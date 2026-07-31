@@ -46,6 +46,7 @@ const BAL={ // 03_data_design.md v2.0 §2 balance table 準拠
   PINCH_HP:300,
   MIKIRI:{window:5,windowPinch:7,whiff:22}, // 見切り: 接触±5F(ピンチ±7F)。空振りは22Fガード不能
   DOWN:{downF:45,wakeF:20,followupMul:0.5}, // 下段ダウン: スマブラ式ダウン連(追撃1発×0.5)→無敵→起き上がり20F無敵→強制起き上がり
+  FOCUS:{max:100,gainDmgMul:0.15,gainGuard:8,gainMikiri:30,slowMul:0.25,durationMs:600,zoom:1.3}, // 集中(自動スロー)
   GDMG_A:10,GDMG_S:45,CHIP_S:20,CHIP_LOW:10,GREGEN:0.22,DIZZY:90,GRECOVER:50,
   SMAX:100,SG:{aHit:12,aHitC:[12,7,4],aBlk:8,whiff:2,gOk:6,got:5},
   ROAR:{s:16,armor:14,a:4,r:24,d:130,stun:34},
@@ -153,10 +154,11 @@ function star(x,y,r,col){
 /* ================= 状態 ================= */
 const game={screen:'title',p1:0,p2:0,frame:0};
 let B=null;
+let focusSlowMs=0; // 集中(自動スロー)発動中の残り実時間(ms)。>0の間メインループが0.25倍速で進行
 function newFighter(ci,side){
   const c=CHARS[ci];
   return{c:c,side:side,baseX:side===0?152:388,y:428,
-    hp:BAL.HP,guard:c.gMax,s:0,ult:0,
+    hp:BAL.HP,guard:c.gMax,s:0,ult:0,focus:0,
     phase:'idle',pf:0,atkLv:null,hasHit:false,
     guardLv:null,stunDur:0,combo:0,
     buf:null,bufF:0,held:null,lunge:0,kb:0,downHitUsed:false,
@@ -176,9 +178,10 @@ function roundInit(first){
     f.hp=BAL.HP;f.shownHp=BAL.HP;f.guard=f.c.gMax;
     f.phase='idle';f.pf=0;f.atkLv=null;f.hasHit=false;
     f.guardLv=null;f.combo=0;f.buf=null;f.kb=0;f.lunge=0;f.sNo=0;f.downHitUsed=false;
-    if(first){f.s=0;f.ult=0;}
+    if(first){f.s=0;f.ult=0;f.focus=0;}
   }
   B.timer=BAL.TIME;B.flow='intro';B.flowF=0;B.clash=null;B.pendKO=-1;B.clashStreak=[0,0];
+  focusSlowMs=0;
   announce('ROUND '+B.round,66,50,'#ffd23f');
 }
 function announce(text,dur,size,color){B.ann.push({text:text,dur:dur,size:size,color:color,f:0});}
@@ -210,6 +213,16 @@ function spec(f){
 }
 function gainS(f,k){f.s=Math.min(BAL.SMAX,f.s+BAL.SG[k]*f.c.sMul);}
 function gainSAmt(f,amt){f.s=Math.min(BAL.SMAX,f.s+amt*f.c.sMul);}
+function gainFocus(f,amt){f.focus=Math.min(BAL.FOCUS.max,f.focus+amt);}
+function triggerFocus(){ // 満タン時に相手攻撃が発生した瞬間、自動で世界がスローに
+  focusSlowMs=BAL.FOCUS.durationMs;
+  announce('集中!!',40,40,'#7fe8ff');
+}
+function checkFocusTrigger(att,def){
+  if(def.focus>=BAL.FOCUS.max&&att.phase==='attack'&&att.atkLv&&att.pf===spec(att).s){
+    def.focus=0;triggerFocus();
+  }
+}
 function startAtk(f,lv,chain){
   f.phase='attack';f.pf=0;f.atkLv=lv;f.hasHit=false;f.guardLv=null;
   if(!chain)f.combo=0;
@@ -251,7 +264,7 @@ function applyInputs(f,opp,cmds,held){
         const win=(f.hp<=BAL.PINCH_HP)?BAL.MIKIRI.windowPinch:BAL.MIKIRI.window;
         const opAtk=opp.phase==='attack'&&opp.atkLv;
         const success=opAtk&&Math.abs(opp.pf-(spec(opp).s+1))<=win;
-        if(success){startClash('mikiri');return;}
+        if(success){gainFocus(f,BAL.FOCUS.gainMikiri);startClash('mikiri');return;}
         f.phase='mikiriRec';f.pf=0;f.guardLv=null;f.buf=null;sfx('whiffG');
       }
     }else if(c.t==='atk'){
@@ -295,7 +308,7 @@ function advance(f){
     const opp=B.p[1-f.side];
     if(f.pf===19&&opp.phase==='grabbed'){ // 叩きつけ
       const dmg=Math.round(BAL.GRAB.d*f.c.dMul);
-      opp.hp-=dmg;
+      opp.hp-=dmg;gainFocus(opp,dmg*BAL.FOCUS.gainDmgMul);
       opp.phase='hitstun';opp.pf=0;opp.stunDur=BAL.GRAB.stun;opp.kb=34;
       fxDmg(opp,dmg,'#ffb6ff');fxBurst(opp.baseX,opp.y-40);
       sfx('slam');B.shake=11;B.hitstop=Math.max(B.hitstop,6);
@@ -341,7 +354,7 @@ function resolveHits(){
   const ar=roarStriking(a),br=roarStriking(b);
   if(ar&&br){ // 咆哮相打ち
     const d=BAL.ROAR.d;
-    a.hp-=d;b.hp-=d;
+    a.hp-=d;b.hp-=d;gainFocus(a,d*BAL.FOCUS.gainDmgMul);gainFocus(b,d*BAL.FOCUS.gainDmgMul);
     for(const f of B.p){f.phase='hitstun';f.pf=0;f.stunDur=BAL.ROAR.stun;f.kb=30;f.atkLv=null;}
     fxDmg(a,d,'#ff8040');fxDmg(b,d,'#ff8040');sfx('roar');
     B.shake=10;B.hitstop=BAL.HITSTOP.roar;
@@ -368,7 +381,7 @@ function handleIfDowned(att,def,dmgBase){ // ダウン連: 1発だけ×0.5で追
   if(def.phase==='down'&&!def.downHitUsed){
     def.downHitUsed=true;
     const dmg=Math.round(dmgBase*BAL.DOWN.followupMul*att.c.dMul);
-    def.hp-=dmg;
+    def.hp-=dmg;gainFocus(def,dmg*BAL.FOCUS.gainDmgMul);
     fxDmg(def,dmg,'#ffb6ff');fxSpark(def,att.atkLv||'mid',0);sfx('hit');
     B.hitstop=Math.max(B.hitstop,BAL.HITSTOP.mid);B.shake=Math.max(B.shake,5);
     if(def.hp<=0){def.hp=0;startKO(def.side);}
@@ -383,10 +396,10 @@ function attackResolve(att,def){
     def.phase='blockstun';def.pf=0;def.stunDur=BAL.BLOCKSTUN[att.atkLv];def.kb=6;
     def.guard-=BAL.GDMG_A;
     if(att.atkLv==='low'){ // 下段は被ガードでも削り10
-      def.hp-=BAL.CHIP_LOW;
+      def.hp-=BAL.CHIP_LOW;gainFocus(def,BAL.CHIP_LOW*BAL.FOCUS.gainDmgMul);
       if(def.hp<=0){def.hp=0;startKO(def.side);return;}
     }
-    gainS(att,'aBlk');gainS(def,'gOk');
+    gainS(att,'aBlk');gainS(def,'gOk');gainFocus(def,BAL.FOCUS.gainGuard);
     const A2=spec(att),rem=A2.s+A2.a+A2.r-att.pf;
     if(rem>6)B.fx.push({k:'suki',x:fpos(att),y:att.y-168,f:0,dur:rem});
     fxSpark(def,att.atkLv,1);sfx('guard');
@@ -404,11 +417,11 @@ function hitApply(att,def){
     B.fx.push({k:'counter',x:def.baseX,y:def.y-186,f:0,dur:38});
   }
   if(def.phase==='roar'&&def.pf<=BAL.ROAR.armor){ // 咆哮アーマー
-    dmg=Math.round(dmg*0.5);def.hp-=dmg;gainS(att,'aBlk');
+    dmg=Math.round(dmg*0.5);def.hp-=dmg;gainS(att,'aBlk');gainFocus(def,dmg*BAL.FOCUS.gainDmgMul);
     fxDmg(def,dmg,'#ffb020');fxSpark(def,att.atkLv,0);sfx('hit');
     B.hitstop=Math.max(B.hitstop,BAL.HITSTOP[att.atkLv]);B.shake=Math.max(B.shake,4);
   }else{
-    def.hp-=dmg;
+    def.hp-=dmg;gainFocus(def,dmg*BAL.FOCUS.gainDmgMul);
     def.atkLv=null;def.guardLv=null;def.buf=null;
     att.combo++;
     gainSAmt(att,BAL.SG.aHitC[Math.min(att.combo-1,2)]);gainS(def,'got');
@@ -429,16 +442,16 @@ function roarResolve(att,def){
   if(handleIfDowned(att,def,R.d))return;
   sfx('roar');fxWave(att);
   if(def.phase==='guard'||(def.phase==='blockstun'&&def.held)){ // 全段ガード可・大削り
-    def.guard-=BAL.GDMG_S;def.hp-=BAL.CHIP_S;
+    def.guard-=BAL.GDMG_S;def.hp-=BAL.CHIP_S;gainFocus(def,BAL.CHIP_S*BAL.FOCUS.gainDmgMul+BAL.FOCUS.gainGuard);
     def.phase='blockstun';def.pf=0;def.stunDur=16;def.kb=20;
     gainS(att,'aBlk');fxSpark(def,'mid',1);
     B.shake=Math.max(B.shake,8);B.hitstop=Math.max(B.hitstop,BAL.HITSTOP.roar);
     if(def.guard<=0)doBreak(def);
   }else if(def.phase==='roar'&&def.pf<=R.armor){
-    const d=Math.round(R.d*0.5);def.hp-=d;gainS(att,'aBlk');
+    const d=Math.round(R.d*0.5);def.hp-=d;gainS(att,'aBlk');gainFocus(def,d*BAL.FOCUS.gainDmgMul);
     fxDmg(def,d,'#ffb020');B.shake=Math.max(B.shake,6);
   }else{
-    def.hp-=R.d;
+    def.hp-=R.d;gainFocus(def,R.d*BAL.FOCUS.gainDmgMul);
     def.phase='hitstun';def.pf=0;def.stunDur=R.stun;
     def.atkLv=null;def.guardLv=null;def.buf=null;def.combo=0;def.kb=34;
     gainS(att,'aHit');gainS(def,'got');
@@ -520,7 +533,7 @@ function resolveClash(){
   B.clashStreak[w]++;B.clashStreak[1-w]=0;
   const stk=B.clashStreak[w];
   const dmg=BAL.CLASH.d+BAL.CLASH.streakBonus*(stk-1); // 連勝で押し切り
-  lose.hp-=dmg;lose.kb=44;
+  lose.hp-=dmg;lose.kb=44;gainFocus(lose,dmg*BAL.FOCUS.gainDmgMul);
   win.ult=Math.min(BAL.ULT.stock,win.ult+1);win.ultFlash=40;
   gainSAmt(win,BAL.CLASH.winS);
   fxDmg(lose,dmg,'#ffe14d');
@@ -556,7 +569,7 @@ function ultStep(){
   const att=B.p[B.ultUser],def=B.p[1-B.ultUser];
   if(B.flowF===BAL.ULT.impact){
     const dmg=Math.round(BAL.ULT.d*att.c.dMul);
-    def.hp-=dmg;att.ult=0;
+    def.hp-=dmg;att.ult=0;gainFocus(def,dmg*BAL.FOCUS.gainDmgMul);
     def.phase='hitstun';def.pf=0;def.stunDur=46;def.kb=46;
     def.atkLv=null;def.guardLv=null;def.buf=null;def.combo=0;
     fxDmg(def,dmg,'#ff2d78');fxBurst(def.baseX,330);
@@ -722,6 +735,7 @@ function fightStep(){
   if(B.flow!=='fight')return;
   advance(p1);advance(p2);
   if(B.flow!=='fight')return;
+  checkFocusTrigger(p1,p2);checkFocusTrigger(p2,p1);
   tryBuf(p1);tryBuf(p2);
   resolveHits();
   if(B.flow!=='fight')return;
@@ -1182,8 +1196,13 @@ function gauges(x,y,f,flip){
   ctx.fillStyle=(f.guard<30)?'#ff8b5a':'#6fd3ff';
   if(flip)ctx.fillRect(x+w-gw,y+15,gw,7);else ctx.fillRect(x,y+15,gw,7);
   ctx.strokeStyle='#778';ctx.strokeRect(x,y+15,w,7);
+  ctx.fillStyle='#231a33';ctx.fillRect(x,y+26,w,6); // 集中ゲージ
+  const fw=f.focus/BAL.FOCUS.max*w;
+  ctx.fillStyle=(f.focus>=BAL.FOCUS.max)?((game.frame%16<8)?'#ffffff':'#7fe8ff'):'#9d6bff';
+  if(flip)ctx.fillRect(x+w-fw,y+26,fw,6);else ctx.fillRect(x,y+26,fw,6);
+  ctx.strokeStyle='#665088';ctx.lineWidth=1;ctx.strokeRect(x,y+26,w,6);
   for(let i=0;i<3;i++){
-    const px=flip?(x+w-14-i*26):(x+14+i*26),py=y+38;
+    const px=flip?(x+w-14-i*26):(x+14+i*26),py=y+49;
     const on=f.ult>i;
     ctx.save();ctx.translate(px,py);ctx.rotate(Math.PI/4);
     ctx.fillStyle=on?(((f.ult>=3&&game.frame%14<7)||f.ultFlash>0)?'#ffffff':'#ff2d78'):'#2a2f3d';
@@ -1434,6 +1453,8 @@ function rBattle(){
     if(c.phase==='in')zoom=1+0.18*Math.min(1,c.f/BAL.CLASH.inF);
     else if(c.phase==='reveal'&&c.f>=BAL.CLASH.revealHitF)zoom=1.18-0.18*Math.min(1,(c.f-BAL.CLASH.revealHitF)/30);
     else zoom=1.18;
+  }else if(focusSlowMs>0){
+    zoom=BAL.FOCUS.zoom; // 集中: 世界がスローになるのに合わせズームイン
   }
   if(zoom!==1){ctx.translate(W/2,300);ctx.scale(zoom,zoom);ctx.translate(-W/2,-300);}
   rStage();
@@ -1454,9 +1475,20 @@ function rBattle(){
   rClashPicks();
   ctx.restore();
   if(B.flow==='clash'&&B.clash&&B.clash.phase==='in'){
-    const k=B.clash.f/26;
+    const k=B.clash.f/BAL.CLASH.inF;
     ctx.save();ctx.translate(W/2,116);ctx.scale(1+k*0.3,1+k*0.3);ctx.rotate(-0.05);
     txt('ギュイーン!!',0,0,52,'#ffe14d');
+    ctx.restore();
+  }
+  if(focusSlowMs>0){ // 集中: 疑似ハイスピード演出の色調オーバーレイ
+    ctx.save();ctx.globalAlpha=0.16;ctx.fillStyle='#3fd8ff';ctx.fillRect(0,0,W,PT);ctx.restore();
+    ctx.strokeStyle='rgba(160,230,255,0.22)';ctx.lineWidth=2;
+    for(let i=0;i<7;i++){
+      const yy=40+i*54;
+      ctx.beginPath();ctx.moveTo(0,yy);ctx.lineTo(W,yy);ctx.stroke();
+    }
+    ctx.save();ctx.globalAlpha=Math.min(1,focusSlowMs/150);
+    txt('マーモットの0.5秒は、人間の0.05秒——',W/2,PT-26,15,'#bdeeff');
     ctx.restore();
   }
   rHUD();
@@ -1538,7 +1570,12 @@ function frame(now){
   requestAnimationFrame(frame);
   let dt=now-last;last=now;
   if(dt>120)dt=120;
-  acc+=dt;
+  let simDt=dt;
+  if(focusSlowMs>0){ // 集中: 実0.6秒の間ロジックを0.25倍速で進める（体感スロー）
+    simDt=dt*BAL.FOCUS.slowMul;
+    focusSlowMs=Math.max(0,focusSlowMs-dt);
+  }
+  acc+=simDt;
   while(acc>=1000/60){
     acc-=1000/60;
     game.frame++;
