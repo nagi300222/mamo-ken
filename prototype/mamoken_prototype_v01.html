@@ -67,6 +67,51 @@ const CHOICES=['up','rd','ld'];
 const BEATS={up:'rd',rd:'ld',ld:'up'}; // 上→右下→左下→上
 const LEVEL_COLOR={high:'#ff5a5a',mid:'#ffe14d',low:'#5ab2ff'}; // テレグラフ段色
 
+/* ================= アセット（画像・生成済みビジュアル） =================
+ * asset_map.md v1 準拠。画像が無い/未読込のキャラ・場面は必ず現行プログラム
+ * 描画にフォールバックする。立ち絵は白背景のままの場合に備えしきい値白抜きを行う。
+ */
+const ASSETS={};
+function loadImg(key,src){
+  const img=new Image();
+  const e={img:img,ready:false,failed:false,canvas:null};
+  ASSETS[key]=e;
+  img.onload=function(){whitenAsset(e);e.ready=true;};
+  img.onerror=function(){e.failed=true;};
+  img.src=src;
+  return e;
+}
+function whitenAsset(e){ // 近似白(しきい値)を透過化。既に透過済みのPNGなら実質no-op
+  try{
+    const oc=document.createElement('canvas');
+    oc.width=e.img.naturalWidth;oc.height=e.img.naturalHeight;
+    const octx=oc.getContext('2d');
+    octx.drawImage(e.img,0,0);
+    const id=octx.getImageData(0,0,oc.width,oc.height);
+    const d=id.data,TH=238;
+    for(let i=0;i<d.length;i+=4){
+      if(d[i]>=TH&&d[i+1]>=TH&&d[i+2]>=TH)d[i+3]=0;
+    }
+    octx.putImageData(id,0,0);
+    e.canvas=oc;
+  }catch(err){ /* file://等でcanvasが汚染される環境では無処理の原画のまま使う */ }
+}
+loadImg('standing_moguzo','../assets/chars/moguzo/standing.png');
+loadImg('standing_pisuke','../assets/chars/pisuke/standing.png');
+loadImg('standing_godan','../assets/chars/godan/standing.png');
+loadImg('clash_guiin','../assets/fx/clash_guiin.png');
+loadImg('roar_moguzo','../assets/fx/roar_moguzo.png');
+loadImg('cutin_moguzo','../assets/cutin/moguzo.png');
+function assetReady(key){const e=ASSETS[key];return!!(e&&e.ready&&!e.failed);}
+function drawStanding(key,cx,bottomY,targetH){ // 足元アンカー・高さ基準でフィット
+  if(!assetReady(key))return false;
+  const e=ASSETS[key],src=e.canvas||e.img;
+  const iw=e.img.naturalWidth,ih=e.img.naturalHeight;
+  const w=targetH*iw/ih;
+  ctx.drawImage(src,cx-w/2,bottomY-targetH,w,targetH);
+  return true;
+}
+
 /* ================= 仮SE（WebAudio合成） ================= */
 let AC=null;
 function audioInit(){try{
@@ -206,6 +251,9 @@ function fxDmg(def,n,col){B.fx.push({k:'dmg',x:def.baseX,y:lvY(def,'high')-30,n:
 function fxWave(att){B.fx.push({k:'wave',x:att.baseX+(att.side===0?30:-30),y:att.y-92,dir:att.side===0?1:-1,f:0,dur:26});}
 function fxBurst(x,y){B.fx.push({k:'burst',x:x,y:y,f:0,dur:22});}
 function fxStars(f){B.fx.push({k:'stars',x:f.baseX,y:f.y-146,f:0,dur:BAL.DIZZY});}
+function fxRoarImg(charId){ // 咆哮演出画(該当キャラの画像が無ければ何も足さず現行のfxWaveのみ)
+  if(assetReady('roar_'+charId))B.fx.push({k:'roarImg',charId:charId,f:0,dur:24});
+}
 
 /* ================= コア戦闘 ================= */
 function actionable(f){return f.phase==='idle'||f.phase==='guard';}
@@ -364,7 +412,7 @@ function resolveHits(){
     const d=BAL.ROAR.d;
     a.hp-=d;b.hp-=d;gainFocus(a,d*BAL.FOCUS.gainDmgMul);gainFocus(b,d*BAL.FOCUS.gainDmgMul);
     for(const f of B.p){f.phase='hitstun';f.pf=0;f.stunDur=BAL.ROAR.stun;f.kb=30;f.atkLv=null;}
-    fxDmg(a,d,'#ff8040');fxDmg(b,d,'#ff8040');sfx('roar');
+    fxDmg(a,d,'#ff8040');fxDmg(b,d,'#ff8040');sfx('roar');fxRoarImg(a.c.id);fxRoarImg(b.c.id);
     B.shake=10;B.hitstop=BAL.HITSTOP.roar;
     if(a.hp<=0)a.hp=0;if(b.hp<=0)b.hp=0;
     if(a.hp===0||b.hp===0)startKO(a.hp===0?0:1);
@@ -448,7 +496,7 @@ function hitApply(att,def){
 function roarResolve(att,def){
   const R=BAL.ROAR;
   if(handleIfDowned(att,def,R.d))return;
-  sfx('roar');fxWave(att);
+  sfx('roar');fxWave(att);fxRoarImg(att.c.id);
   if(def.phase==='guard'||(def.phase==='blockstun'&&def.held)){ // 全段ガード可・大削り
     def.guard-=BAL.GDMG_S;def.hp-=BAL.CHIP_S;gainFocus(def,BAL.CHIP_S*BAL.FOCUS.gainDmgMul+BAL.FOCUS.gainGuard);
     def.phase='blockstun';def.pf=0;def.stunDur=16;def.kb=20;
@@ -1185,6 +1233,14 @@ function rFx(){
         txt('スキ!',0,0,26,'#ffe14d');
         ctx.restore();
       }
+    }else if(p.k==='roarImg'){ // 咆哮演出画(0.4秒フラッシュ表示)
+      const e=ASSETS['roar_'+p.charId];
+      if(e&&e.ready&&!e.failed){
+        ctx.save();ctx.globalAlpha=Math.max(0,1-t);
+        const iw=e.img.naturalWidth,ih=e.img.naturalHeight,ph=280,pw=ph*iw/ih;
+        ctx.drawImage(e.img,W/2-pw/2,150-ph/2,pw,ph);
+        ctx.restore();
+      }
     }else if(p.k==='yomare'){ // 読まれ表示: 同系統3連続
       if(game.frame%10<7){
         ctx.save();ctx.translate(p.x,p.y);ctx.rotate(0.05*Math.sin(game.frame*0.3));
@@ -1450,12 +1506,20 @@ function rCutin(){
       ctx.beginPath();ctx.moveTo(xx,yy);ctx.lineTo(xx-150,yy);ctx.stroke();
     }
     const k=Math.min(1,t/12);
-    const fxp=(att.side===0)?(-180+(W*0.30+180)*k):(W+180-(W*0.30+180)*k);
-    drawBigFace(att,fxp,428);
-    const tx=(att.side===0)?(W+220-(W*0.62+220)*k):(-220+(W*0.62+220)*k);
-    txt('奥義',tx,346,34,'#ffd23f');
-    txt('『'+att.c.ult+'』',tx,408,52,'#ffffff');
-    txt(att.c.name,tx,464,24,'#ffb1d0');
+    const cutinKey='cutin_'+att.c.id;
+    if(assetReady(cutinKey)){ // カットイン画像(テキストは焼き込み済みなのでテロップは重ねない)
+      const e=ASSETS[cutinKey],iw=e.img.naturalWidth,ih=e.img.naturalHeight;
+      const ih2=380,iw2=ih2*iw/ih;
+      const fxp=(att.side===0)?(-iw2*0.5-260+(W*0.5+260+iw2*0.5)*k):(W+iw2*0.5+260-(W*0.5+260+iw2*0.5)*k);
+      ctx.drawImage(e.img,fxp-iw2/2,428-ih2/2,iw2,ih2);
+    }else{
+      const fxp=(att.side===0)?(-180+(W*0.30+180)*k):(W+180-(W*0.30+180)*k);
+      drawBigFace(att,fxp,428);
+      const tx=(att.side===0)?(W+220-(W*0.62+220)*k):(-220+(W*0.62+220)*k);
+      txt('奥義',tx,346,34,'#ffd23f');
+      txt('『'+att.c.ult+'』',tx,408,52,'#ffffff');
+      txt(att.c.name,tx,464,24,'#ffb1d0');
+    }
   }
   if(t>=BAL.ULT.impact&&t<BAL.ULT.impact+5){
     ctx.fillStyle='rgba(255,255,255,0.9)';ctx.fillRect(0,0,W,H);
@@ -1505,6 +1569,14 @@ function rBattle(){
   ctx.restore();
   if(B.flow==='clash'&&B.clash&&B.clash.phase==='in'){
     const k=B.clash.f/BAL.CLASH.inF;
+    if(assetReady('clash_guiin')){ // ギュイーン突入演出画(対戦カードと絵の不一致は演出カットとして許容)
+      const e=ASSETS.clash_guiin,iw=e.img.naturalWidth,ih=e.img.naturalHeight;
+      const scale=Math.max(W/iw,PT/ih)*(1+k*0.15);
+      ctx.save();ctx.globalAlpha=Math.min(1,k*1.6);
+      ctx.translate(W/2,PT/2);ctx.scale(scale,scale);
+      ctx.drawImage(e.img,-iw/2,-ih/2);
+      ctx.restore();
+    }
     ctx.save();ctx.translate(W/2,116);ctx.scale(1+k*0.3,1+k*0.3);ctx.rotate(-0.05);
     txt('ギュイーン!!',0,0,52,'#ffe14d');
     ctx.restore();
@@ -1536,7 +1608,7 @@ function rTitle(){
   txt('（仮）',W/2+170,304,28,'#fff');
   txt('- ギュイーン格闘 -',W/2,346,26,'#ffe6a3');
   demoF.c=CHARS[Math.floor(game.frame/240)%3];
-  rFighter(demoF,W/2,616);
+  if(!drawStanding('standing_'+demoF.c.id,W/2,724,336))rFighter(demoF,W/2,616);
   if(game.frame%60<38)txt('タップでスタート',W/2,732,30,'#fff');
   txt('右＝高さタップで攻撃(上/中/下) はなした瞬間に発生',W/2,812,15,'#cfd6e6');
   txt('左＝ホールドでガード／ジャストタップ=見切り／下フリック=つかみ',W/2,838,15,'#ffe6a3');
@@ -1556,7 +1628,7 @@ function rSelect(){
     ctx.fillStyle='#232a3d';rr(R2.x,R2.y,R2.w,R2.h,18);ctx.fill();
     ctx.strokeStyle='#3a4560';ctx.lineWidth=2;rr(R2.x,R2.y,R2.w,R2.h,18);ctx.stroke();
     demoF.c=CHARS[i];
-    rFighter(demoF,R2.x+82,R2.y+R2.h-22);
+    if(!drawStanding('standing_'+CHARS[i].id,R2.x+82,R2.y+R2.h-4,150))rFighter(demoF,R2.x+82,R2.y+R2.h-22);
     txt(CHARS[i].name,R2.x+164,R2.y+46,31,'#fff','left');
     txt(CHARS[i].type,R2.x+164,R2.y+80,19,'#ffd23f','left');
     const st=[['ちから',CHARS[i].pips.p],['はやさ',CHARS[i].pips.s],['まもり',CHARS[i].pips.g]];
@@ -1575,6 +1647,10 @@ function rResult(){
   const r=B?B.result:'-';
   const col=(r==='WIN')?'#7CFC00':((r==='LOSE')?'#ff6b6b':'#ffd23f');
   const label=(r==='WIN')?'YOU WIN!!':((r==='LOSE')?'YOU LOSE...':'DRAW');
+  if(r==='WIN'||r==='LOSE'){ // 勝者の立ち絵(画像が無ければ何も足さず現行のテキストのみ)
+    const winnerId=(r==='WIN')?CHARS[game.p1].id:CHARS[game.p2].id;
+    drawStanding('standing_'+winnerId,W/2,522,308);
+  }
   txt(label,W/2,280,62,col);
   txt(CHARS[game.p1].name+'  vs  '+CHARS[game.p2].name+'(CPU)',W/2,362,22,'#cfd6e6');
   btn(60,560,W-120,88,'もういちど たたかう');
