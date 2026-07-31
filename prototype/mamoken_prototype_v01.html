@@ -1039,7 +1039,57 @@ function eyesDraw(hx,hy,e){
     ctx.beginPath();ctx.arc(bx,by,3.8,Math.PI*1.5,Math.PI*3);ctx.stroke();
   }
 }
-function rFighter(f,ox,oy){
+/* ================= v0.6移行準備: ポーズ算出/描画の分離 =================
+ * poseId(f)で現在ポーズを一意なIDに算出し、SPRITES[charId][poseId]に画像が
+ * あればdrawImage、無ければ現行の図形描画(drawFighterShape)にフォールバックする。
+ * v0.5では画像は未配置(SPRITESは空)のため、常に図形描画のまま動作は変わらない。
+ */
+const SPRITES={}; // 例: SPRITES.moguzo.atk_mid = {img,ready,failed} （v0.6で投入）
+function poseId(f){
+  const P=f.phase,t=f.pf;
+  if(P==='attack'&&f.atkLv){
+    const A=spec(f),tg=BAL.TELEGRAPH[f.atkLv];
+    if(t<=tg)return 'tele_'+f.atkLv;
+    if(t<=A.s)return 'wind_'+f.atkLv;
+    if(t<=A.s+A.a+2)return 'atk_'+f.atkLv;
+    return 'atkrec_'+f.atkLv;
+  }
+  if(P==='roar'){
+    const R=BAL.ROAR;
+    if(t<=R.s)return 'roarCharge';
+    if(t<=R.s+R.a+6)return 'roarFire';
+    return 'roarRecover';
+  }
+  if(P==='grab')return 'grabReach';
+  if(P==='grabrec')return 'grabWhiff';
+  if(P==='mikiriRec')return 'mikiriWhiff';
+  if(P==='grabHit')return t<=8?'grabLift':(t<=18?'grabRaise':'grabSlam');
+  if(P==='grabbed')return 'grabbedStruggle';
+  if(P==='down')return f.downHitUsed?'downInvuln':'down';
+  if(P==='wake')return 'wake';
+  if(P==='clash')return 'clash';
+  if(P==='ultAtk')return(B&&B.flowF<BAL.ULT.impact)?'ultCharge':'ultFire';
+  if(P==='dizzy')return 'dizzy';
+  if(P==='ko')return 'ko';
+  if(P==='win')return 'win';
+  if(P==='guard'||P==='blockstun')return 'guard';
+  if(P==='hitstun')return 'hitstun';
+  return 'idle';
+}
+function rFighter(f,ox,oy){ // ポーズ画像があればdrawImage、無ければ図形描画にフォールバック
+  const sp=SPRITES[f.c.id]&&SPRITES[f.c.id][poseId(f)];
+  if(sp&&sp.ready&&!sp.failed){drawSpriteFighter(f,ox,oy,sp);return;}
+  drawFighterShape(f,ox,oy);
+}
+function drawSpriteFighter(f,ox,oy,sp){ // 足元アンカー・位置/反転/拡縮は現行ロジックをそのまま適用
+  const x=(ox!=null)?ox:fpos(f),gy=(oy!=null)?oy:f.y,face=f.side===0?1:-1;
+  const img=sp.canvas||sp.img,iw=sp.img.naturalWidth,ih=sp.img.naturalHeight;
+  const h=180,w=h*iw/ih;
+  ctx.save();ctx.translate(x,gy);ctx.scale(face,1);
+  ctx.drawImage(img,-w/2,-h,w,h);
+  ctx.restore();
+}
+function drawFighterShape(f,ox,oy){
   const x=(ox!=null)?ox:fpos(f);
   const gy=(oy!=null)?oy:f.y;
   const c=f.c,gf=game.frame,face=f.side===0?1:-1;
