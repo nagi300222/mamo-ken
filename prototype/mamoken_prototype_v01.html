@@ -622,10 +622,11 @@ function timeUp(){
 
 /* ================= CPU AI ================= */
 const cpuEv=[];
-const ai={think:0,guardT:0,guardOn:false,react:null,ultT:0,hist:[],mash:0,pHoldF:0};
+const AI_MIKIRI_RATE=0.22; // テレグラフを見て見切りを試みる率(命中は保証しない)
+const ai={think:0,guardT:0,guardOn:false,react:null,ultT:0,hist:[],mash:0,pHoldF:0,mikiriAt:null};
 function aiReset(){
   ai.think=30;ai.guardT=0;ai.guardOn=false;ai.react=null;ai.ultT=0;
-  ai.hist=[];ai.mash=0;ai.pHoldF=0;
+  ai.hist=[];ai.mash=0;ai.pHoldF=0;ai.mikiriAt=null;
 }
 function aiStep(){
   const me=B.p[1],you=B.p[0];
@@ -634,13 +635,25 @@ function aiStep(){
     if(ai.ultT>30&&actionable(me))cpuEv.push({t:'ult'});
     return;
   }
-  // 観測: プレイヤーの攻撃を記録して反応 / 即合わせでギュイーン狙い
+  // 観測: プレイヤーの攻撃を記録して反応 / テレグラフを見て差し込み or 見切りを狙う
   if(you.phase==='attack'&&you.pf===1){
     ai.hist.push({lv:you.atkLv,f:B.f});
     if(ai.hist.length>14)ai.hist.shift();
     ai.react={at:B.f+11+((rng()*6)|0),lv:you.atkLv};
-    const cw=0.16+Math.min(0.3,ai.mash*0.05);
-    if(me.phase==='idle'&&rng()<cw){cpuEv.push({t:'atk',lv:you.atkLv});ai.react=null;}
+    const tg=BAL.TELEGRAPH[you.atkLv]; // テレグラフが長い(=見てから対応しやすい)ほど差し込み精度が上がる
+    const cw=0.16+Math.min(0.3,ai.mash*0.05)+(tg-BAL.TELEGRAPH.mid)*0.012;
+    if(me.phase==='idle'&&rng()<cw){
+      cpuEv.push({t:'atk',lv:you.atkLv});ai.react=null;
+    }else if(me.phase==='idle'&&ai.mikiriAt==null&&rng()<AI_MIKIRI_RATE){ // 見切り試行(完璧な精度ではない)
+      const win=(me.hp<=BAL.PINCH_HP)?BAL.MIKIRI.windowPinch:BAL.MIKIRI.window;
+      ai.mikiriAt=B.f+spec(you).s+Math.round((rng()*2-1)*win*2);
+      ai.react=null;
+    }
+  }
+  if(ai.mikiriAt!=null&&B.f>=ai.mikiriAt){cpuEv.push({t:'mikiri'});ai.mikiriAt=null;}
+  // ダウン連追撃: 相手がダウン中で追撃がまだなら即座に1発叩き込む
+  if(you.phase==='down'&&!you.downHitUsed&&me.phase==='idle'){
+    cpuEv.push({t:'atk',lv:'mid'});
   }
   // つかみ返し: 相手のつかみを見たらつかみ合いへ
   if(you.phase==='grab'&&you.pf===1&&me.phase==='guard'&&rng()<0.3){
@@ -691,14 +704,16 @@ function aiStep(){
     if(ai.think<=0){
       ai.think=14+((rng()*12)|0);
       const roll=rng();
-      const aggr=Math.max(0.18,0.36-ai.mash*0.03);
+      const focusThreat=you.focus>=BAL.FOCUS.max; // 相手の集中が満タン→打撃を振ると即返される。攻めを控える
+      const aggr=Math.max(0.1,0.36-ai.mash*0.03-(focusThreat?0.16:0));
+      const grabW=0.1+(focusThreat?0.14:0); // つかみは"発生"扱いされず集中を誘発しないため踏み込みやすい
       const gsel=0.24+Math.min(0.3,ai.mash*0.04);
       if(roll<aggr){
         const rw=rng();
         cpuEv.push({t:'atk',lv:rw<0.34?'high':(rw<0.72?'mid':'low')});
-      }else if(roll<aggr+0.1){
+      }else if(roll<aggr+grabW){
         cpuEv.push({t:'grab'});
-      }else if(roll<aggr+0.1+gsel){
+      }else if(roll<aggr+grabW+gsel){
         ai.guardOn=true;ai.guardT=24+((rng()*24)|0);
       }
       if(me.s>=BAL.SMAX&&rng()<0.3)cpuEv.push({t:'roar'});
