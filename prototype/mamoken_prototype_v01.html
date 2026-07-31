@@ -162,6 +162,7 @@ function newFighter(ci,side){
     phase:'idle',pf:0,atkLv:null,hasHit:false,
     guardLv:null,stunDur:0,combo:0,
     buf:null,bufF:0,held:null,lunge:0,kb:0,downHitUsed:false,
+    lastAtkLv:null,atkStreak:0,yomare:false,
     shownHp:BAL.HP,ultFlash:0,sNo:0};
 }
 function startBattle(){
@@ -178,6 +179,7 @@ function roundInit(first){
     f.hp=BAL.HP;f.shownHp=BAL.HP;f.guard=f.c.gMax;
     f.phase='idle';f.pf=0;f.atkLv=null;f.hasHit=false;
     f.guardLv=null;f.combo=0;f.buf=null;f.kb=0;f.lunge=0;f.sNo=0;f.downHitUsed=false;
+    f.lastAtkLv=null;f.atkStreak=0;f.yomare=false;
     if(first){f.s=0;f.ult=0;f.focus=0;}
   }
   B.timer=BAL.TIME;B.flow='intro';B.flowF=0;B.clash=null;B.pendKO=-1;B.clashStreak=[0,0];
@@ -228,7 +230,13 @@ function startAtk(f,lv,chain){
   if(!chain)f.combo=0;
   sfx('swish');
   sfx(lv==='high'?'teleHigh':(lv==='low'?'teleLow':'teleMid')); // テレグラフ固有SE
+  if(!chain){ // 読まれ表示: ニュートラルからの選択が同系統3連続で「読まれ!」
+    if(f.lastAtkLv===lv)f.atkStreak++;else f.atkStreak=1;
+    f.lastAtkLv=lv;
+    if(f.atkStreak>=3){f.yomare=true;fxYomare(f);}else f.yomare=false;
+  }
 }
+function fxYomare(f){B.fx.push({k:'yomare',x:fpos(f),y:f.y-190,f:0,dur:50});}
 function canChain(f,lv){
   if(f.phase!=='attack'||!f.hasHit||f.combo>=BAL.CMAX)return false;
   if(BAL.ATK[lv].w<=BAL.ATK[f.atkLv].w)return false; // 軽→重ルートのみ（中→上→下）
@@ -1160,6 +1168,12 @@ function rFx(){
       if(game.frame%8<5){
         ctx.save();ctx.translate(p.x,p.y);ctx.rotate(-0.06);
         txt('スキ!',0,0,26,'#ffe14d');
+        ctx.restore();
+      }
+    }else if(p.k==='yomare'){ // 読まれ表示: 同系統3連続
+      if(game.frame%10<7){
+        ctx.save();ctx.translate(p.x,p.y);ctx.rotate(0.05*Math.sin(game.frame*0.3));
+        txt('読まれ!',0,0,26,'#ff4d9e');
         ctx.restore();
       }
     }else if(p.k==='counter'){
