@@ -41,10 +41,11 @@ let rng=mulberry32(20260730);
 /* ================= balance（03データ設計 準拠） ================= */
 const BAL={ // 03_data_design.md v2.0 §2 balance table 準拠
   HP:1000,TIME:3600,WINS:2,
-  ATK:{high:{s:22,a:3,r:24,d:100,y:-108,w:2},mid:{s:14,a:3,r:18,d:70,y:-68,w:1},low:{s:30,a:4,r:30,d:150,y:-26,w:3}},
+  ATK:{high:{s:22,a:3,r:24,d:100,y:-108,w:2},mid:{s:14,a:3,r:18,d:70,y:-68,w:1},low:{s:30,a:4,r:30,d:150,y:-26,w:3,down:true}},
   HITSTUN:{high:32,mid:24},BLOCKSTUN:{high:16,mid:14,low:15},CHAIN:14,CMAX:3,SCALE:[1,0.9,0.8],
   PINCH_HP:300,
   MIKIRI:{window:5,windowPinch:7,whiff:22}, // 見切り: 接触±5F(ピンチ±7F)。空振りは22Fガード不能
+  DOWN:{downF:45,wakeF:20,followupMul:0.5}, // 下段ダウン: スマブラ式ダウン連(追撃1発×0.5)→無敵→起き上がり20F無敵→強制起き上がり
   GDMG_A:10,GDMG_S:45,CHIP_S:20,CHIP_LOW:10,GREGEN:0.22,DIZZY:90,GRECOVER:50,
   SMAX:100,SG:{aHit:12,aHitC:[12,7,4],aBlk:8,whiff:2,gOk:6,got:5},
   ROAR:{s:16,armor:14,a:4,r:24,d:130,stun:34},
@@ -158,7 +159,7 @@ function newFighter(ci,side){
     hp:BAL.HP,guard:c.gMax,s:0,ult:0,
     phase:'idle',pf:0,atkLv:null,hasHit:false,
     guardLv:null,stunDur:0,combo:0,
-    buf:null,bufF:0,held:null,lunge:0,kb:0,
+    buf:null,bufF:0,held:null,lunge:0,kb:0,downHitUsed:false,
     shownHp:BAL.HP,ultFlash:0,sNo:0};
 }
 function startBattle(){
@@ -174,7 +175,7 @@ function roundInit(first){
   for(const f of B.p){
     f.hp=BAL.HP;f.shownHp=BAL.HP;f.guard=f.c.gMax;
     f.phase='idle';f.pf=0;f.atkLv=null;f.hasHit=false;
-    f.guardLv=null;f.combo=0;f.buf=null;f.kb=0;f.lunge=0;f.sNo=0;
+    f.guardLv=null;f.combo=0;f.buf=null;f.kb=0;f.lunge=0;f.sNo=0;f.downHitUsed=false;
     if(first){f.s=0;f.ult=0;}
   }
   B.timer=BAL.TIME;B.flow='intro';B.flowF=0;B.clash=null;B.pendKO=-1;B.clashStreak=[0,0];
@@ -205,7 +206,7 @@ function fxStars(f){B.fx.push({k:'stars',x:f.baseX,y:f.y-146,f:0,dur:BAL.DIZZY})
 function actionable(f){return f.phase==='idle'||f.phase==='guard';}
 function spec(f){
   const b=BAL.ATK[f.atkLv];
-  return{s:Math.max(4,b.s+f.c.sOfs),a:b.a,r:b.r,d:b.d*f.c.dMul,y:b.y};
+  return{s:Math.max(4,b.s+f.c.sOfs),a:b.a,r:b.r,d:b.d*f.c.dMul,y:b.y,down:!!b.down};
 }
 function gainS(f,k){f.s=Math.min(BAL.SMAX,f.s+BAL.SG[k]*f.c.sMul);}
 function gainSAmt(f,amt){f.s=Math.min(BAL.SMAX,f.s+amt*f.c.sMul);}
@@ -314,6 +315,10 @@ function advance(f){
     }
   }else if(f.phase==='mikiriRec'){ // 見切り空振り: ガード不能の硬直
     if(f.pf>=BAL.MIKIRI.whiff){f.phase='idle';f.pf=0;}
+  }else if(f.phase==='down'){ // ダウン: 追撃1発を受けたら以後は無敵のまま起き上がりへ
+    if(f.pf>=BAL.DOWN.downF){f.phase='wake';f.pf=0;}
+  }else if(f.phase==='wake'){ // 起き上がり20F全身無敵→強制起き上がり(起き攻め不可)
+    if(f.pf>=BAL.DOWN.wakeF){f.phase='idle';f.pf=0;f.downHitUsed=false;}
   }else if(f.phase==='dizzy'){
     if(f.pf>=BAL.DIZZY){f.phase='idle';f.pf=0;f.guard=BAL.GRECOVER;}
   }
@@ -357,7 +362,21 @@ function nearClash(att,def){ // 同段をほぼ同時に振り合ったらギュ
   if(def.phase!=='attack'||def.atkLv!==att.atkLv||def.hasHit)return false;
   return def.pf>=spec(def).s-BAL.CLASH.near;
 }
+function isDowned(f){return f.phase==='down'||f.phase==='wake';}
+function handleIfDowned(att,def,dmgBase){ // ダウン連: 1発だけ×0.5で追撃可、以後(起き上がり含め)完全無敵
+  if(!isDowned(def))return false;
+  if(def.phase==='down'&&!def.downHitUsed){
+    def.downHitUsed=true;
+    const dmg=Math.round(dmgBase*BAL.DOWN.followupMul*att.c.dMul);
+    def.hp-=dmg;
+    fxDmg(def,dmg,'#ffb6ff');fxSpark(def,att.atkLv||'mid',0);sfx('hit');
+    B.hitstop=Math.max(B.hitstop,BAL.HITSTOP.mid);B.shake=Math.max(B.shake,5);
+    if(def.hp<=0){def.hp=0;startKO(def.side);}
+  }
+  return true;
+}
 function attackResolve(att,def){
+  if(handleIfDowned(att,def,BAL.ATK[att.atkLv].d))return;
   if(nearClash(att,def)){att.hasHit=true;def.hasHit=true;startClash('trade');return;}
   const guarded=(def.phase==='guard')||(def.phase==='blockstun'&&def.held); // 統一ガード: 全段ふせぐ
   if(guarded){
@@ -390,18 +409,24 @@ function hitApply(att,def){
     B.hitstop=Math.max(B.hitstop,BAL.HITSTOP[att.atkLv]);B.shake=Math.max(B.shake,4);
   }else{
     def.hp-=dmg;
-    def.phase='hitstun';def.pf=0;def.stunDur=BAL.HITSTUN[att.atkLv]||22;
-    def.atkLv=null;def.guardLv=null;def.buf=null;def.combo=0;def.kb=11;
+    def.atkLv=null;def.guardLv=null;def.buf=null;
     att.combo++;
     gainSAmt(att,BAL.SG.aHitC[Math.min(att.combo-1,2)]);gainS(def,'got');
     fxDmg(def,dmg,'#ffffff');fxSpark(def,att.atkLv,0);
-    sfx(att.combo>=2?'hit2':'hit');
-    B.hitstop=Math.max(B.hitstop,BAL.HITSTOP[att.atkLv]);B.shake=Math.max(B.shake,5);
+    if(A.down){ // 下段: ダウンを奪う大技（スマブラ式ダウン連へ）
+      def.phase='down';def.pf=0;def.downHitUsed=false;def.combo=0;def.kb=20;
+      sfx('hit2');B.hitstop=Math.max(B.hitstop,BAL.HITSTOP.low);B.shake=Math.max(B.shake,8);
+    }else{
+      def.phase='hitstun';def.pf=0;def.stunDur=BAL.HITSTUN[att.atkLv]||22;def.combo=0;def.kb=11;
+      sfx(att.combo>=2?'hit2':'hit');
+      B.hitstop=Math.max(B.hitstop,BAL.HITSTOP[att.atkLv]);B.shake=Math.max(B.shake,5);
+    }
   }
   if(def.hp<=0){def.hp=0;startKO(def.side);}
 }
 function roarResolve(att,def){
   const R=BAL.ROAR;
+  if(handleIfDowned(att,def,R.d))return;
   sfx('roar');fxWave(att);
   if(def.phase==='guard'||(def.phase==='blockstun'&&def.held)){ // 全段ガード可・大削り
     def.guard-=BAL.GDMG_S;def.hp-=BAL.CHIP_S;
@@ -424,6 +449,7 @@ function roarResolve(att,def){
 }
 function grabStriking(f){return f.phase==='grab'&&f.pf===BAL.GRAB.s+1;}
 function grabResolve(att,def){
+  if(handleIfDowned(att,def,BAL.GRAB.d))return;
   if(def.phase==='grab'){startClash('grab');return;} // つかみ同士→ギュイーン
   const ok=def.phase==='guard'||def.phase==='blockstun'||def.phase==='idle'
     ||def.phase==='dizzy'||def.phase==='mikiriRec'||(def.phase==='roar'&&def.pf<=BAL.ROAR.armor);
@@ -992,6 +1018,13 @@ function rFighter(f,ox,oy){
     const uf=B?B.flowF:0;
     if(uf<BAL.ULT.impact){lean=-0.18;crouch=-4;pawF=[6,-142];pawB=[-16,-138];eyes='a';mouth=0.6;dy=Math.sin(gf*2.2)*1.6;} // 大振りかぶり
     else{lean=0.4;pawF=[66,-30];pawB=[54,-26];eyes='a';mouth=0.8;} // 振り下ろし
+  }else if(P==='down'){ // ダウン: 1発だけ追撃可、それ以降は無敵で寝ている
+    rot=-1.42;eyes=f.downHitUsed?'x':'s';mouth=0.35;
+    pawF=[10,-30+Math.sin(gf*0.5)*2];pawB=[-16,-32];
+  }else if(P==='wake'){ // 起き上がり20F: 全身無敵のまま強制的に構えへ戻る
+    const k=Math.min(1,t/BAL.DOWN.wakeF);
+    rot=-1.42*(1-k);eyes='c';mouth=0.15;
+    pawF=L([10,-30],stance,k);pawB=L([-16,-32],stanceB,k);
   }else if(P==='dizzy'){
     rot=Math.sin(gf*0.22)*0.17;eyes='s';mouth=0.4;pawF=[22,-48];pawB=[-18,-50];dy=3;crouch=4;
   }else if(P==='ko'){
@@ -1012,6 +1045,12 @@ function rFighter(f,ox,oy){
     const gg=ctx.createRadialGradient(0,bodyY,4,0,bodyY,78);
     gg.addColorStop(0,teleCol);gg.addColorStop(1,'rgba(0,0,0,0)');
     ctx.fillStyle=gg;ctx.beginPath();ctx.arc(0,bodyY,78,0,TAU);ctx.fill();
+    ctx.restore();
+  }
+  if((P==='down'&&f.downHitUsed)||P==='wake'){ // ダウン連消化後〜起き上がりは無敵表示
+    ctx.save();ctx.globalAlpha=0.4+0.3*Math.sin(gf*0.3);
+    ctx.strokeStyle='#7fd8ff';ctx.lineWidth=4;
+    ctx.beginPath();ctx.ellipse(0,bodyY,bw+10,bh+10,0,0,TAU);ctx.stroke();
     ctx.restore();
   }
   const OL=shade(c.color,-70);
