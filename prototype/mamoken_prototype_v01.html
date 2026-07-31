@@ -43,9 +43,10 @@ const BAL={ // 03_data_design.md v2.0 §2 balance table 準拠
   HP:1000,TIME:3600,WINS:2,
   ATK:{high:{s:22,a:3,r:24,d:100,y:-108,w:2},mid:{s:14,a:3,r:18,d:70,y:-68,w:1},low:{s:30,a:4,r:30,d:150,y:-26,w:3}},
   HITSTUN:{high:32,mid:24},BLOCKSTUN:{high:16,mid:14,low:15},CHAIN:14,CMAX:3,SCALE:[1,0.9,0.8],
-  JUST:8,REGAP:12,JUST_PINCH:4,PINCH_HP:300,
+  PINCH_HP:300,
+  MIKIRI:{window:5,windowPinch:7,whiff:22}, // 見切り: 接触±5F(ピンチ±7F)。空振りは22Fガード不能
   GDMG_A:10,GDMG_S:45,CHIP_S:20,CHIP_LOW:10,GREGEN:0.22,DIZZY:90,GRECOVER:50,
-  SMAX:100,SG:{aHit:12,aHitC:[12,7,4],aBlk:8,whiff:2,gOk:6,just:12,got:5},
+  SMAX:100,SG:{aHit:12,aHitC:[12,7,4],aBlk:8,whiff:2,gOk:6,got:5},
   ROAR:{s:16,armor:14,a:4,r:24,d:130,stun:34},
   CLASH:{sel:90,d:120,near:8,streakBonus:30,winS:30,loserStun:40,inF:26,revealHitF:24,revealF:60},
   GRAB:{s:12,a:2,rec:28,seq:28,d:90,stun:30,counterMul:1.25},
@@ -94,7 +95,6 @@ function sfx(n){
   else if(n==='hit'){noiseS(0.07,0.2);tone(170,0.09,'square',0.2,90);}
   else if(n==='hit2'){noiseS(0.1,0.26);tone(120,0.14,'square',0.24,60);}
   else if(n==='guard'){tone(760,0.05,'square',0.1,640);}
-  else if(n==='just'){tone(1050,0.12,'square',0.15,1500);}
   else if(n==='guiin'){tone(480,0.55,'sawtooth',0.15,1500);tone(486,0.55,'sawtooth',0.09,1540);}
   else if(n==='roarStart'){tone(330,0.16,'sine',0.1,150);}
   else if(n==='roar'){tone(110,0.5,'sawtooth',0.2,190);noiseS(0.35,0.16);}
@@ -157,8 +157,8 @@ function newFighter(ci,side){
   return{c:c,side:side,baseX:side===0?152:388,y:428,
     hp:BAL.HP,guard:c.gMax,s:0,ult:0,
     phase:'idle',pf:0,atkLv:null,hasHit:false,
-    guardLv:null,guardStartF:-999,stunDur:0,combo:0,
-    buf:null,bufF:0,held:null,lunge:0,kb:0,lastGF:-999,
+    guardLv:null,stunDur:0,combo:0,
+    buf:null,bufF:0,held:null,lunge:0,kb:0,
     shownHp:BAL.HP,ultFlash:0,sNo:0};
 }
 function startBattle(){
@@ -245,6 +245,14 @@ function applyInputs(f,opp,cmds,held){
         f.phase='grab';f.pf=0;f.guardLv=null;f.atkLv=null;f.buf=null;f.combo=0;f.hasHit=false;
         sfx('grabGo');
       }
+    }else if(c.t==='mikiri'){ // 見切り: ジャストタップ。窓内なら能動的にギュイーンを起こす
+      if(f.phase==='idle'||f.phase==='guard'){
+        const win=(f.hp<=BAL.PINCH_HP)?BAL.MIKIRI.windowPinch:BAL.MIKIRI.window;
+        const opAtk=opp.phase==='attack'&&opp.atkLv;
+        const success=opAtk&&Math.abs(opp.pf-(spec(opp).s+1))<=win;
+        if(success){startClash('mikiri');return;}
+        f.phase='mikiriRec';f.pf=0;f.guardLv=null;f.buf=null;sfx('whiffG');
+      }
     }else if(c.t==='atk'){
       if(f.phase==='idle')startAtk(f,c.lv,false);
       else if(canChain(f,c.lv))startAtk(f,c.lv,true);
@@ -253,10 +261,8 @@ function applyInputs(f,opp,cmds,held){
   }
   if(f.phase==='idle'&&held){
     f.phase='guard';f.pf=0;f.guardLv=held;
-    f.guardStartF=(B.f-f.lastGF<BAL.REGAP)?B.f-40:B.f; // ガード擦り対策: 置きガードのみジャスト
-  }else if(f.phase==='guard'){
-    if(!held){f.phase='idle';f.pf=0;f.guardLv=null;}
-    else if(held!==f.guardLv){f.guardLv=held;f.guardStartF=B.f-40;}
+  }else if(f.phase==='guard'&&!held){
+    f.phase='idle';f.pf=0;f.guardLv=null;
   }
 }
 function tryBuf(f){
@@ -302,10 +308,12 @@ function advance(f){
     if(f.pf>=f.stunDur){f.phase='idle';f.pf=0;}
   }else if(f.phase==='blockstun'){
     if(f.pf>=f.stunDur){
-      if(f.held){f.phase='guard';f.guardLv=f.held;f.guardStartF=B.f-40;}
+      if(f.held){f.phase='guard';f.guardLv=f.held;}
       else f.phase='idle';
       f.pf=0;
     }
+  }else if(f.phase==='mikiriRec'){ // 見切り空振り: ガード不能の硬直
+    if(f.pf>=BAL.MIKIRI.whiff){f.phase='idle';f.pf=0;}
   }else if(f.phase==='dizzy'){
     if(f.pf>=BAL.DIZZY){f.phase='idle';f.pf=0;f.guard=BAL.GRECOVER;}
   }
@@ -345,7 +353,6 @@ function resolveHits(){
   if(ag){grabResolve(a,b);if(B.flow!=='fight')return;}
   if(bg){grabResolve(b,a);}
 }
-function justWin(f){return BAL.JUST+((f.hp<=BAL.PINCH_HP)?BAL.JUST_PINCH:0);} // ピンチ時は逆転補正で窓拡張
 function nearClash(att,def){ // 同段をほぼ同時に振り合ったらギュイーン（相殺緩和）
   if(def.phase!=='attack'||def.atkLv!==att.atkLv||def.hasHit)return false;
   return def.pf>=spec(def).s-BAL.CLASH.near;
@@ -354,10 +361,6 @@ function attackResolve(att,def){
   if(nearClash(att,def)){att.hasHit=true;def.hasHit=true;startClash('trade');return;}
   const guarded=(def.phase==='guard')||(def.phase==='blockstun'&&def.held); // 統一ガード: 全段ふせぐ
   if(guarded){
-    if(def.phase==='guard'&&B.f-def.guardStartF<=justWin(def)){ // ジャスト→競り合い
-      gainS(def,'just');sfx('just');fxSpark(def,att.atkLv,1);
-      startClash('just');return;
-    }
     def.phase='blockstun';def.pf=0;def.stunDur=BAL.BLOCKSTUN[att.atkLv];def.kb=6;
     def.guard-=BAL.GDMG_A;
     if(att.atkLv==='low'){ // 下段は被ガードでも削り10
@@ -423,7 +426,7 @@ function grabStriking(f){return f.phase==='grab'&&f.pf===BAL.GRAB.s+1;}
 function grabResolve(att,def){
   if(def.phase==='grab'){startClash('grab');return;} // つかみ同士→ギュイーン
   const ok=def.phase==='guard'||def.phase==='blockstun'||def.phase==='idle'
-    ||def.phase==='dizzy'||(def.phase==='roar'&&def.pf<=BAL.ROAR.armor);
+    ||def.phase==='dizzy'||def.phase==='mikiriRec'||(def.phase==='roar'&&def.pf<=BAL.ROAR.armor);
   if(ok){ // つかみ成立（ガードくずし）
     att.phase='grabHit';att.pf=0;
     def.phase='grabbed';def.pf=0;def.atkLv=null;def.guardLv=null;def.buf=null;def.combo=0;def.kb=0;
@@ -450,7 +453,7 @@ function startClash(kind){
   B.clash={phase:'in',f:0,pick:[null,null],cpuAt:25+((rng()*45)|0),kind:kind,winner:-2};
   B.hitstop=0;
   sfx('guiin');
-  announce(kind==='just'?'ジャスト!!':(kind==='grab'?'つかみ合い!!':'競り合い!!'),46,44,'#ffe14d');
+  announce(kind==='mikiri'?'見切った!!':(kind==='grab'?'つかみ合い!!':'競り合い!!'),46,44,'#ffe14d');
 }
 function clashBtns(){return[
   {c:'up',x:W/2,y:PT+150,ang:-Math.PI/2,col:'#ffd23f',label:'振り上げ'},
@@ -697,8 +700,7 @@ function fightStep(){
   resolveHits();
   if(B.flow!=='fight')return;
   for(const f of B.p){
-    if(f.phase==='guard'||f.phase==='blockstun')f.lastGF=B.f;
-    else if(f.phase!=='dizzy')
+    if(f.phase!=='guard'&&f.phase!=='blockstun'&&f.phase!=='dizzy')
       f.guard=Math.min(f.c.gMax,f.guard+BAL.GREGEN);
     f.kb*=0.86;if(f.kb<0.5)f.kb=0;
     if(f.sNo>0)f.sNo--;
@@ -968,6 +970,8 @@ function rFighter(f,ox,oy){
     lean=0.30;pawF=[74,-80];pawB=[66,-68];eyes='a';mouth=0.6; // 両手がばっ
   }else if(P==='grabrec'){
     lean=0.12;pawF=[52,-56];pawB=[40,-50];eyes='s';mouth=0.3;dy=2; // スカ
+  }else if(P==='mikiriRec'){
+    lean=-0.22;crouch=-3;pawF=[-16,-70];pawB=[-26,-56];eyes='s';mouth=0.3;dy=1; // 見切り空振り・仰け反り
   }else if(P==='grabHit'){
     if(t<=8){const k=t/8;lean=0.3-0.3*k;pawF=L([74,-80],[30,-92],k);pawB=L([66,-68],[24,-86],k);}
     else if(t<=18){const k=(t-8)/10;lean=-0.12*k;pawF=L([30,-92],[16,-132],k);pawB=L([24,-86],[-2,-128],k);}
