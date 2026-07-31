@@ -1421,14 +1421,14 @@ function rPad(){
     txt(labels[r],W*0.75,y+rh/2,20,'rgba(255,214,180,0.8)');
   }
   txt('タップの高さ＝段。はなした瞬間に発生',W*0.75,PT+(H-PT)-14,12,'rgba(200,190,175,0.6)');
-  if(game.screen==='battle'&&B&&B.flow==='fight'&&B.p[0].s>=BAL.SMAX){
+  if(game.screen==='battle'&&B&&B.flow==='fight'&&B.p[0].s>=BAL.SMAX){ // 右ゾーン内に収め左のガード表示と被らないようにする
     const a=0.5+0.4*Math.sin(game.frame*0.25);
     ctx.save();ctx.globalAlpha=a;
     ctx.fillStyle='rgba(18,18,24,0.85)';
-    rr(W/2-192,PT+(H-PT)/2-34,384,68,34);ctx.fill();
+    rr(W*0.75-128,PT+(H-PT)/2-30,256,60,30);ctx.fill();
     ctx.strokeStyle='#ffd23f';ctx.lineWidth=3;
-    rr(W/2-192,PT+(H-PT)/2-34,384,68,34);ctx.stroke();
-    txt('→ 右へフリックで 咆哮!!',W/2,PT+(H-PT)/2,26,'#ffd23f');
+    rr(W*0.75-128,PT+(H-PT)/2-30,256,60,30);ctx.stroke();
+    txt('→フリックで咆哮!!',W*0.75,PT+(H-PT)/2,22,'#ffd23f');
     ctx.restore();
   }
 }
