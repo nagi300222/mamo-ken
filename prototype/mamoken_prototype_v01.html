@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-<title>マモ拳（仮）prototype v0.4</title>
+<title>マモ拳（仮）prototype v0.5</title>
 <style>
 html,body{margin:0;padding:0;background:#0b0d12;height:100%;overflow:hidden;touch-action:none;
 -webkit-user-select:none;user-select:none;-webkit-touch-callout:none;font-family:sans-serif}
@@ -16,10 +16,12 @@ canvas{display:block;background:#000;touch-action:none}
 <script>
 "use strict";
 /* ============================================================
- * マモ拳（仮） プロトタイプ v0.4（つかみ＆統一ガード版）
- * - 仕様の正: マモ拳_01〜04 の4点セット（数値は03のbalance準拠）
+ * マモ拳（仮） プロトタイプ v0.5（見合いと交差・再設計版）
+ * - 仕様の正: redesign_proposal_v1.md（確定版）＋03_data_design.md v2.0
  * - 仮グラフィック（プログラム描画）/ 仮SE（WebAudio合成）
- * - 上50%バトル / 下50%パッド。左=ガード(ホールド) 右=攻撃 →フリック=咆哮
+ * - 上50%バトル / 下50%パッド（ボタン枠なし）。
+ *   右=高さタップ(リリース発火)で上/中/下段攻撃、右フリック=咆哮
+ *   左=ホールドでガード、ジャストタップ(100ms以内)=見切り、下フリック=つかみ
  * ============================================================ */
 const W=540,H=960,PT=480,TAU=Math.PI*2;
 const cv=document.getElementById('game'),ctx=cv.getContext('2d');
@@ -49,7 +51,7 @@ const BAL={
   GRAB:{s:10,a:2,rec:26,seq:28,d:100,stun:30,counterMul:1.25},
   ULT:{stock:3,d:300,impact:78,total:110},
   HITSTOP:{a:6,s:10,clash:10},
-  BUF:10,FLICK_DX:60,FLICK_MS:300
+  BUF:10,FLICK_DX:60,FLICK_MS:300,JUST_TAP_MS:100
 };
 const CHARS=[
  {id:'moguzo',name:'モグゾー',type:'バランス',ult:'大地烈掌',color:'#b58756',belly:'#ecd9b4',dMul:1,sMul:1,sOfs:0,gMax:100,pips:{p:3,s:3,g:3}},
@@ -673,6 +675,7 @@ function fightStep(){
   B.timer--;
   aiStep();
   const p1=B.p[0],p2=B.p[1];
+  p1Hold=currentP1Hold();
   applyInputs(p1,p2,evq,p1Hold);
   if(B.flow!=='fight'){evq.length=0;cpuEv.length=0;return;}
   applyInputs(p2,p1,cpuEv,ai.guardOn?'mid':null);
@@ -693,63 +696,87 @@ function fightStep(){
   if(B.timer<=0)timeUp();
 }
 
-/* ================= 入力 ================= */
+/* ================= 入力（見合いと交差 v2.0） ================= */
 const evq=[];
 let p1Hold=null,padPress=null,tstate=null;
+let dragRow=1,lastThrownRow=1; // 右ゾーン: 現在ドラッグ中の段 / 直前に投げた段（残像ガイド用）
 function toL(cx2,cy2){
   const r=cv.getBoundingClientRect();
   return{x:(cx2-r.left)/vScale,y:(cy2-r.top)/vScale};
 }
+function rowAt(py,prevRow){ // 段境界±20pxスナップ（誤爆防止）
+  const rh=(H-PT)/3;
+  let r=Math.min(2,Math.max(0,Math.floor((py-PT)/rh)));
+  if(prevRow!=null&&r!==prevRow){
+    const b=PT+Math.max(r,prevRow)*rh;
+    if(Math.abs(py-b)<20)r=prevRow;
+  }
+  return r;
+}
 function pressRoute(p){
   audioInit();
-  if(game.screen==='title'){sfx('tap');game.screen='select';return 'done';}
-  if(game.screen==='select'){selectPress(p);return 'done';}
-  if(game.screen==='result'){resultPress(p);return 'done';}
-  if(game.screen!=='battle'||!B)return 'done';
+  if(game.screen==='title'){sfx('tap');game.screen='select';return null;}
+  if(game.screen==='select'){selectPress(p);return null;}
+  if(game.screen==='result'){resultPress(p);return null;}
+  if(game.screen!=='battle'||!B)return null;
   if(B.flow==='clash'&&B.clash&&B.clash.phase==='select'){
     const c=clashHit(p);
     if(c&&B.clash.pick[0]===null){B.clash.pick[0]=c;sfx('tap');}
-    return 'done';
+    return null;
   }
-  if(p.y<PT)return 'done';
+  if(p.y<PT)return null;
   if(B.p[0].ult>=BAL.ULT.stock){
     if(B.flow==='fight'){evq.push({t:'ult'});sfx('tap');}
-    return 'done';
+    return null;
   }
-  if(B.flow!=='fight'&&B.flow!=='intro')return 'done';
-  const col=p.x<W/2?0:1;
-  if(col===0){
-    if(p.y<PT+(H-PT)*0.60){padPress={col:0,zone:'g'};p1Hold='mid';return 'guard';}
-    padPress={col:0,zone:'t'};
-    evq.push({t:'grab'});
-    return 'done';
+  if(B.flow!=='fight'&&B.flow!=='intro')return null;
+  if(p.x<W/2){ // 左ゾーン: ホールド=ガード / ジャストタップ=見切り / 下フリック=つかみ
+    padPress={zone:'L'};
+    return 'L';
   }
-  const row=Math.min(2,Math.max(0,Math.floor((p.y-PT)/((H-PT)/3))));
-  padPress={col:1,row:row};
-  evq.push({t:'atk',lv:LEVELS[row]}); // 右列は即Attack（フリック成立でSへキャンセル）
-  return 'flickwatch';
+  dragRow=rowAt(p.y,dragRow); // 右ゾーン: 高さ=段。発火はリリース時
+  padPress={zone:'R',row:dragRow};
+  return 'R';
 }
 function onDown(id,x,y){
   if(tstate)return;
   const p=toL(x,y);
-  tstate={id:id,x0:p.x,y0:p.y,t0:performance.now(),mode:pressRoute(p)};
+  const zone=pressRoute(p);
+  tstate=(zone==='L'||zone==='R')?{id:id,x0:p.x,y0:p.y,yNow:p.y,t0:performance.now(),zone:zone,resolved:false}:null;
 }
 function onMove(id,x,y){
-  if(!tstate||tstate.id!==id)return;
+  if(!tstate||tstate.id!==id||tstate.resolved)return;
   const p=toL(x,y);
+  tstate.yNow=p.y;
   const dx=p.x-tstate.x0,dy=p.y-tstate.y0;
-  if((tstate.mode==='guard'||tstate.mode==='flickwatch')
-    &&dx>=BAL.FLICK_DX&&Math.abs(dx)>Math.abs(dy)*1.2
-    &&performance.now()-tstate.t0<=BAL.FLICK_MS){
-    if(tstate.mode==='guard')p1Hold=null;
-    evq.push({t:'roar'});
-    tstate.mode='done';padPress=null;
+  const ms=performance.now()-tstate.t0;
+  if(tstate.zone==='R'){
+    dragRow=rowAt(p.y,dragRow);padPress={zone:'R',row:dragRow};
+    if(dx>=BAL.FLICK_DX&&Math.abs(dx)>Math.abs(dy)*1.2&&ms<=BAL.FLICK_MS){
+      evq.push({t:'roar'});tstate.resolved=true;padPress=null;
+    }
+  }else if(tstate.zone==='L'){
+    if(dy>=BAL.FLICK_DX&&Math.abs(dy)>Math.abs(dx)*1.2&&ms<=BAL.FLICK_MS){
+      evq.push({t:'grab'});tstate.resolved=true;padPress=null;p1Hold=null;
+    }
   }
 }
 function onUp(id){
-  if(!tstate||tstate.id!==id)return;
-  if(tstate.mode==='guard')p1Hold=null;
-  tstate=null;padPress=null;
+  if(!tstate||tstate.id!==id){tstate=null;padPress=null;p1Hold=null;return;}
+  if(!tstate.resolved){
+    if(tstate.zone==='R'){
+      const row=rowAt(tstate.yNow,dragRow);
+      evq.push({t:'atk',lv:LEVELS[row]});
+      lastThrownRow=row;
+    }else if(tstate.zone==='L'){
+      if(performance.now()-tstate.t0<=BAL.JUST_TAP_MS)evq.push({t:'mikiri'});
+    }
+  }
+  p1Hold=null;tstate=null;padPress=null;
+}
+function currentP1Hold(){ // 左ゾーンを100ms超ホールド中＝ガード（未満はジャストタップ=見切り判定に回す）
+  if(tstate&&tstate.zone==='L'&&!tstate.resolved&&performance.now()-tstate.t0>=BAL.JUST_TAP_MS)return 'guard';
+  return null;
 }
 cv.addEventListener('touchstart',function(e){
   e.preventDefault();
@@ -1141,63 +1168,42 @@ function drawShield(x,y,s){
   ctx.beginPath();ctx.moveTo(0,-s*0.55);ctx.lineTo(0,s*0.55);ctx.stroke();
   ctx.restore();
 }
-function drawFist(x,y,s){
-  ctx.save();ctx.translate(x,y);
-  ctx.fillStyle='#c96a4a';rr(-s*0.8,-s*0.7,s*1.6,s*1.3,s*0.5);ctx.fill();
-  ctx.strokeStyle='#ffc6ae';ctx.lineWidth=2.5;
-  for(let i=0;i<3;i++){
-    ctx.beginPath();ctx.arc(-s*0.35+i*s*0.38,-s*0.62,s*0.19,Math.PI,0);ctx.stroke();
-  }
-  ctx.strokeStyle='rgba(255,180,140,0.8)';ctx.lineWidth=3;
-  ctx.beginPath();ctx.moveTo(s*1.0,-s*0.2);ctx.lineTo(s*1.6,-s*0.2);ctx.stroke();
-  ctx.beginPath();ctx.moveTo(s*1.0,s*0.22);ctx.lineTo(s*1.5,s*0.26);ctx.stroke();
-  ctx.restore();
-}
-function drawPalm(x,y,s){
-  ctx.save();ctx.translate(x,y);
-  ctx.fillStyle='#e8b24a';
-  rr(-s*0.7,-s*0.5,s*1.4,s*1.2,s*0.42);ctx.fill();
-  ctx.strokeStyle='#8a6520';ctx.lineWidth=2.5;ctx.lineCap='round';
-  for(let i=0;i<4;i++){
-    ctx.beginPath();ctx.moveTo(-s*0.52+i*s*0.35,-s*0.5);ctx.lineTo(-s*0.52+i*s*0.35,-s*1.02);ctx.stroke();
-  }
-  ctx.strokeStyle='rgba(255,220,150,0.85)';ctx.lineWidth=3;
-  ctx.beginPath();ctx.arc(0,s*0.1,s*1.4,-0.65,0.65);ctx.stroke();
-  ctx.restore();
-}
 function rPad(){
-  ctx.fillStyle='#171a22';ctx.fillRect(0,PT,W,H-PT);
+  ctx.fillStyle='#12141a';ctx.fillRect(0,PT,W,H-PT);
   if(game.screen==='battle'&&B){
     if(B.flow==='clash'&&B.clash){rPadClash();return;}
     if(B.p[0].ult>=BAL.ULT.stock&&(B.flow==='fight'||B.flow==='intro')){rPadUlt();return;}
   }
-  const rh=(H-PT)/3,rowK=['上','中','下'];
-  const gh=(H-PT)*0.60;
-  let hl=padPress&&padPress.col===0&&padPress.zone==='g';
-  ctx.fillStyle=p1Hold?'#2a4a63':(hl?'#24384c':'#1d2a3a');
-  rr(8,PT+6,W/2-12,gh-10,18);ctx.fill();
-  if(p1Hold){ctx.strokeStyle='#7fd8ff';ctx.lineWidth=3;rr(8,PT+6,W/2-12,gh-10,18);ctx.stroke();}
-  drawShield(W/4-2,PT+gh*0.34,36);
-  txt('ガード',W/4-2,PT+gh*0.62,34,'#cfe8ff');
-  txt('おしっぱ・ぜんだん ふせぐ',W/4-2,PT+gh*0.80,14,'#7fb2d8');
-  hl=padPress&&padPress.col===0&&padPress.zone==='t';
-  ctx.fillStyle=hl?'#54401c':'#382c12';
-  rr(8,PT+gh+2,W/2-12,(H-PT)-gh-10,18);ctx.fill();
-  ctx.strokeStyle='#a8853c';ctx.lineWidth=2;rr(8,PT+gh+2,W/2-12,(H-PT)-gh-10,18);ctx.stroke();
-  drawPalm(64,PT+gh+((H-PT)-gh)/2-2,19);
-  txt('つかみ',W/4+30,PT+gh+((H-PT)-gh)/2-13,28,'#ffe1a0');
-  txt('ガードくずし',W/4+30,PT+gh+((H-PT)-gh)/2+15,14,'#c9a86a');
+  // リングマット風の薄いロゴ（ボタン枠は廃止・視線は上半分の相手に固定させる）
+  ctx.save();ctx.globalAlpha=0.055;ctx.translate(W/2,PT+(H-PT)/2);ctx.rotate(-0.05);
+  txt('マモ拳',0,-18,116,'#ffffff');txt('MAMOKEN',0,58,24,'#ffffff');
+  ctx.restore();
+  ctx.strokeStyle='rgba(255,255,255,0.10)';ctx.lineWidth=2;
+  ctx.beginPath();ctx.moveTo(W/2,PT+6);ctx.lineTo(W/2,H-6);ctx.stroke();
+  // 左ゾーン: ガード(ホールド) / 見切り(ジャストタップ) / つかみ(下フリック)
+  const holding=!!(tstate&&tstate.zone==='L'&&!tstate.resolved);
+  const heldMs=holding?performance.now()-tstate.t0:0;
+  const justPhase=holding&&heldMs<BAL.JUST_TAP_MS;
+  ctx.save();ctx.globalAlpha=0.6;
+  ctx.strokeStyle=p1Hold?'#7fd8ff':(justPhase?'#ffe14d':'rgba(255,255,255,0.14)');
+  ctx.lineWidth=(p1Hold||justPhase)?3:1.5;
+  rr(10,PT+8,W/2-20,H-PT-16,20);ctx.stroke();
+  ctx.restore();
+  drawShield(W/4,PT+(H-PT)*0.34,30);
+  txt('ガード(ホールド)',W/4,PT+(H-PT)*0.34+50,17,'rgba(207,232,255,0.85)');
+  txt('ジャストタップ＝見切り',W/4,PT+(H-PT)*0.34+72,13,'rgba(255,225,90,0.75)');
+  txt('下フリック＝つかみ',W/4,PT+(H-PT)*0.34+90,13,'rgba(200,210,230,0.6)');
+  // 右ゾーン: 高さタップ＝段（上/中/下）。発火はリリース時
+  const rh=(H-PT)/3,labels=['上段','中段','下段'];
   for(let r=0;r<3;r++){
     const y=PT+r*rh;
-    const hr2=padPress&&padPress.col===1&&padPress.row===r;
-    ctx.fillStyle=hr2?'#5a2530':'#33202a';
-    rr(W/2+4,y+6,W/2-12,rh-12,16);ctx.fill();
-    drawFist(W/2+60,y+rh/2,23);
-    txt(rowK[r]+'段',W/2+W/4+24,y+rh/2-13,29,'#ffd9c9');
-    txt('こうげき',W/2+W/4+24,y+rh/2+17,15,'#e0937f');
-    txt(['②','①','③'][r],W-34,y+30,24,'#ffb37f');
+    const active=padPress&&padPress.zone==='R'&&padPress.row===r;
+    if(lastThrownRow===r){ctx.save();ctx.globalAlpha=0.09;ctx.fillStyle='#ffffff';ctx.fillRect(W/2+4,y+4,W/2-8,rh-8);ctx.restore();}
+    if(active){ctx.save();ctx.globalAlpha=0.22;ctx.fillStyle='#ffd23f';ctx.fillRect(W/2+4,y+4,W/2-8,rh-8);ctx.restore();}
+    if(r>0){ctx.strokeStyle='rgba(255,255,255,0.10)';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(W/2,y);ctx.lineTo(W,y);ctx.stroke();}
+    txt(labels[r],W*0.75,y+rh/2,20,'rgba(255,214,180,0.8)');
   }
-  ctx.fillStyle='#0d0f14';ctx.fillRect(W/2-2,PT,4,H-PT);
+  txt('タップの高さ＝段。はなした瞬間に発生',W*0.75,PT+(H-PT)-14,12,'rgba(200,190,175,0.6)');
   if(game.screen==='battle'&&B&&B.flow==='fight'&&B.p[0].s>=BAL.SMAX){
     const a=0.5+0.4*Math.sin(game.frame*0.25);
     ctx.save();ctx.globalAlpha=a;
@@ -1408,11 +1414,12 @@ function rTitle(){
   demoF.c=CHARS[Math.floor(game.frame/240)%3];
   rFighter(demoF,W/2,616);
   if(game.frame%60<38)txt('タップでスタート',W/2,732,30,'#fff');
-  txt('左上＝ガード(おしっぱ・ぜんだんふせぐ) / 左下＝つかみ',W/2,822,16,'#cfd6e6');
-  txt('三すくみ: こうげき＞つかみ＞ガード＞こうげき',W/2,850,16,'#ffe6a3');
-  txt('コンボは 中→上→下 / 同じ段＆つかみ同士でギュイーン!!',W/2,878,16,'#ffe14d');
-  txt('Sゲージ満タン→右フリック＝咆哮（割りこみ/大削り）',W/2,906,16,'#cfd6e6');
-  txt('prototype v0.4 - grab & unified guard（仮グラ・仮SE）',W/2,936,13,'#8891a6');
+  txt('右＝高さタップで攻撃(上/中/下) はなした瞬間に発生',W/2,812,15,'#cfd6e6');
+  txt('左＝ホールドでガード／ジャストタップ=見切り／下フリック=つかみ',W/2,838,15,'#ffe6a3');
+  txt('三すくみ: こうげき＞つかみ＞ガード＞こうげき／見切り＞こうげき',W/2,866,15,'#ffe14d');
+  txt('コンボは 中→上→下 / 下段はダウンを奪う大技',W/2,894,15,'#ffb37f');
+  txt('Sゲージ満タン→右フリック＝咆哮（割りこみ/大削り）',W/2,918,15,'#cfd6e6');
+  txt('prototype v0.5 - 見合いと交差（仮グラ・仮SE）',W/2,940,13,'#8891a6');
 }
 function rSelect(){
   const g=ctx.createLinearGradient(0,0,0,H);
