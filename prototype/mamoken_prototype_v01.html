@@ -51,6 +51,7 @@ const BAL={ // 03_data_design.md v2.0 §2 balance table 準拠
   GRAB:{s:12,a:2,rec:28,seq:28,d:90,stun:30,counterMul:1.25},
   ULT:{stock:3,d:300,impact:78,total:110},
   HITSTOP:{mid:6,high:9,low:14,roar:12,clash:16},
+  TELEGRAPH:{mid:8,high:13,low:18}, // 発生前半に構え+段色フラッシュ+固有SE（見てから対応の成立条件）
   BUF:10,FLICK_DX:60,FLICK_MS:300,JUST_TAP_MS:100
 };
 const CHARS=[
@@ -61,6 +62,7 @@ const CHARS=[
 const LEVELS=['high','mid','low'];
 const CHOICES=['up','rd','ld'];
 const BEATS={up:'rd',rd:'ld',ld:'up'}; // 上→右下→左下→上
+const LEVEL_COLOR={high:'#ff5a5a',mid:'#ffe14d',low:'#5ab2ff'}; // テレグラフ段色
 
 /* ================= 仮SE（WebAudio合成） ================= */
 let AC=null;
@@ -105,6 +107,9 @@ function sfx(n){
   else if(n==='grab'){noiseS(0.05,0.15);tone(300,0.08,'square',0.13,220);}
   else if(n==='slam'){noiseS(0.2,0.3);tone(90,0.3,'sine',0.3,40);}
   else if(n==='whiffG'){tone(700,0.12,'sine',0.07,240);}
+  else if(n==='teleHigh'){tone(1500,0.05,'sine',0.08,1700);} // 上段=高音
+  else if(n==='teleMid'){tone(680,0.035,'square',0.07,680);} // 中段=タッ
+  else if(n==='teleLow'){tone(150,0.1,'sine',0.09,100);} // 下段=低音
 }
 
 /* ================= 補助 ================= */
@@ -208,6 +213,7 @@ function startAtk(f,lv,chain){
   f.phase='attack';f.pf=0;f.atkLv=lv;f.hasHit=false;f.guardLv=null;
   if(!chain)f.combo=0;
   sfx('swish');
+  sfx(lv==='high'?'teleHigh':(lv==='low'?'teleLow':'teleMid')); // テレグラフ固有SE
 }
 function canChain(f,lv){
   if(f.phase!=='attack'||!f.hasHit||f.combo>=BAL.CMAX)return false;
@@ -928,6 +934,7 @@ function rFighter(f,ox,oy){
   ctx.beginPath();ctx.ellipse(x,gy+5,42,9,0,0,TAU);ctx.fill();
   ctx.save();ctx.translate(x,gy);ctx.scale(face,1);
   let crouch=0,lean=0,rot=0,dy=0,mouth=0,eyes='n',inflate=0,shieldY=null;
+  let teleGlow=0,teleCol=null;
   let pawF=[32,-92],pawB=[18,-70];
   const P=f.phase,t=f.pf;
   const stance=[34,-84],stanceB=[-2,-80]; // ファイティング構え（フィギュア準拠）
@@ -948,6 +955,8 @@ function rFighter(f,ox,oy){
     else if(t<=A.s+A.a+2){const k=Math.min(1,(t-A.s)/2);pawF=bz(RT.w,RT.c,RT.t,k);lean=RT.ln;dy=RT.dy;eyes='a';mouth=0.3;}
     else{const k=Math.min(1,(t-A.s-A.a-2)/Math.max(1,A.r-2));pawF=bz(RT.t,RT.c,stance,k);lean=RT.ln*(1-k);}
     pawB=[6,-70];
+    const tg=BAL.TELEGRAPH[f.atkLv]; // テレグラフ: 発生前半区間は段色フラッシュで予告
+    if(t<=tg){teleCol=LEVEL_COLOR[f.atkLv];teleGlow=(1-t/tg)*(0.55+0.45*Math.sin(gf*0.9));}
   }else if(P==='guard'||P==='blockstun'){
     pawF=[24,-94];pawB=[34,-88];lean=-0.05;shieldY=-84;crouch=6;eyes='c'; // 両腕で顔前ガード
     if(P==='blockstun'){dy=Math.sin(gf*1.5)*1.8;lean=-0.09;}
@@ -994,6 +1003,13 @@ function rFighter(f,ox,oy){
   ctx.rotate(rot+lean);ctx.translate(0,dy);
   const bw=44+inflate*24,bh=56+inflate*10-crouch*0.5;
   const bodyY=-46+crouch*0.8;
+  if(teleGlow>0){ // テレグラフ: 構えに段色のフラッシュを重ねる
+    ctx.save();ctx.globalAlpha=teleGlow*0.6;
+    const gg=ctx.createRadialGradient(0,bodyY,4,0,bodyY,78);
+    gg.addColorStop(0,teleCol);gg.addColorStop(1,'rgba(0,0,0,0)');
+    ctx.fillStyle=gg;ctx.beginPath();ctx.arc(0,bodyY,78,0,TAU);ctx.fill();
+    ctx.restore();
+  }
   const OL=shade(c.color,-70);
   ctx.fillStyle=shade(c.color,-26);
   ctx.beginPath();ctx.ellipse(-38,bodyY+20,16,9,0.5,0,TAU);ctx.fill();
