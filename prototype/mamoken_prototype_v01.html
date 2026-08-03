@@ -1576,8 +1576,10 @@ function rHUD(){
   const p1=B.p[0],p2=B.p[1];
   hpBar(16,14,232,20,p1,false);
   hpBar(W-16-232,14,232,20,p2,true);
-  ctx.fillStyle='#12151c';ctx.beginPath();ctx.arc(W/2,26,25,0,TAU);ctx.fill();
-  ctx.strokeStyle='#fff';ctx.lineWidth=3;ctx.beginPath();ctx.arc(W/2,26,25,0,TAU);ctx.stroke();
+  if(!drawUiIcon('ui_timer_medal',W/2,26,58)){
+    ctx.fillStyle='#12151c';ctx.beginPath();ctx.arc(W/2,26,25,0,TAU);ctx.fill();
+    ctx.strokeStyle='#fff';ctx.lineWidth=3;ctx.beginPath();ctx.arc(W/2,26,25,0,TAU);ctx.stroke();
+  }
   txt(String(Math.max(0,Math.ceil(B.timer/60))),W/2,27,22,'#ffd23f');
   txt(p1.c.name,18,48,15,'#fff','left');
   txt(p2.c.name+'(CPU)',W-18,48,15,'#fff','right');
