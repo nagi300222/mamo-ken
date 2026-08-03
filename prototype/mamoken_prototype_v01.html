@@ -296,7 +296,15 @@ function stepFx(){
   if(B.shake>0){B.shake*=0.88;if(B.shake<0.3)B.shake=0;}
 }
 function lvY(f,lv){return f.y+BAL.ATK[lv].y;}
-function fxSpark(def,lv,guard){B.fx.push({k:guard?'gspark':'spark',x:def.baseX+(def.side===0?16:-16),y:lvY(def,lv||'mid'),f:0,dur:14});}
+function fxSpark(def,lv,guard,big){ // big: 呼び出し側で強制指定(咆哮ヒットなど、lvが位置算出専用でサイズと無関係な場合用)
+  const isBig=!guard&&(big||lv==='high'||lv==='low'); // 大=上段/下段/咆哮ヒット、小=中段/しゃがみ突き/ガード
+  const picks=[];
+  for(let i=0;i<3;i++){
+    picks.push({n:1+Math.floor(Math.random()*5),rot:Math.random()*TAU,scl:0.75+Math.random()*0.5,
+      ox:(Math.random()*2-1)*(isBig?22:14),oy:(Math.random()*2-1)*(isBig?18:11)});
+  }
+  B.fx.push({k:guard?'gspark':'spark',x:def.baseX+(def.side===0?16:-16),y:lvY(def,lv||'mid'),f:0,dur:14,big:isBig,picks:picks});
+}
 function fxDmg(def,n,col){B.fx.push({k:'dmg',x:def.baseX,y:lvY(def,'high')-30,n:n,col:col,f:0,dur:44});}
 function fxWave(att){B.fx.push({k:'wave',x:att.baseX+(att.side===0?30:-30),y:att.y-92,dir:att.side===0?1:-1,f:0,dur:26});}
 function fxBurst(x,y){B.fx.push({k:'burst',x:x,y:y,f:0,dur:22});}
@@ -605,7 +613,7 @@ function roarResolve(att,def){
     def.phase='hitstun';def.pf=0;def.stunDur=R.stun;
     def.atkLv=null;def.guardLv=null;def.buf=null;def.combo=0;def.kb=34;
     gainS(att,'aHit');gainS(def,'got');
-    fxDmg(def,R.d,'#ff8040');fxSpark(def,'mid',0);
+    fxDmg(def,R.d,'#ff8040');fxSpark(def,'mid',0,true); // 咆哮ヒット=大スパーク
     B.shake=Math.max(B.shake,10);B.hitstop=Math.max(B.hitstop,BAL.HITSTOP.roar);
   }
   if(def.hp<=0){def.hp=0;startKO(def.side);}
@@ -1462,15 +1470,32 @@ function rFx(){
   for(const p of B.fx){
     const t=p.f/p.dur;
     if(p.k==='spark'||p.k==='gspark'){
-      const col=(p.k==='spark')?'#ffe14d':'#7fd8ff';
-      ctx.save();ctx.translate(p.x,p.y);ctx.globalAlpha=1-t;
-      ctx.strokeStyle=col;ctx.lineWidth=5;
-      for(let i=0;i<6;i++){
-        const a=i*TAU/6+t*0.6,r1=6+t*26,r2=16+t*36;
-        ctx.beginPath();ctx.moveTo(Math.cos(a)*r1,Math.sin(a)*r1);ctx.lineTo(Math.cos(a)*r2,Math.sin(a)*r2);ctx.stroke();
+      const sizeC=p.big?'l':'s';
+      const ready=p.picks&&p.picks.some(pk=>assetReady('ui_star_'+sizeC+pk.n));
+      if(ready){ // ヒットスパーク画像(大=上段/下段/咆哮、小=中段/ガード)。ランダム選択+回転+スケールで散らす
+        ctx.save();ctx.translate(p.x,p.y);ctx.globalAlpha=1-t;
+        for(const pk of p.picks){
+          const key='ui_star_'+sizeC+pk.n;
+          if(!assetReady(key))continue;
+          const grow=0.6+0.4*(1-t);
+          ctx.save();
+          ctx.translate(pk.ox*(0.4+0.6*t),pk.oy*(0.4+0.6*t));
+          ctx.rotate(pk.rot+t*0.4);
+          drawUiIcon(key,0,0,(p.big?46:28)*pk.scl*grow);
+          ctx.restore();
+        }
+        ctx.restore();
+      }else{
+        const col=(p.k==='spark')?'#ffe14d':'#7fd8ff';
+        ctx.save();ctx.translate(p.x,p.y);ctx.globalAlpha=1-t;
+        ctx.strokeStyle=col;ctx.lineWidth=5;
+        for(let i=0;i<6;i++){
+          const a=i*TAU/6+t*0.6,r1=6+t*26,r2=16+t*36;
+          ctx.beginPath();ctx.moveTo(Math.cos(a)*r1,Math.sin(a)*r1);ctx.lineTo(Math.cos(a)*r2,Math.sin(a)*r2);ctx.stroke();
+        }
+        ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(0,0,10*(1-t),0,TAU);ctx.fill();
+        ctx.restore();
       }
-      ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(0,0,10*(1-t),0,TAU);ctx.fill();
-      ctx.restore();
     }else if(p.k==='dmg'){
       ctx.save();ctx.globalAlpha=Math.min(1,2-2*t);
       txt(String(p.n),p.x,p.y-30*t,30,p.col);
