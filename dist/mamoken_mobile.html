@@ -77,7 +77,8 @@ const BAL={ // 03_data_design.md v2.0 §2 balance table 準拠
   HITSTOP:{mid:6,high:9,low:14,roar:12,clash:16,crouch:5},
   TELEGRAPH:{mid:8,high:13,low:18,crouch:6}, // 発生前半に構え+段色フラッシュ+固有SE（見てから対応の成立条件）
   BUF:10,FLICK_DX:60,FLICK_MS:300,JUST_TAP_MS:100,
-  SPRITE_H:{moguzo:185,pisuke:165,godan:206} // 表示身長(px)。体格基準ラインナップ(ピスケ小柄/ゴダン大柄)の印象を反映。試遊後調整可
+  SPRITE_H:{moguzo:185,pisuke:165,godan:206}, // 戦闘スプライトの表示身長(px)。体格基準ラインナップ(ピスケ小柄/ゴダン大柄)の印象を反映。試遊後調整可
+  PORTRAIT_RATIO:{moguzo:1.00,pisuke:0.80,godan:1.15} // 立ち絵(portraits/)用の比率。各画面の基準高に乗算して体格差を表現(v2.4.1)
 };
 const CHARS=[
  {id:'moguzo',name:'モグゾー',type:'バランス',ult:'大地烈掌',color:'#b58756',belly:'#ecd9b4',dMul:1,sMul:1,sOfs:0,gMax:100,pips:{p:3,s:3,g:3}},
@@ -328,9 +329,10 @@ function fxSpark(def,lv,guard,big){ // big: 呼び出し側で強制指定(咆�
   B.fx.push({k:guard?'gspark':'spark',x:def.baseX+(def.side===0?16:-16),y:lvY(def,lv||'mid'),f:0,dur:14,big:isBig,picks:picks});
 }
 function fxDmg(def,n,col){B.fx.push({k:'dmg',x:def.baseX,y:lvY(def,'high')-30,n:n,col:col,f:0,dur:44});}
-function fxWave(att){B.fx.push({k:'wave',x:att.baseX+(att.side===0?30:-30),y:att.y-92,dir:att.side===0?1:-1,f:0,dur:26});}
+function relY(f,ratio){return f.y-BAL.SPRITE_H[f.c.id]*ratio;} // キャラの表示身長(BAL.SPRITE_H)基準の頭上/身体オフセット(体格差に追従)
+function fxWave(att){B.fx.push({k:'wave',x:att.baseX+(att.side===0?30:-30),y:relY(att,0.497),dir:att.side===0?1:-1,f:0,dur:26});}
 function fxBurst(x,y){B.fx.push({k:'burst',x:x,y:y,f:0,dur:22});}
-function fxStars(f){B.fx.push({k:'stars',x:f.baseX,y:f.y-146,f:0,dur:BAL.DIZZY});}
+function fxStars(f){B.fx.push({k:'stars',x:f.baseX,y:relY(f,0.789),f:0,dur:BAL.DIZZY});}
 function fxRoarImg(charId){ // 咆哮演出画(該当キャラの画像が無ければ何も足さず現行のfxWaveのみ)
   if(assetReady('roar_'+charId))B.fx.push({k:'roarImg',charId:charId,f:0,dur:24});
 }
@@ -364,7 +366,7 @@ function startAtk(f,lv,chain){
     if(f.atkStreak>=3){f.yomare=true;fxYomare(f);}else f.yomare=false;
   }
 }
-function fxYomare(f){B.fx.push({k:'yomare',x:fpos(f),y:f.y-190,f:0,dur:50});}
+function fxYomare(f){B.fx.push({k:'yomare',x:fpos(f),y:relY(f,1.027),f:0,dur:50});}
 function startDodge(f,kind){ // kind: 'crouch'|'sway'|'lunge'
   f.phase='dodge';f.pf=0;f.dodgeType=kind;f.atkLv=null;f.guardLv=null;f.buf=null;f.combo=0;f.hasHit=false;
   sfx('swish');
@@ -556,7 +558,7 @@ function attackResolve(att,def){
     if(rule.beats===att.atkLv){ // 回避成功: 攻撃側はスカ扱い、防御側はcounterReadyを獲得
       def.counterReadyF=BAL.DODGE.counterReadyF;
       if(def.dodgeType==='lunge')def.clinchF=BAL.DODGE.clinchF; // 踏み込み成功→追加で密着12F
-      B.fx.push({k:'suki',x:fpos(att),y:att.y-168,f:0,dur:20});
+      B.fx.push({k:'suki',x:fpos(att),y:relY(att,0.908),f:0,dur:20});
       sfx('whiffG');
       return;
     }
@@ -577,7 +579,7 @@ function attackResolve(att,def){
     }
     gainS(att,'aBlk');gainS(def,'gOk');gainFocus(def,BAL.FOCUS.gainGuard);
     const A2=spec(att),rem=A2.s+A2.a+A2.r-att.pf;
-    if(rem>6)B.fx.push({k:'suki',x:fpos(att),y:att.y-168,f:0,dur:rem});
+    if(rem>6)B.fx.push({k:'suki',x:fpos(att),y:relY(att,0.908),f:0,dur:rem});
     fxSpark(def,att.atkLv,1);sfx('guard');
     B.hitstop=Math.max(B.hitstop,2);
     if(def.guard<=0)doBreak(def);
@@ -597,7 +599,7 @@ function hitApply(att,def,counterHit){
     dmg=Math.round(dmg*BAL.GRAB.counterMul);
     counterFx=true;
   }
-  if(counterFx)B.fx.push({k:'counter',x:def.baseX,y:def.y-186,f:0,dur:38});
+  if(counterFx)B.fx.push({k:'counter',x:def.baseX,y:relY(def,1.005),f:0,dur:38});
   if(def.phase==='roar'&&def.pf<=BAL.ROAR.armor){ // 咆哮アーマー
     dmg=Math.round(dmg*0.5);def.hp-=dmg;gainS(att,'aBlk');gainFocus(def,dmg*BAL.FOCUS.gainDmgMul);
     fxDmg(def,dmg,'#ffb020');fxSpark(def,att.atkLv,0);sfx('hit');
@@ -656,7 +658,7 @@ function grabResolve(att,def){
     sfx('grab');
   }else{ // 打撃・攻撃中の相手には潰される
     att.phase='grabrec';att.pf=0;
-    B.fx.push({k:'suki',x:fpos(att),y:att.y-168,f:0,dur:BAL.GRAB.rec});
+    B.fx.push({k:'suki',x:fpos(att),y:relY(att,0.908),f:0,dur:BAL.GRAB.rec});
     sfx('whiffG');
   }
 }
@@ -1327,6 +1329,22 @@ function dodgeSpriteOffset(f){ // 回避スプライト用: 11-22Fの戻り区�
   if(f.dodgeType==='sway')return[-14*back,-4*back]; // スウェー→後傾を起こしつつ前へ戻す
   return[14*back,0];                                // lunge→前傾を起こしつつ後ろへ戻す
 }
+function drawStatusRings(f,bodyY,bw,bh){ // 無敵(ダウン連消化後〜起き上がり)/counterReady・密着リング
+  // 呼び出し側でctx.translate(x,gy)+scale(face,1)済みの座標系を前提とする(body楕円の中心=bodyY相対)
+  const gf=game.frame;
+  if((f.phase==='down'&&f.downHitUsed)||f.phase==='wake'){
+    ctx.save();ctx.globalAlpha=0.4+0.3*Math.sin(gf*0.3);
+    ctx.strokeStyle='#7fd8ff';ctx.lineWidth=4;
+    ctx.beginPath();ctx.ellipse(0,bodyY,bw+10,bh+10,0,0,TAU);ctx.stroke();
+    ctx.restore();
+  }
+  if(f.counterReadyF>0||f.clinchF>0){ // 回避成功後のcounterReady/密着表示
+    ctx.save();ctx.globalAlpha=0.4+0.3*Math.sin(gf*0.4);
+    ctx.strokeStyle=f.clinchF>0?'#ff9e2c':'#ffe14d';ctx.lineWidth=4;
+    ctx.beginPath();ctx.ellipse(0,bodyY,bw+6,bh+6,0,0,TAU);ctx.stroke();
+    ctx.restore();
+  }
+}
 function drawSpriteFighter(f,ox,oy,sp){
   // 足元アンカー=画像下端 / P2(side1)は左右反転 / 位置・回転・シェイク・ヒットストップ・
   // 集中スロー・ズームは呼び出し側(rBattle/fpos)の変換をそのまま受けるため追加対応不要
@@ -1350,6 +1368,9 @@ function drawSpriteFighter(f,ox,oy,sp){
     }
   }
   ctx.drawImage(img,-w/2,-h,w,h);
+  // 無敵/counterReadyリングはキャラの表示身長(BAL.SPRITE_H)基準の相対位置で描く(体格差に追従)
+  const H2=BAL.SPRITE_H[f.c.id];
+  drawStatusRings(f,-0.249*H2,0.238*H2,0.303*H2);
   ctx.restore();
 }
 function drawFighterShape(f,ox,oy){
@@ -1463,18 +1484,7 @@ function drawFighterShape(f,ox,oy){
     ctx.fillStyle=gg;ctx.beginPath();ctx.arc(0,bodyY,78,0,TAU);ctx.fill();
     ctx.restore();
   }
-  if((P==='down'&&f.downHitUsed)||P==='wake'){ // ダウン連消化後〜起き上がりは無敵表示
-    ctx.save();ctx.globalAlpha=0.4+0.3*Math.sin(gf*0.3);
-    ctx.strokeStyle='#7fd8ff';ctx.lineWidth=4;
-    ctx.beginPath();ctx.ellipse(0,bodyY,bw+10,bh+10,0,0,TAU);ctx.stroke();
-    ctx.restore();
-  }
-  if(f.counterReadyF>0||f.clinchF>0){ // 回避成功後のcounterReady/密着表示
-    ctx.save();ctx.globalAlpha=0.4+0.3*Math.sin(gf*0.4);
-    ctx.strokeStyle=f.clinchF>0?'#ff9e2c':'#ffe14d';ctx.lineWidth=4;
-    ctx.beginPath();ctx.ellipse(0,bodyY,bw+6,bh+6,0,0,TAU);ctx.stroke();
-    ctx.restore();
-  }
+  drawStatusRings(f,bodyY,bw,bh);
   const OL=shade(c.color,-70);
   ctx.fillStyle=shade(c.color,-26);
   ctx.beginPath();ctx.ellipse(-38,bodyY+20,16,9,0.5,0,TAU);ctx.fill();
@@ -2089,7 +2099,8 @@ function rTitle(){
   txt('（仮）',W/2+170,304,28,'#fff');
   txt('- ギュイーン格闘 -',W/2,346,26,'#ffe6a3');
   demoF.c=CHARS[Math.floor(game.frame/240)%3];
-  if(!drawStanding('standing_'+demoF.c.id,W/2,724,336))rFighter(demoF,W/2,616);
+  // 立ち絵は体格比(BAL.PORTRAIT_RATIO)を基準高336へ乗算。中央配置は維持(足元アンカーで下端揃え)
+  if(!drawStanding('standing_'+demoF.c.id,W/2,724,336*BAL.PORTRAIT_RATIO[demoF.c.id]))rFighter(demoF,W/2,616);
   if(game.frame%60<38)txt('タップでスタート',W/2,732,30,'#fff');
   txt('右＝高さタップで攻撃(上/中/下)／右下の丸ボタン=つかみ',W/2,806,14,'#cfd6e6');
   txt('左＝ホールドでガード／ジャストタップ=見切り',W/2,830,14,'#ffe6a3');
@@ -2110,15 +2121,18 @@ function rSelect(){
     ctx.fillStyle='#232a3d';rr(R2.x,R2.y,R2.w,R2.h,18);ctx.fill();
     ctx.strokeStyle='#3a4560';ctx.lineWidth=2;rr(R2.x,R2.y,R2.w,R2.h,18);ctx.stroke();
     demoF.c=CHARS[i];
-    if(!drawStanding('standing_'+CHARS[i].id,R2.x+82,R2.y+R2.h-4,150))rFighter(demoF,R2.x+82,R2.y+R2.h-22);
-    txt(CHARS[i].name,R2.x+164,R2.y+46,31,'#fff','left');
-    txt(CHARS[i].type,R2.x+164,R2.y+80,19,'#ffd23f','left');
+    // 立ち絵は体格比(BAL.PORTRAIT_RATIO)を基準高140へ乗算。ゴダンの横幅が広いためポートレート列を
+    // 右寄せ(+90)・テキスト列を右シフト(+180/+264)してカード内にゆとりを持たせる(§6.6 v2.4.1)
+    const pcx=R2.x+90,tx=R2.x+180,px2=R2.x+264;
+    if(!drawStanding('standing_'+CHARS[i].id,pcx,R2.y+R2.h-4,140*BAL.PORTRAIT_RATIO[CHARS[i].id]))rFighter(demoF,pcx,R2.y+R2.h-22);
+    txt(CHARS[i].name,tx,R2.y+46,31,'#fff','left');
+    txt(CHARS[i].type,tx,R2.y+80,19,'#ffd23f','left');
     const st=[['ちから',CHARS[i].pips.p],['はやさ',CHARS[i].pips.s],['まもり',CHARS[i].pips.g]];
     for(let j=0;j<3;j++){
-      txt(st[j][0],R2.x+164,R2.y+112+j*26,15,'#9aa2b8','left');
+      txt(st[j][0],tx,R2.y+112+j*26,15,'#9aa2b8','left');
       for(let k=0;k<5;k++){
         ctx.fillStyle=(k<st[j][1])?'#ffd23f':'#39415a';
-        ctx.beginPath();ctx.arc(R2.x+248+k*22,R2.y+112+j*26,6.5,0,TAU);ctx.fill();
+        ctx.beginPath();ctx.arc(px2+k*22,R2.y+112+j*26,6.5,0,TAU);ctx.fill();
       }
     }
   }
@@ -2139,7 +2153,7 @@ function rResult(){
   const label=(r==='WIN')?'YOU WIN!!':((r==='LOSE')?'YOU LOSE...':'DRAW');
   if(r==='WIN'||r==='LOSE'){ // 勝者の立ち絵(画像が無ければ何も足さず現行のテキストのみ)
     const winnerId=(r==='WIN')?CHARS[game.p1].id:CHARS[game.p2].id;
-    drawStanding('standing_'+winnerId,W/2,522,308);
+    drawStanding('standing_'+winnerId,W/2,522,308*BAL.PORTRAIT_RATIO[winnerId]); // 体格比を適用(§6.6 v2.4.1)
   }
   txt(label,W/2,280,62,col);
   txt(CHARS[game.p1].name+'  vs  '+CHARS[game.p2].name+'(CPU)',W/2,362,22,'#cfd6e6');
