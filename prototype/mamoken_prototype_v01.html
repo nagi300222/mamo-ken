@@ -1190,11 +1190,13 @@ function eyesDraw(hx,hy,e){
  */
 function poseId(f){ // POSE_IDS(20種)の正準名を返す。該当スプライトが無い状態は
   const P=f.phase,t=f.pf;      // 意図的にPOSE_IDS外の文字列を返し図形描画へフォールバックさせる
+  if(P==='attack'&&f.atkLv==='crouch')return 'crouch_atk'; // しゃがみ突き(§6.6)。crouchポーズが構え(テレグラフ)を兼ねる
   if(P==='attack'&&f.atkLv){
     const tg=BAL.TELEGRAPH[f.atkLv];
     if(t<=tg)return 'tele_'+f.atkLv; // テレグラフ=tele_*
     return 'atk_'+f.atkLv;           // 構え〜発生〜硬直まで単一ポーズ
   }
+  if(P==='dodge')return f.dodgeType; // 'crouch'|'sway'|'lunge'（画像未配置。図形フォールバックはdrawFighterShapeに実装済み）
   if(P==='roar'){
     const R=BAL.ROAR;
     return(t<=R.s)?'roar_charge':'roar';
@@ -1300,6 +1302,14 @@ function drawFighterShape(f,ox,oy){
     lean=0.12;pawF=[52,-56];pawB=[40,-50];eyes='s';mouth=0.3;dy=2; // スカ
   }else if(P==='mikiriRec'){
     lean=-0.22;crouch=-3;pawF=[-16,-70];pawB=[-26,-56];eyes='s';mouth=0.3;dy=1; // 見切り空振り・仰け反り
+  }else if(P==='dodge'){ // 回避3種(画像未配置の暫定図形): 1-10F判定で深め→11-22Fで構えに戻る
+    const D=BAL.DODGE;
+    const into=Math.min(1,t/D.judgeF);
+    const back=t<=D.judgeF?1:Math.max(0,1-(t-D.judgeF)/(D.totalF-D.judgeF));
+    const k=t<=D.judgeF?into:back;
+    if(f.dodgeType==='crouch'){crouch=16*k;dy=2*k;eyes='c';pawF=[16,-64];pawB=[4,-56];}
+    else if(f.dodgeType==='sway'){lean=-0.30*k;dy=-3*k;eyes='c';pawF=[6,-92];pawB=[-6,-84];}
+    else{lean=0.28*k;eyes='a';pawF=[30,-84];pawB=[18,-72];} // lunge
   }else if(P==='grabHit'){
     if(t<=8){const k=t/8;lean=0.3-0.3*k;pawF=L([74,-80],[30,-92],k);pawB=L([66,-68],[24,-86],k);}
     else if(t<=18){const k=(t-8)/10;lean=-0.12*k;pawF=L([30,-92],[16,-132],k);pawB=L([24,-86],[-2,-128],k);}
