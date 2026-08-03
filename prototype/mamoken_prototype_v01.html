@@ -66,7 +66,8 @@ const BAL={ // 03_data_design.md v2.0 §2 balance table 準拠
   ULT:{stock:3,d:300,impact:78,total:110},
   HITSTOP:{mid:6,high:9,low:14,roar:12,clash:16,crouch:5},
   TELEGRAPH:{mid:8,high:13,low:18,crouch:6}, // 発生前半に構え+段色フラッシュ+固有SE（見てから対応の成立条件）
-  BUF:10,FLICK_DX:60,FLICK_MS:300,JUST_TAP_MS:100
+  BUF:10,FLICK_DX:60,FLICK_MS:300,JUST_TAP_MS:100,
+  SPRITE_H:{moguzo:185,pisuke:165,godan:206} // 表示身長(px)。体格基準ラインナップ(ピスケ小柄/ゴダン大柄)の印象を反映。試遊後調整可
 };
 const CHARS=[
  {id:'moguzo',name:'モグゾー',type:'バランス',ult:'大地烈掌',color:'#b58756',belly:'#ecd9b4',dMul:1,sMul:1,sOfs:0,gMax:100,pips:{p:3,s:3,g:3}},
@@ -94,7 +95,7 @@ function loadImg(key,src){
   img.src=src;
   return e;
 }
-function whitenAsset(e){ // 近似白(しきい値)を透過化。既に透過済みのPNGなら実質no-op
+function whitenAsset(e){ // 近似白(しきい値)を透過化。既に透過済みのPNGなら実質no-op。ついでにalpha bboxの高さも実測する
   try{
     const oc=document.createElement('canvas');
     oc.width=e.img.naturalWidth;oc.height=e.img.naturalHeight;
@@ -102,12 +103,18 @@ function whitenAsset(e){ // 近似白(しきい値)を透過化。既に透過�
     octx.drawImage(e.img,0,0);
     const id=octx.getImageData(0,0,oc.width,oc.height);
     const d=id.data,TH=238;
-    for(let i=0;i<d.length;i+=4){
-      if(d[i]>=TH&&d[i+1]>=TH&&d[i+2]>=TH)d[i+3]=0;
+    let minY=oc.height,maxY=-1;
+    for(let y=0;y<oc.height;y++){
+      for(let x=0;x<oc.width;x++){
+        const i=(y*oc.width+x)*4;
+        if(d[i]>=TH&&d[i+1]>=TH&&d[i+2]>=TH)d[i+3]=0;
+        if(d[i+3]>10){if(y<minY)minY=y;if(y>maxY)maxY=y;}
+      }
     }
     octx.putImageData(id,0,0);
     e.canvas=oc;
-  }catch(err){ /* file://等でcanvasが汚染される環境では無処理の原画のまま使う */ }
+    if(maxY>=minY)e.bboxH=maxY-minY+1; // 実測キャラ高(alpha bboxの高さ)。表示倍率の動的算出に使う
+  }catch(err){ /* file://等でcanvasが汚染される環境では無処理の原画のまま使う(bboxH未設定→呼び出し側でフォールバック) */ }
 }
 loadImg('standing_moguzo','../assets/portraits/moguzo.png'); // v0.6: キャラ選択/タイトル/リザルトはportraits/を使用
 loadImg('standing_pisuke','../assets/portraits/pisuke.png');
@@ -1281,8 +1288,12 @@ function rFighter(f,ox,oy){ // ポーズ画像があればdrawImage、無けれ�
   if(sp&&sp.ready&&!sp.failed){drawSpriteFighter(f,ox,oy,sp);return;}
   drawFighterShape(f,ox,oy);
 }
-const SPRITE_TARGET_H={moguzo:185,pisuke:180,godan:198}; // 表示身長(px)
-const SPRITE_IDLE_H={moguzo:560,pisuke:441,godan:536};   // idle.pngでの実測キャラ身長(px)。倍率=表示身長/実測身長を全ポーズ共通適用
+const SPRITE_IDLE_H_FALLBACK={moguzo:560,pisuke:441,godan:536}; // idle実測が不可(file://等でcanvas汚染)な場合のみ使うフォールバック値
+function spriteScale(charId){ // 表示倍率=目標身長(BAL.SPRITE_H)/idle.pngの実測キャラ高(alpha bboxの高さ)。全ポーズ同倍率で統一
+  const idleE=SPRITES[charId]&&SPRITES[charId].idle;
+  const idleH=(idleE&&idleE.bboxH)||SPRITE_IDLE_H_FALLBACK[charId];
+  return BAL.SPRITE_H[charId]/idleH;
+}
 function dodgeSpriteOffset(f){ // 回避スプライト用: 11-22Fの戻り区間だけ同画像を構え位置へ向けて位置補間する
   const D=BAL.DODGE,back=f.pf<=D.judgeF?0:Math.min(1,(f.pf-D.judgeF)/(D.totalF-D.judgeF));
   if(f.dodgeType==='crouch')return[0,10*back];   // しゃがみ→起き上がる分だけ上へ戻す
@@ -1294,7 +1305,7 @@ function drawSpriteFighter(f,ox,oy,sp){
   // 集中スロー・ズームは呼び出し側(rBattle/fpos)の変換をそのまま受けるため追加対応不要
   const x=(ox!=null)?ox:fpos(f),gy=(oy!=null)?oy:f.y,face=f.side===0?1:-1;
   const img=sp.canvas||sp.img,iw=sp.img.naturalWidth,ih=sp.img.naturalHeight;
-  const scale=SPRITE_TARGET_H[f.c.id]/SPRITE_IDLE_H[f.c.id]; // idle基準の実測倍率。全ポーズ同倍率で統一
+  const scale=spriteScale(f.c.id); // idle基準の実測倍率(動的計測。全ポーズ同倍率で統一)
   const w=iw*scale,h=ih*scale;
   ctx.fillStyle='rgba(0,0,0,0.22)';
   ctx.beginPath();ctx.ellipse(x,gy+5,42,9,0,0,TAU);ctx.fill();
