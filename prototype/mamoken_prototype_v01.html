@@ -473,6 +473,7 @@ function striking(f){
   return f.pf>A.s&&f.pf<=A.s+A.a;
 }
 function roarStriking(f){return f.phase==='roar'&&f.pf===BAL.ROAR.s+1;}
+function gainUltStock(f){f.ult=Math.min(BAL.ULT.stock,f.ult+1);f.ultFlash=40;} // 奥義ストック+1(ギュイーン勝利/咆哮クリーンヒット共通)
 function resolveHits(){
   const a=B.p[0],b=B.p[1];
   const as=striking(a),bs=striking(b);
@@ -483,9 +484,10 @@ function resolveHits(){
     hitApply(b,a,b.counterReadyF>0);return;
   }
   const ar=roarStriking(a),br=roarStriking(b);
-  if(ar&&br){ // 咆哮相打ち
+  if(ar&&br){ // 咆哮相打ち: 双方クリーンヒット扱いで奥義ストック+1(v2.3)
     const d=BAL.ROAR.d;
     a.hp-=d;b.hp-=d;gainFocus(a,d*BAL.FOCUS.gainDmgMul);gainFocus(b,d*BAL.FOCUS.gainDmgMul);
+    gainUltStock(a);gainUltStock(b);
     for(const f of B.p){f.phase='hitstun';f.pf=0;f.stunDur=BAL.ROAR.stun;f.kb=30;f.atkLv=null;}
     fxDmg(a,d,'#ff8040');fxDmg(b,d,'#ff8040');sfx('roar');fxRoarImg(a.c.id);fxRoarImg(b.c.id);
     B.shake=10;B.hitstop=BAL.HITSTOP.roar;
@@ -608,11 +610,11 @@ function roarResolve(att,def){
   }else if(def.phase==='roar'&&def.pf<=R.armor){
     const d=Math.round(R.d*0.5);def.hp-=d;gainS(att,'aBlk');gainFocus(def,d*BAL.FOCUS.gainDmgMul);
     fxDmg(def,d,'#ffb020');B.shake=Math.max(B.shake,6);
-  }else{
+  }else{ // 咆哮クリーンヒット(被ガード/アーマー減衰以外): 奥義ストック+1(v2.3)
     def.hp-=R.d;gainFocus(def,R.d*BAL.FOCUS.gainDmgMul);
     def.phase='hitstun';def.pf=0;def.stunDur=R.stun;
     def.atkLv=null;def.guardLv=null;def.buf=null;def.combo=0;def.kb=34;
-    gainS(att,'aHit');gainS(def,'got');
+    gainS(att,'aHit');gainS(def,'got');gainUltStock(att);
     fxDmg(def,R.d,'#ff8040');fxSpark(def,'mid',0,true); // 咆哮ヒット=大スパーク
     B.shake=Math.max(B.shake,10);B.hitstop=Math.max(B.hitstop,BAL.HITSTOP.roar);
   }
@@ -742,7 +744,7 @@ function applyClashResult(c){ // 3ミニゲーム共通のリワード適用(旧
   const stk=B.clashStreak[w];
   const dmg=BAL.CLASH.d+BAL.CLASH.streakBonus*(stk-1); // 連勝で押し切り
   lose.hp-=dmg;lose.kb=44;gainFocus(lose,dmg*BAL.FOCUS.gainDmgMul);
-  win.ult=Math.min(BAL.ULT.stock,win.ult+1);win.ultFlash=40;
+  gainUltStock(win);
   gainSAmt(win,BAL.CLASH.winS);
   fxDmg(lose,dmg,'#ffe14d');
   fxBurst(W/2,336);
