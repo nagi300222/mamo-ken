@@ -57,8 +57,16 @@ const BAL={ // 03_data_design.md v2.0 §2 balance table 準拠
   CLASH:{sel:90,d:120,near:8,streakBonus:30,winS:30,loserStun:40,inF:26,revealHitF:24,revealF:60},
   MINIGAME:{
     weights:{jyanken:0.5,renda:0.25,hayauchi:0.25},
-    RENDA:{durationF:120,cpuMin:0.115,cpuRng:0.02,tapGain:1,barRange:20}, // レンダ(連打の綱引き)
-    HAYAUCHI:{targets:5,radius:55,cpuMinF:14,cpuMaxF:24,capF:600} // ハヤウチ(的あて連続タップ)
+    RENDA:{durationF:120,tapGain:1,barRange:20}, // レンダ(連打の綱引き)。CPU加算率はBAL.AIDIFFへ難易度別に集約
+    HAYAUCHI:{targets:5,radius:55,capF:600} // ハヤウチ(的あて連続タップ)。CPU撃破速度はBAL.AIDIFFへ難易度別に集約
+  },
+  AIDIFF:{ // 難易度プリセット(§6.7 v2.4)。現行AI(v0.8時点)=HARD、按分してNORMAL/EASYを算出。試遊後調整可
+    EASY:{reactMul:0.4,mikiriRate:0.04,dodgeRate:0.05,atkFreqMul:0.6,downFollowup:0,focusRestraint:false,
+      rendaCpuMin:0.085,rendaCpuRng:0,hayauchiF:[22,34]},
+    NORMAL:{reactMul:0.7,mikiriRate:0.12,dodgeRate:0.10,atkFreqMul:0.8,downFollowup:0.5,focusRestraint:true,
+      rendaCpuMin:0.100,rendaCpuRng:0,hayauchiF:[17,27]},
+    HARD:{reactMul:1.0,mikiriRate:0.22,dodgeRate:0.15,atkFreqMul:1.0,downFollowup:1,focusRestraint:true,
+      rendaCpuMin:0.115,rendaCpuRng:0.02,hayauchiF:[14,24]}
   },
   GRAB:{s:12,a:2,rec:28,seq:28,d:90,stun:30,counterMul:1.25},
   DODGE:{totalF:22,judgeF:10,counterReadyF:18,counterMul:1.25,counterScale:[1.0,1.0,0.9], // 回避: 全体22F(1-10F判定/11-22F戻り)。成功でcounterReady18F
@@ -695,9 +703,9 @@ function clashStep(){
     if(c.f>=BAL.CLASH.inF){
       c.phase='select';c.f=0;
       if(c.mg==='hayauchi'){
-        const H2=BAL.MINIGAME.HAYAUCHI;
+        const hf=curDiff().hayauchiF;
         c.p0target=randHayauchiTarget();
-        c.cpuNextAt=H2.cpuMinF+((rng()*(H2.cpuMaxF-H2.cpuMinF+1))|0);
+        c.cpuNextAt=hf[0]+((rng()*(hf[1]-hf[0]+1))|0);
       }
     }
   }else if(c.phase==='select'){
@@ -724,9 +732,9 @@ function resolveJyankenPicks(c){ // 手の組み合わせ→勝者(あいこ=-1)
   const x=c.pick[0],y=c.pick[1];
   c.winner=(x===y)?-1:(BEATS[x]===y?0:1);
 }
-function stepRenda(c){ // 120Fのタップ連打綱引き。CPUは毎F自動加算
-  const R=BAL.MINIGAME.RENDA;
-  c.rendaC+=R.cpuMin+rng()*R.cpuRng;
+function stepRenda(c){ // 120Fのタップ連打綱引き。CPUは毎F自動加算(加算率は難易度別)
+  const R=BAL.MINIGAME.RENDA,D=curDiff();
+  c.rendaC+=D.rendaCpuMin+rng()*D.rendaCpuRng;
   if(c.f>=R.durationF){
     c.winner=(c.rendaP===c.rendaC)?-1:(c.rendaP>c.rendaC?0:1);
     c.phase='reveal';c.f=0;
@@ -735,11 +743,11 @@ function stepRenda(c){ // 120Fのタップ連打綱引き。CPUは毎F自動加�
 function randHayauchiTarget(){ // パッド内のランダム位置(端は避ける)
   return{x:70+rng()*(W-140),y:PT+110+rng()*(H-PT-160)};
 }
-function stepHayauchi(c){ // 的あて連続タップ。CPUは仮想的に1個14〜24Fで撃破
-  const H2=BAL.MINIGAME.HAYAUCHI;
+function stepHayauchi(c){ // 的あて連続タップ。CPUの1個あたり撃破速度は難易度別
+  const H2=BAL.MINIGAME.HAYAUCHI,hf=curDiff().hayauchiF;
   if(c.p1hits<H2.targets&&c.f>=c.cpuNextAt){
     c.p1hits++;
-    c.cpuNextAt=c.f+H2.cpuMinF+((rng()*(H2.cpuMaxF-H2.cpuMinF+1))|0);
+    c.cpuNextAt=c.f+hf[0]+((rng()*(hf[1]-hf[0]+1))|0);
   }
   if(c.p0hits>=H2.targets||c.p1hits>=H2.targets||c.f>=H2.capF){
     c.winner=(c.p0hits===c.p1hits)?-1:(c.p0hits>c.p1hits?0:1);
@@ -837,8 +845,8 @@ function timeUp(){
 
 /* ================= CPU AI ================= */
 const cpuEv=[];
-const AI_MIKIRI_RATE=0.22; // テレグラフを見て見切りを試みる率(命中は保証しない)
-const AI_DODGE_RATE=0.15; // テレグラフを見て正解回避を試みる率(見切り同様タイミングにブレを入れる)
+let aiDifficulty='NORMAL'; // EASY/NORMAL/HARD。キャラ選択画面で変更・セッション中保持(明示的にリセットしない)
+function curDiff(){return BAL.AIDIFF[aiDifficulty];}
 const LEVEL_TO_DODGE={high:'crouch',mid:'sway',low:'lunge'}; // その段を避ける回避(DODGE_TABLE.beatsの逆引き)
 const ai={think:0,guardT:0,guardOn:false,react:null,ultT:0,hist:[],mash:0,pHoldF:0,mikiriAt:null,dodgeAt:null,dodgeKind:null};
 function aiReset(){
@@ -847,6 +855,7 @@ function aiReset(){
 }
 function aiStep(){
   const me=B.p[1],you=B.p[0];
+  const D=curDiff();
   if(me.ult>=BAL.ULT.stock){
     ai.guardOn=false;ai.ultT++;
     if(ai.ultT>30&&actionable(me))cpuEv.push({t:'ult'});
@@ -858,14 +867,14 @@ function aiStep(){
     if(ai.hist.length>14)ai.hist.shift();
     ai.react={at:B.f+11+((rng()*6)|0),lv:you.atkLv};
     const tg=BAL.TELEGRAPH[you.atkLv]; // テレグラフが長い(=見てから対応しやすい)ほど差し込み精度が上がる
-    const cw=0.16+Math.min(0.3,ai.mash*0.05)+(tg-BAL.TELEGRAPH.mid)*0.012;
+    const cw=(0.16+Math.min(0.3,ai.mash*0.05)+(tg-BAL.TELEGRAPH.mid)*0.012)*D.reactMul; // 難易度の反応正解率
     if(me.phase==='idle'&&rng()<cw){
       cpuEv.push({t:'atk',lv:you.atkLv});ai.react=null;
-    }else if(me.phase==='idle'&&ai.mikiriAt==null&&rng()<AI_MIKIRI_RATE){ // 見切り試行(完璧な精度ではない)
+    }else if(me.phase==='idle'&&ai.mikiriAt==null&&rng()<D.mikiriRate){ // 見切り試行(完璧な精度ではない)
       const win=(me.hp<=BAL.PINCH_HP)?BAL.MIKIRI.windowPinch:BAL.MIKIRI.window;
       ai.mikiriAt=B.f+spec(you).s+Math.round((rng()*2-1)*win*2);
       ai.react=null;
-    }else if(me.phase==='idle'&&ai.dodgeAt==null&&rng()<AI_DODGE_RATE){ // 回避試行: テレグラフを見て正解の回避を狙うが、見切り同様タイミングにブレを入れる
+    }else if(me.phase==='idle'&&ai.dodgeAt==null&&rng()<D.dodgeRate){ // 回避試行: テレグラフを見て正解の回避を狙うが、見切り同様タイミングにブレを入れる
       const contact=B.f+spec(you).s; // 接触(pf=s+1)までの残りF
       const jitter=Math.round((rng()*2-1)*BAL.DODGE.judgeF);
       ai.dodgeAt=contact-5+jitter; // 判定窓(1-10F)の中央付近を狙うが外すこともある
@@ -875,8 +884,8 @@ function aiStep(){
   }
   if(ai.mikiriAt!=null&&B.f>=ai.mikiriAt){cpuEv.push({t:'mikiri'});ai.mikiriAt=null;}
   if(ai.dodgeAt!=null&&B.f>=ai.dodgeAt){cpuEv.push({t:'dodge',kind:ai.dodgeKind});ai.dodgeAt=null;}
-  // ダウン連追撃: 相手がダウン中で追撃がまだなら即座に1発叩き込む
-  if(you.phase==='down'&&!you.downHitUsed&&me.phase==='idle'){
+  // ダウン連追撃: 難易度別の実行率で1発叩き込む(EASY=しない/NORMAL=50%/HARD=常に)
+  if(you.phase==='down'&&!you.downHitUsed&&me.phase==='idle'&&rng()<D.downFollowup){
     cpuEv.push({t:'atk',lv:'mid'});
   }
   // つかみ返し: 相手のつかみを見たらつかみ合いへ
@@ -901,7 +910,7 @@ function aiStep(){
   if(ai.react&&B.f>=ai.react.at){
     const r=ai.react;ai.react=null;
     if(me.phase==='idle'){
-      const gp=0.45+Math.min(0.35,ai.mash*0.05);
+      const gp=(0.45+Math.min(0.35,ai.mash*0.05))*D.reactMul; // 難易度の反応正解率
       if(rng()<gp){ai.guardOn=true;ai.guardT=24+((rng()*20)|0);}
       else if(rng()<0.2)cpuEv.push({t:'atk',lv:LEVELS[(rng()*3)|0]});
     }
@@ -928,8 +937,8 @@ function aiStep(){
     if(ai.think<=0){
       ai.think=14+((rng()*12)|0);
       const roll=rng();
-      const focusThreat=you.focus>=BAL.FOCUS.max; // 相手の集中が満タン→打撃を振ると即返される。攻めを控える
-      const aggr=Math.max(0.1,0.36-ai.mash*0.03-(focusThreat?0.16:0));
+      const focusThreat=D.focusRestraint&&you.focus>=BAL.FOCUS.max; // 相手の集中が満タン→打撃を振ると即返される。攻めを控える(EASYは自重しない)
+      const aggr=Math.max(0.1,0.36-ai.mash*0.03-(focusThreat?0.16:0))*D.atkFreqMul; // 難易度別の攻撃頻度
       const grabW=0.1+(focusThreat?0.14:0); // つかみは"発生"扱いされず集中を誘発しないため踏み込みやすい
       const gsel=0.24+Math.min(0.3,ai.mash*0.04);
       if(roll<aggr){
@@ -1132,7 +1141,16 @@ addEventListener('mouseup',function(){onUp('m');});
 
 /* ================= 画面: セレクト/リザルト当たり判定 ================= */
 function selRect(i){return{x:36,y:180+i*230,w:W-72,h:206};}
+const DIFF_LEVELS=['EASY','NORMAL','HARD']; // §6.7 v2.4: キャラ選択画面で切替・デフォルトNORMAL・セッション中保持
+function diffRect(i){
+  const w=150,gap=10,totalW=3*w+2*gap,x0=(W-totalW)/2;
+  return{x:x0+i*(w+gap),y:866,w:w,h:36};
+}
 function selectPress(p){
+  for(let i=0;i<3;i++){
+    const r=diffRect(i);
+    if(inRect(p,r.x,r.y,r.w,r.h)){aiDifficulty=DIFF_LEVELS[i];sfx('tap');return;}
+  }
   for(let i=0;i<3;i++){
     const R2=selRect(i);
     if(inRect(p,R2.x,R2.y,R2.w,R2.h)){
@@ -2103,7 +2121,15 @@ function rSelect(){
       }
     }
   }
-  txt('奥義: 大地烈掌 / 音速連咆 / 山崩し',W/2,H-36,15,'#8891a6');
+  txt('むずかしさ',W/2,850,13,'#8891a6');
+  const DIFF_COL={EASY:'#7CFC00',NORMAL:'#ffd23f',HARD:'#ff6b6b'};
+  for(let i=0;i<3;i++){
+    const dl=DIFF_LEVELS[i],r=diffRect(i),active=(aiDifficulty===dl);
+    ctx.fillStyle=active?'rgba(255,255,255,0.14)':'#232a3d';rr(r.x,r.y,r.w,r.h,10);ctx.fill();
+    ctx.strokeStyle=active?DIFF_COL[dl]:'#3a4560';ctx.lineWidth=active?3:2;rr(r.x,r.y,r.w,r.h,10);ctx.stroke();
+    txt(dl,r.x+r.w/2,r.y+r.h/2,16,active?DIFF_COL[dl]:'#cfd6e6');
+  }
+  txt('奥義: 大地烈掌 / 音速連咆 / 山崩し',W/2,H-16,15,'#8891a6');
 }
 function rResult(){
   ctx.fillStyle='rgba(10,10,16,0.78)';ctx.fillRect(0,0,W,H);
