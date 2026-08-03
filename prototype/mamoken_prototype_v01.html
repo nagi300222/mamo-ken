@@ -51,7 +51,10 @@ const BAL={ // 03_data_design.md v2.0 §2 balance table 準拠
   SMAX:100,SG:{aHit:12,aHitC:[12,7,4],aBlk:8,whiff:2,gOk:6,got:5},
   ROAR:{s:16,armor:14,a:4,r:24,d:130,stun:34},
   CLASH:{sel:90,d:120,near:8,streakBonus:30,winS:30,loserStun:40,inF:26,revealHitF:24,revealF:60},
-  MINIGAME:{weights:{jyanken:1,renda:0,hayauchi:0}}, // ギュイーンで遊ぶミニゲームの抽選比率(レンダ/ハヤウチは実装コミットで更新)
+  MINIGAME:{
+    weights:{jyanken:0.75,renda:0.25,hayauchi:0}, // ハヤウチ実装まではジャンケンに配分
+    RENDA:{durationF:120,cpuMin:0.115,cpuRng:0.02,tapGain:1,barRange:20} // レンダ(連打の綱引き)
+  },
   GRAB:{s:12,a:2,rec:28,seq:28,d:90,stun:30,counterMul:1.25},
   ULT:{stock:3,d:300,impact:78,total:110},
   HITSTOP:{mid:6,high:9,low:14,roar:12,clash:16},
@@ -551,7 +554,8 @@ function startClash(kind){
     f.phase='clash';f.pf=0;f.atkLv=null;f.guardLv=null;f.buf=null;
     f.lunge=0;f.kb=0;f.combo=0;
   }
-  B.clash={phase:'in',f:0,mg:pickMinigame(),pick:[null,null],cpuAt:25+((rng()*45)|0),kind:kind,winner:-2};
+  B.clash={phase:'in',f:0,mg:pickMinigame(),pick:[null,null],cpuAt:25+((rng()*45)|0),kind:kind,winner:-2,
+    rendaP:0,rendaC:0};
   B.hitstop=0;
   sfx('guiin');
   announce(kind==='mikiri'?'見切った!!':(kind==='grab'?'つかみ合い!!':'競り合い!!'),46,44,'#ffe14d');
@@ -580,7 +584,8 @@ function clashStep(){
   if(c.phase==='in'){
     if(c.f>=BAL.CLASH.inF){c.phase='select';c.f=0;}
   }else if(c.phase==='select'){
-    stepJyanken(c); // 他ミニゲームの分岐は実装コミットで追加
+    if(c.mg==='renda')stepRenda(c);
+    else stepJyanken(c); // ハヤウチは実装コミットで追加するまでジャンケン扱い
   }else if(c.phase==='reveal'){
     if(c.f===BAL.CLASH.revealHitF){
       if(c.mg==='jyanken')resolveJyankenPicks(c);
@@ -600,6 +605,14 @@ function stepJyanken(c){
 function resolveJyankenPicks(c){ // 手の組み合わせ→勝者(あいこ=-1)を判定するだけ
   const x=c.pick[0],y=c.pick[1];
   c.winner=(x===y)?-1:(BEATS[x]===y?0:1);
+}
+function stepRenda(c){ // 120Fのタップ連打綱引き。CPUは毎F自動加算
+  const R=BAL.MINIGAME.RENDA;
+  c.rendaC+=R.cpuMin+rng()*R.cpuRng;
+  if(c.f>=R.durationF){
+    c.winner=(c.rendaP===c.rendaC)?-1:(c.rendaP>c.rendaC?0:1);
+    c.phase='reveal';c.f=0;
+  }
 }
 function applyClashResult(c){ // 3ミニゲーム共通のリワード適用(旧resolveClashの後半を流用)
   if(c.winner===-1){
@@ -865,8 +878,15 @@ function pressRoute(p){
   if(game.screen==='result'){resultPress(p);return null;}
   if(game.screen!=='battle'||!B)return null;
   if(B.flow==='clash'&&B.clash&&B.clash.phase==='select'){
-    const c=clashHit(p);
-    if(c&&B.clash.pick[0]===null){B.clash.pick[0]=c;sfx('tap');}
+    const cl=B.clash;
+    if(cl.mg==='renda'){
+      cl.rendaP+=BAL.MINIGAME.RENDA.tapGain; // 連打はタップ位置を問わない
+      B.fx.push({k:'burst',x:p.x,y:p.y,f:0,dur:14}); // タップごとの火花演出
+      sfx('tap');
+    }else{
+      const c=clashHit(p);
+      if(c&&cl.pick[0]===null){cl.pick[0]=c;sfx('tap');}
+    }
     return null;
   }
   if(p.y<PT)return null;
@@ -1506,14 +1526,23 @@ function rPad(){
 function rPadClash(){
   const c=B.clash;
   ctx.fillStyle='#0e0a16';ctx.fillRect(0,PT,W,H-PT);
+  if(c.phase==='in'){
+    txt('ギュイーン!?',W/2,PT+60,36,'#ffe14d');
+    return;
+  }
+  if(c.mg==='renda')rPadRenda(c);
+  else rPadJyanken(c); // ハヤウチは実装コミットで追加するまでジャンケン表示にフォールバック
+  if(c.phase==='reveal'){
+    ctx.fillStyle='rgba(0,0,0,0.45)';ctx.fillRect(0,PT,W,H-PT);
+  }
+}
+function rPadJyanken(c){
   if(c.phase==='select'){
     const rem=Math.max(0,1-c.f/BAL.CLASH.sel);
     ctx.fillStyle='#2a2f3d';ctx.fillRect(40,PT+16,W-80,14);
     ctx.fillStyle=(rem<0.35)?'#ff5a3c':'#ffd23f';
     ctx.fillRect(40,PT+16,(W-80)*rem,14);
     txt('えらべ!!',W/2,PT+56,30,'#fff');
-  }else if(c.phase==='in'){
-    txt('ギュイーン!?',W/2,PT+60,36,'#ffe14d');
   }
   const bs=clashBtns();
   for(const b of bs){
@@ -1532,10 +1561,31 @@ function rPadClash(){
     }
     ctx.restore();
   }
-  if(c.phase==='reveal'){
-    ctx.fillStyle='rgba(0,0,0,0.45)';ctx.fillRect(0,PT,W,H-PT);
-  }
   txt('✊グー＞✌️チョキ＞✋パー＞✊',W/2,H-22,15,'#9aa2b8');
+}
+function rPadRenda(c){
+  const R=BAL.MINIGAME.RENDA;
+  if(c.phase==='select'){
+    const rem=Math.max(0,1-c.f/R.durationF);
+    ctx.fillStyle='#2a2f3d';ctx.fillRect(40,PT+16,W-80,14);
+    ctx.fillStyle=(rem<0.25)?'#ff5a3c':'#ffd23f';
+    ctx.fillRect(40,PT+16,(W-80)*rem,14);
+  }
+  txt('連打!!',W/2,PT+58,30,'#fff');
+  const diff=Math.max(-R.barRange,Math.min(R.barRange,c.rendaP-c.rendaC));
+  const midY=PT+220,barX=40,barW=W-80;
+  ctx.fillStyle='#1c2030';ctx.fillRect(barX,midY-16,barW,32);
+  ctx.strokeStyle='#556';ctx.lineWidth=2;ctx.strokeRect(barX,midY-16,barW,32);
+  ctx.strokeStyle='rgba(255,255,255,0.4)';ctx.lineWidth=2;
+  ctx.beginPath();ctx.moveTo(barX+barW/2,midY-16);ctx.lineTo(barX+barW/2,midY+16);ctx.stroke();
+  const markerX=barX+barW/2+(diff/R.barRange)*(barW/2-16);
+  ctx.fillStyle=diff>=0?'#7cfc00':'#ff6b6b';
+  ctx.beginPath();ctx.arc(markerX,midY,18,0,TAU);ctx.fill();
+  ctx.strokeStyle='#fff';ctx.lineWidth=3;
+  ctx.beginPath();ctx.arc(markerX,midY,18,0,TAU);ctx.stroke();
+  txt('YOU',barX+20,midY-34,14,'#9f9','left');
+  txt('CPU',barX+barW-20,midY-34,14,'#f99','right');
+  txt('連打で押しきれ!',W/2,midY+56,16,'#ccd');
 }
 function rPadUlt(){
   const g=ctx.createRadialGradient(W/2,PT+240,20,W/2,PT+240,330);
