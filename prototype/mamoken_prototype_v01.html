@@ -1088,11 +1088,26 @@ function rFighter(f,ox,oy){ // ポーズ画像があればdrawImage、無けれ�
   if(sp&&sp.ready&&!sp.failed){drawSpriteFighter(f,ox,oy,sp);return;}
   drawFighterShape(f,ox,oy);
 }
-function drawSpriteFighter(f,ox,oy,sp){ // 足元アンカー・位置/反転/拡縮は現行ロジックをそのまま適用
+const SPRITE_TARGET_H={moguzo:185,pisuke:180,godan:198}; // 表示身長(px)
+const SPRITE_IDLE_H={moguzo:560,pisuke:441,godan:536};   // idle.pngでの実測キャラ身長(px)。倍率=表示身長/実測身長を全ポーズ共通適用
+function drawSpriteFighter(f,ox,oy,sp){
+  // 足元アンカー=画像下端 / P2(side1)は左右反転 / 位置・回転・シェイク・ヒットストップ・
+  // 集中スロー・ズームは呼び出し側(rBattle/fpos)の変換をそのまま受けるため追加対応不要
   const x=(ox!=null)?ox:fpos(f),gy=(oy!=null)?oy:f.y,face=f.side===0?1:-1;
   const img=sp.canvas||sp.img,iw=sp.img.naturalWidth,ih=sp.img.naturalHeight;
-  const h=180,w=h*iw/ih;
+  const scale=SPRITE_TARGET_H[f.c.id]/SPRITE_IDLE_H[f.c.id]; // idle基準の実測倍率。全ポーズ同倍率で統一
+  const w=iw*scale,h=ih*scale;
+  ctx.fillStyle='rgba(0,0,0,0.22)';
+  ctx.beginPath();ctx.ellipse(x,gy+5,42,9,0,0,TAU);ctx.fill();
   ctx.save();ctx.translate(x,gy);ctx.scale(face,1);
+  if(f.phase==='attack'&&f.atkLv){ // 攻撃の発生後数Fは残像を1枚重ねる(図形描画と同じ考え方)
+    const A=spec(f),t=f.pf;
+    if(t>A.s&&t<=A.s+A.a+3){
+      ctx.save();ctx.globalAlpha=0.22;
+      ctx.drawImage(img,-w/2-14,-h,w,h);
+      ctx.restore();
+    }
+  }
   ctx.drawImage(img,-w/2,-h,w,h);
   ctx.restore();
 }
