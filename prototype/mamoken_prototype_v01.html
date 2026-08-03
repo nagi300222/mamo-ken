@@ -1560,10 +1560,19 @@ function gauges(x,y,f,flip){
   for(let i=0;i<3;i++){
     const px=flip?(x+w-14-i*26):(x+14+i*26),py=y+49;
     const on=f.ult>i;
-    ctx.save();ctx.translate(px,py);ctx.rotate(Math.PI/4);
-    ctx.fillStyle=on?(((f.ult>=3&&game.frame%14<7)||f.ultFlash>0)?'#ffffff':'#ff2d78'):'#2a2f3d';
-    ctx.fillRect(-8,-8,16,16);
-    ctx.strokeStyle='#fff';ctx.lineWidth=1.5;ctx.strokeRect(-8,-8,16,16);
+    const flashing=(f.ult>=3&&game.frame%14<7)||f.ultFlash>0;
+    ctx.save();ctx.translate(px,py);
+    if(assetReady('ui_paw_emblem')){ // 所持数だけ点灯・残りは減光(グレースケール)
+      ctx.globalAlpha=on?1:0.35;
+      ctx.filter=on?(flashing?'brightness(1.7) saturate(0.5)':'none'):'grayscale(1) brightness(0.7)';
+      drawUiIcon('ui_paw_emblem',0,0,24);
+      ctx.filter='none';
+    }else{
+      ctx.rotate(Math.PI/4);
+      ctx.fillStyle=on?(flashing?'#ffffff':'#ff2d78'):'#2a2f3d';
+      ctx.fillRect(-8,-8,16,16);
+      ctx.strokeStyle='#fff';ctx.lineWidth=1.5;ctx.strokeRect(-8,-8,16,16);
+    }
     ctx.restore();
   }
 }
