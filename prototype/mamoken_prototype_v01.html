@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-<title>マモ拳（仮）prototype v0.8</title>
+<title>マモ拳（仮）prototype v0.8.6</title>
 <style>
 html,body{margin:0;padding:0;background:#0b0d12;height:100%;overflow:hidden;touch-action:none;
 -webkit-user-select:none;user-select:none;-webkit-touch-callout:none;font-family:sans-serif}
@@ -16,13 +16,15 @@ canvas{display:block;background:#000;touch-action:none}
 <script>
 "use strict";
 /* ============================================================
- * マモ拳（仮） プロトタイプ v0.8（回避システム＋コンボ拡張）
- * - 仕様の正: 03_data_design.md v2.2 §6.6
+ * マモ拳（仮） プロトタイプ v0.8.6（つかみボタン化＋難易度選択）
+ * - 仕様の正: 03_data_design.md v2.4 §6.6/§6.7
  * - 仮グラフィック（プログラム描画/一部スプライト）/ 仮SE（WebAudio合成）
- * - 上50%バトル / 下50%パッド（ボタン枠なし）。
- *   右=高さタップ(リリース発火)で上/中/下段攻撃、右フリック=咆哮、右下フリック=つかみ
+ * - 上50%バトル / 下50%パッド（ボタン枠なし。つかみのみ専用円形ボタン）。
+ *   右=高さタップ(リリース発火)で上/中/下段攻撃、右フリック=咆哮
+ *   右下隅の円形ボタン(肉球アイコン)=つかみ（v2.4: 下フリック割当は廃止）
  *   左=ホールドでガード、ジャストタップ(100ms以内)=見切り
  *   左←フリック=スウェー、左↓フリック=しゃがみ、左→フリック=踏み込み（回避）
+ *   キャラ選択画面でEASY/NORMAL/HARDの難易度選択(デフォルトNORMAL・セッション中保持)
  * ============================================================ */
 const W=540,H=960,PT=480,TAU=Math.PI*2;
 const cv=document.getElementById('game'),ctx=cv.getContext('2d');
@@ -1001,10 +1003,13 @@ function fightStep(){
 const evq=[];
 let p1Hold=null,padPress=null,tstate=null;
 let dragRow=1,lastThrownRow=1; // 右ゾーン: 現在ドラッグ中の段 / 直前に投げた段（残像ガイド用）
+let grabBtnFlashAt=0; // つかみボタン押下の一時ハイライト用タイムスタンプ
 function toL(cx2,cy2){
   const r=cv.getBoundingClientRect();
   return{x:(cx2-r.left)/vScale,y:(cy2-r.top)/vScale};
 }
+const GRAB_BTN={r:55,cx:W-70,cy:H-70}; // つかみボタン(直径110px・右ゾーン右下隅、§6.6 v2.4)
+function inGrabBtn(p){const dx=p.x-GRAB_BTN.cx,dy=p.y-GRAB_BTN.cy;return dx*dx+dy*dy<=GRAB_BTN.r*GRAB_BTN.r;}
 function rowAt(py,prevRow){ // 段境界±20pxスナップ（誤爆防止）
   const rh=(H-PT)/3;
   let r=Math.min(2,Math.max(0,Math.floor((py-PT)/rh)));
@@ -1049,6 +1054,10 @@ function pressRoute(p){
     padPress={zone:'L'};
     return 'L';
   }
+  if(inGrabBtn(p)){ // つかみボタン: 高さ別攻撃より先に判定(§6.6 v2.4、下フリック割当は廃止)
+    evq.push({t:'grab'});sfx('tap');grabBtnFlashAt=performance.now();
+    return null;
+  }
   dragRow=rowAt(p.y,dragRow); // 右ゾーン: 高さ=段。発火はリリース時
   padPress={zone:'R',row:dragRow};
   return 'R';
@@ -1072,10 +1081,9 @@ function onMove(id,x,y){
   const dx=p.x-tstate.x0,dy=p.y-tstate.y0;
   const ms=performance.now()-tstate.t0;
   const dir=flickDir(dx,dy,ms);
-  if(tstate.zone==='R'){ // 右ゾーン: →フリック=咆哮 / ↓フリック=つかみ(左から移動)
+  if(tstate.zone==='R'){ // 右ゾーン: →フリック=咆哮（つかみは専用ボタンへ移動、v2.4）
     dragRow=rowAt(p.y,dragRow);padPress={zone:'R',row:dragRow};
     if(dir==='right'){evq.push({t:'roar'});tstate.resolved=true;padPress=null;}
-    else if(dir==='down'){evq.push({t:'grab'});tstate.resolved=true;padPress=null;}
   }else if(tstate.zone==='L'){ // 左ゾーン: ←スウェー / ↓しゃがみ / →踏み込み
     if(dir==='left'){evq.push({t:'dodge',kind:'sway'});tstate.resolved=true;padPress=null;p1Hold=null;}
     else if(dir==='down'){evq.push({t:'dodge',kind:'crouch'});tstate.resolved=true;padPress=null;p1Hold=null;}
@@ -1677,6 +1685,13 @@ function drawShield(x,y,s){
   ctx.beginPath();ctx.moveTo(0,-s*0.55);ctx.lineTo(0,s*0.55);ctx.stroke();
   ctx.restore();
 }
+function drawPawIcon(cx,cy,r){ // 肉球アイコン(paw_emblem.png未ロード時のフォールバック図形)
+  ctx.save();ctx.translate(cx,cy);ctx.fillStyle='#e8c9a8';
+  ctx.beginPath();ctx.ellipse(0,r*0.15,r*0.62,r*0.5,0,0,TAU);ctx.fill();
+  const toe=r*0.22;
+  ctx.beginPath();ctx.arc(-r*0.42,-r*0.42,toe,0,TAU);ctx.arc(0,-r*0.58,toe,0,TAU);ctx.arc(r*0.42,-r*0.42,toe,0,TAU);ctx.fill();
+  ctx.restore();
+}
 function drawFist(x,y,s){ // ✊グー（v0.4のパッドアイコンを流用）
   ctx.save();ctx.translate(x,y);
   ctx.fillStyle='#c96a4a';rr(-s*0.8,-s*0.7,s*1.6,s*1.3,s*0.5);ctx.fill();
@@ -1748,9 +1763,20 @@ function rPad(){
     if(lastThrownRow===r){ctx.save();ctx.globalAlpha=0.09;ctx.fillStyle='#ffffff';ctx.fillRect(W/2+4,y+4,W/2-8,rh-8);ctx.restore();}
     if(active){ctx.save();ctx.globalAlpha=0.22;ctx.fillStyle='#ffd23f';ctx.fillRect(W/2+4,y+4,W/2-8,rh-8);ctx.restore();}
     if(r>0){ctx.strokeStyle='rgba(255,255,255,0.10)';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(W/2,y);ctx.lineTo(W,y);ctx.stroke();}
-    txt(labels[r],W*0.75,y+rh/2,20,'rgba(255,214,180,0.8)');
+    // 下段はつかみボタン(右下隅)と被らないよう上寄り・左寄りに配置
+    const lx=(r===2)?W*0.62:W*0.75,ly=(r===2)?y+26:y+rh/2;
+    txt(labels[r],lx,ly,20,'rgba(255,214,180,0.8)');
   }
-  txt('タップの高さ＝段／↓フリック＝つかみ',W*0.75,PT+(H-PT)-14,12,'rgba(200,190,175,0.6)');
+  txt('タップの高さ＝段',W*0.6,PT+(H-PT)-14,12,'rgba(200,190,175,0.6)');
+  { // つかみボタン(直径110px・肉球アイコン・薄縁取り、§6.6 v2.4)
+    const flashing=performance.now()-grabBtnFlashAt<140;
+    ctx.save();
+    ctx.beginPath();ctx.arc(GRAB_BTN.cx,GRAB_BTN.cy,GRAB_BTN.r,0,TAU);
+    ctx.fillStyle=flashing?'rgba(255,210,60,0.32)':'rgba(255,255,255,0.08)';ctx.fill();
+    ctx.strokeStyle=flashing?'#ffd23f':'rgba(255,255,255,0.4)';ctx.lineWidth=flashing?3:1.5;ctx.stroke();
+    ctx.restore();
+    if(!drawUiIcon('ui_paw_emblem',GRAB_BTN.cx,GRAB_BTN.cy,GRAB_BTN.r*1.1))drawPawIcon(GRAB_BTN.cx,GRAB_BTN.cy,GRAB_BTN.r*0.8);
+  }
   if(game.screen==='battle'&&B&&B.flow==='fight'&&B.p[0].s>=BAL.SMAX){ // 右ゾーン内に収め左のガード表示と被らないようにする
     const a=0.5+0.4*Math.sin(game.frame*0.25);
     ctx.save();ctx.globalAlpha=a;
@@ -2046,13 +2072,13 @@ function rTitle(){
   demoF.c=CHARS[Math.floor(game.frame/240)%3];
   if(!drawStanding('standing_'+demoF.c.id,W/2,724,336))rFighter(demoF,W/2,616);
   if(game.frame%60<38)txt('タップでスタート',W/2,732,30,'#fff');
-  txt('右＝高さタップで攻撃(上/中/下)／↓フリック=つかみ',W/2,806,14,'#cfd6e6');
+  txt('右＝高さタップで攻撃(上/中/下)／右下の丸ボタン=つかみ',W/2,806,14,'#cfd6e6');
   txt('左＝ホールドでガード／ジャストタップ=見切り',W/2,830,14,'#ffe6a3');
   txt('←スウェー(中段よけ) ↓しゃがみ(上段よけ) →踏み込み(下段よけ)',W/2,854,14,'#a6e6c0');
   txt('段×回避の三すくみ。回避成功でカウンター(×1.25)のチャンス',W/2,880,14,'#ffe14d');
   txt('しゃがみ中に右タップでしゃがみ突き。コンボは4ルート',W/2,904,14,'#ffb37f');
   txt('Sゲージ満タン→右フリック＝咆哮（割りこみ/大削り）',W/2,926,14,'#cfd6e6');
-  txt('prototype v0.8 - 回避システム＋コンボ拡張（仮グラ・仮SE）',W/2,946,12,'#8891a6');
+  txt('prototype v0.8.6 - つかみボタン化＋難易度選択（仮グラ・仮SE）',W/2,946,12,'#8891a6');
 }
 function rSelect(){
   const g=ctx.createLinearGradient(0,0,0,H);
