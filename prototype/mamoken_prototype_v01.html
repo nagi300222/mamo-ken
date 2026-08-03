@@ -52,8 +52,9 @@ const BAL={ // 03_data_design.md v2.0 §2 balance table 準拠
   ROAR:{s:16,armor:14,a:4,r:24,d:130,stun:34},
   CLASH:{sel:90,d:120,near:8,streakBonus:30,winS:30,loserStun:40,inF:26,revealHitF:24,revealF:60},
   MINIGAME:{
-    weights:{jyanken:0.75,renda:0.25,hayauchi:0}, // ハヤウチ実装まではジャンケンに配分
-    RENDA:{durationF:120,cpuMin:0.115,cpuRng:0.02,tapGain:1,barRange:20} // レンダ(連打の綱引き)
+    weights:{jyanken:0.5,renda:0.25,hayauchi:0.25},
+    RENDA:{durationF:120,cpuMin:0.115,cpuRng:0.02,tapGain:1,barRange:20}, // レンダ(連打の綱引き)
+    HAYAUCHI:{targets:5,radius:55,cpuMinF:14,cpuMaxF:24,capF:600} // ハヤウチ(的あて連続タップ)
   },
   GRAB:{s:12,a:2,rec:28,seq:28,d:90,stun:30,counterMul:1.25},
   ULT:{stock:3,d:300,impact:78,total:110},
@@ -555,7 +556,7 @@ function startClash(kind){
     f.lunge=0;f.kb=0;f.combo=0;
   }
   B.clash={phase:'in',f:0,mg:pickMinigame(),pick:[null,null],cpuAt:25+((rng()*45)|0),kind:kind,winner:-2,
-    rendaP:0,rendaC:0};
+    rendaP:0,rendaC:0,p0hits:0,p1hits:0,p0target:null,cpuNextAt:0};
   B.hitstop=0;
   sfx('guiin');
   announce(kind==='mikiri'?'見切った!!':(kind==='grab'?'つかみ合い!!':'競り合い!!'),46,44,'#ffe14d');
@@ -582,10 +583,18 @@ function clashHit(p){
 function clashStep(){
   const c=B.clash;c.f++;
   if(c.phase==='in'){
-    if(c.f>=BAL.CLASH.inF){c.phase='select';c.f=0;}
+    if(c.f>=BAL.CLASH.inF){
+      c.phase='select';c.f=0;
+      if(c.mg==='hayauchi'){
+        const H2=BAL.MINIGAME.HAYAUCHI;
+        c.p0target=randHayauchiTarget();
+        c.cpuNextAt=H2.cpuMinF+((rng()*(H2.cpuMaxF-H2.cpuMinF+1))|0);
+      }
+    }
   }else if(c.phase==='select'){
     if(c.mg==='renda')stepRenda(c);
-    else stepJyanken(c); // ハヤウチは実装コミットで追加するまでジャンケン扱い
+    else if(c.mg==='hayauchi')stepHayauchi(c);
+    else stepJyanken(c);
   }else if(c.phase==='reveal'){
     if(c.f===BAL.CLASH.revealHitF){
       if(c.mg==='jyanken')resolveJyankenPicks(c);
@@ -612,6 +621,20 @@ function stepRenda(c){ // 120Fのタップ連打綱引き。CPUは毎F自動加�
   if(c.f>=R.durationF){
     c.winner=(c.rendaP===c.rendaC)?-1:(c.rendaP>c.rendaC?0:1);
     c.phase='reveal';c.f=0;
+  }
+}
+function randHayauchiTarget(){ // パッド内のランダム位置(端は避ける)
+  return{x:70+rng()*(W-140),y:PT+110+rng()*(H-PT-160)};
+}
+function stepHayauchi(c){ // 的あて連続タップ。CPUは仮想的に1個14〜24Fで撃破
+  const H2=BAL.MINIGAME.HAYAUCHI;
+  if(c.p1hits<H2.targets&&c.f>=c.cpuNextAt){
+    c.p1hits++;
+    c.cpuNextAt=c.f+H2.cpuMinF+((rng()*(H2.cpuMaxF-H2.cpuMinF+1))|0);
+  }
+  if(c.p0hits>=H2.targets||c.p1hits>=H2.targets||c.f>=H2.capF){
+    c.winner=(c.p0hits===c.p1hits)?-1:(c.p0hits>c.p1hits?0:1);
+    c.p0target=null;c.phase='reveal';c.f=0;
   }
 }
 function applyClashResult(c){ // 3ミニゲーム共通のリワード適用(旧resolveClashの後半を流用)
@@ -883,6 +906,13 @@ function pressRoute(p){
       cl.rendaP+=BAL.MINIGAME.RENDA.tapGain; // 連打はタップ位置を問わない
       B.fx.push({k:'burst',x:p.x,y:p.y,f:0,dur:14}); // タップごとの火花演出
       sfx('tap');
+    }else if(cl.mg==='hayauchi'){
+      const tgt=cl.p0target,H2=BAL.MINIGAME.HAYAUCHI;
+      if(tgt&&cl.p0hits<H2.targets&&Math.hypot(p.x-tgt.x,p.y-tgt.y)<=H2.radius){
+        cl.p0hits++;sfx('tap');
+        B.fx.push({k:'burst',x:tgt.x,y:tgt.y,f:0,dur:16});
+        cl.p0target=(cl.p0hits<H2.targets)?randHayauchiTarget():null;
+      }
     }else{
       const c=clashHit(p);
       if(c&&cl.pick[0]===null){cl.pick[0]=c;sfx('tap');}
@@ -1531,7 +1561,8 @@ function rPadClash(){
     return;
   }
   if(c.mg==='renda')rPadRenda(c);
-  else rPadJyanken(c); // ハヤウチは実装コミットで追加するまでジャンケン表示にフォールバック
+  else if(c.mg==='hayauchi')rPadHayauchi(c);
+  else rPadJyanken(c);
   if(c.phase==='reveal'){
     ctx.fillStyle='rgba(0,0,0,0.45)';ctx.fillRect(0,PT,W,H-PT);
   }
@@ -1586,6 +1617,31 @@ function rPadRenda(c){
   txt('YOU',barX+20,midY-34,14,'#9f9','left');
   txt('CPU',barX+barW-20,midY-34,14,'#f99','right');
   txt('連打で押しきれ!',W/2,midY+56,16,'#ccd');
+}
+function rPadHayauchi(c){
+  const H2=BAL.MINIGAME.HAYAUCHI;
+  txt('はやうち!!',W/2,PT+40,28,'#fff');
+  for(let i=0;i<H2.targets;i++){
+    ctx.beginPath();ctx.arc(W/2-96+i*22,PT+74,7,0,TAU);
+    ctx.fillStyle=(i<c.p0hits)?'#7cfc00':'#333a4a';ctx.fill();
+    ctx.strokeStyle='#556';ctx.lineWidth=1.5;ctx.stroke();
+    ctx.beginPath();ctx.arc(W/2+24+i*22,PT+74,7,0,TAU);
+    ctx.fillStyle=(i<c.p1hits)?'#ff6b6b':'#333a4a';ctx.fill();
+    ctx.strokeStyle='#556';ctx.stroke();
+  }
+  txt('YOU',W/2-52,PT+94,13,'#9f9');
+  txt('CPU',W/2+80,PT+94,13,'#f99');
+  if(c.p0target){
+    const pulse=1+0.06*Math.sin(game.frame*0.5);
+    ctx.save();ctx.translate(c.p0target.x,c.p0target.y);ctx.scale(pulse,pulse);
+    ctx.beginPath();ctx.arc(0,0,H2.radius,0,TAU);
+    ctx.fillStyle='rgba(255,90,60,0.25)';ctx.fill();
+    ctx.lineWidth=5;ctx.strokeStyle='#ff5a3c';ctx.stroke();
+    ctx.beginPath();ctx.arc(0,0,H2.radius*0.5,0,TAU);
+    ctx.strokeStyle='#ffd23f';ctx.lineWidth=3;ctx.stroke();
+    ctx.restore();
+  }
+  txt('的をタップしろ!',W/2,H-22,15,'#9aa2b8');
 }
 function rPadUlt(){
   const g=ctx.createRadialGradient(W/2,PT+240,20,W/2,PT+240,330);
