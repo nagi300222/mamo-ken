@@ -96,12 +96,23 @@ function whitenAsset(e){ // 近似白(しきい値)を透過化。既に透過�
     e.canvas=oc;
   }catch(err){ /* file://等でcanvasが汚染される環境では無処理の原画のまま使う */ }
 }
-loadImg('standing_moguzo','../assets/chars/moguzo/standing.png');
-loadImg('standing_pisuke','../assets/chars/pisuke/standing.png');
-loadImg('standing_godan','../assets/chars/godan/standing.png');
+loadImg('standing_moguzo','../assets/portraits/moguzo.png'); // v0.6: キャラ選択/タイトル/リザルトはportraits/を使用
+loadImg('standing_pisuke','../assets/portraits/pisuke.png');
+loadImg('standing_godan','../assets/portraits/godan.png');
 loadImg('clash_guiin','../assets/fx/clash_guiin.png');
 loadImg('roar_moguzo','../assets/fx/roar_moguzo.png');
 loadImg('cutin_moguzo','../assets/cutin/moguzo.png');
+/* ---- v0.6: キャラ戦闘スプライト（20ポーズ×3キャラ）---- */
+const POSE_IDS=['idle','guard','hurt','win','tele_high','tele_mid','tele_low',
+  'atk_mid','atk_high','atk_low','mikiri','roar_charge','roar',
+  'grab_reach','grab_lift','grabbed','down','getup','ko','ult_charge'];
+const SPRITES={}; // SPRITES[charId][poseId] = {img,ready,failed,canvas}
+for(const c of CHARS){
+  SPRITES[c.id]={};
+  for(const pid of POSE_IDS){
+    SPRITES[c.id][pid]=loadImg('sprite_'+c.id+'_'+pid,'../assets/chars/'+c.id+'/'+pid+'.png');
+  }
+}
 function assetReady(key){const e=ASSETS[key];return!!(e&&e.ready&&!e.failed);}
 function drawStanding(key,cx,bottomY,targetH){ // 足元アンカー・高さ基準でフィット
   if(!assetReady(key))return false;
@@ -1039,41 +1050,37 @@ function eyesDraw(hx,hy,e){
     ctx.beginPath();ctx.arc(bx,by,3.8,Math.PI*1.5,Math.PI*3);ctx.stroke();
   }
 }
-/* ================= v0.6移行準備: ポーズ算出/描画の分離 =================
- * poseId(f)で現在ポーズを一意なIDに算出し、SPRITES[charId][poseId]に画像が
- * あればdrawImage、無ければ現行の図形描画(drawFighterShape)にフォールバックする。
- * v0.5では画像は未配置(SPRITESは空)のため、常に図形描画のまま動作は変わらない。
+/* ================= ポーズ算出/描画の分離 =================
+ * poseId(f)で現在ポーズを一意なIDに算出し、SPRITES[charId][poseId]（アセット
+ * 読み込みセクションで登録）に画像があればdrawImage、無ければ現行の図形描画
+ * (drawFighterShape)にフォールバックする。ギュイーン(競り合い)演出は専用の
+ * スプライトを持たないため、意図的に図形描画のまま(変更しない)。
  */
-const SPRITES={}; // 例: SPRITES.moguzo.atk_mid = {img,ready,failed} （v0.6で投入）
-function poseId(f){
-  const P=f.phase,t=f.pf;
+function poseId(f){ // POSE_IDS(20種)の正準名を返す。該当スプライトが無い状態は
+  const P=f.phase,t=f.pf;      // 意図的にPOSE_IDS外の文字列を返し図形描画へフォールバックさせる
   if(P==='attack'&&f.atkLv){
-    const A=spec(f),tg=BAL.TELEGRAPH[f.atkLv];
-    if(t<=tg)return 'tele_'+f.atkLv;
-    if(t<=A.s)return 'wind_'+f.atkLv;
-    if(t<=A.s+A.a+2)return 'atk_'+f.atkLv;
-    return 'atkrec_'+f.atkLv;
+    const tg=BAL.TELEGRAPH[f.atkLv];
+    if(t<=tg)return 'tele_'+f.atkLv; // テレグラフ=tele_*
+    return 'atk_'+f.atkLv;           // 構え〜発生〜硬直まで単一ポーズ
   }
   if(P==='roar'){
     const R=BAL.ROAR;
-    if(t<=R.s)return 'roarCharge';
-    if(t<=R.s+R.a+6)return 'roarFire';
-    return 'roarRecover';
+    return(t<=R.s)?'roar_charge':'roar';
   }
-  if(P==='grab')return 'grabReach';
-  if(P==='grabrec')return 'grabWhiff';
-  if(P==='mikiriRec')return 'mikiriWhiff';
-  if(P==='grabHit')return t<=8?'grabLift':(t<=18?'grabRaise':'grabSlam');
-  if(P==='grabbed')return 'grabbedStruggle';
-  if(P==='down')return f.downHitUsed?'downInvuln':'down';
-  if(P==='wake')return 'wake';
-  if(P==='clash')return 'clash';
-  if(P==='ultAtk')return(B&&B.flowF<BAL.ULT.impact)?'ultCharge':'ultFire';
-  if(P==='dizzy')return 'dizzy';
+  if(P==='grab')return 'grab_reach';
+  if(P==='grabHit')return 'grab_lift';
+  if(P==='grabbed')return 'grabbed';
+  if(P==='grabrec')return 'grabrec';       // 専用スプライト無し→図形フォールバック
+  if(P==='mikiriRec')return 'mikiri';      // 見切り=mikiri（成功時はclashへ即遷移するため空振りのみ表示対象）
+  if(P==='down')return 'down';             // ダウン=down（追撃消化後の無敵も同一ポーズ）
+  if(P==='wake')return 'getup';            // 起き上がり=getup
+  if(P==='clash')return 'clash';           // ギュイーン(競り合い)=専用スプライト無し→図形フォールバック(変更しない)
+  if(P==='ultAtk')return(B&&B.flowF<BAL.ULT.impact)?'ult_charge':'ultFire'; // 発動後は専用ポーズ無し→フォールバック
+  if(P==='dizzy')return 'dizzy';           // 専用スプライト無し→図形フォールバック
   if(P==='ko')return 'ko';
   if(P==='win')return 'win';
   if(P==='guard'||P==='blockstun')return 'guard';
-  if(P==='hitstun')return 'hitstun';
+  if(P==='hitstun')return 'hurt';
   return 'idle';
 }
 function rFighter(f,ox,oy){ // ポーズ画像があればdrawImage、無ければ図形描画にフォールバック
@@ -1081,11 +1088,26 @@ function rFighter(f,ox,oy){ // ポーズ画像があればdrawImage、無けれ�
   if(sp&&sp.ready&&!sp.failed){drawSpriteFighter(f,ox,oy,sp);return;}
   drawFighterShape(f,ox,oy);
 }
-function drawSpriteFighter(f,ox,oy,sp){ // 足元アンカー・位置/反転/拡縮は現行ロジックをそのまま適用
+const SPRITE_TARGET_H={moguzo:185,pisuke:180,godan:198}; // 表示身長(px)
+const SPRITE_IDLE_H={moguzo:560,pisuke:441,godan:536};   // idle.pngでの実測キャラ身長(px)。倍率=表示身長/実測身長を全ポーズ共通適用
+function drawSpriteFighter(f,ox,oy,sp){
+  // 足元アンカー=画像下端 / P2(side1)は左右反転 / 位置・回転・シェイク・ヒットストップ・
+  // 集中スロー・ズームは呼び出し側(rBattle/fpos)の変換をそのまま受けるため追加対応不要
   const x=(ox!=null)?ox:fpos(f),gy=(oy!=null)?oy:f.y,face=f.side===0?1:-1;
   const img=sp.canvas||sp.img,iw=sp.img.naturalWidth,ih=sp.img.naturalHeight;
-  const h=180,w=h*iw/ih;
+  const scale=SPRITE_TARGET_H[f.c.id]/SPRITE_IDLE_H[f.c.id]; // idle基準の実測倍率。全ポーズ同倍率で統一
+  const w=iw*scale,h=ih*scale;
+  ctx.fillStyle='rgba(0,0,0,0.22)';
+  ctx.beginPath();ctx.ellipse(x,gy+5,42,9,0,0,TAU);ctx.fill();
   ctx.save();ctx.translate(x,gy);ctx.scale(face,1);
+  if(f.phase==='attack'&&f.atkLv){ // 攻撃の発生後数Fは残像を1枚重ねる(図形描画と同じ考え方)
+    const A=spec(f),t=f.pf;
+    if(t>A.s&&t<=A.s+A.a+3){
+      ctx.save();ctx.globalAlpha=0.22;
+      ctx.drawImage(img,-w/2-14,-h,w,h);
+      ctx.restore();
+    }
+  }
   ctx.drawImage(img,-w/2,-h,w,h);
   ctx.restore();
 }
