@@ -116,6 +116,7 @@ loadImg('clash_guiin','../assets/fx/clash_guiin.png');
 loadImg('roar_moguzo','../assets/fx/roar_moguzo.png');
 loadImg('cutin_moguzo','../assets/cutin/moguzo.png');
 /* ---- v0.8.5: UI画像（asset_map v3準拠。フレーム系は内側の透過窓に現行の塗りを合わせる）---- */
+loadImg('bg_stage_day','../assets/bg/stage_day.png');
 loadImg('ui_hp_frame','../assets/ui/hp_frame.png');
 loadImg('ui_sgauge_frame','../assets/ui/sgauge_frame.png');
 loadImg('ui_timer_medal','../assets/ui/timer_medal.png');
@@ -1157,6 +1158,14 @@ function fighterXY(f){
   return[fpos(f),f.y];
 }
 function rStage(){
+  if(assetReady('bg_stage_day')){ // 背景画像: 下端を地面ライン(PT)に合わせたcover配置
+    const e=ASSETS['bg_stage_day'],img=e.canvas||e.img;
+    const iw=e.img.naturalWidth,ih=e.img.naturalHeight;
+    const scale=Math.max(W/iw,PT/ih);
+    const dw=iw*scale,dh=ih*scale;
+    ctx.drawImage(img,(W-dw)/2,PT-dh,dw,dh);
+    return;
+  }
   let g=ctx.createLinearGradient(0,0,0,330);
   g.addColorStop(0,'#6fb7f2');g.addColorStop(0.7,'#cfe8ff');g.addColorStop(1,'#ffe7bd');
   ctx.fillStyle=g;ctx.fillRect(0,0,W,330);
