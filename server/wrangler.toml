@@ -1,0 +1,25 @@
+# マモ拳（仮） オンライン対戦リレーサーバー
+#
+# Cloudflare Workers + Durable Objects（1ルーム=1DO）でWebSocketリレーのみを行う。
+# ゲームロジック(決定論ロックステップの実体)はクライアント側(mulberry32 PRNG)で
+# 完結させ、サーバーは「入室したクライアント同士の生メッセージを転送する」役割に
+# 限定する(サーバー側では試合状態を再現しない)。
+#
+# デプロイ:
+#   cd server
+#   npx wrangler deploy
+#
+# 認証(初回のみ): CLOUDFLARE_API_TOKEN環境変数にWorkers編集権限のAPIトークンを
+# 設定するか、`npx wrangler login`でOAuthログインする。
+
+name = "mamoken-relay"
+main = "src/worker.mjs"
+compatibility_date = "2025-01-01"
+
+[[durable_objects.bindings]]
+name = "ROOMS"
+class_name = "Room"
+
+[[migrations]]
+tag = "v1"
+new_sqlite_classes = ["Room"]
