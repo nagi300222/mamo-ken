@@ -224,7 +224,7 @@ function newFighter(ci,side){
     guardLv:null,stunDur:0,combo:0,
     buf:null,bufF:0,held:null,lunge:0,kb:0,downHitUsed:false,
     lastAtkLv:null,atkStreak:0,yomare:false,
-    dodgeType:null,counterReadyF:0,clinchF:0,
+    dodgeType:null,counterReadyF:0,clinchF:0,comboCounter:false,
     shownHp:BAL.HP,ultFlash:0,sNo:0};
 }
 function startBattle(){
@@ -242,7 +242,7 @@ function roundInit(first){
     f.phase='idle';f.pf=0;f.atkLv=null;f.hasHit=false;
     f.guardLv=null;f.combo=0;f.buf=null;f.kb=0;f.lunge=0;f.sNo=0;f.downHitUsed=false;
     f.lastAtkLv=null;f.atkStreak=0;f.yomare=false;
-    f.dodgeType=null;f.counterReadyF=0;f.clinchF=0;
+    f.dodgeType=null;f.counterReadyF=0;f.clinchF=0;f.comboCounter=false;
     if(first){f.s=0;f.ult=0;f.focus=0;}
   }
   B.timer=BAL.TIME;B.flow='intro';B.flowF=0;B.clash=null;B.pendKO=-1;B.clashStreak=[0,0];
@@ -293,7 +293,7 @@ function checkFocusTrigger(att,def){
 }
 function startAtk(f,lv,chain){
   f.phase='attack';f.pf=0;f.atkLv=lv;f.hasHit=false;f.guardLv=null;
-  if(!chain)f.combo=0;
+  if(!chain){f.combo=0;f.comboCounter=false;} // 新規始動でカウンターコンボの補正緩和もリセット
   sfx('swish');
   sfx(lv==='high'?'teleHigh':(lv==='low'?'teleLow':'teleMid')); // テレグラフ固有SE
   if(!chain){ // 読まれ表示: ニュートラルからの選択が同系統3連続で「読まれ!」
@@ -308,7 +308,7 @@ function startDodge(f,kind){ // kind: 'crouch'|'sway'|'lunge'
   sfx('swish');
 }
 function startCrouchAtk(f){ // しゃがみ中(1〜14F)の右ゾーンタップ＝しゃがみ突き。高さは問わない
-  f.phase='attack';f.pf=0;f.atkLv='crouch';f.dodgeType=null;f.hasHit=false;f.guardLv=null;f.combo=0;
+  f.phase='attack';f.pf=0;f.atkLv='crouch';f.dodgeType=null;f.hasHit=false;f.guardLv=null;f.combo=0;f.comboCounter=false;
   sfx('swish');sfx('teleMid'); // 専用SEは無いため中段テレグラフSEを流用
 }
 function canChain(f,lv){
@@ -522,9 +522,10 @@ function attackResolve(att,def){
 }
 function hitApply(att,def,counterHit){
   const A=spec(att);
-  const scale=counterHit?BAL.DODGE.counterScale:BAL.SCALE; // 回避成功後counterReady中のヒットは補正を緩和
+  // カウンター始動のコンボは、以後のチェーンも含めて[1,1,0.9]に緩和(§6.6コンボルートB)
+  const scale=(counterHit||att.comboCounter)?BAL.DODGE.counterScale:BAL.SCALE;
   let dmg=Math.round(A.d*scale[Math.min(att.combo,2)]);
-  if(counterHit)dmg=Math.round(dmg*BAL.DODGE.counterMul);
+  if(counterHit){dmg=Math.round(dmg*BAL.DODGE.counterMul);att.comboCounter=true;} // ×1.25はカウンターの一撃のみ
   if(att.atkLv==='high'&&att.clinchF>0)dmg+=BAL.DODGE.clinchHighBonus; // 密着中は上段+15
   let counterFx=!!counterHit;
   if(def.phase==='grab'||def.phase==='grabrec'){ // 打撃はつかみに勝つ(既存の別カウンター)
