@@ -58,7 +58,8 @@ const BAL={ // 03_data_design.md v2.0 §2 balance table 準拠
     HAYAUCHI:{targets:5,radius:55,cpuMinF:14,cpuMaxF:24,capF:600} // ハヤウチ(的あて連続タップ)
   },
   GRAB:{s:12,a:2,rec:28,seq:28,d:90,stun:30,counterMul:1.25},
-  DODGE:{totalF:22,judgeF:10,counterReadyF:18,counterMul:1.25,counterScale:[1.0,1.0,0.9]}, // 回避: 全体22F(1-10F判定/11-22F戻り)。成功でcounterReady18F
+  DODGE:{totalF:22,judgeF:10,counterReadyF:18,counterMul:1.25,counterScale:[1.0,1.0,0.9], // 回避: 全体22F(1-10F判定/11-22F戻り)。成功でcounterReady18F
+    clinchF:12,clinchGrabS:10,clinchHighBonus:15}, // 踏み込み成功時の密着12F: つかみ発生12→10・上段ダメ+15
 
   ULT:{stock:3,d:300,impact:78,total:110},
   HITSTOP:{mid:6,high:9,low:14,roar:12,clash:16},
@@ -380,7 +381,7 @@ function advance(f){
     const R=BAL.ROAR;
     if(f.pf>=R.s+R.a+R.r){f.phase='idle';f.pf=0;}
   }else if(f.phase==='grab'){
-    if(f.pf>BAL.GRAB.s+BAL.GRAB.a+2){f.phase='grabrec';f.pf=0;}
+    if(f.pf>grabStartup(f)+BAL.GRAB.a+2){f.phase='grabrec';f.pf=0;}
   }else if(f.phase==='grabrec'){
     if(f.pf>=BAL.GRAB.rec){f.phase='idle';f.pf=0;}
   }else if(f.phase==='grabHit'){
@@ -481,6 +482,7 @@ function attackResolve(att,def){
     const rule=DODGE_TABLE[def.dodgeType];
     if(rule.beats===att.atkLv){ // 回避成功: 攻撃側はスカ扱い、防御側はcounterReadyを獲得
       def.counterReadyF=BAL.DODGE.counterReadyF;
+      if(def.dodgeType==='lunge')def.clinchF=BAL.DODGE.clinchF; // 踏み込み成功→追加で密着12F
       B.fx.push({k:'suki',x:fpos(att),y:att.y-168,f:0,dur:20});
       sfx('whiffG');
       return;
@@ -515,6 +517,7 @@ function hitApply(att,def,counterHit){
   const scale=counterHit?BAL.DODGE.counterScale:BAL.SCALE; // 回避成功後counterReady中のヒットは補正を緩和
   let dmg=Math.round(A.d*scale[Math.min(att.combo,2)]);
   if(counterHit)dmg=Math.round(dmg*BAL.DODGE.counterMul);
+  if(att.atkLv==='high'&&att.clinchF>0)dmg+=BAL.DODGE.clinchHighBonus; // 密着中は上段+15
   let counterFx=!!counterHit;
   if(def.phase==='grab'||def.phase==='grabrec'){ // 打撃はつかみに勝つ(既存の別カウンター)
     dmg=Math.round(dmg*BAL.GRAB.counterMul);
@@ -565,7 +568,8 @@ function roarResolve(att,def){
   }
   if(def.hp<=0){def.hp=0;startKO(def.side);}
 }
-function grabStriking(f){return f.phase==='grab'&&f.pf===BAL.GRAB.s+1;}
+function grabStartup(f){return f.clinchF>0?BAL.DODGE.clinchGrabS:BAL.GRAB.s;} // 密着中はつかみ発生12→10
+function grabStriking(f){return f.phase==='grab'&&f.pf===grabStartup(f)+1;}
 function grabResolve(att,def){
   if(handleIfDowned(att,def,BAL.GRAB.d))return;
   if(def.phase==='grab'){startClash('grab');return;} // つかみ同士→ギュイーン
@@ -1322,6 +1326,12 @@ function drawFighterShape(f,ox,oy){
     ctx.save();ctx.globalAlpha=0.4+0.3*Math.sin(gf*0.3);
     ctx.strokeStyle='#7fd8ff';ctx.lineWidth=4;
     ctx.beginPath();ctx.ellipse(0,bodyY,bw+10,bh+10,0,0,TAU);ctx.stroke();
+    ctx.restore();
+  }
+  if(f.counterReadyF>0||f.clinchF>0){ // 回避成功後のcounterReady/密着表示
+    ctx.save();ctx.globalAlpha=0.4+0.3*Math.sin(gf*0.4);
+    ctx.strokeStyle=f.clinchF>0?'#ff9e2c':'#ffe14d';ctx.lineWidth=4;
+    ctx.beginPath();ctx.ellipse(0,bodyY,bw+6,bh+6,0,0,TAU);ctx.stroke();
     ctx.restore();
   }
   const OL=shade(c.color,-70);
