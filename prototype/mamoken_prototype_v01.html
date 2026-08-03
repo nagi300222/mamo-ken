@@ -127,7 +127,8 @@ for(let si=1;si<=5;si++){
 /* ---- v0.6: キャラ戦闘スプライト（20ポーズ×3キャラ）---- */
 const POSE_IDS=['idle','guard','hurt','win','tele_high','tele_mid','tele_low',
   'atk_mid','atk_high','atk_low','mikiri','roar_charge','roar',
-  'grab_reach','grab_lift','grabbed','down','getup','ko','ult_charge'];
+  'grab_reach','grab_lift','grabbed','down','getup','ko','ult_charge',
+  'crouch','sway','lunge','crouch_atk']; // v0.8.5: 回避3種+しゃがみ突き(v0.8で図形フォールバックのまま保留)
 const SPRITES={}; // SPRITES[charId][poseId] = {img,ready,failed,canvas}
 for(const c of CHARS){
   SPRITES[c.id]={};
@@ -1271,6 +1272,12 @@ function rFighter(f,ox,oy){ // ポーズ画像があればdrawImage、無けれ�
 }
 const SPRITE_TARGET_H={moguzo:185,pisuke:180,godan:198}; // 表示身長(px)
 const SPRITE_IDLE_H={moguzo:560,pisuke:441,godan:536};   // idle.pngでの実測キャラ身長(px)。倍率=表示身長/実測身長を全ポーズ共通適用
+function dodgeSpriteOffset(f){ // 回避スプライト用: 11-22Fの戻り区間だけ同画像を構え位置へ向けて位置補間する
+  const D=BAL.DODGE,back=f.pf<=D.judgeF?0:Math.min(1,(f.pf-D.judgeF)/(D.totalF-D.judgeF));
+  if(f.dodgeType==='crouch')return[0,10*back];   // しゃがみ→起き上がる分だけ上へ戻す
+  if(f.dodgeType==='sway')return[-14*back,-4*back]; // スウェー→後傾を起こしつつ前へ戻す
+  return[14*back,0];                                // lunge→前傾を起こしつつ後ろへ戻す
+}
 function drawSpriteFighter(f,ox,oy,sp){
   // 足元アンカー=画像下端 / P2(side1)は左右反転 / 位置・回転・シェイク・ヒットストップ・
   // 集中スロー・ズームは呼び出し側(rBattle/fpos)の変換をそのまま受けるため追加対応不要
@@ -1281,6 +1288,10 @@ function drawSpriteFighter(f,ox,oy,sp){
   ctx.fillStyle='rgba(0,0,0,0.22)';
   ctx.beginPath();ctx.ellipse(x,gy+5,42,9,0,0,TAU);ctx.fill();
   ctx.save();ctx.translate(x,gy);ctx.scale(face,1);
+  if(f.phase==='dodge'){ // 回避: 1-10F判定はポーズ画像そのまま、11-22F戻りは同画像を構えへ向けて位置補間
+    const off=dodgeSpriteOffset(f);
+    ctx.translate(off[0],off[1]);
+  }
   if(f.phase==='attack'&&f.atkLv){ // 攻撃の発生後数Fは残像を1枚重ねる(図形描画と同じ考え方)
     const A=spec(f),t=f.pf;
     if(t>A.s&&t<=A.s+A.a+3){
