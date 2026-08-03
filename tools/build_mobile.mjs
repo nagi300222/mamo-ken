@@ -2,15 +2,17 @@
 // マモ拳（仮） モバイル配布ビルドスクリプト
 //
 // prototype/mamoken_prototype_v01.html が読み込む assets/ 配下の画像を全て
-// base64のdata URLとして埋め込み、単一ファイル dist/mamoken_mobile.html を
-// 生成する。Node標準モジュールのみを使用(npm install不要)。
+// 縮小＋WebP変換(quality 80)した上でbase64のdata URLとして埋め込み、単一
+// ファイル dist/mamoken_mobile.html を生成する。
 //
+// 事前準備(初回のみ): npm install  ※sharpをdevDependencyとして使用
 // 再生成手順:
 //   node tools/build_mobile.mjs
 //
 // 生成物(dist/mamoken_mobile.html)はfile://で直接開いても全画像・全機能が
 // 動作する配布物としてリポジトリにコミットする。assets/追加・変更のたびに
 // このスクリプトを再実行し、dist/の再生成もあわせてコミットすること。
+// node_modules/はコミットしない(sharpはビルド時のみ使用する開発依存)。
 //
 // 仕組み: prototype側のloadImg()の呼び出し方(リテラル/文字列結合どちらも)を
 // 個別に解析するのではなく、assets/配下の画像を全て「相対パス文字列→data URL」
@@ -19,10 +21,15 @@
 // こうすることでポーズ/キャラ追加などプロトタイプ側の変更に追従するための
 // メンテナンスが不要になる。assets/ref/ と ref_design.png はコード上どこからも
 // 読み込まれないアート参考用ファイルのため埋め込み対象から除外する。
+//
+// 縮小方針(カテゴリはassets/直下のサブディレクトリ名で判定): chars=高さ400px /
+// portraits=高さ520px / cutin=幅1280px / bg=高さ1200px / ui・その他=原寸維持。
+// いずれもWebP quality 80へ再エンコードする(元がPNGでも出力は常にimage/webp)。
 
 import { readFileSync, writeFileSync, existsSync, readdirSync, statSync, mkdirSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import sharp from 'sharp';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
@@ -31,14 +38,8 @@ const ASSETS_DIR = path.join(ROOT, 'assets');
 const OUT_DIR = path.join(ROOT, 'dist');
 const OUT_HTML = path.join(OUT_DIR, 'mamoken_mobile.html');
 
-const MIME_BY_EXT = {
-  '.png': 'image/png',
-  '.jpg': 'image/jpeg',
-  '.jpeg': 'image/jpeg',
-  '.gif': 'image/gif',
-  '.webp': 'image/webp',
-  '.svg': 'image/svg+xml',
-};
+const IMG_EXT = new Set(['.png', '.jpg', '.jpeg', '.gif', '.webp']);
+const WEBP_QUALITY = 80;
 
 function walk(dir, out) {
   for (const name of readdirSync(dir)) {
@@ -56,28 +57,45 @@ function isExcluded(relFromAssets) {
   return false;
 }
 
-function buildAssetMap() {
+function resizeConfigFor(relFromAssets) {
+  const top = relFromAssets.split('/')[0];
+  if (top === 'chars') return { height: 400 };
+  if (top === 'portraits') return { height: 520 };
+  if (top === 'cutin') return { width: 1280 };
+  if (top === 'bg') return { height: 1200 };
+  return null; // ui / fx / その他: 原寸維持
+}
+
+async function toWebp(absPath, relFromAssets) {
+  let img = sharp(absPath);
+  const resize = resizeConfigFor(relFromAssets);
+  if (resize) img = img.resize({ ...resize, withoutEnlargement: true });
+  return img.webp({ quality: WEBP_QUALITY }).toBuffer();
+}
+
+async function buildAssetMap() {
   const files = [];
   walk(ASSETS_DIR, files);
   const map = {};
-  let skipped = 0;
+  let skipped = 0, origTotal = 0, outTotal = 0;
   for (const abs of files) {
     const relFromAssets = path.relative(ASSETS_DIR, abs).split(path.sep).join('/');
     if (isExcluded(relFromAssets)) { skipped++; continue; }
     const ext = path.extname(abs).toLowerCase();
-    const mime = MIME_BY_EXT[ext];
-    if (!mime) { skipped++; continue; } // 画像以外の混入ファイルは無視
+    if (!IMG_EXT.has(ext)) { skipped++; continue; } // 画像以外の混入ファイルは無視
+    const origBuf = readFileSync(abs);
+    const outBuf = await toWebp(abs, relFromAssets);
+    origTotal += origBuf.length; outTotal += outBuf.length;
     // prototype/*.html から見た参照パス形式('../assets/...')に合わせてキー化
     const srcKey = '../assets/' + relFromAssets;
-    const b64 = readFileSync(abs).toString('base64');
-    map[srcKey] = `data:${mime};base64,${b64}`;
+    map[srcKey] = `data:image/webp;base64,${outBuf.toString('base64')}`;
   }
-  return { map, skipped };
+  return { map, skipped, origTotal, outTotal };
 }
 
-function main() {
+async function main() {
   const html = readFileSync(SRC_HTML, 'utf8');
-  const { map: assetMap, skipped } = buildAssetMap();
+  const { map: assetMap, skipped, origTotal, outTotal } = await buildAssetMap();
   const count = Object.keys(assetMap).length;
 
   const anchor = 'const ASSETS={};';
@@ -99,7 +117,10 @@ function main() {
   if (!existsSync(OUT_DIR)) mkdirSync(OUT_DIR, { recursive: true });
   writeFileSync(OUT_HTML, out, 'utf8');
   const sizeMB = (Buffer.byteLength(out, 'utf8') / 1024 / 1024).toFixed(2);
-  console.log(`dist/mamoken_mobile.html を生成しました (埋め込み画像: ${count}点 / 除外: ${skipped}件 / サイズ: ${sizeMB}MB)`);
+  const origMB = (origTotal / 1024 / 1024).toFixed(1);
+  const webpMB = (outTotal / 1024 / 1024).toFixed(1);
+  console.log(`dist/mamoken_mobile.html を生成しました (埋め込み画像: ${count}点 / 除外: ${skipped}件)`);
+  console.log(`画像合計: ${origMB}MB → WebP変換後 ${webpMB}MB / 出力ファイルサイズ: ${sizeMB}MB`);
 }
 
-main();
+main().catch((e) => { console.error(e); process.exitCode = 1; });
