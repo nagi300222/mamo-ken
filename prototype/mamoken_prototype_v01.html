@@ -781,10 +781,12 @@ function timeUp(){
 /* ================= CPU AI ================= */
 const cpuEv=[];
 const AI_MIKIRI_RATE=0.22; // テレグラフを見て見切りを試みる率(命中は保証しない)
-const ai={think:0,guardT:0,guardOn:false,react:null,ultT:0,hist:[],mash:0,pHoldF:0,mikiriAt:null};
+const AI_DODGE_RATE=0.15; // テレグラフを見て正解回避を試みる率(見切り同様タイミングにブレを入れる)
+const LEVEL_TO_DODGE={high:'crouch',mid:'sway',low:'lunge'}; // その段を避ける回避(DODGE_TABLE.beatsの逆引き)
+const ai={think:0,guardT:0,guardOn:false,react:null,ultT:0,hist:[],mash:0,pHoldF:0,mikiriAt:null,dodgeAt:null,dodgeKind:null};
 function aiReset(){
   ai.think=30;ai.guardT=0;ai.guardOn=false;ai.react=null;ai.ultT=0;
-  ai.hist=[];ai.mash=0;ai.pHoldF=0;ai.mikiriAt=null;
+  ai.hist=[];ai.mash=0;ai.pHoldF=0;ai.mikiriAt=null;ai.dodgeAt=null;ai.dodgeKind=null;
 }
 function aiStep(){
   const me=B.p[1],you=B.p[0];
@@ -806,9 +808,16 @@ function aiStep(){
       const win=(me.hp<=BAL.PINCH_HP)?BAL.MIKIRI.windowPinch:BAL.MIKIRI.window;
       ai.mikiriAt=B.f+spec(you).s+Math.round((rng()*2-1)*win*2);
       ai.react=null;
+    }else if(me.phase==='idle'&&ai.dodgeAt==null&&rng()<AI_DODGE_RATE){ // 回避試行: テレグラフを見て正解の回避を狙うが、見切り同様タイミングにブレを入れる
+      const contact=B.f+spec(you).s; // 接触(pf=s+1)までの残りF
+      const jitter=Math.round((rng()*2-1)*BAL.DODGE.judgeF);
+      ai.dodgeAt=contact-5+jitter; // 判定窓(1-10F)の中央付近を狙うが外すこともある
+      ai.dodgeKind=LEVEL_TO_DODGE[you.atkLv];
+      ai.react=null;
     }
   }
   if(ai.mikiriAt!=null&&B.f>=ai.mikiriAt){cpuEv.push({t:'mikiri'});ai.mikiriAt=null;}
+  if(ai.dodgeAt!=null&&B.f>=ai.dodgeAt){cpuEv.push({t:'dodge',kind:ai.dodgeKind});ai.dodgeAt=null;}
   // ダウン連追撃: 相手がダウン中で追撃がまだなら即座に1発叩き込む
   if(you.phase==='down'&&!you.downHitUsed&&me.phase==='idle'){
     cpuEv.push({t:'atk',lv:'mid'});
