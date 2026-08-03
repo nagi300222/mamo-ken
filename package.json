@@ -1,0 +1,13 @@
+{
+  "name": "mamoken",
+  "private": true,
+  "version": "0.1.0",
+  "description": "マモ拳（仮） - prototype game repo tooling",
+  "type": "module",
+  "scripts": {
+    "build:mobile": "node tools/build_mobile.mjs"
+  },
+  "devDependencies": {
+    "sharp": "^0.33.5"
+  }
+}

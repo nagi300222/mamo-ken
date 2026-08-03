@@ -66,7 +66,8 @@ const BAL={ // 03_data_design.md v2.0 §2 balance table 準拠
   ULT:{stock:3,d:300,impact:78,total:110},
   HITSTOP:{mid:6,high:9,low:14,roar:12,clash:16,crouch:5},
   TELEGRAPH:{mid:8,high:13,low:18,crouch:6}, // 発生前半に構え+段色フラッシュ+固有SE（見てから対応の成立条件）
-  BUF:10,FLICK_DX:60,FLICK_MS:300,JUST_TAP_MS:100
+  BUF:10,FLICK_DX:60,FLICK_MS:300,JUST_TAP_MS:100,
+  SPRITE_H:{moguzo:185,pisuke:165,godan:206} // 表示身長(px)。体格基準ラインナップ(ピスケ小柄/ゴダン大柄)の印象を反映。試遊後調整可
 };
 const CHARS=[
  {id:'moguzo',name:'モグゾー',type:'バランス',ult:'大地烈掌',color:'#b58756',belly:'#ecd9b4',dMul:1,sMul:1,sOfs:0,gMax:100,pips:{p:3,s:3,g:3}},
@@ -94,7 +95,7 @@ function loadImg(key,src){
   img.src=src;
   return e;
 }
-function whitenAsset(e){ // 近似白(しきい値)を透過化。既に透過済みのPNGなら実質no-op
+function whitenAsset(e){ // 近似白(しきい値)を透過化。既に透過済みのPNGなら実質no-op。ついでにalpha bboxの高さも実測する
   try{
     const oc=document.createElement('canvas');
     oc.width=e.img.naturalWidth;oc.height=e.img.naturalHeight;
@@ -102,12 +103,18 @@ function whitenAsset(e){ // 近似白(しきい値)を透過化。既に透過�
     octx.drawImage(e.img,0,0);
     const id=octx.getImageData(0,0,oc.width,oc.height);
     const d=id.data,TH=238;
-    for(let i=0;i<d.length;i+=4){
-      if(d[i]>=TH&&d[i+1]>=TH&&d[i+2]>=TH)d[i+3]=0;
+    let minY=oc.height,maxY=-1;
+    for(let y=0;y<oc.height;y++){
+      for(let x=0;x<oc.width;x++){
+        const i=(y*oc.width+x)*4;
+        if(d[i]>=TH&&d[i+1]>=TH&&d[i+2]>=TH)d[i+3]=0;
+        if(d[i+3]>10){if(y<minY)minY=y;if(y>maxY)maxY=y;}
+      }
     }
     octx.putImageData(id,0,0);
     e.canvas=oc;
-  }catch(err){ /* file://等でcanvasが汚染される環境では無処理の原画のまま使う */ }
+    if(maxY>=minY)e.bboxH=maxY-minY+1; // 実測キャラ高(alpha bboxの高さ)。表示倍率の動的算出に使う
+  }catch(err){ /* file://等でcanvasが汚染される環境では無処理の原画のまま使う(bboxH未設定→呼び出し側でフォールバック) */ }
 }
 loadImg('standing_moguzo','../assets/portraits/moguzo.png'); // v0.6: キャラ選択/タイトル/リザルトはportraits/を使用
 loadImg('standing_pisuke','../assets/portraits/pisuke.png');
@@ -115,10 +122,23 @@ loadImg('standing_godan','../assets/portraits/godan.png');
 loadImg('clash_guiin','../assets/fx/clash_guiin.png');
 loadImg('roar_moguzo','../assets/fx/roar_moguzo.png');
 loadImg('cutin_moguzo','../assets/cutin/moguzo.png');
+loadImg('cutin_pisuke','../assets/cutin/pisuke.png'); // v0.8.5: 3キャラ分そろった(rCutin側は既にcutin_+charIdで汎用済み)
+loadImg('cutin_godan','../assets/cutin/godan.png');
+/* ---- v0.8.5: UI画像（asset_map v3準拠。フレーム系は内側の透過窓に現行の塗りを合わせる）---- */
+loadImg('bg_stage_day','../assets/bg/stage_day.png');
+loadImg('ui_hp_frame','../assets/ui/hp_frame.png');
+loadImg('ui_sgauge_frame','../assets/ui/sgauge_frame.png');
+loadImg('ui_timer_medal','../assets/ui/timer_medal.png');
+loadImg('ui_paw_emblem','../assets/ui/paw_emblem.png');
+for(let si=1;si<=5;si++){
+  loadImg('ui_star_l'+si,'../assets/ui/star_l'+si+'.png');
+  loadImg('ui_star_s'+si,'../assets/ui/star_s'+si+'.png');
+}
 /* ---- v0.6: キャラ戦闘スプライト（20ポーズ×3キャラ）---- */
 const POSE_IDS=['idle','guard','hurt','win','tele_high','tele_mid','tele_low',
   'atk_mid','atk_high','atk_low','mikiri','roar_charge','roar',
-  'grab_reach','grab_lift','grabbed','down','getup','ko','ult_charge'];
+  'grab_reach','grab_lift','grabbed','down','getup','ko','ult_charge',
+  'crouch','sway','lunge','crouch_atk']; // v0.8.5: 回避3種+しゃがみ突き(v0.8で図形フォールバックのまま保留)
 const SPRITES={}; // SPRITES[charId][poseId] = {img,ready,failed,canvas}
 for(const c of CHARS){
   SPRITES[c.id]={};
@@ -133,6 +153,29 @@ function drawStanding(key,cx,bottomY,targetH){ // 足元アンカー・高さ基
   const iw=e.img.naturalWidth,ih=e.img.naturalHeight;
   const w=targetH*iw/ih;
   ctx.drawImage(src,cx-w/2,bottomY-targetH,w,targetH);
+  return true;
+}
+function drawUiIcon(key,cx,cy,targetW){ // アイコン系: 中心基準・幅targetWでアスペクト維持描画
+  if(!assetReady(key))return false;
+  const e=ASSETS[key],src=e.canvas||e.img;
+  const iw=e.img.naturalWidth,ih=e.img.naturalHeight;
+  const w=targetW,h=targetW*ih/iw;
+  ctx.drawImage(src,cx-w/2,cy-h/2,w,h);
+  return true;
+}
+// フレーム系UI画像(枠+透過窓)用。(ix0f..iy1f)=画像内の透過窓の位置比率(0-1)。
+// 窓が目標矩形(tx,ty,tw,th)にちょうど重なるよう画像全体を拡縮して描画する。flip=true で左右反転(枠のみ)。
+function drawUiFrame(key,tx,ty,tw,th,ix0f,iy0f,ix1f,iy1f,flip){
+  if(!assetReady(key))return false;
+  const e=ASSETS[key],src=e.canvas||e.img;
+  const iw=e.img.naturalWidth,ih=e.img.naturalHeight;
+  const ix0=ix0f*iw,iy0=iy0f*ih,ix1=ix1f*iw,iy1=iy1f*ih;
+  const scale=tw/(ix1-ix0);
+  const dw=iw*scale,dh=ih*scale;
+  ctx.save();
+  if(flip){ctx.translate(tx+tw,ty);ctx.scale(-1,1);}else{ctx.translate(tx,ty);}
+  ctx.drawImage(src,-ix0*scale,-iy0*scale,dw,dh);
+  ctx.restore();
   return true;
 }
 
@@ -264,7 +307,15 @@ function stepFx(){
   if(B.shake>0){B.shake*=0.88;if(B.shake<0.3)B.shake=0;}
 }
 function lvY(f,lv){return f.y+BAL.ATK[lv].y;}
-function fxSpark(def,lv,guard){B.fx.push({k:guard?'gspark':'spark',x:def.baseX+(def.side===0?16:-16),y:lvY(def,lv||'mid'),f:0,dur:14});}
+function fxSpark(def,lv,guard,big){ // big: 呼び出し側で強制指定(咆哮ヒットなど、lvが位置算出専用でサイズと無関係な場合用)
+  const isBig=!guard&&(big||lv==='high'||lv==='low'); // 大=上段/下段/咆哮ヒット、小=中段/しゃがみ突き/ガード
+  const picks=[];
+  for(let i=0;i<3;i++){
+    picks.push({n:1+Math.floor(Math.random()*5),rot:Math.random()*TAU,scl:0.75+Math.random()*0.5,
+      ox:(Math.random()*2-1)*(isBig?22:14),oy:(Math.random()*2-1)*(isBig?18:11)});
+  }
+  B.fx.push({k:guard?'gspark':'spark',x:def.baseX+(def.side===0?16:-16),y:lvY(def,lv||'mid'),f:0,dur:14,big:isBig,picks:picks});
+}
 function fxDmg(def,n,col){B.fx.push({k:'dmg',x:def.baseX,y:lvY(def,'high')-30,n:n,col:col,f:0,dur:44});}
 function fxWave(att){B.fx.push({k:'wave',x:att.baseX+(att.side===0?30:-30),y:att.y-92,dir:att.side===0?1:-1,f:0,dur:26});}
 function fxBurst(x,y){B.fx.push({k:'burst',x:x,y:y,f:0,dur:22});}
@@ -433,6 +484,7 @@ function striking(f){
   return f.pf>A.s&&f.pf<=A.s+A.a;
 }
 function roarStriking(f){return f.phase==='roar'&&f.pf===BAL.ROAR.s+1;}
+function gainUltStock(f){f.ult=Math.min(BAL.ULT.stock,f.ult+1);f.ultFlash=40;} // 奥義ストック+1(ギュイーン勝利/咆哮クリーンヒット共通)
 function resolveHits(){
   const a=B.p[0],b=B.p[1];
   const as=striking(a),bs=striking(b);
@@ -443,9 +495,10 @@ function resolveHits(){
     hitApply(b,a,b.counterReadyF>0);return;
   }
   const ar=roarStriking(a),br=roarStriking(b);
-  if(ar&&br){ // 咆哮相打ち
+  if(ar&&br){ // 咆哮相打ち: 双方クリーンヒット扱いで奥義ストック+1(v2.3)
     const d=BAL.ROAR.d;
     a.hp-=d;b.hp-=d;gainFocus(a,d*BAL.FOCUS.gainDmgMul);gainFocus(b,d*BAL.FOCUS.gainDmgMul);
+    gainUltStock(a);gainUltStock(b);
     for(const f of B.p){f.phase='hitstun';f.pf=0;f.stunDur=BAL.ROAR.stun;f.kb=30;f.atkLv=null;}
     fxDmg(a,d,'#ff8040');fxDmg(b,d,'#ff8040');sfx('roar');fxRoarImg(a.c.id);fxRoarImg(b.c.id);
     B.shake=10;B.hitstop=BAL.HITSTOP.roar;
@@ -568,12 +621,12 @@ function roarResolve(att,def){
   }else if(def.phase==='roar'&&def.pf<=R.armor){
     const d=Math.round(R.d*0.5);def.hp-=d;gainS(att,'aBlk');gainFocus(def,d*BAL.FOCUS.gainDmgMul);
     fxDmg(def,d,'#ffb020');B.shake=Math.max(B.shake,6);
-  }else{
+  }else{ // 咆哮クリーンヒット(被ガード/アーマー減衰以外): 奥義ストック+1(v2.3)
     def.hp-=R.d;gainFocus(def,R.d*BAL.FOCUS.gainDmgMul);
     def.phase='hitstun';def.pf=0;def.stunDur=R.stun;
     def.atkLv=null;def.guardLv=null;def.buf=null;def.combo=0;def.kb=34;
-    gainS(att,'aHit');gainS(def,'got');
-    fxDmg(def,R.d,'#ff8040');fxSpark(def,'mid',0);
+    gainS(att,'aHit');gainS(def,'got');gainUltStock(att);
+    fxDmg(def,R.d,'#ff8040');fxSpark(def,'mid',0,true); // 咆哮ヒット=大スパーク
     B.shake=Math.max(B.shake,10);B.hitstop=Math.max(B.hitstop,BAL.HITSTOP.roar);
   }
   if(def.hp<=0){def.hp=0;startKO(def.side);}
@@ -702,7 +755,7 @@ function applyClashResult(c){ // 3ミニゲーム共通のリワード適用(旧
   const stk=B.clashStreak[w];
   const dmg=BAL.CLASH.d+BAL.CLASH.streakBonus*(stk-1); // 連勝で押し切り
   lose.hp-=dmg;lose.kb=44;gainFocus(lose,dmg*BAL.FOCUS.gainDmgMul);
-  win.ult=Math.min(BAL.ULT.stock,win.ult+1);win.ultFlash=40;
+  gainUltStock(win);
   gainSAmt(win,BAL.CLASH.winS);
   fxDmg(lose,dmg,'#ffe14d');
   fxBurst(W/2,336);
@@ -1114,6 +1167,14 @@ function fighterXY(f){
   return[fpos(f),f.y];
 }
 function rStage(){
+  if(assetReady('bg_stage_day')){ // 背景画像: 下端を地面ライン(PT)に合わせたcover配置
+    const e=ASSETS['bg_stage_day'],img=e.canvas||e.img;
+    const iw=e.img.naturalWidth,ih=e.img.naturalHeight;
+    const scale=Math.max(W/iw,PT/ih);
+    const dw=iw*scale,dh=ih*scale;
+    ctx.drawImage(img,(W-dw)/2,PT-dh,dw,dh);
+    return;
+  }
   let g=ctx.createLinearGradient(0,0,0,330);
   g.addColorStop(0,'#6fb7f2');g.addColorStop(0.7,'#cfe8ff');g.addColorStop(1,'#ffe7bd');
   ctx.fillStyle=g;ctx.fillRect(0,0,W,330);
@@ -1227,18 +1288,32 @@ function rFighter(f,ox,oy){ // ポーズ画像があればdrawImage、無けれ�
   if(sp&&sp.ready&&!sp.failed){drawSpriteFighter(f,ox,oy,sp);return;}
   drawFighterShape(f,ox,oy);
 }
-const SPRITE_TARGET_H={moguzo:185,pisuke:180,godan:198}; // 表示身長(px)
-const SPRITE_IDLE_H={moguzo:560,pisuke:441,godan:536};   // idle.pngでの実測キャラ身長(px)。倍率=表示身長/実測身長を全ポーズ共通適用
+const SPRITE_IDLE_H_FALLBACK={moguzo:560,pisuke:441,godan:536}; // idle実測が不可(file://等でcanvas汚染)な場合のみ使うフォールバック値
+function spriteScale(charId){ // 表示倍率=目標身長(BAL.SPRITE_H)/idle.pngの実測キャラ高(alpha bboxの高さ)。全ポーズ同倍率で統一
+  const idleE=SPRITES[charId]&&SPRITES[charId].idle;
+  const idleH=(idleE&&idleE.bboxH)||SPRITE_IDLE_H_FALLBACK[charId];
+  return BAL.SPRITE_H[charId]/idleH;
+}
+function dodgeSpriteOffset(f){ // 回避スプライト用: 11-22Fの戻り区間だけ同画像を構え位置へ向けて位置補間する
+  const D=BAL.DODGE,back=f.pf<=D.judgeF?0:Math.min(1,(f.pf-D.judgeF)/(D.totalF-D.judgeF));
+  if(f.dodgeType==='crouch')return[0,10*back];   // しゃがみ→起き上がる分だけ上へ戻す
+  if(f.dodgeType==='sway')return[-14*back,-4*back]; // スウェー→後傾を起こしつつ前へ戻す
+  return[14*back,0];                                // lunge→前傾を起こしつつ後ろへ戻す
+}
 function drawSpriteFighter(f,ox,oy,sp){
   // 足元アンカー=画像下端 / P2(side1)は左右反転 / 位置・回転・シェイク・ヒットストップ・
   // 集中スロー・ズームは呼び出し側(rBattle/fpos)の変換をそのまま受けるため追加対応不要
   const x=(ox!=null)?ox:fpos(f),gy=(oy!=null)?oy:f.y,face=f.side===0?1:-1;
   const img=sp.canvas||sp.img,iw=sp.img.naturalWidth,ih=sp.img.naturalHeight;
-  const scale=SPRITE_TARGET_H[f.c.id]/SPRITE_IDLE_H[f.c.id]; // idle基準の実測倍率。全ポーズ同倍率で統一
+  const scale=spriteScale(f.c.id); // idle基準の実測倍率(動的計測。全ポーズ同倍率で統一)
   const w=iw*scale,h=ih*scale;
   ctx.fillStyle='rgba(0,0,0,0.22)';
   ctx.beginPath();ctx.ellipse(x,gy+5,42,9,0,0,TAU);ctx.fill();
   ctx.save();ctx.translate(x,gy);ctx.scale(face,1);
+  if(f.phase==='dodge'){ // 回避: 1-10F判定はポーズ画像そのまま、11-22F戻りは同画像を構えへ向けて位置補間
+    const off=dodgeSpriteOffset(f);
+    ctx.translate(off[0],off[1]);
+  }
   if(f.phase==='attack'&&f.atkLv){ // 攻撃の発生後数Fは残像を1枚重ねる(図形描画と同じ考え方)
     const A=spec(f),t=f.pf;
     if(t>A.s&&t<=A.s+A.a+3){
@@ -1430,15 +1505,32 @@ function rFx(){
   for(const p of B.fx){
     const t=p.f/p.dur;
     if(p.k==='spark'||p.k==='gspark'){
-      const col=(p.k==='spark')?'#ffe14d':'#7fd8ff';
-      ctx.save();ctx.translate(p.x,p.y);ctx.globalAlpha=1-t;
-      ctx.strokeStyle=col;ctx.lineWidth=5;
-      for(let i=0;i<6;i++){
-        const a=i*TAU/6+t*0.6,r1=6+t*26,r2=16+t*36;
-        ctx.beginPath();ctx.moveTo(Math.cos(a)*r1,Math.sin(a)*r1);ctx.lineTo(Math.cos(a)*r2,Math.sin(a)*r2);ctx.stroke();
+      const sizeC=p.big?'l':'s';
+      const ready=p.picks&&p.picks.some(pk=>assetReady('ui_star_'+sizeC+pk.n));
+      if(ready){ // ヒットスパーク画像(大=上段/下段/咆哮、小=中段/ガード)。ランダム選択+回転+スケールで散らす
+        ctx.save();ctx.translate(p.x,p.y);ctx.globalAlpha=1-t;
+        for(const pk of p.picks){
+          const key='ui_star_'+sizeC+pk.n;
+          if(!assetReady(key))continue;
+          const grow=0.6+0.4*(1-t);
+          ctx.save();
+          ctx.translate(pk.ox*(0.4+0.6*t),pk.oy*(0.4+0.6*t));
+          ctx.rotate(pk.rot+t*0.4);
+          drawUiIcon(key,0,0,(p.big?46:28)*pk.scl*grow);
+          ctx.restore();
+        }
+        ctx.restore();
+      }else{
+        const col=(p.k==='spark')?'#ffe14d':'#7fd8ff';
+        ctx.save();ctx.translate(p.x,p.y);ctx.globalAlpha=1-t;
+        ctx.strokeStyle=col;ctx.lineWidth=5;
+        for(let i=0;i<6;i++){
+          const a=i*TAU/6+t*0.6,r1=6+t*26,r2=16+t*36;
+          ctx.beginPath();ctx.moveTo(Math.cos(a)*r1,Math.sin(a)*r1);ctx.lineTo(Math.cos(a)*r2,Math.sin(a)*r2);ctx.stroke();
+        }
+        ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(0,0,10*(1-t),0,TAU);ctx.fill();
+        ctx.restore();
       }
-      ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(0,0,10*(1-t),0,TAU);ctx.fill();
-      ctx.restore();
     }else if(p.k==='dmg'){
       ctx.save();ctx.globalAlpha=Math.min(1,2-2*t);
       txt(String(p.n),p.x,p.y-30*t,30,p.col);
@@ -1490,6 +1582,7 @@ function rFx(){
     }
   }
 }
+const HP_FRAME_WIN=[0.0702,0.3231,0.9307,0.7467]; // hp_frame.png内の透過窓(左,上,右,下 比率)
 function hpBar(x,y,w,h,f,flip){
   ctx.fillStyle='#3b0d10';ctx.fillRect(x,y,w,h);
   const cur=Math.max(0,f.hp)/BAL.HP*w;
@@ -1498,8 +1591,10 @@ function hpBar(x,y,w,h,f,flip){
   if(flip)ctx.fillRect(x,y,shown,h);else ctx.fillRect(x+w-shown,y,shown,h);
   ctx.fillStyle='#ffd23f';
   if(flip)ctx.fillRect(x,y,cur,h);else ctx.fillRect(x+w-cur,y,cur,h);
-  ctx.strokeStyle='#fff';ctx.lineWidth=2.5;ctx.strokeRect(x,y,w,h);
+  const framed=drawUiFrame('ui_hp_frame',x,y,w,h,HP_FRAME_WIN[0],HP_FRAME_WIN[1],HP_FRAME_WIN[2],HP_FRAME_WIN[3],flip);
+  if(!framed){ctx.strokeStyle='#fff';ctx.lineWidth=2.5;ctx.strokeRect(x,y,w,h);}
 }
+const SG_FRAME_WIN=[0.0965,0.4526,0.9000,0.6466]; // sgauge_frame.png内の透過窓(Sゲージ本体のみ。ガード/集中は現行のまま)
 function gauges(x,y,f,flip){
   const w=150;
   ctx.fillStyle='#222733';ctx.fillRect(x,y,w,10);
@@ -1509,7 +1604,8 @@ function gauges(x,y,f,flip){
   if(f.sNo>0&&(game.frame%8<4))col='#ff5a5a';
   ctx.fillStyle=col;
   if(flip)ctx.fillRect(x+w-sw,y,sw,10);else ctx.fillRect(x,y,sw,10);
-  ctx.strokeStyle='#778';ctx.lineWidth=1.5;ctx.strokeRect(x,y,w,10);
+  const sFramed=drawUiFrame('ui_sgauge_frame',x,y,w,10,SG_FRAME_WIN[0],SG_FRAME_WIN[1],SG_FRAME_WIN[2],SG_FRAME_WIN[3],flip);
+  if(!sFramed){ctx.strokeStyle='#778';ctx.lineWidth=1.5;ctx.strokeRect(x,y,w,10);}
   txt('S',flip?x+w+11:x-10,y+5,13,'#ffd23f');
   ctx.fillStyle='#1c2a30';ctx.fillRect(x,y+15,w,7);
   const gw=Math.max(0,f.guard)/f.c.gMax*w;
@@ -1524,10 +1620,19 @@ function gauges(x,y,f,flip){
   for(let i=0;i<3;i++){
     const px=flip?(x+w-14-i*26):(x+14+i*26),py=y+49;
     const on=f.ult>i;
-    ctx.save();ctx.translate(px,py);ctx.rotate(Math.PI/4);
-    ctx.fillStyle=on?(((f.ult>=3&&game.frame%14<7)||f.ultFlash>0)?'#ffffff':'#ff2d78'):'#2a2f3d';
-    ctx.fillRect(-8,-8,16,16);
-    ctx.strokeStyle='#fff';ctx.lineWidth=1.5;ctx.strokeRect(-8,-8,16,16);
+    const flashing=(f.ult>=3&&game.frame%14<7)||f.ultFlash>0;
+    ctx.save();ctx.translate(px,py);
+    if(assetReady('ui_paw_emblem')){ // 所持数だけ点灯・残りは減光(グレースケール)
+      ctx.globalAlpha=on?1:0.35;
+      ctx.filter=on?(flashing?'brightness(1.7) saturate(0.5)':'none'):'grayscale(1) brightness(0.7)';
+      drawUiIcon('ui_paw_emblem',0,0,24);
+      ctx.filter='none';
+    }else{
+      ctx.rotate(Math.PI/4);
+      ctx.fillStyle=on?(flashing?'#ffffff':'#ff2d78'):'#2a2f3d';
+      ctx.fillRect(-8,-8,16,16);
+      ctx.strokeStyle='#fff';ctx.lineWidth=1.5;ctx.strokeRect(-8,-8,16,16);
+    }
     ctx.restore();
   }
 }
@@ -1540,8 +1645,10 @@ function rHUD(){
   const p1=B.p[0],p2=B.p[1];
   hpBar(16,14,232,20,p1,false);
   hpBar(W-16-232,14,232,20,p2,true);
-  ctx.fillStyle='#12151c';ctx.beginPath();ctx.arc(W/2,26,25,0,TAU);ctx.fill();
-  ctx.strokeStyle='#fff';ctx.lineWidth=3;ctx.beginPath();ctx.arc(W/2,26,25,0,TAU);ctx.stroke();
+  if(!drawUiIcon('ui_timer_medal',W/2,26,58)){
+    ctx.fillStyle='#12151c';ctx.beginPath();ctx.arc(W/2,26,25,0,TAU);ctx.fill();
+    ctx.strokeStyle='#fff';ctx.lineWidth=3;ctx.beginPath();ctx.arc(W/2,26,25,0,TAU);ctx.stroke();
+  }
   txt(String(Math.max(0,Math.ceil(B.timer/60))),W/2,27,22,'#ffd23f');
   txt(p1.c.name,18,48,15,'#fff','left');
   txt(p2.c.name+'(CPU)',W-18,48,15,'#fff','right');
