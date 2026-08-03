@@ -1131,13 +1131,16 @@ function poseId(f){ // POSE_IDS(20種)の正準名を返す。該当スプライ
   if(P==='grab')return 'grab_reach';
   if(P==='grabHit')return 'grab_lift';
   if(P==='grabbed')return 'grabbed';
-  if(P==='grabrec')return 'grabrec';       // 専用スプライト無し→図形フォールバック
+  if(P==='grabrec')return 'hurt';          // つかみ空振り→hurtを流用
   if(P==='mikiriRec')return 'mikiri';      // 見切り=mikiri（成功時はclashへ即遷移するため空振りのみ表示対象）
   if(P==='down')return 'down';             // ダウン=down（追撃消化後の無敵も同一ポーズ）
   if(P==='wake')return 'getup';            // 起き上がり=getup
-  if(P==='clash')return 'clash';           // ギュイーン(競り合い)=専用スプライト無し→図形フォールバック(変更しない)
-  if(P==='ultAtk')return(B&&B.flowF<BAL.ULT.impact)?'ult_charge':'ultFire'; // 発動後は専用ポーズ無し→フォールバック
-  if(P==='dizzy')return 'dizzy';           // 専用スプライト無し→図形フォールバック
+  if(P==='clash'){                         // ギュイーン(競り合い): ミニゲーム別にスプライトを流用
+    if(B&&B.clash&&B.clash.mg==='renda')return 'grab_reach'; // レンダ中の両者=押し合い
+    return 'idle';                         // ジャンケン・ハヤウチ中=idle
+  }
+  if(P==='ultAtk')return(B&&B.flowF<BAL.ULT.impact)?'ult_charge':'atk_high'; // 発動後はatk_highを流用
+  if(P==='dizzy')return 'hurt';            // ふらつき→hurtを流用
   if(P==='ko')return 'ko';
   if(P==='win')return 'win';
   if(P==='guard'||P==='blockstun')return 'guard';
