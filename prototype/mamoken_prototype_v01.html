@@ -102,6 +102,17 @@ loadImg('standing_godan','../assets/chars/godan/standing.png');
 loadImg('clash_guiin','../assets/fx/clash_guiin.png');
 loadImg('roar_moguzo','../assets/fx/roar_moguzo.png');
 loadImg('cutin_moguzo','../assets/cutin/moguzo.png');
+/* ---- v0.6: キャラ戦闘スプライト（20ポーズ×3キャラ）---- */
+const POSE_IDS=['idle','guard','hurt','win','tele_high','tele_mid','tele_low',
+  'atk_mid','atk_high','atk_low','mikiri','roar_charge','roar',
+  'grab_reach','grab_lift','grabbed','down','getup','ko','ult_charge'];
+const SPRITES={}; // SPRITES[charId][poseId] = {img,ready,failed,canvas}
+for(const c of CHARS){
+  SPRITES[c.id]={};
+  for(const pid of POSE_IDS){
+    SPRITES[c.id][pid]=loadImg('sprite_'+c.id+'_'+pid,'../assets/chars/'+c.id+'/'+pid+'.png');
+  }
+}
 function assetReady(key){const e=ASSETS[key];return!!(e&&e.ready&&!e.failed);}
 function drawStanding(key,cx,bottomY,targetH){ // 足元アンカー・高さ基準でフィット
   if(!assetReady(key))return false;
@@ -1039,12 +1050,12 @@ function eyesDraw(hx,hy,e){
     ctx.beginPath();ctx.arc(bx,by,3.8,Math.PI*1.5,Math.PI*3);ctx.stroke();
   }
 }
-/* ================= v0.6移行準備: ポーズ算出/描画の分離 =================
- * poseId(f)で現在ポーズを一意なIDに算出し、SPRITES[charId][poseId]に画像が
- * あればdrawImage、無ければ現行の図形描画(drawFighterShape)にフォールバックする。
- * v0.5では画像は未配置(SPRITESは空)のため、常に図形描画のまま動作は変わらない。
+/* ================= ポーズ算出/描画の分離 =================
+ * poseId(f)で現在ポーズを一意なIDに算出し、SPRITES[charId][poseId]（アセット
+ * 読み込みセクションで登録）に画像があればdrawImage、無ければ現行の図形描画
+ * (drawFighterShape)にフォールバックする。ギュイーン(競り合い)演出は専用の
+ * スプライトを持たないため、意図的に図形描画のまま(変更しない)。
  */
-const SPRITES={}; // 例: SPRITES.moguzo.atk_mid = {img,ready,failed} （v0.6で投入）
 function poseId(f){
   const P=f.phase,t=f.pf;
   if(P==='attack'&&f.atkLv){
