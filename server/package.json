@@ -1,0 +1,14 @@
+{
+  "name": "mamoken-relay-server",
+  "private": true,
+  "version": "0.1.0",
+  "description": "マモ拳（仮） オンライン対戦用WebSocketリレーサーバー (Cloudflare Workers + Durable Objects)",
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy"
+  },
+  "devDependencies": {
+    "wrangler": "^4.0.0"
+  }
+}
