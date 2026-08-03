@@ -51,6 +51,7 @@ const BAL={ // 03_data_design.md v2.0 §2 balance table 準拠
   SMAX:100,SG:{aHit:12,aHitC:[12,7,4],aBlk:8,whiff:2,gOk:6,got:5},
   ROAR:{s:16,armor:14,a:4,r:24,d:130,stun:34},
   CLASH:{sel:90,d:120,near:8,streakBonus:30,winS:30,loserStun:40,inF:26,revealHitF:24,revealF:60},
+  MINIGAME:{weights:{jyanken:1,renda:0,hayauchi:0}}, // ギュイーンで遊ぶミニゲームの抽選比率(レンダ/ハヤウチは実装コミットで更新)
   GRAB:{s:12,a:2,rec:28,seq:28,d:90,stun:30,counterMul:1.25},
   ULT:{stock:3,d:300,impact:78,total:110},
   HITSTOP:{mid:6,high:9,low:14,roar:12,clash:16},
@@ -66,6 +67,8 @@ const LEVELS=['high','mid','low'];
 const CHOICES=['guu','choki','paa'];
 const BEATS={guu:'choki',choki:'paa',paa:'guu'}; // ✊グー＞✌️チョキ＞✋パー＞✊
 const LEVEL_COLOR={high:'#ff5a5a',mid:'#ffe14d',low:'#5ab2ff'}; // テレグラフ段色
+const MINIGAME_ORDER=['jyanken','renda','hayauchi'];
+const MINIGAME_NAME={jyanken:'ジャンケン!!',renda:'レンダ!!',hayauchi:'ハヤウチ!!'};
 
 /* ================= アセット（画像・生成済みビジュアル） =================
  * asset_map.md v1 準拠。画像が無い/未読込のキャラ・場面は必ず現行プログラム
@@ -548,10 +551,20 @@ function startClash(kind){
     f.phase='clash';f.pf=0;f.atkLv=null;f.guardLv=null;f.buf=null;
     f.lunge=0;f.kb=0;f.combo=0;
   }
-  B.clash={phase:'in',f:0,pick:[null,null],cpuAt:25+((rng()*45)|0),kind:kind,winner:-2};
+  B.clash={phase:'in',f:0,mg:pickMinigame(),pick:[null,null],cpuAt:25+((rng()*45)|0),kind:kind,winner:-2};
   B.hitstop=0;
   sfx('guiin');
   announce(kind==='mikiri'?'見切った!!':(kind==='grab'?'つかみ合い!!':'競り合い!!'),46,44,'#ffe14d');
+}
+function pickMinigame(){ // BAL.MINIGAME.weightsに従って抽選
+  const w=BAL.MINIGAME.weights;let acc=0,r=rng();
+  for(const k of MINIGAME_ORDER){acc+=w[k];if(r<acc)return k;}
+  return MINIGAME_ORDER[MINIGAME_ORDER.length-1];
+}
+function clashRouletteText(c){ // 突入26F中、高速切替→最後の6Fで確定表示
+  const lockAt=BAL.CLASH.inF-6;
+  if(c.f>=lockAt)return MINIGAME_NAME[c.mg];
+  return MINIGAME_NAME[MINIGAME_ORDER[Math.floor(c.f/3)%MINIGAME_ORDER.length]];
 }
 function clashBtns(){return[ // 三角配置は現行のまま。中身をジャンケンに置き換え
   {c:'guu',x:W/2,y:PT+150,col:'#ffd23f',label:'グー'},
@@ -567,28 +580,34 @@ function clashStep(){
   if(c.phase==='in'){
     if(c.f>=BAL.CLASH.inF){c.phase='select';c.f=0;}
   }else if(c.phase==='select'){
-    if(c.pick[1]===null&&c.f>=c.cpuAt)c.pick[1]=CHOICES[(rng()*3)|0];
-    if(c.f>=BAL.CLASH.sel){
-      if(c.pick[0]===null)c.pick[0]=CHOICES[(rng()*3)|0];
-      if(c.pick[1]===null)c.pick[1]=CHOICES[(rng()*3)|0];
-    }
-    if(c.pick[0]!==null&&c.pick[1]!==null){c.phase='reveal';c.f=0;}
+    stepJyanken(c); // 他ミニゲームの分岐は実装コミットで追加
   }else if(c.phase==='reveal'){
-    if(c.f===BAL.CLASH.revealHitF)resolveClash();
+    if(c.f===BAL.CLASH.revealHitF){
+      if(c.mg==='jyanken')resolveJyankenPicks(c);
+      applyClashResult(c);
+    }
     if(c.f>=BAL.CLASH.revealHitF+BAL.CLASH.revealF)endClash();
   }
 }
-function resolveClash(){
-  const c=B.clash,x=c.pick[0],y=c.pick[1];
-  if(x===y){
-    c.winner=-1;
+function stepJyanken(c){
+  if(c.pick[1]===null&&c.f>=c.cpuAt)c.pick[1]=CHOICES[(rng()*3)|0];
+  if(c.f>=BAL.CLASH.sel){
+    if(c.pick[0]===null)c.pick[0]=CHOICES[(rng()*3)|0];
+    if(c.pick[1]===null)c.pick[1]=CHOICES[(rng()*3)|0];
+  }
+  if(c.pick[0]!==null&&c.pick[1]!==null){c.phase='reveal';c.f=0;}
+}
+function resolveJyankenPicks(c){ // 手の組み合わせ→勝者(あいこ=-1)を判定するだけ
+  const x=c.pick[0],y=c.pick[1];
+  c.winner=(x===y)?-1:(BEATS[x]===y?0:1);
+}
+function applyClashResult(c){ // 3ミニゲーム共通のリワード適用(旧resolveClashの後半を流用)
+  if(c.winner===-1){
     announce('あいこ! しきりなおし',44,34,'#dddddd');
     for(const f of B.p)f.kb=14;
     sfx('guard');return;
   }
-  const w=(BEATS[x]===y)?0:1;
-  c.winner=w;
-  const win=B.p[w],lose=B.p[1-w];
+  const w=c.winner,win=B.p[w],lose=B.p[1-w];
   B.clashStreak[w]++;B.clashStreak[1-w]=0;
   const stk=B.clashStreak[w];
   const dmg=BAL.CLASH.d+BAL.CLASH.streakBonus*(stk-1); // 連勝で押し切り
@@ -1681,6 +1700,7 @@ function rBattle(){
     ctx.save();ctx.translate(W/2,116);ctx.scale(1+k*0.3,1+k*0.3);ctx.rotate(-0.05);
     txt('ギュイーン!!',0,0,52,'#ffe14d');
     ctx.restore();
+    txt(clashRouletteText(B.clash),W/2,166,28,'#fff'); // ルーレットテロップ: どのミニゲームが始まるか予告
   }
   if(focusSlowMs>0){ // 集中: 疑似ハイスピード演出の色調オーバーレイ
     ctx.save();ctx.globalAlpha=0.16;ctx.fillStyle='#3fd8ff';ctx.fillRect(0,0,W,PT);ctx.restore();
