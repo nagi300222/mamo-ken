@@ -42,8 +42,9 @@ let rng=mulberry32(20260730);
 /* ================= balance（03データ設計 準拠） ================= */
 const BAL={ // 03_data_design.md v2.0 §2 balance table 準拠
   HP:1000,TIME:3600,WINS:2,
-  ATK:{high:{s:22,a:3,r:24,d:100,y:-108,w:2},mid:{s:14,a:3,r:18,d:70,y:-68,w:1},low:{s:30,a:4,r:30,d:150,y:-26,w:3,down:true}},
-  HITSTUN:{high:32,mid:24},BLOCKSTUN:{high:16,mid:14,low:15},CHAIN:14,CMAX:3,SCALE:[1,0.9,0.8],
+  ATK:{high:{s:22,a:3,r:24,d:100,y:-108,w:2},mid:{s:14,a:3,r:18,d:70,y:-68,w:1},low:{s:30,a:4,r:30,d:150,y:-26,w:3,down:true},
+    crouch:{s:10,a:3,r:14,d:50,y:-20,w:0.5}}, // しゃがみ突き(§6.6): チェーン先=中段(w1>0.5)
+  HITSTUN:{high:32,mid:24,crouch:19},BLOCKSTUN:{high:16,mid:14,low:15,crouch:12},CHAIN:14,CMAX:3,SCALE:[1,0.9,0.8],
   PINCH_HP:300,
   MIKIRI:{window:5,windowPinch:7,whiff:22}, // 見切り: 接触±5F(ピンチ±7F)。空振りは22Fガード不能
   DOWN:{downF:45,wakeF:20,followupMul:0.5}, // 下段ダウン: スマブラ式ダウン連(追撃1発×0.5)→無敵→起き上がり20F無敵→強制起き上がり
@@ -59,11 +60,12 @@ const BAL={ // 03_data_design.md v2.0 §2 balance table 準拠
   },
   GRAB:{s:12,a:2,rec:28,seq:28,d:90,stun:30,counterMul:1.25},
   DODGE:{totalF:22,judgeF:10,counterReadyF:18,counterMul:1.25,counterScale:[1.0,1.0,0.9], // 回避: 全体22F(1-10F判定/11-22F戻り)。成功でcounterReady18F
-    clinchF:12,clinchGrabS:10,clinchHighBonus:15}, // 踏み込み成功時の密着12F: つかみ発生12→10・上段ダメ+15
+    clinchF:12,clinchGrabS:10,clinchHighBonus:15, // 踏み込み成功時の密着12F: つかみ発生12→10・上段ダメ+15
+    crouchAtkWindow:14}, // しゃがみ中(1〜14F)の右ゾーンタップ=しゃがみ突き
 
   ULT:{stock:3,d:300,impact:78,total:110},
-  HITSTOP:{mid:6,high:9,low:14,roar:12,clash:16},
-  TELEGRAPH:{mid:8,high:13,low:18}, // 発生前半に構え+段色フラッシュ+固有SE（見てから対応の成立条件）
+  HITSTOP:{mid:6,high:9,low:14,roar:12,clash:16,crouch:5},
+  TELEGRAPH:{mid:8,high:13,low:18,crouch:6}, // 発生前半に構え+段色フラッシュ+固有SE（見てから対応の成立条件）
   BUF:10,FLICK_DX:60,FLICK_MS:300,JUST_TAP_MS:100
 };
 const CHARS=[
@@ -74,7 +76,7 @@ const CHARS=[
 const LEVELS=['high','mid','low'];
 const CHOICES=['guu','choki','paa'];
 const BEATS={guu:'choki',choki:'paa',paa:'guu'}; // ✊グー＞✌️チョキ＞✋パー＞✊
-const LEVEL_COLOR={high:'#ff5a5a',mid:'#ffe14d',low:'#5ab2ff'}; // テレグラフ段色
+const LEVEL_COLOR={high:'#ff5a5a',mid:'#ffe14d',low:'#5ab2ff',crouch:'#8bc34a'}; // テレグラフ段色
 const MINIGAME_ORDER=['jyanken','renda','hayauchi'];
 const MINIGAME_NAME={jyanken:'ジャンケン!!',renda:'レンダ!!',hayauchi:'ハヤウチ!!'};
 
@@ -305,6 +307,10 @@ function startDodge(f,kind){ // kind: 'crouch'|'sway'|'lunge'
   f.phase='dodge';f.pf=0;f.dodgeType=kind;f.atkLv=null;f.guardLv=null;f.buf=null;f.combo=0;f.hasHit=false;
   sfx('swish');
 }
+function startCrouchAtk(f){ // しゃがみ中(1〜14F)の右ゾーンタップ＝しゃがみ突き。高さは問わない
+  f.phase='attack';f.pf=0;f.atkLv='crouch';f.dodgeType=null;f.hasHit=false;f.guardLv=null;f.combo=0;
+  sfx('swish');sfx('teleMid'); // 専用SEは無いため中段テレグラフSEを流用
+}
 function canChain(f,lv){
   if(f.phase!=='attack'||!f.hasHit||f.combo>=BAL.CMAX)return false;
   if(BAL.ATK[lv].w<=BAL.ATK[f.atkLv].w)return false; // 軽→重ルートのみ（中→上→下）
@@ -348,7 +354,9 @@ function applyInputs(f,opp,cmds,held){
         f.phase='mikiriRec';f.pf=0;f.guardLv=null;f.buf=null;sfx('whiffG');
       }
     }else if(c.t==='atk'){
-      if(f.phase==='idle')startAtk(f,c.lv,false);
+      if(f.phase==='dodge'&&f.dodgeType==='crouch'&&f.pf>=1&&f.pf<=BAL.DODGE.crouchAtkWindow){
+        startCrouchAtk(f); // しゃがみ中は高さに関わらずしゃがみ突きへキャンセル
+      }else if(f.phase==='idle')startAtk(f,c.lv,false);
       else if(canChain(f,c.lv))startAtk(f,c.lv,true);
       else{f.buf={lv:c.lv};f.bufF=BAL.BUF;}
     }
@@ -1245,6 +1253,16 @@ function drawFighterShape(f,ox,oy){
     dy=Math.sin(gf*0.12+f.side*2)*2;
     pawF=[stance[0],stance[1]+Math.sin(gf*0.12+f.side*2)*3];
     pawB=[stanceB[0],stanceB[1]+Math.sin(gf*0.12+f.side*2+1.2)*3];
+  }else if(P==='attack'&&f.atkLv==='crouch'){ // しゃがみ突き: 低い姿勢からの短い突き(画像未配置の暫定図形)
+    const A=spec(f);
+    crouch=14;
+    const W2=[10,-40],C2=[50,-30],T2=[86,-34];
+    if(t<=A.s){const k=t/A.s;pawF=L([20,-90],W2,k);lean=0.05*k;eyes='a';}
+    else if(t<=A.s+A.a+2){const k=Math.min(1,(t-A.s)/2);pawF=bz(W2,C2,T2,k);lean=0.16;mouth=0.3;eyes='a';}
+    else{const k=Math.min(1,(t-A.s-A.a-2)/Math.max(1,A.r-2));pawF=bz(T2,C2,W2,k);lean=0.16*(1-k);}
+    pawB=[6,-46];
+    const tg=BAL.TELEGRAPH.crouch;
+    if(t<=tg){teleCol=LEVEL_COLOR.crouch;teleGlow=(1-t/tg)*(0.55+0.45*Math.sin(gf*0.9));}
   }else if(P==='attack'&&f.atkLv){
     const A=spec(f);
     const RT={ // 段別モーション: 上=アッパー / 中=ストレート / 下=すくい打ち
