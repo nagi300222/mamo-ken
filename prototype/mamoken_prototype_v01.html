@@ -328,9 +328,10 @@ function fxSpark(def,lv,guard,big){ // big: 呼び出し側で強制指定(咆�
   B.fx.push({k:guard?'gspark':'spark',x:def.baseX+(def.side===0?16:-16),y:lvY(def,lv||'mid'),f:0,dur:14,big:isBig,picks:picks});
 }
 function fxDmg(def,n,col){B.fx.push({k:'dmg',x:def.baseX,y:lvY(def,'high')-30,n:n,col:col,f:0,dur:44});}
-function fxWave(att){B.fx.push({k:'wave',x:att.baseX+(att.side===0?30:-30),y:att.y-92,dir:att.side===0?1:-1,f:0,dur:26});}
+function relY(f,ratio){return f.y-BAL.SPRITE_H[f.c.id]*ratio;} // キャラの表示身長(BAL.SPRITE_H)基準の頭上/身体オフセット(体格差に追従)
+function fxWave(att){B.fx.push({k:'wave',x:att.baseX+(att.side===0?30:-30),y:relY(att,0.497),dir:att.side===0?1:-1,f:0,dur:26});}
 function fxBurst(x,y){B.fx.push({k:'burst',x:x,y:y,f:0,dur:22});}
-function fxStars(f){B.fx.push({k:'stars',x:f.baseX,y:f.y-146,f:0,dur:BAL.DIZZY});}
+function fxStars(f){B.fx.push({k:'stars',x:f.baseX,y:relY(f,0.789),f:0,dur:BAL.DIZZY});}
 function fxRoarImg(charId){ // 咆哮演出画(該当キャラの画像が無ければ何も足さず現行のfxWaveのみ)
   if(assetReady('roar_'+charId))B.fx.push({k:'roarImg',charId:charId,f:0,dur:24});
 }
@@ -364,7 +365,7 @@ function startAtk(f,lv,chain){
     if(f.atkStreak>=3){f.yomare=true;fxYomare(f);}else f.yomare=false;
   }
 }
-function fxYomare(f){B.fx.push({k:'yomare',x:fpos(f),y:f.y-190,f:0,dur:50});}
+function fxYomare(f){B.fx.push({k:'yomare',x:fpos(f),y:relY(f,1.027),f:0,dur:50});}
 function startDodge(f,kind){ // kind: 'crouch'|'sway'|'lunge'
   f.phase='dodge';f.pf=0;f.dodgeType=kind;f.atkLv=null;f.guardLv=null;f.buf=null;f.combo=0;f.hasHit=false;
   sfx('swish');
@@ -556,7 +557,7 @@ function attackResolve(att,def){
     if(rule.beats===att.atkLv){ // 回避成功: 攻撃側はスカ扱い、防御側はcounterReadyを獲得
       def.counterReadyF=BAL.DODGE.counterReadyF;
       if(def.dodgeType==='lunge')def.clinchF=BAL.DODGE.clinchF; // 踏み込み成功→追加で密着12F
-      B.fx.push({k:'suki',x:fpos(att),y:att.y-168,f:0,dur:20});
+      B.fx.push({k:'suki',x:fpos(att),y:relY(att,0.908),f:0,dur:20});
       sfx('whiffG');
       return;
     }
@@ -577,7 +578,7 @@ function attackResolve(att,def){
     }
     gainS(att,'aBlk');gainS(def,'gOk');gainFocus(def,BAL.FOCUS.gainGuard);
     const A2=spec(att),rem=A2.s+A2.a+A2.r-att.pf;
-    if(rem>6)B.fx.push({k:'suki',x:fpos(att),y:att.y-168,f:0,dur:rem});
+    if(rem>6)B.fx.push({k:'suki',x:fpos(att),y:relY(att,0.908),f:0,dur:rem});
     fxSpark(def,att.atkLv,1);sfx('guard');
     B.hitstop=Math.max(B.hitstop,2);
     if(def.guard<=0)doBreak(def);
@@ -597,7 +598,7 @@ function hitApply(att,def,counterHit){
     dmg=Math.round(dmg*BAL.GRAB.counterMul);
     counterFx=true;
   }
-  if(counterFx)B.fx.push({k:'counter',x:def.baseX,y:def.y-186,f:0,dur:38});
+  if(counterFx)B.fx.push({k:'counter',x:def.baseX,y:relY(def,1.005),f:0,dur:38});
   if(def.phase==='roar'&&def.pf<=BAL.ROAR.armor){ // 咆哮アーマー
     dmg=Math.round(dmg*0.5);def.hp-=dmg;gainS(att,'aBlk');gainFocus(def,dmg*BAL.FOCUS.gainDmgMul);
     fxDmg(def,dmg,'#ffb020');fxSpark(def,att.atkLv,0);sfx('hit');
@@ -656,7 +657,7 @@ function grabResolve(att,def){
     sfx('grab');
   }else{ // 打撃・攻撃中の相手には潰される
     att.phase='grabrec';att.pf=0;
-    B.fx.push({k:'suki',x:fpos(att),y:att.y-168,f:0,dur:BAL.GRAB.rec});
+    B.fx.push({k:'suki',x:fpos(att),y:relY(att,0.908),f:0,dur:BAL.GRAB.rec});
     sfx('whiffG');
   }
 }
@@ -1327,6 +1328,22 @@ function dodgeSpriteOffset(f){ // 回避スプライト用: 11-22Fの戻り区�
   if(f.dodgeType==='sway')return[-14*back,-4*back]; // スウェー→後傾を起こしつつ前へ戻す
   return[14*back,0];                                // lunge→前傾を起こしつつ後ろへ戻す
 }
+function drawStatusRings(f,bodyY,bw,bh){ // 無敵(ダウン連消化後〜起き上がり)/counterReady・密着リング
+  // 呼び出し側でctx.translate(x,gy)+scale(face,1)済みの座標系を前提とする(body楕円の中心=bodyY相対)
+  const gf=game.frame;
+  if((f.phase==='down'&&f.downHitUsed)||f.phase==='wake'){
+    ctx.save();ctx.globalAlpha=0.4+0.3*Math.sin(gf*0.3);
+    ctx.strokeStyle='#7fd8ff';ctx.lineWidth=4;
+    ctx.beginPath();ctx.ellipse(0,bodyY,bw+10,bh+10,0,0,TAU);ctx.stroke();
+    ctx.restore();
+  }
+  if(f.counterReadyF>0||f.clinchF>0){ // 回避成功後のcounterReady/密着表示
+    ctx.save();ctx.globalAlpha=0.4+0.3*Math.sin(gf*0.4);
+    ctx.strokeStyle=f.clinchF>0?'#ff9e2c':'#ffe14d';ctx.lineWidth=4;
+    ctx.beginPath();ctx.ellipse(0,bodyY,bw+6,bh+6,0,0,TAU);ctx.stroke();
+    ctx.restore();
+  }
+}
 function drawSpriteFighter(f,ox,oy,sp){
   // 足元アンカー=画像下端 / P2(side1)は左右反転 / 位置・回転・シェイク・ヒットストップ・
   // 集中スロー・ズームは呼び出し側(rBattle/fpos)の変換をそのまま受けるため追加対応不要
@@ -1350,6 +1367,9 @@ function drawSpriteFighter(f,ox,oy,sp){
     }
   }
   ctx.drawImage(img,-w/2,-h,w,h);
+  // 無敵/counterReadyリングはキャラの表示身長(BAL.SPRITE_H)基準の相対位置で描く(体格差に追従)
+  const H2=BAL.SPRITE_H[f.c.id];
+  drawStatusRings(f,-0.249*H2,0.238*H2,0.303*H2);
   ctx.restore();
 }
 function drawFighterShape(f,ox,oy){
@@ -1463,18 +1483,7 @@ function drawFighterShape(f,ox,oy){
     ctx.fillStyle=gg;ctx.beginPath();ctx.arc(0,bodyY,78,0,TAU);ctx.fill();
     ctx.restore();
   }
-  if((P==='down'&&f.downHitUsed)||P==='wake'){ // ダウン連消化後〜起き上がりは無敵表示
-    ctx.save();ctx.globalAlpha=0.4+0.3*Math.sin(gf*0.3);
-    ctx.strokeStyle='#7fd8ff';ctx.lineWidth=4;
-    ctx.beginPath();ctx.ellipse(0,bodyY,bw+10,bh+10,0,0,TAU);ctx.stroke();
-    ctx.restore();
-  }
-  if(f.counterReadyF>0||f.clinchF>0){ // 回避成功後のcounterReady/密着表示
-    ctx.save();ctx.globalAlpha=0.4+0.3*Math.sin(gf*0.4);
-    ctx.strokeStyle=f.clinchF>0?'#ff9e2c':'#ffe14d';ctx.lineWidth=4;
-    ctx.beginPath();ctx.ellipse(0,bodyY,bw+6,bh+6,0,0,TAU);ctx.stroke();
-    ctx.restore();
-  }
+  drawStatusRings(f,bodyY,bw,bh);
   const OL=shade(c.color,-70);
   ctx.fillStyle=shade(c.color,-26);
   ctx.beginPath();ctx.ellipse(-38,bodyY+20,16,9,0.5,0,TAU);ctx.fill();
