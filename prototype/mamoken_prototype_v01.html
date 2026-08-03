@@ -63,8 +63,8 @@ const CHARS=[
  {id:'godan',name:'ゴダン',type:'パワー',ult:'山崩し',color:'#8a6540',belly:'#d9c19d',dMul:1.18,sMul:0.9,sOfs:2,gMax:110,pips:{p:5,s:2,g:4}}
 ];
 const LEVELS=['high','mid','low'];
-const CHOICES=['up','rd','ld'];
-const BEATS={up:'rd',rd:'ld',ld:'up'}; // 上→右下→左下→上
+const CHOICES=['guu','choki','paa'];
+const BEATS={guu:'choki',choki:'paa',paa:'guu'}; // ✊グー＞✌️チョキ＞✋パー＞✊
 const LEVEL_COLOR={high:'#ff5a5a',mid:'#ffe14d',low:'#5ab2ff'}; // テレグラフ段色
 
 /* ================= アセット（画像・生成済みビジュアル） =================
@@ -192,14 +192,6 @@ function txt(t,x,y,size,color,align){
   ctx.fillStyle=color;ctx.fillText(t,x,y);
 }
 function inRect(p,x,y,w,h){return p.x>=x&&p.x<=x+w&&p.y>=y&&p.y<=y+h;}
-function drawArrow(x,y,ang,len,col){
-  ctx.save();ctx.translate(x,y);ctx.rotate(ang);
-  ctx.strokeStyle=col;ctx.fillStyle=col;ctx.lineWidth=10;ctx.lineCap='round';
-  ctx.beginPath();ctx.moveTo(-len*0.5,0);ctx.lineTo(len*0.3,0);ctx.stroke();
-  ctx.beginPath();ctx.moveTo(len*0.72,0);ctx.lineTo(len*0.12,-len*0.42);ctx.lineTo(len*0.12,len*0.42);
-  ctx.closePath();ctx.fill();
-  ctx.restore();
-}
 function star(x,y,r,col){
   ctx.save();ctx.translate(x,y);ctx.fillStyle=col;ctx.beginPath();
   for(let i=0;i<8;i++){const a=i*Math.PI/4,r2=(i%2===0)?r:r*0.45;
@@ -561,10 +553,10 @@ function startClash(kind){
   sfx('guiin');
   announce(kind==='mikiri'?'見切った!!':(kind==='grab'?'つかみ合い!!':'競り合い!!'),46,44,'#ffe14d');
 }
-function clashBtns(){return[
-  {c:'up',x:W/2,y:PT+150,ang:-Math.PI/2,col:'#ffd23f',label:'振り上げ'},
-  {c:'rd',x:W-118,y:PT+352,ang:Math.PI/4,col:'#ff5a5a',label:'右フック'},
-  {c:'ld',x:118,y:PT+352,ang:Math.PI*3/4,col:'#5ab2ff',label:'左ボディ'}];}
+function clashBtns(){return[ // 三角配置は現行のまま。中身をジャンケンに置き換え
+  {c:'guu',x:W/2,y:PT+150,col:'#ffd23f',label:'グー'},
+  {c:'choki',x:W-118,y:PT+352,col:'#ff5a5a',label:'チョキ'},
+  {c:'paa',x:118,y:PT+352,col:'#5ab2ff',label:'パー'}];}
 function clashHit(p){
   const bs=clashBtns();
   for(const b of bs)if(Math.hypot(p.x-b.x,p.y-b.y)<=96)return b.c;
@@ -1407,6 +1399,44 @@ function drawShield(x,y,s){
   ctx.beginPath();ctx.moveTo(0,-s*0.55);ctx.lineTo(0,s*0.55);ctx.stroke();
   ctx.restore();
 }
+function drawFist(x,y,s){ // ✊グー（v0.4のパッドアイコンを流用）
+  ctx.save();ctx.translate(x,y);
+  ctx.fillStyle='#c96a4a';rr(-s*0.8,-s*0.7,s*1.6,s*1.3,s*0.5);ctx.fill();
+  ctx.strokeStyle='#ffc6ae';ctx.lineWidth=2.5;
+  for(let i=0;i<3;i++){
+    ctx.beginPath();ctx.arc(-s*0.35+i*s*0.38,-s*0.62,s*0.19,Math.PI,0);ctx.stroke();
+  }
+  ctx.strokeStyle='rgba(255,180,140,0.8)';ctx.lineWidth=3;
+  ctx.beginPath();ctx.moveTo(s*1.0,-s*0.2);ctx.lineTo(s*1.6,-s*0.2);ctx.stroke();
+  ctx.beginPath();ctx.moveTo(s*1.0,s*0.22);ctx.lineTo(s*1.5,s*0.26);ctx.stroke();
+  ctx.restore();
+}
+function drawPalm(x,y,s){ // ✋パー（v0.4のパッドアイコンを流用）
+  ctx.save();ctx.translate(x,y);
+  ctx.fillStyle='#e8b24a';
+  rr(-s*0.7,-s*0.5,s*1.4,s*1.2,s*0.42);ctx.fill();
+  ctx.strokeStyle='#8a6520';ctx.lineWidth=2.5;ctx.lineCap='round';
+  for(let i=0;i<4;i++){
+    ctx.beginPath();ctx.moveTo(-s*0.52+i*s*0.35,-s*0.5);ctx.lineTo(-s*0.52+i*s*0.35,-s*1.02);ctx.stroke();
+  }
+  ctx.strokeStyle='rgba(255,220,150,0.85)';ctx.lineWidth=3;
+  ctx.beginPath();ctx.arc(0,s*0.1,s*1.4,-0.65,0.65);ctx.stroke();
+  ctx.restore();
+}
+function drawScissors(x,y,s){ // ✌️チョキ（新規: 爪2本）
+  ctx.save();ctx.translate(x,y);
+  ctx.fillStyle='#c96a4a';rr(-s*0.62,-s*0.55,s*1.24,s*1.05,s*0.4);ctx.fill();
+  ctx.strokeStyle='#ffc6ae';ctx.lineWidth=2.2;
+  ctx.beginPath();ctx.arc(-s*0.02,-s*0.48,s*0.16,Math.PI,0);ctx.stroke();
+  ctx.strokeStyle='#f4ded0';ctx.lineWidth=s*0.3;ctx.lineCap='round';
+  ctx.beginPath();ctx.moveTo(-s*0.1,-s*0.32);ctx.lineTo(-s*0.5,-s*1.12);ctx.stroke();
+  ctx.beginPath();ctx.moveTo(s*0.22,-s*0.32);ctx.lineTo(s*0.12,-s*1.18);ctx.stroke();
+  ctx.strokeStyle='rgba(255,220,200,0.85)';ctx.lineWidth=2;
+  ctx.beginPath();ctx.moveTo(-s*0.5,-s*1.12);ctx.lineTo(-s*0.58,-s*1.28);ctx.stroke();
+  ctx.beginPath();ctx.moveTo(s*0.12,-s*1.18);ctx.lineTo(s*0.07,-s*1.34);ctx.stroke();
+  ctx.restore();
+}
+const HAND_ICON={guu:drawFist,choki:drawScissors,paa:drawPalm};
 function rPad(){
   ctx.fillStyle='#12141a';ctx.fillRect(0,PT,W,H-PT);
   if(game.screen==='battle'&&B){
@@ -1475,7 +1505,7 @@ function rPadClash(){
     ctx.beginPath();ctx.arc(0,0,84,0,TAU);
     ctx.fillStyle=picked?'#3d3350':'#221c33';ctx.fill();
     ctx.lineWidth=6;ctx.strokeStyle=b.col;ctx.stroke();
-    drawArrow(0,-12,b.ang,40,b.col);
+    HAND_ICON[b.c](0,-6,32);
     txt(b.label,0,48,20,'#fff');
     if(picked){
       ctx.strokeStyle='#fff';ctx.lineWidth=4;
@@ -1486,7 +1516,7 @@ function rPadClash(){
   if(c.phase==='reveal'){
     ctx.fillStyle='rgba(0,0,0,0.45)';ctx.fillRect(0,PT,W,H-PT);
   }
-  txt('上⇒右下 / 右下⇒左下 / 左下⇒上 に勝つ',W/2,H-22,15,'#9aa2b8');
+  txt('✊グー＞✌️チョキ＞✋パー＞✊',W/2,H-22,15,'#9aa2b8');
 }
 function rPadUlt(){
   const g=ctx.createRadialGradient(W/2,PT+240,20,W/2,PT+240,330);
@@ -1509,8 +1539,7 @@ function rPadUlt(){
 function rClashPicks(){
   if(!B||!B.clash||B.clash.phase!=='reveal')return;
   const c=B.clash;
-  const bl={up:'#ffd23f',rd:'#ff5a5a',ld:'#5ab2ff'};
-  const angs={up:-Math.PI/2,rd:Math.PI/4,ld:Math.PI*3/4};
+  const bl={guu:'#ffd23f',choki:'#ff5a5a',paa:'#5ab2ff'};
   for(let s2=0;s2<2;s2++){
     const pk=c.pick[s2];if(!pk)continue;
     const x=(s2===0)?W/2-48:W/2+48,y=252;
@@ -1519,7 +1548,7 @@ function rClashPicks(){
     ctx.beginPath();ctx.arc(0,0,34,0,TAU);
     ctx.fillStyle='#191524';ctx.fill();
     ctx.lineWidth=4;ctx.strokeStyle=bl[pk];ctx.stroke();
-    drawArrow(0,0,angs[pk],26,bl[pk]);
+    HAND_ICON[pk](0,6,20);
     ctx.restore();
   }
   if(c.f>=BAL.CLASH.revealHitF&&c.winner>=0){
