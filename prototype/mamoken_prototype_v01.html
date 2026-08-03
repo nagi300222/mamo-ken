@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-<title>マモ拳（仮）prototype v0.5</title>
+<title>マモ拳（仮）prototype v0.8</title>
 <style>
 html,body{margin:0;padding:0;background:#0b0d12;height:100%;overflow:hidden;touch-action:none;
 -webkit-user-select:none;user-select:none;-webkit-touch-callout:none;font-family:sans-serif}
@@ -16,12 +16,13 @@ canvas{display:block;background:#000;touch-action:none}
 <script>
 "use strict";
 /* ============================================================
- * マモ拳（仮） プロトタイプ v0.5（見合いと交差・再設計版）
- * - 仕様の正: redesign_proposal_v1.md（確定版）＋03_data_design.md v2.0
- * - 仮グラフィック（プログラム描画）/ 仮SE（WebAudio合成）
+ * マモ拳（仮） プロトタイプ v0.8（回避システム＋コンボ拡張）
+ * - 仕様の正: 03_data_design.md v2.2 §6.6
+ * - 仮グラフィック（プログラム描画/一部スプライト）/ 仮SE（WebAudio合成）
  * - 上50%バトル / 下50%パッド（ボタン枠なし）。
- *   右=高さタップ(リリース発火)で上/中/下段攻撃、右フリック=咆哮
- *   左=ホールドでガード、ジャストタップ(100ms以内)=見切り、下フリック=つかみ
+ *   右=高さタップ(リリース発火)で上/中/下段攻撃、右フリック=咆哮、右下フリック=つかみ
+ *   左=ホールドでガード、ジャストタップ(100ms以内)=見切り
+ *   左←フリック=スウェー、左↓フリック=しゃがみ、左→フリック=踏み込み（回避）
  * ============================================================ */
 const W=540,H=960,PT=480,TAU=Math.PI*2;
 const cv=document.getElementById('game'),ctx=cv.getContext('2d');
@@ -41,8 +42,9 @@ let rng=mulberry32(20260730);
 /* ================= balance（03データ設計 準拠） ================= */
 const BAL={ // 03_data_design.md v2.0 §2 balance table 準拠
   HP:1000,TIME:3600,WINS:2,
-  ATK:{high:{s:22,a:3,r:24,d:100,y:-108,w:2},mid:{s:14,a:3,r:18,d:70,y:-68,w:1},low:{s:30,a:4,r:30,d:150,y:-26,w:3,down:true}},
-  HITSTUN:{high:32,mid:24},BLOCKSTUN:{high:16,mid:14,low:15},CHAIN:14,CMAX:3,SCALE:[1,0.9,0.8],
+  ATK:{high:{s:22,a:3,r:24,d:100,y:-108,w:2},mid:{s:14,a:3,r:18,d:70,y:-68,w:1},low:{s:30,a:4,r:30,d:150,y:-26,w:3,down:true},
+    crouch:{s:10,a:3,r:14,d:50,y:-20,w:0.5}}, // しゃがみ突き(§6.6): チェーン先=中段(w1>0.5)
+  HITSTUN:{high:32,mid:24,crouch:19},BLOCKSTUN:{high:16,mid:14,low:15,crouch:12},CHAIN:14,CMAX:3,SCALE:[1,0.9,0.8],
   PINCH_HP:300,
   MIKIRI:{window:5,windowPinch:7,whiff:22}, // 見切り: 接触±5F(ピンチ±7F)。空振りは22Fガード不能
   DOWN:{downF:45,wakeF:20,followupMul:0.5}, // 下段ダウン: スマブラ式ダウン連(追撃1発×0.5)→無敵→起き上がり20F無敵→強制起き上がり
@@ -57,9 +59,13 @@ const BAL={ // 03_data_design.md v2.0 §2 balance table 準拠
     HAYAUCHI:{targets:5,radius:55,cpuMinF:14,cpuMaxF:24,capF:600} // ハヤウチ(的あて連続タップ)
   },
   GRAB:{s:12,a:2,rec:28,seq:28,d:90,stun:30,counterMul:1.25},
+  DODGE:{totalF:22,judgeF:10,counterReadyF:18,counterMul:1.25,counterScale:[1.0,1.0,0.9], // 回避: 全体22F(1-10F判定/11-22F戻り)。成功でcounterReady18F
+    clinchF:12,clinchGrabS:10,clinchHighBonus:15, // 踏み込み成功時の密着12F: つかみ発生12→10・上段ダメ+15
+    crouchAtkWindow:14}, // しゃがみ中(1〜14F)の右ゾーンタップ=しゃがみ突き
+
   ULT:{stock:3,d:300,impact:78,total:110},
-  HITSTOP:{mid:6,high:9,low:14,roar:12,clash:16},
-  TELEGRAPH:{mid:8,high:13,low:18}, // 発生前半に構え+段色フラッシュ+固有SE（見てから対応の成立条件）
+  HITSTOP:{mid:6,high:9,low:14,roar:12,clash:16,crouch:5},
+  TELEGRAPH:{mid:8,high:13,low:18,crouch:6}, // 発生前半に構え+段色フラッシュ+固有SE（見てから対応の成立条件）
   BUF:10,FLICK_DX:60,FLICK_MS:300,JUST_TAP_MS:100
 };
 const CHARS=[
@@ -70,7 +76,7 @@ const CHARS=[
 const LEVELS=['high','mid','low'];
 const CHOICES=['guu','choki','paa'];
 const BEATS={guu:'choki',choki:'paa',paa:'guu'}; // ✊グー＞✌️チョキ＞✋パー＞✊
-const LEVEL_COLOR={high:'#ff5a5a',mid:'#ffe14d',low:'#5ab2ff'}; // テレグラフ段色
+const LEVEL_COLOR={high:'#ff5a5a',mid:'#ffe14d',low:'#5ab2ff',crouch:'#8bc34a'}; // テレグラフ段色
 const MINIGAME_ORDER=['jyanken','renda','hayauchi'];
 const MINIGAME_NAME={jyanken:'ジャンケン!!',renda:'レンダ!!',hayauchi:'ハヤウチ!!'};
 
@@ -218,6 +224,7 @@ function newFighter(ci,side){
     guardLv:null,stunDur:0,combo:0,
     buf:null,bufF:0,held:null,lunge:0,kb:0,downHitUsed:false,
     lastAtkLv:null,atkStreak:0,yomare:false,
+    dodgeType:null,counterReadyF:0,clinchF:0,comboCounter:false,grabS:BAL.GRAB.s,
     shownHp:BAL.HP,ultFlash:0,sNo:0};
 }
 function startBattle(){
@@ -235,6 +242,7 @@ function roundInit(first){
     f.phase='idle';f.pf=0;f.atkLv=null;f.hasHit=false;
     f.guardLv=null;f.combo=0;f.buf=null;f.kb=0;f.lunge=0;f.sNo=0;f.downHitUsed=false;
     f.lastAtkLv=null;f.atkStreak=0;f.yomare=false;
+    f.dodgeType=null;f.counterReadyF=0;f.clinchF=0;f.comboCounter=false;
     if(first){f.s=0;f.ult=0;f.focus=0;}
   }
   B.timer=BAL.TIME;B.flow='intro';B.flowF=0;B.clash=null;B.pendKO=-1;B.clashStreak=[0,0];
@@ -285,7 +293,7 @@ function checkFocusTrigger(att,def){
 }
 function startAtk(f,lv,chain){
   f.phase='attack';f.pf=0;f.atkLv=lv;f.hasHit=false;f.guardLv=null;
-  if(!chain)f.combo=0;
+  if(!chain){f.combo=0;f.comboCounter=false;} // 新規始動でカウンターコンボの補正緩和もリセット
   sfx('swish');
   sfx(lv==='high'?'teleHigh':(lv==='low'?'teleLow':'teleMid')); // テレグラフ固有SE
   if(!chain){ // 読まれ表示: ニュートラルからの選択が同系統3連続で「読まれ!」
@@ -295,6 +303,14 @@ function startAtk(f,lv,chain){
   }
 }
 function fxYomare(f){B.fx.push({k:'yomare',x:fpos(f),y:f.y-190,f:0,dur:50});}
+function startDodge(f,kind){ // kind: 'crouch'|'sway'|'lunge'
+  f.phase='dodge';f.pf=0;f.dodgeType=kind;f.atkLv=null;f.guardLv=null;f.buf=null;f.combo=0;f.hasHit=false;
+  sfx('swish');
+}
+function startCrouchAtk(f){ // しゃがみ中(1〜14F)の右ゾーンタップ＝しゃがみ突き。高さは問わない
+  f.phase='attack';f.pf=0;f.atkLv='crouch';f.dodgeType=null;f.hasHit=false;f.guardLv=null;f.combo=0;f.comboCounter=false;
+  sfx('swish');sfx('teleMid'); // 専用SEは無いため中段テレグラフSEを流用
+}
 function canChain(f,lv){
   if(f.phase!=='attack'||!f.hasHit||f.combo>=BAL.CMAX)return false;
   if(BAL.ATK[lv].w<=BAL.ATK[f.atkLv].w)return false; // 軽→重ルートのみ（中→上→下）
@@ -323,7 +339,12 @@ function applyInputs(f,opp,cmds,held){
     }else if(c.t==='grab'){
       if(f.phase==='idle'||f.phase==='guard'){
         f.phase='grab';f.pf=0;f.guardLv=null;f.atkLv=null;f.buf=null;f.combo=0;f.hasHit=false;
+        f.grabS=f.clinchF>0?BAL.DODGE.clinchGrabS:BAL.GRAB.s; // 発生F値は開始時点でスナップショット(密着F自体はその後も毎F減衰するため)
         sfx('grabGo');
+      }
+    }else if(c.t==='dodge'){ // 回避: idle/guardから発生
+      if(f.phase==='idle'||f.phase==='guard'){
+        startDodge(f,c.kind);
       }
     }else if(c.t==='mikiri'){ // 見切り: ジャストタップ。窓内なら能動的にギュイーンを起こす
       if(f.phase==='idle'||f.phase==='guard'){
@@ -334,7 +355,9 @@ function applyInputs(f,opp,cmds,held){
         f.phase='mikiriRec';f.pf=0;f.guardLv=null;f.buf=null;sfx('whiffG');
       }
     }else if(c.t==='atk'){
-      if(f.phase==='idle')startAtk(f,c.lv,false);
+      if(f.phase==='dodge'&&f.dodgeType==='crouch'&&f.pf>=1&&f.pf<=BAL.DODGE.crouchAtkWindow){
+        startCrouchAtk(f); // しゃがみ中は高さに関わらずしゃがみ突きへキャンセル
+      }else if(f.phase==='idle')startAtk(f,c.lv,false);
       else if(canChain(f,c.lv))startAtk(f,c.lv,true);
       else{f.buf={lv:c.lv};f.bufF=BAL.BUF;}
     }
@@ -367,7 +390,7 @@ function advance(f){
     const R=BAL.ROAR;
     if(f.pf>=R.s+R.a+R.r){f.phase='idle';f.pf=0;}
   }else if(f.phase==='grab'){
-    if(f.pf>BAL.GRAB.s+BAL.GRAB.a+2){f.phase='grabrec';f.pf=0;}
+    if(f.pf>grabStartup(f)+BAL.GRAB.a+2){f.phase='grabrec';f.pf=0;}
   }else if(f.phase==='grabrec'){
     if(f.pf>=BAL.GRAB.rec){f.phase='idle';f.pf=0;}
   }else if(f.phase==='grabHit'){
@@ -394,6 +417,8 @@ function advance(f){
     }
   }else if(f.phase==='mikiriRec'){ // 見切り空振り: ガード不能の硬直
     if(f.pf>=BAL.MIKIRI.whiff){f.phase='idle';f.pf=0;}
+  }else if(f.phase==='dodge'){ // 回避: 1-10F判定 / 11-22F戻り。位置は変えない
+    if(f.pf>=BAL.DODGE.totalF){f.phase='idle';f.pf=0;f.dodgeType=null;}
   }else if(f.phase==='down'){ // ダウン: 追撃1発を受けたら以後は無敵のまま起き上がりへ
     if(f.pf>=BAL.DOWN.downF){f.phase='wake';f.pf=0;}
   }else if(f.phase==='wake'){ // 起き上がり20F全身無敵→強制起き上がり(起き攻め不可)
@@ -414,8 +439,8 @@ function resolveHits(){
   if(as&&bs){
     a.hasHit=true;b.hasHit=true;
     if(a.atkLv===b.atkLv){startClash('trade');return;} // 同段相打ち→競り合い
-    hitApply(a,b);if(B.flow!=='fight')return;
-    hitApply(b,a);return;
+    hitApply(a,b,a.counterReadyF>0);if(B.flow!=='fight')return;
+    hitApply(b,a,b.counterReadyF>0);return;
   }
   const ar=roarStriking(a),br=roarStriking(b);
   if(ar&&br){ // 咆哮相打ち
@@ -454,8 +479,29 @@ function handleIfDowned(att,def,dmgBase){ // ダウン連: 1発だけ×0.5で追
   }
   return true;
 }
+const DODGE_TABLE={ // 03 §6.6の三すくみ(避ける/通常被弾/カウンター被弾)
+  crouch:{beats:'high',normal:'mid',counter:'low'},
+  sway:{beats:'mid',normal:'low',counter:'high'},
+  lunge:{beats:'low',normal:'high',counter:'mid'}
+};
+function dodgeActive(f){return f.phase==='dodge'&&f.pf>=1&&f.pf<=BAL.DODGE.judgeF;}
 function attackResolve(att,def){
   if(handleIfDowned(att,def,BAL.ATK[att.atkLv].d))return;
+  if(dodgeActive(def)){
+    const rule=DODGE_TABLE[def.dodgeType];
+    if(rule.beats===att.atkLv){ // 回避成功: 攻撃側はスカ扱い、防御側はcounterReadyを獲得
+      def.counterReadyF=BAL.DODGE.counterReadyF;
+      if(def.dodgeType==='lunge')def.clinchF=BAL.DODGE.clinchF; // 踏み込み成功→追加で密着12F
+      B.fx.push({k:'suki',x:fpos(att),y:att.y-168,f:0,dur:20});
+      sfx('whiffG');
+      return;
+    }
+    if(rule.counter===att.atkLv){ // カウンター被弾(通常よりダメージが伸びる)
+      hitApply(att,def,true);
+      return;
+    }
+    // rule.normal===att.atkLv: 回避は機能せず通常ヒットへフォールスルー
+  }
   if(nearClash(att,def)){att.hasHit=true;def.hasHit=true;startClash('trade');return;}
   const guarded=(def.phase==='guard')||(def.phase==='blockstun'&&def.held); // 統一ガード: 全段ふせぐ
   if(guarded){
@@ -473,15 +519,21 @@ function attackResolve(att,def){
     if(def.guard<=0)doBreak(def);
     return;
   }
-  hitApply(att,def);
+  hitApply(att,def,att.counterReadyF>0);
 }
-function hitApply(att,def){
+function hitApply(att,def,counterHit){
   const A=spec(att);
-  let dmg=Math.round(A.d*BAL.SCALE[Math.min(att.combo,2)]);
-  if(def.phase==='grab'||def.phase==='grabrec'){ // 打撃はつかみに勝つ
+  // カウンター始動のコンボは、以後のチェーンも含めて[1,1,0.9]に緩和(§6.6コンボルートB)
+  const scale=(counterHit||att.comboCounter)?BAL.DODGE.counterScale:BAL.SCALE;
+  let dmg=Math.round(A.d*scale[Math.min(att.combo,2)]);
+  if(counterHit){dmg=Math.round(dmg*BAL.DODGE.counterMul);att.comboCounter=true;} // ×1.25はカウンターの一撃のみ
+  if(att.atkLv==='high'&&att.clinchF>0)dmg+=BAL.DODGE.clinchHighBonus; // 密着中は上段+15
+  let counterFx=!!counterHit;
+  if(def.phase==='grab'||def.phase==='grabrec'){ // 打撃はつかみに勝つ(既存の別カウンター)
     dmg=Math.round(dmg*BAL.GRAB.counterMul);
-    B.fx.push({k:'counter',x:def.baseX,y:def.y-186,f:0,dur:38});
+    counterFx=true;
   }
+  if(counterFx)B.fx.push({k:'counter',x:def.baseX,y:def.y-186,f:0,dur:38});
   if(def.phase==='roar'&&def.pf<=BAL.ROAR.armor){ // 咆哮アーマー
     dmg=Math.round(dmg*0.5);def.hp-=dmg;gainS(att,'aBlk');gainFocus(def,dmg*BAL.FOCUS.gainDmgMul);
     fxDmg(def,dmg,'#ffb020');fxSpark(def,att.atkLv,0);sfx('hit');
@@ -526,12 +578,14 @@ function roarResolve(att,def){
   }
   if(def.hp<=0){def.hp=0;startKO(def.side);}
 }
-function grabStriking(f){return f.phase==='grab'&&f.pf===BAL.GRAB.s+1;}
+function grabStartup(f){return f.grabS;} // 発生F値はつかみ開始時点でスナップショット済み(密着中は12→10)
+function grabStriking(f){return f.phase==='grab'&&f.pf===grabStartup(f)+1;}
 function grabResolve(att,def){
   if(handleIfDowned(att,def,BAL.GRAB.d))return;
   if(def.phase==='grab'){startClash('grab');return;} // つかみ同士→ギュイーン
   const ok=def.phase==='guard'||def.phase==='blockstun'||def.phase==='idle'
-    ||def.phase==='dizzy'||def.phase==='mikiriRec'||(def.phase==='roar'&&def.pf<=BAL.ROAR.armor);
+    ||def.phase==='dizzy'||def.phase==='mikiriRec'||def.phase==='dodge' // 回避はつかみを防げない
+    ||(def.phase==='roar'&&def.pf<=BAL.ROAR.armor);
   if(ok){ // つかみ成立（ガードくずし）
     att.phase='grabHit';att.pf=0;
     def.phase='grabbed';def.pf=0;def.atkLv=null;def.guardLv=null;def.buf=null;def.combo=0;def.kb=0;
@@ -729,10 +783,12 @@ function timeUp(){
 /* ================= CPU AI ================= */
 const cpuEv=[];
 const AI_MIKIRI_RATE=0.22; // テレグラフを見て見切りを試みる率(命中は保証しない)
-const ai={think:0,guardT:0,guardOn:false,react:null,ultT:0,hist:[],mash:0,pHoldF:0,mikiriAt:null};
+const AI_DODGE_RATE=0.15; // テレグラフを見て正解回避を試みる率(見切り同様タイミングにブレを入れる)
+const LEVEL_TO_DODGE={high:'crouch',mid:'sway',low:'lunge'}; // その段を避ける回避(DODGE_TABLE.beatsの逆引き)
+const ai={think:0,guardT:0,guardOn:false,react:null,ultT:0,hist:[],mash:0,pHoldF:0,mikiriAt:null,dodgeAt:null,dodgeKind:null};
 function aiReset(){
   ai.think=30;ai.guardT=0;ai.guardOn=false;ai.react=null;ai.ultT=0;
-  ai.hist=[];ai.mash=0;ai.pHoldF=0;ai.mikiriAt=null;
+  ai.hist=[];ai.mash=0;ai.pHoldF=0;ai.mikiriAt=null;ai.dodgeAt=null;ai.dodgeKind=null;
 }
 function aiStep(){
   const me=B.p[1],you=B.p[0];
@@ -754,9 +810,16 @@ function aiStep(){
       const win=(me.hp<=BAL.PINCH_HP)?BAL.MIKIRI.windowPinch:BAL.MIKIRI.window;
       ai.mikiriAt=B.f+spec(you).s+Math.round((rng()*2-1)*win*2);
       ai.react=null;
+    }else if(me.phase==='idle'&&ai.dodgeAt==null&&rng()<AI_DODGE_RATE){ // 回避試行: テレグラフを見て正解の回避を狙うが、見切り同様タイミングにブレを入れる
+      const contact=B.f+spec(you).s; // 接触(pf=s+1)までの残りF
+      const jitter=Math.round((rng()*2-1)*BAL.DODGE.judgeF);
+      ai.dodgeAt=contact-5+jitter; // 判定窓(1-10F)の中央付近を狙うが外すこともある
+      ai.dodgeKind=LEVEL_TO_DODGE[you.atkLv];
+      ai.react=null;
     }
   }
   if(ai.mikiriAt!=null&&B.f>=ai.mikiriAt){cpuEv.push({t:'mikiri'});ai.mikiriAt=null;}
+  if(ai.dodgeAt!=null&&B.f>=ai.dodgeAt){cpuEv.push({t:'dodge',kind:ai.dodgeKind});ai.dodgeAt=null;}
   // ダウン連追撃: 相手がダウン中で追撃がまだなら即座に1発叩き込む
   if(you.phase==='down'&&!you.downHitUsed&&me.phase==='idle'){
     cpuEv.push({t:'atk',lv:'mid'});
@@ -873,6 +936,10 @@ function fightStep(){
       f.guard=Math.min(f.c.gMax,f.guard+BAL.GREGEN);
     f.kb*=0.86;if(f.kb<0.5)f.kb=0;
     if(f.sNo>0)f.sNo--;
+    if(f.phase!=='dodge'){ // counterReady/密着は回避の戻りモーション中は消費せず、動けるようになってから起算
+      if(f.counterReadyF>0)f.counterReadyF--;
+      if(f.clinchF>0)f.clinchF--;
+    }
   }
   if(B.timer<=0)timeUp();
 }
@@ -925,7 +992,7 @@ function pressRoute(p){
     return null;
   }
   if(B.flow!=='fight'&&B.flow!=='intro')return null;
-  if(p.x<W/2){ // 左ゾーン: ホールド=ガード / ジャストタップ=見切り / 下フリック=つかみ
+  if(p.x<W/2){ // 左ゾーン: ホールド=ガード / ジャストタップ=見切り / ←スウェー/↓しゃがみ/→踏み込み
     padPress={zone:'L'};
     return 'L';
   }
@@ -939,21 +1006,27 @@ function onDown(id,x,y){
   const zone=pressRoute(p);
   tstate=(zone==='L'||zone==='R')?{id:id,x0:p.x,y0:p.y,yNow:p.y,t0:performance.now(),zone:zone,resolved:false}:null;
 }
+function flickDir(dx,dy,ms){ // 有効なフリックの方向を1つ返す('left'/'right'/'up'/'down'/null)
+  if(ms>BAL.FLICK_MS)return null;
+  if(Math.abs(dx)>=BAL.FLICK_DX&&Math.abs(dx)>Math.abs(dy)*1.2)return dx>0?'right':'left';
+  if(Math.abs(dy)>=BAL.FLICK_DX&&Math.abs(dy)>Math.abs(dx)*1.2)return dy>0?'down':'up';
+  return null;
+}
 function onMove(id,x,y){
   if(!tstate||tstate.id!==id||tstate.resolved)return;
   const p=toL(x,y);
   tstate.yNow=p.y;
   const dx=p.x-tstate.x0,dy=p.y-tstate.y0;
   const ms=performance.now()-tstate.t0;
-  if(tstate.zone==='R'){
+  const dir=flickDir(dx,dy,ms);
+  if(tstate.zone==='R'){ // 右ゾーン: →フリック=咆哮 / ↓フリック=つかみ(左から移動)
     dragRow=rowAt(p.y,dragRow);padPress={zone:'R',row:dragRow};
-    if(dx>=BAL.FLICK_DX&&Math.abs(dx)>Math.abs(dy)*1.2&&ms<=BAL.FLICK_MS){
-      evq.push({t:'roar'});tstate.resolved=true;padPress=null;
-    }
-  }else if(tstate.zone==='L'){
-    if(dy>=BAL.FLICK_DX&&Math.abs(dy)>Math.abs(dx)*1.2&&ms<=BAL.FLICK_MS){
-      evq.push({t:'grab'});tstate.resolved=true;padPress=null;p1Hold=null;
-    }
+    if(dir==='right'){evq.push({t:'roar'});tstate.resolved=true;padPress=null;}
+    else if(dir==='down'){evq.push({t:'grab'});tstate.resolved=true;padPress=null;}
+  }else if(tstate.zone==='L'){ // 左ゾーン: ←スウェー / ↓しゃがみ / →踏み込み
+    if(dir==='left'){evq.push({t:'dodge',kind:'sway'});tstate.resolved=true;padPress=null;p1Hold=null;}
+    else if(dir==='down'){evq.push({t:'dodge',kind:'crouch'});tstate.resolved=true;padPress=null;p1Hold=null;}
+    else if(dir==='right'){evq.push({t:'dodge',kind:'lunge'});tstate.resolved=true;padPress=null;p1Hold=null;}
   }
 }
 function onUp(id){
@@ -1119,11 +1192,13 @@ function eyesDraw(hx,hy,e){
  */
 function poseId(f){ // POSE_IDS(20種)の正準名を返す。該当スプライトが無い状態は
   const P=f.phase,t=f.pf;      // 意図的にPOSE_IDS外の文字列を返し図形描画へフォールバックさせる
+  if(P==='attack'&&f.atkLv==='crouch')return 'crouch_atk'; // しゃがみ突き(§6.6)。crouchポーズが構え(テレグラフ)を兼ねる
   if(P==='attack'&&f.atkLv){
     const tg=BAL.TELEGRAPH[f.atkLv];
     if(t<=tg)return 'tele_'+f.atkLv; // テレグラフ=tele_*
     return 'atk_'+f.atkLv;           // 構え〜発生〜硬直まで単一ポーズ
   }
+  if(P==='dodge')return f.dodgeType; // 'crouch'|'sway'|'lunge'（画像未配置。図形フォールバックはdrawFighterShapeに実装済み）
   if(P==='roar'){
     const R=BAL.ROAR;
     return(t<=R.s)?'roar_charge':'roar';
@@ -1191,6 +1266,16 @@ function drawFighterShape(f,ox,oy){
     dy=Math.sin(gf*0.12+f.side*2)*2;
     pawF=[stance[0],stance[1]+Math.sin(gf*0.12+f.side*2)*3];
     pawB=[stanceB[0],stanceB[1]+Math.sin(gf*0.12+f.side*2+1.2)*3];
+  }else if(P==='attack'&&f.atkLv==='crouch'){ // しゃがみ突き: 低い姿勢からの短い突き(画像未配置の暫定図形)
+    const A=spec(f);
+    crouch=14;
+    const W2=[10,-40],C2=[50,-30],T2=[86,-34];
+    if(t<=A.s){const k=t/A.s;pawF=L([20,-90],W2,k);lean=0.05*k;eyes='a';}
+    else if(t<=A.s+A.a+2){const k=Math.min(1,(t-A.s)/2);pawF=bz(W2,C2,T2,k);lean=0.16;mouth=0.3;eyes='a';}
+    else{const k=Math.min(1,(t-A.s-A.a-2)/Math.max(1,A.r-2));pawF=bz(T2,C2,W2,k);lean=0.16*(1-k);}
+    pawB=[6,-46];
+    const tg=BAL.TELEGRAPH.crouch;
+    if(t<=tg){teleCol=LEVEL_COLOR.crouch;teleGlow=(1-t/tg)*(0.55+0.45*Math.sin(gf*0.9));}
   }else if(P==='attack'&&f.atkLv){
     const A=spec(f);
     const RT={ // 段別モーション: 上=アッパー / 中=ストレート / 下=すくい打ち
@@ -1219,6 +1304,14 @@ function drawFighterShape(f,ox,oy){
     lean=0.12;pawF=[52,-56];pawB=[40,-50];eyes='s';mouth=0.3;dy=2; // スカ
   }else if(P==='mikiriRec'){
     lean=-0.22;crouch=-3;pawF=[-16,-70];pawB=[-26,-56];eyes='s';mouth=0.3;dy=1; // 見切り空振り・仰け反り
+  }else if(P==='dodge'){ // 回避3種(画像未配置の暫定図形): 1-10F判定で深め→11-22Fで構えに戻る
+    const D=BAL.DODGE;
+    const into=Math.min(1,t/D.judgeF);
+    const back=t<=D.judgeF?1:Math.max(0,1-(t-D.judgeF)/(D.totalF-D.judgeF));
+    const k=t<=D.judgeF?into:back;
+    if(f.dodgeType==='crouch'){crouch=16*k;dy=2*k;eyes='c';pawF=[16,-64];pawB=[4,-56];}
+    else if(f.dodgeType==='sway'){lean=-0.30*k;dy=-3*k;eyes='c';pawF=[6,-92];pawB=[-6,-84];}
+    else{lean=0.28*k;eyes='a';pawF=[30,-84];pawB=[18,-72];} // lunge
   }else if(P==='grabHit'){
     if(t<=8){const k=t/8;lean=0.3-0.3*k;pawF=L([74,-80],[30,-92],k);pawB=L([66,-68],[24,-86],k);}
     else if(t<=18){const k=(t-8)/10;lean=-0.12*k;pawF=L([30,-92],[16,-132],k);pawB=L([24,-86],[-2,-128],k);}
@@ -1272,6 +1365,12 @@ function drawFighterShape(f,ox,oy){
     ctx.save();ctx.globalAlpha=0.4+0.3*Math.sin(gf*0.3);
     ctx.strokeStyle='#7fd8ff';ctx.lineWidth=4;
     ctx.beginPath();ctx.ellipse(0,bodyY,bw+10,bh+10,0,0,TAU);ctx.stroke();
+    ctx.restore();
+  }
+  if(f.counterReadyF>0||f.clinchF>0){ // 回避成功後のcounterReady/密着表示
+    ctx.save();ctx.globalAlpha=0.4+0.3*Math.sin(gf*0.4);
+    ctx.strokeStyle=f.clinchF>0?'#ff9e2c':'#ffe14d';ctx.lineWidth=4;
+    ctx.beginPath();ctx.ellipse(0,bodyY,bw+6,bh+6,0,0,TAU);ctx.stroke();
     ctx.restore();
   }
   const OL=shade(c.color,-70);
@@ -1521,7 +1620,7 @@ function rPad(){
   ctx.restore();
   ctx.strokeStyle='rgba(255,255,255,0.10)';ctx.lineWidth=2;
   ctx.beginPath();ctx.moveTo(W/2,PT+6);ctx.lineTo(W/2,H-6);ctx.stroke();
-  // 左ゾーン: ガード(ホールド) / 見切り(ジャストタップ) / つかみ(下フリック)
+  // 左ゾーン: ガード(ホールド) / 見切り(ジャストタップ) / スウェー・しゃがみ・踏み込み(3方向フリック)
   const holding=!!(tstate&&tstate.zone==='L'&&!tstate.resolved);
   const heldMs=holding?performance.now()-tstate.t0:0;
   const justPhase=holding&&heldMs<BAL.JUST_TAP_MS;
@@ -1530,10 +1629,10 @@ function rPad(){
   ctx.lineWidth=(p1Hold||justPhase)?3:1.5;
   rr(10,PT+8,W/2-20,H-PT-16,20);ctx.stroke();
   ctx.restore();
-  drawShield(W/4,PT+(H-PT)*0.34,30);
-  txt('ガード(ホールド)',W/4,PT+(H-PT)*0.34+50,17,'rgba(207,232,255,0.85)');
-  txt('ジャストタップ＝見切り',W/4,PT+(H-PT)*0.34+72,13,'rgba(255,225,90,0.75)');
-  txt('下フリック＝つかみ',W/4,PT+(H-PT)*0.34+90,13,'rgba(200,210,230,0.6)');
+  drawShield(W/4,PT+(H-PT)*0.30,30);
+  txt('ガード(ホールド)',W/4,PT+(H-PT)*0.30+50,17,'rgba(207,232,255,0.85)');
+  txt('ジャストタップ＝見切り',W/4,PT+(H-PT)*0.30+72,13,'rgba(255,225,90,0.75)');
+  txt('←スウェー ↓しゃがみ →踏み込み',W/4,PT+(H-PT)*0.30+92,12,'rgba(160,230,180,0.75)');
   // 右ゾーン: 高さタップ＝段（上/中/下）。発火はリリース時
   const rh=(H-PT)/3,labels=['上段','中段','下段'];
   for(let r=0;r<3;r++){
@@ -1544,7 +1643,7 @@ function rPad(){
     if(r>0){ctx.strokeStyle='rgba(255,255,255,0.10)';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(W/2,y);ctx.lineTo(W,y);ctx.stroke();}
     txt(labels[r],W*0.75,y+rh/2,20,'rgba(255,214,180,0.8)');
   }
-  txt('タップの高さ＝段。はなした瞬間に発生',W*0.75,PT+(H-PT)-14,12,'rgba(200,190,175,0.6)');
+  txt('タップの高さ＝段／↓フリック＝つかみ',W*0.75,PT+(H-PT)-14,12,'rgba(200,190,175,0.6)');
   if(game.screen==='battle'&&B&&B.flow==='fight'&&B.p[0].s>=BAL.SMAX){ // 右ゾーン内に収め左のガード表示と被らないようにする
     const a=0.5+0.4*Math.sin(game.frame*0.25);
     ctx.save();ctx.globalAlpha=a;
@@ -1840,12 +1939,13 @@ function rTitle(){
   demoF.c=CHARS[Math.floor(game.frame/240)%3];
   if(!drawStanding('standing_'+demoF.c.id,W/2,724,336))rFighter(demoF,W/2,616);
   if(game.frame%60<38)txt('タップでスタート',W/2,732,30,'#fff');
-  txt('右＝高さタップで攻撃(上/中/下) はなした瞬間に発生',W/2,812,15,'#cfd6e6');
-  txt('左＝ホールドでガード／ジャストタップ=見切り／下フリック=つかみ',W/2,838,15,'#ffe6a3');
-  txt('三すくみ: こうげき＞つかみ＞ガード＞こうげき／見切り＞こうげき',W/2,866,15,'#ffe14d');
-  txt('コンボは 中→上→下 / 下段はダウンを奪う大技',W/2,894,15,'#ffb37f');
-  txt('Sゲージ満タン→右フリック＝咆哮（割りこみ/大削り）',W/2,918,15,'#cfd6e6');
-  txt('prototype v0.5 - 見合いと交差（仮グラ・仮SE）',W/2,940,13,'#8891a6');
+  txt('右＝高さタップで攻撃(上/中/下)／↓フリック=つかみ',W/2,806,14,'#cfd6e6');
+  txt('左＝ホールドでガード／ジャストタップ=見切り',W/2,830,14,'#ffe6a3');
+  txt('←スウェー(中段よけ) ↓しゃがみ(上段よけ) →踏み込み(下段よけ)',W/2,854,14,'#a6e6c0');
+  txt('段×回避の三すくみ。回避成功でカウンター(×1.25)のチャンス',W/2,880,14,'#ffe14d');
+  txt('しゃがみ中に右タップでしゃがみ突き。コンボは4ルート',W/2,904,14,'#ffb37f');
+  txt('Sゲージ満タン→右フリック＝咆哮（割りこみ/大削り）',W/2,926,14,'#cfd6e6');
+  txt('prototype v0.8 - 回避システム＋コンボ拡張（仮グラ・仮SE）',W/2,946,12,'#8891a6');
 }
 function rSelect(){
   const g=ctx.createLinearGradient(0,0,0,H);
