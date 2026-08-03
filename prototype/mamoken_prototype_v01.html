@@ -224,7 +224,7 @@ function newFighter(ci,side){
     guardLv:null,stunDur:0,combo:0,
     buf:null,bufF:0,held:null,lunge:0,kb:0,downHitUsed:false,
     lastAtkLv:null,atkStreak:0,yomare:false,
-    dodgeType:null,counterReadyF:0,clinchF:0,comboCounter:false,
+    dodgeType:null,counterReadyF:0,clinchF:0,comboCounter:false,grabS:BAL.GRAB.s,
     shownHp:BAL.HP,ultFlash:0,sNo:0};
 }
 function startBattle(){
@@ -339,6 +339,7 @@ function applyInputs(f,opp,cmds,held){
     }else if(c.t==='grab'){
       if(f.phase==='idle'||f.phase==='guard'){
         f.phase='grab';f.pf=0;f.guardLv=null;f.atkLv=null;f.buf=null;f.combo=0;f.hasHit=false;
+        f.grabS=f.clinchF>0?BAL.DODGE.clinchGrabS:BAL.GRAB.s; // 発生F値は開始時点でスナップショット(密着F自体はその後も毎F減衰するため)
         sfx('grabGo');
       }
     }else if(c.t==='dodge'){ // 回避: idle/guardから発生
@@ -577,7 +578,7 @@ function roarResolve(att,def){
   }
   if(def.hp<=0){def.hp=0;startKO(def.side);}
 }
-function grabStartup(f){return f.clinchF>0?BAL.DODGE.clinchGrabS:BAL.GRAB.s;} // 密着中はつかみ発生12→10
+function grabStartup(f){return f.grabS;} // 発生F値はつかみ開始時点でスナップショット済み(密着中は12→10)
 function grabStriking(f){return f.phase==='grab'&&f.pf===grabStartup(f)+1;}
 function grabResolve(att,def){
   if(handleIfDowned(att,def,BAL.GRAB.d))return;
