@@ -51,6 +51,11 @@ const BAL={ // 03_data_design.md v2.0 §2 balance table 準拠
   SMAX:100,SG:{aHit:12,aHitC:[12,7,4],aBlk:8,whiff:2,gOk:6,got:5},
   ROAR:{s:16,armor:14,a:4,r:24,d:130,stun:34},
   CLASH:{sel:90,d:120,near:8,streakBonus:30,winS:30,loserStun:40,inF:26,revealHitF:24,revealF:60},
+  MINIGAME:{
+    weights:{jyanken:0.5,renda:0.25,hayauchi:0.25},
+    RENDA:{durationF:120,cpuMin:0.115,cpuRng:0.02,tapGain:1,barRange:20}, // レンダ(連打の綱引き)
+    HAYAUCHI:{targets:5,radius:55,cpuMinF:14,cpuMaxF:24,capF:600} // ハヤウチ(的あて連続タップ)
+  },
   GRAB:{s:12,a:2,rec:28,seq:28,d:90,stun:30,counterMul:1.25},
   ULT:{stock:3,d:300,impact:78,total:110},
   HITSTOP:{mid:6,high:9,low:14,roar:12,clash:16},
@@ -63,9 +68,11 @@ const CHARS=[
  {id:'godan',name:'ゴダン',type:'パワー',ult:'山崩し',color:'#8a6540',belly:'#d9c19d',dMul:1.18,sMul:0.9,sOfs:2,gMax:110,pips:{p:5,s:2,g:4}}
 ];
 const LEVELS=['high','mid','low'];
-const CHOICES=['up','rd','ld'];
-const BEATS={up:'rd',rd:'ld',ld:'up'}; // 上→右下→左下→上
+const CHOICES=['guu','choki','paa'];
+const BEATS={guu:'choki',choki:'paa',paa:'guu'}; // ✊グー＞✌️チョキ＞✋パー＞✊
 const LEVEL_COLOR={high:'#ff5a5a',mid:'#ffe14d',low:'#5ab2ff'}; // テレグラフ段色
+const MINIGAME_ORDER=['jyanken','renda','hayauchi'];
+const MINIGAME_NAME={jyanken:'ジャンケン!!',renda:'レンダ!!',hayauchi:'ハヤウチ!!'};
 
 /* ================= アセット（画像・生成済みビジュアル） =================
  * asset_map.md v1 準拠。画像が無い/未読込のキャラ・場面は必ず現行プログラム
@@ -192,14 +199,6 @@ function txt(t,x,y,size,color,align){
   ctx.fillStyle=color;ctx.fillText(t,x,y);
 }
 function inRect(p,x,y,w,h){return p.x>=x&&p.x<=x+w&&p.y>=y&&p.y<=y+h;}
-function drawArrow(x,y,ang,len,col){
-  ctx.save();ctx.translate(x,y);ctx.rotate(ang);
-  ctx.strokeStyle=col;ctx.fillStyle=col;ctx.lineWidth=10;ctx.lineCap='round';
-  ctx.beginPath();ctx.moveTo(-len*0.5,0);ctx.lineTo(len*0.3,0);ctx.stroke();
-  ctx.beginPath();ctx.moveTo(len*0.72,0);ctx.lineTo(len*0.12,-len*0.42);ctx.lineTo(len*0.12,len*0.42);
-  ctx.closePath();ctx.fill();
-  ctx.restore();
-}
 function star(x,y,r,col){
   ctx.save();ctx.translate(x,y);ctx.fillStyle=col;ctx.beginPath();
   for(let i=0;i<8;i++){const a=i*Math.PI/4,r2=(i%2===0)?r:r*0.45;
@@ -556,15 +555,26 @@ function startClash(kind){
     f.phase='clash';f.pf=0;f.atkLv=null;f.guardLv=null;f.buf=null;
     f.lunge=0;f.kb=0;f.combo=0;
   }
-  B.clash={phase:'in',f:0,pick:[null,null],cpuAt:25+((rng()*45)|0),kind:kind,winner:-2};
+  B.clash={phase:'in',f:0,mg:pickMinigame(),pick:[null,null],cpuAt:25+((rng()*45)|0),kind:kind,winner:-2,
+    rendaP:0,rendaC:0,p0hits:0,p1hits:0,p0target:null,cpuNextAt:0};
   B.hitstop=0;
   sfx('guiin');
   announce(kind==='mikiri'?'見切った!!':(kind==='grab'?'つかみ合い!!':'競り合い!!'),46,44,'#ffe14d');
 }
-function clashBtns(){return[
-  {c:'up',x:W/2,y:PT+150,ang:-Math.PI/2,col:'#ffd23f',label:'振り上げ'},
-  {c:'rd',x:W-118,y:PT+352,ang:Math.PI/4,col:'#ff5a5a',label:'右フック'},
-  {c:'ld',x:118,y:PT+352,ang:Math.PI*3/4,col:'#5ab2ff',label:'左ボディ'}];}
+function pickMinigame(){ // BAL.MINIGAME.weightsに従って抽選
+  const w=BAL.MINIGAME.weights;let acc=0,r=rng();
+  for(const k of MINIGAME_ORDER){acc+=w[k];if(r<acc)return k;}
+  return MINIGAME_ORDER[MINIGAME_ORDER.length-1];
+}
+function clashRouletteText(c){ // 突入26F中、高速切替→最後の6Fで確定表示
+  const lockAt=BAL.CLASH.inF-6;
+  if(c.f>=lockAt)return MINIGAME_NAME[c.mg];
+  return MINIGAME_NAME[MINIGAME_ORDER[Math.floor(c.f/3)%MINIGAME_ORDER.length]];
+}
+function clashBtns(){return[ // 三角配置は現行のまま。中身をジャンケンに置き換え
+  {c:'guu',x:W/2,y:PT+150,col:'#ffd23f',label:'グー'},
+  {c:'choki',x:W-118,y:PT+352,col:'#ff5a5a',label:'チョキ'},
+  {c:'paa',x:118,y:PT+352,col:'#5ab2ff',label:'パー'}];}
 function clashHit(p){
   const bs=clashBtns();
   for(const b of bs)if(Math.hypot(p.x-b.x,p.y-b.y)<=96)return b.c;
@@ -573,30 +583,67 @@ function clashHit(p){
 function clashStep(){
   const c=B.clash;c.f++;
   if(c.phase==='in'){
-    if(c.f>=BAL.CLASH.inF){c.phase='select';c.f=0;}
-  }else if(c.phase==='select'){
-    if(c.pick[1]===null&&c.f>=c.cpuAt)c.pick[1]=CHOICES[(rng()*3)|0];
-    if(c.f>=BAL.CLASH.sel){
-      if(c.pick[0]===null)c.pick[0]=CHOICES[(rng()*3)|0];
-      if(c.pick[1]===null)c.pick[1]=CHOICES[(rng()*3)|0];
+    if(c.f>=BAL.CLASH.inF){
+      c.phase='select';c.f=0;
+      if(c.mg==='hayauchi'){
+        const H2=BAL.MINIGAME.HAYAUCHI;
+        c.p0target=randHayauchiTarget();
+        c.cpuNextAt=H2.cpuMinF+((rng()*(H2.cpuMaxF-H2.cpuMinF+1))|0);
+      }
     }
-    if(c.pick[0]!==null&&c.pick[1]!==null){c.phase='reveal';c.f=0;}
+  }else if(c.phase==='select'){
+    if(c.mg==='renda')stepRenda(c);
+    else if(c.mg==='hayauchi')stepHayauchi(c);
+    else stepJyanken(c);
   }else if(c.phase==='reveal'){
-    if(c.f===BAL.CLASH.revealHitF)resolveClash();
+    if(c.f===BAL.CLASH.revealHitF){
+      if(c.mg==='jyanken')resolveJyankenPicks(c);
+      applyClashResult(c);
+    }
     if(c.f>=BAL.CLASH.revealHitF+BAL.CLASH.revealF)endClash();
   }
 }
-function resolveClash(){
-  const c=B.clash,x=c.pick[0],y=c.pick[1];
-  if(x===y){
-    c.winner=-1;
+function stepJyanken(c){
+  if(c.pick[1]===null&&c.f>=c.cpuAt)c.pick[1]=CHOICES[(rng()*3)|0];
+  if(c.f>=BAL.CLASH.sel){
+    if(c.pick[0]===null)c.pick[0]=CHOICES[(rng()*3)|0];
+    if(c.pick[1]===null)c.pick[1]=CHOICES[(rng()*3)|0];
+  }
+  if(c.pick[0]!==null&&c.pick[1]!==null){c.phase='reveal';c.f=0;}
+}
+function resolveJyankenPicks(c){ // 手の組み合わせ→勝者(あいこ=-1)を判定するだけ
+  const x=c.pick[0],y=c.pick[1];
+  c.winner=(x===y)?-1:(BEATS[x]===y?0:1);
+}
+function stepRenda(c){ // 120Fのタップ連打綱引き。CPUは毎F自動加算
+  const R=BAL.MINIGAME.RENDA;
+  c.rendaC+=R.cpuMin+rng()*R.cpuRng;
+  if(c.f>=R.durationF){
+    c.winner=(c.rendaP===c.rendaC)?-1:(c.rendaP>c.rendaC?0:1);
+    c.phase='reveal';c.f=0;
+  }
+}
+function randHayauchiTarget(){ // パッド内のランダム位置(端は避ける)
+  return{x:70+rng()*(W-140),y:PT+110+rng()*(H-PT-160)};
+}
+function stepHayauchi(c){ // 的あて連続タップ。CPUは仮想的に1個14〜24Fで撃破
+  const H2=BAL.MINIGAME.HAYAUCHI;
+  if(c.p1hits<H2.targets&&c.f>=c.cpuNextAt){
+    c.p1hits++;
+    c.cpuNextAt=c.f+H2.cpuMinF+((rng()*(H2.cpuMaxF-H2.cpuMinF+1))|0);
+  }
+  if(c.p0hits>=H2.targets||c.p1hits>=H2.targets||c.f>=H2.capF){
+    c.winner=(c.p0hits===c.p1hits)?-1:(c.p0hits>c.p1hits?0:1);
+    c.p0target=null;c.phase='reveal';c.f=0;
+  }
+}
+function applyClashResult(c){ // 3ミニゲーム共通のリワード適用(旧resolveClashの後半を流用)
+  if(c.winner===-1){
     announce('あいこ! しきりなおし',44,34,'#dddddd');
     for(const f of B.p)f.kb=14;
     sfx('guard');return;
   }
-  const w=(BEATS[x]===y)?0:1;
-  c.winner=w;
-  const win=B.p[w],lose=B.p[1-w];
+  const w=c.winner,win=B.p[w],lose=B.p[1-w];
   B.clashStreak[w]++;B.clashStreak[1-w]=0;
   const stk=B.clashStreak[w];
   const dmg=BAL.CLASH.d+BAL.CLASH.streakBonus*(stk-1); // 連勝で押し切り
@@ -854,8 +901,22 @@ function pressRoute(p){
   if(game.screen==='result'){resultPress(p);return null;}
   if(game.screen!=='battle'||!B)return null;
   if(B.flow==='clash'&&B.clash&&B.clash.phase==='select'){
-    const c=clashHit(p);
-    if(c&&B.clash.pick[0]===null){B.clash.pick[0]=c;sfx('tap');}
+    const cl=B.clash;
+    if(cl.mg==='renda'){
+      cl.rendaP+=BAL.MINIGAME.RENDA.tapGain; // 連打はタップ位置を問わない
+      B.fx.push({k:'burst',x:p.x,y:p.y,f:0,dur:14}); // タップごとの火花演出
+      sfx('tap');
+    }else if(cl.mg==='hayauchi'){
+      const tgt=cl.p0target,H2=BAL.MINIGAME.HAYAUCHI;
+      if(tgt&&cl.p0hits<H2.targets&&Math.hypot(p.x-tgt.x,p.y-tgt.y)<=H2.radius){
+        cl.p0hits++;sfx('tap');
+        B.fx.push({k:'burst',x:tgt.x,y:tgt.y,f:0,dur:16});
+        cl.p0target=(cl.p0hits<H2.targets)?randHayauchiTarget():null;
+      }
+    }else{
+      const c=clashHit(p);
+      if(c&&cl.pick[0]===null){cl.pick[0]=c;sfx('tap');}
+    }
     return null;
   }
   if(p.y<PT)return null;
@@ -1070,13 +1131,16 @@ function poseId(f){ // POSE_IDS(20種)の正準名を返す。該当スプライ
   if(P==='grab')return 'grab_reach';
   if(P==='grabHit')return 'grab_lift';
   if(P==='grabbed')return 'grabbed';
-  if(P==='grabrec')return 'grabrec';       // 専用スプライト無し→図形フォールバック
+  if(P==='grabrec')return 'hurt';          // つかみ空振り→hurtを流用
   if(P==='mikiriRec')return 'mikiri';      // 見切り=mikiri（成功時はclashへ即遷移するため空振りのみ表示対象）
   if(P==='down')return 'down';             // ダウン=down（追撃消化後の無敵も同一ポーズ）
   if(P==='wake')return 'getup';            // 起き上がり=getup
-  if(P==='clash')return 'clash';           // ギュイーン(競り合い)=専用スプライト無し→図形フォールバック(変更しない)
-  if(P==='ultAtk')return(B&&B.flowF<BAL.ULT.impact)?'ult_charge':'ultFire'; // 発動後は専用ポーズ無し→フォールバック
-  if(P==='dizzy')return 'dizzy';           // 専用スプライト無し→図形フォールバック
+  if(P==='clash'){                         // ギュイーン(競り合い): ミニゲーム別にスプライトを流用
+    if(B&&B.clash&&B.clash.mg==='renda')return 'grab_reach'; // レンダ中の両者=押し合い
+    return 'idle';                         // ジャンケン・ハヤウチ中=idle
+  }
+  if(P==='ultAtk')return(B&&B.flowF<BAL.ULT.impact)?'ult_charge':'atk_high'; // 発動後はatk_highを流用
+  if(P==='dizzy')return 'hurt';            // ふらつき→hurtを流用
   if(P==='ko')return 'ko';
   if(P==='win')return 'win';
   if(P==='guard'||P==='blockstun')return 'guard';
@@ -1407,6 +1471,44 @@ function drawShield(x,y,s){
   ctx.beginPath();ctx.moveTo(0,-s*0.55);ctx.lineTo(0,s*0.55);ctx.stroke();
   ctx.restore();
 }
+function drawFist(x,y,s){ // ✊グー（v0.4のパッドアイコンを流用）
+  ctx.save();ctx.translate(x,y);
+  ctx.fillStyle='#c96a4a';rr(-s*0.8,-s*0.7,s*1.6,s*1.3,s*0.5);ctx.fill();
+  ctx.strokeStyle='#ffc6ae';ctx.lineWidth=2.5;
+  for(let i=0;i<3;i++){
+    ctx.beginPath();ctx.arc(-s*0.35+i*s*0.38,-s*0.62,s*0.19,Math.PI,0);ctx.stroke();
+  }
+  ctx.strokeStyle='rgba(255,180,140,0.8)';ctx.lineWidth=3;
+  ctx.beginPath();ctx.moveTo(s*1.0,-s*0.2);ctx.lineTo(s*1.6,-s*0.2);ctx.stroke();
+  ctx.beginPath();ctx.moveTo(s*1.0,s*0.22);ctx.lineTo(s*1.5,s*0.26);ctx.stroke();
+  ctx.restore();
+}
+function drawPalm(x,y,s){ // ✋パー（v0.4のパッドアイコンを流用）
+  ctx.save();ctx.translate(x,y);
+  ctx.fillStyle='#e8b24a';
+  rr(-s*0.7,-s*0.5,s*1.4,s*1.2,s*0.42);ctx.fill();
+  ctx.strokeStyle='#8a6520';ctx.lineWidth=2.5;ctx.lineCap='round';
+  for(let i=0;i<4;i++){
+    ctx.beginPath();ctx.moveTo(-s*0.52+i*s*0.35,-s*0.5);ctx.lineTo(-s*0.52+i*s*0.35,-s*1.02);ctx.stroke();
+  }
+  ctx.strokeStyle='rgba(255,220,150,0.85)';ctx.lineWidth=3;
+  ctx.beginPath();ctx.arc(0,s*0.1,s*1.4,-0.65,0.65);ctx.stroke();
+  ctx.restore();
+}
+function drawScissors(x,y,s){ // ✌️チョキ（新規: 爪2本）
+  ctx.save();ctx.translate(x,y);
+  ctx.fillStyle='#c96a4a';rr(-s*0.62,-s*0.55,s*1.24,s*1.05,s*0.4);ctx.fill();
+  ctx.strokeStyle='#ffc6ae';ctx.lineWidth=2.2;
+  ctx.beginPath();ctx.arc(-s*0.02,-s*0.48,s*0.16,Math.PI,0);ctx.stroke();
+  ctx.strokeStyle='#f4ded0';ctx.lineWidth=s*0.3;ctx.lineCap='round';
+  ctx.beginPath();ctx.moveTo(-s*0.1,-s*0.32);ctx.lineTo(-s*0.5,-s*1.12);ctx.stroke();
+  ctx.beginPath();ctx.moveTo(s*0.22,-s*0.32);ctx.lineTo(s*0.12,-s*1.18);ctx.stroke();
+  ctx.strokeStyle='rgba(255,220,200,0.85)';ctx.lineWidth=2;
+  ctx.beginPath();ctx.moveTo(-s*0.5,-s*1.12);ctx.lineTo(-s*0.58,-s*1.28);ctx.stroke();
+  ctx.beginPath();ctx.moveTo(s*0.12,-s*1.18);ctx.lineTo(s*0.07,-s*1.34);ctx.stroke();
+  ctx.restore();
+}
+const HAND_ICON={guu:drawFist,choki:drawScissors,paa:drawPalm};
 function rPad(){
   ctx.fillStyle='#12141a';ctx.fillRect(0,PT,W,H-PT);
   if(game.screen==='battle'&&B){
@@ -1457,14 +1559,24 @@ function rPad(){
 function rPadClash(){
   const c=B.clash;
   ctx.fillStyle='#0e0a16';ctx.fillRect(0,PT,W,H-PT);
+  if(c.phase==='in'){
+    txt('ギュイーン!?',W/2,PT+60,36,'#ffe14d');
+    return;
+  }
+  if(c.mg==='renda')rPadRenda(c);
+  else if(c.mg==='hayauchi')rPadHayauchi(c);
+  else rPadJyanken(c);
+  if(c.phase==='reveal'){
+    ctx.fillStyle='rgba(0,0,0,0.45)';ctx.fillRect(0,PT,W,H-PT);
+  }
+}
+function rPadJyanken(c){
   if(c.phase==='select'){
     const rem=Math.max(0,1-c.f/BAL.CLASH.sel);
     ctx.fillStyle='#2a2f3d';ctx.fillRect(40,PT+16,W-80,14);
     ctx.fillStyle=(rem<0.35)?'#ff5a3c':'#ffd23f';
     ctx.fillRect(40,PT+16,(W-80)*rem,14);
     txt('えらべ!!',W/2,PT+56,30,'#fff');
-  }else if(c.phase==='in'){
-    txt('ギュイーン!?',W/2,PT+60,36,'#ffe14d');
   }
   const bs=clashBtns();
   for(const b of bs){
@@ -1475,7 +1587,7 @@ function rPadClash(){
     ctx.beginPath();ctx.arc(0,0,84,0,TAU);
     ctx.fillStyle=picked?'#3d3350':'#221c33';ctx.fill();
     ctx.lineWidth=6;ctx.strokeStyle=b.col;ctx.stroke();
-    drawArrow(0,-12,b.ang,40,b.col);
+    HAND_ICON[b.c](0,-6,32);
     txt(b.label,0,48,20,'#fff');
     if(picked){
       ctx.strokeStyle='#fff';ctx.lineWidth=4;
@@ -1483,10 +1595,56 @@ function rPadClash(){
     }
     ctx.restore();
   }
-  if(c.phase==='reveal'){
-    ctx.fillStyle='rgba(0,0,0,0.45)';ctx.fillRect(0,PT,W,H-PT);
+  txt('✊グー＞✌️チョキ＞✋パー＞✊',W/2,H-22,15,'#9aa2b8');
+}
+function rPadRenda(c){
+  const R=BAL.MINIGAME.RENDA;
+  if(c.phase==='select'){
+    const rem=Math.max(0,1-c.f/R.durationF);
+    ctx.fillStyle='#2a2f3d';ctx.fillRect(40,PT+16,W-80,14);
+    ctx.fillStyle=(rem<0.25)?'#ff5a3c':'#ffd23f';
+    ctx.fillRect(40,PT+16,(W-80)*rem,14);
   }
-  txt('上⇒右下 / 右下⇒左下 / 左下⇒上 に勝つ',W/2,H-22,15,'#9aa2b8');
+  txt('連打!!',W/2,PT+58,30,'#fff');
+  const diff=Math.max(-R.barRange,Math.min(R.barRange,c.rendaP-c.rendaC));
+  const midY=PT+220,barX=40,barW=W-80;
+  ctx.fillStyle='#1c2030';ctx.fillRect(barX,midY-16,barW,32);
+  ctx.strokeStyle='#556';ctx.lineWidth=2;ctx.strokeRect(barX,midY-16,barW,32);
+  ctx.strokeStyle='rgba(255,255,255,0.4)';ctx.lineWidth=2;
+  ctx.beginPath();ctx.moveTo(barX+barW/2,midY-16);ctx.lineTo(barX+barW/2,midY+16);ctx.stroke();
+  const markerX=barX+barW/2+(diff/R.barRange)*(barW/2-16);
+  ctx.fillStyle=diff>=0?'#7cfc00':'#ff6b6b';
+  ctx.beginPath();ctx.arc(markerX,midY,18,0,TAU);ctx.fill();
+  ctx.strokeStyle='#fff';ctx.lineWidth=3;
+  ctx.beginPath();ctx.arc(markerX,midY,18,0,TAU);ctx.stroke();
+  txt('YOU',barX+20,midY-34,14,'#9f9','left');
+  txt('CPU',barX+barW-20,midY-34,14,'#f99','right');
+  txt('連打で押しきれ!',W/2,midY+56,16,'#ccd');
+}
+function rPadHayauchi(c){
+  const H2=BAL.MINIGAME.HAYAUCHI;
+  txt('はやうち!!',W/2,PT+40,28,'#fff');
+  for(let i=0;i<H2.targets;i++){
+    ctx.beginPath();ctx.arc(W/2-96+i*22,PT+74,7,0,TAU);
+    ctx.fillStyle=(i<c.p0hits)?'#7cfc00':'#333a4a';ctx.fill();
+    ctx.strokeStyle='#556';ctx.lineWidth=1.5;ctx.stroke();
+    ctx.beginPath();ctx.arc(W/2+24+i*22,PT+74,7,0,TAU);
+    ctx.fillStyle=(i<c.p1hits)?'#ff6b6b':'#333a4a';ctx.fill();
+    ctx.strokeStyle='#556';ctx.stroke();
+  }
+  txt('YOU',W/2-52,PT+94,13,'#9f9');
+  txt('CPU',W/2+80,PT+94,13,'#f99');
+  if(c.p0target){
+    const pulse=1+0.06*Math.sin(game.frame*0.5);
+    ctx.save();ctx.translate(c.p0target.x,c.p0target.y);ctx.scale(pulse,pulse);
+    ctx.beginPath();ctx.arc(0,0,H2.radius,0,TAU);
+    ctx.fillStyle='rgba(255,90,60,0.25)';ctx.fill();
+    ctx.lineWidth=5;ctx.strokeStyle='#ff5a3c';ctx.stroke();
+    ctx.beginPath();ctx.arc(0,0,H2.radius*0.5,0,TAU);
+    ctx.strokeStyle='#ffd23f';ctx.lineWidth=3;ctx.stroke();
+    ctx.restore();
+  }
+  txt('的をタップしろ!',W/2,H-22,15,'#9aa2b8');
 }
 function rPadUlt(){
   const g=ctx.createRadialGradient(W/2,PT+240,20,W/2,PT+240,330);
@@ -1509,8 +1667,7 @@ function rPadUlt(){
 function rClashPicks(){
   if(!B||!B.clash||B.clash.phase!=='reveal')return;
   const c=B.clash;
-  const bl={up:'#ffd23f',rd:'#ff5a5a',ld:'#5ab2ff'};
-  const angs={up:-Math.PI/2,rd:Math.PI/4,ld:Math.PI*3/4};
+  const bl={guu:'#ffd23f',choki:'#ff5a5a',paa:'#5ab2ff'};
   for(let s2=0;s2<2;s2++){
     const pk=c.pick[s2];if(!pk)continue;
     const x=(s2===0)?W/2-48:W/2+48,y=252;
@@ -1519,7 +1676,7 @@ function rClashPicks(){
     ctx.beginPath();ctx.arc(0,0,34,0,TAU);
     ctx.fillStyle='#191524';ctx.fill();
     ctx.lineWidth=4;ctx.strokeStyle=bl[pk];ctx.stroke();
-    drawArrow(0,0,angs[pk],26,bl[pk]);
+    HAND_ICON[pk](0,6,20);
     ctx.restore();
   }
   if(c.f>=BAL.CLASH.revealHitF&&c.winner>=0){
@@ -1652,6 +1809,7 @@ function rBattle(){
     ctx.save();ctx.translate(W/2,116);ctx.scale(1+k*0.3,1+k*0.3);ctx.rotate(-0.05);
     txt('ギュイーン!!',0,0,52,'#ffe14d');
     ctx.restore();
+    txt(clashRouletteText(B.clash),W/2,166,28,'#fff'); // ルーレットテロップ: どのミニゲームが始まるか予告
   }
   if(focusSlowMs>0){ // 集中: 疑似ハイスピード演出の色調オーバーレイ
     ctx.save();ctx.globalAlpha=0.16;ctx.fillStyle='#3fd8ff';ctx.fillRect(0,0,W,PT);ctx.restore();
