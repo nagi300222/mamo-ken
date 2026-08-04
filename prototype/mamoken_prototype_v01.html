@@ -78,7 +78,8 @@ const BAL={ // 03_data_design.md v2.0 §2 balance table 準拠
   TELEGRAPH:{mid:8,high:13,low:18,crouch:6}, // 発生前半に構え+段色フラッシュ+固有SE（見てから対応の成立条件）
   BUF:10,FLICK_DX:60,FLICK_MS:300,JUST_TAP_MS:100,
   SPRITE_H:{moguzo:185,pisuke:165,godan:206}, // 戦闘スプライトの表示身長(px)。体格基準ラインナップ(ピスケ小柄/ゴダン大柄)の印象を反映。試遊後調整可
-  PORTRAIT_RATIO:{moguzo:1.00,pisuke:0.80,godan:1.15} // 立ち絵(portraits/)用の比率。各画面の基準高に乗算して体格差を表現(v2.4.1)
+  PORTRAIT_RATIO:{moguzo:1.00,pisuke:0.80,godan:1.15}, // 立ち絵(portraits/)用の比率。各画面の基準高に乗算して体格差を表現(v2.4.1)
+  NET:{delayF:4} // オンライン対戦(v0.9): ロックステップ入力遅延バッファ(F)。§03データ設計 準拠
 };
 const CHARS=[
  {id:'moguzo',name:'モグゾー',type:'バランス',ult:'大地烈掌',color:'#b58756',belly:'#ecd9b4',dMul:1,sMul:1,sOfs:0,gMax:100,pips:{p:3,s:3,g:3}},
@@ -268,7 +269,11 @@ function star(x,y,r,col){
 
 /* ================= オンライン対戦（v0.9） =================
  * サーバーはWebSocketリレー専用(ゲームロジックを持たない)。ロビーで両者が揃うと
- * 共有rngシードを受け取り、対戦本体(コマンド交換ロックステップ)はPR(3)で実装。
+ * 共有rngシードを受け取り、以後は入力コマンド(タグ:frame番号)を交換するロックステップ方式で
+ * 両クライアントが同一のB状態を独立に計算する(§03データ設計 準拠、Math.randomは対戦本体で不使用)。
+ * ギュイーン(競り合いミニゲーム)は実際のタップを相互送信しない(スコープ外・PR3)。
+ * オンライン中は両サイドとも共有rng駆動のシミュレーション結果で決着させ、決定性を優先する
+ * (ローカルのタップはSE/演出のみに反映し、勝敗には影響しない)。
  */
 const CONFIG={WS_URL:'wss://mamoken-relay.n-kyosuke1121.workers.dev'}; // デプロイ済み本番Workers URL
 const ONLINE_BTN={x:0,y:0,w:0,h:0}; // rTitle()で毎フレーム位置を確定(pressRouteと共有)
@@ -276,11 +281,29 @@ const ONLINE_BACK_RECT={x:70,y:864,w:400,h:60};
 const online={
   state:'menu', // 'menu'|'connecting'|'waiting'|'ready'|'error'
   mode:null,    // 'create'|'join'
-  code:null,ws:null,slot:null,seed:null,errorMsg:''
+  code:null,ws:null,slot:null,seed:null,errorMsg:'',
+  myPick:null,peerPick:null // オンラインキャラ選択(CHARSのindex)
 };
+const NET={ // ロックステップ状態(startOnlineBattleで対戦ごとに初期化)
+  active:false,       // true=オンライン対戦本体が進行中(この間はCPU AI/オフラインrng消費経路を一切使わない)
+  capTick:0,           // ローカル入力の採取カウンタ(毎ロジックF必ず+1。採取と送信は待機中でも止めない=二重送信防止)
+  simF:0,              // 次に確定させるシミュレーションフレーム番号
+  localQ:{},peerQ:{},  // frame番号 -> {cmds,hold}
+  waiting:false        // true="同期中…"(両者のF入力が揃うまでこのFのロジックは進めない)
+};
+let netPendingPeerCmds=[]; // 自分がstartOnlineBattle前に受信したcmd(相手が先に対戦開始した場合の取りこぼし防止)
+function onlineActive(){return NET.active;}
+function netSend(msg){if(online.ws&&online.ws.readyState===1){try{online.ws.send(JSON.stringify(msg));}catch(e){}}}
 function onlineReset(){
   if(online.ws){try{online.ws.close();}catch(e){}}
   online.state='menu';online.mode=null;online.code=null;online.ws=null;online.slot=null;online.seed=null;online.errorMsg='';
+  online.myPick=null;online.peerPick=null;
+  NET.active=false;netPendingPeerCmds=[];
+}
+function onlineHandleDisconnect(reason){
+  online.state='error';online.errorMsg=reason;
+  NET.active=false;
+  if(game.screen==='onlineSelect'||game.screen==='battle')game.screen='onlineInterrupted';
 }
 function onlineConnect(code,mode){
   online.mode=mode;online.code=code;online.state='connecting';
@@ -292,13 +315,23 @@ function onlineConnect(code,mode){
   ws.addEventListener('message',function(ev){
     let msg;try{msg=JSON.parse(ev.data);}catch(e){return;}
     if(msg.t==='welcome'){online.slot=msg.slot;}
-    else if(msg.t==='ready'){online.seed=msg.seed;online.state='ready';}
-    else if(msg.t==='peerLeft'){if(online.state==='ready'){online.state='error';online.errorMsg='相手が退出しました';}}
+    else if(msg.t==='ready'){
+      online.seed=msg.seed;online.state='ready';
+      if(online.slot===0||online.slot===1){online.myPick=null;online.peerPick=null;game.screen='onlineSelect';}
+    }else if(msg.t==='peerLeft'){
+      if(online.state==='ready')onlineHandleDisconnect('相手が退出しました');
+    }else if(msg.t==='pick'){
+      online.peerPick=msg.charIdx;
+      if(game.screen==='onlineSelect')maybeStartOnlineBattle();
+    }else if(msg.t==='cmd'){
+      if(NET.active)NET.peerQ[msg.f]={cmds:msg.cmds,hold:msg.hold};
+      else netPendingPeerCmds.push(msg);
+    }
   });
   ws.addEventListener('close',function(){
-    if(online.state!=='menu'){online.state='error';online.errorMsg='通信が切断されました';}
+    if(online.state!=='menu')onlineHandleDisconnect('通信が切断されました');
   });
-  ws.addEventListener('error',function(){online.state='error';online.errorMsg='接続エラーが発生しました';});
+  ws.addEventListener('error',function(){onlineHandleDisconnect('接続エラーが発生しました');});
 }
 function wsUrlToHttpBase(wsUrl){return wsUrl.replace(/^ws:/,'http:').replace(/^wss:/,'https:');}
 function onlineCreateRoom(){
@@ -328,10 +361,35 @@ function onlineLobbyPress(p){
     if(inRect(p,r.join.x,r.join.y,r.join.w,r.join.h)){sfx('tap');onlineJoinPrompt();return;}
   }
 }
+function onlineSelectPress(p){
+  if(online.myPick!=null)return;
+  for(let i=0;i<3;i++){
+    const r=selRect(i);
+    if(inRect(p,r.x,r.y,r.w,r.h)){
+      online.myPick=i;sfx('tap');
+      netSend({t:'pick',charIdx:i});
+      maybeStartOnlineBattle();
+      return;
+    }
+  }
+}
+function maybeStartOnlineBattle(){
+  if(online.myPick==null||online.peerPick==null)return;
+  const bySlot=[null,null];
+  bySlot[online.slot]=online.myPick;bySlot[1-online.slot]=online.peerPick;
+  startOnlineBattle(online.seed,bySlot);
+}
+const ONLINE_INTERRUPTED_BACK_RECT={x:60,y:560,w:W-120,h:88};
+function onlineInterruptedPress(p){
+  if(inRect(p,ONLINE_INTERRUPTED_BACK_RECT.x,ONLINE_INTERRUPTED_BACK_RECT.y,ONLINE_INTERRUPTED_BACK_RECT.w,ONLINE_INTERRUPTED_BACK_RECT.h)){
+    sfx('tap');onlineReset();game.screen='title';
+  }
+}
 
 /* ================= 状態 ================= */
 const game={screen:'title',p1:0,p2:0,frame:0};
 let B=null;
+let lastMatchOnline=false; // 直前の対戦がオンラインだったか(リザルト画面の遷移先分岐用)
 let focusSlowMs=0; // 集中(自動スロー)発動中の残り実時間(ms)。>0の間メインループが0.25倍速で進行
 function newFighter(ci,side){
   const c=CHARS[ci];
@@ -345,12 +403,30 @@ function newFighter(ci,side){
     shownHp:BAL.HP,ultFlash:0,sNo:0};
 }
 function startBattle(){
+  lastMatchOnline=false;
   rng=mulberry32((Date.now()>>>0)^0x5f3759df);
   B={f:0,round:1,wins:[0,0],timer:BAL.TIME,
     p:[newFighter(game.p1,0),newFighter(game.p2,1)],
     flow:'intro',flowF:0,hitstop:0,shake:0,
     clash:null,ultUser:-1,ann:[],fx:[],koSide:-1,result:null,pendKO:-1,clashStreak:[0,0]};
   aiReset();roundInit(true);
+  game.screen='battle';
+}
+function startOnlineBattle(seed,charIdxBySlot){ // オンライン対戦開始: 共有シード+両者の選択キャラでBを構築、CPU AIは使わない
+  lastMatchOnline=true;
+  rng=mulberry32(seed>>>0);
+  game.p1=charIdxBySlot[0];game.p2=charIdxBySlot[1];
+  B={f:0,round:1,wins:[0,0],timer:BAL.TIME,
+    p:[newFighter(game.p1,0),newFighter(game.p2,1)],
+    flow:'intro',flowF:0,hitstop:0,shake:0,
+    clash:null,ultUser:-1,ann:[],fx:[],koSide:-1,result:null,pendKO:-1,clashStreak:[0,0]};
+  roundInit(true);
+  NET.capTick=0;NET.simF=0;NET.waiting=false;
+  NET.localQ={};NET.peerQ={};
+  for(let i=0;i<BAL.NET.delayF;i++){NET.localQ[i]={cmds:[],hold:null};NET.peerQ[i]={cmds:[],hold:null};}
+  for(const m of netPendingPeerCmds)NET.peerQ[m.f]={cmds:m.cmds,hold:m.hold};
+  netPendingPeerCmds=[];
+  NET.active=true;
   game.screen='battle';
 }
 function roundInit(first){
@@ -737,8 +813,10 @@ function startClash(kind){
     f.phase='clash';f.pf=0;f.atkLv=null;f.guardLv=null;f.buf=null;
     f.lunge=0;f.kb=0;f.combo=0;
   }
-  B.clash={phase:'in',f:0,mg:pickMinigame(),pick:[null,null],cpuAt:25+((rng()*45)|0),kind:kind,winner:-2,
-    rendaP:0,rendaC:0,p0hits:0,p1hits:0,p0target:null,cpuNextAt:0};
+  B.clash={phase:'in',f:0,mg:pickMinigame(),pick:[null,null],cpuAt:25+((rng()*45)|0),
+    cpuAt0:onlineActive()?25+((rng()*45)|0):null, // オンライン時のみ: index0側も共有rng駆動でシミュレートし決定性を維持(タップは演出のみ)
+    kind:kind,winner:-2,
+    rendaP:0,rendaC:0,p0hits:0,p1hits:0,p0target:null,cpuNextAt:0,cpuNextAt0:0};
   B.hitstop=0;
   sfx('guiin');
   announce(kind==='mikiri'?'見切った!!':(kind==='grab'?'つかみ合い!!':'競り合い!!'),46,44,'#ffe14d');
@@ -771,6 +849,7 @@ function clashStep(){
         const hf=curDiff().hayauchiF;
         c.p0target=randHayauchiTarget();
         c.cpuNextAt=hf[0]+((rng()*(hf[1]-hf[0]+1))|0);
+        if(onlineActive())c.cpuNextAt0=hf[0]+((rng()*(hf[1]-hf[0]+1))|0);
       }
     }
   }else if(c.phase==='select'){
@@ -786,6 +865,7 @@ function clashStep(){
   }
 }
 function stepJyanken(c){
+  if(onlineActive()&&c.pick[0]===null&&c.f>=c.cpuAt0)c.pick[0]=CHOICES[(rng()*3)|0]; // オンライン: index0もシミュレート(タップでは決めない)
   if(c.pick[1]===null&&c.f>=c.cpuAt)c.pick[1]=CHOICES[(rng()*3)|0];
   if(c.f>=BAL.CLASH.sel){
     if(c.pick[0]===null)c.pick[0]=CHOICES[(rng()*3)|0];
@@ -799,6 +879,7 @@ function resolveJyankenPicks(c){ // 手の組み合わせ→勝者(あいこ=-1)
 }
 function stepRenda(c){ // 120Fのタップ連打綱引き。CPUは毎F自動加算(加算率は難易度別)
   const R=BAL.MINIGAME.RENDA,D=curDiff();
+  if(onlineActive())c.rendaP+=D.rendaCpuMin+rng()*D.rendaCpuRng; // オンライン: index0もシミュレート(タップは演出のみ)
   c.rendaC+=D.rendaCpuMin+rng()*D.rendaCpuRng;
   if(c.f>=R.durationF){
     c.winner=(c.rendaP===c.rendaC)?-1:(c.rendaP>c.rendaC?0:1);
@@ -810,6 +891,10 @@ function randHayauchiTarget(){ // パッド内のランダム位置(端は避け
 }
 function stepHayauchi(c){ // 的あて連続タップ。CPUの1個あたり撃破速度は難易度別
   const H2=BAL.MINIGAME.HAYAUCHI,hf=curDiff().hayauchiF;
+  if(onlineActive()&&c.p0hits<H2.targets&&c.f>=c.cpuNextAt0){ // オンライン: index0もシミュレート(タップは演出のみ)
+    c.p0hits++;
+    c.cpuNextAt0=c.f+hf[0]+((rng()*(hf[1]-hf[0]+1))|0);
+  }
   if(c.p1hits<H2.targets&&c.f>=c.cpuNextAt){
     c.p1hits++;
     c.cpuNextAt=c.f+hf[0]+((rng()*(hf[1]-hf[0]+1))|0);
@@ -911,7 +996,7 @@ function timeUp(){
 /* ================= CPU AI ================= */
 const cpuEv=[];
 let aiDifficulty='NORMAL'; // EASY/NORMAL/HARD。キャラ選択画面で変更・セッション中保持(明示的にリセットしない)
-function curDiff(){return BAL.AIDIFF[aiDifficulty];}
+function curDiff(){return BAL.AIDIFF[onlineActive()?'NORMAL':aiDifficulty];} // オンライン中はローカルのaiDifficulty設定に関わらずNORMAL固定(両クライアントのrng消費を一致させ決定性を維持)
 const LEVEL_TO_DODGE={high:'crouch',mid:'sway',low:'lunge'}; // その段を避ける回避(DODGE_TABLE.beatsの逆引き)
 const ai={think:0,guardT:0,guardOn:false,react:null,ultT:0,hist:[],mash:0,pHoldF:0,mikiriAt:null,dodgeAt:null,dodgeKind:null};
 function aiReset(){
@@ -1021,6 +1106,7 @@ function aiStep(){
 
 /* ================= ロジック ================= */
 function logic(){
+  if(onlineActive()){netLogicTick();return;}
   B.f++;stepFx();
   if(B.hitstop>0){B.hitstop--;return;}
   if(B.flow==='intro'){
@@ -1043,6 +1129,79 @@ function logic(){
     evq.length=0;B.flowF++;
     if(B.flowF>=80){B.ann.length=0;game.screen='result';}
   }
+}
+/* ---- オンライン専用ロジック(ロックステップ) ----
+ * B.flow全体(fight/clash/ultCine/ko/roundEnd/matchEnd)を、両者の入力コマンドが
+ * 揃ったFのみ1F進める。揃わない間は"同期中…"としてB状態を一切変更しない
+ * (競り合いミニゲームの内部乱数消費もこの1Fに紐づくため、両クライアントで完全に一致する)。
+ */
+function netCaptureAndSend(){ // 毎ロジック呼び出しで必ず1回だけ採取・送信する(待機中の再試行による二重送信を防ぐ)
+  const cmds=evq.slice();evq.length=0;
+  const held=currentP1Hold();
+  const f=NET.capTick+BAL.NET.delayF;
+  NET.localQ[f]={cmds:cmds,hold:held};
+  netSend({t:'cmd',f:f,cmds:cmds,hold:held});
+  NET.capTick++;
+}
+function netLogicTick(){
+  netCaptureAndSend();
+  const f=NET.simF;
+  const haveLocal=Object.prototype.hasOwnProperty.call(NET.localQ,f);
+  const havePeer=Object.prototype.hasOwnProperty.call(NET.peerQ,f);
+  if(!(haveLocal&&havePeer)){NET.waiting=true;return;} // 相手の入力がまだ届いていない→このFは進めない(タイマーも減らさない)
+  NET.waiting=false;
+  const local=NET.localQ[f],peer=NET.peerQ[f];
+  delete NET.localQ[f];delete NET.peerQ[f];
+  const cmds0=online.slot===0?local.cmds:peer.cmds,hold0=online.slot===0?local.hold:peer.hold;
+  const cmds1=online.slot===1?local.cmds:peer.cmds,hold1=online.slot===1?local.hold:peer.hold;
+  NET.simF++;
+  B.f++;stepFx();
+  if(B.hitstop>0){B.hitstop--;return;}
+  if(B.flow==='intro'){
+    B.flowF++;
+    if(B.flowF===58){announce('FIGHT!',44,64,'#ff5a3c');sfx('fight');}
+    if(B.flowF>=70)B.flow='fight';
+  }else if(B.flow==='fight'){
+    netFightStep(cmds0,hold0,cmds1,hold1);
+  }else if(B.flow==='clash'){
+    clashStep();
+  }else if(B.flow==='ultCine'){
+    ultStep();
+  }else if(B.flow==='ko'){
+    B.flowF++;
+    if(B.flowF>=120)finishRound();
+  }else if(B.flow==='roundEnd'){
+    B.flowF++;
+    if(B.flowF>=80){B.round++;roundInit(false);}
+  }else if(B.flow==='matchEnd'){
+    B.flowF++;
+    if(B.flowF>=80){B.ann.length=0;game.screen='result';NET.active=false;}
+  }
+}
+function netFightStep(cmds0,hold0,cmds1,hold1){ // fightStep()のオンライン版(CPU AI/evq/cpuEvは使わない)
+  B.timer--;
+  const p1=B.p[0],p2=B.p[1];
+  applyInputs(p1,p2,cmds0,hold0);
+  if(B.flow!=='fight')return;
+  applyInputs(p2,p1,cmds1,hold1);
+  if(B.flow!=='fight')return;
+  advance(p1);advance(p2);
+  if(B.flow!=='fight')return;
+  checkFocusTrigger(p1,p2);checkFocusTrigger(p2,p1);
+  tryBuf(p1);tryBuf(p2);
+  resolveHits();
+  if(B.flow!=='fight')return;
+  for(const f of B.p){
+    if(f.phase!=='guard'&&f.phase!=='blockstun'&&f.phase!=='dizzy')
+      f.guard=Math.min(f.c.gMax,f.guard+BAL.GREGEN);
+    f.kb*=0.86;if(f.kb<0.5)f.kb=0;
+    if(f.sNo>0)f.sNo--;
+    if(f.phase!=='dodge'){
+      if(f.counterReadyF>0)f.counterReadyF--;
+      if(f.clinchF>0)f.clinchF--;
+    }
+  }
+  if(B.timer<=0)timeUp();
 }
 function fightStep(){
   B.timer--;
@@ -1102,28 +1261,34 @@ function pressRoute(p){
   if(game.screen==='select'){selectPress(p);return null;}
   if(game.screen==='result'){resultPress(p);return null;}
   if(game.screen==='onlineLobby'){onlineLobbyPress(p);return null;}
+  if(game.screen==='onlineSelect'){onlineSelectPress(p);return null;}
+  if(game.screen==='onlineInterrupted'){onlineInterruptedPress(p);return null;}
   if(game.screen!=='battle'||!B)return null;
   if(B.flow==='clash'&&B.clash&&B.clash.phase==='select'){
-    const cl=B.clash;
+    const cl=B.clash,netOn=onlineActive(); // オンライン中はタップを演出のみに留め、勝敗は共有rngシミュレートに委ねる(決定性維持・PR3スコープ)
     if(cl.mg==='renda'){
-      cl.rendaP+=BAL.MINIGAME.RENDA.tapGain; // 連打はタップ位置を問わない
+      if(!netOn)cl.rendaP+=BAL.MINIGAME.RENDA.tapGain; // 連打はタップ位置を問わない
       B.fx.push({k:'burst',x:p.x,y:p.y,f:0,dur:14}); // タップごとの火花演出
       sfx('tap');
     }else if(cl.mg==='hayauchi'){
       const tgt=cl.p0target,H2=BAL.MINIGAME.HAYAUCHI;
-      if(tgt&&cl.p0hits<H2.targets&&Math.hypot(p.x-tgt.x,p.y-tgt.y)<=H2.radius){
-        cl.p0hits++;sfx('tap');
+      if(tgt&&Math.hypot(p.x-tgt.x,p.y-tgt.y)<=H2.radius){
+        sfx('tap');
         B.fx.push({k:'burst',x:tgt.x,y:tgt.y,f:0,dur:16});
-        cl.p0target=(cl.p0hits<H2.targets)?randHayauchiTarget():null;
+        if(!netOn&&cl.p0hits<H2.targets){
+          cl.p0hits++;
+          cl.p0target=(cl.p0hits<H2.targets)?randHayauchiTarget():null;
+        }
       }
     }else{
       const c=clashHit(p);
-      if(c&&cl.pick[0]===null){cl.pick[0]=c;sfx('tap');}
+      if(c){sfx('tap');if(!netOn&&cl.pick[0]===null)cl.pick[0]=c;}
     }
     return null;
   }
   if(p.y<PT)return null;
-  if(B.p[0].ult>=BAL.ULT.stock){
+  const myF=onlineActive()?B.p[online.slot]:B.p[0]; // オンライン中は自分のスロット側の奥義ストックを見る
+  if(myF.ult>=BAL.ULT.stock){
     if(B.flow==='fight'){evq.push({t:'ult'});sfx('tap');}
     return null;
   }
@@ -1229,6 +1394,10 @@ function selectPress(p){
   }
 }
 function resultPress(p){
+  if(lastMatchOnline){ // オンライン対戦後: 勝ち残り交代等はPR(4)で対応。今回はタイトルへ戻す
+    if(inRect(p,60,560,W-120,88)){sfx('tap');onlineReset();game.screen='title';}
+    return;
+  }
   if(inRect(p,60,560,W-120,88)){sfx('tap');startBattle();return;}
   if(inRect(p,60,676,W-120,88)){sfx('tap');game.screen='select';return;}
 }
@@ -2153,6 +2322,10 @@ function rBattle(){
   rPad();
   rCutin();
   rAnn();
+  if(onlineActive()&&NET.waiting){ // 相手の入力待ち: 対戦は完全停止し明示的に知らせる
+    ctx.save();ctx.globalAlpha=0.55;ctx.fillStyle='#000';ctx.fillRect(0,PT/2-40,W,80);ctx.restore();
+    txt('同期中…',W/2,PT/2,26,'#ffe6a3');
+  }
 }
 const demoF={c:CHARS[0],side:0,baseX:0,y:0,phase:'idle',pf:0,atkLv:null,guardLv:null,held:null,lunge:0,kb:0,s:0,ult:0,combo:0,sNo:0};
 function rTitle(){
@@ -2220,16 +2393,22 @@ function rSelect(){
 function rResult(){
   ctx.fillStyle='rgba(10,10,16,0.78)';ctx.fillRect(0,0,W,H);
   const r=B?B.result:'-';
-  const col=(r==='WIN')?'#7CFC00':((r==='LOSE')?'#ff6b6b':'#ffd23f');
-  const label=(r==='WIN')?'YOU WIN!!':((r==='LOSE')?'YOU LOSE...':'DRAW');
-  if(r==='WIN'||r==='LOSE'){ // 勝者の立ち絵(画像が無ければ何も足さず現行のテキストのみ)
-    const winnerId=(r==='WIN')?CHARS[game.p1].id:CHARS[game.p2].id;
+  const winSide=(r==='WIN')?0:((r==='LOSE')?1:-1); // B.resultは常にB.p[0]視点(WIN=p0勝ち)。オンラインでは自分のslotと比較して表示を分ける
+  const iWon=lastMatchOnline?(winSide===online.slot):(winSide===0);
+  const col=(winSide<0)?'#ffd23f':(iWon?'#7CFC00':'#ff6b6b');
+  const label=(winSide<0)?'DRAW':(iWon?'YOU WIN!!':'YOU LOSE...');
+  if(winSide>=0){ // 勝者の立ち絵(画像が無ければ何も足さず現行のテキストのみ)
+    const winnerId=(winSide===0)?CHARS[game.p1].id:CHARS[game.p2].id;
     drawStanding('standing_'+winnerId,W/2,522,308*BAL.PORTRAIT_RATIO[winnerId]); // 体格比を適用(§6.6 v2.4.1)
   }
   txt(label,W/2,280,62,col);
-  txt(CHARS[game.p1].name+'  vs  '+CHARS[game.p2].name+'(CPU)',W/2,362,22,'#cfd6e6');
-  btn(60,560,W-120,88,'もういちど たたかう');
-  btn(60,676,W-120,88,'キャラをえらぶ');
+  txt(CHARS[game.p1].name+'  vs  '+CHARS[game.p2].name+(lastMatchOnline?'':'(CPU)'),W/2,362,22,'#cfd6e6');
+  if(lastMatchOnline){
+    btn(60,560,W-120,88,'タイトルへ戻る');
+  }else{
+    btn(60,560,W-120,88,'もういちど たたかう');
+    btn(60,676,W-120,88,'キャラをえらぶ');
+  }
 }
 function btn(x,y,w,h,label){
   ctx.fillStyle='#2b3350';rr(x,y,w,h,20);ctx.fill();
@@ -2258,12 +2437,46 @@ function rOnlineLobby(){
     txt('対戦相手が見つかりました！',W/2,420,26,'#7CFC00');
     txt('ルームコード: '+(online.code||'----'),W/2,470,18,'#ffd23f');
     txt('あなたは'+(online.slot<2?('P'+(online.slot+1)):'観戦者')+'です',W/2,506,16,'#cfd6e6');
-    txt('オンライン対戦バトルは次のアップデートで対応予定です',W/2,560,14,'#8891a6');
+    if(online.slot>=2)txt('観戦は次のアップデートで対応予定です',W/2,560,14,'#8891a6');
   }else if(online.state==='error'){
     txt('エラー',W/2,420,26,'#ff6b6b');
     txt(online.errorMsg||'不明なエラー',W/2,466,16,'#ffb3b3');
   }
   btn(ONLINE_BACK_RECT.x,ONLINE_BACK_RECT.y,ONLINE_BACK_RECT.w,ONLINE_BACK_RECT.h,'タイトルへ戻る');
+}
+function rOnlineSelect(){
+  const g=ctx.createLinearGradient(0,0,0,H);
+  g.addColorStop(0,'#1d2436');g.addColorStop(1,'#171a22');
+  ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
+  txt('キャラクターをえらぶ(オンライン)',W/2,84,30,'#ffd23f');
+  txt('ルームコード: '+(online.code||'----')+' / あなたはP'+(online.slot+1),W/2,124,15,'#aab3c8');
+  for(let i=0;i<3;i++){
+    const R2=selRect(i),picked=(online.myPick===i);
+    ctx.fillStyle=picked?'#3a4560':'#232a3d';rr(R2.x,R2.y,R2.w,R2.h,18);ctx.fill();
+    ctx.strokeStyle=picked?'#ffd23f':'#3a4560';ctx.lineWidth=picked?3:2;rr(R2.x,R2.y,R2.w,R2.h,18);ctx.stroke();
+    demoF.c=CHARS[i];
+    const pcx=R2.x+90,tx=R2.x+180,px2=R2.x+264;
+    if(!drawStanding('standing_'+CHARS[i].id,pcx,R2.y+R2.h-4,140*BAL.PORTRAIT_RATIO[CHARS[i].id]))rFighter(demoF,pcx,R2.y+R2.h-22);
+    txt(CHARS[i].name,tx,R2.y+46,31,'#fff','left');
+    txt(CHARS[i].type,tx,R2.y+80,19,'#ffd23f','left');
+    const st=[['ちから',CHARS[i].pips.p],['はやさ',CHARS[i].pips.s],['まもり',CHARS[i].pips.g]];
+    for(let j=0;j<3;j++){
+      txt(st[j][0],tx,R2.y+112+j*26,15,'#9aa2b8','left');
+      for(let k=0;k<5;k++){
+        ctx.fillStyle=(k<st[j][1])?'#ffd23f':'#39415a';
+        ctx.beginPath();ctx.arc(px2+k*22,R2.y+112+j*26,6.5,0,TAU);ctx.fill();
+      }
+    }
+  }
+  if(online.myPick!=null&&online.peerPick==null){
+    txt('相手の選択を待っています…',W/2,850,18,'#ffe6a3');
+  }
+}
+function rOnlineInterrupted(){
+  ctx.fillStyle='rgba(10,10,16,0.92)';ctx.fillRect(0,0,W,H);
+  txt('通信が切断されました',W/2,420,30,'#ff6b6b');
+  txt(online.errorMsg||'対戦が中断されました',W/2,466,16,'#ffb3b3');
+  btn(ONLINE_INTERRUPTED_BACK_RECT.x,ONLINE_INTERRUPTED_BACK_RECT.y,ONLINE_INTERRUPTED_BACK_RECT.w,ONLINE_INTERRUPTED_BACK_RECT.h,'タイトルへ戻る');
 }
 function render(){
   ctx.clearRect(0,0,W,H);
@@ -2271,6 +2484,8 @@ function render(){
   else if(game.screen==='select')rSelect();
   else if(game.screen==='battle')rBattle();
   else if(game.screen==='result'){if(B)rBattle();rResult();}
+  else if(game.screen==='onlineSelect')rOnlineSelect();
+  else if(game.screen==='onlineInterrupted'){if(B)rBattle();rOnlineInterrupted();}
   else if(game.screen==='onlineLobby')rOnlineLobby();
 }
 
