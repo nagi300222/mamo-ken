@@ -86,30 +86,34 @@ const BAL={ // 03_data_design.md v2.0 §2 balance table 準拠
         // ガードは通常段と同ルールで適用(spec()/attackResolve()がlvを見て処理するため自動的に成立)。
         // guardDmg/guardChipは表の「被ガード-N/削りN」が既定値(BAL.GDMG_A/BAL.CHIP_LOW)と異なる技のみ明示
     bufF:24, // 方向入力バッファ窓(F)
+    buffer:12, // コマンド先行入力(v0.11 §6.9): 硬直の残りがこのF数以内なら「コマンド+攻撃入力」を保持し、行動可能Fで自動発動
     moves:{
       moguzo:[ // 1:地走り(前進打撃) 2:昇撃(カウンター強化) 3:引き寄せ投げ(リーチ強化)
-        {seq:['right','down'],trigger:'mid',type:'atk',lv:'mid',name:'地走り',s:18,a:3,r:18,d:95,fwd:40,guardDmg:8,color:'#ffb84d',se:'hit'},
-        {seq:['down','right'],trigger:'high',type:'atk',lv:'high',name:'昇撃',s:24,a:3,r:30,d:120,counterMul:1.5,color:'#ff5a3c',se:'hit2'},
-        {seq:['left','right'],trigger:'grab',type:'grab',name:'引き寄せ投げ',s:14,d:100,reachMul:1.5,color:'#ffd23f',se:'grab'}
+        {seq:['right','down'],trigger:'mid',type:'atk',lv:'mid',name:'地走り',s:18,a:3,r:18,d:95,fwd:40,guardDmg:8,color:'#ffb84d',se:'cmdHit'},
+        {seq:['down','right'],trigger:'high',type:'atk',lv:'high',name:'昇撃',s:24,a:3,r:30,d:120,counterMul:1.5,color:'#ff5a3c',se:'cmdHit'},
+        {seq:['left','right'],trigger:'grab',type:'grab',name:'引き寄せ投げ',s:14,d:100,reachMul:1.5,color:'#ffd23f',se:'cmdGrabHit'}
       ],
       pisuke:[ // 1:二連牙(高速・簡略化して単発ヒットで実装) 2:スライディング(下段) 3:宙返り蹴(投げ無敵)
-        {seq:['right','right'],trigger:'mid',type:'atk',lv:'mid',name:'二連牙',s:8,a:3,r:18,d:95,color:'#5ab2ff',se:'hit2'},
-        {seq:['down','left'],trigger:'low',type:'atk',lv:'low',name:'スライディング',s:30,a:4,r:30,d:80,down:true,fwd:60,guardDmg:14,color:'#7cfc00',se:'hit2'},
-        {seq:['left','right'],trigger:'high',type:'atk',lv:'high',name:'宙返り蹴',s:20,a:3,r:24,d:90,fwd:20,color:'#5ab2ff',se:'hit'}
+        {seq:['right','right'],trigger:'mid',type:'atk',lv:'mid',name:'二連牙',s:8,a:3,r:18,d:95,color:'#5ab2ff',se:'cmdHit'},
+        {seq:['down','left'],trigger:'low',type:'atk',lv:'low',name:'スライディング',s:30,a:4,r:30,d:80,down:true,fwd:60,guardDmg:14,color:'#7cfc00',se:'cmdHit'},
+        {seq:['left','right'],trigger:'high',type:'atk',lv:'high',name:'宙返り蹴',s:20,a:3,r:24,d:90,fwd:20,color:'#5ab2ff',se:'cmdHit'}
       ],
       godan:[ // 1:地割れ(削り大) 2:山掴み(アーマー付き投げ) 3:巌の構え(自動見切り→反撃中段)
-        {seq:['down','down'],trigger:'low',type:'atk',lv:'low',name:'地割れ',s:30,a:3,r:30,d:110,down:true,guardChip:30,color:'#8a6540',se:'hit2'},
-        {seq:['right','down'],trigger:'grab',type:'grab',name:'山掴み',s:16,d:110,armor:6,color:'#ff9500',se:'grab'},
+        {seq:['down','down'],trigger:'low',type:'atk',lv:'low',name:'地割れ',s:30,a:3,r:30,d:110,down:true,guardChip:30,color:'#8a6540',se:'cmdHit'},
+        {seq:['right','down'],trigger:'grab',type:'grab',name:'山掴み',s:16,d:110,armor:6,color:'#ff9500',se:'cmdGrabHit'},
         {seq:['left','left'],trigger:'mid',type:'stance',name:'巌の構え',stanceF:12,counterLv:'mid',counterDmg:100,color:'#ffd23f',se:'guard'}
       ]
     }
   }
 };
 const CHARS=[
- {id:'moguzo',name:'モグゾー',type:'バランス',ult:'大地烈掌',color:'#b58756',belly:'#ecd9b4',dMul:1,sMul:1,sOfs:0,gMax:100,pips:{p:3,s:3,g:3}},
- {id:'pisuke',name:'ピスケ',type:'スピード',ult:'音速連咆',color:'#cfa972',belly:'#f5ead0',dMul:0.85,sMul:1.25,sOfs:-2,gMax:90,pips:{p:2,s:5,g:2}},
- {id:'godan',name:'ゴダン',type:'パワー',ult:'山崩し',color:'#8a6540',belly:'#d9c19d',dMul:1.18,sMul:0.9,sOfs:2,gMax:110,pips:{p:5,s:2,g:4}}
-];
+ {id:'moguzo',name:'モグゾー',type:'バランス',ult:'大地烈掌',color:'#b58756',belly:'#ecd9b4',dMul:1,sMul:1,sOfs:0,gMax:100,pips:{p:3,s:3,g:3},
+   stats5:{atk:3,spd:3,def:3,tech:3,brk:3},usability:1}, // §6.9: ステータス5種+つかいやすさ★(v0.11)
+ {id:'pisuke',name:'ピスケ',type:'スピード',ult:'音速連咆',color:'#cfa972',belly:'#f5ead0',dMul:0.85,sMul:1.25,sOfs:-2,gMax:90,pips:{p:2,s:5,g:2},
+   stats5:{atk:2,spd:5,def:2,tech:4,brk:2},usability:2},
+ {id:'godan',name:'ゴダン',type:'パワー',ult:'山崩し',color:'#8a6540',belly:'#d9c19d',dMul:1.18,sMul:0.9,sOfs:2,gMax:110,pips:{p:5,s:2,g:4},
+   stats5:{atk:5,spd:2,def:4,tech:2,brk:4},usability:1}
+]; // v0.11 (3): 枠4〜8は未実装(CHARSに要素を追加するだけでキャラ選択8枠グリッドが解放される構造、§6.9)
 const LEVELS=['high','mid','low'];
 const LV_LABEL={high:'上段',mid:'中段',low:'下段',crouch:'しゃがみ'}; // わざ表(§6.8)等での段属性表示ラベル
 const DIR_ARROW={left:'←',down:'↓',right:'→'}; // BAL.CMD.moves[].seqの方向文字列→矢印表示(わざ表用)
@@ -169,6 +173,10 @@ loadImg('ui_sgauge_frame','../assets/ui/sgauge_frame.png');
 loadImg('ui_timer_medal','../assets/ui/timer_medal.png');
 loadImg('ui_paw_emblem','../assets/ui/paw_emblem.png');
 for(const c of CHARS)loadImg('face_'+c.id,'../assets/ui/face_'+c.id+'.png'); // v0.10: キャラ選択SF風刷新の顔アイコン(§6.8 v2.5)
+for(const c of CHARS)loadImg('facesq_'+c.id,'../assets/ui/facesq_'+c.id+'.png'); // v0.11: キャラ選択8枠グリッド用の正方形顔アイコン(§6.9)
+loadImg('dirbtn_left','../assets/ui/dirbtn_left.png'); // v0.11: 方向ボタンの影絵アイコン(←=スウェー、§6.9)
+loadImg('dirbtn_down','../assets/ui/dirbtn_down.png'); // ↓=しゃがみ
+loadImg('dirbtn_right','../assets/ui/dirbtn_right.png'); // →=踏み込み
 for(let si=1;si<=5;si++){
   loadImg('ui_star_l'+si,'../assets/ui/star_l'+si+'.png');
   loadImg('ui_star_s'+si,'../assets/ui/star_s'+si+'.png');
@@ -243,20 +251,42 @@ function noiseS(dur,vol){if(!AC)return;try{
   g.gain.exponentialRampToValueAtTime(0.001,t+dur);
   s.connect(g);g.connect(AC.destination);s.start(t);
 }catch(e){}}
+const HIT_SE={mid:'hitMid',high:'hitHigh',low:'hitLow'}; // ヒット音3階層(v0.11 (4)): 段属性で選ぶ。cm.se(コマンド技専用)が優先
 function sfx(n){
   if(n==='tap'){tone(640,0.05,'square',0.09);}
   else if(n==='swish'){tone(900,0.06,'sine',0.05,320);}
   else if(n==='hit'){noiseS(0.07,0.2);tone(170,0.09,'square',0.2,90);}
   else if(n==='hit2'){noiseS(0.1,0.26);tone(120,0.14,'square',0.24,60);}
-  else if(n==='guard'){tone(760,0.05,'square',0.1,640);}
+  else if(n==='hitMid'){ // 中段=鋭いスナップ: 短い高域ノイズ+速い減衰のクリック(v0.11 (4))
+    noiseS(0.045,0.22);tone(950,0.045,'square',0.18,280);
+  }
+  else if(n==='hitHigh'){ // 上段=重いインパクト: パンチ寄りの低中音+ノイズ
+    noiseS(0.09,0.26);tone(160,0.12,'square',0.22,70);tone(75,0.1,'sine',0.15,40);
+  }
+  else if(n==='hitLow'){ // 下段=最重+低音: 大きめノイズ+深いサブベース
+    noiseS(0.17,0.32);tone(90,0.22,'sawtooth',0.26,42);tone(45,0.32,'sine',0.22,26);
+  }
+  else if(n==='counterHit'){ // カウンター専用の高い抜け音。通常ヒット音に重ねてヒットストップと同時に鳴らす
+    tone(1500,0.08,'sine',0.17,2300);tone(2100,0.05,'sine',0.11,2700);
+  }
+  else if(n==='cmdHit'){ // コマンド技(打撃)専用の派手めな音
+    noiseS(0.12,0.28);tone(240,0.16,'sawtooth',0.24,720);tone(760,0.08,'square',0.14,1150);
+  }
+  else if(n==='cmdGrabHit'){ // コマンド技(投げ)専用の派手めな音
+    noiseS(0.22,0.34);tone(520,0.1,'sine',0.17,120);tone(90,0.3,'sine',0.26,40);
+  }
+  else if(n==='cmdCounter'){ // 巌の構え等: 反撃成立時の専用の派手めな音
+    tone(1300,0.1,'sine',0.19,2500);noiseS(0.14,0.24);tone(150,0.18,'square',0.2,60);
+  }
+  else if(n==='guard'){tone(1500,0.028,'square',0.09,2700);tone(980,0.04,'square',0.08,620);} // 短い金属質のガード音(v0.11: 高音2連で刃/爪が触れる質感)
   else if(n==='guiin'){tone(480,0.55,'sawtooth',0.15,1500);tone(486,0.55,'sawtooth',0.09,1540);}
   else if(n==='roarStart'){tone(330,0.16,'sine',0.1,150);}
-  else if(n==='roar'){tone(110,0.5,'sawtooth',0.2,190);noiseS(0.35,0.16);}
+  else if(n==='roar'){tone(110,0.5,'sawtooth',0.22,190);noiseS(0.4,0.2);tone(1900,0.12,'sine',0.09,3200);} // 咆哮=専用の派手めな音(低音+ノイズ+高音の煌めき)
   else if(n==='break'){tone(420,0.35,'square',0.18,110);noiseS(0.25,0.18);}
   else if(n==='ko'){noiseS(0.5,0.28);tone(90,0.7,'sine',0.28,45);}
   else if(n==='fight'){tone(660,0.1,'square',0.13);tone(880,0.16,'square',0.13);}
-  else if(n==='ult'){tone(180,0.8,'sawtooth',0.2,900);}
-  else if(n==='ultHit'){noiseS(0.6,0.3);tone(70,0.8,'sine',0.3,34);}
+  else if(n==='ult'){tone(180,0.8,'sawtooth',0.22,900);tone(60,0.9,'sine',0.2,600);noiseS(0.3,0.12);} // 奥義=専用の派手めな音(低音の重ね+ノイズ)
+  else if(n==='ultHit'){noiseS(0.6,0.32);tone(70,0.8,'sine',0.32,34);tone(2300,0.2,'sine',0.14,4300);tone(35,1.0,'sine',0.24,20);} // 奥義ヒット=高い煌めき+超低音を追加
   else if(n==='grabGo'){tone(500,0.08,'sine',0.08,700);}
   else if(n==='grab'){noiseS(0.05,0.15);tone(300,0.08,'square',0.13,220);}
   else if(n==='slam'){noiseS(0.2,0.3);tone(90,0.3,'sine',0.3,40);}
@@ -511,7 +541,8 @@ function newFighter(ci,side){
     lastAtkLv:null,atkStreak:0,yomare:false,
     dodgeType:null,counterReadyF:0,clinchF:0,comboCounter:false,grabS:BAL.GRAB.s,
     shownHp:BAL.HP,ultFlash:0,sNo:0,
-    dirBuf:[],cmdMove:null,cmdIdx:null}; // コマンド技(v0.10 §6.8): 方向入力バッファ/発動中の技定義とインデックス
+    dirBuf:[],cmdMove:null,cmdIdx:null, // コマンド技(v0.10 §6.8): 方向入力バッファ/発動中の技定義とインデックス
+    cmdBufMove:null,cmdBufIdx:null}; // コマンド先行入力(v0.11 §6.9): 硬直中に受理し行動可能Fで自動発動する技の保持先
 }
 function startBattle(){
   lastMatchOnline=false;
@@ -551,7 +582,7 @@ function roundInit(first){
     f.guardLv=null;f.combo=0;f.buf=null;f.kb=0;f.lunge=0;f.sNo=0;f.downHitUsed=false;
     f.lastAtkLv=null;f.atkStreak=0;f.yomare=false;
     f.dodgeType=null;f.counterReadyF=0;f.clinchF=0;f.comboCounter=false;
-    f.dirBuf.length=0;f.cmdMove=null;f.cmdIdx=null;
+    f.dirBuf.length=0;f.cmdMove=null;f.cmdIdx=null;f.cmdBufMove=null;f.cmdBufIdx=null;
     if(first){f.s=0;f.ult=0;f.focus=0;}
   }
   B.timer=BAL.TIME;B.flow='intro';B.flowF=0;B.clash=null;B.pendKO=-1;B.clashStreak=[0,0];
@@ -669,6 +700,30 @@ function startCmdStance(f,m,idx){
   f.dirBuf.length=0;
   sfx(m.se||'guard');
 }
+function stunRemaining(f){ // コマンド先行入力(v0.11 §6.9): 現在の硬直/回収フェーズがidleに戻るまでの残りF。対象外のフェーズはnull
+  switch(f.phase){
+    case 'attack':case 'cmdAtk':{const A=spec(f);return A.s+A.a+A.r-f.pf;}
+    case 'cmdStance':return(f.cmdMove?f.cmdMove.stanceF:0)-f.pf;
+    case 'roar':return BAL.ROAR.s+BAL.ROAR.a+BAL.ROAR.r-f.pf;
+    case 'grabrec':return BAL.GRAB.rec-f.pf;
+    case 'grabHit':return BAL.GRAB.seq-f.pf;
+    case 'hitstun':case 'blockstun':return f.stunDur-f.pf;
+    case 'mikiriRec':return BAL.MIKIRI.whiff-f.pf;
+    case 'dodge':return BAL.DODGE.totalF-f.pf;
+    default:return null;
+  }
+}
+function resolveToIdle(f){ // コマンド先行入力(v0.11 §6.9): idle復帰の瞬間、保持中のコマンド技があれば自動発動する
+  if(f.cmdBufMove){
+    const m=f.cmdBufMove,idx=f.cmdBufIdx;
+    f.cmdBufMove=null;f.cmdBufIdx=null;
+    if(m.type==='grab')startCmdGrab(f,m,idx);
+    else if(m.type==='stance')startCmdStance(f,m,idx);
+    else startCmdAtk(f,m,idx);
+    return;
+  }
+  f.phase='idle';f.pf=0;
+}
 function canChain(f,lv){
   if(f.phase!=='attack'||!f.hasHit||f.combo>=BAL.CMAX)return false;
   if(BAL.ATK[lv].w<=BAL.ATK[f.atkLv].w)return false; // 軽→重ルートのみ（中→上→下）
@@ -702,6 +757,9 @@ function applyInputs(f,opp,cmds,held){
         f.phase='grab';f.pf=0;f.guardLv=null;f.atkLv=null;f.buf=null;f.combo=0;f.hasHit=false;
         f.grabS=f.clinchF>0?BAL.DODGE.clinchGrabS:BAL.GRAB.s; // 発生F値は開始時点でスナップショット(密着F自体はその後も毎F減衰するため)
         sfx('grabGo');
+      }else if(cm&&cm.move.type==='grab'){ // コマンド先行入力(v0.11 §6.9): 硬直残りBAL.CMD.buffer以内なら保持し、idle復帰時に自動発動
+        const rem=stunRemaining(f);
+        if(rem!=null&&rem<=BAL.CMD.buffer){f.cmdBufMove=cm.move;f.cmdBufIdx=cm.idx;}
       }
     }else if(c.t==='dodge'){ // 回避: idle/guardから発生。押下履歴は成否に関わらず常にバッファへ積む(コマンド技判定用)
       pushDirBuf(f,c.kind);
@@ -726,7 +784,9 @@ function applyInputs(f,opp,cmds,held){
         startCrouchAtk(f); // しゃがみ中は高さに関わらずしゃがみ突きへキャンセル
       }else if(f.phase==='idle')startAtk(f,c.lv,false);
       else if(canChain(f,c.lv))startAtk(f,c.lv,true);
-      else{f.buf={lv:c.lv};f.bufF=BAL.BUF;}
+      else if(cm&&(cm.move.type==='atk'||cm.move.type==='stance')&&cm.move.trigger===c.lv&&stunRemaining(f)!=null&&stunRemaining(f)<=BAL.CMD.buffer){
+        f.cmdBufMove=cm.move;f.cmdBufIdx=cm.idx; // コマンド先行入力(v0.11 §6.9)
+      }else{f.buf={lv:c.lv};f.bufF=BAL.BUF;}
     }
   }
   if(f.phase==='idle'&&held){
@@ -752,49 +812,49 @@ function advance(f){
     else f.lunge=maxLunge*Math.max(0,1-(t-A.s-A.a)/A.r);
     if(t>=total){
       if(!f.hasHit)gainS(f,'whiff');
-      f.phase='idle';f.pf=0;f.atkLv=null;f.combo=0;f.lunge=0;f.cmdMove=null;f.cmdIdx=null;
+      f.pf=0;f.atkLv=null;f.combo=0;f.lunge=0;f.cmdMove=null;f.cmdIdx=null;resolveToIdle(f);
     }
   }else if(f.phase==='cmdStance'){ // 巌の構え等: stanceF内は無敵(下記attackResolveで処理)。時間切れは空振り扱いで終了
-    if(f.cmdMove&&f.pf>=f.cmdMove.stanceF){f.phase='idle';f.pf=0;f.cmdMove=null;f.cmdIdx=null;}
+    if(f.cmdMove&&f.pf>=f.cmdMove.stanceF){f.pf=0;f.cmdMove=null;f.cmdIdx=null;resolveToIdle(f);}
   }else if(f.phase==='roar'){
     const R=BAL.ROAR;
-    if(f.pf>=R.s+R.a+R.r){f.phase='idle';f.pf=0;}
+    if(f.pf>=R.s+R.a+R.r){f.pf=0;resolveToIdle(f);}
   }else if(f.phase==='grab'){
     if(f.pf>grabStartup(f)+BAL.GRAB.a+2){f.phase='grabrec';f.pf=0;}
   }else if(f.phase==='grabrec'){
-    if(f.pf>=BAL.GRAB.rec){f.phase='idle';f.pf=0;f.cmdMove=null;f.cmdIdx=null;}
+    if(f.pf>=BAL.GRAB.rec){f.pf=0;f.cmdMove=null;f.cmdIdx=null;resolveToIdle(f);}
   }else if(f.phase==='grabHit'){
     const opp=B.p[1-f.side];
     if(f.pf===19&&opp.phase==='grabbed'){ // 叩きつけ
       const dmg=Math.round((f.cmdMove?f.cmdMove.d:BAL.GRAB.d)*f.c.dMul); // コマンド投げ(v0.10)はdmgをcmdMoveから取る
       opp.hp-=dmg;gainFocus(opp,dmg*BAL.FOCUS.gainDmgMul);
-      opp.phase='hitstun';opp.pf=0;opp.stunDur=BAL.GRAB.stun;opp.kb=34;
+      opp.phase='hitstun';opp.pf=0;opp.stunDur=BAL.GRAB.stun;opp.kb=34;opp.cmdBufMove=null;opp.cmdBufIdx=null;
       fxDmg(opp,dmg,(f.cmdMove&&f.cmdMove.color)||'#ffb6ff');fxBurst(opp.baseX,opp.y-40);
       sfx((f.cmdMove&&f.cmdMove.se)||'slam');B.shake=11;B.hitstop=Math.max(B.hitstop,6);
       gainSAmt(f,10);
       if(opp.hp<=0){opp.hp=0;startKO(opp.side);}
     }
-    if(f.pf>=BAL.GRAB.seq){f.phase='idle';f.pf=0;f.cmdMove=null;f.cmdIdx=null;}
+    if(f.pf>=BAL.GRAB.seq){f.pf=0;f.cmdMove=null;f.cmdIdx=null;resolveToIdle(f);}
   }else if(f.phase==='grabbed'){
-    if(f.pf>40){f.phase='idle';f.pf=0;}
+    if(f.pf>40){f.pf=0;resolveToIdle(f);}
   }else if(f.phase==='hitstun'){
-    if(f.pf>=f.stunDur){f.phase='idle';f.pf=0;}
+    if(f.pf>=f.stunDur){f.pf=0;resolveToIdle(f);}
   }else if(f.phase==='blockstun'){
     if(f.pf>=f.stunDur){
-      if(f.held){f.phase='guard';f.guardLv=f.held;}
-      else f.phase='idle';
       f.pf=0;
+      if(f.held){f.phase='guard';f.guardLv=f.held;f.cmdBufMove=null;f.cmdBufIdx=null;} // ガードへ復帰する場合は先行入力を破棄(idleからの発動ルールのため)
+      else resolveToIdle(f);
     }
   }else if(f.phase==='mikiriRec'){ // 見切り空振り: ガード不能の硬直
-    if(f.pf>=BAL.MIKIRI.whiff){f.phase='idle';f.pf=0;}
+    if(f.pf>=BAL.MIKIRI.whiff){f.pf=0;resolveToIdle(f);}
   }else if(f.phase==='dodge'){ // 回避: 1-10F判定 / 11-22F戻り。位置は変えない
-    if(f.pf>=BAL.DODGE.totalF){f.phase='idle';f.pf=0;f.dodgeType=null;}
+    if(f.pf>=BAL.DODGE.totalF){f.pf=0;f.dodgeType=null;resolveToIdle(f);}
   }else if(f.phase==='down'){ // ダウン: 追撃1発を受けたら以後は無敵のまま起き上がりへ
     if(f.pf>=BAL.DOWN.downF){f.phase='wake';f.pf=0;}
   }else if(f.phase==='wake'){ // 起き上がり20F全身無敵→強制起き上がり(起き攻め不可)
-    if(f.pf>=BAL.DOWN.wakeF){f.phase='idle';f.pf=0;f.downHitUsed=false;}
+    if(f.pf>=BAL.DOWN.wakeF){f.pf=0;f.downHitUsed=false;resolveToIdle(f);}
   }else if(f.phase==='dizzy'){
-    if(f.pf>=BAL.DIZZY){f.phase='idle';f.pf=0;f.guard=BAL.GRECOVER;}
+    if(f.pf>=BAL.DIZZY){f.pf=0;f.guard=BAL.GRECOVER;resolveToIdle(f);}
   }
 }
 function striking(f){
@@ -823,7 +883,7 @@ function resolveHits(){
     const d=BAL.ROAR.d;
     a.hp-=d;b.hp-=d;gainFocus(a,d*BAL.FOCUS.gainDmgMul);gainFocus(b,d*BAL.FOCUS.gainDmgMul);
     gainUltStock(a);gainUltStock(b);
-    for(const f of B.p){f.phase='hitstun';f.pf=0;f.stunDur=BAL.ROAR.stun;f.kb=30;f.atkLv=null;}
+    for(const f of B.p){f.phase='hitstun';f.pf=0;f.stunDur=BAL.ROAR.stun;f.kb=30;f.atkLv=null;f.cmdBufMove=null;f.cmdBufIdx=null;}
     fxDmg(a,d,'#ff8040');fxDmg(b,d,'#ff8040');sfx('roar');fxRoarImg(a.c.id);fxRoarImg(b.c.id);
     B.shake=10;B.hitstop=BAL.HITSTOP.roar;
     if(a.hp<=0)a.hp=0;if(b.hp<=0)b.hp=0;
@@ -868,12 +928,12 @@ function attackResolve(att,def){
     // 巌の構え等(v0.10): 構え成立中は相手の攻撃を無効化し、即座に反撃(construction技のcounterDmg)を与える
     const m=def.cmdMove,dmg=Math.round(m.counterDmg*def.c.dMul);
     att.hp-=dmg;gainFocus(att,dmg*BAL.FOCUS.gainDmgMul);
-    att.phase='hitstun';att.pf=0;att.stunDur=BAL.HITSTUN[m.counterLv]||24;att.combo=0;att.kb=20;
+    att.phase='hitstun';att.pf=0;att.stunDur=BAL.HITSTUN[m.counterLv]||24;att.combo=0;att.kb=20;att.cmdBufMove=null;att.cmdBufIdx=null;
     att.atkLv=null;att.guardLv=null;att.buf=null;
     fxDmg(att,dmg,m.color||'#ffd23f');fxSpark(att,m.counterLv,0);
     B.fx.push({k:'counter',x:att.baseX,y:relY(att,1.005),f:0,dur:38});
     gainSAmt(def,BAL.CLASH.winS);gainUltStock(def);
-    sfx(m.se||'hit2');B.shake=10;B.hitstop=BAL.HITSTOP[m.counterLv]||9;
+    sfx('cmdCounter');B.shake=10;B.hitstop=BAL.HITSTOP[m.counterLv]||9; // 反撃成立時は専用の派手めな音(v0.11 (4))。m.seはこの構えの入り音用
     def.phase='idle';def.pf=0;def.cmdMove=null;def.cmdIdx=null;
     if(att.hp<=0){att.hp=0;startKO(att.side);}
     return;
@@ -939,11 +999,11 @@ function hitApply(att,def,counterHit,lvOverride,cmdOverride){
   const cmArmorF=(def.phase==='grab'&&def.cmdMove&&def.cmdMove.armor)?def.cmdMove.armor:0; // 山掴み等: 投げ側のアーマー(§6.8)
   if(def.phase==='roar'&&def.pf<=BAL.ROAR.armor){ // 咆哮アーマー
     dmg=Math.round(dmg*0.5);def.hp-=dmg;gainS(att,'aBlk');gainFocus(def,dmg*BAL.FOCUS.gainDmgMul);
-    fxDmg(def,dmg,'#ffb020');fxSpark(def,lv,0);sfx('hit');
+    fxDmg(def,dmg,'#ffb020');fxSpark(def,lv,0);sfx(HIT_SE[lv]||'hit');
     B.hitstop=Math.max(B.hitstop,BAL.HITSTOP[lv]);B.shake=Math.max(B.shake,4);
   }else if(cmArmorF&&def.pf<=cmArmorF){ // コマンド投げのアーマー: 進行中の投げ自体は継続する
     dmg=Math.round(dmg*0.5);def.hp-=dmg;gainS(att,'aBlk');gainFocus(def,dmg*BAL.FOCUS.gainDmgMul);
-    fxDmg(def,dmg,'#ffb020');fxSpark(def,lv,0);sfx('hit');
+    fxDmg(def,dmg,'#ffb020');fxSpark(def,lv,0);sfx(HIT_SE[lv]||'hit');
     B.hitstop=Math.max(B.hitstop,BAL.HITSTOP[lv]);B.shake=Math.max(B.shake,4);
   }else{
     def.hp-=dmg;gainFocus(def,dmg*BAL.FOCUS.gainDmgMul);
@@ -951,12 +1011,13 @@ function hitApply(att,def,counterHit,lvOverride,cmdOverride){
     att.combo++;
     gainSAmt(att,BAL.SG.aHitC[Math.min(att.combo-1,2)]);gainS(def,'got');
     fxDmg(def,dmg,cm&&cm.color||'#ffffff');fxSpark(def,lv,0);
+    if(counterHit)sfx('counterHit'); // カウンター専用の高い抜け音をヒットストップと同フレームで重ねる(v0.11 (4))
     if(A.down){ // 下段: ダウンを奪う大技（スマブラ式ダウン連へ）
-      def.phase='down';def.pf=0;def.downHitUsed=false;def.combo=0;def.kb=20;
-      sfx(cm&&cm.se||'hit2');B.hitstop=Math.max(B.hitstop,BAL.HITSTOP.low);B.shake=Math.max(B.shake,8);
+      def.phase='down';def.pf=0;def.downHitUsed=false;def.combo=0;def.kb=20;def.cmdBufMove=null;def.cmdBufIdx=null;
+      sfx((cm&&cm.se)||HIT_SE[lv]||'hit2');B.hitstop=Math.max(B.hitstop,BAL.HITSTOP.low);B.shake=Math.max(B.shake,8);
     }else{
-      def.phase='hitstun';def.pf=0;def.stunDur=BAL.HITSTUN[lv]||22;def.combo=0;def.kb=11;
-      sfx(cm&&cm.se||(att.combo>=2?'hit2':'hit'));
+      def.phase='hitstun';def.pf=0;def.stunDur=BAL.HITSTUN[lv]||22;def.combo=0;def.kb=11;def.cmdBufMove=null;def.cmdBufIdx=null;
+      sfx((cm&&cm.se)||HIT_SE[lv]||'hit'); // ヒット音3階層(v0.11 (4)): 段属性で選ぶ。コマンド技はcm.seの専用音が優先
       B.hitstop=Math.max(B.hitstop,BAL.HITSTOP[lv]);B.shake=Math.max(B.shake,5);
     }
   }
@@ -977,7 +1038,7 @@ function roarResolve(att,def){
     fxDmg(def,d,'#ffb020');B.shake=Math.max(B.shake,6);
   }else{ // 咆哮クリーンヒット(被ガード/アーマー減衰以外): 奥義ストック+1(v2.3)
     def.hp-=R.d;gainFocus(def,R.d*BAL.FOCUS.gainDmgMul);
-    def.phase='hitstun';def.pf=0;def.stunDur=R.stun;
+    def.phase='hitstun';def.pf=0;def.stunDur=R.stun;def.cmdBufMove=null;def.cmdBufIdx=null;
     def.atkLv=null;def.guardLv=null;def.buf=null;def.combo=0;def.kb=34;
     gainS(att,'aHit');gainS(def,'got');gainUltStock(att);
     fxDmg(def,R.d,'#ff8040');fxSpark(def,'mid',0,true); // 咆哮ヒット=大スパーク
@@ -1151,7 +1212,7 @@ function endClash(){
   for(const f of B.p){if(f.phase==='clash'){f.phase='idle';f.pf=0;}}
   if(c.winner>=0){
     const lose=B.p[1-c.winner];
-    lose.phase='hitstun';lose.pf=0;lose.stunDur=BAL.CLASH.loserStun; // 勝者は追撃1発確定
+    lose.phase='hitstun';lose.pf=0;lose.stunDur=BAL.CLASH.loserStun;lose.cmdBufMove=null;lose.cmdBufIdx=null; // 勝者は追撃1発確定
     if(c.winner===0)announce('追撃チャンス!!',40,30,'#7CFC00');
   }
   B.flow='fight';
@@ -1172,7 +1233,7 @@ function ultStep(){
   if(B.flowF===BAL.ULT.impact){
     const dmg=Math.round(BAL.ULT.d*att.c.dMul);
     def.hp-=dmg;att.ult=0;gainFocus(def,dmg*BAL.FOCUS.gainDmgMul);
-    def.phase='hitstun';def.pf=0;def.stunDur=46;def.kb=46;
+    def.phase='hitstun';def.pf=0;def.stunDur=46;def.kb=46;def.cmdBufMove=null;def.cmdBufIdx=null;
     def.atkLv=null;def.guardLv=null;def.buf=null;def.combo=0;
     fxDmg(def,dmg,'#ff2d78');fxBurst(def.baseX,330);
     sfx('ultHit');B.shake=18;
@@ -1484,7 +1545,8 @@ function toL(cx2,cy2){
 }
 const GRAB_BTN={r:55,cx:70,cy:PT+70}; // つかみボタン(直径110px・左上=Lトリガー位置イメージ、§6.8 v2.5)
 function inGrabBtn(p){const dx=p.x-GRAB_BTN.cx,dy=p.y-GRAB_BTN.cy;return dx*dx+dy*dy<=GRAB_BTN.r*GRAB_BTN.r;}
-const DIR_BTN_ARROW={sway:'←',crouch:'↓',lunge:'→'};
+const DIR_BTN_ARROW={sway:'←',crouch:'↓',lunge:'→'}; // 画像未読込時の図形フォールバック用
+const DIR_BTN_ASSET={sway:'dirbtn_left',crouch:'dirbtn_down',lunge:'dirbtn_right'}; // 回避モーションの影絵アイコン(v0.11 §6.9)
 function leftLowerRect(){ // 左ゾーン下半分(方向ボタン用の矩形)
   const y0=PT+(H-PT)/2;
   return{x:10,y:y0+8,w:W/2-20,h:(H-PT)/2-16};
@@ -1651,26 +1713,30 @@ function selRect(i){return{x:36,y:180+i*230,w:W-72,h:206};} // オンライン�
 const DIFF_LEVELS=['EASY','NORMAL','HARD']; // §6.7 v2.4: キャラ選択画面で切替・デフォルトNORMAL・セッション中保持
 function diffRect(i){
   const w=150,gap=10,totalW=3*w+2*gap,x0=(W-totalW)/2;
-  return{x:x0+i*(w+gap),y:780,w:w,h:36};
+  return{x:x0+i*(w+gap),y:800,w:w,h:32};
 }
-let selCharIdx=0; // キャラ選択画面(SF風刷新)で現在フォーカス中のキャラ(§6.8 v2.5)
-function faceRect(i){ // 顔アイコン3つ(下半分・§6.8 v2.5)
-  const s=100,gap=24,totalW=3*s+2*gap,x0=(W-totalW)/2;
-  return{x:x0+i*(s+gap),y:644,w:s,h:s};
+let selCharIdx=0; // キャラ選択画面(SF風刷新)で現在フォーカス中のキャラ(§6.8/§6.9)
+const SELECT_SLOTS=8; // キャラ選択8枠グリッド(2行×4列、§6.9 v2.6)。CHARSに要素を追加するだけで枠1〜3以降が解放される
+const SELECT_LOCKED=[5,7]; // 未実装枠のうち鍵アイコンを出す2枠(0-indexed)
+function slotRect(i){ // 8枠グリッド(2行×4列)の各枠の矩形
+  const cols=4,s=92,gapX=14,gapY=14,totalW=cols*s+(cols-1)*gapX,x0=(W-totalW)/2,y0=420;
+  const col=i%cols,row=Math.floor(i/cols);
+  return{x:x0+col*(s+gapX),y:y0+row*(s+gapY),w:s,h:s};
 }
-const SELECT_CONFIRM_BTN={x:60,y:824,w:W-120,h:60}; // けってい(§6.8 v2.5)
-const SELECT_BACK_BTN={x:60,y:896,w:W-120,h:48}; // キャラ選択画面の「もどる」(タイトルへ、§6.8 v2.5)
+const SELECT_STAT_ROWS=[['こうげき','atk'],['はやさ','spd'],['まもり','def'],['わざ','tech'],['くずし','brk']]; // §6.9 ステータス5種
+const SELECT_CONFIRM_BTN={x:60,y:844,w:W-120,h:48}; // けってい(§6.9 v2.6でレイアウト再構成)
+const SELECT_BACK_BTN={x:60,y:904,w:W-120,h:40}; // キャラ選択画面の「もどる」(タイトルへ)
 function selectPress(p){
-  for(let i=0;i<3;i++){
-    const r=faceRect(i);
-    if(inRect(p,r.x,r.y,r.w,r.h)){selCharIdx=i;sfx('tap');return;}
+  for(let i=0;i<SELECT_SLOTS;i++){
+    const r=slotRect(i);
+    if(inRect(p,r.x,r.y,r.w,r.h)){if(i<CHARS.length){selCharIdx=i;sfx('tap');}return;} // 未実装枠はタップ無効
   }
   for(let i=0;i<3;i++){
     const r=diffRect(i);
     if(inRect(p,r.x,r.y,r.w,r.h)){aiDifficulty=DIFF_LEVELS[i];sfx('tap');return;}
   }
   if(inRect(p,SELECT_CONFIRM_BTN.x,SELECT_CONFIRM_BTN.y,SELECT_CONFIRM_BTN.w,SELECT_CONFIRM_BTN.h)){
-    game.p1=selCharIdx;game.p2=(Math.random()*3)|0;
+    game.p1=selCharIdx;game.p2=(Math.random()*CHARS.length)|0;
     sfx('tap');startBattle();return;
   }
   if(inRect(p,SELECT_BACK_BTN.x,SELECT_BACK_BTN.y,SELECT_BACK_BTN.w,SELECT_BACK_BTN.h)){sfx('tap');game.screen='title';return;}
@@ -2369,7 +2435,7 @@ function rPad(){
   drawShield(W/4,PT+upperH*0.4,26);
   txt('ガード(ホールド)',W/4,PT+upperH*0.4+42,16,'rgba(207,232,255,0.85)');
   txt('ジャストタップ＝見切り',W/4,PT+upperH*0.4+62,12,'rgba(255,225,90,0.75)');
-  for(const b of dirBtnRects()){ // 方向ボタン(←↓→): タップで即時発火、押下瞬間だけ肉球ボタン同様にハイライト
+  for(const b of dirBtnRects()){ // 方向ボタン(←↓→): タップで即時発火、押下瞬間だけ発光させる(v0.11: 矢印→回避モーションの影絵アイコンに変更)
     const flashing=b.dir===dirBtnFlashKind&&performance.now()-dirBtnFlashAt<140;
     ctx.save();ctx.globalAlpha=flashing?0.9:0.5;
     ctx.fillStyle=flashing?'rgba(255,210,60,0.22)':'rgba(255,255,255,0.03)';
@@ -2377,7 +2443,11 @@ function rPad(){
     ctx.strokeStyle=flashing?'#ffd23f':'rgba(255,255,255,0.16)';ctx.lineWidth=flashing?3:1.5;
     rr(b.x+4,b.y+4,b.w-8,b.h-8,14);ctx.stroke();
     ctx.restore();
-    txt(DIR_BTN_ARROW[b.dir],b.x+b.w/2,b.y+b.h/2+11,30,flashing?'#ffe14d':'rgba(160,230,180,0.85)');
+    ctx.save();
+    if(flashing){ctx.shadowColor='#ffd23f';ctx.shadowBlur=18;} // 押下時の発光(§6.9)
+    const iconOk=drawUiIcon(DIR_BTN_ASSET[b.dir],b.x+b.w/2,b.y+b.h/2,Math.min(b.w,b.h)*0.62);
+    ctx.restore();
+    if(!iconOk)txt(DIR_BTN_ARROW[b.dir],b.x+b.w/2,b.y+b.h/2+11,30,flashing?'#ffe14d':'rgba(160,230,180,0.85)');
   }
   // 右ゾーン: 高さタップ＝段（上/中/下）。発火はリリース時
   const rh=(H-PT)/3,labels=['上段','中段','下段'];
@@ -2732,34 +2802,53 @@ function rTitle(){
   txt('オンライン対戦',ONLINE_BTN.x+ONLINE_BTN.w/2,ONLINE_BTN.y+ONLINE_BTN.h/2,13,'#dff4ff');
 }
 const DIFF_COL={EASY:'#7CFC00',NORMAL:'#ffd23f',HARD:'#ff6b6b'};
-function rSelect(){ // SF風キャラ選択(§6.8 v2.5): 上=選択中キャラ大写し、下=顔アイコン+難易度+けってい+もどる
+function drawLockIcon(x,y,s){ // 未実装枠の鍵アイコン(簡易図形、§6.9 v2.6)
+  ctx.save();ctx.translate(x,y);
+  ctx.strokeStyle='#8892a6';ctx.lineWidth=2.5;ctx.lineCap='round';
+  ctx.beginPath();ctx.arc(0,-s*0.35,s*0.55,Math.PI,0);ctx.stroke();
+  ctx.fillStyle='#6b7488';ctx.fillRect(-s*0.7,-s*0.15,s*1.4,s*1.05);
+  ctx.fillStyle='#3a4152';ctx.beginPath();ctx.arc(0,s*0.32,s*0.14,0,TAU);ctx.fill();
+  ctx.restore();
+}
+function rSelect(){ // SF6風キャラ選択(§6.9 v2.6): 上=立ち絵+名前+タイプ、中央=8枠グリッド、下部=ステータス5種+つかいやすさ+難易度+けってい+もどる
   const c=CHARS[selCharIdx];
   const g=ctx.createLinearGradient(0,0,0,H);
   g.addColorStop(0,'#20263c');g.addColorStop(0.55,'#1a2032');g.addColorStop(1,'#12141c');
   ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
-  txt('キャラクターをえらぶ',W/2,30,15,'#8891a6');
-  txt(c.name,W/2,80,46,'#fff');
-  txt(c.type,W/2,120,20,'#ffd23f');
-  const st=[['ちから',c.pips.p],['はやさ',c.pips.s],['まもり',c.pips.g]],stX0=(W-260)/2;
-  for(let j=0;j<3;j++){
-    const yy=150+j*26;
-    txt(st[j][0],stX0,yy,14,'#9aa2b8','left');
+  txt('キャラクターをえらぶ',W/2,26,14,'#8891a6');
+  txt(c.name,W/2,68,40,'#fff');
+  txt(c.type,W/2,102,18,'#ffd23f');
+  demoF.c=c;
+  if(!drawStanding('standing_'+c.id,W/2,396,232*BAL.PORTRAIT_RATIO[c.id]))rFighter(demoF,W/2,340);
+  for(let i=0;i<SELECT_SLOTS;i++){ // 8枠グリッド: 枠1〜3=既存キャラ(タップでフォーカス切替)、枠4〜8=未実装(？/鍵)
+    const r=slotRect(i),impl=i<CHARS.length,active=impl&&i===selCharIdx;
+    ctx.fillStyle=active?'rgba(255,210,60,0.16)':(impl?'#232a3d':'#1a1e2b');rr(r.x,r.y,r.w,r.h,14);ctx.fill();
+    ctx.strokeStyle=active?'#ffd23f':(impl?'#3a4560':'#2a2f3f');ctx.lineWidth=active?3:2;rr(r.x,r.y,r.w,r.h,14);ctx.stroke();
+    if(impl){
+      if(!drawUiIcon('facesq_'+CHARS[i].id,r.x+r.w/2,r.y+r.h/2,r.w-14)){
+        demoF.c=CHARS[i];rFighter(demoF,r.x+r.w/2,r.y+r.h-8);
+      }
+    }else{
+      ctx.save();ctx.globalAlpha=0.55;
+      txt('？',r.x+r.w/2,r.y+r.h/2-(SELECT_LOCKED.includes(i)?9:0),28,'#6b7488');
+      if(SELECT_LOCKED.includes(i))drawLockIcon(r.x+r.w/2,r.y+r.h/2+20,10);
+      ctx.restore();
+    }
+  }
+  const stX0=(W-260)/2;
+  let yy=636;
+  for(const[label,key]of SELECT_STAT_ROWS){ // §6.9 ステータス5種
+    txt(label,stX0,yy,14,'#9aa2b8','left');
     for(let k=0;k<5;k++){
-      ctx.fillStyle=(k<st[j][1])?'#ffd23f':'#39415a';
+      ctx.fillStyle=(k<c.stats5[key])?'#ffd23f':'#39415a';
       ctx.beginPath();ctx.arc(stX0+70+k*22,yy-5,6.5,0,TAU);ctx.fill();
     }
+    yy+=22;
   }
-  demoF.c=c;
-  if(!drawStanding('standing_'+c.id,W/2,632,360*BAL.PORTRAIT_RATIO[c.id]))rFighter(demoF,W/2,540);
-  for(let i=0;i<3;i++){ // 顔アイコン3つ(タップでフォーカス切替)
-    const r=faceRect(i),active=(i===selCharIdx);
-    ctx.fillStyle=active?'rgba(255,210,60,0.16)':'#232a3d';rr(r.x,r.y,r.w,r.h,16);ctx.fill();
-    ctx.strokeStyle=active?'#ffd23f':'#3a4560';ctx.lineWidth=active?3:2;rr(r.x,r.y,r.w,r.h,16);ctx.stroke();
-    if(!drawUiIcon('face_'+CHARS[i].id,r.x+r.w/2,r.y+r.h/2,r.w-16)){
-      demoF.c=CHARS[i];rFighter(demoF,r.x+r.w/2,r.y+r.h-8);
-    }
-  }
-  txt('むずかしさ',W/2,764,13,'#8891a6');
+  txt('つかいやすさ',stX0,yy,13,'#7fd8ff','left');
+  let stars='';for(let k=0;k<5;k++)stars+=(k<c.usability)?'★':'☆';
+  txt(stars,stX0+100,yy,18,'#ffd23f','left');
+  txt('むずかしさ',W/2,782,13,'#8891a6');
   for(let i=0;i<3;i++){
     const dl=DIFF_LEVELS[i],r=diffRect(i),active=(aiDifficulty===dl);
     ctx.fillStyle=active?'rgba(255,255,255,0.14)':'#232a3d';rr(r.x,r.y,r.w,r.h,10);ctx.fill();
@@ -2768,7 +2857,7 @@ function rSelect(){ // SF風キャラ選択(§6.8 v2.5): 上=選択中キャラ�
   }
   ctx.fillStyle='#3d6e2f';rr(SELECT_CONFIRM_BTN.x,SELECT_CONFIRM_BTN.y,SELECT_CONFIRM_BTN.w,SELECT_CONFIRM_BTN.h,16);ctx.fill();
   ctx.strokeStyle='#7CFC00';ctx.lineWidth=3;rr(SELECT_CONFIRM_BTN.x,SELECT_CONFIRM_BTN.y,SELECT_CONFIRM_BTN.w,SELECT_CONFIRM_BTN.h,16);ctx.stroke();
-  txt('けってい（あいてはランダム）',W/2,SELECT_CONFIRM_BTN.y+SELECT_CONFIRM_BTN.h/2,22,'#fff');
+  txt('けってい（あいてはランダム）',W/2,SELECT_CONFIRM_BTN.y+SELECT_CONFIRM_BTN.h/2,19,'#fff');
   ctx.fillStyle='rgba(255,255,255,0.06)';rr(SELECT_BACK_BTN.x,SELECT_BACK_BTN.y,SELECT_BACK_BTN.w,SELECT_BACK_BTN.h,12);ctx.fill();
   ctx.strokeStyle='rgba(255,255,255,0.35)';ctx.lineWidth=2;rr(SELECT_BACK_BTN.x,SELECT_BACK_BTN.y,SELECT_BACK_BTN.w,SELECT_BACK_BTN.h,12);ctx.stroke();
   txt('もどる',W/2,SELECT_BACK_BTN.y+SELECT_BACK_BTN.h/2,16,'#dfe4ee');
