@@ -62,11 +62,11 @@ const BAL={ // 03_data_design.md v2.0 §2 balance table 準拠
   },
   AIDIFF:{ // 難易度プリセット(§6.7 v2.4)。現行AI(v0.8時点)=HARD、按分してNORMAL/EASYを算出。試遊後調整可
     EASY:{reactMul:0.4,mikiriRate:0.04,dodgeRate:0.05,atkFreqMul:0.6,downFollowup:0,focusRestraint:false,
-      rendaCpuMin:0.085,rendaCpuRng:0,hayauchiF:[22,34]},
+      rendaCpuMin:0.085,rendaCpuRng:0,hayauchiF:[22,34],cmdMoveRate:0.05}, // コマンド技使用率(v0.10 (3)): EASY=ほぼ不使用
     NORMAL:{reactMul:0.7,mikiriRate:0.12,dodgeRate:0.10,atkFreqMul:0.8,downFollowup:0.5,focusRestraint:true,
-      rendaCpuMin:0.100,rendaCpuRng:0,hayauchiF:[17,27]},
+      rendaCpuMin:0.100,rendaCpuRng:0,hayauchiF:[17,27],cmdMoveRate:0.25}, // NORMAL=たまに
     HARD:{reactMul:1.0,mikiriRate:0.22,dodgeRate:0.15,atkFreqMul:1.0,downFollowup:1,focusRestraint:true,
-      rendaCpuMin:0.115,rendaCpuRng:0.02,hayauchiF:[14,24]}
+      rendaCpuMin:0.115,rendaCpuRng:0.02,hayauchiF:[14,24],cmdMoveRate:0.6} // HARD=積極的
   },
   GRAB:{s:12,a:2,rec:28,seq:28,d:90,stun:30,counterMul:1.25},
   DODGE:{totalF:22,judgeF:10,counterReadyF:18,counterMul:1.25,counterScale:[1.0,1.0,0.9], // 回避: 全体22F(1-10F判定/11-22F戻り)。成功でcounterReady18F
@@ -1168,10 +1168,21 @@ const cpuEv=[];
 let aiDifficulty='NORMAL'; // EASY/NORMAL/HARD。キャラ選択画面で変更・セッション中保持(明示的にリセットしない)
 function curDiff(){return BAL.AIDIFF[onlineActive()?'NORMAL':aiDifficulty];} // オンライン中はローカルのaiDifficulty設定に関わらずNORMAL固定(両クライアントのrng消費を一致させ決定性を維持)
 const LEVEL_TO_DODGE={high:'crouch',mid:'sway',low:'lunge'}; // その段を避ける回避(DODGE_TABLE.beatsの逆引き)
-const ai={think:0,guardT:0,guardOn:false,react:null,ultT:0,hist:[],mash:0,pHoldF:0,mikiriAt:null,dodgeAt:null,dodgeKind:null};
+const DIR_TO_DODGE_KIND={left:'sway',down:'crouch',right:'lunge'}; // BAL.CMD.seqの方向文字列→dodgeコマンドのkind(DODGE_DIRの逆引き、v0.10 (3))
+const ai={think:0,guardT:0,guardOn:false,react:null,ultT:0,hist:[],mash:0,pHoldF:0,mikiriAt:null,dodgeAt:null,dodgeKind:null,cmdQueue:[]};
 function aiReset(){
   ai.think=30;ai.guardT=0;ai.guardOn=false;ai.react=null;ai.ultT=0;
-  ai.hist=[];ai.mash=0;ai.pHoldF=0;ai.mikiriAt=null;ai.dodgeAt=null;ai.dodgeKind=null;
+  ai.hist=[];ai.mash=0;ai.pHoldF=0;ai.mikiriAt=null;ai.dodgeAt=null;ai.dodgeKind=null;ai.cmdQueue=[];
+}
+function aiQueueCommandMove(me){ // コマンド技(v0.10 (3)): 方向2つ+トリガーを予約し、人間の連続タップと同じ入力経路(cpuEv)で発火させる
+  // 1つ目の方向入力は実際の回避(BAL.DODGE.totalF=22F)を伴うため、idleに復帰する直後(dir1から23F後、
+  // 24Fバッファに収まる最終タイミング)でトリガーを送る。2つ目の方向は回避演技中でもdirBufには積まれる。
+  const moves=BAL.CMD.moves[me.c.id];
+  if(!moves||!moves.length)return;
+  const idx=(rng()*moves.length)|0,mv=moves[idx],dir1At=B.f+1;
+  ai.cmdQueue.push({at:dir1At,cmd:{t:'dodge',kind:DIR_TO_DODGE_KIND[mv.seq[0]]}});
+  ai.cmdQueue.push({at:dir1At+1,cmd:{t:'dodge',kind:DIR_TO_DODGE_KIND[mv.seq[1]]}});
+  ai.cmdQueue.push({at:dir1At+BAL.DODGE.totalF+1,cmd:(mv.type==='grab')?{t:'grab'}:{t:'atk',lv:mv.trigger}});
 }
 function aiStep(){
   const me=B.p[1],you=B.p[0];
@@ -1204,6 +1215,7 @@ function aiStep(){
   }
   if(ai.mikiriAt!=null&&B.f>=ai.mikiriAt){cpuEv.push({t:'mikiri'});ai.mikiriAt=null;}
   if(ai.dodgeAt!=null&&B.f>=ai.dodgeAt){cpuEv.push({t:'dodge',kind:ai.dodgeKind});ai.dodgeAt=null;}
+  while(ai.cmdQueue.length&&B.f>=ai.cmdQueue[0].at)cpuEv.push(ai.cmdQueue.shift().cmd); // 予約済みコマンド技入力の発火(v0.10 (3))
   // ダウン連追撃: 難易度別の実行率で1発叩き込む(EASY=しない/NORMAL=50%/HARD=常に)
   if(you.phase==='down'&&!you.downHitUsed&&me.phase==='idle'&&rng()<D.downFollowup){
     cpuEv.push({t:'atk',lv:'mid'});
@@ -1262,8 +1274,12 @@ function aiStep(){
       const grabW=0.1+(focusThreat?0.14:0); // つかみは"発生"扱いされず集中を誘発しないため踏み込みやすい
       const gsel=0.24+Math.min(0.3,ai.mash*0.04);
       if(roll<aggr){
-        const rw=rng();
-        cpuEv.push({t:'atk',lv:rw<0.34?'high':(rw<0.72?'mid':'low')});
+        if(ai.cmdQueue.length===0&&rng()<D.cmdMoveRate){ // 難易度別のコマンド技使用率(v0.10 (3): EASY=ほぼ不使用/NORMAL=たまに/HARD=積極的)
+          aiQueueCommandMove(me);
+        }else{
+          const rw=rng();
+          cpuEv.push({t:'atk',lv:rw<0.34?'high':(rw<0.72?'mid':'low')});
+        }
       }else if(roll<aggr+grabW){
         cpuEv.push({t:'grab'});
       }else if(roll<aggr+grabW+gsel){
