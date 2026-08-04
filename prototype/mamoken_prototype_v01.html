@@ -279,10 +279,21 @@ function rr(x,y,w,h,r){
   ctx.arcTo(x+w,y,x+w,y+h,r);ctx.arcTo(x+w,y+h,x,y+h,r);
   ctx.arcTo(x,y+h,x,y,r);ctx.arcTo(x,y,x+w,y,r);ctx.closePath();
 }
+let inMirrorZone=false; // オンライン2P側のビュー反転(§6.8 v2.5.1(7))が有効な描画区間中か。rBattle()の反転save/restore内でのみtrue
 function txt(t,x,y,size,color,align){
   ctx.font='900 '+size+'px "Hiragino Kaku Gothic ProN","Yu Gothic",sans-serif';
-  ctx.textAlign=align||'center';ctx.textBaseline='middle';
+  const al=align||'center';
   ctx.lineWidth=Math.max(3,size*0.16);ctx.strokeStyle='rgba(0,0,0,0.85)';ctx.lineJoin='round';
+  if(inMirrorZone){ // 座標はミラーされた空間のまま・文字だけ正向きに描く(鏡文字にしない)ため局所的に打ち消す
+    ctx.save();
+    ctx.translate(x,y);ctx.scale(-1,1);
+    ctx.textAlign=(al==='left')?'right':(al==='right')?'left':'center';ctx.textBaseline='middle';
+    ctx.strokeText(t,0,0);
+    ctx.fillStyle=color;ctx.fillText(t,0,0);
+    ctx.restore();
+    return;
+  }
+  ctx.textAlign=al;ctx.textBaseline='middle';
   ctx.strokeText(t,x,y);
   ctx.fillStyle=color;ctx.fillText(t,x,y);
 }
@@ -2576,6 +2587,8 @@ function rAnn(){
 }
 function rBattle(){
   ctx.save();
+  const mirror=onlineActive()&&online.slot===1; // 2P側クライアントのみ描画層で水平ミラー(§6.8 v2.5.1(7)。シミュレーション/入力/パッドUI/HUDは対象外)
+  if(mirror){ctx.translate(W,0);ctx.scale(-1,1);inMirrorZone=true;}
   if(B.shake>0)ctx.translate((Math.random()*2-1)*B.shake,(Math.random()*2-1)*B.shake);
   let zoom=1;
   if(B.flow==='clash'&&B.clash){
@@ -2603,6 +2616,7 @@ function rBattle(){
   rFighter(B.p[1],xyB[0],xyB[1]);rFighter(B.p[0],xyA[0],xyA[1]);
   rFx();
   rClashPicks();
+  inMirrorZone=false;
   ctx.restore();
   if(B.flow==='clash'&&B.clash&&B.clash.phase==='in'){
     const k=B.clash.f/BAL.CLASH.inF;
