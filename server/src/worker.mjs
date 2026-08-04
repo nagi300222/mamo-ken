@@ -5,7 +5,12 @@
 // 3人目以降を観戦者として扱い、対戦者間の生メッセージをそのまま転送する。
 // 決定論ロックステップの実体(rngシード適用・入力バッファ・フレーム進行)は
 // クライアント側(mulberry32)で完結させる。サーバーが生成する乱数はルーム確立時の
-// 共有rngシード値そのもの(1回だけ)に限られ、対戦シミュレーションには関与しない。
+// 共有rngシード値そのもの(対戦開始のたび1回)に限られ、対戦シミュレーションには関与しない。
+//
+// 例外(v0.9 PR4「勝ち残り交代」): slot(誰が対戦者か)の入れ替えは各クライアント単独では
+// 決定できないため、'matchOver'メッセージだけはサーバーが内容を解釈し、観戦者の昇格/
+// 敗者の観戦降格と次戦の共有シード配布を行う。他の全メッセージ種別(cmd/pick等)は
+// 従来通り意味を解釈せず生のまま中継するだけ。
 
 const ROOM_CODE_ALPHABET = 'ABCDEFGHJKMNPQRSTUVWXYZ23456789'; // 0/O/1/I/L等の混同しやすい文字を除外
 
@@ -86,7 +91,13 @@ export class Room {
     }
 
     ws.addEventListener('message', (event) => {
-      // サーバーはペイロードの意味を解釈せず、他クライアントへそのまま中継するだけ
+      let msg = null;
+      try { msg = JSON.parse(event.data); } catch (err) { /* JSONでなければ下のraw中継に任せる */ }
+      if (msg && msg.t === 'matchOver') {
+        this.handleMatchOver(ws, msg);
+        return; // このメッセージはサーバー内部処理のみ。生のまま中継はしない
+      }
+      // それ以外(cmd/pick等)はペイロードの意味を解釈せず、他クライアントへそのまま中継するだけ
       this.broadcast(event.data, ws, true);
     });
 
@@ -111,6 +122,40 @@ export class Room {
   bothPlayersPresent() {
     const used = new Set(Array.from(this.sessions.values()).map((v) => v.slot));
     return used.has(0) && used.has(1);
+  }
+
+  // 勝ち残り交代(v0.9 PR4): 1試合終わるたびにslot0のクライアントだけが送ってくる
+  // (二重送信を避けるため送信元を1人に固定)。観戦者がいれば入室順で最も早い1人を
+  // 敗者と入れ替えて挑戦者に昇格させ、勝者はslotそのまま。最後に次戦の共有シードを配布する。
+  handleMatchOver(ws, msg) {
+    const info = this.sessions.get(ws);
+    if (!info || info.slot !== 0) return;
+    const winnerSlot = (msg.winnerSlot === 0 || msg.winnerSlot === 1) ? msg.winnerSlot : null;
+    if (winnerSlot == null) return;
+    const loserSlot = 1 - winnerSlot;
+
+    let spectatorEntry = null;
+    for (const entry of this.sessions) { // Mapは挿入順を保持するため、最初に見つかる観戦者が入室順で最も早い
+      if (entry[1].slot >= 2) { spectatorEntry = entry; break; }
+    }
+    if (spectatorEntry) {
+      let loserWs = null;
+      for (const [w, i] of this.sessions) { if (i.slot === loserSlot) { loserWs = w; break; } }
+      if (loserWs) {
+        const [specWs, specInfo] = spectatorEntry;
+        const loserInfo = this.sessions.get(loserWs);
+        const vacatedSlot = specInfo.slot;
+        specInfo.slot = loserSlot;
+        loserInfo.slot = vacatedSlot;
+        this.send(specWs, { t: 'yourSlot', slot: loserSlot });
+        this.send(loserWs, { t: 'yourSlot', slot: vacatedSlot });
+      }
+    }
+
+    this.seed = (crypto.getRandomValues(new Uint32Array(1))[0]) >>> 0;
+    for (const [w, i] of this.sessions) {
+      if (i.slot === 0 || i.slot === 1) this.send(w, { t: 'ready', seed: this.seed });
+    }
   }
 
   send(ws, obj) {

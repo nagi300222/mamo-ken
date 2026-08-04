@@ -77,7 +77,7 @@ const BAL={ // 03_data_design.md v2.0 §2 balance table 準拠
   HITSTOP:{mid:6,high:9,low:14,roar:12,clash:16,crouch:5},
   TELEGRAPH:{mid:8,high:13,low:18,crouch:6}, // 発生前半に構え+段色フラッシュ+固有SE（見てから対応の成立条件）
   BUF:10,FLICK_DX:60,FLICK_MS:300,JUST_TAP_MS:100,
-  SPRITE_H:{moguzo:185,pisuke:165,godan:206}, // 戦闘スプライトの表示身長(px)。体格基準ラインナップ(ピスケ小柄/ゴダン大柄)の印象を反映。試遊後調整可
+  SPRITE_H:{moguzo:172,pisuke:116,godan:206}, // 戦闘スプライトの表示身長(px)。体格基準ラインナップ(ピスケ小柄/ゴダン大柄)の印象を反映(v2.4.2改・頭サイズ整合idle差し替えと連動)
   PORTRAIT_RATIO:{moguzo:1.00,pisuke:0.80,godan:1.15}, // 立ち絵(portraits/)用の比率。各画面の基準高に乗算して体格差を表現(v2.4.1)
   NET:{delayF:4} // オンライン対戦(v0.9): ロックステップ入力遅延バッファ(F)。§03データ設計 準拠
 };
@@ -303,7 +303,7 @@ function onlineReset(){
 function onlineHandleDisconnect(reason){
   online.state='error';online.errorMsg=reason;
   NET.active=false;
-  if(game.screen==='onlineSelect'||game.screen==='battle')game.screen='onlineInterrupted';
+  if(game.screen==='onlineSelect'||game.screen==='battle'||game.screen==='result')game.screen='onlineInterrupted';
 }
 function onlineConnect(code,mode){
   online.mode=mode;online.code=code;online.state='connecting';
@@ -318,8 +318,14 @@ function onlineConnect(code,mode){
     else if(msg.t==='ready'){
       online.seed=msg.seed;online.state='ready';
       if(online.slot===0||online.slot===1){online.myPick=null;online.peerPick=null;game.screen='onlineSelect';}
+    }else if(msg.t==='yourSlot'){ // 勝ち残り交代(v0.9 PR4): 観戦者⇔対戦者の入れ替え通知
+      online.slot=msg.slot;
+      if(msg.slot>=2){ // 敗者→観戦者に降格。直後に新シードの'ready'は届かないのでここでロビーへ戻す
+        online.myPick=null;online.peerPick=null;
+        game.screen='onlineLobby';
+      } // 観戦者→対戦者に昇格した側は、この直後に届く'ready'がonlineSelectへ遷移させる
     }else if(msg.t==='peerLeft'){
-      if(online.state==='ready')onlineHandleDisconnect('相手が退出しました');
+      if(online.state==='ready'&&(msg.slot===0||msg.slot===1))onlineHandleDisconnect('相手が退出しました'); // 観戦者の退出では対戦を中断しない
     }else if(msg.t==='pick'){
       online.peerPick=msg.charIdx;
       if(game.screen==='onlineSelect')maybeStartOnlineBattle();
@@ -1175,7 +1181,13 @@ function netLogicTick(){
     if(B.flowF>=80){B.round++;roundInit(false);}
   }else if(B.flow==='matchEnd'){
     B.flowF++;
-    if(B.flowF>=80){B.ann.length=0;game.screen='result';NET.active=false;}
+    if(B.flowF>=80){
+      B.ann.length=0;game.screen='result';NET.active=false;
+      if(online.slot===0){ // 勝ち残り交代(v0.9 PR4): 二重送信防止のためslot0のクライアントだけがサーバーへ通知する
+        const winnerSlot=(B.result==='WIN')?0:(B.result==='LOSE'?1:-1);
+        if(winnerSlot>=0)netSend({t:'matchOver',winnerSlot:winnerSlot});
+      }
+    }
   }
 }
 function netFightStep(cmds0,hold0,cmds1,hold1){ // fightStep()のオンライン版(CPU AI/evq/cpuEvは使わない)
@@ -1552,7 +1564,7 @@ function rFighter(f,ox,oy){ // ポーズ画像があればdrawImage、無けれ�
   if(sp&&sp.ready&&!sp.failed){drawSpriteFighter(f,ox,oy,sp);return;}
   drawFighterShape(f,ox,oy);
 }
-const SPRITE_IDLE_H_FALLBACK={moguzo:560,pisuke:441,godan:536}; // idle実測が不可(file://等でcanvas汚染)な場合のみ使うフォールバック値
+const SPRITE_IDLE_H_FALLBACK={moguzo:520,pisuke:352,godan:536}; // idle実測が不可(file://等でcanvas汚染)な場合のみ使うフォールバック値(v0.9 PR4: サイズ調整版idle差し替えに合わせ再実測)
 function spriteScale(charId){ // 表示倍率=目標身長(BAL.SPRITE_H)/idle.pngの実測キャラ高(alpha bboxの高さ)。全ポーズ同倍率で統一
   const idleE=SPRITES[charId]&&SPRITES[charId].idle;
   const idleH=(idleE&&idleE.bboxH)||SPRITE_IDLE_H_FALLBACK[charId];
