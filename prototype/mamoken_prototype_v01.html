@@ -167,6 +167,7 @@ loadImg('ui_hp_frame','../assets/ui/hp_frame.png');
 loadImg('ui_sgauge_frame','../assets/ui/sgauge_frame.png');
 loadImg('ui_timer_medal','../assets/ui/timer_medal.png');
 loadImg('ui_paw_emblem','../assets/ui/paw_emblem.png');
+for(const c of CHARS)loadImg('face_'+c.id,'../assets/ui/face_'+c.id+'.png'); // v0.10: キャラ選択SF風刷新の顔アイコン(§6.8 v2.5)
 for(let si=1;si<=5;si++){
   loadImg('ui_star_l'+si,'../assets/ui/star_l'+si+'.png');
   loadImg('ui_star_s'+si,'../assets/ui/star_s'+si+'.png');
@@ -1599,26 +1600,33 @@ addEventListener('mousemove',function(e){onMove('m',e.clientX,e.clientY);});
 addEventListener('mouseup',function(){onUp('m');});
 
 /* ================= 画面: セレクト/リザルト当たり判定 ================= */
-function selRect(i){return{x:36,y:180+i*230,w:W-72,h:206};}
+function selRect(i){return{x:36,y:180+i*230,w:W-72,h:206};} // オンライン対戦の3枚カード選択(§6.8対象外・現状維持)
 const DIFF_LEVELS=['EASY','NORMAL','HARD']; // §6.7 v2.4: キャラ選択画面で切替・デフォルトNORMAL・セッション中保持
 function diffRect(i){
   const w=150,gap=10,totalW=3*w+2*gap,x0=(W-totalW)/2;
-  return{x:x0+i*(w+gap),y:866,w:w,h:36};
+  return{x:x0+i*(w+gap),y:780,w:w,h:36};
 }
-const SELECT_BACK_BTN={x:14,y:14,w:88,h:40}; // キャラ選択画面の「もどる」(タイトルへ、§6.8 v2.5)
+let selCharIdx=0; // キャラ選択画面(SF風刷新)で現在フォーカス中のキャラ(§6.8 v2.5)
+function faceRect(i){ // 顔アイコン3つ(下半分・§6.8 v2.5)
+  const s=100,gap=24,totalW=3*s+2*gap,x0=(W-totalW)/2;
+  return{x:x0+i*(s+gap),y:644,w:s,h:s};
+}
+const SELECT_CONFIRM_BTN={x:60,y:824,w:W-120,h:60}; // けってい(§6.8 v2.5)
+const SELECT_BACK_BTN={x:60,y:896,w:W-120,h:48}; // キャラ選択画面の「もどる」(タイトルへ、§6.8 v2.5)
 function selectPress(p){
-  if(inRect(p,SELECT_BACK_BTN.x,SELECT_BACK_BTN.y,SELECT_BACK_BTN.w,SELECT_BACK_BTN.h)){sfx('tap');game.screen='title';return;}
+  for(let i=0;i<3;i++){
+    const r=faceRect(i);
+    if(inRect(p,r.x,r.y,r.w,r.h)){selCharIdx=i;sfx('tap');return;}
+  }
   for(let i=0;i<3;i++){
     const r=diffRect(i);
     if(inRect(p,r.x,r.y,r.w,r.h)){aiDifficulty=DIFF_LEVELS[i];sfx('tap');return;}
   }
-  for(let i=0;i<3;i++){
-    const R2=selRect(i);
-    if(inRect(p,R2.x,R2.y,R2.w,R2.h)){
-      game.p1=i;game.p2=(Math.random()*3)|0;
-      sfx('tap');startBattle();return;
-    }
+  if(inRect(p,SELECT_CONFIRM_BTN.x,SELECT_CONFIRM_BTN.y,SELECT_CONFIRM_BTN.w,SELECT_CONFIRM_BTN.h)){
+    game.p1=selCharIdx;game.p2=(Math.random()*3)|0;
+    sfx('tap');startBattle();return;
   }
+  if(inRect(p,SELECT_BACK_BTN.x,SELECT_BACK_BTN.y,SELECT_BACK_BTN.w,SELECT_BACK_BTN.h)){sfx('tap');game.screen='title';return;}
 }
 function resultPress(p){
   if(lastMatchOnline){ // オンライン対戦後: 最低RESULT_HOLD_MIN_MS(180F/3秒)は保持し、以降タップで次戦へ(8秒で自動進行)
@@ -2658,44 +2666,47 @@ function rTitle(){
   ctx.strokeStyle='#7fd8ff';ctx.lineWidth=2;rr(ONLINE_BTN.x,ONLINE_BTN.y,ONLINE_BTN.w,ONLINE_BTN.h,10);ctx.stroke();
   txt('オンライン対戦',ONLINE_BTN.x+ONLINE_BTN.w/2,ONLINE_BTN.y+ONLINE_BTN.h/2,13,'#dff4ff');
 }
-function rSelect(){
+const DIFF_COL={EASY:'#7CFC00',NORMAL:'#ffd23f',HARD:'#ff6b6b'};
+function rSelect(){ // SF風キャラ選択(§6.8 v2.5): 上=選択中キャラ大写し、下=顔アイコン+難易度+けってい+もどる
+  const c=CHARS[selCharIdx];
   const g=ctx.createLinearGradient(0,0,0,H);
-  g.addColorStop(0,'#1d2436');g.addColorStop(1,'#171a22');
+  g.addColorStop(0,'#20263c');g.addColorStop(0.55,'#1a2032');g.addColorStop(1,'#12141c');
   ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
-  txt('キャラクターをえらぶ',W/2,88,36,'#ffd23f');
-  txt('タップですぐ対戦開始（あいてはランダム）',W/2,132,17,'#aab3c8');
-  ctx.fillStyle='rgba(255,255,255,0.08)';rr(SELECT_BACK_BTN.x,SELECT_BACK_BTN.y,SELECT_BACK_BTN.w,SELECT_BACK_BTN.h,10);ctx.fill();
-  ctx.strokeStyle='rgba(255,255,255,0.4)';ctx.lineWidth=2;rr(SELECT_BACK_BTN.x,SELECT_BACK_BTN.y,SELECT_BACK_BTN.w,SELECT_BACK_BTN.h,10);ctx.stroke();
-  txt('もどる',SELECT_BACK_BTN.x+SELECT_BACK_BTN.w/2,SELECT_BACK_BTN.y+SELECT_BACK_BTN.h/2,15,'#dfe4ee');
-  for(let i=0;i<3;i++){
-    const R2=selRect(i);
-    ctx.fillStyle='#232a3d';rr(R2.x,R2.y,R2.w,R2.h,18);ctx.fill();
-    ctx.strokeStyle='#3a4560';ctx.lineWidth=2;rr(R2.x,R2.y,R2.w,R2.h,18);ctx.stroke();
-    demoF.c=CHARS[i];
-    // 立ち絵は体格比(BAL.PORTRAIT_RATIO)を基準高140へ乗算。ゴダンの横幅が広いためポートレート列を
-    // 右寄せ(+90)・テキスト列を右シフト(+180/+264)してカード内にゆとりを持たせる(§6.6 v2.4.1)
-    const pcx=R2.x+90,tx=R2.x+180,px2=R2.x+264;
-    if(!drawStanding('standing_'+CHARS[i].id,pcx,R2.y+R2.h-4,140*BAL.PORTRAIT_RATIO[CHARS[i].id]))rFighter(demoF,pcx,R2.y+R2.h-22);
-    txt(CHARS[i].name,tx,R2.y+46,31,'#fff','left');
-    txt(CHARS[i].type,tx,R2.y+80,19,'#ffd23f','left');
-    const st=[['ちから',CHARS[i].pips.p],['はやさ',CHARS[i].pips.s],['まもり',CHARS[i].pips.g]];
-    for(let j=0;j<3;j++){
-      txt(st[j][0],tx,R2.y+112+j*26,15,'#9aa2b8','left');
-      for(let k=0;k<5;k++){
-        ctx.fillStyle=(k<st[j][1])?'#ffd23f':'#39415a';
-        ctx.beginPath();ctx.arc(px2+k*22,R2.y+112+j*26,6.5,0,TAU);ctx.fill();
-      }
+  txt('キャラクターをえらぶ',W/2,30,15,'#8891a6');
+  txt(c.name,W/2,80,46,'#fff');
+  txt(c.type,W/2,120,20,'#ffd23f');
+  const st=[['ちから',c.pips.p],['はやさ',c.pips.s],['まもり',c.pips.g]],stX0=(W-260)/2;
+  for(let j=0;j<3;j++){
+    const yy=150+j*26;
+    txt(st[j][0],stX0,yy,14,'#9aa2b8','left');
+    for(let k=0;k<5;k++){
+      ctx.fillStyle=(k<st[j][1])?'#ffd23f':'#39415a';
+      ctx.beginPath();ctx.arc(stX0+70+k*22,yy-5,6.5,0,TAU);ctx.fill();
     }
   }
-  txt('むずかしさ',W/2,850,13,'#8891a6');
-  const DIFF_COL={EASY:'#7CFC00',NORMAL:'#ffd23f',HARD:'#ff6b6b'};
+  demoF.c=c;
+  if(!drawStanding('standing_'+c.id,W/2,632,360*BAL.PORTRAIT_RATIO[c.id]))rFighter(demoF,W/2,540);
+  for(let i=0;i<3;i++){ // 顔アイコン3つ(タップでフォーカス切替)
+    const r=faceRect(i),active=(i===selCharIdx);
+    ctx.fillStyle=active?'rgba(255,210,60,0.16)':'#232a3d';rr(r.x,r.y,r.w,r.h,16);ctx.fill();
+    ctx.strokeStyle=active?'#ffd23f':'#3a4560';ctx.lineWidth=active?3:2;rr(r.x,r.y,r.w,r.h,16);ctx.stroke();
+    if(!drawUiIcon('face_'+CHARS[i].id,r.x+r.w/2,r.y+r.h/2,r.w-16)){
+      demoF.c=CHARS[i];rFighter(demoF,r.x+r.w/2,r.y+r.h-8);
+    }
+  }
+  txt('むずかしさ',W/2,764,13,'#8891a6');
   for(let i=0;i<3;i++){
     const dl=DIFF_LEVELS[i],r=diffRect(i),active=(aiDifficulty===dl);
     ctx.fillStyle=active?'rgba(255,255,255,0.14)':'#232a3d';rr(r.x,r.y,r.w,r.h,10);ctx.fill();
     ctx.strokeStyle=active?DIFF_COL[dl]:'#3a4560';ctx.lineWidth=active?3:2;rr(r.x,r.y,r.w,r.h,10);ctx.stroke();
     txt(dl,r.x+r.w/2,r.y+r.h/2,16,active?DIFF_COL[dl]:'#cfd6e6');
   }
-  txt('奥義: 大地烈掌 / 音速連咆 / 山崩し',W/2,H-16,15,'#8891a6');
+  ctx.fillStyle='#3d6e2f';rr(SELECT_CONFIRM_BTN.x,SELECT_CONFIRM_BTN.y,SELECT_CONFIRM_BTN.w,SELECT_CONFIRM_BTN.h,16);ctx.fill();
+  ctx.strokeStyle='#7CFC00';ctx.lineWidth=3;rr(SELECT_CONFIRM_BTN.x,SELECT_CONFIRM_BTN.y,SELECT_CONFIRM_BTN.w,SELECT_CONFIRM_BTN.h,16);ctx.stroke();
+  txt('けってい（あいてはランダム）',W/2,SELECT_CONFIRM_BTN.y+SELECT_CONFIRM_BTN.h/2,22,'#fff');
+  ctx.fillStyle='rgba(255,255,255,0.06)';rr(SELECT_BACK_BTN.x,SELECT_BACK_BTN.y,SELECT_BACK_BTN.w,SELECT_BACK_BTN.h,12);ctx.fill();
+  ctx.strokeStyle='rgba(255,255,255,0.35)';ctx.lineWidth=2;rr(SELECT_BACK_BTN.x,SELECT_BACK_BTN.y,SELECT_BACK_BTN.w,SELECT_BACK_BTN.h,12);ctx.stroke();
+  txt('もどる',W/2,SELECT_BACK_BTN.y+SELECT_BACK_BTN.h/2,16,'#dfe4ee');
 }
 function rResult(){
   ctx.fillStyle='rgba(10,10,16,0.78)';ctx.fillRect(0,0,W,H);
