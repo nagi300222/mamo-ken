@@ -89,18 +89,18 @@ const BAL={ // 03_data_design.md v2.0 §2 balance table 準拠
     buffer:12, // コマンド先行入力(v0.11 §6.9): 硬直の残りがこのF数以内なら「コマンド+攻撃入力」を保持し、行動可能Fで自動発動
     moves:{
       moguzo:[ // 1:地走り(前進打撃) 2:昇撃(カウンター強化) 3:引き寄せ投げ(リーチ強化)
-        {seq:['right','down'],trigger:'mid',type:'atk',lv:'mid',name:'地走り',s:18,a:3,r:18,d:95,fwd:40,guardDmg:8,color:'#ffb84d',se:'hit'},
-        {seq:['down','right'],trigger:'high',type:'atk',lv:'high',name:'昇撃',s:24,a:3,r:30,d:120,counterMul:1.5,color:'#ff5a3c',se:'hit2'},
-        {seq:['left','right'],trigger:'grab',type:'grab',name:'引き寄せ投げ',s:14,d:100,reachMul:1.5,color:'#ffd23f',se:'grab'}
+        {seq:['right','down'],trigger:'mid',type:'atk',lv:'mid',name:'地走り',s:18,a:3,r:18,d:95,fwd:40,guardDmg:8,color:'#ffb84d',se:'cmdHit'},
+        {seq:['down','right'],trigger:'high',type:'atk',lv:'high',name:'昇撃',s:24,a:3,r:30,d:120,counterMul:1.5,color:'#ff5a3c',se:'cmdHit'},
+        {seq:['left','right'],trigger:'grab',type:'grab',name:'引き寄せ投げ',s:14,d:100,reachMul:1.5,color:'#ffd23f',se:'cmdGrabHit'}
       ],
       pisuke:[ // 1:二連牙(高速・簡略化して単発ヒットで実装) 2:スライディング(下段) 3:宙返り蹴(投げ無敵)
-        {seq:['right','right'],trigger:'mid',type:'atk',lv:'mid',name:'二連牙',s:8,a:3,r:18,d:95,color:'#5ab2ff',se:'hit2'},
-        {seq:['down','left'],trigger:'low',type:'atk',lv:'low',name:'スライディング',s:30,a:4,r:30,d:80,down:true,fwd:60,guardDmg:14,color:'#7cfc00',se:'hit2'},
-        {seq:['left','right'],trigger:'high',type:'atk',lv:'high',name:'宙返り蹴',s:20,a:3,r:24,d:90,fwd:20,color:'#5ab2ff',se:'hit'}
+        {seq:['right','right'],trigger:'mid',type:'atk',lv:'mid',name:'二連牙',s:8,a:3,r:18,d:95,color:'#5ab2ff',se:'cmdHit'},
+        {seq:['down','left'],trigger:'low',type:'atk',lv:'low',name:'スライディング',s:30,a:4,r:30,d:80,down:true,fwd:60,guardDmg:14,color:'#7cfc00',se:'cmdHit'},
+        {seq:['left','right'],trigger:'high',type:'atk',lv:'high',name:'宙返り蹴',s:20,a:3,r:24,d:90,fwd:20,color:'#5ab2ff',se:'cmdHit'}
       ],
       godan:[ // 1:地割れ(削り大) 2:山掴み(アーマー付き投げ) 3:巌の構え(自動見切り→反撃中段)
-        {seq:['down','down'],trigger:'low',type:'atk',lv:'low',name:'地割れ',s:30,a:3,r:30,d:110,down:true,guardChip:30,color:'#8a6540',se:'hit2'},
-        {seq:['right','down'],trigger:'grab',type:'grab',name:'山掴み',s:16,d:110,armor:6,color:'#ff9500',se:'grab'},
+        {seq:['down','down'],trigger:'low',type:'atk',lv:'low',name:'地割れ',s:30,a:3,r:30,d:110,down:true,guardChip:30,color:'#8a6540',se:'cmdHit'},
+        {seq:['right','down'],trigger:'grab',type:'grab',name:'山掴み',s:16,d:110,armor:6,color:'#ff9500',se:'cmdGrabHit'},
         {seq:['left','left'],trigger:'mid',type:'stance',name:'巌の構え',stanceF:12,counterLv:'mid',counterDmg:100,color:'#ffd23f',se:'guard'}
       ]
     }
@@ -251,20 +251,42 @@ function noiseS(dur,vol){if(!AC)return;try{
   g.gain.exponentialRampToValueAtTime(0.001,t+dur);
   s.connect(g);g.connect(AC.destination);s.start(t);
 }catch(e){}}
+const HIT_SE={mid:'hitMid',high:'hitHigh',low:'hitLow'}; // ヒット音3階層(v0.11 (4)): 段属性で選ぶ。cm.se(コマンド技専用)が優先
 function sfx(n){
   if(n==='tap'){tone(640,0.05,'square',0.09);}
   else if(n==='swish'){tone(900,0.06,'sine',0.05,320);}
   else if(n==='hit'){noiseS(0.07,0.2);tone(170,0.09,'square',0.2,90);}
   else if(n==='hit2'){noiseS(0.1,0.26);tone(120,0.14,'square',0.24,60);}
-  else if(n==='guard'){tone(760,0.05,'square',0.1,640);}
+  else if(n==='hitMid'){ // 中段=鋭いスナップ: 短い高域ノイズ+速い減衰のクリック(v0.11 (4))
+    noiseS(0.045,0.22);tone(950,0.045,'square',0.18,280);
+  }
+  else if(n==='hitHigh'){ // 上段=重いインパクト: パンチ寄りの低中音+ノイズ
+    noiseS(0.09,0.26);tone(160,0.12,'square',0.22,70);tone(75,0.1,'sine',0.15,40);
+  }
+  else if(n==='hitLow'){ // 下段=最重+低音: 大きめノイズ+深いサブベース
+    noiseS(0.17,0.32);tone(90,0.22,'sawtooth',0.26,42);tone(45,0.32,'sine',0.22,26);
+  }
+  else if(n==='counterHit'){ // カウンター専用の高い抜け音。通常ヒット音に重ねてヒットストップと同時に鳴らす
+    tone(1500,0.08,'sine',0.17,2300);tone(2100,0.05,'sine',0.11,2700);
+  }
+  else if(n==='cmdHit'){ // コマンド技(打撃)専用の派手めな音
+    noiseS(0.12,0.28);tone(240,0.16,'sawtooth',0.24,720);tone(760,0.08,'square',0.14,1150);
+  }
+  else if(n==='cmdGrabHit'){ // コマンド技(投げ)専用の派手めな音
+    noiseS(0.22,0.34);tone(520,0.1,'sine',0.17,120);tone(90,0.3,'sine',0.26,40);
+  }
+  else if(n==='cmdCounter'){ // 巌の構え等: 反撃成立時の専用の派手めな音
+    tone(1300,0.1,'sine',0.19,2500);noiseS(0.14,0.24);tone(150,0.18,'square',0.2,60);
+  }
+  else if(n==='guard'){tone(1500,0.028,'square',0.09,2700);tone(980,0.04,'square',0.08,620);} // 短い金属質のガード音(v0.11: 高音2連で刃/爪が触れる質感)
   else if(n==='guiin'){tone(480,0.55,'sawtooth',0.15,1500);tone(486,0.55,'sawtooth',0.09,1540);}
   else if(n==='roarStart'){tone(330,0.16,'sine',0.1,150);}
-  else if(n==='roar'){tone(110,0.5,'sawtooth',0.2,190);noiseS(0.35,0.16);}
+  else if(n==='roar'){tone(110,0.5,'sawtooth',0.22,190);noiseS(0.4,0.2);tone(1900,0.12,'sine',0.09,3200);} // 咆哮=専用の派手めな音(低音+ノイズ+高音の煌めき)
   else if(n==='break'){tone(420,0.35,'square',0.18,110);noiseS(0.25,0.18);}
   else if(n==='ko'){noiseS(0.5,0.28);tone(90,0.7,'sine',0.28,45);}
   else if(n==='fight'){tone(660,0.1,'square',0.13);tone(880,0.16,'square',0.13);}
-  else if(n==='ult'){tone(180,0.8,'sawtooth',0.2,900);}
-  else if(n==='ultHit'){noiseS(0.6,0.3);tone(70,0.8,'sine',0.3,34);}
+  else if(n==='ult'){tone(180,0.8,'sawtooth',0.22,900);tone(60,0.9,'sine',0.2,600);noiseS(0.3,0.12);} // 奥義=専用の派手めな音(低音の重ね+ノイズ)
+  else if(n==='ultHit'){noiseS(0.6,0.32);tone(70,0.8,'sine',0.32,34);tone(2300,0.2,'sine',0.14,4300);tone(35,1.0,'sine',0.24,20);} // 奥義ヒット=高い煌めき+超低音を追加
   else if(n==='grabGo'){tone(500,0.08,'sine',0.08,700);}
   else if(n==='grab'){noiseS(0.05,0.15);tone(300,0.08,'square',0.13,220);}
   else if(n==='slam'){noiseS(0.2,0.3);tone(90,0.3,'sine',0.3,40);}
@@ -911,7 +933,7 @@ function attackResolve(att,def){
     fxDmg(att,dmg,m.color||'#ffd23f');fxSpark(att,m.counterLv,0);
     B.fx.push({k:'counter',x:att.baseX,y:relY(att,1.005),f:0,dur:38});
     gainSAmt(def,BAL.CLASH.winS);gainUltStock(def);
-    sfx(m.se||'hit2');B.shake=10;B.hitstop=BAL.HITSTOP[m.counterLv]||9;
+    sfx('cmdCounter');B.shake=10;B.hitstop=BAL.HITSTOP[m.counterLv]||9; // 反撃成立時は専用の派手めな音(v0.11 (4))。m.seはこの構えの入り音用
     def.phase='idle';def.pf=0;def.cmdMove=null;def.cmdIdx=null;
     if(att.hp<=0){att.hp=0;startKO(att.side);}
     return;
@@ -977,11 +999,11 @@ function hitApply(att,def,counterHit,lvOverride,cmdOverride){
   const cmArmorF=(def.phase==='grab'&&def.cmdMove&&def.cmdMove.armor)?def.cmdMove.armor:0; // 山掴み等: 投げ側のアーマー(§6.8)
   if(def.phase==='roar'&&def.pf<=BAL.ROAR.armor){ // 咆哮アーマー
     dmg=Math.round(dmg*0.5);def.hp-=dmg;gainS(att,'aBlk');gainFocus(def,dmg*BAL.FOCUS.gainDmgMul);
-    fxDmg(def,dmg,'#ffb020');fxSpark(def,lv,0);sfx('hit');
+    fxDmg(def,dmg,'#ffb020');fxSpark(def,lv,0);sfx(HIT_SE[lv]||'hit');
     B.hitstop=Math.max(B.hitstop,BAL.HITSTOP[lv]);B.shake=Math.max(B.shake,4);
   }else if(cmArmorF&&def.pf<=cmArmorF){ // コマンド投げのアーマー: 進行中の投げ自体は継続する
     dmg=Math.round(dmg*0.5);def.hp-=dmg;gainS(att,'aBlk');gainFocus(def,dmg*BAL.FOCUS.gainDmgMul);
-    fxDmg(def,dmg,'#ffb020');fxSpark(def,lv,0);sfx('hit');
+    fxDmg(def,dmg,'#ffb020');fxSpark(def,lv,0);sfx(HIT_SE[lv]||'hit');
     B.hitstop=Math.max(B.hitstop,BAL.HITSTOP[lv]);B.shake=Math.max(B.shake,4);
   }else{
     def.hp-=dmg;gainFocus(def,dmg*BAL.FOCUS.gainDmgMul);
@@ -989,12 +1011,13 @@ function hitApply(att,def,counterHit,lvOverride,cmdOverride){
     att.combo++;
     gainSAmt(att,BAL.SG.aHitC[Math.min(att.combo-1,2)]);gainS(def,'got');
     fxDmg(def,dmg,cm&&cm.color||'#ffffff');fxSpark(def,lv,0);
+    if(counterHit)sfx('counterHit'); // カウンター専用の高い抜け音をヒットストップと同フレームで重ねる(v0.11 (4))
     if(A.down){ // 下段: ダウンを奪う大技（スマブラ式ダウン連へ）
       def.phase='down';def.pf=0;def.downHitUsed=false;def.combo=0;def.kb=20;def.cmdBufMove=null;def.cmdBufIdx=null;
-      sfx(cm&&cm.se||'hit2');B.hitstop=Math.max(B.hitstop,BAL.HITSTOP.low);B.shake=Math.max(B.shake,8);
+      sfx((cm&&cm.se)||HIT_SE[lv]||'hit2');B.hitstop=Math.max(B.hitstop,BAL.HITSTOP.low);B.shake=Math.max(B.shake,8);
     }else{
       def.phase='hitstun';def.pf=0;def.stunDur=BAL.HITSTUN[lv]||22;def.combo=0;def.kb=11;def.cmdBufMove=null;def.cmdBufIdx=null;
-      sfx(cm&&cm.se||(att.combo>=2?'hit2':'hit'));
+      sfx((cm&&cm.se)||HIT_SE[lv]||'hit'); // ヒット音3階層(v0.11 (4)): 段属性で選ぶ。コマンド技はcm.seの専用音が優先
       B.hitstop=Math.max(B.hitstop,BAL.HITSTOP[lv]);B.shake=Math.max(B.shake,5);
     }
   }
