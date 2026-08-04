@@ -110,6 +110,8 @@ const CHARS=[
  {id:'godan',name:'ゴダン',type:'パワー',ult:'山崩し',color:'#8a6540',belly:'#d9c19d',dMul:1.18,sMul:0.9,sOfs:2,gMax:110,pips:{p:5,s:2,g:4}}
 ];
 const LEVELS=['high','mid','low'];
+const LV_LABEL={high:'上段',mid:'中段',low:'下段',crouch:'しゃがみ'}; // わざ表(§6.8)等での段属性表示ラベル
+const DIR_ARROW={left:'←',down:'↓',right:'→'}; // BAL.CMD.moves[].seqの方向文字列→矢印表示(わざ表用)
 const CHOICES=['guu','choki','paa'];
 const BEATS={guu:'choki',choki:'paa',paa:'guu'}; // ✊グー＞✌️チョキ＞✋パー＞✊
 const LEVEL_COLOR={high:'#ff5a5a',mid:'#ffe14d',low:'#5ab2ff',crouch:'#8bc34a'}; // テレグラフ段色
@@ -1470,7 +1472,12 @@ function pressRoute(p){
   if(game.screen==='onlineLobby'){onlineLobbyPress(p);return null;}
   if(game.screen==='onlineSelect'){onlineSelectPress(p);return null;}
   if(game.screen==='onlineInterrupted'){onlineInterruptedPress(p);return null;}
+  if(game.screen==='pause'){pausePress(p);return null;}
+  if(game.screen==='movelist'){movelistPress(p);return null;}
   if(game.screen!=='battle'||!B)return null;
+  if(inRect(p,PAUSE_BTN.x,PAUSE_BTN.y,PAUSE_BTN.w,PAUSE_BTN.h)){ // 右上「II」: 高さ別攻撃等より先に判定(§6.8 v2.5)
+    sfx('tap');pauseConfirmingQuit=false;game.screen='pause';return null;
+  }
   if(B.flow==='clash'&&B.clash&&B.clash.phase==='select'){
     // オンライン中は実際のタップをロックステップ入力バッファ(evq)経由のコマンドとして送信し、
     // 両クライアントが同一の同期入力列から決定論的に勝敗を計算する(v0.9.1)。
@@ -1597,7 +1604,9 @@ function diffRect(i){
   const w=150,gap=10,totalW=3*w+2*gap,x0=(W-totalW)/2;
   return{x:x0+i*(w+gap),y:866,w:w,h:36};
 }
+const SELECT_BACK_BTN={x:14,y:14,w:88,h:40}; // キャラ選択画面の「もどる」(タイトルへ、§6.8 v2.5)
 function selectPress(p){
+  if(inRect(p,SELECT_BACK_BTN.x,SELECT_BACK_BTN.y,SELECT_BACK_BTN.w,SELECT_BACK_BTN.h)){sfx('tap');game.screen='title';return;}
   for(let i=0;i<3;i++){
     const r=diffRect(i);
     if(inRect(p,r.x,r.y,r.w,r.h)){aiDifficulty=DIFF_LEVELS[i];sfx('tap');return;}
@@ -1618,6 +1627,48 @@ function resultPress(p){
   }
   if(inRect(p,60,560,W-120,88)){sfx('tap');startBattle();return;}
   if(inRect(p,60,676,W-120,88)){sfx('tap');game.screen='select';return;}
+}
+
+/* ================= ポーズ／わざ表(§6.8 v2.5) ================= */
+let pauseConfirmingQuit=false; // タイトルへ選択時の確認ステップ
+const PAUSE_RECT={resume:{x:60,y:380,w:W-120,h:76},movelist:{x:60,y:472,w:W-120,h:76},quit:{x:60,y:564,w:W-120,h:76}};
+const PAUSE_CONFIRM_RECT={yes:{x:60,y:520,w:(W-140)/2,h:76},no:{x:80+(W-140)/2,y:520,w:(W-140)/2,h:76}};
+const MOVELIST_BACK_RECT={x:60,y:H-96,w:W-120,h:64};
+const COMBO_ROUTES=[ // §6.6 基本コンボ4ルート(キャラ共通の参考値・わざ表表示専用)
+  {name:'ルートA 中→上→下',note:'基本',dmg:'280＋ダウン追撃'},
+  {name:'ルートB 回避成功→カウンター中→上→下',note:'読み勝ちの最大リターン',dmg:'323＋追撃'},
+  {name:'ルートC しゃがみ突き→中→上',note:'ダウン無しの取り回し型',dmg:'193'},
+  {name:'ルートD 踏み込み→つかみ(高速コマ投げ)',note:'ガード崩しの密着択',dmg:'90＋密着継続'}
+];
+function pausePress(p){
+  if(onlineActive()){ // オンライン中は「タイトルへ(切断)」のみ(§6.8 v2.5)
+    if(pauseConfirmingQuit){
+      if(inRect(p,PAUSE_CONFIRM_RECT.yes.x,PAUSE_CONFIRM_RECT.yes.y,PAUSE_CONFIRM_RECT.yes.w,PAUSE_CONFIRM_RECT.yes.h)){
+        sfx('tap');pauseConfirmingQuit=false;onlineReset();game.screen='title';return;
+      }
+      if(inRect(p,PAUSE_CONFIRM_RECT.no.x,PAUSE_CONFIRM_RECT.no.y,PAUSE_CONFIRM_RECT.no.w,PAUSE_CONFIRM_RECT.no.h)){
+        sfx('tap');pauseConfirmingQuit=false;return;
+      }
+      return;
+    }
+    if(inRect(p,PAUSE_RECT.quit.x,PAUSE_RECT.quit.y,PAUSE_RECT.quit.w,PAUSE_RECT.quit.h)){sfx('tap');pauseConfirmingQuit=true;}
+    return;
+  }
+  if(pauseConfirmingQuit){
+    if(inRect(p,PAUSE_CONFIRM_RECT.yes.x,PAUSE_CONFIRM_RECT.yes.y,PAUSE_CONFIRM_RECT.yes.w,PAUSE_CONFIRM_RECT.yes.h)){
+      sfx('tap');pauseConfirmingQuit=false;game.screen='title';return;
+    }
+    if(inRect(p,PAUSE_CONFIRM_RECT.no.x,PAUSE_CONFIRM_RECT.no.y,PAUSE_CONFIRM_RECT.no.w,PAUSE_CONFIRM_RECT.no.h)){
+      sfx('tap');pauseConfirmingQuit=false;return;
+    }
+    return;
+  }
+  if(inRect(p,PAUSE_RECT.resume.x,PAUSE_RECT.resume.y,PAUSE_RECT.resume.w,PAUSE_RECT.resume.h)){sfx('tap');game.screen='battle';return;}
+  if(inRect(p,PAUSE_RECT.movelist.x,PAUSE_RECT.movelist.y,PAUSE_RECT.movelist.w,PAUSE_RECT.movelist.h)){sfx('tap');game.screen='movelist';return;}
+  if(inRect(p,PAUSE_RECT.quit.x,PAUSE_RECT.quit.y,PAUSE_RECT.quit.w,PAUSE_RECT.quit.h)){sfx('tap');pauseConfirmingQuit=true;return;}
+}
+function movelistPress(p){
+  if(inRect(p,MOVELIST_BACK_RECT.x,MOVELIST_BACK_RECT.y,MOVELIST_BACK_RECT.w,MOVELIST_BACK_RECT.h)){sfx('tap');game.screen='pause';}
 }
 
 /* ================= 描画 ================= */
@@ -2132,10 +2183,19 @@ function comboTxt(x,y,n){
   txt(n+' HIT!',0,0,28,'#ffa229');
   ctx.restore();
 }
+const PAUSE_BTN={x:0,y:0,w:0,h:0}; // 戦闘中右上「II」(rHUDで毎フレーム位置確定・pressRouteと共有、§6.8 v2.5)
 function rHUD(){
   const p1=B.p[0],p2=B.p[1];
   hpBar(16,14,232,20,p1,false);
-  hpBar(W-16-232,14,232,20,p2,true);
+  hpBar(W-46-232,14,232,20,p2,true); // 右上に一時停止ボタン分の余白(30px)を確保
+  PAUSE_BTN.x=W-38;PAUSE_BTN.y=8;PAUSE_BTN.w=30;PAUSE_BTN.h=30;
+  ctx.save();
+  ctx.fillStyle='rgba(0,0,0,0.35)';rr(PAUSE_BTN.x,PAUSE_BTN.y,PAUSE_BTN.w,PAUSE_BTN.h,8);ctx.fill();
+  ctx.strokeStyle='rgba(255,255,255,0.5)';ctx.lineWidth=1.5;rr(PAUSE_BTN.x,PAUSE_BTN.y,PAUSE_BTN.w,PAUSE_BTN.h,8);ctx.stroke();
+  ctx.fillStyle='#fff';
+  ctx.fillRect(PAUSE_BTN.x+9,PAUSE_BTN.y+7,5,16);
+  ctx.fillRect(PAUSE_BTN.x+16,PAUSE_BTN.y+7,5,16);
+  ctx.restore();
   if(!drawUiIcon('ui_timer_medal',W/2,26,58)){
     ctx.fillStyle='#12151c';ctx.beginPath();ctx.arc(W/2,26,25,0,TAU);ctx.fill();
     ctx.strokeStyle='#fff';ctx.lineWidth=3;ctx.beginPath();ctx.arc(W/2,26,25,0,TAU);ctx.stroke();
@@ -2603,6 +2663,9 @@ function rSelect(){
   ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
   txt('キャラクターをえらぶ',W/2,88,36,'#ffd23f');
   txt('タップですぐ対戦開始（あいてはランダム）',W/2,132,17,'#aab3c8');
+  ctx.fillStyle='rgba(255,255,255,0.08)';rr(SELECT_BACK_BTN.x,SELECT_BACK_BTN.y,SELECT_BACK_BTN.w,SELECT_BACK_BTN.h,10);ctx.fill();
+  ctx.strokeStyle='rgba(255,255,255,0.4)';ctx.lineWidth=2;rr(SELECT_BACK_BTN.x,SELECT_BACK_BTN.y,SELECT_BACK_BTN.w,SELECT_BACK_BTN.h,10);ctx.stroke();
+  txt('もどる',SELECT_BACK_BTN.x+SELECT_BACK_BTN.w/2,SELECT_BACK_BTN.y+SELECT_BACK_BTN.h/2,15,'#dfe4ee');
   for(let i=0;i<3;i++){
     const R2=selRect(i);
     ctx.fillStyle='#232a3d';rr(R2.x,R2.y,R2.w,R2.h,18);ctx.fill();
@@ -2661,6 +2724,52 @@ function btn(x,y,w,h,label){
   ctx.fillStyle='#2b3350';rr(x,y,w,h,20);ctx.fill();
   ctx.strokeStyle='#7fa2ff';ctx.lineWidth=3;rr(x,y,w,h,20);ctx.stroke();
   txt(label,x+w/2,y+h/2,28,'#fff');
+}
+function rPauseOverlay(){ // 戦闘中右上「II」→ポーズ画面(§6.8 v2.5)
+  ctx.fillStyle='rgba(8,8,14,0.82)';ctx.fillRect(0,0,W,H);
+  txt('ポーズ',W/2,220,40,'#ffd23f');
+  if(pauseConfirmingQuit){
+    txt(onlineActive()?'対戦を中断してタイトルへ戻りますか？':'タイトルへ戻りますか？',W/2,420,20,'#ffe6a3');
+    btn(PAUSE_CONFIRM_RECT.yes.x,PAUSE_CONFIRM_RECT.yes.y,PAUSE_CONFIRM_RECT.yes.w,PAUSE_CONFIRM_RECT.yes.h,'はい');
+    btn(PAUSE_CONFIRM_RECT.no.x,PAUSE_CONFIRM_RECT.no.y,PAUSE_CONFIRM_RECT.no.w,PAUSE_CONFIRM_RECT.no.h,'いいえ');
+    return;
+  }
+  if(onlineActive()){ // オンライン中は「タイトルへ(切断)」のみ(§6.8 v2.5)
+    btn(PAUSE_RECT.quit.x,PAUSE_RECT.quit.y,PAUSE_RECT.quit.w,PAUSE_RECT.quit.h,'タイトルへ（切断）');
+    return;
+  }
+  btn(PAUSE_RECT.resume.x,PAUSE_RECT.resume.y,PAUSE_RECT.resume.w,PAUSE_RECT.resume.h,'つづける');
+  btn(PAUSE_RECT.movelist.x,PAUSE_RECT.movelist.y,PAUSE_RECT.movelist.w,PAUSE_RECT.movelist.h,'わざ表');
+  btn(PAUSE_RECT.quit.x,PAUSE_RECT.quit.y,PAUSE_RECT.quit.w,PAUSE_RECT.quit.h,'タイトルへ');
+}
+function rMovelistOverlay(){ // わざ表=使用キャラのコマンド技3種+基本コンボ4ルート(§6.8/§6.6)
+  ctx.fillStyle='rgba(8,8,14,0.94)';ctx.fillRect(0,0,W,H);
+  const myF=onlineActive()?B.p[online.slot]:B.p[0];
+  txt('わざ表 - '+myF.c.name,W/2,52,28,'#ffd23f');
+  txt('コマンド技',60,90,17,'#7fd8ff','left');
+  const moves=BAL.CMD.moves[myF.c.id]||[];
+  let y=104;
+  for(let i=0;i<moves.length;i++){
+    const m=moves[i];
+    const seqStr=m.seq.map(function(d){return DIR_ARROW[d];}).join('')+'＋'+(m.type==='grab'?'つかみ':LV_LABEL[m.trigger]);
+    ctx.fillStyle='#232a3d';rr(50,y,W-100,66,14);ctx.fill();
+    ctx.strokeStyle='#3a4560';ctx.lineWidth=2;rr(50,y,W-100,66,14);ctx.stroke();
+    txt(seqStr,74,y+26,19,'#ffd23f','left');
+    txt(m.name,74,y+50,16,'#fff','left');
+    txt('dmg'+Math.round(m.d),W-70,y+38,15,'#ffb6b6','right');
+    y+=76;
+  }
+  y+=8;
+  txt('基本コンボ 4ルート',60,y+18,17,'#7fd8ff','left');
+  y+=32;
+  for(const r of COMBO_ROUTES){
+    ctx.fillStyle='#1c2233';rr(50,y,W-100,58,12);ctx.fill();
+    ctx.strokeStyle='#33394f';ctx.lineWidth=2;rr(50,y,W-100,58,12);ctx.stroke();
+    txt(r.name,74,y+22,15,'#fff','left');
+    txt(r.note+' / dmg'+r.dmg,74,y+44,12,'#9aa2b8','left');
+    y+=64;
+  }
+  btn(MOVELIST_BACK_RECT.x,MOVELIST_BACK_RECT.y,MOVELIST_BACK_RECT.w,MOVELIST_BACK_RECT.h,'もどる');
 }
 function rOnlineLobby(){
   const g=ctx.createLinearGradient(0,0,0,H);
@@ -2737,6 +2846,8 @@ function render(){
   else if(game.screen==='onlineSelect')rOnlineSelect();
   else if(game.screen==='onlineInterrupted'){if(B)rBattle();rOnlineInterrupted();}
   else if(game.screen==='onlineLobby')rOnlineLobby();
+  else if(game.screen==='pause'){if(B)rBattle();rPauseOverlay();}
+  else if(game.screen==='movelist'){if(B)rBattle();rMovelistOverlay();}
 }
 
 /* ================= メインループ ================= */
