@@ -175,7 +175,8 @@ for(let si=1;si<=5;si++){
 const POSE_IDS=['idle','guard','hurt','win','tele_high','tele_mid','tele_low',
   'atk_mid','atk_high','atk_low','mikiri','roar_charge','roar',
   'grab_reach','grab_lift','grabbed','down','getup','ko','ult_charge',
-  'crouch','sway','lunge','crouch_atk']; // v0.8.5: 回避3種+しゃがみ突き(v0.8で図形フォールバックのまま保留)
+  'crouch','sway','lunge','crouch_atk',
+  'cmd1','cmd2','cmd3']; // v0.10: コマンド技専用ポーズ(§6.8 v2.5.1。cmd_spareは予備のため未使用)
 const SPRITES={}; // SPRITES[charId][poseId] = {img,ready,failed,canvas}
 for(const c of CHARS){
   SPRITES[c.id]={};
