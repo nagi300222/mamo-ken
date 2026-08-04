@@ -483,10 +483,11 @@ function fxRoarImg(charId){ // 咆哮演出画(該当キャラの画像が無け
 
 /* ================= コア戦闘 ================= */
 function actionable(f){return f.phase==='idle'||f.phase==='guard';}
-function spec(f){
-  const b=BAL.ATK[f.atkLv];
+function specForLv(f,lv){
+  const b=BAL.ATK[lv];
   return{s:Math.max(4,b.s+f.c.sOfs),a:b.a,r:b.r,d:b.d*f.c.dMul,y:b.y,down:!!b.down};
 }
+function spec(f){return specForLv(f,f.atkLv);}
 function gainS(f,k){f.s=Math.min(BAL.SMAX,f.s+BAL.SG[k]*f.c.sMul);}
 function gainSAmt(f,amt){f.s=Math.min(BAL.SMAX,f.s+amt*f.c.sMul);}
 function gainFocus(f,amt){f.focus=Math.min(BAL.FOCUS.max,f.focus+amt);}
@@ -648,8 +649,12 @@ function resolveHits(){
   if(as&&bs){
     a.hasHit=true;b.hasHit=true;
     if(a.atkLv===b.atkLv){startClash('trade');return;} // 同段相打ち→競り合い
-    hitApply(a,b,a.counterReadyF>0);if(B.flow!=='fight')return;
-    hitApply(b,a,b.counterReadyF>0);return;
+    // 異段の同時ヒットは両者とも独立成立させる。先にatkLvを退避しておく
+    // (1回目のhitApplyがdef.atkLv=nullで相手の攻撃情報を消してしまい、
+    //  2回目の呼び出しでspec()が例外を投げていた既存バグの修正。挙動は変えない)
+    const aLv=a.atkLv,bLv=b.atkLv;
+    hitApply(a,b,a.counterReadyF>0,aLv);if(B.flow!=='fight')return;
+    hitApply(b,a,b.counterReadyF>0,bLv);return;
   }
   const ar=roarStriking(a),br=roarStriking(b);
   if(ar&&br){ // 咆哮相打ち: 双方クリーンヒット扱いで奥義ストック+1(v2.3)
@@ -731,13 +736,18 @@ function attackResolve(att,def){
   }
   hitApply(att,def,att.counterReadyF>0);
 }
-function hitApply(att,def,counterHit){
-  const A=spec(att);
+function hitApply(att,def,counterHit,lvOverride){
+  // lvOverride: 異段の同時ヒット処理(resolveHits)専用。2回目の呼び出し時点でatt.atkLvが
+  // 1回目の呼び出し(defとして被弾)によりnull化されている場合があるため、呼び出し側が
+  // 事前に退避しておいた値を明示的に渡す。通常の単発ヒットではatt.atkLvがそのまま使われ、
+  // 挙動は従来と同一。
+  const lv=(lvOverride!=null)?lvOverride:att.atkLv;
+  const A=specForLv(att,lv);
   // カウンター始動のコンボは、以後のチェーンも含めて[1,1,0.9]に緩和(§6.6コンボルートB)
   const scale=(counterHit||att.comboCounter)?BAL.DODGE.counterScale:BAL.SCALE;
   let dmg=Math.round(A.d*scale[Math.min(att.combo,2)]);
   if(counterHit){dmg=Math.round(dmg*BAL.DODGE.counterMul);att.comboCounter=true;} // ×1.25はカウンターの一撃のみ
-  if(att.atkLv==='high'&&att.clinchF>0)dmg+=BAL.DODGE.clinchHighBonus; // 密着中は上段+15
+  if(lv==='high'&&att.clinchF>0)dmg+=BAL.DODGE.clinchHighBonus; // 密着中は上段+15
   let counterFx=!!counterHit;
   if(def.phase==='grab'||def.phase==='grabrec'){ // 打撃はつかみに勝つ(既存の別カウンター)
     dmg=Math.round(dmg*BAL.GRAB.counterMul);
@@ -746,21 +756,21 @@ function hitApply(att,def,counterHit){
   if(counterFx)B.fx.push({k:'counter',x:def.baseX,y:relY(def,1.005),f:0,dur:38});
   if(def.phase==='roar'&&def.pf<=BAL.ROAR.armor){ // 咆哮アーマー
     dmg=Math.round(dmg*0.5);def.hp-=dmg;gainS(att,'aBlk');gainFocus(def,dmg*BAL.FOCUS.gainDmgMul);
-    fxDmg(def,dmg,'#ffb020');fxSpark(def,att.atkLv,0);sfx('hit');
-    B.hitstop=Math.max(B.hitstop,BAL.HITSTOP[att.atkLv]);B.shake=Math.max(B.shake,4);
+    fxDmg(def,dmg,'#ffb020');fxSpark(def,lv,0);sfx('hit');
+    B.hitstop=Math.max(B.hitstop,BAL.HITSTOP[lv]);B.shake=Math.max(B.shake,4);
   }else{
     def.hp-=dmg;gainFocus(def,dmg*BAL.FOCUS.gainDmgMul);
     def.atkLv=null;def.guardLv=null;def.buf=null;
     att.combo++;
     gainSAmt(att,BAL.SG.aHitC[Math.min(att.combo-1,2)]);gainS(def,'got');
-    fxDmg(def,dmg,'#ffffff');fxSpark(def,att.atkLv,0);
+    fxDmg(def,dmg,'#ffffff');fxSpark(def,lv,0);
     if(A.down){ // 下段: ダウンを奪う大技（スマブラ式ダウン連へ）
       def.phase='down';def.pf=0;def.downHitUsed=false;def.combo=0;def.kb=20;
       sfx('hit2');B.hitstop=Math.max(B.hitstop,BAL.HITSTOP.low);B.shake=Math.max(B.shake,8);
     }else{
-      def.phase='hitstun';def.pf=0;def.stunDur=BAL.HITSTUN[att.atkLv]||22;def.combo=0;def.kb=11;
+      def.phase='hitstun';def.pf=0;def.stunDur=BAL.HITSTUN[lv]||22;def.combo=0;def.kb=11;
       sfx(att.combo>=2?'hit2':'hit');
-      B.hitstop=Math.max(B.hitstop,BAL.HITSTOP[att.atkLv]);B.shake=Math.max(B.shake,5);
+      B.hitstop=Math.max(B.hitstop,BAL.HITSTOP[lv]);B.shake=Math.max(B.shake,5);
     }
   }
   if(def.hp<=0){def.hp=0;startKO(def.side);}
