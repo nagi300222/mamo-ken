@@ -290,9 +290,13 @@ const NET={ // ロックステップ状態(startOnlineBattleで対戦ごとに�
   capTick:0,           // ローカル入力の採取カウンタ(毎ロジックF必ず+1。採取と送信は待機中でも止めない=二重送信防止)
   simF:0,              // 次に確定させるシミュレーションフレーム番号
   localQ:{},peerQ:{},  // frame番号 -> {cmds,hold}
-  waiting:false        // true="同期中…"(両者のF入力が揃うまでこのFのロジックは進めない)
+  waiting:false,       // true="同期中…"(両者のF入力が揃うまでこのFのロジックは進めない)
+  matchSeq:0           // 対戦(startOnlineBattle)ごとに+1する通し番号。勝ち残り交代等で対戦が
+                        // 連続する際、前の対戦の終盤に届いた遅延cmdが次の対戦のsimF(0番から
+                        // 再カウント)と衝突してpeerQを汚染しないよう、cmdメッセージに載せて
+                        // 世代を区別する(絶対にリセットしない・増加のみ)
 };
-let netPendingPeerCmds=[]; // 自分がstartOnlineBattle前に受信したcmd(相手が先に対戦開始した場合の取りこぼし防止)
+let netPendingPeerCmds=[]; // 自分がstartOnlineBattle前に受信したcmd(相手が先に対戦開始した場合の取りこぼし防止。matchSeq付き)
 function onlineActive(){return NET.active;}
 function netSend(msg){if(online.ws&&online.ws.readyState===1){try{online.ws.send(JSON.stringify(msg));}catch(e){}}}
 function onlineReset(){
@@ -331,8 +335,12 @@ function onlineConnect(code,mode){
       online.peerPick=msg.charIdx;
       if(game.screen==='onlineSelect')maybeStartOnlineBattle();
     }else if(msg.t==='cmd'){
-      if(NET.active)NET.peerQ[msg.f]={cmds:msg.cmds,hold:msg.hold};
-      else netPendingPeerCmds.push(msg);
+      // matchSeqで対戦の世代を区別する: 今の対戦(NET.matchSeq)宛てのみ即適用。
+      // 未来の対戦(相手が先に開始した分)は保留し、過去の対戦の残骸(前の対戦の終盤に
+      // 遅れて届いた分)は破棄する(simFは対戦ごとに0から数え直すため、破棄しないと
+      // 次の対戦のpeerQを誤って汚染しデシンクの原因になる)
+      if(NET.active&&msg.matchSeq===NET.matchSeq)NET.peerQ[msg.f]={cmds:msg.cmds,hold:msg.hold};
+      else if(msg.matchSeq>NET.matchSeq)netPendingPeerCmds.push(msg);
     }
   });
   ws.addEventListener('close',function(){
@@ -428,10 +436,11 @@ function startOnlineBattle(seed,charIdxBySlot){ // オンライン対戦開始: 
     flow:'intro',flowF:0,hitstop:0,shake:0,
     clash:null,ultUser:-1,ann:[],fx:[],koSide:-1,result:null,pendKO:-1,clashStreak:[0,0]};
   roundInit(true);
+  NET.matchSeq++; // 対戦世代を進める(前の対戦の遅延cmd残骸を弾くため)
   NET.capTick=0;NET.simF=0;NET.waiting=false;
   NET.localQ={};NET.peerQ={};
   for(let i=0;i<BAL.NET.delayF;i++){NET.localQ[i]={cmds:[],hold:null};NET.peerQ[i]={cmds:[],hold:null};}
-  for(const m of netPendingPeerCmds)NET.peerQ[m.f]={cmds:m.cmds,hold:m.hold};
+  for(const m of netPendingPeerCmds){if(m.matchSeq===NET.matchSeq)NET.peerQ[m.f]={cmds:m.cmds,hold:m.hold};} // 念のためこの世代宛て以外は捨てる
   netPendingPeerCmds=[];
   NET.active=true;
   game.screen='battle';
@@ -484,10 +493,11 @@ function fxRoarImg(charId){ // 咆哮演出画(該当キャラの画像が無け
 
 /* ================= コア戦闘 ================= */
 function actionable(f){return f.phase==='idle'||f.phase==='guard';}
-function spec(f){
-  const b=BAL.ATK[f.atkLv];
+function specForLv(f,lv){
+  const b=BAL.ATK[lv];
   return{s:Math.max(4,b.s+f.c.sOfs),a:b.a,r:b.r,d:b.d*f.c.dMul,y:b.y,down:!!b.down};
 }
+function spec(f){return specForLv(f,f.atkLv);}
 function gainS(f,k){f.s=Math.min(BAL.SMAX,f.s+BAL.SG[k]*f.c.sMul);}
 function gainSAmt(f,amt){f.s=Math.min(BAL.SMAX,f.s+amt*f.c.sMul);}
 function gainFocus(f,amt){f.focus=Math.min(BAL.FOCUS.max,f.focus+amt);}
@@ -649,8 +659,12 @@ function resolveHits(){
   if(as&&bs){
     a.hasHit=true;b.hasHit=true;
     if(a.atkLv===b.atkLv){startClash('trade');return;} // 同段相打ち→競り合い
-    hitApply(a,b,a.counterReadyF>0);if(B.flow!=='fight')return;
-    hitApply(b,a,b.counterReadyF>0);return;
+    // 異段の同時ヒットは両者とも独立成立させる。先にatkLvを退避しておく
+    // (1回目のhitApplyがdef.atkLv=nullで相手の攻撃情報を消してしまい、
+    //  2回目の呼び出しでspec()が例外を投げていた既存バグの修正。挙動は変えない)
+    const aLv=a.atkLv,bLv=b.atkLv;
+    hitApply(a,b,a.counterReadyF>0,aLv);if(B.flow!=='fight')return;
+    hitApply(b,a,b.counterReadyF>0,bLv);return;
   }
   const ar=roarStriking(a),br=roarStriking(b);
   if(ar&&br){ // 咆哮相打ち: 双方クリーンヒット扱いで奥義ストック+1(v2.3)
@@ -732,13 +746,18 @@ function attackResolve(att,def){
   }
   hitApply(att,def,att.counterReadyF>0);
 }
-function hitApply(att,def,counterHit){
-  const A=spec(att);
+function hitApply(att,def,counterHit,lvOverride){
+  // lvOverride: 異段の同時ヒット処理(resolveHits)専用。2回目の呼び出し時点でatt.atkLvが
+  // 1回目の呼び出し(defとして被弾)によりnull化されている場合があるため、呼び出し側が
+  // 事前に退避しておいた値を明示的に渡す。通常の単発ヒットではatt.atkLvがそのまま使われ、
+  // 挙動は従来と同一。
+  const lv=(lvOverride!=null)?lvOverride:att.atkLv;
+  const A=specForLv(att,lv);
   // カウンター始動のコンボは、以後のチェーンも含めて[1,1,0.9]に緩和(§6.6コンボルートB)
   const scale=(counterHit||att.comboCounter)?BAL.DODGE.counterScale:BAL.SCALE;
   let dmg=Math.round(A.d*scale[Math.min(att.combo,2)]);
   if(counterHit){dmg=Math.round(dmg*BAL.DODGE.counterMul);att.comboCounter=true;} // ×1.25はカウンターの一撃のみ
-  if(att.atkLv==='high'&&att.clinchF>0)dmg+=BAL.DODGE.clinchHighBonus; // 密着中は上段+15
+  if(lv==='high'&&att.clinchF>0)dmg+=BAL.DODGE.clinchHighBonus; // 密着中は上段+15
   let counterFx=!!counterHit;
   if(def.phase==='grab'||def.phase==='grabrec'){ // 打撃はつかみに勝つ(既存の別カウンター)
     dmg=Math.round(dmg*BAL.GRAB.counterMul);
@@ -747,21 +766,21 @@ function hitApply(att,def,counterHit){
   if(counterFx)B.fx.push({k:'counter',x:def.baseX,y:relY(def,1.005),f:0,dur:38});
   if(def.phase==='roar'&&def.pf<=BAL.ROAR.armor){ // 咆哮アーマー
     dmg=Math.round(dmg*0.5);def.hp-=dmg;gainS(att,'aBlk');gainFocus(def,dmg*BAL.FOCUS.gainDmgMul);
-    fxDmg(def,dmg,'#ffb020');fxSpark(def,att.atkLv,0);sfx('hit');
-    B.hitstop=Math.max(B.hitstop,BAL.HITSTOP[att.atkLv]);B.shake=Math.max(B.shake,4);
+    fxDmg(def,dmg,'#ffb020');fxSpark(def,lv,0);sfx('hit');
+    B.hitstop=Math.max(B.hitstop,BAL.HITSTOP[lv]);B.shake=Math.max(B.shake,4);
   }else{
     def.hp-=dmg;gainFocus(def,dmg*BAL.FOCUS.gainDmgMul);
     def.atkLv=null;def.guardLv=null;def.buf=null;
     att.combo++;
     gainSAmt(att,BAL.SG.aHitC[Math.min(att.combo-1,2)]);gainS(def,'got');
-    fxDmg(def,dmg,'#ffffff');fxSpark(def,att.atkLv,0);
+    fxDmg(def,dmg,'#ffffff');fxSpark(def,lv,0);
     if(A.down){ // 下段: ダウンを奪う大技（スマブラ式ダウン連へ）
       def.phase='down';def.pf=0;def.downHitUsed=false;def.combo=0;def.kb=20;
       sfx('hit2');B.hitstop=Math.max(B.hitstop,BAL.HITSTOP.low);B.shake=Math.max(B.shake,8);
     }else{
-      def.phase='hitstun';def.pf=0;def.stunDur=BAL.HITSTUN[att.atkLv]||22;def.combo=0;def.kb=11;
+      def.phase='hitstun';def.pf=0;def.stunDur=BAL.HITSTUN[lv]||22;def.combo=0;def.kb=11;
       sfx(att.combo>=2?'hit2':'hit');
-      B.hitstop=Math.max(B.hitstop,BAL.HITSTOP[att.atkLv]);B.shake=Math.max(B.shake,5);
+      B.hitstop=Math.max(B.hitstop,BAL.HITSTOP[lv]);B.shake=Math.max(B.shake,5);
     }
   }
   if(def.hp<=0){def.hp=0;startKO(def.side);}
@@ -820,10 +839,9 @@ function startClash(kind){
     f.phase='clash';f.pf=0;f.atkLv=null;f.guardLv=null;f.buf=null;
     f.lunge=0;f.kb=0;f.combo=0;
   }
-  B.clash={phase:'in',f:0,mg:pickMinigame(),pick:[null,null],cpuAt:25+((rng()*45)|0),
-    cpuAt0:onlineActive()?25+((rng()*45)|0):null, // オンライン時のみ: index0側も共有rng駆動でシミュレートし決定性を維持(タップは演出のみ)
+  B.clash={phase:'in',f:0,mg:pickMinigame(),pick:[null,null],cpuAt:25+((rng()*45)|0), // cpuAtはオフライン時のみ使用
     kind:kind,winner:-2,
-    rendaP:0,rendaC:0,p0hits:0,p1hits:0,p0target:null,cpuNextAt:0,cpuNextAt0:0};
+    rendaP:0,rendaC:0,p0hits:0,p1hits:0,p0target:null,p1target:null,cpuNextAt:0};
   B.hitstop=0;
   sfx('guiin');
   announce(kind==='mikiri'?'見切った!!':(kind==='grab'?'つかみ合い!!':'競り合い!!'),46,44,'#ffe14d');
@@ -847,22 +865,25 @@ function clashHit(p){
   for(const b of bs)if(Math.hypot(p.x-b.x,p.y-b.y)<=96)return b.c;
   return null;
 }
-function clashStep(){
+function clashStep(cmds0,cmds1){ // cmds0/cmds1: オンライン時のみ(ロックステップ入力バッファ経由のミニゲームコマンド)。オフラインはundefinedのまま無視される
   const c=B.clash;c.f++;
   if(c.phase==='in'){
     if(c.f>=BAL.CLASH.inF){
       c.phase='select';c.f=0;
       if(c.mg==='hayauchi'){
-        const hf=curDiff().hayauchiF;
         c.p0target=randHayauchiTarget();
-        c.cpuNextAt=hf[0]+((rng()*(hf[1]-hf[0]+1))|0);
-        if(onlineActive())c.cpuNextAt0=hf[0]+((rng()*(hf[1]-hf[0]+1))|0);
+        if(onlineActive()){
+          c.p1target=randHayauchiTarget(); // オンライン: 両者とも実タップで狙う的を個別に持つ(位置は共有rng生成で決定論)
+        }else{
+          const hf=curDiff().hayauchiF;
+          c.cpuNextAt=hf[0]+((rng()*(hf[1]-hf[0]+1))|0);
+        }
       }
     }
   }else if(c.phase==='select'){
-    if(c.mg==='renda')stepRenda(c);
-    else if(c.mg==='hayauchi')stepHayauchi(c);
-    else stepJyanken(c);
+    if(c.mg==='renda')stepRenda(c,cmds0,cmds1);
+    else if(c.mg==='hayauchi')stepHayauchi(c,cmds0,cmds1);
+    else stepJyanken(c,cmds0,cmds1);
   }else if(c.phase==='reveal'){
     if(c.f===BAL.CLASH.revealHitF){
       if(c.mg==='jyanken')resolveJyankenPicks(c);
@@ -871,8 +892,17 @@ function clashStep(){
     if(c.f>=BAL.CLASH.revealHitF+BAL.CLASH.revealF)endClash();
   }
 }
-function stepJyanken(c){
-  if(onlineActive()&&c.pick[0]===null&&c.f>=c.cpuAt0)c.pick[0]=CHOICES[(rng()*3)|0]; // オンライン: index0もシミュレート(タップでは決めない)
+function stepJyanken(c,cmds0,cmds1){
+  if(onlineActive()){ // オンライン: 両者ともロックステップ入力バッファ経由の実タップ(mgPick)で決める
+    if(c.pick[0]===null&&cmds0)for(const cm of cmds0)if(cm.t==='mgPick'){c.pick[0]=cm.choice;break;}
+    if(c.pick[1]===null&&cmds1)for(const cm of cmds1)if(cm.t==='mgPick'){c.pick[1]=cm.choice;break;}
+    if(c.f>=BAL.CLASH.sel){ // 〆切までに未選択ならランダム確定(両クライアントで同一)
+      if(c.pick[0]===null)c.pick[0]=CHOICES[(rng()*3)|0];
+      if(c.pick[1]===null)c.pick[1]=CHOICES[(rng()*3)|0];
+    }
+    if(c.pick[0]!==null&&c.pick[1]!==null){c.phase='reveal';c.f=0;}
+    return;
+  }
   if(c.pick[1]===null&&c.f>=c.cpuAt)c.pick[1]=CHOICES[(rng()*3)|0];
   if(c.f>=BAL.CLASH.sel){
     if(c.pick[0]===null)c.pick[0]=CHOICES[(rng()*3)|0];
@@ -884,10 +914,15 @@ function resolveJyankenPicks(c){ // 手の組み合わせ→勝者(あいこ=-1)
   const x=c.pick[0],y=c.pick[1];
   c.winner=(x===y)?-1:(BEATS[x]===y?0:1);
 }
-function stepRenda(c){ // 120Fのタップ連打綱引き。CPUは毎F自動加算(加算率は難易度別)
-  const R=BAL.MINIGAME.RENDA,D=curDiff();
-  if(onlineActive())c.rendaP+=D.rendaCpuMin+rng()*D.rendaCpuRng; // オンライン: index0もシミュレート(タップは演出のみ)
-  c.rendaC+=D.rendaCpuMin+rng()*D.rendaCpuRng;
+function stepRenda(c,cmds0,cmds1){ // 120Fのタップ連打綱引き。オンラインは実タップ(ロックステップ入力)集計/オフラインはCPU自動加算(難易度別)
+  const R=BAL.MINIGAME.RENDA;
+  if(onlineActive()){ // 両者とも同期された入力列から同一計算(タップ自体の演出はpressRoute側で即時反映済み)
+    if(cmds0)for(const cm of cmds0)if(cm.t==='mgTap')c.rendaP+=R.tapGain;
+    if(cmds1)for(const cm of cmds1)if(cm.t==='mgTap')c.rendaC+=R.tapGain;
+  }else{
+    const D=curDiff();
+    c.rendaC+=D.rendaCpuMin+rng()*D.rendaCpuRng;
+  }
   if(c.f>=R.durationF){
     c.winner=(c.rendaP===c.rendaC)?-1:(c.rendaP>c.rendaC?0:1);
     c.phase='reveal';c.f=0;
@@ -896,19 +931,21 @@ function stepRenda(c){ // 120Fのタップ連打綱引き。CPUは毎F自動加�
 function randHayauchiTarget(){ // パッド内のランダム位置(端は避ける)
   return{x:70+rng()*(W-140),y:PT+110+rng()*(H-PT-160)};
 }
-function stepHayauchi(c){ // 的あて連続タップ。CPUの1個あたり撃破速度は難易度別
-  const H2=BAL.MINIGAME.HAYAUCHI,hf=curDiff().hayauchiF;
-  if(onlineActive()&&c.p0hits<H2.targets&&c.f>=c.cpuNextAt0){ // オンライン: index0もシミュレート(タップは演出のみ)
-    c.p0hits++;
-    c.cpuNextAt0=c.f+hf[0]+((rng()*(hf[1]-hf[0]+1))|0);
-  }
-  if(c.p1hits<H2.targets&&c.f>=c.cpuNextAt){
-    c.p1hits++;
-    c.cpuNextAt=c.f+hf[0]+((rng()*(hf[1]-hf[0]+1))|0);
+function stepHayauchi(c,cmds0,cmds1){ // 的あて連続タップ。オンラインは実タップ(ロックステップ入力)判定/オフラインはCPU自動撃破(難易度別)
+  const H2=BAL.MINIGAME.HAYAUCHI;
+  if(onlineActive()){ // 「何Fに何個目を撃ったか」はmgHitコマンドの到着タイミング自体が表す。的の出現位置は共有rngで生成し両者一致
+    if(cmds0)for(const cm of cmds0)if(cm.t==='mgHit'&&c.p0hits<H2.targets){c.p0hits++;c.p0target=(c.p0hits<H2.targets)?randHayauchiTarget():null;}
+    if(cmds1)for(const cm of cmds1)if(cm.t==='mgHit'&&c.p1hits<H2.targets){c.p1hits++;c.p1target=(c.p1hits<H2.targets)?randHayauchiTarget():null;}
+  }else{
+    const hf=curDiff().hayauchiF;
+    if(c.p1hits<H2.targets&&c.f>=c.cpuNextAt){
+      c.p1hits++;
+      c.cpuNextAt=c.f+hf[0]+((rng()*(hf[1]-hf[0]+1))|0);
+    }
   }
   if(c.p0hits>=H2.targets||c.p1hits>=H2.targets||c.f>=H2.capF){
     c.winner=(c.p0hits===c.p1hits)?-1:(c.p0hits>c.p1hits?0:1);
-    c.p0target=null;c.phase='reveal';c.f=0;
+    c.p0target=null;c.p1target=null;c.phase='reveal';c.f=0;
   }
 }
 function applyClashResult(c){ // 3ミニゲーム共通のリワード適用(旧resolveClashの後半を流用)
@@ -1147,7 +1184,7 @@ function netCaptureAndSend(){ // 毎ロジック呼び出しで必ず1回だけ�
   const held=currentP1Hold();
   const f=NET.capTick+BAL.NET.delayF;
   NET.localQ[f]={cmds:cmds,hold:held};
-  netSend({t:'cmd',f:f,cmds:cmds,hold:held});
+  netSend({t:'cmd',f:f,cmds:cmds,hold:held,matchSeq:NET.matchSeq});
   NET.capTick++;
 }
 function netLogicTick(){
@@ -1171,7 +1208,7 @@ function netLogicTick(){
   }else if(B.flow==='fight'){
     netFightStep(cmds0,hold0,cmds1,hold1);
   }else if(B.flow==='clash'){
-    clashStep();
+    clashStep(cmds0,cmds1);
   }else if(B.flow==='ultCine'){
     ultStep();
   }else if(B.flow==='ko'){
@@ -1278,24 +1315,33 @@ function pressRoute(p){
   if(game.screen==='onlineInterrupted'){onlineInterruptedPress(p);return null;}
   if(game.screen!=='battle'||!B)return null;
   if(B.flow==='clash'&&B.clash&&B.clash.phase==='select'){
-    const cl=B.clash,netOn=onlineActive(); // オンライン中はタップを演出のみに留め、勝敗は共有rngシミュレートに委ねる(決定性維持・PR3スコープ)
+    // オンライン中は実際のタップをロックステップ入力バッファ(evq)経由のコマンドとして送信し、
+    // 両クライアントが同一の同期入力列から決定論的に勝敗を計算する(v0.9.1)。
+    // ローカル演出(sfx/fx)はここで即時反映してよいが、勝敗判定に使うカウント/選択自体は
+    // netLogicTick→clashStep→stepRenda/stepHayauchi/stepJyankenが同期Fで両者同一に確定させる。
+    const cl=B.clash,netOn=onlineActive(),myIdx=netOn?online.slot:0;
     if(cl.mg==='renda'){
-      if(!netOn)cl.rendaP+=BAL.MINIGAME.RENDA.tapGain; // 連打はタップ位置を問わない
+      if(netOn)evq.push({t:'mgTap'});else cl.rendaP+=BAL.MINIGAME.RENDA.tapGain; // 連打はタップ位置を問わない
       B.fx.push({k:'burst',x:p.x,y:p.y,f:0,dur:14}); // タップごとの火花演出
       sfx('tap');
     }else if(cl.mg==='hayauchi'){
-      const tgt=cl.p0target,H2=BAL.MINIGAME.HAYAUCHI;
+      const tgt=netOn?(myIdx===0?cl.p0target:cl.p1target):cl.p0target,H2=BAL.MINIGAME.HAYAUCHI;
       if(tgt&&Math.hypot(p.x-tgt.x,p.y-tgt.y)<=H2.radius){
         sfx('tap');
         B.fx.push({k:'burst',x:tgt.x,y:tgt.y,f:0,dur:16});
-        if(!netOn&&cl.p0hits<H2.targets){
+        if(netOn){evq.push({t:'mgHit'});}
+        else if(cl.p0hits<H2.targets){
           cl.p0hits++;
           cl.p0target=(cl.p0hits<H2.targets)?randHayauchiTarget():null;
         }
       }
     }else{
       const c=clashHit(p);
-      if(c){sfx('tap');if(!netOn&&cl.pick[0]===null)cl.pick[0]=c;}
+      if(c){
+        sfx('tap');
+        if(netOn){if(cl.pick[myIdx]===null)evq.push({t:'mgPick',choice:c});}
+        else if(cl.pick[0]===null)cl.pick[0]=c;
+      }
     }
     return null;
   }
@@ -2087,9 +2133,10 @@ function rPadJyanken(c){
     ctx.fillRect(40,PT+16,(W-80)*rem,14);
     txt('えらべ!!',W/2,PT+56,30,'#fff');
   }
+  const myIdx=onlineActive()?online.slot:0;
   const bs=clashBtns();
   for(const b of bs){
-    const picked=(c.pick[0]===b.c);
+    const picked=(c.pick[myIdx]===b.c);
     const pulse=1+0.04*Math.sin(game.frame*0.3);
     ctx.save();ctx.translate(b.x,b.y);
     ctx.scale(picked?1.1:pulse,picked?1.1:pulse);
@@ -2107,7 +2154,8 @@ function rPadJyanken(c){
   txt('✊グー＞✌️チョキ＞✋パー＞✊',W/2,H-22,15,'#9aa2b8');
 }
 function rPadRenda(c){
-  const R=BAL.MINIGAME.RENDA;
+  const R=BAL.MINIGAME.RENDA,netOn=onlineActive(),myIdx=netOn?online.slot:0;
+  const myVal=(myIdx===0)?c.rendaP:c.rendaC,oppVal=(myIdx===0)?c.rendaC:c.rendaP;
   if(c.phase==='select'){
     const rem=Math.max(0,1-c.f/R.durationF);
     ctx.fillStyle='#2a2f3d';ctx.fillRect(40,PT+16,W-80,14);
@@ -2115,7 +2163,7 @@ function rPadRenda(c){
     ctx.fillRect(40,PT+16,(W-80)*rem,14);
   }
   txt('連打!!',W/2,PT+58,30,'#fff');
-  const diff=Math.max(-R.barRange,Math.min(R.barRange,c.rendaP-c.rendaC));
+  const diff=Math.max(-R.barRange,Math.min(R.barRange,myVal-oppVal)); // オンラインは自分のslot視点に変換して表示
   const midY=PT+220,barX=40,barW=W-80;
   ctx.fillStyle='#1c2030';ctx.fillRect(barX,midY-16,barW,32);
   ctx.strokeStyle='#556';ctx.lineWidth=2;ctx.strokeRect(barX,midY-16,barW,32);
@@ -2127,25 +2175,35 @@ function rPadRenda(c){
   ctx.strokeStyle='#fff';ctx.lineWidth=3;
   ctx.beginPath();ctx.arc(markerX,midY,18,0,TAU);ctx.stroke();
   txt('YOU',barX+20,midY-34,14,'#9f9','left');
-  txt('CPU',barX+barW-20,midY-34,14,'#f99','right');
+  txt(netOn?'あいて':'CPU',barX+barW-20,midY-34,14,'#f99','right');
   txt('連打で押しきれ!',W/2,midY+56,16,'#ccd');
 }
 function rPadHayauchi(c){
-  const H2=BAL.MINIGAME.HAYAUCHI;
+  const H2=BAL.MINIGAME.HAYAUCHI,netOn=onlineActive(),myIdx=netOn?online.slot:0;
+  const myHits=(myIdx===0)?c.p0hits:c.p1hits,oppHits=(myIdx===0)?c.p1hits:c.p0hits;
   txt('はやうち!!',W/2,PT+40,28,'#fff');
   for(let i=0;i<H2.targets;i++){
     ctx.beginPath();ctx.arc(W/2-96+i*22,PT+74,7,0,TAU);
-    ctx.fillStyle=(i<c.p0hits)?'#7cfc00':'#333a4a';ctx.fill();
+    ctx.fillStyle=(i<myHits)?'#7cfc00':'#333a4a';ctx.fill();
     ctx.strokeStyle='#556';ctx.lineWidth=1.5;ctx.stroke();
     ctx.beginPath();ctx.arc(W/2+24+i*22,PT+74,7,0,TAU);
-    ctx.fillStyle=(i<c.p1hits)?'#ff6b6b':'#333a4a';ctx.fill();
+    ctx.fillStyle=(i<oppHits)?'#ff6b6b':'#333a4a';ctx.fill();
     ctx.strokeStyle='#556';ctx.stroke();
   }
   txt('YOU',W/2-52,PT+94,13,'#9f9');
-  txt('CPU',W/2+80,PT+94,13,'#f99');
-  if(c.p0target){
+  txt(netOn?'あいて':'CPU',W/2+80,PT+94,13,'#f99');
+  const myTarget=netOn?(myIdx===0?c.p0target:c.p1target):c.p0target;
+  const oppTarget=netOn?(myIdx===0?c.p1target:c.p0target):null;
+  if(oppTarget){ // オンライン: 相手の的も薄く表示(両者の進行が見えるように)
+    ctx.save();ctx.globalAlpha=0.35;
+    ctx.beginPath();ctx.arc(oppTarget.x,oppTarget.y,H2.radius,0,TAU);
+    ctx.fillStyle='rgba(90,140,255,0.25)';ctx.fill();
+    ctx.lineWidth=3;ctx.strokeStyle='#5a8cff';ctx.stroke();
+    ctx.restore();
+  }
+  if(myTarget){
     const pulse=1+0.06*Math.sin(game.frame*0.5);
-    ctx.save();ctx.translate(c.p0target.x,c.p0target.y);ctx.scale(pulse,pulse);
+    ctx.save();ctx.translate(myTarget.x,myTarget.y);ctx.scale(pulse,pulse);
     ctx.beginPath();ctx.arc(0,0,H2.radius,0,TAU);
     ctx.fillStyle='rgba(255,90,60,0.25)';ctx.fill();
     ctx.lineWidth=5;ctx.strokeStyle='#ff5a3c';ctx.stroke();
