@@ -266,6 +266,69 @@ function star(x,y,r,col){
   ctx.closePath();ctx.fill();ctx.restore();
 }
 
+/* ================= オンライン対戦（v0.9） =================
+ * サーバーはWebSocketリレー専用(ゲームロジックを持たない)。ロビーで両者が揃うと
+ * 共有rngシードを受け取り、対戦本体(コマンド交換ロックステップ)はPR(3)で実装。
+ */
+const CONFIG={WS_URL:'wss://mamoken-relay.n-kyosuke1121.workers.dev'}; // デプロイ済み本番Workers URL
+const ONLINE_BTN={x:0,y:0,w:0,h:0}; // rTitle()で毎フレーム位置を確定(pressRouteと共有)
+const ONLINE_BACK_RECT={x:70,y:864,w:400,h:60};
+const online={
+  state:'menu', // 'menu'|'connecting'|'waiting'|'ready'|'error'
+  mode:null,    // 'create'|'join'
+  code:null,ws:null,slot:null,seed:null,errorMsg:''
+};
+function onlineReset(){
+  if(online.ws){try{online.ws.close();}catch(e){}}
+  online.state='menu';online.mode=null;online.code=null;online.ws=null;online.slot=null;online.seed=null;online.errorMsg='';
+}
+function onlineConnect(code,mode){
+  online.mode=mode;online.code=code;online.state='connecting';
+  let ws;
+  try{ws=new WebSocket(CONFIG.WS_URL+'/ws/'+code);}
+  catch(e){online.state='error';online.errorMsg='接続に失敗しました';return;}
+  online.ws=ws;
+  ws.addEventListener('open',function(){online.state='waiting';});
+  ws.addEventListener('message',function(ev){
+    let msg;try{msg=JSON.parse(ev.data);}catch(e){return;}
+    if(msg.t==='welcome'){online.slot=msg.slot;}
+    else if(msg.t==='ready'){online.seed=msg.seed;online.state='ready';}
+    else if(msg.t==='peerLeft'){if(online.state==='ready'){online.state='error';online.errorMsg='相手が退出しました';}}
+  });
+  ws.addEventListener('close',function(){
+    if(online.state!=='menu'){online.state='error';online.errorMsg='通信が切断されました';}
+  });
+  ws.addEventListener('error',function(){online.state='error';online.errorMsg='接続エラーが発生しました';});
+}
+function wsUrlToHttpBase(wsUrl){return wsUrl.replace(/^ws:/,'http:').replace(/^wss:/,'https:');}
+function onlineCreateRoom(){
+  online.state='connecting';online.mode='create';
+  fetch(wsUrlToHttpBase(CONFIG.WS_URL)+'/api/new-code').then(function(r){return r.json();}).then(function(d){
+    onlineConnect(d.code,'create');
+  }).catch(function(){online.state='error';online.errorMsg='コード取得に失敗しました';});
+}
+function onlineJoinPrompt(){
+  const code=(window.prompt('ルームコード(4文字)を入力してください')||'').trim().toUpperCase();
+  if(!code)return;
+  onlineConnect(code,'join');
+}
+function onlineMenuRects(){
+  return{
+    create:{x:70,y:420,w:W-140,h:84},
+    join:{x:70,y:530,w:W-140,h:84}
+  };
+}
+function onlineLobbyPress(p){
+  if(inRect(p,ONLINE_BACK_RECT.x,ONLINE_BACK_RECT.y,ONLINE_BACK_RECT.w,ONLINE_BACK_RECT.h)){
+    sfx('tap');onlineReset();game.screen='title';return;
+  }
+  if(online.state==='menu'){
+    const r=onlineMenuRects();
+    if(inRect(p,r.create.x,r.create.y,r.create.w,r.create.h)){sfx('tap');onlineCreateRoom();return;}
+    if(inRect(p,r.join.x,r.join.y,r.join.w,r.join.h)){sfx('tap');onlineJoinPrompt();return;}
+  }
+}
+
 /* ================= 状態 ================= */
 const game={screen:'title',p1:0,p2:0,frame:0};
 let B=null;
@@ -1032,9 +1095,13 @@ function rowAt(py,prevRow){ // 段境界±20pxスナップ（誤爆防止）
 }
 function pressRoute(p){
   audioInit();
-  if(game.screen==='title'){sfx('tap');game.screen='select';return null;}
+  if(game.screen==='title'){
+    if(inRect(p,ONLINE_BTN.x,ONLINE_BTN.y,ONLINE_BTN.w,ONLINE_BTN.h)){sfx('tap');onlineReset();game.screen='onlineLobby';return null;}
+    sfx('tap');game.screen='select';return null;
+  }
   if(game.screen==='select'){selectPress(p);return null;}
   if(game.screen==='result'){resultPress(p);return null;}
+  if(game.screen==='onlineLobby'){onlineLobbyPress(p);return null;}
   if(game.screen!=='battle'||!B)return null;
   if(B.flow==='clash'&&B.clash&&B.clash.phase==='select'){
     const cl=B.clash;
@@ -2107,7 +2174,12 @@ function rTitle(){
   txt('段×回避の三すくみ。回避成功でカウンター(×1.25)のチャンス',W/2,880,14,'#ffe14d');
   txt('しゃがみ中に右タップでしゃがみ突き。コンボは4ルート',W/2,904,14,'#ffb37f');
   txt('Sゲージ満タン→右フリック＝咆哮（割りこみ/大削り）',W/2,926,14,'#cfd6e6');
-  txt('prototype v0.8.6 - つかみボタン化＋難易度選択（仮グラ・仮SE）',W/2,946,12,'#8891a6');
+  txt('prototype v0.9 - オンライン対戦（仮グラ・仮SE）',W/2,946,12,'#8891a6');
+  // オンライン対戦ボタン(右上・タップでロビー画面へ)
+  ONLINE_BTN.x=W-142;ONLINE_BTN.y=14;ONLINE_BTN.w=128;ONLINE_BTN.h=36;
+  ctx.fillStyle='rgba(127,216,255,0.16)';rr(ONLINE_BTN.x,ONLINE_BTN.y,ONLINE_BTN.w,ONLINE_BTN.h,10);ctx.fill();
+  ctx.strokeStyle='#7fd8ff';ctx.lineWidth=2;rr(ONLINE_BTN.x,ONLINE_BTN.y,ONLINE_BTN.w,ONLINE_BTN.h,10);ctx.stroke();
+  txt('オンライン対戦',ONLINE_BTN.x+ONLINE_BTN.w/2,ONLINE_BTN.y+ONLINE_BTN.h/2,13,'#dff4ff');
 }
 function rSelect(){
   const g=ctx.createLinearGradient(0,0,0,H);
@@ -2164,12 +2236,42 @@ function btn(x,y,w,h,label){
   ctx.strokeStyle='#7fa2ff';ctx.lineWidth=3;rr(x,y,w,h,20);ctx.stroke();
   txt(label,x+w/2,y+h/2,28,'#fff');
 }
+function rOnlineLobby(){
+  const g=ctx.createLinearGradient(0,0,0,H);
+  g.addColorStop(0,'#1d2436');g.addColorStop(1,'#171a22');
+  ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
+  txt('オンライン対戦',W/2,88,32,'#ffd23f');
+  txt('友だちとルームコードで1対1(3人目以降は観戦)',W/2,128,15,'#aab3c8');
+  if(online.state==='menu'){
+    const r=onlineMenuRects();
+    btn(r.create.x,r.create.y,r.create.w,r.create.h,'ルームを作成(ホスト)');
+    btn(r.join.x,r.join.y,r.join.w,r.join.h,'コードで参加');
+    txt('作成するとコードが発行されます。相手に伝えてください',W/2,660,14,'#8891a6');
+  }else if(online.state==='connecting'){
+    txt('接続中…',W/2,460,26,'#cfd6e6');
+  }else if(online.state==='waiting'){
+    txt('ルームコード',W/2,380,18,'#aab3c8');
+    txt(online.code||'----',W/2,460,72,'#ffd23f');
+    txt('このコードを相手に伝え、「コードで参加」してもらってください',W/2,540,14,'#cfd6e6');
+    if(game.frame%60<38)txt('対戦相手を待っています…',W/2,580,18,'#ffe6a3');
+  }else if(online.state==='ready'){
+    txt('対戦相手が見つかりました！',W/2,420,26,'#7CFC00');
+    txt('ルームコード: '+(online.code||'----'),W/2,470,18,'#ffd23f');
+    txt('あなたは'+(online.slot<2?('P'+(online.slot+1)):'観戦者')+'です',W/2,506,16,'#cfd6e6');
+    txt('オンライン対戦バトルは次のアップデートで対応予定です',W/2,560,14,'#8891a6');
+  }else if(online.state==='error'){
+    txt('エラー',W/2,420,26,'#ff6b6b');
+    txt(online.errorMsg||'不明なエラー',W/2,466,16,'#ffb3b3');
+  }
+  btn(ONLINE_BACK_RECT.x,ONLINE_BACK_RECT.y,ONLINE_BACK_RECT.w,ONLINE_BACK_RECT.h,'タイトルへ戻る');
+}
 function render(){
   ctx.clearRect(0,0,W,H);
   if(game.screen==='title')rTitle();
   else if(game.screen==='select')rSelect();
   else if(game.screen==='battle')rBattle();
   else if(game.screen==='result'){if(B)rBattle();rResult();}
+  else if(game.screen==='onlineLobby')rOnlineLobby();
 }
 
 /* ================= メインループ ================= */
