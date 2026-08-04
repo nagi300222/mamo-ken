@@ -289,9 +289,13 @@ const NET={ // ロックステップ状態(startOnlineBattleで対戦ごとに�
   capTick:0,           // ローカル入力の採取カウンタ(毎ロジックF必ず+1。採取と送信は待機中でも止めない=二重送信防止)
   simF:0,              // 次に確定させるシミュレーションフレーム番号
   localQ:{},peerQ:{},  // frame番号 -> {cmds,hold}
-  waiting:false        // true="同期中…"(両者のF入力が揃うまでこのFのロジックは進めない)
+  waiting:false,       // true="同期中…"(両者のF入力が揃うまでこのFのロジックは進めない)
+  matchSeq:0           // 対戦(startOnlineBattle)ごとに+1する通し番号。勝ち残り交代等で対戦が
+                        // 連続する際、前の対戦の終盤に届いた遅延cmdが次の対戦のsimF(0番から
+                        // 再カウント)と衝突してpeerQを汚染しないよう、cmdメッセージに載せて
+                        // 世代を区別する(絶対にリセットしない・増加のみ)
 };
-let netPendingPeerCmds=[]; // 自分がstartOnlineBattle前に受信したcmd(相手が先に対戦開始した場合の取りこぼし防止)
+let netPendingPeerCmds=[]; // 自分がstartOnlineBattle前に受信したcmd(相手が先に対戦開始した場合の取りこぼし防止。matchSeq付き)
 function onlineActive(){return NET.active;}
 function netSend(msg){if(online.ws&&online.ws.readyState===1){try{online.ws.send(JSON.stringify(msg));}catch(e){}}}
 function onlineReset(){
@@ -330,8 +334,12 @@ function onlineConnect(code,mode){
       online.peerPick=msg.charIdx;
       if(game.screen==='onlineSelect')maybeStartOnlineBattle();
     }else if(msg.t==='cmd'){
-      if(NET.active)NET.peerQ[msg.f]={cmds:msg.cmds,hold:msg.hold};
-      else netPendingPeerCmds.push(msg);
+      // matchSeqで対戦の世代を区別する: 今の対戦(NET.matchSeq)宛てのみ即適用。
+      // 未来の対戦(相手が先に開始した分)は保留し、過去の対戦の残骸(前の対戦の終盤に
+      // 遅れて届いた分)は破棄する(simFは対戦ごとに0から数え直すため、破棄しないと
+      // 次の対戦のpeerQを誤って汚染しデシンクの原因になる)
+      if(NET.active&&msg.matchSeq===NET.matchSeq)NET.peerQ[msg.f]={cmds:msg.cmds,hold:msg.hold};
+      else if(msg.matchSeq>NET.matchSeq)netPendingPeerCmds.push(msg);
     }
   });
   ws.addEventListener('close',function(){
@@ -427,10 +435,11 @@ function startOnlineBattle(seed,charIdxBySlot){ // オンライン対戦開始: 
     flow:'intro',flowF:0,hitstop:0,shake:0,
     clash:null,ultUser:-1,ann:[],fx:[],koSide:-1,result:null,pendKO:-1,clashStreak:[0,0]};
   roundInit(true);
+  NET.matchSeq++; // 対戦世代を進める(前の対戦の遅延cmd残骸を弾くため)
   NET.capTick=0;NET.simF=0;NET.waiting=false;
   NET.localQ={};NET.peerQ={};
   for(let i=0;i<BAL.NET.delayF;i++){NET.localQ[i]={cmds:[],hold:null};NET.peerQ[i]={cmds:[],hold:null};}
-  for(const m of netPendingPeerCmds)NET.peerQ[m.f]={cmds:m.cmds,hold:m.hold};
+  for(const m of netPendingPeerCmds){if(m.matchSeq===NET.matchSeq)NET.peerQ[m.f]={cmds:m.cmds,hold:m.hold};} // 念のためこの世代宛て以外は捨てる
   netPendingPeerCmds=[];
   NET.active=true;
   game.screen='battle';
@@ -1156,7 +1165,7 @@ function netCaptureAndSend(){ // 毎ロジック呼び出しで必ず1回だけ�
   const held=currentP1Hold();
   const f=NET.capTick+BAL.NET.delayF;
   NET.localQ[f]={cmds:cmds,hold:held};
-  netSend({t:'cmd',f:f,cmds:cmds,hold:held});
+  netSend({t:'cmd',f:f,cmds:cmds,hold:held,matchSeq:NET.matchSeq});
   NET.capTick++;
 }
 function netLogicTick(){
