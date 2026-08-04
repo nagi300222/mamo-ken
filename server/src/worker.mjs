@@ -97,6 +97,12 @@ export class Room {
         this.handleMatchOver(ws, msg);
         return; // このメッセージはサーバー内部処理のみ。生のまま中継はしない
       }
+      if (msg && msg.t === 'ping') {
+        // キープアライブ(v0.9.2): 無通信での切断誤検知を減らすため送信者本人にだけpongを返す。
+        // 他クライアントへは中継しない(ノイズになるだけなので)
+        this.send(ws, { t: 'pong' });
+        return;
+      }
       // それ以外(cmd/pick等)はペイロードの意味を解釈せず、他クライアントへそのまま中継するだけ
       this.broadcast(event.data, ws, true);
     });
