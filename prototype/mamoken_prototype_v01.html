@@ -86,6 +86,7 @@ const BAL={ // 03_data_design.md v2.0 §2 balance table 準拠
         // ガードは通常段と同ルールで適用(spec()/attackResolve()がlvを見て処理するため自動的に成立)。
         // guardDmg/guardChipは表の「被ガード-N/削りN」が既定値(BAL.GDMG_A/BAL.CHIP_LOW)と異なる技のみ明示
     bufF:24, // 方向入力バッファ窓(F)
+    buffer:12, // コマンド先行入力(v0.11 §6.9): 硬直の残りがこのF数以内なら「コマンド+攻撃入力」を保持し、行動可能Fで自動発動
     moves:{
       moguzo:[ // 1:地走り(前進打撃) 2:昇撃(カウンター強化) 3:引き寄せ投げ(リーチ強化)
         {seq:['right','down'],trigger:'mid',type:'atk',lv:'mid',name:'地走り',s:18,a:3,r:18,d:95,fwd:40,guardDmg:8,color:'#ffb84d',se:'hit'},
@@ -511,7 +512,8 @@ function newFighter(ci,side){
     lastAtkLv:null,atkStreak:0,yomare:false,
     dodgeType:null,counterReadyF:0,clinchF:0,comboCounter:false,grabS:BAL.GRAB.s,
     shownHp:BAL.HP,ultFlash:0,sNo:0,
-    dirBuf:[],cmdMove:null,cmdIdx:null}; // コマンド技(v0.10 §6.8): 方向入力バッファ/発動中の技定義とインデックス
+    dirBuf:[],cmdMove:null,cmdIdx:null, // コマンド技(v0.10 §6.8): 方向入力バッファ/発動中の技定義とインデックス
+    cmdBufMove:null,cmdBufIdx:null}; // コマンド先行入力(v0.11 §6.9): 硬直中に受理し行動可能Fで自動発動する技の保持先
 }
 function startBattle(){
   lastMatchOnline=false;
@@ -551,7 +553,7 @@ function roundInit(first){
     f.guardLv=null;f.combo=0;f.buf=null;f.kb=0;f.lunge=0;f.sNo=0;f.downHitUsed=false;
     f.lastAtkLv=null;f.atkStreak=0;f.yomare=false;
     f.dodgeType=null;f.counterReadyF=0;f.clinchF=0;f.comboCounter=false;
-    f.dirBuf.length=0;f.cmdMove=null;f.cmdIdx=null;
+    f.dirBuf.length=0;f.cmdMove=null;f.cmdIdx=null;f.cmdBufMove=null;f.cmdBufIdx=null;
     if(first){f.s=0;f.ult=0;f.focus=0;}
   }
   B.timer=BAL.TIME;B.flow='intro';B.flowF=0;B.clash=null;B.pendKO=-1;B.clashStreak=[0,0];
@@ -669,6 +671,30 @@ function startCmdStance(f,m,idx){
   f.dirBuf.length=0;
   sfx(m.se||'guard');
 }
+function stunRemaining(f){ // コマンド先行入力(v0.11 §6.9): 現在の硬直/回収フェーズがidleに戻るまでの残りF。対象外のフェーズはnull
+  switch(f.phase){
+    case 'attack':case 'cmdAtk':{const A=spec(f);return A.s+A.a+A.r-f.pf;}
+    case 'cmdStance':return(f.cmdMove?f.cmdMove.stanceF:0)-f.pf;
+    case 'roar':return BAL.ROAR.s+BAL.ROAR.a+BAL.ROAR.r-f.pf;
+    case 'grabrec':return BAL.GRAB.rec-f.pf;
+    case 'grabHit':return BAL.GRAB.seq-f.pf;
+    case 'hitstun':case 'blockstun':return f.stunDur-f.pf;
+    case 'mikiriRec':return BAL.MIKIRI.whiff-f.pf;
+    case 'dodge':return BAL.DODGE.totalF-f.pf;
+    default:return null;
+  }
+}
+function resolveToIdle(f){ // コマンド先行入力(v0.11 §6.9): idle復帰の瞬間、保持中のコマンド技があれば自動発動する
+  if(f.cmdBufMove){
+    const m=f.cmdBufMove,idx=f.cmdBufIdx;
+    f.cmdBufMove=null;f.cmdBufIdx=null;
+    if(m.type==='grab')startCmdGrab(f,m,idx);
+    else if(m.type==='stance')startCmdStance(f,m,idx);
+    else startCmdAtk(f,m,idx);
+    return;
+  }
+  f.phase='idle';f.pf=0;
+}
 function canChain(f,lv){
   if(f.phase!=='attack'||!f.hasHit||f.combo>=BAL.CMAX)return false;
   if(BAL.ATK[lv].w<=BAL.ATK[f.atkLv].w)return false; // 軽→重ルートのみ（中→上→下）
@@ -702,6 +728,9 @@ function applyInputs(f,opp,cmds,held){
         f.phase='grab';f.pf=0;f.guardLv=null;f.atkLv=null;f.buf=null;f.combo=0;f.hasHit=false;
         f.grabS=f.clinchF>0?BAL.DODGE.clinchGrabS:BAL.GRAB.s; // 発生F値は開始時点でスナップショット(密着F自体はその後も毎F減衰するため)
         sfx('grabGo');
+      }else if(cm&&cm.move.type==='grab'){ // コマンド先行入力(v0.11 §6.9): 硬直残りBAL.CMD.buffer以内なら保持し、idle復帰時に自動発動
+        const rem=stunRemaining(f);
+        if(rem!=null&&rem<=BAL.CMD.buffer){f.cmdBufMove=cm.move;f.cmdBufIdx=cm.idx;}
       }
     }else if(c.t==='dodge'){ // 回避: idle/guardから発生。押下履歴は成否に関わらず常にバッファへ積む(コマンド技判定用)
       pushDirBuf(f,c.kind);
@@ -726,7 +755,9 @@ function applyInputs(f,opp,cmds,held){
         startCrouchAtk(f); // しゃがみ中は高さに関わらずしゃがみ突きへキャンセル
       }else if(f.phase==='idle')startAtk(f,c.lv,false);
       else if(canChain(f,c.lv))startAtk(f,c.lv,true);
-      else{f.buf={lv:c.lv};f.bufF=BAL.BUF;}
+      else if(cm&&(cm.move.type==='atk'||cm.move.type==='stance')&&cm.move.trigger===c.lv&&stunRemaining(f)!=null&&stunRemaining(f)<=BAL.CMD.buffer){
+        f.cmdBufMove=cm.move;f.cmdBufIdx=cm.idx; // コマンド先行入力(v0.11 §6.9)
+      }else{f.buf={lv:c.lv};f.bufF=BAL.BUF;}
     }
   }
   if(f.phase==='idle'&&held){
@@ -752,49 +783,49 @@ function advance(f){
     else f.lunge=maxLunge*Math.max(0,1-(t-A.s-A.a)/A.r);
     if(t>=total){
       if(!f.hasHit)gainS(f,'whiff');
-      f.phase='idle';f.pf=0;f.atkLv=null;f.combo=0;f.lunge=0;f.cmdMove=null;f.cmdIdx=null;
+      f.pf=0;f.atkLv=null;f.combo=0;f.lunge=0;f.cmdMove=null;f.cmdIdx=null;resolveToIdle(f);
     }
   }else if(f.phase==='cmdStance'){ // 巌の構え等: stanceF内は無敵(下記attackResolveで処理)。時間切れは空振り扱いで終了
-    if(f.cmdMove&&f.pf>=f.cmdMove.stanceF){f.phase='idle';f.pf=0;f.cmdMove=null;f.cmdIdx=null;}
+    if(f.cmdMove&&f.pf>=f.cmdMove.stanceF){f.pf=0;f.cmdMove=null;f.cmdIdx=null;resolveToIdle(f);}
   }else if(f.phase==='roar'){
     const R=BAL.ROAR;
-    if(f.pf>=R.s+R.a+R.r){f.phase='idle';f.pf=0;}
+    if(f.pf>=R.s+R.a+R.r){f.pf=0;resolveToIdle(f);}
   }else if(f.phase==='grab'){
     if(f.pf>grabStartup(f)+BAL.GRAB.a+2){f.phase='grabrec';f.pf=0;}
   }else if(f.phase==='grabrec'){
-    if(f.pf>=BAL.GRAB.rec){f.phase='idle';f.pf=0;f.cmdMove=null;f.cmdIdx=null;}
+    if(f.pf>=BAL.GRAB.rec){f.pf=0;f.cmdMove=null;f.cmdIdx=null;resolveToIdle(f);}
   }else if(f.phase==='grabHit'){
     const opp=B.p[1-f.side];
     if(f.pf===19&&opp.phase==='grabbed'){ // 叩きつけ
       const dmg=Math.round((f.cmdMove?f.cmdMove.d:BAL.GRAB.d)*f.c.dMul); // コマンド投げ(v0.10)はdmgをcmdMoveから取る
       opp.hp-=dmg;gainFocus(opp,dmg*BAL.FOCUS.gainDmgMul);
-      opp.phase='hitstun';opp.pf=0;opp.stunDur=BAL.GRAB.stun;opp.kb=34;
+      opp.phase='hitstun';opp.pf=0;opp.stunDur=BAL.GRAB.stun;opp.kb=34;opp.cmdBufMove=null;opp.cmdBufIdx=null;
       fxDmg(opp,dmg,(f.cmdMove&&f.cmdMove.color)||'#ffb6ff');fxBurst(opp.baseX,opp.y-40);
       sfx((f.cmdMove&&f.cmdMove.se)||'slam');B.shake=11;B.hitstop=Math.max(B.hitstop,6);
       gainSAmt(f,10);
       if(opp.hp<=0){opp.hp=0;startKO(opp.side);}
     }
-    if(f.pf>=BAL.GRAB.seq){f.phase='idle';f.pf=0;f.cmdMove=null;f.cmdIdx=null;}
+    if(f.pf>=BAL.GRAB.seq){f.pf=0;f.cmdMove=null;f.cmdIdx=null;resolveToIdle(f);}
   }else if(f.phase==='grabbed'){
-    if(f.pf>40){f.phase='idle';f.pf=0;}
+    if(f.pf>40){f.pf=0;resolveToIdle(f);}
   }else if(f.phase==='hitstun'){
-    if(f.pf>=f.stunDur){f.phase='idle';f.pf=0;}
+    if(f.pf>=f.stunDur){f.pf=0;resolveToIdle(f);}
   }else if(f.phase==='blockstun'){
     if(f.pf>=f.stunDur){
-      if(f.held){f.phase='guard';f.guardLv=f.held;}
-      else f.phase='idle';
       f.pf=0;
+      if(f.held){f.phase='guard';f.guardLv=f.held;f.cmdBufMove=null;f.cmdBufIdx=null;} // ガードへ復帰する場合は先行入力を破棄(idleからの発動ルールのため)
+      else resolveToIdle(f);
     }
   }else if(f.phase==='mikiriRec'){ // 見切り空振り: ガード不能の硬直
-    if(f.pf>=BAL.MIKIRI.whiff){f.phase='idle';f.pf=0;}
+    if(f.pf>=BAL.MIKIRI.whiff){f.pf=0;resolveToIdle(f);}
   }else if(f.phase==='dodge'){ // 回避: 1-10F判定 / 11-22F戻り。位置は変えない
-    if(f.pf>=BAL.DODGE.totalF){f.phase='idle';f.pf=0;f.dodgeType=null;}
+    if(f.pf>=BAL.DODGE.totalF){f.pf=0;f.dodgeType=null;resolveToIdle(f);}
   }else if(f.phase==='down'){ // ダウン: 追撃1発を受けたら以後は無敵のまま起き上がりへ
     if(f.pf>=BAL.DOWN.downF){f.phase='wake';f.pf=0;}
   }else if(f.phase==='wake'){ // 起き上がり20F全身無敵→強制起き上がり(起き攻め不可)
-    if(f.pf>=BAL.DOWN.wakeF){f.phase='idle';f.pf=0;f.downHitUsed=false;}
+    if(f.pf>=BAL.DOWN.wakeF){f.pf=0;f.downHitUsed=false;resolveToIdle(f);}
   }else if(f.phase==='dizzy'){
-    if(f.pf>=BAL.DIZZY){f.phase='idle';f.pf=0;f.guard=BAL.GRECOVER;}
+    if(f.pf>=BAL.DIZZY){f.pf=0;f.guard=BAL.GRECOVER;resolveToIdle(f);}
   }
 }
 function striking(f){
@@ -823,7 +854,7 @@ function resolveHits(){
     const d=BAL.ROAR.d;
     a.hp-=d;b.hp-=d;gainFocus(a,d*BAL.FOCUS.gainDmgMul);gainFocus(b,d*BAL.FOCUS.gainDmgMul);
     gainUltStock(a);gainUltStock(b);
-    for(const f of B.p){f.phase='hitstun';f.pf=0;f.stunDur=BAL.ROAR.stun;f.kb=30;f.atkLv=null;}
+    for(const f of B.p){f.phase='hitstun';f.pf=0;f.stunDur=BAL.ROAR.stun;f.kb=30;f.atkLv=null;f.cmdBufMove=null;f.cmdBufIdx=null;}
     fxDmg(a,d,'#ff8040');fxDmg(b,d,'#ff8040');sfx('roar');fxRoarImg(a.c.id);fxRoarImg(b.c.id);
     B.shake=10;B.hitstop=BAL.HITSTOP.roar;
     if(a.hp<=0)a.hp=0;if(b.hp<=0)b.hp=0;
@@ -868,7 +899,7 @@ function attackResolve(att,def){
     // 巌の構え等(v0.10): 構え成立中は相手の攻撃を無効化し、即座に反撃(construction技のcounterDmg)を与える
     const m=def.cmdMove,dmg=Math.round(m.counterDmg*def.c.dMul);
     att.hp-=dmg;gainFocus(att,dmg*BAL.FOCUS.gainDmgMul);
-    att.phase='hitstun';att.pf=0;att.stunDur=BAL.HITSTUN[m.counterLv]||24;att.combo=0;att.kb=20;
+    att.phase='hitstun';att.pf=0;att.stunDur=BAL.HITSTUN[m.counterLv]||24;att.combo=0;att.kb=20;att.cmdBufMove=null;att.cmdBufIdx=null;
     att.atkLv=null;att.guardLv=null;att.buf=null;
     fxDmg(att,dmg,m.color||'#ffd23f');fxSpark(att,m.counterLv,0);
     B.fx.push({k:'counter',x:att.baseX,y:relY(att,1.005),f:0,dur:38});
@@ -952,10 +983,10 @@ function hitApply(att,def,counterHit,lvOverride,cmdOverride){
     gainSAmt(att,BAL.SG.aHitC[Math.min(att.combo-1,2)]);gainS(def,'got');
     fxDmg(def,dmg,cm&&cm.color||'#ffffff');fxSpark(def,lv,0);
     if(A.down){ // 下段: ダウンを奪う大技（スマブラ式ダウン連へ）
-      def.phase='down';def.pf=0;def.downHitUsed=false;def.combo=0;def.kb=20;
+      def.phase='down';def.pf=0;def.downHitUsed=false;def.combo=0;def.kb=20;def.cmdBufMove=null;def.cmdBufIdx=null;
       sfx(cm&&cm.se||'hit2');B.hitstop=Math.max(B.hitstop,BAL.HITSTOP.low);B.shake=Math.max(B.shake,8);
     }else{
-      def.phase='hitstun';def.pf=0;def.stunDur=BAL.HITSTUN[lv]||22;def.combo=0;def.kb=11;
+      def.phase='hitstun';def.pf=0;def.stunDur=BAL.HITSTUN[lv]||22;def.combo=0;def.kb=11;def.cmdBufMove=null;def.cmdBufIdx=null;
       sfx(cm&&cm.se||(att.combo>=2?'hit2':'hit'));
       B.hitstop=Math.max(B.hitstop,BAL.HITSTOP[lv]);B.shake=Math.max(B.shake,5);
     }
@@ -977,7 +1008,7 @@ function roarResolve(att,def){
     fxDmg(def,d,'#ffb020');B.shake=Math.max(B.shake,6);
   }else{ // 咆哮クリーンヒット(被ガード/アーマー減衰以外): 奥義ストック+1(v2.3)
     def.hp-=R.d;gainFocus(def,R.d*BAL.FOCUS.gainDmgMul);
-    def.phase='hitstun';def.pf=0;def.stunDur=R.stun;
+    def.phase='hitstun';def.pf=0;def.stunDur=R.stun;def.cmdBufMove=null;def.cmdBufIdx=null;
     def.atkLv=null;def.guardLv=null;def.buf=null;def.combo=0;def.kb=34;
     gainS(att,'aHit');gainS(def,'got');gainUltStock(att);
     fxDmg(def,R.d,'#ff8040');fxSpark(def,'mid',0,true); // 咆哮ヒット=大スパーク
@@ -1151,7 +1182,7 @@ function endClash(){
   for(const f of B.p){if(f.phase==='clash'){f.phase='idle';f.pf=0;}}
   if(c.winner>=0){
     const lose=B.p[1-c.winner];
-    lose.phase='hitstun';lose.pf=0;lose.stunDur=BAL.CLASH.loserStun; // 勝者は追撃1発確定
+    lose.phase='hitstun';lose.pf=0;lose.stunDur=BAL.CLASH.loserStun;lose.cmdBufMove=null;lose.cmdBufIdx=null; // 勝者は追撃1発確定
     if(c.winner===0)announce('追撃チャンス!!',40,30,'#7CFC00');
   }
   B.flow='fight';
@@ -1172,7 +1203,7 @@ function ultStep(){
   if(B.flowF===BAL.ULT.impact){
     const dmg=Math.round(BAL.ULT.d*att.c.dMul);
     def.hp-=dmg;att.ult=0;gainFocus(def,dmg*BAL.FOCUS.gainDmgMul);
-    def.phase='hitstun';def.pf=0;def.stunDur=46;def.kb=46;
+    def.phase='hitstun';def.pf=0;def.stunDur=46;def.kb=46;def.cmdBufMove=null;def.cmdBufIdx=null;
     def.atkLv=null;def.guardLv=null;def.buf=null;def.combo=0;
     fxDmg(def,dmg,'#ff2d78');fxBurst(def.baseX,330);
     sfx('ultHit');B.shake=18;
