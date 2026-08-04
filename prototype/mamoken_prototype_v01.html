@@ -483,7 +483,7 @@ function newFighter(ci,side){
 function startBattle(){
   lastMatchOnline=false;
   rng=mulberry32((Date.now()>>>0)^0x5f3759df);
-  B={f:0,round:1,wins:[0,0],timer:BAL.TIME,
+  B={f:0,round:1,wins:[0,0],timer:BAL.TIME,fightStartF:0, // v0.10 (8): YOUマーカーの強調2秒判定に使う「fightに入ったF」
     p:[newFighter(game.p1,0),newFighter(game.p2,1)],
     flow:'intro',flowF:0,hitstop:0,shake:0,
     clash:null,ultUser:-1,ann:[],fx:[],koSide:-1,result:null,pendKO:-1,clashStreak:[0,0]};
@@ -494,7 +494,7 @@ function startOnlineBattle(seed,charIdxBySlot){ // オンライン対戦開始: 
   lastMatchOnline=true;
   rng=mulberry32(seed>>>0);
   game.p1=charIdxBySlot[0];game.p2=charIdxBySlot[1];
-  B={f:0,round:1,wins:[0,0],timer:BAL.TIME,
+  B={f:0,round:1,wins:[0,0],timer:BAL.TIME,fightStartF:0, // v0.10 (8): YOUマーカーの強調2秒判定に使う「fightに入ったF」
     p:[newFighter(game.p1,0),newFighter(game.p2,1)],
     flow:'intro',flowF:0,hitstop:0,shake:0,
     clash:null,ultUser:-1,ann:[],fx:[],koSide:-1,result:null,pendKO:-1,clashStreak:[0,0]};
@@ -1313,7 +1313,7 @@ function logic(){
   if(B.flow==='intro'){
     evq.length=0;B.flowF++;
     if(B.flowF===58){announce('FIGHT!',44,64,'#ff5a3c');sfx('fight');}
-    if(B.flowF>=70)B.flow='fight';
+    if(B.flowF>=70){B.flow='fight';B.fightStartF=B.f;} // ラウンド開始時刻(YOUマーカーの強調2秒判定用、v0.10 (8))
   }else if(B.flow==='fight'){
     fightStep();
   }else if(B.flow==='clash'){
@@ -1361,7 +1361,7 @@ function netLogicTick(){
   if(B.flow==='intro'){
     B.flowF++;
     if(B.flowF===58){announce('FIGHT!',44,64,'#ff5a3c');sfx('fight');}
-    if(B.flowF>=70)B.flow='fight';
+    if(B.flowF>=70){B.flow='fight';B.fightStartF=B.f;} // ラウンド開始時刻(YOUマーカーの強調2秒判定用、v0.10 (8))
   }else if(B.flow==='fight'){
     netFightStep(cmds0,hold0,cmds1,hold1);
   }else if(B.flow==='clash'){
@@ -1706,6 +1706,20 @@ function fpos(f){
     return x;
   }
   return f.baseX+f.lunge*face-f.kb*face;
+}
+function rYouMarker(){ // オンライン: 自キャラの頭上に「YOU」+▼(§6.8 v2.5(8))。位置はSPRITE_Hに追従、開始2秒は強調
+  const myF=B.p[online.slot];
+  const [mx,my]=fighterXY(myF);
+  const headY=my-BAL.SPRITE_H[myF.c.id]*1.02; // 表示身長基準の頭上オフセット(体格差に追従)
+  const big=B.flow==='fight'&&(B.f-B.fightStartF)<120; // ラウンド開始2秒(120F)だけ大きく強調
+  const scl=big?1.6:1;
+  ctx.save();
+  ctx.globalAlpha=big?1:0.82;
+  ctx.fillStyle='#ffd23f';ctx.strokeStyle='rgba(0,0,0,0.6)';ctx.lineWidth=1.5;
+  ctx.beginPath();ctx.moveTo(mx,headY+12*scl);ctx.lineTo(mx-8*scl,headY);ctx.lineTo(mx+8*scl,headY);ctx.closePath();
+  ctx.fill();ctx.stroke();
+  ctx.restore();
+  txt('YOU',mx,headY-13*scl,big?26:15,'#ffd23f');
 }
 function fighterXY(f){
   if(f.phase==='grabbed'){
@@ -2614,6 +2628,7 @@ function rBattle(){
   }
   const xyB=fighterXY(B.p[1]),xyA=fighterXY(B.p[0]);
   rFighter(B.p[1],xyB[0],xyB[1]);rFighter(B.p[0],xyA[0],xyA[1]);
+  if(onlineActive()&&(B.flow==='fight'||B.flow==='intro'))rYouMarker();
   rFx();
   rClashPicks();
   inMirrorZone=false;
