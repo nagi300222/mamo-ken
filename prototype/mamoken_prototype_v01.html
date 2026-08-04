@@ -170,6 +170,10 @@ loadImg('ui_sgauge_frame','../assets/ui/sgauge_frame.png');
 loadImg('ui_timer_medal','../assets/ui/timer_medal.png');
 loadImg('ui_paw_emblem','../assets/ui/paw_emblem.png');
 for(const c of CHARS)loadImg('face_'+c.id,'../assets/ui/face_'+c.id+'.png'); // v0.10: キャラ選択SF風刷新の顔アイコン(§6.8 v2.5)
+for(const c of CHARS)loadImg('facesq_'+c.id,'../assets/ui/facesq_'+c.id+'.png'); // v0.11: キャラ選択8枠グリッド用の正方形顔アイコン(§6.9)
+loadImg('dirbtn_left','../assets/ui/dirbtn_left.png'); // v0.11: 方向ボタンの影絵アイコン(←=スウェー、§6.9)
+loadImg('dirbtn_down','../assets/ui/dirbtn_down.png'); // ↓=しゃがみ
+loadImg('dirbtn_right','../assets/ui/dirbtn_right.png'); // →=踏み込み
 for(let si=1;si<=5;si++){
   loadImg('ui_star_l'+si,'../assets/ui/star_l'+si+'.png');
   loadImg('ui_star_s'+si,'../assets/ui/star_s'+si+'.png');
@@ -1515,7 +1519,8 @@ function toL(cx2,cy2){
 }
 const GRAB_BTN={r:55,cx:70,cy:PT+70}; // つかみボタン(直径110px・左上=Lトリガー位置イメージ、§6.8 v2.5)
 function inGrabBtn(p){const dx=p.x-GRAB_BTN.cx,dy=p.y-GRAB_BTN.cy;return dx*dx+dy*dy<=GRAB_BTN.r*GRAB_BTN.r;}
-const DIR_BTN_ARROW={sway:'←',crouch:'↓',lunge:'→'};
+const DIR_BTN_ARROW={sway:'←',crouch:'↓',lunge:'→'}; // 画像未読込時の図形フォールバック用
+const DIR_BTN_ASSET={sway:'dirbtn_left',crouch:'dirbtn_down',lunge:'dirbtn_right'}; // 回避モーションの影絵アイコン(v0.11 §6.9)
 function leftLowerRect(){ // 左ゾーン下半分(方向ボタン用の矩形)
   const y0=PT+(H-PT)/2;
   return{x:10,y:y0+8,w:W/2-20,h:(H-PT)/2-16};
@@ -2400,7 +2405,7 @@ function rPad(){
   drawShield(W/4,PT+upperH*0.4,26);
   txt('ガード(ホールド)',W/4,PT+upperH*0.4+42,16,'rgba(207,232,255,0.85)');
   txt('ジャストタップ＝見切り',W/4,PT+upperH*0.4+62,12,'rgba(255,225,90,0.75)');
-  for(const b of dirBtnRects()){ // 方向ボタン(←↓→): タップで即時発火、押下瞬間だけ肉球ボタン同様にハイライト
+  for(const b of dirBtnRects()){ // 方向ボタン(←↓→): タップで即時発火、押下瞬間だけ発光させる(v0.11: 矢印→回避モーションの影絵アイコンに変更)
     const flashing=b.dir===dirBtnFlashKind&&performance.now()-dirBtnFlashAt<140;
     ctx.save();ctx.globalAlpha=flashing?0.9:0.5;
     ctx.fillStyle=flashing?'rgba(255,210,60,0.22)':'rgba(255,255,255,0.03)';
@@ -2408,7 +2413,11 @@ function rPad(){
     ctx.strokeStyle=flashing?'#ffd23f':'rgba(255,255,255,0.16)';ctx.lineWidth=flashing?3:1.5;
     rr(b.x+4,b.y+4,b.w-8,b.h-8,14);ctx.stroke();
     ctx.restore();
-    txt(DIR_BTN_ARROW[b.dir],b.x+b.w/2,b.y+b.h/2+11,30,flashing?'#ffe14d':'rgba(160,230,180,0.85)');
+    ctx.save();
+    if(flashing){ctx.shadowColor='#ffd23f';ctx.shadowBlur=18;} // 押下時の発光(§6.9)
+    const iconOk=drawUiIcon(DIR_BTN_ASSET[b.dir],b.x+b.w/2,b.y+b.h/2,Math.min(b.w,b.h)*0.62);
+    ctx.restore();
+    if(!iconOk)txt(DIR_BTN_ARROW[b.dir],b.x+b.w/2,b.y+b.h/2+11,30,flashing?'#ffe14d':'rgba(160,230,180,0.85)');
   }
   // 右ゾーン: 高さタップ＝段（上/中/下）。発火はリリース時
   const rh=(H-PT)/3,labels=['上段','中段','下段'];
