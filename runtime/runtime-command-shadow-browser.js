@@ -1,10 +1,13 @@
 (function installRuntimeCommandShadow(root){
   'use strict';
 
-  const VERSION='runtime-command-shadow-browser-v1';
+  const VERSION='runtime-command-shadow-browser-v2';
+  const REPORT_VERSION='mamoken-command-shadow-report-v1';
   const MAX_OBSERVATIONS=256;
-  const CURRENT_CHARACTERS=new Set(['moguzo','pisuke','godan']);
-  const CURRENT_LEVELS=new Set(['high','mid','low']);
+  const CURRENT_CHARACTERS=['moguzo','pisuke','godan'];
+  const CURRENT_LEVELS=['high','mid','low'];
+  const CURRENT_CHARACTER_SET=new Set(CURRENT_CHARACTERS);
+  const CURRENT_LEVEL_SET=new Set(CURRENT_LEVELS);
   const requestedEnabled=/(?:^|[?&])mamokenShadow=1(?:&|$)/.test((root.location&&root.location.search)||'');
   let disabledReason=null;
   let observations=[];
@@ -29,8 +32,8 @@
   function fail(message){throw new TypeError(message);}
   function assertFrame(value){if(!Number.isInteger(value)||value<0)fail('frame must be a non-negative integer');return value;}
   function assertPlayer(value){if(value!==0&&value!==1)fail('player must be 0 or 1');return value;}
-  function assertCharacter(value){if(!CURRENT_CHARACTERS.has(value))fail('characterId must be a current character');return value;}
-  function assertTrigger(value){if(value!=='grab'&&!CURRENT_LEVELS.has(value))fail('trigger must be high, mid, low, or grab');return value;}
+  function assertCharacter(value){if(!CURRENT_CHARACTER_SET.has(value))fail('characterId must be a current character');return value;}
+  function assertTrigger(value){if(value!=='grab'&&!CURRENT_LEVEL_SET.has(value))fail('trigger must be high, mid, low, or grab');return value;}
   function assertDirection(value){if(value!=='left'&&value!=='down'&&value!=='right')fail('direction must be left, down, or right');return value;}
 
   function fallbackDecision(trigger){
@@ -78,8 +81,49 @@
     };
   }
 
+  function counter(){return{observations:0,mismatches:0};}
+  function addCount(bucket,key,item){
+    bucket[key].observations++;
+    if(!item.matches)bucket[key].mismatches++;
+  }
+  function observationHash(){return fnv1a32(stableStringify({version:VERSION,observations:observations}));}
+  function buildSummary(){
+    const byPlayer={'0':counter(),'1':counter()};
+    const byCharacter={moguzo:counter(),pisuke:counter(),godan:counter()};
+    const byTrigger={high:counter(),mid:counter(),low:counter(),grab:counter()};
+    let mismatches=0;
+    for(const item of observations){
+      if(!item.matches)mismatches++;
+      addCount(byPlayer,String(item.player),item);
+      addCount(byCharacter,item.characterId,item);
+      addCount(byTrigger,item.trigger,item);
+    }
+    return{
+      observationCount:observations.length,
+      mismatchCount:mismatches,
+      observationHash:observationHash(),
+      firstFrame:observations.length?observations[0].frame:null,
+      lastFrame:observations.length?observations[observations.length-1].frame:null,
+      byPlayer:byPlayer,
+      byCharacter:byCharacter,
+      byTrigger:byTrigger
+    };
+  }
+  function buildReport(){
+    return{
+      reportVersion:REPORT_VERSION,
+      observerVersion:VERSION,
+      requestedEnabled:requestedEnabled,
+      enabled:api.enabled,
+      disabledReason:disabledReason,
+      summary:buildSummary(),
+      observations:clone(observations)
+    };
+  }
+
   const api={
     version:VERSION,
+    reportVersion:REPORT_VERSION,
     get enabled(){return requestedEnabled&&disabledReason===null;},
     get requestedEnabled(){return requestedEnabled;},
     get disabledReason(){return disabledReason;},
@@ -112,8 +156,11 @@
         observations:observations
       });
     },
-    hash:function(){return fnv1a32(stableStringify({version:VERSION,observations:observations}));},
-    mismatchCount:function(){return observations.reduce(function(total,item){return total+(item.matches?0:1);},0);}
+    summary:function(){return clone(buildSummary());},
+    report:function(){return clone(buildReport());},
+    exportReport:function(){return JSON.stringify(buildReport(),null,2)+'\n';},
+    hash:function(){return observationHash();},
+    mismatchCount:function(){return buildSummary().mismatchCount;}
   };
 
   Object.defineProperty(root,'__MAMOKEN_COMMAND_SHADOW__',{value:api,writable:false,configurable:true});
