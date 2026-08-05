@@ -764,17 +764,23 @@ function runtimeCommandShadowObserve(f,c,cm){
 function runtimeCommandCanaryResolve(f,c,legacyCm){
   const api=window.__MAMOKEN_COMMAND_SHADOW__;
   if(!api||!api.canaryEnabled||lastMatchOnline||NET.active)return legacyCm;
+  const trigger=c.t==='grab'?'grab':c.lv;
+  const payload={
+    frame:B.f,
+    player:f.side,
+    characterId:f.c.id,
+    trigger:trigger,
+    directions:f.dirBuf.map(function(entry){return{direction:entry.dir,frame:entry.f};})
+  };
+  let attemptId=null;
   try{
-    const trigger=c.t==='grab'?'grab':c.lv;
-    const result=api.resolveTrigger({
-      frame:B.f,
-      player:f.side,
-      characterId:f.c.id,
-      trigger:trigger,
-      directions:f.dirBuf.map(function(entry){return{direction:entry.dir,frame:entry.f};})
-    });
+    const result=api.resolveTrigger(payload);
     if(!result||!result.accepted)return legacyCm;
-    if(result.decision.kind==='fallback')return null;
+    attemptId=result.attemptId;
+    if(result.decision.kind==='fallback'){
+      api.completeCanaryAttempt(attemptId,'fallback');
+      return null;
+    }
     const idx=result.decision.slot-1;
     const moves=BAL.CMD.moves[f.c.id];
     const move=moves&&moves[idx];
@@ -784,9 +790,14 @@ function runtimeCommandCanaryResolve(f,c,legacyCm){
     if(!compatible||move.name!==result.decision.name||result.decision.commandId!==f.c.id+':slot-'+(idx+1)){
       throw new Error('Core command canary resolved an unknown current move');
     }
+    api.completeCanaryAttempt(attemptId,'command');
     return{move:move,idx:idx};
   }catch(error){
-    try{api.disable(error);}catch(ignore){}
+    try{
+      api.failCanaryAttempt(attemptId,payload,attemptId==null?'resolve-error':'runtime-validation-failed',error);
+    }catch(auditError){
+      try{api.disable(error);}catch(ignore){}
+    }
     return legacyCm;
   }
 }

@@ -45,13 +45,27 @@ function buildReport({extra=false,mismatch=false}={}){
   return{api,text:api.exportReport(),report:JSON.parse(api.exportReport())};
 }
 
+function toLegacyV1(report){
+  return{
+    reportVersion:'mamoken-command-shadow-report-v1',
+    observerVersion:report.observerVersion,
+    requestedEnabled:report.requestedEnabled,
+    enabled:report.enabled,
+    disabledReason:report.disabledReason,
+    summary:structuredClone(report.summary),
+    observations:structuredClone(report.observations)
+  };
+}
+
 const first=buildReport();
 const second=buildReport();
 assert.equal(first.text,second.text);
 assert.equal(first.text.endsWith('\n'),true);
-assert.equal(first.api.reportVersion,'mamoken-command-shadow-report-v1');
-assert.equal(first.report.reportVersion,'mamoken-command-shadow-report-v1');
-assert.equal(first.report.observerVersion,'runtime-command-shadow-browser-v3');
+assert.equal(first.api.reportVersion,'mamoken-command-shadow-report-v2');
+assert.equal(first.report.reportVersion,'mamoken-command-shadow-report-v2');
+assert.equal(first.report.observerVersion,'runtime-command-shadow-browser-v4');
+assert.equal(first.report.requestedShadow,true);
+assert.equal(first.report.requestedCanary,false);
 assert.equal(first.report.summary.observationCount,3);
 assert.equal(first.report.summary.mismatchCount,0);
 assert.equal(first.report.summary.firstFrame,1);
@@ -66,6 +80,11 @@ assert.equal(first.report.summary.byTrigger.mid.observations,1);
 assert.equal(first.report.summary.byTrigger.low.observations,0);
 assert.equal(first.report.summary.byTrigger.grab.observations,1);
 assert.equal(first.report.summary.observationHash,first.api.hash());
+assert.equal(first.report.canary.requested,false);
+assert.equal(first.report.canary.enabled,false);
+assert.equal(first.report.canary.summary.attemptCount,0);
+assert.equal(first.report.canary.summary.eventHash,first.api.canaryHash());
+assert.deepEqual(first.report.canary.events,[]);
 assert.equal(Object.hasOwn(first.report,'timestamp'),false);
 assert.equal(Object.hasOwn(first.report,'url'),false);
 assert.equal(Object.hasOwn(first.report,'userAgent'),false);
@@ -74,24 +93,42 @@ assert.equal(first.text.includes('mamokenCoreCommand=1'),false);
 
 const parsed=parseShadowReportText(first.text,'fixture');
 assert.equal(parsed.summary.observationHash,first.api.hash());
+assert.equal(parsed.canary.summary.eventHash,first.api.canaryHash());
 assert.deepEqual(normalizeShadowReport(first.report),parsed);
 
 const identical=compareShadowReports(first.report,second.report);
 assert.equal(identical.compatible,true);
 assert.equal(identical.identical,true);
+assert.equal(identical.observationsIdentical,true);
+assert.equal(identical.canaryIdentical,true);
 assert.equal(identical.firstDifferenceIndex,null);
+assert.equal(identical.canaryFirstDifferenceIndex,null);
 assert.equal(identical.delta.observationCount,0);
 assert.equal(identical.delta.mismatchCount,0);
+assert.equal(identical.delta.canaryAttemptCount,0);
 
 const changed=buildReport({extra:true,mismatch:true});
 const different=compareShadowReports(first.report,changed.report);
 assert.equal(different.compatible,true);
 assert.equal(different.identical,false);
+assert.equal(different.observationsIdentical,false);
+assert.equal(different.canaryIdentical,true);
 assert.equal(different.firstDifferenceIndex,3);
 assert.equal(different.delta.observationCount,1);
 assert.equal(different.delta.mismatchCount,1);
 assert.equal(different.firstDifference.left,null);
 assert.equal(different.firstDifference.right.matches,false);
+
+const legacyV1=toLegacyV1(first.report);
+const legacyParsed=normalizeShadowReport(legacyV1,'legacy');
+assert.equal(legacyParsed.reportVersion,'mamoken-command-shadow-report-v1');
+assert.equal(legacyParsed.canary,null);
+const legacySame=compareShadowReports(legacyV1,structuredClone(legacyV1));
+assert.equal(legacySame.compatible,true);
+assert.equal(legacySame.identical,true);
+const crossVersion=compareShadowReports(legacyV1,first.report);
+assert.equal(crossVersion.compatible,false);
+assert.equal(crossVersion.identical,false);
 
 {
   const tampered=structuredClone(first.report);
@@ -107,6 +144,11 @@ assert.equal(different.firstDifference.right.matches,false);
   const tampered=structuredClone(first.report);
   tampered.summary.byCharacter.moguzo.observations=99;
   assert.throws(()=>normalizeShadowReport(tampered,'tampered'),/byCharacter.*does not match/);
+}
+{
+  const tampered=structuredClone(first.report);
+  tampered.canary.summary.eventHash='00000000';
+  assert.throws(()=>normalizeShadowReport(tampered,'tampered'),/eventHash.*does not match/);
 }
 {
   const tampered=structuredClone(first.report);
@@ -146,4 +188,4 @@ assert.equal(/localStorage/.test(browserSource),false);
 assert.equal(/createElement\(['"]a['"]\)/.test(browserSource),false);
 assert.equal(/Date\.|new Date/.test(browserSource),false);
 
-console.log(`runtime shadow export tests passed; reportHash=${first.report.summary.observationHash}; observations=3; compareExit=0/1/2`);
+console.log(`runtime shadow export tests passed; reportHash=${first.report.summary.observationHash}; canaryHash=${first.report.canary.summary.eventHash}; observations=3; compareExit=0/1/2`);
