@@ -1,74 +1,78 @@
-# Fable5 Rollup — T00 / T00.1 / T02 / T03 / T04
+# Fable5 Rollup — T00〜T11
 
-## PRs and SHAs
+## PRs and merge state
 
 | Task | PR | SHA / state | Purpose |
 |---|---:|---|---|
-| T00 | #17 | merged | Audit tool and generated current implementation reports. |
-| T00.1 | #18 | merged | Correct source/dist comparison source for audit reports. |
-| T02 | #21 | merged as `66b13bcbeb5bd53a41d63e8236cd53b1a16ca48c` | Core types, current constants, validation, stable serialization, hash, and determinism fixtures. |
-| T03 | #25 | merged as `090c7ffe2f7bad3e88db342e83e801fffe43a0df` | Pure normalized input history, command matching, conflict resolution, and command prebuffer contracts. |
-| T04 | #26 | Draft; implementation head before reports `a12095f53024fe3433009cb92921e974536b38c5` | MoveSpec migration, current combo compatibility, provisional Capacity/repeat/height contracts, and deterministic combo evaluator. |
+| T00 | #17 | merged `5c566d1452b611c0942420c81c954e7bc741858d` | Current implementation audit and generated reports. |
+| T00.1 | #18 | merged `f257ae49d554480846a402e48ecff1275a4a3b3b` | Correct source/dist audit comparison. |
+| T01 | #16 | merged `6f707d171da9dbbcfec1e3ba1bd08d333d480500` | Canonical data design v2.7. |
+| T02 | #21 | merged `66b13bcbeb5bd53a41d63e8236cd53b1a16ca48c` | Core types, constants, validation, stable hash and determinism. |
+| T03 | #25 | merged `090c7ffe2f7bad3e88db342e83e801fffe43a0df` | Normalized input history and deterministic command parser. |
+| T04 | #26 | merged `acb8a021d456bf1f17e843b546b1071203b55a33` | MoveSpec migration and combo contracts. |
+| T05 | #27 | merged `b3a326b2eb8436eeb315095d0495b800b3cb60fc` | Defense triangle, just step and step-cancel contracts. |
+| T06 | #28 | merged `74cca88d9d4d2fadf37bc6f8880648a1b4d3e0e8` | Gauge separation, Roar clean hit and fair Gyuiin. |
+| T07 | #29 | merged `4430a99ac098890cc32a2ce81b010520148e6c3c` | Eight isolated ability hooks. |
+| T08 | #30 | merged `72b5bdfb809636b650f5ad3dac83985706117a03` | Deterministic sprite-processing contract. |
+| T09 | #31 | merged `8fad1f19a0d3725dcd1dc220c45a05e3c07a9f26` | Public-observation CPU, personas and AI determinism. |
+| T10 | #32 | merged `5103c18557addbbc6fba516452349d3831e19c54` | Eight-slot roster and portrait UI contract. |
+| T11 | #33 | merge candidate on `feature/roster-core3-v1` | Rebuilt current-three roster data. |
 
 Superseded T02 drafts #19 and #20 were closed without merge. Issue #23 preserved the unpublished first T03 attempt and was closed after PR #25 merged.
 
-## Tests / verification inputs
+## Verification commands
 
-- GitHub Actions `Core contract check` — clean Linux checkout with Node.js 24.
-- `npm ci` — validates `package-lock.json` and installs local TypeScript / Sharp dependencies.
-- `npm run check:core` — TypeScript strict check plus Core snapshot/determinism tests.
-- `npm run check:command` — T03 input-history, matching, conflict, timing, P1/P2, and 10,000F tests.
-- `npm run check:combat` — T04 MoveSpec migration, combo compatibility, provisional rules, validators, and 10,000F tests.
-- `node tools/audit_current_impl.mjs` — T00 snapshot and source/dist contract audit, before and after build.
-- `npm run build:mobile` — validates the existing mobile build path without committing generated differences.
-- `git diff --check` — whitespace/diff sanity.
-- Scoped diff check for `prototype/mamoken_prototype_v01.html`, `index.html`, `dist/mamoken_mobile.html`, `server`, and `assets`.
+- `npm ci`
+- `npm run check:core`
+- `npm run check:command`
+- `npm run check:combat`
+- `npm run check:defense`
+- `npm run check:gauge`
+- `npm run check:ability`
+- `npm run check:sprite`
+- `npm run check:cpu`
+- `npm run check:ui`
+- `npm run check:roster`
+- `node tools/audit_current_impl.mjs`
+- `npm run build:mobile`
+- second audit after build
+- `git diff --check`
+- scoped diff check for runtime HTML, index, generated dist, server and assets
 
-## T02 judgment material
+## Core judgments
 
-- Current constants are referenced from T00 `reports/current_impl_constants.json` rather than manually re-copied.
-- Current phase and flow lists are compared against T00 `reports/current_impl_phases.json`.
-- Validators cover normal move specs, command move specs, and current character combat fields.
-- Determinism fixtures cover same-seed replay, negative seed/input divergence, and P1/P2 swap mirror equivalence through 10,000F.
-- Baseline and normalized swap hash: `7a28953f`.
-- Changed-seed hash: `4727347e` (divergence frame 1).
-- Changed-input hash: `f11b781c` (divergence frame 4096).
+### T02–T04
 
-## T03 judgment material
+- Current constants and existing commands are sourced from T00 reports rather than copied into a second BAL.
+- Stable serialization rejects ambiguous values and excludes `lastHash` from its own hash target.
+- T03 current compatibility remains direction history 24F and command prebuffer 12F.
+- T04 current compatibility remains max 3Hit, 14F cancel window, `[1.0, 0.9, 0.8]` scale and one 0.5 down follow-up.
+- Capacity, repeat decay, height limits and new cancel routes remain provisional.
 
-- Normalized input events carry numeric `frame`, `order`, and `player` fields.
-- Direction press/release updates pure direction and hold histories; parser code has no DOM, Canvas, Audio, timer, locale, wall-clock, or random dependency.
-- Current timing remains `24F` direction history and `12F` command prebuffer, sourced from `CURRENT_CONTRACT.bal.CMD`.
-- Provisional timing is isolated: gap `18F`, 3-direction `28F`, 4-direction `38F`, final grace `10F`, same-direction gap `2F`, hold detect `30F`, charge complete `45F`.
-- Current nine commands are generated from `CURRENT_CONTRACT.bal.CMD.moves`, not hand-copied.
-- Prebuffer boundary: `0F immediate`, `11F queued`, `12F queued`, `13F rejected`.
-- Parser 10,000F hash: `f5a7abc5`; changed same-frame order diverges at frame `731`.
-- P1/P2 fixture consumes logical directions and does not mirror inside the parser.
-- Runtime, BAL, current nine moves, online protocol, server, UI, assets, and dist behavior remain unchanged by T03.
+### T05–T07
 
-## T04 judgment material
+- Current dodge is 22F with active frames 1–10 and the fixed high/mid/low triangle.
+- Provisional just step is sway/step center ±2F, return -4F, Counter Ready 22F and one tagged hit-only cancel token.
+- S, Focus, Ult and Charge are separate. Charge exists only for the charge archetype and never grows through time or Gyuiin.
+- Canonical Gyuiin is exactly damage 120 + Ult 1; S, Focus, Charge, streak and follow-up stun are zero for every character and ability.
+- Eight abilities are isolated hooks and cannot change Gyuiin.
 
-- `CombatMoveSpec` and `CombatCharacterSpec` represent the v2.7 target contracts without replacing T02's audited runtime types.
-- Current crouch/mid/high/low records source Startup, Active, Recovery, Damage, Telegraph, runtime weight, S gains, and chain constants from `CURRENT_CONTRACT.bal`.
-- Current contact-frame audit is fixed as `startupF + 1`: crouch 11F, mid 15F, high 23F, low 31F.
-- Current chain compatibility remains max 3Hit, 14F cancel window, ascending runtime weight, scales `[1.0, 0.9, 0.8]`, counter route `[1.0, 1.0, 0.9]`, and one 0.5 down followup.
-- Current route fixtures: `中→上→下 = 280`, `しゃがみ→中→上 = 193`, counter `中→上→下 = 323`, low down followup `75`.
-- Capacity, Weight classes, target Hit scales, minimum scale, repeat damage/hitstun/roar decay, and style height limits remain isolated in `provisional` profiles.
-- Reach/Knockback conceptual mappings, crouch target level mapping, and per-move target cancel arrays are not silently promoted to confirmed runtime behavior.
-- Combat 10,000F hash: `7fab5c7a`; changed route hash `b9bd6d05`; divergence frame `731`.
-- Runtime, BAL, current normals/combo, command moves, online protocol, server, UI, assets, and dist behavior remain unchanged by T04.
+### T08–T10
 
-## T05 / T06 handoff material
+- Sprite processing removes only exterior-connected white, preserves enclosed interior white, requires 24 poses and keeps per-character overrides outside base data.
+- D-02 S6 is `crouch / sway / lunge / crouch_atk`; down and KO remain horizontal.
+- CPU receives only public observations after configured perception delay, uses a separate AI PRNG and logs accepted decisions.
+- All 28 style pairings pass 1,000 deterministic synthetic bouts and P1/P2 swap checks.
+- UI contract provides eight visible roster slots, five independent display axes, non-color-only input cues, safe portrait hit regions and online disconnect confirmation.
 
-- T05 can consume T03 input resolution and T04 MoveSpec/combo contracts while preserving current/provisional separation.
-- Crouch target level mapping and Reach/Knockback migration should be resolved with defense/evasion/contact semantics, not by editing current BAL in T04.
-- Runtime integration remains a separate scoped PR with online long-run determinism regression.
-- T06 should consume preserved Gyuiin/minigame legacy values from T00 snapshot; T02–T04 intentionally do not rebalance them.
+### T11
 
-## Gate
+- Existing command slots 1–3 are generated from `CURRENT_CONTRACT.bal.CMD.moves` and remain unchanged.
+- Each current character has seven command slots, one provisional special, five recommended combos, a matching Persona, current BAL audit and canonical-to-current asset mapping.
+- New slots 4–7 and specials remain provisional data and are not enabled in the legacy runtime.
 
-- T02: merged after `Core contract check` success.
-- T03: merged after PR #25 `Core contract check` success and scoped runtime/BAL/protocol diff 0.
-- T04: `MERGE_GO` only after PR #26 `Core contract check` passes and scoped review confirms runtime/BAL/protocol diff 0.
-- T05: start after T04 merge.
-- T06 inputs: preserved and accepted as audit facts, not yet behavior changes.
+## Safety boundary
+
+Through T11, the legacy runtime HTML, existing BAL values, existing nine command moves, online protocol, server, UI rendering, source assets and generated dist behavior remain unchanged. The new files are pure Core contracts, deterministic evaluators, validators, reports and tests.
+
+Runtime migration, activation of provisional moves/values, actual sprite conversion and online state/wire integration remain separate explicit work with long-run desync and gameplay regression gates.
