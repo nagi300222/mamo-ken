@@ -760,6 +760,33 @@ function runtimeCommandShadowObserve(f,c,cm){
     try{api.disable(error);}catch(ignore){}
   }
 }
+/* T17 offline runtime command canary */
+function runtimeCommandCanaryResolve(f,c,legacyCm){
+  const api=window.__MAMOKEN_COMMAND_SHADOW__;
+  if(!api||!api.canaryEnabled||lastMatchOnline||NET.active)return legacyCm;
+  try{
+    const trigger=c.t==='grab'?'grab':c.lv;
+    const result=api.resolveTrigger({
+      frame:B.f,
+      player:f.side,
+      characterId:f.c.id,
+      trigger:trigger,
+      directions:f.dirBuf.map(function(entry){return{direction:entry.dir,frame:entry.f};})
+    });
+    if(!result||!result.accepted)return legacyCm;
+    if(result.decision.kind==='fallback')return null;
+    const idx=result.decision.slot-1;
+    const moves=BAL.CMD.moves[f.c.id];
+    const move=moves&&moves[idx];
+    if(!move||move.name!==result.decision.name||result.decision.commandId!==f.c.id+':slot-'+(idx+1)){
+      throw new Error('Core command canary resolved an unknown current move');
+    }
+    return{move:move,idx:idx};
+  }catch(error){
+    try{api.disable(error);}catch(ignore){}
+    return legacyCm;
+  }
+}
 function applyInputs(f,opp,cmds,held){
   f.held=held;
   if(f.ult>=BAL.ULT.stock){ // 奥義スタンバイ: パッド強制変形（モードA）
@@ -780,7 +807,8 @@ function applyInputs(f,opp,cmds,held){
         sfx('roarStart');
       }else if(f.s<BAL.SMAX){f.sNo=14;} // ゲージ不足時のS枠点滅フィードバックは両サイドとも出す(オンラインは両者とも人間のため)
     }else if(c.t==='grab'){
-      const cm=detectCommandMove(f);runtimeCommandShadowObserve(f,c,cm); // コマンド技(v0.10): 直前2方向+つかみタップ=投げ系コマンド技
+      const legacyCm=detectCommandMove(f);runtimeCommandShadowObserve(f,c,legacyCm); // コマンド技(v0.10): 直前2方向+つかみタップ=投げ系コマンド技
+      const cm=runtimeCommandCanaryResolve(f,c,legacyCm);
       if(cm&&cm.move.type==='grab'&&(f.phase==='idle'||f.phase==='guard')){
         startCmdGrab(f,cm.move,cm.idx);
       }else if(f.phase==='idle'||f.phase==='guard'){
@@ -805,7 +833,8 @@ function applyInputs(f,opp,cmds,held){
         f.phase='mikiriRec';f.pf=0;f.guardLv=null;f.buf=null;sfx('whiffG');
       }
     }else if(c.t==='atk'){
-      const cm=detectCommandMove(f);runtimeCommandShadowObserve(f,c,cm); // コマンド技(v0.10): 直前2方向+同じ高さの攻撃タップ=コマンド技
+      const legacyCm=detectCommandMove(f);runtimeCommandShadowObserve(f,c,legacyCm); // コマンド技(v0.10): 直前2方向+同じ高さの攻撃タップ=コマンド技
+      const cm=runtimeCommandCanaryResolve(f,c,legacyCm);
       if(cm&&cm.move.type==='atk'&&cm.move.trigger===c.lv&&f.phase==='idle'){
         startCmdAtk(f,cm.move,cm.idx);
       }else if(cm&&cm.move.type==='stance'&&cm.move.trigger===c.lv&&f.phase==='idle'){
