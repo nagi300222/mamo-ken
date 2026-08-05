@@ -11,3 +11,5 @@ export * from './combo.ts';
 export * from './combat-validation.ts';
 export * from './defense-types.ts';
 export * from './defense.ts';
+export * from './gauge-types.ts';
+export * from './gauge.ts';
