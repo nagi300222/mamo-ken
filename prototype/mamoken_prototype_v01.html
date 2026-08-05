@@ -551,7 +551,7 @@ function startBattle(){
     p:[newFighter(game.p1,0),newFighter(game.p2,1)],
     flow:'intro',flowF:0,hitstop:0,shake:0,
     clash:null,ultUser:-1,ann:[],fx:[],koSide:-1,result:null,pendKO:-1,clashStreak:[0,0]};
-  aiReset();roundInit(true);
+  aiReset();runtimeCommandShadowReset();roundInit(true);
   game.screen='battle';
 }
 function startOnlineBattle(seed,charIdxBySlot,delayF){ // オンライン対戦開始: 共有シード+両者の選択キャラでBを構築、CPU AIは使わない
@@ -562,7 +562,7 @@ function startOnlineBattle(seed,charIdxBySlot,delayF){ // オンライン対戦�
     p:[newFighter(game.p1,0),newFighter(game.p2,1)],
     flow:'intro',flowF:0,hitstop:0,shake:0,
     clash:null,ultUser:-1,ann:[],fx:[],koSide:-1,result:null,pendKO:-1,clashStreak:[0,0]};
-  roundInit(true);
+  runtimeCommandShadowReset();roundInit(true);
   NET.matchSeq++; // 対戦世代を進める(前の対戦の遅延cmd残骸を弾くため)
   // v0.10 (9): delayFは固定値ではなくRTT実測による開始時適応値(両者の算出値の大きい方)。
   // 未計測(delayF未指定)の場合は安全側の上限にフォールバックする
@@ -730,6 +730,36 @@ function canChain(f,lv){
   const A=spec(f);
   return f.pf>A.s+A.a&&f.pf<=A.s+A.a+BAL.CHAIN;
 }
+/* T15 runtime command shadow hook */
+function runtimeCommandShadowReset(){
+  const api=window.__MAMOKEN_COMMAND_SHADOW__;
+  if(api&&api.enabled)api.reset();
+}
+function runtimeCommandShadowObserve(f,c,cm){
+  const api=window.__MAMOKEN_COMMAND_SHADOW__;
+  if(!api||!api.enabled)return;
+  try{
+    const trigger=c.t==='grab'?'grab':c.lv;
+    const compatible=!!cm&&(trigger==='grab'
+      ?cm.move.type==='grab'
+      :(cm.move.type==='atk'||cm.move.type==='stance')&&cm.move.trigger===trigger);
+    const legacy=compatible
+      ?{kind:'command',commandId:f.c.id+':slot-'+(cm.idx+1),slot:cm.idx+1,name:cm.move.name}
+      :(trigger==='grab'
+        ?{kind:'fallback',fallback:'normal-grab'}
+        :{kind:'fallback',fallback:'normal-attack',level:trigger});
+    api.observeTrigger({
+      frame:B.f,
+      player:f.side,
+      characterId:f.c.id,
+      trigger:trigger,
+      directions:f.dirBuf.map(function(entry){return{direction:entry.dir,frame:entry.f};}),
+      legacy:legacy
+    });
+  }catch(error){
+    try{api.disable(error);}catch(ignore){}
+  }
+}
 function applyInputs(f,opp,cmds,held){
   f.held=held;
   if(f.ult>=BAL.ULT.stock){ // 奥義スタンバイ: パッド強制変形（モードA）
@@ -750,7 +780,7 @@ function applyInputs(f,opp,cmds,held){
         sfx('roarStart');
       }else if(f.s<BAL.SMAX){f.sNo=14;} // ゲージ不足時のS枠点滅フィードバックは両サイドとも出す(オンラインは両者とも人間のため)
     }else if(c.t==='grab'){
-      const cm=detectCommandMove(f); // コマンド技(v0.10): 直前2方向+つかみタップ=投げ系コマンド技
+      const cm=detectCommandMove(f);runtimeCommandShadowObserve(f,c,cm); // コマンド技(v0.10): 直前2方向+つかみタップ=投げ系コマンド技
       if(cm&&cm.move.type==='grab'&&(f.phase==='idle'||f.phase==='guard')){
         startCmdGrab(f,cm.move,cm.idx);
       }else if(f.phase==='idle'||f.phase==='guard'){
@@ -775,7 +805,7 @@ function applyInputs(f,opp,cmds,held){
         f.phase='mikiriRec';f.pf=0;f.guardLv=null;f.buf=null;sfx('whiffG');
       }
     }else if(c.t==='atk'){
-      const cm=detectCommandMove(f); // コマンド技(v0.10): 直前2方向+同じ高さの攻撃タップ=コマンド技
+      const cm=detectCommandMove(f);runtimeCommandShadowObserve(f,c,cm); // コマンド技(v0.10): 直前2方向+同じ高さの攻撃タップ=コマンド技
       if(cm&&cm.move.type==='atk'&&cm.move.trigger===c.lv&&f.phase==='idle'){
         startCmdAtk(f,cm.move,cm.idx);
       }else if(cm&&cm.move.type==='stance'&&cm.move.trigger===c.lv&&f.phase==='idle'){
@@ -3037,5 +3067,6 @@ function frame(now){
 }
 requestAnimationFrame(frame);
 </script>
+<script src="../runtime/runtime-command-shadow-browser.js"></script>
 </body>
 </html>
