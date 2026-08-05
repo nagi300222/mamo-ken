@@ -25,3 +25,5 @@ export * from './roster-types.ts';
 export * from './roster-core3.ts';
 export * from './runtime-adapter-types.ts';
 export * from './runtime-adapter.ts';
+export * from './runtime-input-bridge-types.ts';
+export * from './runtime-input-bridge.ts';

@@ -15,6 +15,8 @@ on:
       - 'test/ui-contract.test.mjs'
       - 'test/roster-core3.test.mjs'
       - 'test/runtime-adapter.test.mjs'
+      - 'test/runtime-input-bridge.test.mjs'
+      - 'reports/T*_COMPLETION.md'
       - 'reports/current_impl_*.json'
       - 'package.json'
       - 'package-lock.json'
@@ -71,6 +73,9 @@ jobs:
 
       - name: Legacy runtime adapter tests
         run: npm run check:runtime
+
+      - name: Legacy runtime input bridge tests
+        run: npm run check:runtime-input
 
       - name: Audit current implementation before build
         run: node tools/audit_current_impl.mjs
