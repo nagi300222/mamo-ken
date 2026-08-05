@@ -9,6 +9,7 @@ on:
       - 'dist/mamoken_mobile.html'
       - 'tools/build_mobile.mjs'
       - 'tools/apply_t15_runtime_shadow_hook.mjs'
+      - 'tools/compare_runtime_shadow_reports.mjs'
       - 'test/core-spec.test.mjs'
       - 'test/command-parser.test.mjs'
       - 'test/combat-moves.test.mjs'
@@ -23,6 +24,7 @@ on:
       - 'test/runtime-input-bridge.test.mjs'
       - 'test/runtime-command-shadow.test.mjs'
       - 'test/runtime-shadow-hook.test.mjs'
+      - 'test/runtime-shadow-export.test.mjs'
       - 'reports/T*_COMPLETION.md'
       - 'reports/current_impl_*.json'
       - 'package.json'
@@ -89,6 +91,9 @@ jobs:
 
       - name: Default-off runtime shadow hook tests
         run: npm run check:runtime-hook
+
+      - name: Runtime shadow export and comparison tests
+        run: npm run check:runtime-export
 
       - name: Audit current implementation before build
         run: node tools/audit_current_impl.mjs
