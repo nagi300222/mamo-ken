@@ -100,6 +100,10 @@ assert.deepEqual(snapshot, {
   lastHash: '2f2f6296',
 });
 assert.equal(snapshot.lastHash, stateHash(hashable(snapshot)));
+assert.equal(adaptLegacyRuntimeBattle(makeBattle(), context).lastHash, snapshot.lastHash);
+const changedBattle = makeBattle();
+changedBattle.p[1].hp -= 1;
+assert.notEqual(adaptLegacyRuntimeBattle(changedBattle, context).lastHash, snapshot.lastHash);
 
 source.p[0].hp = 1;
 source.p[0].c.id = 'pisuke';
