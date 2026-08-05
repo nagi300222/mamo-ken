@@ -10,6 +10,7 @@ on:
       - 'tools/build_mobile.mjs'
       - 'tools/apply_t15_runtime_shadow_hook.mjs'
       - 'tools/apply_t17_runtime_command_canary.mjs'
+      - 'tools/apply_t18_runtime_canary_audit.mjs'
       - 'tools/compare_runtime_shadow_reports.mjs'
       - 'test/core-spec.test.mjs'
       - 'test/command-parser.test.mjs'
@@ -27,6 +28,7 @@ on:
       - 'test/runtime-shadow-hook.test.mjs'
       - 'test/runtime-shadow-export.test.mjs'
       - 'test/runtime-command-canary.test.mjs'
+      - 'test/runtime-canary-audit.test.mjs'
       - 'reports/T*_COMPLETION.md'
       - 'reports/current_impl_*.json'
       - 'package.json'
@@ -99,6 +101,9 @@ jobs:
 
       - name: Offline runtime command canary tests
         run: npm run check:runtime-canary
+
+      - name: Runtime canary audit tests
+        run: npm run check:runtime-canary-audit
 
       - name: Audit current implementation before build
         run: node tools/audit_current_impl.mjs
