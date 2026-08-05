@@ -16,6 +16,7 @@ on:
       - 'test/roster-core3.test.mjs'
       - 'test/runtime-adapter.test.mjs'
       - 'test/runtime-input-bridge.test.mjs'
+      - 'reports/T*_COMPLETION.md'
       - 'reports/current_impl_*.json'
       - 'package.json'
       - 'package-lock.json'
