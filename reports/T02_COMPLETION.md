@@ -2,12 +2,15 @@
 
 ## PR / commit
 
-- PR: #20 (`codex/-t02-core-begvef`, Draftのまま停止)
-- Local commit: see final response commit SHA
-- Source of truth: `docs/03_data_design.md` v2.7, T00 reports, and PR #20 HOLD review.
+- PR: #21 (`codex/-t02-core-0ltp2r`, Draft)
+- Codex implementation source commit: `09d7845e2fb5cd96fd3473fea854251d71ffbf6e`
+- GitHub import head before Hub corrections: `16bfa2753eddaa1105324e2b3a45ea2ebeaa4f0a`
+- Source of truth: `docs/03_data_design.md` v2.7, T00 reports, and the PR #20 HOLD review carried forward into PR #21.
+- Superseded drafts: #19, #20 (closed without merge).
 
 ## Exact changed files
 
+- `.github/workflows/core-check.yml`
 - `package.json`
 - `package-lock.json`
 - `tsconfig.json`
@@ -30,7 +33,7 @@
 
 ## Required fixes completed
 
-- Added missing current phase `clash` and now checks `reports/current_impl_phases.json` fighter phases / battle flows structurally.
+- Added current phase `clash` and checks `reports/current_impl_phases.json` fighter phases / battle flows structurally.
 - Split archetypes into `CurrentArchetypeId = standard | rush | power` and `PlannedArchetypeId = defense | tricky | grappler | counter | charge`.
 - Added `MoveSpec`, `CommandMoveSpec`, `CharacterCombatSpec`, and validators for current normal attacks, current `CMD.moves`, and current characters.
 - Single-sourced current runtime constants from `reports/current_impl_constants.json` with typed exports.
@@ -38,6 +41,7 @@
 - Hardened `stable-json-v1` to reject Date, Map, Set, class instances, sparse arrays, symbol keys, and other ambiguous values.
 - Added P1/P2 swap fixture: fighter tuple swap + input player 0/1 mapping must remain mirror-equivalent after normalization for 10,000F.
 - Hash target excludes `lastHash` through `HashableBattleState` / `toHashableBattleState`.
+- Added GitHub Actions `Core contract check` so `npm ci`, core tests, audit, mobile build, and scoped-diff checks run in a clean Linux environment.
 
 ## 10,000F / negative / swap results
 
@@ -54,5 +58,5 @@
 ## Preserved legacy / blockers
 
 - Legacy phase names remain isolated in `LegacyFighterPhase`; they are not added to current hashable state.
-- Operational blocker: local `npm ci` and `npm install --save-dev typescript` hit registry 403 in this environment. `package.json` and `package-lock.json` were updated for TypeScript, and `npm run check:core` passes using the available global `tsc`.
-- Operational blocker: pushing to GitHub from this environment hits HTTPS CONNECT 403, so the local commit may need operator-side push to PR #20 branch.
+- Codex sandbox-only limitations: npm registry and direct GitHub push returned 403. These do not alter repository scope or runtime behavior.
+- Merge gate: GitHub Actions `Core contract check` must pass on PR #21 before merge.
