@@ -13,3 +13,5 @@ export * from './defense-types.ts';
 export * from './defense.ts';
 export * from './gauge-types.ts';
 export * from './gauge.ts';
+export * from './ability-types.ts';
+export * from './ability-hooks.ts';
