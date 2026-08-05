@@ -5,7 +5,8 @@
   "description": "マモ拳（仮） - prototype game repo tooling",
   "type": "module",
   "scripts": {
-    "build:mobile": "node tools/build_mobile.mjs"
+    "build:mobile": "node tools/build_mobile.mjs",
+    "check:core": "node test/core-spec.test.mjs"
   },
   "devDependencies": {
     "sharp": "^0.33.5"
