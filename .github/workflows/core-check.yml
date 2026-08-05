@@ -5,6 +5,7 @@ on:
     paths:
       - 'src/core/**'
       - 'test/core-spec.test.mjs'
+      - 'test/command-parser.test.mjs'
       - 'reports/current_impl_*.json'
       - 'package.json'
       - 'package-lock.json'
@@ -31,6 +32,9 @@ jobs:
 
       - name: Typecheck and core tests
         run: npm run check:core
+
+      - name: Command parser tests
+        run: npm run check:command
 
       - name: Audit current implementation before build
         run: node tools/audit_current_impl.mjs

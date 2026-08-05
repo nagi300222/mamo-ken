@@ -99,7 +99,17 @@ export type CharacterCombatSpec = Pick<CurrentCharacterSpec, 'id' | 'dMul' | 'sM
 
 export type CurrentImplementationContract = Readonly<{
   source: string;
-  bal: Readonly<Record<string, JsonValue>> & { readonly HP: number; readonly TIME: number; readonly SMAX: number; readonly ATK: Readonly<Record<CurrentMoveKey, MoveSpec>>; readonly CMD: { readonly moves: Readonly<Record<CurrentCharacterId, readonly CommandMoveSpec[]>> } };
+  bal: Readonly<Record<string, JsonValue>> & {
+    readonly HP: number;
+    readonly TIME: number;
+    readonly SMAX: number;
+    readonly ATK: Readonly<Record<CurrentMoveKey, MoveSpec>>;
+    readonly CMD: {
+      readonly bufF: number;
+      readonly buffer: number;
+      readonly moves: Readonly<Record<CurrentCharacterId, readonly CommandMoveSpec[]>>;
+    };
+  };
   characters: readonly CurrentCharacterSpec[];
   characterIds: readonly CurrentCharacterId[];
   levels: readonly CurrentLevel[];
