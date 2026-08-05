@@ -9,3 +9,5 @@ export * from './combat-types.ts';
 export * from './combat-moves.ts';
 export * from './combo.ts';
 export * from './combat-validation.ts';
+export * from './defense-types.ts';
+export * from './defense.ts';
