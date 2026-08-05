@@ -778,7 +778,10 @@ function runtimeCommandCanaryResolve(f,c,legacyCm){
     const idx=result.decision.slot-1;
     const moves=BAL.CMD.moves[f.c.id];
     const move=moves&&moves[idx];
-    if(!move||move.name!==result.decision.name||result.decision.commandId!==f.c.id+':slot-'+(idx+1)){
+    const compatible=!!move&&(trigger==='grab'
+      ?move.type==='grab'
+      :(move.type==='atk'||move.type==='stance')&&move.trigger===trigger);
+    if(!compatible||move.name!==result.decision.name||result.decision.commandId!==f.c.id+':slot-'+(idx+1)){
       throw new Error('Core command canary resolved an unknown current move');
     }
     return{move:move,idx:idx};
