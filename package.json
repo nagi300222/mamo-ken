@@ -22,6 +22,7 @@
     "check:runtime-hook": "npm run typecheck:core && node --experimental-strip-types test/runtime-shadow-hook.test.mjs",
     "check:runtime-export": "npm run typecheck:core && node --experimental-strip-types test/runtime-shadow-export.test.mjs",
     "check:runtime-canary": "npm run typecheck:core && node --experimental-strip-types test/runtime-command-canary.test.mjs",
+    "check:runtime-canary-audit": "npm run typecheck:core && node --experimental-strip-types test/runtime-canary-audit.test.mjs",
     "compare:runtime-shadow": "node tools/compare_runtime_shadow_reports.mjs",
     "typecheck:core": "tsc --noEmit"
   },
