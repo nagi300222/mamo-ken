@@ -6,6 +6,7 @@ on:
       - 'src/core/**'
       - 'test/core-spec.test.mjs'
       - 'test/command-parser.test.mjs'
+      - 'test/combat-moves.test.mjs'
       - 'reports/current_impl_*.json'
       - 'package.json'
       - 'package-lock.json'
@@ -35,6 +36,9 @@ jobs:
 
       - name: Command parser tests
         run: npm run check:command
+
+      - name: Combat MoveSpec and combo tests
+        run: npm run check:combat
 
       - name: Audit current implementation before build
         run: node tools/audit_current_impl.mjs

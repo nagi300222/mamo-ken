@@ -8,6 +8,7 @@
     "build:mobile": "node tools/build_mobile.mjs",
     "check:core": "npm run typecheck:core && node --experimental-strip-types test/core-spec.test.mjs",
     "check:command": "npm run typecheck:core && node --experimental-strip-types test/command-parser.test.mjs",
+    "check:combat": "npm run typecheck:core && node --experimental-strip-types test/combat-moves.test.mjs",
     "typecheck:core": "tsc --noEmit"
   },
   "devDependencies": {
