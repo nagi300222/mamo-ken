@@ -15,6 +15,7 @@
     "check:sprite": "npm run typecheck:core && node --experimental-strip-types test/sprite-pipeline.test.mjs",
     "check:cpu": "npm run typecheck:core && node --experimental-strip-types test/cpu-persona.test.mjs",
     "check:ui": "npm run typecheck:core && node --experimental-strip-types test/ui-contract.test.mjs",
+    "check:roster": "npm run typecheck:core && node --experimental-strip-types test/roster-core3.test.mjs",
     "typecheck:core": "tsc --noEmit"
   },
   "devDependencies": {
