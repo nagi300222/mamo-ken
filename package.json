@@ -12,6 +12,7 @@
     "check:defense": "npm run typecheck:core && node --experimental-strip-types test/defense.test.mjs",
     "check:gauge": "npm run typecheck:core && node --experimental-strip-types test/gauge-gyuiin.test.mjs",
     "check:ability": "npm run typecheck:core && node --experimental-strip-types test/ability-hooks.test.mjs",
+    "check:sprite": "npm run typecheck:core && node --experimental-strip-types test/sprite-pipeline.test.mjs",
     "typecheck:core": "tsc --noEmit"
   },
   "devDependencies": {

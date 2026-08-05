@@ -15,3 +15,5 @@ export * from './gauge-types.ts';
 export * from './gauge.ts';
 export * from './ability-types.ts';
 export * from './ability-hooks.ts';
+export * from './sprite-types.ts';
+export * from './sprite-pipeline.ts';
