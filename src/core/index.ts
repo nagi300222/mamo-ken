@@ -17,3 +17,5 @@ export * from './ability-types.ts';
 export * from './ability-hooks.ts';
 export * from './sprite-types.ts';
 export * from './sprite-pipeline.ts';
+export * from './cpu-types.ts';
+export * from './cpu.ts';
