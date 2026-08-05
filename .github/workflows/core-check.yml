@@ -1,0 +1,54 @@
+name: Core contract check
+
+on:
+  pull_request:
+    paths:
+      - 'src/core/**'
+      - 'test/core-spec.test.mjs'
+      - 'reports/current_impl_*.json'
+      - 'package.json'
+      - 'package-lock.json'
+      - 'tsconfig.json'
+      - '.github/workflows/core-check.yml'
+  workflow_dispatch:
+
+jobs:
+  core-check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Typecheck and core tests
+        run: npm run check:core
+
+      - name: Audit current implementation before build
+        run: node tools/audit_current_impl.mjs
+
+      - name: Build mobile distribution
+        run: npm run build:mobile
+
+      - name: Audit current implementation after build
+        run: node tools/audit_current_impl.mjs
+
+      - name: Restore generated audit/build outputs
+        run: |
+          git restore dist/mamoken_mobile.html
+          git restore reports/current_impl_constants.json
+          git restore reports/current_impl_phases.json
+          git restore reports/current_impl_sync_scope.md
+
+      - name: Verify scoped diff
+        run: |
+          git diff --check
+          git diff --exit-code -- prototype/mamoken_prototype_v01.html index.html dist/mamoken_mobile.html server assets
