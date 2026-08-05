@@ -9,6 +9,7 @@
     "check:core": "npm run typecheck:core && node --experimental-strip-types test/core-spec.test.mjs",
     "check:command": "npm run typecheck:core && node --experimental-strip-types test/command-parser.test.mjs",
     "check:combat": "npm run typecheck:core && node --experimental-strip-types test/combat-moves.test.mjs",
+    "check:defense": "npm run typecheck:core && node --experimental-strip-types test/defense.test.mjs",
     "typecheck:core": "tsc --noEmit"
   },
   "devDependencies": {
