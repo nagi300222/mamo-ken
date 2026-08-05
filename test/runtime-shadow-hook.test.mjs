@@ -36,12 +36,14 @@ function commandPayload(characterId,move,slot,frame=12,player=0){
 
 {
   const api=loadBrowserObserver('');
-  assert.equal(api.version,'runtime-command-shadow-browser-v4');
-  assert.equal(api.reportVersion,'mamoken-command-shadow-report-v2');
+  assert.equal(api.version,'runtime-command-shadow-browser-v5');
+  assert.equal(api.reportVersion,'mamoken-command-shadow-report-v3');
   assert.equal(api.requestedEnabled,false);
   assert.equal(api.requestedShadow,false);
   assert.equal(api.requestedCanary,false);
-  assert.equal(api.canaryEnabled,false);
+  assert.equal(api.requestedLegacy,false);
+  assert.equal(api.canaryEnabled,true);
+  assert.equal(api.offlineAuthority,'core-default');
   assert.equal(api.enabled,false);
   const result=api.observeTrigger({});
   assert.equal(result.accepted,false);
@@ -50,6 +52,8 @@ function commandPayload(characterId,move,slot,frame=12,player=0){
   assert.equal(api.snapshot().canaryEvents.length,0);
   assert.equal(api.summary().observationCount,0);
   assert.equal(api.report().summary.mismatchCount,0);
+  assert.equal(api.report().canary.enabled,true);
+  assert.equal(api.report().canary.defaultEnabled,true);
   assert.equal(api.report().canary.summary.attemptCount,0);
 }
 
@@ -57,7 +61,7 @@ const currentApi=loadBrowserObserver('?mamokenShadow=1');
 assert.equal(currentApi.requestedEnabled,true);
 assert.equal(currentApi.requestedShadow,true);
 assert.equal(currentApi.requestedCanary,false);
-assert.equal(currentApi.canaryEnabled,false);
+assert.equal(currentApi.canaryEnabled,true);
 assert.equal(currentApi.enabled,true);
 let currentCount=0;
 for(const characterId of ['moguzo','pisuke','godan']){
@@ -148,9 +152,9 @@ assert.ok(patchScript.includes("const MARKER='/* T15 runtime command shadow hook
 assert.ok(buildScript.includes('runtime-command-shadow-browser.js'));
 assert.ok(buildScript.includes('RUNTIME_SHADOW_TAG'));
 assert.equal(dist.includes(externalTag),false);
-assert.ok(dist.includes('runtime-command-shadow-browser-v4'));
-assert.ok(dist.includes('mamoken-command-shadow-report-v2'));
+assert.ok(dist.includes('runtime-command-shadow-browser-v5'));
+assert.ok(dist.includes('mamoken-command-shadow-report-v3'));
 assert.ok(dist.includes('/* T15 runtime command shadow hook */'));
 assert.equal((dist.match(/runtimeCommandShadowObserve\(f,c,legacyCm\);/g)||[]).length,2);
 
-console.log(`runtime shadow hook tests passed; currentCommands=${currentCount}; longHash=${longHash}; defaultOff=true; ring=256; report=v2`);
+console.log(`runtime shadow hook tests passed; currentCommands=${currentCount}; longHash=${longHash}; shadowDefaultOff=true; coreDefaultOn=true; ring=256; report=v3`);

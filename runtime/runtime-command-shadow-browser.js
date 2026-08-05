@@ -1,8 +1,8 @@
 (function installRuntimeCommandShadow(root){
   'use strict';
 
-  const VERSION='runtime-command-shadow-browser-v4';
-  const REPORT_VERSION='mamoken-command-shadow-report-v2';
+  const VERSION='runtime-command-shadow-browser-v5';
+  const REPORT_VERSION='mamoken-command-shadow-report-v3';
   const MAX_OBSERVATIONS=256;
   const MAX_CANARY_EVENTS=256;
   const CURRENT_CHARACTERS=['moguzo','pisuke','godan'];
@@ -12,6 +12,7 @@
   const search=(root.location&&root.location.search)||'';
   const requestedShadow=/(?:^|[?&])mamokenShadow=1(?:&|$)/.test(search);
   const requestedCanary=/(?:^|[?&])mamokenCoreCommand=1(?:&|$)/.test(search);
+  const requestedLegacy=/(?:^|[?&])mamokenLegacyCommand=1(?:&|$)/.test(search);
   const requestedEnabled=requestedShadow||requestedCanary;
   let disabledReason=null;
   let observations=[];
@@ -196,6 +197,11 @@
     };
     return appendCanaryEvent(event);
   }
+  function offlineAuthority(){
+    if(requestedLegacy)return'legacy-override';
+    if(disabledReason!==null)return'legacy-rollback';
+    return'core-default';
+  }
 
   function buildReport(){
     return{
@@ -204,12 +210,16 @@
       requestedEnabled:requestedEnabled,
       requestedShadow:requestedShadow,
       requestedCanary:requestedCanary,
+      requestedLegacy:requestedLegacy,
       enabled:api.enabled,
       disabledReason:disabledReason,
+      authority:{offline:offlineAuthority(),online:'legacy'},
       summary:buildSummary(),
       observations:clone(observations),
       canary:{
         requested:requestedCanary,
+        defaultEnabled:true,
+        legacyOverride:requestedLegacy,
         enabled:api.canaryEnabled,
         disabledReason:disabledReason,
         summary:buildCanarySummary(),
@@ -225,7 +235,9 @@
     get requestedEnabled(){return requestedEnabled;},
     get requestedShadow(){return requestedShadow;},
     get requestedCanary(){return requestedCanary;},
-    get canaryEnabled(){return requestedCanary&&disabledReason===null;},
+    get requestedLegacy(){return requestedLegacy;},
+    get offlineAuthority(){return offlineAuthority();},
+    get canaryEnabled(){return !requestedLegacy&&disabledReason===null;},
     get disabledReason(){return disabledReason;},
     resolveTrigger:function(source){
       if(!api.canaryEnabled)return{accepted:false,reason:'disabled'};
@@ -262,6 +274,9 @@
     canaryStatus:function(){
       return clone({
         requested:requestedCanary,
+        defaultEnabled:true,
+        legacyOverride:requestedLegacy,
+        offlineAuthority:offlineAuthority(),
         enabled:api.canaryEnabled,
         disabledReason:disabledReason,
         summary:buildCanarySummary()
@@ -301,6 +316,8 @@
         requestedEnabled:requestedEnabled,
         requestedShadow:requestedShadow,
         requestedCanary:requestedCanary,
+        requestedLegacy:requestedLegacy,
+        offlineAuthority:offlineAuthority(),
         canaryEnabled:api.canaryEnabled,
         enabled:api.enabled,
         disabledReason:disabledReason,

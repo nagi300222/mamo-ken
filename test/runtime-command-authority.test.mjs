@@ -108,7 +108,7 @@ rollback.reset();
 assert.equal(rollback.canaryEnabled,true);
 assert.equal(rollback.offlineAuthority,'core-default');
 
-const normalReport=plain(normal.report());
+const normalReport=plain(loadApi('').report());
 assert.equal(normalReport.requestedLegacy,false);
 assert.equal(normalReport.authority.offline,'core-default');
 assert.equal(normalReport.authority.online,'legacy');
