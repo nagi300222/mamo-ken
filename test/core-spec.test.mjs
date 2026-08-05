@@ -75,6 +75,10 @@ const sameLastHashChanged = { ...base, lastHash: 'different-last-hash' };
 assert.equal(stateHash(toHashableBattleState(base)), stateHash(toHashableBattleState(sameLastHashChanged)));
 assert.notEqual(stateHash(toHashableBattleState(base)), stateHash({ ...toHashableBattleState(base), seed: 999 }));
 
+function compareCodeUnit(a, b) {
+  return a < b ? -1 : a > b ? 1 : 0;
+}
+
 function scriptedInputs(frame) {
   const events = [];
   if (frame % 37 === 0) events.push({ frame, player: 0, kind: 'attack', level: frame % 74 === 0 ? 'high' : 'mid' });
@@ -97,7 +101,7 @@ function normalizeForSwap(state) {
   const hashable = toHashableBattleState(state);
   return {
     ...hashable,
-    fighters: [...hashable.fighters].sort((a, b) => a.characterId.localeCompare(b.characterId)),
+    fighters: [...hashable.fighters].sort((a, b) => compareCodeUnit(a.characterId, b.characterId)),
   };
 }
 
