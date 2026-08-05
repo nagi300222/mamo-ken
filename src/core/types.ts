@@ -79,6 +79,8 @@ export type CommandMoveSpec = Readonly<{
   [key: string]: JsonValue | undefined;
 }>;
 
+export type AuditedCommandMoveSpec = CommandMoveSpec & Readonly<{ slot: number }>;
+
 export type CurrentCharacterSpec = Readonly<{
   id: CurrentCharacterId;
   name: string;
@@ -102,7 +104,7 @@ export type CurrentImplementationContract = Readonly<{
   characterIds: readonly CurrentCharacterId[];
   levels: readonly CurrentLevel[];
   choices: readonly string[];
-  commandMoves: Readonly<Record<CurrentCharacterId, readonly string[]>>;
+  commandMoves: Readonly<Record<CurrentCharacterId, readonly AuditedCommandMoveSpec[]>>;
   inputTiming: JsonValue;
   roar: JsonValue;
   sGauge: JsonValue;
