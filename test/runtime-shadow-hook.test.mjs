@@ -9,7 +9,6 @@ const __dirname=path.dirname(fileURLToPath(import.meta.url));
 const ROOT=path.resolve(__dirname,'..');
 const browserSource=readFileSync(path.join(ROOT,'runtime','runtime-command-shadow-browser.js'),'utf8');
 const runtimeBal={CMD:CURRENT_CONTRACT.bal.CMD};
-const DIRECTION_TO_DODGE={left:'sway',down:'crouch',right:'lunge'};
 
 function loadBrowserObserver(search){
   const sandbox={console,location:{search}};
@@ -37,13 +36,16 @@ function commandPayload(characterId,move,slot,frame=12,player=0){
 
 {
   const api=loadBrowserObserver('');
-  assert.equal(api.version,'runtime-command-shadow-browser-v1');
+  assert.equal(api.version,'runtime-command-shadow-browser-v2');
+  assert.equal(api.reportVersion,'mamoken-command-shadow-report-v1');
   assert.equal(api.requestedEnabled,false);
   assert.equal(api.enabled,false);
   const result=api.observeTrigger({});
   assert.equal(result.accepted,false);
   assert.equal(result.reason,'disabled');
   assert.equal(api.snapshot().observations.length,0);
+  assert.equal(api.summary().observationCount,0);
+  assert.equal(api.report().summary.mismatchCount,0);
 }
 
 const currentApi=loadBrowserObserver('?mamokenShadow=1');
@@ -65,6 +67,10 @@ for(const characterId of ['moguzo','pisuke','godan']){
 }
 assert.equal(currentCount,9);
 assert.equal(currentApi.mismatchCount(),0);
+assert.equal(currentApi.summary().observationCount,9);
+assert.equal(currentApi.summary().byCharacter.moguzo.observations,3);
+assert.equal(currentApi.summary().byCharacter.pisuke.observations,3);
+assert.equal(currentApi.summary().byCharacter.godan.observations,3);
 
 {
   const api=loadBrowserObserver('?x=1&mamokenShadow=1');
@@ -82,6 +88,7 @@ assert.equal(currentApi.mismatchCount(),0);
   });
   assert.equal(mismatch.observation.matches,false);
   assert.equal(api.mismatchCount(),1);
+  assert.equal(api.summary().byTrigger.mid.mismatches,1);
 }
 
 function longRunHash(){
@@ -98,6 +105,8 @@ function longRunHash(){
   assert.equal(snapshot.observations[0].frame,44);
   assert.equal(snapshot.observations[255].frame,299);
   assert.equal(api.mismatchCount(),0);
+  assert.equal(api.summary().firstFrame,44);
+  assert.equal(api.summary().lastFrame,299);
   return api.hash();
 }
 const longHash=longRunHash();
@@ -129,8 +138,9 @@ assert.ok(patchScript.includes("const MARKER='/* T15 runtime command shadow hook
 assert.ok(buildScript.includes('runtime-command-shadow-browser.js'));
 assert.ok(buildScript.includes('RUNTIME_SHADOW_TAG'));
 assert.equal(dist.includes(externalTag),false);
-assert.ok(dist.includes('runtime-command-shadow-browser-v1'));
+assert.ok(dist.includes('runtime-command-shadow-browser-v2'));
+assert.ok(dist.includes('mamoken-command-shadow-report-v1'));
 assert.ok(dist.includes('/* T15 runtime command shadow hook */'));
 assert.equal((dist.match(/runtimeCommandShadowObserve\(f,c,cm\);/g)||[]).length,2);
 
-console.log(`runtime shadow hook tests passed; currentCommands=${currentCount}; longHash=${longHash}; defaultOff=true; ring=256`);
+console.log(`runtime shadow hook tests passed; currentCommands=${currentCount}; longHash=${longHash}; defaultOff=true; ring=256; report=v1`);
