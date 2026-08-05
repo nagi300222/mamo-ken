@@ -8,6 +8,7 @@ on:
       - 'test/command-parser.test.mjs'
       - 'test/combat-moves.test.mjs'
       - 'test/defense.test.mjs'
+      - 'test/gauge-gyuiin.test.mjs'
       - 'reports/current_impl_*.json'
       - 'package.json'
       - 'package-lock.json'
@@ -43,6 +44,9 @@ jobs:
 
       - name: Defense and step tests
         run: npm run check:defense
+
+      - name: Gauge, roar and Gyuiin tests
+        run: npm run check:gauge
 
       - name: Audit current implementation before build
         run: node tools/audit_current_impl.mjs
