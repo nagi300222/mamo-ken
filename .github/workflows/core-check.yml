@@ -11,6 +11,7 @@ on:
       - 'test/gauge-gyuiin.test.mjs'
       - 'test/ability-hooks.test.mjs'
       - 'test/sprite-pipeline.test.mjs'
+      - 'test/cpu-persona.test.mjs'
       - 'reports/current_impl_*.json'
       - 'package.json'
       - 'package-lock.json'
@@ -21,7 +22,7 @@ on:
 jobs:
   core-check:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 15
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -55,6 +56,9 @@ jobs:
 
       - name: Sprite pipeline tests
         run: npm run check:sprite
+
+      - name: CPU persona and determinism tests
+        run: npm run check:cpu
 
       - name: Audit current implementation before build
         run: node tools/audit_current_impl.mjs
