@@ -13,6 +13,7 @@ on:
       - 'test/sprite-pipeline.test.mjs'
       - 'test/cpu-persona.test.mjs'
       - 'test/ui-contract.test.mjs'
+      - 'test/roster-core3.test.mjs'
       - 'reports/current_impl_*.json'
       - 'package.json'
       - 'package-lock.json'
@@ -63,6 +64,9 @@ jobs:
 
       - name: UI contract tests
         run: npm run check:ui
+
+      - name: Core-three roster tests
+        run: npm run check:roster
 
       - name: Audit current implementation before build
         run: node tools/audit_current_impl.mjs
