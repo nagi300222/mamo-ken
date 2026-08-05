@@ -31,7 +31,7 @@ export const UI_CONTRACT: UiContract = Object.freeze({
     Object.freeze({ slot: 7, characterId: 'counter_tbd', archetype: 'counter', status: 'planned', unlocked: false, displayName: '？', placeholder: 'lock', stats: null, statsAreIndependentAxes: true }),
     Object.freeze({ slot: 8, characterId: 'charge_tbd', archetype: 'charge', status: 'planned', unlocked: false, displayName: '？', placeholder: 'lock', stats: null, statsAreIndependentAxes: true }),
   ] satisfies readonly RosterSlotContract[]),
-  difficulties: Object.freeze(['EASY', 'NORMAL', 'HARD']),
+  difficulties: Object.freeze(['EASY', 'NORMAL', 'HARD'] as const),
   actions: Object.freeze([
     Object.freeze({ id: 'back', visibleOn: Object.freeze(['character_select', 'move_list']), requiresConfirmation: false }),
     Object.freeze({ id: 'pause', visibleOn: Object.freeze(['battle']), requiresConfirmation: false }),
