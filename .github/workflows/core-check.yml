@@ -9,6 +9,7 @@ on:
       - 'dist/mamoken_mobile.html'
       - 'tools/build_mobile.mjs'
       - 'tools/apply_t15_runtime_shadow_hook.mjs'
+      - 'tools/apply_t17_runtime_command_canary.mjs'
       - 'tools/compare_runtime_shadow_reports.mjs'
       - 'test/core-spec.test.mjs'
       - 'test/command-parser.test.mjs'
@@ -25,6 +26,7 @@ on:
       - 'test/runtime-command-shadow.test.mjs'
       - 'test/runtime-shadow-hook.test.mjs'
       - 'test/runtime-shadow-export.test.mjs'
+      - 'test/runtime-command-canary.test.mjs'
       - 'reports/T*_COMPLETION.md'
       - 'reports/current_impl_*.json'
       - 'package.json'
@@ -94,6 +96,9 @@ jobs:
 
       - name: Runtime shadow export and comparison tests
         run: npm run check:runtime-export
+
+      - name: Offline runtime command canary tests
+        run: npm run check:runtime-canary
 
       - name: Audit current implementation before build
         run: node tools/audit_current_impl.mjs
