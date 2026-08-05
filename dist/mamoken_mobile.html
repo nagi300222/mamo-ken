@@ -761,6 +761,36 @@ function runtimeCommandShadowObserve(f,c,cm){
     try{api.disable(error);}catch(ignore){}
   }
 }
+/* T17 offline runtime command canary */
+function runtimeCommandCanaryResolve(f,c,legacyCm){
+  const api=window.__MAMOKEN_COMMAND_SHADOW__;
+  if(!api||!api.canaryEnabled||lastMatchOnline||NET.active)return legacyCm;
+  try{
+    const trigger=c.t==='grab'?'grab':c.lv;
+    const result=api.resolveTrigger({
+      frame:B.f,
+      player:f.side,
+      characterId:f.c.id,
+      trigger:trigger,
+      directions:f.dirBuf.map(function(entry){return{direction:entry.dir,frame:entry.f};})
+    });
+    if(!result||!result.accepted)return legacyCm;
+    if(result.decision.kind==='fallback')return null;
+    const idx=result.decision.slot-1;
+    const moves=BAL.CMD.moves[f.c.id];
+    const move=moves&&moves[idx];
+    const compatible=!!move&&(trigger==='grab'
+      ?move.type==='grab'
+      :(move.type==='atk'||move.type==='stance')&&move.trigger===trigger);
+    if(!compatible||move.name!==result.decision.name||result.decision.commandId!==f.c.id+':slot-'+(idx+1)){
+      throw new Error('Core command canary resolved an unknown current move');
+    }
+    return{move:move,idx:idx};
+  }catch(error){
+    try{api.disable(error);}catch(ignore){}
+    return legacyCm;
+  }
+}
 function applyInputs(f,opp,cmds,held){
   f.held=held;
   if(f.ult>=BAL.ULT.stock){ // 奥義スタンバイ: パッド強制変形（モードA）
@@ -781,7 +811,8 @@ function applyInputs(f,opp,cmds,held){
         sfx('roarStart');
       }else if(f.s<BAL.SMAX){f.sNo=14;} // ゲージ不足時のS枠点滅フィードバックは両サイドとも出す(オンラインは両者とも人間のため)
     }else if(c.t==='grab'){
-      const cm=detectCommandMove(f);runtimeCommandShadowObserve(f,c,cm); // コマンド技(v0.10): 直前2方向+つかみタップ=投げ系コマンド技
+      const legacyCm=detectCommandMove(f);runtimeCommandShadowObserve(f,c,legacyCm); // コマンド技(v0.10): 直前2方向+つかみタップ=投げ系コマンド技
+      const cm=runtimeCommandCanaryResolve(f,c,legacyCm);
       if(cm&&cm.move.type==='grab'&&(f.phase==='idle'||f.phase==='guard')){
         startCmdGrab(f,cm.move,cm.idx);
       }else if(f.phase==='idle'||f.phase==='guard'){
@@ -806,7 +837,8 @@ function applyInputs(f,opp,cmds,held){
         f.phase='mikiriRec';f.pf=0;f.guardLv=null;f.buf=null;sfx('whiffG');
       }
     }else if(c.t==='atk'){
-      const cm=detectCommandMove(f);runtimeCommandShadowObserve(f,c,cm); // コマンド技(v0.10): 直前2方向+同じ高さの攻撃タップ=コマンド技
+      const legacyCm=detectCommandMove(f);runtimeCommandShadowObserve(f,c,legacyCm); // コマンド技(v0.10): 直前2方向+同じ高さの攻撃タップ=コマンド技
+      const cm=runtimeCommandCanaryResolve(f,c,legacyCm);
       if(cm&&cm.move.type==='atk'&&cm.move.trigger===c.lv&&f.phase==='idle'){
         startCmdAtk(f,cm.move,cm.idx);
       }else if(cm&&cm.move.type==='stance'&&cm.move.trigger===c.lv&&f.phase==='idle'){
@@ -3072,14 +3104,17 @@ requestAnimationFrame(frame);
 (function installRuntimeCommandShadow(root){
   'use strict';
 
-  const VERSION='runtime-command-shadow-browser-v2';
+  const VERSION='runtime-command-shadow-browser-v3';
   const REPORT_VERSION='mamoken-command-shadow-report-v1';
   const MAX_OBSERVATIONS=256;
   const CURRENT_CHARACTERS=['moguzo','pisuke','godan'];
   const CURRENT_LEVELS=['high','mid','low'];
   const CURRENT_CHARACTER_SET=new Set(CURRENT_CHARACTERS);
   const CURRENT_LEVEL_SET=new Set(CURRENT_LEVELS);
-  const requestedEnabled=/(?:^|[?&])mamokenShadow=1(?:&|$)/.test((root.location&&root.location.search)||'');
+  const search=(root.location&&root.location.search)||'';
+  const requestedShadow=/(?:^|[?&])mamokenShadow=1(?:&|$)/.test(search);
+  const requestedCanary=/(?:^|[?&])mamokenCoreCommand=1(?:&|$)/.test(search);
+  const requestedEnabled=requestedShadow||requestedCanary;
   let disabledReason=null;
   let observations=[];
 
@@ -3135,10 +3170,9 @@ requestAnimationFrame(frame);
     return fallbackDecision(trigger);
   }
 
-  function normalizePayload(source){
+  function normalizeDecisionPayload(source){
     if(!source||typeof source!=='object'||Array.isArray(source))fail('payload must be an object');
     if(!Array.isArray(source.directions))fail('directions must be an array');
-    if(!source.legacy||typeof source.legacy!=='object'||Array.isArray(source.legacy))fail('legacy decision must be an object');
     return{
       frame:assertFrame(source.frame),
       player:assertPlayer(source.player),
@@ -3147,7 +3181,19 @@ requestAnimationFrame(frame);
       directions:source.directions.map(function(entry){
         if(!entry||typeof entry!=='object'||Array.isArray(entry))fail('direction entry must be an object');
         return{direction:assertDirection(entry.direction),frame:assertFrame(entry.frame)};
-      }),
+      })
+    };
+  }
+
+  function normalizePayload(source){
+    const payload=normalizeDecisionPayload(source);
+    if(!source.legacy||typeof source.legacy!=='object'||Array.isArray(source.legacy))fail('legacy decision must be an object');
+    return{
+      frame:payload.frame,
+      player:payload.player,
+      characterId:payload.characterId,
+      trigger:payload.trigger,
+      directions:payload.directions,
       legacy:clone(source.legacy)
     };
   }
@@ -3197,7 +3243,18 @@ requestAnimationFrame(frame);
     reportVersion:REPORT_VERSION,
     get enabled(){return requestedEnabled&&disabledReason===null;},
     get requestedEnabled(){return requestedEnabled;},
+    get requestedShadow(){return requestedShadow;},
+    get requestedCanary(){return requestedCanary;},
+    get canaryEnabled(){return requestedCanary&&disabledReason===null;},
     get disabledReason(){return disabledReason;},
+    resolveTrigger:function(source){
+      if(!api.canaryEnabled)return{accepted:false,reason:'disabled'};
+      const payload=normalizeDecisionPayload(source);
+      return{accepted:true,decision:clone(coreDecision(payload))};
+    },
+    canaryStatus:function(){
+      return clone({requested:requestedCanary,enabled:api.canaryEnabled,disabledReason:disabledReason});
+    },
     observeTrigger:function(source){
       if(!api.enabled)return{accepted:false,reason:'disabled'};
       const payload=normalizePayload(source);
@@ -3222,6 +3279,9 @@ requestAnimationFrame(frame);
       return clone({
         version:VERSION,
         requestedEnabled:requestedEnabled,
+        requestedShadow:requestedShadow,
+        requestedCanary:requestedCanary,
+        canaryEnabled:api.canaryEnabled,
         enabled:api.enabled,
         disabledReason:disabledReason,
         observations:observations

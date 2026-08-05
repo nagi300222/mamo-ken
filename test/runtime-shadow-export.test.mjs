@@ -51,7 +51,7 @@ assert.equal(first.text,second.text);
 assert.equal(first.text.endsWith('\n'),true);
 assert.equal(first.api.reportVersion,'mamoken-command-shadow-report-v1');
 assert.equal(first.report.reportVersion,'mamoken-command-shadow-report-v1');
-assert.equal(first.report.observerVersion,'runtime-command-shadow-browser-v2');
+assert.equal(first.report.observerVersion,'runtime-command-shadow-browser-v3');
 assert.equal(first.report.summary.observationCount,3);
 assert.equal(first.report.summary.mismatchCount,0);
 assert.equal(first.report.summary.firstFrame,1);
@@ -70,6 +70,7 @@ assert.equal(Object.hasOwn(first.report,'timestamp'),false);
 assert.equal(Object.hasOwn(first.report,'url'),false);
 assert.equal(Object.hasOwn(first.report,'userAgent'),false);
 assert.equal(first.text.includes('mamokenShadow=1'),false);
+assert.equal(first.text.includes('mamokenCoreCommand=1'),false);
 
 const parsed=parseShadowReportText(first.text,'fixture');
 assert.equal(parsed.summary.observationHash,first.api.hash());

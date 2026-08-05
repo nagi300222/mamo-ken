@@ -1,14 +1,17 @@
 (function installRuntimeCommandShadow(root){
   'use strict';
 
-  const VERSION='runtime-command-shadow-browser-v2';
+  const VERSION='runtime-command-shadow-browser-v3';
   const REPORT_VERSION='mamoken-command-shadow-report-v1';
   const MAX_OBSERVATIONS=256;
   const CURRENT_CHARACTERS=['moguzo','pisuke','godan'];
   const CURRENT_LEVELS=['high','mid','low'];
   const CURRENT_CHARACTER_SET=new Set(CURRENT_CHARACTERS);
   const CURRENT_LEVEL_SET=new Set(CURRENT_LEVELS);
-  const requestedEnabled=/(?:^|[?&])mamokenShadow=1(?:&|$)/.test((root.location&&root.location.search)||'');
+  const search=(root.location&&root.location.search)||'';
+  const requestedShadow=/(?:^|[?&])mamokenShadow=1(?:&|$)/.test(search);
+  const requestedCanary=/(?:^|[?&])mamokenCoreCommand=1(?:&|$)/.test(search);
+  const requestedEnabled=requestedShadow||requestedCanary;
   let disabledReason=null;
   let observations=[];
 
@@ -64,10 +67,9 @@
     return fallbackDecision(trigger);
   }
 
-  function normalizePayload(source){
+  function normalizeDecisionPayload(source){
     if(!source||typeof source!=='object'||Array.isArray(source))fail('payload must be an object');
     if(!Array.isArray(source.directions))fail('directions must be an array');
-    if(!source.legacy||typeof source.legacy!=='object'||Array.isArray(source.legacy))fail('legacy decision must be an object');
     return{
       frame:assertFrame(source.frame),
       player:assertPlayer(source.player),
@@ -76,7 +78,19 @@
       directions:source.directions.map(function(entry){
         if(!entry||typeof entry!=='object'||Array.isArray(entry))fail('direction entry must be an object');
         return{direction:assertDirection(entry.direction),frame:assertFrame(entry.frame)};
-      }),
+      })
+    };
+  }
+
+  function normalizePayload(source){
+    const payload=normalizeDecisionPayload(source);
+    if(!source.legacy||typeof source.legacy!=='object'||Array.isArray(source.legacy))fail('legacy decision must be an object');
+    return{
+      frame:payload.frame,
+      player:payload.player,
+      characterId:payload.characterId,
+      trigger:payload.trigger,
+      directions:payload.directions,
       legacy:clone(source.legacy)
     };
   }
@@ -126,7 +140,18 @@
     reportVersion:REPORT_VERSION,
     get enabled(){return requestedEnabled&&disabledReason===null;},
     get requestedEnabled(){return requestedEnabled;},
+    get requestedShadow(){return requestedShadow;},
+    get requestedCanary(){return requestedCanary;},
+    get canaryEnabled(){return requestedCanary&&disabledReason===null;},
     get disabledReason(){return disabledReason;},
+    resolveTrigger:function(source){
+      if(!api.canaryEnabled)return{accepted:false,reason:'disabled'};
+      const payload=normalizeDecisionPayload(source);
+      return{accepted:true,decision:clone(coreDecision(payload))};
+    },
+    canaryStatus:function(){
+      return clone({requested:requestedCanary,enabled:api.canaryEnabled,disabledReason:disabledReason});
+    },
     observeTrigger:function(source){
       if(!api.enabled)return{accepted:false,reason:'disabled'};
       const payload=normalizePayload(source);
@@ -151,6 +176,9 @@
       return clone({
         version:VERSION,
         requestedEnabled:requestedEnabled,
+        requestedShadow:requestedShadow,
+        requestedCanary:requestedCanary,
+        canaryEnabled:api.canaryEnabled,
         enabled:api.enabled,
         disabledReason:disabledReason,
         observations:observations
