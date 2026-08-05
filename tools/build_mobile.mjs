@@ -21,6 +21,8 @@
 // こうすることでポーズ/キャラ追加などプロトタイプ側の変更に追従するための
 // メンテナンスが不要になる。assets/ref/ と ref_design.png はコード上どこからも
 // 読み込まれないアート参考用ファイルのため埋め込み対象から除外する。
+// runtime/runtime-command-shadow-browser.js はprototypeでは外部scriptとして読み込み、
+// 配布版では単一HTMLを維持するため同じビルド内でinline化する。
 //
 // 縮小方針(カテゴリはassets/直下のサブディレクトリ名で判定): chars=高さ400px /
 // portraits=高さ520px / cutin=幅1280px / bg=高さ1200px / ui・その他=原寸維持。
@@ -37,6 +39,8 @@ const SRC_HTML = path.join(ROOT, 'prototype', 'mamoken_prototype_v01.html');
 const ASSETS_DIR = path.join(ROOT, 'assets');
 const OUT_DIR = path.join(ROOT, 'dist');
 const OUT_HTML = path.join(OUT_DIR, 'mamoken_mobile.html');
+const RUNTIME_SHADOW_JS = path.join(ROOT, 'runtime', 'runtime-command-shadow-browser.js');
+const RUNTIME_SHADOW_TAG = '<script src="../runtime/runtime-command-shadow-browser.js"></script>';
 
 const IMG_EXT = new Set(['.png', '.jpg', '.jpeg', '.gif', '.webp']);
 const WEBP_QUALITY = 80;
@@ -95,6 +99,7 @@ async function buildAssetMap() {
 
 async function main() {
   const html = readFileSync(SRC_HTML, 'utf8');
+  const runtimeShadowSource = readFileSync(RUNTIME_SHADOW_JS, 'utf8');
   const { map: assetMap, skipped, origTotal, outTotal } = await buildAssetMap();
   const count = Object.keys(assetMap).length;
 
@@ -113,6 +118,11 @@ async function main() {
     srcLine,
     '  img.src=Object.prototype.hasOwnProperty.call(__ASSET_MAP__,src)?__ASSET_MAP__[src]:src;'
   );
+
+  if (!out.includes(RUNTIME_SHADOW_TAG)) {
+    throw new Error(`アンカー行が見つかりません: ${JSON.stringify(RUNTIME_SHADOW_TAG)} (runtime shadow hookが未適用の可能性があります)`);
+  }
+  out = out.replace(RUNTIME_SHADOW_TAG, `<script>\n${runtimeShadowSource}\n</script>`);
 
   if (!existsSync(OUT_DIR)) mkdirSync(OUT_DIR, { recursive: true });
   writeFileSync(OUT_HTML, out, 'utf8');
