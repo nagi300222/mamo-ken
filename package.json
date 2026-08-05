@@ -19,6 +19,7 @@
     "check:runtime": "npm run typecheck:core && node --experimental-strip-types test/runtime-adapter.test.mjs",
     "check:runtime-input": "npm run typecheck:core && node --experimental-strip-types test/runtime-input-bridge.test.mjs",
     "check:runtime-shadow": "npm run typecheck:core && node --experimental-strip-types test/runtime-command-shadow.test.mjs",
+    "check:runtime-hook": "npm run typecheck:core && node --experimental-strip-types test/runtime-shadow-hook.test.mjs",
     "typecheck:core": "tsc --noEmit"
   },
   "devDependencies": {
