@@ -1,9 +1,10 @@
 (function installRuntimeCommandShadow(root){
   'use strict';
 
-  const VERSION='runtime-command-shadow-browser-v3';
-  const REPORT_VERSION='mamoken-command-shadow-report-v1';
+  const VERSION='runtime-command-shadow-browser-v4';
+  const REPORT_VERSION='mamoken-command-shadow-report-v2';
   const MAX_OBSERVATIONS=256;
+  const MAX_CANARY_EVENTS=256;
   const CURRENT_CHARACTERS=['moguzo','pisuke','godan'];
   const CURRENT_LEVELS=['high','mid','low'];
   const CURRENT_CHARACTER_SET=new Set(CURRENT_CHARACTERS);
@@ -14,6 +15,8 @@
   const requestedEnabled=requestedShadow||requestedCanary;
   let disabledReason=null;
   let observations=[];
+  let canaryEvents=[];
+  let canaryAttemptSeq=0;
 
   function stableStringify(value){
     if(value===null||typeof value!=='object')return JSON.stringify(value);
@@ -38,6 +41,8 @@
   function assertCharacter(value){if(!CURRENT_CHARACTER_SET.has(value))fail('characterId must be a current character');return value;}
   function assertTrigger(value){if(value!=='grab'&&!CURRENT_LEVEL_SET.has(value))fail('trigger must be high, mid, low, or grab');return value;}
   function assertDirection(value){if(value!=='left'&&value!=='down'&&value!=='right')fail('direction must be left, down, or right');return value;}
+  function assertAttemptId(value){if(!Number.isInteger(value)||value<1)fail('attemptId must be a positive integer');return value;}
+  function assertRollbackReason(value){if(typeof value!=='string'||!/^[a-z0-9-]{1,64}$/.test(value))fail('rollback reason must be a stable lowercase code');return value;}
 
   function fallbackDecision(trigger){
     return trigger==='grab'
@@ -123,15 +128,93 @@
       byTrigger:byTrigger
     };
   }
+
+  function canaryCounter(){return{attempts:0,commands:0,fallbacks:0,rollbacks:0,pending:0};}
+  function addCanaryCount(bucket,key,event){
+    const target=bucket[key];
+    target.attempts++;
+    if(event.outcome==='command')target.commands++;
+    else if(event.outcome==='fallback')target.fallbacks++;
+    else if(event.outcome==='rollback')target.rollbacks++;
+    else target.pending++;
+  }
+  function canaryEventHash(){return fnv1a32(stableStringify({version:VERSION,events:canaryEvents}));}
+  function buildCanarySummary(){
+    const byPlayer={'0':canaryCounter(),'1':canaryCounter()};
+    const byCharacter={moguzo:canaryCounter(),pisuke:canaryCounter(),godan:canaryCounter()};
+    const byTrigger={high:canaryCounter(),mid:canaryCounter(),low:canaryCounter(),grab:canaryCounter()};
+    const reasonCounts={};
+    let commandCount=0,fallbackCount=0,rollbackCount=0,pendingCount=0;
+    for(const event of canaryEvents){
+      if(event.outcome==='command')commandCount++;
+      else if(event.outcome==='fallback')fallbackCount++;
+      else if(event.outcome==='rollback'){
+        rollbackCount++;
+        reasonCounts[event.reason]=(reasonCounts[event.reason]||0)+1;
+      }else pendingCount++;
+      addCanaryCount(byPlayer,String(event.player),event);
+      addCanaryCount(byCharacter,event.characterId,event);
+      addCanaryCount(byTrigger,event.trigger,event);
+    }
+    const rollbackReasons={};
+    for(const reason of Object.keys(reasonCounts).sort())rollbackReasons[reason]=reasonCounts[reason];
+    return{
+      attemptCount:canaryEvents.length,
+      commandCount:commandCount,
+      fallbackCount:fallbackCount,
+      rollbackCount:rollbackCount,
+      pendingCount:pendingCount,
+      eventHash:canaryEventHash(),
+      firstFrame:canaryEvents.length?canaryEvents[0].frame:null,
+      lastFrame:canaryEvents.length?canaryEvents[canaryEvents.length-1].frame:null,
+      byPlayer:byPlayer,
+      byCharacter:byCharacter,
+      byTrigger:byTrigger,
+      rollbackReasons:rollbackReasons
+    };
+  }
+  function appendCanaryEvent(event){
+    canaryEvents=canaryEvents.concat([event]).slice(-MAX_CANARY_EVENTS);
+    return event;
+  }
+  function findCanaryEvent(attemptId){
+    for(let index=canaryEvents.length-1;index>=0;index--){
+      if(canaryEvents[index].attemptId===attemptId)return canaryEvents[index];
+    }
+    return null;
+  }
+  function createCanaryEvent(payload,decision){
+    const event={
+      attemptId:++canaryAttemptSeq,
+      frame:payload.frame,
+      player:payload.player,
+      characterId:payload.characterId,
+      trigger:payload.trigger,
+      decision:decision?clone(decision):null,
+      outcome:'pending',
+      reason:null
+    };
+    return appendCanaryEvent(event);
+  }
+
   function buildReport(){
     return{
       reportVersion:REPORT_VERSION,
       observerVersion:VERSION,
       requestedEnabled:requestedEnabled,
+      requestedShadow:requestedShadow,
+      requestedCanary:requestedCanary,
       enabled:api.enabled,
       disabledReason:disabledReason,
       summary:buildSummary(),
-      observations:clone(observations)
+      observations:clone(observations),
+      canary:{
+        requested:requestedCanary,
+        enabled:api.canaryEnabled,
+        disabledReason:disabledReason,
+        summary:buildCanarySummary(),
+        events:clone(canaryEvents)
+      }
     };
   }
 
@@ -147,10 +230,45 @@
     resolveTrigger:function(source){
       if(!api.canaryEnabled)return{accepted:false,reason:'disabled'};
       const payload=normalizeDecisionPayload(source);
-      return{accepted:true,decision:clone(coreDecision(payload))};
+      const decision=coreDecision(payload);
+      const event=createCanaryEvent(payload,decision);
+      return{accepted:true,attemptId:event.attemptId,decision:clone(decision)};
+    },
+    completeCanaryAttempt:function(attemptId,outcome){
+      const id=assertAttemptId(attemptId);
+      if(outcome!=='command'&&outcome!=='fallback')fail('canary outcome must be command or fallback');
+      const event=findCanaryEvent(id);
+      if(!event)fail('canary attempt is outside the audit ring or unknown');
+      if(event.outcome!=='pending')fail('canary attempt is already completed');
+      const expected=event.decision&&event.decision.kind==='command'?'command':'fallback';
+      if(outcome!==expected)fail('canary outcome does not match the resolved decision');
+      event.outcome=outcome;
+      return clone(event);
+    },
+    failCanaryAttempt:function(attemptId,source,reason,error){
+      const payload=normalizeDecisionPayload(source);
+      const stableReason=assertRollbackReason(reason);
+      let event=null;
+      if(attemptId!==null&&attemptId!==undefined){
+        event=findCanaryEvent(assertAttemptId(attemptId));
+        if(event&&event.outcome!=='pending')fail('canary attempt is already completed');
+      }
+      if(!event)event=createCanaryEvent(payload,null);
+      event.outcome='rollback';
+      event.reason=stableReason;
+      disabledReason=error instanceof Error?error.message:String(error||stableReason);
+      return clone(event);
     },
     canaryStatus:function(){
-      return clone({requested:requestedCanary,enabled:api.canaryEnabled,disabledReason:disabledReason});
+      return clone({
+        requested:requestedCanary,
+        enabled:api.canaryEnabled,
+        disabledReason:disabledReason,
+        summary:buildCanarySummary()
+      });
+    },
+    canaryAudit:function(){
+      return clone({summary:buildCanarySummary(),events:canaryEvents});
     },
     observeTrigger:function(source){
       if(!api.enabled)return{accepted:false,reason:'disabled'};
@@ -168,7 +286,12 @@
       observations=observations.concat([observation]).slice(-MAX_OBSERVATIONS);
       return{accepted:true,observation:clone(observation)};
     },
-    reset:function(){observations=[];disabledReason=null;},
+    reset:function(){
+      observations=[];
+      canaryEvents=[];
+      canaryAttemptSeq=0;
+      disabledReason=null;
+    },
     disable:function(error){
       disabledReason=error instanceof Error?error.message:String(error||'disabled');
     },
@@ -181,13 +304,15 @@
         canaryEnabled:api.canaryEnabled,
         enabled:api.enabled,
         disabledReason:disabledReason,
-        observations:observations
+        observations:observations,
+        canaryEvents:canaryEvents
       });
     },
     summary:function(){return clone(buildSummary());},
     report:function(){return clone(buildReport());},
     exportReport:function(){return JSON.stringify(buildReport(),null,2)+'\n';},
     hash:function(){return observationHash();},
+    canaryHash:function(){return canaryEventHash();},
     mismatchCount:function(){return buildSummary().mismatchCount;}
   };
 
