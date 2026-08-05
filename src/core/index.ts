@@ -27,3 +27,5 @@ export * from './runtime-adapter-types.ts';
 export * from './runtime-adapter.ts';
 export * from './runtime-input-bridge-types.ts';
 export * from './runtime-input-bridge.ts';
+export * from './runtime-command-shadow-types.ts';
+export * from './runtime-command-shadow.ts';
