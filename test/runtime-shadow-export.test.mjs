@@ -104,6 +104,11 @@ assert.equal(different.firstDifference.right.matches,false);
 }
 {
   const tampered=structuredClone(first.report);
+  tampered.summary.byCharacter.moguzo.observations=99;
+  assert.throws(()=>normalizeShadowReport(tampered,'tampered'),/byCharacter.*does not match/);
+}
+{
+  const tampered=structuredClone(first.report);
   tampered.reportVersion='unknown-report';
   assert.throws(()=>normalizeShadowReport(tampered,'tampered'),/reportVersion/);
 }
