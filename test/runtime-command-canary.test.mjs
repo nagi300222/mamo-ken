@@ -10,6 +10,7 @@ const ROOT=path.resolve(__dirname,'..');
 const browserSource=readFileSync(path.join(ROOT,'runtime','runtime-command-shadow-browser.js'),'utf8');
 const runtimeBal={CMD:CURRENT_CONTRACT.bal.CMD};
 
+function plain(value){return JSON.parse(JSON.stringify(value));}
 function loadApi(search){
   const sandbox={console,location:{search}};
   sandbox.window=sandbox;
@@ -39,7 +40,7 @@ function decisionPayload(characterId,move,frame=30,player=0,triggerOverride=null
   assert.equal(api.canaryEnabled,false);
   assert.equal(api.resolveTrigger({}).accepted,false);
   assert.equal(api.resolveTrigger({}).reason,'disabled');
-  assert.deepEqual(api.canaryStatus(),{requested:false,enabled:false,disabledReason:null});
+  assert.deepEqual(plain(api.canaryStatus()),{requested:false,enabled:false,disabledReason:null});
 }
 
 {
@@ -58,7 +59,7 @@ assert.equal(canary.requestedCanary,true);
 assert.equal(canary.requestedEnabled,true);
 assert.equal(canary.enabled,true);
 assert.equal(canary.canaryEnabled,true);
-assert.deepEqual(canary.canaryStatus(),{requested:true,enabled:true,disabledReason:null});
+assert.deepEqual(plain(canary.canaryStatus()),{requested:true,enabled:true,disabledReason:null});
 
 let commandCount=0;
 for(const characterId of ['moguzo','pisuke','godan']){
@@ -85,7 +86,7 @@ assert.equal(commandCount,9);
     directions:[]
   });
   assert.equal(result.accepted,true);
-  assert.deepEqual(result.decision,{kind:'fallback',fallback:'normal-attack',level:'high'});
+  assert.deepEqual(plain(result.decision),{kind:'fallback',fallback:'normal-attack',level:'high'});
 }
 
 {
@@ -111,7 +112,7 @@ assert.equal(commandCount,9);
   assert.equal(api.enabled,false);
   assert.equal(api.canaryEnabled,false);
   assert.equal(api.resolveTrigger({}).accepted,false);
-  assert.deepEqual(api.canaryStatus(),{requested:true,enabled:false,disabledReason:'forced canary failure'});
+  assert.deepEqual(plain(api.canaryStatus()),{requested:true,enabled:false,disabledReason:'forced canary failure'});
   api.reset();
   assert.equal(api.enabled,true);
   assert.equal(api.canaryEnabled,true);
