@@ -51,8 +51,8 @@ function buildFixture({rollback=false}={}){
 const first=buildFixture();
 const second=buildFixture();
 assert.equal(first.text,second.text);
-assert.equal(first.report.reportVersion,'mamoken-command-shadow-report-v2');
-assert.equal(first.report.observerVersion,'runtime-command-shadow-browser-v4');
+assert.equal(first.report.reportVersion,'mamoken-command-shadow-report-v3');
+assert.equal(first.report.observerVersion,'runtime-command-shadow-browser-v5');
 assert.equal(first.report.canary.summary.attemptCount,3);
 assert.equal(first.report.canary.summary.commandCount,1);
 assert.equal(first.report.canary.summary.fallbackCount,2);

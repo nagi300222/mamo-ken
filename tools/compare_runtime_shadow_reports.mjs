@@ -4,7 +4,8 @@ import { fileURLToPath } from 'node:url';
 
 const REPORT_V1='mamoken-command-shadow-report-v1';
 const REPORT_V2='mamoken-command-shadow-report-v2';
-const SUPPORTED_REPORTS=new Set([REPORT_V1,REPORT_V2]);
+const REPORT_V3='mamoken-command-shadow-report-v3';
+const SUPPORTED_REPORTS=new Set([REPORT_V1,REPORT_V2,REPORT_V3]);
 const CURRENT_CHARACTERS=new Set(['moguzo','pisuke','godan']);
 const CURRENT_TRIGGERS=new Set(['high','mid','low','grab']);
 const CANARY_OUTCOMES=new Set(['command','fallback','rollback','pending']);
@@ -220,7 +221,17 @@ function normalizeCanarySection(source,label,observerVersion,topLevel){
   if(typeof source.enabled!=='boolean')fail(`${label}.enabled`,'must be boolean');
   const disabledReason=assertNullableString(source.disabledReason,`${label}.disabledReason`);
   if(source.requested!==topLevel.requestedCanary)fail(`${label}.requested`,'must match requestedCanary');
-  if(source.enabled!==(source.requested&&disabledReason===null))fail(`${label}.enabled`,'does not match requested/disabled state');
+  let defaultEnabled=false,legacyOverride=false;
+  if(topLevel.reportVersion===REPORT_V3){
+    if(source.defaultEnabled!==true)fail(`${label}.defaultEnabled`,'must be true');
+    if(typeof source.legacyOverride!=='boolean')fail(`${label}.legacyOverride`,'must be boolean');
+    if(source.legacyOverride!==topLevel.requestedLegacy)fail(`${label}.legacyOverride`,'must match requestedLegacy');
+    defaultEnabled=true;
+    legacyOverride=source.legacyOverride;
+    if(source.enabled!==(!legacyOverride&&disabledReason===null))fail(`${label}.enabled`,'does not match default/override/disabled state');
+  }else if(source.enabled!==(source.requested&&disabledReason===null)){
+    fail(`${label}.enabled`,'does not match requested/disabled state');
+  }
   if(disabledReason!==topLevel.disabledReason)fail(`${label}.disabledReason`,'must match top-level disabledReason');
   if(!Array.isArray(source.events))fail(`${label}.events`,'must be an array');
   if(source.events.length>256)fail(`${label}.events`,'must not exceed the 256-entry ring');
@@ -260,12 +271,12 @@ function normalizeCanarySection(source,label,observerVersion,topLevel){
     assertInteger(count,`${label}.summary.rollbackReasons.${reason}`,1);
   }
   assertCanarySummaryMatch(summary,expectedCanarySummary(observerVersion,events),`${label}.summary`);
-  return{requested:source.requested,enabled:source.enabled,disabledReason,summary,events};
+  return{requested:source.requested,defaultEnabled,legacyOverride,enabled:source.enabled,disabledReason,summary,events};
 }
 
 export function normalizeShadowReport(source,label='report'){
   if(!isObject(source))fail(label,'must be an object');
-  if(!SUPPORTED_REPORTS.has(source.reportVersion))fail(`${label}.reportVersion`,`must be ${REPORT_V1} or ${REPORT_V2}`);
+  if(!SUPPORTED_REPORTS.has(source.reportVersion))fail(`${label}.reportVersion`,`must be ${REPORT_V1}, ${REPORT_V2}, or ${REPORT_V3}`);
   if(typeof source.observerVersion!=='string'||source.observerVersion.length===0)fail(`${label}.observerVersion`,'must be a non-empty string');
   if(typeof source.requestedEnabled!=='boolean')fail(`${label}.requestedEnabled`,'must be boolean');
   if(typeof source.enabled!=='boolean')fail(`${label}.enabled`,'must be boolean');
@@ -289,16 +300,28 @@ export function normalizeShadowReport(source,label='report'){
   if(typeof source.requestedCanary!=='boolean')fail(`${label}.requestedCanary`,'must be boolean');
   if(source.requestedEnabled!==(source.requestedShadow||source.requestedCanary))fail(`${label}.requestedEnabled`,'must match requestedShadow/requestedCanary');
   if(source.enabled!==(source.requestedEnabled&&disabledReason===null))fail(`${label}.enabled`,'does not match requested/disabled state');
-  const topLevel={requestedCanary:source.requestedCanary,disabledReason};
+  let requestedLegacy=false,authority=null;
+  if(source.reportVersion===REPORT_V3){
+    if(typeof source.requestedLegacy!=='boolean')fail(`${label}.requestedLegacy`,'must be boolean');
+    requestedLegacy=source.requestedLegacy;
+    if(!isObject(source.authority))fail(`${label}.authority`,'must be an object');
+    const expectedOffline=requestedLegacy?'legacy-override':(disabledReason===null?'core-default':'legacy-rollback');
+    if(source.authority.offline!==expectedOffline)fail(`${label}.authority.offline`,'does not match override/disabled state');
+    if(source.authority.online!=='legacy')fail(`${label}.authority.online`,'must be legacy');
+    authority={offline:source.authority.offline,online:'legacy'};
+  }
+  const topLevel={reportVersion:source.reportVersion,requestedCanary:source.requestedCanary,requestedLegacy,disabledReason};
   const canary=normalizeCanarySection(source.canary,`${label}.canary`,source.observerVersion,topLevel);
   return{
-    reportVersion:REPORT_V2,
+    reportVersion:source.reportVersion,
     observerVersion:source.observerVersion,
     requestedEnabled:source.requestedEnabled,
     requestedShadow:source.requestedShadow,
     requestedCanary:source.requestedCanary,
+    requestedLegacy,
     enabled:source.enabled,
     disabledReason,
+    authority,
     summary:observationSection.summary,
     observations:observationSection.observations,
     canary
@@ -338,7 +361,8 @@ export function compareShadowReports(leftSource,rightSource){
   const leftCanary=left.canary?left.canary.events:[];
   const rightCanary=right.canary?right.canary.events:[];
   const canaryIdentical=stableStringify(leftCanary)===stableStringify(rightCanary);
-  const identical=compatible&&observationsIdentical&&canaryIdentical;
+  const authorityIdentical=stableStringify(left.authority)===stableStringify(right.authority);
+  const identical=compatible&&observationsIdentical&&canaryIdentical&&authorityIdentical;
   const firstDifferenceIndex=firstDifference(left.observations,right.observations);
   const canaryFirstDifferenceIndex=firstDifference(leftCanary,rightCanary);
   const leftCanaryMetrics=canaryMetrics(left);
@@ -349,12 +373,14 @@ export function compareShadowReports(leftSource,rightSource){
     identical,
     observationsIdentical,
     canaryIdentical,
+    authorityIdentical,
     left:{
       reportVersion:left.reportVersion,
       observerVersion:left.observerVersion,
       observationCount:left.summary.observationCount,
       mismatchCount:left.summary.mismatchCount,
       observationHash:left.summary.observationHash,
+      authority:left.authority,
       canary:leftCanaryMetrics
     },
     right:{
@@ -363,6 +389,7 @@ export function compareShadowReports(leftSource,rightSource){
       observationCount:right.summary.observationCount,
       mismatchCount:right.summary.mismatchCount,
       observationHash:right.summary.observationHash,
+      authority:right.authority,
       canary:rightCanaryMetrics
     },
     delta:{

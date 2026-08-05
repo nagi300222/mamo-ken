@@ -41,12 +41,16 @@ function complete(api,result){
 {
   const api=loadApi('');
   assert.equal(api.requestedCanary,false);
-  assert.equal(api.canaryEnabled,false);
-  assert.equal(api.resolveTrigger({}).accepted,false);
-  assert.equal(api.resolveTrigger({}).reason,'disabled');
+  assert.equal(api.requestedLegacy,false);
+  assert.equal(api.enabled,false);
+  assert.equal(api.canaryEnabled,true);
+  assert.equal(api.offlineAuthority,'core-default');
   const status=plain(api.canaryStatus());
   assert.equal(status.requested,false);
-  assert.equal(status.enabled,false);
+  assert.equal(status.defaultEnabled,true);
+  assert.equal(status.legacyOverride,false);
+  assert.equal(status.offlineAuthority,'core-default');
+  assert.equal(status.enabled,true);
   assert.equal(status.disabledReason,null);
   assert.equal(status.summary.attemptCount,0);
 }
@@ -56,13 +60,29 @@ function complete(api,result){
   assert.equal(api.requestedShadow,true);
   assert.equal(api.requestedCanary,false);
   assert.equal(api.enabled,true);
+  assert.equal(api.canaryEnabled,true);
+  assert.equal(api.offlineAuthority,'core-default');
+}
+
+{
+  const api=loadApi('?mamokenLegacyCommand=1');
+  assert.equal(api.requestedLegacy,true);
   assert.equal(api.canaryEnabled,false);
-  assert.equal(api.resolveTrigger({}).accepted,false);
+  assert.equal(api.offlineAuthority,'legacy-override');
+  assert.deepEqual(plain(api.resolveTrigger({})),{accepted:false,reason:'disabled'});
+}
+
+{
+  const api=loadApi('?mamokenCoreCommand=1&mamokenLegacyCommand=1');
+  assert.equal(api.requestedCanary,true);
+  assert.equal(api.requestedLegacy,true);
+  assert.equal(api.canaryEnabled,false);
+  assert.equal(api.offlineAuthority,'legacy-override');
 }
 
 const canary=loadApi('?mamokenCoreCommand=1');
-assert.equal(canary.version,'runtime-command-shadow-browser-v4');
-assert.equal(canary.reportVersion,'mamoken-command-shadow-report-v2');
+assert.equal(canary.version,'runtime-command-shadow-browser-v5');
+assert.equal(canary.reportVersion,'mamoken-command-shadow-report-v3');
 assert.equal(canary.requestedShadow,false);
 assert.equal(canary.requestedCanary,true);
 assert.equal(canary.requestedEnabled,true);
@@ -138,6 +158,9 @@ assert.equal(summary.eventHash,canary.canaryHash());
   assert.equal(api.resolveTrigger({}).accepted,false);
   const status=plain(api.canaryStatus());
   assert.equal(status.requested,true);
+  assert.equal(status.defaultEnabled,true);
+  assert.equal(status.legacyOverride,false);
+  assert.equal(status.offlineAuthority,'legacy-rollback');
   assert.equal(status.enabled,false);
   assert.equal(status.disabledReason,'forced canary failure');
   assert.equal(status.summary.rollbackCount,1);
@@ -145,6 +168,7 @@ assert.equal(summary.eventHash,canary.canaryHash());
   api.reset();
   assert.equal(api.enabled,true);
   assert.equal(api.canaryEnabled,true);
+  assert.equal(api.offlineAuthority,'core-default');
   assert.equal(api.canaryStatus().summary.attemptCount,0);
 }
 
@@ -166,9 +190,10 @@ for(const source of [prototype,dist]){
 }
 assert.ok(prototype.includes('<script src="../runtime/runtime-command-shadow-browser.js"></script>'));
 assert.equal(dist.includes('<script src="../runtime/runtime-command-shadow-browser.js"></script>'),false);
-assert.ok(dist.includes('runtime-command-shadow-browser-v4'));
-assert.ok(dist.includes('mamoken-command-shadow-report-v2'));
+assert.ok(dist.includes('runtime-command-shadow-browser-v5'));
+assert.ok(dist.includes('mamoken-command-shadow-report-v3'));
 assert.ok(dist.includes('mamokenCoreCommand=1'));
+assert.ok(dist.includes('mamokenLegacyCommand=1'));
 assert.ok(patcher.includes("const MARKER='/* T17 offline runtime command canary */'"));
 assert.ok(patcher.includes('lastMatchOnline||NET.active'));
 assert.ok(auditPatcher.includes('runtime-validation-failed'));
@@ -178,4 +203,4 @@ assert.equal(/\bfetch\s*\(/.test(browserSource),false);
 assert.equal(/localStorage/.test(browserSource),false);
 assert.equal(/Date\.|new Date/.test(browserSource),false);
 
-console.log(`runtime command canary tests passed; currentCommands=${commandCount}; auditHash=${summary.eventHash}; defaultOff=true; onlineAuthority=false; rollback=legacy`);
+console.log(`runtime command canary tests passed; currentCommands=${commandCount}; auditHash=${summary.eventHash}; defaultOn=true; onlineAuthority=legacy; rollback=legacy`);
