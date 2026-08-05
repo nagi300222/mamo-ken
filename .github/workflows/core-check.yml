@@ -4,6 +4,11 @@ on:
   pull_request:
     paths:
       - 'src/core/**'
+      - 'runtime/**'
+      - 'prototype/mamoken_prototype_v01.html'
+      - 'dist/mamoken_mobile.html'
+      - 'tools/build_mobile.mjs'
+      - 'tools/apply_t15_runtime_shadow_hook.mjs'
       - 'test/core-spec.test.mjs'
       - 'test/command-parser.test.mjs'
       - 'test/combat-moves.test.mjs'
@@ -17,6 +22,7 @@ on:
       - 'test/runtime-adapter.test.mjs'
       - 'test/runtime-input-bridge.test.mjs'
       - 'test/runtime-command-shadow.test.mjs'
+      - 'test/runtime-shadow-hook.test.mjs'
       - 'reports/T*_COMPLETION.md'
       - 'reports/current_impl_*.json'
       - 'package.json'
@@ -81,23 +87,28 @@ jobs:
       - name: Runtime command shadow tests
         run: npm run check:runtime-shadow
 
+      - name: Default-off runtime shadow hook tests
+        run: npm run check:runtime-hook
+
       - name: Audit current implementation before build
         run: node tools/audit_current_impl.mjs
 
       - name: Build mobile distribution
         run: npm run build:mobile
 
+      - name: Verify committed mobile distribution is reproducible
+        run: git diff --exit-code -- dist/mamoken_mobile.html
+
       - name: Audit current implementation after build
         run: node tools/audit_current_impl.mjs
 
-      - name: Restore generated audit/build outputs
+      - name: Restore generated audit outputs
         run: |
-          git restore dist/mamoken_mobile.html
           git restore reports/current_impl_constants.json
           git restore reports/current_impl_phases.json
           git restore reports/current_impl_sync_scope.md
 
-      - name: Verify scoped diff
+      - name: Verify scoped working tree
         run: |
           git diff --check
-          git diff --exit-code -- prototype/mamoken_prototype_v01.html index.html dist/mamoken_mobile.html server assets
+          git diff --exit-code -- index.html server assets
