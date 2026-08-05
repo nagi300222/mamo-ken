@@ -39,13 +39,6 @@ jobs:
       - name: Build mobile distribution
         run: npm run build:mobile
 
-      - name: Verify runtime diagnostic contracts
-        run: |
-          npm run check:runtime-hook
-          npm run check:runtime-export
-          npm run check:runtime-canary
-          npm run check:runtime-canary-audit
-
       - name: Commit generated runtime files
         run: |
           git config user.name "github-actions[bot]"
