@@ -9,6 +9,7 @@ on:
       - 'test/combat-moves.test.mjs'
       - 'test/defense.test.mjs'
       - 'test/gauge-gyuiin.test.mjs'
+      - 'test/ability-hooks.test.mjs'
       - 'reports/current_impl_*.json'
       - 'package.json'
       - 'package-lock.json'
@@ -47,6 +48,9 @@ jobs:
 
       - name: Gauge, roar and Gyuiin tests
         run: npm run check:gauge
+
+      - name: Ability hook tests
+        run: npm run check:ability
 
       - name: Audit current implementation before build
         run: node tools/audit_current_impl.mjs
