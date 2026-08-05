@@ -164,7 +164,7 @@ const longB = scriptedShadow(false);
 const longChanged = scriptedShadow(true);
 const longHash = runtimeCommandShadowHash(longA);
 assert.equal(runtimeCommandShadowMismatchCount(longA), 0);
-assert.equal(longA.observations.length, 512);
+assert.equal(longA.observations.length, 360);
 assert.equal(longHash, runtimeCommandShadowHash(longB));
 assert.notEqual(longHash, runtimeCommandShadowHash(longChanged));
 
