@@ -114,7 +114,7 @@ The report still contains no:
 
 ## Verification
 
-GitHub Actions `Core contract check` run #51 completed successfully with all 28 workflow steps.
+GitHub Actions `Core contract check` run #52 completed successfully with all 28 workflow steps.
 
 ### T19 authority verification
 
