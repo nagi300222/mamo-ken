@@ -53,8 +53,41 @@ function normalizeObservation(value,label){
   };
 }
 
-function countMismatches(observations){return observations.reduce((total,item)=>total+(item.matches?0:1),0);}
-function expectedHash(observerVersion,observations){return fnv1a32(stableStringify({version:observerVersion,observations}));}
+function counter(){return{observations:0,mismatches:0};}
+function addCount(bucket,key,item){
+  bucket[key].observations++;
+  if(!item.matches)bucket[key].mismatches++;
+}
+function expectedSummary(observerVersion,observations){
+  const byPlayer={'0':counter(),'1':counter()};
+  const byCharacter={moguzo:counter(),pisuke:counter(),godan:counter()};
+  const byTrigger={high:counter(),mid:counter(),low:counter(),grab:counter()};
+  let mismatchCount=0;
+  for(const item of observations){
+    if(!item.matches)mismatchCount++;
+    addCount(byPlayer,String(item.player),item);
+    addCount(byCharacter,item.characterId,item);
+    addCount(byTrigger,item.trigger,item);
+  }
+  return{
+    observationCount:observations.length,
+    mismatchCount,
+    observationHash:fnv1a32(stableStringify({version:observerVersion,observations})),
+    firstFrame:observations.length?observations[0].frame:null,
+    lastFrame:observations.length?observations.at(-1).frame:null,
+    byPlayer,
+    byCharacter,
+    byTrigger
+  };
+}
+function assertSummaryMatch(actual,expected,label){
+  for(const key of ['observationCount','mismatchCount','observationHash','firstFrame','lastFrame']){
+    if(actual[key]!==expected[key])fail(`${label}.${key}`,'does not match observations');
+  }
+  for(const key of ['byPlayer','byCharacter','byTrigger']){
+    if(stableStringify(actual[key])!==stableStringify(expected[key]))fail(`${label}.${key}`,'does not match observations');
+  }
+}
 
 export function normalizeShadowReport(source,label='report'){
   if(!isObject(source))fail(label,'must be an object');
@@ -90,15 +123,7 @@ export function normalizeShadowReport(source,label='report'){
     }
   };
   if(typeof summary.observationHash!=='string'||!/^[0-9a-f]{8}$/.test(summary.observationHash))fail(`${label}.summary.observationHash`,'must be an 8-character lowercase hex hash');
-  const mismatchCount=countMismatches(observations);
-  const observationHash=expectedHash(source.observerVersion,observations);
-  const firstFrame=observations.length?observations[0].frame:null;
-  const lastFrame=observations.length?observations.at(-1).frame:null;
-  if(summary.observationCount!==observations.length)fail(`${label}.summary.observationCount`,'does not match observations.length');
-  if(summary.mismatchCount!==mismatchCount)fail(`${label}.summary.mismatchCount`,'does not match observations');
-  if(summary.observationHash!==observationHash)fail(`${label}.summary.observationHash`,'does not match observerVersion and observations');
-  if(summary.firstFrame!==firstFrame)fail(`${label}.summary.firstFrame`,'does not match the first observation');
-  if(summary.lastFrame!==lastFrame)fail(`${label}.summary.lastFrame`,'does not match the last observation');
+  assertSummaryMatch(summary,expectedSummary(source.observerVersion,observations),`${label}.summary`);
   return{
     reportVersion:REPORT_VERSION,
     observerVersion:source.observerVersion,
