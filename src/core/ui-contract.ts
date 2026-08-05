@@ -7,6 +7,7 @@ import type {
   UiContract,
   UiHitRegion,
   UiRect,
+  UiScreenId,
 } from './ui-types.ts';
 
 const CURRENT_STATS: CurrentRosterStats = Object.freeze(Object.fromEntries(
@@ -18,6 +19,10 @@ const CURRENT_STATS: CurrentRosterStats = Object.freeze(Object.fromEntries(
     BRK: character.stats5.brk,
   })]),
 ) as Record<CurrentCharacterId, CurrentRosterStats[CurrentCharacterId]>);
+
+function screens(...values: UiScreenId[]): readonly UiScreenId[] {
+  return Object.freeze(values);
+}
 
 export const UI_CONTRACT: UiContract = Object.freeze({
   version: 'ui-contract-v1',
@@ -33,12 +38,12 @@ export const UI_CONTRACT: UiContract = Object.freeze({
   ] satisfies readonly RosterSlotContract[]),
   difficulties: Object.freeze(['EASY', 'NORMAL', 'HARD'] as const),
   actions: Object.freeze([
-    Object.freeze({ id: 'back', visibleOn: Object.freeze(['character_select', 'move_list']), requiresConfirmation: false }),
-    Object.freeze({ id: 'pause', visibleOn: Object.freeze(['battle']), requiresConfirmation: false }),
-    Object.freeze({ id: 'move_list', visibleOn: Object.freeze(['battle', 'pause']), requiresConfirmation: false }),
-    Object.freeze({ id: 'disconnect_request', visibleOn: Object.freeze(['pause']), requiresConfirmation: true }),
-    Object.freeze({ id: 'disconnect_confirm', visibleOn: Object.freeze(['disconnect_confirm']), requiresConfirmation: true }),
-    Object.freeze({ id: 'disconnect_cancel', visibleOn: Object.freeze(['disconnect_confirm']), requiresConfirmation: false }),
+    Object.freeze({ id: 'back', visibleOn: screens('character_select', 'move_list'), requiresConfirmation: false }),
+    Object.freeze({ id: 'pause', visibleOn: screens('battle'), requiresConfirmation: false }),
+    Object.freeze({ id: 'move_list', visibleOn: screens('battle', 'pause'), requiresConfirmation: false }),
+    Object.freeze({ id: 'disconnect_request', visibleOn: screens('pause'), requiresConfirmation: true }),
+    Object.freeze({ id: 'disconnect_confirm', visibleOn: screens('disconnect_confirm'), requiresConfirmation: true }),
+    Object.freeze({ id: 'disconnect_cancel', visibleOn: screens('disconnect_confirm'), requiresConfirmation: false }),
   ]),
   inputCues: Object.freeze([
     Object.freeze({ id: 'dir_left', label: '←', colorToken: 'direction_neutral', shapeToken: 'arrow_left', positionToken: 'left_pad_left', seToken: 'direction_tap' }),
@@ -68,9 +73,8 @@ export function buildPortraitLayout(width: number, height: number, safeTop = 0, 
   const gap = 8;
   const rosterTop = safeTop + 56;
   const rosterBottom = Math.floor(height * 0.56);
-  const rosterHeight = rosterBottom - rosterTop;
   const cardWidth = (width - pad * 2 - gap) / 2;
-  const cardHeight = (rosterHeight - gap * 3) / 4;
+  const cardHeight = (rosterBottom - rosterTop - gap * 3) / 4;
   const rosterRegions: UiHitRegion[] = [];
   for (let index = 0; index < 8; index += 1) {
     const column = index % 2;
@@ -123,8 +127,7 @@ export function validateUiContract(contract: UiContract = UI_CONTRACT): void {
 }
 
 export function validatePortraitLayout(layout: PortraitLayoutContract): void {
-  const groups = [layout.rosterRegions, layout.battleRegions];
-  for (const regions of groups) {
+  for (const regions of [layout.rosterRegions, layout.battleRegions]) {
     for (const region of regions) {
       const { x, y, width, height } = region.rect;
       if (width < 40 || height < 40) throw new Error(`tap region too small: ${region.id}`);
