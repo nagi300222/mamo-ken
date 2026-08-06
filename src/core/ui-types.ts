@@ -6,6 +6,7 @@ export type CharacterDetailTab = 'performance' | 'moves' | 'combos';
 export type UiScreenId = 'character_select' | 'character_detail' | 'battle' | 'pause' | 'move_list' | 'disconnect_confirm';
 
 export type UiRect = Readonly<{ x: number; y: number; width: number; height: number }>;
+export type UiCropProfile = Readonly<{ anchorX: number; anchorY: number; zoom: number }>;
 
 export type RosterSlotContract = Readonly<{
   slot: number;
@@ -14,10 +15,15 @@ export type RosterSlotContract = Readonly<{
   status: 'current_impl' | 'planned';
   unlocked: boolean;
   playableNow: boolean;
+  offlineTrialPlayable: boolean;
+  trialSkeletonSource: CurrentCharacterId;
+  trialLabelJa: string | null;
   displayName: string;
   placeholder: null | 'lock' | 'question';
   stats: Readonly<Record<DisplayStatKey, number>> | null;
   statsAreIndependentAxes: true;
+  faceCrop: UiCropProfile;
+  heroCrop: UiCropProfile;
 }>;
 
 export type InputCueContract = Readonly<{
@@ -38,13 +44,27 @@ export type UiActionContract = Readonly<{
 export type UiHitRegion = Readonly<{
   id: string;
   rect: UiRect;
-  role: 'roster_slot' | 'direction' | 'attack' | 'grab' | 'guard' | 'utility';
+  role: 'roster_slot' | 'mystery_slot' | 'direction' | 'attack' | 'grab' | 'guard' | 'utility';
 }>;
 
 export type PortraitLayoutContract = Readonly<{
   viewport: Readonly<{ width: number; height: number; safeTop: number; safeBottom: number }>;
   rosterRegions: readonly UiHitRegion[];
   battleRegions: readonly UiHitRegion[];
+}>;
+
+export type CharacterSelectContract = Readonly<{
+  columns: 5;
+  rows: 2;
+  rosterEntries: 9;
+  totalCells: 10;
+  mysteryCellIndex: 9;
+  faceCropAnchor: 'nose';
+  textSeparatedFromArtwork: true;
+  officialPlayableCount: 3;
+  offlineTrialPlayableCount: 9;
+  onlinePlayableCount: 3;
+  provisionalSkeletonLabelRequired: true;
 }>;
 
 export type CharacterDetailContract = Readonly<{
@@ -55,14 +75,16 @@ export type CharacterDetailContract = Readonly<{
   preservesSelectedCharacter: true;
   allRosterEntriesVisible: true;
   battleAvailabilityUnchanged: true;
+  offlineTrialAvailabilityVisible: true;
   comboUnverifiedLabelJa: '未検証';
   scrollStepLogicalPx: number;
   minimumPrimaryTargetLogicalPx: number;
 }>;
 
 export type UiContract = Readonly<{
-  version: 'ui-contract-v2';
+  version: 'ui-contract-v3';
   roster: readonly RosterSlotContract[];
+  characterSelect: CharacterSelectContract;
   difficulties: readonly UiDifficulty[];
   actions: readonly UiActionContract[];
   inputCues: readonly InputCueContract[];

@@ -1,4 +1,5 @@
 import { CURRENT_CHARACTERS } from './constants.ts';
+import { FULL_ROSTER } from './roster-full.ts';
 import type { CurrentCharacterId } from './types.ts';
 import type {
   CurrentRosterStats,
@@ -24,19 +25,40 @@ function screens(...values: UiScreenId[]): readonly UiScreenId[] {
   return Object.freeze(values);
 }
 
+const ROSTER_CONTRACT = Object.freeze(FULL_ROSTER.map((character) => Object.freeze({
+  slot: character.slot,
+  characterId: character.id,
+  archetype: character.archetype,
+  status: character.playableNow ? 'current_impl' : 'planned',
+  unlocked: true,
+  playableNow: character.playableNow,
+  offlineTrialPlayable: character.offlineTrialPlayable,
+  trialSkeletonSource: character.trialSkeletonSource,
+  trialLabelJa: character.trialLabelJa,
+  displayName: character.nameJa,
+  placeholder: null,
+  stats: character.playableNow ? CURRENT_STATS[character.id as CurrentCharacterId] : null,
+  statsAreIndependentAxes: true,
+  faceCrop: character.selectionFaceCrop,
+  heroCrop: character.selectionHeroCrop,
+})) satisfies readonly RosterSlotContract[]);
+
 export const UI_CONTRACT: UiContract = Object.freeze({
-  version: 'ui-contract-v2',
-  roster: Object.freeze([
-    Object.freeze({ slot: 1, characterId: 'moguzo', archetype: 'standard', status: 'current_impl', unlocked: true, playableNow: true, displayName: 'モグゾー', placeholder: null, stats: CURRENT_STATS.moguzo, statsAreIndependentAxes: true }),
-    Object.freeze({ slot: 2, characterId: 'pisuke', archetype: 'rush', status: 'current_impl', unlocked: true, playableNow: true, displayName: 'ピスケ', placeholder: null, stats: CURRENT_STATS.pisuke, statsAreIndependentAxes: true }),
-    Object.freeze({ slot: 3, characterId: 'godan', archetype: 'power', status: 'current_impl', unlocked: true, playableNow: true, displayName: 'ゴダン', placeholder: null, stats: CURRENT_STATS.godan, statsAreIndependentAxes: true }),
-    Object.freeze({ slot: 4, characterId: 'hakuma', archetype: 'defense', status: 'planned', unlocked: true, playableNow: false, displayName: 'ハクマ', placeholder: null, stats: null, statsAreIndependentAxes: true }),
-    Object.freeze({ slot: 5, characterId: 'chirka', archetype: 'tricky', status: 'planned', unlocked: true, playableNow: false, displayName: 'チルカ', placeholder: null, stats: null, statsAreIndependentAxes: true }),
-    Object.freeze({ slot: 6, characterId: 'takimaru', archetype: 'grappler', status: 'planned', unlocked: true, playableNow: false, displayName: 'タキマル', placeholder: null, stats: null, statsAreIndependentAxes: true }),
-    Object.freeze({ slot: 7, characterId: 'yomikage', archetype: 'counter', status: 'planned', unlocked: true, playableNow: false, displayName: 'ヨミカゲ', placeholder: null, stats: null, statsAreIndependentAxes: true }),
-    Object.freeze({ slot: 8, characterId: 'bullet', archetype: 'charge', status: 'planned', unlocked: true, playableNow: false, displayName: 'バレット', placeholder: null, stats: null, statsAreIndependentAxes: true }),
-    Object.freeze({ slot: 9, characterId: 'dark_moguzo', archetype: 'another', status: 'planned', unlocked: true, playableNow: false, displayName: 'ダークモグゾー', placeholder: null, stats: null, statsAreIndependentAxes: true }),
-  ] satisfies readonly RosterSlotContract[]),
+  version: 'ui-contract-v3',
+  roster: ROSTER_CONTRACT,
+  characterSelect: Object.freeze({
+    columns: 5,
+    rows: 2,
+    rosterEntries: 9,
+    totalCells: 10,
+    mysteryCellIndex: 9,
+    faceCropAnchor: 'nose',
+    textSeparatedFromArtwork: true,
+    officialPlayableCount: 3,
+    offlineTrialPlayableCount: 9,
+    onlinePlayableCount: 3,
+    provisionalSkeletonLabelRequired: true,
+  }),
   difficulties: Object.freeze(['EASY', 'NORMAL', 'HARD'] as const),
   actions: Object.freeze([
     Object.freeze({ id: 'back', visibleOn: screens('character_select', 'character_detail', 'move_list'), requiresConfirmation: false }),
@@ -65,6 +87,7 @@ export const UI_CONTRACT: UiContract = Object.freeze({
     preservesSelectedCharacter: true,
     allRosterEntriesVisible: true,
     battleAvailabilityUnchanged: true,
+    offlineTrialAvailabilityVisible: true,
     comboUnverifiedLabelJa: '未検証',
     scrollStepLogicalPx: 260,
     minimumPrimaryTargetLogicalPx: 74,
@@ -83,21 +106,20 @@ export function rectanglesOverlap(a: UiRect, b: UiRect): boolean {
 
 export function buildPortraitLayout(width: number, height: number, safeTop = 0, safeBottom = 0): PortraitLayoutContract {
   if (width < 320 || height < 568) throw new RangeError('minimum portrait viewport is 320x568');
-  const pad = 12;
-  const gap = 8;
+  const pad = 8;
+  const gap = 4;
   const rosterTop = safeTop + 56;
-  const rosterBottom = Math.floor(height * 0.56);
-  const columns = 3;
-  const rows = 3;
+  const columns = 5;
+  const rows = 2;
   const cardWidth = (width - pad * 2 - gap * (columns - 1)) / columns;
-  const cardHeight = (rosterBottom - rosterTop - gap * (rows - 1)) / rows;
+  const cardHeight = Math.max(60, Math.min(92, cardWidth * 1.08));
   const rosterRegions: UiHitRegion[] = [];
-  for (let index = 0; index < 9; index += 1) {
+  for (let index = 0; index < 10; index += 1) {
     const column = index % columns;
     const row = Math.floor(index / columns);
     rosterRegions.push(Object.freeze({
-      id: `roster_${index + 1}`,
-      role: 'roster_slot',
+      id: index === 9 ? 'roster_mystery' : `roster_${index + 1}`,
+      role: index === 9 ? 'mystery_slot' : 'roster_slot',
       rect: rect(pad + column * (cardWidth + gap), rosterTop + row * (cardHeight + gap), cardWidth, cardHeight),
     }));
   }
@@ -129,22 +151,36 @@ export function buildPortraitLayout(width: number, height: number, safeTop = 0, 
 }
 
 export function validateUiContract(contract: UiContract = UI_CONTRACT): void {
-  if (contract.roster.length !== 9) throw new Error('UI roster must contain nine slots');
+  if (contract.version !== 'ui-contract-v3') throw new Error('UI contract version must be v3');
+  if (contract.roster.length !== 9) throw new Error('UI roster must contain nine entries');
   if (new Set(contract.roster.map((slot) => slot.slot)).size !== 9) throw new Error('duplicate roster slot');
-  if (contract.roster.filter((slot) => slot.playableNow).length !== 3) throw new Error('only current three slots may be playable');
+  if (contract.roster.filter((slot) => slot.playableNow).length !== 3) throw new Error('only current three slots may be officially playable');
+  if (contract.roster.filter((slot) => slot.offlineTrialPlayable).length !== 9) throw new Error('all nine roster entries must support offline skeleton trials');
+  if (contract.characterSelect.columns !== 5 || contract.characterSelect.rows !== 2 || contract.characterSelect.totalCells !== 10) throw new Error('character select must use a 2x5 grid');
+  if (contract.characterSelect.rosterEntries !== 9 || contract.characterSelect.mysteryCellIndex !== 9) throw new Error('character select must reserve cell ten for mystery');
+  if (contract.characterSelect.faceCropAnchor !== 'nose' || !contract.characterSelect.textSeparatedFromArtwork) throw new Error('selection art must use nose-centered crops separated from text');
+  if (contract.characterSelect.officialPlayableCount !== 3 || contract.characterSelect.offlineTrialPlayableCount !== 9 || contract.characterSelect.onlinePlayableCount !== 3) throw new Error('playability counts are inconsistent');
   for (const slot of contract.roster) {
     if (!slot.statsAreIndependentAxes) throw new Error('display stats must not be treated as TOTAL');
     if (!slot.unlocked) throw new Error('all adopted roster art must be focusable');
-    if (slot.playableNow !== (slot.status === 'current_impl')) throw new Error('UI playability must match current implementation status');
+    if (slot.playableNow !== (slot.status === 'current_impl')) throw new Error('official UI playability must match current implementation status');
+    if (!slot.offlineTrialPlayable) throw new Error(`${slot.characterId}: offline trial unavailable`);
+    if (!slot.playableNow && !slot.trialLabelJa) throw new Error(`${slot.characterId}: provisional skeleton label required`);
     if (!slot.playableNow && slot.stats !== null) throw new Error('planned roster stats must remain unset');
+    for (const crop of [slot.faceCrop, slot.heroCrop]) {
+      if (crop.anchorX < 0 || crop.anchorX > 1 || crop.anchorY < 0 || crop.anchorY > 1 || crop.zoom < 1) throw new Error(`${slot.characterId}: invalid crop profile`);
+    }
   }
+  const bullet = contract.roster.find((slot) => slot.characterId === 'bullet');
+  if (!bullet || bullet.faceCrop.anchorX === 0.5 || bullet.heroCrop.zoom <= 1.3) throw new Error('Bullet crop must compensate for the long tail');
   for (const cue of contract.inputCues) {
     if (!cue.colorToken || !cue.shapeToken || !cue.positionToken || !cue.seToken) throw new Error(`incomplete cue: ${cue.id}`);
   }
   if (JSON.stringify(contract.characterDetail.tabs) !== JSON.stringify(['performance', 'moves', 'combos'])) throw new Error('character detail tabs must be performance/moves/combos');
   if (!contract.characterDetail.preservesSelectedCharacter) throw new Error('character detail must preserve selected character');
   if (!contract.characterDetail.allRosterEntriesVisible) throw new Error('all roster entries must expose character details');
-  if (!contract.characterDetail.battleAvailabilityUnchanged) throw new Error('character details must not alter battle availability');
+  if (!contract.characterDetail.battleAvailabilityUnchanged) throw new Error('character detail must not alter battle availability');
+  if (!contract.characterDetail.offlineTrialAvailabilityVisible) throw new Error('character detail must show offline trial status');
   if (contract.characterDetail.minimumPrimaryTargetLogicalPx < 74) throw new Error('character detail primary tap targets are too small');
   if (contract.characterDetail.comboUnverifiedLabelJa !== '未検証') throw new Error('unverified combo label must remain explicit');
   if (!contract.onlineDisconnect.confirmationRequired) throw new Error('online disconnect confirmation is required');

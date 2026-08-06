@@ -21,6 +21,7 @@
     "check:ui": "npm run typecheck:core && node --experimental-strip-types test/ui-contract.test.mjs",
     "check:roster": "npm run typecheck:core && node --experimental-strip-types test/roster-core3.test.mjs",
     "check:roster-full": "npm run typecheck:core && node --experimental-strip-types test/full-roster-art.test.mjs",
+    "check:roster-trial-ui": "npm run typecheck:core && node --experimental-strip-types test/roster-trial-select-ui.test.mjs",
     "check:character-catalog": "npm run typecheck:core && node --experimental-strip-types test/character-catalog.test.mjs",
     "check:character-catalog-browser": "npm run typecheck:core && node --experimental-strip-types test/character-catalog-browser.test.mjs",
     "check:character-detail": "npm run typecheck:core && node --experimental-strip-types test/character-detail-panel.test.mjs",

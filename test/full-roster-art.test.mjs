@@ -3,25 +3,32 @@ import { existsSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import sharp from 'sharp';
-import { FULL_ROSTER, validateFullRoster } from '../src/core/roster-full.ts';
+import { FULL_ROSTER, OFFLINE_TRIAL_ROSTER_IDS, validateFullRoster } from '../src/core/roster-full.ts';
 import { FULL_ROSTER_IDS, PLANNED_CHARACTER_IDS } from '../src/core/constants.ts';
 
 const __dirname=path.dirname(fileURLToPath(import.meta.url));
 const ROOT=path.resolve(__dirname,'..');
 const EXPECTED=['moguzo','pisuke','godan','hakuma','chirka','takimaru','yomikage','bullet','dark_moguzo'];
-const ids=EXPECTED;
 
 validateFullRoster();
 assert.deepEqual(FULL_ROSTER.map((character)=>character.id),EXPECTED);
 assert.deepEqual([...FULL_ROSTER_IDS],EXPECTED);
+assert.deepEqual([...OFFLINE_TRIAL_ROSTER_IDS],EXPECTED);
 assert.deepEqual([...PLANNED_CHARACTER_IDS],['hakuma','chirka','takimaru','yomikage','bullet']);
 assert.deepEqual(FULL_ROSTER.filter((character)=>character.playableNow).map((character)=>character.id),['moguzo','pisuke','godan']);
+assert.equal(FULL_ROSTER.filter((character)=>character.offlineTrialPlayable).length,9);
+assert.deepEqual(FULL_ROSTER.map((character)=>character.trialSkeletonSource),['moguzo','pisuke','godan','godan','pisuke','godan','pisuke','pisuke','moguzo']);
+assert.ok(FULL_ROSTER.slice(3).every((character)=>character.trialLabelJa));
 assert.equal(FULL_ROSTER.find((character)=>character.id==='dark_moguzo').combatStatus,'another_planned');
 assert.equal(FULL_ROSTER.find((character)=>character.id==='dark_moguzo').heightRatio,1);
 assert.equal(FULL_ROSTER.find((character)=>character.id==='dark_moguzo').widthRatio,1);
 assert.equal(FULL_ROSTER.find((character)=>character.id==='pisuke').heightRatio,null);
 assert.equal(FULL_ROSTER.find((character)=>character.id==='pisuke').selectionDisplayScale,1.04);
 assert.equal(FULL_ROSTER.find((character)=>character.id==='godan').selectionDisplayScale,1.08);
+const bullet=FULL_ROSTER.find((character)=>character.id==='bullet');
+assert.notEqual(bullet.selectionFaceCrop.anchorX,0.5);
+assert.ok(bullet.selectionHeroCrop.zoom>1.3);
+assert.ok(bullet.notes.some((note)=>note.includes('尾を除外')));
 
 for(const character of FULL_ROSTER){
   const asset=path.join(ROOT,character.selectionAssetPath);
@@ -31,31 +38,46 @@ for(const character of FULL_ROSTER){
   assert.equal(metadata.width,256);
   assert.equal(metadata.height,256);
   assert.equal(metadata.hasAlpha,true);
+  for(const crop of [character.selectionFaceCrop,character.selectionHeroCrop]){
+    assert.ok(crop.anchorX>=0&&crop.anchorX<=1);
+    assert.ok(crop.anchorY>=0&&crop.anchorY<=1);
+    assert.ok(crop.zoom>=1);
+  }
 }
 
 const prototype=readFileSync(path.join(ROOT,'prototype','mamoken_prototype_v01.html'),'utf8');
 const dist=readFileSync(path.join(ROOT,'dist','mamoken_mobile.html'),'utf8');
 const build=readFileSync(path.join(ROOT,'tools','build_mobile.mjs'),'utf8');
-const patcher=readFileSync(path.join(ROOT,'tools','apply_t20_full_roster_art_select.mjs'),'utf8');
+const t20Patcher=readFileSync(path.join(ROOT,'tools','apply_t20_full_roster_art_select.mjs'),'utf8');
+const t28Patcher=readFileSync(path.join(ROOT,'tools','apply_t28_roster_trial_select_ui.mjs'),'utf8');
 
 for(const source of [prototype,dist]){
   assert.equal((source.match(/\/\* T20 full roster art select \*\//g)||[]).length,1);
-  assert.ok(source.includes('const SELECT_SLOTS=ROSTER.length'));
-  assert.ok(source.includes('const cols=3,s=88'));
-  assert.ok(source.includes('const selected=ROSTER[selCharIdx]'));
-  assert.ok(source.includes('300*c.displayScale'));
-  assert.ok(source.includes('(r.h+10)*entry.displayScale'));
+  assert.equal((source.match(/\/\* T28 roster trial select UI \*\//g)||[]).length,1);
+  assert.ok(source.includes('const SELECT_SLOTS=10'));
+  assert.ok(source.includes('const cols=5,s=96'));
+  assert.ok(source.includes("txt('?',r.x+r.w/2"));
+  assert.ok(source.includes("txt('未定'"));
+  assert.ok(source.includes('function drawRosterCrop('));
+  assert.ok(source.includes("faceCrop:{x:0.42,y:0.28,z:2.48}"));
+  assert.ok(source.includes("heroCrop:{x:0.43,y:0.41,z:1.38}"));
   assert.ok(source.includes('function loadImg(key,src,preserveWhite)'));
   assert.ok(source.includes('if(!preserveWhite)whitenAsset(e)'));
-  assert.ok(source.includes('if(!selected.playable)'));
-  assert.ok(source.includes("'閲覧のみ：2D・技 実装待ち'"));
+  assert.ok(source.includes('if(!selected.trialPlayable)'));
+  assert.ok(source.includes("'仮骨格で試運転'"));
+  assert.ok(source.includes("'既存性能・共通技のみ / 専用技未実装'"));
+  assert.ok(source.includes("if(p1.c.trial)txt('仮骨格 / 共通技のみ'"));
   assert.ok(source.includes("for(let i=0;i<3;i++){\n    const R2=selRect(i)"),'online select must stay current-three only');
+  assert.ok(source.includes("for(const sid of ['moguzo','pisuke','godan'])"),'only official sprite banks may load');
+  assert.ok(source.includes('function skeletonIdOf(c)'));
+  assert.ok(source.includes('function commandMovesFor(c)'));
   for(const id of EXPECTED)assert.ok(source.includes(`id:'${id}'`),`missing roster id in runtime: ${id}`);
 }
-for(const id of ids)assert.ok(prototype.includes(`loadImg('roster_${id}','../assets/roster3d/${id}.webp',true)`));
+for(const id of EXPECTED)assert.ok(prototype.includes(`loadImg('roster_${id}','../assets/roster3d/${id}.webp',true)`));
 assert.ok(build.includes("top === 'roster3d'"));
-assert.ok(patcher.includes("const MARKER='/* T20 full roster art select */'"));
-for(const id of ids){
+assert.ok(t20Patcher.includes("const MARKER='/* T20 full roster art select */'"));
+assert.ok(t28Patcher.includes("const MARKER='/* T28 roster trial select UI */'"));
+for(const id of EXPECTED){
   assert.ok(dist.includes(`loadImg('roster_${id}','../assets/roster3d/${id}.webp',true)`));
   assert.ok(dist.includes(`\"../assets/roster3d/${id}.webp\":\"data:image/webp;base64,`));
 }
@@ -76,4 +98,4 @@ assert.ok(resume.includes('ピスケ'));
 assert.ok(resume.includes('ダークモグゾー'));
 assert.ok(resume.includes('再開順'));
 
-console.log(`full roster art tests passed; roster=${FULL_ROSTER.length}; playable=3; previewOnly=6; assets=9x256`);
+console.log(`full roster art tests passed; roster=${FULL_ROSTER.length}; official=3; offlineTrial=9; grid=2x5; assets=9x256`);
