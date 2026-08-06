@@ -39,17 +39,21 @@ jobs:
           base64 --decode /tmp/t20_payload.b64 > /tmp/t20_payload.tar.gz
           tar -xzf /tmp/t20_payload.tar.gz -C .
 
+      - name: Apply corrected T20 integration sources
+        run: tar -xzf .github/t20_override.tar.gz -C .
+
       - name: Apply full roster integration
         run: |
           node tools/apply_t20_full_roster_art_select.mjs
           npm run build:mobile
           npm run check:roster-full
+          npm run check:ui
           node tools/audit_current_impl.mjs
           git diff --check
 
       - name: Commit generated integration
         run: |
-          rm -rf .github/t20_payload
+          rm -rf .github/t20_payload .github/t20_override.tar.gz
           git rm .github/workflows/t20-generate.yml
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
