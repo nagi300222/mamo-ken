@@ -6,7 +6,6 @@ import type {
   ProductDecisionStatus,
   ProductOwner,
   ProductPhaseContract,
-  ProductPhaseId,
   ProductWorkStatus,
 } from './product-types.ts';
 
@@ -103,6 +102,14 @@ function fnv1a(text:string):string{
   return hash.toString(16).padStart(8,'0');
 }
 
+function isAllowedProductPath(path:string):boolean{
+  if(path.startsWith('design/product/'))return true;
+  if(path.startsWith('src/product/'))return true;
+  if(path.startsWith('reports/product/'))return true;
+  if(path.startsWith('test/product-')&&path.endsWith('.test.mjs'))return true;
+  return path==='.github/workflows/product-contract.yml'||path==='package.json'||path==='tsconfig.product.json';
+}
+
 export function hashProductContract(contract:ProductContract=PRODUCT_CONTRACT):string{return fnv1a(stable(contract));}
 
 export function canTransitionProductStatus(from:ProductWorkStatus,to:ProductWorkStatus,contract:ProductContract=PRODUCT_CONTRACT):boolean{
@@ -163,12 +170,12 @@ export function evaluateProductCompletion(input:ProductCompletionInput,contract:
   return Object.freeze({complete:blockers.length===0,blockers:Object.freeze([...new Set(blockers)])});
 }
 
-export function validateProductScopedPaths(paths:readonly string[],contract:ProductContract=PRODUCT_CONTRACT):readonly string[]{
+export function validateProductScopedPaths(paths:readonly string[]):readonly string[]{
   const errors:string[]=[];
   for(const path of paths){
     const forbidden=FORBIDDEN_ROOTS.find((root)=>path.startsWith(root));
     if(forbidden){errors.push(`${path}: forbidden root ${forbidden}`);continue;}
-    if(!ALLOWED_ROOTS.some((root)=>root.endsWith('/')?path.startsWith(root):path===root||path.startsWith(root)))errors.push(`${path}: outside P00 scope`);
+    if(!isAllowedProductPath(path))errors.push(`${path}: outside P00 scope`);
   }
   return Object.freeze(errors);
 }
