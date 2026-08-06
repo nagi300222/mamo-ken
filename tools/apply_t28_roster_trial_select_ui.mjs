@@ -76,10 +76,8 @@ const cropHelper=`function drawRosterCrop(key,x,y,w,h,crop,radius){ // 鼻/胴�
 `;
 source=replaceOnce(source,'function drawUiIcon(key,cx,cy,targetW){',cropHelper+'function drawUiIcon(key,cx,cy,targetW){','add roster crop helper');
 
-source=replaceOnce(source,'  const moves=BAL.CMD.moves[f.c.id];','  const moves=commandMovesFor(f.c);','command detection helper');
-source=replaceOnce(source,'    const moves=BAL.CMD.moves[f.c.id];','    const moves=commandMovesFor(f.c);','canary command helper');
+source=source.replaceAll('  const moves=BAL.CMD.moves[f.c.id];','  const moves=commandMovesFor(f.c);');
 source=replaceOnce(source,'  const moves=BAL.CMD.moves[me.c.id];','  const moves=commandMovesFor(me.c);','CPU command helper');
-source=replaceOnce(source,'  const moves=BAL.CMD.moves[myF.c.id]||[];','  const moves=commandMovesFor(myF.c);','move list command helper');
 source=replaceOnce(source,'function runtimeCommandShadowObserve(f,c,cm){\n  const api=',"function runtimeCommandShadowObserve(f,c,cm){\n  if(f.c.trial)return;\n  const api=",'skip trial shadow observation');
 source=replaceOnce(source,'function runtimeCommandCanaryResolve(f,c,legacyCm){\n  const api=',"function runtimeCommandCanaryResolve(f,c,legacyCm){\n  if(f.c.trial)return legacyCm;\n  const api=",'skip trial canary');
 
@@ -191,5 +189,6 @@ source=replaceOnce(source,"  txt(p1.c.name,18,48,15,'#fff','left');\n  txt(p2.c.
 
 source=replaceOnce(source,"    const winnerId=(winSide===0)?CHARS[game.p1].id:CHARS[game.p2].id;\n    drawStanding('standing_'+winnerId,W/2,522,308*BAL.PORTRAIT_RATIO[winnerId]); // 体格比を適用(§6.6 v2.4.1)","    const winner=(winSide===0)?CHARS[game.p1]:CHARS[game.p2];\n    demoF.c=winner;\n    if(!drawStanding('standing_'+winner.id,W/2,522,308*portraitRatioForChar(winner)))rFighter(demoF,W/2,500);",'trial result art fallback');
 
+source=replaceOnce(source,'const SELECT_DETAIL_BTN={x:60,y:638,w:W-120,h:74};\n','','remove superseded T22 detail button');
 writeFileSync(TARGET,source,'utf8');
 console.log('patched prototype/mamoken_prototype_v01.html');
