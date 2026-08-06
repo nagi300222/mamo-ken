@@ -27,6 +27,7 @@ on:
       - 'test/ui-contract.test.mjs'
       - 'test/roster-core3.test.mjs'
       - 'test/full-roster-art.test.mjs'
+      - 'test/character-catalog.test.mjs'
       - 'test/runtime-adapter.test.mjs'
       - 'test/runtime-input-bridge.test.mjs'
       - 'test/runtime-command-shadow.test.mjs'
@@ -92,6 +93,9 @@ jobs:
 
       - name: Full roster art and selection tests
         run: npm run check:roster-full
+
+      - name: Full character catalog tests
+        run: npm run check:character-catalog
 
       - name: Legacy runtime adapter tests
         run: npm run check:runtime
