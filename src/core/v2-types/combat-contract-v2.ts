@@ -140,10 +140,10 @@ export const COMBAT_CONTRACT_V2:CombatContractV2=Object.freeze({
   authority:COMBAT_V2_AUTHORITY,
   liveRuntimeAuthority:false,
   formalBalanceAuthority:false,
-  postureStates:Object.freeze(['NORMAL','SWAY_SHALLOW','SWAY_DEEP','CROUCH','LUNGE','CLINCH','DOWN']),
+  postureStates:Object.freeze(['NORMAL','SWAY_SHALLOW','SWAY_DEEP','CROUCH','LUNGE','CLINCH','DOWN'] as const),
   inputConstants:Object.freeze({statusTag:'PROTOTYPE_CANDIDATE',legacyGestureSlackF:null,commandPrebufferF:10,directionHistoryF:40,directionGapMaxF:18,finalTriggerGraceF:10,guardTapThresholdF:6,rowBoundaryHysteresisPx:null,sameDirectionMinGapF:2,commandTotal2F:24,commandTotal3F:30,commandTotal4F:40}),
   clocks:Object.freeze({simulationAdvancesDuringHitstop:true,combatAdvancesDuringHitstop:false,fighterActionAdvancesDuringHitstop:false}),
-  clinch:Object.freeze({standardDurationF:24,simultaneousForwardDurationF:18,expiryResult:'NORMAL_RESET',ticksDuringHitstop:false,ticksDuringGlobalFreeze:false,clearsOn:Object.freeze(['throw_success','down','round_transition','ultimate','gyuiin'])}),
+  clinch:Object.freeze({standardDurationF:24,simultaneousForwardDurationF:18,expiryResult:'NORMAL_RESET',ticksDuringHitstop:false,ticksDuringGlobalFreeze:false,clearsOn:Object.freeze(['throw_success','down','round_transition','ultimate','gyuiin'] as const)}),
   freezePolicy:Object.freeze({
     NONE:Object.freeze({simulationFrame:true,inputHistory:true,combatFrame:true,actionTimeline:true,cpuDecision:true,stateHash:true}),
     HITSTOP:Object.freeze({simulationFrame:true,inputHistory:true,combatFrame:false,actionTimeline:false,cpuDecision:false,stateHash:true}),
@@ -152,7 +152,7 @@ export const COMBAT_CONTRACT_V2:CombatContractV2=Object.freeze({
     KO_FREEZE:Object.freeze({simulationFrame:true,inputHistory:true,combatFrame:false,actionTimeline:false,cpuDecision:false,stateHash:true}),
     PAUSE:Object.freeze({simulationFrame:false,inputHistory:false,combatFrame:false,actionTimeline:false,cpuDecision:false,stateHash:false}),
   }),
-  inputNormalizationOrder:Object.freeze(['release','direction_press','guard_mikiri','attack_grab','roar_ultimate']),
-  actionPriorityOrder:Object.freeze(['ULTIMATE','ROAR','ABILITY','LONG_COMMAND','SHORT_COMMAND','THROW_BRANCH','STEP_CANCEL','NORMAL_CHAIN']),
-  cpuMatchups:Object.freeze({roster:Object.freeze(['moguzo','pisuke','godan','hakuma','chirka','takimaru','yomikage','bullet','dark_moguzo']),nonMirrorPairCount:36,mirrorPairCount:9,sideSwappedSymmetryRuns:true}),
+  inputNormalizationOrder:Object.freeze(['release','direction_press','guard_mikiri','attack_grab','roar_ultimate'] as const),
+  actionPriorityOrder:Object.freeze(['ULTIMATE','ROAR','ABILITY','LONG_COMMAND','SHORT_COMMAND','THROW_BRANCH','STEP_CANCEL','NORMAL_CHAIN'] as const),
+  cpuMatchups:Object.freeze({roster:Object.freeze(['moguzo','pisuke','godan','hakuma','chirka','takimaru','yomikage','bullet','dark_moguzo'] as const),nonMirrorPairCount:36,mirrorPairCount:9,sideSwappedSymmetryRuns:true}),
 });
