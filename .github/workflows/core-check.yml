@@ -20,6 +20,7 @@ on:
       - 'tools/apply_t22_ui_contract.mjs'
       - 'tools/apply_t24_extended_command_shadow.mjs'
       - 'tools/apply_t26_browser_command_contract.mjs'
+      - 'tools/apply_t28_roster_trial_select_ui.mjs'
       - 'tools/compare_runtime_shadow_reports.mjs'
       - 'test/core-spec.test.mjs'
       - 'test/command-parser.test.mjs'
@@ -35,6 +36,7 @@ on:
       - 'test/ui-contract.test.mjs'
       - 'test/roster-core3.test.mjs'
       - 'test/full-roster-art.test.mjs'
+      - 'test/roster-trial-select-ui.test.mjs'
       - 'test/character-catalog.test.mjs'
       - 'test/character-catalog-browser.test.mjs'
       - 'test/character-detail-panel.test.mjs'
@@ -110,6 +112,9 @@ jobs:
 
       - name: Full roster art and selection tests
         run: npm run check:roster-full
+
+      - name: Offline trial roster UI tests
+        run: npm run check:roster-trial-ui
 
       - name: Full character catalog tests
         run: npm run check:character-catalog
