@@ -19,10 +19,12 @@ on:
       - 'tools/apply_t22_character_detail_panel.mjs'
       - 'tools/apply_t22_ui_contract.mjs'
       - 'tools/apply_t24_extended_command_shadow.mjs'
+      - 'tools/apply_t26_browser_command_contract.mjs'
       - 'tools/compare_runtime_shadow_reports.mjs'
       - 'test/core-spec.test.mjs'
       - 'test/command-parser.test.mjs'
       - 'test/command-catalog.test.mjs'
+      - 'test/browser-command-contract.test.mjs'
       - 'test/combat-moves.test.mjs'
       - 'test/defense.test.mjs'
       - 'test/gauge-gyuiin.test.mjs'
@@ -116,6 +118,9 @@ jobs:
 
       - name: Browser character catalog tests
         run: npm run check:character-catalog-browser
+
+      - name: Browser Core3 command contract tests
+        run: npm run check:browser-command-contract
 
       - name: Legacy runtime adapter tests
         run: npm run check:runtime

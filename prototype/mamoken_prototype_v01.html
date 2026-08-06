@@ -772,7 +772,8 @@ function runtimeCommandShadowObserve(f,c,cm){
     player:f.side,
     characterId:f.c.id,
     trigger:trigger,
-    directions:f.dirBuf.map(function(entry){return{direction:entry.dir,frame:entry.f};})
+    directions:f.dirBuf.map(function(entry){return{direction:entry.dir,frame:entry.f};}),
+    activeConditions:(f.c.id==='pisuke'&&f.clinchF>0)?['pisuke.lunge-success']:[] /* T26 browser command contract */
   };
   if(baseEnabled){
     try{
