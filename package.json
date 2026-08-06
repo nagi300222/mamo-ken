@@ -29,6 +29,7 @@
     "check:character-catalog": "npm run typecheck:core && node --experimental-strip-types test/character-catalog.test.mjs",
     "check:character-catalog-browser": "npm run typecheck:core && node --experimental-strip-types test/character-catalog-browser.test.mjs",
     "check:character-detail": "npm run typecheck:core && node --experimental-strip-types test/character-detail-panel.test.mjs",
+    "check:core3-seven-move": "npm run typecheck:core && node --experimental-strip-types test/core3-seven-move-plan.test.mjs && node --experimental-strip-types test/core3-seven-move-command.test.mjs",
     "check:runtime": "npm run typecheck:core && node --experimental-strip-types test/runtime-adapter.test.mjs",
     "check:runtime-input": "npm run typecheck:core && node --experimental-strip-types test/runtime-input-bridge.test.mjs",
     "check:runtime-shadow": "npm run typecheck:core && node --experimental-strip-types test/runtime-command-shadow.test.mjs",
