@@ -16,9 +16,13 @@ on:
       - '.github/workflows/battle-state-v2.yml'
   workflow_dispatch:
 
+concurrency:
+  group: battle-state-v2-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
 jobs:
   schema:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
