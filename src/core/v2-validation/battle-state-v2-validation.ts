@@ -1,3 +1,4 @@
+// G01.2 RNG and combo schema correction
 // G01.1 current gauge schema correction
 import { fnv1a32, stableStringify } from '../determinism.ts';
 import {
@@ -42,6 +43,8 @@ export type FighterSeedV2=Readonly<{
 
 export type InitialBattleStateOptionsV2=Readonly<{
   fighters:Readonly<Record<PlayerIdV2,FighterSeedV2>>;
+  seed:number;
+  aiSeed:number;
   roundIndex:number;
   timerCombatF:number;
   timeoutEnabled:boolean;
@@ -254,6 +257,7 @@ function createFighter(playerId:PlayerIdV2,seed:FighterSeedV2):FighterStateV2{
     defense:Object.freeze({guardHeld:false,mikiriWindowF:0,dodgeWindowF:0,armorHitsRemaining:0,lastResult:'NONE'}),
     ability:Object.freeze({abilityId:seed.abilityId,phase:'idle',values:Object.freeze({})}),
     resources:Object.freeze({hp:seed.maxHp,maxHp:seed.maxHp,guard:seed.maxGuard,maxGuard:seed.maxGuard,sGauge:0,maxSGauge:seed.maxSGauge,focusGauge:0,maxFocusGauge:seed.maxFocusGauge,ultimateStock:0,maxUltimateStock:seed.maxUltimateStock}),
+    combo:Object.freeze({count:0}),
     timers:Object.freeze({hitstunF:0,blockstunF:0,guardBreakF:0,downF:0,wakeF:0,invulnerabilityF:0}),
     inputHold:Object.freeze({activeHolds:Object.freeze({}),completedHolds:Object.freeze([])}),
     bulletCharge:seed.characterId==='bullet'?Object.freeze({value:0,lastGainSignature:null,maxReady:false}):null,
@@ -261,7 +265,7 @@ function createFighter(playerId:PlayerIdV2,seed:FighterSeedV2):FighterStateV2{
 }
 
 export function createInitialBattleStateV2(options:InitialBattleStateOptionsV2):BattleStateV2{
-  if(!integer(options.roundIndex,1)||!integer(options.timerCombatF))throw new TypeError('invalid round options');
+  if(!integer(options.roundIndex,1)||!integer(options.timerCombatF)||!integer(options.seed)||options.seed>0xffff_ffff||!integer(options.aiSeed)||options.aiSeed>0xffff_ffff)throw new TypeError('invalid round or RNG options');
   const state:BattleStateV2=Object.freeze({
     version:BATTLE_STATE_V2_VERSION,
     combatContractVersion:COMBAT_CONTRACT_V2.version,
@@ -270,6 +274,8 @@ export function createInitialBattleStateV2(options:InitialBattleStateOptionsV2):
     flow:'fight',
     clocks:Object.freeze({simulationFrame:0,combatFrame:0,fighterActionFrame:freezePair(0,0)}),
     freeze:Object.freeze({kind:'NONE',remainingF:0,sourceId:null}),
+    seed:options.seed,
+    aiSeed:options.aiSeed,
     fighters:freezePair(createFighter(0,options.fighters[0]),createFighter(1,options.fighters[1])),
     spatial:Object.freeze({engagement:'NORMAL',clinchRemainingF:0,overextendedPlayer:null,sideSwap:false,lastPositionBatchId:0}),
     round:Object.freeze({roundIndex:options.roundIndex,timerCombatF:options.timerCombatF,wins:freezePair(0,0),timeoutEnabled:options.timeoutEnabled}),
@@ -291,6 +297,8 @@ function validateFighter(state:BattleStateV2,fighter:FighterStateV2,playerId:Pla
   }else if(!text(fighter.action.actionId)||fighter.action.startedCombatFrame===null||!integer(fighter.action.startedCombatFrame))errors.push(`${path}.action: active identity required`);
   if(!integer(fighter.action.actionFrame)||!integer(fighter.action.currentContactIndex))errors.push(`${path}.action: non-negative counters required`);
   if(state.clocks.fighterActionFrame[playerId]!==fighter.action.actionFrame)errors.push(`${path}.actionFrame: clock mismatch`);
+  if(fighter.combo===null||typeof fighter.combo!=='object')errors.push(`${path}.combo: required`);
+  else if(!integer(fighter.combo.count))errors.push(`${path}.combo.count: non-negative integer required`);
   for(const [key,value] of Object.entries(fighter.timers))if(!integer(value))errors.push(`${path}.timers.${key}: non-negative integer required`);
   for(const [value,max,key] of [[fighter.resources.hp,fighter.resources.maxHp,'hp'],[fighter.resources.guard,fighter.resources.maxGuard,'guard'],[fighter.resources.sGauge,fighter.resources.maxSGauge,'sGauge'],[fighter.resources.focusGauge,fighter.resources.maxFocusGauge,'focusGauge'],[fighter.resources.ultimateStock,fighter.resources.maxUltimateStock,'ultimateStock']] as const){
     if(!integer(max,1)||!integer(value)||value>max)errors.push(`${path}.resources.${key}: invalid range`);
@@ -320,6 +328,11 @@ export function validateBattleStateV2(state:BattleStateV2):ValidationResultV2{
   if(state.freeze.kind==='NONE'){
     if(state.freeze.remainingF!==0||state.freeze.sourceId!==null)errors.push('freeze: NONE invariant violated');
   }else if(!integer(state.freeze.remainingF,1)||!text(state.freeze.sourceId))errors.push('freeze: active freeze requires duration and source');
+  const stateRecord=state as unknown as Readonly<Record<string,unknown>>;
+  if(!Object.hasOwn(stateRecord,'seed'))errors.push('seed: required');
+  else if(!integer(state.seed)||state.seed>0xffff_ffff)errors.push('seed: unsigned 32-bit integer required');
+  if(!Object.hasOwn(stateRecord,'aiSeed'))errors.push('aiSeed: required');
+  else if(!integer(state.aiSeed)||state.aiSeed>0xffff_ffff)errors.push('aiSeed: unsigned 32-bit integer required');
   validateFighter(state,state.fighters[0],0,errors);
   validateFighter(state,state.fighters[1],1,errors);
   if(state.spatial.sideSwap!==false)errors.push('spatial.sideSwap: current contract requires false');

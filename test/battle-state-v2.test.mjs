@@ -1,6 +1,9 @@
+// G01.2 RNG and combo schema correction
 // G01.1 current gauge schema correction
 import assert from 'node:assert/strict';
+import {spawnSync} from 'node:child_process';
 import {readFileSync} from 'node:fs';
+import {fileURLToPath} from 'node:url';
 import {
   COMBAT_CONTRACT_V2,
   materializeMoveSpecV2Closure,
@@ -32,7 +35,7 @@ const closureJson=JSON.parse(readFileSync(new URL('../design/combat/contracts/MA
 const closures=materializeMoveSpecV2Closure(closureJson);
 const specs=closures.map(createOpenMoveSpecV2FromClosure);
 
-assert.equal(BATTLE_STATE_V2_VERSION,'mamoken-battle-state-v2-v0.2');
+assert.equal(BATTLE_STATE_V2_VERSION,'mamoken-battle-state-v2-v0.3');
 assert.equal(MOVE_SPEC_V2_VERSION,'mamoken-movespec-v2-v0.1');
 assert.equal(specs.length,21);
 assert.equal(new Set(specs.map((spec)=>spec.id)).size,21);
@@ -80,12 +83,13 @@ const state=createInitialBattleStateV2({
     0:{characterId:'moguzo',maxHp:1000,maxGuard:100,maxSGauge:100,maxFocusGauge:100,maxUltimateStock:1,abilityId:'moguzo.guts'},
     1:{characterId:'bullet',maxHp:900,maxGuard:90,maxSGauge:100,maxFocusGauge:100,maxUltimateStock:1,abilityId:'bullet.overcharge'},
   },
+  seed:0x12345678,aiSeed:0x51a1,
   roundIndex:1,
   timerCombatF:5940,
   timeoutEnabled:true,
 });
 assert.equal(validateBattleStateV2(state).ok,true,validateBattleStateV2(state).errors.join('\n'));
-assert.equal(state.version,'mamoken-battle-state-v2-v0.2');
+assert.equal(state.version,'mamoken-battle-state-v2-v0.3');
 assert.equal(state.combatContractVersion,COMBAT_CONTRACT_V2.version);
 assert.equal(state.authority,'shadow_only');
 assert.equal(state.liveRuntimeAuthority,false);
@@ -93,8 +97,40 @@ assert.deepEqual(state.fighters[0].resources,{hp:1000,maxHp:1000,guard:100,maxGu
 assert.equal(state.fighters[0].bulletCharge,null);
 assert.deepEqual(state.fighters[1].bulletCharge,{value:0,lastGainSignature:null,maxReady:false});
 assert.notStrictEqual(state.fighters[0].inputHold,state.fighters[1].inputHold);
+assert.equal(state.seed,0x12345678);
+assert.equal(state.aiSeed,0x51a1);
+assert.deepEqual(state.fighters[0].combo,{count:0});
+assert.deepEqual(state.fighters[1].combo,{count:0});
 assert.equal(state.flow,'fight');
 assert.equal(state.spatial.sideSwap,false);
+
+const distinctState=structuredClone(state);
+distinctState.seed=0x89abcdef;
+distinctState.aiSeed=0x10203040;
+distinctState.fighters[0].combo.count=2;
+distinctState.fighters[1].combo.count=7;
+assert.equal(validateBattleStateV2(distinctState).ok,true,validateBattleStateV2(distinctState).errors.join('\n'));
+const serialized=JSON.stringify(distinctState);
+const deserialized=JSON.parse(serialized);
+assert.equal(deserialized.seed,0x89abcdef);
+assert.equal(deserialized.aiSeed,0x10203040);
+assert.equal(deserialized.fighters[0].combo.count,2);
+assert.equal(deserialized.fighters[1].combo.count,7);
+assert.equal(validateBattleStateV2(deserialized).ok,true,validateBattleStateV2(deserialized).errors.join('\n'));
+assert.notEqual(hashBattleStateV2(distinctState),hashBattleStateV2(state));
+const sameSeedClone=JSON.parse(JSON.stringify(state));
+assert.equal(hashBattleStateV2(sameSeedClone),hashBattleStateV2(state));
+
+const missingSeed=structuredClone(state);delete missingSeed.seed;
+assert.deepEqual(validateBattleStateV2(missingSeed).errors.filter((error)=>error.startsWith('seed:')),['seed: required']);
+const missingAiSeed=structuredClone(state);delete missingAiSeed.aiSeed;
+assert.deepEqual(validateBattleStateV2(missingAiSeed).errors.filter((error)=>error.startsWith('aiSeed:')),['aiSeed: required']);
+const missingP1Combo=structuredClone(state);delete missingP1Combo.fighters[0].combo;
+assert.deepEqual(validateBattleStateV2(missingP1Combo).errors.filter((error)=>error.startsWith('fighters.0.combo')),['fighters.0.combo: required']);
+const missingP2Combo=structuredClone(state);delete missingP2Combo.fighters[1].combo;
+assert.deepEqual(validateBattleStateV2(missingP2Combo).errors.filter((error)=>error.startsWith('fighters.1.combo')),['fighters.1.combo: required']);
+const missingSeedOptions={fighters:{0:{characterId:'moguzo',maxHp:1000,maxGuard:100,maxSGauge:100,maxFocusGauge:100,maxUltimateStock:1,abilityId:'moguzo.guts'},1:{characterId:'bullet',maxHp:900,maxGuard:90,maxSGauge:100,maxFocusGauge:100,maxUltimateStock:1,abilityId:'bullet.overcharge'}},aiSeed:1,roundIndex:1,timerCombatF:5940,timeoutEnabled:true};
+assert.throws(()=>createInitialBattleStateV2(missingSeedOptions),TypeError);
 
 const normalClocks=advanceBattleClocksV2(state.clocks,'NONE',{0:true,1:false});
 assert.deepEqual(normalClocks,{simulationFrame:1,combatFrame:1,fighterActionFrame:{0:1,1:0}});
@@ -105,6 +141,12 @@ assert.deepEqual(ultimateFreezeClocks,{simulationFrame:3,combatFrame:1,fighterAc
 const pauseClocks=advanceBattleClocksV2(ultimateFreezeClocks,'PAUSE',{0:true,1:true});
 assert.deepEqual(pauseClocks,ultimateFreezeClocks);
 
+const invalidSeed=structuredClone(state);invalidSeed.seed=0x1_0000_0000;
+assert.equal(validateBattleStateV2(invalidSeed).ok,false);
+const invalidAiSeed=structuredClone(state);invalidAiSeed.aiSeed=-1;
+assert.equal(validateBattleStateV2(invalidAiSeed).ok,false);
+const invalidCombo=structuredClone(state);invalidCombo.fighters[0].combo.count=-1;
+assert.equal(validateBattleStateV2(invalidCombo).ok,false);
 const invalidFocus=structuredClone(state);invalidFocus.fighters[0].resources.focusGauge=101;
 assert.equal(validateBattleStateV2(invalidFocus).ok,false);
 const invalidUlt=structuredClone(state);invalidUlt.fighters[0].resources.ultimateStock=2;
@@ -120,7 +162,7 @@ assert.equal(validateBattleStateV2(invalidFreeze).ok,false);
 
 const stateHash=hashBattleStateV2(state);
 assert.match(stateHash,/^[0-9a-f]{8}$/);
-assert.equal(stateHash,hashBattleStateV2(createInitialBattleStateV2({fighters:{0:{characterId:'moguzo',maxHp:1000,maxGuard:100,maxSGauge:100,maxFocusGauge:100,maxUltimateStock:1,abilityId:'moguzo.guts'},1:{characterId:'bullet',maxHp:900,maxGuard:90,maxSGauge:100,maxFocusGauge:100,maxUltimateStock:1,abilityId:'bullet.overcharge'}},roundIndex:1,timerCombatF:5940,timeoutEnabled:true})));
+assert.equal(stateHash,hashBattleStateV2(createInitialBattleStateV2({fighters:{0:{characterId:'moguzo',maxHp:1000,maxGuard:100,maxSGauge:100,maxFocusGauge:100,maxUltimateStock:1,abilityId:'moguzo.guts'},1:{characterId:'bullet',maxHp:900,maxGuard:90,maxSGauge:100,maxFocusGauge:100,maxUltimateStock:1,abilityId:'bullet.overcharge'}},seed:0x12345678,aiSeed:0x51a1,roundIndex:1,timerCombatF:5940,timeoutEnabled:true})));
 assert.notEqual(hashMoveSpecV2(baseSpec),hashMoveSpecV2(resolvedReach));
 
 const batch={
@@ -156,9 +198,16 @@ assert.equal(new Set(RESOLUTION_REASON_CODES_V2).size,RESOLUTION_REASON_CODES_V2
 assert.ok(RESOLUTION_REASON_CODES_V2.some((code)=>code==='REJECT_FAIL_CLOSED'));
 assert.ok(RESOLUTION_REASON_CODES_V2.some((code)=>code==='RESULT_TRADE'));
 
+const generatedPaths=['../src/core/v2-types/battle-state-v2.ts','../src/core/v2-validation/battle-state-v2-validation.ts','../test/battle-state-v2.test.mjs','../design/combat/contracts/MAMOKEN_BATTLE_STATE_AND_MOVESPEC_V2_v0.1.md','../reports/combat/G01_COMPLETION.md'];
+const generatedBefore=generatedPaths.map((relative)=>readFileSync(new URL(relative,import.meta.url),'utf8'));
+const patcherRun=spawnSync(process.execPath,[fileURLToPath(new URL('../tools/apply_g01_rng_combo_fix.mjs',import.meta.url))],{cwd:fileURLToPath(new URL('..',import.meta.url)),encoding:'utf8'});
+assert.equal(patcherRun.status,0,`${patcherRun.stdout}\n${patcherRun.stderr}`);
+const generatedAfter=generatedPaths.map((relative)=>readFileSync(new URL(relative,import.meta.url),'utf8'));
+assert.deepEqual(generatedAfter,generatedBefore);
+
 for(const path of ['../src/core/v2-types/battle-state-v2.ts','../src/core/v2-types/move-spec-v2.ts','../src/core/v2-validation/battle-state-v2-validation.ts']){
   const source=readFileSync(new URL(path,import.meta.url),'utf8');
   for(const forbidden of ['prototype/','dist/','runtime/','server/','assets/','Math.random','Date.now','globalThis.window','window.document','document.','localStorage','sessionStorage','fetch(','setTimeout(','setInterval('])assert.equal(source.includes(forbidden),false,`${path}: forbidden live dependency ${forbidden}`);
 }
 
-console.log(`battle state v2 tests passed; moves=21; openNumerics=21; reasons=${RESOLUTION_REASON_CODES_V2.length}; clocks=3; currentGauges=s+focus+ult+charge; hash=${stateHash}`);
+console.log(`battle state v2 tests passed; moves=21; openNumerics=21; reasons=${RESOLUTION_REASON_CODES_V2.length}; clocks=3; currentGauges=s+focus+ult+charge; rng=2; combo=1; hash=${stateHash}`);
