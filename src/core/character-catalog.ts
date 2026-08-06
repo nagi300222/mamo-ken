@@ -262,7 +262,7 @@ export const CHARACTER_CATALOG = [
 
 export const CHARACTER_CATALOG_BY_ID = Object.fromEntries(
   CHARACTER_CATALOG.map((character) => [character.id, character]),
-) as Readonly<Record<CharacterId, CharacterCatalogEntry>>;
+) as unknown as Readonly<Record<CharacterId, CharacterCatalogEntry>>;
 
 export const CATALOG_MOVE_COUNT = CHARACTER_CATALOG.reduce((total, character) => total + character.moves.length, 0);
 
