@@ -9,6 +9,7 @@ import {
 } from '../src/core/ui-contract.ts';
 
 validateUiContract();
+assert.equal(UI_CONTRACT.version, 'ui-contract-v2');
 assert.equal(UI_CONTRACT.roster.length, 9);
 assert.deepEqual(UI_CONTRACT.roster.slice(0, 3).map((slot) => slot.characterId), ['moguzo', 'pisuke', 'godan']);
 assert.ok(UI_CONTRACT.roster.slice(0, 3).every((slot) => slot.unlocked && slot.playableNow && slot.status === 'current_impl'));
@@ -21,11 +22,21 @@ for (const slot of UI_CONTRACT.roster.slice(0, 3)) {
 }
 assert.deepEqual(UI_CONTRACT.difficulties, ['EASY', 'NORMAL', 'HARD']);
 assert.ok(UI_CONTRACT.actions.some((action) => action.id === 'back'));
+assert.ok(UI_CONTRACT.actions.some((action) => action.id === 'character_detail'));
 assert.ok(UI_CONTRACT.actions.some((action) => action.id === 'pause'));
 assert.ok(UI_CONTRACT.actions.some((action) => action.id === 'move_list'));
 assert.equal(UI_CONTRACT.actions.find((action) => action.id === 'disconnect_request').requiresConfirmation, true);
 assert.equal(UI_CONTRACT.onlineDisconnect.confirmationRequired, true);
 assert.equal(UI_CONTRACT.ultTextOverlay.bakedIntoSprite, false);
+assert.deepEqual(UI_CONTRACT.characterDetail.tabs, ['performance', 'moves', 'combos']);
+assert.deepEqual(UI_CONTRACT.characterDetail.tabLabelsJa, { performance: '性能', moves: 'わざ', combos: 'コンボ' });
+assert.equal(UI_CONTRACT.characterDetail.returnsTo, 'character_select');
+assert.equal(UI_CONTRACT.characterDetail.preservesSelectedCharacter, true);
+assert.equal(UI_CONTRACT.characterDetail.allRosterEntriesVisible, true);
+assert.equal(UI_CONTRACT.characterDetail.battleAvailabilityUnchanged, true);
+assert.equal(UI_CONTRACT.characterDetail.comboUnverifiedLabelJa, '未検証');
+assert.equal(UI_CONTRACT.characterDetail.scrollStepLogicalPx, 260);
+assert.ok(UI_CONTRACT.characterDetail.minimumPrimaryTargetLogicalPx >= 74);
 
 for (const cue of UI_CONTRACT.inputCues) {
   assert.ok(cue.colorToken);
@@ -58,9 +69,11 @@ assert.throws(() => buildPortraitLayout(319, 568), /minimum/);
 assert.throws(() => validateUiContract({ ...UI_CONTRACT, roster: UI_CONTRACT.roster.slice(0, 8) }), /nine/);
 const badCue = UI_CONTRACT.inputCues.map((cue) => cue.id === 'attack_high' ? { ...cue, shapeToken: '' } : cue);
 assert.throws(() => validateUiContract({ ...UI_CONTRACT, inputCues: badCue }), /incomplete cue/);
+assert.throws(() => validateUiContract({ ...UI_CONTRACT, characterDetail: { ...UI_CONTRACT.characterDetail, tabs: ['performance', 'moves'] } }), /tabs/);
+assert.throws(() => validateUiContract({ ...UI_CONTRACT, characterDetail: { ...UI_CONTRACT.characterDetail, minimumPrimaryTargetLogicalPx: 40 } }), /too small/);
 
 const source = readFileSync(new URL('../src/core/ui-contract.ts', import.meta.url), 'utf8');
 for (const forbidden of ['Math.random', 'Date.now', 'localeCompare', 'document.', 'window.', 'setTimeout', 'setInterval']) {
   assert.equal(source.includes(forbidden), false, `forbidden API: ${forbidden}`);
 }
-console.log(`UI contract tests passed; slots=9; playable=3; viewports=${viewports.length}; cues=${UI_CONTRACT.inputCues.length}`);
+console.log(`UI contract tests passed; slots=9; playable=3; detailTabs=${UI_CONTRACT.characterDetail.tabs.length}; viewports=${viewports.length}; cues=${UI_CONTRACT.inputCues.length}`);

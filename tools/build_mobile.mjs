@@ -41,6 +41,8 @@ const OUT_DIR = path.join(ROOT, 'dist');
 const OUT_HTML = path.join(OUT_DIR, 'mamoken_mobile.html');
 const RUNTIME_SHADOW_JS = path.join(ROOT, 'runtime', 'runtime-command-shadow-browser.js');
 const RUNTIME_SHADOW_TAG = '<script src="../runtime/runtime-command-shadow-browser.js"></script>';
+const CHARACTER_CATALOG_BROWSER_JS = path.join(ROOT, 'runtime', 'character-catalog-browser.js');
+const CHARACTER_CATALOG_BROWSER_TAG = '<script src="../runtime/character-catalog-browser.js"></script>';
 
 const IMG_EXT = new Set(['.png', '.jpg', '.jpeg', '.gif', '.webp']);
 const WEBP_QUALITY = 80;
@@ -101,6 +103,7 @@ async function buildAssetMap() {
 async function main() {
   const html = readFileSync(SRC_HTML, 'utf8');
   const runtimeShadowSource = readFileSync(RUNTIME_SHADOW_JS, 'utf8');
+  const characterCatalogBrowserSource = readFileSync(CHARACTER_CATALOG_BROWSER_JS, 'utf8');
   const { map: assetMap, skipped, origTotal, outTotal } = await buildAssetMap();
   const count = Object.keys(assetMap).length;
 
@@ -119,6 +122,11 @@ async function main() {
     srcLine,
     '  img.src=Object.prototype.hasOwnProperty.call(__ASSET_MAP__,src)?__ASSET_MAP__[src]:src;'
   );
+
+  if (!out.includes(CHARACTER_CATALOG_BROWSER_TAG)) {
+    throw new Error(`アンカー行が見つかりません: ${JSON.stringify(CHARACTER_CATALOG_BROWSER_TAG)} (character catalog browser bridgeが未適用の可能性があります)`);
+  }
+  out = out.replace(CHARACTER_CATALOG_BROWSER_TAG, `<script>\n${characterCatalogBrowserSource}\n</script>`);
 
   if (!out.includes(RUNTIME_SHADOW_TAG)) {
     throw new Error(`アンカー行が見つかりません: ${JSON.stringify(RUNTIME_SHADOW_TAG)} (runtime shadow hookが未適用の可能性があります)`);
