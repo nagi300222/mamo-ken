@@ -14,6 +14,7 @@ canvas{display:block;background:#000;touch-action:none}
 <body>
 <div id="wrap"><canvas id="game"></canvas></div>
 <script src="../runtime/character-catalog-browser.js"></script>
+<script src="../runtime/runtime-extended-command-shadow-browser.js"></script>
 <script>
 "use strict";
 /* ============================================================
@@ -753,33 +754,44 @@ function canChain(f,lv){
   return f.pf>A.s+A.a&&f.pf<=A.s+A.a+BAL.CHAIN;
 }
 /* T15 runtime command shadow hook */
+/* T24 extended command shadow hook */
 function runtimeCommandShadowReset(){
   const api=window.__MAMOKEN_COMMAND_SHADOW__;
   if(api&&api.enabled)api.reset();
+  const extended=window.__MAMOKEN_EXTENDED_COMMAND_SHADOW__;
+  if(extended&&extended.enabled)extended.reset();
 }
 function runtimeCommandShadowObserve(f,c,cm){
   const api=window.__MAMOKEN_COMMAND_SHADOW__;
-  if(!api||!api.enabled)return;
-  try{
-    const trigger=c.t==='grab'?'grab':c.lv;
-    const compatible=!!cm&&(trigger==='grab'
-      ?cm.move.type==='grab'
-      :(cm.move.type==='atk'||cm.move.type==='stance')&&cm.move.trigger===trigger);
-    const legacy=compatible
-      ?{kind:'command',commandId:f.c.id+':slot-'+(cm.idx+1),slot:cm.idx+1,name:cm.move.name}
-      :(trigger==='grab'
-        ?{kind:'fallback',fallback:'normal-grab'}
-        :{kind:'fallback',fallback:'normal-attack',level:trigger});
-    api.observeTrigger({
-      frame:B.f,
-      player:f.side,
-      characterId:f.c.id,
-      trigger:trigger,
-      directions:f.dirBuf.map(function(entry){return{direction:entry.dir,frame:entry.f};}),
-      legacy:legacy
-    });
-  }catch(error){
-    try{api.disable(error);}catch(ignore){}
+  const extended=window.__MAMOKEN_EXTENDED_COMMAND_SHADOW__;
+  const baseEnabled=!!(api&&api.enabled),extendedEnabled=!!(extended&&extended.enabled);
+  if(!baseEnabled&&!extendedEnabled)return;
+  const trigger=c.t==='grab'?'grab':c.lv;
+  const payload={
+    frame:B.f,
+    player:f.side,
+    characterId:f.c.id,
+    trigger:trigger,
+    directions:f.dirBuf.map(function(entry){return{direction:entry.dir,frame:entry.f};})
+  };
+  if(baseEnabled){
+    try{
+      const compatible=!!cm&&(trigger==='grab'
+        ?cm.move.type==='grab'
+        :(cm.move.type==='atk'||cm.move.type==='stance')&&cm.move.trigger===trigger);
+      const legacy=compatible
+        ?{kind:'command',commandId:f.c.id+':slot-'+(cm.idx+1),slot:cm.idx+1,name:cm.move.name}
+        :(trigger==='grab'
+          ?{kind:'fallback',fallback:'normal-grab'}
+          :{kind:'fallback',fallback:'normal-attack',level:trigger});
+      api.observeTrigger({...payload,legacy:legacy});
+    }catch(error){
+      try{api.disable(error);}catch(ignore){}
+    }
+  }
+  if(extendedEnabled){
+    try{extended.observeTrigger(payload);}
+    catch(error){try{extended.disable(error);}catch(ignore){}}
   }
 }
 /* T17 offline runtime command canary */
