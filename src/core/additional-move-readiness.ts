@@ -31,14 +31,15 @@ export const UNSUPPORTED_ADDITIONAL_MOVE_CAPABILITIES = Object.freeze([
   'down_on_hit',
 ] as const satisfies readonly AdditionalMoveCapability[]);
 
-const REQUIRED_CAPABILITIES: Readonly<Partial<Record<AdditionalMoveCommandId, readonly AdditionalMoveCapability[]>>> = Object.freeze({
-  'moguzo:slot-7': Object.freeze(['combo_limit']),
-  'pisuke:slot-6': Object.freeze(['conditional_command']),
-  'pisuke:slot-7': Object.freeze(['forward_movement', 'combo_end']),
-  'godan:slot-4': Object.freeze(['one_hit_armor']),
-  'godan:slot-6': Object.freeze(['down_on_hit']),
-  'godan:slot-7': Object.freeze(['guard_pressure']),
-});
+const REQUIRED_CAPABILITY_DATA = {
+  'moguzo:slot-7': ['combo_limit'],
+  'pisuke:slot-6': ['conditional_command'],
+  'pisuke:slot-7': ['forward_movement', 'combo_end'],
+  'godan:slot-4': ['one_hit_armor'],
+  'godan:slot-6': ['down_on_hit'],
+  'godan:slot-7': ['guard_pressure'],
+} as const satisfies Readonly<Partial<Record<AdditionalMoveCommandId, readonly AdditionalMoveCapability[]>>>;
+const REQUIRED_CAPABILITIES: Readonly<Partial<Record<AdditionalMoveCommandId, readonly AdditionalMoveCapability[]>>> = Object.freeze(REQUIRED_CAPABILITY_DATA);
 
 const MOVE_SPEC_REQUIRED_FIELDS = Object.freeze([
   'weight',
