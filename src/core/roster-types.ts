@@ -2,8 +2,10 @@ import type { AbilityHookId } from './ability-types.ts';
 import type { ArchetypeId, CurrentCharacterId, CurrentLevel, Direction } from './types.ts';
 import type { PoseId } from './sprite-types.ts';
 
-export type RosterDataStatus = 'current_impl' | 'provisional';
+export type RosterDataStatus = 'current_impl' | 'design_confirmed';
 export type CommandTier = 'beginner' | 'intermediate' | 'advanced';
+export type RosterMoveAttribute = 'HIGH' | 'MID' | 'LOW' | 'GRAB';
+export type RecommendedComboCategory = 'beginner' | 'basic' | 'practical' | 'advanced' | 'max';
 
 export type RosterCommandMove = Readonly<{
   id: string;
@@ -14,9 +16,13 @@ export type RosterCommandMove = Readonly<{
   trigger: CurrentLevel | 'grab';
   type: 'atk' | 'grab' | 'stance';
   level: CurrentLevel | null;
+  attribute: RosterMoveAttribute;
+  reach: 0 | 1 | 2 | 3;
   tier: CommandTier;
-  role: string;
-  estimatedDamage: number;
+  roleJa: string;
+  conditionsJa: readonly string[];
+  balanceConstraints: readonly string[];
+  estimatedDamage: number | null;
   tags: readonly string[];
 }>;
 
@@ -29,10 +35,13 @@ export type CharacterSpecialData = Readonly<{
 
 export type RecommendedComboData = Readonly<{
   id: string;
+  category: RecommendedComboCategory;
   labelJa: string;
+  status: 'unverified_move_spec';
   moveIds: readonly string[];
-  condition: 'normal' | 'conditional';
-  estimatedDamage: number;
+  condition: null;
+  estimatedDamage: null;
+  notesJa: readonly string[];
 }>;
 
 export type CharacterAssetMapping = Readonly<{
