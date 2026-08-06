@@ -6,12 +6,57 @@ on:
       - 'prototype/mamoken_prototype_v01.html'
       - 'dist/mamoken_mobile.html'
       - 'assets/roster3d/**'
+      - 'tools/apply_t29_ui_visual_fixes.mjs'
       - 'tools/capture_ui_visual_audit.mjs'
       - '.github/workflows/ui-visual-audit.yml'
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
+  generate-fixes:
+    if: ${{ github.event_name == 'pull_request' && github.head_ref == 'feature/ui-visual-audit-v1' && github.actor != 'github-actions[bot]' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@v4
+        with:
+          ref: feature/ui-visual-audit-v1
+          fetch-depth: 0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+
+      - name: Install project dependencies
+        run: npm ci
+
+      - name: Apply visual audit fixes
+        run: node tools/apply_t29_ui_visual_fixes.mjs
+
+      - name: Rebuild mobile distribution
+        run: npm run build:mobile
+
+      - name: Verify detail screen syntax and contract
+        run: npm run check:character-detail
+
+      - name: Commit generated changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add prototype/mamoken_prototype_v01.html dist/mamoken_mobile.html
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m "[t29] apply detail-screen visual audit fixes"
+          git fetch origin feature/ui-visual-audit-v1
+          git rebase origin/feature/ui-visual-audit-v1
+          git push origin HEAD:feature/ui-visual-audit-v1
+
   capture:
+    if: ${{ github.event_name == 'workflow_dispatch' || github.actor == 'github-actions[bot]' }}
     runs-on: ubuntu-latest
     timeout-minutes: 25
     steps:
