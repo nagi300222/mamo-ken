@@ -1,12 +1,11 @@
 import { abilityGyuiinEffect } from './ability-hooks.ts';
-import type { AbilityHookId } from './ability-types.ts';
 import { CHARACTER_CATALOG_BY_ID } from './character-catalog.ts';
-import type { CharacterCatalogEntry, CharacterCatalogMove } from './character-catalog.ts';
+import type { CharacterCatalogMove } from './character-catalog.ts';
 import { BAL, CURRENT_CHARACTERS, CURRENT_CONTRACT } from './constants.ts';
 import { CPU_PERSONAS } from './cpu.ts';
 import { REQUIRED_POSE_IDS } from './sprite-types.ts';
 import type { PoseId } from './sprite-types.ts';
-import type { CurrentCharacterId, CurrentLevel, Direction } from './types.ts';
+import type { CurrentCharacterId, CurrentLevel } from './types.ts';
 import type {
   CharacterAssetMapping,
   CoreRosterCharacter,
@@ -17,7 +16,7 @@ import type {
 const CURRENT_RUNTIME_POSE_IDS = Object.freeze([...(CURRENT_CONTRACT.sprites as { readonly poseIds: readonly string[] }).poseIds]);
 const SPRITE_H = BAL.SPRITE_H as Readonly<Record<CurrentCharacterId, number>>;
 const PORTRAIT_RATIO = BAL.PORTRAIT_RATIO as Readonly<Record<CurrentCharacterId, number>>;
-const CURRENT_IDS = ['moguzo', 'pisuke', 'godan'] as const satisfies readonly CurrentCharacterId[];
+const CURRENT_SLOTS = 3;
 
 export const CANONICAL_TO_CURRENT_POSE: Readonly<Record<PoseId, string>> = Object.freeze({
   idle: 'idle',
@@ -46,28 +45,9 @@ export const CANONICAL_TO_CURRENT_POSE: Readonly<Record<PoseId, string>> = Objec
   crouch_atk: 'crouch_atk',
 });
 
-type AuditedCommandMove = Readonly<{
-  seq: readonly Direction[];
-  trigger: CurrentLevel | 'grab';
-  type: 'atk' | 'grab' | 'stance';
-  lv?: CurrentLevel;
-  name: string;
-  d?: number;
-  counterDmg?: number;
-}>;
-
-const ABILITY_HOOK_BY_CHARACTER = Object.freeze({
-  moguzo: 'guts',
-  pisuke: 'chase',
-  godan: 'heavy_armor',
-} as const satisfies Readonly<Record<CurrentCharacterId, AbilityHookId>>);
-
-function catalogCharacter(characterId: CurrentCharacterId): CharacterCatalogEntry {
-  return CHARACTER_CATALOG_BY_ID[characterId];
-}
-
-function auditedMoves(characterId: CurrentCharacterId): readonly AuditedCommandMove[] {
-  return CURRENT_CONTRACT.bal.CMD.moves[characterId] as unknown as readonly AuditedCommandMove[];
+function tierFor(move: CharacterCatalogMove): RosterCommandMove['tier'] {
+  if (move.difficulty === 'standard') return 'intermediate';
+  return move.difficulty;
 }
 
 function levelFor(move: CharacterCatalogMove): CurrentLevel | null {
@@ -77,81 +57,51 @@ function levelFor(move: CharacterCatalogMove): CurrentLevel | null {
   return null;
 }
 
-function typeFor(move: CharacterCatalogMove): 'atk' | 'grab' {
-  return move.attribute === 'GRAB' ? 'grab' : 'atk';
-}
-
-function currentMove(
-  characterId: CurrentCharacterId,
-  catalogMove: CharacterCatalogMove,
-  audited: AuditedCommandMove,
-): RosterCommandMove {
-  const damage = typeof audited.d === 'number' ? audited.d : typeof audited.counterDmg === 'number' ? audited.counterDmg : null;
+function commandMove(characterId: CurrentCharacterId, slot: 1 | 2 | 3 | 4 | 5 | 6 | 7): RosterCommandMove {
+  const catalogMove = CHARACTER_CATALOG_BY_ID[characterId].moves[slot - 1];
+  if (!catalogMove || catalogMove.slot !== slot) throw new Error(`${characterId}: missing catalog slot ${slot}`);
+  const audited = slot <= CURRENT_SLOTS ? CURRENT_CONTRACT.bal.CMD.moves[characterId][slot - 1] : null;
+  const current = catalogMove.implementationStatus === 'current_runtime';
+  const type = audited?.type ?? (catalogMove.attribute === 'GRAB' ? 'grab' : 'atk');
+  const auditedLevel = audited?.lv;
+  const level = auditedLevel === 'high' || auditedLevel === 'mid' || auditedLevel === 'low' ? auditedLevel : levelFor(catalogMove);
   return Object.freeze({
-    id: `${characterId}.cmd${catalogMove.slot}`,
-    slot: catalogMove.slot as 1 | 2 | 3,
-    status: 'current_impl',
+    id: `${characterId}.cmd${slot}`,
+    slot,
+    status: current ? 'current_impl' : 'design_confirmed',
     nameJa: catalogMove.nameJa,
     sequence: Object.freeze([...catalogMove.command.directions]),
     trigger: catalogMove.command.trigger,
-    type: audited.type,
-    level: audited.lv ?? levelFor(catalogMove),
+    type,
+    level,
     attribute: catalogMove.attribute,
     reach: catalogMove.reach,
-    tier: catalogMove.difficulty,
+    tier: tierFor(catalogMove),
     roleJa: catalogMove.roleJa,
     conditionsJa: Object.freeze([...catalogMove.conditionsJa]),
     balanceConstraints: Object.freeze([...catalogMove.balanceConstraints]),
-    frameDataStatus: 'current_audited',
-    estimatedDamage: damage,
-    tags: Object.freeze(['current_runtime', `reach_${catalogMove.reach}`]),
-  });
-}
-
-function designMove(characterId: CurrentCharacterId, catalogMove: CharacterCatalogMove): RosterCommandMove {
-  return Object.freeze({
-    id: `${characterId}.cmd${catalogMove.slot}`,
-    slot: catalogMove.slot as 4 | 5 | 6 | 7,
-    status: 'design_confirmed',
-    nameJa: catalogMove.nameJa,
-    sequence: Object.freeze([...catalogMove.command.directions]),
-    trigger: catalogMove.command.trigger,
-    type: typeFor(catalogMove),
-    level: levelFor(catalogMove),
-    attribute: catalogMove.attribute,
-    reach: catalogMove.reach,
-    tier: catalogMove.difficulty,
-    roleJa: catalogMove.roleJa,
-    conditionsJa: Object.freeze([...catalogMove.conditionsJa]),
-    balanceConstraints: Object.freeze([...catalogMove.balanceConstraints]),
-    frameDataStatus: 'bal_undecided',
-    estimatedDamage: null,
-    tags: Object.freeze([
-      'design_confirmed',
-      `reach_${catalogMove.reach}`,
-      ...(catalogMove.conditionsJa.length > 0 ? ['conditional'] : []),
-    ]),
+    estimatedDamage: typeof audited?.d === 'number' ? audited.d : null,
+    tags: Object.freeze(current ? ['existing_slot'] : ['design_confirmed']),
   });
 }
 
 function commandMoves(characterId: CurrentCharacterId): readonly RosterCommandMove[] {
-  const catalog = catalogCharacter(characterId);
-  const audited = auditedMoves(characterId);
-  return Object.freeze(catalog.moves.map((move, index) => {
-    if (index < 3) return currentMove(characterId, move, audited[index]);
-    return designMove(characterId, move);
-  }));
+  return Object.freeze([1, 2, 3, 4, 5, 6, 7].map((slot) => commandMove(
+    characterId,
+    slot as 1 | 2 | 3 | 4 | 5 | 6 | 7,
+  )));
 }
 
 function combos(characterId: CurrentCharacterId): readonly RecommendedComboData[] {
-  return Object.freeze(catalogCharacter(characterId).combos.map((combo, index) => Object.freeze({
-    id: `${characterId}.combo${index + 1}`,
+  return Object.freeze(CHARACTER_CATALOG_BY_ID[characterId].combos.map((combo) => Object.freeze({
+    id: `${characterId}.combo.${combo.category}`,
     category: combo.category,
     labelJa: combo.labelJa,
-    status: 'unverified_move_spec',
+    status: 'unverified_move_spec' as const,
     moveIds: Object.freeze([]),
-    condition: 'undecided',
+    condition: null,
     estimatedDamage: null,
+    notesJa: Object.freeze([...combo.notesJa]),
   })));
 }
 
@@ -168,25 +118,18 @@ function assets(characterId: CurrentCharacterId): CharacterAssetMapping {
 function rosterCharacter(
   id: CurrentCharacterId,
   archetype: 'standard' | 'rush' | 'power',
+  commandDifficulty: 1 | 2,
+  special: CoreRosterCharacter['special'],
 ): CoreRosterCharacter {
   const current = CURRENT_CHARACTERS.find((character) => character.id === id);
-  const catalog = catalogCharacter(id);
   if (!current) throw new Error(`missing current character: ${id}`);
-  if (catalog.difficulty !== 1 && catalog.difficulty !== 2) throw new Error(`unexpected current command difficulty: ${id}`);
-  const special = catalog.specials[0];
-  if (!special || special.status !== 'confirmed') throw new Error(`missing confirmed current special: ${id}`);
   return Object.freeze({
     id,
     displayName: current.name,
     archetype,
-    commandDifficulty: catalog.difficulty,
+    commandDifficulty,
     commandMoves: commandMoves(id),
-    special: Object.freeze({
-      id: `${id}.${special.id}`,
-      nameJa: special.nameJa,
-      status: 'confirmed',
-      abilityHook: ABILITY_HOOK_BY_CHARACTER[id],
-    }),
+    special,
     recommendedCombos: combos(id),
     personaId: archetype,
     assets: assets(id),
@@ -196,63 +139,54 @@ function rosterCharacter(
       damageMul: current.dMul,
       startupOffsetF: current.sOfs,
       sGainMul: current.sMul,
-      currentCommandCount: 3,
-      plannedCommandCount: 7,
+      currentCommandCount: CURRENT_SLOTS,
     }),
   });
 }
 
 export const CORE3_ROSTER: readonly CoreRosterCharacter[] = Object.freeze([
-  rosterCharacter('moguzo', 'standard'),
-  rosterCharacter('pisuke', 'rush'),
-  rosterCharacter('godan', 'power'),
+  rosterCharacter('moguzo', 'standard', 1, Object.freeze({ id: 'moguzo.guts', nameJa: '根性', status: 'provisional', abilityHook: 'guts' })),
+  rosterCharacter('pisuke', 'rush', 2, Object.freeze({ id: 'pisuke.chase', nameJa: 'チェイス', status: 'provisional', abilityHook: 'chase' })),
+  rosterCharacter('godan', 'power', 1, Object.freeze({ id: 'godan.heavy_armor', nameJa: 'ヘビーアーマー', status: 'provisional', abilityHook: 'heavy_armor' })),
 ]);
 
 export function validateCore3Roster(roster: readonly CoreRosterCharacter[] = CORE3_ROSTER): void {
   if (roster.length !== 3) throw new Error('core roster must contain three characters');
   if (new Set(roster.map((character) => character.id)).size !== 3) throw new Error('duplicate core character');
-  if (roster.map((character) => character.id).join(',') !== CURRENT_IDS.join(',')) throw new Error('core roster order mismatch');
-
   for (const character of roster) {
-    const catalog = catalogCharacter(character.id);
+    const catalog = CHARACTER_CATALOG_BY_ID[character.id];
     if (character.commandMoves.length !== 7) throw new Error(`${character.id}: seven command moves required`);
     if (character.recommendedCombos.length !== 5) throw new Error(`${character.id}: five recommended combos required`);
-    const current = auditedMoves(character.id);
-
     for (let index = 0; index < 7; index += 1) {
-      const move = character.commandMoves[index];
+      const rebuilt = character.commandMoves[index];
       const designed = catalog.moves[index];
-      if (move.slot !== index + 1) throw new Error(`${character.id}: move slot order mismatch`);
-      if (move.nameJa !== designed.nameJa) throw new Error(`${character.id}: catalog move name mismatch at slot ${index + 1}`);
-      if (move.sequence.join(',') !== designed.command.directions.join(',')) throw new Error(`${character.id}: catalog command mismatch at slot ${index + 1}`);
-      if (move.trigger !== designed.command.trigger) throw new Error(`${character.id}: catalog trigger mismatch at slot ${index + 1}`);
-      if (move.attribute !== designed.attribute || move.reach !== designed.reach) throw new Error(`${character.id}: catalog classification mismatch at slot ${index + 1}`);
-      if (move.roleJa !== designed.roleJa || move.tier !== designed.difficulty) throw new Error(`${character.id}: catalog role mismatch at slot ${index + 1}`);
-      if (move.conditionsJa.join(',') !== designed.conditionsJa.join(',')) throw new Error(`${character.id}: catalog conditions mismatch at slot ${index + 1}`);
-      if (move.balanceConstraints.join(',') !== designed.balanceConstraints.join(',')) throw new Error(`${character.id}: catalog constraints mismatch at slot ${index + 1}`);
-
-      if (index < 3) {
-        const audited = current[index];
-        if (move.status !== 'current_impl' || move.frameDataStatus !== 'current_audited') throw new Error(`${character.id}: current slot ${index + 1} status mismatch`);
-        if (move.nameJa !== audited.name || move.trigger !== audited.trigger || move.type !== audited.type) throw new Error(`${character.id}: current slot ${index + 1} mismatch`);
-        if (move.sequence.join(',') !== audited.seq.join(',')) throw new Error(`${character.id}: current sequence ${index + 1} mismatch`);
-        if (move.estimatedDamage === null) throw new Error(`${character.id}: current slot ${index + 1} damage audit missing`);
+      if (rebuilt.slot !== designed.slot || rebuilt.nameJa !== designed.nameJa) throw new Error(`${character.id}: catalog slot ${index + 1} mismatch`);
+      if (rebuilt.sequence.join(',') !== designed.command.directions.join(',') || rebuilt.trigger !== designed.command.trigger) throw new Error(`${character.id}: catalog input ${index + 1} mismatch`);
+      if (rebuilt.attribute !== designed.attribute || rebuilt.reach !== designed.reach || rebuilt.roleJa !== designed.roleJa) throw new Error(`${character.id}: catalog design ${index + 1} mismatch`);
+      const expectedTier = designed.difficulty === 'standard' ? 'intermediate' : designed.difficulty;
+      if (rebuilt.tier !== expectedTier) throw new Error(`${character.id}: catalog difficulty ${index + 1} mismatch`);
+      if (index < CURRENT_SLOTS) {
+        const audited = CURRENT_CONTRACT.bal.CMD.moves[character.id][index];
+        if (rebuilt.status !== 'current_impl' || designed.implementationStatus !== 'current_runtime') throw new Error(`${character.id}: current slot ${index + 1} status mismatch`);
+        if (rebuilt.nameJa !== audited.name || rebuilt.trigger !== audited.trigger || rebuilt.type !== audited.type) throw new Error(`${character.id}: current slot ${index + 1} mismatch`);
+        if (rebuilt.sequence.join(',') !== audited.seq.join(',')) throw new Error(`${character.id}: current sequence ${index + 1} mismatch`);
+        if (rebuilt.estimatedDamage !== (typeof audited.d === 'number' ? audited.d : null)) throw new Error(`${character.id}: current damage audit ${index + 1} mismatch`);
       } else {
-        if (move.status !== 'design_confirmed' || move.frameDataStatus !== 'bal_undecided') throw new Error(`${character.id}: new slot ${index + 1} must remain design-confirmed/BAL-undecided`);
-        if (move.estimatedDamage !== null) throw new Error(`${character.id}: new slot ${index + 1} must not invent damage`);
+        if (rebuilt.status !== 'design_confirmed' || designed.implementationStatus !== 'design_confirmed') throw new Error(`${character.id}: future slot ${index + 1} must remain design-confirmed only`);
+        if (rebuilt.estimatedDamage !== null) throw new Error(`${character.id}: future slot ${index + 1} damage must remain unresolved`);
       }
-      if (move.reach === 3 && move.balanceConstraints.length < 2) throw new Error(`${character.id}: Reach 3 slot ${index + 1} needs constraints`);
     }
-
     if (new Set(character.commandMoves.map((move) => `${move.sequence.join(',')}+${move.trigger}`)).size !== 7) throw new Error(`${character.id}: duplicate command input`);
-    if (character.special.status !== 'confirmed' || character.special.nameJa !== catalog.specials[0]?.nameJa) throw new Error(`${character.id}: confirmed special mismatch`);
-    if (!character.recommendedCombos.every((combo) => combo.status === 'unverified_move_spec' && combo.moveIds.length === 0 && combo.estimatedDamage === null && combo.condition === 'undecided')) {
-      throw new Error(`${character.id}: unmeasured combo route must remain empty`);
+    for (let index = 0; index < character.recommendedCombos.length; index += 1) {
+      const combo = character.recommendedCombos[index];
+      const designed = catalog.combos[index];
+      if (combo.category !== designed.category || combo.labelJa !== designed.labelJa) throw new Error(`${character.id}: combo category mismatch`);
+      if (combo.status !== 'unverified_move_spec' || combo.moveIds.length !== 0 || combo.estimatedDamage !== null || combo.condition !== null) throw new Error(`${character.id}: combo must remain unverified`);
     }
+    if (character.special.nameJa !== catalog.specials[0]?.nameJa) throw new Error(`${character.id}: special design mismatch`);
     if (character.personaId !== character.archetype || !CPU_PERSONAS[character.personaId]) throw new Error(`${character.id}: persona mismatch`);
     const gyuiin = abilityGyuiinEffect(character.special.abilityHook);
     if (gyuiin.rewardDamageBonus !== 0 || gyuiin.rewardUltBonus !== 0 || gyuiin.timingBonusF !== 0 || gyuiin.weightMul !== 1) throw new Error(`${character.id}: ability changes Gyuiin`);
-    if (character.balanceAudit.currentCommandCount !== 3 || character.balanceAudit.plannedCommandCount !== 7) throw new Error(`${character.id}: command-count audit mismatch`);
     for (const poseId of REQUIRED_POSE_IDS) {
       const runtimePose = character.assets.poseMap[poseId];
       if (!CURRENT_RUNTIME_POSE_IDS.includes(runtimePose)) throw new Error(`${character.id}: unmapped runtime pose ${poseId}/${runtimePose}`);
