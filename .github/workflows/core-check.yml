@@ -10,11 +10,14 @@ on:
       - 'assets/roster3d/**'
       - 'design/**'
       - 'tools/build_mobile.mjs'
+      - 'tools/build_character_catalog_browser.mjs'
       - 'tools/apply_t15_runtime_shadow_hook.mjs'
       - 'tools/apply_t17_runtime_command_canary.mjs'
       - 'tools/apply_t18_runtime_canary_audit.mjs'
       - 'tools/apply_t19_offline_core_default.mjs'
       - 'tools/apply_t20_full_roster_art_select.mjs'
+      - 'tools/apply_t22_character_detail_panel.mjs'
+      - 'tools/apply_t22_ui_contract.mjs'
       - 'tools/compare_runtime_shadow_reports.mjs'
       - 'test/core-spec.test.mjs'
       - 'test/command-parser.test.mjs'
@@ -28,6 +31,8 @@ on:
       - 'test/roster-core3.test.mjs'
       - 'test/full-roster-art.test.mjs'
       - 'test/character-catalog.test.mjs'
+      - 'test/character-catalog-browser.test.mjs'
+      - 'test/character-detail-panel.test.mjs'
       - 'test/runtime-adapter.test.mjs'
       - 'test/runtime-input-bridge.test.mjs'
       - 'test/runtime-command-shadow.test.mjs'
@@ -97,6 +102,15 @@ jobs:
       - name: Full character catalog tests
         run: npm run check:character-catalog
 
+      - name: Generate browser character catalog
+        run: npm run build:character-catalog-browser
+
+      - name: Verify browser character catalog is reproducible
+        run: git diff --exit-code -- runtime/character-catalog-browser.js
+
+      - name: Browser character catalog tests
+        run: npm run check:character-catalog-browser
+
       - name: Legacy runtime adapter tests
         run: npm run check:runtime
 
@@ -129,6 +143,9 @@ jobs:
 
       - name: Verify committed mobile distribution is reproducible
         run: git diff --exit-code -- dist/mamoken_mobile.html
+
+      - name: Character detail panel tests
+        run: npm run check:character-detail
 
       - name: Audit current implementation after build
         run: node tools/audit_current_impl.mjs
