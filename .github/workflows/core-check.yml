@@ -1,8 +1,6 @@
 name: Core contract check
 
 on:
-  push:
-    branches: [feature/extended-command-shadow-v1]
   pull_request:
     paths:
       - 'src/core/**'
@@ -58,7 +56,7 @@ permissions:
 
 jobs:
   t24-generate:
-    if: ${{ github.event_name == 'push' && github.actor != 'github-actions[bot]' }}
+    if: ${{ github.event_name == 'pull_request' && github.head_ref == 'feature/extended-command-shadow-v1' && github.actor != 'github-actions[bot]' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -95,7 +93,7 @@ jobs:
           git push origin HEAD:feature/extended-command-shadow-v1
 
   core-check:
-    if: ${{ github.event_name != 'push' }}
+    if: ${{ github.event_name != 'pull_request' || github.head_ref != 'feature/extended-command-shadow-v1' || github.actor == 'github-actions[bot]' }}
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
