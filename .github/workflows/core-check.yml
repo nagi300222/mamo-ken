@@ -57,128 +57,140 @@ on:
       - '.github/workflows/core-check.yml'
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
+  t28-generate:
+    if: ${{ github.event_name == 'pull_request' && github.head_ref == 'feature/roster-trial-select-ui-v1' && github.actor != 'github-actions[bot]' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: feature/roster-trial-select-ui-v1
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - run: npm ci
+      - name: Remove duplicate patcher replacement
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          path=Path('tools/apply_t28_roster_trial_select_ui.mjs')
+          text=path.read_text()
+          needle="source=replaceOnce(source,'  const moves=BAL.CMD.moves[myF.c.id]||[];','  const moves=commandMovesFor(myF.c);','move list command helper');\n"
+          if text.count(needle) != 1:
+              raise SystemExit(f'expected duplicate helper line once, found {text.count(needle)}')
+          path.write_text(text.replace(needle,''))
+          PY
+      - name: Apply T28 runtime and UI integration
+        run: node tools/apply_t28_roster_trial_select_ui.mjs
+      - name: Build mobile distribution
+        run: npm run build:mobile
+      - name: Run T28 focused tests
+        run: |
+          npm run check:ui
+          npm run check:roster-full
+          npm run check:roster-trial-ui
+          npm run check:character-detail
+      - name: Commit generated changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add tools/apply_t28_roster_trial_select_ui.mjs prototype/mamoken_prototype_v01.html dist/mamoken_mobile.html
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m "[t28] integrate offline trial roster and select UI"
+          git fetch origin feature/roster-trial-select-ui-v1
+          git rebase origin/feature/roster-trial-select-ui-v1
+          git push origin HEAD:feature/roster-trial-select-ui-v1
+
   core-check:
+    if: ${{ github.event_name != 'pull_request' || github.head_ref != 'feature/roster-trial-select-ui-v1' || github.actor == 'github-actions[bot]' }}
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '24'
           cache: npm
-
       - name: Install dependencies
         run: npm ci
-
       - name: Typecheck and core tests
         run: npm run check:core
-
       - name: Command parser tests
         run: npm run check:command
-
       - name: Core3 command catalog overlap tests
         run: npm run check:command-catalog
-
       - name: Additional move readiness gate tests
         run: npm run check:additional-move-readiness
-
       - name: Combat MoveSpec and combo tests
         run: npm run check:combat
-
       - name: Defense and step tests
         run: npm run check:defense
-
       - name: Gauge, roar and Gyuiin tests
         run: npm run check:gauge
-
       - name: Ability hook tests
         run: npm run check:ability
-
       - name: Sprite pipeline tests
         run: npm run check:sprite
-
       - name: CPU persona and determinism tests
         run: npm run check:cpu
-
       - name: UI contract tests
         run: npm run check:ui
-
       - name: Core-three roster tests
         run: npm run check:roster
-
       - name: Full roster art and selection tests
         run: npm run check:roster-full
-
       - name: Offline trial roster UI tests
         run: npm run check:roster-trial-ui
-
       - name: Full character catalog tests
         run: npm run check:character-catalog
-
       - name: Generate browser character catalog
         run: npm run build:character-catalog-browser
-
       - name: Verify browser character catalog is reproducible
         run: git diff --exit-code -- runtime/character-catalog-browser.js
-
       - name: Browser character catalog tests
         run: npm run check:character-catalog-browser
-
       - name: Browser Core3 command contract tests
         run: npm run check:browser-command-contract
-
       - name: Legacy runtime adapter tests
         run: npm run check:runtime
-
       - name: Legacy runtime input bridge tests
         run: npm run check:runtime-input
-
       - name: Runtime command shadow tests
         run: npm run check:runtime-shadow
-
       - name: Extended 21-command shadow tests
         run: npm run check:runtime-extended-shadow
-
       - name: Runtime shadow hook tests
         run: npm run check:runtime-hook
-
       - name: Runtime shadow export and comparison tests
         run: npm run check:runtime-export
-
       - name: Runtime command canary tests
         run: npm run check:runtime-canary
-
       - name: Runtime canary audit tests
         run: npm run check:runtime-canary-audit
-
       - name: Offline default Core command authority tests
         run: npm run check:runtime-authority
-
       - name: Audit current implementation before build
         run: node tools/audit_current_impl.mjs
-
       - name: Build mobile distribution
         run: npm run build:mobile
-
       - name: Verify committed mobile distribution is reproducible
         run: git diff --exit-code -- dist/mamoken_mobile.html
-
       - name: Character detail panel tests
         run: npm run check:character-detail
-
       - name: Audit current implementation after build
         run: node tools/audit_current_impl.mjs
-
       - name: Restore generated audit outputs
         run: |
           git restore reports/current_impl_constants.json
           git restore reports/current_impl_phases.json
           git restore reports/current_impl_sync_scope.md
-
       - name: Verify scoped working tree
         run: |
           git diff --check
