@@ -25,6 +25,7 @@ on:
       - 'test/command-parser.test.mjs'
       - 'test/command-catalog.test.mjs'
       - 'test/browser-command-contract.test.mjs'
+      - 'test/additional-move-readiness.test.mjs'
       - 'test/combat-moves.test.mjs'
       - 'test/defense.test.mjs'
       - 'test/gauge-gyuiin.test.mjs'
@@ -79,6 +80,9 @@ jobs:
 
       - name: Core3 command catalog overlap tests
         run: npm run check:command-catalog
+
+      - name: Additional move readiness gate tests
+        run: npm run check:additional-move-readiness
 
       - name: Combat MoveSpec and combo tests
         run: npm run check:combat

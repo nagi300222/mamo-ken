@@ -10,6 +10,8 @@ export * from './combat-types.ts';
 export * from './combat-moves.ts';
 export * from './combo.ts';
 export * from './combat-validation.ts';
+export * from './additional-move-readiness-types.ts';
+export * from './additional-move-readiness.ts';
 export * from './defense-types.ts';
 export * from './defense.ts';
 export * from './gauge-types.ts';
