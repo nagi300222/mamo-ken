@@ -7,11 +7,14 @@ on:
       - 'runtime/**'
       - 'prototype/mamoken_prototype_v01.html'
       - 'dist/mamoken_mobile.html'
+      - 'assets/roster3d/**'
+      - 'design/**'
       - 'tools/build_mobile.mjs'
       - 'tools/apply_t15_runtime_shadow_hook.mjs'
       - 'tools/apply_t17_runtime_command_canary.mjs'
       - 'tools/apply_t18_runtime_canary_audit.mjs'
       - 'tools/apply_t19_offline_core_default.mjs'
+      - 'tools/apply_t20_full_roster_art_select.mjs'
       - 'tools/compare_runtime_shadow_reports.mjs'
       - 'test/core-spec.test.mjs'
       - 'test/command-parser.test.mjs'
@@ -23,6 +26,7 @@ on:
       - 'test/cpu-persona.test.mjs'
       - 'test/ui-contract.test.mjs'
       - 'test/roster-core3.test.mjs'
+      - 'test/full-roster-art.test.mjs'
       - 'test/runtime-adapter.test.mjs'
       - 'test/runtime-input-bridge.test.mjs'
       - 'test/runtime-command-shadow.test.mjs'
@@ -85,6 +89,9 @@ jobs:
 
       - name: Core-three roster tests
         run: npm run check:roster
+
+      - name: Full roster art and selection tests
+        run: npm run check:roster-full
 
       - name: Legacy runtime adapter tests
         run: npm run check:runtime
