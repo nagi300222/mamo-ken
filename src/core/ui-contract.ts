@@ -25,7 +25,7 @@ function screens(...values: UiScreenId[]): readonly UiScreenId[] {
 }
 
 export const UI_CONTRACT: UiContract = Object.freeze({
-  version: 'ui-contract-v1',
+  version: 'ui-contract-v2',
   roster: Object.freeze([
     Object.freeze({ slot: 1, characterId: 'moguzo', archetype: 'standard', status: 'current_impl', unlocked: true, playableNow: true, displayName: 'モグゾー', placeholder: null, stats: CURRENT_STATS.moguzo, statsAreIndependentAxes: true }),
     Object.freeze({ slot: 2, characterId: 'pisuke', archetype: 'rush', status: 'current_impl', unlocked: true, playableNow: true, displayName: 'ピスケ', placeholder: null, stats: CURRENT_STATS.pisuke, statsAreIndependentAxes: true }),
@@ -39,7 +39,8 @@ export const UI_CONTRACT: UiContract = Object.freeze({
   ] satisfies readonly RosterSlotContract[]),
   difficulties: Object.freeze(['EASY', 'NORMAL', 'HARD'] as const),
   actions: Object.freeze([
-    Object.freeze({ id: 'back', visibleOn: screens('character_select', 'move_list'), requiresConfirmation: false }),
+    Object.freeze({ id: 'back', visibleOn: screens('character_select', 'character_detail', 'move_list'), requiresConfirmation: false }),
+    Object.freeze({ id: 'character_detail', visibleOn: screens('character_select'), requiresConfirmation: false }),
     Object.freeze({ id: 'pause', visibleOn: screens('battle'), requiresConfirmation: false }),
     Object.freeze({ id: 'move_list', visibleOn: screens('battle', 'pause'), requiresConfirmation: false }),
     Object.freeze({ id: 'disconnect_request', visibleOn: screens('pause'), requiresConfirmation: true }),
@@ -56,6 +57,18 @@ export const UI_CONTRACT: UiContract = Object.freeze({
     Object.freeze({ id: 'guard', label: '防', colorToken: 'guard', shapeToken: 'shield', positionToken: 'left_pad_hold', seToken: 'guard_on' }),
     Object.freeze({ id: 'grab', label: '掴', colorToken: 'grab', shapeToken: 'paw', positionToken: 'right_pad_grab', seToken: 'grab_go' }),
   ]),
+  characterDetail: Object.freeze({
+    screen: 'character_detail',
+    tabs: Object.freeze(['performance', 'moves', 'combos'] as const),
+    tabLabelsJa: Object.freeze({ performance: '性能', moves: 'わざ', combos: 'コンボ' }),
+    returnsTo: 'character_select',
+    preservesSelectedCharacter: true,
+    allRosterEntriesVisible: true,
+    battleAvailabilityUnchanged: true,
+    comboUnverifiedLabelJa: '未検証',
+    scrollStepLogicalPx: 260,
+    minimumPrimaryTargetLogicalPx: 74,
+  }),
   ultTextOverlay: Object.freeze({ status: 'optional', bakedIntoSprite: false, token: 'ult_text_overlay' }),
   onlineDisconnect: Object.freeze({ confirmationRequired: true, screen: 'disconnect_confirm' }),
 });
@@ -128,6 +141,12 @@ export function validateUiContract(contract: UiContract = UI_CONTRACT): void {
   for (const cue of contract.inputCues) {
     if (!cue.colorToken || !cue.shapeToken || !cue.positionToken || !cue.seToken) throw new Error(`incomplete cue: ${cue.id}`);
   }
+  if (JSON.stringify(contract.characterDetail.tabs) !== JSON.stringify(['performance', 'moves', 'combos'])) throw new Error('character detail tabs must be performance/moves/combos');
+  if (!contract.characterDetail.preservesSelectedCharacter) throw new Error('character detail must preserve selected character');
+  if (!contract.characterDetail.allRosterEntriesVisible) throw new Error('all roster entries must expose character details');
+  if (!contract.characterDetail.battleAvailabilityUnchanged) throw new Error('character details must not alter battle availability');
+  if (contract.characterDetail.minimumPrimaryTargetLogicalPx < 74) throw new Error('character detail primary tap targets are too small');
+  if (contract.characterDetail.comboUnverifiedLabelJa !== '未検証') throw new Error('unverified combo label must remain explicit');
   if (!contract.onlineDisconnect.confirmationRequired) throw new Error('online disconnect confirmation is required');
 }
 
