@@ -21,6 +21,8 @@ on:
       - 'tools/apply_t24_extended_command_shadow.mjs'
       - 'tools/apply_t26_browser_command_contract.mjs'
       - 'tools/apply_t28_roster_trial_select_ui.mjs'
+      - 'tools/apply_t29_ui_visual_fixes.mjs'
+      - 'tools/capture_ui_visual_audit.mjs'
       - 'tools/compare_runtime_shadow_reports.mjs'
       - 'test/core-spec.test.mjs'
       - 'test/command-parser.test.mjs'
@@ -34,6 +36,7 @@ on:
       - 'test/sprite-pipeline.test.mjs'
       - 'test/cpu-persona.test.mjs'
       - 'test/ui-contract.test.mjs'
+      - 'test/ui-visual-audit-contract.test.mjs'
       - 'test/roster-core3.test.mjs'
       - 'test/full-roster-art.test.mjs'
       - 'test/roster-trial-select-ui.test.mjs'
@@ -55,6 +58,7 @@ on:
       - 'package-lock.json'
       - 'tsconfig.json'
       - '.github/workflows/core-check.yml'
+      - '.github/workflows/ui-visual-audit.yml'
   workflow_dispatch:
 
 jobs:
@@ -106,6 +110,9 @@ jobs:
 
       - name: UI contract tests
         run: npm run check:ui
+
+      - name: UI visual audit contract tests
+        run: npm run check:ui-visual-audit
 
       - name: Core-three roster tests
         run: npm run check:roster
