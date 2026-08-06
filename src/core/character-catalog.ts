@@ -1,0 +1,400 @@
+import type { ArchetypeId, CharacterId, Direction } from './types.ts';
+import { FULL_ROSTER } from './roster-full.ts';
+import type { CurrentImplementationContract } from './types.ts';
+
+export const CHARACTER_CATALOG_VERSION = 'character-catalog-v1' as const;
+
+export const CHARACTER_CATALOG_SOURCE_REFS = [
+  'design/MAMOKEN_CHARACTER_DESIGN_v1.0.md',
+  '01_CURRENT_DECISIONS.md display stat table',
+  'reports/current_impl_constants.json current command audit',
+] as const;
+
+export type CatalogMoveAttribute = 'HIGH' | 'MID' | 'LOW' | 'GRAB';
+export type CatalogMoveDifficulty = 'beginner' | 'standard' | 'advanced';
+export type CatalogMoveImplementationStatus = 'current_runtime' | 'design_confirmed';
+export type CatalogSpecialStatus = 'confirmed' | 'candidate';
+export type ComboCategory = 'beginner' | 'basic' | 'practical' | 'advanced' | 'max';
+export type ComboStatus = 'unverified_move_spec';
+
+export type CharacterDisplayStats = Readonly<{
+  atk: number;
+  spd: number;
+  def: number;
+  tec: number;
+  brk: number;
+}>;
+
+export type CharacterCatalogMove = Readonly<{
+  slot: number;
+  nameJa: string;
+  command: Readonly<{
+    notationJa: string;
+    directions: readonly Direction[];
+    trigger: 'high' | 'mid' | 'low' | 'grab';
+  }>;
+  attribute: CatalogMoveAttribute;
+  reach: 0 | 1 | 2 | 3;
+  roleJa: string;
+  difficulty: CatalogMoveDifficulty;
+  conditionsJa: readonly string[];
+  balanceConstraints: readonly string[];
+  implementationStatus: CatalogMoveImplementationStatus;
+  runtimeKind?: 'atk' | 'grab' | 'stance';
+}>;
+
+export type CharacterSpecialCatalog = Readonly<{
+  id: string;
+  nameJa: string;
+  status: CatalogSpecialStatus;
+  summaryJa: string;
+  rulesJa: readonly string[];
+}>;
+
+export type CharacterComboCatalog = Readonly<{
+  category: ComboCategory;
+  labelJa: string;
+  status: ComboStatus;
+  routeJa: readonly string[];
+  notesJa: readonly string[];
+}>;
+
+export type CharacterCatalogEntry = Readonly<{
+  id: CharacterId;
+  nameJa: string;
+  speciesJa: string;
+  archetype: ArchetypeId | 'another';
+  styleJa: string;
+  conceptJa: string;
+  winConditionJa: string;
+  weaknessJa: string;
+  displayStats: CharacterDisplayStats;
+  difficulty: 1 | 2 | 3 | 4 | 5;
+  moves: readonly CharacterCatalogMove[];
+  specials: readonly CharacterSpecialCatalog[];
+  roar: Readonly<{ nameJa: string; summaryJa: string; affectsGyuiin: false; status: 'confirmed' }>;
+  ultimate: Readonly<{ nameJa: string; summaryJa: string; status: 'confirmed' }>;
+  cpuPlanJa: string;
+  combos: readonly CharacterComboCatalog[];
+}>;
+
+const UNVERIFIED_COMBOS = [
+  { category: 'beginner', labelJa: '初心者', status: 'unverified_move_spec', routeJa: [], notesJa: ['MoveSpec実装後に連続成立と実測ダメージを確認して確定する'] },
+  { category: 'basic', labelJa: '基本', status: 'unverified_move_spec', routeJa: [], notesJa: ['MoveSpec実装後に連続成立と実測ダメージを確認して確定する'] },
+  { category: 'practical', labelJa: '実戦', status: 'unverified_move_spec', routeJa: [], notesJa: ['MoveSpec実装後に連続成立と実測ダメージを確認して確定する'] },
+  { category: 'advanced', labelJa: '上級', status: 'unverified_move_spec', routeJa: [], notesJa: ['MoveSpec実装後に連続成立と実測ダメージを確認して確定する'] },
+  { category: 'max', labelJa: '最大／条件付き最大', status: 'unverified_move_spec', routeJa: [], notesJa: ['MoveSpec実装後に連続成立と実測ダメージを確認して確定する'] },
+] as const satisfies readonly CharacterComboCatalog[];
+
+export const CHARACTER_CATALOG = [
+  {
+    id: 'moguzo', nameJa: 'モグゾー', speciesJa: '基準マーモット', archetype: 'standard', styleJa: 'スタンダード',
+    conceptJa: '全システムへ素直な正解を返す王道型', winConditionJa: '上中下投げを偏らせず使い、相手の癖へ正解を返す', weaknessJa: '特化型の得意距離・得意状況では競り負ける',
+    displayStats: { atk: 3, spd: 3, def: 3, tec: 3, brk: 3 }, difficulty: 1,
+    moves: [
+      { slot: 1, nameJa: '地走り', command: { notationJa: '→↓＋中', directions: ['right','down'], trigger: 'mid' }, attribute: 'MID', reach: 2, roleJa: '標準的な差し込み・基本始動', difficulty: 'beginner', conditionsJa: [], balanceConstraints: [], implementationStatus: 'current_runtime', runtimeKind: 'atk' },
+      { slot: 2, nameJa: '昇撃', command: { notationJa: '↓→＋上', directions: ['down','right'], trigger: 'high' }, attribute: 'HIGH', reach: 1, roleJa: '空振り・前のめりな攻めへの反撃', difficulty: 'standard', conditionsJa: [], balanceConstraints: [], implementationStatus: 'current_runtime', runtimeKind: 'atk' },
+      { slot: 3, nameJa: '引き寄せ投げ', command: { notationJa: '←→＋つかみ', directions: ['left','right'], trigger: 'grab' }, attribute: 'GRAB', reach: 2, roleJa: 'ガード継続を崩す長めの投げ', difficulty: 'beginner', conditionsJa: [], balanceConstraints: [], implementationStatus: 'current_runtime', runtimeKind: 'grab' },
+      { slot: 4, nameJa: '砂払い', command: { notationJa: '↓←＋下', directions: ['down','left'], trigger: 'low' }, attribute: 'LOW', reach: 2, roleJa: 'スウェーと待ち姿勢を狩る', difficulty: 'beginner', conditionsJa: [], balanceConstraints: [], implementationStatus: 'design_confirmed' },
+      { slot: 5, nameJa: '山越え拳', command: { notationJa: '→→＋上', directions: ['right','right'], trigger: 'high' }, attribute: 'HIGH', reach: 2, roleJa: 'スウェーへ刺す重い上段', difficulty: 'standard', conditionsJa: [], balanceConstraints: [], implementationStatus: 'design_confirmed' },
+      { slot: 6, nameJa: '胴押し', command: { notationJa: '←↓＋中', directions: ['left','down'], trigger: 'mid' }, attribute: 'MID', reach: 0, roleJa: '密着時の短い連携・仕切り直し', difficulty: 'beginner', conditionsJa: [], balanceConstraints: [], implementationStatus: 'design_confirmed' },
+      { slot: 7, nameJa: '土煙突き', command: { notationJa: '←↓→＋中', directions: ['left','down','right'], trigger: 'mid' }, attribute: 'MID', reach: 3, roleJa: '深いスウェーへの単発回答', difficulty: 'advanced', conditionsJa: [], balanceConstraints: ['長い発生','大きな後隙','単発回答・コンボ伸長を制限'], implementationStatus: 'design_confirmed' },
+    ],
+    specials: [{ id: 'guts', nameJa: '根性', status: 'confirmed', summaryJa: '異なる技を散らして使い、次のコマンド技を小幅強化する', rulesJa: ['同じ技の反復では成立しない','低HP時の底力はBAL候補','ギュイーンへ影響しない'] }],
+    roar: { nameJa: '真っ向咆哮', summaryJa: '全性能が標準の基準咆哮', affectsGyuiin: false, status: 'confirmed' },
+    ultimate: { nameJa: '大地烈掌', summaryJa: '地面へ両手を叩きつけ、跳ね上がった相手へ掌底を打ち込む重い単発型', status: 'confirmed' },
+    cpuPlanJa: '全属性を均等に使い、相手の偏りへ素直な回答を返す', combos: UNVERIFIED_COMBOS,
+  },
+  {
+    id: 'pisuke', nameJa: 'ピスケ', speciesJa: '細身のマーモット', archetype: 'rush', styleJa: 'ラッシュ',
+    conceptJa: '技とステップを切り替えて攻めを継続する', winConditionJa: 'ヒット後に技と回避を切り替え、攻めを切らさない', weaknessJa: '単発火力と耐久が低く、ガードや空振りで攻めが終わる',
+    displayStats: { atk: 2, spd: 5, def: 2, tec: 4, brk: 2 }, difficulty: 2,
+    moves: [
+      { slot: 1, nameJa: '二連牙', command: { notationJa: '→→＋中', directions: ['right','right'], trigger: 'mid' }, attribute: 'MID', reach: 1, roleJa: '高速始動・連携の入口', difficulty: 'beginner', conditionsJa: [], balanceConstraints: [], implementationStatus: 'current_runtime', runtimeKind: 'atk' },
+      { slot: 2, nameJa: 'スライディング', command: { notationJa: '↓←＋下', directions: ['down','left'], trigger: 'low' }, attribute: 'LOW', reach: 2, roleJa: 'スウェー狩り・ダウン締め', difficulty: 'standard', conditionsJa: [], balanceConstraints: [], implementationStatus: 'current_runtime', runtimeKind: 'atk' },
+      { slot: 3, nameJa: '宙返り蹴', command: { notationJa: '←→＋上', directions: ['left','right'], trigger: 'high' }, attribute: 'HIGH', reach: 2, roleJa: '投げ読み・攻め切れ時の離脱反撃', difficulty: 'standard', conditionsJa: [], balanceConstraints: [], implementationStatus: 'current_runtime', runtimeKind: 'atk' },
+      { slot: 4, nameJa: 'かすみ連打', command: { notationJa: '↓→＋中', directions: ['down','right'], trigger: 'mid' }, attribute: 'MID', reach: 0, roleJa: '密着維持・コンボ中継', difficulty: 'beginner', conditionsJa: [], balanceConstraints: [], implementationStatus: 'design_confirmed' },
+      { slot: 5, nameJa: '風切り爪', command: { notationJa: '→↓＋上', directions: ['right','down'], trigger: 'high' }, attribute: 'HIGH', reach: 2, roleJa: '遅い技や空振りへの差し返し', difficulty: 'beginner', conditionsJa: [], balanceConstraints: [], implementationStatus: 'design_confirmed' },
+      { slot: 6, nameJa: 'すり抜け足', command: { notationJa: '→←＋下', directions: ['right','left'], trigger: 'low' }, attribute: 'LOW', reach: 1, roleJa: '踏み込み成功後の連携継続', difficulty: 'advanced', conditionsJa: ['踏み込み成功後'], balanceConstraints: [], implementationStatus: 'design_confirmed' },
+      { slot: 7, nameJa: 'つむじ返し', command: { notationJa: '↓→→＋中', directions: ['down','right','right'], trigger: 'mid' }, attribute: 'MID', reach: 3, roleJa: '遠い姿勢を追う突進・攻め終了技', difficulty: 'advanced', conditionsJa: [], balanceConstraints: ['攻め終了技','大きな後隙','低い始動補正'], implementationStatus: 'design_confirmed' },
+    ],
+    specials: [{ id: 'chase', nameJa: 'チェイス', status: 'confirmed', summaryJa: '対応技ヒット時だけ方向ボタンでステップキャンセルする', rulesJa: ['ガード・空振りでは不可','基本上限1回','最終段から不可'] }],
+    roar: { nameJa: '疾風咆哮', summaryJa: '発生と復帰が速い代わりにアーマー時間と削りが低い', affectsGyuiin: false, status: 'confirmed' },
+    ultimate: { nameJa: '音速連咆', summaryJa: '残像を残す連続打撃を高速頭突きで締める多段演出型', status: 'confirmed' },
+    cpuPlanJa: '高速始動とヒット確認を重視し、ガードされたら攻めを終える', combos: UNVERIFIED_COMBOS,
+  },
+  {
+    id: 'godan', nameJa: 'ゴダン', speciesJa: '大柄なマーモット', archetype: 'power', styleJa: 'パワー',
+    conceptJa: '少ない読み勝ちを重量打撃へ変える', winConditionJa: '条件付きアーマーと重量技で少ない読み勝ちを大きくする', weaknessJa: '技が遅く、見切り・投げ・空振り反撃に弱い',
+    displayStats: { atk: 5, spd: 1, def: 4, tec: 1, brk: 4 }, difficulty: 1,
+    moves: [
+      { slot: 1, nameJa: '地割れ', command: { notationJa: '↓↓＋下', directions: ['down','down'], trigger: 'low' }, attribute: 'LOW', reach: 3, roleJa: '深いスウェー狩り・ガード削り', difficulty: 'beginner', conditionsJa: [], balanceConstraints: ['長い発生','大きな後隙','コンボ不可'], implementationStatus: 'current_runtime', runtimeKind: 'atk' },
+      { slot: 2, nameJa: '山掴み', command: { notationJa: '→↓＋つかみ', directions: ['right','down'], trigger: 'grab' }, attribute: 'GRAB', reach: 1, roleJa: '条件付きアーマー投げ', difficulty: 'beginner', conditionsJa: [], balanceConstraints: [], implementationStatus: 'current_runtime', runtimeKind: 'grab' },
+      { slot: 3, nameJa: '巌の構え', command: { notationJa: '←←＋中', directions: ['left','left'], trigger: 'mid' }, attribute: 'MID', reach: 1, roleJa: '攻撃を読んだ構え反撃', difficulty: 'standard', conditionsJa: [], balanceConstraints: [], implementationStatus: 'current_runtime', runtimeKind: 'stance' },
+      { slot: 4, nameJa: '岩砕き', command: { notationJa: '↓→＋中', directions: ['down','right'], trigger: 'mid' }, attribute: 'MID', reach: 1, roleJa: '1Hitアーマー付き主力重量打撃', difficulty: 'beginner', conditionsJa: [], balanceConstraints: [], implementationStatus: 'design_confirmed' },
+      { slot: 5, nameJa: '天蓋落とし', command: { notationJa: '→→＋上', directions: ['right','right'], trigger: 'high' }, attribute: 'HIGH', reach: 2, roleJa: 'スウェーへ刺す最大級の上段', difficulty: 'standard', conditionsJa: [], balanceConstraints: [], implementationStatus: 'design_confirmed' },
+      { slot: 6, nameJa: '根こそぎ', command: { notationJa: '←↓＋下', directions: ['left','down'], trigger: 'low' }, attribute: 'LOW', reach: 1, roleJa: '短いコンボの締め・ダウン奪取', difficulty: 'beginner', conditionsJa: [], balanceConstraints: [], implementationStatus: 'design_confirmed' },
+      { slot: 7, nameJa: '大山押し', command: { notationJa: '←↓→＋中', directions: ['left','down','right'], trigger: 'mid' }, attribute: 'MID', reach: 2, roleJa: 'ガードへ圧力をかけ仕切り直す', difficulty: 'advanced', conditionsJa: [], balanceConstraints: [], implementationStatus: 'design_confirmed' },
+    ],
+    specials: [{ id: 'heavy_armor', nameJa: 'ヘビーアーマー', status: 'confirmed', summaryJa: '指定重量技だけに1Hitアーマーを付与する', rulesJa: ['発生直後からは付かない','投げ・見切り・返し技に弱い','アーマー受け始動には重い補正','常時アーマーは禁止'] }],
+    roar: { nameJa: '地鳴り咆哮', summaryJa: '長いアーマーと強い削り・押し戻しを持つが発生と復帰が遅い', affectsGyuiin: false, status: 'confirmed' },
+    ultimate: { nameJa: '山崩し', summaryJa: '相手を持ち上げて叩きつけ、両拳で押し潰す超重量単発演出型', status: 'confirmed' },
+    cpuPlanJa: '限定アーマーと重量技を狙い、長い空振りを連発しない', combos: UNVERIFIED_COMBOS,
+  },
+  {
+    id: 'hakuma', nameJa: 'ハクマ', speciesJa: 'ヒマラヤマーモット', archetype: 'defense', styleJa: 'ディフェンス',
+    conceptJa: '防御成功を次の反撃へ変える', winConditionJa: '防御成功を次の安定反撃へ変える', weaknessJa: '投げ、能動的な崩し、防御成功を与えない待ち',
+    displayStats: { atk: 2, spd: 2, def: 5, tec: 3, brk: 2 }, difficulty: 2,
+    moves: [
+      { slot: 1, nameJa: '雪壁掌', command: { notationJa: '←↓＋中', directions: ['left','down'], trigger: 'mid' }, attribute: 'MID', reach: 1, roleJa: '防御後の安定反撃', difficulty: 'beginner', conditionsJa: [], balanceConstraints: [], implementationStatus: 'design_confirmed' },
+      { slot: 2, nameJa: '氷柱返し', command: { notationJa: '↓→＋上', directions: ['down','right'], trigger: 'high' }, attribute: 'HIGH', reach: 2, roleJa: '鉄壁状態からスウェーを狩る', difficulty: 'standard', conditionsJa: ['鉄壁状態で強化'], balanceConstraints: [], implementationStatus: 'design_confirmed' },
+      { slot: 3, nameJa: '雪崩抱え', command: { notationJa: '←→＋つかみ', directions: ['left','right'], trigger: 'grab' }, attribute: 'GRAB', reach: 1, roleJa: 'ガードを固め返す相手への崩し', difficulty: 'beginner', conditionsJa: [], balanceConstraints: [], implementationStatus: 'design_confirmed' },
+      { slot: 4, nameJa: '地伏せ', command: { notationJa: '↓←＋下', directions: ['down','left'], trigger: 'low' }, attribute: 'LOW', reach: 2, roleJa: '守りからのスウェー狩り', difficulty: 'standard', conditionsJa: [], balanceConstraints: [], implementationStatus: 'design_confirmed' },
+      { slot: 5, nameJa: '不動押し', command: { notationJa: '←←＋中', directions: ['left','left'], trigger: 'mid' }, attribute: 'MID', reach: 0, roleJa: '密着を押し戻して仕切り直す', difficulty: 'beginner', conditionsJa: [], balanceConstraints: [], implementationStatus: 'design_confirmed' },
+      { slot: 6, nameJa: '白峰打ち', command: { notationJa: '→↓＋上', directions: ['right','down'], trigger: 'high' }, attribute: 'HIGH', reach: 1, roleJa: '防御成功時に本領を発揮する反撃', difficulty: 'advanced', conditionsJa: ['防御成功後に強化'], balanceConstraints: [], implementationStatus: 'design_confirmed' },
+      { slot: 7, nameJa: '雪煙崩し', command: { notationJa: '←↓→＋中', directions: ['left','down','right'], trigger: 'mid' }, attribute: 'MID', reach: 3, roleJa: '鉄壁状態を消費する遠距離反撃', difficulty: 'advanced', conditionsJa: ['鉄壁状態を消費'], balanceConstraints: ['条件限定','大きな後隙','状態消費'], implementationStatus: 'design_confirmed' },
+    ],
+    specials: [{ id: 'iron_wall', nameJa: 'アイアンウォール', status: 'confirmed', summaryJa: '防御成功から鉄壁状態を得て、次の対応技1回を強化する', rulesJa: ['投げ・被弾・咆哮アーマー受けでは獲得しない','強化は各技1項目だけ','被弾で消失'] }],
+    roar: { nameJa: '不動咆哮', summaryJa: '鉄壁状態を消費すると押し戻しと安定性が向上する', affectsGyuiin: false, status: 'confirmed' },
+    ultimate: { nameJa: '白峰不動掌', summaryJa: '連撃を正面から受け止め、全体重を乗せた掌底で吹き飛ばす', status: 'confirmed' },
+    cpuPlanJa: '防御成功後だけ反撃比重を上げ、待ち一辺倒にはしない', combos: UNVERIFIED_COMBOS,
+  },
+  {
+    id: 'chirka', nameJa: 'チルカ', speciesJa: 'ボバクマーモット', archetype: 'tricky', styleJa: 'トリッキー',
+    conceptJa: '攻撃・停止・遅延で相手を先に動かす', winConditionJa: '同じ予備動作から攻撃・停止・遅延を使い分ける', weaknessJa: '待ち、フェイント無視、フェイント後の専用硬直',
+    displayStats: { atk: 2, spd: 4, def: 2, tec: 5, brk: 5 }, difficulty: 4,
+    moves: [
+      { slot: 1, nameJa: 'だまし突き', command: { notationJa: '→↓＋中', directions: ['right','down'], trigger: 'mid' }, attribute: 'MID', reach: 1, roleJa: 'フェイント可能な基準技', difficulty: 'beginner', conditionsJa: ['フェイント対応'], balanceConstraints: [], implementationStatus: 'design_confirmed' },
+      { slot: 2, nameJa: '空鳴り爪', command: { notationJa: '↓→＋上', directions: ['down','right'], trigger: 'high' }, attribute: 'HIGH', reach: 2, roleJa: '音だけ先に見せる遅延上段', difficulty: 'standard', conditionsJa: ['ディレイ対応'], balanceConstraints: [], implementationStatus: 'design_confirmed' },
+      { slot: 3, nameJa: 'すかし抱き', command: { notationJa: '←→＋つかみ', directions: ['left','right'], trigger: 'grab' }, attribute: 'GRAB', reach: 1, roleJa: '打撃テレグラフから止まって掴む', difficulty: 'standard', conditionsJa: [], balanceConstraints: [], implementationStatus: 'design_confirmed' },
+      { slot: 4, nameJa: '影踏み', command: { notationJa: '↓←＋下', directions: ['down','left'], trigger: 'low' }, attribute: 'LOW', reach: 2, roleJa: '遅らせて出すスウェー狩り', difficulty: 'beginner', conditionsJa: ['ディレイ対応'], balanceConstraints: [], implementationStatus: 'design_confirmed' },
+      { slot: 5, nameJa: 'つんのめり', command: { notationJa: '→←→＋中', directions: ['right','left','right'], trigger: 'mid' }, attribute: 'MID', reach: 0, roleJa: '空振りに見せた近距離攻撃', difficulty: 'advanced', conditionsJa: [], balanceConstraints: [], implementationStatus: 'design_confirmed' },
+      { slot: 6, nameJa: '戻り蹴り', command: { notationJa: '←↓→＋上', directions: ['left','down','right'], trigger: 'high' }, attribute: 'HIGH', reach: 2, roleJa: '待って反撃する相手を釣る', difficulty: 'standard', conditionsJa: [], balanceConstraints: [], implementationStatus: 'design_confirmed' },
+      { slot: 7, nameJa: 'あと出し頭突き', command: { notationJa: '↓→↓＋中', directions: ['down','right','down'], trigger: 'mid' }, attribute: 'MID', reach: 3, roleJa: '長い遅延から届く単発技', difficulty: 'advanced', conditionsJa: ['一度だけ遅延'], balanceConstraints: ['長い予告','大きな後隙','単発技'], implementationStatus: 'design_confirmed' },
+    ],
+    specials: [
+      { id: 'feint', nameJa: 'フェイント', status: 'confirmed', summaryJa: '指定技のTelegraph中に中断する', rulesJa: ['攻撃判定なし','専用硬直','即つかみ不可','入力は通常コマンド履歴へ積まない'] },
+      { id: 'delay', nameJa: 'ディレイ', status: 'confirmed', summaryJa: '指定技の発生を一度だけ遅らせる', rulesJa: ['延長量は技ごとに固定','再フェイント不可','同一技でフェイントと併用不可'] },
+    ],
+    roar: { nameJa: 'ずらし咆哮', summaryJa: '発生前に明確な一拍を置く遅延型', affectsGyuiin: false, status: 'confirmed' },
+    ultimate: { nameJa: '百面本命打ち', summaryJa: '複数の構えを見せたあと、全力頭突きを叩き込む', status: 'confirmed' },
+    cpuPlanJa: 'フェイントと実攻撃を偏らせず、不可視の三択は作らない', combos: UNVERIFIED_COMBOS,
+  },
+  {
+    id: 'takimaru', nameJa: 'タキマル', speciesJa: 'ホーリーマーモット', archetype: 'grappler', styleJa: 'グラップラー',
+    conceptJa: '打撃で固めて腕ごと抱え込む', winConditionJa: '安全な打撃で固めて投げ派生を通す', weaknessJa: '投げ空振り、暴れ、投げ派生への正解回避',
+    displayStats: { atk: 4, spd: 2, def: 4, tec: 3, brk: 5 }, difficulty: 2,
+    moves: [
+      { slot: 1, nameJa: '丸抱え', command: { notationJa: '→↓＋つかみ', directions: ['right','down'], trigger: 'grab' }, attribute: 'GRAB', reach: 1, roleJa: '基準コマンド投げ', difficulty: 'beginner', conditionsJa: [], balanceConstraints: [], implementationStatus: 'design_confirmed' },
+      { slot: 2, nameJa: '巻き投げ', command: { notationJa: '←→＋つかみ', directions: ['left','right'], trigger: 'grab' }, attribute: 'GRAB', reach: 2, roleJa: '長い腕を使う遠めの投げ', difficulty: 'standard', conditionsJa: [], balanceConstraints: [], implementationStatus: 'design_confirmed' },
+      { slot: 3, nameJa: 'ぶちかまし', command: { notationJa: '→→＋中', directions: ['right','right'], trigger: 'mid' }, attribute: 'MID', reach: 1, roleJa: 'ガードを意識させる打撃始動', difficulty: 'beginner', conditionsJa: [], balanceConstraints: [], implementationStatus: 'design_confirmed' },
+      { slot: 4, nameJa: '足さらい', command: { notationJa: '↓←＋下', directions: ['down','left'], trigger: 'low' }, attribute: 'LOW', reach: 1, roleJa: '暴れ・スウェーへの下段択', difficulty: 'beginner', conditionsJa: [], balanceConstraints: [], implementationStatus: 'design_confirmed' },
+      { slot: 5, nameJa: '熊手払い', command: { notationJa: '↓→＋上', directions: ['down','right'], trigger: 'high' }, attribute: 'HIGH', reach: 2, roleJa: 'スウェー狩りから投げ択へ移行', difficulty: 'standard', conditionsJa: [], balanceConstraints: [], implementationStatus: 'design_confirmed' },
+      { slot: 6, nameJa: '肩車崩し', command: { notationJa: '←↓＋つかみ', directions: ['left','down'], trigger: 'grab' }, attribute: 'GRAB', reach: 0, roleJa: '打撃後だけ狙える密着派生投げ', difficulty: 'advanced', conditionsJa: ['指定打撃後の派生窓'], balanceConstraints: [], implementationStatus: 'design_confirmed' },
+      { slot: 7, nameJa: '大回転落とし', command: { notationJa: '←↓→＋つかみ', directions: ['left','down','right'], trigger: 'grab' }, attribute: 'GRAB', reach: 1, roleJa: '高リスク投げ締め・仕切り直し', difficulty: 'advanced', conditionsJa: [], balanceConstraints: [], implementationStatus: 'design_confirmed' },
+    ],
+    specials: [
+      { id: 'pressure', nameJa: 'プレッシャー', status: 'confirmed', summaryJa: '指定打撃のヒットまたはガード後に短い投げ派生窓を作る', rulesJa: ['ヒットから確定投げにしない','ガード後にも割り込み可能','正解回避で大きく負ける'] },
+      { id: 'follow_hug', nameJa: '追い抱き', status: 'candidate', summaryJa: '一部投げ成功後に補正付き追撃へ移行する候補', rulesJa: ['ダメージより有利状態を得る','追い抱き後はコンボ終了','実装過多なら削除可能'] },
+    ],
+    roar: { nameJa: '抱き込み咆哮', summaryJa: 'Reachは短いが密着時の削りと硬直が強い', affectsGyuiin: false, status: 'confirmed' },
+    ultimate: { nameJa: '天地大回転', summaryJa: '相手を抱えて自分ごと転がり、何度も叩きつける', status: 'confirmed' },
+    cpuPlanJa: '打撃から投げ派生を狙うが、確定投げや回答不能連携は選ばない', combos: UNVERIFIED_COMBOS,
+  },
+  {
+    id: 'yomikage', nameJa: 'ヨミカゲ', speciesJa: 'クロボウシマーモット', archetype: 'counter', styleJa: 'カウンター',
+    conceptJa: '正確に避けた一瞬だけ強力な返しを使う', winConditionJa: '正解回避・ジャスト成功直後の専用反撃', weaknessJa: '待たれること、自分からの崩し、読み失敗',
+    displayStats: { atk: 4, spd: 3, def: 2, tec: 5, brk: 1 }, difficulty: 3,
+    moves: [
+      { slot: 1, nameJa: '影縫い', command: { notationJa: '→↓＋中', directions: ['right','down'], trigger: 'mid' }, attribute: 'MID', reach: 1, roleJa: '通常時の弱いが素早い主力', difficulty: 'beginner', conditionsJa: [], balanceConstraints: [], implementationStatus: 'design_confirmed' },
+      { slot: 2, nameJa: '霞落とし', command: { notationJa: '↓←＋下', directions: ['down','left'], trigger: 'low' }, attribute: 'LOW', reach: 2, roleJa: 'スウェーを止める下段', difficulty: 'beginner', conditionsJa: [], balanceConstraints: [], implementationStatus: 'design_confirmed' },
+      { slot: 3, nameJa: '月かすめ', command: { notationJa: '←→＋上', directions: ['left','right'], trigger: 'high' }, attribute: 'HIGH', reach: 2, roleJa: '先回りしたスウェー狩り', difficulty: 'beginner', conditionsJa: [], balanceConstraints: [], implementationStatus: 'design_confirmed' },
+      { slot: 4, nameJa: '腕返し', command: { notationJa: '←↓＋つかみ', directions: ['left','down'], trigger: 'grab' }, attribute: 'GRAB', reach: 0, roleJa: '密着した相手の力を利用する返し投げ', difficulty: 'standard', conditionsJa: [], balanceConstraints: [], implementationStatus: 'design_confirmed' },
+      { slot: 5, nameJa: '後の先・天', command: { notationJa: '→→＋上', directions: ['right','right'], trigger: 'high' }, attribute: 'HIGH', reach: 2, roleJa: '返し窓限定の上段反撃', difficulty: 'standard', conditionsJa: ['返し窓限定'], balanceConstraints: [], implementationStatus: 'design_confirmed' },
+      { slot: 6, nameJa: '後の先・地', command: { notationJa: '↓↓＋下', directions: ['down','down'], trigger: 'low' }, attribute: 'LOW', reach: 2, roleJa: '返し窓限定のダウン反撃', difficulty: 'advanced', conditionsJa: ['返し窓限定'], balanceConstraints: [], implementationStatus: 'design_confirmed' },
+      { slot: 7, nameJa: '後の先・芯', command: { notationJa: '←↓→＋中', directions: ['left','down','right'], trigger: 'mid' }, attribute: 'MID', reach: 3, roleJa: '返し窓限定の最大Reach反撃', difficulty: 'advanced', conditionsJa: ['返し窓限定'], balanceConstraints: ['条件限定','失敗時の大きな後隙','コンボ補正'], implementationStatus: 'design_confirmed' },
+    ],
+    specials: [{ id: 'just', nameJa: 'ジャスト', status: 'confirmed', summaryJa: '正解回避またはジャストステップ成功後に返し窓を発生させる', rulesJa: ['通常ガードでは発動しない','返し窓中だけ後の先3技を使用可能','自動反撃せずプレイヤーが属性を選ぶ','失敗時は大きな後隙'] }],
+    roar: { nameJa: '返響咆哮', summaryJa: '通常時は低威力・短い後隙、返し窓中は発生または復帰が強化される', affectsGyuiin: false, status: 'confirmed' },
+    ultimate: { nameJa: '後の先・月断', summaryJa: '攻撃を半歩ずらし、喉・胴・足元へ返したあと正中へ掌底を打つ', status: 'confirmed' },
+    cpuPlanJa: '公開テレグラフだけを観測し、返し窓成功時に専用反撃を選ぶ', combos: UNVERIFIED_COMBOS,
+  },
+  {
+    id: 'bullet', nameJa: 'バレット', speciesJa: 'オナガマーモット', archetype: 'charge', styleJa: 'チャージ',
+    conceptJa: '異なる成功を蓄積し一気に解放する', winConditionJa: '異なる成功を蓄積してMAX技を解放する', weaknessJa: '通常時の低火力、解放技の失敗、蓄積前の速攻',
+    displayStats: { atk: 5, spd: 2, def: 3, tec: 5, brk: 3 }, difficulty: 3,
+    moves: [
+      { slot: 1, nameJa: '弾み突き', command: { notationJa: '→↓＋中', directions: ['right','down'], trigger: 'mid' }, attribute: 'MID', reach: 1, roleJa: '通常時の軽い始動', difficulty: 'beginner', conditionsJa: [], balanceConstraints: [], implementationStatus: 'design_confirmed' },
+      { slot: 2, nameJa: '尾払い', command: { notationJa: '↓←＋下', directions: ['down','left'], trigger: 'low' }, attribute: 'LOW', reach: 2, roleJa: '長い尾によるスウェー狩り', difficulty: 'beginner', conditionsJa: [], balanceConstraints: [], implementationStatus: 'design_confirmed' },
+      { slot: 3, nameJa: '跳ね上げ', command: { notationJa: '↓→＋上', directions: ['down','right'], trigger: 'high' }, attribute: 'HIGH', reach: 2, roleJa: '蓄積後に伸びる上段反撃', difficulty: 'beginner', conditionsJa: ['Charge段階で変化'], balanceConstraints: [], implementationStatus: 'design_confirmed' },
+      { slot: 4, nameJa: '蓄圧タックル', command: { notationJa: '→→＋中', directions: ['right','right'], trigger: 'mid' }, attribute: 'MID', reach: 2, roleJa: 'Chargeを1段階使う強化突進', difficulty: 'standard', conditionsJa: ['Charge 1以上'], balanceConstraints: [], implementationStatus: 'design_confirmed' },
+      { slot: 5, nameJa: '抱え弾き', command: { notationJa: '←→＋つかみ', directions: ['left','right'], trigger: 'grab' }, attribute: 'GRAB', reach: 1, roleJa: '成功時にChargeを得る投げ', difficulty: 'standard', conditionsJa: [], balanceConstraints: [], implementationStatus: 'design_confirmed' },
+      { slot: 6, nameJa: '圧抜き掌', command: { notationJa: '←←＋中', directions: ['left','left'], trigger: 'mid' }, attribute: 'MID', reach: 1, roleJa: 'Chargeを一部消費して仕切り直す', difficulty: 'advanced', conditionsJa: ['Chargeを一部消費'], balanceConstraints: [], implementationStatus: 'design_confirmed' },
+      { slot: 7, nameJa: '弾丸頭突き', command: { notationJa: '←↓→→＋中', directions: ['left','down','right','right'], trigger: 'mid' }, attribute: 'MID', reach: 3, roleJa: 'MAX全消費の主砲', difficulty: 'advanced', conditionsJa: ['Charge 3限定','使用結果に関係なく全消費'], balanceConstraints: ['条件限定','全リソース消費','大きな後隙'], implementationStatus: 'design_confirmed' },
+    ],
+    specials: [
+      { id: 'overcharge', nameJa: 'オーバーチャージ', status: 'confirmed', summaryJa: '異なる能動的成功でCharge 0〜3を蓄積する', rulesJa: ['時間経過では増えない','同じ行動の反復では連続獲得しない','全技を一律強化しない'] },
+      { id: 'max_release', nameJa: 'MAX解放', status: 'confirmed', summaryJa: 'Charge 3で一部技を解放版へ変化させる', rulesJa: ['弾丸頭突きが使用可能','ヒット・ガード・空振り・アーマー受けのどれでも全消費','通常平均火力はゴダン以下'] },
+    ],
+    roar: { nameJa: '蓄圧咆哮', summaryJa: '標準より長い持続と後隙を持ち、クリーンヒットはCharge獲得候補', affectsGyuiin: false, status: 'confirmed' },
+    ultimate: { nameJa: '超圧縮・弾丸頭突き', summaryJa: '全身の毛を圧縮し身体ごと一直線に撃ち出す', status: 'confirmed' },
+    cpuPlanJa: '異なる成功を選んでChargeを貯め、MAX技を抱え続けず解放する', combos: UNVERIFIED_COMBOS,
+  },
+  {
+    id: 'dark_moguzo', nameJa: 'ダークモグゾー', speciesJa: 'モグゾー別ルート', archetype: 'another', styleJa: 'アナザー',
+    conceptJa: '最低耐久と引き換えに派生で触り続ける', winConditionJa: '低耐久と引き換えに確認・差し返し・派生で触り続ける', weaknessJa: '最低クラスのHPとGuard、低単発火力、派生失敗',
+    displayStats: { atk: 4, spd: 4, def: 3, tec: 5, brk: 3 }, difficulty: 5,
+    moves: [
+      { slot: 1, nameJa: '黒走り', command: { notationJa: '→↓＋中', directions: ['right','down'], trigger: 'mid' }, attribute: 'MID', reach: 2, roleJa: '軽い差し込み・ヒット確認始動', difficulty: 'beginner', conditionsJa: [], balanceConstraints: [], implementationStatus: 'design_confirmed' },
+      { slot: 2, nameJa: '逆昇撃', command: { notationJa: '↓→＋上', directions: ['down','right'], trigger: 'high' }, attribute: 'HIGH', reach: 1, roleJa: '空振り反撃・コンボ中継', difficulty: 'standard', conditionsJa: [], balanceConstraints: [], implementationStatus: 'design_confirmed' },
+      { slot: 3, nameJa: '闇引き', command: { notationJa: '←→＋つかみ', directions: ['left','right'], trigger: 'grab' }, attribute: 'GRAB', reach: 2, roleJa: 'ガード崩し・連携終了', difficulty: 'standard', conditionsJa: [], balanceConstraints: [], implementationStatus: 'design_confirmed' },
+      { slot: 4, nameJa: '黒砂払い', command: { notationJa: '↓←＋下', directions: ['down','left'], trigger: 'low' }, attribute: 'LOW', reach: 2, roleJa: 'スウェー狩り・ルート分岐', difficulty: 'beginner', conditionsJa: [], balanceConstraints: [], implementationStatus: 'design_confirmed' },
+      { slot: 5, nameJa: '裏山越え', command: { notationJa: '→→＋上', directions: ['right','right'], trigger: 'high' }, attribute: 'HIGH', reach: 2, roleJa: '守りを変えた相手への重い上段', difficulty: 'advanced', conditionsJa: [], balanceConstraints: [], implementationStatus: 'design_confirmed' },
+      { slot: 6, nameJa: '闇押し', command: { notationJa: '←↓＋中', directions: ['left','down'], trigger: 'mid' }, attribute: 'MID', reach: 0, roleJa: '密着連携・ルート組み直し', difficulty: 'standard', conditionsJa: [], balanceConstraints: [], implementationStatus: 'design_confirmed' },
+      { slot: 7, nameJa: '黒煙突き', command: { notationJa: '←↓→＋中', directions: ['left','down','right'], trigger: 'mid' }, attribute: 'MID', reach: 3, roleJa: '深いスウェーへの単発差し返し', difficulty: 'advanced', conditionsJa: [], balanceConstraints: ['大きな後隙','派生不可','単発差し返し'], implementationStatus: 'design_confirmed' },
+    ],
+    specials: [{ id: 'dark_chain', nameJa: '暗連', status: 'confirmed', summaryJa: '指定コマンド技ヒット時だけ別の指定技へ1回派生する', rulesJa: ['1コンボ1回','同技派生禁止','ガード・空振りでは発動しない','闇引き・黒煙突き・咆哮・奥義へ派生しない','派生後は強い補正'] }],
+    roar: { nameJa: '暗震咆哮', summaryJa: '威力と削りが低い代わりに復帰が速い', affectsGyuiin: false, status: 'confirmed' },
+    ultimate: { nameJa: '暗連・黒天烈掌', summaryJa: '複数の暗い派生技をつなぎ、黒い掌底で叩き落とす', status: 'confirmed' },
+    cpuPlanJa: '対人カタログとBossRuleSetを分離し、入力先読みや不可視派生を使わない', combos: UNVERIFIED_COMBOS,
+  },
+] as const satisfies readonly CharacterCatalogEntry[];
+
+export const CHARACTER_CATALOG_BY_ID = Object.fromEntries(
+  CHARACTER_CATALOG.map((character) => [character.id, character]),
+) as Readonly<Record<CharacterId, CharacterCatalogEntry>>;
+
+export const CATALOG_MOVE_COUNT = CHARACTER_CATALOG.reduce((total, character) => total + character.moves.length, 0);
+
+const EXPECTED_COMBO_CATEGORIES = ['beginner', 'basic', 'practical', 'advanced', 'max'] as const;
+
+function stableSortValue(value: unknown): unknown {
+  if (Array.isArray(value)) return value.map(stableSortValue);
+  if (value && typeof value === 'object') {
+    return Object.fromEntries(
+      Object.entries(value as Record<string, unknown>)
+        .sort(([a], [b]) => a.localeCompare(b))
+        .map(([key, nested]) => [key, stableSortValue(nested)]),
+    );
+  }
+  return value;
+}
+
+export function exportCharacterCatalog(): string {
+  return JSON.stringify(stableSortValue({
+    version: CHARACTER_CATALOG_VERSION,
+    sourceRefs: CHARACTER_CATALOG_SOURCE_REFS,
+    characters: CHARACTER_CATALOG,
+  }));
+}
+
+export function hashCharacterCatalog(): string {
+  const source = exportCharacterCatalog();
+  let hash = 0x811c9dc5;
+  for (let index = 0; index < source.length; index += 1) {
+    hash ^= source.charCodeAt(index);
+    hash = Math.imul(hash, 0x01000193);
+  }
+  return (hash >>> 0).toString(16).padStart(8, '0');
+}
+
+export function validateCharacterCatalog(
+  catalog: readonly CharacterCatalogEntry[] = CHARACTER_CATALOG,
+): void {
+  if (catalog.length !== 9) throw new Error('character catalog must contain exactly nine characters');
+
+  const ids = new Set<string>();
+  let moveCount = 0;
+  for (const character of catalog) {
+    if (ids.has(character.id)) throw new Error(`duplicate catalog character id: ${character.id}`);
+    ids.add(character.id);
+
+    if (character.moves.length !== 7) throw new Error(`character must contain seven moves: ${character.id}`);
+    const moveSlots = new Set<number>();
+    const moveNames = new Set<string>();
+    const commandAttributes = new Set<CatalogMoveAttribute>();
+    for (const move of character.moves) {
+      moveCount += 1;
+      if (moveSlots.has(move.slot)) throw new Error(`duplicate move slot: ${character.id}:${move.slot}`);
+      if (moveNames.has(move.nameJa)) throw new Error(`duplicate move name: ${character.id}:${move.nameJa}`);
+      moveSlots.add(move.slot);
+      moveNames.add(move.nameJa);
+      commandAttributes.add(move.attribute);
+      if (move.slot < 1 || move.slot > 7) throw new Error(`invalid move slot: ${character.id}:${move.slot}`);
+      if (move.command.directions.length < 2 || move.command.directions.length > 4) {
+        throw new Error(`invalid command length: ${character.id}:${move.nameJa}`);
+      }
+      if (move.reach === 3 && move.balanceConstraints.length < 2) {
+        throw new Error(`Reach 3 move requires at least two constraints: ${character.id}:${move.nameJa}`);
+      }
+    }
+
+    // GRAB may be supplied by the common grab action; Piske intentionally has no command grab.
+    for (const attribute of ['HIGH', 'MID', 'LOW'] as const) {
+      if (!commandAttributes.has(attribute)) throw new Error(`missing command attribute ${attribute}: ${character.id}`);
+    }
+
+    const statValues = Object.values(character.displayStats);
+    if (statValues.some((value) => !Number.isInteger(value) || value < 1 || value > 5)) {
+      throw new Error(`invalid display stats: ${character.id}`);
+    }
+    const total = statValues.reduce((sum, value) => sum + value, 0);
+    if (character.id === 'dark_moguzo') {
+      if (total !== 19) throw new Error('dark_moguzo display total must be the fixed exception 19');
+    } else if (total < 13 || total > 18) {
+      throw new Error(`display stat total outside 13..18: ${character.id}`);
+    }
+
+    if (character.combos.length !== 5) throw new Error(`character must contain five combo slots: ${character.id}`);
+    if (character.combos.some((combo, index) => combo.category !== EXPECTED_COMBO_CATEGORIES[index])) {
+      throw new Error(`invalid combo category order: ${character.id}`);
+    }
+    if (character.combos.some((combo) => combo.status !== 'unverified_move_spec' || combo.routeJa.length !== 0)) {
+      throw new Error(`unverified combo slots must not invent routes: ${character.id}`);
+    }
+    if (character.roar.affectsGyuiin !== false) throw new Error(`roar must not affect Gyuiin: ${character.id}`);
+  }
+
+  if (moveCount !== 63) throw new Error(`character catalog must contain 63 moves; got ${moveCount}`);
+
+  const rosterIds = FULL_ROSTER.map((character) => character.id);
+  if (JSON.stringify([...ids]) !== JSON.stringify(rosterIds)) {
+    throw new Error('character catalog order must match the full roster');
+  }
+  for (const rosterCharacter of FULL_ROSTER) {
+    const catalogCharacter = catalog.find((character) => character.id === rosterCharacter.id);
+    if (!catalogCharacter) throw new Error(`missing roster catalog entry: ${rosterCharacter.id}`);
+    if (catalogCharacter.nameJa !== rosterCharacter.nameJa) throw new Error(`name mismatch: ${rosterCharacter.id}`);
+    if (catalogCharacter.styleJa !== rosterCharacter.styleJa) throw new Error(`style mismatch: ${rosterCharacter.id}`);
+    if (catalogCharacter.ultimate.nameJa !== rosterCharacter.ultimateJa) throw new Error(`ultimate mismatch: ${rosterCharacter.id}`);
+  }
+}
+
+export function validateCurrentCommandCatalogParity(
+  current: CurrentImplementationContract,
+  catalog: readonly CharacterCatalogEntry[] = CHARACTER_CATALOG,
+): void {
+  for (const characterId of current.characterIds) {
+    const catalogCharacter = catalog.find((character) => character.id === characterId);
+    if (!catalogCharacter) throw new Error(`missing current character in catalog: ${characterId}`);
+    const runtimeMoves = current.commandMoves[characterId];
+    const currentCatalogMoves = catalogCharacter.moves.filter((move) => move.implementationStatus === 'current_runtime');
+    if (runtimeMoves.length !== currentCatalogMoves.length) {
+      throw new Error(`current move count mismatch: ${characterId}`);
+    }
+    for (const runtimeMove of runtimeMoves) {
+      const catalogMove = currentCatalogMoves.find((move) => move.slot === runtimeMove.slot);
+      if (!catalogMove) throw new Error(`missing current move slot: ${characterId}:${runtimeMove.slot}`);
+      if (catalogMove.nameJa !== runtimeMove.name) throw new Error(`current move name mismatch: ${characterId}:${runtimeMove.slot}`);
+      if (JSON.stringify(catalogMove.command.directions) !== JSON.stringify(runtimeMove.seq)) {
+        throw new Error(`current move command mismatch: ${characterId}:${runtimeMove.slot}`);
+      }
+      if (catalogMove.command.trigger !== runtimeMove.trigger) {
+        throw new Error(`current move trigger mismatch: ${characterId}:${runtimeMove.slot}`);
+      }
+      if (catalogMove.runtimeKind !== runtimeMove.type) {
+        throw new Error(`current move runtime kind mismatch: ${characterId}:${runtimeMove.slot}`);
+      }
+    }
+  }
+}
