@@ -19,6 +19,8 @@ jobs:
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
           node-version: '24'
@@ -27,6 +29,9 @@ jobs:
       - name: Validate integrated v0.2 contract
         run: npm run check:combat-v2
       - name: Enforce G00 scoped diff
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
         run: |
-          git diff --check
-          git diff --exit-code origin/${{ github.base_ref }}...HEAD -- prototype dist runtime server assets
+          git diff --check "$BASE_SHA" "$HEAD_SHA"
+          git diff --exit-code "$BASE_SHA" "$HEAD_SHA" -- prototype dist runtime server assets
