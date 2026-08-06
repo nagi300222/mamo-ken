@@ -40,7 +40,15 @@ jobs:
           tar -xzf /tmp/t20_payload.tar.gz -C .
 
       - name: Apply corrected T20 integration sources
-        run: tar -xzf .github/t20_override.tar.gz -C .
+        run: |
+          tar -xzf .github/t20_override.tar.gz -C .
+          python - <<'PY'
+          from pathlib import Path
+          path=Path('design/2D_ART_RESUME_PLAN_2026-08-06.md')
+          text=path.read_text()
+          text=text.replace('既存9画像のみ','既存画像のみ（正式な9画像）')
+          path.write_text(text)
+          PY
 
       - name: Apply full roster integration
         run: |
@@ -53,7 +61,7 @@ jobs:
 
       - name: Commit generated integration
         run: |
-          rm -rf .github/t20_payload .github/t20_override.tar.gz
+          rm -rf .github/t20_payload .github/t20_override.tar.gz .github/t20_override_v2
           git rm .github/workflows/t20-generate.yml
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
