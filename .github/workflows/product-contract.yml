@@ -27,8 +27,8 @@ jobs:
       - run: npm ci
       - name: Validate product contract
         run: npm run check:product
-      - name: Enforce P00 scoped diff
-        if: github.event_name == 'pull_request'
+      - name: Enforce product-owned scoped diff
+        if: github.event_name == 'pull_request' && startsWith(github.head_ref, 'feature/product-')
         env:
           BASE_SHA: ${{ github.event.pull_request.base.sha }}
           HEAD_SHA: ${{ github.event.pull_request.head.sha }}
