@@ -1,4 +1,4 @@
-import { TARGET_PROVISIONAL_PROFILE } from './command-parser.ts';
+import { CURRENT_COMPAT_PROFILE, TARGET_PROVISIONAL_PROFILE } from './command-parser.ts';
 import type { CommandDefinition, CommandDefinitionSource, CommandTimingProfile, InputTrigger } from './command-types.ts';
 import { fnv1a32, stableStringify } from './determinism.ts';
 import { CORE3_ROSTER } from './roster-core3.ts';
@@ -24,7 +24,10 @@ export type CommandInputOverlap = Readonly<{
 export type Core3CommandCatalogContract = Readonly<{
   version: typeof CORE3_COMMAND_CATALOG_VERSION;
   priorityPolicy: typeof CORE3_COMMAND_PRIORITY_POLICY;
-  timingProfile: CommandTimingProfile;
+  timingProfiles: Readonly<{
+    current: CommandTimingProfile;
+    target: CommandTimingProfile;
+  }>;
   definitions: readonly CommandDefinition[];
   overlaps: readonly CommandInputOverlap[];
 }>;
@@ -110,7 +113,10 @@ export function buildCore3CommandCatalogContract(): Core3CommandCatalogContract 
   return Object.freeze({
     version: CORE3_COMMAND_CATALOG_VERSION,
     priorityPolicy: CORE3_COMMAND_PRIORITY_POLICY,
-    timingProfile: TARGET_PROVISIONAL_PROFILE,
+    timingProfiles: Object.freeze({
+      current: CURRENT_COMPAT_PROFILE,
+      target: TARGET_PROVISIONAL_PROFILE,
+    }),
     definitions,
     overlaps: auditCore3CommandInputOverlaps(definitions),
   });
@@ -128,7 +134,8 @@ export function validateCore3CommandCatalog(): void {
   if (definitions.filter((definition) => definition.source === 'design_confirmed').length !== 12) throw new Error('command catalog must contain twelve design-confirmed definitions');
   if (new Set(definitions.map((definition) => definition.id)).size !== definitions.length) throw new Error('duplicate command definition id');
   if (contract.priorityPolicy !== CORE3_COMMAND_PRIORITY_POLICY) throw new Error('command priority policy mismatch');
-  if (contract.timingProfile !== TARGET_PROVISIONAL_PROFILE || contract.timingProfile.id !== 'target-provisional') throw new Error('command catalog must use target provisional timing profile');
+  if (contract.timingProfiles.current !== CURRENT_COMPAT_PROFILE || contract.timingProfiles.current.id !== 'current-compat') throw new Error('current timing profile mismatch');
+  if (contract.timingProfiles.target !== TARGET_PROVISIONAL_PROFILE || contract.timingProfiles.target.id !== 'target-provisional') throw new Error('target timing profile mismatch');
 
   for (const character of CORE3_ROSTER) {
     const characterDefinitions = definitions.filter((definition) => definition.characterId === character.id);
