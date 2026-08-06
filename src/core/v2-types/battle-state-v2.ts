@@ -14,7 +14,7 @@ import type {
   PostureStateV2,
 } from './combat-contract-v2.ts';
 
-export const BATTLE_STATE_V2_VERSION='mamoken-battle-state-v2-v0.1' as const;
+export const BATTLE_STATE_V2_VERSION='mamoken-battle-state-v2-v0.2' as const;
 export const BATTLE_STATE_V2_AUTHORITY='shadow_only' as const;
 
 export type RosterCharacterIdV2='moguzo'|'pisuke'|'godan'|'hakuma'|'chirka'|'takimaru'|'yomikage'|'bullet'|'dark_moguzo';
@@ -89,8 +89,10 @@ export type FighterResourcesV2=Readonly<{
   maxGuard:number;
   sGauge:number;
   maxSGauge:number;
-  roarGauge:number;
-  maxRoarGauge:number;
+  focusGauge:number;
+  maxFocusGauge:number;
+  ultimateStock:number;
+  maxUltimateStock:number;
 }>;
 
 export type FighterTimersV2=Readonly<{
@@ -210,7 +212,9 @@ export type ContactResultV2=Readonly<{
   hpDelta:Readonly<Record<PlayerIdV2,number>>;
   guardDelta:Readonly<Record<PlayerIdV2,number>>;
   sGaugeDelta:Readonly<Record<PlayerIdV2,number>>;
-  roarGaugeDelta:Readonly<Record<PlayerIdV2,number>>;
+  focusGaugeDelta:Readonly<Record<PlayerIdV2,number>>;
+  ultimateStockDelta:Readonly<Record<PlayerIdV2,number>>;
+  bulletChargeDelta:Readonly<Record<PlayerIdV2,number>>;
   downType:DownTypeV2;
   followupAllowed:boolean;
 }>;

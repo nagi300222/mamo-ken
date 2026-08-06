@@ -1,3 +1,4 @@
+// G01.1 current gauge schema correction
 import { fnv1a32, stableStringify } from '../determinism.ts';
 import {
   COMBAT_CONTRACT_V2,
@@ -34,7 +35,8 @@ export type FighterSeedV2=Readonly<{
   maxHp:number;
   maxGuard:number;
   maxSGauge:number;
-  maxRoarGauge:number;
+  maxFocusGauge:number;
+  maxUltimateStock:number;
   abilityId:string;
 }>;
 
@@ -242,7 +244,7 @@ export function validateMoveSpecV2Registry(registry:MoveSpecV2Registry):Validati
 }
 
 function createFighter(playerId:PlayerIdV2,seed:FighterSeedV2):FighterStateV2{
-  if(!integer(seed.maxHp,1)||!integer(seed.maxGuard,1)||!integer(seed.maxSGauge,1)||!integer(seed.maxRoarGauge,1)||!text(seed.abilityId))throw new TypeError(`player ${playerId}: invalid fighter seed`);
+  if(!integer(seed.maxHp,1)||!integer(seed.maxGuard,1)||!integer(seed.maxSGauge,1)||!integer(seed.maxFocusGauge,1)||!integer(seed.maxUltimateStock,1)||!text(seed.abilityId))throw new TypeError(`player ${playerId}: invalid fighter seed`);
   return Object.freeze({
     playerId,
     characterId:seed.characterId,
@@ -251,7 +253,7 @@ function createFighter(playerId:PlayerIdV2,seed:FighterSeedV2):FighterStateV2{
     action:Object.freeze({actionId:null,moveId:null,phase:'idle',startedCombatFrame:null,actionFrame:0,currentContactIndex:0,cancelConsumed:false}),
     defense:Object.freeze({guardHeld:false,mikiriWindowF:0,dodgeWindowF:0,armorHitsRemaining:0,lastResult:'NONE'}),
     ability:Object.freeze({abilityId:seed.abilityId,phase:'idle',values:Object.freeze({})}),
-    resources:Object.freeze({hp:seed.maxHp,maxHp:seed.maxHp,guard:seed.maxGuard,maxGuard:seed.maxGuard,sGauge:0,maxSGauge:seed.maxSGauge,roarGauge:0,maxRoarGauge:seed.maxRoarGauge}),
+    resources:Object.freeze({hp:seed.maxHp,maxHp:seed.maxHp,guard:seed.maxGuard,maxGuard:seed.maxGuard,sGauge:0,maxSGauge:seed.maxSGauge,focusGauge:0,maxFocusGauge:seed.maxFocusGauge,ultimateStock:0,maxUltimateStock:seed.maxUltimateStock}),
     timers:Object.freeze({hitstunF:0,blockstunF:0,guardBreakF:0,downF:0,wakeF:0,invulnerabilityF:0}),
     inputHold:Object.freeze({activeHolds:Object.freeze({}),completedHolds:Object.freeze([])}),
     bulletCharge:seed.characterId==='bullet'?Object.freeze({value:0,lastGainSignature:null,maxReady:false}):null,
@@ -290,7 +292,7 @@ function validateFighter(state:BattleStateV2,fighter:FighterStateV2,playerId:Pla
   if(!integer(fighter.action.actionFrame)||!integer(fighter.action.currentContactIndex))errors.push(`${path}.action: non-negative counters required`);
   if(state.clocks.fighterActionFrame[playerId]!==fighter.action.actionFrame)errors.push(`${path}.actionFrame: clock mismatch`);
   for(const [key,value] of Object.entries(fighter.timers))if(!integer(value))errors.push(`${path}.timers.${key}: non-negative integer required`);
-  for(const [value,max,key] of [[fighter.resources.hp,fighter.resources.maxHp,'hp'],[fighter.resources.guard,fighter.resources.maxGuard,'guard'],[fighter.resources.sGauge,fighter.resources.maxSGauge,'sGauge'],[fighter.resources.roarGauge,fighter.resources.maxRoarGauge,'roarGauge']] as const){
+  for(const [value,max,key] of [[fighter.resources.hp,fighter.resources.maxHp,'hp'],[fighter.resources.guard,fighter.resources.maxGuard,'guard'],[fighter.resources.sGauge,fighter.resources.maxSGauge,'sGauge'],[fighter.resources.focusGauge,fighter.resources.maxFocusGauge,'focusGauge'],[fighter.resources.ultimateStock,fighter.resources.maxUltimateStock,'ultimateStock']] as const){
     if(!integer(max,1)||!integer(value)||value>max)errors.push(`${path}.resources.${key}: invalid range`);
   }
   if((fighter.controlState==='down'||fighter.controlState==='ko')&&fighter.postureState!=='DOWN')errors.push(`${path}: down/ko control requires DOWN posture`);

@@ -1,4 +1,4 @@
-# マモ拳 BattleState V2 / MoveSpec V2 schema v0.1
+# マモ拳 BattleState V2 / MoveSpec V2 schema v0.2
 
 - 更新日: 2026-08-06
 - 工程: G01
@@ -76,7 +76,21 @@ bulletCharge
 - resource current値は0..max
 - hold開始Fは現在simulationFrameを越えない
 
-## 5. SpatialPairState V2
+## 5. Current gauge schema
+
+G01.1 current gauge schema correction. 現行runtime正本に合わせ、fighter resourcesは次を保持する。
+
+```text
+hp / maxHp
+guard / maxGuard
+sGauge / maxSGauge
+focusGauge / maxFocusGauge
+ultimateStock / maxUltimateStock
+```
+
+Bulletのchargeはresourcesへ混ぜず、引き続きBulletChargeStateで管理する。独立したroarGaugeは現行正本に存在しないため削除する。ContactResultはS / focus / ultimate / Bullet chargeのdeltaを別々に持つ。
+
+## 6. SpatialPairState V2
 
 ```text
 engagement
@@ -88,7 +102,7 @@ lastPositionBatchId
 
 CLINCH中は両fighterがCLINCH postureで、残りFが1以上。NORMAL中はclinchRemainingF=0。
 
-## 6. Full MoveSpec V2
+## 7. Full MoveSpec V2
 
 Full MoveSpec V2は以下を含む。
 
@@ -109,7 +123,7 @@ resource policy
 tags
 ```
 
-## 7. TaggedValue
+## 8. TaggedValue
 
 未決値と「明示的になし」を区別する。
 
@@ -134,7 +148,7 @@ resolved:
 
 FORMAL MoveSpecはOPEN値を一つでも含められない。
 
-## 8. G00 closureからの変換
+## 9. G00 closureからの変換
 
 G00の21技closureをFull MoveSpec V2へ変換する。
 
@@ -162,7 +176,7 @@ G01でOPENのままにするもの:
 
 数値の実importと21技candidate validationはG08の責務。
 
-## 9. Intent / Result
+## 10. Intent / Result
 
 G01は同時batch resolver用のデータ型だけを定義する。
 
@@ -184,7 +198,7 @@ player identity
 
 FrameBatchはP1/P2を同じpreStateHashから表現する。解決処理はG09まで追加しない。
 
-## 10. 理由コード
+## 11. 理由コード
 
 ```text
 OK_*
@@ -202,7 +216,7 @@ RESULT_*
 
 表示文言とreason codeを分離する。
 
-## 11. 対称性
+## 12. 対称性
 
 FrameBatchIntentはP1/P2 swap関数を持つ。
 
@@ -212,7 +226,7 @@ swap(swap(batch)) == batch
 
 G01は型対称性だけを検証し、勝敗やdamageの同時解決は行わない。
 
-## 12. 非目標
+## 13. 非目標
 
 - live runtime adapter
 - runtime authority切替
@@ -225,7 +239,7 @@ G01は型対称性だけを検証し、勝敗やdamageの同時解決は行わ�
 - online protocol変更
 - prototype / dist / runtime / server / assets変更
 
-## 13. 後続
+## 14. 後続
 
 ```text
 G02 read-only legacy adapter
