@@ -1,4 +1,5 @@
 import type { CommandDefinition } from './command-types.ts';
+import { CHARACTER_CATALOG_BY_ID } from './character-catalog.ts';
 import { CURRENT_CONTRACT } from './constants.ts';
 import { fnv1a32, stableStringify } from './determinism.ts';
 import { CORE3_ROSTER } from './roster-core3.ts';
@@ -64,23 +65,28 @@ function currentAudit(characterId: CurrentCharacterId, slot: number): Core3Curre
 }
 
 export const CORE3_SEVEN_MOVE_PLAN: readonly Core3SevenMovePlanEntry[] = Object.freeze(
-  CORE3_ROSTER.flatMap((character) => character.commandMoves.map((move) => Object.freeze({
-    id: move.id,
-    characterId: character.id,
-    slot: move.slot,
-    nameJa: move.nameJa,
-    directions: Object.freeze([...move.sequence]),
-    trigger: move.trigger,
-    attribute: move.attribute,
-    reach: move.reach,
-    roleJa: move.roleJa,
-    difficulty: move.tier,
-    conditionsJa: Object.freeze([...move.conditionsJa]),
-    balanceConstraints: Object.freeze([...move.balanceConstraints]),
-    runtimeConnection: move.status === 'current_impl' ? 'current_runtime' : 'not_connected',
-    balanceStatus: move.frameDataStatus,
-    currentAudit: move.status === 'current_impl' ? currentAudit(character.id, move.slot) : null,
-  }))),
+  CORE3_ROSTER.flatMap((character) => character.commandMoves.map((move) => {
+    const catalogMove = CHARACTER_CATALOG_BY_ID[character.id].moves[move.slot - 1];
+    if (!catalogMove) throw new Error(`missing catalog move: ${character.id}:${move.slot}`);
+    const connected = move.status === 'current_impl';
+    return Object.freeze({
+      id: move.id,
+      characterId: character.id,
+      slot: move.slot,
+      nameJa: move.nameJa,
+      directions: Object.freeze([...move.sequence]),
+      trigger: move.trigger,
+      attribute: move.attribute,
+      reach: move.reach,
+      roleJa: move.roleJa,
+      difficulty: catalogMove.difficulty,
+      conditionsJa: Object.freeze([...move.conditionsJa]),
+      balanceConstraints: Object.freeze([...move.balanceConstraints]),
+      runtimeConnection: connected ? 'current_runtime' : 'not_connected',
+      balanceStatus: connected ? 'current_audited' : 'bal_undecided',
+      currentAudit: connected ? currentAudit(character.id, move.slot) : null,
+    });
+  })),
 );
 
 export function buildCore3SevenMoveCommandDefinitions(
@@ -115,21 +121,21 @@ export function validateCore3SevenMovePlan(
       if (ids.has(entry.id)) throw new Error(`duplicate plan id: ${entry.id}`);
       ids.add(entry.id);
       const rosterMove = character.commandMoves[entry.slot - 1];
-      if (!rosterMove) throw new Error(`missing roster move: ${entry.id}`);
+      const catalogMove = CHARACTER_CATALOG_BY_ID[entry.characterId].moves[entry.slot - 1];
+      if (!rosterMove || !catalogMove) throw new Error(`missing source move: ${entry.id}`);
       if (entry.nameJa !== rosterMove.nameJa || entry.directions.join(',') !== rosterMove.sequence.join(',') || entry.trigger !== rosterMove.trigger) {
         throw new Error(`plan/roster command mismatch: ${entry.id}`);
       }
       if (entry.attribute !== rosterMove.attribute || entry.reach !== rosterMove.reach || entry.roleJa !== rosterMove.roleJa) {
         throw new Error(`plan/roster classification mismatch: ${entry.id}`);
       }
+      if (entry.difficulty !== catalogMove.difficulty) throw new Error(`plan/catalog difficulty mismatch: ${entry.id}`);
       if (entry.runtimeConnection === 'current_runtime') {
         if (entry.slot > 3 || entry.balanceStatus !== 'current_audited' || entry.currentAudit === null) {
           throw new Error(`invalid current runtime plan entry: ${entry.id}`);
         }
-      } else {
-        if (entry.slot < 4 || entry.balanceStatus !== 'bal_undecided' || entry.currentAudit !== null) {
-          throw new Error(`unconnected move must not contain runtime BAL: ${entry.id}`);
-        }
+      } else if (entry.slot < 4 || entry.balanceStatus !== 'bal_undecided' || entry.currentAudit !== null) {
+        throw new Error(`unconnected move must not contain runtime BAL: ${entry.id}`);
       }
       if (entry.reach === 3 && entry.balanceConstraints.length < 2) throw new Error(`Reach 3 constraints missing: ${entry.id}`);
     }
