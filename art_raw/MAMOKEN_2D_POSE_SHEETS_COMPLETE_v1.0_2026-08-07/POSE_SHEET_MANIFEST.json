@@ -1,0 +1,950 @@
+{
+  "package": "MAMOKEN_2D_POSE_SHEETS_COMPLETE",
+  "version": "1.0",
+  "created_at_jst": "2026-08-07T02:18:00+09:00",
+  "source_archive": "mamoken.zip",
+  "status": "COMMON_24_POSES_COMPLETE",
+  "characters": [
+    {
+      "id": "A-01",
+      "slug": "moguzo",
+      "name_ja": "モグゾー",
+      "source_folder": "モグゾー",
+      "master": {
+        "source_filename": "3ee800f7-4616-4c7c-8c02-5b11d9fdad0d.png",
+        "new_filename": "00_moguzo_2d_master.png",
+        "zip_timestamp": "2026-08-07T00:41:36"
+      },
+      "sheets": [
+        {
+          "sequence": 1,
+          "set": "S1",
+          "label_ja": "基本状態",
+          "source_filename": "56cadbba-beb3-4843-8a81-3b5c452c5ec3.png",
+          "new_filename": "01_moguzo_S1_basic_idle_guard_flinch_victory.png",
+          "zip_timestamp": "2026-08-07T01:14:52",
+          "cells": {
+            "top_left": "idle",
+            "top_right": "guard",
+            "bottom_left": "flinch",
+            "bottom_right": "victory"
+          }
+        },
+        {
+          "sequence": 2,
+          "set": "S2",
+          "label_ja": "攻撃予備動作・中段攻撃",
+          "source_filename": "7979ff0a-d900-4ada-a159-3f0ee2619a70.png",
+          "new_filename": "02_moguzo_S2_telegraphs_and_mid_attack.png",
+          "zip_timestamp": "2026-08-07T01:19:02",
+          "cells": {
+            "top_left": "tele_high",
+            "top_right": "tele_mid",
+            "bottom_left": "tele_low",
+            "bottom_right": "attack_mid"
+          }
+        },
+        {
+          "sequence": 3,
+          "set": "S3",
+          "label_ja": "上段・下段・見切り・咆哮吸気",
+          "source_filename": "0d0fd70a-57f2-486a-8fed-7d5c103c746c.png",
+          "new_filename": "03_moguzo_S3_attacks_mikiri_roar_charge.png",
+          "zip_timestamp": "2026-08-07T01:26:40",
+          "cells": {
+            "top_left": "attack_high",
+            "top_right": "attack_low",
+            "bottom_left": "mikiri",
+            "bottom_right": "roar_charge"
+          }
+        },
+        {
+          "sequence": 4,
+          "set": "S4",
+          "label_ja": "咆哮・つかみ",
+          "source_filename": "bea8450a-4f2d-4d94-833b-f8c30063b995.png",
+          "new_filename": "04_moguzo_S4_roar_and_grab.png",
+          "zip_timestamp": "2026-08-07T02:00:48",
+          "cells": {
+            "top_left": "roar_release",
+            "top_right": "grab_reach",
+            "bottom_left": "grab_lift",
+            "bottom_right": "grabbed"
+          }
+        },
+        {
+          "sequence": 5,
+          "set": "S5",
+          "label_ja": "ダウン・復帰・KO・奥義準備",
+          "source_filename": "25a1e403-79f4-4bfe-b1ea-ad92c6eafb3c.png",
+          "new_filename": "05_moguzo_S5_down_getup_ko_ult_charge.png",
+          "zip_timestamp": "2026-08-07T02:10:32",
+          "cells": {
+            "top_left": "down",
+            "top_right": "getup",
+            "bottom_left": "ko",
+            "bottom_right": "ult_charge"
+          }
+        },
+        {
+          "sequence": 6,
+          "set": "S6",
+          "label_ja": "回避・しゃがみ攻撃",
+          "source_filename": "d8d4e70d-12d3-4778-907d-e9d1e6278664.png",
+          "new_filename": "06_moguzo_S6_crouch_sway_lunge_crouch_attack.png",
+          "zip_timestamp": "2026-08-07T02:14:44",
+          "cells": {
+            "top_left": "crouch",
+            "top_right": "sway",
+            "bottom_left": "lunge",
+            "bottom_right": "crouch_atk"
+          }
+        }
+      ]
+    },
+    {
+      "id": "A-02",
+      "slug": "piske",
+      "name_ja": "ピスケ",
+      "source_folder": "ピスケ",
+      "master": {
+        "source_filename": "b3ee0eaa-1d5a-4eca-b40a-abf8c287c3a1.png",
+        "new_filename": "00_piske_2d_master.png",
+        "zip_timestamp": "2026-08-07T00:43:12"
+      },
+      "sheets": [
+        {
+          "sequence": 1,
+          "set": "S1",
+          "label_ja": "基本状態",
+          "source_filename": "e7c54c7c-57c8-4d27-9690-a0c6a8442757.png",
+          "new_filename": "01_piske_S1_basic_idle_guard_flinch_victory.png",
+          "zip_timestamp": "2026-08-07T01:14:56",
+          "cells": {
+            "top_left": "idle",
+            "top_right": "guard",
+            "bottom_left": "flinch",
+            "bottom_right": "victory"
+          }
+        },
+        {
+          "sequence": 2,
+          "set": "S2",
+          "label_ja": "攻撃予備動作・中段攻撃",
+          "source_filename": "833181b9-717c-42d5-90f6-85eef163487a.png",
+          "new_filename": "02_piske_S2_telegraphs_and_mid_attack.png",
+          "zip_timestamp": "2026-08-07T01:19:04",
+          "cells": {
+            "top_left": "tele_high",
+            "top_right": "tele_mid",
+            "bottom_left": "tele_low",
+            "bottom_right": "attack_mid"
+          }
+        },
+        {
+          "sequence": 3,
+          "set": "S3",
+          "label_ja": "上段・下段・見切り・咆哮吸気",
+          "source_filename": "f88017bb-819e-47d4-8a3f-af67d1f9b33e.png",
+          "new_filename": "03_piske_S3_attacks_mikiri_roar_charge.png",
+          "zip_timestamp": "2026-08-07T01:26:42",
+          "cells": {
+            "top_left": "attack_high",
+            "top_right": "attack_low",
+            "bottom_left": "mikiri",
+            "bottom_right": "roar_charge"
+          }
+        },
+        {
+          "sequence": 4,
+          "set": "S4",
+          "label_ja": "咆哮・つかみ",
+          "source_filename": "7b46ea41-ea98-4743-9bbe-e56361516e79.png",
+          "new_filename": "04_piske_S4_roar_and_grab.png",
+          "zip_timestamp": "2026-08-07T02:00:50",
+          "cells": {
+            "top_left": "roar_release",
+            "top_right": "grab_reach",
+            "bottom_left": "grab_lift",
+            "bottom_right": "grabbed"
+          }
+        },
+        {
+          "sequence": 5,
+          "set": "S5",
+          "label_ja": "ダウン・復帰・KO・奥義準備",
+          "source_filename": "ade70d46-b85d-42ef-a061-9f3058c58b7d.png",
+          "new_filename": "05_piske_S5_down_getup_ko_ult_charge.png",
+          "zip_timestamp": "2026-08-07T02:10:36",
+          "cells": {
+            "top_left": "down",
+            "top_right": "getup",
+            "bottom_left": "ko",
+            "bottom_right": "ult_charge"
+          }
+        },
+        {
+          "sequence": 6,
+          "set": "S6",
+          "label_ja": "回避・しゃがみ攻撃",
+          "source_filename": "438b48bd-a939-4b35-a6db-d6194c4110d4.png",
+          "new_filename": "06_piske_S6_crouch_sway_lunge_crouch_attack.png",
+          "zip_timestamp": "2026-08-07T02:14:48",
+          "cells": {
+            "top_left": "crouch",
+            "top_right": "sway",
+            "bottom_left": "lunge",
+            "bottom_right": "crouch_atk"
+          }
+        }
+      ]
+    },
+    {
+      "id": "A-03",
+      "slug": "godan",
+      "name_ja": "ゴダン",
+      "source_folder": "ゴダン",
+      "master": {
+        "source_filename": "e81f68ab-17bf-4bc4-98a0-67f154cb8641.png",
+        "new_filename": "00_godan_2d_master.png",
+        "zip_timestamp": "2026-08-07T00:46:02"
+      },
+      "sheets": [
+        {
+          "sequence": 1,
+          "set": "S1",
+          "label_ja": "基本状態",
+          "source_filename": "0d417c07-d807-4c8b-a7df-bed2444d18b5.png",
+          "new_filename": "01_godan_S1_basic_idle_guard_flinch_victory.png",
+          "zip_timestamp": "2026-08-07T01:14:58",
+          "cells": {
+            "top_left": "idle",
+            "top_right": "guard",
+            "bottom_left": "flinch",
+            "bottom_right": "victory"
+          }
+        },
+        {
+          "sequence": 2,
+          "set": "S2",
+          "label_ja": "攻撃予備動作・中段攻撃",
+          "source_filename": "3f846565-7a79-4987-aff8-f1b901ac9591.png",
+          "new_filename": "02_godan_S2_telegraphs_and_mid_attack.png",
+          "zip_timestamp": "2026-08-07T01:19:06",
+          "cells": {
+            "top_left": "tele_high",
+            "top_right": "tele_mid",
+            "bottom_left": "tele_low",
+            "bottom_right": "attack_mid"
+          }
+        },
+        {
+          "sequence": 3,
+          "set": "S3",
+          "label_ja": "上段・下段・見切り・咆哮吸気",
+          "source_filename": "a308a2d1-f243-44b9-9212-fa21340e41e2.png",
+          "new_filename": "03_godan_S3_attacks_mikiri_roar_charge.png",
+          "zip_timestamp": "2026-08-07T01:26:46",
+          "cells": {
+            "top_left": "attack_high",
+            "top_right": "attack_low",
+            "bottom_left": "mikiri",
+            "bottom_right": "roar_charge"
+          }
+        },
+        {
+          "sequence": 4,
+          "set": "S4",
+          "label_ja": "咆哮・つかみ",
+          "source_filename": "30828ae1-20bd-4d91-b17f-3de019548b35.png",
+          "new_filename": "04_godan_S4_roar_and_grab.png",
+          "zip_timestamp": "2026-08-07T02:04:18",
+          "cells": {
+            "top_left": "roar_release",
+            "top_right": "grab_reach",
+            "bottom_left": "grab_lift",
+            "bottom_right": "grabbed"
+          }
+        },
+        {
+          "sequence": 5,
+          "set": "S5",
+          "label_ja": "ダウン・復帰・KO・奥義準備",
+          "source_filename": "834800b4-c6d4-498e-865c-725c065fd86c.png",
+          "new_filename": "05_godan_S5_down_getup_ko_ult_charge.png",
+          "zip_timestamp": "2026-08-07T02:10:38",
+          "cells": {
+            "top_left": "down",
+            "top_right": "getup",
+            "bottom_left": "ko",
+            "bottom_right": "ult_charge"
+          }
+        },
+        {
+          "sequence": 6,
+          "set": "S6",
+          "label_ja": "回避・しゃがみ攻撃",
+          "source_filename": "03b31921-be67-4ccb-a605-83d7f4dad7e8.png",
+          "new_filename": "06_godan_S6_crouch_sway_lunge_crouch_attack.png",
+          "zip_timestamp": "2026-08-07T02:14:52",
+          "cells": {
+            "top_left": "crouch",
+            "top_right": "sway",
+            "bottom_left": "lunge",
+            "bottom_right": "crouch_atk"
+          }
+        }
+      ]
+    },
+    {
+      "id": "A-04",
+      "slug": "hakuma",
+      "name_ja": "ハクマ",
+      "source_folder": "ハクマ",
+      "master": {
+        "source_filename": "c782e0b1-e17f-4bb2-8eaa-a8ccfb8d3e7a.png",
+        "new_filename": "00_hakuma_2d_master.png",
+        "zip_timestamp": "2026-08-07T00:48:42"
+      },
+      "sheets": [
+        {
+          "sequence": 1,
+          "set": "S1",
+          "label_ja": "基本状態",
+          "source_filename": "0cc734f6-dad6-44f0-8343-811cb1ea68a6.png",
+          "new_filename": "01_hakuma_S1_basic_idle_guard_flinch_victory.png",
+          "zip_timestamp": "2026-08-07T01:15:02",
+          "cells": {
+            "top_left": "idle",
+            "top_right": "guard",
+            "bottom_left": "flinch",
+            "bottom_right": "victory"
+          }
+        },
+        {
+          "sequence": 2,
+          "set": "S2",
+          "label_ja": "攻撃予備動作・中段攻撃",
+          "source_filename": "db2156bc-4cb1-4f5a-841f-734effbf1464.png",
+          "new_filename": "02_hakuma_S2_telegraphs_and_mid_attack.png",
+          "zip_timestamp": "2026-08-07T01:19:10",
+          "cells": {
+            "top_left": "tele_high",
+            "top_right": "tele_mid",
+            "bottom_left": "tele_low",
+            "bottom_right": "attack_mid"
+          }
+        },
+        {
+          "sequence": 3,
+          "set": "S3",
+          "label_ja": "上段・下段・見切り・咆哮吸気",
+          "source_filename": "9d646eff-bd58-4fa7-a630-e6abe53409c9.png",
+          "new_filename": "03_hakuma_S3_attacks_mikiri_roar_charge.png",
+          "zip_timestamp": "2026-08-07T01:26:48",
+          "cells": {
+            "top_left": "attack_high",
+            "top_right": "attack_low",
+            "bottom_left": "mikiri",
+            "bottom_right": "roar_charge"
+          }
+        },
+        {
+          "sequence": 4,
+          "set": "S4",
+          "label_ja": "咆哮・つかみ",
+          "source_filename": "c03690a2-f0b2-4cdd-b1b3-f528ff8456a0.png",
+          "new_filename": "04_hakuma_S4_roar_and_grab.png",
+          "zip_timestamp": "2026-08-07T02:02:04",
+          "cells": {
+            "top_left": "roar_release",
+            "top_right": "grab_reach",
+            "bottom_left": "grab_lift",
+            "bottom_right": "grabbed"
+          }
+        },
+        {
+          "sequence": 5,
+          "set": "S5",
+          "label_ja": "ダウン・復帰・KO・奥義準備",
+          "source_filename": "8aa6abca-709c-47e3-a128-abb04a833674.png",
+          "new_filename": "05_hakuma_S5_down_getup_ko_ult_charge.png",
+          "zip_timestamp": "2026-08-07T02:10:42",
+          "cells": {
+            "top_left": "down",
+            "top_right": "getup",
+            "bottom_left": "ko",
+            "bottom_right": "ult_charge"
+          }
+        },
+        {
+          "sequence": 6,
+          "set": "S6",
+          "label_ja": "回避・しゃがみ攻撃",
+          "source_filename": "acccf6b1-e8fb-40fc-bf84-04f75f6d5ce2.png",
+          "new_filename": "06_hakuma_S6_crouch_sway_lunge_crouch_attack.png",
+          "zip_timestamp": "2026-08-07T02:14:58",
+          "cells": {
+            "top_left": "crouch",
+            "top_right": "sway",
+            "bottom_left": "lunge",
+            "bottom_right": "crouch_atk"
+          }
+        }
+      ]
+    },
+    {
+      "id": "A-05",
+      "slug": "chilka",
+      "name_ja": "チルカ",
+      "source_folder": "チルカ",
+      "master": {
+        "source_filename": "80ffdf0c-f094-4e98-8d18-05426b41a9dd.png",
+        "new_filename": "00_chilka_2d_master.png",
+        "zip_timestamp": "2026-08-07T00:48:46"
+      },
+      "sheets": [
+        {
+          "sequence": 1,
+          "set": "S1",
+          "label_ja": "基本状態",
+          "source_filename": "402d0116-ef7d-4fb8-81fd-fa6844fc1bfd.png",
+          "new_filename": "01_chilka_S1_basic_idle_guard_flinch_victory.png",
+          "zip_timestamp": "2026-08-07T01:15:08",
+          "cells": {
+            "top_left": "idle",
+            "top_right": "guard",
+            "bottom_left": "flinch",
+            "bottom_right": "victory"
+          }
+        },
+        {
+          "sequence": 2,
+          "set": "S2",
+          "label_ja": "攻撃予備動作・中段攻撃",
+          "source_filename": "117ed999-6ca4-4e70-92ae-e4b1c3bf7e52.png",
+          "new_filename": "02_chilka_S2_telegraphs_and_mid_attack.png",
+          "zip_timestamp": "2026-08-07T01:19:12",
+          "cells": {
+            "top_left": "tele_high",
+            "top_right": "tele_mid",
+            "bottom_left": "tele_low",
+            "bottom_right": "attack_mid"
+          }
+        },
+        {
+          "sequence": 3,
+          "set": "S3",
+          "label_ja": "上段・下段・見切り・咆哮吸気",
+          "source_filename": "c65d300d-53cc-472e-aefa-eeab52672742.png",
+          "new_filename": "03_chilka_S3_attacks_mikiri_roar_charge.png",
+          "zip_timestamp": "2026-08-07T01:26:54",
+          "cells": {
+            "top_left": "attack_high",
+            "top_right": "attack_low",
+            "bottom_left": "mikiri",
+            "bottom_right": "roar_charge"
+          }
+        },
+        {
+          "sequence": 4,
+          "set": "S4",
+          "label_ja": "咆哮・つかみ",
+          "source_filename": "5eb53e1f-2283-45d8-aae3-867dc706e39f.png",
+          "new_filename": "04_chilka_S4_roar_and_grab.png",
+          "zip_timestamp": "2026-08-07T02:02:12",
+          "cells": {
+            "top_left": "roar_release",
+            "top_right": "grab_reach",
+            "bottom_left": "grab_lift",
+            "bottom_right": "grabbed"
+          }
+        },
+        {
+          "sequence": 5,
+          "set": "S5",
+          "label_ja": "ダウン・復帰・KO・奥義準備",
+          "source_filename": "ffbf0723-9170-4748-b22c-55260802c546.png",
+          "new_filename": "05_chilka_S5_down_getup_ko_ult_charge.png",
+          "zip_timestamp": "2026-08-07T02:10:48",
+          "cells": {
+            "top_left": "down",
+            "top_right": "getup",
+            "bottom_left": "ko",
+            "bottom_right": "ult_charge"
+          }
+        },
+        {
+          "sequence": 6,
+          "set": "S6",
+          "label_ja": "回避・しゃがみ攻撃",
+          "source_filename": "1fba64e8-5d26-4556-8012-34eadc296f6c.png",
+          "new_filename": "06_chilka_S6_crouch_sway_lunge_crouch_attack.png",
+          "zip_timestamp": "2026-08-07T02:15:02",
+          "cells": {
+            "top_left": "crouch",
+            "top_right": "sway",
+            "bottom_left": "lunge",
+            "bottom_right": "crouch_atk"
+          }
+        }
+      ]
+    },
+    {
+      "id": "A-06",
+      "slug": "takimaru",
+      "name_ja": "タキマル",
+      "source_folder": "タキマル",
+      "master": {
+        "source_filename": "02337d04-cb4d-48f6-92bb-6595eaa70159.png",
+        "new_filename": "00_takimaru_2d_master.png",
+        "zip_timestamp": "2026-08-07T00:49:32"
+      },
+      "sheets": [
+        {
+          "sequence": 1,
+          "set": "S1",
+          "label_ja": "基本状態",
+          "source_filename": "296e5a77-24d6-4e70-89eb-67dcf28abb73.png",
+          "new_filename": "01_takimaru_S1_basic_idle_guard_flinch_victory.png",
+          "zip_timestamp": "2026-08-07T01:15:28",
+          "cells": {
+            "top_left": "idle",
+            "top_right": "guard",
+            "bottom_left": "flinch",
+            "bottom_right": "victory"
+          }
+        },
+        {
+          "sequence": 2,
+          "set": "S2",
+          "label_ja": "攻撃予備動作・中段攻撃",
+          "source_filename": "f6779a5e-72df-47f5-90e6-8ca2480a3dfe.png",
+          "new_filename": "02_takimaru_S2_telegraphs_and_mid_attack.png",
+          "zip_timestamp": "2026-08-07T01:33:26",
+          "cells": {
+            "top_left": "tele_high",
+            "top_right": "tele_mid",
+            "bottom_left": "tele_low",
+            "bottom_right": "attack_mid"
+          }
+        },
+        {
+          "sequence": 3,
+          "set": "S3",
+          "label_ja": "上段・下段・見切り・咆哮吸気",
+          "source_filename": "bc74fb22-93bd-4265-a241-6f331afbce1c.png",
+          "new_filename": "03_takimaru_S3_attacks_mikiri_roar_charge.png",
+          "zip_timestamp": "2026-08-07T01:36:26",
+          "cells": {
+            "top_left": "attack_high",
+            "top_right": "attack_low",
+            "bottom_left": "mikiri",
+            "bottom_right": "roar_charge"
+          }
+        },
+        {
+          "sequence": 4,
+          "set": "S4",
+          "label_ja": "咆哮・つかみ",
+          "source_filename": "11617a62-80dd-43e8-b62d-40122914f54a.png",
+          "new_filename": "04_takimaru_S4_roar_and_grab.png",
+          "zip_timestamp": "2026-08-07T02:05:28",
+          "cells": {
+            "top_left": "roar_release",
+            "top_right": "grab_reach",
+            "bottom_left": "grab_lift",
+            "bottom_right": "grabbed"
+          }
+        },
+        {
+          "sequence": 5,
+          "set": "S5",
+          "label_ja": "ダウン・復帰・KO・奥義準備",
+          "source_filename": "fab30a9d-5a18-47b2-b02b-d65c06c90847.png",
+          "new_filename": "05_takimaru_S5_down_getup_ko_ult_charge.png",
+          "zip_timestamp": "2026-08-07T02:10:54",
+          "cells": {
+            "top_left": "down",
+            "top_right": "getup",
+            "bottom_left": "ko",
+            "bottom_right": "ult_charge"
+          }
+        },
+        {
+          "sequence": 6,
+          "set": "S6",
+          "label_ja": "回避・しゃがみ攻撃",
+          "source_filename": "e2fff9ba-eb86-494e-9bbc-867351960804.png",
+          "new_filename": "06_takimaru_S6_crouch_sway_lunge_crouch_attack.png",
+          "zip_timestamp": "2026-08-07T02:15:08",
+          "cells": {
+            "top_left": "crouch",
+            "top_right": "sway",
+            "bottom_left": "lunge",
+            "bottom_right": "crouch_atk"
+          }
+        }
+      ]
+    },
+    {
+      "id": "A-07",
+      "slug": "yomikage",
+      "name_ja": "ヨミカゲ",
+      "source_folder": "ヨミカゲ",
+      "master": {
+        "source_filename": "39a3b8d2-3987-4fdf-a617-2975897444d9.png",
+        "new_filename": "00_yomikage_2d_master.png",
+        "zip_timestamp": "2026-08-07T00:48:58"
+      },
+      "sheets": [
+        {
+          "sequence": 1,
+          "set": "S1",
+          "label_ja": "基本状態",
+          "source_filename": "d8b5ab51-f538-4a56-9b9b-780ca1ef3e78.png",
+          "new_filename": "01_yomikage_S1_basic_idle_guard_flinch_victory.png",
+          "zip_timestamp": "2026-08-07T01:15:32",
+          "cells": {
+            "top_left": "idle",
+            "top_right": "guard",
+            "bottom_left": "flinch",
+            "bottom_right": "victory"
+          }
+        },
+        {
+          "sequence": 2,
+          "set": "S2",
+          "label_ja": "攻撃予備動作・中段攻撃",
+          "source_filename": "82495017-45ed-4522-b177-210503f19318.png",
+          "new_filename": "02_yomikage_S2_telegraphs_and_mid_attack.png",
+          "zip_timestamp": "2026-08-07T01:25:00",
+          "cells": {
+            "top_left": "tele_high",
+            "top_right": "tele_mid",
+            "bottom_left": "tele_low",
+            "bottom_right": "attack_mid"
+          }
+        },
+        {
+          "sequence": 3,
+          "set": "S3",
+          "label_ja": "上段・下段・見切り・咆哮吸気",
+          "source_filename": "8ca553e7-0956-449b-8061-748e2c016b3a.png",
+          "new_filename": "03_yomikage_S3_attacks_mikiri_roar_charge.png",
+          "zip_timestamp": "2026-08-07T01:28:34",
+          "cells": {
+            "top_left": "attack_high",
+            "top_right": "attack_low",
+            "bottom_left": "mikiri",
+            "bottom_right": "roar_charge"
+          }
+        },
+        {
+          "sequence": 4,
+          "set": "S4",
+          "label_ja": "咆哮・つかみ",
+          "source_filename": "5e19f559-3482-4d12-b72d-1cd09a08d01f.png",
+          "new_filename": "04_yomikage_S4_roar_and_grab.png",
+          "zip_timestamp": "2026-08-07T02:04:36",
+          "cells": {
+            "top_left": "roar_release",
+            "top_right": "grab_reach",
+            "bottom_left": "grab_lift",
+            "bottom_right": "grabbed"
+          }
+        },
+        {
+          "sequence": 5,
+          "set": "S5",
+          "label_ja": "ダウン・復帰・KO・奥義準備",
+          "source_filename": "09dffb0b-f426-4afd-bff6-e763306d9c2d.png",
+          "new_filename": "05_yomikage_S5_down_getup_ko_ult_charge.png",
+          "zip_timestamp": "2026-08-07T02:10:58",
+          "cells": {
+            "top_left": "down",
+            "top_right": "getup",
+            "bottom_left": "ko",
+            "bottom_right": "ult_charge"
+          }
+        },
+        {
+          "sequence": 6,
+          "set": "S6",
+          "label_ja": "回避・しゃがみ攻撃",
+          "source_filename": "7ba81a14-7002-4804-bbbd-15ad240778ce.png",
+          "new_filename": "06_yomikage_S6_crouch_sway_lunge_crouch_attack.png",
+          "zip_timestamp": "2026-08-07T02:15:18",
+          "cells": {
+            "top_left": "crouch",
+            "top_right": "sway",
+            "bottom_left": "lunge",
+            "bottom_right": "crouch_atk"
+          }
+        }
+      ]
+    },
+    {
+      "id": "A-08",
+      "slug": "bullet",
+      "name_ja": "バレット",
+      "source_folder": "バレット",
+      "master": {
+        "source_filename": "cbb194e4-2534-46ec-a3b6-f05db87d724a.png",
+        "new_filename": "00_bullet_2d_master.png",
+        "zip_timestamp": "2026-08-07T00:50:48"
+      },
+      "sheets": [
+        {
+          "sequence": 1,
+          "set": "S1",
+          "label_ja": "基本状態",
+          "source_filename": "825a067b-d170-40c2-b042-0e7eec41e06c.png",
+          "new_filename": "01_bullet_S1_basic_idle_guard_flinch_victory.png",
+          "zip_timestamp": "2026-08-07T01:15:36",
+          "cells": {
+            "top_left": "idle",
+            "top_right": "guard",
+            "bottom_left": "flinch",
+            "bottom_right": "victory"
+          }
+        },
+        {
+          "sequence": 2,
+          "set": "S2",
+          "label_ja": "攻撃予備動作・中段攻撃",
+          "source_filename": "e46768f9-be1b-4196-8050-552f8af068e3.png",
+          "new_filename": "02_bullet_S2_telegraphs_and_mid_attack.png",
+          "zip_timestamp": "2026-08-07T01:25:02",
+          "cells": {
+            "top_left": "tele_high",
+            "top_right": "tele_mid",
+            "bottom_left": "tele_low",
+            "bottom_right": "attack_mid"
+          }
+        },
+        {
+          "sequence": 3,
+          "set": "S3",
+          "label_ja": "上段・下段・見切り・咆哮吸気",
+          "source_filename": "53496065-73d4-482f-93b5-16eb75008f00.png",
+          "new_filename": "03_bullet_S3_attacks_mikiri_roar_charge.png",
+          "zip_timestamp": "2026-08-07T01:28:38",
+          "cells": {
+            "top_left": "attack_high",
+            "top_right": "attack_low",
+            "bottom_left": "mikiri",
+            "bottom_right": "roar_charge"
+          }
+        },
+        {
+          "sequence": 4,
+          "set": "S4",
+          "label_ja": "咆哮・つかみ",
+          "source_filename": "ec07c7d2-7581-45f5-bf00-1a884a9e0e56.png",
+          "new_filename": "04_bullet_S4_roar_and_grab.png",
+          "zip_timestamp": "2026-08-07T02:03:02",
+          "cells": {
+            "top_left": "roar_release",
+            "top_right": "grab_reach",
+            "bottom_left": "grab_lift",
+            "bottom_right": "grabbed"
+          }
+        },
+        {
+          "sequence": 5,
+          "set": "S5",
+          "label_ja": "ダウン・復帰・KO・奥義準備",
+          "source_filename": "2fee079d-0558-4330-a7b1-7292a3ff906f.png",
+          "new_filename": "05_bullet_S5_down_getup_ko_ult_charge.png",
+          "zip_timestamp": "2026-08-07T02:11:04",
+          "cells": {
+            "top_left": "down",
+            "top_right": "getup",
+            "bottom_left": "ko",
+            "bottom_right": "ult_charge"
+          }
+        },
+        {
+          "sequence": 6,
+          "set": "S6",
+          "label_ja": "回避・しゃがみ攻撃",
+          "source_filename": "46e5c92d-eed4-4b79-9818-08153d0725fb.png",
+          "new_filename": "06_bullet_S6_crouch_sway_lunge_crouch_attack.png",
+          "zip_timestamp": "2026-08-07T02:15:22",
+          "cells": {
+            "top_left": "crouch",
+            "top_right": "sway",
+            "bottom_left": "lunge",
+            "bottom_right": "crouch_atk"
+          }
+        }
+      ]
+    },
+    {
+      "id": "A-09",
+      "slug": "dark_moguzo",
+      "name_ja": "ダークモグゾー",
+      "source_folder": "ダークモグゾー",
+      "master": {
+        "source_filename": "0f317dfa-d6ee-43c5-8430-b2124ba62142.png",
+        "new_filename": "00_dark_moguzo_2d_master.png",
+        "zip_timestamp": "2026-08-07T01:13:16"
+      },
+      "sheets": [
+        {
+          "sequence": 1,
+          "set": "S1",
+          "label_ja": "基本状態",
+          "source_filename": "14a21e92-4d9b-4339-aeb3-96d954f048ef.png",
+          "new_filename": "01_dark_moguzo_S1_basic_idle_guard_flinch_victory.png",
+          "zip_timestamp": "2026-08-07T01:17:18",
+          "cells": {
+            "top_left": "idle",
+            "top_right": "guard",
+            "bottom_left": "flinch",
+            "bottom_right": "victory"
+          }
+        },
+        {
+          "sequence": 2,
+          "set": "S2",
+          "label_ja": "攻撃予備動作・中段攻撃",
+          "source_filename": "f763e426-87ce-40af-86d4-f4161e8fceb2.png",
+          "new_filename": "02_dark_moguzo_S2_telegraphs_and_mid_attack.png",
+          "zip_timestamp": "2026-08-07T01:25:04",
+          "cells": {
+            "top_left": "tele_high",
+            "top_right": "tele_mid",
+            "bottom_left": "tele_low",
+            "bottom_right": "attack_mid"
+          }
+        },
+        {
+          "sequence": 3,
+          "set": "S3",
+          "label_ja": "上段・下段・見切り・咆哮吸気",
+          "source_filename": "8dae204a-86e7-492d-87d7-4cda048a5223.png",
+          "new_filename": "03_dark_moguzo_S3_attacks_mikiri_roar_charge.png",
+          "zip_timestamp": "2026-08-07T01:28:40",
+          "cells": {
+            "top_left": "attack_high",
+            "top_right": "attack_low",
+            "bottom_left": "mikiri",
+            "bottom_right": "roar_charge"
+          }
+        },
+        {
+          "sequence": 4,
+          "set": "S4",
+          "label_ja": "咆哮・つかみ",
+          "source_filename": "99180174-9dca-4c4b-8243-2e6ac08041f7.png",
+          "new_filename": "04_dark_moguzo_S4_roar_and_grab.png",
+          "zip_timestamp": "2026-08-07T02:03:08",
+          "cells": {
+            "top_left": "roar_release",
+            "top_right": "grab_reach",
+            "bottom_left": "grab_lift",
+            "bottom_right": "grabbed"
+          }
+        },
+        {
+          "sequence": 5,
+          "set": "S5",
+          "label_ja": "ダウン・復帰・KO・奥義準備",
+          "source_filename": "fbd13a1f-856b-43bb-b6f5-2cda6e5edafa.png",
+          "new_filename": "05_dark_moguzo_S5_down_getup_ko_ult_charge.png",
+          "zip_timestamp": "2026-08-07T02:11:14",
+          "cells": {
+            "top_left": "down",
+            "top_right": "getup",
+            "bottom_left": "ko",
+            "bottom_right": "ult_charge"
+          }
+        },
+        {
+          "sequence": 6,
+          "set": "S6",
+          "label_ja": "回避・しゃがみ攻撃",
+          "source_filename": "cfb53505-9e24-4026-9405-b02fa9179af9.png",
+          "new_filename": "06_dark_moguzo_S6_crouch_sway_lunge_crouch_attack.png",
+          "zip_timestamp": "2026-08-07T02:16:30",
+          "cells": {
+            "top_left": "crouch",
+            "top_right": "sway",
+            "bottom_left": "lunge",
+            "bottom_right": "crouch_atk"
+          }
+        }
+      ]
+    }
+  ],
+  "set_definition": [
+    {
+      "set": "S1",
+      "file_tag": "basic_idle_guard_flinch_victory",
+      "label_ja": "基本状態",
+      "cells": {
+        "top_left": "idle",
+        "top_right": "guard",
+        "bottom_left": "flinch",
+        "bottom_right": "victory"
+      }
+    },
+    {
+      "set": "S2",
+      "file_tag": "telegraphs_and_mid_attack",
+      "label_ja": "攻撃予備動作・中段攻撃",
+      "cells": {
+        "top_left": "tele_high",
+        "top_right": "tele_mid",
+        "bottom_left": "tele_low",
+        "bottom_right": "attack_mid"
+      }
+    },
+    {
+      "set": "S3",
+      "file_tag": "attacks_mikiri_roar_charge",
+      "label_ja": "上段・下段・見切り・咆哮吸気",
+      "cells": {
+        "top_left": "attack_high",
+        "top_right": "attack_low",
+        "bottom_left": "mikiri",
+        "bottom_right": "roar_charge"
+      }
+    },
+    {
+      "set": "S4",
+      "file_tag": "roar_and_grab",
+      "label_ja": "咆哮・つかみ",
+      "cells": {
+        "top_left": "roar_release",
+        "top_right": "grab_reach",
+        "bottom_left": "grab_lift",
+        "bottom_right": "grabbed"
+      }
+    },
+    {
+      "set": "S5",
+      "file_tag": "down_getup_ko_ult_charge",
+      "label_ja": "ダウン・復帰・KO・奥義準備",
+      "cells": {
+        "top_left": "down",
+        "top_right": "getup",
+        "bottom_left": "ko",
+        "bottom_right": "ult_charge"
+      }
+    },
+    {
+      "set": "S6",
+      "file_tag": "crouch_sway_lunge_crouch_attack",
+      "label_ja": "回避・しゃがみ攻撃",
+      "cells": {
+        "top_left": "crouch",
+        "top_right": "sway",
+        "bottom_left": "lunge",
+        "bottom_right": "crouch_atk"
+      }
+    }
+  ]
+}
