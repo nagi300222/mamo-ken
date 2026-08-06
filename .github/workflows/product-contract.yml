@@ -1,0 +1,37 @@
+name: Product contract
+
+on:
+  pull_request:
+    paths:
+      - 'design/product/**'
+      - 'src/product/**'
+      - 'test/product-contract.test.mjs'
+      - 'reports/product/**'
+      - 'package.json'
+      - 'tsconfig.product.json'
+      - '.github/workflows/product-contract.yml'
+  workflow_dispatch:
+
+jobs:
+  product:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - run: npm ci
+      - name: Validate product contract
+        run: npm run check:product
+      - name: Enforce P00 scoped diff
+        if: github.event_name == 'pull_request'
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          git diff --check "$BASE_SHA" "$HEAD_SHA"
+          git diff --exit-code "$BASE_SHA" "$HEAD_SHA" -- prototype dist runtime server assets src/core design/combat
