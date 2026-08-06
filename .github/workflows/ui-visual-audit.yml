@@ -1,14 +1,6 @@
 name: UI visual audit
 
 on:
-  pull_request:
-    paths:
-      - 'prototype/mamoken_prototype_v01.html'
-      - 'dist/mamoken_mobile.html'
-      - 'assets/roster3d/**'
-      - 'tools/apply_t29_ui_visual_fixes.mjs'
-      - 'tools/capture_ui_visual_audit.mjs'
-      - '.github/workflows/ui-visual-audit.yml'
   workflow_dispatch:
 
 jobs:
