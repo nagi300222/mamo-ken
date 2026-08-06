@@ -1,0 +1,41 @@
+{
+  "version": "mamoken-current3-movespec-closure-v0.2",
+  "statusTag": "PROTOTYPE_CANDIDATE",
+  "authority": "shadow_only",
+  "liveRuntimeAuthority": false,
+  "formalBalanceAuthority": false,
+  "inheritsNumericCandidatesFrom": "MAMOKEN_CURRENT_3_CHARACTERS_MOVESPEC_v0.1.json",
+  "closureNote": "G00 preserves v0.1 numeric candidates and adds only G-F02..G-F06 schema corrections. Exact multi-hit offsets remain OPEN.",
+  "defaults": {
+    "statusTag": "PROTOTYPE_CANDIDATE",
+    "authority": "shadow_only",
+    "resourcePolicyId": "resource.action-contact-v0.2",
+    "singleContactSchedule": { "status": "FIXED_STRUCTURE", "count": 1, "activeOffsetsF": [0] },
+    "emptyCancelWindows": { "onHit": null, "onBlock": null, "onWhiff": null }
+  },
+  "moves": [
+    { "id":"moguzo:slot-1","characterId":"moguzo","slot":1,"nameJa":"地走り","sourceStatus":"CURRENT_ANCHOR_TRANSLATED","moveKind":"strike","contactKind":{"kind":"strike","level":"MID"},"downType":"NONE","followupAllowed":false,"forwardMovement":"ONE_STEP","maximumApproachSteps":null,"cancelOnHit":{"statusTag":"PROTOTYPE_CANDIDATE","basis":"FIRST_CONTACT","startOffsetF":0,"endOffsetF":17,"allowedMoveIds":["moguzo:slot-4","moguzo:slot-5"],"oncePerCombo":false} },
+    { "id":"moguzo:slot-2","characterId":"moguzo","slot":2,"nameJa":"昇撃","sourceStatus":"CURRENT_ANCHOR_TRANSLATED","moveKind":"strike","contactKind":{"kind":"strike","level":"HIGH"},"downType":"NONE","followupAllowed":false,"forwardMovement":"NONE","maximumApproachSteps":null },
+    { "id":"moguzo:slot-3","characterId":"moguzo","slot":3,"nameJa":"引き寄せ投げ","sourceStatus":"CURRENT_ANCHOR_TRANSLATED","moveKind":"throw","contactKind":{"kind":"throw","throwRange":"NORMAL_LONG"},"downType":"throwDown","followupAllowed":false,"forwardMovement":"NONE","maximumApproachSteps":null },
+    { "id":"moguzo:slot-4","characterId":"moguzo","slot":4,"nameJa":"砂払い","sourceStatus":"DESIGN_CONFIRMED_NUMERIC_CANDIDATE","moveKind":"strike","contactKind":{"kind":"strike","level":"LOW"},"downType":"NONE","followupAllowed":false,"forwardMovement":"NONE","maximumApproachSteps":null,"cancelOnHit":{"statusTag":"PROTOTYPE_CANDIDATE","basis":"FIRST_CONTACT","startOffsetF":0,"endOffsetF":17,"allowedMoveIds":["moguzo:slot-5"],"oncePerCombo":false} },
+    { "id":"moguzo:slot-5","characterId":"moguzo","slot":5,"nameJa":"山越え拳","sourceStatus":"DESIGN_CONFIRMED_NUMERIC_CANDIDATE","moveKind":"strike","contactKind":{"kind":"strike","level":"HIGH"},"downType":"NONE","followupAllowed":false,"forwardMovement":"ONE_STEP","maximumApproachSteps":null },
+    { "id":"moguzo:slot-6","characterId":"moguzo","slot":6,"nameJa":"胴押し","sourceStatus":"DESIGN_CONFIRMED_NUMERIC_CANDIDATE","moveKind":"strike","contactKind":{"kind":"strike","level":"MID"},"downType":"NONE","followupAllowed":false,"forwardMovement":"NONE","maximumApproachSteps":null },
+    { "id":"moguzo:slot-7","characterId":"moguzo","slot":7,"nameJa":"土煙突き","sourceStatus":"DESIGN_CONFIRMED_NUMERIC_CANDIDATE","moveKind":"strike","contactKind":{"kind":"strike","level":"MID"},"downType":"NONE","followupAllowed":false,"forwardMovement":"ONE_STEP","maximumApproachSteps":null },
+
+    { "id":"pisuke:slot-1","characterId":"pisuke","slot":1,"nameJa":"二連牙","sourceStatus":"CURRENT_ANCHOR_TRANSLATED","moveKind":"strike","contactKind":{"kind":"strike","level":"MID"},"downType":"NONE","followupAllowed":false,"forwardMovement":"NONE","maximumApproachSteps":null,"contactSchedule":{"status":"OPEN_TIMING","count":2,"activeOffsetsF":null},"cancelOnHit":{"statusTag":"PROTOTYPE_CANDIDATE","basis":"FIRST_CONTACT","startOffsetF":0,"endOffsetF":19,"allowedMoveIds":["pisuke:slot-4","pisuke:slot-5","pisuke:slot-6"],"oncePerCombo":false} },
+    { "id":"pisuke:slot-2","characterId":"pisuke","slot":2,"nameJa":"スライディング","sourceStatus":"CURRENT_ANCHOR_TRANSLATED","moveKind":"strike","contactKind":{"kind":"strike","level":"LOW"},"downType":"lightDown","followupAllowed":true,"forwardMovement":"TWO_STEP","maximumApproachSteps":null },
+    { "id":"pisuke:slot-3","characterId":"pisuke","slot":3,"nameJa":"宙返り蹴","sourceStatus":"CURRENT_ANCHOR_TRANSLATED","moveKind":"strike","contactKind":{"kind":"strike","level":"HIGH"},"downType":"NONE","followupAllowed":false,"forwardMovement":"ONE_STEP","maximumApproachSteps":null },
+    { "id":"pisuke:slot-4","characterId":"pisuke","slot":4,"nameJa":"かすみ連打","sourceStatus":"DESIGN_CONFIRMED_NUMERIC_CANDIDATE","moveKind":"strike","contactKind":{"kind":"strike","level":"MID"},"downType":"NONE","followupAllowed":false,"forwardMovement":"NONE","maximumApproachSteps":null,"contactSchedule":{"status":"OPEN_TIMING","count":3,"activeOffsetsF":null} },
+    { "id":"pisuke:slot-5","characterId":"pisuke","slot":5,"nameJa":"風切り爪","sourceStatus":"DESIGN_CONFIRMED_NUMERIC_CANDIDATE","moveKind":"strike","contactKind":{"kind":"strike","level":"HIGH"},"downType":"NONE","followupAllowed":false,"forwardMovement":"ONE_STEP","maximumApproachSteps":null },
+    { "id":"pisuke:slot-6","characterId":"pisuke","slot":6,"nameJa":"すり抜け足","sourceStatus":"DESIGN_CONFIRMED_NUMERIC_CANDIDATE","moveKind":"strike","contactKind":{"kind":"strike","level":"LOW"},"downType":"NONE","followupAllowed":false,"forwardMovement":"ENTER_CLINCH","maximumApproachSteps":null },
+    { "id":"pisuke:slot-7","characterId":"pisuke","slot":7,"nameJa":"つむじ返し","sourceStatus":"DESIGN_CONFIRMED_NUMERIC_CANDIDATE","moveKind":"strike","contactKind":{"kind":"strike","level":"MID"},"downType":"NONE","followupAllowed":false,"forwardMovement":"CHASE_TO_CONTACT","maximumApproachSteps":2 },
+
+    { "id":"godan:slot-1","characterId":"godan","slot":1,"nameJa":"地割れ","sourceStatus":"CURRENT_ANCHOR_TRANSLATED","moveKind":"strike","contactKind":{"kind":"strike","level":"LOW"},"downType":"hardDown","followupAllowed":false,"forwardMovement":"NONE","maximumApproachSteps":null },
+    { "id":"godan:slot-2","characterId":"godan","slot":2,"nameJa":"山掴み","sourceStatus":"CURRENT_ANCHOR_TRANSLATED","moveKind":"throw","contactKind":{"kind":"throw","throwRange":"NORMAL_SHORT"},"downType":"throwDown","followupAllowed":false,"forwardMovement":"NONE","maximumApproachSteps":null },
+    { "id":"godan:slot-3","characterId":"godan","slot":3,"nameJa":"巌の構え","sourceStatus":"CURRENT_ANCHOR_TRANSLATED","moveKind":"stance","contactKind":{"kind":"stance","stanceId":"godan:slot-3"},"downType":"NONE","followupAllowed":false,"forwardMovement":"NONE","maximumApproachSteps":null },
+    { "id":"godan:slot-4","characterId":"godan","slot":4,"nameJa":"岩砕き","sourceStatus":"DESIGN_CONFIRMED_NUMERIC_CANDIDATE","moveKind":"strike","contactKind":{"kind":"strike","level":"MID"},"downType":"NONE","followupAllowed":false,"forwardMovement":"ONE_STEP","maximumApproachSteps":null },
+    { "id":"godan:slot-5","characterId":"godan","slot":5,"nameJa":"天蓋落とし","sourceStatus":"DESIGN_CONFIRMED_NUMERIC_CANDIDATE","moveKind":"strike","contactKind":{"kind":"strike","level":"HIGH"},"downType":"hardDown","followupAllowed":false,"forwardMovement":"ONE_STEP","maximumApproachSteps":null },
+    { "id":"godan:slot-6","characterId":"godan","slot":6,"nameJa":"根こそぎ","sourceStatus":"DESIGN_CONFIRMED_NUMERIC_CANDIDATE","moveKind":"strike","contactKind":{"kind":"strike","level":"LOW"},"downType":"lightDown","followupAllowed":false,"forwardMovement":"NONE","maximumApproachSteps":null },
+    { "id":"godan:slot-7","characterId":"godan","slot":7,"nameJa":"大山押し","sourceStatus":"DESIGN_CONFIRMED_NUMERIC_CANDIDATE","moveKind":"strike","contactKind":{"kind":"strike","level":"MID"},"downType":"NONE","followupAllowed":false,"forwardMovement":"ONE_STEP","maximumApproachSteps":null }
+  ]
+}
