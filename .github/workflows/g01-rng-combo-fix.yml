@@ -19,6 +19,7 @@ jobs:
   generate:
     if: ${{ github.head_ref == 'fix/battle-state-v2-rng-combo' && github.actor != 'github-actions[bot]' }}
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
         with:
