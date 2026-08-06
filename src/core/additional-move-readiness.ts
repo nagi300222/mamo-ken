@@ -31,14 +31,14 @@ export const UNSUPPORTED_ADDITIONAL_MOVE_CAPABILITIES = Object.freeze([
   'down_on_hit',
 ] as const satisfies readonly AdditionalMoveCapability[]);
 
-const REQUIRED_CAPABILITIES = Object.freeze({
+const REQUIRED_CAPABILITIES: Readonly<Partial<Record<AdditionalMoveCommandId, readonly AdditionalMoveCapability[]>>> = Object.freeze({
   'moguzo:slot-7': Object.freeze(['combo_limit']),
   'pisuke:slot-6': Object.freeze(['conditional_command']),
   'pisuke:slot-7': Object.freeze(['forward_movement', 'combo_end']),
   'godan:slot-4': Object.freeze(['one_hit_armor']),
   'godan:slot-6': Object.freeze(['down_on_hit']),
   'godan:slot-7': Object.freeze(['guard_pressure']),
-} as const satisfies Readonly<Partial<Record<AdditionalMoveCommandId, readonly AdditionalMoveCapability[]>>>);
+});
 
 const MOVE_SPEC_REQUIRED_FIELDS = Object.freeze([
   'weight',
@@ -218,7 +218,7 @@ function evaluateDraft(draft: AdditionalMoveImplementationDraft): AdditionalMove
   if (draft.moveSpec.level !== moveLevel(design.attribute) || draft.moveSpec.reachClass !== design.reach) throw new Error(`${draft.commandId}: move draft level/reach mismatch`);
 
   const requiredCapabilities = Object.freeze([...(REQUIRED_CAPABILITIES[draft.commandId] ?? [])]);
-  const unsupportedCapabilities = Object.freeze(requiredCapabilities.filter((capability) =>
+  const unsupportedCapabilities = Object.freeze(requiredCapabilities.filter((capability: AdditionalMoveCapability) =>
     UNSUPPORTED_ADDITIONAL_MOVE_CAPABILITIES.includes(capability as typeof UNSUPPORTED_ADDITIONAL_MOVE_CAPABILITIES[number]),
   ));
   const constraintIds = requiredConstraintIds(draft.commandId, design.balanceConstraints.length);
