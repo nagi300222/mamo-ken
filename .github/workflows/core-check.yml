@@ -29,6 +29,8 @@ on:
       - 'test/cpu-persona.test.mjs'
       - 'test/ui-contract.test.mjs'
       - 'test/roster-core3.test.mjs'
+      - 'test/core3-seven-move-plan.test.mjs'
+      - 'test/core3-seven-move-command.test.mjs'
       - 'test/full-roster-art.test.mjs'
       - 'test/character-catalog.test.mjs'
       - 'test/character-catalog-browser.test.mjs'
@@ -96,6 +98,9 @@ jobs:
       - name: Core-three roster tests
         run: npm run check:roster
 
+      - name: Core-three confirmed seven-move plan tests
+        run: npm run check:core3-seven-move
+
       - name: Full roster art and selection tests
         run: npm run check:roster-full
 
@@ -159,4 +164,4 @@ jobs:
       - name: Verify scoped working tree
         run: |
           git diff --check
-          git diff --exit-code -- index.html server assets
+          git diff --exit-code -- index.html server assets prototype dist runtime
