@@ -3,14 +3,15 @@ import { readFileSync } from 'node:fs';
 import {
   CORE3_COMMAND_CATALOG_VERSION,
   CORE3_COMMAND_PRIORITY_POLICY,
+  CURRENT_COMPAT_PROFILE,
   TARGET_PROVISIONAL_PROFILE,
   applyNormalizedInputEvents,
   auditCore3CommandInputOverlaps,
   buildCore3CatalogCommandDefinitions,
+  buildCore3CommandCatalogContract,
   createInputHistoryState,
-  fnv1a32,
+  hashCore3CommandCatalog,
   resolveCommandTrigger,
-  stableStringify,
   validateCore3CommandCatalog,
 } from '../src/core/index.ts';
 
@@ -30,7 +31,21 @@ validateCore3CommandCatalog();
 assert.equal(CORE3_COMMAND_CATALOG_VERSION,'core3-command-catalog-v1');
 assert.equal(CORE3_COMMAND_PRIORITY_POLICY,'longest-command-first');
 
-const definitions=buildCore3CatalogCommandDefinitions();
+const contract=buildCore3CommandCatalogContract();
+const definitions=contract.definitions;
+const overlaps=contract.overlaps;
+assert.equal(contract.version,CORE3_COMMAND_CATALOG_VERSION);
+assert.equal(contract.priorityPolicy,CORE3_COMMAND_PRIORITY_POLICY);
+assert.strictEqual(contract.timingProfiles.current,CURRENT_COMPAT_PROFILE);
+assert.strictEqual(contract.timingProfiles.target,TARGET_PROVISIONAL_PROFILE);
+assert.deepEqual(contract.timingProfiles.current,{
+  id:'current-compat',status:'current_impl',directionHistoryF:24,commandPrebufferF:12,latestDirectionsOnly:true,
+});
+assert.deepEqual(contract.timingProfiles.target,{
+  id:'target-provisional',status:'provisional',directionHistoryF:38,commandPrebufferF:12,latestDirectionsOnly:true,
+  directionGapMaxF:18,commandTotal3F:28,commandTotal4F:38,finalButtonGraceF:10,sameDirectionMinGapF:2,
+  holdDetectF:30,chargeCompleteF:45,
+});
 assert.equal(definitions.length,21);
 assert.equal(definitions.filter((definition)=>definition.source==='current_impl').length,9);
 assert.equal(definitions.filter((definition)=>definition.source==='design_confirmed').length,12);
@@ -61,7 +76,6 @@ assert.deepEqual(conditionFailure.blockedBy,[]);
 assert.equal(conditionFailure.fallback.kind,'normal-attack');
 assert.equal(conditionFailure.fallback.level,'low');
 
-const overlaps=auditCore3CommandInputOverlaps(definitions);
 assert.deepEqual(overlaps.map((overlap)=>[overlap.shorterId,overlap.longerId]),[
   ['pisuke:slot-1','pisuke:slot-7'],
   ['godan:slot-4','godan:slot-7'],
@@ -96,12 +110,13 @@ const pisukeMatches=resolveCommandTrigger(
 assert.equal(pisukeMatches.kind,'command');
 assert.equal(pisukeMatches.match.definition.name,'つむじ返し');
 
-const hash=fnv1a32(stableStringify({version:CORE3_COMMAND_CATALOG_VERSION,priority:CORE3_COMMAND_PRIORITY_POLICY,definitions,overlaps}));
-const rebuiltDefinitions=buildCore3CatalogCommandDefinitions();
-const rebuiltOverlaps=auditCore3CommandInputOverlaps(rebuiltDefinitions);
-assert.equal(hash,fnv1a32(stableStringify({version:CORE3_COMMAND_CATALOG_VERSION,priority:CORE3_COMMAND_PRIORITY_POLICY,definitions:rebuiltDefinitions,overlaps:rebuiltOverlaps})));
-const changed=definitions.map((definition)=>definition.id==='godan:slot-7'?{...definition,directions:['right','down','right']}:definition);
-assert.notEqual(hash,fnv1a32(stableStringify({version:CORE3_COMMAND_CATALOG_VERSION,priority:CORE3_COMMAND_PRIORITY_POLICY,definitions:changed,overlaps:auditCore3CommandInputOverlaps(changed)})));
+const hash=hashCore3CommandCatalog(contract);
+const rebuilt=buildCore3CommandCatalogContract();
+assert.equal(hash,hashCore3CommandCatalog(rebuilt));
+const changed={...contract,timingProfiles:{...contract.timingProfiles,target:{...contract.timingProfiles.target,directionHistoryF:37}}};
+assert.notEqual(hash,hashCore3CommandCatalog(changed));
+const changedDefinitions=definitions.map((definition)=>definition.id==='godan:slot-7'?{...definition,directions:['right','down','right']}:definition);
+assert.notEqual(hash,hashCore3CommandCatalog({...contract,definitions:changedDefinitions,overlaps:auditCore3CommandInputOverlaps(changedDefinitions)}));
 
 for(const path of ['../src/core/command-catalog.ts','../src/core/command-types.ts']){
   const source=readFileSync(new URL(path,import.meta.url),'utf8');
@@ -110,4 +125,4 @@ for(const path of ['../src/core/command-catalog.ts','../src/core/command-types.t
   }
 }
 
-console.log(`command catalog tests passed; definitions=21; current=9; design=12; overlaps=2; conditional=1; priority=longest-first; hash=${hash}`);
+console.log(`command catalog tests passed; definitions=21; current=9; design=12; overlaps=2; conditional=1; profiles=current+target; priority=longest-first; hash=${hash}`);
