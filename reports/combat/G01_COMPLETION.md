@@ -49,7 +49,7 @@ The state keeps separate:
 
 ## RNG and combo correction
 
-G01.2 RNG and combo schema correction. BattleState now preserves current deterministic RNG values as unsigned 32-bit combat and AI states, and each fighter preserves the current combo count. Both are included in the deterministic state hash. ContactResult exposes a P1/P2 combo-count delta field for later resolvers.
+G01.2 RNG and combo schema correction. BattleState now preserves current `seed` and `aiSeed` directly as unsigned 32-bit integers, and each fighter preserves its independent current `combo.count`. Both are included in the deterministic state hash. ContactResult exposes a P1/P2 combo-count delta field for later resolvers.
 
 ## Current gauge correction
 

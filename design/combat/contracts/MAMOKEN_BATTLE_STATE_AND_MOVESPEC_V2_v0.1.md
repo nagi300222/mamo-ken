@@ -78,7 +78,7 @@ bulletCharge
 
 ## 5. Deterministic RNG and combo
 
-G01.2 RNG and combo schema correction. BattleStateは現行snapshotの`seed` / `aiSeed`を捨てず、unsigned 32-bitの`rng.combatState` / `rng.aiState`として保持する。各fighterは`combo.count`を持つ。これらはstate hashへ含まれる。
+G01.2 RNG and combo schema correction. BattleStateは現行snapshotの`seed` / `aiSeed`を名称も値も変えず、unsigned 32-bit整数として直接保持する。各fighterは`combo.count`をP1/P2別に持つ。これらはstate hashへ含まれる。
 
 ContactResultは`comboCountDelta`をP1/P2別に持つ。G01.2は型とvalidatorだけを追加し、combo resolverは追加しない。
 

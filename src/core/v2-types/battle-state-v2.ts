@@ -1,3 +1,4 @@
+// G01.2 RNG and combo schema correction
 import type {
   BattleClocksV2,
   BattleFlowV2,
@@ -144,11 +145,6 @@ export type RoundStateV2=Readonly<{
   timeoutEnabled:boolean;
 }>;
 
-export type BattleRngStateV2=Readonly<{
-  combatState:number;
-  aiState:number;
-}>;
-
 export type BattleStateV2=Readonly<{
   version:typeof BATTLE_STATE_V2_VERSION;
   combatContractVersion:'mamoken-combat-contract-v0.2';
@@ -157,7 +153,8 @@ export type BattleStateV2=Readonly<{
   flow:BattleFlowV2;
   clocks:BattleClocksV2;
   freeze:FreezeStateV2;
-  rng:BattleRngStateV2;
+  seed:number;
+  aiSeed:number;
   fighters:Readonly<Record<PlayerIdV2,FighterStateV2>>;
   spatial:SpatialPairStateV2;
   round:RoundStateV2;
