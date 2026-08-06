@@ -181,6 +181,7 @@ function whitenAsset(e){ // 近似白(しきい値)を透過化。既に透過�
     if(maxY>=minY)e.bboxH=maxY-minY+1; // 実測キャラ高(alpha bboxの高さ)。表示倍率の動的算出に使う
   }catch(err){ /* file://等でcanvasが汚染される環境では無処理の原画のまま使う(bboxH未設定→呼び出し側でフォールバック) */ }
 }
+loadImg('title_keyvisual','../assets/title/keyvisual.png'); // P1: タイトル背景として全面採用(cover配置。ロゴ/TAP TO STARTは画像内)
 loadImg('standing_moguzo','../assets/portraits/moguzo.png'); // v0.6: キャラ選択/タイトル/リザルトはportraits/を使用
 loadImg('standing_pisuke','../assets/portraits/pisuke.png');
 loadImg('standing_godan','../assets/portraits/godan.png');
@@ -2957,26 +2958,26 @@ function rBattle(){
   }
 }
 const demoF={c:CHARS[0],side:0,baseX:0,y:0,phase:'idle',pf:0,atkLv:null,guardLv:null,held:null,lunge:0,kb:0,s:0,ult:0,combo:0,sNo:0};
-function rTitle(){
-  const g=ctx.createLinearGradient(0,0,0,H);
-  g.addColorStop(0,'#274069');g.addColorStop(0.5,'#3c6a52');g.addColorStop(1,'#171a22');
-  ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
-  ctx.fillStyle='rgba(255,90,60,0.85)';
-  ctx.beginPath();ctx.arc(W/2,268,150,0,TAU);ctx.fill();
-  txt('マモ拳',W/2,250,110,'#ffd23f');
-  txt('（仮）',W/2+170,304,28,'#fff');
-  txt('- ギュイーン格闘 -',W/2,346,26,'#ffe6a3');
-  demoF.c=CHARS[Math.floor(game.frame/240)%3];
-  // 立ち絵は体格比(BAL.PORTRAIT_RATIO)を基準高336へ乗算。中央配置は維持(足元アンカーで下端揃え)
-  if(!drawStanding('standing_'+demoF.c.id,W/2,724,336*BAL.PORTRAIT_RATIO[demoF.c.id]))rFighter(demoF,W/2,616);
-  if(game.frame%60<38)txt('タップでスタート',W/2,732,30,'#fff');
-  txt('右＝高さタップで攻撃(上/中/下)／左上の丸ボタン=つかみ',W/2,806,14,'#cfd6e6');
-  txt('左上＝ホールドでガード／ジャストタップ=見切り',W/2,830,14,'#ffe6a3');
-  txt('左下＝←スウェー ↓しゃがみ →踏み込み（回避）ボタン',W/2,854,14,'#a6e6c0');
-  txt('段×回避の三すくみ。回避成功でカウンター(×1.25)のチャンス',W/2,880,14,'#ffe14d');
-  txt('方向2つ＋攻撃/つかみでコマンド技。コンボは基本4ルート',W/2,904,14,'#ffb37f');
-  txt('Sゲージ満タン→右フリック＝咆哮（割りこみ/大削り）',W/2,926,14,'#cfd6e6');
-  txt('prototype v0.10 - オンライン対戦（仮グラ・仮SE）',W/2,946,12,'#8891a6');
+function rTitle(){ // P1: keyvisual.pngをcover全面採用。ロゴ/TAP TO STARTは画像内の文字を使用し、旧テキスト・立ち絵ローテは非表示
+  if(assetReady('title_keyvisual')){
+    const e=ASSETS['title_keyvisual'],img=e.canvas||e.img;
+    const iw=e.img.naturalWidth,ih=e.img.naturalHeight;
+    const scale=Math.max(W/iw,H/ih);
+    const dw=iw*scale,dh=ih*scale;
+    ctx.drawImage(img,(W-dw)/2,(H-dh)/2,dw,dh);
+  }else{ // 未読込時のみ現行描画へフォールバック
+    const g=ctx.createLinearGradient(0,0,0,H);
+    g.addColorStop(0,'#274069');g.addColorStop(0.5,'#3c6a52');g.addColorStop(1,'#171a22');
+    ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
+    ctx.fillStyle='rgba(255,90,60,0.85)';
+    ctx.beginPath();ctx.arc(W/2,268,150,0,TAU);ctx.fill();
+    txt('マモ拳',W/2,250,110,'#ffd23f');
+    txt('（仮）',W/2+170,304,28,'#fff');
+    txt('- ギュイーン格闘 -',W/2,346,26,'#ffe6a3');
+    demoF.c=CHARS[Math.floor(game.frame/240)%3];
+    if(!drawStanding('standing_'+demoF.c.id,W/2,724,336*BAL.PORTRAIT_RATIO[demoF.c.id]))rFighter(demoF,W/2,616);
+    if(game.frame%60<38)txt('タップでスタート',W/2,732,30,'#fff');
+  }
   // オンライン対戦ボタン(右上・タップでロビー画面へ)
   ONLINE_BTN.x=W-142;ONLINE_BTN.y=14;ONLINE_BTN.w=128;ONLINE_BTN.h=36;
   ctx.fillStyle='rgba(127,216,255,0.16)';rr(ONLINE_BTN.x,ONLINE_BTN.y,ONLINE_BTN.w,ONLINE_BTN.h,10);ctx.fill();
