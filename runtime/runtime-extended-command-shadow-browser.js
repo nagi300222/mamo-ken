@@ -35,10 +35,8 @@
   function assertDirection(value){if(value!=='left'&&value!=='down'&&value!=='right')fail('direction must be left, down, or right');return value;}
 
   function catalog(){
-    const api=root.__MAMOKEN_CHARACTER_CATALOG__;
-    if(!api||typeof api.get!=='function')fail('character catalog browser API is unavailable');
-    const data=api.get();
-    if(!data||!data.byId)fail('character catalog data is unavailable');
+    const data=root.__MAMOKEN_CHARACTER_CATALOG__;
+    if(!data||!data.byId)fail('character catalog browser API is unavailable');
     return data;
   }
   function characterCatalog(characterId){
