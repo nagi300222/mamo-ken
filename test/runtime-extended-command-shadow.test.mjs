@@ -83,7 +83,7 @@ assert.equal(conflict.characterId,'pisuke');
 assert.equal(conflict.runtime.commandId,'pisuke:slot-1');
 assert.equal(conflict.catalog.commandId,'pisuke:slot-7');
 assert.equal(conflict.catalog.name,'つむじ返し');
-assert.deepEqual(report.commandContract.overlaps.map((overlap)=>[overlap.shorterId,overlap.longerId]),[
+assert.deepEqual(plain(report.commandContract.overlaps.map((overlap)=>[overlap.shorterId,overlap.longerId])),[
   ['pisuke:slot-1','pisuke:slot-7'],
   ['godan:slot-4','godan:slot-7'],
 ]);
@@ -91,13 +91,13 @@ assert.deepEqual(report.commandContract.overlaps.map((overlap)=>[overlap.shorter
 const conditioned=contract.definitions.find((definition)=>definition.id==='pisuke:slot-6');
 const conditionSuccess=api.resolveTrigger(payload(conditioned,300,0,true));
 assert.equal(conditionSuccess.decision.catalog.commandId,'pisuke:slot-6');
-assert.deepEqual(conditionSuccess.decision.activeConditions,['pisuke.lunge-success']);
+assert.deepEqual(plain(conditionSuccess.decision.activeConditions),['pisuke.lunge-success']);
 const conditionFailure=api.resolveTrigger(payload(conditioned,300,0,false));
 assert.equal(conditionFailure.decision.catalog.kind,'fallback');
 assert.equal(conditionFailure.decision.catalog.fallback,'normal-attack');
-assert.deepEqual(conditionFailure.decision.activeConditions,[]);
+assert.deepEqual(plain(conditionFailure.decision.activeConditions),[]);
 const normalizedConditions=api.resolveTrigger({...payload(conditioned,300,0,true),activeConditions:['pisuke.lunge-success','pisuke.lunge-success']});
-assert.deepEqual(normalizedConditions.decision.activeConditions,['pisuke.lunge-success']);
+assert.deepEqual(plain(normalizedConditions.decision.activeConditions),['pisuke.lunge-success']);
 
 const manual=api.resolveTrigger({
   frame:12,player:0,characterId:'moguzo',trigger:'mid',activeConditions:[],
