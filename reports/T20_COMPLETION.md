@@ -104,7 +104,7 @@ Resume order after image generation becomes available and the user explicitly re
 
 ## Verification
 
-GitHub Actions `Core contract check` run #56 completed successfully with all 29 workflow steps.
+GitHub Actions `Core contract check` run #57 completed successfully with all 29 workflow steps.
 
 ### T20 checks
 
