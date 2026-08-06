@@ -1,4 +1,4 @@
-# G01 Completion Report — BattleState V2 / Full MoveSpec V2 Schema v0.2
+# G01 Completion Report — BattleState V2 / Full MoveSpec V2 Schema v0.3
 
 ## Scope
 
@@ -46,6 +46,10 @@ The state keeps separate:
 - Input holds cannot start in a future simulation frame.
 - CLINCH requires both fighters in CLINCH posture and a positive timer.
 - Current contract keeps `sideSwap=false`.
+
+## RNG and combo correction
+
+G01.2 RNG and combo schema correction. BattleState now preserves current deterministic RNG values as unsigned 32-bit combat and AI states, and each fighter preserves the current combo count. Both are included in the deterministic state hash. ContactResult exposes a P1/P2 combo-count delta field for later resolvers.
 
 ## Current gauge correction
 

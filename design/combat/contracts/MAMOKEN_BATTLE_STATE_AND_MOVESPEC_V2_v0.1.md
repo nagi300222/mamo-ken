@@ -1,4 +1,4 @@
-# マモ拳 BattleState V2 / MoveSpec V2 schema v0.2
+# マモ拳 BattleState V2 / MoveSpec V2 schema v0.3
 
 - 更新日: 2026-08-06
 - 工程: G01
@@ -76,7 +76,13 @@ bulletCharge
 - resource current値は0..max
 - hold開始Fは現在simulationFrameを越えない
 
-## 5. Current gauge schema
+## 5. Deterministic RNG and combo
+
+G01.2 RNG and combo schema correction. BattleStateは現行snapshotの`seed` / `aiSeed`を捨てず、unsigned 32-bitの`rng.combatState` / `rng.aiState`として保持する。各fighterは`combo.count`を持つ。これらはstate hashへ含まれる。
+
+ContactResultは`comboCountDelta`をP1/P2別に持つ。G01.2は型とvalidatorだけを追加し、combo resolverは追加しない。
+
+## 6. Current gauge schema
 
 G01.1 current gauge schema correction. 現行runtime正本に合わせ、fighter resourcesは次を保持する。
 
@@ -90,7 +96,7 @@ ultimateStock / maxUltimateStock
 
 Bulletのchargeはresourcesへ混ぜず、引き続きBulletChargeStateで管理する。独立したroarGaugeは現行正本に存在しないため削除する。ContactResultはS / focus / ultimate / Bullet chargeのdeltaを別々に持つ。
 
-## 6. SpatialPairState V2
+## 7. SpatialPairState V2
 
 ```text
 engagement
@@ -102,7 +108,7 @@ lastPositionBatchId
 
 CLINCH中は両fighterがCLINCH postureで、残りFが1以上。NORMAL中はclinchRemainingF=0。
 
-## 7. Full MoveSpec V2
+## 8. Full MoveSpec V2
 
 Full MoveSpec V2は以下を含む。
 
@@ -123,7 +129,7 @@ resource policy
 tags
 ```
 
-## 8. TaggedValue
+## 9. TaggedValue
 
 未決値と「明示的になし」を区別する。
 
@@ -148,7 +154,7 @@ resolved:
 
 FORMAL MoveSpecはOPEN値を一つでも含められない。
 
-## 9. G00 closureからの変換
+## 10. G00 closureからの変換
 
 G00の21技closureをFull MoveSpec V2へ変換する。
 
@@ -176,7 +182,7 @@ G01でOPENのままにするもの:
 
 数値の実importと21技candidate validationはG08の責務。
 
-## 10. Intent / Result
+## 11. Intent / Result
 
 G01は同時batch resolver用のデータ型だけを定義する。
 
@@ -198,7 +204,7 @@ player identity
 
 FrameBatchはP1/P2を同じpreStateHashから表現する。解決処理はG09まで追加しない。
 
-## 11. 理由コード
+## 12. 理由コード
 
 ```text
 OK_*
@@ -216,7 +222,7 @@ RESULT_*
 
 表示文言とreason codeを分離する。
 
-## 12. 対称性
+## 13. 対称性
 
 FrameBatchIntentはP1/P2 swap関数を持つ。
 
@@ -226,7 +232,7 @@ swap(swap(batch)) == batch
 
 G01は型対称性だけを検証し、勝敗やdamageの同時解決は行わない。
 
-## 13. 非目標
+## 14. 非目標
 
 - live runtime adapter
 - runtime authority切替
@@ -239,7 +245,7 @@ G01は型対称性だけを検証し、勝敗やdamageの同時解決は行わ�
 - online protocol変更
 - prototype / dist / runtime / server / assets変更
 
-## 14. 後続
+## 15. 後続
 
 ```text
 G02 read-only legacy adapter
