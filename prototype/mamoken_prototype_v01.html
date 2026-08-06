@@ -3042,7 +3042,7 @@ function drawDetailPerformance(c,startY){
   textCard('コンセプト',c.conceptJa,'#ffd23f');
   textCard('勝ち筋',c.winConditionJa,'#7CFC00');
   textCard('弱点',c.weaknessJa,'#ff8b8b');
-  detailCard(26,y,414,190,'#7fd8ff');txt('表示性能',44,y+24,16,'#7fd8ff','left');
+  detailCard(26,y,414,218,'#7fd8ff');txt('表示性能',44,y+24,16,'#7fd8ff','left');
   const statRows=[['ATK','atk'],['SPD','spd'],['DEF','def'],['TEC','tec'],['BRK','brk']];
   let sy=y+54;
   for(const row of statRows){
@@ -3053,7 +3053,7 @@ function drawDetailPerformance(c,startY){
     sy+=27;
   }
   let stars='';for(let k=0;k<5;k++)stars+=k<c.difficulty?'★':'☆';
-  txt('総合難度',48,y+174,14,'#aab3c8','left');txt(stars,150,y+174,19,'#ffd23f','left');y+=202;
+  txt('総合難度',48,y+198,14,'#aab3c8','left');txt(stars,150,y+198,19,'#ffd23f','left');y+=230;
   for(const special of c.specials){
     detailCard(26,y,414,132,special.status==='candidate'?'#ffbf4a':'#b89cff');
     txt('固有能力 '+detailStatusLabel(special.status),44,y+23,13,special.status==='candidate'?'#ffbf4a':'#b89cff','left');
@@ -3151,12 +3151,13 @@ function rSelect(){ // T28: 2x5顔アイコン＋アート/文字分離＋全9�
   ctx.strokeStyle='rgba(255,255,255,0.35)';ctx.lineWidth=2;rr(SELECT_BACK_BTN.x,SELECT_BACK_BTN.y,SELECT_BACK_BTN.w,SELECT_BACK_BTN.h,12);ctx.stroke();txt('もどる',W/2,SELECT_BACK_BTN.y+SELECT_BACK_BTN.h/2,16,'#dfe4ee');
   txt('●緑=正式実装  ●黄=仮骨格テスト　オンラインは正式3体のみ',W/2,850,12,'#aeb6c8');
 }
+/* T29 visual audit fixes */
 function rCharacterDetail(){
   const selected=ROSTER[selCharIdx],c=selectedCharacterDetail();
   const g=ctx.createLinearGradient(0,0,0,H);g.addColorStop(0,'#1d263a');g.addColorStop(1,'#0f121a');
   ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
   if(!c){txt('詳細データを読み込めませんでした',W/2,H/2,20,'#ff8b8b');return;}
-  txt(c.name,W/2,34,30,'#fff');txt(c.styleJa+' / '+c.speciesJa,W/2,67,14,'#ffd23f');
+  txt(c.nameJa,W/2,34,30,'#fff');txt(c.styleJa+' / '+c.speciesJa,W/2,67,14,'#ffd23f');
   txt(selected.playable?'正式実装・オンライン可':'仮骨格でオフライン試運転可',W/2,91,12,selected.playable?'#7CFC00':'#ffcf66');
   for(let i=0;i<CHARACTER_DETAIL_TABS.length;i++){
     const tab=CHARACTER_DETAIL_TABS[i],r=characterDetailTabRect(i),active=characterDetailTab===tab.id;
