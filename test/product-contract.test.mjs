@@ -81,7 +81,7 @@ const allowed=[
 ];
 assert.deepEqual(validateProductScopedPaths(allowed),[]);
 for(const forbidden of ['prototype/x.html','dist/x.html','runtime/x.js','server/x.js','assets/x.webp','src/core/types.ts','design/combat/x.md'])assert.ok(validateProductScopedPaths([forbidden])[0].includes('forbidden root'));
-assert.ok(validateProductScopedPaths(['README.md'])[0].includes('outside P00 scope'));
+for(const lookalike of ['package.jsonx','tsconfig.product.json.bak','.github/workflows/product-contract.yml.disabled','test/product-contract.test.mjsx','test/product-other.mjs','README.md'])assert.ok(validateProductScopedPaths([lookalike])[0].includes('outside P00 scope'),lookalike);
 
 const report=buildProductContractReport();
 assert.equal(report.version,'mamoken-product-contract-v1');
@@ -102,10 +102,9 @@ const design=readFileSync(new URL('../design/product/MAMOKEN_PRODUCT_SOURCE_OF_T
 for(const token of ['P00','P11','PENDING','OPEN','FORMAL','completion gate','scoped diff gate','Rollback note','mamoken.save.v1','production'])assert.ok(design.includes(token),`design missing ${token}`);
 for(const path of ['../src/product/product-types.ts','../src/product/product-contract.ts']){
   const source=readFileSync(new URL(path,import.meta.url),'utf8');
-  for(const forbidden of ['../core/','prototype/','dist/','runtime/','server/','assets/','Math.random','Date.now','document.','window.','localStorage','fetch(']){
-    if(forbidden.endsWith('/'))continue;
-    assert.equal(source.includes(forbidden),false,`${path}: forbidden API ${forbidden}`);
-  }
+  const imports=[...source.matchAll(/from\s+['"]([^'"]+)['"]/g)].map((match)=>match[1]);
+  assert.ok(imports.every((specifier)=>specifier.startsWith('./')),`${path}: product source may only import sibling product modules`);
+  for(const forbiddenApi of ['Math.random','Date.now','document.','window.','localStorage','sessionStorage','fetch(','XMLHttpRequest','WebSocket'])assert.equal(source.includes(forbiddenApi),false,`${path}: forbidden API ${forbiddenApi}`);
 }
 
 console.log(`product contract tests passed; phases=12; P00=complete; pending=11; settings=7; saveKeys=3; channels=4; hash=${report.hash}`);
