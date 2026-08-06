@@ -19,7 +19,7 @@ const ALLOWED_ROOTS=Object.freeze([
   '.github/workflows/product-contract.yml',
   'package.json',
   'tsconfig.product.json',
-]);
+] as const);
 
 const FORBIDDEN_ROOTS=Object.freeze([
   'prototype/',
@@ -29,7 +29,7 @@ const FORBIDDEN_ROOTS=Object.freeze([
   'assets/',
   'src/core/',
   'design/combat/',
-]);
+] as const);
 
 const OWNERS=new Set<ProductOwner>(['product','qa','save','ux','accessibility','platform','performance','online_ops','legal','tutorial','localization','release']);
 
@@ -60,32 +60,32 @@ export const PRODUCT_CONTRACT:ProductContract=Object.freeze({
     'completion report',
     'implementation and tests',
     'roadmap or proposal',
-  ]),
+  ] as const),
   phases:PHASES,
   settingIds:Object.freeze([
     'settings.audio.master','settings.audio.bgm','settings.audio.sfx',
     'settings.accessibility.screen_shake','settings.accessibility.flashes',
     'settings.input.haptics','settings.language.locale',
-  ]),
-  saveKeys:Object.freeze(['mamoken.save.v1','mamoken.settings.v1','mamoken.replay.v1']),
-  errorClasses:Object.freeze(['VALIDATION','STORAGE','NETWORK','PROTOCOL','ASSET','LIFECYCLE','UNKNOWN']),
-  releaseChannels:Object.freeze(['local','preview','staging','production']),
+  ] as const),
+  saveKeys:Object.freeze(['mamoken.save.v1','mamoken.settings.v1','mamoken.replay.v1'] as const),
+  errorClasses:Object.freeze(['VALIDATION','STORAGE','NETWORK','PROTOCOL','ASSET','LIFECYCLE','UNKNOWN'] as const),
+  releaseChannels:Object.freeze(['local','preview','staging','production'] as const),
   statusTransitions:Object.freeze({
-    PENDING:Object.freeze(['OPEN','BLOCKED']),
-    OPEN:Object.freeze(['IN_PROGRESS','BLOCKED']),
-    IN_PROGRESS:Object.freeze(['COMPLETE','BLOCKED','OPEN']),
-    BLOCKED:Object.freeze(['OPEN','IN_PROGRESS']),
-    COMPLETE:Object.freeze([]),
+    PENDING:Object.freeze(['OPEN','BLOCKED'] as const),
+    OPEN:Object.freeze(['IN_PROGRESS','BLOCKED'] as const),
+    IN_PROGRESS:Object.freeze(['COMPLETE','BLOCKED','OPEN'] as const),
+    BLOCKED:Object.freeze(['OPEN','IN_PROGRESS'] as const),
+    COMPLETE:Object.freeze([] as const),
   }),
   decisionTransitions:Object.freeze({
-    PENDING:Object.freeze(['OPEN']),
-    OPEN:Object.freeze(['PENDING','FORMAL']),
-    FORMAL:Object.freeze(['OPEN']),
+    PENDING:Object.freeze(['OPEN'] as const),
+    OPEN:Object.freeze(['PENDING','FORMAL'] as const),
+    FORMAL:Object.freeze(['OPEN'] as const),
   }),
   defaultRollback:Object.freeze({
     trigger:'completion gate regression or scoped-diff violation',
     rollbackTarget:'last green product contract commit',
-    preservedData:Object.freeze(['user save data','user settings','diagnostic evidence']),
+    preservedData:Object.freeze(['user save data','user settings','diagnostic evidence'] as const),
     verification:'rerun product contract and affected phase smoke tests',
   }),
 });
