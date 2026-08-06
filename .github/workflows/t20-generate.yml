@@ -1,0 +1,58 @@
+name: T20 generate full roster art select
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: t20-full-roster-art-select
+  cancel-in-progress: false
+
+jobs:
+  generate:
+    if: ${{ github.event_name == 'workflow_dispatch' || github.head_ref == 'feature/full-roster-art-select-v1' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout feature branch
+        uses: actions/checkout@v4
+        with:
+          ref: feature/full-roster-art-select-v1
+          fetch-depth: 0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Restore T20 source payload
+        run: |
+          cat .github/t20_payload/chunk_*.b64 > /tmp/t20_payload.b64
+          base64 --decode /tmp/t20_payload.b64 > /tmp/t20_payload.tar.gz
+          tar -xzf /tmp/t20_payload.tar.gz -C .
+
+      - name: Apply full roster integration
+        run: |
+          node tools/apply_t20_full_roster_art_select.mjs
+          npm run build:mobile
+          npm run check:roster-full
+          node tools/audit_current_impl.mjs
+          git diff --check
+
+      - name: Commit generated integration
+        run: |
+          rm -rf .github/t20_payload
+          git rm .github/workflows/t20-generate.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "[t20-generated] integrate full roster art selection"
+          git push origin HEAD:feature/full-roster-art-select-v1
