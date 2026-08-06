@@ -1,0 +1,39 @@
+name: BattleState v2 schema
+
+on:
+  pull_request:
+    paths:
+      - 'design/combat/contracts/MAMOKEN_BATTLE_STATE_AND_MOVESPEC_V2_v0.1.md'
+      - 'src/core/v2-types/battle-state-v2.ts'
+      - 'src/core/v2-types/move-spec-v2.ts'
+      - 'src/core/v2-validation/battle-state-v2-validation.ts'
+      - 'src/core/index.ts'
+      - 'test/battle-state-v2.test.mjs'
+      - 'reports/combat/G01_COMPLETION.md'
+      - 'package.json'
+      - '.github/workflows/battle-state-v2.yml'
+  workflow_dispatch:
+
+jobs:
+  schema:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - run: npm ci
+      - name: Validate BattleState and MoveSpec V2 schemas
+        run: npm run check:battle-state-v2
+      - name: Enforce G01 scoped diff
+        if: github.event_name == 'pull_request'
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          git diff --check "$BASE_SHA" "$HEAD_SHA"
+          git diff --exit-code "$BASE_SHA" "$HEAD_SHA" -- prototype dist runtime server assets src/product design/product
