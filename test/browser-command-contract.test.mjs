@@ -34,8 +34,8 @@ assert.equal(Object.isFrozen(browser.commandContract.definitions),true);
 assert.equal(Object.isFrozen(browser.commandContract.definitions[0]),true);
 assert.equal(Object.isFrozen(browser.commandContract.timingProfiles.target),true);
 assert.equal(Object.isFrozen(browser.commandContract.overlaps[0]),true);
-assert.throws(()=>{browser.commandContract.definitions.push({});},TypeError);
-assert.throws(()=>{browser.commandContract.priorityPolicy='shortest-first';},TypeError);
+assert.throws(()=>{browser.commandContract.definitions.push({});},/not extensible|read only|frozen/i);
+assert.throws(()=>{browser.commandContract.priorityPolicy='shortest-first';},/read only|Cannot assign|frozen/i);
 
 const descriptor=Object.getOwnPropertyDescriptor(context,'__MAMOKEN_CHARACTER_CATALOG__');
 assert.equal(descriptor.writable,false);
