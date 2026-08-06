@@ -2,8 +2,10 @@ import type { AbilityHookId } from './ability-types.ts';
 import type { ArchetypeId, CurrentCharacterId, CurrentLevel, Direction } from './types.ts';
 import type { PoseId } from './sprite-types.ts';
 
-export type RosterDataStatus = 'current_impl' | 'provisional';
-export type CommandTier = 'beginner' | 'intermediate' | 'advanced';
+export type RosterDataStatus = 'current_impl' | 'design_confirmed';
+export type CommandTier = 'beginner' | 'standard' | 'advanced';
+export type RosterMoveAttribute = 'HIGH' | 'MID' | 'LOW' | 'GRAB';
+export type RosterFrameDataStatus = 'current_audited' | 'bal_undecided';
 
 export type RosterCommandMove = Readonly<{
   id: string;
@@ -14,25 +16,32 @@ export type RosterCommandMove = Readonly<{
   trigger: CurrentLevel | 'grab';
   type: 'atk' | 'grab' | 'stance';
   level: CurrentLevel | null;
+  attribute: RosterMoveAttribute;
+  reach: 0 | 1 | 2 | 3;
   tier: CommandTier;
-  role: string;
-  estimatedDamage: number;
+  roleJa: string;
+  conditionsJa: readonly string[];
+  balanceConstraints: readonly string[];
+  frameDataStatus: RosterFrameDataStatus;
+  estimatedDamage: number | null;
   tags: readonly string[];
 }>;
 
 export type CharacterSpecialData = Readonly<{
   id: string;
   nameJa: string;
-  status: 'provisional';
+  status: 'confirmed';
   abilityHook: AbilityHookId;
 }>;
 
 export type RecommendedComboData = Readonly<{
   id: string;
+  category: 'beginner' | 'basic' | 'practical' | 'advanced' | 'max';
   labelJa: string;
+  status: 'unverified_move_spec';
   moveIds: readonly string[];
-  condition: 'normal' | 'conditional';
-  estimatedDamage: number;
+  condition: 'undecided';
+  estimatedDamage: null;
 }>;
 
 export type CharacterAssetMapping = Readonly<{
@@ -50,6 +59,7 @@ export type CharacterBalanceAudit = Readonly<{
   startupOffsetF: number;
   sGainMul: number;
   currentCommandCount: 3;
+  plannedCommandCount: 7;
 }>;
 
 export type CoreRosterCharacter = Readonly<{
