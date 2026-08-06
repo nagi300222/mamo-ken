@@ -14,7 +14,25 @@ export * from './v2-types/combat-contract-v2.ts';
 export * from './v2-types/move-spec-v2.ts';
 export * from './v2-types/battle-state-v2.ts';
 export * from './v2-validation/combat-contract-v2-validation.ts';
-export * from './v2-validation/battle-state-v2-validation.ts';
+export {
+  advanceBattleClocksV2,
+  createInitialBattleStateV2,
+  createOpenMoveSpecV2FromClosure,
+  hashBattleStateV2,
+  hashMoveSpecV2,
+  openTaggedValueV2,
+  resolvedTaggedValueV2,
+  swapFrameBatchIntentPlayersV2,
+  validateBattleStateV2,
+  validateFrameBatchIntentV2,
+  validateMoveSpecV2,
+  validateMoveSpecV2Registry,
+  validateResolutionReasonCodesV2,
+} from './v2-validation/battle-state-v2-validation.ts';
+export type {
+  FighterSeedV2,
+  InitialBattleStateOptionsV2,
+} from './v2-validation/battle-state-v2-validation.ts';
 export * from './additional-move-readiness-types.ts';
 export * from './additional-move-readiness.ts';
 export * from './defense-types.ts';
