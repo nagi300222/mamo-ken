@@ -90,6 +90,8 @@ jobs:
           git add prototype/mamoken_prototype_v01.html tools/build_mobile.mjs dist/mamoken_mobile.html test/runtime-extended-command-shadow.test.mjs
           if git diff --cached --quiet; then exit 0; fi
           git commit -m "[t24] integrate extended command shadow into runtime build"
+          git fetch origin feature/extended-command-shadow-v1
+          git rebase origin/feature/extended-command-shadow-v1
           git push origin HEAD:feature/extended-command-shadow-v1
 
   core-check:
