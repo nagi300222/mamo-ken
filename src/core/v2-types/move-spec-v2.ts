@@ -51,30 +51,30 @@ export type MoveAdvantageV2=Readonly<{
   whiffExtraRecoveryF:TaggedValueV2<number>|null;
 }>;
 
-export type MoveArmorV2=Readonly<{
-  armorHits:TaggedValueV2<number>;
-  startF:TaggedValueV2<number>;
-  endF:TaggedValueV2<number>;
-}>|null;
+export type MoveArmorDefinitionV2=Readonly<{
+  armorHits:number;
+  startF:number;
+  endF:number;
+}>;
 
-export type MoveInvulnerabilityV2=Readonly<{
+export type MoveInvulnerabilityDefinitionV2=Readonly<{
   kind:'strike'|'throw'|'all';
-  startF:TaggedValueV2<number>;
-  endF:TaggedValueV2<number>;
-}>|null;
+  startF:number;
+  endF:number;
+}>;
 
 export type MoveMovementV2=Readonly<{
   forwardMovement:ForwardMovementV2;
   maximumApproachSteps:number|null;
-  endPositionOnHit:EndPositionV2;
-  endPositionOnBlock:EndPositionV2;
-  endPositionOnWhiff:EndPositionV2;
+  endPositionOnHit:TaggedValueV2<EndPositionV2>;
+  endPositionOnBlock:TaggedValueV2<EndPositionV2>;
+  endPositionOnWhiff:TaggedValueV2<EndPositionV2>;
 }>;
 
 export type MoveDownPolicyV2=Readonly<{
   downType:DownTypeV2;
   followupAllowed:boolean;
-  wakeProfileId:string|null;
+  wakeProfileId:TaggedValueV2<string>|null;
 }>;
 
 export type MoveCancelWindowsV2=Readonly<{
@@ -104,8 +104,8 @@ export type MoveSpecV2=Readonly<{
   damage:MoveDamageV2;
   advantage:MoveAdvantageV2;
   cancelWindows:MoveCancelWindowsV2;
-  armor:MoveArmorV2;
-  invulnerability:MoveInvulnerabilityV2;
+  armor:TaggedValueV2<MoveArmorDefinitionV2|null>;
+  invulnerability:TaggedValueV2<MoveInvulnerabilityDefinitionV2|null>;
   resourcePolicyId:string;
   tags:readonly string[];
 }>;
