@@ -11,7 +11,7 @@ export type PlannedArchetypeId = 'defense' | 'tricky' | 'grappler' | 'counter' |
 export type ArchetypeId = CurrentArchetypeId | PlannedArchetypeId;
 
 export type CurrentCharacterId = 'moguzo' | 'pisuke' | 'godan';
-export type PlannedCharacterId = 'himalaya' | 'bobak' | 'grappler_tbd' | 'counter_tbd' | 'charge_tbd';
+export type PlannedCharacterId = 'hakuma' | 'chirka' | 'takimaru' | 'yomikage' | 'bullet';
 export type BossCharacterId = 'dark_moguzo';
 export type CharacterId = CurrentCharacterId | PlannedCharacterId | BossCharacterId;
 

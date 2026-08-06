@@ -9,10 +9,11 @@ import {
 } from '../src/core/ui-contract.ts';
 
 validateUiContract();
-assert.equal(UI_CONTRACT.roster.length, 8);
+assert.equal(UI_CONTRACT.roster.length, 9);
 assert.deepEqual(UI_CONTRACT.roster.slice(0, 3).map((slot) => slot.characterId), ['moguzo', 'pisuke', 'godan']);
-assert.ok(UI_CONTRACT.roster.slice(0, 3).every((slot) => slot.unlocked && slot.status === 'current_impl'));
-assert.ok(UI_CONTRACT.roster.slice(3).every((slot) => !slot.unlocked && slot.status === 'planned' && slot.placeholder !== null));
+assert.ok(UI_CONTRACT.roster.slice(0, 3).every((slot) => slot.unlocked && slot.playableNow && slot.status === 'current_impl'));
+assert.deepEqual(UI_CONTRACT.roster.slice(3).map((slot) => slot.characterId), ['hakuma', 'chirka', 'takimaru', 'yomikage', 'bullet', 'dark_moguzo']);
+assert.ok(UI_CONTRACT.roster.slice(3).every((slot) => slot.unlocked && !slot.playableNow && slot.status === 'planned' && slot.placeholder === null));
 for (const slot of UI_CONTRACT.roster.slice(0, 3)) {
   assert.deepEqual(Object.keys(slot.stats), ['ATK', 'SPD', 'DEF', 'TEC', 'BRK']);
   assert.equal(slot.statsAreIndependentAxes, true);
@@ -44,7 +45,7 @@ const viewports = [
 for (const [width, height, safeTop, safeBottom] of viewports) {
   const layout = buildPortraitLayout(width, height, safeTop, safeBottom);
   validatePortraitLayout(layout);
-  assert.equal(layout.rosterRegions.length, 8);
+  assert.equal(layout.rosterRegions.length, 9);
   assert.equal(layout.battleRegions.filter((region) => region.role === 'direction').length, 3);
   assert.equal(layout.battleRegions.filter((region) => region.role === 'attack').length, 3);
   for (const group of [layout.rosterRegions, layout.battleRegions]) {
@@ -54,7 +55,7 @@ for (const [width, height, safeTop, safeBottom] of viewports) {
   }
 }
 assert.throws(() => buildPortraitLayout(319, 568), /minimum/);
-assert.throws(() => validateUiContract({ ...UI_CONTRACT, roster: UI_CONTRACT.roster.slice(0, 7) }), /eight/);
+assert.throws(() => validateUiContract({ ...UI_CONTRACT, roster: UI_CONTRACT.roster.slice(0, 8) }), /nine/);
 const badCue = UI_CONTRACT.inputCues.map((cue) => cue.id === 'attack_high' ? { ...cue, shapeToken: '' } : cue);
 assert.throws(() => validateUiContract({ ...UI_CONTRACT, inputCues: badCue }), /incomplete cue/);
 
@@ -62,4 +63,4 @@ const source = readFileSync(new URL('../src/core/ui-contract.ts', import.meta.ur
 for (const forbidden of ['Math.random', 'Date.now', 'localeCompare', 'document.', 'window.', 'setTimeout', 'setInterval']) {
   assert.equal(source.includes(forbidden), false, `forbidden API: ${forbidden}`);
 }
-console.log(`UI contract tests passed; slots=8; viewports=${viewports.length}; cues=${UI_CONTRACT.inputCues.length}`);
+console.log(`UI contract tests passed; slots=9; playable=3; viewports=${viewports.length}; cues=${UI_CONTRACT.inputCues.length}`);

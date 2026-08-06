@@ -14,5 +14,6 @@ export const CURRENT_CHARACTER_IDS = CURRENT_CONTRACT.characterIds;
 
 export const CURRENT_ARCHETYPE_IDS = ['standard', 'rush', 'power'] as const satisfies readonly CurrentArchetypeId[];
 export const PLANNED_ARCHETYPE_IDS = ['defense', 'tricky', 'grappler', 'counter', 'charge'] as const satisfies readonly PlannedArchetypeId[];
-export const PLANNED_CHARACTER_IDS = ['himalaya', 'bobak', 'grappler_tbd', 'counter_tbd', 'charge_tbd'] as const;
+export const PLANNED_CHARACTER_IDS = ['hakuma', 'chirka', 'takimaru', 'yomikage', 'bullet'] as const;
 export const BOSS_CHARACTER_IDS = ['dark_moguzo'] as const;
+export const FULL_ROSTER_IDS = [...CURRENT_CHARACTER_IDS, ...PLANNED_CHARACTER_IDS, ...BOSS_CHARACTER_IDS] as const;
