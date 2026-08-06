@@ -14,7 +14,7 @@ import type {
   PostureStateV2,
 } from './combat-contract-v2.ts';
 
-export const BATTLE_STATE_V2_VERSION='mamoken-battle-state-v2-v0.2' as const;
+export const BATTLE_STATE_V2_VERSION='mamoken-battle-state-v2-v0.3' as const;
 export const BATTLE_STATE_V2_AUTHORITY='shadow_only' as const;
 
 export type RosterCharacterIdV2='moguzo'|'pisuke'|'godan'|'hakuma'|'chirka'|'takimaru'|'yomikage'|'bullet'|'dark_moguzo';
@@ -95,6 +95,10 @@ export type FighterResourcesV2=Readonly<{
   maxUltimateStock:number;
 }>;
 
+export type FighterComboStateV2=Readonly<{
+  count:number;
+}>;
+
 export type FighterTimersV2=Readonly<{
   hitstunF:number;
   blockstunF:number;
@@ -113,6 +117,7 @@ export type FighterStateV2=Readonly<{
   defense:DefenseStateV2;
   ability:AbilityStateV2;
   resources:FighterResourcesV2;
+  combo:FighterComboStateV2;
   timers:FighterTimersV2;
   inputHold:InputHoldStateV2;
   bulletCharge:BulletChargeStateV2|null;
@@ -139,6 +144,11 @@ export type RoundStateV2=Readonly<{
   timeoutEnabled:boolean;
 }>;
 
+export type BattleRngStateV2=Readonly<{
+  combatState:number;
+  aiState:number;
+}>;
+
 export type BattleStateV2=Readonly<{
   version:typeof BATTLE_STATE_V2_VERSION;
   combatContractVersion:'mamoken-combat-contract-v0.2';
@@ -147,6 +157,7 @@ export type BattleStateV2=Readonly<{
   flow:BattleFlowV2;
   clocks:BattleClocksV2;
   freeze:FreezeStateV2;
+  rng:BattleRngStateV2;
   fighters:Readonly<Record<PlayerIdV2,FighterStateV2>>;
   spatial:SpatialPairStateV2;
   round:RoundStateV2;
@@ -215,6 +226,7 @@ export type ContactResultV2=Readonly<{
   focusGaugeDelta:Readonly<Record<PlayerIdV2,number>>;
   ultimateStockDelta:Readonly<Record<PlayerIdV2,number>>;
   bulletChargeDelta:Readonly<Record<PlayerIdV2,number>>;
+  comboCountDelta:Readonly<Record<PlayerIdV2,number>>;
   downType:DownTypeV2;
   followupAllowed:boolean;
 }>;
