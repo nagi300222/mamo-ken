@@ -6,6 +6,7 @@
   "type": "module",
   "scripts": {
     "build:mobile": "node tools/build_mobile.mjs",
+    "build:character-catalog-browser": "node --experimental-strip-types tools/build_character_catalog_browser.mjs",
     "check:core": "npm run typecheck:core && node --experimental-strip-types test/core-spec.test.mjs",
     "check:command": "npm run typecheck:core && node --experimental-strip-types test/command-parser.test.mjs",
     "check:combat": "npm run typecheck:core && node --experimental-strip-types test/combat-moves.test.mjs",
@@ -18,6 +19,8 @@
     "check:roster": "npm run typecheck:core && node --experimental-strip-types test/roster-core3.test.mjs",
     "check:roster-full": "npm run typecheck:core && node --experimental-strip-types test/full-roster-art.test.mjs",
     "check:character-catalog": "npm run typecheck:core && node --experimental-strip-types test/character-catalog.test.mjs",
+    "check:character-catalog-browser": "npm run typecheck:core && node --experimental-strip-types test/character-catalog-browser.test.mjs",
+    "check:character-detail": "npm run typecheck:core && node --experimental-strip-types test/character-detail-panel.test.mjs",
     "check:runtime": "npm run typecheck:core && node --experimental-strip-types test/runtime-adapter.test.mjs",
     "check:runtime-input": "npm run typecheck:core && node --experimental-strip-types test/runtime-input-bridge.test.mjs",
     "check:runtime-shadow": "npm run typecheck:core && node --experimental-strip-types test/runtime-command-shadow.test.mjs",
