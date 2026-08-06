@@ -10,6 +10,8 @@ on:
       - 'src/core/index.ts'
       - 'test/battle-state-v2.test.mjs'
       - 'reports/combat/G01_COMPLETION.md'
+      - 'reports/combat/G01_2_COMPLETION.md'
+      - 'tools/apply_g01_rng_combo_fix.mjs'
       - 'package.json'
       - '.github/workflows/battle-state-v2.yml'
   workflow_dispatch:
@@ -29,6 +31,10 @@ jobs:
       - run: npm ci
       - name: Validate BattleState and MoveSpec V2 schemas
         run: npm run check:battle-state-v2
+      - name: Verify generated G01.2 contract is reproducible
+        run: |
+          node tools/apply_g01_rng_combo_fix.mjs
+          git diff --exit-code -- src/core/v2-types/battle-state-v2.ts src/core/v2-validation/battle-state-v2-validation.ts test/battle-state-v2.test.mjs design/combat/contracts/MAMOKEN_BATTLE_STATE_AND_MOVESPEC_V2_v0.1.md reports/combat/G01_COMPLETION.md
       - name: Enforce G01 scoped diff
         if: github.event_name == 'pull_request'
         env:
