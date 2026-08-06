@@ -35,7 +35,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add src/core/v2-validation/battle-state-v2-validation.ts test/battle-state-v2.test.mjs design/combat/contracts/MAMOKEN_BATTLE_STATE_AND_MOVESPEC_V2_v0.1.md reports/combat/G01_COMPLETION.md
+          git add src/core/v2-types/battle-state-v2.ts src/core/v2-validation/battle-state-v2-validation.ts test/battle-state-v2.test.mjs design/combat/contracts/MAMOKEN_BATTLE_STATE_AND_MOVESPEC_V2_v0.1.md reports/combat/G01_COMPLETION.md
           if git diff --cached --quiet; then exit 0; fi
-          git commit -m "[g01-fix] preserve RNG and combo in validators and tests"
+          git commit -m "[g01-fix] preserve seed aiSeed and combo in generated contract"
           git push origin HEAD:fix/battle-state-v2-rng-combo
