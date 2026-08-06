@@ -3,6 +3,7 @@ import type { CurrentCharacterId, CurrentLevel, Direction } from './types.ts';
 export type PlayerId = 0 | 1;
 export type InputTrigger = CurrentLevel | 'grab';
 export type InputProfileStatus = 'current_impl' | 'provisional';
+export type CommandDefinitionSource = 'current_impl' | 'design_confirmed' | 'provisional';
 
 export type DirectionInputEvent = Readonly<{
   kind: 'direction';
@@ -96,7 +97,7 @@ export type CommandDefinition = Readonly<{
   trigger: InputTrigger;
   specificity: number;
   definitionOrder: number;
-  source: 'current_impl' | 'provisional';
+  source: CommandDefinitionSource;
   conditionId?: string;
   blockShorterOnConditionFailure?: boolean;
   charge?: ChargeRequirement;
