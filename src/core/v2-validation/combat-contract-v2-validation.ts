@@ -138,8 +138,9 @@ export function validateMoveSpecV2CandidateDocument(document:unknown):Validation
     push(errors,DOWN.has(move.downType),`${path}.downType: invalid`);
     push(errors,typeof move.followupAllowed==='boolean',`${path}.followupAllowed: boolean required`);
     push(errors,FORWARD.has(move.forwardMovement),`${path}.forwardMovement: invalid`);
-    if(move.forwardMovement==='CHASE_TO_CONTACT')push(errors(integer(move.maximumApproachSteps,1)&&move.maximumApproachSteps<=2,`${path}.maximumApproachSteps: 1..2 required for chase`);
-    else push(errors,move.maximumApproachSteps===null,`${path}.maximumApproachSteps: only chase may set it`);
+    if(move.forwardMovement==='CHASE_TO_CONTACT'){
+      push(errors,integer(move.maximumApproachSteps,1)&&move.maximumApproachSteps<=2,`${path}.maximumApproachSteps: 1..2 required for chase`);
+    }else push(errors,move.maximumApproachSteps===null,`${path}.maximumApproachSteps: only chase may set it`);
     validateSchedule(move.contactSchedule,`${path}.contactSchedule`,errors);
     validateCancelWindow(move.cancelWindows.onHit,`${path}.cancelWindows.onHit`,errors);
     validateCancelWindow(move.cancelWindows.onBlock,`${path}.cancelWindows.onBlock`,errors);
