@@ -9,6 +9,7 @@
     "build:character-catalog-browser": "node --experimental-strip-types tools/build_character_catalog_browser.mjs",
     "check:core": "npm run typecheck:core && node --experimental-strip-types test/core-spec.test.mjs",
     "check:command": "npm run typecheck:core && node --experimental-strip-types test/command-parser.test.mjs",
+    "check:command-catalog": "npm run typecheck:core && node --experimental-strip-types test/command-catalog.test.mjs",
     "check:combat": "npm run typecheck:core && node --experimental-strip-types test/combat-moves.test.mjs",
     "check:defense": "npm run typecheck:core && node --experimental-strip-types test/defense.test.mjs",
     "check:gauge": "npm run typecheck:core && node --experimental-strip-types test/gauge-gyuiin.test.mjs",

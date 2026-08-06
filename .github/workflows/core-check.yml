@@ -22,6 +22,7 @@ on:
       - 'tools/compare_runtime_shadow_reports.mjs'
       - 'test/core-spec.test.mjs'
       - 'test/command-parser.test.mjs'
+      - 'test/command-catalog.test.mjs'
       - 'test/combat-moves.test.mjs'
       - 'test/defense.test.mjs'
       - 'test/gauge-gyuiin.test.mjs'
@@ -73,6 +74,9 @@ jobs:
 
       - name: Command parser tests
         run: npm run check:command
+
+      - name: Core3 command catalog overlap tests
+        run: npm run check:command-catalog
 
       - name: Combat MoveSpec and combo tests
         run: npm run check:combat

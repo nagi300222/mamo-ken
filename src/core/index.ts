@@ -5,6 +5,7 @@ export * from './validation.ts';
 export * from './command-types.ts';
 export * from './input-events.ts';
 export * from './command-parser.ts';
+export * from './command-catalog.ts';
 export * from './combat-types.ts';
 export * from './combat-moves.ts';
 export * from './combo.ts';
