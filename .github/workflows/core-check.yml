@@ -74,16 +74,26 @@ jobs:
           node-version: '24'
           cache: npm
       - run: npm ci
-      - name: Remove duplicate patcher replacement
+      - name: Normalize patcher replacements
         run: |
           python - <<'PY'
           from pathlib import Path
           path=Path('tools/apply_t28_roster_trial_select_ui.mjs')
           text=path.read_text()
-          needle="source=replaceOnce(source,'  const moves=BAL.CMD.moves[myF.c.id]||[];','  const moves=commandMovesFor(myF.c);','move list command helper');\n"
-          if text.count(needle) != 1:
-              raise SystemExit(f'expected duplicate helper line once, found {text.count(needle)}')
-          path.write_text(text.replace(needle,''))
+          remove_lines=[
+            "source=replaceOnce(source,'    const moves=BAL.CMD.moves[f.c.id];','    const moves=commandMovesFor(f.c);','canary command helper');\n",
+            "source=replaceOnce(source,'  const moves=BAL.CMD.moves[myF.c.id]||[];','  const moves=commandMovesFor(myF.c);','move list command helper');\n",
+          ]
+          old="source=replaceOnce(source,'  const moves=BAL.CMD.moves[f.c.id];','  const moves=commandMovesFor(f.c);','command detection helper');\n"
+          new="source=source.replaceAll('  const moves=BAL.CMD.moves[f.c.id];','  const moves=commandMovesFor(f.c);');\n"
+          if text.count(old)!=1:
+              raise SystemExit(f'command helper anchor count={text.count(old)}')
+          text=text.replace(old,new)
+          for needle in remove_lines:
+              if text.count(needle)!=1:
+                  raise SystemExit(f'cleanup anchor count={text.count(needle)}: {needle}')
+              text=text.replace(needle,'')
+          path.write_text(text)
           PY
       - name: Apply T28 runtime and UI integration
         run: node tools/apply_t28_roster_trial_select_ui.mjs
