@@ -22,12 +22,22 @@ function patch(relativePath,fn){
 
 patch('prototype/mamoken_prototype_v01.html',(source)=>{
   if(source.includes(MARKER))return source;
-  return replaceOnce(
-    source,
-    "    directions:f.dirBuf.map(function(entry){return{direction:entry.dir,frame:entry.f};})\n  };",
-    `    directions:f.dirBuf.map(function(entry){return{direction:entry.dir,frame:entry.f};}),
+  const before=`  const payload={
+    frame:B.f,
+    player:f.side,
+    characterId:f.c.id,
+    trigger:trigger,
+    directions:f.dirBuf.map(function(entry){return{direction:entry.dir,frame:entry.f};})
+  };
+  if(baseEnabled){`;
+  const after=`  const payload={
+    frame:B.f,
+    player:f.side,
+    characterId:f.c.id,
+    trigger:trigger,
+    directions:f.dirBuf.map(function(entry){return{direction:entry.dir,frame:entry.f};}),
     activeConditions:(f.c.id==='pisuke'&&f.clinchF>0)?['pisuke.lunge-success']:[] ${MARKER}
-  };`,
-    'attach diagnostic command conditions',
-  );
+  };
+  if(baseEnabled){`;
+  return replaceOnce(source,before,after,'attach diagnostic command conditions');
 });
