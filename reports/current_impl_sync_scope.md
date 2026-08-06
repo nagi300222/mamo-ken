@@ -17,4 +17,4 @@
 - Client lockstep advances B.flow only when both delayed inputs for the same sim frame are present.
 - Server relays cmd/pick-like payloads without interpreting battle semantics.
 - Gyuiin minigames use mgPick/mgTap/mgHit through the same lockstep cmd queue online.
-- `index.html` is only the Pages entry/redirect; `tools/build_mobile.mjs` builds `dist/mamoken_mobile.html` from `prototype/mamoken_prototype_v01.html`.
+- index.html is only the Pages entry/redirect; tools/build_mobile.mjs builds dist from prototype/mamoken_prototype_v01.html.

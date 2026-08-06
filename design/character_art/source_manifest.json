@@ -1,0 +1,17 @@
+{
+  "manifestVersion": "mamoken-character-art-source-v1",
+  "sourceDate": "2026-08-06",
+  "precedence": "The nine images attached in the implementation chat are the visual source of truth. When the handoff ZIP differs, the attached image wins.",
+  "runtimeUse": "Optimized transparent WebP derivatives are used only in the character-select roster. Current battle sprites remain unchanged.",
+  "characters": {
+    "moguzo": {"sourceFilename":"04692940-FC59-4FA5-98A3-32755C4D0FA5.jpeg","sha256":"2fb1d0684d292d5a8a9255c100aba5f01ba25006529540c71e5f5ebe30907312","selectionAsset":"assets/roster3d/moguzo.webp","selectionDisplayScale":1.00},
+    "pisuke": {"sourceFilename":"B440FF50-CDC2-4BDC-8812-D3C9AE9A5009.jpeg","sha256":"6a069749affdac0c91dc413eae89643a1283c54c0d205fbbfa1d3a263e36f346","selectionAsset":"assets/roster3d/pisuke.webp","selectionDisplayScale":1.04},
+    "godan": {"sourceFilename":"03C294AE-852F-409F-BAC8-074B28166F0F.jpeg","sha256":"3e8af621f1151d413d2e165cd3634e430ee0c3ea54e45b602bac4966d2b15bbd","selectionAsset":"assets/roster3d/godan.webp","selectionDisplayScale":1.08},
+    "hakuma": {"sourceFilename":"C761EB9A-77D8-4726-807F-F434762A2BE7.jpeg","sha256":"80f896219d6f9b0ef76bf95d644cdb69e899baef49f45c4fd5ce149643db0fe7","selectionAsset":"assets/roster3d/hakuma.webp","selectionDisplayScale":1.05},
+    "chirka": {"sourceFilename":"921B6709-CFFF-44B7-8E76-7A363D57A1D4.jpeg","sha256":"fbf2a9fbb42ff03591b9cf06aacb80fdd9f0172704a9fa7bf7cfd8ff313d97c1","selectionAsset":"assets/roster3d/chirka.webp","selectionDisplayScale":0.98},
+    "takimaru": {"sourceFilename":"059A639A-5E47-4844-B27E-3BB61DB084F7.jpeg","sha256":"b413a324775ecf21ee5bddf3a50a275aef3182658839dd0830bad7199b00bf3b","selectionAsset":"assets/roster3d/takimaru.webp","selectionDisplayScale":1.07},
+    "yomikage": {"sourceFilename":"CACB971E-E4DF-467F-B251-73953B23398F.jpeg","sha256":"751279783a8752aeaf2faff9729766b757568f757faa6726c79f0f3dd82830c3","selectionAsset":"assets/roster3d/yomikage.webp","selectionDisplayScale":1.00},
+    "bullet": {"sourceFilename":"3A78F2D8-420E-445E-9C90-3BA00BF3EF76.jpeg","sha256":"1f50927cb366bc8daaffe0acd6e44f51bc8fb13bc3a26d90ac5348b71b7092ba","selectionAsset":"assets/roster3d/bullet.webp","selectionDisplayScale":1.03},
+    "dark_moguzo": {"sourceFilename":"042DFFAC-BF26-4072-810E-BEF4EFF37B22.jpeg","sha256":"ed871711add57ec5d50b27eec862c65685b7a6739e907f9550ee62cfad842547","selectionAsset":"assets/roster3d/dark_moguzo.webp","selectionDisplayScale":1.00}
+  }
+}

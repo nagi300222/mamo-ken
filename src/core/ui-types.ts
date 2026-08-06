@@ -9,9 +9,10 @@ export type UiRect = Readonly<{ x: number; y: number; width: number; height: num
 export type RosterSlotContract = Readonly<{
   slot: number;
   characterId: CharacterId;
-  archetype: ArchetypeId;
+  archetype: ArchetypeId | 'another';
   status: 'current_impl' | 'planned';
   unlocked: boolean;
+  playableNow: boolean;
   displayName: string;
   placeholder: null | 'lock' | 'question';
   stats: Readonly<Record<DisplayStatKey, number>> | null;

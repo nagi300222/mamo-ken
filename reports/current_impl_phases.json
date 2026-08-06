@@ -3,239 +3,239 @@
   "fighterPhases": [
     {
       "value": "attack",
-      "line": 2003
+      "line": 2098
     },
     {
       "value": "blockstun",
-      "line": 1524
+      "line": 1618
     },
     {
       "value": "clash",
-      "line": 1212
+      "line": 1306
     },
     {
       "value": "cmdAtk",
-      "line": 983
+      "line": 1077
     },
     {
       "value": "cmdStance",
-      "line": 927
+      "line": 1021
     },
     {
       "value": "dizzy",
-      "line": 1524
+      "line": 1618
     },
     {
       "value": "dodge",
-      "line": 1999
+      "line": 2094
     },
     {
       "value": "down",
-      "line": 1976
+      "line": 2071
     },
     {
       "value": "grab",
-      "line": 1336
+      "line": 1430
     },
     {
       "value": "grabbed",
-      "line": 1827
+      "line": 1922
     },
     {
       "value": "grabHit",
-      "line": 1058
+      "line": 1152
     },
     {
       "value": "grabrec",
-      "line": 1062
+      "line": 1156
     },
     {
       "value": "guard",
-      "line": 1524
+      "line": 1618
     },
     {
       "value": "hitstun",
-      "line": 1352
+      "line": 1446
     },
     {
       "value": "idle",
-      "line": 1379
+      "line": 1473
     },
     {
       "value": "in",
-      "line": 2742
+      "line": 2837
     },
     {
       "value": "ko",
-      "line": 1273
+      "line": 1367
     },
     {
       "value": "mikiriRec",
-      "line": 1055
+      "line": 1149
     },
     {
       "value": "reveal",
-      "line": 2717
+      "line": 2812
     },
     {
       "value": "roar",
-      "line": 1056
+      "line": 1150
     },
     {
       "value": "select",
-      "line": 2530
+      "line": 2625
     },
     {
       "value": "ultAtk",
-      "line": 1227
+      "line": 1321
     },
     {
       "value": "wake",
-      "line": 1976
+      "line": 2071
     },
     {
       "value": "win",
-      "line": 1272
+      "line": 1366
     }
   ],
   "battleFlows": [
     {
       "value": "clash",
-      "line": 2742
+      "line": 2837
     },
     {
       "value": "fight",
-      "line": 2737
+      "line": 2832
     },
     {
       "value": "intro",
-      "line": 2737
+      "line": 2832
     },
     {
       "value": "ko",
-      "line": 1468
+      "line": 1562
     },
     {
       "value": "matchEnd",
-      "line": 1474
+      "line": 1568
     },
     {
       "value": "roundEnd",
-      "line": 1471
+      "line": 1565
     },
     {
       "value": "ultCine",
-      "line": 2657
+      "line": 2752
     }
   ],
   "gameScreens": [
     {
       "value": "battle",
-      "line": 3034
+      "line": 3133
     },
     {
       "value": "movelist",
-      "line": 3016
+      "line": 3115
     },
     {
       "value": "onlineInterrupted",
-      "line": 3013
+      "line": 3112
     },
     {
       "value": "onlineLobby",
-      "line": 3014
+      "line": 3113
     },
     {
       "value": "onlineSelect",
-      "line": 3012
+      "line": 3111
     },
     {
       "value": "pause",
-      "line": 3015
+      "line": 3114
     },
     {
       "value": "result",
-      "line": 3011
+      "line": 3110
     },
     {
       "value": "select",
-      "line": 3009
+      "line": 3108
     },
     {
       "value": "title",
-      "line": 3008
+      "line": 3107
     }
   ],
   "clashMiniGamePhases": [
     {
       "value": "in",
-      "line": 2742
+      "line": 2837
     },
     {
       "value": "reveal",
-      "line": 2717
+      "line": 2812
     },
     {
       "value": "select",
-      "line": 2530
+      "line": 2625
     }
   ],
   "eventTypes": [
     {
       "value": "atk",
-      "line": 1676
+      "line": 1770
     },
     {
       "value": "cmd",
-      "line": 1441
+      "line": 1535
     },
     {
       "value": "delayFReport",
-      "line": 437
+      "line": 458
     },
     {
       "value": "dodge",
-      "line": 1637
+      "line": 1731
     },
     {
       "value": "grab",
-      "line": 1631
+      "line": 1725
     },
     {
       "value": "matchOver",
-      "line": 528
+      "line": 549
     },
     {
       "value": "mgHit",
-      "line": 1607
+      "line": 1701
     },
     {
       "value": "mgPick",
-      "line": 1617
+      "line": 1711
     },
     {
       "value": "mgTap",
-      "line": 1599
+      "line": 1693
     },
     {
       "value": "mikiri",
-      "line": 1679
+      "line": 1773
     },
     {
       "value": "pick",
-      "line": 496
+      "line": 517
     },
     {
       "value": "ping",
-      "line": 409
+      "line": 430
     },
     {
       "value": "roar",
-      "line": 1668
+      "line": 1762
     },
     {
       "value": "ult",
-      "line": 1626
+      "line": 1720
     }
   ]
 }

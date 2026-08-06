@@ -27,14 +27,15 @@ function screens(...values: UiScreenId[]): readonly UiScreenId[] {
 export const UI_CONTRACT: UiContract = Object.freeze({
   version: 'ui-contract-v1',
   roster: Object.freeze([
-    Object.freeze({ slot: 1, characterId: 'moguzo', archetype: 'standard', status: 'current_impl', unlocked: true, displayName: 'モグゾー', placeholder: null, stats: CURRENT_STATS.moguzo, statsAreIndependentAxes: true }),
-    Object.freeze({ slot: 2, characterId: 'pisuke', archetype: 'rush', status: 'current_impl', unlocked: true, displayName: 'ピスケ', placeholder: null, stats: CURRENT_STATS.pisuke, statsAreIndependentAxes: true }),
-    Object.freeze({ slot: 3, characterId: 'godan', archetype: 'power', status: 'current_impl', unlocked: true, displayName: 'ゴダン', placeholder: null, stats: CURRENT_STATS.godan, statsAreIndependentAxes: true }),
-    Object.freeze({ slot: 4, characterId: 'himalaya', archetype: 'defense', status: 'planned', unlocked: false, displayName: '？', placeholder: 'question', stats: null, statsAreIndependentAxes: true }),
-    Object.freeze({ slot: 5, characterId: 'bobak', archetype: 'tricky', status: 'planned', unlocked: false, displayName: '？', placeholder: 'question', stats: null, statsAreIndependentAxes: true }),
-    Object.freeze({ slot: 6, characterId: 'grappler_tbd', archetype: 'grappler', status: 'planned', unlocked: false, displayName: '？', placeholder: 'lock', stats: null, statsAreIndependentAxes: true }),
-    Object.freeze({ slot: 7, characterId: 'counter_tbd', archetype: 'counter', status: 'planned', unlocked: false, displayName: '？', placeholder: 'lock', stats: null, statsAreIndependentAxes: true }),
-    Object.freeze({ slot: 8, characterId: 'charge_tbd', archetype: 'charge', status: 'planned', unlocked: false, displayName: '？', placeholder: 'lock', stats: null, statsAreIndependentAxes: true }),
+    Object.freeze({ slot: 1, characterId: 'moguzo', archetype: 'standard', status: 'current_impl', unlocked: true, playableNow: true, displayName: 'モグゾー', placeholder: null, stats: CURRENT_STATS.moguzo, statsAreIndependentAxes: true }),
+    Object.freeze({ slot: 2, characterId: 'pisuke', archetype: 'rush', status: 'current_impl', unlocked: true, playableNow: true, displayName: 'ピスケ', placeholder: null, stats: CURRENT_STATS.pisuke, statsAreIndependentAxes: true }),
+    Object.freeze({ slot: 3, characterId: 'godan', archetype: 'power', status: 'current_impl', unlocked: true, playableNow: true, displayName: 'ゴダン', placeholder: null, stats: CURRENT_STATS.godan, statsAreIndependentAxes: true }),
+    Object.freeze({ slot: 4, characterId: 'hakuma', archetype: 'defense', status: 'planned', unlocked: true, playableNow: false, displayName: 'ハクマ', placeholder: null, stats: null, statsAreIndependentAxes: true }),
+    Object.freeze({ slot: 5, characterId: 'chirka', archetype: 'tricky', status: 'planned', unlocked: true, playableNow: false, displayName: 'チルカ', placeholder: null, stats: null, statsAreIndependentAxes: true }),
+    Object.freeze({ slot: 6, characterId: 'takimaru', archetype: 'grappler', status: 'planned', unlocked: true, playableNow: false, displayName: 'タキマル', placeholder: null, stats: null, statsAreIndependentAxes: true }),
+    Object.freeze({ slot: 7, characterId: 'yomikage', archetype: 'counter', status: 'planned', unlocked: true, playableNow: false, displayName: 'ヨミカゲ', placeholder: null, stats: null, statsAreIndependentAxes: true }),
+    Object.freeze({ slot: 8, characterId: 'bullet', archetype: 'charge', status: 'planned', unlocked: true, playableNow: false, displayName: 'バレット', placeholder: null, stats: null, statsAreIndependentAxes: true }),
+    Object.freeze({ slot: 9, characterId: 'dark_moguzo', archetype: 'another', status: 'planned', unlocked: true, playableNow: false, displayName: 'ダークモグゾー', placeholder: null, stats: null, statsAreIndependentAxes: true }),
   ] satisfies readonly RosterSlotContract[]),
   difficulties: Object.freeze(['EASY', 'NORMAL', 'HARD'] as const),
   actions: Object.freeze([
@@ -73,12 +74,14 @@ export function buildPortraitLayout(width: number, height: number, safeTop = 0, 
   const gap = 8;
   const rosterTop = safeTop + 56;
   const rosterBottom = Math.floor(height * 0.56);
-  const cardWidth = (width - pad * 2 - gap) / 2;
-  const cardHeight = (rosterBottom - rosterTop - gap * 3) / 4;
+  const columns = 3;
+  const rows = 3;
+  const cardWidth = (width - pad * 2 - gap * (columns - 1)) / columns;
+  const cardHeight = (rosterBottom - rosterTop - gap * (rows - 1)) / rows;
   const rosterRegions: UiHitRegion[] = [];
-  for (let index = 0; index < 8; index += 1) {
-    const column = index % 2;
-    const row = Math.floor(index / 2);
+  for (let index = 0; index < 9; index += 1) {
+    const column = index % columns;
+    const row = Math.floor(index / columns);
     rosterRegions.push(Object.freeze({
       id: `roster_${index + 1}`,
       role: 'roster_slot',
@@ -113,12 +116,14 @@ export function buildPortraitLayout(width: number, height: number, safeTop = 0, 
 }
 
 export function validateUiContract(contract: UiContract = UI_CONTRACT): void {
-  if (contract.roster.length !== 8) throw new Error('UI roster must contain eight slots');
-  if (new Set(contract.roster.map((slot) => slot.slot)).size !== 8) throw new Error('duplicate roster slot');
-  if (contract.roster.filter((slot) => slot.unlocked).length !== 3) throw new Error('only current three slots may be unlocked');
+  if (contract.roster.length !== 9) throw new Error('UI roster must contain nine slots');
+  if (new Set(contract.roster.map((slot) => slot.slot)).size !== 9) throw new Error('duplicate roster slot');
+  if (contract.roster.filter((slot) => slot.playableNow).length !== 3) throw new Error('only current three slots may be playable');
   for (const slot of contract.roster) {
     if (!slot.statsAreIndependentAxes) throw new Error('display stats must not be treated as TOTAL');
-    if (!slot.unlocked && slot.placeholder === null) throw new Error('locked slot needs visible placeholder');
+    if (!slot.unlocked) throw new Error('all adopted roster art must be focusable');
+    if (slot.playableNow !== (slot.status === 'current_impl')) throw new Error('UI playability must match current implementation status');
+    if (!slot.playableNow && slot.stats !== null) throw new Error('planned roster stats must remain unset');
   }
   for (const cue of contract.inputCues) {
     if (!cue.colorToken || !cue.shapeToken || !cue.positionToken || !cue.seToken) throw new Error(`incomplete cue: ${cue.id}`);

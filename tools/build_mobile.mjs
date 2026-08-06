@@ -65,6 +65,7 @@ function resizeConfigFor(relFromAssets) {
   const top = relFromAssets.split('/')[0];
   if (top === 'chars') return { height: 400 };
   if (top === 'portraits') return { height: 520 };
+  if (top === 'roster3d') return { height: 256 };
   if (top === 'cutin') return { width: 1280 };
   if (top === 'bg') return { height: 1200 };
   return null; // ui / fx / その他: 原寸維持

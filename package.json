@@ -16,6 +16,7 @@
     "check:cpu": "npm run typecheck:core && node --experimental-strip-types test/cpu-persona.test.mjs",
     "check:ui": "npm run typecheck:core && node --experimental-strip-types test/ui-contract.test.mjs",
     "check:roster": "npm run typecheck:core && node --experimental-strip-types test/roster-core3.test.mjs",
+    "check:roster-full": "npm run typecheck:core && node --experimental-strip-types test/full-roster-art.test.mjs",
     "check:runtime": "npm run typecheck:core && node --experimental-strip-types test/runtime-adapter.test.mjs",
     "check:runtime-input": "npm run typecheck:core && node --experimental-strip-types test/runtime-input-bridge.test.mjs",
     "check:runtime-shadow": "npm run typecheck:core && node --experimental-strip-types test/runtime-command-shadow.test.mjs",
