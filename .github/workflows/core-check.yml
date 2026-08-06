@@ -97,6 +97,26 @@ jobs:
           PY
       - name: Apply T28 runtime and UI integration
         run: node tools/apply_t28_roster_trial_select_ui.mjs
+      - name: Remove superseded detail constant and persist fix
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          prototype=Path('prototype/mamoken_prototype_v01.html')
+          old="const SELECT_DETAIL_BTN={x:60,y:638,w:W-120,h:74};\n"
+          text=prototype.read_text()
+          if text.count(old)!=1:
+              raise SystemExit(f'old detail constant count={text.count(old)}')
+          prototype.write_text(text.replace(old,''))
+          patcher=Path('tools/apply_t28_roster_trial_select_ui.mjs')
+          source=patcher.read_text()
+          anchor="writeFileSync(TARGET,source,'utf8');\n"
+          fix="source=replaceOnce(source,'const SELECT_DETAIL_BTN={x:60,y:638,w:W-120,h:74};\\n','','remove superseded T22 detail button');\n"
+          if source.count(anchor)!=1:
+              raise SystemExit('patcher write anchor missing')
+          if fix not in source:
+              source=source.replace(anchor,fix+anchor)
+          patcher.write_text(source)
+          PY
       - name: Build mobile distribution
         run: npm run build:mobile
       - name: Run T28 focused tests
