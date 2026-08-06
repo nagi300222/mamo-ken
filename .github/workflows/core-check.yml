@@ -18,6 +18,7 @@ on:
       - 'tools/apply_t20_full_roster_art_select.mjs'
       - 'tools/apply_t22_character_detail_panel.mjs'
       - 'tools/apply_t22_ui_contract.mjs'
+      - 'tools/apply_t24_extended_command_shadow.mjs'
       - 'tools/compare_runtime_shadow_reports.mjs'
       - 'test/core-spec.test.mjs'
       - 'test/command-parser.test.mjs'
@@ -36,6 +37,7 @@ on:
       - 'test/runtime-adapter.test.mjs'
       - 'test/runtime-input-bridge.test.mjs'
       - 'test/runtime-command-shadow.test.mjs'
+      - 'test/runtime-extended-command-shadow.test.mjs'
       - 'test/runtime-shadow-hook.test.mjs'
       - 'test/runtime-shadow-export.test.mjs'
       - 'test/runtime-command-canary.test.mjs'
@@ -119,6 +121,9 @@ jobs:
 
       - name: Runtime command shadow tests
         run: npm run check:runtime-shadow
+
+      - name: Extended 21-command shadow tests
+        run: npm run check:runtime-extended-shadow
 
       - name: Runtime shadow hook tests
         run: npm run check:runtime-hook
