@@ -4,6 +4,7 @@ import vm from 'node:vm';
 
 const catalogSource=readFileSync(new URL('../runtime/character-catalog-browser.js',import.meta.url),'utf8');
 const extendedSource=readFileSync(new URL('../runtime/runtime-extended-command-shadow-browser.js',import.meta.url),'utf8');
+const plain=(value)=>JSON.parse(JSON.stringify(value));
 
 function load(search='?mamokenExtendedShadow=1'){
   const context=vm.createContext({console,location:{search}});
@@ -31,14 +32,12 @@ assert.equal(api.reportVersion,'mamoken-extended-command-shadow-report-v1');
 assert.equal(api.enabled,true);
 assert.equal(api.requestedEnabled,true);
 
-const catalogApi=vm.runInNewContext('api', {api:load().constructor ? undefined : undefined});
-void catalogApi;
 const catalogContext=vm.createContext({console,location:{search:'?mamokenExtendedShadow=1'}});
 catalogContext.window=catalogContext;
 catalogContext.globalThis=catalogContext;
 vm.runInContext(catalogSource,catalogContext);
 vm.runInContext(extendedSource,catalogContext);
-const catalog=catalogContext.__MAMOKEN_CHARACTER_CATALOG__.get();
+const catalog=catalogContext.__MAMOKEN_CHARACTER_CATALOG__;
 const auditApi=catalogContext.__MAMOKEN_EXTENDED_COMMAND_SHADOW__;
 
 const expected={
@@ -62,7 +61,7 @@ for(const characterId of ['moguzo','pisuke','godan']){
 const summary=auditApi.summary();
 assert.equal(summary.observationCount,21);
 assert.equal(summary.conflictCount,1);
-assert.deepEqual(summary.classifications,expected);
+assert.deepEqual(plain(summary.classifications),expected);
 assert.equal(summary.byCharacter.moguzo.observations,7);
 assert.equal(summary.byCharacter.pisuke.observations,7);
 assert.equal(summary.byCharacter.godan.observations,7);
@@ -119,7 +118,7 @@ assert.throws(()=>auditApi.resolveTrigger({frame:2,player:0,characterId:'moguzo'
 
 const disabled=load('');
 assert.equal(disabled.enabled,false);
-assert.deepEqual(disabled.observeTrigger({frame:0,player:0,characterId:'moguzo',trigger:'mid',directions:[]}),{accepted:false,reason:'disabled'});
+assert.deepEqual(plain(disabled.observeTrigger({frame:0,player:0,characterId:'moguzo',trigger:'mid',directions:[]})),{accepted:false,reason:'disabled'});
 assert.equal(disabled.summary().observationCount,0);
 
 const ring=load();
