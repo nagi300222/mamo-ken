@@ -13,6 +13,7 @@
     "check:browser-command-contract": "npm run typecheck:core && node --experimental-strip-types test/browser-command-contract.test.mjs",
     "check:additional-move-readiness": "npm run typecheck:core && node --experimental-strip-types test/additional-move-readiness.test.mjs",
     "check:combat-v2": "npm run typecheck:core && node --experimental-strip-types test/combat-v2-contract.test.mjs",
+    "check:product": "npm run typecheck:product && node --experimental-strip-types test/product-contract.test.mjs",
     "check:combat": "npm run typecheck:core && node --experimental-strip-types test/combat-moves.test.mjs",
     "check:defense": "npm run typecheck:core && node --experimental-strip-types test/defense.test.mjs",
     "check:gauge": "npm run typecheck:core && node --experimental-strip-types test/gauge-gyuiin.test.mjs",
@@ -37,7 +38,8 @@
     "check:runtime-canary-audit": "npm run typecheck:core && node --experimental-strip-types test/runtime-canary-audit.test.mjs",
     "check:runtime-authority": "npm run typecheck:core && node --experimental-strip-types test/runtime-command-authority.test.mjs",
     "compare:runtime-shadow": "node tools/compare_runtime_shadow_reports.mjs",
-    "typecheck:core": "tsc --noEmit"
+    "typecheck:core": "tsc --noEmit",
+    "typecheck:product": "tsc -p tsconfig.product.json --noEmit"
   },
   "devDependencies": {
     "sharp": "^0.33.5",
