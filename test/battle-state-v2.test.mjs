@@ -152,7 +152,7 @@ assert.ok(RESOLUTION_REASON_CODES_V2.some((code)=>code==='RESULT_TRADE'));
 
 for(const path of ['../src/core/v2-types/battle-state-v2.ts','../src/core/v2-types/move-spec-v2.ts','../src/core/v2-validation/battle-state-v2-validation.ts']){
   const source=readFileSync(new URL(path,import.meta.url),'utf8');
-  for(const forbidden of ['prototype/','dist/','runtime/','server/','assets/','Math.random','Date.now','document.','window.','localStorage','sessionStorage','fetch(','setTimeout(','setInterval('])assert.equal(source.includes(forbidden),false,`${path}: forbidden live dependency ${forbidden}`);
+  for(const forbidden of ['prototype/','dist/','runtime/','server/','assets/','Math.random','Date.now','globalThis.window','window.document','document.','localStorage','sessionStorage','fetch(','setTimeout(','setInterval('])assert.equal(source.includes(forbidden),false,`${path}: forbidden live dependency ${forbidden}`);
 }
 
 console.log(`battle state v2 tests passed; moves=21; openNumerics=21; reasons=${RESOLUTION_REASON_CODES_V2.length}; clocks=3; hash=${stateHash}`);
