@@ -1,0 +1,46 @@
+name: UI visual audit
+
+on:
+  pull_request:
+    paths:
+      - 'prototype/mamoken_prototype_v01.html'
+      - 'dist/mamoken_mobile.html'
+      - 'assets/roster3d/**'
+      - 'tools/capture_ui_visual_audit.mjs'
+      - '.github/workflows/ui-visual-audit.yml'
+  workflow_dispatch:
+
+jobs:
+  capture:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+
+      - name: Install project dependencies
+        run: npm ci
+
+      - name: Install Playwright without changing the lockfile
+        run: npm install --no-save --package-lock=false playwright@1.55.0
+
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Capture real-browser UI states
+        run: node tools/capture_ui_visual_audit.mjs
+
+      - name: Upload UI audit screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mamoken-ui-visual-audit
+          path: reports/ui-visual-audit/
+          if-no-files-found: error
+          retention-days: 14
