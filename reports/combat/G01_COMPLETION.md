@@ -1,4 +1,4 @@
-# G01 Completion Report — BattleState V2 / Full MoveSpec V2 Schema v0.1
+# G01 Completion Report — BattleState V2 / Full MoveSpec V2 Schema v0.2
 
 ## Scope
 
@@ -46,6 +46,17 @@ The state keeps separate:
 - Input holds cannot start in a future simulation frame.
 - CLINCH requires both fighters in CLINCH posture and a positive timer.
 - Current contract keeps `sideSwap=false`.
+
+## Current gauge correction
+
+G01.1 current gauge schema correction. The BattleState resource schema now matches the current runtime gauge source:
+
+- S gauge
+- focus gauge
+- ultimate stock
+- Bullet charge in separate BulletChargeState
+
+The unsupported standalone roar gauge fields were removed. ContactResult now exposes separate S, focus, ultimate, and Bullet-charge deltas.
 
 ## Three clocks
 

@@ -1,3 +1,4 @@
+// G01.1 current gauge schema correction
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {
@@ -31,7 +32,7 @@ const closureJson=JSON.parse(readFileSync(new URL('../design/combat/contracts/MA
 const closures=materializeMoveSpecV2Closure(closureJson);
 const specs=closures.map(createOpenMoveSpecV2FromClosure);
 
-assert.equal(BATTLE_STATE_V2_VERSION,'mamoken-battle-state-v2-v0.1');
+assert.equal(BATTLE_STATE_V2_VERSION,'mamoken-battle-state-v2-v0.2');
 assert.equal(MOVE_SPEC_V2_VERSION,'mamoken-movespec-v2-v0.1');
 assert.equal(specs.length,21);
 assert.equal(new Set(specs.map((spec)=>spec.id)).size,21);
@@ -76,18 +77,19 @@ assert.equal(validateMoveSpecV2(badThrow).ok,false);
 
 const state=createInitialBattleStateV2({
   fighters:{
-    0:{characterId:'moguzo',maxHp:1000,maxGuard:100,maxSGauge:100,maxRoarGauge:100,abilityId:'moguzo.guts'},
-    1:{characterId:'bullet',maxHp:900,maxGuard:90,maxSGauge:100,maxRoarGauge:100,abilityId:'bullet.overcharge'},
+    0:{characterId:'moguzo',maxHp:1000,maxGuard:100,maxSGauge:100,maxFocusGauge:100,maxUltimateStock:1,abilityId:'moguzo.guts'},
+    1:{characterId:'bullet',maxHp:900,maxGuard:90,maxSGauge:100,maxFocusGauge:100,maxUltimateStock:1,abilityId:'bullet.overcharge'},
   },
   roundIndex:1,
   timerCombatF:5940,
   timeoutEnabled:true,
 });
 assert.equal(validateBattleStateV2(state).ok,true,validateBattleStateV2(state).errors.join('\n'));
-assert.equal(state.version,'mamoken-battle-state-v2-v0.1');
+assert.equal(state.version,'mamoken-battle-state-v2-v0.2');
 assert.equal(state.combatContractVersion,COMBAT_CONTRACT_V2.version);
 assert.equal(state.authority,'shadow_only');
 assert.equal(state.liveRuntimeAuthority,false);
+assert.deepEqual(state.fighters[0].resources,{hp:1000,maxHp:1000,guard:100,maxGuard:100,sGauge:0,maxSGauge:100,focusGauge:0,maxFocusGauge:100,ultimateStock:0,maxUltimateStock:1});
 assert.equal(state.fighters[0].bulletCharge,null);
 assert.deepEqual(state.fighters[1].bulletCharge,{value:0,lastGainSignature:null,maxReady:false});
 assert.notStrictEqual(state.fighters[0].inputHold,state.fighters[1].inputHold);
@@ -103,6 +105,10 @@ assert.deepEqual(ultimateFreezeClocks,{simulationFrame:3,combatFrame:1,fighterAc
 const pauseClocks=advanceBattleClocksV2(ultimateFreezeClocks,'PAUSE',{0:true,1:true});
 assert.deepEqual(pauseClocks,ultimateFreezeClocks);
 
+const invalidFocus=structuredClone(state);invalidFocus.fighters[0].resources.focusGauge=101;
+assert.equal(validateBattleStateV2(invalidFocus).ok,false);
+const invalidUlt=structuredClone(state);invalidUlt.fighters[0].resources.ultimateStock=2;
+assert.equal(validateBattleStateV2(invalidUlt).ok,false);
 const invalidBullet=structuredClone(state);invalidBullet.fighters[1].bulletCharge.maxReady=true;
 assert.equal(validateBattleStateV2(invalidBullet).ok,false);
 const invalidClinch=structuredClone(state);invalidClinch.spatial.engagement='CLINCH';invalidClinch.spatial.clinchRemainingF=24;
@@ -114,7 +120,7 @@ assert.equal(validateBattleStateV2(invalidFreeze).ok,false);
 
 const stateHash=hashBattleStateV2(state);
 assert.match(stateHash,/^[0-9a-f]{8}$/);
-assert.equal(stateHash,hashBattleStateV2(createInitialBattleStateV2({fighters:{0:{characterId:'moguzo',maxHp:1000,maxGuard:100,maxSGauge:100,maxRoarGauge:100,abilityId:'moguzo.guts'},1:{characterId:'bullet',maxHp:900,maxGuard:90,maxSGauge:100,maxRoarGauge:100,abilityId:'bullet.overcharge'}},roundIndex:1,timerCombatF:5940,timeoutEnabled:true})));
+assert.equal(stateHash,hashBattleStateV2(createInitialBattleStateV2({fighters:{0:{characterId:'moguzo',maxHp:1000,maxGuard:100,maxSGauge:100,maxFocusGauge:100,maxUltimateStock:1,abilityId:'moguzo.guts'},1:{characterId:'bullet',maxHp:900,maxGuard:90,maxSGauge:100,maxFocusGauge:100,maxUltimateStock:1,abilityId:'bullet.overcharge'}},roundIndex:1,timerCombatF:5940,timeoutEnabled:true})));
 assert.notEqual(hashMoveSpecV2(baseSpec),hashMoveSpecV2(resolvedReach));
 
 const batch={
@@ -155,4 +161,4 @@ for(const path of ['../src/core/v2-types/battle-state-v2.ts','../src/core/v2-typ
   for(const forbidden of ['prototype/','dist/','runtime/','server/','assets/','Math.random','Date.now','globalThis.window','window.document','document.','localStorage','sessionStorage','fetch(','setTimeout(','setInterval('])assert.equal(source.includes(forbidden),false,`${path}: forbidden live dependency ${forbidden}`);
 }
 
-console.log(`battle state v2 tests passed; moves=21; openNumerics=21; reasons=${RESOLUTION_REASON_CODES_V2.length}; clocks=3; hash=${stateHash}`);
+console.log(`battle state v2 tests passed; moves=21; openNumerics=21; reasons=${RESOLUTION_REASON_CODES_V2.length}; clocks=3; currentGauges=s+focus+ult+charge; hash=${stateHash}`);
