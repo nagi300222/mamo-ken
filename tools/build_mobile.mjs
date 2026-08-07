@@ -27,6 +27,10 @@
 // 縮小方針(カテゴリはassets/直下のサブディレクトリ名で判定): chars=高さ400px /
 // portraits=高さ520px / cutin=幅1280px / bg=高さ1200px / ui・その他=原寸維持。
 // いずれもWebP quality 80へ再エンコードする(元がPNGでも出力は常にimage/webp)。
+//
+// BGM(R1追加): assets/bgm/配下の.mp3は画像と同じ__ASSET_MAP__に、音質を変えない
+// ため無変換・原本バイトのままdata:audio/mpeg;base64として埋め込む(prototype側の
+// bgmAssetSrc()が同じマップを参照するため、埋め込み用の文字列差し替えは不要)。
 
 import { readFileSync, writeFileSync, existsSync, readdirSync, statSync, mkdirSync } from 'node:fs';
 import path from 'node:path';
@@ -45,8 +49,13 @@ const CHARACTER_CATALOG_BROWSER_JS = path.join(ROOT, 'runtime', 'character-catal
 const CHARACTER_CATALOG_BROWSER_TAG = '<script src="../runtime/character-catalog-browser.js"></script>';
 const RUNTIME_EXTENDED_SHADOW_JS = path.join(ROOT, 'runtime', 'runtime-extended-command-shadow-browser.js');
 const RUNTIME_EXTENDED_SHADOW_TAG = '<script src="../runtime/runtime-extended-command-shadow-browser.js"></script>';
+// BGM(R2): 闘技場(昼)のWeb Audio実装がfile://下でのfetch/XHR不可を回避するために
+// prototype専用で読み込むbase64ペイロード。distは同じ音源を__ASSET_MAP__のdata URLで
+// 既に持っているため不要 → タグ自体を除去する(残すと単体配布時に404で壊れた参照になる)。
+const ARENA_BGM_B64_TAG = '<script src="../runtime/arena-bgm-b64.js"></script>';
 
 const IMG_EXT = new Set(['.png', '.jpg', '.jpeg', '.gif', '.webp']);
+const AUDIO_MIME = { '.mp3': 'audio/mpeg' }; // BGM(R1): 音質を変えないため再エンコードせず原本バイトのまま埋め込む
 const WEBP_QUALITY = 80;
 
 function walk(dir, out) {
@@ -87,20 +96,25 @@ async function buildAssetMap() {
   const files = [];
   walk(ASSETS_DIR, files);
   const map = {};
-  let skipped = 0, origTotal = 0, outTotal = 0;
+  let skipped = 0, origTotal = 0, outTotal = 0, audioTotal = 0, audioCount = 0;
   for (const abs of files) {
     const relFromAssets = path.relative(ASSETS_DIR, abs).split(path.sep).join('/');
     if (isExcluded(relFromAssets)) { skipped++; continue; }
     const ext = path.extname(abs).toLowerCase();
-    if (!IMG_EXT.has(ext)) { skipped++; continue; } // 画像以外の混入ファイルは無視
+    const srcKey = '../assets/' + relFromAssets; // prototype/*.html から見た参照パス形式に合わせてキー化
+    if (AUDIO_MIME[ext]) { // BGM(R1): 縮小・再エンコードなしで原本バイトのままdata URL化
+      const buf = readFileSync(abs);
+      audioTotal += buf.length; audioCount++;
+      map[srcKey] = `data:${AUDIO_MIME[ext]};base64,${buf.toString('base64')}`;
+      continue;
+    }
+    if (!IMG_EXT.has(ext)) { skipped++; continue; } // 画像・音声以外の混入ファイルは無視
     const origBuf = readFileSync(abs);
     const outBuf = await toWebp(abs, relFromAssets);
     origTotal += origBuf.length; outTotal += outBuf.length;
-    // prototype/*.html から見た参照パス形式('../assets/...')に合わせてキー化
-    const srcKey = '../assets/' + relFromAssets;
     map[srcKey] = `data:image/webp;base64,${outBuf.toString('base64')}`;
   }
-  return { map, skipped, origTotal, outTotal };
+  return { map, skipped, origTotal, outTotal, audioTotal, audioCount };
 }
 
 async function main() {
@@ -108,8 +122,8 @@ async function main() {
   const runtimeShadowSource = readFileSync(RUNTIME_SHADOW_JS, 'utf8');
   const characterCatalogBrowserSource = readFileSync(CHARACTER_CATALOG_BROWSER_JS, 'utf8');
   const runtimeExtendedShadowSource = readFileSync(RUNTIME_EXTENDED_SHADOW_JS, 'utf8');
-  const { map: assetMap, skipped, origTotal, outTotal } = await buildAssetMap();
-  const count = Object.keys(assetMap).length;
+  const { map: assetMap, skipped, origTotal, outTotal, audioTotal, audioCount } = await buildAssetMap();
+  const count = Object.keys(assetMap).length - audioCount; // 画像点数(BGMは別集計)
 
   const anchor = 'const ASSETS={};';
   if (!html.includes(anchor)) {
@@ -126,6 +140,11 @@ async function main() {
     srcLine,
     '  img.src=Object.prototype.hasOwnProperty.call(__ASSET_MAP__,src)?__ASSET_MAP__[src]:src;'
   );
+
+  if (!out.includes(ARENA_BGM_B64_TAG)) {
+    throw new Error(`アンカー行が見つかりません: ${JSON.stringify(ARENA_BGM_B64_TAG)} (闘技場BGMのbase64読み込みタグが変更された可能性があります)`);
+  }
+  out = out.replace(ARENA_BGM_B64_TAG, ''); // distは__ASSET_MAP__に同じ音源のdata URLを持つため不要(タグ自体を除去)
 
   if (!out.includes(CHARACTER_CATALOG_BROWSER_TAG)) {
     throw new Error(`アンカー行が見つかりません: ${JSON.stringify(CHARACTER_CATALOG_BROWSER_TAG)} (character catalog browser bridgeが未適用の可能性があります)`);
@@ -147,8 +166,9 @@ async function main() {
   const sizeMB = (Buffer.byteLength(out, 'utf8') / 1024 / 1024).toFixed(2);
   const origMB = (origTotal / 1024 / 1024).toFixed(1);
   const webpMB = (outTotal / 1024 / 1024).toFixed(1);
-  console.log(`dist/mamoken_mobile.html を生成しました (埋め込み画像: ${count}点 / 除外: ${skipped}件)`);
-  console.log(`画像合計: ${origMB}MB → WebP変換後 ${webpMB}MB / 出力ファイルサイズ: ${sizeMB}MB`);
+  const audioMB = (audioTotal / 1024 / 1024).toFixed(1);
+  console.log(`dist/mamoken_mobile.html を生成しました (埋め込み画像: ${count}点 / 埋め込みBGM: ${audioCount}点 / 除外: ${skipped}件)`);
+  console.log(`画像合計: ${origMB}MB → WebP変換後 ${webpMB}MB / BGM合計(無変換): ${audioMB}MB / 出力ファイルサイズ: ${sizeMB}MB`);
 }
 
 main().catch((e) => { console.error(e); process.exitCode = 1; });
