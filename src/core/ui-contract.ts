@@ -56,7 +56,7 @@ export const UI_CONTRACT: UiContract = Object.freeze({
     textSeparatedFromArtwork: true,
     officialPlayableCount: 3,
     offlineTrialPlayableCount: 9,
-    onlinePlayableCount: 3,
+    onlinePlayableCount: 9,
     provisionalSkeletonLabelRequired: true,
   }),
   difficulties: Object.freeze(['EASY', 'NORMAL', 'HARD'] as const),
@@ -159,7 +159,7 @@ export function validateUiContract(contract: UiContract = UI_CONTRACT): void {
   if (contract.characterSelect.columns !== 5 || contract.characterSelect.rows !== 2 || contract.characterSelect.totalCells !== 10) throw new Error('character select must use a 2x5 grid');
   if (contract.characterSelect.rosterEntries !== 9 || contract.characterSelect.mysteryCellIndex !== 9) throw new Error('character select must reserve cell ten for mystery');
   if (contract.characterSelect.faceCropAnchor !== 'nose' || !contract.characterSelect.textSeparatedFromArtwork) throw new Error('selection art must use nose-centered crops separated from text');
-  if (contract.characterSelect.officialPlayableCount !== 3 || contract.characterSelect.offlineTrialPlayableCount !== 9 || contract.characterSelect.onlinePlayableCount !== 3) throw new Error('playability counts are inconsistent');
+  if (contract.characterSelect.officialPlayableCount !== 3 || contract.characterSelect.offlineTrialPlayableCount !== 9 || contract.characterSelect.onlinePlayableCount !== 9) throw new Error('playability counts are inconsistent');
   for (const slot of contract.roster) {
     if (!slot.statsAreIndependentAxes) throw new Error('display stats must not be treated as TOTAL');
     if (!slot.unlocked) throw new Error('all adopted roster art must be focusable');
