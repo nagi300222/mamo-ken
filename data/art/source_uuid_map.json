@@ -1,0 +1,1431 @@
+{
+  "moguzo": {
+    "master": "00_master.png",
+    "current_jobs": {
+      "J01_common_basic_2x2.png": {
+        "source_uuid": "c3ef49e3-4d72-41cd-8564-05a8e81d8c17.png",
+        "timestamp": [
+          2026,
+          8,
+          7,
+          23,
+          54,
+          26
+        ]
+      },
+      "J02_high_1x4.png": {
+        "source_uuid": "1bc7384d-44c9-486d-becb-c324c361f273.png",
+        "timestamp": [
+          2026,
+          8,
+          7,
+          23,
+          54,
+          30
+        ]
+      },
+      "J03_mid_1x4.png": {
+        "source_uuid": "e82262f5-236f-4d30-baff-127df372dfb0.png",
+        "timestamp": [
+          2026,
+          8,
+          7,
+          23,
+          54,
+          32
+        ]
+      },
+      "J04_low_1x4.png": {
+        "source_uuid": "2ee38f3d-0d27-4c4c-9c69-416e55c82c55.png",
+        "timestamp": [
+          2026,
+          8,
+          7,
+          23,
+          54,
+          34
+        ]
+      },
+      "J05_mikiri_1x4.png": {
+        "source_uuid": "54a4ad0d-7192-4401-9325-0122154c6765.png",
+        "timestamp": [
+          2026,
+          8,
+          7,
+          23,
+          54,
+          36
+        ]
+      },
+      "J06_roar_1x4.png": {
+        "source_uuid": "a80c0502-590b-4287-a436-96f561889555.png",
+        "timestamp": [
+          2026,
+          8,
+          7,
+          23,
+          54,
+          42
+        ]
+      },
+      "J07_grab_1x4.png": {
+        "source_uuid": "84000dca-08b1-4511-bb74-6d444919419b.png",
+        "timestamp": [
+          2026,
+          8,
+          7,
+          23,
+          54,
+          44
+        ]
+      },
+      "J08_unique_01_1x4_地走り.png": {
+        "source_uuid": "6a0752b8-bfdb-4b44-8b39-2daa26f42b06.png",
+        "timestamp": [
+          2026,
+          8,
+          7,
+          23,
+          54,
+          46
+        ]
+      },
+      "J09_unique_02_1x4_昇撃.png": {
+        "source_uuid": "8bfcd230-3132-44d3-935f-659e21105aaa.png",
+        "timestamp": [
+          2026,
+          8,
+          7,
+          23,
+          54,
+          48
+        ]
+      },
+      "J10_unique_03_1x4_引き寄せ投げ.png": {
+        "source_uuid": "67cf0b9e-f07a-4e39-a229-d8583a1d8e78.png",
+        "timestamp": [
+          2026,
+          8,
+          7,
+          23,
+          54,
+          52
+        ]
+      },
+      "J11_unique_04_1x4_砂払い.png": {
+        "source_uuid": "c6d8f512-3b47-4a2c-babd-86a212dfee97.png",
+        "timestamp": [
+          2026,
+          8,
+          7,
+          23,
+          54,
+          56
+        ]
+      },
+      "J12_unique_05_1x4_山越え拳.png": {
+        "source_uuid": "dba0092d-7624-48f8-83d8-94cf8c48cff0.png",
+        "timestamp": [
+          2026,
+          8,
+          7,
+          23,
+          55,
+          6
+        ]
+      },
+      "J13_unique_06_1x4_胴押し.png": {
+        "source_uuid": "deb74a07-e785-472b-8e06-2fce6be8576f.png",
+        "timestamp": [
+          2026,
+          8,
+          7,
+          23,
+          55,
+          12
+        ]
+      },
+      "J14_unique_07_1x4_土煙突き.png": {
+        "source_uuid": "bb605e2a-8f94-493d-9c2b-5f754a08b335.png",
+        "timestamp": [
+          2026,
+          8,
+          7,
+          23,
+          55,
+          16
+        ]
+      },
+      "J15_downset_2x2.png": {
+        "source_uuid": "810a77b7-0bac-401f-b7bd-fe41df0c7d8b.png",
+        "timestamp": [
+          2026,
+          8,
+          7,
+          23,
+          55,
+          20
+        ]
+      }
+    },
+    "legacy_common24": [
+      "01_moguzo_S1_basic_idle_guard_flinch_victory.png",
+      "02_moguzo_S2_telegraphs_and_mid_attack.png",
+      "03_moguzo_S3_attacks_mikiri_roar_charge.png",
+      "04_moguzo_S4_roar_and_grab.png",
+      "05_moguzo_S5_down_getup_ko_ult_charge.png",
+      "06_moguzo_S6_crouch_sway_lunge_crouch_attack.png"
+    ]
+  },
+  "piske": {
+    "master": "00_master.png",
+    "current_jobs": {
+      "J01_common_basic_2x2.png": {
+        "source_uuid": "21300ecf-bbb6-4281-88c7-b7291f02e17d.png",
+        "timestamp": [
+          2026,
+          8,
+          8,
+          0,
+          22,
+          54
+        ]
+      },
+      "J02_high_1x4.png": {
+        "source_uuid": "c840e3fe-005a-4e7f-b1cc-a872e719d03f.png",
+        "timestamp": [
+          2026,
+          8,
+          8,
+          0,
+          23,
+          4
+        ]
+      },
+      "J03_mid_1x4.png": {
+        "source_uuid": "36c269cd-de12-4fb9-8a61-eb231857a923.png",
+        "timestamp": [
+          2026,
+          8,
+          8,
+          0,
+          24,
+          58
+        ]
+      },
+      "J04_low_1x4.png": {
+        "source_uuid": "f4824d0c-9d64-45fe-acb2-81873a64e458.png",
+        "timestamp": [
+          2026,
+          8,
+          8,
+          0,
+          25,
+          30
+        ]
+      },
+      "J05_mikiri_1x4.png": {
+        "source_uuid": "adf86ba4-039a-4c23-87e4-0938e5c5c779.png",
+        "timestamp": [
+          2026,
+          8,
+          8,
+          0,
+          25,
+          58
+        ]
+      },
+      "J06_roar_1x4.png": {
+        "source_uuid": "f79fe841-f1eb-42d6-b9d7-5bcfa9144d07.png",
+        "timestamp": [
+          2026,
+          8,
+          8,
+          0,
+          26,
+          4
+        ]
+      },
+      "J07_grab_1x4.png": {
+        "source_uuid": "8a13b018-06c2-418d-8e39-3e61458877b9.png",
+        "timestamp": [
+          2026,
+          8,
+          8,
+          0,
+          26,
+          8
+        ]
+      },
+      "J08_unique_01_1x4_二連牙.png": {
+        "source_uuid": "7724d444-2a7f-42de-ae29-7b71f1071913.png",
+        "timestamp": [
+          2026,
+          8,
+          8,
+          0,
+          26,
+          10
+        ]
+      },
+      "J09_unique_02_1x4_スライディング.png": {
+        "source_uuid": "e394d8d9-a1a0-4f2b-927a-5304be353a9f.png",
+        "timestamp": [
+          2026,
+          8,
+          8,
+          0,
+          26,
+          18
+        ]
+      },
+      "J10_unique_03_1x4_宙返り蹴.png": {
+        "source_uuid": "914cd9bb-75f0-4bd9-bae2-3e8e65ebbe0d.png",
+        "timestamp": [
+          2026,
+          8,
+          8,
+          0,
+          26,
+          24
+        ]
+      },
+      "J11_unique_04_1x4_かすみ連打.png": {
+        "source_uuid": "35ac5b67-c270-45a3-9425-9e31c1e14416.png",
+        "timestamp": [
+          2026,
+          8,
+          8,
+          0,
+          26,
+          28
+        ]
+      },
+      "J12_unique_05_1x4_風切り爪.png": {
+        "source_uuid": "dd5a749f-cdc5-426e-9e7e-97f53657b03a.png",
+        "timestamp": [
+          2026,
+          8,
+          8,
+          0,
+          28,
+          0
+        ]
+      },
+      "J13_unique_06_1x4_すり抜け足.png": {
+        "source_uuid": "508bb557-6c1b-4406-9949-7c424b69f71d.png",
+        "timestamp": [
+          2026,
+          8,
+          8,
+          0,
+          28,
+          10
+        ]
+      },
+      "J14_unique_07_1x4_つむじ返し.png": {
+        "source_uuid": "b71f6bfc-dbe7-423a-a14f-0868f8b7924d.png",
+        "timestamp": [
+          2026,
+          8,
+          8,
+          0,
+          28,
+          14
+        ]
+      },
+      "J15_downset_2x2.png": {
+        "source_uuid": "fecb520a-5289-4709-94b8-292d52f64883.png",
+        "timestamp": [
+          2026,
+          8,
+          8,
+          0,
+          28,
+          20
+        ]
+      }
+    },
+    "legacy_common24": [
+      "01_piske_S1_basic_idle_guard_flinch_victory.png",
+      "02_piske_S2_telegraphs_and_mid_attack.png",
+      "03_piske_S3_attacks_mikiri_roar_charge.png",
+      "04_piske_S4_roar_and_grab.png",
+      "05_piske_S5_down_getup_ko_ult_charge.png",
+      "06_piske_S6_crouch_sway_lunge_crouch_attack.png"
+    ]
+  },
+  "godan": {
+    "master": "00_master.png",
+    "current_jobs": {
+      "J01_common_basic_2x2.png": {
+        "source_uuid": "f462828d-c20c-4b50-b16f-d98668c6f576.png",
+        "timestamp": [
+          2026,
+          8,
+          8,
+          0,
+          30,
+          6
+        ]
+      },
+      "J02_high_1x4.png": {
+        "source_uuid": "436ab1e7-205d-4931-9fd8-cf36cd34189b.png",
+        "timestamp": [
+          2026,
+          8,
+          8,
+          0,
+          30,
+          10
+        ]
+      },
+      "J03_mid_1x4.png": {
+        "source_uuid": "362da528-02eb-4627-8d6f-f442e1dde4fb.png",
+        "timestamp": [
+          2026,
+          8,
+          8,
+          0,
+          30,
+          12
+        ]
+      },
+      "J04_low_1x4.png": {
+        "source_uuid": "3a7e408f-caa3-444f-86d8-d3435a31a335.png",
+        "timestamp": [
+          2026,
+          8,
+          8,
+          0,
+          30,
+          18
+        ]
+      },
+      "J05_mikiri_1x4.png": {
+        "source_uuid": "cd201e2f-ce77-43f2-a47b-3d0496ae03ec.png",
+        "timestamp": [
+          2026,
+          8,
+          8,
+          0,
+          30,
+          22
+        ]
+      },
+      "J06_roar_1x4.png": {
+        "source_uuid": "51c777bf-97af-424c-83ff-00e8b77aa2f8.png",
+        "timestamp": [
+          2026,
+          8,
+          8,
+          0,
+          30,
+          24
+        ]
+      },
+      "J07_grab_1x4.png": {
+        "source_uuid": "4cae1eed-6dfd-445d-8f7e-6e5252d51046.png",
+        "timestamp": [
+          2026,
+          8,
+          8,
+          0,
+          30,
+          26
+        ]
+      },
+      "J08_unique_01_1x4_地割れ.png": {
+        "source_uuid": "9a93af40-08f9-498d-861f-2710fc4d01ff.png",
+        "timestamp": [
+          2026,
+          8,
+          8,
+          0,
+          30,
+          28
+        ]
+      },
+      "J09_unique_02_1x4_山掴み.png": {
+        "source_uuid": "9c48e289-db20-4fe0-9d9d-56b892f157bc.png",
+        "timestamp": [
+          2026,
+          8,
+          8,
+          0,
+          30,
+          34
+        ]
+      },
+      "J10_unique_03_1x4_巌の構え.png": {
+        "source_uuid": "f90994f8-541b-41bd-ac8c-8c02fc2ac88f.png",
+        "timestamp": [
+          2026,
+          8,
+          8,
+          0,
+          30,
+          42
+        ]
+      },
+      "J11_unique_04_1x4_岩砕き.png": {
+        "source_uuid": "ad352a28-f8f9-4247-954b-bbf4b82b9f24.png",
+        "timestamp": [
+          2026,
+          8,
+          8,
+          0,
+          30,
+          44
+        ]
+      },
+      "J12_unique_05_1x4_天蓋落とし.png": {
+        "source_uuid": "86a98cc6-e20f-4978-8703-c32dd5abf8d5.png",
+        "timestamp": [
+          2026,
+          8,
+          8,
+          0,
+          31,
+          50
+        ]
+      },
+      "J13_unique_06_1x4_根こそぎ.png": {
+        "source_uuid": "5fb43f3f-b760-4052-be10-30dc53f62c80.png",
+        "timestamp": [
+          2026,
+          8,
+          8,
+          0,
+          31,
+          52
+        ]
+      },
+      "J14_unique_07_1x4_大山押し.png": {
+        "source_uuid": "dc0f5a73-607d-4dfe-8cfe-659d9941131b.png",
+        "timestamp": [
+          2026,
+          8,
+          8,
+          0,
+          31,
+          56
+        ]
+      },
+      "J15_downset_2x2.png": {
+        "source_uuid": "73b5db5f-324c-43dc-a545-9e680b8efef8.png",
+        "timestamp": [
+          2026,
+          8,
+          8,
+          0,
+          31,
+          58
+        ]
+      }
+    },
+    "legacy_common24": [
+      "01_godan_S1_basic_idle_guard_flinch_victory.png",
+      "02_godan_S2_telegraphs_and_mid_attack.png",
+      "03_godan_S3_attacks_mikiri_roar_charge.png",
+      "04_godan_S4_roar_and_grab.png",
+      "05_godan_S5_down_getup_ko_ult_charge.png",
+      "06_godan_S6_crouch_sway_lunge_crouch_attack.png"
+    ]
+  },
+  "hakuma": {
+    "master": "00_master.png",
+    "current_jobs": {
+      "J01_common_basic_2x2.png": {
+        "source_uuid": "ce8c9d7c-8193-490f-a68c-e428108c0c04.png",
+        "timestamp": [
+          2026,
+          8,
+          8,
+          0,
+          36,
+          4
+        ]
+      },
+      "J02_high_1x4.png": {
+        "source_uuid": "fe62f2a9-80ff-46fe-8ba2-343d020e99c4.png",
+        "timestamp": [
+          2026,
+          8,
+          8,
+          0,
+          36,
+          6
+        ]
+      },
+      "J03_mid_1x4.png": {
+        "source_uuid": "9d1644f8-207f-448f-a3b3-a018b6a50be5.png",
+        "timestamp": [
+          2026,
+          8,
+          8,
+          0,
+          36,
+          8
+        ]
+      },
+      "J04_low_1x4.png": {
+        "source_uuid": "e3a61b1b-bfe4-4032-b6af-a72aa34840ce.png",
+        "timestamp": [
+          2026,
+          8,
+          8,
+          0,
+          36,
+          10
+        ]
+      },
+      "J05_mikiri_1x4.png": {
+        "source_uuid": "7282a41b-ab9d-4783-a577-f12c6230e15c.png",
+        "timestamp": [
+          2026,
+          8,
+          8,
+          0,
+          36,
+          28
+        ]
+      },
+      "J06_roar_1x4.png": {
+        "source_uuid": "a062bd0f-0208-4feb-aac2-1c1c3dd8f986.png",
+        "timestamp": [
+          2026,
+          8,
+          8,
+          0,
+          36,
+          34
+        ]
+      },
+      "J07_grab_1x4.png": {
+        "source_uuid": "fbd64a98-7177-4cc1-a0cd-2a8b0c608464.png",
+        "timestamp": [
+          2026,
+          8,
+          8,
+          0,
+          37,
+          2
+        ]
+      },
+      "J08_unique_01_1x4_雪壁掌.png": {
+        "source_uuid": "b9f6c4ca-9a52-41e2-8d98-fd2aed9d5ecc.png",
+        "timestamp": [
+          2026,
+          8,
+          8,
+          0,
+          37,
+          4
+        ]
+      },
+      "J09_unique_02_1x4_氷柱返し.png": {
+        "source_uuid": "6b4916cf-2b26-414c-b962-0415db5537d0.png",
+        "timestamp": [
+          2026,
+          8,
+          8,
+          0,
+          37,
+          8
+        ]
+      },
+      "J10_unique_03_1x4_雪崩抱え.png": {
+        "source_uuid": "5c412de3-4198-4ec1-be84-d0571374dbe5.png",
+        "timestamp": [
+          2026,
+          8,
+          8,
+          0,
+          37,
+          12
+        ]
+      },
+      "J11_unique_04_1x4_地伏せ.png": {
+        "source_uuid": "7f617ff0-156c-478c-a855-17905c0d383f.png",
+        "timestamp": [
+          2026,
+          8,
+          8,
+          0,
+          37,
+          14
+        ]
+      },
+      "J12_unique_05_1x4_不動押し.png": {
+        "source_uuid": "2d689d5f-e008-4423-a1d0-1870be652842.png",
+        "timestamp": [
+          2026,
+          8,
+          8,
+          0,
+          37,
+          22
+        ]
+      },
+      "J13_unique_06_1x4_白峰打ち.png": {
+        "source_uuid": "6654627e-a930-4075-a3d4-c725f7cff65b.png",
+        "timestamp": [
+          2026,
+          8,
+          8,
+          0,
+          37,
+          24
+        ]
+      },
+      "J14_unique_07_1x4_雪煙崩し.png": {
+        "source_uuid": "95cb3eda-df3d-48ab-a740-0f4208c94608.png",
+        "timestamp": [
+          2026,
+          8,
+          8,
+          0,
+          37,
+          30
+        ]
+      },
+      "J15_downset_2x2.png": {
+        "source_uuid": "90c7d07b-b5ab-4a18-b1f8-121bf1894ade.png",
+        "timestamp": [
+          2026,
+          8,
+          8,
+          0,
+          37,
+          32
+        ]
+      }
+    },
+    "legacy_common24": [
+      "01_hakuma_S1_basic_idle_guard_flinch_victory.png",
+      "02_hakuma_S2_telegraphs_and_mid_attack.png",
+      "03_hakuma_S3_attacks_mikiri_roar_charge.png",
+      "04_hakuma_S4_roar_and_grab.png",
+      "05_hakuma_S5_down_getup_ko_ult_charge.png",
+      "06_hakuma_S6_crouch_sway_lunge_crouch_attack.png"
+    ]
+  },
+  "chilka": {
+    "master": "00_master.png",
+    "current_jobs": {
+      "J01_common_basic_2x2.png": {
+        "source_uuid": "a903ada4-a78f-4316-97eb-b020fa30ea16.png",
+        "timestamp": [
+          2026,
+          8,
+          8,
+          0,
+          39,
+          6
+        ]
+      },
+      "J02_high_1x4.png": {
+        "source_uuid": "75bb0e08-affc-4e12-bb91-e11af0e0448c.png",
+        "timestamp": [
+          2026,
+          8,
+          8,
+          0,
+          39,
+          8
+        ]
+      },
+      "J03_mid_1x4.png": {
+        "source_uuid": "821780e7-a6b9-47c9-8ece-da546d1dbf41.png",
+        "timestamp": [
+          2026,
+          8,
+          8,
+          0,
+          39,
+          12
+        ]
+      },
+      "J04_low_1x4.png": {
+        "source_uuid": "5b31d68f-849e-4975-83a8-bf824ae3612e.png",
+        "timestamp": [
+          2026,
+          8,
+          8,
+          0,
+          39,
+          14
+        ]
+      },
+      "J05_mikiri_1x4.png": {
+        "source_uuid": "25ff0c25-1f13-4664-8977-fa11a4d2c84e.png",
+        "timestamp": [
+          2026,
+          8,
+          8,
+          0,
+          39,
+          20
+        ]
+      },
+      "J06_roar_1x4.png": {
+        "source_uuid": "16380322-dbfa-43a2-95de-b0831b6759c7.png",
+        "timestamp": [
+          2026,
+          8,
+          8,
+          0,
+          39,
+          24
+        ]
+      },
+      "J07_grab_1x4.png": {
+        "source_uuid": "8cce222e-3bc9-4131-b4de-368a5020c888.png",
+        "timestamp": [
+          2026,
+          8,
+          8,
+          0,
+          39,
+          26
+        ]
+      },
+      "J08_unique_01_1x4_だまし突き.png": {
+        "source_uuid": "46bfcb34-d1d5-4a8a-94bb-352b9fb723c6.png",
+        "timestamp": [
+          2026,
+          8,
+          8,
+          0,
+          39,
+          30
+        ]
+      },
+      "J09_unique_02_1x4_空鳴り爪.png": {
+        "source_uuid": "1a3dd775-2332-4b8c-8201-7138b9221d8c.png",
+        "timestamp": [
+          2026,
+          8,
+          8,
+          0,
+          39,
+          36
+        ]
+      },
+      "J10_unique_03_1x4_すかし抱き.png": {
+        "source_uuid": "d6ff874f-177a-43f8-af32-ff57564fa7ea.png",
+        "timestamp": [
+          2026,
+          8,
+          8,
+          0,
+          39,
+          46
+        ]
+      },
+      "J11_unique_04_1x4_影踏み.png": {
+        "source_uuid": "0203cb37-70dc-4e09-a610-edc362a8e24e.png",
+        "timestamp": [
+          2026,
+          8,
+          8,
+          0,
+          40,
+          40
+        ]
+      },
+      "J12_unique_05_1x4_つんのめり.png": {
+        "source_uuid": "d67b7212-5f87-4fb2-9158-20f51a1972e9.png",
+        "timestamp": [
+          2026,
+          8,
+          8,
+          0,
+          40,
+          42
+        ]
+      },
+      "J13_unique_06_1x4_戻り蹴り.png": {
+        "source_uuid": "638ca68f-ef31-43a7-b888-8e29dccbbbc0.png",
+        "timestamp": [
+          2026,
+          8,
+          8,
+          0,
+          40,
+          46
+        ]
+      },
+      "J14_unique_07_1x4_あと出し頭突き.png": {
+        "source_uuid": "d630c35b-dbc5-4aac-a5d8-4bd9fd7f2694.png",
+        "timestamp": [
+          2026,
+          8,
+          8,
+          0,
+          40,
+          48
+        ]
+      },
+      "J15_downset_2x2.png": {
+        "source_uuid": "4b9bcdd7-f74f-4fd7-b59a-13e96ec18e7e.png",
+        "timestamp": [
+          2026,
+          8,
+          8,
+          0,
+          40,
+          52
+        ]
+      }
+    },
+    "legacy_common24": [
+      "01_chilka_S1_basic_idle_guard_flinch_victory.png",
+      "02_chilka_S2_telegraphs_and_mid_attack.png",
+      "03_chilka_S3_attacks_mikiri_roar_charge.png",
+      "04_chilka_S4_roar_and_grab.png",
+      "05_chilka_S5_down_getup_ko_ult_charge.png",
+      "06_chilka_S6_crouch_sway_lunge_crouch_attack.png"
+    ]
+  },
+  "takimaru": {
+    "master": "00_master.png",
+    "current_jobs": {
+      "J01_common_basic_2x2.png": {
+        "source_uuid": "614208b6-12c5-4c24-a98a-7bb66cd1e187.png",
+        "timestamp": [
+          2026,
+          8,
+          8,
+          0,
+          42,
+          28
+        ]
+      },
+      "J02_high_1x4.png": {
+        "source_uuid": "67def557-fcb0-427e-baea-48deba4b93fa.png",
+        "timestamp": [
+          2026,
+          8,
+          8,
+          0,
+          42,
+          32
+        ]
+      },
+      "J03_mid_1x4.png": {
+        "source_uuid": "145936ce-19d0-4e04-810f-227d68dbb009.png",
+        "timestamp": [
+          2026,
+          8,
+          8,
+          0,
+          42,
+          38
+        ]
+      },
+      "J04_low_1x4.png": {
+        "source_uuid": "de41e542-ed0e-452b-ac8d-32594fc05ee1.png",
+        "timestamp": [
+          2026,
+          8,
+          8,
+          0,
+          42,
+          38
+        ]
+      },
+      "J05_mikiri_1x4.png": {
+        "source_uuid": "e57a9e72-afbe-4968-93b3-952023e8d784.png",
+        "timestamp": [
+          2026,
+          8,
+          8,
+          0,
+          42,
+          42
+        ]
+      },
+      "J06_roar_1x4.png": {
+        "source_uuid": "4b65406c-5533-4397-9f8b-3b4a7f19d16a.png",
+        "timestamp": [
+          2026,
+          8,
+          8,
+          0,
+          42,
+          46
+        ]
+      },
+      "J07_grab_1x4.png": {
+        "source_uuid": "4125dc1a-b814-4aa1-838d-e3696feeb917.png",
+        "timestamp": [
+          2026,
+          8,
+          8,
+          0,
+          42,
+          52
+        ]
+      },
+      "J08_unique_01_1x4_丸抱え.png": {
+        "source_uuid": "6eba9c17-f2cb-4cf2-82c2-f4add52768ba.png",
+        "timestamp": [
+          2026,
+          8,
+          8,
+          0,
+          42,
+          54
+        ]
+      },
+      "J09_unique_02_1x4_巻き投げ.png": {
+        "source_uuid": "e6ab7343-1778-41ac-b22a-8d9754af9a9c.png",
+        "timestamp": [
+          2026,
+          8,
+          8,
+          0,
+          42,
+          58
+        ]
+      },
+      "J10_unique_03_1x4_ぶちかまし.png": {
+        "source_uuid": "da9706af-ee98-4bab-850c-da861e1cee38.png",
+        "timestamp": [
+          2026,
+          8,
+          8,
+          0,
+          43,
+          0
+        ]
+      },
+      "J11_unique_04_1x4_足さらい.png": {
+        "source_uuid": "973e1e90-0ee0-40ef-a9e3-71b097b34fd2.png",
+        "timestamp": [
+          2026,
+          8,
+          8,
+          0,
+          43,
+          2
+        ]
+      },
+      "J12_unique_05_1x4_熊手払い.png": {
+        "source_uuid": "b9391218-ec50-4dd3-8210-34e26afe87b4.png",
+        "timestamp": [
+          2026,
+          8,
+          8,
+          0,
+          43,
+          6
+        ]
+      },
+      "J13_unique_06_1x4_肩車崩し.png": {
+        "source_uuid": "620cd2ad-6932-40b5-8565-56dc743e97c5.png",
+        "timestamp": [
+          2026,
+          8,
+          8,
+          0,
+          43,
+          12
+        ]
+      },
+      "J14_unique_07_1x4_大回転落とし.png": {
+        "source_uuid": "c102b56f-1897-4f80-b052-c73824d99913.png",
+        "timestamp": [
+          2026,
+          8,
+          8,
+          0,
+          43,
+          18
+        ]
+      },
+      "J15_downset_2x2.png": {
+        "source_uuid": "60eab52b-cff4-4144-b7de-1dbc20e2afd0.png",
+        "timestamp": [
+          2026,
+          8,
+          8,
+          0,
+          43,
+          20
+        ]
+      }
+    },
+    "legacy_common24": [
+      "01_takimaru_S1_basic_idle_guard_flinch_victory.png",
+      "02_takimaru_S2_telegraphs_and_mid_attack.png",
+      "03_takimaru_S3_attacks_mikiri_roar_charge.png",
+      "04_takimaru_S4_roar_and_grab.png",
+      "05_takimaru_S5_down_getup_ko_ult_charge.png",
+      "06_takimaru_S6_crouch_sway_lunge_crouch_attack.png"
+    ]
+  },
+  "yomikage": {
+    "master": "00_master.png",
+    "current_jobs": {
+      "J01_common_basic_2x2.png": {
+        "source_uuid": "0d12716b-55d4-4395-839b-ad3eb36d256e.png",
+        "timestamp": [
+          2026,
+          8,
+          8,
+          0,
+          44,
+          44
+        ]
+      },
+      "J02_high_1x4.png": {
+        "source_uuid": "31fc3cb2-7f67-4fc4-9de4-e0492f3c7df1.png",
+        "timestamp": [
+          2026,
+          8,
+          8,
+          0,
+          44,
+          48
+        ]
+      },
+      "J03_mid_1x4.png": {
+        "source_uuid": "00cf4e1e-ab74-4d3f-8186-0a57d263f434.png",
+        "timestamp": [
+          2026,
+          8,
+          8,
+          0,
+          44,
+          52
+        ]
+      },
+      "J04_low_1x4.png": {
+        "source_uuid": "6281252d-e92a-43ec-9127-d4e286fa5f20.png",
+        "timestamp": [
+          2026,
+          8,
+          8,
+          0,
+          44,
+          54
+        ]
+      },
+      "J05_mikiri_1x4.png": {
+        "source_uuid": "65090661-e6f1-4c0a-a623-aa1e3c3a32e9.png",
+        "timestamp": [
+          2026,
+          8,
+          8,
+          0,
+          44,
+          58
+        ]
+      },
+      "J06_roar_1x4.png": {
+        "source_uuid": "e432b543-3e54-44e5-b63c-8fbc942fa5b8.png",
+        "timestamp": [
+          2026,
+          8,
+          8,
+          0,
+          45,
+          0
+        ]
+      },
+      "J07_grab_1x4.png": {
+        "source_uuid": "22edc207-5160-44a3-99cd-5dcdd30e48d4.png",
+        "timestamp": [
+          2026,
+          8,
+          8,
+          0,
+          45,
+          8
+        ]
+      },
+      "J08_unique_01_1x4_影縫い.png": {
+        "source_uuid": "67f53b7f-1f40-4130-8b4f-5a380642b528.png",
+        "timestamp": [
+          2026,
+          8,
+          8,
+          0,
+          45,
+          36
+        ]
+      },
+      "J09_unique_02_1x4_霞落とし.png": {
+        "source_uuid": "44d7d0e5-0d68-4d1e-943e-4249aa19419b.png",
+        "timestamp": [
+          2026,
+          8,
+          8,
+          0,
+          45,
+          48
+        ]
+      },
+      "J10_unique_03_1x4_月かすめ.png": {
+        "source_uuid": "bef2c776-b4b8-4821-b029-0b3769937883.png",
+        "timestamp": [
+          2026,
+          8,
+          8,
+          0,
+          45,
+          52
+        ]
+      },
+      "J11_unique_04_1x4_腕返し.png": {
+        "source_uuid": "070154a3-9b00-4d7f-a6dc-1ab2c84ae071.png",
+        "timestamp": [
+          2026,
+          8,
+          8,
+          0,
+          45,
+          54
+        ]
+      },
+      "J12_unique_05_1x4_後の先・天.png": {
+        "source_uuid": "a81337ee-8df7-453c-8a7e-8f3aca4c610e.png",
+        "timestamp": [
+          2026,
+          8,
+          8,
+          0,
+          46,
+          0
+        ]
+      },
+      "J13_unique_06_1x4_後の先・地.png": {
+        "source_uuid": "e95c2228-76e2-4462-9f64-1ad8fd63ee69.png",
+        "timestamp": [
+          2026,
+          8,
+          8,
+          0,
+          46,
+          2
+        ]
+      },
+      "J14_unique_07_1x4_後の先・芯.png": {
+        "source_uuid": "f027fb3a-e9ab-42b6-8c4f-9d67075086d3.png",
+        "timestamp": [
+          2026,
+          8,
+          8,
+          0,
+          46,
+          6
+        ]
+      },
+      "J15_downset_2x2.png": {
+        "source_uuid": "cf29a15a-f7ef-4ec2-ae6f-ef9028919ce0.png",
+        "timestamp": [
+          2026,
+          8,
+          8,
+          0,
+          46,
+          10
+        ]
+      }
+    },
+    "legacy_common24": [
+      "01_yomikage_S1_basic_idle_guard_flinch_victory.png",
+      "02_yomikage_S2_telegraphs_and_mid_attack.png",
+      "03_yomikage_S3_attacks_mikiri_roar_charge.png",
+      "04_yomikage_S4_roar_and_grab.png",
+      "05_yomikage_S5_down_getup_ko_ult_charge.png",
+      "06_yomikage_S6_crouch_sway_lunge_crouch_attack.png"
+    ]
+  },
+  "bullet": {
+    "master": "00_master.png",
+    "current_jobs": {
+      "J01_common_basic_2x2.png": {
+        "source_uuid": "e4044fd0-bf6d-42ca-9591-3814a4543a9e.png",
+        "timestamp": [
+          2026,
+          8,
+          8,
+          0,
+          46,
+          38
+        ]
+      },
+      "J02_high_1x4.png": {
+        "source_uuid": "e53836ff-dc2a-479e-8bb3-04f9afae8b6c.png",
+        "timestamp": [
+          2026,
+          8,
+          8,
+          0,
+          54,
+          40
+        ]
+      },
+      "J03_mid_1x4.png": {
+        "source_uuid": "a620ffc3-752b-475a-b267-4aa2105ca095.png",
+        "timestamp": [
+          2026,
+          8,
+          8,
+          0,
+          54,
+          44
+        ]
+      },
+      "J04_low_1x4.png": {
+        "source_uuid": "814ea909-95e5-456b-84d1-a2f4ee534aaf.png",
+        "timestamp": [
+          2026,
+          8,
+          8,
+          0,
+          54,
+          48
+        ]
+      },
+      "J05_mikiri_1x4.png": {
+        "source_uuid": "d59a9ea5-e38c-41ff-8822-6a75434a32d1.png",
+        "timestamp": [
+          2026,
+          8,
+          8,
+          0,
+          54,
+          52
+        ]
+      },
+      "J06_roar_1x4.png": {
+        "source_uuid": "30cae0fe-f0cf-4248-b62f-27beb4c31943.png",
+        "timestamp": [
+          2026,
+          8,
+          8,
+          0,
+          54,
+          54
+        ]
+      },
+      "J07_grab_1x4.png": {
+        "source_uuid": "e79bc444-7b98-4c56-8da7-65ee0fb7f5b8.png",
+        "timestamp": [
+          2026,
+          8,
+          8,
+          0,
+          54,
+          58
+        ]
+      },
+      "J08_unique_01_1x4_弾み突き.png": {
+        "source_uuid": "54949d2f-9c54-4716-9764-036e6fc3aa54.png",
+        "timestamp": [
+          2026,
+          8,
+          8,
+          0,
+          55,
+          2
+        ]
+      },
+      "J09_unique_02_1x4_尾払い.png": {
+        "source_uuid": "d6898c24-ef33-4e82-b873-826003a0a6aa.png",
+        "timestamp": [
+          2026,
+          8,
+          8,
+          0,
+          55,
+          4
+        ]
+      },
+      "J10_unique_03_1x4_跳ね上げ.png": {
+        "source_uuid": "002ec5c1-ced3-49c1-b74e-0b3c25da99fa.png",
+        "timestamp": [
+          2026,
+          8,
+          8,
+          0,
+          55,
+          8
+        ]
+      },
+      "J11_unique_04_1x4_蓄圧タックル.png": {
+        "source_uuid": "5b916cf7-7efe-4c36-a57e-83dff8dee773.png",
+        "timestamp": [
+          2026,
+          8,
+          8,
+          0,
+          55,
+          12
+        ]
+      },
+      "J12_unique_05_1x4_抱え弾き.png": {
+        "source_uuid": "2fe6e635-172c-45ea-83b0-f133647dd293.png",
+        "timestamp": [
+          2026,
+          8,
+          8,
+          0,
+          55,
+          16
+        ]
+      },
+      "J13_unique_06_1x4_圧抜き掌.png": {
+        "source_uuid": "e616e367-9457-42b1-9349-7c8ceb4728d6.png",
+        "timestamp": [
+          2026,
+          8,
+          8,
+          0,
+          55,
+          24
+        ]
+      },
+      "J14_unique_07_1x4_弾丸頭突き.png": {
+        "source_uuid": "ae57f8fd-d990-4ba9-a6ec-c6c58c6f1626.png",
+        "timestamp": [
+          2026,
+          8,
+          8,
+          0,
+          55,
+          26
+        ]
+      },
+      "J15_downset_2x2.png": {
+        "source_uuid": "43a7571f-4417-4ba9-b17f-ef1a9408e6b1.png",
+        "timestamp": [
+          2026,
+          8,
+          8,
+          0,
+          55,
+          30
+        ]
+      }
+    },
+    "legacy_common24": [
+      "01_bullet_S1_basic_idle_guard_flinch_victory.png",
+      "02_bullet_S2_telegraphs_and_mid_attack.png",
+      "03_bullet_S3_attacks_mikiri_roar_charge.png",
+      "04_bullet_S4_roar_and_grab.png",
+      "05_bullet_S5_down_getup_ko_ult_charge.png",
+      "06_bullet_S6_crouch_sway_lunge_crouch_attack.png"
+    ]
+  },
+  "dark_moguzo": {
+    "master": "00_master.png",
+    "current_jobs": {},
+    "legacy_common24": []
+  }
+}

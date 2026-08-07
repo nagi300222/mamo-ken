@@ -1,0 +1,1748 @@
+[
+  {
+    "path": "assets/art/archive/bullet/ARCHIVE_ALT_unique_06_previous.png",
+    "bytes": 1182152,
+    "sha256": "917cd0f1f497fe997aea5025f561e5f46476807b54ed8d596fed8ddcd7a8a5eb",
+    "width": 1774,
+    "height": 887,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/current/bullet/00_master.png",
+    "bytes": 1297661,
+    "sha256": "a38fda08ecd725cf904436c94947cc60b5a98a1ce7b7a754deeb90d3192f0acf",
+    "width": 1448,
+    "height": 1086,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/current/bullet/J01_common_basic_2x2.png",
+    "bytes": 1613332,
+    "sha256": "b6b175dca64afa4c747352a2195166e01215f89ec86bb8abc833def840b1c1ec",
+    "width": 1254,
+    "height": 1254,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/current/bullet/J02_high_1x4.png",
+    "bytes": 1307095,
+    "sha256": "a74ca77c20f9f14d9379657405bc4b8d98e351264b6cc40d2f9b6f27f667e008",
+    "width": 1983,
+    "height": 793,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/current/bullet/J03_mid_1x4.png",
+    "bytes": 1306676,
+    "sha256": "8c8bbbfa899d3e62ea7b4a227f7429e640093fcdc409754a4b1202a1ac778c0d",
+    "width": 1774,
+    "height": 887,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/current/bullet/J04_low_1x4.png",
+    "bytes": 1017904,
+    "sha256": "d8bdb5c103ac3e4d8538c3e39c37f5b184eeded51a286db3fa1f3a483aeb0c44",
+    "width": 1774,
+    "height": 887,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/current/bullet/J05_mikiri_1x4.png",
+    "bytes": 1122828,
+    "sha256": "cc9f397be460fc0e255f4f02471376252feb06854118dc9f03e520fe3ae31196",
+    "width": 1774,
+    "height": 887,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/current/bullet/J06_roar_1x4.png",
+    "bytes": 1345220,
+    "sha256": "4bb7f62fdb0c52422526cc592886c60e5cf5565c78e0778702334b767b77ad2d",
+    "width": 1928,
+    "height": 816,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/current/bullet/J07_grab_1x4.png",
+    "bytes": 1176765,
+    "sha256": "66605de9a98adc0c81229511f66536d4293f929be3ecd956dcf6666332b4493a",
+    "width": 1774,
+    "height": 887,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/current/bullet/J08_unique_01_1x4_弾み突き.png",
+    "bytes": 1174172,
+    "sha256": "a8935d6d6f2ddaa3fd40c258ecd45ed6a5ea9674314adb938d9fbbc86a611de6",
+    "width": 1774,
+    "height": 887,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/current/bullet/J09_unique_02_1x4_尾払い.png",
+    "bytes": 1141376,
+    "sha256": "cfec4ea498f36c2dc9e506eb2b48ee20b30ce2bb952191664c03d3edc0799c80",
+    "width": 1774,
+    "height": 887,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/current/bullet/J10_unique_03_1x4_跳ね上げ.png",
+    "bytes": 1215687,
+    "sha256": "847849c8aeb0306c400c21b2ff2fa44390f29893cc249e2c6a3dff58d72bbd69",
+    "width": 1672,
+    "height": 941,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/current/bullet/J11_unique_04_1x4_蓄圧タックル.png",
+    "bytes": 1107458,
+    "sha256": "375b898ec1a8c18581fe29bf4f97e07be17e8931db8f582fda3dbf78b6d1b10c",
+    "width": 1774,
+    "height": 887,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/current/bullet/J12_unique_05_1x4_抱え弾き.png",
+    "bytes": 1230649,
+    "sha256": "35f347f618b3620e3747cfdde337b0a75361a2209f3c74734250fce3737e2896",
+    "width": 1774,
+    "height": 887,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/current/bullet/J13_unique_06_1x4_圧抜き掌.png",
+    "bytes": 1146635,
+    "sha256": "80af1071439e8e420b97d823e9127464f113975227aeabc08d689fc60b4abacb",
+    "width": 1672,
+    "height": 941,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/current/bullet/J14_unique_07_1x4_弾丸頭突き.png",
+    "bytes": 1059086,
+    "sha256": "e9652bd476eb57eea2e4cb4b21674ac8b1191681810d70bb6fbba32ef8a3854c",
+    "width": 1774,
+    "height": 887,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/current/bullet/J15_downset_2x2.png",
+    "bytes": 1222118,
+    "sha256": "ad496b101d8b9b6edc11cfed6b9b229f21e19954769a0a01125c924b6c4293bb",
+    "width": 1448,
+    "height": 1086,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/current/chilka/00_master.png",
+    "bytes": 1289109,
+    "sha256": "8c954f4b5adcfa00093ee09c15cc821f643221a4f5c5e3eed665813062b48a56",
+    "width": 1086,
+    "height": 1448,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/current/chilka/J01_common_basic_2x2.png",
+    "bytes": 1573845,
+    "sha256": "c3dff01fa969475f4b730fb44b40056cac3452067e1ca7b9014088fc692c5360",
+    "width": 1254,
+    "height": 1254,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/current/chilka/J02_high_1x4.png",
+    "bytes": 1407155,
+    "sha256": "de9ef7fb7d434c3c09a8576d6e337ebf3f91147ba396dda39e7d2f267506cf76",
+    "width": 1774,
+    "height": 887,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/current/chilka/J03_mid_1x4.png",
+    "bytes": 1309997,
+    "sha256": "bfdf452198597e50db175cd806a0333aecfa3b34408765ef4a36e246842b6ba6",
+    "width": 1774,
+    "height": 887,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/current/chilka/J04_low_1x4.png",
+    "bytes": 1070588,
+    "sha256": "3f1753753ab5f8d6d19062a41157ea461a5135992402bceeb479fce879b515f3",
+    "width": 1774,
+    "height": 887,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/current/chilka/J05_mikiri_1x4.png",
+    "bytes": 1214019,
+    "sha256": "b1e7fcfa65c3381746c602573316dd8bae227483092a58e9ab0096fc9691b969",
+    "width": 1774,
+    "height": 887,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/current/chilka/J06_roar_1x4.png",
+    "bytes": 1400061,
+    "sha256": "ae83f4fdbfe51a9ea8f86d1e5ff7c4efc8088aa1996f499d73b32549c5bda1b2",
+    "width": 1870,
+    "height": 841,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/current/chilka/J07_grab_1x4.png",
+    "bytes": 1229256,
+    "sha256": "0da341a696c4cdcfed7fc75a3a0b065e8c59f17742d684b6deb48e8c4fa39015",
+    "width": 1774,
+    "height": 887,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/current/chilka/J08_unique_01_1x4_だまし突き.png",
+    "bytes": 1275294,
+    "sha256": "f86159dd9ec1d1a497f2da24e6e5b7eee523c7adeb774619b5c1914403d90eb2",
+    "width": 1774,
+    "height": 887,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/current/chilka/J09_unique_02_1x4_空鳴り爪.png",
+    "bytes": 1229772,
+    "sha256": "591e7130006d7370783d9f8e279ab26f12b10d03eefec6ee4b0c780c26fb7273",
+    "width": 1672,
+    "height": 941,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/current/chilka/J10_unique_03_1x4_すかし抱き.png",
+    "bytes": 1277811,
+    "sha256": "d0e82fffbf70211019625db883792e00f68a0fe21c1d9cc3654acc5e76d43886",
+    "width": 1672,
+    "height": 941,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/current/chilka/J11_unique_04_1x4_影踏み.png",
+    "bytes": 1240605,
+    "sha256": "dd60167818253a59e46ddb514f314b9d441f543d0cf91d0e83ccff63f8e0bbcd",
+    "width": 1672,
+    "height": 941,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/current/chilka/J12_unique_05_1x4_つんのめり.png",
+    "bytes": 1141588,
+    "sha256": "73974943efd0209572292451b6be1c2780d74c23cd06e4dff94c6effa0497f16",
+    "width": 1672,
+    "height": 941,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/current/chilka/J13_unique_06_1x4_戻り蹴り.png",
+    "bytes": 1258869,
+    "sha256": "8bf21277e7e63e7b959b1abbbdfdc55ed350bf6e34dcf127016f4d7f185b8594",
+    "width": 1672,
+    "height": 941,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/current/chilka/J14_unique_07_1x4_あと出し頭突き.png",
+    "bytes": 1139236,
+    "sha256": "095c5e4565e37b612cbd1e3dcb1c9595412cf56647ff53f1458056df4268567b",
+    "width": 1672,
+    "height": 941,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/current/chilka/J15_downset_2x2.png",
+    "bytes": 1311690,
+    "sha256": "b9f4b39deacd78905a788b0b7a89d6c08442e06e9407645acad181552b03c1aa",
+    "width": 1254,
+    "height": 1254,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/current/dark_moguzo/00_master.png",
+    "bytes": 1425676,
+    "sha256": "ebdb8d760c0c632bf90bfa04823c8d07cca4a7e3228f0b663553e587334083d6",
+    "width": 1122,
+    "height": 1402,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/current/dark_moguzo/J08_unique_01_1x4_黒走り.png",
+    "bytes": 1337949,
+    "sha256": "b046bbb5aef42f57fc39d325711267ec9d24cfeff77eb1a0a6d8ac15d2b20c1a",
+    "width": 1942,
+    "height": 809,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/current/dark_moguzo/J09_unique_02_1x4_逆昇撃.png",
+    "bytes": 1240764,
+    "sha256": "effff3efc7901f96b1f428868691412b594b5d2cf3fc6e09721f254cf7826887",
+    "width": 1774,
+    "height": 887,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/current/dark_moguzo/J10_unique_03_1x4_闇引き.png",
+    "bytes": 1170166,
+    "sha256": "0420b56a305e1768c16cafd669d3b832121e46d72e27873a3ea3761a141ea153",
+    "width": 1774,
+    "height": 887,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/current/dark_moguzo/J11_unique_04_1x4_黒砂払い.png",
+    "bytes": 1125420,
+    "sha256": "0e066d9836d67b82798e6354474e34be47e9663d9c82ef6b4a57b8233b7b8978",
+    "width": 1774,
+    "height": 887,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/current/dark_moguzo/J12_unique_05_1x4_裏山越え.png",
+    "bytes": 1222151,
+    "sha256": "ebc4bfb507758f64dc511f3d8a97f80802cf92bbef20353ec339a7c598552151",
+    "width": 1774,
+    "height": 887,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/current/dark_moguzo/J13_unique_06_1x4_闇押し.png",
+    "bytes": 1190576,
+    "sha256": "b71e18df8ca3b0595fae738dc66c7ca824b584d0e65da38a592abb637b5bf0e7",
+    "width": 1774,
+    "height": 887,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/current/dark_moguzo/J14_unique_07_1x4_黒煙突き.png",
+    "bytes": 1154603,
+    "sha256": "5b78c826b837346c1e891bbbf4f2da0a2ff49e93bb2a686a92ca8c003c70559c",
+    "width": 1774,
+    "height": 887,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/current/godan/00_master.png",
+    "bytes": 1538636,
+    "sha256": "d6f60d31fe7fe956eb2d1de7a5041df7a166a670484a7c627d3a77f861466358",
+    "width": 1086,
+    "height": 1448,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/current/godan/J01_common_basic_2x2.png",
+    "bytes": 1454462,
+    "sha256": "5373ce1603dc843c60af7271c531b7c44abed9311f9be1bdb897e385eb0d9f6d",
+    "width": 1254,
+    "height": 1254,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/current/godan/J02_high_1x4.png",
+    "bytes": 1320109,
+    "sha256": "92027f951ddc562f6c904d367c5d6ab187ed0593d0d14efb3ba074e4ae6aca21",
+    "width": 1774,
+    "height": 887,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/current/godan/J03_mid_1x4.png",
+    "bytes": 1327136,
+    "sha256": "0b224035d0aca458f3cba9714046620c069301dc69a56eddc2372bffcc98fa38",
+    "width": 1672,
+    "height": 941,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/current/godan/J04_low_1x4.png",
+    "bytes": 1343063,
+    "sha256": "9bb4f660b6fafe4e575a2f50f52c8bdd3152a3163dc1a5f9cd919d65a9c5a8ed",
+    "width": 1536,
+    "height": 1024,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/current/godan/J05_mikiri_1x4.png",
+    "bytes": 1540847,
+    "sha256": "e5dd717b3027865f935a6acde348f14cbc8ddc71f3e7935510db510d2b07a94d",
+    "width": 1536,
+    "height": 1024,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/current/godan/J06_roar_1x4.png",
+    "bytes": 1409619,
+    "sha256": "07a26352a18376350618edc1fb3f5bdfd2115d91a3f54310defa5a8129ecc0cf",
+    "width": 1774,
+    "height": 887,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/current/godan/J07_grab_1x4.png",
+    "bytes": 1294431,
+    "sha256": "c3745b4735bfb9ec7c57c2a155c3d9ba4c71e85ad89a3304a440ccdad7bb4431",
+    "width": 1672,
+    "height": 941,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/current/godan/J08_unique_01_1x4_地割れ.png",
+    "bytes": 1396369,
+    "sha256": "3bd8c85a9c3024e9e8d316dc1767e6f522e8eff9795ab8f56a3a34db199527bc",
+    "width": 1774,
+    "height": 887,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/current/godan/J09_unique_02_1x4_山掴み.png",
+    "bytes": 1369184,
+    "sha256": "81746b98b8b5bb09092abedca7edb8b0efd72644d65fc6c75213e0e10c590eaa",
+    "width": 1672,
+    "height": 941,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/current/godan/J10_unique_03_1x4_巌の構え.png",
+    "bytes": 1537278,
+    "sha256": "7df3adeaa3079279e84abe45f45c50661ed5349315376aa083f37f3a0a0ee974",
+    "width": 1536,
+    "height": 1024,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/current/godan/J11_unique_04_1x4_岩砕き.png",
+    "bytes": 1440945,
+    "sha256": "d62ce341eafaa65413c82d4d6185c1596ecc9b2b9a49a54a8624726dabbfd201",
+    "width": 1774,
+    "height": 887,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/current/godan/J12_unique_05_1x4_天蓋落とし.png",
+    "bytes": 1500122,
+    "sha256": "21703926f5622590e65ce6ecb016e2b92fb4ee02c81defef78ffd43d8873b6d7",
+    "width": 1730,
+    "height": 909,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/current/godan/J13_unique_06_1x4_根こそぎ.png",
+    "bytes": 1400597,
+    "sha256": "e392a86c7d9efa74ba4cea7159567fa3db505477b66d5596c9e9345ce29803f5",
+    "width": 1774,
+    "height": 887,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/current/godan/J14_unique_07_1x4_大山押し.png",
+    "bytes": 1345710,
+    "sha256": "f7271a14a69d0583d23046194cff0fe83e457e5320d7f34e008b028912c9e1ce",
+    "width": 1672,
+    "height": 941,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/current/godan/J15_downset_2x2.png",
+    "bytes": 1435770,
+    "sha256": "0e58b96ae40f8fe57406ec23cf13b78e89c2e6485c38f99d2425f209186d8cc3",
+    "width": 1254,
+    "height": 1254,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/current/hakuma/00_master.png",
+    "bytes": 1354284,
+    "sha256": "c24669a73daddcc282512e31c16304666ffc845bc99a422ac508ba86e8f22ad4",
+    "width": 1086,
+    "height": 1448,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/current/hakuma/J01_common_basic_2x2.png",
+    "bytes": 1533299,
+    "sha256": "4d235484f53b10a62b43da8687791a86ef92c49619b40c08e51195636233d6f9",
+    "width": 1254,
+    "height": 1254,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/current/hakuma/J02_high_1x4.png",
+    "bytes": 1340610,
+    "sha256": "210902fb454a9ee5ab87b6adb0f10aa77824a765c183082f7a9a4c10101108e1",
+    "width": 1672,
+    "height": 941,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/current/hakuma/J03_mid_1x4.png",
+    "bytes": 1359856,
+    "sha256": "1b56882609bbc1201f086444273222acb5fedd8c99a998eb0afeb8627e74728e",
+    "width": 1850,
+    "height": 850,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/current/hakuma/J04_low_1x4.png",
+    "bytes": 1160308,
+    "sha256": "06cdb209209573bbce094cee4965efc3ec6414216ceadbf51fd0003c60d5f758",
+    "width": 1883,
+    "height": 835,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/current/hakuma/J05_mikiri_1x4.png",
+    "bytes": 1317182,
+    "sha256": "ff25a705fb61c72fe1978a5a0d4b7e339abc7dfdfed6be026ca696b19e814ebd",
+    "width": 1789,
+    "height": 879,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/current/hakuma/J06_roar_1x4.png",
+    "bytes": 1418662,
+    "sha256": "0d0c708923a51d937043dbc3d291c797ff70fbf8f273285217e9fab6b00ddb8a",
+    "width": 1774,
+    "height": 887,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/current/hakuma/J07_grab_1x4.png",
+    "bytes": 1342261,
+    "sha256": "b875f48387556d879760becb5a3cc4d11e4148ed21e4d4fcdd04a8a571407ff0",
+    "width": 1672,
+    "height": 941,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/current/hakuma/J08_unique_01_1x4_雪壁掌.png",
+    "bytes": 1371871,
+    "sha256": "0ac2c80c4ffa2dcfbc2b5fb12ad89d49d5e3ee21b255b60154788789ae09f5ea",
+    "width": 1774,
+    "height": 887,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/current/hakuma/J09_unique_02_1x4_氷柱返し.png",
+    "bytes": 1372707,
+    "sha256": "c3f581dd84fe29b344f758e5679450c7f329b9a43dc642df42597ce9c937a496",
+    "width": 1672,
+    "height": 941,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/current/hakuma/J10_unique_03_1x4_雪崩抱え.png",
+    "bytes": 1293535,
+    "sha256": "457f72fde6996de3d4200732dc7725450ee4f869e303f0cccc9b04a57c3c1127",
+    "width": 1672,
+    "height": 941,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/current/hakuma/J11_unique_04_1x4_地伏せ.png",
+    "bytes": 1219815,
+    "sha256": "035b66ec40ee5849bbb0ee30a33034d9adbd2ccb041154fcb2f888fec35a9ad8",
+    "width": 1672,
+    "height": 941,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/current/hakuma/J12_unique_05_1x4_不動押し.png",
+    "bytes": 1292801,
+    "sha256": "008941ac0eac01894335ad07ef2fcac04f495919fdd16c1852b30b60bc81d939",
+    "width": 1672,
+    "height": 941,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/current/hakuma/J13_unique_06_1x4_白峰打ち.png",
+    "bytes": 1303141,
+    "sha256": "2856b8d257cf17add5262566c8ac94ac48f9683e864f996722aa17dcea4cd45f",
+    "width": 1672,
+    "height": 941,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/current/hakuma/J14_unique_07_1x4_雪煙崩し.png",
+    "bytes": 1241547,
+    "sha256": "8754e18a82e687652de365153db9acbca09f17821b8ca726f2ae733398fc607a",
+    "width": 1672,
+    "height": 941,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/current/hakuma/J15_downset_2x2.png",
+    "bytes": 1318965,
+    "sha256": "5cc8ecf6531565d341effd93638f4ca6d5350faf6de2be4adff8dca5b6bf49e2",
+    "width": 1254,
+    "height": 1254,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/current/moguzo/00_master.png",
+    "bytes": 1432980,
+    "sha256": "1cb82962ce52372fe0ef2ca53f78aa01e6bf1afb28841dd8492b9b501414e5b4",
+    "width": 1122,
+    "height": 1402,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/current/moguzo/J01_common_basic_2x2.png",
+    "bytes": 1793366,
+    "sha256": "5d719b0a0406a84838f0f402bc59e59afc695cec56a6b5c6ca47222b6e51b55a",
+    "width": 1254,
+    "height": 1254,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/current/moguzo/J02_high_1x4.png",
+    "bytes": 1580359,
+    "sha256": "5f8fc39296d1e51ff35c65ee4797c5698758044afa2ddad753f406b0e429f30e",
+    "width": 1774,
+    "height": 887,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/current/moguzo/J03_mid_1x4.png",
+    "bytes": 1398629,
+    "sha256": "f91143b96de54dd57c221611eec6e093913f9faca4a74273eaf4b73bfbe74a14",
+    "width": 1774,
+    "height": 887,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/current/moguzo/J04_low_1x4.png",
+    "bytes": 1286504,
+    "sha256": "f3eb5f63c314d6b36850adb9d817ae6afb031d07a6eac09cbc7b8bea2f939efa",
+    "width": 1774,
+    "height": 887,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/current/moguzo/J05_mikiri_1x4.png",
+    "bytes": 1420277,
+    "sha256": "2554897411c6e21f112618411faa4b672b511a9e46277b08ed14aa15e0b87d5a",
+    "width": 1774,
+    "height": 887,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/current/moguzo/J06_roar_1x4.png",
+    "bytes": 1504712,
+    "sha256": "1f8a06ade2cde7dab47766c015bf07f038be77828980ee9853178bd446dcc6fb",
+    "width": 1774,
+    "height": 887,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/current/moguzo/J07_grab_1x4.png",
+    "bytes": 1423357,
+    "sha256": "2e24704d2670c13c9b0e3e0b78b1a88bc9215b9a7d6bc14cd470de234d4abea7",
+    "width": 1774,
+    "height": 887,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/current/moguzo/J08_unique_01_1x4_地走り.png",
+    "bytes": 1256824,
+    "sha256": "48f1aa0fbded55473979bb5f3dd0198ae383c323e519def4599c32627419688e",
+    "width": 1672,
+    "height": 941,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/current/moguzo/J09_unique_02_1x4_昇撃.png",
+    "bytes": 1296783,
+    "sha256": "f1d715381d4c0208a567c71016f160faa3169117962438d1883b25a08c46dffa",
+    "width": 1672,
+    "height": 941,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/current/moguzo/J10_unique_03_1x4_引き寄せ投げ.png",
+    "bytes": 1378110,
+    "sha256": "ed4fdd0b58ab136e80047759aea7f20d2b4d9b6071214a56b08e9fb5c0b34f1e",
+    "width": 1774,
+    "height": 887,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/current/moguzo/J11_unique_04_1x4_砂払い.png",
+    "bytes": 1258994,
+    "sha256": "31ab722b6115efdb4bcb48cd1d514f3a90277a737612cdb8f7c7882341845ccc",
+    "width": 1672,
+    "height": 941,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/current/moguzo/J12_unique_05_1x4_山越え拳.png",
+    "bytes": 1286526,
+    "sha256": "06cf6ae2c44cfca7b10fbd891460018e49754d7c2dc0e98afa38e26cc4df48c9",
+    "width": 1659,
+    "height": 948,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/current/moguzo/J13_unique_06_1x4_胴押し.png",
+    "bytes": 1456157,
+    "sha256": "96695605b12d517fff201cbd6661a2d11b4a1d7916805e9f8c479620cb47ffeb",
+    "width": 1920,
+    "height": 819,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/current/moguzo/J14_unique_07_1x4_土煙突き.png",
+    "bytes": 1310624,
+    "sha256": "4f5110ffebe9d12af8cd38ff5dae4bf6105615e12e350078e40ceb52114f1d9e",
+    "width": 1774,
+    "height": 887,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/current/moguzo/J15_downset_2x2.png",
+    "bytes": 1429204,
+    "sha256": "84307f9e968520706b2301f42faf146accca10b1626e68958845019b4bca20c7",
+    "width": 1254,
+    "height": 1254,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/current/piske/00_master.png",
+    "bytes": 1434651,
+    "sha256": "4a169438f1ed9f856577c301aa9383247caf86a124dbdbd51ecb073254e4f081",
+    "width": 1122,
+    "height": 1402,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/current/piske/J01_common_basic_2x2.png",
+    "bytes": 1660872,
+    "sha256": "fb2bf0303324dfecfd8164aa88d768dec06c2a469b9ce164b5d0bf312fbb2c51",
+    "width": 1254,
+    "height": 1254,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/current/piske/J02_high_1x4.png",
+    "bytes": 1520699,
+    "sha256": "486e676992e7131804cc416759480e432a6bd1ee1608d114413b49e214c75344",
+    "width": 1983,
+    "height": 793,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/current/piske/J03_mid_1x4.png",
+    "bytes": 1337789,
+    "sha256": "91d7dbbdfbe99048ae7b368623c63f337e21e2e8a7d5c684fb1004c928d96949",
+    "width": 1983,
+    "height": 793,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/current/piske/J04_low_1x4.png",
+    "bytes": 1263247,
+    "sha256": "6c451bb1e7cf699354c3af0a05dc39547fd7ab3a3cc8be3048b9db55cc161f2b",
+    "width": 1774,
+    "height": 887,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/current/piske/J05_mikiri_1x4.png",
+    "bytes": 1316064,
+    "sha256": "85c8e5a48a3069960cad8400f814a1b8200a23b419eec683a0ef704be3a83fdb",
+    "width": 1774,
+    "height": 887,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/current/piske/J06_roar_1x4.png",
+    "bytes": 1437084,
+    "sha256": "4db3b1d321a5d81d6fe751a8c190346e99f028aa7c6f3a9e3addc4e787f3e028",
+    "width": 1774,
+    "height": 887,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/current/piske/J07_grab_1x4.png",
+    "bytes": 1348708,
+    "sha256": "7b83c69244e316dbd63033f4c4de62b37b7a18531d64f1744527b0fc3b7fb390",
+    "width": 1734,
+    "height": 907,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/current/piske/J08_unique_01_1x4_二連牙.png",
+    "bytes": 1395945,
+    "sha256": "6a33688568606f671f56e06022891f02cfb53760ff7aac7cd54098bb2887c294",
+    "width": 1983,
+    "height": 793,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/current/piske/J09_unique_02_1x4_スライディング.png",
+    "bytes": 1167456,
+    "sha256": "adcc674ee6cd1296de93fd4a126c9719876f1e99a98728431d16a25db26a85fa",
+    "width": 1774,
+    "height": 887,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/current/piske/J10_unique_03_1x4_宙返り蹴.png",
+    "bytes": 1280419,
+    "sha256": "35c4798f3ce6bbbc0fe86ca202ffe6b1868e638c30ad75e0c485d81ed175360e",
+    "width": 1774,
+    "height": 887,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/current/piske/J11_unique_04_1x4_かすみ連打.png",
+    "bytes": 1225634,
+    "sha256": "4e7ccfccc98981adaa32bfa5018def28a29eadb98d850cbb227fc3aa0ff2d248",
+    "width": 1774,
+    "height": 887,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/current/piske/J12_unique_05_1x4_風切り爪.png",
+    "bytes": 1245669,
+    "sha256": "aca22f1fb5873c5c8c001e207d3e14a09508d16ad6bf3e0a95d8f0512467f93d",
+    "width": 1694,
+    "height": 928,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/current/piske/J13_unique_06_1x4_すり抜け足.png",
+    "bytes": 1171348,
+    "sha256": "010ab62299b8f5f1beab67e13c1af636c4ae2b1596b138709dde57406c40ae16",
+    "width": 1774,
+    "height": 887,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/current/piske/J14_unique_07_1x4_つむじ返し.png",
+    "bytes": 1205796,
+    "sha256": "ace944c70601119615d04297d6d3db50928af9b0497ad9765223b95b4058a97a",
+    "width": 1774,
+    "height": 887,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/current/piske/J15_downset_2x2.png",
+    "bytes": 1445427,
+    "sha256": "f645085e063794717dceaee4bfdd20e7db0d3f315700ec1e7a28a23e5dad0c45",
+    "width": 1254,
+    "height": 1254,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/current/takimaru/00_master.png",
+    "bytes": 1578971,
+    "sha256": "264e8479db15d2fac8cc23cecddaa6dde9caa7d93691b3ab5263a903cf1553b6",
+    "width": 1086,
+    "height": 1448,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/current/takimaru/J01_common_basic_2x2.png",
+    "bytes": 1479006,
+    "sha256": "a696688f8862be84c8d51a87ce6f1ee0604b719f2bc8452cadf4138ce8ac3efc",
+    "width": 1254,
+    "height": 1254,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/current/takimaru/J02_high_1x4.png",
+    "bytes": 1422648,
+    "sha256": "f163c2548edee8c19a22e5dbe5084344fb65eeb81b91fe61fcd419a9eec2433d",
+    "width": 1774,
+    "height": 887,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/current/takimaru/J03_mid_1x4.png",
+    "bytes": 1258260,
+    "sha256": "e1797f8a68546f9e9ed30ae0d2c69a1e539ec0b240c0f188b15e44918f9fa090",
+    "width": 1672,
+    "height": 941,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/current/takimaru/J04_low_1x4.png",
+    "bytes": 1202497,
+    "sha256": "e6af1dc87af8ba6e48cded02848167f512c736c5735dbd51946b35f708280cd7",
+    "width": 1672,
+    "height": 941,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/current/takimaru/J05_mikiri_1x4.png",
+    "bytes": 1310232,
+    "sha256": "1b4852b4a3609fc2a7e0769e5e3f3ef852cb7ba20c7b470502f5e5c34f613b1d",
+    "width": 1672,
+    "height": 941,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/current/takimaru/J06_roar_1x4.png",
+    "bytes": 1443337,
+    "sha256": "cb17270264a724721d53d6fd67bd36fd1281cd1a729a7d7a2f373b8aff4f7c93",
+    "width": 1672,
+    "height": 941,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/current/takimaru/J07_grab_1x4.png",
+    "bytes": 1347092,
+    "sha256": "4ee433023afd016bd07be95f4f4d1ad5a7757f3d656928682f2606b1b2b46b1c",
+    "width": 1774,
+    "height": 887,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/current/takimaru/J08_unique_01_1x4_丸抱え.png",
+    "bytes": 1330394,
+    "sha256": "ca66822b140c72e4591d8e8eb694eb831d9ed83d409d8b058d70efeb0bfa4d4d",
+    "width": 1774,
+    "height": 887,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/current/takimaru/J09_unique_02_1x4_巻き投げ.png",
+    "bytes": 1361226,
+    "sha256": "3dfbc94e7d45fc8b39b783fea3e97b0988e0e89dccd30f6c8c13ec30f3701580",
+    "width": 1672,
+    "height": 941,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/current/takimaru/J10_unique_03_1x4_ぶちかまし.png",
+    "bytes": 1452251,
+    "sha256": "4ae0b9372a5634b40944558a57b2b95a3f698aa821a84c4e309e9ae72707443a",
+    "width": 1536,
+    "height": 1024,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/current/takimaru/J11_unique_04_1x4_足さらい.png",
+    "bytes": 1160930,
+    "sha256": "cc0aa594e85561109a7cd0e7365d28d9d6ace2129862b2001a85bafd2bba53a3",
+    "width": 1535,
+    "height": 1024,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/current/takimaru/J12_unique_05_1x4_熊手払い.png",
+    "bytes": 1232997,
+    "sha256": "0700608b8305f46271ba04891562c14742ce56eb8b3ef61dea1169e404853754",
+    "width": 1774,
+    "height": 887,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/current/takimaru/J13_unique_06_1x4_肩車崩し.png",
+    "bytes": 1224511,
+    "sha256": "4c12241686459259a988c40dc3ea6a467db08f05b210a32df16c1fc6fc6638ca",
+    "width": 1672,
+    "height": 941,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/current/takimaru/J14_unique_07_1x4_大回転落とし.png",
+    "bytes": 1253009,
+    "sha256": "9697a1d7eadd21d9144c1bdfc577e957ddc2d294a45ba61ec976e15f308c4b09",
+    "width": 1672,
+    "height": 941,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/current/takimaru/J15_downset_2x2.png",
+    "bytes": 1249339,
+    "sha256": "71b375982fa98c4e63a084e07568565386e56c2d19b32b6420e4e456af6f128c",
+    "width": 1254,
+    "height": 1254,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/current/yomikage/00_master.png",
+    "bytes": 1551109,
+    "sha256": "23359e9892cd7e107e1855d54dd5ed32f840bed4e11c85b213d1c4b940f7940c",
+    "width": 1086,
+    "height": 1448,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/current/yomikage/J01_common_basic_2x2.png",
+    "bytes": 1641662,
+    "sha256": "bd05b214937c0d4f7ece7de8000de730fb8754948347009525bd4b2c6987eae0",
+    "width": 1254,
+    "height": 1254,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/current/yomikage/J02_high_1x4.png",
+    "bytes": 1373303,
+    "sha256": "845c1641af911de4a0d2deda9a043ecd6fce013dfd94fdcf2150241b7b8bbaf8",
+    "width": 2172,
+    "height": 724,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/current/yomikage/J03_mid_1x4.png",
+    "bytes": 1316743,
+    "sha256": "c292236e027e7f041cae98c594ccacf993c7cb1670544ec7dfa4b55e645ab884",
+    "width": 1870,
+    "height": 841,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/current/yomikage/J04_low_1x4.png",
+    "bytes": 1164329,
+    "sha256": "5f01b98d702c2a92120899eca967c94bf43874ce7a31bc98a109ea8b6856577a",
+    "width": 1983,
+    "height": 793,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/current/yomikage/J05_mikiri_1x4.png",
+    "bytes": 1315464,
+    "sha256": "d64b6df5bca380fdcb8894a427de910000fcd6925ddf88e2e646f38a412aaaba",
+    "width": 1774,
+    "height": 887,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/current/yomikage/J06_roar_1x4.png",
+    "bytes": 1558532,
+    "sha256": "0416fe813f225fa89d683224e56f8569a4e9413acb8f46f6da90f24f04709796",
+    "width": 1773,
+    "height": 887,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/current/yomikage/J07_grab_1x4.png",
+    "bytes": 1580429,
+    "sha256": "d92cee92668110d8546e8e4e311a4f5e51eb906e9de6d399a994463502cf917b",
+    "width": 2172,
+    "height": 724,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/current/yomikage/J08_unique_01_1x4_影縫い.png",
+    "bytes": 1523051,
+    "sha256": "dbc43259562e8e761c4646a0739543a3773e356a17c50ad6e463e5bf1014d478",
+    "width": 1536,
+    "height": 1024,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/current/yomikage/J09_unique_02_1x4_霞落とし.png",
+    "bytes": 1553538,
+    "sha256": "b7fbe7d40216861a52288094bdadd170933f25bd7eac89db437aa6f762b8af95",
+    "width": 1536,
+    "height": 1024,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/current/yomikage/J10_unique_03_1x4_月かすめ.png",
+    "bytes": 1542178,
+    "sha256": "a5d72745d16f97b0b298b1d8950c3e2ed1cf2c4ffd040a82ea55d5dd96878143",
+    "width": 1536,
+    "height": 1024,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/current/yomikage/J11_unique_04_1x4_腕返し.png",
+    "bytes": 1246605,
+    "sha256": "be2b704753877b9ba9dd910fbe89c06c960616542bc45f19df2e74286e45d403",
+    "width": 1672,
+    "height": 941,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/current/yomikage/J12_unique_05_1x4_後の先・天.png",
+    "bytes": 1562548,
+    "sha256": "8c96d67d77d50fc9dace4048344a7b9f4e1b4499ebdab5fbf19ea9ce5b72871b",
+    "width": 1536,
+    "height": 1024,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/current/yomikage/J13_unique_06_1x4_後の先・地.png",
+    "bytes": 1533176,
+    "sha256": "2ebeaeff8b8612642fdf2f685afe0a8849eda5da991a81fa1f15c0d0921a6a2a",
+    "width": 1536,
+    "height": 1024,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/current/yomikage/J14_unique_07_1x4_後の先・芯.png",
+    "bytes": 1621953,
+    "sha256": "476c22d9c8e987c9390ab662365a7e50854158e7f2e5649105254dc73ea5a27a",
+    "width": 1536,
+    "height": 1024,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/current/yomikage/J15_downset_2x2.png",
+    "bytes": 1505799,
+    "sha256": "1024e4748b84b1d3c83891f908d58985a2f2935634dbd02f29a7163bf3a21726",
+    "width": 1254,
+    "height": 1254,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/cutins/bullet_ultimate_cutin.png",
+    "bytes": 2280675,
+    "sha256": "b1562852d1f9624259603255d460d84b1c41f931b0f830b3d1a845078c28fb52",
+    "width": 1402,
+    "height": 1122,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/cutins/chilka_ultimate_cutin.png",
+    "bytes": 3312586,
+    "sha256": "b2e53723f051bc84a6973702042df6545df389e22835e2aee14e729644d04a48",
+    "width": 1535,
+    "height": 1024,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/cutins/dark_moguzo_ultimate_cutin.png",
+    "bytes": 2643613,
+    "sha256": "a05c01c99d889f76eae6435a53fb66725dfb44202b0b07c53bb4c421d717682b",
+    "width": 1402,
+    "height": 1122,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/cutins/godan_ultimate_cutin.png",
+    "bytes": 2787928,
+    "sha256": "e0fb14154c77de0a06af4ae4e32801cc5e4a6c2011d64f9fde9ea226d5b8c435",
+    "width": 1536,
+    "height": 1024,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/cutins/hakuma_ultimate_cutin.png",
+    "bytes": 3131822,
+    "sha256": "c37cbc3b42fdaf4047946eb9ba0f10244c80ad39f88448a197f5b3aef80cd031",
+    "width": 1535,
+    "height": 1024,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/cutins/moguzo_ultimate_cutin.png",
+    "bytes": 2432255,
+    "sha256": "bc0042f4fc53bcd544106d6446c79c2e96d14694080fc4ec6c49152f15585c4b",
+    "width": 1536,
+    "height": 1024,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/cutins/piske_ultimate_cutin.png",
+    "bytes": 3037417,
+    "sha256": "63796f7628abb296f2105d7fdda231130df23c412e9857d34a0f8078fbf62cfd",
+    "width": 1536,
+    "height": 1024,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/cutins/takimaru_ultimate_cutin.png",
+    "bytes": 2854161,
+    "sha256": "8df439f1fec3f11c97691803cfe6400d4e9c62612cc21b0fa51af25bb9c8ed43",
+    "width": 1402,
+    "height": 1122,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/cutins/yomikage_ultimate_cutin.png",
+    "bytes": 2636503,
+    "sha256": "c72ede46e7e81561e1958fa256ee0563f85c16f2141b2235984cf44e9323bf3a",
+    "width": 1448,
+    "height": 1086,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/legacy_common24/bullet/01_bullet_S1_basic_idle_guard_flinch_victory.png",
+    "bytes": 1697447,
+    "sha256": "5e3c66ee07ba31b44f81d5990be4124c91f26ebcc5defadcfe14963efcd2bf6f",
+    "width": 1254,
+    "height": 1254,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/legacy_common24/bullet/02_bullet_S2_telegraphs_and_mid_attack.png",
+    "bytes": 1543068,
+    "sha256": "e3e539f9b9628cf80a5fd2a4d2fb69336abdae01cd8ce2ee1cfd363bfd65e1cd",
+    "width": 1254,
+    "height": 1254,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/legacy_common24/bullet/03_bullet_S3_attacks_mikiri_roar_charge.png",
+    "bytes": 1476859,
+    "sha256": "375caa34da5d6db6d7b32ebd09df12d9e5d2cf03fd3a611ff94c290e63c4c2d0",
+    "width": 1254,
+    "height": 1254,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/legacy_common24/bullet/04_bullet_S4_roar_and_grab.png",
+    "bytes": 1480989,
+    "sha256": "f733cc20b45f7c10962020c8a7a506a5d0789ef7997e049cdbfddae2af726b29",
+    "width": 1254,
+    "height": 1254,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/legacy_common24/bullet/05_bullet_S5_down_getup_ko_ult_charge.png",
+    "bytes": 1260749,
+    "sha256": "3141876fcbac6121236f3bec40cf43151baaa4b1d56366c9ea87caec7c54cffa",
+    "width": 1254,
+    "height": 1254,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/legacy_common24/bullet/06_bullet_S6_crouch_sway_lunge_crouch_attack.png",
+    "bytes": 1461383,
+    "sha256": "74de6e8aa9cc705246790c7a25598e126bda39ee3df9e0bd4ac901528a7a28e6",
+    "width": 1254,
+    "height": 1254,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/legacy_common24/chilka/01_chilka_S1_basic_idle_guard_flinch_victory.png",
+    "bytes": 1633684,
+    "sha256": "b92d2971ae71115c9e51452caf4b88b87c60ae3b3048f8ad013ae9d5ec461298",
+    "width": 1254,
+    "height": 1254,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/legacy_common24/chilka/02_chilka_S2_telegraphs_and_mid_attack.png",
+    "bytes": 1484937,
+    "sha256": "4aa1c167d2e0e75aeeaa331a1e8f1a8c5c1f898e0d36461e71510bfaf3d3e744",
+    "width": 1254,
+    "height": 1254,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/legacy_common24/chilka/03_chilka_S3_attacks_mikiri_roar_charge.png",
+    "bytes": 1495120,
+    "sha256": "b1ccb405d23009b5d997527ae59a7fcda917c7911d1bfd32c9b0a283bab921b8",
+    "width": 1254,
+    "height": 1254,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/legacy_common24/chilka/04_chilka_S4_roar_and_grab.png",
+    "bytes": 1538583,
+    "sha256": "f3fbb1c961f82ef62c116b3a81f16add1e489205f4ac1dc15c779e3b429f4742",
+    "width": 1254,
+    "height": 1254,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/legacy_common24/chilka/05_chilka_S5_down_getup_ko_ult_charge.png",
+    "bytes": 1403179,
+    "sha256": "f97453aea795cc794e15c3381ca15decadac9d10b3f48b255f0167754e5e5e0b",
+    "width": 1254,
+    "height": 1254,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/legacy_common24/chilka/06_chilka_S6_crouch_sway_lunge_crouch_attack.png",
+    "bytes": 1729758,
+    "sha256": "dd0707e036e5673f07759ebf30b86a9c341d7b9ccb7ff226f7bbb838c4660f19",
+    "width": 1254,
+    "height": 1254,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/legacy_common24/godan/01_godan_S1_basic_idle_guard_flinch_victory.png",
+    "bytes": 1605201,
+    "sha256": "9674d0c77bf442033afc81a3b6758fdf2ee0e8ab30281b8f535c6ec26f6e0031",
+    "width": 1254,
+    "height": 1254,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/legacy_common24/godan/02_godan_S2_telegraphs_and_mid_attack.png",
+    "bytes": 1600938,
+    "sha256": "2a5d38b7d90b10da34f38dfa1a363b31ead0dcfacecf279e207eba665e292e08",
+    "width": 1254,
+    "height": 1254,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/legacy_common24/godan/03_godan_S3_attacks_mikiri_roar_charge.png",
+    "bytes": 1526702,
+    "sha256": "287d03e0d00818b8d9faafc87e7982c71d2f107be7975260d7b47742359fb141",
+    "width": 1254,
+    "height": 1254,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/legacy_common24/godan/04_godan_S4_roar_and_grab.png",
+    "bytes": 1524811,
+    "sha256": "a1274e04bdc1aa47470a01045a58860572f5391a4c09b5550e3205cf9ed2a3d8",
+    "width": 1254,
+    "height": 1254,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/legacy_common24/godan/05_godan_S5_down_getup_ko_ult_charge.png",
+    "bytes": 1468801,
+    "sha256": "a771467e4a43d8ea41d4e147445b67ee924d28e9df8335b129443699bf6028e8",
+    "width": 1254,
+    "height": 1254,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/legacy_common24/godan/06_godan_S6_crouch_sway_lunge_crouch_attack.png",
+    "bytes": 1404111,
+    "sha256": "0999ac54eb8885ec965fd9cfbb6f7f36f8c7e636d30726ae5be8dd27d2a02103",
+    "width": 1254,
+    "height": 1254,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/legacy_common24/hakuma/01_hakuma_S1_basic_idle_guard_flinch_victory.png",
+    "bytes": 1454429,
+    "sha256": "4f45980fed8801389a02b92366ce63680a2a1e6c050d6b039a2afc5779b4fae3",
+    "width": 1254,
+    "height": 1254,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/legacy_common24/hakuma/02_hakuma_S2_telegraphs_and_mid_attack.png",
+    "bytes": 1552716,
+    "sha256": "b0123a3e49277f50b25b04726882d0522dd5ad956fafc0af87a7bb2d0947489d",
+    "width": 1254,
+    "height": 1254,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/legacy_common24/hakuma/03_hakuma_S3_attacks_mikiri_roar_charge.png",
+    "bytes": 1543331,
+    "sha256": "af1d2da06447fbbcbfea3bdb9d1558ddd1e20f9fbf3fb2b4ce3a28257e37e7bf",
+    "width": 1254,
+    "height": 1254,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/legacy_common24/hakuma/04_hakuma_S4_roar_and_grab.png",
+    "bytes": 1750832,
+    "sha256": "0c1f229096e3b5af57decfff3840a96c4c66c699e09235bf5db31e5004c6cfc9",
+    "width": 1254,
+    "height": 1254,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/legacy_common24/hakuma/05_hakuma_S5_down_getup_ko_ult_charge.png",
+    "bytes": 1199155,
+    "sha256": "dcfc2c1bc07982f9183c0210f7791ddcb8197144c232d50c3f3b5cdb0873845b",
+    "width": 1254,
+    "height": 1254,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/legacy_common24/hakuma/06_hakuma_S6_crouch_sway_lunge_crouch_attack.png",
+    "bytes": 1400464,
+    "sha256": "988cc1684cb2839a9c350e826b5dee424e45e66956b915e66773890382972869",
+    "width": 1254,
+    "height": 1254,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/legacy_common24/moguzo/01_moguzo_S1_basic_idle_guard_flinch_victory.png",
+    "bytes": 1779448,
+    "sha256": "f70a50d01f2cf1f1ccd8e93cd02ac11c77d29d52269a701914f0e5f1f5bd6212",
+    "width": 1254,
+    "height": 1254,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/legacy_common24/moguzo/02_moguzo_S2_telegraphs_and_mid_attack.png",
+    "bytes": 1598904,
+    "sha256": "48fa47e11e319c4d03fcf7763400161b2a7155379f1216d52ea87f402ab0c7b7",
+    "width": 1254,
+    "height": 1254,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/legacy_common24/moguzo/03_moguzo_S3_attacks_mikiri_roar_charge.png",
+    "bytes": 1672190,
+    "sha256": "0ea3a15d34aebe914992c785937fd6d5ac94cccd990d9a25f7ea6b7a4c43017b",
+    "width": 1254,
+    "height": 1254,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/legacy_common24/moguzo/04_moguzo_S4_roar_and_grab.png",
+    "bytes": 1672343,
+    "sha256": "0aed609444d687723c5bd9c9648dabd3dd36419329472d9c379417b25d515bb2",
+    "width": 1254,
+    "height": 1254,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/legacy_common24/moguzo/05_moguzo_S5_down_getup_ko_ult_charge.png",
+    "bytes": 1533684,
+    "sha256": "6c6cc3ebc0219cf6df9374e4a763b42c132d0c27f271d084e16ad3e91a465c41",
+    "width": 1254,
+    "height": 1254,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/legacy_common24/moguzo/06_moguzo_S6_crouch_sway_lunge_crouch_attack.png",
+    "bytes": 1520755,
+    "sha256": "7dc938244b83fa0a1f3c7371cc316b6066f444110eca9e0e156596e772edb2d8",
+    "width": 1254,
+    "height": 1254,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/legacy_common24/piske/01_piske_S1_basic_idle_guard_flinch_victory.png",
+    "bytes": 1602260,
+    "sha256": "386a41d1983ec4455347ba19567fd02e2150d446ab25b6733324805c492d4bf8",
+    "width": 1254,
+    "height": 1254,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/legacy_common24/piske/02_piske_S2_telegraphs_and_mid_attack.png",
+    "bytes": 1762350,
+    "sha256": "d28d7640cf93bc76cde1af44b288da15dbb0a5cbcf6384d17ebf3e07d8194fdd",
+    "width": 1254,
+    "height": 1254,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/legacy_common24/piske/03_piske_S3_attacks_mikiri_roar_charge.png",
+    "bytes": 1602916,
+    "sha256": "1f6e9bc5fa68c9560017036d0fbca988c6afa80f3c4f1ec86c5755449c4d84be",
+    "width": 1254,
+    "height": 1254,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/legacy_common24/piske/04_piske_S4_roar_and_grab.png",
+    "bytes": 1660606,
+    "sha256": "ac815ac92e019bcbd259f5e118038d355edec82ef6065fd423c8af8baef4a6fb",
+    "width": 1254,
+    "height": 1254,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/legacy_common24/piske/05_piske_S5_down_getup_ko_ult_charge.png",
+    "bytes": 1481851,
+    "sha256": "c1ad12056740037f0a9d1948c06e3bc6f0b89c20958be4e191dbbf6d453d4440",
+    "width": 1254,
+    "height": 1254,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/legacy_common24/piske/06_piske_S6_crouch_sway_lunge_crouch_attack.png",
+    "bytes": 1526203,
+    "sha256": "b4ec6f4be5eaccd80889dbab64c3d6e55979a92f01db2de2f22933f54c457adb",
+    "width": 1254,
+    "height": 1254,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/legacy_common24/takimaru/01_takimaru_S1_basic_idle_guard_flinch_victory.png",
+    "bytes": 1422167,
+    "sha256": "31f4eb88306036b2331a0ecd1e18d8e5081e7f6f9173b799a6595979c4886554",
+    "width": 1254,
+    "height": 1254,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/legacy_common24/takimaru/02_takimaru_S2_telegraphs_and_mid_attack.png",
+    "bytes": 1606178,
+    "sha256": "51f9d9fdeb86a03e367378531ea19285c59d706f2eb020dc8978aefb8b0d62bb",
+    "width": 1254,
+    "height": 1254,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/legacy_common24/takimaru/03_takimaru_S3_attacks_mikiri_roar_charge.png",
+    "bytes": 1691789,
+    "sha256": "509b6c4b95aee51014004362b6d505917472180682fb58fabacc1a279c233030",
+    "width": 1254,
+    "height": 1254,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/legacy_common24/takimaru/04_takimaru_S4_roar_and_grab.png",
+    "bytes": 1825512,
+    "sha256": "a05da353f71633abd9d1b17f1cf2525f722bba078b5822dda9391ca9119e6c24",
+    "width": 1254,
+    "height": 1254,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/legacy_common24/takimaru/05_takimaru_S5_down_getup_ko_ult_charge.png",
+    "bytes": 1348451,
+    "sha256": "74747897d4ef447364398b3e50df7a8f785b58f66d9b1426564e3837b8818207",
+    "width": 1254,
+    "height": 1254,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/legacy_common24/takimaru/06_takimaru_S6_crouch_sway_lunge_crouch_attack.png",
+    "bytes": 1402029,
+    "sha256": "0f8618a352e3f5b6ae9b5707594b7054b7bafce519b52f96a9f5b9c9598a78d8",
+    "width": 1254,
+    "height": 1254,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/legacy_common24/yomikage/01_yomikage_S1_basic_idle_guard_flinch_victory.png",
+    "bytes": 1692400,
+    "sha256": "afba1fd2289cac38edad31caa3139e8569dd907502a89a91c55d4fd484fdefa7",
+    "width": 1254,
+    "height": 1254,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/legacy_common24/yomikage/02_yomikage_S2_telegraphs_and_mid_attack.png",
+    "bytes": 1602937,
+    "sha256": "eed622edcb1ac284e85218cbf4029f595baca13aecdc3b47f19272f92d72b441",
+    "width": 1254,
+    "height": 1254,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/legacy_common24/yomikage/03_yomikage_S3_attacks_mikiri_roar_charge.png",
+    "bytes": 1603755,
+    "sha256": "5ea0badd6e71eec70077380e502315fc304d4d7517d73240923aacd895523543",
+    "width": 1254,
+    "height": 1254,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/legacy_common24/yomikage/04_yomikage_S4_roar_and_grab.png",
+    "bytes": 1472030,
+    "sha256": "3e4863525ea58d9ec068d4a75ed66d05809bc8d13950406ffacb44f50925f8a3",
+    "width": 1254,
+    "height": 1254,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/legacy_common24/yomikage/05_yomikage_S5_down_getup_ko_ult_charge.png",
+    "bytes": 1502792,
+    "sha256": "a3842a8ee4295a23bf7182a1019ed758a139f11f831f88fe924304af3cb6aaaa",
+    "width": 1254,
+    "height": 1254,
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  {
+    "path": "assets/art/legacy_common24/yomikage/06_yomikage_S6_crouch_sway_lunge_crouch_attack.png",
+    "bytes": 1472425,
+    "sha256": "1e2f29795b1ed2dc9c66d385f93c041072554591279a3342eff309b0308e3b10",
+    "width": 1254,
+    "height": 1254,
+    "mode": "RGB",
+    "hasAlpha": false
+  }
+]
