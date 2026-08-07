@@ -393,6 +393,62 @@ function sfx(n){
   else if(n==='teleLow'){tone(150,0.1,'sine',0.09,100);} // 下段=低音
 }
 
+/* ================= BGM管理(R1) =================
+   既存のSE(WebAudio合成)とは別種の「音楽ファイル再生」のため<audio>要素ベースの
+   最小限の共通管理をここに新設する(既存にAudioManager等は存在しないため)。
+   file://直開き(prototype)でも<audio src="相対パス">はfetch()系CORS制限を受けず
+   読み込めるため、BGMはdecodeAudioDataではなくHTMLAudioElementで統一する。
+   dist側はbuild_mobile.mjsが同じ__ASSET_MAP__にBGMのdata URLも埋め込み、
+   bgmAssetSrc()がある場合はそれを優先して使う(画像のloadImg()と同じ仕組み)。 */
+let BGM_VOLUME=0.35; // 全BGM共通の音量(1箇所で調整。SEを埋めない程度の初期値)
+const BGM_TRACKS={ // 画面バケット→音源。闘技場(昼)はイントロ→ループ境界を確信をもって
+  // 判定できなかったため(無音区間なし・スペクトル一致度も弱い)暫定で全曲ループとする
+  title:'../assets/bgm/bgm_title_marmot_fist.mp3',
+  select:'../assets/bgm/bgm_character_select.mp3',
+  arena:'../assets/bgm/bgm_village_arena_day.mp3'
+};
+function bgmAssetSrc(relPath){ // dist埋め込み時は__ASSET_MAP__のdata URLを、無ければ相対パスをそのまま使う
+  return (typeof __ASSET_MAP__!=='undefined'&&Object.prototype.hasOwnProperty.call(__ASSET_MAP__,relPath))?__ASSET_MAP__[relPath]:relPath;
+}
+const bgmEls={};
+for(const k in BGM_TRACKS){
+  const el=new Audio(bgmAssetSrc(BGM_TRACKS[k]));
+  el.loop=true;el.preload='auto';el.volume=BGM_VOLUME;
+  bgmEls[k]=el;
+}
+let bgmCurrentKey=null;
+function bgmStop(){ // 画面遷移時の後始末: 現在の曲を止める(次回同じ曲に戻った際は先頭から)
+  if(bgmCurrentKey&&bgmEls[bgmCurrentKey]){try{bgmEls[bgmCurrentKey].pause();bgmEls[bgmCurrentKey].currentTime=0;}catch(e){}}
+  bgmCurrentKey=null;
+}
+function bgmPlay(key){
+  if(!BGM_TRACKS[key])return;
+  const el=bgmEls[key];
+  if(bgmCurrentKey===key){ // 同一曲: 再生中なら無駄な再スタートをしない。再生できていない場合のみ再試行(自動再生解禁待ち)
+    if(el&&!el.paused)return;
+  }else{
+    bgmStop(); // 曲の切り替え: 二重再生防止のため先に前の曲を確実に止める
+    bgmCurrentKey=key;
+  }
+  if(!el)return;
+  try{const p=el.play();if(p&&p.catch)p.catch(()=>{});}catch(e){} // 自動再生制限で拒否された場合は次フレーム以降に再試行(無理な回避処理は入れない)
+}
+// 画面→BGMバケットの対応。未掲載の画面(オンラインロビー/選択・SPRITE CHECK等)は
+// 「今回勝手にBGMを割り当てない」指示により現状維持(前の曲を止めも切り替えもしない)。
+// characterDetail/pause/movelist/onlineInterruptedは元の画面の続きとして扱い、
+// resultは対戦終了に伴い明示的に無音へ戻す。
+const BGM_SCREEN_MAP={
+  title:'title',
+  select:'select',characterDetail:'select',
+  battle:'arena',pause:'arena',movelist:'arena',onlineInterrupted:'arena',
+  result:null
+};
+function bgmSyncToScreen(){
+  if(!Object.prototype.hasOwnProperty.call(BGM_SCREEN_MAP,game.screen))return;
+  const target=BGM_SCREEN_MAP[game.screen];
+  if(target===null)bgmStop();else bgmPlay(target);
+}
+
 /* ================= 補助 ================= */
 function shade(hex,amt){
   const n=parseInt(hex.slice(1),16);
@@ -1758,6 +1814,7 @@ function rowAt(py,prevRow){ // 段境界±20pxスナップ（誤爆防止）
 }
 function pressRoute(p){
   audioInit();
+  bgmSyncToScreen(); // このユーザー操作の中で現在画面のBGM再生を試みる(自動再生解禁はジェスチャー内でのみ確実)
   if(game.screen==='title'){
     if(inRect(p,ONLINE_BTN.x,ONLINE_BTN.y,ONLINE_BTN.w,ONLINE_BTN.h)){sfx('tap');onlineReset();game.screen='onlineLobby';return null;}
     sfx('tap');game.screen='select';return null;
@@ -3485,6 +3542,7 @@ function frame(now){
     game.frame++;
     if(game.screen==='battle')logic();
   }
+  bgmSyncToScreen();
   render();
 }
 requestAnimationFrame(frame);
