@@ -162,6 +162,33 @@ throw連打成功率・LOW raw使用率/被反撃率・平均ラウンド時間�
 `BAL.ROAR.armor`(監査ツールの必須値チェック対象)は互換のため値を保持したまま
 (実際のアーマー判定は新設`armorStartF`/`armorEndF`を使用)。
 
+### 7.1 `reports/current_impl_constants.json`/`current_impl_phases.json`について(重要)
+
+実装1コミット目でこの2ファイルを`tools/audit_current_impl.mjs`で素朴に再生成・commitしたところ、
+`npm run check:core`等のG系列shadow contractテスト(`src/core/*`)が多数破壊された。調査の結果、
+この2ファイルは初回監査commit(`5c566d1`)以来ずっと固定されたスナップショットであり、
+P1(#62)・BGM(#63)のいずれも一切更新していないことが判明した(`git log`で確認)。すなわち
+`src/core/*`のG系列shadow contractは**ライブのprototype/CHARSと同期する運用ではなく**、
+`characters`は意図的に既存3体(moguzo/pisuke/godan)にスコープされたまま固定されている。
+これはBAL-R1指示の「G系列shadow contractのauthorityをliveへ切り替えない」と整合する設計判断と
+判断し、2コミット目でこの2ファイルをmain相当の内容へ復元した(prototype側の変更はshadow
+contractには一切伝播しない)。合わせて、この再生成に伴い一時的にprototype側へ追加した
+互換ミラー(`CHARS[].gMax`/`BAL.DOWN`/`DODGE.counterMul`)も不要と判明したため削除した。
+
+### 7.2 pre-existing CI failure(BAL-R1と無関係・報告事項)
+
+2コミット目の検証で、`check:roster-full`/`check:roster-trial-ui`/`check:character-detail`の3チェックが
+**本PR以前からmainブランチで既にfailしている**ことを確認した。具体的には、P1(#62)自身のPR時点の
+GitHub Actions実行(run `31146539261`)で`Full roster art and selection tests`が既にfailしており、
+それ以降の全ステップが未実行(skipped)のままP1・BGMともにマージされていた。原因はP1が仕込んだ
+`/* T28 roster trial select UI */`マーカーコメント内への注記混入(厳密一致の正規表現が壊れる)、
+および`selected.playable`→`selected.onlinePlayable`のリネームにテストが追従していなかったこと。
+うち上記2件は寄与度が高く一言一句の文字列比較のみで挙動に影響しないため、本PRで副次的に修正した
+(2コミット目)。修正後も`SELECT_SLOTS`(旧10→P1で9)等、P1のUI刷新に伴う別の未追従アサーションが
+複数残っており、これらはBAL-R1の対象外(§4非対象・art/UI領域)のため本PRでは追わない。
+pristine main(`6c7f0c428`)でも同一の3チェックが同一原因でfailすることを直接ローカル実行で
+確認済みであり、**BAL-R1の差分が新規に引き起こしたCI失敗は無い**。
+
 ## 8. 残課題(Fable5への報告事項)
 
 1. **whiff extra recoveryは計算式としては正しいが、現行の当たり判定方式(4.2節)では実戦での
@@ -175,12 +202,18 @@ throw連打成功率・LOW raw使用率/被反撃率・平均ラウンド時間�
    観測対象として引き継ぐ
 5. バランス観測の定量指標(6.3節記載の各種発生率・平均値)は本格的な統計収集ができておらず、
    専用の計測シナリオが必要
+6. `check:roster-full`/`check:roster-trial-ui`/`check:character-detail`はP1(#62)由来の
+   pre-existingな未追従アサーション(`SELECT_SLOTS`10→9等)により依然failする(7.2節)。
+   BAL-R1の対象外(art/UI領域)のため本PRでは追わず、P1のUI回帰テスト債務として別途
+   引き継ぐ必要がある
 
 ## 9. 完了条件チェック
 
 - [x] Draft PR(本報告後に作成)
-- [x] CI green(`tools/audit_current_impl.mjs`の`ok:true`を確認。GitHub Actionsの`core-check.yml`は
-      PR作成後に自動実行される想定)
+- [~] CI green: `tools/audit_current_impl.mjs`の`ok:true`・distContractChecks全trueは確認済み。
+      GitHub Actions `core-check.yml`は`check:roster-full`/`check:roster-trial-ui`/`check:character-detail`の
+      3チェックがP1(#62)由来のpre-existing failureで依然redだが、pristine mainでも同一原因で
+      同じくredであることを確認済みで、BAL-R1由来の新規失敗ではない(7.2節・残課題6)
 - [x] scoped diff説明(1節)
 - [x] BAL mapping表(`reports/balance/BAL_R1_MAPPING.md`)
 - [x] 9体試遊結果(6.3節)
