@@ -108,6 +108,11 @@ const BAL={ // 03_data_design.md v2.0 §2 balance table 準拠
   // (PORTRAIT_H[id] = 380 * SPRITE_H[id]/SPRITE_H.moguzo)。containでの全体縮小をやめ、この身長で
   // 等比拡縮し、鼻Y位置を共通基準ラインに揃えて配置する(rSelectのdrawHeroArtByHeight参照)
   PORTRAIT_H:{moguzo:380,pisuke:256,godan:455,hakuma:400,chirka:373,takimaru:407,yomikage:380,bullet:391,dark_moguzo:380},
+  // VIS-R1.1(2): PORTRAIT_H系はそのまま維持し、表示直前にこの係数を掛けて全体を約0.82倍に縮小する
+  // (最大キャラ=胸〜腰上まで・最小キャラ=全身+足元余白、を目標レンジとして実測調整)
+  PORTRAIT_SCALE:0.82,
+  // VIS-R1.1(2): 鼻Xの微調整用オフセット(px、枠内基準線からのずれ)。初期値は全員0
+  PORTRAIT_OFFSET_X:{moguzo:0,pisuke:0,godan:0,hakuma:0,chirka:0,takimaru:0,yomikage:0,bullet:0,dark_moguzo:0},
   NET:{delayFMin:3,delayFMax:8,frameMs:16.7,waitingShowF:20}, // オンライン対戦: 入力遅延バッファ(F)は
     // v0.10 (9)でRTT実測に基づく開始時適応に変更(固定6Fから、良回線3〜4F/悪回線6〜8Fへ)。
     // waitingShowF: 「同期中…」表示は待機がこのF数以上続いた場合のみ(瞬間的な待機でのちらつき防止)
@@ -218,14 +223,12 @@ const ROSTER=[
  {id:'bullet',name:'バレット',type:'チャージ',species:'オナガマーモット',ability:'オーバーチャージ',ult:'超圧縮・弾丸頭突き',playable:true,onlinePlayable:false,combatIndex:7,displayScale:1.03,faceCrop:{x:0.42,y:0.28,z:2.48},heroCrop:{x:0.43,y:0.41,z:1.38}},
  {id:'dark_moguzo',name:'ダークモグゾー',type:'アナザー',species:'モグゾー別ルート',ability:'暗連',ult:'暗連・黒天烈掌',playable:true,onlinePlayable:false,combatIndex:8,displayScale:1.00,faceCrop:{x:0.50,y:0.28,z:2.35},heroCrop:{x:0.50,y:0.42,z:1.25}}
 ];
-// VIS-R1(2): tools/face_metrics.mjsでassets/portraits/{id}.pngを実測した鼻位置(画像高/幅に対する比率)。
-// フォトリアル素材は耳の暗色パッチや装身具が目・鼻より大きく写ることがあり誤検出のリスクが高いため、
-// 「候補2件以上」「顔中心平均に使った候補のY方向の広がりが画像高12%以内」「Y比率が0.04〜0.20の範囲内」
-// の3条件を満たした実測値のみを採用し、満たさないキャラは信頼できた実測値の中央値でフォールバックする
-// (godan/chirka/takimaru/yomikage/bullet/dark_moguzoがフォールバック。詳細はtools/gen_portrait_nose_baseline.mjs
-// と reports/vis/portrait_nose_baseline.md)
-const PORTRAIT_NOSE_Y_RATIO={moguzo:0.0992,pisuke:0.0829,godan:0.0829,hakuma:0.0821,chirka:0.0829,takimaru:0.0829,yomikage:0.0829,bullet:0.0829,dark_moguzo:0.0829};
-const PORTRAIT_NOSE_X_RATIO={moguzo:0.5280,pisuke:0.4760,godan:0.3782,hakuma:0.5381,chirka:0.4030,takimaru:0.4754,yomikage:0.6112,bullet:0.5982,dark_moguzo:0.6075};
+// VIS-R1.1(1)(2): VIS-R1では自動顔検出(tools/face_metrics.mjs)の実測値を使っていたが、
+// フィギュア調のportraits/素材では拳・爪の暗色を鼻と誤検出するケースがあったため、
+// facesq_{id}.png選択アイコン用に発注者が実機検収した手動クロップ中心(tools/facesq_manual_table.mjs
+// のFACESQ_MANUAL_TABLE)をそのまま鼻位置としても採用する(検収済みの座標を1本化して使う)。
+const PORTRAIT_NOSE_Y_RATIO={moguzo:0.159,pisuke:0.111,godan:0.105,hakuma:0.144,chirka:0.203,takimaru:0.142,yomikage:0.17,bullet:0.101,dark_moguzo:0.159};
+const PORTRAIT_NOSE_X_RATIO={moguzo:0.619,pisuke:0.476,godan:0.52,hakuma:0.395,chirka:0.365,takimaru:0.504,yomikage:0.55,bullet:0.68,dark_moguzo:0.619};
 const OFFICIAL_CHARACTER_COUNT=3;
 function skeletonIdOf(c){return(c&&c.skeletonId)||c.id;}
 function spriteHeightForChar(c){return BAL.SPRITE_H[skeletonIdOf(c)];}
@@ -346,20 +349,24 @@ function drawContain(key,x,y,w,h,anchorBottom,alpha){ // P1追加: 矩形(x,y,w,
 function drawHeroArt(charId,x,y,w,h,alpha){ // P1追加: portraits優先・roster3dへフォールバック(いずれもcontain・下端アンカー)
   return drawContain('standing_'+charId,x,y,w,h,true,alpha)||drawContain('roster_'+charId,x,y,w,h,true,alpha);
 }
-// VIS-R1(2): キャラ選択・左プレビュー専用。containで全体を箱に収める(=キャラ毎に縮小率が変わり
-// 体格差が消える)のをやめ、BAL.PORTRAIT_H[charId]の実身長(px)で等比拡縮し、鼻のY位置を
-// 箱内の共通基準ライン(noseBaseYRatio×箱の高さ)に揃えて配置する(体格差は頭頂・足元のはみ出しに出る)。
+// VIS-R1(2)/VIS-R1.1(2): キャラ選択・左プレビュー専用。containで全体を箱に収める(=キャラ毎に
+// 縮小率が変わり体格差が消える)のをやめ、BAL.PORTRAIT_H[charId]×BAL.PORTRAIT_SCALEの実身長(px)で
+// 等比拡縮し、鼻のY位置を箱内の共通基準ライン(noseBaseYRatio×箱の高さ)、鼻のX位置を箱内の
+// 基準線(PORTRAIT_NOSE_X_BASE_RATIO×箱の幅+per-charのBAL.PORTRAIT_OFFSET_X)に揃えて配置する
+// (体格差は頭頂・足元・しっぽ/手のはみ出しに出る)。
 // portraits/が未読込の場合のみdrawHeroArt(contain)へフォールバックする(roster3d webpは鼻比率未計測のため)
+const PORTRAIT_NOSE_X_BASE_RATIO=0.52; // VIS-R1.1(2): 鼻Xの基準線(箱幅に対する比率)。旧仕様は中央(0.50)固定だった
 function drawHeroArtByHeight(charId,x,y,w,h,noseBaseYRatio,alpha){
   const key='standing_'+charId;
   if(!assetReady(key))return drawHeroArt(charId,x,y,w,h,alpha);
   const e=ASSETS[key],src=e.canvas||e.img,iw=e.img.naturalWidth,ih=e.img.naturalHeight;
-  const scale=BAL.PORTRAIT_H[charId]/ih; // 等比拡縮のみ(縦横比不変)
+  const scale=(BAL.PORTRAIT_H[charId]*BAL.PORTRAIT_SCALE)/ih; // 等比拡縮のみ(縦横比不変)
   const dw=iw*scale,dh=ih*scale;
   const noseX=iw*(PORTRAIT_NOSE_X_RATIO[charId]!=null?PORTRAIT_NOSE_X_RATIO[charId]:0.5)*scale;
   const noseY=ih*PORTRAIT_NOSE_Y_RATIO[charId]*scale;
+  const baseX=x+w*PORTRAIT_NOSE_X_BASE_RATIO+(BAL.PORTRAIT_OFFSET_X[charId]||0);
   const baseY=y+h*noseBaseYRatio;
-  const dx=x+w/2-noseX,dy=baseY-noseY;
+  const dx=baseX-noseX,dy=baseY-noseY;
   if(alpha!=null){ctx.save();ctx.globalAlpha=alpha;ctx.drawImage(src,dx,dy,dw,dh);ctx.restore();}
   else ctx.drawImage(src,dx,dy,dw,dh);
   return true;
@@ -3491,8 +3498,12 @@ function rSelect(){ // P1追加: KOF/餓狼風レイアウト(縦画面翻訳)�
 
   // --- 左: 大型立ち絵(VIS-R1(2): PORTRAIT_H実身長で等比拡縮+鼻Y基準ライン合わせ。containでの
   // 全体縮小はやめ、体格差は頭頂/足元のはみ出しに出す。しっぼ・手のはみ出しは許容しキャンバスは拡げない) ---
-  const AB=SELECT_ART_BOX,NOSE_BASE_Y_RATIO=0.30;
+  const AB=SELECT_ART_BOX,NOSE_BASE_Y_RATIO=0.26; // VIS-R1.1(2): 基準ラインをやや上へ(旧0.30)
   ctx.save();rr(AB.x,AB.y,AB.w,AB.h,18);ctx.clip();
+  // VIS-R1.1(3): 角丸パス(rr)のclipに加え、素の矩形clipも重ねて交差させる(clip()は複数回呼ぶと
+  // 積算=交差されるため安全)。実機で報告された左端の描画はみ出し疑いに対する保険で、
+  // 大きく等比拡縮した立ち絵がボックス外へ描画されることを二重に防ぐ
+  ctx.beginPath();ctx.rect(AB.x,AB.y,AB.w,AB.h);ctx.clip();
   ctx.fillStyle='rgba(10,12,18,0.35)';ctx.fillRect(AB.x,AB.y,AB.w,AB.h);
   let fadeT=1,fading=selectFadeFromId!=null;
   if(fading){
