@@ -72,6 +72,7 @@ function resizeConfigFor(relFromAssets) {
   if (top === 'roster3d') return { height: 256 };
   if (top === 'cutin') return { width: 1280 };
   if (top === 'bg') return { height: 1200 };
+  if (top === 'title') return { width: 720 };
   return null; // ui / fx / その他: 原寸維持
 }
 

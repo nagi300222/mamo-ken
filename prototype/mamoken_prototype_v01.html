@@ -79,8 +79,10 @@ const BAL={ // 03_data_design.md v2.0 §2 balance table 準拠
   HITSTOP:{mid:6,high:9,low:14,roar:12,clash:16,crouch:5},
   TELEGRAPH:{mid:8,high:13,low:18,crouch:6}, // 発生前半に構え+段色フラッシュ+固有SE（見てから対応の成立条件）
   BUF:10,FLICK_DX:60,FLICK_MS:300,JUST_TAP_MS:100,
-  SPRITE_H:{moguzo:172,pisuke:116,godan:206}, // 戦闘スプライトの表示身長(px)。体格基準ラインナップ(ピスケ小柄/ゴダン大柄)の印象を反映(v2.4.2改・頭サイズ整合idle差し替えと連動)
-  PORTRAIT_RATIO:{moguzo:1.00,pisuke:0.80,godan:1.15}, // 立ち絵(portraits/)用の比率。各画面の基準高に乗算して体格差を表現(v2.4.1)
+  // 戦闘スプライトの表示身長(px)。新6キャラはdesign/character_art/source_manifest.json由来の
+  // heightRatio(モグゾー基準1.00)をモグゾーのSPRITE_H(172)に乗算した暫定値(P1 (3))
+  SPRITE_H:{moguzo:172,pisuke:116,godan:206,hakuma:181,chirka:169,takimaru:184,yomikage:172,bullet:177,dark_moguzo:172},
+  PORTRAIT_RATIO:{moguzo:1.00,pisuke:0.80,godan:1.15,hakuma:1.05,chirka:0.98,takimaru:1.07,yomikage:1.00,bullet:1.03,dark_moguzo:1.00}, // 立ち絵(portraits/)用の比率。各画面の基準高に乗算して体格差を表現(v2.4.1)
   NET:{delayFMin:3,delayFMax:8,frameMs:16.7,waitingShowF:20}, // オンライン対戦: 入力遅延バッファ(F)は
     // v0.10 (9)でRTT実測に基づく開始時適応に変更(固定6Fから、良回線3〜4F/悪回線6〜8Fへ)。
     // waitingShowF: 「同期中…」表示は待機がこのF数以上続いた場合のみ(瞬間的な待機でのちらつき防止)
@@ -104,33 +106,72 @@ const BAL={ // 03_data_design.md v2.0 §2 balance table 準拠
         {seq:['down','down'],trigger:'low',type:'atk',lv:'low',name:'地割れ',s:30,a:3,r:30,d:110,down:true,guardChip:30,color:'#8a6540',se:'cmdHit'},
         {seq:['right','down'],trigger:'grab',type:'grab',name:'山掴み',s:16,d:110,armor:6,color:'#ff9500',se:'cmdGrabHit'},
         {seq:['left','left'],trigger:'mid',type:'stance',name:'巌の構え',stanceF:12,counterLv:'mid',counterDmg:100,color:'#ffd23f',se:'guard'}
+      ],
+      // P1 (4): 新6キャラの暫定コマンド技。既存9種の型(数値・フレームは無改変で流用)から
+      // スタイルに合う3つを選び、技名のみキャラに合わせて仮命名。全て後調整前提。
+      // 型の由来: 1=前進強打(地走り型) 2=大アッパー対空(昇撃型) 3=リーチ投げ(引き寄せ投げ型)
+      // 4=高速多段(二連牙型) 5=突進下段(スライディング型) 6=後退→前進蹴(宙返り蹴型)
+      // 7=地震削り(地割れ型) 8=アーマー投げ(山掴み型) 9=自動見切り構え(巌の構え型)
+      // 同キャラ内でseq(方向2つ)が重複しないよう、型1と型8(ともに→↓)、型3と型6(ともに←→)は
+      // 同時に採用しないこと(detectCommandMove()はseq一致のみで先頭一致技を返すため)
+      hakuma:[ // ディフェンス。9:白峰の構え(自動見切り→反撃中段) 8:雪崩抱え(アーマー投げ) 4:雪壁掌(高速中段)
+        {seq:['left','left'],trigger:'mid',type:'stance',name:'白峰の構え',stanceF:12,counterLv:'mid',counterDmg:100,color:'#bfe3d0',se:'guard'},
+        {seq:['right','down'],trigger:'grab',type:'grab',name:'雪崩抱え',s:16,d:110,armor:6,color:'#8fb8a0',se:'cmdGrabHit'},
+        {seq:['right','right'],trigger:'mid',type:'atk',lv:'mid',name:'雪壁掌',s:8,a:3,r:18,d:95,color:'#dbe8e0',se:'cmdHit'}
+      ],
+      chirka:[ // トリッキー。4:だまし突き(高速中段) 6:戻り蹴り(後退→前進蹴・上段) 8:すかし抱き(アーマー投げ型を仮流用)
+        {seq:['right','right'],trigger:'mid',type:'atk',lv:'mid',name:'だまし突き',s:8,a:3,r:18,d:95,color:'#b98cc7',se:'cmdHit'},
+        {seq:['left','right'],trigger:'high',type:'atk',lv:'high',name:'戻り蹴り',s:20,a:3,r:24,d:90,fwd:20,color:'#caa6d9',se:'cmdHit'},
+        {seq:['right','down'],trigger:'grab',type:'grab',name:'すかし抱き',s:16,d:110,armor:6,color:'#9d6bb0',se:'cmdGrabHit'}
+      ],
+      takimaru:[ // グラップラー。8:丸抱え(アーマー投げ) 3:巻き投げ(リーチ投げ) 4:ぶちかまし(高速中段)
+        {seq:['right','down'],trigger:'grab',type:'grab',name:'丸抱え',s:16,d:110,armor:6,color:'#c9a24d',se:'cmdGrabHit'},
+        {seq:['left','right'],trigger:'grab',type:'grab',name:'巻き投げ',s:14,d:100,reachMul:1.5,color:'#b0aac2',se:'cmdGrabHit'},
+        {seq:['right','right'],trigger:'mid',type:'atk',lv:'mid',name:'ぶちかまし',s:8,a:3,r:18,d:95,color:'#8a8398',se:'cmdHit'}
+      ],
+      yomikage:[ // カウンター。9:後の先・構え(自動見切り→反撃中段) 2:後の先・天(大アッパー対空) 5:後の先・地(突進下段)
+        {seq:['left','left'],trigger:'mid',type:'stance',name:'後の先・構え',stanceF:12,counterLv:'mid',counterDmg:100,color:'#6b7fd6',se:'guard'},
+        {seq:['down','right'],trigger:'high',type:'atk',lv:'high',name:'後の先・天',s:24,a:3,r:30,d:120,counterMul:1.5,color:'#8695e0',se:'cmdHit'},
+        {seq:['down','left'],trigger:'low',type:'atk',lv:'low',name:'後の先・地',s:30,a:4,r:30,d:80,down:true,fwd:60,guardDmg:14,color:'#4f5bb8',se:'cmdHit'}
+      ],
+      bullet:[ // チャージ。7:尾払い(地震削り) 2:跳ね上げ(大アッパー対空) 4:弾み突き(高速中段)
+        {seq:['down','down'],trigger:'low',type:'atk',lv:'low',name:'尾払い',s:30,a:3,r:30,d:110,down:true,guardChip:30,color:'#a83250',se:'cmdHit'},
+        {seq:['down','right'],trigger:'high',type:'atk',lv:'high',name:'跳ね上げ',s:24,a:3,r:30,d:120,counterMul:1.5,color:'#c14a68',se:'cmdHit'},
+        {seq:['right','right'],trigger:'mid',type:'atk',lv:'mid',name:'弾み突き',s:8,a:3,r:18,d:95,color:'#8a2740',se:'cmdHit'}
+      ],
+      dark_moguzo:[ // アナザー。5:黒砂払い(突進下段) 3:闇引き(リーチ投げ) 1:黒走り(前進強打)
+        {seq:['down','left'],trigger:'low',type:'atk',lv:'low',name:'黒砂払い',s:30,a:4,r:30,d:80,down:true,fwd:60,guardDmg:14,color:'#5a2f6b',se:'cmdHit'},
+        {seq:['left','right'],trigger:'grab',type:'grab',name:'闇引き',s:14,d:100,reachMul:1.5,color:'#7a1f2f',se:'cmdGrabHit'},
+        {seq:['right','down'],trigger:'mid',type:'atk',lv:'mid',name:'黒走り',s:18,a:3,r:18,d:95,fwd:40,guardDmg:8,color:'#3d1f4a',se:'cmdHit'}
       ]
     }
   }
 };
-const CHARS=[
- {id:'moguzo',name:'モグゾー',type:'スタンダード',ult:'大地烈掌',color:'#b58756',belly:'#ecd9b4',dMul:1,sMul:1,sOfs:0,gMax:100,pips:{p:3,s:3,g:3},stats5:{atk:3,spd:3,def:3,tech:3,brk:3},usability:1,trial:false,skeletonId:'moguzo',trialLabel:null},
- {id:'pisuke',name:'ピスケ',type:'ラッシュ',ult:'音速連咆',color:'#cfa972',belly:'#f5ead0',dMul:0.85,sMul:1.25,sOfs:-2,gMax:90,pips:{p:2,s:5,g:2},stats5:{atk:2,spd:5,def:2,tech:4,brk:2},usability:2,trial:false,skeletonId:'pisuke',trialLabel:null},
- {id:'godan',name:'ゴダン',type:'パワー',ult:'山崩し',color:'#8a6540',belly:'#d9c19d',dMul:1.18,sMul:0.9,sOfs:2,gMax:110,pips:{p:5,s:2,g:4},stats5:{atk:5,spd:2,def:4,tech:2,brk:4},usability:1,trial:false,skeletonId:'godan',trialLabel:null},
- {id:'hakuma',name:'ハクマ',type:'ディフェンス',ult:'白峰不動掌',color:'#8a6540',belly:'#d9c19d',dMul:1.18,sMul:0.9,sOfs:2,gMax:110,pips:{p:5,s:2,g:4},stats5:{atk:5,spd:2,def:4,tech:2,brk:4},usability:1,trial:true,skeletonId:'godan',trialLabel:'ゴダン骨格 / 共通技のみ'},
- {id:'chirka',name:'チルカ',type:'トリッキー',ult:'百面本命打ち',color:'#cfa972',belly:'#f5ead0',dMul:0.85,sMul:1.25,sOfs:-2,gMax:90,pips:{p:2,s:5,g:2},stats5:{atk:2,spd:5,def:2,tech:4,brk:2},usability:2,trial:true,skeletonId:'pisuke',trialLabel:'ピスケ骨格 / 共通技のみ'},
- {id:'takimaru',name:'タキマル',type:'グラップラー',ult:'天地大回転',color:'#8a6540',belly:'#d9c19d',dMul:1.18,sMul:0.9,sOfs:2,gMax:110,pips:{p:5,s:2,g:4},stats5:{atk:5,spd:2,def:4,tech:2,brk:4},usability:1,trial:true,skeletonId:'godan',trialLabel:'ゴダン骨格 / 共通技のみ'},
- {id:'yomikage',name:'ヨミカゲ',type:'カウンター',ult:'後の先・月断',color:'#cfa972',belly:'#f5ead0',dMul:0.85,sMul:1.25,sOfs:-2,gMax:90,pips:{p:2,s:5,g:2},stats5:{atk:2,spd:5,def:2,tech:4,brk:2},usability:2,trial:true,skeletonId:'pisuke',trialLabel:'ピスケ骨格 / 共通技のみ'},
- {id:'bullet',name:'バレット',type:'チャージ',ult:'超圧縮・弾丸頭突き',color:'#cfa972',belly:'#f5ead0',dMul:0.85,sMul:1.25,sOfs:-2,gMax:90,pips:{p:2,s:5,g:2},stats5:{atk:2,spd:5,def:2,tech:4,brk:2},usability:2,trial:true,skeletonId:'pisuke',trialLabel:'ピスケ骨格 / 共通技のみ'},
- {id:'dark_moguzo',name:'ダークモグゾー',type:'アナザー',ult:'暗連・黒天烈掌',color:'#b58756',belly:'#ecd9b4',dMul:1,sMul:1,sOfs:0,gMax:100,pips:{p:3,s:3,g:3},stats5:{atk:3,spd:3,def:3,tech:3,brk:3},usability:1,trial:true,skeletonId:'moguzo',trialLabel:'モグゾー骨格 / 共通技のみ'}
+const CHARS=[ // P1: 全9キャラが自身の実アート・実装を持つ(trial/skeletonId借用は廃止)。
+              // 新6キャラのstats5/usabilityはdocs/03_data_design.md v2.7 §3.4のスタイル別表+
+              // 「未定義項目はスタンダード準拠の暫定値でよい」指示によりusability=1(モグゾーと同値)
+ {id:'moguzo',name:'モグゾー',type:'スタンダード',ult:'大地烈掌',color:'#b58756',belly:'#ecd9b4',dMul:1,sMul:1,sOfs:0,gMax:100,pips:{p:3,s:3,g:3},stats5:{atk:3,spd:3,def:3,tech:3,brk:3},usability:1},
+ {id:'pisuke',name:'ピスケ',type:'ラッシュ',ult:'音速連咆',color:'#cfa972',belly:'#f5ead0',dMul:0.85,sMul:1.25,sOfs:-2,gMax:90,pips:{p:2,s:5,g:2},stats5:{atk:2,spd:5,def:2,tech:4,brk:2},usability:2},
+ {id:'godan',name:'ゴダン',type:'パワー',ult:'山崩し',color:'#8a6540',belly:'#d9c19d',dMul:1.18,sMul:0.9,sOfs:2,gMax:110,pips:{p:5,s:2,g:4},stats5:{atk:5,spd:2,def:4,tech:2,brk:4},usability:1},
+ {id:'hakuma',name:'ハクマ',type:'ディフェンス',ult:'白峰不動掌',color:'#8a6540',belly:'#d9c19d',dMul:1.18,sMul:0.9,sOfs:2,gMax:110,pips:{p:5,s:2,g:4},stats5:{atk:2,spd:2,def:5,tech:3,brk:2},usability:1},
+ {id:'chirka',name:'チルカ',type:'トリッキー',ult:'百面本命打ち',color:'#cfa972',belly:'#f5ead0',dMul:0.85,sMul:1.25,sOfs:-2,gMax:90,pips:{p:2,s:5,g:2},stats5:{atk:2,spd:4,def:2,tech:5,brk:5},usability:1},
+ {id:'takimaru',name:'タキマル',type:'グラップラー',ult:'天地大回転',color:'#8a6540',belly:'#d9c19d',dMul:1.18,sMul:0.9,sOfs:2,gMax:110,pips:{p:5,s:2,g:4},stats5:{atk:4,spd:2,def:4,tech:3,brk:5},usability:1},
+ {id:'yomikage',name:'ヨミカゲ',type:'カウンター',ult:'後の先・月断',color:'#cfa972',belly:'#f5ead0',dMul:0.85,sMul:1.25,sOfs:-2,gMax:90,pips:{p:2,s:5,g:2},stats5:{atk:4,spd:3,def:2,tech:5,brk:1},usability:1},
+ {id:'bullet',name:'バレット',type:'チャージ',ult:'超圧縮・弾丸頭突き',color:'#cfa972',belly:'#f5ead0',dMul:0.85,sMul:1.25,sOfs:-2,gMax:90,pips:{p:2,s:5,g:2},stats5:{atk:5,spd:2,def:3,tech:5,brk:3},usability:1},
+ {id:'dark_moguzo',name:'ダークモグゾー',type:'アナザー',ult:'暗連・黒天烈掌',color:'#b58756',belly:'#ecd9b4',dMul:1,sMul:1,sOfs:0,gMax:100,pips:{p:3,s:3,g:3},stats5:{atk:4,spd:4,def:3,tech:5,brk:3},usability:1}
 ];
 /* T20 full roster art select */
-/* T28 roster trial select UI */
+/* T28 roster trial select UI → P1: 全9キャラ実装済みに更新。onlinePlayableのみ既存3体に限定(オンラインは§6.8対象外・現状維持) */
 const ROSTER=[
- {id:'moguzo',name:'モグゾー',type:'スタンダード',species:'基準マーモット',ability:'根性',ult:'大地烈掌',playable:true,trialPlayable:true,combatIndex:0,skeletonId:'moguzo',trialLabel:null,displayScale:1.00,faceCrop:{x:0.50,y:0.28,z:2.35},heroCrop:{x:0.50,y:0.42,z:1.25}},
- {id:'pisuke',name:'ピスケ',type:'ラッシュ',species:'細身のマーモット',ability:'チェイス',ult:'音速連咆',playable:true,trialPlayable:true,combatIndex:1,skeletonId:'pisuke',trialLabel:null,displayScale:1.04,faceCrop:{x:0.50,y:0.27,z:2.40},heroCrop:{x:0.50,y:0.41,z:1.28}},
- {id:'godan',name:'ゴダン',type:'パワー',species:'大柄なマーモット',ability:'ヘビーアーマー',ult:'山崩し',playable:true,trialPlayable:true,combatIndex:2,skeletonId:'godan',trialLabel:null,displayScale:1.08,faceCrop:{x:0.50,y:0.29,z:2.25},heroCrop:{x:0.50,y:0.43,z:1.18}},
- {id:'hakuma',name:'ハクマ',type:'ディフェンス',species:'ヒマラヤマーモット',ability:'アイアンウォール',ult:'白峰不動掌',playable:false,trialPlayable:true,combatIndex:3,skeletonId:'godan',trialLabel:'ゴダン骨格で試運転',displayScale:1.05,faceCrop:{x:0.50,y:0.30,z:2.18},heroCrop:{x:0.50,y:0.44,z:1.14}},
- {id:'chirka',name:'チルカ',type:'トリッキー',species:'ボバクマーモット',ability:'フェイント／ディレイ',ult:'百面本命打ち',playable:false,trialPlayable:true,combatIndex:4,skeletonId:'pisuke',trialLabel:'ピスケ骨格で試運転',displayScale:0.98,faceCrop:{x:0.50,y:0.28,z:2.32},heroCrop:{x:0.50,y:0.42,z:1.22}},
- {id:'takimaru',name:'タキマル',type:'グラップラー',species:'ホーリーマーモット',ability:'プレッシャー',ult:'天地大回転',playable:false,trialPlayable:true,combatIndex:5,skeletonId:'godan',trialLabel:'ゴダン骨格で試運転',displayScale:1.07,faceCrop:{x:0.50,y:0.28,z:2.24},heroCrop:{x:0.50,y:0.42,z:1.16}},
- {id:'yomikage',name:'ヨミカゲ',type:'カウンター',species:'クロボウシマーモット',ability:'ジャスト',ult:'後の先・月断',playable:false,trialPlayable:true,combatIndex:6,skeletonId:'pisuke',trialLabel:'ピスケ骨格で試運転',displayScale:1.00,faceCrop:{x:0.50,y:0.28,z:2.36},heroCrop:{x:0.50,y:0.42,z:1.24}},
- {id:'bullet',name:'バレット',type:'チャージ',species:'オナガマーモット',ability:'オーバーチャージ',ult:'超圧縮・弾丸頭突き',playable:false,trialPlayable:true,combatIndex:7,skeletonId:'pisuke',trialLabel:'ピスケ骨格で試運転',displayScale:1.03,faceCrop:{x:0.42,y:0.28,z:2.48},heroCrop:{x:0.43,y:0.41,z:1.38}},
- {id:'dark_moguzo',name:'ダークモグゾー',type:'アナザー',species:'モグゾー別ルート',ability:'暗連',ult:'暗連・黒天烈掌',playable:false,trialPlayable:true,combatIndex:8,skeletonId:'moguzo',trialLabel:'モグゾー骨格で試運転',displayScale:1.00,faceCrop:{x:0.50,y:0.28,z:2.35},heroCrop:{x:0.50,y:0.42,z:1.25}}
+ {id:'moguzo',name:'モグゾー',type:'スタンダード',species:'基準マーモット',ability:'根性',ult:'大地烈掌',playable:true,onlinePlayable:true,combatIndex:0,displayScale:1.00,faceCrop:{x:0.50,y:0.28,z:2.35},heroCrop:{x:0.50,y:0.42,z:1.25}},
+ {id:'pisuke',name:'ピスケ',type:'ラッシュ',species:'細身のマーモット',ability:'チェイス',ult:'音速連咆',playable:true,onlinePlayable:true,combatIndex:1,displayScale:1.04,faceCrop:{x:0.50,y:0.27,z:2.40},heroCrop:{x:0.50,y:0.41,z:1.28}},
+ {id:'godan',name:'ゴダン',type:'パワー',species:'大柄なマーモット',ability:'ヘビーアーマー',ult:'山崩し',playable:true,onlinePlayable:true,combatIndex:2,displayScale:1.08,faceCrop:{x:0.50,y:0.29,z:2.25},heroCrop:{x:0.50,y:0.43,z:1.18}},
+ {id:'hakuma',name:'ハクマ',type:'ディフェンス',species:'ヒマラヤマーモット',ability:'アイアンウォール',ult:'白峰不動掌',playable:true,onlinePlayable:false,combatIndex:3,displayScale:1.05,faceCrop:{x:0.50,y:0.30,z:2.18},heroCrop:{x:0.50,y:0.44,z:1.14}},
+ {id:'chirka',name:'チルカ',type:'トリッキー',species:'ボバクマーモット',ability:'フェイント／ディレイ',ult:'百面本命打ち',playable:true,onlinePlayable:false,combatIndex:4,displayScale:0.98,faceCrop:{x:0.50,y:0.28,z:2.32},heroCrop:{x:0.50,y:0.42,z:1.22}},
+ {id:'takimaru',name:'タキマル',type:'グラップラー',species:'ホーリーマーモット',ability:'プレッシャー',ult:'天地大回転',playable:true,onlinePlayable:false,combatIndex:5,displayScale:1.07,faceCrop:{x:0.50,y:0.28,z:2.24},heroCrop:{x:0.50,y:0.42,z:1.16}},
+ {id:'yomikage',name:'ヨミカゲ',type:'カウンター',species:'クロボウシマーモット',ability:'ジャスト',ult:'後の先・月断',playable:true,onlinePlayable:false,combatIndex:6,displayScale:1.00,faceCrop:{x:0.50,y:0.28,z:2.36},heroCrop:{x:0.50,y:0.42,z:1.24}},
+ {id:'bullet',name:'バレット',type:'チャージ',species:'オナガマーモット',ability:'オーバーチャージ',ult:'超圧縮・弾丸頭突き',playable:true,onlinePlayable:false,combatIndex:7,displayScale:1.03,faceCrop:{x:0.42,y:0.28,z:2.48},heroCrop:{x:0.43,y:0.41,z:1.38}},
+ {id:'dark_moguzo',name:'ダークモグゾー',type:'アナザー',species:'モグゾー別ルート',ability:'暗連',ult:'暗連・黒天烈掌',playable:true,onlinePlayable:false,combatIndex:8,displayScale:1.00,faceCrop:{x:0.50,y:0.28,z:2.35},heroCrop:{x:0.50,y:0.42,z:1.25}}
 ];
 const OFFICIAL_CHARACTER_COUNT=3;
 function skeletonIdOf(c){return(c&&c.skeletonId)||c.id;}
@@ -181,9 +222,8 @@ function whitenAsset(e){ // 近似白(しきい値)を透過化。既に透過�
     if(maxY>=minY)e.bboxH=maxY-minY+1; // 実測キャラ高(alpha bboxの高さ)。表示倍率の動的算出に使う
   }catch(err){ /* file://等でcanvasが汚染される環境では無処理の原画のまま使う(bboxH未設定→呼び出し側でフォールバック) */ }
 }
-loadImg('standing_moguzo','../assets/portraits/moguzo.png'); // v0.6: キャラ選択/タイトル/リザルトはportraits/を使用
-loadImg('standing_pisuke','../assets/portraits/pisuke.png');
-loadImg('standing_godan','../assets/portraits/godan.png');
+loadImg('title_keyvisual','../assets/title/keyvisual.png'); // P1: タイトル背景として全面採用(cover配置。ロゴ/TAP TO STARTは画像内)
+for(const c of CHARS)loadImg('standing_'+c.id,'../assets/portraits/'+c.id+'.png'); // v0.6: キャラ選択/タイトル/リザルトはportraits/を使用。P1追加で全9キャラ分に拡張
 loadImg('roster_moguzo','../assets/roster3d/moguzo.webp',true);
 loadImg('roster_pisuke','../assets/roster3d/pisuke.webp',true);
 loadImg('roster_godan','../assets/roster3d/godan.webp',true);
@@ -204,8 +244,8 @@ loadImg('ui_hp_frame','../assets/ui/hp_frame.png');
 loadImg('ui_sgauge_frame','../assets/ui/sgauge_frame.png');
 loadImg('ui_timer_medal','../assets/ui/timer_medal.png');
 loadImg('ui_paw_emblem','../assets/ui/paw_emblem.png');
-for(const c of CHARS.slice(0,OFFICIAL_CHARACTER_COUNT))loadImg('face_'+c.id,'../assets/ui/face_'+c.id+'.png'); // v0.10: キャラ選択SF風刷新の顔アイコン(§6.8 v2.5)
-for(const c of CHARS.slice(0,OFFICIAL_CHARACTER_COUNT))loadImg('facesq_'+c.id,'../assets/ui/facesq_'+c.id+'.png'); // v0.11: キャラ選択8枠グリッド用の正方形顔アイコン(§6.9)
+for(const c of CHARS.slice(0,OFFICIAL_CHARACTER_COUNT))loadImg('face_'+c.id,'../assets/ui/face_'+c.id+'.png'); // v0.10: キャラ選択SF風刷新の顔アイコン(§6.8 v2.5。既存3キャラのみ現行アイコンを保持)
+for(const c of CHARS)loadImg('facesq_'+c.id,'../assets/ui/facesq_'+c.id+'.png'); // v0.11: 正方形顔アイコン(§6.9)。P1で全9キャラ分に拡張
 loadImg('dirbtn_left','../assets/ui/dirbtn_left.png'); // v0.11: 方向ボタンの影絵アイコン(←=スウェー、§6.9)
 loadImg('dirbtn_down','../assets/ui/dirbtn_down.png'); // ↓=しゃがみ
 loadImg('dirbtn_right','../assets/ui/dirbtn_right.png'); // →=踏み込み
@@ -213,16 +253,19 @@ for(let si=1;si<=5;si++){
   loadImg('ui_star_l'+si,'../assets/ui/star_l'+si+'.png');
   loadImg('ui_star_s'+si,'../assets/ui/star_s'+si+'.png');
 }
-/* ---- v0.6: キャラ戦闘スプライト（20ポーズ×3キャラ）---- */
+/* ---- v0.6: キャラ戦闘スプライト（共通24ポーズ×9キャラ）---- */
 const POSE_IDS=['idle','guard','hurt','win','tele_high','tele_mid','tele_low',
   'atk_mid','atk_high','atk_low','mikiri','roar_charge','roar',
   'grab_reach','grab_lift','grabbed','down','getup','ko','ult_charge',
-  'crouch','sway','lunge','crouch_atk',
-  'cmd1','cmd2','cmd3']; // v0.10: コマンド技専用ポーズ(§6.8 v2.5.1。cmd_spareは予備のため未使用)
-const SPRITES={}; // 公式3骨格だけをロードし、仮キャラはskeletonId経由で共有する
-for(const sid of ['moguzo','pisuke','godan']){
+  'crouch','sway','lunge','crouch_atk']; // P1: 全9キャラ共通の24ポーズ(art/pose-sheets-raw由来)
+const CMD_POSE_IDS=['cmd1','cmd2','cmd3']; // v0.10: コマンド技専用ポーズ(§6.8 v2.5.1。cmd_spareは予備のため未使用)
+const CMD_POSE_CHAR_IDS=new Set(['moguzo','pisuke','godan']); // cmd1〜3専用ポーズ画像を持つキャラ(既存3体のみ。新6キャラは共通ポーズで代替表示のため読み込み自体を行わない)
+function hasCmdPoseArt(c){return CMD_POSE_CHAR_IDS.has(c.id);}
+const SPRITES={};
+for(const sid of CHARS.map(function(c){return c.id;})){
   SPRITES[sid]={};
   for(const pid of POSE_IDS)SPRITES[sid][pid]=loadImg('sprite_'+sid+'_'+pid,'../assets/chars/'+sid+'/'+pid+'.png');
+  if(CMD_POSE_CHAR_IDS.has(sid))for(const pid of CMD_POSE_IDS)SPRITES[sid][pid]=loadImg('sprite_'+sid+'_'+pid,'../assets/chars/'+sid+'/'+pid+'.png');
 }
 function assetReady(key){const e=ASSETS[key];return!!(e&&e.ready&&!e.failed);}
 function drawStanding(key,cx,bottomY,targetH){ // 足元アンカー・高さ基準でフィット
@@ -232,6 +275,20 @@ function drawStanding(key,cx,bottomY,targetH){ // 足元アンカー・高さ基
   const w=targetH*iw/ih;
   ctx.drawImage(src,cx-w/2,bottomY-targetH,w,targetH);
   return true;
+}
+function drawContain(key,x,y,w,h,anchorBottom,alpha){ // P1追加: 矩形(x,y,w,h)へアスペクト比を保ったまま全体を収める(contain)。
+  // クロップ・引き伸ばし無し。anchorBottom=trueで下端基準(足元アンカー)・水平中央、falseで矩形中央に配置
+  if(!assetReady(key))return false;
+  const e=ASSETS[key],src=e.canvas||e.img;
+  const iw=e.img.naturalWidth,ih=e.img.naturalHeight;
+  const scale=Math.min(w/iw,h/ih);
+  const dw=iw*scale,dh=ih*scale,dx=x+(w-dw)/2,dy=anchorBottom?(y+h-dh):(y+(h-dh)/2);
+  if(alpha!=null){ctx.save();ctx.globalAlpha=alpha;ctx.drawImage(src,dx,dy,dw,dh);ctx.restore();}
+  else ctx.drawImage(src,dx,dy,dw,dh);
+  return true;
+}
+function drawHeroArt(charId,x,y,w,h,alpha){ // P1追加: portraits優先・roster3dへフォールバック(いずれもcontain・下端アンカー)
+  return drawContain('standing_'+charId,x,y,w,h,true,alpha)||drawContain('roster_'+charId,x,y,w,h,true,alpha);
 }
 function drawRosterCrop(key,x,y,w,h,crop,radius){ // 鼻/胴体アンカー中心のクロップ。画像全体の尾や余白を倍率計算に使わない
   if(!assetReady(key))return false;
@@ -556,6 +613,8 @@ function onlineInterruptedPress(p){
 
 /* ================= 状態 ================= */
 const game={screen:'title',p1:0,p2:0,frame:0};
+if(new URLSearchParams(location.search).get('debug')==='sprites')game.screen='spriteCheck'; // P1 (7): 9キャラ×24ポーズの表示確認用デバッグ画面(?debug=sprites)
+let spriteCheckIdx=0;
 let B=null;
 let lastMatchOnline=false; // 直前の対戦がオンラインだったか(リザルト画面の遷移先分岐用)
 let resultShownAt=0,resultAdvanced=false; // v0.9.2: オンラインのリザルト保持(最低180F/3秒・8秒で自動進行)用
@@ -779,7 +838,6 @@ function runtimeCommandShadowReset(){
   if(extended&&extended.enabled)extended.reset();
 }
 function runtimeCommandShadowObserve(f,c,cm){
-  if(f.c.trial)return;
   const api=window.__MAMOKEN_COMMAND_SHADOW__;
   const extended=window.__MAMOKEN_EXTENDED_COMMAND_SHADOW__;
   const baseEnabled=!!(api&&api.enabled),extendedEnabled=!!(extended&&extended.enabled);
@@ -815,7 +873,6 @@ function runtimeCommandShadowObserve(f,c,cm){
 }
 /* T17 offline runtime command canary */
 function runtimeCommandCanaryResolve(f,c,legacyCm){
-  if(f.c.trial)return legacyCm;
   const api=window.__MAMOKEN_COMMAND_SHADOW__;
   if(!api||!api.canaryEnabled||lastMatchOnline||NET.active)return legacyCm;
   const trigger=c.t==='grab'?'grab':c.lv;
@@ -1713,6 +1770,7 @@ function pressRoute(p){
   if(game.screen==='onlineInterrupted'){onlineInterruptedPress(p);return null;}
   if(game.screen==='pause'){pausePress(p);return null;}
   if(game.screen==='movelist'){movelistPress(p);return null;}
+  if(game.screen==='spriteCheck'){spriteCheckPress(p);return null;}
   if(game.screen!=='battle'||!B)return null;
   if(inRect(p,PAUSE_BTN.x,PAUSE_BTN.y,PAUSE_BTN.w,PAUSE_BTN.h)){ // 右上「II」: 高さ別攻撃等より先に判定(§6.8 v2.5)
     sfx('tap');pauseConfirmingQuit=false;game.screen='pause';return null;
@@ -1841,19 +1899,27 @@ function selRect(i){return{x:36,y:180+i*230,w:W-72,h:206};} // オンライン�
 const DIFF_LEVELS=['EASY','NORMAL','HARD']; // §6.7 v2.4: キャラ選択画面で切替・デフォルトNORMAL・セッション中保持
 function diffRect(i){
   const w=160,gap=8,totalW=3*w+2*gap,x0=(W-totalW)/2;
-  return{x:x0+i*(w+gap),y:590,w:w,h:48};
+  return{x:x0+i*(w+gap),y:SELECT_DIFF_Y,w:w,h:46};
 }
 let selCharIdx=0;
-const SELECT_SLOTS=10; // 2段×5列。先頭9枠=ロスター、10枠目=?
+let selectFadeFromId=null,selectFadeStart=0; // P1追加: キャラ切替時のクロスフェード(旧キャラid・開始time)
+const SELECT_FADE_MS=220;
+const SELECT_SLOTS=9; // P1: 3段×3列。全9キャラが実装済みのためミステリー枠は無し(CHARS/ROSTERに足すだけで枠が増える構造は維持)
+// P1追加: KOF/餓狼風レイアウト(縦画面翻訳)。上〜中央を左=大型立ち絵/右=顔アイコン密グリッドに分割
+const SELECT_SAFE_TOP=26,SELECT_SAFE_BOTTOM=22; // ノッチ/ホームバー避けの余白(canvasは常にletterboxで全体表示されるため実質は見た目の余白)
+const SELECT_TOP_Y=40,SELECT_TOP_H=Math.round(H*0.44); // 上部帯(立ち絵+グリッド)の高さ=画面高の44%
+const SELECT_ART_BOX={x:8,y:SELECT_TOP_Y,w:250,h:SELECT_TOP_H};
+const SELECT_GRID_BOX={x:266,y:SELECT_TOP_Y,w:W-266-10,h:SELECT_TOP_H};
 function slotRect(i){
-  const cols=5,s=96,gapX=6,gapY=6,totalW=cols*s+(cols-1)*gapX,x0=(W-totalW)/2,y0=270;
+  const cols=3,gap=6,s=Math.floor((SELECT_GRID_BOX.w-(cols-1)*gap)/cols);
+  const totalH=cols*s+(cols-1)*gap,y0=SELECT_GRID_BOX.y+(SELECT_GRID_BOX.h-totalH)/2;
   const col=i%cols,row=Math.floor(i/cols);
-  return{x:x0+col*(s+gapX),y:y0+row*(s+gapY),w:s,h:s};
+  return{x:SELECT_GRID_BOX.x+col*(s+gap),y:y0+row*(s+gap),w:s,h:s};
 }
-const SELECT_STAT_ROWS=[['こうげき','atk'],['はやさ','spd'],['まもり','def'],['わざ','tech'],['くずし','brk']];
-const SELECT_DETAIL_BTN={x:18,y:478,w:W-36,h:72};
-const SELECT_CONFIRM_BTN={x:18,y:660,w:W-36,h:76};
-const SELECT_BACK_BTN={x:18,y:758,w:W-36,h:58};
+const SELECT_DETAIL_BTN={x:18,y:SELECT_TOP_Y+SELECT_TOP_H+14,w:W-36,h:60};
+const SELECT_DIFF_Y=SELECT_DETAIL_BTN.y+SELECT_DETAIL_BTN.h+34;
+const SELECT_CONFIRM_BTN={x:18,y:SELECT_DIFF_Y+46+14,w:W-36,h:68};
+const SELECT_BACK_BTN={x:18,y:SELECT_CONFIRM_BTN.y+SELECT_CONFIRM_BTN.h+10,w:W-36,h:50};
 /* T22 character detail panel */
 const CHARACTER_DETAIL_CATALOG=window.__MAMOKEN_CHARACTER_CATALOG__||null;
 const CHARACTER_DETAIL_TABS=[
@@ -1885,6 +1951,7 @@ function selectPress(p){
     const r=slotRect(i);
     if(inRect(p,r.x,r.y,r.w,r.h)){
       if(i>=ROSTER.length){sfx('guard');return;}
+      if(i!==selCharIdx){selectFadeFromId=ROSTER[selCharIdx].id;selectFadeStart=performance.now();} // P1追加: 立ち絵クロスフェード
       selCharIdx=i;sfx('tap');return;
     }
   }
@@ -1895,7 +1962,6 @@ function selectPress(p){
   }
   if(inRect(p,SELECT_CONFIRM_BTN.x,SELECT_CONFIRM_BTN.y,SELECT_CONFIRM_BTN.w,SELECT_CONFIRM_BTN.h)){
     const selected=ROSTER[selCharIdx];
-    if(!selected.trialPlayable){sfx('guard');return;}
     game.p1=selected.combatIndex;
     game.p2=(Math.random()*CHARS.length)|0;
     if(game.p2===game.p1)game.p2=(game.p2+1)%CHARS.length;
@@ -2106,16 +2172,18 @@ function poseId(f){ // POSE_IDS(20種)の正準名を返す。該当スプライ
   if((P==='attack'||P==='cmdAtk')&&f.atkLv){
     const tg=BAL.TELEGRAPH[f.atkLv];
     if(t<=tg)return 'tele_'+f.atkLv; // テレグラフ=tele_*(コマンド技も通常段のtele_*を流用、§6.8)
-    return(P==='cmdAtk'&&f.cmdIdx!=null)?('cmd'+(f.cmdIdx+1)):('atk_'+f.atkLv); // コマンド技は発生後cmd1〜3(§6.8 v2.5.1)
+    // コマンド技は発生後cmd1〜3(§6.8 v2.5.1)。専用ポーズ画像を持たないキャラ(P1新6キャラ)は
+    // 共通ポーズのatk_*で代替表示する(全て後調整前提)
+    return(P==='cmdAtk'&&f.cmdIdx!=null&&hasCmdPoseArt(f.c))?('cmd'+(f.cmdIdx+1)):('atk_'+f.atkLv);
   }
-  if(P==='cmdStance')return(f.cmdIdx!=null)?('cmd'+(f.cmdIdx+1)):'guard'; // 巌の構え等: 構え中も専用ポーズを表示
+  if(P==='cmdStance')return(f.cmdIdx!=null&&hasCmdPoseArt(f.c))?('cmd'+(f.cmdIdx+1)):'guard'; // 巌の構え等: 構え中も専用ポーズを表示(代替はguard)
   if(P==='dodge')return f.dodgeType; // 'crouch'|'sway'|'lunge'（画像未配置。図形フォールバックはdrawFighterShapeに実装済み）
   if(P==='roar'){
     const R=BAL.ROAR;
     return(t<=R.s)?'roar_charge':'roar';
   }
-  if(P==='grab')return f.cmdMove&&f.cmdIdx!=null?('cmd'+(f.cmdIdx+1)):'grab_reach'; // コマンド投げの構え(§6.8)
-  if(P==='grabHit')return f.cmdMove&&f.cmdIdx!=null?('cmd'+(f.cmdIdx+1)):'grab_lift';
+  if(P==='grab')return(f.cmdMove&&f.cmdIdx!=null&&hasCmdPoseArt(f.c))?('cmd'+(f.cmdIdx+1)):'grab_reach'; // コマンド投げの構え(§6.8)。代替はgrab_reach
+  if(P==='grabHit')return(f.cmdMove&&f.cmdIdx!=null&&hasCmdPoseArt(f.c))?('cmd'+(f.cmdIdx+1)):'grab_lift';
   if(P==='grabbed')return 'grabbed';
   if(P==='grabrec')return 'hurt';          // つかみ空振り→hurtを流用
   if(P==='mikiriRec')return 'mikiri';      // 見切り=mikiri（成功時はclashへ即遷移するため空振りのみ表示対象）
@@ -2138,7 +2206,9 @@ function rFighter(f,ox,oy){ // 仮キャラは既存3体の骨格・共通24ポ�
   if(sp&&sp.ready&&!sp.failed){drawSpriteFighter(f,ox,oy,sp);return;}
   drawFighterShape(f,ox,oy);
 }
-const SPRITE_IDLE_H_FALLBACK={moguzo:520,pisuke:352,godan:536}; // idle実測が不可(file://等でcanvas汚染)な場合のみ使うフォールバック値(v0.9 PR4: サイズ調整版idle差し替えに合わせ再実測)
+// idle実測が不可(file://等でcanvas汚染)な場合のみ使うフォールバック値。新6キャラはP1生成物のidle.pngを
+// 事前計測(alpha bbox高さ)した値(hakuma584/chirka547/takimaru526/yomikage555/bullet524/dark_moguzo579)
+const SPRITE_IDLE_H_FALLBACK={moguzo:520,pisuke:352,godan:536,hakuma:584,chirka:547,takimaru:526,yomikage:555,bullet:524,dark_moguzo:579};
 function spriteScale(c){ // 仮キャラも元骨格の実測倍率・表示身長をそのまま使う
   const charId=skeletonIdOf(c),idleE=SPRITES[charId]&&SPRITES[charId].idle;
   const idleH=(idleE&&idleE.bboxH)||SPRITE_IDLE_H_FALLBACK[charId];
@@ -2519,8 +2589,6 @@ function rHUD(){
   txt(String(Math.max(0,Math.ceil(B.timer/60))),W/2,27,22,'#ffd23f');
   txt(p1.c.name,18,48,15,'#fff','left');
   txt(p2.c.name+(onlineActive()?'':'(CPU)'),W-18,48,15,'#fff','right');
-  if(p1.c.trial)txt('仮骨格 / 共通技のみ',30,137,11,'#ffcf66','left');
-  if(p2.c.trial)txt('仮骨格 / 共通技のみ',W-30,137,11,'#ffcf66','right');
   for(let i=0;i<2;i++){
     ctx.fillStyle=(B.wins[0]>i)?'#ffd23f':'#3a4152';
     ctx.beginPath();ctx.arc(26+i*22,64,7,0,TAU);ctx.fill();
@@ -2957,26 +3025,26 @@ function rBattle(){
   }
 }
 const demoF={c:CHARS[0],side:0,baseX:0,y:0,phase:'idle',pf:0,atkLv:null,guardLv:null,held:null,lunge:0,kb:0,s:0,ult:0,combo:0,sNo:0};
-function rTitle(){
-  const g=ctx.createLinearGradient(0,0,0,H);
-  g.addColorStop(0,'#274069');g.addColorStop(0.5,'#3c6a52');g.addColorStop(1,'#171a22');
-  ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
-  ctx.fillStyle='rgba(255,90,60,0.85)';
-  ctx.beginPath();ctx.arc(W/2,268,150,0,TAU);ctx.fill();
-  txt('マモ拳',W/2,250,110,'#ffd23f');
-  txt('（仮）',W/2+170,304,28,'#fff');
-  txt('- ギュイーン格闘 -',W/2,346,26,'#ffe6a3');
-  demoF.c=CHARS[Math.floor(game.frame/240)%3];
-  // 立ち絵は体格比(BAL.PORTRAIT_RATIO)を基準高336へ乗算。中央配置は維持(足元アンカーで下端揃え)
-  if(!drawStanding('standing_'+demoF.c.id,W/2,724,336*BAL.PORTRAIT_RATIO[demoF.c.id]))rFighter(demoF,W/2,616);
-  if(game.frame%60<38)txt('タップでスタート',W/2,732,30,'#fff');
-  txt('右＝高さタップで攻撃(上/中/下)／左上の丸ボタン=つかみ',W/2,806,14,'#cfd6e6');
-  txt('左上＝ホールドでガード／ジャストタップ=見切り',W/2,830,14,'#ffe6a3');
-  txt('左下＝←スウェー ↓しゃがみ →踏み込み（回避）ボタン',W/2,854,14,'#a6e6c0');
-  txt('段×回避の三すくみ。回避成功でカウンター(×1.25)のチャンス',W/2,880,14,'#ffe14d');
-  txt('方向2つ＋攻撃/つかみでコマンド技。コンボは基本4ルート',W/2,904,14,'#ffb37f');
-  txt('Sゲージ満タン→右フリック＝咆哮（割りこみ/大削り）',W/2,926,14,'#cfd6e6');
-  txt('prototype v0.10 - オンライン対戦（仮グラ・仮SE）',W/2,946,12,'#8891a6');
+function rTitle(){ // P1: keyvisual.pngをcover全面採用。ロゴ/TAP TO STARTは画像内の文字を使用し、旧テキスト・立ち絵ローテは非表示
+  if(assetReady('title_keyvisual')){
+    const e=ASSETS['title_keyvisual'],img=e.canvas||e.img;
+    const iw=e.img.naturalWidth,ih=e.img.naturalHeight;
+    const scale=Math.max(W/iw,H/ih);
+    const dw=iw*scale,dh=ih*scale;
+    ctx.drawImage(img,(W-dw)/2,(H-dh)/2,dw,dh);
+  }else{ // 未読込時のみ現行描画へフォールバック
+    const g=ctx.createLinearGradient(0,0,0,H);
+    g.addColorStop(0,'#274069');g.addColorStop(0.5,'#3c6a52');g.addColorStop(1,'#171a22');
+    ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
+    ctx.fillStyle='rgba(255,90,60,0.85)';
+    ctx.beginPath();ctx.arc(W/2,268,150,0,TAU);ctx.fill();
+    txt('マモ拳',W/2,250,110,'#ffd23f');
+    txt('（仮）',W/2+170,304,28,'#fff');
+    txt('- ギュイーン格闘 -',W/2,346,26,'#ffe6a3');
+    demoF.c=CHARS[Math.floor(game.frame/240)%3];
+    if(!drawStanding('standing_'+demoF.c.id,W/2,724,336*BAL.PORTRAIT_RATIO[demoF.c.id]))rFighter(demoF,W/2,616);
+    if(game.frame%60<38)txt('タップでスタート',W/2,732,30,'#fff');
+  }
   // オンライン対戦ボタン(右上・タップでロビー画面へ)
   ONLINE_BTN.x=W-142;ONLINE_BTN.y=14;ONLINE_BTN.w=128;ONLINE_BTN.h=36;
   ctx.fillStyle='rgba(127,216,255,0.16)';rr(ONLINE_BTN.x,ONLINE_BTN.y,ONLINE_BTN.w,ONLINE_BTN.h,10);ctx.fill();
@@ -3104,52 +3172,79 @@ function drawDetailCombos(c,startY){
   detailWrapped('入力列／始動条件／消費リソース／用途／実測ダメージ／検証状態',44,y+53,378,14,'#dfe4ee',3);y+=116;
   return y;
 }
-function rSelect(){ // T28: 2x5顔アイコン＋アート/文字分離＋全9体オフライン仮試運転
+function rSelect(){ // P1追加: KOF/餓狼風レイアウト(縦画面翻訳)。左=大型立ち絵(contain+クロスフェード)/右=顔アイコン密グリッド/下=帯状メニュー
   const c=ROSTER[selCharIdx],detail=selectedCharacterDetail();
-  const g=ctx.createLinearGradient(0,0,0,H);g.addColorStop(0,'#20263c');g.addColorStop(0.55,'#1a2032');g.addColorStop(1,'#12141c');
-  ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
-  txt('キャラクターをえらぶ',W/2,14,13,'#a4adc0');
-  const hero={x:18,y:34,w:184,h:218},info={x:214,y:34,w:308,h:218};
-  ctx.fillStyle='#252c40';rr(hero.x,hero.y,hero.w,hero.h,18);ctx.fill();ctx.strokeStyle='#48546f';ctx.lineWidth=2;rr(hero.x,hero.y,hero.w,hero.h,18);ctx.stroke();
-  drawRosterCrop('roster_'+c.id,hero.x+6,hero.y+6,hero.w-12,hero.h-12,c.heroCrop,14);
-  ctx.fillStyle='rgba(26,31,47,0.98)';rr(info.x,info.y,info.w,info.h,18);ctx.fill();ctx.strokeStyle='#48546f';ctx.lineWidth=2;rr(info.x,info.y,info.w,info.h,18);ctx.stroke();
-  txt(c.name,info.x+18,info.y+34,c.name.length>6?23:30,'#fff','left');
-  txt(c.type,info.x+18,info.y+68,17,'#ffd23f','left');
-  txt(c.species,info.x+18,info.y+94,13,'#aeb8cb','left');
-  txt(c.playable?'正式実装 / オンライン可':'オフライン仮試運転',info.x+18,info.y+124,13,c.playable?'#7CFC00':'#ffcf66','left');
-  if(c.trialLabel)txt(c.trialLabel,info.x+18,info.y+149,12,'#ffb36b','left');
-  txt('特性  '+(detail?detail.specials.map(function(s){return s.nameJa;}).join('／'):c.ability),info.x+18,info.y+181,13,'#e8ecf4','left');
-  txt('奥義  '+(detail?detail.ultimate.nameJa:c.ult),info.x+18,info.y+207,13,'#ffe6a3','left');
+  // 背景: 暗色ベース+斜めグラデ+ビネット(keyvisualは流用しない。文字の可読性を最優先)
+  ctx.fillStyle='#0c0e15';ctx.fillRect(0,0,W,H);
+  const bg=ctx.createLinearGradient(0,0,W,H);
+  bg.addColorStop(0,'#232a42');bg.addColorStop(0.5,'#161a28');bg.addColorStop(1,'#0a0b10');
+  ctx.fillStyle=bg;ctx.fillRect(0,0,W,H);
+  const vg=ctx.createRadialGradient(W*0.5,H*0.32,W*0.1,W*0.5,H*0.32,W*0.95);
+  vg.addColorStop(0,'rgba(0,0,0,0)');vg.addColorStop(1,'rgba(0,0,0,0.58)');
+  ctx.fillStyle=vg;ctx.fillRect(0,0,W,H);
+  txt('キャラクターをえらぶ',W/2,SELECT_SAFE_TOP-6,13,'#a4adc0');
+
+  // --- 左: 大型立ち絵(portraits優先・roster3dへフォールバック。containで引き伸ばし無し・下端アンカー) ---
+  const AB=SELECT_ART_BOX;
+  ctx.save();rr(AB.x,AB.y,AB.w,AB.h,18);ctx.clip();
+  ctx.fillStyle='rgba(10,12,18,0.35)';ctx.fillRect(AB.x,AB.y,AB.w,AB.h);
+  let fadeT=1,fading=selectFadeFromId!=null;
+  if(fading){
+    const elapsed=performance.now()-selectFadeStart;
+    if(elapsed<SELECT_FADE_MS){fadeT=elapsed/SELECT_FADE_MS;drawHeroArt(selectFadeFromId,AB.x,AB.y,AB.w,AB.h,1-fadeT);}
+    else{selectFadeFromId=null;fading=false;}
+  }
+  if(!drawHeroArt(c.id,AB.x,AB.y,AB.w,AB.h,fading?fadeT:null))drawRosterCrop('roster_'+c.id,AB.x,AB.y,AB.w,AB.h,c.heroCrop,0);
+  const topFade=ctx.createLinearGradient(AB.x,AB.y,AB.x,AB.y+112);
+  topFade.addColorStop(0,'rgba(6,8,12,0.74)');topFade.addColorStop(1,'rgba(6,8,12,0)');
+  ctx.fillStyle=topFade;ctx.fillRect(AB.x,AB.y,AB.w,112);
+  const botFade=ctx.createLinearGradient(AB.x,AB.y+AB.h-46,AB.x,AB.y+AB.h);
+  botFade.addColorStop(0,'rgba(6,8,12,0)');botFade.addColorStop(1,'rgba(6,8,12,0.84)');
+  ctx.fillStyle=botFade;ctx.fillRect(AB.x,AB.y+AB.h-46,AB.w,46);
+  ctx.restore();
+  ctx.strokeStyle='#3a4560';ctx.lineWidth=2;rr(AB.x,AB.y,AB.w,AB.h,18);ctx.stroke();
+  txt(c.name,AB.x+12,AB.y+29,c.name.length>6?23:29,'#fff','left');
+  txt(c.type+'  '+c.species,AB.x+12,AB.y+55,12,'#ffd23f','left');
+  txt(c.onlinePlayable?'正式実装 / オンライン可':'正式実装 / オフラインのみ',AB.x+12,AB.y+77,11,c.onlinePlayable?'#7CFC00':'#ffcf66','left');
+  const abilityLine='特性:'+(detail?detail.specials.map(function(s){return s.nameJa;}).join('／'):c.ability)+'　奥義:'+(detail?detail.ultimate.nameJa:c.ult);
+  detailWrapped(abilityLine,AB.x+12,AB.y+AB.h-34,AB.w-24,11,'#f0f2f7',2);
+
+  // --- 右: 顔アイコン密グリッド3x3(選択中=ゴールド太枠+発光、未選択は少し暗く) ---
   for(let i=0;i<SELECT_SLOTS;i++){
     const r=slotRect(i),entry=ROSTER[i],active=i===selCharIdx;
-    ctx.fillStyle=active?'rgba(255,210,60,0.16)':'#232a3d';rr(r.x,r.y,r.w,r.h,12);ctx.fill();
-    ctx.strokeStyle=active?'#ffd23f':'#3a4560';ctx.lineWidth=active?3:2;rr(r.x,r.y,r.w,r.h,12);ctx.stroke();
-    if(!entry){
-      txt('?',r.x+r.w/2,r.y+39,38,'#8993aa');
-      ctx.fillStyle='rgba(8,10,16,0.86)';ctx.fillRect(r.x+4,r.y+r.h-25,r.w-8,21);txt('未定',r.x+r.w/2,r.y+r.h-14,10,'#aeb6c8');
-      continue;
+    ctx.save();
+    if(active){ctx.shadowColor='#ffd23f';ctx.shadowBlur=14;}
+    ctx.fillStyle=active?'#2c2410':'#1a1d29';rr(r.x,r.y,r.w,r.h,10);ctx.fill();
+    ctx.restore();
+    if(entry){
+      ctx.save();
+      if(!active)ctx.globalAlpha=0.6;
+      if(!drawUiIcon('facesq_'+entry.id,r.x+r.w/2,r.y+r.h/2,r.w-6))drawRosterCrop('roster_'+entry.id,r.x+2,r.y+2,r.w-4,r.h-4,entry.faceCrop,8);
+      ctx.restore();
+      if(entry.onlinePlayable){ctx.fillStyle='#7fd8ff';ctx.beginPath();ctx.arc(r.x+r.w-8,r.y+8,4,0,TAU);ctx.fill();}
     }
-    drawRosterCrop('roster_'+entry.id,r.x+4,r.y+4,r.w-8,r.h-31,entry.faceCrop,8);
-    ctx.fillStyle='rgba(8,10,16,0.90)';ctx.fillRect(r.x+4,r.y+r.h-25,r.w-8,21);
-    txt(entry.name,r.x+r.w/2,r.y+r.h-14,entry.name.length>6?8:10,'#fff');
-    ctx.fillStyle=entry.playable?'#7CFC00':'#ffbf4a';ctx.beginPath();ctx.arc(r.x+r.w-10,r.y+10,5,0,TAU);ctx.fill();
+    ctx.strokeStyle=active?'#ffd23f':'#3a4560';ctx.lineWidth=active?4:1.5;rr(r.x,r.y,r.w,r.h,10);ctx.stroke();
   }
-  ctx.fillStyle=detail?'rgba(85,118,181,0.30)':'#343946';rr(SELECT_DETAIL_BTN.x,SELECT_DETAIL_BTN.y,SELECT_DETAIL_BTN.w,SELECT_DETAIL_BTN.h,16);ctx.fill();
-  ctx.strokeStyle=detail?'#7fd8ff':'#666f82';ctx.lineWidth=3;rr(SELECT_DETAIL_BTN.x,SELECT_DETAIL_BTN.y,SELECT_DETAIL_BTN.w,SELECT_DETAIL_BTN.h,16);ctx.stroke();
-  txt('性能・わざ・コンボを見る',W/2,SELECT_DETAIL_BTN.y+SELECT_DETAIL_BTN.h/2,19,detail?'#e8f6ff':'#9da5b5');
-  txt('CPUむずかしさ',W/2,572,13,'#a2abc0');
+
+  // --- 下部: 帯状メニュー(機能・導線は現行のまま) ---
+  ctx.fillStyle=detail?'rgba(85,118,181,0.30)':'#20263a';rr(SELECT_DETAIL_BTN.x,SELECT_DETAIL_BTN.y,SELECT_DETAIL_BTN.w,SELECT_DETAIL_BTN.h,14);ctx.fill();
+  ctx.strokeStyle=detail?'#7fd8ff':'#4a5470';ctx.lineWidth=2.5;rr(SELECT_DETAIL_BTN.x,SELECT_DETAIL_BTN.y,SELECT_DETAIL_BTN.w,SELECT_DETAIL_BTN.h,14);ctx.stroke();
+  txt('性能・わざ・コンボを見る',W/2,SELECT_DETAIL_BTN.y+SELECT_DETAIL_BTN.h/2,18,detail?'#e8f6ff':'#9da5b5');
+  txt('CPUむずかしさ',W/2,SELECT_DIFF_Y-14,12,'#a2abc0');
   for(let i=0;i<3;i++){
     const dl=DIFF_LEVELS[i],r=diffRect(i),active=aiDifficulty===dl;
-    ctx.fillStyle=active?'rgba(255,255,255,0.14)':'#232a3d';rr(r.x,r.y,r.w,r.h,10);ctx.fill();
-    ctx.strokeStyle=active?DIFF_COL[dl]:'#3a4560';ctx.lineWidth=active?3:2;rr(r.x,r.y,r.w,r.h,10);ctx.stroke();txt(dl,r.x+r.w/2,r.y+r.h/2,16,active?DIFF_COL[dl]:'#cfd6e6');
+    ctx.fillStyle=active?'rgba(255,255,255,0.14)':'#1a1d29';rr(r.x,r.y,r.w,r.h,10);ctx.fill();
+    ctx.strokeStyle=active?DIFF_COL[dl]:'#3a4560';ctx.lineWidth=active?3:2;rr(r.x,r.y,r.w,r.h,10);ctx.stroke();
+    txt(dl,r.x+r.w/2,r.y+r.h/2,15,active?DIFF_COL[dl]:'#cfd6e6');
   }
-  ctx.fillStyle=c.playable?'#3d6e2f':'#665124';rr(SELECT_CONFIRM_BTN.x,SELECT_CONFIRM_BTN.y,SELECT_CONFIRM_BTN.w,SELECT_CONFIRM_BTN.h,16);ctx.fill();
-  ctx.strokeStyle=c.playable?'#7CFC00':'#ffcf66';ctx.lineWidth=3;rr(SELECT_CONFIRM_BTN.x,SELECT_CONFIRM_BTN.y,SELECT_CONFIRM_BTN.w,SELECT_CONFIRM_BTN.h,16);ctx.stroke();
-  txt(c.playable?'けってい（正式実装）':'仮骨格で試運転',W/2,SELECT_CONFIRM_BTN.y+31,20,'#fff');
-  txt(c.playable?'相手は9体からランダム':'既存性能・共通技のみ / 専用技未実装',W/2,SELECT_CONFIRM_BTN.y+55,12,c.playable?'#cceac3':'#ffe1a8');
-  ctx.fillStyle='rgba(255,255,255,0.06)';rr(SELECT_BACK_BTN.x,SELECT_BACK_BTN.y,SELECT_BACK_BTN.w,SELECT_BACK_BTN.h,12);ctx.fill();
-  ctx.strokeStyle='rgba(255,255,255,0.35)';ctx.lineWidth=2;rr(SELECT_BACK_BTN.x,SELECT_BACK_BTN.y,SELECT_BACK_BTN.w,SELECT_BACK_BTN.h,12);ctx.stroke();txt('もどる',W/2,SELECT_BACK_BTN.y+SELECT_BACK_BTN.h/2,16,'#dfe4ee');
-  txt('●緑=正式実装  ●黄=仮骨格テスト　オンラインは正式3体のみ',W/2,850,12,'#aeb6c8');
+  ctx.fillStyle='#2c4a1f';rr(SELECT_CONFIRM_BTN.x,SELECT_CONFIRM_BTN.y,SELECT_CONFIRM_BTN.w,SELECT_CONFIRM_BTN.h,16);ctx.fill();
+  ctx.strokeStyle='#7CFC00';ctx.lineWidth=3;rr(SELECT_CONFIRM_BTN.x,SELECT_CONFIRM_BTN.y,SELECT_CONFIRM_BTN.w,SELECT_CONFIRM_BTN.h,16);ctx.stroke();
+  txt('けってい',W/2,SELECT_CONFIRM_BTN.y+29,20,'#fff');
+  txt('相手は9体からランダム',W/2,SELECT_CONFIRM_BTN.y+52,12,'#cceac3');
+  ctx.fillStyle='rgba(255,255,255,0.05)';rr(SELECT_BACK_BTN.x,SELECT_BACK_BTN.y,SELECT_BACK_BTN.w,SELECT_BACK_BTN.h,12);ctx.fill();
+  ctx.strokeStyle='rgba(255,255,255,0.3)';ctx.lineWidth=2;rr(SELECT_BACK_BTN.x,SELECT_BACK_BTN.y,SELECT_BACK_BTN.w,SELECT_BACK_BTN.h,12);ctx.stroke();
+  txt('もどる',W/2,SELECT_BACK_BTN.y+SELECT_BACK_BTN.h/2,16,'#dfe4ee');
+  txt('●青=オンライン対戦可(モグゾー/ピスケ/ゴダン)　9体ともオフラインで対戦可能',W/2,SELECT_BACK_BTN.y+SELECT_BACK_BTN.h+26,11,'#aeb6c8');
 }
 /* T29 visual audit fixes */
 function rCharacterDetail(){
@@ -3158,7 +3253,7 @@ function rCharacterDetail(){
   ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
   if(!c){txt('詳細データを読み込めませんでした',W/2,H/2,20,'#ff8b8b');return;}
   txt(c.nameJa,W/2,34,30,'#fff');txt(c.styleJa+' / '+c.speciesJa,W/2,67,14,'#ffd23f');
-  txt(selected.playable?'正式実装・オンライン可':'仮骨格でオフライン試運転可',W/2,91,12,selected.playable?'#7CFC00':'#ffcf66');
+  txt(selected.onlinePlayable?'正式実装・オンライン可':'正式実装・オフラインのみ',W/2,91,12,selected.onlinePlayable?'#7CFC00':'#ffcf66');
   for(let i=0;i<CHARACTER_DETAIL_TABS.length;i++){
     const tab=CHARACTER_DETAIL_TABS[i],r=characterDetailTabRect(i),active=characterDetailTab===tab.id;
     ctx.fillStyle=active?'rgba(127,216,255,0.22)':'#252b3d';rr(r.x,r.y,r.w,r.h,14);ctx.fill();
@@ -3239,7 +3334,6 @@ function rMovelistOverlay(){ // わざ表=使用キャラのコマンド技3種+
   txt('コマンド技',60,90,17,'#7fd8ff','left');
   const moves=commandMovesFor(myF.c);
   let y=104;
-  if(myF.c.trial){txt('仮骨格テスト：専用コマンド技は未実装',60,y+18,14,'#ffcf66','left');y+=42;}
   for(let i=0;i<moves.length;i++){
     const m=moves[i];
     const seqStr=m.seq.map(function(d){return DIR_ARROW[d];}).join('')+'＋'+(m.type==='grab'?'つかみ':LV_LABEL[m.trigger]);
@@ -3247,7 +3341,7 @@ function rMovelistOverlay(){ // わざ表=使用キャラのコマンド技3種+
     ctx.strokeStyle='#3a4560';ctx.lineWidth=2;rr(50,y,W-100,66,14);ctx.stroke();
     txt(seqStr,74,y+26,19,'#ffd23f','left');
     txt(m.name,74,y+50,16,'#fff','left');
-    txt('dmg'+Math.round(m.d),W-70,y+38,15,'#ffb6b6','right');
+    txt('dmg'+Math.round(m.type==='stance'?m.counterDmg:m.d),W-70,y+38,15,'#ffb6b6','right'); // 構え技はcounterDmgを表示(P1でdmgNaNを発見・修正)
     y+=76;
   }
   y+=8;
@@ -3340,6 +3434,38 @@ function render(){
   else if(game.screen==='onlineLobby')rOnlineLobby();
   else if(game.screen==='pause'){if(B)rBattle();rPauseOverlay();}
   else if(game.screen==='movelist'){if(B)rBattle();rMovelistOverlay();}
+  else if(game.screen==='spriteCheck')rSpriteCheck();
+}
+const SPRITE_CHECK_PREV_BTN={x:10,y:10,w:60,h:40},SPRITE_CHECK_NEXT_BTN={x:W-70,y:10,w:60,h:40},SPRITE_CHECK_BACK_BTN={x:W/2-60,y:10,w:120,h:40};
+function spriteCheckPress(p){
+  if(inRect(p,SPRITE_CHECK_PREV_BTN.x,SPRITE_CHECK_PREV_BTN.y,SPRITE_CHECK_PREV_BTN.w,SPRITE_CHECK_PREV_BTN.h)){spriteCheckIdx=(spriteCheckIdx+CHARS.length-1)%CHARS.length;return;}
+  if(inRect(p,SPRITE_CHECK_NEXT_BTN.x,SPRITE_CHECK_NEXT_BTN.y,SPRITE_CHECK_NEXT_BTN.w,SPRITE_CHECK_NEXT_BTN.h)){spriteCheckIdx=(spriteCheckIdx+1)%CHARS.length;return;}
+  if(inRect(p,SPRITE_CHECK_BACK_BTN.x,SPRITE_CHECK_BACK_BTN.y,SPRITE_CHECK_BACK_BTN.w,SPRITE_CHECK_BACK_BTN.h)){game.screen='title';return;}
+}
+// P1 (7): 全9キャラ×共通24ポーズの表示確認用デバッグ画面(?debug=sprites でタイトルの代わりに表示)。
+// 左右ボタンでキャラ切替、6列×4行で全ポーズをサムネイル表示しSPRITES[id][poseId]の読み込み状態も明示する。
+function rSpriteCheck(){
+  ctx.fillStyle='#12141c';ctx.fillRect(0,0,W,H);
+  const c=CHARS[spriteCheckIdx];
+  txt('SPRITE CHECK',W/2,52,14,'#7fd8ff');
+  txt(c.name+' ('+c.id+')  '+(spriteCheckIdx+1)+'/'+CHARS.length,W/2,76,16,'#ffd23f');
+  btn(SPRITE_CHECK_PREV_BTN.x,SPRITE_CHECK_PREV_BTN.y,SPRITE_CHECK_PREV_BTN.w,SPRITE_CHECK_PREV_BTN.h,'◀');
+  btn(SPRITE_CHECK_NEXT_BTN.x,SPRITE_CHECK_NEXT_BTN.y,SPRITE_CHECK_NEXT_BTN.w,SPRITE_CHECK_NEXT_BTN.h,'▶');
+  btn(SPRITE_CHECK_BACK_BTN.x,SPRITE_CHECK_BACK_BTN.y,SPRITE_CHECK_BACK_BTN.w,SPRITE_CHECK_BACK_BTN.h,'タイトルへ');
+  const cols=6,cell=88,gap=4,x0=(W-(cols*cell+(cols-1)*gap))/2,y0=100;
+  let ready=0;
+  for(let i=0;i<POSE_IDS.length;i++){
+    const pid=POSE_IDS[i],col=i%cols,row=Math.floor(i/cols);
+    const x=x0+col*(cell+gap),y=y0+row*(cell+gap);
+    ctx.fillStyle='#1c2030';ctx.fillRect(x,y,cell,cell-16);
+    const sp=SPRITES[c.id]&&SPRITES[c.id][pid];
+    const ok=!!(sp&&sp.ready&&!sp.failed);
+    if(ok){ready++;drawUiIcon('sprite_'+c.id+'_'+pid,x+cell/2,y+(cell-16)/2,cell-10);}
+    else{ctx.strokeStyle='#ff6b6b';ctx.lineWidth=2;ctx.strokeRect(x+2,y+2,cell-4,cell-20);txt('NG',x+cell/2,y+(cell-16)/2,14,'#ff6b6b');}
+    ctx.fillStyle=ok?'#7CFC00':'#ff6b6b';ctx.fillRect(x,y+cell-16,10,10);
+    txt(pid,x+cell/2,y+cell-6,8,'#cfd6e6');
+  }
+  txt('読み込み済み: '+ready+'/'+POSE_IDS.length,W/2,y0+4*(cell+gap)+16,13,ready===POSE_IDS.length?'#7CFC00':'#ffcf66');
 }
 
 /* ================= メインループ ================= */
