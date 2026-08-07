@@ -2774,6 +2774,26 @@ function spriteScale(c){ // 仮キャラも元骨格の実測倍率・表示身�
   const idleH=(idleE&&idleE.bboxH)||SPRITE_IDLE_H_FALLBACK[charId];
   return BAL.SPRITE_H[charId]/idleH;
 }
+// VIS-R1(3): tools/gen_pose_scale_report.mjsでchars/{id}/*.pngをtools/face_metrics.mjs実測し、
+// idle.pngの頭サイズを基準(常に補正1.0)に「基準/そのポーズの頭サイズ」をクランプ0.85〜1.20で
+// 算出した疎な補正テーブル(scale===1.0のポーズは省略。キャラ間の体格差=SPRITE_H/idle基準は
+// 変更せず、キャラ内のポーズ間の頭サイズばらつきのみを補正する)。検出候補1件以下・検出不能な
+// ポーズは補正対象外(現状維持)。全データはreports/vis/pose_scale_corrections.csv参照
+const POSE_SCALE_CORRECTION={
+  moguzo:{cmd1:0.850,cmd2:1.200,cmd3:1.096,grab_lift:1.055,tele_high:0.951,tele_mid:0.936},
+  pisuke:{cmd2:1.200,cmd3:0.850,getup:0.919,grab_lift:1.130,grab_reach:1.020,hurt:1.200,lunge:0.965,mikiri:1.012,roar:0.969,sway:0.850},
+  godan:{getup:1.161,lunge:0.930},
+  hakuma:{atk_high:1.200,atk_low:1.189,atk_mid:1.179,crouch:0.888,crouch_atk:0.971,getup:1.179,grab_lift:1.200,grab_reach:1.200,hurt:1.083,lunge:1.026,mikiri:1.200,roar:1.124,roar_charge:1.131,sway:0.943,tele_high:1.094,tele_low:1.149,tele_mid:1.079,ult_charge:1.196,win:1.200},
+  chirka:{atk_low:1.075,crouch:1.091,crouch_atk:1.140,ko:1.098,lunge:1.143,roar_charge:1.200,sway:1.130,tele_low:1.016,ult_charge:1.016,win:1.153},
+  takimaru:{atk_low:1.200,grabbed:1.200,hurt:0.940,roar_charge:1.200,tele_low:0.850,tele_mid:0.850},
+  yomikage:{atk_low:1.200,crouch:1.200,crouch_atk:1.200,getup:1.160,grab_lift:1.200,grab_reach:1.200,guard:1.096,hurt:1.200,ko:1.200,mikiri:1.200,roar:1.194,win:1.076},
+  bullet:{atk_high:1.140,atk_low:1.200,atk_mid:1.126,crouch:0.974,crouch_atk:1.027,getup:1.191,grab_reach:1.138,guard:1.013,lunge:1.013,mikiri:1.155,roar:1.083,roar_charge:1.131,sway:0.943,tele_high:1.081,tele_low:1.106,tele_mid:1.087,ult_charge:1.200,win:1.079},
+  dark_moguzo:{grab_reach:0.928,lunge:1.038},
+};
+function poseScaleCorrection(c,pid){
+  const t=POSE_SCALE_CORRECTION[skeletonIdOf(c)];
+  return(t&&t[pid]!=null)?t[pid]:1.0;
+}
 function dodgeSpriteOffset(f){ // 回避スプライト用: 11-22Fの戻り区間だけ同画像を構え位置へ向けて位置補間する
   const D=BAL.DODGE,back=f.pf<=D.judgeF?0:Math.min(1,(f.pf-D.judgeF)/(D.totalF-D.judgeF));
   if(f.dodgeType==='crouch')return[0,10*back];   // しゃがみ→起き上がる分だけ上へ戻す
@@ -2801,7 +2821,8 @@ function drawSpriteFighter(f,ox,oy,sp){
   // 集中スロー・ズームは呼び出し側(rBattle/fpos)の変換をそのまま受けるため追加対応不要
   const x=(ox!=null)?ox:fpos(f),gy=(oy!=null)?oy:f.y,face=f.side===0?1:-1;
   const img=sp.canvas||sp.img,iw=sp.img.naturalWidth,ih=sp.img.naturalHeight;
-  const scale=spriteScale(f.c); // 元骨格idle基準の実測倍率。仮キャラも全ポーズ同倍率
+  // 元骨格idle基準の実測倍率 × VIS-R1(3)のポーズ別頭サイズ補正(キャラ内の頭サイズを揃える)
+  const scale=spriteScale(f.c)*poseScaleCorrection(f.c,poseId(f));
   const w=iw*scale,h=ih*scale;
   ctx.fillStyle='rgba(0,0,0,0.22)';
   ctx.beginPath();ctx.ellipse(x,gy+5,42,9,0,0,TAU);ctx.fill();

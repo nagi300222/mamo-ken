@@ -1,0 +1,226 @@
+charId,poseId,detected,candCount,headSize,reference,referenceSource,scale,note
+moguzo,atk_high,true,1,,131.42,median(fallback: idle unreliable),1.0000,候補1件のみ(弱)・現状維持
+moguzo,atk_low,true,1,,131.42,median(fallback: idle unreliable),1.0000,候補1件のみ(弱)・現状維持
+moguzo,atk_mid,true,1,,131.42,median(fallback: idle unreliable),1.0000,候補1件のみ(弱)・現状維持
+moguzo,cmd1,true,3,164.62,131.42,median(fallback: idle unreliable),0.8500,クランプ前0.798
+moguzo,cmd2,true,3,98.23,131.42,median(fallback: idle unreliable),1.2000,クランプ前1.338
+moguzo,cmd3,true,2,119.90,131.42,median(fallback: idle unreliable),1.0961,
+moguzo,crouch,true,1,,131.42,median(fallback: idle unreliable),1.0000,候補1件のみ(弱)・現状維持
+moguzo,crouch_atk,true,1,,131.42,median(fallback: idle unreliable),1.0000,候補1件のみ(弱)・現状維持
+moguzo,down,false,0,,131.42,median(fallback: idle unreliable),1.0000,検出不能・現状維持
+moguzo,getup,true,1,,131.42,median(fallback: idle unreliable),1.0000,候補1件のみ(弱)・現状維持
+moguzo,grab_lift,true,2,124.62,131.42,median(fallback: idle unreliable),1.0546,
+moguzo,grab_reach,true,1,,131.42,median(fallback: idle unreliable),1.0000,候補1件のみ(弱)・現状維持
+moguzo,grabbed,true,1,,131.42,median(fallback: idle unreliable),1.0000,候補1件のみ(弱)・現状維持
+moguzo,guard,false,0,,131.42,median(fallback: idle unreliable),1.0000,検出不能・現状維持
+moguzo,hurt,false,0,,131.42,median(fallback: idle unreliable),1.0000,検出不能・現状維持
+moguzo,idle,true,1,,131.42,median(fallback: idle unreliable),1.0000,候補1件のみ(弱)・現状維持
+moguzo,ko,false,0,,131.42,median(fallback: idle unreliable),1.0000,検出不能・現状維持
+moguzo,lunge,true,1,,131.42,median(fallback: idle unreliable),1.0000,候補1件のみ(弱)・現状維持
+moguzo,mikiri,true,1,,131.42,median(fallback: idle unreliable),1.0000,候補1件のみ(弱)・現状維持
+moguzo,roar,true,1,,131.42,median(fallback: idle unreliable),1.0000,候補1件のみ(弱)・現状維持
+moguzo,roar_charge,true,1,,131.42,median(fallback: idle unreliable),1.0000,候補1件のみ(弱)・現状維持
+moguzo,sway,true,1,,131.42,median(fallback: idle unreliable),1.0000,候補1件のみ(弱)・現状維持
+moguzo,tele_high,true,2,138.22,131.42,median(fallback: idle unreliable),0.9508,
+moguzo,tele_low,true,1,,131.42,median(fallback: idle unreliable),1.0000,候補1件のみ(弱)・現状維持
+moguzo,tele_mid,true,2,140.43,131.42,median(fallback: idle unreliable),0.9359,
+moguzo,ult_charge,true,1,,131.42,median(fallback: idle unreliable),1.0000,候補1件のみ(弱)・現状維持
+moguzo,win,true,1,,131.42,median(fallback: idle unreliable),1.0000,候補1件のみ(弱)・現状維持
+pisuke,atk_high,true,1,,129.90,median(fallback: idle unreliable),1.0000,候補1件のみ(弱)・現状維持
+pisuke,atk_low,true,1,,129.90,median(fallback: idle unreliable),1.0000,候補1件のみ(弱)・現状維持
+pisuke,atk_mid,true,1,,129.90,median(fallback: idle unreliable),1.0000,候補1件のみ(弱)・現状維持
+pisuke,cmd1,true,1,,129.90,median(fallback: idle unreliable),1.0000,候補1件のみ(弱)・現状維持
+pisuke,cmd2,true,2,91.96,129.90,median(fallback: idle unreliable),1.2000,クランプ前1.413
+pisuke,cmd3,true,5,161.20,129.90,median(fallback: idle unreliable),0.8500,クランプ前0.806
+pisuke,crouch,true,1,,129.90,median(fallback: idle unreliable),1.0000,候補1件のみ(弱)・現状維持
+pisuke,crouch_atk,true,2,129.61,129.90,median(fallback: idle unreliable),1.0023,
+pisuke,down,false,0,,129.90,median(fallback: idle unreliable),1.0000,検出不能・現状維持
+pisuke,getup,true,2,141.38,129.90,median(fallback: idle unreliable),0.9188,
+pisuke,grab_lift,true,5,114.99,129.90,median(fallback: idle unreliable),1.1297,
+pisuke,grab_reach,true,5,127.36,129.90,median(fallback: idle unreliable),1.0199,
+pisuke,grabbed,true,1,,129.90,median(fallback: idle unreliable),1.0000,候補1件のみ(弱)・現状維持
+pisuke,guard,false,0,,129.90,median(fallback: idle unreliable),1.0000,検出不能・現状維持
+pisuke,hurt,true,2,58.16,129.90,median(fallback: idle unreliable),1.2000,クランプ前2.234
+pisuke,idle,true,1,,129.90,median(fallback: idle unreliable),1.0000,候補1件のみ(弱)・現状維持
+pisuke,ko,false,0,,129.90,median(fallback: idle unreliable),1.0000,検出不能・現状維持
+pisuke,lunge,true,2,134.56,129.90,median(fallback: idle unreliable),0.9654,
+pisuke,mikiri,true,2,128.42,129.90,median(fallback: idle unreliable),1.0116,
+pisuke,roar,true,2,134.13,129.90,median(fallback: idle unreliable),0.9685,
+pisuke,roar_charge,true,1,,129.90,median(fallback: idle unreliable),1.0000,候補1件のみ(弱)・現状維持
+pisuke,sway,true,2,152.75,129.90,median(fallback: idle unreliable),0.8504,
+pisuke,tele_high,true,1,,129.90,median(fallback: idle unreliable),1.0000,候補1件のみ(弱)・現状維持
+pisuke,tele_low,true,2,130.20,129.90,median(fallback: idle unreliable),0.9977,
+pisuke,tele_mid,true,1,,129.90,median(fallback: idle unreliable),1.0000,候補1件のみ(弱)・現状維持
+pisuke,ult_charge,true,1,,129.90,median(fallback: idle unreliable),1.0000,候補1件のみ(弱)・現状維持
+pisuke,win,true,1,,129.90,median(fallback: idle unreliable),1.0000,候補1件のみ(弱)・現状維持
+godan,atk_high,false,0,,81.78,median(fallback: idle unreliable),1.0000,検出不能・現状維持
+godan,atk_low,false,0,,81.78,median(fallback: idle unreliable),1.0000,検出不能・現状維持
+godan,atk_mid,false,0,,81.78,median(fallback: idle unreliable),1.0000,検出不能・現状維持
+godan,cmd1,false,0,,81.78,median(fallback: idle unreliable),1.0000,検出不能・現状維持
+godan,cmd2,false,0,,81.78,median(fallback: idle unreliable),1.0000,検出不能・現状維持
+godan,cmd3,true,1,,81.78,median(fallback: idle unreliable),1.0000,候補1件のみ(弱)・現状維持
+godan,crouch,true,1,,81.78,median(fallback: idle unreliable),1.0000,候補1件のみ(弱)・現状維持
+godan,crouch_atk,false,0,,81.78,median(fallback: idle unreliable),1.0000,検出不能・現状維持
+godan,down,false,0,,81.78,median(fallback: idle unreliable),1.0000,検出不能・現状維持
+godan,getup,true,2,70.42,81.78,median(fallback: idle unreliable),1.1614,
+godan,grab_lift,true,2,81.78,81.78,median(fallback: idle unreliable),1.0000,
+godan,grab_reach,true,1,,81.78,median(fallback: idle unreliable),1.0000,候補1件のみ(弱)・現状維持
+godan,grabbed,true,1,,81.78,median(fallback: idle unreliable),1.0000,候補1件のみ(弱)・現状維持
+godan,guard,false,0,,81.78,median(fallback: idle unreliable),1.0000,検出不能・現状維持
+godan,hurt,false,0,,81.78,median(fallback: idle unreliable),1.0000,検出不能・現状維持
+godan,idle,false,0,,81.78,median(fallback: idle unreliable),1.0000,検出不能・現状維持
+godan,ko,false,0,,81.78,median(fallback: idle unreliable),1.0000,検出不能・現状維持
+godan,lunge,true,2,87.90,81.78,median(fallback: idle unreliable),0.9304,
+godan,mikiri,false,0,,81.78,median(fallback: idle unreliable),1.0000,検出不能・現状維持
+godan,roar,false,0,,81.78,median(fallback: idle unreliable),1.0000,検出不能・現状維持
+godan,roar_charge,false,0,,81.78,median(fallback: idle unreliable),1.0000,検出不能・現状維持
+godan,sway,true,1,,81.78,median(fallback: idle unreliable),1.0000,候補1件のみ(弱)・現状維持
+godan,tele_high,false,0,,81.78,median(fallback: idle unreliable),1.0000,検出不能・現状維持
+godan,tele_low,true,1,,81.78,median(fallback: idle unreliable),1.0000,候補1件のみ(弱)・現状維持
+godan,tele_mid,false,0,,81.78,median(fallback: idle unreliable),1.0000,検出不能・現状維持
+godan,ult_charge,false,0,,81.78,median(fallback: idle unreliable),1.0000,検出不能・現状維持
+godan,win,false,0,,81.78,median(fallback: idle unreliable),1.0000,検出不能・現状維持
+hakuma,atk_high,true,3,114.83,150.73,idle,1.2000,クランプ前1.313
+hakuma,atk_low,true,4,126.76,150.73,idle,1.1891,
+hakuma,atk_mid,true,3,127.82,150.73,idle,1.1792,
+hakuma,crouch,true,2,169.79,150.73,idle,0.8877,
+hakuma,crouch_atk,true,2,155.25,150.73,idle,0.9709,
+hakuma,down,true,1,,150.73,idle,1.0000,候補1件のみ(弱)・現状維持
+hakuma,getup,true,2,127.82,150.73,idle,1.1792,
+hakuma,grab_lift,true,3,110.56,150.73,idle,1.2000,クランプ前1.363
+hakuma,grab_reach,true,4,85.69,150.73,idle,1.2000,クランプ前1.759
+hakuma,grabbed,true,1,,150.73,idle,1.0000,候補1件のみ(弱)・現状維持
+hakuma,guard,true,1,,150.73,idle,1.0000,候補1件のみ(弱)・現状維持
+hakuma,hurt,true,2,139.19,150.73,idle,1.0829,
+hakuma,idle,true,3,150.73,150.73,idle,1.0000,
+hakuma,ko,true,1,,150.73,idle,1.0000,候補1件のみ(弱)・現状維持
+hakuma,lunge,true,4,146.85,150.73,idle,1.0264,
+hakuma,mikiri,true,3,118.94,150.73,idle,1.2000,クランプ前1.267
+hakuma,roar,true,3,134.13,150.73,idle,1.1238,
+hakuma,roar_charge,true,2,133.26,150.73,idle,1.1310,
+hakuma,sway,true,2,159.76,150.73,idle,0.9434,
+hakuma,tele_high,true,2,137.80,150.73,idle,1.0938,
+hakuma,tele_low,true,4,131.23,150.73,idle,1.1486,
+hakuma,tele_mid,true,4,139.74,150.73,idle,1.0786,
+hakuma,ult_charge,true,2,126.00,150.73,idle,1.1962,
+hakuma,win,true,3,111.08,150.73,idle,1.2000,クランプ前1.357
+chirka,atk_high,false,0,,179.80,idle,1.0000,検出不能・現状維持
+chirka,atk_low,true,2,167.29,179.80,idle,1.0748,
+chirka,atk_mid,false,0,,179.80,idle,1.0000,検出不能・現状維持
+chirka,crouch,true,3,164.74,179.80,idle,1.0914,
+chirka,crouch_atk,true,3,157.70,179.80,idle,1.1401,
+chirka,down,false,0,,179.80,idle,1.0000,検出不能・現状維持
+chirka,getup,true,1,,179.80,idle,1.0000,候補1件のみ(弱)・現状維持
+chirka,grab_lift,true,1,,179.80,idle,1.0000,候補1件のみ(弱)・現状維持
+chirka,grab_reach,false,0,,179.80,idle,1.0000,検出不能・現状維持
+chirka,grabbed,true,1,,179.80,idle,1.0000,候補1件のみ(弱)・現状維持
+chirka,guard,true,1,,179.80,idle,1.0000,候補1件のみ(弱)・現状維持
+chirka,hurt,false,0,,179.80,idle,1.0000,検出不能・現状維持
+chirka,idle,true,2,179.80,179.80,idle,1.0000,
+chirka,ko,true,4,163.80,179.80,idle,1.0977,
+chirka,lunge,true,4,157.34,179.80,idle,1.1428,
+chirka,mikiri,true,1,,179.80,idle,1.0000,候補1件のみ(弱)・現状維持
+chirka,roar,false,0,,179.80,idle,1.0000,検出不能・現状維持
+chirka,roar_charge,true,2,144.87,179.80,idle,1.2000,クランプ前1.241
+chirka,sway,true,4,159.16,179.80,idle,1.1297,
+chirka,tele_high,false,0,,179.80,idle,1.0000,検出不能・現状維持
+chirka,tele_low,true,2,177.00,179.80,idle,1.0158,
+chirka,tele_mid,true,1,,179.80,idle,1.0000,候補1件のみ(弱)・現状維持
+chirka,ult_charge,true,2,177.00,179.80,idle,1.0158,
+chirka,win,true,2,155.99,179.80,idle,1.1526,
+takimaru,atk_high,true,1,,112.29,median(fallback: idle unreliable),1.0000,候補1件のみ(弱)・現状維持
+takimaru,atk_low,true,3,69.59,112.29,median(fallback: idle unreliable),1.2000,クランプ前1.613
+takimaru,atk_mid,true,1,,112.29,median(fallback: idle unreliable),1.0000,候補1件のみ(弱)・現状維持
+takimaru,crouch,true,1,,112.29,median(fallback: idle unreliable),1.0000,候補1件のみ(弱)・現状維持
+takimaru,crouch_atk,false,0,,112.29,median(fallback: idle unreliable),1.0000,検出不能・現状維持
+takimaru,down,false,0,,112.29,median(fallback: idle unreliable),1.0000,検出不能・現状維持
+takimaru,getup,true,1,,112.29,median(fallback: idle unreliable),1.0000,候補1件のみ(弱)・現状維持
+takimaru,grab_lift,false,0,,112.29,median(fallback: idle unreliable),1.0000,検出不能・現状維持
+takimaru,grab_reach,true,2,112.29,112.29,median(fallback: idle unreliable),1.0000,
+takimaru,grabbed,true,3,41.13,112.29,median(fallback: idle unreliable),1.2000,クランプ前2.730
+takimaru,guard,true,1,,112.29,median(fallback: idle unreliable),1.0000,候補1件のみ(弱)・現状維持
+takimaru,hurt,true,2,119.42,112.29,median(fallback: idle unreliable),0.9403,
+takimaru,idle,true,1,,112.29,median(fallback: idle unreliable),1.0000,候補1件のみ(弱)・現状維持
+takimaru,ko,false,0,,112.29,median(fallback: idle unreliable),1.0000,検出不能・現状維持
+takimaru,lunge,true,1,,112.29,median(fallback: idle unreliable),1.0000,候補1件のみ(弱)・現状維持
+takimaru,mikiri,true,1,,112.29,median(fallback: idle unreliable),1.0000,候補1件のみ(弱)・現状維持
+takimaru,roar,true,1,,112.29,median(fallback: idle unreliable),1.0000,候補1件のみ(弱)・現状維持
+takimaru,roar_charge,true,2,69.32,112.29,median(fallback: idle unreliable),1.2000,クランプ前1.620
+takimaru,sway,true,1,,112.29,median(fallback: idle unreliable),1.0000,候補1件のみ(弱)・現状維持
+takimaru,tele_high,true,1,,112.29,median(fallback: idle unreliable),1.0000,候補1件のみ(弱)・現状維持
+takimaru,tele_low,true,2,132.40,112.29,median(fallback: idle unreliable),0.8500,クランプ前0.848
+takimaru,tele_mid,true,3,139.60,112.29,median(fallback: idle unreliable),0.8500,クランプ前0.804
+takimaru,ult_charge,true,1,,112.29,median(fallback: idle unreliable),1.0000,候補1件のみ(弱)・現状維持
+takimaru,win,true,1,,112.29,median(fallback: idle unreliable),1.0000,候補1件のみ(弱)・現状維持
+yomikage,atk_high,true,1,,117.47,idle,1.0000,候補1件のみ(弱)・現状維持
+yomikage,atk_low,true,2,85.24,117.47,idle,1.2000,クランプ前1.378
+yomikage,atk_mid,false,0,,117.47,idle,1.0000,検出不能・現状維持
+yomikage,crouch,true,4,94.44,117.47,idle,1.2000,クランプ前1.244
+yomikage,crouch_atk,true,3,91.54,117.47,idle,1.2000,クランプ前1.283
+yomikage,down,true,1,,117.47,idle,1.0000,候補1件のみ(弱)・現状維持
+yomikage,getup,true,2,101.31,117.47,idle,1.1596,
+yomikage,grab_lift,true,4,95.85,117.47,idle,1.2000,クランプ前1.226
+yomikage,grab_reach,true,2,93.00,117.47,idle,1.2000,クランプ前1.263
+yomikage,grabbed,true,1,,117.47,idle,1.0000,候補1件のみ(弱)・現状維持
+yomikage,guard,true,2,107.21,117.47,idle,1.0958,
+yomikage,hurt,true,3,47.62,117.47,idle,1.2000,クランプ前2.467
+yomikage,idle,true,3,117.47,117.47,idle,1.0000,
+yomikage,ko,true,4,61.69,117.47,idle,1.2000,クランプ前1.904
+yomikage,lunge,true,1,,117.47,idle,1.0000,候補1件のみ(弱)・現状維持
+yomikage,mikiri,true,2,83.18,117.47,idle,1.2000,クランプ前1.412
+yomikage,roar,true,2,98.42,117.47,idle,1.1936,
+yomikage,roar_charge,true,1,,117.47,idle,1.0000,候補1件のみ(弱)・現状維持
+yomikage,sway,true,1,,117.47,idle,1.0000,候補1件のみ(弱)・現状維持
+yomikage,tele_high,false,0,,117.47,idle,1.0000,検出不能・現状維持
+yomikage,tele_low,true,1,,117.47,idle,1.0000,候補1件のみ(弱)・現状維持
+yomikage,tele_mid,true,1,,117.47,idle,1.0000,候補1件のみ(弱)・現状維持
+yomikage,ult_charge,true,2,117.31,117.47,idle,1.0014,
+yomikage,win,true,2,109.16,117.47,idle,1.0761,
+bullet,atk_high,true,3,96.05,109.51,idle,1.1402,
+bullet,atk_low,true,2,88.55,109.51,idle,1.2000,クランプ前1.237
+bullet,atk_mid,true,3,97.24,109.51,idle,1.1262,
+bullet,crouch,true,2,112.46,109.51,idle,0.9738,
+bullet,crouch_atk,true,2,106.67,109.51,idle,1.0267,
+bullet,down,true,1,,109.51,idle,1.0000,候補1件のみ(弱)・現状維持
+bullet,getup,true,2,91.96,109.51,idle,1.1909,
+bullet,grab_lift,true,1,,109.51,idle,1.0000,候補1件のみ(弱)・現状維持
+bullet,grab_reach,true,2,96.25,109.51,idle,1.1378,
+bullet,grabbed,true,1,,109.51,idle,1.0000,候補1件のみ(弱)・現状維持
+bullet,guard,true,2,108.10,109.51,idle,1.0131,
+bullet,hurt,true,1,,109.51,idle,1.0000,候補1件のみ(弱)・現状維持
+bullet,idle,true,2,109.51,109.51,idle,1.0000,
+bullet,ko,true,1,,109.51,idle,1.0000,候補1件のみ(弱)・現状維持
+bullet,lunge,true,3,108.10,109.51,idle,1.0131,
+bullet,mikiri,true,3,94.84,109.51,idle,1.1547,
+bullet,roar,true,2,101.12,109.51,idle,1.0830,
+bullet,roar_charge,true,2,96.85,109.51,idle,1.1308,
+bullet,sway,true,3,116.16,109.51,idle,0.9428,
+bullet,tele_high,true,3,101.31,109.51,idle,1.0810,
+bullet,tele_low,true,2,99.01,109.51,idle,1.1061,
+bullet,tele_mid,true,2,100.74,109.51,idle,1.0871,
+bullet,ult_charge,true,3,90.70,109.51,idle,1.2000,クランプ前1.207
+bullet,win,true,2,101.50,109.51,idle,1.0790,
+dark_moguzo,atk_high,false,0,,120.86,median(fallback: idle unreliable),1.0000,検出不能・現状維持
+dark_moguzo,atk_low,false,0,,120.86,median(fallback: idle unreliable),1.0000,検出不能・現状維持
+dark_moguzo,atk_mid,false,0,,120.86,median(fallback: idle unreliable),1.0000,検出不能・現状維持
+dark_moguzo,crouch,true,1,,120.86,median(fallback: idle unreliable),1.0000,候補1件のみ(弱)・現状維持
+dark_moguzo,crouch_atk,true,2,120.86,120.86,median(fallback: idle unreliable),1.0000,
+dark_moguzo,down,false,0,,120.86,median(fallback: idle unreliable),1.0000,検出不能・現状維持
+dark_moguzo,getup,false,0,,120.86,median(fallback: idle unreliable),1.0000,検出不能・現状維持
+dark_moguzo,grab_lift,false,0,,120.86,median(fallback: idle unreliable),1.0000,検出不能・現状維持
+dark_moguzo,grab_reach,true,2,130.20,120.86,median(fallback: idle unreliable),0.9283,
+dark_moguzo,grabbed,true,1,,120.86,median(fallback: idle unreliable),1.0000,候補1件のみ(弱)・現状維持
+dark_moguzo,guard,true,1,,120.86,median(fallback: idle unreliable),1.0000,候補1件のみ(弱)・現状維持
+dark_moguzo,hurt,true,1,,120.86,median(fallback: idle unreliable),1.0000,候補1件のみ(弱)・現状維持
+dark_moguzo,idle,false,0,,120.86,median(fallback: idle unreliable),1.0000,検出不能・現状維持
+dark_moguzo,ko,false,0,,120.86,median(fallback: idle unreliable),1.0000,検出不能・現状維持
+dark_moguzo,lunge,true,2,116.49,120.86,median(fallback: idle unreliable),1.0375,
+dark_moguzo,mikiri,true,1,,120.86,median(fallback: idle unreliable),1.0000,候補1件のみ(弱)・現状維持
+dark_moguzo,roar,false,0,,120.86,median(fallback: idle unreliable),1.0000,検出不能・現状維持
+dark_moguzo,roar_charge,false,0,,120.86,median(fallback: idle unreliable),1.0000,検出不能・現状維持
+dark_moguzo,sway,false,0,,120.86,median(fallback: idle unreliable),1.0000,検出不能・現状維持
+dark_moguzo,tele_high,false,0,,120.86,median(fallback: idle unreliable),1.0000,検出不能・現状維持
+dark_moguzo,tele_low,false,0,,120.86,median(fallback: idle unreliable),1.0000,検出不能・現状維持
+dark_moguzo,tele_mid,true,1,,120.86,median(fallback: idle unreliable),1.0000,候補1件のみ(弱)・現状維持
+dark_moguzo,ult_charge,false,0,,120.86,median(fallback: idle unreliable),1.0000,検出不能・現状維持
+dark_moguzo,win,false,0,,120.86,median(fallback: idle unreliable),1.0000,検出不能・現状維持
