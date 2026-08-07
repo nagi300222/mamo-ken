@@ -106,6 +106,43 @@ const BAL={ // 03_data_design.md v2.0 §2 balance table 準拠
         {seq:['down','down'],trigger:'low',type:'atk',lv:'low',name:'地割れ',s:30,a:3,r:30,d:110,down:true,guardChip:30,color:'#8a6540',se:'cmdHit'},
         {seq:['right','down'],trigger:'grab',type:'grab',name:'山掴み',s:16,d:110,armor:6,color:'#ff9500',se:'cmdGrabHit'},
         {seq:['left','left'],trigger:'mid',type:'stance',name:'巌の構え',stanceF:12,counterLv:'mid',counterDmg:100,color:'#ffd23f',se:'guard'}
+      ],
+      // P1 (4): 新6キャラの暫定コマンド技。既存9種の型(数値・フレームは無改変で流用)から
+      // スタイルに合う3つを選び、技名のみキャラに合わせて仮命名。全て後調整前提。
+      // 型の由来: 1=前進強打(地走り型) 2=大アッパー対空(昇撃型) 3=リーチ投げ(引き寄せ投げ型)
+      // 4=高速多段(二連牙型) 5=突進下段(スライディング型) 6=後退→前進蹴(宙返り蹴型)
+      // 7=地震削り(地割れ型) 8=アーマー投げ(山掴み型) 9=自動見切り構え(巌の構え型)
+      // 同キャラ内でseq(方向2つ)が重複しないよう、型1と型8(ともに→↓)、型3と型6(ともに←→)は
+      // 同時に採用しないこと(detectCommandMove()はseq一致のみで先頭一致技を返すため)
+      hakuma:[ // ディフェンス。9:白峰の構え(自動見切り→反撃中段) 8:雪崩抱え(アーマー投げ) 4:雪壁掌(高速中段)
+        {seq:['left','left'],trigger:'mid',type:'stance',name:'白峰の構え',stanceF:12,counterLv:'mid',counterDmg:100,color:'#bfe3d0',se:'guard'},
+        {seq:['right','down'],trigger:'grab',type:'grab',name:'雪崩抱え',s:16,d:110,armor:6,color:'#8fb8a0',se:'cmdGrabHit'},
+        {seq:['right','right'],trigger:'mid',type:'atk',lv:'mid',name:'雪壁掌',s:8,a:3,r:18,d:95,color:'#dbe8e0',se:'cmdHit'}
+      ],
+      chirka:[ // トリッキー。4:だまし突き(高速中段) 6:戻り蹴り(後退→前進蹴・上段) 8:すかし抱き(アーマー投げ型を仮流用)
+        {seq:['right','right'],trigger:'mid',type:'atk',lv:'mid',name:'だまし突き',s:8,a:3,r:18,d:95,color:'#b98cc7',se:'cmdHit'},
+        {seq:['left','right'],trigger:'high',type:'atk',lv:'high',name:'戻り蹴り',s:20,a:3,r:24,d:90,fwd:20,color:'#caa6d9',se:'cmdHit'},
+        {seq:['right','down'],trigger:'grab',type:'grab',name:'すかし抱き',s:16,d:110,armor:6,color:'#9d6bb0',se:'cmdGrabHit'}
+      ],
+      takimaru:[ // グラップラー。8:丸抱え(アーマー投げ) 3:巻き投げ(リーチ投げ) 4:ぶちかまし(高速中段)
+        {seq:['right','down'],trigger:'grab',type:'grab',name:'丸抱え',s:16,d:110,armor:6,color:'#c9a24d',se:'cmdGrabHit'},
+        {seq:['left','right'],trigger:'grab',type:'grab',name:'巻き投げ',s:14,d:100,reachMul:1.5,color:'#b0aac2',se:'cmdGrabHit'},
+        {seq:['right','right'],trigger:'mid',type:'atk',lv:'mid',name:'ぶちかまし',s:8,a:3,r:18,d:95,color:'#8a8398',se:'cmdHit'}
+      ],
+      yomikage:[ // カウンター。9:後の先・構え(自動見切り→反撃中段) 2:後の先・天(大アッパー対空) 5:後の先・地(突進下段)
+        {seq:['left','left'],trigger:'mid',type:'stance',name:'後の先・構え',stanceF:12,counterLv:'mid',counterDmg:100,color:'#6b7fd6',se:'guard'},
+        {seq:['down','right'],trigger:'high',type:'atk',lv:'high',name:'後の先・天',s:24,a:3,r:30,d:120,counterMul:1.5,color:'#8695e0',se:'cmdHit'},
+        {seq:['down','left'],trigger:'low',type:'atk',lv:'low',name:'後の先・地',s:30,a:4,r:30,d:80,down:true,fwd:60,guardDmg:14,color:'#4f5bb8',se:'cmdHit'}
+      ],
+      bullet:[ // チャージ。7:尾払い(地震削り) 2:跳ね上げ(大アッパー対空) 4:弾み突き(高速中段)
+        {seq:['down','down'],trigger:'low',type:'atk',lv:'low',name:'尾払い',s:30,a:3,r:30,d:110,down:true,guardChip:30,color:'#a83250',se:'cmdHit'},
+        {seq:['down','right'],trigger:'high',type:'atk',lv:'high',name:'跳ね上げ',s:24,a:3,r:30,d:120,counterMul:1.5,color:'#c14a68',se:'cmdHit'},
+        {seq:['right','right'],trigger:'mid',type:'atk',lv:'mid',name:'弾み突き',s:8,a:3,r:18,d:95,color:'#8a2740',se:'cmdHit'}
+      ],
+      dark_moguzo:[ // アナザー。5:黒砂払い(突進下段) 3:闇引き(リーチ投げ) 1:黒走り(前進強打)
+        {seq:['down','left'],trigger:'low',type:'atk',lv:'low',name:'黒砂払い',s:30,a:4,r:30,d:80,down:true,fwd:60,guardDmg:14,color:'#5a2f6b',se:'cmdHit'},
+        {seq:['left','right'],trigger:'grab',type:'grab',name:'闇引き',s:14,d:100,reachMul:1.5,color:'#7a1f2f',se:'cmdGrabHit'},
+        {seq:['right','down'],trigger:'mid',type:'atk',lv:'mid',name:'黒走り',s:18,a:3,r:18,d:95,fwd:40,guardDmg:8,color:'#3d1f4a',se:'cmdHit'}
       ]
     }
   }
