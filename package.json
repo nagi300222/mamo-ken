@@ -14,6 +14,7 @@
     "check:additional-move-readiness": "npm run typecheck:core && node --experimental-strip-types test/additional-move-readiness.test.mjs",
     "check:combat-v2": "npm run typecheck:core && node --experimental-strip-types test/combat-v2-contract.test.mjs",
     "check:battle-state-v2": "npm run typecheck:core && node --experimental-strip-types test/battle-state-v2.test.mjs",
+    "check:legacy-adapter-v2": "npm run typecheck:core && node --experimental-strip-types test/legacy-adapter-v2.test.mjs",
     "check:product": "npm run typecheck:product && node --experimental-strip-types test/product-contract.test.mjs",
     "check:combat": "npm run typecheck:core && node --experimental-strip-types test/combat-moves.test.mjs",
     "check:defense": "npm run typecheck:core && node --experimental-strip-types test/defense.test.mjs",
