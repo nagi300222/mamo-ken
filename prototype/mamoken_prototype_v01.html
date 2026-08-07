@@ -3286,7 +3286,7 @@ function rMovelistOverlay(){ // わざ表=使用キャラのコマンド技3種+
     ctx.strokeStyle='#3a4560';ctx.lineWidth=2;rr(50,y,W-100,66,14);ctx.stroke();
     txt(seqStr,74,y+26,19,'#ffd23f','left');
     txt(m.name,74,y+50,16,'#fff','left');
-    txt('dmg'+Math.round(m.d),W-70,y+38,15,'#ffb6b6','right');
+    txt('dmg'+Math.round(m.type==='stance'?m.counterDmg:m.d),W-70,y+38,15,'#ffb6b6','right'); // 構え技はcounterDmgを表示(P1でdmgNaNを発見・修正)
     y+=76;
   }
   y+=8;
