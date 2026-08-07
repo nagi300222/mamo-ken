@@ -95,6 +95,10 @@ const BAL={ // 03_data_design.md v2.0 §2 balance table 準拠
   // heightRatio(モグゾー基準1.00)をモグゾーのSPRITE_H(172)に乗算した暫定値(P1 (3))
   SPRITE_H:{moguzo:172,pisuke:116,godan:206,hakuma:181,chirka:169,takimaru:184,yomikage:172,bullet:177,dark_moguzo:172},
   PORTRAIT_RATIO:{moguzo:1.00,pisuke:0.80,godan:1.15,hakuma:1.05,chirka:0.98,takimaru:1.07,yomikage:1.00,bullet:1.03,dark_moguzo:1.00}, // 立ち絵(portraits/)用の比率。各画面の基準高に乗算して体格差を表現(v2.4.1)
+  // VIS-R1(2): キャラ選択・左プレビュー専用の表示身長(px)。現行SPRITE_H系の体格比をそのまま踏襲
+  // (PORTRAIT_H[id] = 380 * SPRITE_H[id]/SPRITE_H.moguzo)。containでの全体縮小をやめ、この身長で
+  // 等比拡縮し、鼻Y位置を共通基準ラインに揃えて配置する(rSelectのdrawHeroArtByHeight参照)
+  PORTRAIT_H:{moguzo:380,pisuke:256,godan:455,hakuma:400,chirka:373,takimaru:407,yomikage:380,bullet:391,dark_moguzo:380},
   NET:{delayFMin:3,delayFMax:8,frameMs:16.7,waitingShowF:20}, // オンライン対戦: 入力遅延バッファ(F)は
     // v0.10 (9)でRTT実測に基づく開始時適応に変更(固定6Fから、良回線3〜4F/悪回線6〜8Fへ)。
     // waitingShowF: 「同期中…」表示は待機がこのF数以上続いた場合のみ(瞬間的な待機でのちらつき防止)
@@ -205,6 +209,14 @@ const ROSTER=[
  {id:'bullet',name:'バレット',type:'チャージ',species:'オナガマーモット',ability:'オーバーチャージ',ult:'超圧縮・弾丸頭突き',playable:true,onlinePlayable:false,combatIndex:7,displayScale:1.03,faceCrop:{x:0.42,y:0.28,z:2.48},heroCrop:{x:0.43,y:0.41,z:1.38}},
  {id:'dark_moguzo',name:'ダークモグゾー',type:'アナザー',species:'モグゾー別ルート',ability:'暗連',ult:'暗連・黒天烈掌',playable:true,onlinePlayable:false,combatIndex:8,displayScale:1.00,faceCrop:{x:0.50,y:0.28,z:2.35},heroCrop:{x:0.50,y:0.42,z:1.25}}
 ];
+// VIS-R1(2): tools/face_metrics.mjsでassets/portraits/{id}.pngを実測した鼻位置(画像高/幅に対する比率)。
+// フォトリアル素材は耳の暗色パッチや装身具が目・鼻より大きく写ることがあり誤検出のリスクが高いため、
+// 「候補2件以上」「顔中心平均に使った候補のY方向の広がりが画像高12%以内」「Y比率が0.04〜0.20の範囲内」
+// の3条件を満たした実測値のみを採用し、満たさないキャラは信頼できた実測値の中央値でフォールバックする
+// (godan/chirka/takimaru/yomikage/bullet/dark_moguzoがフォールバック。詳細はtools/gen_portrait_nose_baseline.mjs
+// と reports/vis/portrait_nose_baseline.md)
+const PORTRAIT_NOSE_Y_RATIO={moguzo:0.0992,pisuke:0.0829,godan:0.0829,hakuma:0.0821,chirka:0.0829,takimaru:0.0829,yomikage:0.0829,bullet:0.0829,dark_moguzo:0.0829};
+const PORTRAIT_NOSE_X_RATIO={moguzo:0.5280,pisuke:0.4760,godan:0.3782,hakuma:0.5381,chirka:0.4030,takimaru:0.4754,yomikage:0.6112,bullet:0.5982,dark_moguzo:0.6075};
 const OFFICIAL_CHARACTER_COUNT=3;
 function skeletonIdOf(c){return(c&&c.skeletonId)||c.id;}
 function spriteHeightForChar(c){return BAL.SPRITE_H[skeletonIdOf(c)];}
@@ -324,6 +336,24 @@ function drawContain(key,x,y,w,h,anchorBottom,alpha){ // P1追加: 矩形(x,y,w,
 }
 function drawHeroArt(charId,x,y,w,h,alpha){ // P1追加: portraits優先・roster3dへフォールバック(いずれもcontain・下端アンカー)
   return drawContain('standing_'+charId,x,y,w,h,true,alpha)||drawContain('roster_'+charId,x,y,w,h,true,alpha);
+}
+// VIS-R1(2): キャラ選択・左プレビュー専用。containで全体を箱に収める(=キャラ毎に縮小率が変わり
+// 体格差が消える)のをやめ、BAL.PORTRAIT_H[charId]の実身長(px)で等比拡縮し、鼻のY位置を
+// 箱内の共通基準ライン(noseBaseYRatio×箱の高さ)に揃えて配置する(体格差は頭頂・足元のはみ出しに出る)。
+// portraits/が未読込の場合のみdrawHeroArt(contain)へフォールバックする(roster3d webpは鼻比率未計測のため)
+function drawHeroArtByHeight(charId,x,y,w,h,noseBaseYRatio,alpha){
+  const key='standing_'+charId;
+  if(!assetReady(key))return drawHeroArt(charId,x,y,w,h,alpha);
+  const e=ASSETS[key],src=e.canvas||e.img,iw=e.img.naturalWidth,ih=e.img.naturalHeight;
+  const scale=BAL.PORTRAIT_H[charId]/ih; // 等比拡縮のみ(縦横比不変)
+  const dw=iw*scale,dh=ih*scale;
+  const noseX=iw*(PORTRAIT_NOSE_X_RATIO[charId]!=null?PORTRAIT_NOSE_X_RATIO[charId]:0.5)*scale;
+  const noseY=ih*PORTRAIT_NOSE_Y_RATIO[charId]*scale;
+  const baseY=y+h*noseBaseYRatio;
+  const dx=x+w/2-noseX,dy=baseY-noseY;
+  if(alpha!=null){ctx.save();ctx.globalAlpha=alpha;ctx.drawImage(src,dx,dy,dw,dh);ctx.restore();}
+  else ctx.drawImage(src,dx,dy,dw,dh);
+  return true;
 }
 function drawRosterCrop(key,x,y,w,h,crop,radius){ // 鼻/胴体アンカー中心のクロップ。画像全体の尾や余白を倍率計算に使わない
   if(!assetReady(key))return false;
@@ -2447,6 +2477,26 @@ function spriteScale(c){ // 仮キャラも元骨格の実測倍率・表示身�
   const idleH=(idleE&&idleE.bboxH)||SPRITE_IDLE_H_FALLBACK[charId];
   return BAL.SPRITE_H[charId]/idleH;
 }
+// VIS-R1(3): tools/gen_pose_scale_report.mjsでchars/{id}/*.pngをtools/face_metrics.mjs実測し、
+// idle.pngの頭サイズを基準(常に補正1.0)に「基準/そのポーズの頭サイズ」をクランプ0.85〜1.20で
+// 算出した疎な補正テーブル(scale===1.0のポーズは省略。キャラ間の体格差=SPRITE_H/idle基準は
+// 変更せず、キャラ内のポーズ間の頭サイズばらつきのみを補正する)。検出候補1件以下・検出不能な
+// ポーズは補正対象外(現状維持)。全データはreports/vis/pose_scale_corrections.csv参照
+const POSE_SCALE_CORRECTION={
+  moguzo:{cmd1:0.850,cmd2:1.200,cmd3:1.096,grab_lift:1.055,tele_high:0.951,tele_mid:0.936},
+  pisuke:{cmd2:1.200,cmd3:0.850,getup:0.919,grab_lift:1.130,grab_reach:1.020,hurt:1.200,lunge:0.965,mikiri:1.012,roar:0.969,sway:0.850},
+  godan:{getup:1.161,lunge:0.930},
+  hakuma:{atk_high:1.200,atk_low:1.189,atk_mid:1.179,crouch:0.888,crouch_atk:0.971,getup:1.179,grab_lift:1.200,grab_reach:1.200,hurt:1.083,lunge:1.026,mikiri:1.200,roar:1.124,roar_charge:1.131,sway:0.943,tele_high:1.094,tele_low:1.149,tele_mid:1.079,ult_charge:1.196,win:1.200},
+  chirka:{atk_low:1.075,crouch:1.091,crouch_atk:1.140,ko:1.098,lunge:1.143,roar_charge:1.200,sway:1.130,tele_low:1.016,ult_charge:1.016,win:1.153},
+  takimaru:{atk_low:1.200,grabbed:1.200,hurt:0.940,roar_charge:1.200,tele_low:0.850,tele_mid:0.850},
+  yomikage:{atk_low:1.200,crouch:1.200,crouch_atk:1.200,getup:1.160,grab_lift:1.200,grab_reach:1.200,guard:1.096,hurt:1.200,ko:1.200,mikiri:1.200,roar:1.194,win:1.076},
+  bullet:{atk_high:1.140,atk_low:1.200,atk_mid:1.126,crouch:0.974,crouch_atk:1.027,getup:1.191,grab_reach:1.138,guard:1.013,lunge:1.013,mikiri:1.155,roar:1.083,roar_charge:1.131,sway:0.943,tele_high:1.081,tele_low:1.106,tele_mid:1.087,ult_charge:1.200,win:1.079},
+  dark_moguzo:{grab_reach:0.928,lunge:1.038},
+};
+function poseScaleCorrection(c,pid){
+  const t=POSE_SCALE_CORRECTION[skeletonIdOf(c)];
+  return(t&&t[pid]!=null)?t[pid]:1.0;
+}
 function dodgeSpriteOffset(f){ // 回避スプライト用: 11-22Fの戻り区間だけ同画像を構え位置へ向けて位置補間する
   const D=BAL.DODGE,back=f.pf<=D.judgeF?0:Math.min(1,(f.pf-D.judgeF)/(D.totalF-D.judgeF));
   if(f.dodgeType==='crouch')return[0,10*back];   // しゃがみ→起き上がる分だけ上へ戻す
@@ -2474,7 +2524,8 @@ function drawSpriteFighter(f,ox,oy,sp){
   // 集中スロー・ズームは呼び出し側(rBattle/fpos)の変換をそのまま受けるため追加対応不要
   const x=(ox!=null)?ox:fpos(f),gy=(oy!=null)?oy:f.y,face=f.side===0?1:-1;
   const img=sp.canvas||sp.img,iw=sp.img.naturalWidth,ih=sp.img.naturalHeight;
-  const scale=spriteScale(f.c); // 元骨格idle基準の実測倍率。仮キャラも全ポーズ同倍率
+  // 元骨格idle基準の実測倍率 × VIS-R1(3)のポーズ別頭サイズ補正(キャラ内の頭サイズを揃える)
+  const scale=spriteScale(f.c)*poseScaleCorrection(f.c,poseId(f));
   const w=iw*scale,h=ih*scale;
   ctx.fillStyle='rgba(0,0,0,0.22)';
   ctx.beginPath();ctx.ellipse(x,gy+5,42,9,0,0,TAU);ctx.fill();
@@ -3437,17 +3488,18 @@ function rSelect(){ // P1追加: KOF/餓狼風レイアウト(縦画面翻訳)�
   ctx.fillStyle=vg;ctx.fillRect(0,0,W,H);
   txt('キャラクターをえらぶ',W/2,SELECT_SAFE_TOP-6,13,'#a4adc0');
 
-  // --- 左: 大型立ち絵(portraits優先・roster3dへフォールバック。containで引き伸ばし無し・下端アンカー) ---
-  const AB=SELECT_ART_BOX;
+  // --- 左: 大型立ち絵(VIS-R1(2): PORTRAIT_H実身長で等比拡縮+鼻Y基準ライン合わせ。containでの
+  // 全体縮小はやめ、体格差は頭頂/足元のはみ出しに出す。しっぼ・手のはみ出しは許容しキャンバスは拡げない) ---
+  const AB=SELECT_ART_BOX,NOSE_BASE_Y_RATIO=0.30;
   ctx.save();rr(AB.x,AB.y,AB.w,AB.h,18);ctx.clip();
   ctx.fillStyle='rgba(10,12,18,0.35)';ctx.fillRect(AB.x,AB.y,AB.w,AB.h);
   let fadeT=1,fading=selectFadeFromId!=null;
   if(fading){
     const elapsed=performance.now()-selectFadeStart;
-    if(elapsed<SELECT_FADE_MS){fadeT=elapsed/SELECT_FADE_MS;drawHeroArt(selectFadeFromId,AB.x,AB.y,AB.w,AB.h,1-fadeT);}
+    if(elapsed<SELECT_FADE_MS){fadeT=elapsed/SELECT_FADE_MS;drawHeroArtByHeight(selectFadeFromId,AB.x,AB.y,AB.w,AB.h,NOSE_BASE_Y_RATIO,1-fadeT);}
     else{selectFadeFromId=null;fading=false;}
   }
-  if(!drawHeroArt(c.id,AB.x,AB.y,AB.w,AB.h,fading?fadeT:null))drawRosterCrop('roster_'+c.id,AB.x,AB.y,AB.w,AB.h,c.heroCrop,0);
+  if(!drawHeroArtByHeight(c.id,AB.x,AB.y,AB.w,AB.h,NOSE_BASE_Y_RATIO,fading?fadeT:null))drawRosterCrop('roster_'+c.id,AB.x,AB.y,AB.w,AB.h,c.heroCrop,0);
   const topFade=ctx.createLinearGradient(AB.x,AB.y,AB.x,AB.y+112);
   topFade.addColorStop(0,'rgba(6,8,12,0.74)');topFade.addColorStop(1,'rgba(6,8,12,0)');
   ctx.fillStyle=topFade;ctx.fillRect(AB.x,AB.y,AB.w,112);
