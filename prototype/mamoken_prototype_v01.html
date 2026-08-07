@@ -9,13 +9,22 @@ html,body{margin:0;padding:0;background:#0b0d12;height:100%;overflow:hidden;touc
 -webkit-user-select:none;user-select:none;-webkit-touch-callout:none;font-family:sans-serif}
 #wrap{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#0b0d12}
 canvas{display:block;background:#000;touch-action:none}
+#debugAudioPanel{display:none;position:fixed;top:8px;right:8px;z-index:1000;background:rgba(0,0,0,0.78);
+color:#9be8ff;font:11px sans-serif;padding:6px 8px;border-radius:6px;pointer-events:auto;touch-action:auto}
+#debugAudioPanel label{display:block;margin:3px 0}
+#debugAudioPanel input[type=range]{width:120px;vertical-align:middle}
 </style>
 </head>
 <body>
 <div id="wrap"><canvas id="game"></canvas></div>
+<div id="debugAudioPanel"><!-- BGM-R1.2 (4): ?debug=bal限定のBGM/SE音量調整UI(通常プレイ非表示)。
+最適値は発注者が実機で探索後、後続コミットで初期値を定数化する想定 -->
+<label>BGM <input type="range" id="dbgBgmVol" min="0" max="1" step="0.01"><span id="dbgBgmVolVal"></span></label>
+<label>SE <input type="range" id="dbgSeVol" min="0" max="1" step="0.01"><span id="dbgSeVolVal"></span></label>
+</div>
 <script src="../runtime/character-catalog-browser.js"></script>
 <script src="../runtime/runtime-extended-command-shadow-browser.js"></script>
-<script src="../runtime/arena-bgm-b64.js"></script>
+<script src="../runtime/bgm-b64.js"></script>
 <script>
 "use strict";
 /* ============================================================
@@ -400,7 +409,7 @@ function tone(f0,dur,type,vol,f1){if(!AC)return;try{
   o.type=type||'square';
   o.frequency.setValueAtTime(f0,t);
   o.frequency.linearRampToValueAtTime(f1==null?f0:f1,t+dur);
-  g.gain.setValueAtTime(vol||0.15,t);
+  g.gain.setValueAtTime((vol||0.15)*SE_VOLUME,t);
   g.gain.exponentialRampToValueAtTime(0.001,t+dur);
   o.connect(g);g.connect(AC.destination);
   o.start(t);o.stop(t+dur+0.02);
@@ -409,7 +418,7 @@ function noiseS(dur,vol){if(!AC)return;try{
   const t=AC.currentTime,n=(AC.sampleRate*dur)|0,b=AC.createBuffer(1,n,AC.sampleRate),d=b.getChannelData(0);
   for(let i=0;i<n;i++)d[i]=Math.random()*2-1;
   const s=AC.createBufferSource();s.buffer=b;
-  const g=AC.createGain();g.gain.setValueAtTime(vol,t);
+  const g=AC.createGain();g.gain.setValueAtTime(vol*SE_VOLUME,t);
   g.gain.exponentialRampToValueAtTime(0.001,t+dur);
   s.connect(g);g.connect(AC.destination);s.start(t);
 }catch(e){}}
@@ -458,81 +467,43 @@ function sfx(n){
   else if(n==='teleLow'){tone(150,0.1,'sine',0.09,100);} // 下段=低音
 }
 
-/* ================= BGM管理(R1/R2) =================
-   既存のSE(WebAudio合成)とは別種の「音楽ファイル再生」のため<audio>要素ベースの
-   最小限の共通管理をここに新設する(既存にAudioManager等は存在しないため)。
-   file://直開き(prototype)でも<audio src="相対パス">はfetch()系CORS制限を受けず
-   読み込めるため、全曲ループでよいBGM(タイトル/選択)はdecodeAudioDataではなく
-   HTMLAudioElementで統一する。dist側はbuild_mobile.mjsが同じ__ASSET_MAP__にBGMの
-   data URLも埋め込み、bgmAssetSrc()がある場合はそれを優先して使う(画像のloadImg()
-   と同じ仕組み)。闘技場(昼)のみイントロ+ループの精密な境界が必要なため、下の
-   「闘技場(昼)BGM: Web Audio個別実装」セクションでAudioBufferSourceNode.loopStart
-   を使う専用実装に分けている(HTMLAudioElement.currentTimeの監視はMP3のシーク精度
-   が不十分なため使わない)。音量はBGM_VOLUME1箇所でどちらの実装にも共通に適用する。
+/* ================= BGM管理(R1/R2/BGM-R1.2) =================
+   BGM-R1.2: 全BGM(タイトル/選択/闘技場)をAudioBufferSourceNode+GainNodeで再生する
+   単一のWeb Audio経路に統一する(旧R1/R2はタイトル/選択をHTMLAudioElementで再生していたが、
+   iOSでOSのメディアコントロール[通知センター/ロック画面]に再生ボタン・曲名が表示されて
+   しまう問題があり、これを解消するため撤去した。SEは既存のWebAudio合成のまま変更しない)。
+
+   file://直開き(prototype)ではfetch()/XMLHttpRequestがCORSで失敗するため、bgm mp3の
+   バイト列(ArrayBuffer)は<script src>読み込み(通常のリソース読み込みでCORS制限を受けない)
+   経由のwindow.__BGM_B64__(runtime/bgm-b64.js、tools/build_bgm_b64.mjsが生成)から取得する。
+   dist埋め込み時は__ASSET_MAP__のdata URLをそのまま使う(画像のloadImg()と同じ仕組み)。
+   イントロ+ループが必要な曲(闘技場(昼))はAudioBufferSourceNode.loopStart/loopEndを使う
+   (HTMLAudioElement.currentTimeの監視はMP3のシーク精度が不十分なため使わない)。
+   音量はBGM_VOLUME1箇所→単一のGainNodeに適用され、全曲で共通に効く。
 
    ▼BGM追加手順(新しい曲を1曲追加する場合)
    1. 配置先: assets/bgm/ 直下にmp3を置く
    2. ASCII命名: bgm_<用途>.mp3のような英数字のみのファイル名にする
       (日本語ファイル名はfile://直開き環境やビルド処理で問題になりうるため使わない)
-   3. MAP追記: 下のBGM_TRACKSに「キー: '../assets/bgm/ファイル名'」を1行追加し、
+   3. MAP追記: 下のBGM_SOURCESに「キー: '../assets/bgm/ファイル名'」を1行追加し、
       BGM_SCREEN_MAPの対応するnullエントリをそのキー名に差し替える(既存キーの
-      対応先を変える場合もこの2箇所を直すだけでよい)。全曲ループで良い曲はこれだけで
-      鳴る。闘技場(昼)のような精密なイントロ+ループが必要な曲を追加する場合は、
-      下の「闘技場(昼)BGM」セクションと同様にWeb Audio個別実装が必要になる
-   4. build対応: 拡張子が.mp3のままならbuild_mobile.mjs側の対応済みなので追加作業は
-      不要。.mp3以外(wav/ogg等)を使う場合のみtools/build_mobile.mjsのAUDIO_MIMEに
-      拡張子とMIMEタイプを追記する
+      対応先を変える場合もこの2箇所を直すだけでよい)。イントロ+ループが必要な曲は
+      BGM_LOOP_STARTに「キー: 秒数」を追加する(無指定キーは曲全体をloopする)
+   4. b64再生成: tools/build_bgm_b64.mjsのBGM_SOURCESにも同じキー:ファイル名を追記し、
+      node tools/build_bgm_b64.mjs を実行してruntime/bgm-b64.jsを再生成する
+      (prototypeのfile://直開き用。distはbuild_mobile.mjsが別途__ASSET_MAP__へ埋め込む
+      ため、拡張子が.mp3のままなら追加作業は不要)
    5. dist再生成: node tools/build_mobile.mjs を実行し、dist/mamoken_mobile.htmlを
       再生成してコミットする */
-let BGM_VOLUME=0.35; // 全BGM共通の音量(1箇所で調整。SEを埋めない程度の初期値。闘技場(昼)のWeb Audio実装も同じ値を使う)
-const BGM_TRACKS={ // 全曲ループで良いBGM(HTMLAudioElement)。闘技場(昼)はここに含めず下のARENA_BGM_SRCで個別管理する
+let BGM_VOLUME=0.35; // 全BGM共通の音量(1箇所で調整。BGM-R1.2でGainNode1本に集約)
+let SE_VOLUME=1.0; // SE共通の音量倍率(BGM-R1.2で追加。既存の各tone()/noiseS()呼び出しのvolに掛ける。1.0=既存バランスのまま)
+const BGM_SOURCES={ // __ASSET_MAP__解決用のキー文字列(参照用。実体はスクリプト埋め込みb64かdist埋め込みから取得)
   title:'../assets/bgm/bgm_title_marmot_fist.mp3',
-  select:'../assets/bgm/bgm_character_select.mp3'
+  select:'../assets/bgm/bgm_character_select.mp3',
+  arena:'../assets/bgm/bgm_village_arena_day.mp3'
 };
-function bgmAssetSrc(relPath){ // dist埋め込み時は__ASSET_MAP__のdata URLを、無ければ相対パスをそのまま使う
-  return (typeof __ASSET_MAP__!=='undefined'&&Object.prototype.hasOwnProperty.call(__ASSET_MAP__,relPath))?__ASSET_MAP__[relPath]:relPath;
-}
-const bgmEls={};
-for(const k in BGM_TRACKS){
-  const el=new Audio(bgmAssetSrc(BGM_TRACKS[k]));
-  el.loop=true;el.preload='auto';el.volume=BGM_VOLUME;
-  bgmEls[k]=el;
-}
-let bgmCurrentKey=null;
-function bgmStop(){ // 画面遷移時の後始末: 現在の曲を止める(次回同じ曲に戻った際は先頭から)
-  if(bgmCurrentKey==='arena'){arenaBgmStop();}
-  else if(bgmCurrentKey&&bgmEls[bgmCurrentKey]){try{bgmEls[bgmCurrentKey].pause();bgmEls[bgmCurrentKey].currentTime=0;}catch(e){}}
-  bgmCurrentKey=null;
-}
-function bgmPlay(key){
-  if(key==='arena'){ // 闘技場(昼)はWeb Audio個別実装(下記)へ委譲
-    if(bgmCurrentKey===key){if(arenaPlaying)return;} // 同一曲・再生中なら無駄な再スタートをしない
-    else{bgmStop();bgmCurrentKey=key;}
-    arenaBgmStart(); // デコード未完了/自動再生解禁待ちの間は次フレームで自動的に再試行される
-    return;
-  }
-  if(!BGM_TRACKS[key])return;
-  const el=bgmEls[key];
-  if(bgmCurrentKey===key){ // 同一曲: 再生中なら無駄な再スタートをしない。再生できていない場合のみ再試行(自動再生解禁待ち)
-    if(el&&!el.paused)return;
-  }else{
-    bgmStop(); // 曲の切り替え: 二重再生防止のため先に前の曲を確実に止める
-    bgmCurrentKey=key;
-  }
-  if(!el)return;
-  try{const p=el.play();if(p&&p.catch)p.catch(()=>{});}catch(e){} // 自動再生制限で拒否された場合は次フレーム以降に再試行(無理な回避処理は入れない)
-}
-/* ---- 闘技場(昼)BGM: Web Audio個別実装(R2) ----
-   loopStart=11.584秒(0.000〜11.584=イントロ・初回のみ／11.584以降=本編ループ)。
-   AudioBufferSourceNode.loopStart/loopEndによる再生位置基準のループのため、
-   HTMLAudioElementのcurrentTime監視(MP3のシーク精度が不十分)より正確に境界を保てる。
-   バイト列(ArrayBuffer)の入手はfile://下でのfetch()/XMLHttpRequestがCORSで失敗する
-   ため、<script src>読み込み(通常のリソース読み込みでCORS制限を受けない)経由の
-   window.__ARENA_BGM_B64__(runtime/arena-bgm-b64.js、tools/build_arena_bgm_b64.mjs
-   が生成)か、dist埋め込み時は__ASSET_MAP__のdata URLをそのまま使う。 */
-const ARENA_BGM_SRC='../assets/bgm/bgm_village_arena_day.mp3'; // __ASSET_MAP__解決用のキー文字列(参照用。実体は下記いずれかから取得)
-const ARENA_BGM_LOOP_START=11.584;
-let arenaBuffer=null,arenaBgmLoading=false,arenaGainNode=null,arenaSrcNode=null,arenaPlaying=false;
+const BGM_LOOP_START={arena:11.584}; // イントロ+ループ構成の曲のみ指定(0.000〜loopStart=イントロ・初回のみ)。無指定キーは曲全体をloop
+const bgmBuffers={},bgmBufferLoading={};
 function base64ToArrayBuffer(b64OrDataUri){
   const i=b64OrDataUri.indexOf(',');
   const b64=(b64OrDataUri.indexOf('data:')===0&&i>=0)?b64OrDataUri.slice(i+1):b64OrDataUri;
@@ -541,48 +512,63 @@ function base64ToArrayBuffer(b64OrDataUri){
   for(let j=0;j<bin.length;j++)out[j]=bin.charCodeAt(j);
   return out.buffer;
 }
-function arenaBgmLoadStart(){ // 一度だけ非同期デコードを開始(ネットワークアクセスなし)
-  if(arenaBuffer||arenaBgmLoading)return;
-  const dataSrc=(typeof __ASSET_MAP__!=='undefined'&&Object.prototype.hasOwnProperty.call(__ASSET_MAP__,ARENA_BGM_SRC))?__ASSET_MAP__[ARENA_BGM_SRC]:window.__ARENA_BGM_B64__;
+function bgmLoadStart(key){ // 一度だけ非同期デコードを開始(ネットワークアクセスなし)
+  if(bgmBuffers[key]||bgmBufferLoading[key])return;
+  const relPath=BGM_SOURCES[key];
+  const dataSrc=(typeof __ASSET_MAP__!=='undefined'&&Object.prototype.hasOwnProperty.call(__ASSET_MAP__,relPath))?__ASSET_MAP__[relPath]:(typeof window.__BGM_B64__!=='undefined'?window.__BGM_B64__[key]:null);
   if(!dataSrc)return; // 読み込み元が未準備: 次回呼び出しで再試行
-  arenaBgmLoading=true;
+  bgmBufferLoading[key]=true;
   try{
     if(!AC)AC=new (window.AudioContext||window.webkitAudioContext)(); // decodeAudioData自体はsuspended状態でも実行できる
     const ab=base64ToArrayBuffer(dataSrc);
     AC.decodeAudioData(ab).then(
-      (decoded)=>{arenaBuffer=decoded;arenaBgmLoading=false;},
-      ()=>{arenaBgmLoading=false;} // 失敗時は無音のまま(次回呼び出しで再試行)。無理な回避処理は入れない
+      (decoded)=>{bgmBuffers[key]=decoded;bgmBufferLoading[key]=false;},
+      ()=>{bgmBufferLoading[key]=false;} // 失敗時は無音のまま(次回呼び出しで再試行)。無理な回避処理は入れない
     );
-  }catch(e){arenaBgmLoading=false;}
+  }catch(e){bgmBufferLoading[key]=false;}
 }
-function arenaEnsureGain(){
+let bgmGainNode=null,bgmSrcNode=null,bgmCurrentKey=null,bgmPlaying=false;
+function bgmEnsureGain(){
   if(!AC)return null;
-  if(!arenaGainNode){arenaGainNode=AC.createGain();arenaGainNode.connect(AC.destination);}
-  arenaGainNode.gain.value=BGM_VOLUME; // 他BGMと共通の音量を都度反映
-  return arenaGainNode;
+  if(!bgmGainNode){bgmGainNode=AC.createGain();bgmGainNode.connect(AC.destination);}
+  bgmGainNode.gain.value=BGM_VOLUME; // 全BGM共通の音量を都度反映(デバッグスライダーでの変更もここで効く)
+  return bgmGainNode;
 }
-function arenaBgmStart(){ // 対戦開始時に呼ぶ想定。二重再生防止はbgmPlay側のbgmCurrentKeyチェックで行う
-  if(arenaPlaying)return;
-  if(!arenaBuffer){arenaBgmLoadStart();return;} // デコード未完了: 次フレームで自動的に再試行される
+function bgmStop(){ // 画面遷移時の後始末: 現在の曲を止める(次回同じ曲に戻った際は先頭から)。AudioBufferSourceNodeは再利用不可のため次回開始時に新規作成する
+  if(bgmSrcNode){try{bgmSrcNode.onended=null;bgmSrcNode.stop();bgmSrcNode.disconnect();}catch(e){}bgmSrcNode=null;}
+  bgmPlaying=false;bgmCurrentKey=null;
+}
+function bgmPlay(key){
+  if(!BGM_SOURCES[key])return;
+  if(bgmCurrentKey===key){if(bgmPlaying)return;} // 同一曲・再生中なら無駄な再スタートをしない
+  else{bgmStop();bgmCurrentKey=key;} // 曲の切り替え: 二重再生防止のため先に前の曲を確実に止める
+  if(!bgmBuffers[key]){bgmLoadStart(key);return;} // デコード未完了/自動再生解禁待ちの間は次フレームで自動的に再試行される(frame()内のbgmSyncToScreen()より)
   if(!AC)return;
   if(AC.state==='suspended')AC.resume();
-  const g=arenaEnsureGain();
+  const g=bgmEnsureGain();
   if(!g)return;
   const src=AC.createBufferSource();
-  src.buffer=arenaBuffer;
+  src.buffer=bgmBuffers[key];
+  const loopStart=BGM_LOOP_START[key];
   src.loop=true;
-  src.loopStart=ARENA_BGM_LOOP_START;
-  src.loopEnd=arenaBuffer.duration;
+  if(loopStart!=null){src.loopStart=loopStart;src.loopEnd=bgmBuffers[key].duration;} // イントロ+ループ(闘技場(昼)等)
   src.connect(g);
-  src.start(0); // offset省略=0.000から再生。0.000〜loopStartはこの1回のみ、以降はloopStart〜loopEndをループ
-  arenaSrcNode=src;
-  arenaPlaying=true;
+  src.start(0); // offset省略=0.000から再生。loopStart指定曲は0.000〜loopStartがこの1回のみ、以降loopStart〜loopEndをループ
+  bgmSrcNode=src;
+  bgmPlaying=true;
 }
-function arenaBgmStop(){ // 対戦終了時の後始末。AudioBufferSourceNodeは再利用不可のため次回開始時に新規作成する
-  if(arenaSrcNode){try{arenaSrcNode.onended=null;arenaSrcNode.stop();arenaSrcNode.disconnect();}catch(e){}arenaSrcNode=null;}
-  arenaPlaying=false;
-}
-arenaBgmLoadStart(); // 起動直後からデコードを先行させ、対戦開始時点では待たされないようにする
+for(const k in BGM_SOURCES)bgmLoadStart(k); // 起動直後から全曲のデコードを先行させ、再生開始時点では待たされないようにする
+// バックグラウンド遷移→復帰時のsuspend/resume対策(BGM-R1.2 (3)): AudioContextがサスペンド/
+// (稀なケースとして)破棄された状態で復帰した場合に無音固着が起きないよう、復帰直後に必ず
+// 一旦bgmStop()してからbgmSyncToScreen()で再評価させる(同一曲でも「再生中」フラグが崩れて
+// いる可能性があるため、常に明示的に停止→再開示させることで二重再生も防ぐ)
+document.addEventListener('visibilitychange',()=>{
+  if(document.visibilityState!=='visible')return;
+  if(AC&&AC.state==='closed'){AC=null;bgmGainNode=null;} // 長時間バックグラウンドでcontextが破棄される稀なケースの保険
+  if(AC&&AC.state==='suspended')AC.resume();
+  bgmStop();
+  bgmSyncToScreen();
+});
 // 画面→BGMバケットの対応。characterDetail/pause/movelist/onlineInterruptedは
 // 元の画面(選択/戦闘)の続きとして扱い、resultは対戦終了に伴い明示的に無音へ戻す。
 // オンライン系画面(ロビー/ルーム待機はどちらもonlineLobby一つの画面・オンライン
@@ -828,6 +814,21 @@ function onlineInterruptedPress(p){
 const game={screen:'title',p1:0,p2:0,frame:0};
 if(new URLSearchParams(location.search).get('debug')==='sprites')game.screen='spriteCheck'; // P1 (7): 9キャラ×24ポーズの表示確認用デバッグ画面(?debug=sprites)
 const DEBUG_BAL=new URLSearchParams(location.search).get('debug')==='bal'; // BAL-R1: 戦闘中に開発用の数値パネルを重ねて表示する(?debug=bal)。通常プレイUIには常設しない
+if(DEBUG_BAL){ // BGM-R1.2 (4): BGM/SE音量スライダー(通常プレイでは非表示。canvas上のHTMLオーバーレイなので描画コード側の変更は不要)
+  const panel=document.getElementById('debugAudioPanel');
+  panel.style.display='block';
+  const bgmInput=document.getElementById('dbgBgmVol'),bgmVal=document.getElementById('dbgBgmVolVal');
+  const seInput=document.getElementById('dbgSeVol'),seVal=document.getElementById('dbgSeVolVal');
+  bgmInput.value=String(BGM_VOLUME);bgmVal.textContent=BGM_VOLUME.toFixed(2);
+  seInput.value=String(SE_VOLUME);seVal.textContent=SE_VOLUME.toFixed(2);
+  bgmInput.addEventListener('input',()=>{
+    BGM_VOLUME=parseFloat(bgmInput.value);bgmVal.textContent=BGM_VOLUME.toFixed(2);
+    if(bgmGainNode)bgmGainNode.gain.value=BGM_VOLUME; // 再生中でも即時反映(次回bgmEnsureGain()呼び出し待ちにしない)
+  });
+  seInput.addEventListener('input',()=>{
+    SE_VOLUME=parseFloat(seInput.value);seVal.textContent=SE_VOLUME.toFixed(2);
+  });
+}
 let spriteCheckIdx=0;
 let B=null;
 let lastMatchOnline=false; // 直前の対戦がオンラインだったか(リザルト画面の遷移先分岐用)
