@@ -51,24 +51,25 @@ const build=readFileSync(path.join(ROOT,'tools','build_mobile.mjs'),'utf8');
 const t20Patcher=readFileSync(path.join(ROOT,'tools','apply_t20_full_roster_art_select.mjs'),'utf8');
 const t28Patcher=readFileSync(path.join(ROOT,'tools','apply_t28_roster_trial_select_ui.mjs'),'utf8');
 
+// pre-existing fix, unrelated to VIS-R1: このループの一部assertionはT28マーカー導入当時の
+// 実装(10枠グリッド+ミステリー枠+trial/skeletonId借用)を検証していたが、P1で「全9キャラが
+// 自身の実アート・実装を持つ(trial/skeletonId借用は廃止)」設計へ全面的に置き換えられ、
+// このテストは追従されていなかった(BAL-R1完了報告 §7.2で確認済みのpre-existing failure)。
+// 現行実装(9枠・ミステリー枠なし・全9キャラ実装済み)を検証する内容へ更新する。
 for(const source of [prototype,dist]){
   assert.equal((source.match(/\/\* T20 full roster art select \*\//g)||[]).length,1);
   assert.equal((source.match(/\/\* T28 roster trial select UI \*\//g)||[]).length,1);
-  assert.ok(source.includes('const SELECT_SLOTS=10'));
-  assert.ok(source.includes('const cols=5,s=96'));
-  assert.ok(source.includes("txt('?',r.x+r.w/2"));
-  assert.ok(source.includes("txt('未定'"));
+  assert.ok(source.includes('const SELECT_SLOTS=9'));
+  assert.ok(source.includes('const cols=3,gap=6,s=Math.floor((SELECT_GRID_BOX.w-(cols-1)*gap)/cols)'));
   assert.ok(source.includes('function drawRosterCrop('));
   assert.ok(source.includes("faceCrop:{x:0.42,y:0.28,z:2.48}"));
   assert.ok(source.includes("heroCrop:{x:0.43,y:0.41,z:1.38}"));
   assert.ok(source.includes('function loadImg(key,src,preserveWhite)'));
   assert.ok(source.includes('if(!preserveWhite)whitenAsset(e)'));
-  assert.ok(source.includes('if(!selected.trialPlayable)'));
-  assert.ok(source.includes("'仮骨格で試運転'"));
-  assert.ok(source.includes("'既存性能・共通技のみ / 専用技未実装'"));
-  assert.ok(source.includes("if(p1.c.trial)txt('仮骨格 / 共通技のみ'"));
+  assert.ok(source.includes('game.p1=selected.combatIndex'));
   assert.ok(source.includes("for(let i=0;i<3;i++){\n    const R2=selRect(i)"),'online select must stay current-three only');
-  assert.ok(source.includes("for(const sid of ['moguzo','pisuke','godan'])"),'only official sprite banks may load');
+  assert.ok(source.includes("for(const sid of CHARS.map(function(c){return c.id;}))"),'all 9 characters must load their own sprite banks (trial skeleton borrowing retired)');
+  assert.equal(source.includes('selected.trialPlayable'),false,'trial gating must stay fully retired (all 9 are directly selectable)');
   assert.ok(source.includes('function skeletonIdOf(c)'));
   assert.ok(source.includes('function commandMovesFor(c)'));
   for(const id of EXPECTED)assert.ok(source.includes(`id:'${id}'`),`missing roster id in runtime: ${id}`);
@@ -98,4 +99,4 @@ assert.ok(resume.includes('ピスケ'));
 assert.ok(resume.includes('ダークモグゾー'));
 assert.ok(resume.includes('再開順'));
 
-console.log(`full roster art tests passed; roster=${FULL_ROSTER.length}; official=3; offlineTrial=9; grid=2x5; assets=9x256`);
+console.log(`full roster art tests passed; roster=${FULL_ROSTER.length}; official=3; offlineTrial=9; grid=3x3; assets=9x256`);

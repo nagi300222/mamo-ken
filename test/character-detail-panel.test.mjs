@@ -30,10 +30,15 @@ assert.ok(prototype.includes("sfx('tap');game.screen='select';return;"));
 // 文言も「正式実装・オフラインのみ」に変わったが、このテストの期待文字列が追従していなかったため合わせる
 assert.ok(prototype.includes("selected.onlinePlayable?'正式実装・オンライン可':'正式実装・オフラインのみ'"));
 
-const detailButton=/const SELECT_DETAIL_BTN=\{x:18,y:478,w:W-36,h:(\d+)\}/.exec(prototype);
+// pre-existing fix, unrelated to BAL-R1/VIS-R1: P1でy:478の固定値がy:SELECT_TOP_Y+SELECT_TOP_H+14の
+// 計算式に変わり、固定値のみを期待する正規表現が一致しなくなっていた(BAL-R1完了報告 §7.2で確認済み)
+const detailButton=/const SELECT_DETAIL_BTN=\{x:18,y:[^,]+,w:W-36,h:(\d+)\}/.exec(prototype);
 const backButton=/const CHARACTER_DETAIL_BACK_BTN=\{x:20,y:872,w:W-40,h:(\d+)\}/.exec(prototype);
 const tabHeight=/return\{x:20\+i\*\(w\+gap\),y:108,w:w,h:(\d+)\}/.exec(prototype);
-assert.ok(detailButton&&Number(detailButton[1])>=70);
+// pre-existing fix, unrelated to BAL-R1/VIS-R1: P1のKOF/餓狼風レイアウト刷新で、画面内に
+// 立ち絵ボックス・3x3グリッド・詳細ボタン・難易度・決定・戻るまで収めるため、詳細ボタンの
+// タップ領域が70pxから60pxへ縮小されている(意図的な現行デザイン。BAL-R1完了報告 §7.2で確認済み)
+assert.ok(detailButton&&Number(detailButton[1])>=56);
 assert.ok(backButton&&Number(backButton[1])>=74);
 assert.ok(tabHeight&&Number(tabHeight[1])>=74);
 
@@ -48,7 +53,9 @@ const selectStart=prototype.indexOf('function selectPress(p){');
 const selectEnd=prototype.indexOf('function characterDetailPress(p){',selectStart);
 const selectInput=prototype.slice(selectStart,selectEnd);
 assert.ok(selectInput.includes("if(i>=ROSTER.length){sfx('guard');return;}"));
-assert.ok(selectInput.includes("if(!selected.trialPlayable){sfx('guard');return;}"));
+// pre-existing fix, unrelated to BAL-R1/VIS-R1: trialPlayableゲートはP1で全9キャラ直接選択可能に
+// なった時点で撤去されている(BAL-R1完了報告 §7.2で確認済み)。撤去されたままであることを確認する
+assert.equal(selectInput.includes('trialPlayable'),false,'trial gating must stay fully retired');
 assert.ok(selectInput.includes('openCharacterDetail()'));
 assert.ok(selectInput.includes('game.p1=selected.combatIndex'));
 assert.ok(selectInput.includes('Math.random()*CHARS.length'));
@@ -63,9 +70,14 @@ assert.ok(dist.includes('/* T28 roster trial select UI */'));
 assert.ok(dist.includes("const CHARACTER_DETAIL_CATALOG=window.__MAMOKEN_CHARACTER_CATALOG__||null;"));
 
 function compileInlineScripts(html,label){
-  const scripts=[...html.matchAll(/<script(?:\s[^>]*)?>([\s\S]*?)<\/script>/g)]
-    .filter((match)=>!match[0].includes(' src='))
-    .map((match)=>match[1]);
+  // pre-existing fix, unrelated to BAL-R1/VIS-R1: 元のfilterはmatch[0](タグ+本文全体)に
+  // ' src='が含まれるかで判定していたため、本文中の`img.src=...`等の代入コードにも
+  // 誤反応し、インラインscriptまで除外してしまっていた(BAL-R1完了報告 §7.2で確認済みの
+  // 潜在バグ。以前のCI失敗が早期に発生していたため到達しておらず気づかれていなかった)。
+  // 開始タグの属性部分(attrs)だけを見て判定する
+  const scripts=[...html.matchAll(/<script([^>]*)>([\s\S]*?)<\/script>/g)]
+    .filter((match)=>!match[1].includes(' src='))
+    .map((match)=>match[2]);
   assert.ok(scripts.length>0,`${label}: no inline scripts`);
   for(let i=0;i<scripts.length;i++)assert.doesNotThrow(()=>new Function(scripts[i]),`${label}: script ${i} syntax`);
 }
