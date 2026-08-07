@@ -418,57 +418,95 @@ const BAL={ // 03_data_design.md v2.0 §2 balance table 準拠
     bufF:24, // 方向入力バッファ窓(F)
     buffer:12, // コマンド先行入力(v0.11 §6.9): 硬直の残りがこのF数以内なら「コマンド+攻撃入力」を保持し、行動可能Fで自動発動
     moves:{
-      moguzo:[ // 1:地走り(前進打撃) 2:昇撃(カウンター強化) 3:引き寄せ投げ(リーチ強化)
+      // CMD-R1: 既存3体(moguzo/pisuke/godan)の枠1〜3(旧9技)は数値・seqとも無変更で維持し、
+      // 枠4〜7のみ今回追加する(R-D01準拠)。枠4〜7はm.exactDmg:trueを持ち、dMulを二重適用しない
+      // (damage/hitAdv/blockAdvがキャラ別の確定値のため)。hitstun/blockstunは既存契約式
+      // (stunDur=adv+(active+recovery-1))でHit+/Block-から逆算した値。Hit+が投入文に無い技は
+      // hitstunを明示せず共通BAL.HITSTUN[lv]へフォールバックする(blockstunのみ確定値)
+      moguzo:[ // 1:地走り(前進打撃) 2:昇撃(カウンター強化) 3:引き寄せ投げ(リーチ強化) — 旧9技(無変更)
         {seq:['right','down'],trigger:'mid',type:'atk',lv:'mid',name:'地走り',s:18,a:3,r:18,d:95,fwd:40,guardDmg:8,color:'#ffb84d',se:'cmdHit'},
         {seq:['down','right'],trigger:'high',type:'atk',lv:'high',name:'昇撃',s:24,a:3,r:30,d:120,counterMul:1.5,color:'#ff5a3c',se:'cmdHit'},
-        {seq:['left','right'],trigger:'grab',type:'grab',name:'引き寄せ投げ',s:14,d:100,reachMul:1.5,color:'#ffd23f',se:'cmdGrabHit'}
+        {seq:['left','right'],trigger:'grab',type:'grab',name:'引き寄せ投げ',s:14,d:100,reachMul:1.5,color:'#ffd23f',se:'cmdGrabHit'},
+        // CMD-R1新規(枠4〜7)
+        {seq:['down','left'],trigger:'low',type:'atk',lv:'low',name:'砂払い',s:20,a:4,r:23,d:82,down:false,guardDmg:10,hitstun:30,blockstun:18,whiff:6,scale:0.95,exactDmg:true,color:'#c9a24d',se:'cmdHit'},
+        {seq:['right','right'],trigger:'high',type:'atk',lv:'high',name:'山越え拳',s:25,a:4,r:29,d:125,guardDmg:18,hitstun:39,blockstun:19,whiff:10,scale:0.85,exactDmg:true,color:'#ff7a3c',se:'cmdHit'},
+        {seq:['left','down'],trigger:'mid',type:'atk',lv:'mid',name:'胴押し',s:12,a:3,r:16,d:55,guardDmg:16,blockstun:15,whiff:3,scale:1.0,exactDmg:true,tags:['NORMAL_RESET','Pushback2'],color:'#e0a860',se:'cmdHit'},
+        {seq:['left','down','right'],trigger:'mid',type:'atk',lv:'mid',name:'土煙突き',s:30,a:4,r:34,d:105,guardDmg:14,blockstun:23,whiff:12,scale:0.80,comboEnd:true,exactDmg:true,reach:3,tags:['NORMAL_RESET'],color:'#a97848',se:'cmdHit'}
       ],
-      pisuke:[ // 1:二連牙(高速・簡略化して単発ヒットで実装) 2:スライディング(下段) 3:宙返り蹴(投げ無敵)
+      pisuke:[ // 1:二連牙(高速・簡略化して単発ヒットで実装) 2:スライディング(下段) 3:宙返り蹴(投げ無敵) — 旧9技(無変更)
         {seq:['right','right'],trigger:'mid',type:'atk',lv:'mid',name:'二連牙',s:8,a:3,r:18,d:95,color:'#5ab2ff',se:'cmdHit'},
         {seq:['down','left'],trigger:'low',type:'atk',lv:'low',name:'スライディング',s:30,a:4,r:30,d:80,down:true,fwd:60,guardDmg:14,color:'#7cfc00',se:'cmdHit'},
-        {seq:['left','right'],trigger:'high',type:'atk',lv:'high',name:'宙返り蹴',s:20,a:3,r:24,d:90,fwd:20,color:'#5ab2ff',se:'cmdHit'}
+        {seq:['left','right'],trigger:'high',type:'atk',lv:'high',name:'宙返り蹴',s:20,a:3,r:24,d:90,fwd:20,color:'#5ab2ff',se:'cmdHit'},
+        // CMD-R1新規(枠4〜7)
+        {seq:['down','right'],trigger:'mid',type:'atk',lv:'mid',name:'かすみ連打',s:10,a:8,r:18,d:78,hits:3,guardDmg:13,hitstun:35,blockstun:20,whiff:4,scale:0.80,exactDmg:true,tags:['CLINCH'],color:'#4fc3ff',se:'cmdHit'},
+        {seq:['right','down'],trigger:'high',type:'atk',lv:'high',name:'風切り爪',s:15,a:3,r:21,d:82,guardDmg:9,hitstun:29,blockstun:16,whiff:6,scale:0.90,exactDmg:true,color:'#79d0ff',se:'cmdHit'},
+        {seq:['right','left'],trigger:'low',type:'atk',lv:'low',name:'すり抜け足',s:11,a:3,r:17,d:62,guardDmg:7,blockstun:15,whiff:6,scale:0.80,exactDmg:true,poseId:'lunge',tags:['LUNGE成功時限定','Hit→CLINCH'],color:'#8be26b',se:'cmdHit'},
+        {seq:['down','right','right'],trigger:'mid',type:'atk',lv:'mid',name:'つむじ返し',s:24,a:4,r:31,d:98,guardDmg:12,blockstun:22,whiff:12,scale:0.75,comboEnd:true,exactDmg:true,reach:3,poseId:'lunge',tags:['CHASE_TO_CONTACT','maximumApproachSteps2','NORMAL_RESET'],color:'#3aa0e0',se:'cmdHit'}
       ],
-      godan:[ // 1:地割れ(削り大) 2:山掴み(アーマー付き投げ) 3:巌の構え(自動見切り→反撃中段)
+      godan:[ // 1:地割れ(削り大) 2:山掴み(アーマー付き投げ) 3:巌の構え(自動見切り→反撃中段) — 旧9技(無変更)
         {seq:['down','down'],trigger:'low',type:'atk',lv:'low',name:'地割れ',s:30,a:3,r:30,d:110,down:true,guardChip:30,color:'#8a6540',se:'cmdHit'},
         {seq:['right','down'],trigger:'grab',type:'grab',name:'山掴み',s:16,d:110,armor:6,color:'#ff9500',se:'cmdGrabHit'},
-        {seq:['left','left'],trigger:'mid',type:'stance',name:'巌の構え',stanceF:12,counterLv:'mid',counterDmg:100,color:'#ffd23f',se:'guard'}
+        {seq:['left','left'],trigger:'mid',type:'stance',name:'巌の構え',stanceF:12,counterLv:'mid',counterDmg:100,color:'#ffd23f',se:'guard'},
+        // CMD-R1新規(枠4〜7)
+        {seq:['down','right'],trigger:'mid',type:'atk',lv:'mid',name:'岩砕き',s:20,a:4,r:28,d:115,guardDmg:16,hitstun:38,blockstun:21,whiff:9,scale:0.85,exactDmg:true,armorStartF:4,armorEndF:19,color:'#7a5a38',se:'cmdHit'},
+        {seq:['right','right'],trigger:'high',type:'atk',lv:'high',name:'天蓋落とし',s:29,a:4,r:34,d:150,down:'hardDown',guardDmg:21,blockstun:21,whiff:12,scale:0.75,exactDmg:true,color:'#9a7248',se:'cmdHit'},
+        {seq:['left','down'],trigger:'low',type:'atk',lv:'low',name:'根こそぎ',s:22,a:4,r:28,d:105,down:'throwDown',guardDmg:14,blockstun:20,whiff:7,scale:0.80,comboEnd:true,exactDmg:true,tags:['追撃不可(throwDown流用)'],color:'#6b4d30',se:'cmdHit'},
+        {seq:['left','down','right'],trigger:'mid',type:'atk',lv:'mid',name:'大山押し',s:24,a:5,r:30,d:110,guardDmg:22,blockstun:26,whiff:9,scale:0.85,exactDmg:true,reach:2,tags:['NORMAL_RESET','Pushback2'],color:'#8a6540',se:'cmdHit'}
       ],
-      // P1 (4): 新6キャラの暫定コマンド技。既存9種の型(数値・フレームは無改変で流用)から
-      // スタイルに合う3つを選び、技名のみキャラに合わせて仮命名。全て後調整前提。
-      // 型の由来: 1=前進強打(地走り型) 2=大アッパー対空(昇撃型) 3=リーチ投げ(引き寄せ投げ型)
-      // 4=高速多段(二連牙型) 5=突進下段(スライディング型) 6=後退→前進蹴(宙返り蹴型)
-      // 7=地震削り(地割れ型) 8=アーマー投げ(山掴み型) 9=自動見切り構え(巌の構え型)
-      // 同キャラ内でseq(方向2つ)が重複しないよう、型1と型8(ともに→↓)、型3と型6(ともに←→)は
-      // 同時に採用しないこと(detectCommandMove()はseq一致のみで先頭一致技を返すため)
-      hakuma:[ // ディフェンス。9:白峰の構え(自動見切り→反撃中段) 8:雪崩抱え(アーマー投げ) 4:雪壁掌(高速中段)
-        {seq:['left','left'],trigger:'mid',type:'stance',name:'白峰の構え',stanceF:12,counterLv:'mid',counterDmg:100,color:'#bfe3d0',se:'guard'},
-        {seq:['right','down'],trigger:'grab',type:'grab',name:'雪崩抱え',s:16,d:110,armor:6,color:'#8fb8a0',se:'cmdGrabHit'},
-        {seq:['right','right'],trigger:'mid',type:'atk',lv:'mid',name:'雪壁掌',s:8,a:3,r:18,d:95,color:'#dbe8e0',se:'cmdHit'}
+      // CMD-R1: 新6キャラ(P1暫定18技)はすべて下記7技セットへ全面置換する
+      hakuma:[
+        {seq:['left','down'],trigger:'mid',type:'atk',lv:'mid',name:'雪壁掌',s:16,a:3,r:20,d:78,guardDmg:10,hitstun:27,blockstun:16,whiff:4,scale:0.95,exactDmg:true,tags:['Iron Wall対応'],color:'#bfe3d0',se:'cmdHit'},
+        {seq:['down','right'],trigger:'high',type:'atk',lv:'high',name:'氷柱返し',s:24,a:4,r:27,d:108,guardDmg:14,hitstun:36,blockstun:20,whiff:8,scale:0.90,exactDmg:true,color:'#a7d9c9',se:'cmdHit'},
+        {seq:['left','right'],trigger:'grab',type:'grab',name:'雪崩抱え',s:14,d:100,armor:6,whiff:34,down:'throwDown',exactDmg:true,color:'#8fb8a0',se:'cmdGrabHit'},
+        {seq:['down','left'],trigger:'low',type:'atk',lv:'low',name:'地伏せ',s:23,a:4,r:27,d:88,down:false,guardDmg:12,hitstun:34,blockstun:20,whiff:7,scale:0.90,exactDmg:true,color:'#749c8a',se:'cmdHit'},
+        {seq:['left','left'],trigger:'mid',type:'atk',lv:'mid',name:'不動押し',s:13,a:4,r:17,d:58,guardDmg:17,blockstun:17,whiff:3,scale:1.0,exactDmg:true,tags:['NORMAL_RESET','Pushback2'],color:'#5f8a76',se:'cmdHit'},
+        {seq:['right','down'],trigger:'high',type:'atk',lv:'high',name:'白峰打ち',s:21,a:4,r:25,d:100,guardDmg:13,hitstun:35,blockstun:19,whiff:7,scale:0.90,exactDmg:true,tags:['Iron Wall対応'],color:'#dbe8e0',se:'cmdHit'},
+        {seq:['left','down','right'],trigger:'mid',type:'atk',lv:'mid',name:'雪煙崩し',s:28,a:4,r:34,d:115,guardDmg:15,blockstun:24,whiff:12,scale:0.80,comboEnd:true,exactDmg:true,reach:3,tags:['Iron Wall消費'],color:'#c7ece0',se:'cmdHit'}
       ],
-      chirka:[ // トリッキー。4:だまし突き(高速中段) 6:戻り蹴り(後退→前進蹴・上段) 8:すかし抱き(アーマー投げ型を仮流用)
-        {seq:['right','right'],trigger:'mid',type:'atk',lv:'mid',name:'だまし突き',s:8,a:3,r:18,d:95,color:'#b98cc7',se:'cmdHit'},
-        {seq:['left','right'],trigger:'high',type:'atk',lv:'high',name:'戻り蹴り',s:20,a:3,r:24,d:90,fwd:20,color:'#caa6d9',se:'cmdHit'},
-        {seq:['right','down'],trigger:'grab',type:'grab',name:'すかし抱き',s:16,d:110,armor:6,color:'#9d6bb0',se:'cmdGrabHit'}
+      chirka:[
+        {seq:['right','down'],trigger:'mid',type:'atk',lv:'mid',name:'だまし突き',s:15,a:3,r:20,d:72,guardDmg:9,hitstun:27,blockstun:16,whiff:5,scale:0.95,exactDmg:true,tags:['Feint','Delay'],color:'#b98cc7',se:'cmdHit'},
+        {seq:['down','right'],trigger:'high',type:'atk',lv:'high',name:'空鳴り爪',s:23,a:4,r:26,d:98,guardDmg:12,hitstun:35,blockstun:20,whiff:7,scale:0.90,exactDmg:true,tags:['Delay'],color:'#caa6d9',se:'cmdHit'},
+        {seq:['left','right'],trigger:'grab',type:'grab',name:'すかし抱き',s:15,d:92,whiff:36,down:'throwDown',exactDmg:true,tags:['独立GRAB telegraph'],color:'#9d6bb0',se:'cmdGrabHit'},
+        {seq:['down','left'],trigger:'low',type:'atk',lv:'low',name:'影踏み',s:21,a:4,r:25,d:82,down:false,guardDmg:10,hitstun:32,blockstun:19,whiff:6,scale:0.90,exactDmg:true,tags:['Delay'],color:'#7a5c8a',se:'cmdHit'},
+        {seq:['right','left','right'],trigger:'mid',type:'atk',lv:'mid',name:'つんのめり',s:12,a:3,r:19,d:65,guardDmg:8,hitstun:27,blockstun:16,whiff:10,scale:0.85,exactDmg:true,reach:0,color:'#c39ed4',se:'cmdHit'},
+        {seq:['left','down','right'],trigger:'high',type:'atk',lv:'high',name:'戻り蹴り',s:20,a:4,r:24,d:90,guardDmg:11,hitstun:32,blockstun:19,whiff:6,scale:0.90,exactDmg:true,reach:2,color:'#b98cc7',se:'cmdHit'},
+        {seq:['down','right','down'],trigger:'mid',type:'atk',lv:'mid',name:'あと出し頭突き',s:31,a:4,r:35,d:108,guardDmg:14,blockstun:24,whiff:12,scale:0.75,comboEnd:true,exactDmg:true,reach:3,tags:['Delay可','NORMAL_RESET'],color:'#8a6a99',se:'cmdHit'}
       ],
-      takimaru:[ // グラップラー。8:丸抱え(アーマー投げ) 3:巻き投げ(リーチ投げ) 4:ぶちかまし(高速中段)
-        {seq:['right','down'],trigger:'grab',type:'grab',name:'丸抱え',s:16,d:110,armor:6,color:'#c9a24d',se:'cmdGrabHit'},
-        {seq:['left','right'],trigger:'grab',type:'grab',name:'巻き投げ',s:14,d:100,reachMul:1.5,color:'#b0aac2',se:'cmdGrabHit'},
-        {seq:['right','right'],trigger:'mid',type:'atk',lv:'mid',name:'ぶちかまし',s:8,a:3,r:18,d:95,color:'#8a8398',se:'cmdHit'}
+      takimaru:[
+        {seq:['right','down'],trigger:'grab',type:'grab',name:'丸抱え',s:12,d:110,whiff:32,down:'throwDown',exactDmg:true,color:'#c9a24d',se:'cmdGrabHit'},
+        {seq:['left','right'],trigger:'grab',type:'grab',name:'巻き投げ',s:17,d:125,whiff:42,down:'throwDown',exactDmg:true,reach:2,tags:['NORMAL_LONG'],color:'#b0aac2',se:'cmdGrabHit'},
+        {seq:['right','right'],trigger:'mid',type:'atk',lv:'mid',name:'ぶちかまし',s:15,a:4,r:22,d:92,guardDmg:14,hitstun:30,blockstun:19,whiff:5,scale:0.90,exactDmg:true,tags:['Pressure起点'],color:'#8a8398',se:'cmdHit'},
+        {seq:['down','left'],trigger:'low',type:'atk',lv:'low',name:'足さらい',s:18,a:4,r:24,d:82,down:false,guardDmg:11,hitstun:31,blockstun:18,whiff:6,scale:0.90,exactDmg:true,color:'#a08f6a',se:'cmdHit'},
+        {seq:['down','right'],trigger:'high',type:'atk',lv:'high',name:'熊手払い',s:21,a:4,r:27,d:100,guardDmg:14,hitstun:36,blockstun:21,whiff:7,scale:0.90,exactDmg:true,tags:['Pressure起点'],color:'#c9a24d',se:'cmdHit'},
+        {seq:['left','down'],trigger:'grab',type:'grab',name:'肩車崩し',s:13,d:118,whiff:34,down:'throwDown',exactDmg:true,tags:['Pressure条件限定'],color:'#b09354',se:'cmdGrabHit'},
+        {seq:['left','down','right'],trigger:'grab',type:'grab',name:'大回転落とし',s:20,d:145,whiff:46,down:'throwDown',comboEnd:true,exactDmg:true,reach:1,tags:['NORMAL_RESET'],color:'#8a8398',se:'cmdGrabHit'}
       ],
-      yomikage:[ // カウンター。9:後の先・構え(自動見切り→反撃中段) 2:後の先・天(大アッパー対空) 5:後の先・地(突進下段)
-        {seq:['left','left'],trigger:'mid',type:'stance',name:'後の先・構え',stanceF:12,counterLv:'mid',counterDmg:100,color:'#6b7fd6',se:'guard'},
-        {seq:['down','right'],trigger:'high',type:'atk',lv:'high',name:'後の先・天',s:24,a:3,r:30,d:120,counterMul:1.5,color:'#8695e0',se:'cmdHit'},
-        {seq:['down','left'],trigger:'low',type:'atk',lv:'low',name:'後の先・地',s:30,a:4,r:30,d:80,down:true,fwd:60,guardDmg:14,color:'#4f5bb8',se:'cmdHit'}
+      yomikage:[
+        {seq:['right','down'],trigger:'mid',type:'atk',lv:'mid',name:'影縫い',s:11,a:3,r:18,d:62,guardDmg:8,hitstun:25,blockstun:16,whiff:4,scale:0.85,exactDmg:true,color:'#6b7fd6',se:'cmdHit'},
+        {seq:['down','left'],trigger:'low',type:'atk',lv:'low',name:'霞落とし',s:18,a:4,r:24,d:78,down:false,guardDmg:10,hitstun:31,blockstun:19,whiff:6,scale:0.90,exactDmg:true,color:'#4f5bb8',se:'cmdHit'},
+        {seq:['left','right'],trigger:'high',type:'atk',lv:'high',name:'月かすめ',s:16,a:3,r:22,d:82,guardDmg:10,hitstun:29,blockstun:17,whiff:6,scale:0.90,exactDmg:true,color:'#8695e0',se:'cmdHit'},
+        {seq:['left','down'],trigger:'grab',type:'grab',name:'腕返し',s:12,d:95,whiff:34,down:'throwDown',exactDmg:true,color:'#5a67ad',se:'cmdGrabHit'},
+        {seq:['right','right'],trigger:'high',type:'atk',lv:'high',name:'後の先・天',s:8,a:3,r:18,d:105,guardDmg:12,hitstun:28,blockstun:10,whiff:10,scale:0.90,exactDmg:true,tags:['Just状態限定'],color:'#8695e0',se:'cmdHit'},
+        {seq:['down','down'],trigger:'low',type:'atk',lv:'low',name:'後の先・地',s:10,a:4,r:22,d:115,down:'lightDown',guardDmg:13,blockstun:13,whiff:10,scale:0.85,comboEnd:true,exactDmg:true,tags:['Just限定'],color:'#4f5bb8',se:'cmdHit'},
+        {seq:['left','down','right'],trigger:'mid',type:'atk',lv:'mid',name:'後の先・芯',s:14,a:3,r:26,d:120,guardDmg:14,blockstun:14,whiff:12,scale:0.80,comboEnd:true,exactDmg:true,reach:3,tags:['Just限定','NORMAL_RESET'],color:'#6b7fd6',se:'cmdHit'}
       ],
-      bullet:[ // チャージ。7:尾払い(地震削り) 2:跳ね上げ(大アッパー対空) 4:弾み突き(高速中段)
-        {seq:['down','down'],trigger:'low',type:'atk',lv:'low',name:'尾払い',s:30,a:3,r:30,d:110,down:true,guardChip:30,color:'#a83250',se:'cmdHit'},
-        {seq:['down','right'],trigger:'high',type:'atk',lv:'high',name:'跳ね上げ',s:24,a:3,r:30,d:120,counterMul:1.5,color:'#c14a68',se:'cmdHit'},
-        {seq:['right','right'],trigger:'mid',type:'atk',lv:'mid',name:'弾み突き',s:8,a:3,r:18,d:95,color:'#8a2740',se:'cmdHit'}
+      bullet:[
+        {seq:['right','down'],trigger:'mid',type:'atk',lv:'mid',name:'弾み突き',s:13,a:3,r:19,d:68,guardDmg:8,hitstun:26,blockstun:16,whiff:4,scale:0.90,exactDmg:true,color:'#8a2740',se:'cmdHit'},
+        {seq:['down','left'],trigger:'low',type:'atk',lv:'low',name:'尾払い',s:20,a:4,r:24,d:85,guardDmg:11,hitstun:31,blockstun:18,whiff:6,scale:0.90,exactDmg:true,tags:['尾攻撃hitbox','通常時の尾hurtboxなし'],color:'#a83250',se:'cmdHit'},
+        {seq:['down','right'],trigger:'high',type:'atk',lv:'high',name:'跳ね上げ',s:18,a:3,r:23,d:90,guardDmg:11,hitstun:31,blockstun:17,whiff:6,scale:0.90,exactDmg:true,color:'#c14a68',se:'cmdHit'},
+        {seq:['right','right'],trigger:'mid',type:'atk',lv:'mid',name:'蓄圧タックル',s:18,a:4,r:25,d:108,guardDmg:15,hitstun:34,blockstun:20,whiff:8,scale:0.85,exactDmg:true,poseId:'lunge',tags:['Charge1消費'],color:'#a83250',se:'cmdHit'},
+        {seq:['left','right'],trigger:'grab',type:'grab',name:'抱え弾き',s:14,d:95,whiff:35,down:'throwDown',exactDmg:true,tags:['成功Charge+1'],color:'#8a2740',se:'cmdGrabHit'},
+        {seq:['left','left'],trigger:'mid',type:'atk',lv:'mid',name:'圧抜き掌',s:16,a:3,r:21,d:72,guardDmg:13,blockstun:18,whiff:5,scale:0.90,exactDmg:true,tags:['Charge1消費','Guard+8','NORMAL_RESET'],color:'#c14a68',se:'cmdHit'},
+        {seq:['left','down','right','right'],trigger:'mid',type:'atk',lv:'mid',name:'弾丸頭突き',s:29,a:4,r:38,d:160,down:'hardDown',guardDmg:22,blockstun:23,whiff:14,scale:0.70,exactDmg:true,reach:3,tags:['Charge3全消費'],color:'#8a2740',se:'cmdHit'}
       ],
-      dark_moguzo:[ // アナザー。5:黒砂払い(突進下段) 3:闇引き(リーチ投げ) 1:黒走り(前進強打)
-        {seq:['down','left'],trigger:'low',type:'atk',lv:'low',name:'黒砂払い',s:30,a:4,r:30,d:80,down:true,fwd:60,guardDmg:14,color:'#5a2f6b',se:'cmdHit'},
-        {seq:['left','right'],trigger:'grab',type:'grab',name:'闇引き',s:14,d:100,reachMul:1.5,color:'#7a1f2f',se:'cmdGrabHit'},
-        {seq:['right','down'],trigger:'mid',type:'atk',lv:'mid',name:'黒走り',s:18,a:3,r:18,d:95,fwd:40,guardDmg:8,color:'#3d1f4a',se:'cmdHit'}
+      dark_moguzo:[
+        {seq:['right','down'],trigger:'mid',type:'atk',lv:'mid',name:'黒走り',s:11,a:3,r:18,d:68,guardDmg:9,hitstun:27,blockstun:15,whiff:5,scale:0.85,exactDmg:true,tags:['暗連可'],color:'#3d1f4a',se:'cmdHit'},
+        {seq:['down','right'],trigger:'high',type:'atk',lv:'high',name:'逆昇撃',s:14,a:3,r:20,d:80,guardDmg:10,hitstun:28,blockstun:15,whiff:6,scale:0.85,exactDmg:true,tags:['暗連可'],color:'#5a2f6b',se:'cmdHit'},
+        {seq:['left','right'],trigger:'grab',type:'grab',name:'闇引き',s:16,d:90,whiff:40,down:'throwDown',exactDmg:true,tags:['暗連不可'],color:'#7a1f2f',se:'cmdGrabHit'},
+        {seq:['down','left'],trigger:'low',type:'atk',lv:'low',name:'黒砂払い',s:16,a:4,r:22,d:72,guardDmg:9,hitstun:31,blockstun:17,whiff:6,scale:0.85,exactDmg:true,tags:['暗連可'],color:'#5a2f6b',se:'cmdHit'},
+        {seq:['right','right'],trigger:'high',type:'atk',lv:'high',name:'裏山越え',s:22,a:4,r:27,d:100,guardDmg:13,hitstun:37,blockstun:19,whiff:9,scale:0.80,exactDmg:true,tags:['暗連可'],color:'#3d1f4a',se:'cmdHit'},
+        {seq:['left','down'],trigger:'mid',type:'atk',lv:'mid',name:'闇押し',s:10,a:3,r:16,d:52,guardDmg:8,hitstun:26,blockstun:15,whiff:4,scale:0.80,exactDmg:true,tags:['暗連可'],color:'#5a2f6b',se:'cmdHit'},
+        {seq:['left','down','right'],trigger:'mid',type:'atk',lv:'mid',name:'黒煙突き',s:26,a:4,r:32,d:95,guardDmg:12,blockstun:21,whiff:12,scale:0.75,comboEnd:true,exactDmg:true,reach:3,tags:['暗連不可','NORMAL_RESET'],color:'#3d1f4a',se:'cmdHit'}
       ]
     }
   }
@@ -614,14 +652,12 @@ const POSE_IDS=['idle','guard','hurt','win','tele_high','tele_mid','tele_low',
   'atk_mid','atk_high','atk_low','mikiri','roar_charge','roar',
   'grab_reach','grab_lift','grabbed','down','getup','ko','ult_charge',
   'crouch','sway','lunge','crouch_atk']; // P1: 全9キャラ共通の24ポーズ(art/pose-sheets-raw由来)
-const CMD_POSE_IDS=['cmd1','cmd2','cmd3']; // v0.10: コマンド技専用ポーズ(§6.8 v2.5.1。cmd_spareは予備のため未使用)
-const CMD_POSE_CHAR_IDS=new Set(['moguzo','pisuke','godan']); // cmd1〜3専用ポーズ画像を持つキャラ(既存3体のみ。新6キャラは共通ポーズで代替表示のため読み込み自体を行わない)
-function hasCmdPoseArt(c){return CMD_POSE_CHAR_IDS.has(c.id);}
+// CMD-R1: 旧cmd1〜3専用ポーズ(既存3体のみ)は廃止し、全コマンド技を既存24ポーズからの流用(m.poseId)へ
+// 統一する(タッチ統一優先。9体すべて同じ絵作りの規則で表示できるようにする)
 const SPRITES={};
 for(const sid of CHARS.map(function(c){return c.id;})){
   SPRITES[sid]={};
   for(const pid of POSE_IDS)SPRITES[sid][pid]=loadImg('sprite_'+sid+'_'+pid,'../assets/chars/'+sid+'/'+pid+'.png');
-  if(CMD_POSE_CHAR_IDS.has(sid))for(const pid of CMD_POSE_IDS)SPRITES[sid][pid]=loadImg('sprite_'+sid+'_'+pid,'../assets/chars/'+sid+'/'+pid+'.png');
 }
 function assetReady(key){const e=ASSETS[key];return!!(e&&e.ready&&!e.failed);}
 function drawStanding(key,cx,bottomY,targetH){ // 足元アンカー・高さ基準でフィット
@@ -1155,7 +1191,7 @@ function newFighter(ci,side){
     hp:maxHpFor(c),guard:maxGuardFor(c),s:0,ult:0,focus:0,
     phase:'idle',pf:0,atkLv:null,hasHit:false,landedHit:false, // landedHit(BAL-R1.1新設): hasHitは「active窓で解決を試みた(ガード/回避も含む)」を表す既存フラグのため、
     // 「確定ヒット(ガード/回避されず本当に命中した)」だけをchainのゲートに使うためlandedHitを分離する(hitApply()内でのみtrueにする)
-
+    cmdArmorUsed:false, // CMD-R1新設: コマンド打撃技のアーマー窓(armorStartF/armorEndF)は1hitのみ吸収する管理フラグ
     guardLv:null,stunDur:0,combo:0,downType:null, // downType(BAL-R1): 現在down/wake中のBAL.DOWNWAKEキー(lightDown/throwDown/ultimateDown)
     buf:null,bufF:0,held:null,lunge:0,kb:0,downHitUsed:false,
     lastAtkLv:null,atkStreak:0,yomare:false,
@@ -1199,7 +1235,7 @@ function startOnlineBattle(seed,charIdxBySlot,delayF){ // オンライン対戦�
 function roundInit(first){
   for(const f of B.p){
     f.hp=maxHpFor(f.c);f.shownHp=maxHpFor(f.c);f.guard=maxGuardFor(f.c);
-    f.phase='idle';f.pf=0;f.atkLv=null;f.hasHit=false;f.landedHit=false;f.downType=null;
+    f.phase='idle';f.pf=0;f.atkLv=null;f.hasHit=false;f.landedHit=false;f.cmdArmorUsed=false;f.downType=null;
     f.guardLv=null;f.combo=0;f.buf=null;f.kb=0;f.lunge=0;f.sNo=0;f.downHitUsed=false;
     f.guardRegenCooldownF=0;f.dizzyHits=0;f.dizzyDamage=0;f.postBreakActive=false;
     f.lastAtkLv=null;f.atkStreak=0;f.yomare=false;
@@ -1252,10 +1288,17 @@ function specForLv(f,lv){ // BAL-R1: 通常技(crouch/mid/high/low)はBAL_R1_CHA
   return{s:b.s,a:b.a,r:b.r,d:b.d,y:BAL.ATK[lv].y,down:b.down||false,gd:b.gd,hitstun:b.hitstun||22,blockstun:b.blockstun};
 }
 function specForCmd(f,m){ // コマンド技(v0.10): 数値はBAL.CMDの技定義そのもの(キャラのsOfsは適用しない=技ごとに調整済みの値)。
-  // 非対象のため既存通りdMul適用+共通BAL.HITSTUN/BLOCKSTUN/GDMG_Aを使う
-  const isDown=(m.down!=null)?m.down:(m.trigger==='low');
-  return{s:m.s,a:m.a||3,r:m.r||BAL.ATK[m.lv].r,d:m.d*f.c.dMul,y:BAL.ATK[m.lv].y,down:isDown?'lightDown':false,
-    gd:(m.guardDmg!=null)?m.guardDmg:BAL.GDMG_A,hitstun:BAL.HITSTUN[m.lv]||22,blockstun:BAL.BLOCKSTUN[m.lv]};
+  // 旧9技(P1以前からの既存技、枠1〜3の一部)はキャラのdMul+共通BAL.HITSTUN/BLOCKSTUN/GDMG_Aを
+  // 引き続き適用する(既存動作を維持)。CMD-R1で追加/置換した技(m.exactDmg:true)は既にキャラ別の
+  // 確定値(damage/hitAdv/blockAdv由来のhitstun・blockstun)のため、二重適用しないよう素通しする
+  // CMD-R1: m.downが文字列ならBAL.DOWNWAKEのキーとして直接使う(hardDown/throwDown流用等)。
+  // true/未指定は既存どおりlightDown/(lowのみ既定でlightDown)。false/'downなし'相当は無ダウン
+  const downType=(typeof m.down==='string')?m.down:((m.down!=null?m.down:(m.trigger==='low'))?'lightDown':false);
+  const dmg=m.exactDmg?m.d:m.d*f.c.dMul;
+  return{s:m.s,a:m.a||3,r:m.r||BAL.ATK[m.lv].r,d:dmg,y:BAL.ATK[m.lv].y,down:downType,
+    gd:(m.guardDmg!=null)?m.guardDmg:BAL.GDMG_A,
+    hitstun:m.hitstun!=null?m.hitstun:(BAL.HITSTUN[m.lv]||22),
+    blockstun:m.blockstun!=null?m.blockstun:BAL.BLOCKSTUN[m.lv]};
 }
 function spec(f){
   if(f.cmdMove&&f.phase==='cmdAtk')return specForCmd(f,f.cmdMove);
@@ -1280,7 +1323,7 @@ function checkFocusTrigger(att,def){
   }
 }
 function startAtk(f,lv,chain){
-  f.phase='attack';f.pf=0;f.atkLv=lv;f.hasHit=false;f.landedHit=false;f.guardLv=null;
+  f.phase='attack';f.pf=0;f.atkLv=lv;f.hasHit=false;f.landedHit=false;f.cmdArmorUsed=false;f.guardLv=null;
   if(!chain){f.combo=0;f.comboCounter=false;} // 新規始動でカウンターコンボの補正緩和もリセット
   sfx('swish');
   sfx(lv==='high'?'teleHigh':(lv==='low'?'teleLow':'teleMid')); // テレグラフ固有SE
@@ -1292,52 +1335,64 @@ function startAtk(f,lv,chain){
 }
 function fxYomare(f){B.fx.push({k:'yomare',x:fpos(f),y:relY(f,1.027),f:0,dur:50});}
 function startDodge(f,kind){ // kind: 'crouch'|'sway'|'lunge'
-  f.phase='dodge';f.pf=0;f.dodgeType=kind;f.atkLv=null;f.guardLv=null;f.buf=null;f.combo=0;f.hasHit=false;f.landedHit=false;
+  f.phase='dodge';f.pf=0;f.dodgeType=kind;f.atkLv=null;f.guardLv=null;f.buf=null;f.combo=0;f.hasHit=false;f.landedHit=false;f.cmdArmorUsed=false;
   sfx('swish');
 }
 function startCrouchAtk(f){ // しゃがみ中(1〜14F)の右ゾーンタップ＝しゃがみ突き。高さは問わない
-  f.phase='attack';f.pf=0;f.atkLv='crouch';f.dodgeType=null;f.hasHit=false;f.landedHit=false;f.guardLv=null;f.combo=0;f.comboCounter=false;
+  f.phase='attack';f.pf=0;f.atkLv='crouch';f.dodgeType=null;f.hasHit=false;f.landedHit=false;f.cmdArmorUsed=false;f.guardLv=null;f.combo=0;f.comboCounter=false;
   sfx('swish');sfx('teleMid'); // 専用SEは無いため中段テレグラフSEを流用
 }
 /* ---- コマンド技(v0.10 §6.8) ---- */
 const DODGE_DIR={sway:'left',crouch:'down',lunge:'right'}; // 方向ボタンの押下履歴を入力バッファへ積む際の矢印表記
 function pushDirBuf(f,kind){
   f.dirBuf.push({dir:DODGE_DIR[kind],f:B.f});
-  if(f.dirBuf.length>8)f.dirBuf.shift(); // 24F窓に対して十分な余裕を持たせつつメモリを節約
+  if(f.dirBuf.length>8)f.dirBuf.shift(); // 24F窓+最長4方向コマンド(CMD-R1)に対して十分な余裕を持たせつつメモリを節約
 }
-function detectCommandMove(f){ // 直近2方向がキャラのコマンド技のいずれかと一致すれば{move,idx}を返す
+function detectCommandMove(f){ // 直近nF方向がキャラのコマンド技のいずれかと一致すれば{move,idx}を返す。
+  // CMD-R1: seqは2〜4方向の可変長に対応し、longest-command-first(最長一致優先)で判定する
+  // (例: 2方向technicalの末尾一致が3〜4方向technicalの末尾とも一致する場合、後者を優先する)
   const moves=commandMovesFor(f.c);
   if(!moves)return null;
   const win=f.dirBuf.filter(function(e){return B.f-e.f<=BAL.CMD.bufF;});
   if(win.length<2)return null;
-  const d0=win[win.length-2].dir,d1=win[win.length-1].dir;
+  let best=null,bestLen=0;
   for(let i=0;i<moves.length;i++){
-    const m=moves[i];
-    if(m.seq[0]===d0&&m.seq[1]===d1)return{move:m,idx:i};
+    const m=moves[i],len=m.seq.length;
+    if(len<=bestLen||win.length<len)continue;
+    let ok=true;
+    for(let k=0;k<len;k++){if(win[win.length-len+k].dir!==m.seq[k]){ok=false;break;}}
+    if(ok){best={move:m,idx:i};bestLen=len;}
   }
-  return null;
+  return best;
 }
 function startCmdAtk(f,m,idx){
-  f.phase='cmdAtk';f.pf=0;f.atkLv=m.lv;f.cmdMove=m;f.cmdIdx=idx;f.hasHit=false;f.landedHit=false;f.guardLv=null;f.buf=null;
+  f.phase='cmdAtk';f.pf=0;f.atkLv=m.lv;f.cmdMove=m;f.cmdIdx=idx;f.hasHit=false;f.landedHit=false;f.cmdArmorUsed=false;f.guardLv=null;f.buf=null;
   f.combo=0;f.comboCounter=false;f.dirBuf.length=0;
   sfx('swish');sfx(m.lv==='high'?'teleHigh':(m.lv==='low'?'teleLow':'teleMid'));
 }
 function startCmdGrab(f,m,idx){
-  f.phase='grab';f.pf=0;f.guardLv=null;f.atkLv=null;f.buf=null;f.combo=0;f.hasHit=false;f.landedHit=false;
+  f.phase='grab';f.pf=0;f.guardLv=null;f.atkLv=null;f.buf=null;f.combo=0;f.hasHit=false;f.landedHit=false;f.cmdArmorUsed=false;
   f.cmdMove=m;f.cmdIdx=idx;f.grabS=m.s;f.dirBuf.length=0;
   sfx('grabGo');
 }
 function startCmdStance(f,m,idx){
-  f.phase='cmdStance';f.pf=0;f.cmdMove=m;f.cmdIdx=idx;f.atkLv=null;f.guardLv=null;f.buf=null;f.combo=0;f.hasHit=false;f.landedHit=false;
+  f.phase='cmdStance';f.pf=0;f.cmdMove=m;f.cmdIdx=idx;f.atkLv=null;f.guardLv=null;f.buf=null;f.combo=0;f.hasHit=false;f.landedHit=false;f.cmdArmorUsed=false;
   f.dirBuf.length=0;
   sfx(m.se||'guard');
 }
+function whiffExtraFor(f){ // BAL-R1: 通常技の空振りのみ追加recovery。CMD-R1: コマンド打撃技もm.whiffがあれば同様に適用する
+  if(f.hasHit)return 0;
+  if(f.phase==='attack')return WHIFF_EXTRA_F[f.atkLv]||0;
+  if(f.phase==='cmdAtk'&&f.cmdMove&&f.cmdMove.whiff!=null)return f.cmdMove.whiff;
+  return 0;
+}
+function grabRecFor(f){return(f.cmdMove&&f.cmdMove.whiff!=null)?f.cmdMove.whiff:BAL.GRAB.rec;} // CMD-R1: コマンド投げのm.whiffがあれば空振り硬直を上書き
 function stunRemaining(f){ // コマンド先行入力(v0.11 §6.9): 現在の硬直/回収フェーズがidleに戻るまでの残りF。対象外のフェーズはnull
   switch(f.phase){
-    case 'attack':case 'cmdAtk':{const A=spec(f);const we=(f.phase==='attack'&&!f.hasHit)?(WHIFF_EXTRA_F[f.atkLv]||0):0;return A.s+A.a+A.r+we-f.pf;} // BAL-R1: whiff extra recoveryをここでも考慮(通常技の空振りのみ)
+    case 'attack':case 'cmdAtk':{const A=spec(f);return A.s+A.a+A.r+whiffExtraFor(f)-f.pf;}
     case 'cmdStance':return(f.cmdMove?f.cmdMove.stanceF:0)-f.pf;
     case 'roar':return BAL.ROAR.s+BAL.ROAR.a+BAL.ROAR.r-f.pf;
-    case 'grabrec':return BAL.GRAB.rec-f.pf;
+    case 'grabrec':return grabRecFor(f)-f.pf;
     case 'grabHit':return BAL.GRAB.seq-f.pf;
     case 'hitstun':case 'blockstun':return f.stunDur-f.pf;
     case 'mikiriRec':return BAL.MIKIRI.whiff-f.pf;
@@ -1462,7 +1517,7 @@ function applyInputs(f,opp,cmds,held){
       const okPhase=f.phase==='idle'||f.phase==='guard'||f.phase==='hitstun'||f.phase==='blockstun'
         ||(f.phase==='attack'&&f.pf<=spec(f).s); // A発生キャンセル可
       if(f.s>=BAL.SMAX&&okPhase){
-        f.s=0;f.phase='roar';f.pf=0;f.atkLv=null;f.guardLv=null;f.hasHit=false;f.landedHit=false;f.kb=0;f.buf=null;f.combo=0;
+        f.s=0;f.phase='roar';f.pf=0;f.atkLv=null;f.guardLv=null;f.hasHit=false;f.landedHit=false;f.cmdArmorUsed=false;f.kb=0;f.buf=null;f.combo=0;
         sfx('roarStart');
       }else if(f.s<BAL.SMAX){f.sNo=14;} // ゲージ不足時のS枠点滅フィードバックは両サイドとも出す(オンラインは両者とも人間のため)
     }else if(c.t==='grab'){
@@ -1471,7 +1526,7 @@ function applyInputs(f,opp,cmds,held){
       if(cm&&cm.move.type==='grab'&&(f.phase==='idle'||f.phase==='guard')){
         startCmdGrab(f,cm.move,cm.idx);
       }else if(f.phase==='idle'||f.phase==='guard'){
-        f.phase='grab';f.pf=0;f.guardLv=null;f.atkLv=null;f.buf=null;f.combo=0;f.hasHit=false;f.landedHit=false;
+        f.phase='grab';f.pf=0;f.guardLv=null;f.atkLv=null;f.buf=null;f.combo=0;f.hasHit=false;f.landedHit=false;f.cmdArmorUsed=false;
         f.grabS=f.clinchF>0?BAL.DODGE.clinchGrabS:BAL.GRAB.s; // 発生F値は開始時点でスナップショット(密着F自体はその後も毎F減衰するため)
         sfx('grabGo');
       }else if(cm&&cm.move.type==='grab'){ // コマンド先行入力(v0.11 §6.9): 硬直残りBAL.CMD.buffer以内なら保持し、idle復帰時に自動発動
@@ -1525,7 +1580,7 @@ function advance(f){
   f.pf++;
   if(f.phase==='attack'||f.phase==='cmdAtk'){
     const A=spec(f),t=f.pf;
-    const whiffExtra=(f.phase==='attack'&&!f.hasHit)?(WHIFF_EXTRA_F[f.atkLv]||0):0; // BAL-R1新設: 通常技の空振りのみ追加recovery(コマンド技18種は非対象のため対象外)
+    const whiffExtra=whiffExtraFor(f); // BAL-R1: 通常技の空振り追加recovery。CMD-R1: m.whiff指定のコマンド打撃技も対象
     const total=A.s+A.a+A.r+whiffExtra;
     const maxLunge=(f.cmdMove&&f.cmdMove.fwd!=null)?f.cmdMove.fwd:142; // コマンド技の前進距離(§6.8。指定無しは通常技と同じ142)
     if(t<=A.s+A.a)f.lunge=maxLunge*Math.min(1,t/A.s);
@@ -1542,13 +1597,16 @@ function advance(f){
   }else if(f.phase==='grab'){
     if(f.pf>grabStartup(f)+BAL.GRAB.a+2){f.phase='grabrec';f.pf=0;}
   }else if(f.phase==='grabrec'){
-    if(f.pf>=BAL.GRAB.rec){f.pf=0;f.cmdMove=null;f.cmdIdx=null;resolveToIdle(f);}
+    if(f.pf>=grabRecFor(f)){f.pf=0;f.cmdMove=null;f.cmdIdx=null;resolveToIdle(f);} // CMD-R1: m.whiff指定のコマンド投げは専用の空振り硬直を使う
   }else if(f.phase==='grabHit'){
     const opp=B.p[1-f.side];
     if(f.pf===19&&opp.phase==='grabbed'){ // 叩きつけ
-      const dmg=Math.round((f.cmdMove?f.cmdMove.d:BAL.GRAB.d)*f.c.dMul); // コマンド投げ(v0.10)はdmgをcmdMoveから取る
+      // コマンド投げ(v0.10)はdmgをcmdMoveから取る。CMD-R1(m.exactDmg:true)は確定値のためdMulを適用しない
+      const dmg=Math.round(f.cmdMove?(f.cmdMove.exactDmg?f.cmdMove.d:f.cmdMove.d*f.c.dMul):(BAL.GRAB.d*f.c.dMul));
       opp.hp-=dmg;gainFocus(opp,dmg*BAL.FOCUS.gainDmgMul);
-      if(f.cmdMove){ // コマンド投げ(非対象・BAL.CMD): 従来通りhitstun固定
+      if(f.cmdMove&&f.cmdMove.down){ // CMD-R1新設: コマンド投げでもm.down指定があればdown状態(throwDown等)へ遷移する
+        opp.phase='down';opp.pf=0;opp.downType=f.cmdMove.down;opp.downHitUsed=false;opp.kb=34;
+      }else if(f.cmdMove){ // コマンド投げ(旧9技): 従来通りhitstun固定
         opp.phase='hitstun';opp.pf=0;opp.stunDur=BAL.GRAB.stun;opp.kb=34;
       }else{ // BAL-R1: 通常投げはヒット時throwDown(down状態)へ。旧は無条件hitstunだった
         opp.phase='down';opp.pf=0;opp.downType=BAL.GRAB.downType;opp.downHitUsed=false;opp.kb=34;
@@ -1732,6 +1790,12 @@ function hitApply(att,def,counterHit,lvOverride,cmdOverride){
     dmg=Math.round(dmg*0.5);def.hp-=dmg;gainS(att,'aBlk');gainFocus(def,dmg*BAL.FOCUS.gainDmgMul);
     fxDmg(def,dmg,'#ffb020');fxSpark(def,lv,0);sfx(HIT_SE[lv]||'hit');
     B.hitstop=Math.max(B.hitstop,BAL.HITSTOP[lv]);B.shake=Math.max(B.shake,4);
+  }else if(def.phase==='cmdAtk'&&def.cmdMove&&def.cmdMove.armorStartF!=null&&!def.cmdArmorUsed&&def.pf>=def.cmdMove.armorStartF&&def.pf<=def.cmdMove.armorEndF){
+    // CMD-R1新設: コマンド打撃技のアーマー窓(咆哮と同型式)。1hitのみ吸収し、以降は素通し(def.cmdArmorUsedで管理)
+    def.cmdArmorUsed=true;
+    dmg=Math.round(dmg*0.5);def.hp-=dmg;gainS(att,'aBlk');gainFocus(def,dmg*BAL.FOCUS.gainDmgMul);
+    fxDmg(def,dmg,'#ffb020');fxSpark(def,lv,0);sfx(HIT_SE[lv]||'hit');
+    B.hitstop=Math.max(B.hitstop,BAL.HITSTOP[lv]);B.shake=Math.max(B.shake,4);
   }else{
     if(def.postBreakActive){ // BAL-R1新設: ガードブレイク後の追撃は最大breakMaxFollowupHits発/累計breakMaxDamageまで。
       // dizzyフェーズ自体は1発被弾で即hitstunへ遷移するため、doBreak()〜自然にidleへ戻るまでpostBreakActiveで追跡する
@@ -1740,7 +1804,8 @@ function hitApply(att,def,counterHit,lvOverride,cmdOverride){
       def.dizzyDamage+=dmg;def.dizzyHits++;
     }
     def.hp-=dmg;gainFocus(def,dmg*BAL.FOCUS.gainDmgMul);
-    att.combo++;att.landedHit=true; // BAL-R1.1: 確定ヒット時のみchain可(ガード/回避/アーマー吸収では立たない)
+    att.landedHit=true; // BAL-R1.1: 確定ヒット時のみchain可(ガード/回避/アーマー吸収では立たない)
+    if(cm&&cm.comboEnd)att.combo=0;else att.combo++; // CMD-R1: comboEndの技はここで正式にコンボを打ち切る(次のヒットのdamage scaleを最初から)
     gainSAmt(att,BAL.SG.aHitC[Math.min(att.combo-1,2)]);gainS(def,'got');
     fxDmg(def,dmg,cm&&cm.color||'#ffffff');fxSpark(def,lv,0);
     if(counterHit)sfx('counterHit'); // カウンター専用の高い抜け音をヒットストップと同フレームで重ねる(v0.11 (4))
@@ -2742,18 +2807,23 @@ function poseId(f){ // POSE_IDS(20種)の正準名を返す。該当スプライ
   if((P==='attack'||P==='cmdAtk')&&f.atkLv){
     const tg=BAL.TELEGRAPH[f.atkLv];
     if(t<=tg)return 'tele_'+f.atkLv; // テレグラフ=tele_*(コマンド技も通常段のtele_*を流用、§6.8)
-    // コマンド技は発生後cmd1〜3(§6.8 v2.5.1)。専用ポーズ画像を持たないキャラ(P1新6キャラ)は
-    // 共通ポーズのatk_*で代替表示する(全て後調整前提)
-    return(P==='cmdAtk'&&f.cmdIdx!=null&&hasCmdPoseArt(f.c))?('cmd'+(f.cmdIdx+1)):('atk_'+f.atkLv);
+    // CMD-R1: 旧cmd1〜3専用ポーズは廃止(タッチ統一優先)。既存24ポーズからの流用のみとし、
+    // m.poseId指定があればそれを、無ければ通常技と同じatk_*(打撃技の既定)を使う。
+    // 多段技(m.hits>1)はactive+recovery中にatk_mid⇄atk_highを交互に切り替えて多段感を出す
+    if(P==='cmdAtk'&&f.cmdMove){
+      if(f.cmdMove.hits>1)return(Math.floor((t-tg)/3)%2===0)?'atk_mid':'atk_high';
+      if(f.cmdMove.poseId)return f.cmdMove.poseId;
+    }
+    return 'atk_'+f.atkLv;
   }
-  if(P==='cmdStance')return(f.cmdIdx!=null&&hasCmdPoseArt(f.c))?('cmd'+(f.cmdIdx+1)):'guard'; // 巌の構え等: 構え中も専用ポーズを表示(代替はguard)
+  if(P==='cmdStance')return 'mikiri'; // CMD-R1: 構え・Just待ち系は静止感のあるmikiriポーズへ統一(旧cmd1〜3/guardから変更)
   if(P==='dodge')return f.dodgeType; // 'crouch'|'sway'|'lunge'（画像未配置。図形フォールバックはdrawFighterShapeに実装済み）
   if(P==='roar'){
     const R=BAL.ROAR;
     return(t<=R.s)?'roar_charge':'roar';
   }
-  if(P==='grab')return(f.cmdMove&&f.cmdIdx!=null&&hasCmdPoseArt(f.c))?('cmd'+(f.cmdIdx+1)):'grab_reach'; // コマンド投げの構え(§6.8)。代替はgrab_reach
-  if(P==='grabHit')return(f.cmdMove&&f.cmdIdx!=null&&hasCmdPoseArt(f.c))?('cmd'+(f.cmdIdx+1)):'grab_lift';
+  if(P==='grab')return'grab_reach'; // コマンド投げの構え(§6.8)。CMD-R1: 旧cmd1〜3は廃止し常にgrab_reachへ統一
+  if(P==='grabHit')return'grab_lift'; // CMD-R1: 旧cmd1〜3は廃止し常にgrab_liftへ統一
   if(P==='grabbed')return 'grabbed';
   if(P==='grabrec')return 'hurt';          // つかみ空振り→hurtを流用
   if(P==='mikiriRec')return 'mikiri';      // 見切り=mikiri（成功時はclashへ即遷移するため空振りのみ表示対象）
