@@ -63,7 +63,7 @@ export type CharacterSelectContract = Readonly<{
   textSeparatedFromArtwork: true;
   officialPlayableCount: 3;
   offlineTrialPlayableCount: 9;
-  onlinePlayableCount: 3;
+  onlinePlayableCount: 9;
   provisionalSkeletonLabelRequired: true;
 }>;
 

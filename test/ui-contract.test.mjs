@@ -33,7 +33,7 @@ assert.notEqual(bullet.faceCrop.anchorX,0.5);
 assert.ok(bullet.heroCrop.zoom>1.3);
 assert.deepEqual(UI_CONTRACT.characterSelect,{
   columns:5,rows:2,rosterEntries:9,totalCells:10,mysteryCellIndex:9,faceCropAnchor:'nose',
-  textSeparatedFromArtwork:true,officialPlayableCount:3,offlineTrialPlayableCount:9,onlinePlayableCount:3,
+  textSeparatedFromArtwork:true,officialPlayableCount:3,offlineTrialPlayableCount:9,onlinePlayableCount:9,
   provisionalSkeletonLabelRequired:true,
 });
 assert.deepEqual(UI_CONTRACT.difficulties, ['EASY', 'NORMAL', 'HARD']);

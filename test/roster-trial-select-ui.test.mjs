@@ -30,7 +30,7 @@ for(const source of [prototype,dist]){
   assert.ok(source.includes('function commandMovesFor(c){return BAL.CMD.moves[c.id]||[];}'));
   assert.ok(source.includes('const moves=commandMovesFor(me.c)'));
   assert.ok(source.includes('const moves=commandMovesFor(myF.c)'));
-  assert.ok(source.includes("for(let i=0;i<3;i++){\n    const R2=selRect(i)"),'online roster must remain official three');
+  assert.ok(source.includes("for(let i=0;i<9;i++){ // ONLINE-9 (1)(2): 全9キャラから選択可能(旧i<3の制限を解除)\n    const r=onlineSlotRect(i);"),'ONLINE-9: online roster now offers all nine characters');
   assert.equal(source.includes("for(const c of CHARS)loadImg('face_'"),false,'planned characters must not request missing face UI assets');
   assert.equal(source.includes('if(f.c.trial)'),false,'trial skeleton borrowing must stay fully retired');
   assert.equal(source.includes('selected.trialPlayable'),false,'trial gating must stay fully retired (all 9 are directly selectable)');

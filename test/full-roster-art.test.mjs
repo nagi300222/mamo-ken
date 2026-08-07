@@ -67,7 +67,7 @@ for(const source of [prototype,dist]){
   assert.ok(source.includes('function loadImg(key,src,preserveWhite)'));
   assert.ok(source.includes('if(!preserveWhite)whitenAsset(e)'));
   assert.ok(source.includes('game.p1=selected.combatIndex'));
-  assert.ok(source.includes("for(let i=0;i<3;i++){\n    const R2=selRect(i)"),'online select must stay current-three only');
+  assert.ok(source.includes("for(let i=0;i<9;i++){ // ONLINE-9 (1)(2): 全9キャラから選択可能(旧i<3の制限を解除)\n    const r=onlineSlotRect(i);"),'ONLINE-9: online select must offer all nine characters (old current-three restriction was lifted intentionally)');
   assert.ok(source.includes("for(const sid of CHARS.map(function(c){return c.id;}))"),'all 9 characters must load their own sprite banks (trial skeleton borrowing retired)');
   assert.equal(source.includes('selected.trialPlayable'),false,'trial gating must stay fully retired (all 9 are directly selectable)');
   assert.ok(source.includes('function skeletonIdOf(c)'));

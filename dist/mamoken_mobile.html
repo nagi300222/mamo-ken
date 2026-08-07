@@ -543,19 +543,19 @@ const CHARS=[ // P1: 全9キャラが自身の実アート・実装を持つ(tri
 ];
 /* T20 full roster art select */
 /* T28 roster trial select UI */
-// P1: 全9キャラ実装済みに更新。onlinePlayableのみ既存3体に限定(オンラインは§6.8対象外・現状維持)
-// (pre-existing fix, unrelated to BAL-R1: P1でこのマーカーコメント内に注記が混入し、test/full-roster-art.test.mjs他の
-//  厳密一致チェックが本PR以前から落ちていたため、注記を別行へ退避しマーカーは元の完全一致文字列に戻す)
+// ONLINE-9: 全9キャラのonlinePlayableをtrueへ変更(旧P1コメントの「既存3体に限定」は解除)。
+// ダークモグゾーもここでは対人版CharacterDefのまま(BossRuleSet・ボス補正は元々このROSTER/CHARS/
+// BAL_R1_CHARSに一切存在しない。test/online-roster9.test.mjsで無参照を保証する)
 const ROSTER=[
  {id:'moguzo',name:'モグゾー',type:'スタンダード',species:'基準マーモット',ability:'根性',ult:'大地烈掌',playable:true,onlinePlayable:true,combatIndex:0,displayScale:1.00,faceCrop:{x:0.50,y:0.28,z:2.35},heroCrop:{x:0.50,y:0.42,z:1.25}},
  {id:'pisuke',name:'ピスケ',type:'ラッシュ',species:'細身のマーモット',ability:'チェイス',ult:'音速連咆',playable:true,onlinePlayable:true,combatIndex:1,displayScale:1.04,faceCrop:{x:0.50,y:0.27,z:2.40},heroCrop:{x:0.50,y:0.41,z:1.28}},
  {id:'godan',name:'ゴダン',type:'パワー',species:'大柄なマーモット',ability:'ヘビーアーマー',ult:'山崩し',playable:true,onlinePlayable:true,combatIndex:2,displayScale:1.08,faceCrop:{x:0.50,y:0.29,z:2.25},heroCrop:{x:0.50,y:0.43,z:1.18}},
- {id:'hakuma',name:'ハクマ',type:'ディフェンス',species:'ヒマラヤマーモット',ability:'アイアンウォール',ult:'白峰不動掌',playable:true,onlinePlayable:false,combatIndex:3,displayScale:1.05,faceCrop:{x:0.50,y:0.30,z:2.18},heroCrop:{x:0.50,y:0.44,z:1.14}},
- {id:'chirka',name:'チルカ',type:'トリッキー',species:'ボバクマーモット',ability:'フェイント／ディレイ',ult:'百面本命打ち',playable:true,onlinePlayable:false,combatIndex:4,displayScale:0.98,faceCrop:{x:0.50,y:0.28,z:2.32},heroCrop:{x:0.50,y:0.42,z:1.22}},
- {id:'takimaru',name:'タキマル',type:'グラップラー',species:'ホーリーマーモット',ability:'プレッシャー',ult:'天地大回転',playable:true,onlinePlayable:false,combatIndex:5,displayScale:1.07,faceCrop:{x:0.50,y:0.28,z:2.24},heroCrop:{x:0.50,y:0.42,z:1.16}},
- {id:'yomikage',name:'ヨミカゲ',type:'カウンター',species:'クロボウシマーモット',ability:'ジャスト',ult:'後の先・月断',playable:true,onlinePlayable:false,combatIndex:6,displayScale:1.00,faceCrop:{x:0.50,y:0.28,z:2.36},heroCrop:{x:0.50,y:0.42,z:1.24}},
- {id:'bullet',name:'バレット',type:'チャージ',species:'オナガマーモット',ability:'オーバーチャージ',ult:'超圧縮・弾丸頭突き',playable:true,onlinePlayable:false,combatIndex:7,displayScale:1.03,faceCrop:{x:0.42,y:0.28,z:2.48},heroCrop:{x:0.43,y:0.41,z:1.38}},
- {id:'dark_moguzo',name:'ダークモグゾー',type:'アナザー',species:'モグゾー別ルート',ability:'暗連',ult:'暗連・黒天烈掌',playable:true,onlinePlayable:false,combatIndex:8,displayScale:1.00,faceCrop:{x:0.50,y:0.28,z:2.35},heroCrop:{x:0.50,y:0.42,z:1.25}}
+ {id:'hakuma',name:'ハクマ',type:'ディフェンス',species:'ヒマラヤマーモット',ability:'アイアンウォール',ult:'白峰不動掌',playable:true,onlinePlayable:true,combatIndex:3,displayScale:1.05,faceCrop:{x:0.50,y:0.30,z:2.18},heroCrop:{x:0.50,y:0.44,z:1.14}},
+ {id:'chirka',name:'チルカ',type:'トリッキー',species:'ボバクマーモット',ability:'フェイント／ディレイ',ult:'百面本命打ち',playable:true,onlinePlayable:true,combatIndex:4,displayScale:0.98,faceCrop:{x:0.50,y:0.28,z:2.32},heroCrop:{x:0.50,y:0.42,z:1.22}},
+ {id:'takimaru',name:'タキマル',type:'グラップラー',species:'ホーリーマーモット',ability:'プレッシャー',ult:'天地大回転',playable:true,onlinePlayable:true,combatIndex:5,displayScale:1.07,faceCrop:{x:0.50,y:0.28,z:2.24},heroCrop:{x:0.50,y:0.42,z:1.16}},
+ {id:'yomikage',name:'ヨミカゲ',type:'カウンター',species:'クロボウシマーモット',ability:'ジャスト',ult:'後の先・月断',playable:true,onlinePlayable:true,combatIndex:6,displayScale:1.00,faceCrop:{x:0.50,y:0.28,z:2.36},heroCrop:{x:0.50,y:0.42,z:1.24}},
+ {id:'bullet',name:'バレット',type:'チャージ',species:'オナガマーモット',ability:'オーバーチャージ',ult:'超圧縮・弾丸頭突き',playable:true,onlinePlayable:true,combatIndex:7,displayScale:1.03,faceCrop:{x:0.42,y:0.28,z:2.48},heroCrop:{x:0.43,y:0.41,z:1.38}},
+ {id:'dark_moguzo',name:'ダークモグゾー',type:'アナザー',species:'モグゾー別ルート',ability:'暗連',ult:'暗連・黒天烈掌',playable:true,onlinePlayable:true,combatIndex:8,displayScale:1.00,faceCrop:{x:0.50,y:0.28,z:2.35},heroCrop:{x:0.50,y:0.42,z:1.25}}
 ];
 // VIS-R1.1(1)(2): VIS-R1では自動顔検出(tools/face_metrics.mjs)の実測値を使っていたが、
 // フィギュア調のportraits/素材では拳・爪の暗色を鼻と誤検出するケースがあったため、
@@ -981,6 +981,11 @@ function star(x,y,r,col){
  * (ローカルのタップはSE/演出のみに反映し、勝敗には影響しない)。
  */
 const CONFIG={WS_URL:'wss://mamoken-relay.n-kyosuke1121.workers.dev'}; // デプロイ済み本番Workers URL
+// ONLINE-9 (2): ビルド識別子。ルーム確立時に両者で交換し、不一致ならデシンク事故を未然に防ぐため
+// 対戦を開始しない。手動で採番する版数タグ(オンラインの同期仕様や9キャラ化のような互換性を破る
+// 変更を配布するたびに更新すること)。サーバー(server/)はメッセージ種別を解釈せず中継するだけ
+// なので、このチェックはサーバー変更なしにクライアント同士だけで実装できる
+const BUILD_ID='mamoken-online9-2026-08-07';
 const ONLINE_BTN={x:0,y:0,w:0,h:0}; // rTitle()で毎フレーム位置を確定(pressRouteと共有)
 const ONLINE_BACK_RECT={x:70,y:864,w:400,h:60};
 const online={
@@ -989,7 +994,8 @@ const online={
   code:null,ws:null,slot:null,seed:null,errorMsg:'',
   myPick:null,peerPick:null, // オンラインキャラ選択(CHARSのindex)
   keepaliveIv:null, // WSキープアライブping用interval(v0.9.2: 無通信での切断誤検知を減らす)
-  lastPingSentAt:null,myDelayF:null,delayFBySlot:{} // v0.10 (9): 開始時RTT適応delayF。両者確定するまでmaybeStartOnlineBattleは待つ
+  lastPingSentAt:null,myDelayF:null,delayFBySlot:{}, // v0.10 (9): 開始時RTT適応delayF。両者確定するまでmaybeStartOnlineBattleは待つ
+  peerBuildId:null // ONLINE-9 (2): 相手から届いたBUILD_ID。既知になるまでmaybeStartOnlineBattleは待つ
 };
 function computeDelayFromRTT(rttMs){ // delayF=clamp(3,ceil(RTT/2/16.7ms)+1,8) (§6.8 v2.5(9))
   const oneWayFrames=Math.ceil((rttMs/2)/BAL.NET.frameMs)+1;
@@ -1018,12 +1024,21 @@ function onlineReset(){
   online.state='menu';online.mode=null;online.code=null;online.ws=null;online.slot=null;online.seed=null;online.errorMsg='';
   online.myPick=null;online.peerPick=null;
   online.lastPingSentAt=null;online.myDelayF=null;online.delayFBySlot={};
+  online.peerBuildId=null; // ONLINE-9 (2)
   NET.active=false;netPendingPeerCmds=[];
 }
 function onlineHandleDisconnect(reason){
   online.state='error';online.errorMsg=reason;
   NET.active=false;
   if(game.screen==='onlineSelect'||game.screen==='battle'||game.screen==='result')game.screen='onlineInterrupted';
+}
+function onlineVersionMismatch(){ // ONLINE-9 (2): ビルド識別子不一致。どの画面にいても即座に対戦へ進ませない
+  online.errorMsg='バージョンが違います。ページを更新してください';
+  online.state='error';
+  NET.active=false;
+  if(online.keepaliveIv){clearInterval(online.keepaliveIv);online.keepaliveIv=null;}
+  if(online.ws){try{online.ws.close();}catch(e){}}
+  game.screen='onlineInterrupted';
 }
 function onlineConnect(code,mode){
   online.mode=mode;online.code=code;online.state='connecting';
@@ -1043,6 +1058,7 @@ function onlineConnect(code,mode){
     if(msg.t==='welcome'){
       online.slot=msg.slot;
       online.lastPingSentAt=performance.now();netSend({t:'ping'}); // 部屋確立時にRTT計測を即時開始(v0.10 (9)、キープアライブの初回を待たない)
+      netSend({t:'hello',buildId:BUILD_ID}); // ONLINE-9 (2): 部屋確立時にビルド識別子を送る(サーバーは意味を解釈せずそのまま相手へ中継する)
     }
     else if(msg.t==='pong'){
       if(online.lastPingSentAt!=null&&online.myDelayF==null){
@@ -1057,8 +1073,14 @@ function onlineConnect(code,mode){
       if((msg.slot===0||msg.slot===1)&&typeof msg.value==='number')online.delayFBySlot[msg.slot]=msg.value;
       if(game.screen==='onlineSelect')maybeStartOnlineBattle();
     }
-    else if(msg.t==='peerJoined'){ // 新規接続(観戦者含む)通知。自分の計測済みdelayFを再送し、後から入室した相手にも届くようにする(v0.10 (9))
+    else if(msg.t==='hello'){ // ONLINE-9 (2): 相手のビルド識別子。不一致ならその場で対戦を止める
+      if(typeof msg.buildId==='string')online.peerBuildId=msg.buildId;
+      if(online.peerBuildId!=null&&online.peerBuildId!==BUILD_ID){onlineVersionMismatch();return;}
+      if(game.screen==='onlineSelect')maybeStartOnlineBattle();
+    }
+    else if(msg.t==='peerJoined'){ // 新規接続(観戦者含む)通知。自分の計測済みdelayF・ビルド識別子を再送し、後から入室した相手にも届くようにする(v0.10 (9)/ONLINE-9 (2))
       if(online.myDelayF!=null)netSend({t:'delayFReport',slot:online.slot,value:online.myDelayF});
+      netSend({t:'hello',buildId:BUILD_ID});
     }
     else if(msg.t==='ready'){
       online.seed=msg.seed;online.state='ready';
@@ -1088,7 +1110,9 @@ function onlineConnect(code,mode){
   });
   ws.addEventListener('close',function(){
     if(online.keepaliveIv){clearInterval(online.keepaliveIv);online.keepaliveIv=null;}
-    if(online.state!=='menu')onlineHandleDisconnect('通信が切断されました');
+    // ONLINE-9 (2): 既にerror状態(自分でonlineVersionMismatch()等がws.close()した場合を含む)なら、
+    // このclose通知で汎用の「通信が切断されました」に上書きしない(バージョン不一致メッセージ等を残す)
+    if(online.state!=='menu'&&online.state!=='error')onlineHandleDisconnect('通信が切断されました');
   });
   ws.addEventListener('error',function(){
     if(online.keepaliveIv){clearInterval(online.keepaliveIv);online.keepaliveIv=null;}
@@ -1125,8 +1149,8 @@ function onlineLobbyPress(p){
 }
 function onlineSelectPress(p){
   if(online.myPick!=null)return;
-  for(let i=0;i<3;i++){
-    const r=selRect(i);
+  for(let i=0;i<9;i++){ // ONLINE-9 (1)(2): 全9キャラから選択可能(旧i<3の制限を解除)
+    const r=onlineSlotRect(i);
     if(inRect(p,r.x,r.y,r.w,r.h)){
       online.myPick=i;sfx('tap');
       netSend({t:'pick',charIdx:i});
@@ -1138,6 +1162,8 @@ function onlineSelectPress(p){
 function maybeStartOnlineBattle(){
   if(online.myPick==null||online.peerPick==null)return;
   if(online.delayFBySlot[0]==null||online.delayFBySlot[1]==null)return; // 両者のRTT計測(delayF)が揃うまで開始しない(v0.10 (9))
+  if(online.peerBuildId==null)return; // ONLINE-9 (2): 相手のビルド識別子が届くまで開始しない
+  if(online.peerBuildId!==BUILD_ID){onlineVersionMismatch();return;} // 通常は'hello'受信時点で検出済みだが、開始直前にも保険で再チェックする
   const bySlot=[null,null];
   bySlot[online.slot]=online.myPick;bySlot[1-online.slot]=online.peerPick;
   const delayF=Math.max(online.delayFBySlot[0],online.delayFBySlot[1]); // 大きい方(=回線が悪い側)を両者で採用
@@ -2530,7 +2556,15 @@ addEventListener('mousemove',function(e){onMove('m',e.clientX,e.clientY);});
 addEventListener('mouseup',function(){onUp('m');});
 
 /* ================= 画面: セレクト/リザルト当たり判定 ================= */
-function selRect(i){return{x:36,y:180+i*230,w:W-72,h:206};} // オンライン対戦の3枚カード選択(§6.8対象外・現状維持)
+// ONLINE-9 (2): オンライン選択も全9キャラを3x3グリッドで表示する(旧selRect=3枚縦カードは廃止)。
+// 左に立ち絵パネルを置かない全幅レイアウトのため、offline選択のslotRect(SELECT_GRID_BOX基準)とは
+// 別の専用ジオメトリを持つ
+const ONLINE_SELECT_GRID={x:30,y:170,w:W-60,cellGap:10};
+function onlineSlotRect(i){
+  const cols=3,g=ONLINE_SELECT_GRID,cell=Math.floor((g.w-(cols-1)*g.cellGap)/cols);
+  const col=i%cols,row=Math.floor(i/cols);
+  return{x:g.x+col*(cell+g.cellGap),y:g.y+row*(cell+g.cellGap),w:cell,h:cell};
+}
 const DIFF_LEVELS=['EASY','NORMAL','HARD']; // §6.7 v2.4: キャラ選択画面で切替・デフォルトNORMAL・セッション中保持
 function diffRect(i){
   const w=160,gap=8,totalW=3*w+2*gap,x0=(W-totalW)/2;
@@ -3930,7 +3964,7 @@ function rSelect(){ // P1追加: KOF/餓狼風レイアウト(縦画面翻訳)�
   ctx.fillStyle='rgba(255,255,255,0.05)';rr(SELECT_BACK_BTN.x,SELECT_BACK_BTN.y,SELECT_BACK_BTN.w,SELECT_BACK_BTN.h,12);ctx.fill();
   ctx.strokeStyle='rgba(255,255,255,0.3)';ctx.lineWidth=2;rr(SELECT_BACK_BTN.x,SELECT_BACK_BTN.y,SELECT_BACK_BTN.w,SELECT_BACK_BTN.h,12);ctx.stroke();
   txt('もどる',W/2,SELECT_BACK_BTN.y+SELECT_BACK_BTN.h/2,16,'#dfe4ee');
-  txt('●青=オンライン対戦可(モグゾー/ピスケ/ゴダン)　9体ともオフラインで対戦可能',W/2,SELECT_BACK_BTN.y+SELECT_BACK_BTN.h+26,11,'#aeb6c8');
+  txt('●青=オンライン対戦可(全員可)　9体ともオフラインで対戦可能',W/2,SELECT_BACK_BTN.y+SELECT_BACK_BTN.h+26,11,'#aeb6c8');
 }
 /* T29 visual audit fixes */
 function rCharacterDetail(){
@@ -4071,32 +4105,27 @@ function rOnlineLobby(){
   }
   btn(ONLINE_BACK_RECT.x,ONLINE_BACK_RECT.y,ONLINE_BACK_RECT.w,ONLINE_BACK_RECT.h,'タイトルへ戻る');
 }
-function rOnlineSelect(){
+function rOnlineSelect(){ // ONLINE-9 (2): 3枚縦カード(旧i<3)から全9キャラ3x3グリッドへ変更(オフライン選択のグリッド見た目に合わせる)
   const g=ctx.createLinearGradient(0,0,0,H);
   g.addColorStop(0,'#1d2436');g.addColorStop(1,'#171a22');
   ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
-  txt('キャラクターをえらぶ(オンライン)',W/2,84,30,'#ffd23f');
-  txt('ルームコード: '+(online.code||'----')+' / あなたはP'+(online.slot+1),W/2,124,15,'#aab3c8');
-  for(let i=0;i<3;i++){
-    const R2=selRect(i),picked=(online.myPick===i);
-    ctx.fillStyle=picked?'#3a4560':'#232a3d';rr(R2.x,R2.y,R2.w,R2.h,18);ctx.fill();
-    ctx.strokeStyle=picked?'#ffd23f':'#3a4560';ctx.lineWidth=picked?3:2;rr(R2.x,R2.y,R2.w,R2.h,18);ctx.stroke();
-    demoF.c=CHARS[i];
-    const pcx=R2.x+90,tx=R2.x+180,px2=R2.x+264;
-    if(!drawStanding('standing_'+CHARS[i].id,pcx,R2.y+R2.h-4,140*BAL.PORTRAIT_RATIO[CHARS[i].id]))rFighter(demoF,pcx,R2.y+R2.h-22);
-    txt(CHARS[i].name,tx,R2.y+46,31,'#fff','left');
-    txt(CHARS[i].type,tx,R2.y+80,19,'#ffd23f','left');
-    const st=[['ちから',CHARS[i].pips.p],['はやさ',CHARS[i].pips.s],['まもり',CHARS[i].pips.g]];
-    for(let j=0;j<3;j++){
-      txt(st[j][0],tx,R2.y+112+j*26,15,'#9aa2b8','left');
-      for(let k=0;k<5;k++){
-        ctx.fillStyle=(k<st[j][1])?'#ffd23f':'#39415a';
-        ctx.beginPath();ctx.arc(px2+k*22,R2.y+112+j*26,6.5,0,TAU);ctx.fill();
-      }
-    }
+  txt('キャラクターをえらぶ(オンライン)',W/2,84,26,'#ffd23f');
+  txt('ルームコード: '+(online.code||'----')+' / あなたはP'+(online.slot+1),W/2,118,15,'#aab3c8');
+  for(let i=0;i<9;i++){
+    const r=onlineSlotRect(i),entry=ROSTER[i],picked=(online.myPick===i);
+    ctx.save();
+    if(picked){ctx.shadowColor='#ffd23f';ctx.shadowBlur=14;}
+    ctx.fillStyle=picked?'#3a3010':'#232a3d';rr(r.x,r.y,r.w,r.h,14);ctx.fill();
+    ctx.restore();
+    if(!drawUiIcon('facesq_'+entry.id,r.x+r.w/2,r.y+r.h*0.42,r.w-10))drawRosterCrop('roster_'+entry.id,r.x+3,r.y+3,r.w-6,r.h*0.68,entry.faceCrop,10);
+    txt(entry.name,r.x+r.w/2,r.y+r.h-10,13,picked?'#ffd23f':'#dfe4ee');
+    if(entry.onlinePlayable){ctx.fillStyle='#7fd8ff';ctx.beginPath();ctx.arc(r.x+r.w-8,r.y+8,4,0,TAU);ctx.fill();}
+    ctx.strokeStyle=picked?'#ffd23f':'#3a4560';ctx.lineWidth=picked?4:1.5;rr(r.x,r.y,r.w,r.h,14);ctx.stroke();
   }
+  const gridBottomY=ONLINE_SELECT_GRID.y+3*onlineSlotRect(0).h+2*ONLINE_SELECT_GRID.cellGap;
+  txt('●青=オンライン対戦可(全員可)',W/2,gridBottomY+30,12,'#aeb6c8');
   if(online.myPick!=null&&online.peerPick==null){
-    txt('相手の選択を待っています…',W/2,850,18,'#ffe6a3');
+    txt('相手の選択を待っています…',W/2,gridBottomY+58,18,'#ffe6a3');
   }
 }
 function rOnlineInterrupted(){
