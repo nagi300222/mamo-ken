@@ -1,0 +1,32 @@
+{
+  "version": "2026-08-08",
+  "repoRelativeRoot": true,
+  "assetCount": 194,
+  "docs": [
+    "docs/art/ART_AUDIT.md",
+    "docs/art/DARK_MOGUZO_POLICY.md",
+    "docs/art/FABLE5_STATUS_UPDATE.md",
+    "docs/art/GITHUB_UPLOAD_README.md",
+    "docs/art/IMPLEMENTATION_KICKOFF.md",
+    "docs/art/IMPLEMENTATION_METHOD.md",
+    "docs/art/KNOWN_DEBT_AND_REPLACEMENT_PLAN.md",
+    "docs/art/P2_COLOR_POLICY.md",
+    "docs/art/README_ART_ASSETS.md",
+    "docs/art/SIZE_RATIO_GUIDE.md",
+    "docs/art/SPECIAL_BEHAVIOR_ART_POLICY.md",
+    "docs/art/VFX_LATER.md"
+  ],
+  "data": [
+    "data/art/art_manifest.json",
+    "data/art/asset_checksums.json",
+    "data/art/size_ratio_candidates.json",
+    "data/art/source_uuid_map.json"
+  ],
+  "notes": [
+    "VFX not included; later delivery.",
+    "Current source sheets are opaque white-background RGB PNG.",
+    "Dark Moguzo common frames are to be generated from Moguzo by deterministic recolor.",
+    "2P colors are build-time deterministic palette variants.",
+    "Special-behavior semantics remain owned by combat design."
+  ]
+}

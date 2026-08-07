@@ -1,0 +1,37 @@
+{
+  "version": "2026-08-08",
+  "authority": "combat_runtime",
+  "purpose": "art_implementation_reference_only",
+  "appliesTo": [
+    "crouch_attack",
+    "mid",
+    "high",
+    "low"
+  ],
+  "notTheSameAs": "command_move_multi_hit_count",
+  "limits": {
+    "moguzo": 3,
+    "piske": 4,
+    "godan": 2,
+    "hakuma": 2,
+    "chilka": 3,
+    "takimaru": 2,
+    "yomikage": 2,
+    "bullet": 3,
+    "dark_moguzo": 4
+  },
+  "artPlayback": {
+    "F1": "startup_first_half",
+    "F2": "startup_second_half",
+    "F3": "active_key_pose",
+    "F4": "recovery_optional_full_duration",
+    "onLegalHitChainCancel": "F3 -> needed recovery/F4 portion -> next action F1",
+    "mustNotChangeBalToFitFrames": true,
+    "extraArtRequiredNow": false
+  },
+  "knockback": {
+    "distanceStatus": "not_final",
+    "bakeDistanceIntoImage": false,
+    "useRuntimePositionInterpolation": true
+  }
+}

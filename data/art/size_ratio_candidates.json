@@ -1,0 +1,56 @@
+{
+  "moguzo": {
+    "heightRatioToMoguzo": 1.0,
+    "widthReferenceToMoguzo": 1.0,
+    "authority": "fixed",
+    "note": ""
+  },
+  "piske": {
+    "heightRatioToMoguzo": 1.03,
+    "widthReferenceToMoguzo": 0.9,
+    "authority": "implementation_candidate",
+    "note": "正式数値は未固定。モグゾーより少し高く細身を初期候補とする。"
+  },
+  "godan": {
+    "heightRatioToMoguzo": 1.08,
+    "widthReferenceToMoguzo": 1.25,
+    "authority": "reference_target",
+    "note": "幅広・低重心を優先。width値を非等比stretchで強制しない。"
+  },
+  "hakuma": {
+    "heightRatioToMoguzo": 1.05,
+    "widthReferenceToMoguzo": 1.18,
+    "authority": "fixed",
+    "note": ""
+  },
+  "chilka": {
+    "heightRatioToMoguzo": 0.98,
+    "widthReferenceToMoguzo": 1.0,
+    "authority": "fixed",
+    "note": ""
+  },
+  "takimaru": {
+    "heightRatioToMoguzo": 1.07,
+    "widthReferenceToMoguzo": 1.14,
+    "authority": "fixed",
+    "note": ""
+  },
+  "yomikage": {
+    "heightRatioToMoguzo": 1.0,
+    "widthReferenceToMoguzo": 0.95,
+    "authority": "fixed",
+    "note": ""
+  },
+  "bullet": {
+    "heightRatioToMoguzo": 1.03,
+    "widthReferenceToMoguzo": 1.1,
+    "authority": "fixed_body_bounds",
+    "note": "長い尾をbodyBoundsから除外して本体を縮小しない。"
+  },
+  "dark_moguzo": {
+    "heightRatioToMoguzo": 1.0,
+    "widthReferenceToMoguzo": 1.0,
+    "authority": "fixed_same_as_moguzo",
+    "note": "共通動作のgeometry・scaleはモグゾーと完全共通。"
+  }
+}
