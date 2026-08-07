@@ -26,7 +26,9 @@ assert.ok(prototype.includes("c.cpuPlanJa"));
 assert.ok(prototype.includes("characterDetailScroll=Math.min(characterDetailMaxScroll,characterDetailScroll+260)"));
 assert.ok(prototype.includes("characterDetailScroll=Math.max(0,characterDetailScroll-260)"));
 assert.ok(prototype.includes("sfx('tap');game.screen='select';return;"));
-assert.ok(prototype.includes("selected.playable?'正式実装・オンライン可':'仮骨格でオフライン試運転可'"));
+// pre-existing fix, unrelated to BAL-R1: P1でselected.playable→selected.onlinePlayableへ改名され
+// 文言も「正式実装・オフラインのみ」に変わったが、このテストの期待文字列が追従していなかったため合わせる
+assert.ok(prototype.includes("selected.onlinePlayable?'正式実装・オンライン可':'正式実装・オフラインのみ'"));
 
 const detailButton=/const SELECT_DETAIL_BTN=\{x:18,y:478,w:W-36,h:(\d+)\}/.exec(prototype);
 const backButton=/const CHARACTER_DETAIL_BACK_BTN=\{x:20,y:872,w:W-40,h:(\d+)\}/.exec(prototype);

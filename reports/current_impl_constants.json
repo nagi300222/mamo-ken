@@ -54,67 +54,36 @@
     "CMAX": 3,
     "SCALE": [
       1,
-      0.85,
-      0.7,
-      0.6,
-      0.52,
-      0.46
+      0.9,
+      0.8
     ],
-    "SCALE_FLOOR": 0.4,
     "PINCH_HP": 300,
     "MIKIRI": {
       "window": 5,
       "windowPinch": 7,
-      "whiff": 24
+      "whiff": 22
     },
-    "DOWNWAKE": {
-      "lightDown": {
-        "downF": 36,
-        "wakeF": 18,
-        "followupAllowed": true
-      },
-      "hardDown": {
-        "downF": 48,
-        "wakeF": 20,
-        "followupAllowed": false
-      },
-      "throwDown": {
-        "downF": 42,
-        "wakeF": 18,
-        "followupAllowed": false
-      },
-      "ultimateDown": {
-        "downF": 54,
-        "wakeF": 24,
-        "followupAllowed": false
-      },
-      "followupDamageScale": 0.45,
-      "maxFollowupHits": 1,
-      "followupExtendsDown": false,
-      "wakeStrikeInvuln": true,
-      "wakeThrowInvuln": true
+    "DOWN": {
+      "downF": 45,
+      "wakeF": 20,
+      "followupMul": 0.5
     },
     "FOCUS": {
       "max": 100,
       "gainDmgMul": 0.15,
       "gainGuard": 8,
       "gainMikiri": 30,
-      "slowMul": 0.5,
-      "durationMs": 750,
+      "slowMul": 0.25,
+      "durationMs": 600,
       "zoom": 1.3
     },
     "GDMG_A": 10,
+    "GDMG_S": 45,
+    "CHIP_S": 20,
     "CHIP_LOW": 10,
-    "GUARD": {
-      "regenDelayF": 60,
-      "regenPerSecond": 12,
-      "downWakeRegenPerSecond": 6,
-      "breakStunF": 36,
-      "breakMaxFollowupHits": 2,
-      "breakMaxDamage": 180,
-      "recoverTo": 50
-    },
-    "COUNTER_MUL": 1.2,
+    "GREGEN": 0.22,
+    "DIZZY": 90,
+    "GRECOVER": 50,
     "SMAX": 100,
     "SG": {
       "aHit": 12,
@@ -129,19 +98,12 @@
       "got": 5
     },
     "ROAR": {
-      "s": 17,
-      "armorStartF": 4,
-      "armorEndF": 15,
-      "armor": 15,
-      "armorHits": 1,
+      "s": 16,
+      "armor": 14,
       "a": 4,
       "r": 24,
-      "d": 120,
-      "guardDamage": 38,
-      "chipDamage": 10,
-      "stun": 34,
-      "sCost": 100,
-      "cleanHitUltGain": 1
+      "d": 130,
+      "stun": 34
     },
     "CLASH": {
       "sel": 90,
@@ -221,16 +183,17 @@
     "GRAB": {
       "s": 12,
       "a": 2,
-      "rec": 32,
+      "rec": 28,
       "seq": 28,
       "d": 90,
       "stun": 30,
-      "downType": "throwDown"
+      "counterMul": 1.25
     },
     "DODGE": {
       "totalF": 22,
       "judgeF": 10,
       "counterReadyF": 18,
+      "counterMul": 1.25,
       "counterScale": [
         1,
         1,
@@ -245,20 +208,15 @@
       "stock": 3,
       "d": 300,
       "impact": 78,
-      "total": 110,
-      "guardDamage": 32,
-      "chipDamage": 0,
-      "downType": "ultimateDown"
+      "total": 110
     },
     "HITSTOP": {
       "mid": 6,
       "high": 9,
-      "low": 12,
+      "low": 14,
       "roar": 12,
       "clash": 16,
-      "crouch": 5,
-      "throw": 10,
-      "counterBonus": 2
+      "crouch": 5
     },
     "TELEGRAPH": {
       "mid": 8,
@@ -273,24 +231,12 @@
     "SPRITE_H": {
       "moguzo": 172,
       "pisuke": 116,
-      "godan": 206,
-      "hakuma": 181,
-      "chirka": 169,
-      "takimaru": 184,
-      "yomikage": 172,
-      "bullet": 177,
-      "dark_moguzo": 172
+      "godan": 206
     },
     "PORTRAIT_RATIO": {
       "moguzo": 1,
       "pisuke": 0.8,
-      "godan": 1.15,
-      "hakuma": 1.05,
-      "chirka": 0.98,
-      "takimaru": 1.07,
-      "yomikage": 1,
-      "bullet": 1.03,
-      "dark_moguzo": 1
+      "godan": 1.15
     },
     "NET": {
       "delayFMin": 3,
@@ -454,305 +400,6 @@
             "color": "#ffd23f",
             "se": "guard"
           }
-        ],
-        "hakuma": [
-          {
-            "seq": [
-              "left",
-              "left"
-            ],
-            "trigger": "mid",
-            "type": "stance",
-            "name": "白峰の構え",
-            "stanceF": 12,
-            "counterLv": "mid",
-            "counterDmg": 100,
-            "color": "#bfe3d0",
-            "se": "guard"
-          },
-          {
-            "seq": [
-              "right",
-              "down"
-            ],
-            "trigger": "grab",
-            "type": "grab",
-            "name": "雪崩抱え",
-            "s": 16,
-            "d": 110,
-            "armor": 6,
-            "color": "#8fb8a0",
-            "se": "cmdGrabHit"
-          },
-          {
-            "seq": [
-              "right",
-              "right"
-            ],
-            "trigger": "mid",
-            "type": "atk",
-            "lv": "mid",
-            "name": "雪壁掌",
-            "s": 8,
-            "a": 3,
-            "r": 18,
-            "d": 95,
-            "color": "#dbe8e0",
-            "se": "cmdHit"
-          }
-        ],
-        "chirka": [
-          {
-            "seq": [
-              "right",
-              "right"
-            ],
-            "trigger": "mid",
-            "type": "atk",
-            "lv": "mid",
-            "name": "だまし突き",
-            "s": 8,
-            "a": 3,
-            "r": 18,
-            "d": 95,
-            "color": "#b98cc7",
-            "se": "cmdHit"
-          },
-          {
-            "seq": [
-              "left",
-              "right"
-            ],
-            "trigger": "high",
-            "type": "atk",
-            "lv": "high",
-            "name": "戻り蹴り",
-            "s": 20,
-            "a": 3,
-            "r": 24,
-            "d": 90,
-            "fwd": 20,
-            "color": "#caa6d9",
-            "se": "cmdHit"
-          },
-          {
-            "seq": [
-              "right",
-              "down"
-            ],
-            "trigger": "grab",
-            "type": "grab",
-            "name": "すかし抱き",
-            "s": 16,
-            "d": 110,
-            "armor": 6,
-            "color": "#9d6bb0",
-            "se": "cmdGrabHit"
-          }
-        ],
-        "takimaru": [
-          {
-            "seq": [
-              "right",
-              "down"
-            ],
-            "trigger": "grab",
-            "type": "grab",
-            "name": "丸抱え",
-            "s": 16,
-            "d": 110,
-            "armor": 6,
-            "color": "#c9a24d",
-            "se": "cmdGrabHit"
-          },
-          {
-            "seq": [
-              "left",
-              "right"
-            ],
-            "trigger": "grab",
-            "type": "grab",
-            "name": "巻き投げ",
-            "s": 14,
-            "d": 100,
-            "reachMul": 1.5,
-            "color": "#b0aac2",
-            "se": "cmdGrabHit"
-          },
-          {
-            "seq": [
-              "right",
-              "right"
-            ],
-            "trigger": "mid",
-            "type": "atk",
-            "lv": "mid",
-            "name": "ぶちかまし",
-            "s": 8,
-            "a": 3,
-            "r": 18,
-            "d": 95,
-            "color": "#8a8398",
-            "se": "cmdHit"
-          }
-        ],
-        "yomikage": [
-          {
-            "seq": [
-              "left",
-              "left"
-            ],
-            "trigger": "mid",
-            "type": "stance",
-            "name": "後の先・構え",
-            "stanceF": 12,
-            "counterLv": "mid",
-            "counterDmg": 100,
-            "color": "#6b7fd6",
-            "se": "guard"
-          },
-          {
-            "seq": [
-              "down",
-              "right"
-            ],
-            "trigger": "high",
-            "type": "atk",
-            "lv": "high",
-            "name": "後の先・天",
-            "s": 24,
-            "a": 3,
-            "r": 30,
-            "d": 120,
-            "counterMul": 1.5,
-            "color": "#8695e0",
-            "se": "cmdHit"
-          },
-          {
-            "seq": [
-              "down",
-              "left"
-            ],
-            "trigger": "low",
-            "type": "atk",
-            "lv": "low",
-            "name": "後の先・地",
-            "s": 30,
-            "a": 4,
-            "r": 30,
-            "d": 80,
-            "down": true,
-            "fwd": 60,
-            "guardDmg": 14,
-            "color": "#4f5bb8",
-            "se": "cmdHit"
-          }
-        ],
-        "bullet": [
-          {
-            "seq": [
-              "down",
-              "down"
-            ],
-            "trigger": "low",
-            "type": "atk",
-            "lv": "low",
-            "name": "尾払い",
-            "s": 30,
-            "a": 3,
-            "r": 30,
-            "d": 110,
-            "down": true,
-            "guardChip": 30,
-            "color": "#a83250",
-            "se": "cmdHit"
-          },
-          {
-            "seq": [
-              "down",
-              "right"
-            ],
-            "trigger": "high",
-            "type": "atk",
-            "lv": "high",
-            "name": "跳ね上げ",
-            "s": 24,
-            "a": 3,
-            "r": 30,
-            "d": 120,
-            "counterMul": 1.5,
-            "color": "#c14a68",
-            "se": "cmdHit"
-          },
-          {
-            "seq": [
-              "right",
-              "right"
-            ],
-            "trigger": "mid",
-            "type": "atk",
-            "lv": "mid",
-            "name": "弾み突き",
-            "s": 8,
-            "a": 3,
-            "r": 18,
-            "d": 95,
-            "color": "#8a2740",
-            "se": "cmdHit"
-          }
-        ],
-        "dark_moguzo": [
-          {
-            "seq": [
-              "down",
-              "left"
-            ],
-            "trigger": "low",
-            "type": "atk",
-            "lv": "low",
-            "name": "黒砂払い",
-            "s": 30,
-            "a": 4,
-            "r": 30,
-            "d": 80,
-            "down": true,
-            "fwd": 60,
-            "guardDmg": 14,
-            "color": "#5a2f6b",
-            "se": "cmdHit"
-          },
-          {
-            "seq": [
-              "left",
-              "right"
-            ],
-            "trigger": "grab",
-            "type": "grab",
-            "name": "闇引き",
-            "s": 14,
-            "d": 100,
-            "reachMul": 1.5,
-            "color": "#7a1f2f",
-            "se": "cmdGrabHit"
-          },
-          {
-            "seq": [
-              "right",
-              "down"
-            ],
-            "trigger": "mid",
-            "type": "atk",
-            "lv": "mid",
-            "name": "黒走り",
-            "s": 18,
-            "a": 3,
-            "r": 18,
-            "d": 95,
-            "fwd": 40,
-            "guardDmg": 8,
-            "color": "#3d1f4a",
-            "se": "cmdHit"
-          }
         ]
       }
     }
@@ -761,11 +408,12 @@
     {
       "id": "moguzo",
       "name": "モグゾー",
-      "type": "スタンダード",
+      "type": "バランス",
       "ult": "大地烈掌",
       "dMul": 1,
       "sMul": 1,
       "sOfs": 0,
+      "gMax": 100,
       "pips": {
         "p": 3,
         "s": 3,
@@ -783,11 +431,12 @@
     {
       "id": "pisuke",
       "name": "ピスケ",
-      "type": "ラッシュ",
+      "type": "スピード",
       "ult": "音速連咆",
       "dMul": 0.85,
       "sMul": 1.25,
       "sOfs": -2,
+      "gMax": 90,
       "pips": {
         "p": 2,
         "s": 5,
@@ -810,6 +459,7 @@
       "dMul": 1.18,
       "sMul": 0.9,
       "sOfs": 2,
+      "gMax": 110,
       "pips": {
         "p": 5,
         "s": 2,
@@ -823,150 +473,12 @@
         "brk": 4
       },
       "usability": 1
-    },
-    {
-      "id": "hakuma",
-      "name": "ハクマ",
-      "type": "ディフェンス",
-      "ult": "白峰不動掌",
-      "dMul": 1.18,
-      "sMul": 0.9,
-      "sOfs": 2,
-      "pips": {
-        "p": 5,
-        "s": 2,
-        "g": 4
-      },
-      "stats5": {
-        "atk": 2,
-        "spd": 2,
-        "def": 5,
-        "tech": 3,
-        "brk": 2
-      },
-      "usability": 1
-    },
-    {
-      "id": "chirka",
-      "name": "チルカ",
-      "type": "トリッキー",
-      "ult": "百面本命打ち",
-      "dMul": 0.85,
-      "sMul": 1.25,
-      "sOfs": -2,
-      "pips": {
-        "p": 2,
-        "s": 5,
-        "g": 2
-      },
-      "stats5": {
-        "atk": 2,
-        "spd": 4,
-        "def": 2,
-        "tech": 5,
-        "brk": 5
-      },
-      "usability": 1
-    },
-    {
-      "id": "takimaru",
-      "name": "タキマル",
-      "type": "グラップラー",
-      "ult": "天地大回転",
-      "dMul": 1.18,
-      "sMul": 0.9,
-      "sOfs": 2,
-      "pips": {
-        "p": 5,
-        "s": 2,
-        "g": 4
-      },
-      "stats5": {
-        "atk": 4,
-        "spd": 2,
-        "def": 4,
-        "tech": 3,
-        "brk": 5
-      },
-      "usability": 1
-    },
-    {
-      "id": "yomikage",
-      "name": "ヨミカゲ",
-      "type": "カウンター",
-      "ult": "後の先・月断",
-      "dMul": 0.85,
-      "sMul": 1.25,
-      "sOfs": -2,
-      "pips": {
-        "p": 2,
-        "s": 5,
-        "g": 2
-      },
-      "stats5": {
-        "atk": 4,
-        "spd": 3,
-        "def": 2,
-        "tech": 5,
-        "brk": 1
-      },
-      "usability": 1
-    },
-    {
-      "id": "bullet",
-      "name": "バレット",
-      "type": "チャージ",
-      "ult": "超圧縮・弾丸頭突き",
-      "dMul": 0.85,
-      "sMul": 1.25,
-      "sOfs": -2,
-      "pips": {
-        "p": 2,
-        "s": 5,
-        "g": 2
-      },
-      "stats5": {
-        "atk": 5,
-        "spd": 2,
-        "def": 3,
-        "tech": 5,
-        "brk": 3
-      },
-      "usability": 1
-    },
-    {
-      "id": "dark_moguzo",
-      "name": "ダークモグゾー",
-      "type": "アナザー",
-      "ult": "暗連・黒天烈掌",
-      "dMul": 1,
-      "sMul": 1,
-      "sOfs": 0,
-      "pips": {
-        "p": 3,
-        "s": 3,
-        "g": 3
-      },
-      "stats5": {
-        "atk": 4,
-        "spd": 4,
-        "def": 3,
-        "tech": 5,
-        "brk": 3
-      },
-      "usability": 1
     }
   ],
   "characterIds": [
     "moguzo",
     "pisuke",
-    "godan",
-    "hakuma",
-    "chirka",
-    "takimaru",
-    "yomikage",
-    "bullet",
-    "dark_moguzo"
+    "godan"
   ],
   "levels": [
     "high",
@@ -1140,323 +652,6 @@
         "color": "#ffd23f",
         "se": "guard"
       }
-    ],
-    "hakuma": [
-      {
-        "slot": 1,
-        "seq": [
-          "left",
-          "left"
-        ],
-        "trigger": "mid",
-        "type": "stance",
-        "name": "白峰の構え",
-        "stanceF": 12,
-        "counterLv": "mid",
-        "counterDmg": 100,
-        "color": "#bfe3d0",
-        "se": "guard"
-      },
-      {
-        "slot": 2,
-        "seq": [
-          "right",
-          "down"
-        ],
-        "trigger": "grab",
-        "type": "grab",
-        "name": "雪崩抱え",
-        "s": 16,
-        "d": 110,
-        "armor": 6,
-        "color": "#8fb8a0",
-        "se": "cmdGrabHit"
-      },
-      {
-        "slot": 3,
-        "seq": [
-          "right",
-          "right"
-        ],
-        "trigger": "mid",
-        "type": "atk",
-        "lv": "mid",
-        "name": "雪壁掌",
-        "s": 8,
-        "a": 3,
-        "r": 18,
-        "d": 95,
-        "color": "#dbe8e0",
-        "se": "cmdHit"
-      }
-    ],
-    "chirka": [
-      {
-        "slot": 1,
-        "seq": [
-          "right",
-          "right"
-        ],
-        "trigger": "mid",
-        "type": "atk",
-        "lv": "mid",
-        "name": "だまし突き",
-        "s": 8,
-        "a": 3,
-        "r": 18,
-        "d": 95,
-        "color": "#b98cc7",
-        "se": "cmdHit"
-      },
-      {
-        "slot": 2,
-        "seq": [
-          "left",
-          "right"
-        ],
-        "trigger": "high",
-        "type": "atk",
-        "lv": "high",
-        "name": "戻り蹴り",
-        "s": 20,
-        "a": 3,
-        "r": 24,
-        "d": 90,
-        "fwd": 20,
-        "color": "#caa6d9",
-        "se": "cmdHit"
-      },
-      {
-        "slot": 3,
-        "seq": [
-          "right",
-          "down"
-        ],
-        "trigger": "grab",
-        "type": "grab",
-        "name": "すかし抱き",
-        "s": 16,
-        "d": 110,
-        "armor": 6,
-        "color": "#9d6bb0",
-        "se": "cmdGrabHit"
-      }
-    ],
-    "takimaru": [
-      {
-        "slot": 1,
-        "seq": [
-          "right",
-          "down"
-        ],
-        "trigger": "grab",
-        "type": "grab",
-        "name": "丸抱え",
-        "s": 16,
-        "d": 110,
-        "armor": 6,
-        "color": "#c9a24d",
-        "se": "cmdGrabHit"
-      },
-      {
-        "slot": 2,
-        "seq": [
-          "left",
-          "right"
-        ],
-        "trigger": "grab",
-        "type": "grab",
-        "name": "巻き投げ",
-        "s": 14,
-        "d": 100,
-        "reachMul": 1.5,
-        "color": "#b0aac2",
-        "se": "cmdGrabHit"
-      },
-      {
-        "slot": 3,
-        "seq": [
-          "right",
-          "right"
-        ],
-        "trigger": "mid",
-        "type": "atk",
-        "lv": "mid",
-        "name": "ぶちかまし",
-        "s": 8,
-        "a": 3,
-        "r": 18,
-        "d": 95,
-        "color": "#8a8398",
-        "se": "cmdHit"
-      }
-    ],
-    "yomikage": [
-      {
-        "slot": 1,
-        "seq": [
-          "left",
-          "left"
-        ],
-        "trigger": "mid",
-        "type": "stance",
-        "name": "後の先・構え",
-        "stanceF": 12,
-        "counterLv": "mid",
-        "counterDmg": 100,
-        "color": "#6b7fd6",
-        "se": "guard"
-      },
-      {
-        "slot": 2,
-        "seq": [
-          "down",
-          "right"
-        ],
-        "trigger": "high",
-        "type": "atk",
-        "lv": "high",
-        "name": "後の先・天",
-        "s": 24,
-        "a": 3,
-        "r": 30,
-        "d": 120,
-        "counterMul": 1.5,
-        "color": "#8695e0",
-        "se": "cmdHit"
-      },
-      {
-        "slot": 3,
-        "seq": [
-          "down",
-          "left"
-        ],
-        "trigger": "low",
-        "type": "atk",
-        "lv": "low",
-        "name": "後の先・地",
-        "s": 30,
-        "a": 4,
-        "r": 30,
-        "d": 80,
-        "down": true,
-        "fwd": 60,
-        "guardDmg": 14,
-        "color": "#4f5bb8",
-        "se": "cmdHit"
-      }
-    ],
-    "bullet": [
-      {
-        "slot": 1,
-        "seq": [
-          "down",
-          "down"
-        ],
-        "trigger": "low",
-        "type": "atk",
-        "lv": "low",
-        "name": "尾払い",
-        "s": 30,
-        "a": 3,
-        "r": 30,
-        "d": 110,
-        "down": true,
-        "guardChip": 30,
-        "color": "#a83250",
-        "se": "cmdHit"
-      },
-      {
-        "slot": 2,
-        "seq": [
-          "down",
-          "right"
-        ],
-        "trigger": "high",
-        "type": "atk",
-        "lv": "high",
-        "name": "跳ね上げ",
-        "s": 24,
-        "a": 3,
-        "r": 30,
-        "d": 120,
-        "counterMul": 1.5,
-        "color": "#c14a68",
-        "se": "cmdHit"
-      },
-      {
-        "slot": 3,
-        "seq": [
-          "right",
-          "right"
-        ],
-        "trigger": "mid",
-        "type": "atk",
-        "lv": "mid",
-        "name": "弾み突き",
-        "s": 8,
-        "a": 3,
-        "r": 18,
-        "d": 95,
-        "color": "#8a2740",
-        "se": "cmdHit"
-      }
-    ],
-    "dark_moguzo": [
-      {
-        "slot": 1,
-        "seq": [
-          "down",
-          "left"
-        ],
-        "trigger": "low",
-        "type": "atk",
-        "lv": "low",
-        "name": "黒砂払い",
-        "s": 30,
-        "a": 4,
-        "r": 30,
-        "d": 80,
-        "down": true,
-        "fwd": 60,
-        "guardDmg": 14,
-        "color": "#5a2f6b",
-        "se": "cmdHit"
-      },
-      {
-        "slot": 2,
-        "seq": [
-          "left",
-          "right"
-        ],
-        "trigger": "grab",
-        "type": "grab",
-        "name": "闇引き",
-        "s": 14,
-        "d": 100,
-        "reachMul": 1.5,
-        "color": "#7a1f2f",
-        "se": "cmdGrabHit"
-      },
-      {
-        "slot": 3,
-        "seq": [
-          "right",
-          "down"
-        ],
-        "trigger": "mid",
-        "type": "atk",
-        "lv": "mid",
-        "name": "黒走り",
-        "s": 18,
-        "a": 3,
-        "r": 18,
-        "d": 95,
-        "fwd": 40,
-        "guardDmg": 8,
-        "color": "#3d1f4a",
-        "se": "cmdHit"
-      }
     ]
   },
   "inputTiming": {
@@ -1467,19 +662,12 @@
     "JUST_TAP_MS": 100
   },
   "roar": {
-    "s": 17,
-    "armorStartF": 4,
-    "armorEndF": 15,
-    "armor": 15,
-    "armorHits": 1,
+    "s": 16,
+    "armor": 14,
     "a": 4,
     "r": 24,
-    "d": 120,
-    "guardDamage": 38,
-    "chipDamage": 10,
-    "stun": 34,
-    "sCost": 100,
-    "cleanHitUltGain": 1
+    "d": 130,
+    "stun": 34
   },
   "sGauge": {
     "aHit": 12,
@@ -1504,14 +692,16 @@
     "revealHitF": 24,
     "revealF": 60
   },
+  "down": {
+    "downF": 45,
+    "wakeF": 20,
+    "followupMul": 0.5
+  },
   "ult": {
     "stock": 3,
     "d": 300,
     "impact": 78,
-    "total": 110,
-    "guardDamage": 32,
-    "chipDamage": 0,
-    "downType": "ultimateDown"
+    "total": 110
   },
   "net": {
     "delayFMin": 3,
@@ -1591,29 +781,20 @@
       "crouch",
       "sway",
       "lunge",
-      "crouch_atk"
+      "crouch_atk",
+      "cmd1",
+      "cmd2",
+      "cmd3"
     ],
     "spriteH": {
       "moguzo": 172,
       "pisuke": 116,
-      "godan": 206,
-      "hakuma": 181,
-      "chirka": 169,
-      "takimaru": 184,
-      "yomikage": 172,
-      "bullet": 177,
-      "dark_moguzo": 172
+      "godan": 206
     },
     "portraitRatio": {
       "moguzo": 1,
       "pisuke": 0.8,
-      "godan": 1.15,
-      "hakuma": 1.05,
-      "chirka": 0.98,
-      "takimaru": 1.07,
-      "yomikage": 1,
-      "bullet": 1.03,
-      "dark_moguzo": 1
+      "godan": 1.15
     }
   }
 }

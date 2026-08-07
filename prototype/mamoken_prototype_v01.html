@@ -190,7 +190,10 @@ const CHARS=[ // P1: 全9キャラが自身の実アート・実装を持つ(tri
  {id:'dark_moguzo',name:'ダークモグゾー',type:'アナザー',ult:'暗連・黒天烈掌',color:'#b58756',belly:'#ecd9b4',dMul:1,sMul:1,sOfs:0,pips:{p:3,s:3,g:3},stats5:{atk:4,spd:4,def:3,tech:5,brk:3},usability:1}
 ];
 /* T20 full roster art select */
-/* T28 roster trial select UI → P1: 全9キャラ実装済みに更新。onlinePlayableのみ既存3体に限定(オンラインは§6.8対象外・現状維持) */
+/* T28 roster trial select UI */
+// P1: 全9キャラ実装済みに更新。onlinePlayableのみ既存3体に限定(オンラインは§6.8対象外・現状維持)
+// (pre-existing fix, unrelated to BAL-R1: P1でこのマーカーコメント内に注記が混入し、test/full-roster-art.test.mjs他の
+//  厳密一致チェックが本PR以前から落ちていたため、注記を別行へ退避しマーカーは元の完全一致文字列に戻す)
 const ROSTER=[
  {id:'moguzo',name:'モグゾー',type:'スタンダード',species:'基準マーモット',ability:'根性',ult:'大地烈掌',playable:true,onlinePlayable:true,combatIndex:0,displayScale:1.00,faceCrop:{x:0.50,y:0.28,z:2.35},heroCrop:{x:0.50,y:0.42,z:1.25}},
  {id:'pisuke',name:'ピスケ',type:'ラッシュ',species:'細身のマーモット',ability:'チェイス',ult:'音速連咆',playable:true,onlinePlayable:true,combatIndex:1,displayScale:1.04,faceCrop:{x:0.50,y:0.27,z:2.40},heroCrop:{x:0.50,y:0.41,z:1.28}},
