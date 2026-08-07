@@ -49,6 +49,10 @@ const CHARACTER_CATALOG_BROWSER_JS = path.join(ROOT, 'runtime', 'character-catal
 const CHARACTER_CATALOG_BROWSER_TAG = '<script src="../runtime/character-catalog-browser.js"></script>';
 const RUNTIME_EXTENDED_SHADOW_JS = path.join(ROOT, 'runtime', 'runtime-extended-command-shadow-browser.js');
 const RUNTIME_EXTENDED_SHADOW_TAG = '<script src="../runtime/runtime-extended-command-shadow-browser.js"></script>';
+// BGM(R2): 闘技場(昼)のWeb Audio実装がfile://下でのfetch/XHR不可を回避するために
+// prototype専用で読み込むbase64ペイロード。distは同じ音源を__ASSET_MAP__のdata URLで
+// 既に持っているため不要 → タグ自体を除去する(残すと単体配布時に404で壊れた参照になる)。
+const ARENA_BGM_B64_TAG = '<script src="../runtime/arena-bgm-b64.js"></script>';
 
 const IMG_EXT = new Set(['.png', '.jpg', '.jpeg', '.gif', '.webp']);
 const AUDIO_MIME = { '.mp3': 'audio/mpeg' }; // BGM(R1): 音質を変えないため再エンコードせず原本バイトのまま埋め込む
@@ -136,6 +140,11 @@ async function main() {
     srcLine,
     '  img.src=Object.prototype.hasOwnProperty.call(__ASSET_MAP__,src)?__ASSET_MAP__[src]:src;'
   );
+
+  if (!out.includes(ARENA_BGM_B64_TAG)) {
+    throw new Error(`アンカー行が見つかりません: ${JSON.stringify(ARENA_BGM_B64_TAG)} (闘技場BGMのbase64読み込みタグが変更された可能性があります)`);
+  }
+  out = out.replace(ARENA_BGM_B64_TAG, ''); // distは__ASSET_MAP__に同じ音源のdata URLを持つため不要(タグ自体を除去)
 
   if (!out.includes(CHARACTER_CATALOG_BROWSER_TAG)) {
     throw new Error(`アンカー行が見つかりません: ${JSON.stringify(CHARACTER_CATALOG_BROWSER_TAG)} (character catalog browser bridgeが未適用の可能性があります)`);
