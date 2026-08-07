@@ -6,8 +6,11 @@ on:
       - 'design/combat/contracts/**'
       - 'src/core/v2-types/**'
       - 'src/core/v2-validation/**'
+      - 'src/core/legacy-adapter-v2.ts'
+      - 'src/core/legacy-adapter-v2-types.ts'
       - 'src/core/index.ts'
       - 'test/combat-v2-contract.test.mjs'
+      - 'test/legacy-adapter-v2.test.mjs'
       - 'reports/combat/**'
       - 'package.json'
       - '.github/workflows/combat-v2-contract.yml'
@@ -28,6 +31,8 @@ jobs:
       - run: npm ci
       - name: Validate integrated v0.2 contract
         run: npm run check:combat-v2
+      - name: Validate G02 read-only legacy adapter
+        run: npm run check:legacy-adapter-v2
       - name: Enforce G00 scoped diff
         env:
           BASE_SHA: ${{ github.event.pull_request.base.sha }}
