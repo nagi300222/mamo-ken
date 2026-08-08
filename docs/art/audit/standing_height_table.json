@@ -1,0 +1,65 @@
+{
+  "moguzo": {
+    "sourceId": "moguzo",
+    "ownBodyHeightPx": 1052,
+    "targetRatio": 1.0,
+    "targetHeightPx": 1052.0,
+    "appliedScale": 1.0
+  },
+  "pisuke": {
+    "sourceId": "piske",
+    "ownBodyHeightPx": 1015,
+    "targetRatio": 1.03,
+    "targetHeightPx": 1083.6,
+    "appliedScale": 1.0675
+  },
+  "godan": {
+    "sourceId": "godan",
+    "ownBodyHeightPx": 1244,
+    "targetRatio": 1.08,
+    "targetHeightPx": 1136.2,
+    "appliedScale": 0.9133
+  },
+  "hakuma": {
+    "sourceId": "hakuma",
+    "ownBodyHeightPx": 1101,
+    "targetRatio": 1.05,
+    "targetHeightPx": 1104.6,
+    "appliedScale": 1.0033
+  },
+  "chirka": {
+    "sourceId": "chilka",
+    "ownBodyHeightPx": 1026,
+    "targetRatio": 0.98,
+    "targetHeightPx": 1031.0,
+    "appliedScale": 1.0048
+  },
+  "takimaru": {
+    "sourceId": "takimaru",
+    "ownBodyHeightPx": 1111,
+    "targetRatio": 1.07,
+    "targetHeightPx": 1125.6,
+    "appliedScale": 1.0132
+  },
+  "yomikage": {
+    "sourceId": "yomikage",
+    "ownBodyHeightPx": 1067,
+    "targetRatio": 1.0,
+    "targetHeightPx": 1052.0,
+    "appliedScale": 0.9859
+  },
+  "bullet": {
+    "sourceId": "bullet",
+    "ownBodyHeightPx": 955,
+    "targetRatio": 1.03,
+    "targetHeightPx": 1083.6,
+    "appliedScale": 1.1346
+  },
+  "dark_moguzo": {
+    "sourceId": "dark_moguzo",
+    "ownBodyHeightPx": 1068,
+    "targetRatio": 1.0,
+    "targetHeightPx": 1052.0,
+    "appliedScale": 0.985
+  }
+}
