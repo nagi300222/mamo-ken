@@ -2115,7 +2115,14 @@
         "renderOnly": true,
         "technicalDebt": "finger-count or accessory consistency may be replaced later; not implementation blocker"
       },
-      "specialBehaviorBinding": null
+      "specialBehaviorBinding": null,
+      "poseOverrides": {
+        "flinch": {
+          "path": "assets/art/overrides/godan/flinch/godan_flinch_replacement_alpha_fullcanvas.png",
+          "sha256": "d8b7b486d6fcbfa46b725808f67cbc32fc5fbd46c35b466eea48b2c644e6dd00",
+          "note": "vNext FINAL: SIZE_NORMALIZATION_FINAL sec.8 Godan flinch replacement (full-canvas, pre-alpha-cut). Applied to the common_basic sheet flinch cell only; BAL/timing/hitbox/hurtbox untouched."
+        }
+      }
     },
     "hakuma": {
       "charId": "hakuma",

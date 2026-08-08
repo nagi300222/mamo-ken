@@ -1,6 +1,6 @@
 {
-  "artifactHash": "89e52c2eac4f760b2b58b6f531332cb42bf68adafb66113d9797ec09ac47f2bd",
-  "buildId": "mamoken-art-current-v1-2026-08-08",
+  "artifactHash": "e45de56ab88b78e28cfb6c6e59c9a6fb0a15b7b338c6f100673be7e3bf008a55",
+  "buildId": "mamoken-art-current-v2-2026-08-09",
   "characters": {
     "bullet": {
       "actions": {
@@ -33,6 +33,7 @@
                 "x": -151,
                 "y": -288.767
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -77,6 +78,7 @@
                 "x": -152.5,
                 "y": -254.254
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -121,6 +123,7 @@
                 "x": -153.5,
                 "y": -263.765
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -165,6 +168,7 @@
                 "x": -154.5,
                 "y": -270.768
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -221,6 +225,7 @@
                 "x": -129,
                 "y": -284.136
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -265,6 +270,7 @@
                 "x": -130,
                 "y": -266.152
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -309,6 +315,7 @@
                 "x": -160,
                 "y": -240.771
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -353,6 +360,7 @@
                 "x": -172,
                 "y": -283.23
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -409,6 +417,7 @@
                 "x": -144.5,
                 "y": -305.674
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 941,
@@ -453,6 +462,7 @@
                 "x": -147.5,
                 "y": -275.15
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 941,
@@ -497,6 +507,7 @@
                 "x": -119,
                 "y": -369.768
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 941,
@@ -541,6 +552,7 @@
                 "x": -133,
                 "y": -302.641
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 941,
@@ -597,6 +609,7 @@
                 "x": -151,
                 "y": -250.513
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -641,6 +654,7 @@
                 "x": -121,
                 "y": -204.766
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -685,6 +699,7 @@
                 "x": -165.5,
                 "y": -164.511
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -729,6 +744,7 @@
                 "x": -146.5,
                 "y": -242.257
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -785,6 +801,7 @@
                 "x": -159.5,
                 "y": -298.743
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -829,6 +846,7 @@
                 "x": -138.5,
                 "y": -267.47
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -873,6 +891,7 @@
                 "x": -170,
                 "y": -278.976
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -917,6 +936,7 @@
                 "x": -163,
                 "y": -295.771
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -973,6 +993,7 @@
                 "x": -137.5,
                 "y": -296.977
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 941,
@@ -1017,6 +1038,7 @@
                 "x": -128.5,
                 "y": -279.234
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 941,
@@ -1061,6 +1083,7 @@
                 "x": -156,
                 "y": -281
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 941,
@@ -1105,6 +1128,7 @@
                 "x": -136,
                 "y": -288.767
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 941,
@@ -1161,6 +1185,7 @@
                 "x": -131,
                 "y": -247.768
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -1205,6 +1230,7 @@
                 "x": -135,
                 "y": -183.492
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -1249,6 +1275,7 @@
                 "x": -165.5,
                 "y": -179
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -1293,6 +1320,7 @@
                 "x": -166,
                 "y": -205.763
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -1349,6 +1377,7 @@
                 "x": -155.5,
                 "y": -299.256
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -1393,6 +1422,7 @@
                 "x": -156.5,
                 "y": -283.512
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -1437,6 +1467,7 @@
                 "x": -158,
                 "y": -295.254
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -1481,6 +1512,7 @@
                 "x": -137.5,
                 "y": -293.763
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -1537,6 +1569,7 @@
                 "x": -191,
                 "y": -316.232
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 793,
@@ -1581,6 +1614,7 @@
                 "x": -185,
                 "y": -309.488
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 793,
@@ -1625,6 +1659,7 @@
                 "x": -191.5,
                 "y": -345.717
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 793,
@@ -1669,6 +1704,7 @@
                 "x": -189.5,
                 "y": -337.768
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 793,
@@ -1725,6 +1761,7 @@
                 "x": -156.5,
                 "y": -213.254
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -1769,6 +1806,7 @@
                 "x": -144,
                 "y": -189.514
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -1813,6 +1851,7 @@
                 "x": -165.5,
                 "y": -150.772
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -1857,6 +1896,7 @@
                 "x": -140,
                 "y": -174.515
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -1913,6 +1953,7 @@
                 "x": -171.5,
                 "y": -297.257
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -1957,6 +1998,7 @@
                 "x": -170.5,
                 "y": -299.51
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -2001,6 +2043,7 @@
                 "x": -150,
                 "y": -281.511
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -2045,6 +2088,7 @@
                 "x": -135.5,
                 "y": -295.771
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -2101,6 +2145,7 @@
                 "x": -159.5,
                 "y": -287.256
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -2145,6 +2190,7 @@
                 "x": -157.5,
                 "y": -242.257
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -2189,6 +2235,7 @@
                 "x": -168,
                 "y": -221.492
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -2233,6 +2280,7 @@
                 "x": -149.5,
                 "y": -272.77
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -2289,6 +2337,7 @@
                 "x": -193,
                 "y": -364.744
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 816,
@@ -2333,6 +2382,7 @@
                 "x": -180.5,
                 "y": -371.745
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 816,
@@ -2377,6 +2427,7 @@
                 "x": -183.5,
                 "y": -407.744
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 816,
@@ -2421,6 +2472,7 @@
                 "x": -156,
                 "y": -362.765
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 816,
@@ -2508,6 +2560,7 @@
             "x": -218.5,
             "y": -223.762
           },
+          "presentationScale": 1,
           "renderOnly": true,
           "sourceRect": {
             "height": 627,
@@ -2552,6 +2605,7 @@
             "x": -197,
             "y": -227.767
           },
+          "presentationScale": 1,
           "renderOnly": true,
           "sourceRect": {
             "height": 627,
@@ -2596,6 +2650,7 @@
             "x": -247.5,
             "y": -121.759
           },
+          "presentationScale": 1,
           "renderOnly": true,
           "sourceRect": {
             "height": 543,
@@ -2640,6 +2695,7 @@
             "x": -210.5,
             "y": -409.082
           },
+          "presentationScale": 1,
           "renderOnly": true,
           "sourceRect": {
             "height": 627,
@@ -2684,6 +2740,7 @@
             "x": -208.5,
             "y": -234.466
           },
+          "presentationScale": 1,
           "renderOnly": true,
           "sourceRect": {
             "height": 543,
@@ -2728,6 +2785,7 @@
             "x": -100.5,
             "y": -392.768
           },
+          "presentationScale": 1,
           "renderOnly": true,
           "sourceRect": {
             "height": 627,
@@ -2772,6 +2830,7 @@
             "x": -188.5,
             "y": -320.234
           },
+          "presentationScale": 1,
           "renderOnly": true,
           "sourceRect": {
             "height": 627,
@@ -2816,6 +2875,7 @@
             "x": -208,
             "y": -356.766
           },
+          "presentationScale": 1,
           "renderOnly": true,
           "sourceRect": {
             "height": 627,
@@ -2860,6 +2920,7 @@
             "x": -250.5,
             "y": -171.69
           },
+          "presentationScale": 1,
           "renderOnly": true,
           "sourceRect": {
             "height": 543,
@@ -2904,6 +2965,7 @@
             "x": -236,
             "y": -261.763
           },
+          "presentationScale": 1,
           "renderOnly": true,
           "sourceRect": {
             "height": 627,
@@ -2948,6 +3010,7 @@
             "x": -190,
             "y": -327.765
           },
+          "presentationScale": 1,
           "renderOnly": true,
           "sourceRect": {
             "height": 627,
@@ -2992,6 +3055,7 @@
             "x": -215.5,
             "y": -247.864
           },
+          "presentationScale": 1,
           "renderOnly": true,
           "sourceRect": {
             "height": 543,
@@ -3036,6 +3100,7 @@
             "x": -187,
             "y": -421.885
           },
+          "presentationScale": 1,
           "renderOnly": true,
           "sourceRect": {
             "height": 627,
@@ -3105,6 +3170,7 @@
                 "x": -118.5,
                 "y": -277
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -3149,6 +3215,7 @@
                 "x": -132.5,
                 "y": -254.684
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -3193,6 +3260,7 @@
                 "x": -146,
                 "y": -259.685
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -3237,6 +3305,7 @@
                 "x": -125,
                 "y": -254.026
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -3293,6 +3362,7 @@
                 "x": -116,
                 "y": -271.314
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 941,
@@ -3337,6 +3407,7 @@
                 "x": -125,
                 "y": -256.314
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 941,
@@ -3381,6 +3452,7 @@
                 "x": -137.5,
                 "y": -263.685
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 941,
@@ -3425,6 +3497,7 @@
                 "x": -125,
                 "y": -275.026
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 941,
@@ -3481,6 +3554,7 @@
                 "x": -117,
                 "y": -272
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 941,
@@ -3525,6 +3599,7 @@
                 "x": -137.5,
                 "y": -255.657
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 941,
@@ -3569,6 +3644,7 @@
                 "x": -136.5,
                 "y": -239.687
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 941,
@@ -3613,6 +3689,7 @@
                 "x": -120.5,
                 "y": -262.025
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 941,
@@ -3669,6 +3746,7 @@
                 "x": -116,
                 "y": -265.032
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 941,
@@ -3713,6 +3791,7 @@
                 "x": -131.5,
                 "y": -244.314
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 941,
@@ -3757,6 +3836,7 @@
                 "x": -117.5,
                 "y": -255.161
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 941,
@@ -3801,6 +3881,7 @@
                 "x": -124,
                 "y": -223.343
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 941,
@@ -3857,6 +3938,7 @@
                 "x": -109,
                 "y": -262.626
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 941,
@@ -3901,6 +3983,7 @@
                 "x": -135.5,
                 "y": -211.342
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 941,
@@ -3945,6 +4028,7 @@
                 "x": -137.5,
                 "y": -220.657
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 941,
@@ -3989,6 +4073,7 @@
                 "x": -131.5,
                 "y": -199.029
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 941,
@@ -4045,6 +4130,7 @@
                 "x": -120.5,
                 "y": -284.342
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 941,
@@ -4089,6 +4175,7 @@
                 "x": -124.5,
                 "y": -283.315
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 941,
@@ -4133,6 +4220,7 @@
                 "x": -131.5,
                 "y": -291.344
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 941,
@@ -4177,6 +4265,7 @@
                 "x": -122,
                 "y": -273.026
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 941,
@@ -4233,6 +4322,7 @@
                 "x": -110,
                 "y": -255.028
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 941,
@@ -4277,6 +4367,7 @@
                 "x": -119.5,
                 "y": -204.632
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 941,
@@ -4321,6 +4412,7 @@
                 "x": -137.5,
                 "y": -192.317
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 941,
@@ -4365,6 +4457,7 @@
                 "x": -125.5,
                 "y": -194.027
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 941,
@@ -4421,6 +4514,7 @@
                 "x": -117,
                 "y": -262.683
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -4465,6 +4559,7 @@
                 "x": -145.5,
                 "y": -257.028
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -4509,6 +4604,7 @@
                 "x": -143.5,
                 "y": -246.688
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -4553,6 +4649,7 @@
                 "x": -117.5,
                 "y": -262.683
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -4609,6 +4706,7 @@
                 "x": -125,
                 "y": -326.657
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -4653,6 +4751,7 @@
                 "x": -129,
                 "y": -325.631
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -4697,6 +4796,7 @@
                 "x": -133.5,
                 "y": -396.026
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -4741,6 +4841,7 @@
                 "x": -123,
                 "y": -292.031
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -4797,6 +4898,7 @@
                 "x": -125,
                 "y": -194.033
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -4841,6 +4943,7 @@
                 "x": -139.5,
                 "y": -164.688
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -4885,6 +4988,7 @@
                 "x": -144,
                 "y": -144.685
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -4929,6 +5033,7 @@
                 "x": -103.5,
                 "y": -164.683
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -4985,6 +5090,7 @@
                 "x": -120.5,
                 "y": -287
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -5029,6 +5135,7 @@
                 "x": -120,
                 "y": -274.344
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -5073,6 +5180,7 @@
                 "x": -146,
                 "y": -269.684
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -5117,6 +5225,7 @@
                 "x": -119.5,
                 "y": -273.031
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -5173,6 +5282,7 @@
                 "x": -119,
                 "y": -266.315
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -5217,6 +5327,7 @@
                 "x": -137.5,
                 "y": -234.316
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -5261,6 +5372,7 @@
                 "x": -146,
                 "y": -253.313
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -5305,6 +5417,7 @@
                 "x": -143.5,
                 "y": -260.03
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -5361,6 +5474,7 @@
                 "x": -138,
                 "y": -302.687
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 841,
@@ -5405,6 +5519,7 @@
                 "x": -139,
                 "y": -331.684
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 841,
@@ -5449,6 +5564,7 @@
                 "x": -146.5,
                 "y": -336.031
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 841,
@@ -5493,6 +5609,7 @@
                 "x": -131,
                 "y": -306
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 841,
@@ -5578,6 +5695,7 @@
             "x": -156.5,
             "y": -246.032
           },
+          "presentationScale": 1,
           "renderOnly": true,
           "sourceRect": {
             "height": 627,
@@ -5622,6 +5740,7 @@
             "x": -181,
             "y": -243.029
           },
+          "presentationScale": 1,
           "renderOnly": true,
           "sourceRect": {
             "height": 627,
@@ -5666,6 +5785,7 @@
             "x": -200,
             "y": -134.356
           },
+          "presentationScale": 1,
           "renderOnly": true,
           "sourceRect": {
             "height": 627,
@@ -5710,6 +5830,7 @@
             "x": -168,
             "y": -381.579
           },
+          "presentationScale": 1,
           "renderOnly": true,
           "sourceRect": {
             "height": 627,
@@ -5754,6 +5875,7 @@
             "x": -164,
             "y": -221.027
           },
+          "presentationScale": 1,
           "renderOnly": true,
           "sourceRect": {
             "height": 627,
@@ -5798,6 +5920,7 @@
             "x": -150,
             "y": -231.025
           },
+          "presentationScale": 1,
           "renderOnly": true,
           "sourceRect": {
             "height": 627,
@@ -5842,6 +5965,7 @@
             "x": -147,
             "y": -330.028
           },
+          "presentationScale": 1,
           "renderOnly": true,
           "sourceRect": {
             "height": 627,
@@ -5886,6 +6010,7 @@
             "x": -155.5,
             "y": -339.029
           },
+          "presentationScale": 1,
           "renderOnly": true,
           "sourceRect": {
             "height": 627,
@@ -5930,6 +6055,7 @@
             "x": -191,
             "y": -173.791
           },
+          "presentationScale": 1,
           "renderOnly": true,
           "sourceRect": {
             "height": 627,
@@ -5974,6 +6100,7 @@
             "x": -168,
             "y": -283.03
           },
+          "presentationScale": 1,
           "renderOnly": true,
           "sourceRect": {
             "height": 627,
@@ -6018,6 +6145,7 @@
             "x": -135,
             "y": -329.03
           },
+          "presentationScale": 1,
           "renderOnly": true,
           "sourceRect": {
             "height": 627,
@@ -6062,6 +6190,7 @@
             "x": -147.5,
             "y": -252.026
           },
+          "presentationScale": 1,
           "renderOnly": true,
           "sourceRect": {
             "height": 627,
@@ -6106,6 +6235,7 @@
             "x": -141.5,
             "y": -385.377
           },
+          "presentationScale": 1,
           "renderOnly": true,
           "sourceRect": {
             "height": 627,
@@ -6175,6 +6305,7 @@
                 "x": -115.5,
                 "y": -287.147
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 809,
@@ -6219,6 +6350,7 @@
                 "x": -121,
                 "y": -256.617
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 809,
@@ -6263,6 +6395,7 @@
                 "x": -150,
                 "y": -248.853
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 809,
@@ -6307,6 +6440,7 @@
                 "x": -106,
                 "y": -274.849
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 809,
@@ -6363,6 +6497,7 @@
                 "x": -102,
                 "y": -241.389
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -6407,6 +6542,7 @@
                 "x": -136,
                 "y": -233.152
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -6451,6 +6587,7 @@
                 "x": -89.5,
                 "y": -338.988
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -6495,6 +6632,7 @@
                 "x": -107,
                 "y": -230.154
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -6551,6 +6689,7 @@
                 "x": -98.5,
                 "y": -240.148
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -6595,6 +6734,7 @@
                 "x": -136.5,
                 "y": -225.7
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -6639,6 +6779,7 @@
                 "x": -133,
                 "y": -227.232
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -6683,6 +6824,7 @@
                 "x": -149.5,
                 "y": -235.153
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -6739,6 +6881,7 @@
                 "x": -91,
                 "y": -230.766
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -6783,6 +6926,7 @@
                 "x": -119,
                 "y": -204.383
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -6827,6 +6971,7 @@
                 "x": -137.5,
                 "y": -182.148
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -6871,6 +7016,7 @@
                 "x": -138,
                 "y": -184.383
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -6927,6 +7073,7 @@
                 "x": -96,
                 "y": -253.148
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -6971,6 +7118,7 @@
                 "x": -124.5,
                 "y": -235.466
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -7015,6 +7163,7 @@
                 "x": -112.5,
                 "y": -306.235
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -7059,6 +7208,7 @@
                 "x": -119,
                 "y": -217.382
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -7115,6 +7265,7 @@
                 "x": -97,
                 "y": -250.147
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -7159,6 +7310,7 @@
                 "x": -129.5,
                 "y": -224.848
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -7203,6 +7355,7 @@
                 "x": -132.5,
                 "y": -223
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -7247,6 +7400,7 @@
                 "x": -136.5,
                 "y": -231
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -7303,6 +7457,7 @@
                 "x": -90,
                 "y": -236.15
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -7347,6 +7502,7 @@
                 "x": -116.5,
                 "y": -203.466
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -7391,6 +7547,7 @@
                 "x": -137,
                 "y": -199.383
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -7435,6 +7592,7 @@
                 "x": -120.5,
                 "y": -203.384
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -7491,6 +7649,7 @@
                 "x": -104,
                 "y": -264.466
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -7535,6 +7694,7 @@
                 "x": -136.5,
                 "y": -253.467
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -7579,6 +7739,7 @@
                 "x": -119.5,
                 "y": -306.148
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -7623,6 +7784,7 @@
                 "x": -100,
                 "y": -264.466
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -7679,6 +7841,7 @@
                 "x": -121,
                 "y": -294.383
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -7723,6 +7886,7 @@
                 "x": -115.5,
                 "y": -290
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -7767,6 +7931,7 @@
                 "x": -132.5,
                 "y": -362
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -7811,6 +7976,7 @@
                 "x": -127.5,
                 "y": -336.153
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -7867,6 +8033,7 @@
                 "x": -109,
                 "y": -247.151
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -7911,6 +8078,7 @@
                 "x": -112.5,
                 "y": -197.383
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -7955,6 +8123,7 @@
                 "x": -137,
                 "y": -195
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -7999,6 +8168,7 @@
                 "x": -123.5,
                 "y": -213.768
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -8055,6 +8225,7 @@
                 "x": -110.5,
                 "y": -263.151
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -8099,6 +8270,7 @@
                 "x": -136.5,
                 "y": -256.766
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -8143,6 +8315,7 @@
                 "x": -137,
                 "y": -259.382
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -8187,6 +8360,7 @@
                 "x": -133,
                 "y": -258.152
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -8243,6 +8417,7 @@
                 "x": -112.5,
                 "y": -283.149
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -8287,6 +8462,7 @@
                 "x": -123,
                 "y": -240.617
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -8331,6 +8507,7 @@
                 "x": -137,
                 "y": -245.848
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -8375,6 +8552,7 @@
                 "x": -112.5,
                 "y": -282
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -8431,6 +8609,7 @@
                 "x": -111,
                 "y": -280.153
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -8475,6 +8654,7 @@
                 "x": -115.5,
                 "y": -279.147
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -8519,6 +8699,7 @@
                 "x": -132.5,
                 "y": -293.768
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -8563,6 +8744,7 @@
                 "x": -108,
                 "y": -276.767
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -8648,6 +8830,7 @@
             "x": -132.5,
             "y": -214.154
           },
+          "presentationScale": 1,
           "renderOnly": true,
           "sourceRect": {
             "height": 627,
@@ -8692,6 +8875,7 @@
             "x": -155,
             "y": -219.148
           },
+          "presentationScale": 1,
           "renderOnly": true,
           "sourceRect": {
             "height": 627,
@@ -8736,6 +8920,7 @@
             "x": -174,
             "y": -132.271
           },
+          "presentationScale": 1,
           "renderOnly": true,
           "sourceRect": {
             "height": 627,
@@ -8780,6 +8965,7 @@
             "x": -154.5,
             "y": -359.472
           },
+          "presentationScale": 1,
           "renderOnly": true,
           "sourceRect": {
             "height": 627,
@@ -8824,6 +9010,7 @@
             "x": -156.5,
             "y": -224.148
           },
+          "presentationScale": 1,
           "renderOnly": true,
           "sourceRect": {
             "height": 627,
@@ -8868,6 +9055,7 @@
             "x": -107.5,
             "y": -242.152
           },
+          "presentationScale": 1,
           "renderOnly": true,
           "sourceRect": {
             "height": 627,
@@ -8912,6 +9100,7 @@
             "x": -133.5,
             "y": -341.234
           },
+          "presentationScale": 1,
           "renderOnly": true,
           "sourceRect": {
             "height": 627,
@@ -8956,6 +9145,7 @@
             "x": -131.5,
             "y": -346.149
           },
+          "presentationScale": 1,
           "renderOnly": true,
           "sourceRect": {
             "height": 627,
@@ -9000,6 +9190,7 @@
             "x": -176.5,
             "y": -163.899
           },
+          "presentationScale": 1,
           "renderOnly": true,
           "sourceRect": {
             "height": 627,
@@ -9044,6 +9235,7 @@
             "x": -151.5,
             "y": -261.152
           },
+          "presentationScale": 1,
           "renderOnly": true,
           "sourceRect": {
             "height": 627,
@@ -9088,6 +9280,7 @@
             "x": -123.5,
             "y": -292.151
           },
+          "presentationScale": 1,
           "renderOnly": true,
           "sourceRect": {
             "height": 627,
@@ -9132,6 +9325,7 @@
             "x": -132.5,
             "y": -279.441
           },
+          "presentationScale": 1,
           "renderOnly": true,
           "sourceRect": {
             "height": 627,
@@ -9176,6 +9370,7 @@
             "x": -117.5,
             "y": -363.067
           },
+          "presentationScale": 1,
           "renderOnly": true,
           "sourceRect": {
             "height": 627,
@@ -9245,6 +9440,7 @@
                 "x": -173.5,
                 "y": -496.452
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -9289,6 +9485,7 @@
                 "x": -223,
                 "y": -468.462
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -9333,6 +9530,7 @@
                 "x": -224,
                 "y": -450.973
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -9377,6 +9575,7 @@
                 "x": -175,
                 "y": -495.443
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -9433,6 +9632,7 @@
                 "x": -169.5,
                 "y": -474
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 941,
@@ -9477,6 +9677,7 @@
                 "x": -211,
                 "y": -446.018
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 941,
@@ -9521,6 +9722,7 @@
                 "x": -211,
                 "y": -459.974
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 941,
@@ -9565,6 +9767,7 @@
                 "x": -202,
                 "y": -461
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 941,
@@ -9621,6 +9824,7 @@
                 "x": -164.5,
                 "y": -468.974
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 1024,
@@ -9665,6 +9869,7 @@
                 "x": -194,
                 "y": -454.009
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 1024,
@@ -9709,6 +9914,7 @@
                 "x": -191,
                 "y": -429.972
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 1024,
@@ -9753,6 +9959,7 @@
                 "x": -172.5,
                 "y": -466.974
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 1024,
@@ -9809,6 +10016,7 @@
                 "x": -171.5,
                 "y": -470.974
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -9853,6 +10061,7 @@
                 "x": -205,
                 "y": -451.982
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -9897,6 +10106,7 @@
                 "x": -224,
                 "y": -454.982
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -9941,6 +10151,7 @@
                 "x": -221.5,
                 "y": -444.982
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -9997,6 +10208,7 @@
                 "x": -167,
                 "y": -519.43
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 909,
@@ -10041,6 +10253,7 @@
                 "x": -189,
                 "y": -577.396
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 909,
@@ -10085,6 +10298,7 @@
                 "x": -218.5,
                 "y": -618.971
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 909,
@@ -10129,6 +10343,7 @@
                 "x": -213.5,
                 "y": -457.128
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 909,
@@ -10185,6 +10400,7 @@
                 "x": -169.5,
                 "y": -476.087
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -10229,6 +10445,7 @@
                 "x": -201,
                 "y": -384.097
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -10273,6 +10490,7 @@
                 "x": -224,
                 "y": -347.966
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -10317,6 +10535,7 @@
                 "x": -235.5,
                 "y": -422.058
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -10373,6 +10592,7 @@
                 "x": -163,
                 "y": -467.079
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 941,
@@ -10417,6 +10637,7 @@
                 "x": -192.5,
                 "y": -429.096
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 941,
@@ -10461,6 +10682,7 @@
                 "x": -211,
                 "y": -412.942
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 941,
@@ -10505,6 +10727,7 @@
                 "x": -220,
                 "y": -438.056
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 941,
@@ -10561,6 +10784,7 @@
                 "x": -164.5,
                 "y": -468.035
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 941,
@@ -10605,6 +10829,7 @@
                 "x": -211,
                 "y": -455.036
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 941,
@@ -10649,6 +10874,7 @@
                 "x": -171.5,
                 "y": -457.974
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 941,
@@ -10693,6 +10919,7 @@
                 "x": -164.5,
                 "y": -464.026
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 941,
@@ -10749,6 +10976,7 @@
                 "x": -187.5,
                 "y": -518.99
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -10793,6 +11021,7 @@
                 "x": -186,
                 "y": -468
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -10837,6 +11066,7 @@
                 "x": -224,
                 "y": -440.009
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -10881,6 +11111,7 @@
                 "x": -190.5,
                 "y": -450.973
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -10937,6 +11168,7 @@
                 "x": -179.5,
                 "y": -323.972
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 1024,
@@ -10981,6 +11213,7 @@
                 "x": -176,
                 "y": -280.989
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 1024,
@@ -11025,6 +11258,7 @@
                 "x": -185,
                 "y": -259.985
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 1024,
@@ -11069,6 +11303,7 @@
                 "x": -184.5,
                 "y": -338.991
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 1024,
@@ -11125,6 +11360,7 @@
                 "x": -187,
                 "y": -449.973
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 941,
@@ -11169,6 +11405,7 @@
                 "x": -193.5,
                 "y": -436.991
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 941,
@@ -11213,6 +11450,7 @@
                 "x": -211,
                 "y": -429.991
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 941,
@@ -11257,6 +11495,7 @@
                 "x": -185.5,
                 "y": -453.982
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 941,
@@ -11313,6 +11552,7 @@
                 "x": -175.5,
                 "y": -466.974
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 1024,
@@ -11357,6 +11597,7 @@
                 "x": -183.5,
                 "y": -401
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 1024,
@@ -11401,6 +11642,7 @@
                 "x": -177,
                 "y": -436.972
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 1024,
@@ -11445,6 +11687,7 @@
                 "x": -171,
                 "y": -443.973
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 1024,
@@ -11501,6 +11744,7 @@
                 "x": -185,
                 "y": -525.981
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -11545,6 +11789,7 @@
                 "x": -187.5,
                 "y": -542.981
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -11589,6 +11834,7 @@
                 "x": -203.5,
                 "y": -550.973
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -11633,6 +11879,7 @@
                 "x": -182.5,
                 "y": -526.981
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -11718,6 +11965,7 @@
             "x": -241,
             "y": -371.968
           },
+          "presentationScale": 1,
           "renderOnly": true,
           "sourceRect": {
             "height": 627,
@@ -11762,6 +12010,7 @@
             "x": -303.5,
             "y": -369.967
           },
+          "presentationScale": 1,
           "renderOnly": true,
           "sourceRect": {
             "height": 627,
@@ -11806,6 +12055,7 @@
             "x": -309.5,
             "y": -270.179
           },
+          "presentationScale": 1,
           "renderOnly": true,
           "sourceRect": {
             "height": 627,
@@ -11834,46 +12084,47 @@
         "flinch": {
           "battleScale": 0.5,
           "bodyBounds": {
-            "height": 400,
-            "width": 525,
-            "x": 3,
-            "y": 3
+            "height": 572,
+            "width": 429,
+            "x": 2,
+            "y": 2
           },
           "footAnchor": {
-            "x": 265.5,
-            "y": 501.945
+            "x": 216.5,
+            "y": 574.487
           },
           "frameId": "flinch",
-          "geometryHash": "188c562b6660e6dc63ab071f5ed3983acb184fa0857602f3e5ccc425e449e2e0",
-          "height": 406,
+          "geometryHash": "e7caa722c84f3451bf43c09f46c25b8d1376c55e72c3e5a19d46b139bc8e94c0",
+          "height": 576,
           "offset": {
-            "x": -265.5,
-            "y": -501.945
+            "x": -216.5,
+            "y": -574.487
           },
+          "presentationScale": 0.5,
           "renderOnly": true,
           "sourceRect": {
-            "height": 627,
-            "width": 627,
+            "height": 1448,
+            "width": 1086,
             "x": 0,
-            "y": 627
+            "y": 0
           },
           "variants": {
             "p1": {
               "path": "assets/art/runtime/godan/p1/common_basic/flinch.png",
-              "sha256": "c767f264e1b2269b1b92c38edd07d3c033e26f56e3fd14ab59ecfbff5d293992"
+              "sha256": "0c0bc8651e1b845a783851cdb46a26de34b1b681a2f8e49b5d335e27f22d15db"
             },
             "p2": {
               "path": "assets/art/runtime/godan/p2/common_basic/flinch.png",
-              "sha256": "d1ccd881e87b3fe914c2b74241ff07b14ec4047544d91d2393ec62f3931dc9f6"
+              "sha256": "cde30d9a48d17b765b2e17be9547e1a4675065054ccd6a80d25c2fb62e7d47d0"
             }
           },
           "visualBounds": {
-            "height": 400,
-            "width": 525,
-            "x": 3,
-            "y": 3
+            "height": 572,
+            "width": 429,
+            "x": 2,
+            "y": 2
           },
-          "width": 531
+          "width": 433
         },
         "getup": {
           "battleScale": 0.5,
@@ -11894,6 +12145,7 @@
             "x": -282,
             "y": -396.272
           },
+          "presentationScale": 1,
           "renderOnly": true,
           "sourceRect": {
             "height": 627,
@@ -11938,6 +12190,7 @@
             "x": -174,
             "y": -412.971
           },
+          "presentationScale": 1,
           "renderOnly": true,
           "sourceRect": {
             "height": 627,
@@ -11982,6 +12235,7 @@
             "x": -234,
             "y": -485.969
           },
+          "presentationScale": 1,
           "renderOnly": true,
           "sourceRect": {
             "height": 627,
@@ -12026,6 +12280,7 @@
             "x": -232.5,
             "y": -374.968
           },
+          "presentationScale": 1,
           "renderOnly": true,
           "sourceRect": {
             "height": 627,
@@ -12070,6 +12325,7 @@
             "x": -303.5,
             "y": -244.251
           },
+          "presentationScale": 1,
           "renderOnly": true,
           "sourceRect": {
             "height": 627,
@@ -12114,6 +12370,7 @@
             "x": -279,
             "y": -450.973
           },
+          "presentationScale": 1,
           "renderOnly": true,
           "sourceRect": {
             "height": 627,
@@ -12158,6 +12415,7 @@
             "x": -236.5,
             "y": -553.973
           },
+          "presentationScale": 1,
           "renderOnly": true,
           "sourceRect": {
             "height": 627,
@@ -12202,6 +12460,7 @@
             "x": -276.5,
             "y": -464.974
           },
+          "presentationScale": 1,
           "renderOnly": true,
           "sourceRect": {
             "height": 627,
@@ -12246,6 +12505,7 @@
             "x": -275.5,
             "y": -453.835
           },
+          "presentationScale": 1,
           "renderOnly": true,
           "sourceRect": {
             "height": 627,
@@ -12315,6 +12575,7 @@
                 "x": -125,
                 "y": -289.733
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -12359,6 +12620,7 @@
                 "x": -152,
                 "y": -274.683
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -12403,6 +12665,7 @@
                 "x": -145,
                 "y": -337.369
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -12447,6 +12710,7 @@
                 "x": -145,
                 "y": -315.948
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -12503,6 +12767,7 @@
                 "x": -124,
                 "y": -316
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 941,
@@ -12547,6 +12812,7 @@
                 "x": -143,
                 "y": -262.315
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 941,
@@ -12591,6 +12857,7 @@
                 "x": -127,
                 "y": -393.578
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 941,
@@ -12635,6 +12902,7 @@
                 "x": -145.5,
                 "y": -316.951
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 941,
@@ -12691,6 +12959,7 @@
                 "x": -112,
                 "y": -296
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 941,
@@ -12735,6 +13004,7 @@
                 "x": -143,
                 "y": -267.949
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 941,
@@ -12779,6 +13049,7 @@
                 "x": -127,
                 "y": -285.948
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 941,
@@ -12823,6 +13094,7 @@
                 "x": -144,
                 "y": -295.684
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 941,
@@ -12879,6 +13151,7 @@
                 "x": -114.5,
                 "y": -302.74
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 941,
@@ -12923,6 +13196,7 @@
                 "x": -123.5,
                 "y": -245.418
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 941,
@@ -12967,6 +13241,7 @@
                 "x": -143,
                 "y": -173.271
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 941,
@@ -13011,6 +13286,7 @@
                 "x": -150.5,
                 "y": -228.944
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 941,
@@ -13067,6 +13343,7 @@
                 "x": -121,
                 "y": -306.316
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 941,
@@ -13111,6 +13388,7 @@
                 "x": -143,
                 "y": -263.683
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 941,
@@ -13155,6 +13433,7 @@
                 "x": -143,
                 "y": -247.317
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 941,
@@ -13199,6 +13478,7 @@
                 "x": -169,
                 "y": -287.948
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 941,
@@ -13255,6 +13535,7 @@
                 "x": -111.5,
                 "y": -295.316
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 941,
@@ -13299,6 +13580,7 @@
                 "x": -143,
                 "y": -249.317
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 941,
@@ -13343,6 +13625,7 @@
                 "x": -143,
                 "y": -364.95
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 941,
@@ -13387,6 +13670,7 @@
                 "x": -140.5,
                 "y": -344.947
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 941,
@@ -13443,6 +13727,7 @@
                 "x": -99,
                 "y": -270.947
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 941,
@@ -13487,6 +13772,7 @@
                 "x": -105,
                 "y": -242.787
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 941,
@@ -13531,6 +13817,7 @@
                 "x": -143,
                 "y": -209.733
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 941,
@@ -13575,6 +13862,7 @@
                 "x": -165,
                 "y": -255.684
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 941,
@@ -13631,6 +13919,7 @@
                 "x": -115.5,
                 "y": -307.478
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 941,
@@ -13675,6 +13964,7 @@
                 "x": -143,
                 "y": -295.732
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 941,
@@ -13719,6 +14009,7 @@
                 "x": -123,
                 "y": -307.947
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 941,
@@ -13763,6 +14054,7 @@
                 "x": -115.5,
                 "y": -307.466
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 941,
@@ -13819,6 +14111,7 @@
                 "x": -132.5,
                 "y": -358.368
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 941,
@@ -13863,6 +14156,7 @@
                 "x": -119.5,
                 "y": -357.367
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 941,
@@ -13907,6 +14201,7 @@
                 "x": -138,
                 "y": -350.948
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 941,
@@ -13951,6 +14246,7 @@
                 "x": -131.5,
                 "y": -313.683
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 941,
@@ -14007,6 +14303,7 @@
                 "x": -143.5,
                 "y": -227.052
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 835,
@@ -14051,6 +14348,7 @@
                 "x": -137.5,
                 "y": -218
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 835,
@@ -14095,6 +14393,7 @@
                 "x": -161,
                 "y": -191.951
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 835,
@@ -14139,6 +14438,7 @@
                 "x": -122.5,
                 "y": -223.317
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 835,
@@ -14195,6 +14495,7 @@
                 "x": -134.5,
                 "y": -317.368
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 850,
@@ -14239,6 +14540,7 @@
                 "x": -141.5,
                 "y": -300.633
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 850,
@@ -14283,6 +14585,7 @@
                 "x": -159.5,
                 "y": -303.946
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 850,
@@ -14327,6 +14630,7 @@
                 "x": -138,
                 "y": -314
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 850,
@@ -14383,6 +14687,7 @@
                 "x": -128,
                 "y": -308
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 879,
@@ -14427,6 +14732,7 @@
                 "x": -134,
                 "y": -282.315
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 879,
@@ -14471,6 +14777,7 @@
                 "x": -153,
                 "y": -281.947
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 879,
@@ -14515,6 +14822,7 @@
                 "x": -141,
                 "y": -300.316
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 879,
@@ -14571,6 +14879,7 @@
                 "x": -136,
                 "y": -343.101
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -14615,6 +14924,7 @@
                 "x": -128.5,
                 "y": -350.055
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -14659,6 +14969,7 @@
                 "x": -148,
                 "y": -371.945
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -14703,6 +15014,7 @@
                 "x": -126.5,
                 "y": -334.733
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -14788,6 +15100,7 @@
             "x": -178,
             "y": -247.951
           },
+          "presentationScale": 1,
           "renderOnly": true,
           "sourceRect": {
             "height": 627,
@@ -14832,6 +15145,7 @@
             "x": -203,
             "y": -243.95
           },
+          "presentationScale": 1,
           "renderOnly": true,
           "sourceRect": {
             "height": 627,
@@ -14876,6 +15190,7 @@
             "x": -190,
             "y": -167.314
           },
+          "presentationScale": 1,
           "renderOnly": true,
           "sourceRect": {
             "height": 627,
@@ -14920,6 +15235,7 @@
             "x": -173,
             "y": -382.817
           },
+          "presentationScale": 1,
           "renderOnly": true,
           "sourceRect": {
             "height": 627,
@@ -14964,6 +15280,7 @@
             "x": -171,
             "y": -233.316
           },
+          "presentationScale": 1,
           "renderOnly": true,
           "sourceRect": {
             "height": 627,
@@ -15008,6 +15325,7 @@
             "x": -136.5,
             "y": -310.95
           },
+          "presentationScale": 1,
           "renderOnly": true,
           "sourceRect": {
             "height": 627,
@@ -15052,6 +15370,7 @@
             "x": -152.5,
             "y": -340.367
           },
+          "presentationScale": 1,
           "renderOnly": true,
           "sourceRect": {
             "height": 627,
@@ -15096,6 +15415,7 @@
             "x": -151,
             "y": -362.949
           },
+          "presentationScale": 1,
           "renderOnly": true,
           "sourceRect": {
             "height": 627,
@@ -15140,6 +15460,7 @@
             "x": -207.5,
             "y": -182.202
           },
+          "presentationScale": 1,
           "renderOnly": true,
           "sourceRect": {
             "height": 627,
@@ -15184,6 +15505,7 @@
             "x": -182.5,
             "y": -302.948
           },
+          "presentationScale": 1,
           "renderOnly": true,
           "sourceRect": {
             "height": 627,
@@ -15228,6 +15550,7 @@
             "x": -144,
             "y": -349.946
           },
+          "presentationScale": 1,
           "renderOnly": true,
           "sourceRect": {
             "height": 627,
@@ -15272,6 +15595,7 @@
             "x": -170,
             "y": -264.951
           },
+          "presentationScale": 1,
           "renderOnly": true,
           "sourceRect": {
             "height": 627,
@@ -15316,6 +15640,7 @@
             "x": -158.5,
             "y": -382.25
           },
+          "presentationScale": 1,
           "renderOnly": true,
           "sourceRect": {
             "height": 627,
@@ -15385,6 +15710,7 @@
                 "x": -95,
                 "y": -241
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 941,
@@ -15429,6 +15755,7 @@
                 "x": -118.5,
                 "y": -198.847
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 941,
@@ -15473,6 +15800,7 @@
                 "x": -129.5,
                 "y": -209.617
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 941,
@@ -15517,6 +15845,7 @@
                 "x": -94.5,
                 "y": -223.151
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 941,
@@ -15573,6 +15902,7 @@
                 "x": -97.5,
                 "y": -258
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 941,
@@ -15617,6 +15947,7 @@
                 "x": -116.5,
                 "y": -194.767
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 941,
@@ -15661,6 +15992,7 @@
                 "x": -116.5,
                 "y": -310.767
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 941,
@@ -15705,6 +16037,7 @@
                 "x": -107.5,
                 "y": -258.152
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 941,
@@ -15761,6 +16094,7 @@
                 "x": -104,
                 "y": -264.148
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -15805,6 +16139,7 @@
                 "x": -136.5,
                 "y": -222.235
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -15849,6 +16184,7 @@
                 "x": -115.5,
                 "y": -244.15
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -15893,6 +16229,7 @@
                 "x": -121,
                 "y": -261.152
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -15949,6 +16286,7 @@
                 "x": -94.5,
                 "y": -263.58
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 941,
@@ -15993,6 +16331,7 @@
                 "x": -106.5,
                 "y": -208.051
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 941,
@@ -16037,6 +16376,7 @@
                 "x": -129,
                 "y": -185.155
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 941,
@@ -16081,6 +16421,7 @@
                 "x": -129,
                 "y": -222.261
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 941,
@@ -16137,6 +16478,7 @@
                 "x": -93.5,
                 "y": -252.15
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 948,
@@ -16181,6 +16523,7 @@
                 "x": -119,
                 "y": -227.692
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 948,
@@ -16225,6 +16568,7 @@
                 "x": -118,
                 "y": -306
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 948,
@@ -16269,6 +16613,7 @@
                 "x": -123.5,
                 "y": -219.617
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 948,
@@ -16325,6 +16670,7 @@
                 "x": -106.5,
                 "y": -290.148
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 819,
@@ -16369,6 +16715,7 @@
                 "x": -117,
                 "y": -243.702
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 819,
@@ -16413,6 +16760,7 @@
                 "x": -144.5,
                 "y": -240.313
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 819,
@@ -16457,6 +16805,7 @@
                 "x": -139.5,
                 "y": -238.231
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 819,
@@ -16513,6 +16862,7 @@
                 "x": -94.5,
                 "y": -245
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -16557,6 +16907,7 @@
                 "x": -107,
                 "y": -217.547
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -16601,6 +16952,7 @@
                 "x": -137,
                 "y": -217
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -16645,6 +16997,7 @@
                 "x": -127,
                 "y": -225.154
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -16701,6 +17054,7 @@
                 "x": -104,
                 "y": -264.466
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -16745,6 +17099,7 @@
                 "x": -136.5,
                 "y": -253.467
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -16789,6 +17144,7 @@
                 "x": -119.5,
                 "y": -306.148
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -16833,6 +17189,7 @@
                 "x": -100,
                 "y": -264.466
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -16889,6 +17246,7 @@
                 "x": -121,
                 "y": -294.383
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -16933,6 +17291,7 @@
                 "x": -115.5,
                 "y": -290
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -16977,6 +17336,7 @@
                 "x": -132.5,
                 "y": -362
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -17021,6 +17381,7 @@
                 "x": -127.5,
                 "y": -336.153
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -17077,6 +17438,7 @@
                 "x": -109,
                 "y": -247.151
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -17121,6 +17483,7 @@
                 "x": -112.5,
                 "y": -197.383
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -17165,6 +17528,7 @@
                 "x": -137,
                 "y": -195
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -17209,6 +17573,7 @@
                 "x": -123.5,
                 "y": -213.768
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -17265,6 +17630,7 @@
                 "x": -110.5,
                 "y": -263.151
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -17309,6 +17675,7 @@
                 "x": -136.5,
                 "y": -256.766
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -17353,6 +17720,7 @@
                 "x": -137,
                 "y": -259.382
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -17397,6 +17765,7 @@
                 "x": -133,
                 "y": -258.152
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -17453,6 +17822,7 @@
                 "x": -112.5,
                 "y": -283.149
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -17497,6 +17867,7 @@
                 "x": -123,
                 "y": -240.617
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -17541,6 +17912,7 @@
                 "x": -137,
                 "y": -245.848
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -17585,6 +17957,7 @@
                 "x": -112.5,
                 "y": -282
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -17641,6 +18014,7 @@
                 "x": -111,
                 "y": -280.153
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -17685,6 +18059,7 @@
                 "x": -115.5,
                 "y": -279.147
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -17729,6 +18104,7 @@
                 "x": -132.5,
                 "y": -293.768
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -17773,6 +18149,7 @@
                 "x": -108,
                 "y": -276.767
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -17858,6 +18235,7 @@
             "x": -132.5,
             "y": -214.154
           },
+          "presentationScale": 1,
           "renderOnly": true,
           "sourceRect": {
             "height": 627,
@@ -17902,6 +18280,7 @@
             "x": -155,
             "y": -219.148
           },
+          "presentationScale": 1,
           "renderOnly": true,
           "sourceRect": {
             "height": 627,
@@ -17946,6 +18325,7 @@
             "x": -174,
             "y": -132.271
           },
+          "presentationScale": 1,
           "renderOnly": true,
           "sourceRect": {
             "height": 627,
@@ -17990,6 +18370,7 @@
             "x": -154.5,
             "y": -359.472
           },
+          "presentationScale": 1,
           "renderOnly": true,
           "sourceRect": {
             "height": 627,
@@ -18034,6 +18415,7 @@
             "x": -156.5,
             "y": -224.148
           },
+          "presentationScale": 1,
           "renderOnly": true,
           "sourceRect": {
             "height": 627,
@@ -18078,6 +18460,7 @@
             "x": -107.5,
             "y": -242.152
           },
+          "presentationScale": 1,
           "renderOnly": true,
           "sourceRect": {
             "height": 627,
@@ -18122,6 +18505,7 @@
             "x": -133.5,
             "y": -341.234
           },
+          "presentationScale": 1,
           "renderOnly": true,
           "sourceRect": {
             "height": 627,
@@ -18166,6 +18550,7 @@
             "x": -131.5,
             "y": -346.149
           },
+          "presentationScale": 1,
           "renderOnly": true,
           "sourceRect": {
             "height": 627,
@@ -18210,6 +18595,7 @@
             "x": -176.5,
             "y": -163.899
           },
+          "presentationScale": 1,
           "renderOnly": true,
           "sourceRect": {
             "height": 627,
@@ -18254,6 +18640,7 @@
             "x": -151.5,
             "y": -261.152
           },
+          "presentationScale": 1,
           "renderOnly": true,
           "sourceRect": {
             "height": 627,
@@ -18298,6 +18685,7 @@
             "x": -123.5,
             "y": -292.151
           },
+          "presentationScale": 1,
           "renderOnly": true,
           "sourceRect": {
             "height": 627,
@@ -18342,6 +18730,7 @@
             "x": -132.5,
             "y": -279.441
           },
+          "presentationScale": 1,
           "renderOnly": true,
           "sourceRect": {
             "height": 627,
@@ -18386,6 +18775,7 @@
             "x": -117.5,
             "y": -363.067
           },
+          "presentationScale": 1,
           "renderOnly": true,
           "sourceRect": {
             "height": 627,
@@ -18455,6 +18845,7 @@
                 "x": -116,
                 "y": -285.317
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 793,
@@ -18499,6 +18890,7 @@
                 "x": -169.5,
                 "y": -275.319
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 793,
@@ -18543,6 +18935,7 @@
                 "x": -163,
                 "y": -263.954
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 793,
@@ -18587,6 +18980,7 @@
                 "x": -173.5,
                 "y": -262.317
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 793,
@@ -18643,6 +19037,7 @@
                 "x": -101.5,
                 "y": -267.949
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -18687,6 +19082,7 @@
                 "x": -121.5,
                 "y": -203.735
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -18731,6 +19127,7 @@
                 "x": -151.5,
                 "y": -143.053
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -18775,6 +19172,7 @@
                 "x": -122.5,
                 "y": -169.045
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -18831,6 +19229,7 @@
                 "x": -96.5,
                 "y": -259.413
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -18875,6 +19274,7 @@
                 "x": -131,
                 "y": -208.45
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -18919,6 +19319,7 @@
                 "x": -121,
                 "y": -352.142
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -18963,6 +19364,7 @@
                 "x": -129.5,
                 "y": -219.951
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -19019,6 +19421,7 @@
                 "x": -103.5,
                 "y": -254.955
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -19063,6 +19466,7 @@
                 "x": -140.5,
                 "y": -230.956
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -19107,6 +19511,7 @@
                 "x": -151.5,
                 "y": -233.948
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -19151,6 +19556,7 @@
                 "x": -132,
                 "y": -220.948
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -19207,6 +19613,7 @@
                 "x": -104,
                 "y": -262
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 928,
@@ -19251,6 +19658,7 @@
                 "x": -137.5,
                 "y": -236.366
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 928,
@@ -19295,6 +19703,7 @@
                 "x": -145,
                 "y": -336.95
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 928,
@@ -19339,6 +19748,7 @@
                 "x": -135.5,
                 "y": -322.317
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 928,
@@ -19395,6 +19805,7 @@
                 "x": -109.5,
                 "y": -261.948
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -19439,6 +19850,7 @@
                 "x": -131,
                 "y": -185.368
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -19483,6 +19895,7 @@
                 "x": -151.5,
                 "y": -162.955
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -19527,6 +19940,7 @@
                 "x": -142,
                 "y": -205.634
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -19583,6 +19997,7 @@
                 "x": -108.5,
                 "y": -269.731
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -19627,6 +20042,7 @@
                 "x": -131,
                 "y": -206.451
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -19671,6 +20087,7 @@
                 "x": -151.5,
                 "y": -241.95
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -19715,6 +20132,7 @@
                 "x": -135,
                 "y": -190.815
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -19771,6 +20189,7 @@
                 "x": -110.5,
                 "y": -289.953
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 907,
@@ -19815,6 +20234,7 @@
                 "x": -148.5,
                 "y": -278.954
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 907,
@@ -19859,6 +20279,7 @@
                 "x": -133,
                 "y": -286.955
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 907,
@@ -19903,6 +20324,7 @@
                 "x": -113,
                 "y": -280.949
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 907,
@@ -19959,6 +20381,7 @@
                 "x": -130.5,
                 "y": -400.683
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 793,
@@ -20003,6 +20426,7 @@
                 "x": -126.5,
                 "y": -321.732
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 793,
@@ -20047,6 +20471,7 @@
                 "x": -164.5,
                 "y": -367.683
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 793,
@@ -20091,6 +20516,7 @@
                 "x": -123,
                 "y": -305.951
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 793,
@@ -20147,6 +20573,7 @@
                 "x": -112,
                 "y": -267.955
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -20191,6 +20618,7 @@
                 "x": -119,
                 "y": -207.634
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -20235,6 +20663,7 @@
                 "x": -151.5,
                 "y": -211.955
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -20279,6 +20708,7 @@
                 "x": -112,
                 "y": -225.952
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -20335,6 +20765,7 @@
                 "x": -116,
                 "y": -273.956
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 793,
@@ -20379,6 +20810,7 @@
                 "x": -146,
                 "y": -257
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 793,
@@ -20423,6 +20855,7 @@
                 "x": -169,
                 "y": -265.318
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 793,
@@ -20467,6 +20900,7 @@
                 "x": -163,
                 "y": -257.633
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 793,
@@ -20523,6 +20957,7 @@
                 "x": -115,
                 "y": -289.634
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -20567,6 +21002,7 @@
                 "x": -110,
                 "y": -256.95
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -20611,6 +21047,7 @@
                 "x": -151.5,
                 "y": -238.636
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -20655,6 +21092,7 @@
                 "x": -114,
                 "y": -285.633
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -20711,6 +21149,7 @@
                 "x": -123.5,
                 "y": -280
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -20755,6 +21194,7 @@
                 "x": -124.5,
                 "y": -324.633
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -20799,6 +21239,7 @@
                 "x": -135.5,
                 "y": -332.953
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -20843,6 +21284,7 @@
                 "x": -120,
                 "y": -273.318
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -20928,6 +21370,7 @@
             "x": -151,
             "y": -230.956
           },
+          "presentationScale": 1,
           "renderOnly": true,
           "sourceRect": {
             "height": 627,
@@ -20972,6 +21415,7 @@
             "x": -168.5,
             "y": -218.954
           },
+          "presentationScale": 1,
           "renderOnly": true,
           "sourceRect": {
             "height": 627,
@@ -21016,6 +21460,7 @@
             "x": -204.5,
             "y": -133.95
           },
+          "presentationScale": 1,
           "renderOnly": true,
           "sourceRect": {
             "height": 627,
@@ -21060,6 +21505,7 @@
             "x": -143.5,
             "y": -389.212
           },
+          "presentationScale": 1,
           "renderOnly": true,
           "sourceRect": {
             "height": 627,
@@ -21104,6 +21550,7 @@
             "x": -182,
             "y": -256.683
           },
+          "presentationScale": 1,
           "renderOnly": true,
           "sourceRect": {
             "height": 627,
@@ -21148,6 +21595,7 @@
             "x": -133,
             "y": -278.949
           },
+          "presentationScale": 1,
           "renderOnly": true,
           "sourceRect": {
             "height": 627,
@@ -21192,6 +21640,7 @@
             "x": -133,
             "y": -355.78
           },
+          "presentationScale": 1,
           "renderOnly": true,
           "sourceRect": {
             "height": 627,
@@ -21236,6 +21685,7 @@
             "x": -133,
             "y": -355.954
           },
+          "presentationScale": 1,
           "renderOnly": true,
           "sourceRect": {
             "height": 627,
@@ -21280,6 +21730,7 @@
             "x": -190.5,
             "y": -171.136
           },
+          "presentationScale": 1,
           "renderOnly": true,
           "sourceRect": {
             "height": 627,
@@ -21324,6 +21775,7 @@
             "x": -159.5,
             "y": -289.948
           },
+          "presentationScale": 1,
           "renderOnly": true,
           "sourceRect": {
             "height": 627,
@@ -21368,6 +21820,7 @@
             "x": -127.5,
             "y": -336.954
           },
+          "presentationScale": 1,
           "renderOnly": true,
           "sourceRect": {
             "height": 627,
@@ -21412,6 +21865,7 @@
             "x": -150.5,
             "y": -249.507
           },
+          "presentationScale": 1,
           "renderOnly": true,
           "sourceRect": {
             "height": 627,
@@ -21456,6 +21910,7 @@
             "x": -127.5,
             "y": -401.781
           },
+          "presentationScale": 1,
           "renderOnly": true,
           "sourceRect": {
             "height": 627,
@@ -21525,6 +21980,7 @@
                 "x": -139.5,
                 "y": -326.792
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -21569,6 +22025,7 @@
                 "x": -163,
                 "y": -312.474
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -21613,6 +22070,7 @@
                 "x": -125,
                 "y": -316.795
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -21657,6 +22115,7 @@
                 "x": -117,
                 "y": -334.264
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -21713,6 +22172,7 @@
                 "x": -145.5,
                 "y": -333.883
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 941,
@@ -21757,6 +22217,7 @@
                 "x": -154.5,
                 "y": -326.35
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 941,
@@ -21801,6 +22262,7 @@
                 "x": -163.5,
                 "y": -333.942
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 941,
@@ -21845,6 +22307,7 @@
                 "x": -160.5,
                 "y": -350.794
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 941,
@@ -21901,6 +22364,7 @@
                 "x": -135.5,
                 "y": -306.264
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 1024,
@@ -21945,6 +22409,7 @@
                 "x": -128,
                 "y": -272.737
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 1024,
@@ -21989,6 +22454,7 @@
                 "x": -141.5,
                 "y": -257.413
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 1024,
@@ -22033,6 +22499,7 @@
                 "x": -137.5,
                 "y": -290.791
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 1024,
@@ -22089,6 +22556,7 @@
                 "x": -131,
                 "y": -293.947
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 1024,
@@ -22133,6 +22601,7 @@
                 "x": -138,
                 "y": -257.426
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 1024,
@@ -22177,6 +22646,7 @@
                 "x": -136,
                 "y": -205.787
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 1024,
@@ -22221,6 +22691,7 @@
                 "x": -129.5,
                 "y": -276.946
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 1024,
@@ -22277,6 +22748,7 @@
                 "x": -133.5,
                 "y": -306.793
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -22321,6 +22793,7 @@
                 "x": -130,
                 "y": -286.632
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -22365,6 +22838,7 @@
                 "x": -163.5,
                 "y": -254.412
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -22409,6 +22883,7 @@
                 "x": -176.5,
                 "y": -292.793
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -22465,6 +22940,7 @@
                 "x": -134.5,
                 "y": -306.53
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 941,
@@ -22509,6 +22985,7 @@
                 "x": -122,
                 "y": -336.794
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 941,
@@ -22553,6 +23030,7 @@
                 "x": -124,
                 "y": -277.941
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 941,
@@ -22597,6 +23075,7 @@
                 "x": -161.5,
                 "y": -307.529
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 941,
@@ -22653,6 +23132,7 @@
                 "x": -132.5,
                 "y": -330.788
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 941,
@@ -22697,6 +23177,7 @@
                 "x": -145.5,
                 "y": -344.823
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 941,
@@ -22741,6 +23222,7 @@
                 "x": -154,
                 "y": -294.789
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 941,
@@ -22785,6 +23267,7 @@
                 "x": -152.5,
                 "y": -328.795
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 941,
@@ -22841,6 +23324,7 @@
                 "x": -130.5,
                 "y": -345.793
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -22885,6 +23369,7 @@
                 "x": -163,
                 "y": -342.793
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -22929,6 +23414,7 @@
                 "x": -137.5,
                 "y": -353.789
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -22973,6 +23459,7 @@
                 "x": -118.5,
                 "y": -346.263
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -23029,6 +23516,7 @@
                 "x": -137.5,
                 "y": -428.264
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -23073,6 +23561,7 @@
                 "x": -123.5,
                 "y": -414.794
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -23117,6 +23606,7 @@
                 "x": -163.5,
                 "y": -423.793
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -23161,6 +23651,7 @@
                 "x": -152.5,
                 "y": -421.264
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -23217,6 +23708,7 @@
                 "x": -134,
                 "y": -279.156
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 941,
@@ -23261,6 +23753,7 @@
                 "x": -152,
                 "y": -228.264
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 941,
@@ -23305,6 +23798,7 @@
                 "x": -153,
                 "y": -214.793
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 941,
@@ -23349,6 +23843,7 @@
                 "x": -112.5,
                 "y": -209.263
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 941,
@@ -23405,6 +23900,7 @@
                 "x": -132.5,
                 "y": -303.264
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 941,
@@ -23449,6 +23945,7 @@
                 "x": -133,
                 "y": -289
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 941,
@@ -23493,6 +23990,7 @@
                 "x": -154.5,
                 "y": -293.265
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 941,
@@ -23537,6 +24035,7 @@
                 "x": -169,
                 "y": -303.788
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 941,
@@ -23593,6 +24092,7 @@
                 "x": -148,
                 "y": -376.792
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 941,
@@ -23637,6 +24137,7 @@
                 "x": -124,
                 "y": -361.789
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 941,
@@ -23681,6 +24182,7 @@
                 "x": -133,
                 "y": -353.789
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 941,
@@ -23725,6 +24227,7 @@
                 "x": -141,
                 "y": -364.789
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 941,
@@ -23781,6 +24284,7 @@
                 "x": -132,
                 "y": -386.794
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 941,
@@ -23825,6 +24329,7 @@
                 "x": -142.5,
                 "y": -394.79
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 941,
@@ -23869,6 +24374,7 @@
                 "x": -146,
                 "y": -392.789
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 941,
@@ -23913,6 +24419,7 @@
                 "x": -131,
                 "y": -375.794
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 941,
@@ -23998,6 +24505,7 @@
             "x": -182.5,
             "y": -258.788
           },
+          "presentationScale": 1,
           "renderOnly": true,
           "sourceRect": {
             "height": 627,
@@ -24042,6 +24550,7 @@
             "x": -200,
             "y": -258.788
           },
+          "presentationScale": 1,
           "renderOnly": true,
           "sourceRect": {
             "height": 627,
@@ -24086,6 +24595,7 @@
             "x": -219,
             "y": -163.68
           },
+          "presentationScale": 1,
           "renderOnly": true,
           "sourceRect": {
             "height": 627,
@@ -24130,6 +24640,7 @@
             "x": -165,
             "y": -402.366
           },
+          "presentationScale": 1,
           "renderOnly": true,
           "sourceRect": {
             "height": 627,
@@ -24174,6 +24685,7 @@
             "x": -196,
             "y": -259.53
           },
+          "presentationScale": 1,
           "renderOnly": true,
           "sourceRect": {
             "height": 627,
@@ -24218,6 +24730,7 @@
             "x": -172,
             "y": -309.792
           },
+          "presentationScale": 1,
           "renderOnly": true,
           "sourceRect": {
             "height": 627,
@@ -24262,6 +24775,7 @@
             "x": -143,
             "y": -363.265
           },
+          "presentationScale": 1,
           "renderOnly": true,
           "sourceRect": {
             "height": 627,
@@ -24306,6 +24820,7 @@
             "x": -154,
             "y": -369.794
           },
+          "presentationScale": 1,
           "renderOnly": true,
           "sourceRect": {
             "height": 627,
@@ -24350,6 +24865,7 @@
             "x": -225.5,
             "y": -166.659
           },
+          "presentationScale": 1,
           "renderOnly": true,
           "sourceRect": {
             "height": 627,
@@ -24394,6 +24910,7 @@
             "x": -193.5,
             "y": -287.792
           },
+          "presentationScale": 1,
           "renderOnly": true,
           "sourceRect": {
             "height": 627,
@@ -24438,6 +24955,7 @@
             "x": -150.5,
             "y": -336.794
           },
+          "presentationScale": 1,
           "renderOnly": true,
           "sourceRect": {
             "height": 627,
@@ -24482,6 +25000,7 @@
             "x": -159,
             "y": -274.79
           },
+          "presentationScale": 1,
           "renderOnly": true,
           "sourceRect": {
             "height": 627,
@@ -24526,6 +25045,7 @@
             "x": -139,
             "y": -403.801
           },
+          "presentationScale": 1,
           "renderOnly": true,
           "sourceRect": {
             "height": 627,
@@ -24595,6 +25115,7 @@
                 "x": -102.5,
                 "y": -284.673
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 1024,
@@ -24639,6 +25160,7 @@
                 "x": -127.5,
                 "y": -262.01
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 1024,
@@ -24683,6 +25205,7 @@
                 "x": -127.5,
                 "y": -250.011
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 1024,
@@ -24727,6 +25250,7 @@
                 "x": -109,
                 "y": -276.01
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 1024,
@@ -24783,6 +25307,7 @@
                 "x": -101.5,
                 "y": -323.565
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 1024,
@@ -24827,6 +25352,7 @@
                 "x": -127.5,
                 "y": -313.919
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 1024,
@@ -24871,6 +25397,7 @@
                 "x": -127.5,
                 "y": -226.686
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 1024,
@@ -24915,6 +25442,7 @@
                 "x": -110,
                 "y": -319.868
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 1024,
@@ -24971,6 +25499,7 @@
                 "x": -102.5,
                 "y": -292.009
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 1024,
@@ -25015,6 +25544,7 @@
                 "x": -125.5,
                 "y": -271.012
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 1024,
@@ -25059,6 +25589,7 @@
                 "x": -127.5,
                 "y": -307.011
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 1024,
@@ -25103,6 +25634,7 @@
                 "x": -106,
                 "y": -323.014
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 1024,
@@ -25159,6 +25691,7 @@
                 "x": -98.5,
                 "y": -286.314
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 941,
@@ -25203,6 +25736,7 @@
                 "x": -138.5,
                 "y": -275
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 941,
@@ -25247,6 +25781,7 @@
                 "x": -114,
                 "y": -277.012
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 941,
@@ -25291,6 +25826,7 @@
                 "x": -99,
                 "y": -286.654
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 941,
@@ -25347,6 +25883,7 @@
                 "x": -104.5,
                 "y": -295.674
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 1024,
@@ -25391,6 +25928,7 @@
                 "x": -125.5,
                 "y": -265.327
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 1024,
@@ -25435,6 +25973,7 @@
                 "x": -122.5,
                 "y": -345.013
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 1024,
@@ -25479,6 +26018,7 @@
                 "x": -124,
                 "y": -363.013
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 1024,
@@ -25535,6 +26075,7 @@
                 "x": -101.5,
                 "y": -304.619
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 1024,
@@ -25579,6 +26120,7 @@
                 "x": -119,
                 "y": -253.608
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 1024,
@@ -25623,6 +26165,7 @@
                 "x": -127.5,
                 "y": -221.349
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 1024,
@@ -25667,6 +26210,7 @@
                 "x": -116,
                 "y": -304.326
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 1024,
@@ -25723,6 +26267,7 @@
                 "x": -99,
                 "y": -309
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 1024,
@@ -25767,6 +26312,7 @@
                 "x": -118,
                 "y": -272.01
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 1024,
@@ -25811,6 +26357,7 @@
                 "x": -127.5,
                 "y": -275.012
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 1024,
@@ -25855,6 +26402,7 @@
                 "x": -100,
                 "y": -309.338
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 1024,
@@ -25911,6 +26459,7 @@
                 "x": -130,
                 "y": -332.675
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 724,
@@ -25955,6 +26504,7 @@
                 "x": -180.5,
                 "y": -313.011
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 724,
@@ -25999,6 +26549,7 @@
                 "x": -127.5,
                 "y": -347.673
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 724,
@@ -26043,6 +26594,7 @@
                 "x": -126.5,
                 "y": -328.675
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 724,
@@ -26099,6 +26651,7 @@
                 "x": -140,
                 "y": -339.014
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 724,
@@ -26143,6 +26696,7 @@
                 "x": -131.5,
                 "y": -281.012
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 724,
@@ -26187,6 +26741,7 @@
                 "x": -177,
                 "y": -388.014
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 724,
@@ -26231,6 +26786,7 @@
                 "x": -127.5,
                 "y": -373.012
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 724,
@@ -26287,6 +26843,7 @@
                 "x": -120.5,
                 "y": -245.656
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 793,
@@ -26331,6 +26888,7 @@
                 "x": -143,
                 "y": -199
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 793,
@@ -26375,6 +26933,7 @@
                 "x": -164,
                 "y": -146.009
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 793,
@@ -26419,6 +26978,7 @@
                 "x": -144.5,
                 "y": -196
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 793,
@@ -26475,6 +27035,7 @@
                 "x": -118.5,
                 "y": -289.011
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 841,
@@ -26519,6 +27080,7 @@
                 "x": -144,
                 "y": -272.014
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 841,
@@ -26563,6 +27125,7 @@
                 "x": -155,
                 "y": -273.675
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 841,
@@ -26607,6 +27170,7 @@
                 "x": -136.5,
                 "y": -276.673
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 841,
@@ -26663,6 +27227,7 @@
                 "x": -118.5,
                 "y": -301.011
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -26707,6 +27272,7 @@
                 "x": -117,
                 "y": -273.012
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -26751,6 +27317,7 @@
                 "x": -139.5,
                 "y": -225
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -26795,6 +27362,7 @@
                 "x": -117.5,
                 "y": -285.674
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -26851,6 +27419,7 @@
                 "x": -134.5,
                 "y": -341.662
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -26895,6 +27464,7 @@
                 "x": -132,
                 "y": -344.663
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -26939,6 +27509,7 @@
                 "x": -143,
                 "y": -353.673
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -26983,6 +27554,7 @@
                 "x": -131.5,
                 "y": -331.01
               },
+              "presentationScale": 1,
               "renderOnly": true,
               "sourceRect": {
                 "height": 887,
@@ -27068,6 +27640,7 @@
             "x": -150.5,
             "y": -200.013
           },
+          "presentationScale": 1,
           "renderOnly": true,
           "sourceRect": {
             "height": 627,
@@ -27112,6 +27685,7 @@
             "x": -183,
             "y": -182.007
           },
+          "presentationScale": 1,
           "renderOnly": true,
           "sourceRect": {
             "height": 627,
@@ -27156,6 +27730,7 @@
             "x": -204.5,
             "y": -141.014
           },
+          "presentationScale": 1,
           "renderOnly": true,
           "sourceRect": {
             "height": 627,
@@ -27200,6 +27775,7 @@
             "x": -146,
             "y": -349.779
           },
+          "presentationScale": 1,
           "renderOnly": true,
           "sourceRect": {
             "height": 627,
@@ -27244,6 +27820,7 @@
             "x": -184.5,
             "y": -252.653
           },
+          "presentationScale": 1,
           "renderOnly": true,
           "sourceRect": {
             "height": 627,
@@ -27288,6 +27865,7 @@
             "x": -113.5,
             "y": -264.015
           },
+          "presentationScale": 1,
           "renderOnly": true,
           "sourceRect": {
             "height": 627,
@@ -27332,6 +27910,7 @@
             "x": -137,
             "y": -327.01
           },
+          "presentationScale": 1,
           "renderOnly": true,
           "sourceRect": {
             "height": 627,
@@ -27376,6 +27955,7 @@
             "x": -138,
             "y": -346.674
           },
+          "presentationScale": 1,
           "renderOnly": true,
           "sourceRect": {
             "height": 627,
@@ -27420,6 +28000,7 @@
             "x": -207,
             "y": -179.446
           },
+          "presentationScale": 1,
           "renderOnly": true,
           "sourceRect": {
             "height": 627,
@@ -27464,6 +28045,7 @@
             "x": -168.5,
             "y": -267.012
           },
+          "presentationScale": 1,
           "renderOnly": true,
           "sourceRect": {
             "height": 627,
@@ -27508,6 +28090,7 @@
             "x": -147,
             "y": -309.011
           },
+          "presentationScale": 1,
           "renderOnly": true,
           "sourceRect": {
             "height": 627,
@@ -27552,6 +28135,7 @@
             "x": -163.5,
             "y": -286.29
           },
+          "presentationScale": 1,
           "renderOnly": true,
           "sourceRect": {
             "height": 627,
@@ -27596,6 +28180,7 @@
             "x": -111.5,
             "y": -376.032
           },
+          "presentationScale": 1,
           "renderOnly": true,
           "sourceRect": {
             "height": 627,
@@ -27644,7 +28229,7 @@
     "darkMasterGeometryAgreement": 0.962175,
     "darkPaletteBinCount": 1118,
     "runtimePixelsPerDisplayPixel": 2,
-    "verifiedSourceCount": 193
+    "verifiedSourceCount": 194
   },
   "policies": {
     "alphaIsAuthoritative": true,
@@ -27653,7 +28238,7 @@
     "frameTimingAuthority": "BAL phase/pf",
     "legacyWhitenAssetAllowed": false,
     "p2Transform": "build-time deterministic",
-    "poseScaleCorrectionAllowed": false
+    "poseScaleCorrectionAllowed": true
   },
   "runtimeToSourceId": {
     "bullet": "bullet",

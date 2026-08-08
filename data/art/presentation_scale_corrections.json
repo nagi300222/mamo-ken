@@ -1,0 +1,12 @@
+{
+  "version": "vnext-size-normalization-final-2026-08-09",
+  "note": "vNext SIZE_NORMALIZATION_FINAL per-frame presentation-only face-scale corrections. Applied on top of the existing per-character uniform resizeScale in tools/build_current_art.mjs; never touches BAL/hitbox/hurtbox/timing. Missing entries default to 1.0 (KEEP / no correction).\n\nEvidence basis: every pose/action/command frame shipped on main (2b288aca, PR#73) was already exhaustively reviewed frame-by-frame by direct visual inspection in a prior full art audit -- see docs/art/audit/FINAL_per_frame_detail.csv (548/548 rows judged OK, visualJudgement column) and docs/art/audit/AUDIT_INPUT_NOTES.md. Two independent automated single-template face-matching attempts (whole-face, then a tighter eye/ear/brow patch) were both validated against that manual data and rejected: both disagreed with careful manual measurement by as much as 3-4.5x even at >0.9 match confidence, confirming SIZE_NORMALIZATION_FINAL's explicit prohibition on using automated face judgment as decision basis for this art style. No non-obvious per-frame corrections are asserted here as a result -- only the one clear, directly-measured case created by this PR itself (Godan's flinch art replacement) needed one.",
+  "characters": {
+    "godan": {
+      "_flinchNote": "vNext PR1 Godan flinch replacement (assets/art/overrides/godan/flinch) is a standalone full-canvas image drawn at a materially larger apparent character-scale than the sheet-cut common_basic poses -- idle/guard/victory bodyBounds.height are 349-483px post-resize, the new flinch was rendering at 1147px (~3x) before this correction. Measured via two independent landmark spans on the built (post-resizeScale, pre-presentationScale) idle.png vs flinch.png: face-box width ratio 180/365=0.493, ear-to-nose-tip span ratio 163/315=0.517. 0.5 matches both within their own measurement noise and brings flinch's bodyBounds.height to ~574px, consistent with a standing/recoiling brace pose (wider stance than idle, comparable to guard's 483px).",
+      "poses": {
+        "flinch": 0.5
+      }
+    }
+  }
+}
