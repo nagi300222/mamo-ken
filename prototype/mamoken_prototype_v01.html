@@ -912,6 +912,9 @@ function onlineInterruptedPress(p){
 const game={screen:'title',p1:0,p2:0,frame:0};
 if(new URLSearchParams(location.search).get('debug')==='sprites')game.screen='spriteCheck'; // P1 (7): 9キャラ×24ポーズの表示確認用デバッグ画面(?debug=sprites)
 const DEBUG_BAL=new URLSearchParams(location.search).get('debug')==='bal'; // BAL-R1: 戦闘中に開発用の数値パネルを重ねて表示する(?debug=bal)。通常プレイUIには常設しない
+const DEBUG_NET=new URLSearchParams(location.search).get('debug')==='net'; // 調査用一時ログ(?debug=net): ギュイーン勝敗判定の公平性調査(実機2台での再現用)。
+  // オンライン中のみ、ギュイーン開始/終了時にslot・tick・入力集計値・勝者・簡易state hashをconsoleへ出す。
+  // 通常プレイでは無効。戦闘ロジック自体には一切影響しない(console.logのみ)
 if(DEBUG_BAL){ // BGM-R1.2 (4): BGM/SE音量スライダー(通常プレイでは非表示。canvas上のHTMLオーバーレイなので描画コード側の変更は不要)
   const panel=document.getElementById('debugAudioPanel');
   panel.style.display='block';
@@ -1651,6 +1654,7 @@ function startClash(kind){
   B.clash={phase:'in',f:0,mg:pickMinigame(),pick:[null,null],cpuAt:25+((rng()*45)|0), // cpuAtはオフライン時のみ使用
     kind:kind,winner:-2,
     rendaP:0,rendaC:0,p0hits:0,p1hits:0,p0target:null,p1target:null,cpuNextAt:0};
+  if(DEBUG_NET&&onlineActive())console.log('[gyuiin]', {event:'start', slot:online.slot, mg:B.clash.mg, kind:kind, startTick:B.f, delayF:NET.delayF, simF:NET.simF});
   B.hitstop=0;
   sfx('guiin');
   announce(kind==='mikiri'?'見切った!!':(kind==='grab'?'つかみ合い!!':'競り合い!!'),46,44,'#ffe14d');
@@ -1758,6 +1762,12 @@ function stepHayauchi(c,cmds0,cmds1){ // 的あて連続タップ。オンライ
   }
 }
 function applyClashResult(c){ // 3ミニゲーム共通のリワード適用(旧resolveClashの後半を流用)
+  if(DEBUG_NET&&onlineActive()){
+    const inputVals=c.mg==='renda'?{rendaP:c.rendaP,rendaC:c.rendaC}:(c.mg==='hayauchi'?{p0hits:c.p0hits,p1hits:c.p1hits}:{pick:c.pick});
+    const stHash=[B.f,Math.round(B.p[0].hp),Math.round(B.p[1].hp),B.clashStreak[0],B.clashStreak[1]].join(',');
+    console.log('[gyuiin]', {event:'end', slot:online.slot, mg:c.mg, endTick:B.f, clashInternalF:c.f,
+      inputVals:inputVals, canonicalWinner:c.winner, stateHash:stHash});
+  }
   if(c.winner===-1){
     announce('あいこ! しきりなおし',44,34,'#dddddd');
     for(const f of B.p)f.kb=14;
