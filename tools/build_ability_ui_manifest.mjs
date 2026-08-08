@@ -34,9 +34,10 @@ function collectPaths(node, root, found) {
 
 export function buildAbilityUiManifest() {
   const manifest = JSON.parse(readFileSync(MANIFEST_PATH, 'utf8'));
+  const absRoot = path.resolve(ROOT, manifest.root);
   const found = new Set();
-  collectPaths(manifest.characters, manifest.root, found);
-  collectPaths(manifest.common, manifest.root, found);
+  collectPaths(manifest.characters, absRoot, found);
+  collectPaths(manifest.common, absRoot, found);
   if (found.size === 0) throw new Error('ability_ui_manifest.json resolved zero asset paths');
   for (const absPath of found) {
     if (!existsSync(absPath)) throw new Error(`missing ability UI asset: ${path.relative(ROOT, absPath)}`);
