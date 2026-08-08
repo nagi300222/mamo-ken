@@ -24,6 +24,8 @@ color:#9be8ff;font:11px sans-serif;padding:6px 8px;border-radius:6px;pointer-eve
 </div>
 <script src="../runtime/character-catalog-browser.js"></script>
 <script src="../runtime/runtime-extended-command-shadow-browser.js"></script>
+<script src="../runtime/current-art-manifest-browser.js"></script>
+<script src="../runtime/current-art-runtime-browser.js"></script>
 <script src="../runtime/bgm-b64.js"></script>
 <script>
 "use strict";
@@ -277,8 +279,13 @@ const ROSTER=[
 const PORTRAIT_NOSE_Y_RATIO={moguzo:0.159,pisuke:0.111,godan:0.105,hakuma:0.144,chirka:0.203,takimaru:0.142,yomikage:0.17,bullet:0.101,dark_moguzo:0.159};
 const PORTRAIT_NOSE_X_RATIO={moguzo:0.619,pisuke:0.476,godan:0.52,hakuma:0.395,chirka:0.365,takimaru:0.504,yomikage:0.55,bullet:0.68,dark_moguzo:0.619};
 const OFFICIAL_CHARACTER_COUNT=3;
+const CURRENT_ART_MANIFEST=globalThis.MAMOKEN_CURRENT_ART_MANIFEST||null;
+const CURRENT_ART_RUNTIME=globalThis.MAMOKEN_CURRENT_ART_RUNTIME||null;
 function skeletonIdOf(c){return(c&&c.skeletonId)||c.id;}
-function spriteHeightForChar(c){return BAL.SPRITE_H[skeletonIdOf(c)];}
+function spriteHeightForChar(c){
+  const id=skeletonIdOf(c);
+  return CURRENT_ART_RUNTIME&&CURRENT_ART_MANIFEST?CURRENT_ART_RUNTIME.displayHeight(CURRENT_ART_MANIFEST,id,172):BAL.SPRITE_H[id];
+}
 function portraitRatioForChar(c){return BAL.PORTRAIT_RATIO[skeletonIdOf(c)];}
 function commandMovesFor(c){return BAL.CMD.moves[c.id]||[];}
 function r1Char(c){return BAL_R1_CHARS[skeletonIdOf(c)];} // BAL-R1: per-charバランスデータの単一取得口
@@ -342,9 +349,7 @@ loadImg('roster_bullet','../assets/roster3d/bullet.webp',true);
 loadImg('roster_dark_moguzo','../assets/roster3d/dark_moguzo.webp',true); // T20: 3D正本由来・同一足元/同一キャンバスの選択画面専用アート
 loadImg('clash_guiin','../assets/fx/clash_guiin.png');
 loadImg('roar_moguzo','../assets/fx/roar_moguzo.png');
-loadImg('cutin_moguzo','../assets/cutin/moguzo.png');
-loadImg('cutin_pisuke','../assets/cutin/pisuke.png'); // v0.8.5: 3キャラ分そろった(rCutin側は既にcutin_+charIdで汎用済み)
-loadImg('cutin_godan','../assets/cutin/godan.png');
+for(const c of CHARS)loadImg('cutin_'+c.id,'../assets/art/cutins/'+(c.id==='pisuke'?'piske':(c.id==='chirka'?'chilka':c.id))+'_ultimate_cutin.png',true);
 /* ---- v0.8.5: UI画像（asset_map v3準拠。フレーム系は内側の透過窓に現行の塗りを合わせる）---- */
 loadImg('bg_stage_day','../assets/bg/stage_day.png');
 loadImg('ui_hp_frame','../assets/ui/hp_frame.png');
@@ -371,6 +376,20 @@ const SPRITES={};
 for(const sid of CHARS.map(function(c){return c.id;})){
   SPRITES[sid]={};
   for(const pid of POSE_IDS)SPRITES[sid][pid]=loadImg('sprite_'+sid+'_'+pid,'../assets/chars/'+sid+'/'+pid+'.png');
+}
+function currentArtAssetKey(frame,palette){const v=CURRENT_ART_RUNTIME.variant(frame,palette);return'current_art_'+palette+'_'+(v?v.sha256:frame.geometryHash);}
+function ensureCurrentArtFrameAsset(frame,palette){
+  if(!frame)return null;
+  const variant=CURRENT_ART_RUNTIME.variant(frame,palette),key=currentArtAssetKey(frame,palette);
+  if(!variant)return null;
+  return ASSETS[key]||loadImg(key,'../'+variant.path,true); // derived alpha is authoritative: never whitenAsset()
+}
+function preloadCurrentArtCharacter(charId){
+  if(!CURRENT_ART_MANIFEST||!CURRENT_ART_RUNTIME)return;
+  const c=CURRENT_ART_MANIFEST.characters[charId];if(!c)return;
+  const frames=Object.values(c.poses);
+  for(const action of Object.values(c.actions))for(const frame of action.frames)frames.push(frame);
+  for(const frame of frames)for(const palette of ['p1','p2'])ensureCurrentArtFrameAsset(frame,palette);
 }
 function assetReady(key){const e=ASSETS[key];return!!(e&&e.ready&&!e.failed);}
 function drawStanding(key,cx,bottomY,targetH){ // 足元アンカー・高さ基準でフィット
@@ -698,7 +717,7 @@ const CONFIG={WS_URL:'wss://mamoken-relay.n-kyosuke1121.workers.dev'}; // デプ
 // 対戦を開始しない。手動で採番する版数タグ(オンラインの同期仕様や9キャラ化のような互換性を破る
 // 変更を配布するたびに更新すること)。サーバー(server/)はメッセージ種別を解釈せず中継するだけ
 // なので、このチェックはサーバー変更なしにクライアント同士だけで実装できる
-const BUILD_ID='mamoken-online9-2026-08-07';
+const BUILD_ID='mamoken-art-current-v1-2026-08-08';
 const ONLINE_BTN={x:0,y:0,w:0,h:0}; // rTitle()で毎フレーム位置を確定(pressRouteと共有)
 const ONLINE_BACK_RECT={x:70,y:864,w:400,h:60};
 const online={
@@ -893,6 +912,9 @@ function onlineInterruptedPress(p){
 const game={screen:'title',p1:0,p2:0,frame:0};
 if(new URLSearchParams(location.search).get('debug')==='sprites')game.screen='spriteCheck'; // P1 (7): 9キャラ×24ポーズの表示確認用デバッグ画面(?debug=sprites)
 const DEBUG_BAL=new URLSearchParams(location.search).get('debug')==='bal'; // BAL-R1: 戦闘中に開発用の数値パネルを重ねて表示する(?debug=bal)。通常プレイUIには常設しない
+const DEBUG_NET=new URLSearchParams(location.search).get('debug')==='net'; // 調査用一時ログ(?debug=net): ギュイーン勝敗判定の公平性調査(実機2台での再現用)。
+  // オンライン中のみ、ギュイーン開始/終了時にslot・tick・入力集計値・勝者・簡易state hashをconsoleへ出す。
+  // 通常プレイでは無効。戦闘ロジック自体には一切影響しない(console.logのみ)
 if(DEBUG_BAL){ // BGM-R1.2 (4): BGM/SE音量スライダー(通常プレイでは非表示。canvas上のHTMLオーバーレイなので描画コード側の変更は不要)
   const panel=document.getElementById('debugAudioPanel');
   panel.style.display='block';
@@ -948,6 +970,7 @@ function startBattle(){
     p:[newFighter(game.p1,0),newFighter(game.p2,1)],
     flow:'intro',flowF:0,hitstop:0,shake:0,
     clash:null,ultUser:-1,ann:[],fx:[],koSide:-1,result:null,pendKO:-1,clashStreak:[0,0]};
+  for(const f of B.p)preloadCurrentArtCharacter(f.c.id);
   aiReset();runtimeCommandShadowReset();roundInit(true);
   game.screen='battle';
 }
@@ -959,6 +982,7 @@ function startOnlineBattle(seed,charIdxBySlot,delayF){ // オンライン対戦�
     p:[newFighter(game.p1,0),newFighter(game.p2,1)],
     flow:'intro',flowF:0,hitstop:0,shake:0,
     clash:null,ultUser:-1,ann:[],fx:[],koSide:-1,result:null,pendKO:-1,clashStreak:[0,0]};
+  for(const f of B.p)preloadCurrentArtCharacter(f.c.id);
   runtimeCommandShadowReset();roundInit(true);
   NET.matchSeq++; // 対戦世代を進める(前の対戦の遅延cmd残骸を弾くため)
   // v0.10 (9): delayFは固定値ではなくRTT実測による開始時適応値(両者の算出値の大きい方)。
@@ -1630,6 +1654,7 @@ function startClash(kind){
   B.clash={phase:'in',f:0,mg:pickMinigame(),pick:[null,null],cpuAt:25+((rng()*45)|0), // cpuAtはオフライン時のみ使用
     kind:kind,winner:-2,
     rendaP:0,rendaC:0,p0hits:0,p1hits:0,p0target:null,p1target:null,cpuNextAt:0};
+  if(DEBUG_NET&&onlineActive())console.log('[gyuiin]', {event:'start', slot:online.slot, mg:B.clash.mg, kind:kind, startTick:B.f, delayF:NET.delayF, simF:NET.simF});
   B.hitstop=0;
   sfx('guiin');
   announce(kind==='mikiri'?'見切った!!':(kind==='grab'?'つかみ合い!!':'競り合い!!'),46,44,'#ffe14d');
@@ -1737,6 +1762,12 @@ function stepHayauchi(c,cmds0,cmds1){ // 的あて連続タップ。オンライ
   }
 }
 function applyClashResult(c){ // 3ミニゲーム共通のリワード適用(旧resolveClashの後半を流用)
+  if(DEBUG_NET&&onlineActive()){
+    const inputVals=c.mg==='renda'?{rendaP:c.rendaP,rendaC:c.rendaC}:(c.mg==='hayauchi'?{p0hits:c.p0hits,p1hits:c.p1hits}:{pick:c.pick});
+    const stHash=[B.f,Math.round(B.p[0].hp),Math.round(B.p[1].hp),B.clashStreak[0],B.clashStreak[1]].join(',');
+    console.log('[gyuiin]', {event:'end', slot:online.slot, mg:c.mg, endTick:B.f, clashInternalF:c.f,
+      inputVals:inputVals, canonicalWinner:c.winner, stateHash:stHash});
+  }
   if(c.winner===-1){
     announce('あいこ! しきりなおし',44,34,'#dddddd');
     for(const f of B.p)f.kb=14;
@@ -1752,7 +1783,8 @@ function applyClashResult(c){ // 3ミニゲーム共通のリワード適用(旧
   fxDmg(lose,dmg,'#ffe14d');
   fxBurst(W/2,336);
   sfx('hit2');B.shake=12;B.hitstop=BAL.HITSTOP.clash;
-  announce(w===0?'せりかち!!':'まけた…',44,42,w===0?'#7CFC00':'#ff6b6b');
+  const iWonClash=onlineActive()?(w===online.slot):(w===0); // BattleStateはp0視点で共通(w)。表示だけローカルプレイヤー視点(online.slot)へ変換する(rResult()のiWonと同じ変換パターン)
+  announce(iWonClash?'せりかち!!':'まけた…',44,42,iWonClash?'#7CFC00':'#ff6b6b');
   if(stk>=2)announce(stk+'連勝!! おしきり!!',50,30,'#ff9e2c');
   if(lose.hp<=0){lose.hp=0;B.pendKO=lose.side;}
   else if(win.ult>=BAL.ULT.stock)announce('奥義スタンバイ!!',56,34,'#ff2d78');
@@ -1763,7 +1795,7 @@ function endClash(){
   if(c.winner>=0){
     const lose=B.p[1-c.winner];
     lose.phase='hitstun';lose.pf=0;lose.stunDur=BAL.CLASH.loserStun;lose.cmdBufMove=null;lose.cmdBufIdx=null; // 勝者は追撃1発確定
-    if(c.winner===0)announce('追撃チャンス!!',40,30,'#7CFC00');
+    if(onlineActive()?(c.winner===online.slot):(c.winner===0))announce('追撃チャンス!!',40,30,'#7CFC00'); // 表示のみローカルプレイヤー視点(online.slot)へ変換(applyClashResultのiWonClashと同じ理由)
   }
   B.flow='fight';
   if(B.pendKO>=0){const s2=B.pendKO;B.pendKO=-1;startKO(s2);}
@@ -2591,7 +2623,56 @@ function poseId(f){ // POSE_IDS(20種)の正準名を返す。該当スプライ
   if(P==='hitstun')return 'hurt';
   return 'idle';
 }
+function currentArtTimedRequest(f,actionId,timing){
+  return{kind:'timed',characterId:f.c.id,actionId:actionId,phaseFrame:f.pf,timing:timing};
+}
+function currentArtCommandAction(f){
+  if(!CURRENT_ART_RUNTIME||f.cmdIdx==null)return null;
+  try{return CURRENT_ART_RUNTIME.commandActionId(f.cmdIdx);}catch(_err){return null;}
+}
+function currentArtRequest(f){
+  if(!CURRENT_ART_RUNTIME||!CURRENT_ART_MANIFEST)return null;
+  const P=f.phase,t=f.pf,charId=f.c.id,pose=function(poseId){return{kind:'pose',characterId:charId,poseId:poseId};};
+  if(P==='attack'&&f.atkLv==='crouch')return pose('crouch_atk');
+  if(P==='attack'&&f.atkLv){const A=spec(f);return currentArtTimedRequest(f,f.atkLv,{startupF:A.s,activeF:A.a,recoveryF:A.r});}
+  if(P==='cmdAtk'&&f.cmdMove){const A=spec(f),actionId=currentArtCommandAction(f);return actionId?currentArtTimedRequest(f,actionId,{startupF:A.s,activeF:A.a,recoveryF:A.r}):null;}
+  if(P==='cmdStance'&&f.cmdMove){
+    const actionId=currentArtCommandAction(f),half=Math.max(1,Math.floor(f.cmdMove.stanceF/2));
+    return actionId?{kind:'frame',characterId:charId,actionId:actionId,frameIndex:t<=half?0:1}:null;
+  }
+  if(P==='roar')return currentArtTimedRequest(f,'roar',{startupF:BAL.ROAR.s,activeF:BAL.ROAR.a,recoveryF:BAL.ROAR.r});
+  if(P==='mikiriRec')return currentArtTimedRequest(f,'mikiri',{startupF:BAL.MIKIRI.window,activeF:1,recoveryF:Math.max(0,BAL.MIKIRI.whiff-BAL.MIKIRI.window-1)});
+  if(P==='grab'){
+    const actionId=currentArtCommandAction(f)||'grab',startup=grabStartup(f);
+    return currentArtTimedRequest(f,actionId,{startupF:startup,activeF:BAL.GRAB.a,recoveryF:BAL.GRAB.rec});
+  }
+  if(P==='grabHit'){
+    const actionId=currentArtCommandAction(f)||'grab';
+    return{kind:'frame',characterId:charId,actionId:actionId,frameIndex:t<=19?2:3}; // impact/hitstop at pf=19 keeps F3
+  }
+  if(P==='grabrec'){
+    const actionId=currentArtCommandAction(f)||'grab';
+    return{kind:'frame',characterId:charId,actionId:actionId,frameIndex:3};
+  }
+  if(P==='grabbed')return pose('grabbed');
+  if(P==='dodge')return pose(f.dodgeType);
+  if(P==='down')return pose('down');
+  if(P==='wake')return pose('getup');
+  if(P==='ko')return pose('ko');
+  if(P==='win')return pose('victory');
+  if(P==='guard'||P==='blockstun')return pose('guard');
+  if(P==='hitstun'||P==='dizzy')return pose('flinch');
+  if(P==='ultAtk')return(B&&B.flowF<BAL.ULT.impact)?pose('ult_charge'):{kind:'frame',characterId:charId,actionId:'high',frameIndex:2};
+  if(P==='clash'&&B&&B.clash&&B.clash.mg==='renda')return{kind:'frame',characterId:charId,actionId:'grab',frameIndex:1};
+  return pose('idle');
+}
+function currentArtFrame(f){return CURRENT_ART_RUNTIME&&CURRENT_ART_RUNTIME.resolveFrame(CURRENT_ART_MANIFEST,currentArtRequest(f));}
 function rFighter(f,ox,oy){ // 仮キャラは既存3体の骨格・共通24ポーズを明示的に流用
+  const currentFrame=currentArtFrame(f);
+  if(currentFrame){
+    const palette=CURRENT_ART_RUNTIME.paletteForSide(f.side),currentSprite=ensureCurrentArtFrameAsset(currentFrame,palette);
+    if(currentSprite&&currentSprite.ready&&!currentSprite.failed){drawCurrentArtFighter(f,ox,oy,currentSprite,currentFrame);return;}
+  }
   const sid=skeletonIdOf(f.c),sp=SPRITES[sid]&&SPRITES[sid][poseId(f)];
   if(sp&&sp.ready&&!sp.failed){drawSpriteFighter(f,ox,oy,sp);return;}
   drawFighterShape(f,ox,oy);
@@ -2645,6 +2726,19 @@ function drawStatusRings(f,bodyY,bw,bh){ // 無敵(ダウン連消化後〜起�
     ctx.beginPath();ctx.ellipse(0,bodyY,bw+6,bh+6,0,0,TAU);ctx.stroke();
     ctx.restore();
   }
+}
+function drawCurrentArtFighter(f,ox,oy,sp,frame){
+  // Manifest placement is presentation-only. bodyBounds/visualBounds never feed hit/reach/state.
+  const x=(ox!=null)?ox:fpos(f),gy=(oy!=null)?oy:f.y,face=f.side===0?1:-1;
+  const img=sp.img,scale=frame.battleScale,w=frame.width*scale,h=frame.height*scale;
+  const bodyW=frame.bodyBounds.width*scale;
+  ctx.fillStyle='rgba(0,0,0,0.22)';
+  ctx.beginPath();ctx.ellipse(x,gy+5,Math.max(30,Math.min(64,bodyW*0.32)),9,0,0,TAU);ctx.fill();
+  ctx.save();ctx.translate(x,gy);ctx.scale(face,1);
+  ctx.drawImage(img,frame.offset.x*scale,frame.offset.y*scale,w,h);
+  const H2=spriteHeightForChar(f.c);
+  drawStatusRings(f,-0.249*H2,0.238*H2,0.303*H2);
+  ctx.restore();
 }
 function drawSpriteFighter(f,ox,oy,sp){
   // 足元アンカー=画像下端 / P2(side1)は左右反転 / 位置・回転・シェイク・ヒットストップ・

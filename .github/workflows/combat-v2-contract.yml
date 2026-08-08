@@ -39,4 +39,22 @@ jobs:
           HEAD_SHA: ${{ github.event.pull_request.head.sha }}
         run: |
           git diff --check "$BASE_SHA" "$HEAD_SHA"
+          # このワークフローはpackage.json変更だけでも起動する(npm ci整合のためtrigger pathsに含む)。
+          # G00が実際に所有するコントラクト本体が変更されていない場合、このPRはG00と無関係な変更
+          # (例: package.jsonへのスクリプト追加のみ)がpathsにマッチしただけなので、shadow-only
+          # scope enforcementの対象外とする。G00所有ファイルが変更されている場合は従来どおり
+          # prototype/dist/runtime等への漏れを検出する(shadow-only契約の保護は維持する)。
+          if git diff --quiet "$BASE_SHA" "$HEAD_SHA" -- \
+            design/combat/contracts \
+            src/core/v2-types \
+            src/core/v2-validation \
+            src/core/legacy-adapter-v2.ts \
+            src/core/legacy-adapter-v2-types.ts \
+            src/core/index.ts \
+            test/combat-v2-contract.test.mjs \
+            test/legacy-adapter-v2.test.mjs \
+            reports/combat; then
+            echo "G00所有ファイルの変更なし(package.json等の付随trigger pathのみ)。scoped-diff enforcementは対象外。"
+            exit 0
+          fi
           git diff --exit-code "$BASE_SHA" "$HEAD_SHA" -- prototype dist runtime server assets

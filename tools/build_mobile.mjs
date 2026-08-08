@@ -49,6 +49,10 @@ const CHARACTER_CATALOG_BROWSER_JS = path.join(ROOT, 'runtime', 'character-catal
 const CHARACTER_CATALOG_BROWSER_TAG = '<script src="../runtime/character-catalog-browser.js"></script>';
 const RUNTIME_EXTENDED_SHADOW_JS = path.join(ROOT, 'runtime', 'runtime-extended-command-shadow-browser.js');
 const RUNTIME_EXTENDED_SHADOW_TAG = '<script src="../runtime/runtime-extended-command-shadow-browser.js"></script>';
+const CURRENT_ART_MANIFEST_JS = path.join(ROOT, 'runtime', 'current-art-manifest-browser.js');
+const CURRENT_ART_MANIFEST_TAG = '<script src="../runtime/current-art-manifest-browser.js"></script>';
+const CURRENT_ART_RUNTIME_JS = path.join(ROOT, 'runtime', 'current-art-runtime-browser.js');
+const CURRENT_ART_RUNTIME_TAG = '<script src="../runtime/current-art-runtime-browser.js"></script>';
 // BGM(R2): 闘技場(昼)のWeb Audio実装がfile://下でのfetch/XHR不可を回避するために
 // prototype専用で読み込むbase64ペイロード。distは同じ音源を__ASSET_MAP__のdata URLで
 // 既に持っているため不要 → タグ自体を除去する(残すと単体配布時に404で壊れた参照になる)。
@@ -71,6 +75,12 @@ function isExcluded(relFromAssets) {
   // アート参考用(ゲームコードから未参照)。埋め込み対象から除外。
   if (relFromAssets.startsWith('ref/')) return true;
   if (path.basename(relFromAssets) === 'ref_design.png') return true;
+  // Current-art source delivery stays in GitHub, while dist embeds only derived alpha runtime
+  // frames and the presentation cut-ins. This prevents opaque source sheets/archive/fallback
+  // packages from being duplicated into the standalone HTML.
+  if (relFromAssets.startsWith('art/current/')) return true;
+  if (relFromAssets.startsWith('art/legacy_common24/')) return true;
+  if (relFromAssets.startsWith('art/archive/')) return true;
   return false;
 }
 
@@ -122,6 +132,8 @@ async function main() {
   const runtimeShadowSource = readFileSync(RUNTIME_SHADOW_JS, 'utf8');
   const characterCatalogBrowserSource = readFileSync(CHARACTER_CATALOG_BROWSER_JS, 'utf8');
   const runtimeExtendedShadowSource = readFileSync(RUNTIME_EXTENDED_SHADOW_JS, 'utf8');
+  const currentArtManifestSource = readFileSync(CURRENT_ART_MANIFEST_JS, 'utf8');
+  const currentArtRuntimeSource = readFileSync(CURRENT_ART_RUNTIME_JS, 'utf8');
   const { map: assetMap, skipped, origTotal, outTotal, audioTotal, audioCount } = await buildAssetMap();
   const count = Object.keys(assetMap).length - audioCount; // 画像点数(BGMは別集計)
 
@@ -155,6 +167,16 @@ async function main() {
     throw new Error(`アンカー行が見つかりません: ${JSON.stringify(RUNTIME_EXTENDED_SHADOW_TAG)} (extended command shadow hookが未適用の可能性があります)`);
   }
   out = out.replace(RUNTIME_EXTENDED_SHADOW_TAG, `<script>\n${runtimeExtendedShadowSource}\n</script>`);
+
+  if (!out.includes(CURRENT_ART_MANIFEST_TAG)) {
+    throw new Error(`アンカー行が見つかりません: ${JSON.stringify(CURRENT_ART_MANIFEST_TAG)} (current art manifestが未適用の可能性があります)`);
+  }
+  out = out.replace(CURRENT_ART_MANIFEST_TAG, `<script>\n${currentArtManifestSource}\n</script>`);
+
+  if (!out.includes(CURRENT_ART_RUNTIME_TAG)) {
+    throw new Error(`アンカー行が見つかりません: ${JSON.stringify(CURRENT_ART_RUNTIME_TAG)} (current art runtimeが未適用の可能性があります)`);
+  }
+  out = out.replace(CURRENT_ART_RUNTIME_TAG, `<script>\n${currentArtRuntimeSource}\n</script>`);
 
   if (!out.includes(RUNTIME_SHADOW_TAG)) {
     throw new Error(`アンカー行が見つかりません: ${JSON.stringify(RUNTIME_SHADOW_TAG)} (runtime shadow hookが未適用の可能性があります)`);
