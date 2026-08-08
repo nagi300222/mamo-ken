@@ -56,6 +56,8 @@ const BACKGROUND_BRIGHTNESS_MIN = 200;
 const BACKGROUND_CHROMA_MAX = 48;
 const ALPHA_VISIBLE_MIN = 8;
 
+const PRESENTATION_SCALE_PATH = path.join(ROOT, 'data', 'art', 'presentation_scale_corrections.json');
+
 const P2_PROFILES = Object.freeze({
   moguzo: { furHue: -12, saturation: 0.92, light: -0.035, accessory: 'red_to_blue' },
   pisuke: { furHue: -8, saturation: 0.88, light: -0.025, accessory: 'blue_to_teal' },
@@ -96,7 +98,13 @@ function validateSourceChecksums(manifest) {
   const checked = new Set();
   const descriptors = [];
   for (const character of Object.values(manifest.characters)) {
-    descriptors.push(character.master, character.cutin, ...Object.values(character.actions), ...(character.legacyCommon24 || []));
+    descriptors.push(
+      character.master,
+      character.cutin,
+      ...Object.values(character.actions),
+      ...(character.legacyCommon24 || []),
+      ...Object.values(character.poseOverrides || {}),
+    );
   }
   for (const descriptor of descriptors) {
     if (!descriptor?.path || !descriptor.sha256 || checked.has(descriptor.path)) continue;
@@ -107,6 +115,34 @@ function validateSourceChecksums(manifest) {
     checked.add(descriptor.path);
   }
   return checked.size;
+}
+
+// vNext SIZE_NORMALIZATION_FINAL: per-frame presentation-only face-scale correction.
+// Values are visually derived (manual landmark measurement / montage review), never
+// from automated single-template face matching (validated unreliable for this art
+// style: candidate corrections disagreed with manual measurement by up to 4.5x even
+// at >0.9 match confidence). Missing entries default to 1.0 (no correction / KEEP).
+// This never touches BAL, hitbox/hurtbox, or timing -- resize-only, applied on top of
+// the existing per-character uniform resizeScale.
+function loadPresentationScaleCorrections() {
+  if (!existsSync(PRESENTATION_SCALE_PATH)) return { characters: {} };
+  return readJson(PRESENTATION_SCALE_PATH);
+}
+
+function presentationScaleFor(corrections, runtimeCharId, kind, id, frameIndex) {
+  // Dark Moguzo's common poses/actions are byte-identical clones of Moguzo's own
+  // frames (see cloneMoguzoCommonForDark) -- they must use Moguzo's own correction,
+  // not an independent measurement, so the two never drift apart. Dark's unique
+  // cmd_01-07 art is Dark-only and always uses dark_moguzo's own table.
+  const isDarkUniqueCommand = runtimeCharId === 'dark_moguzo' && kind === 'action' && id.startsWith('cmd_');
+  const sourceCharId = (runtimeCharId === 'dark_moguzo' && !isDarkUniqueCommand) ? 'moguzo' : runtimeCharId;
+  const table = corrections.characters?.[sourceCharId];
+  if (!table) return 1.0;
+  if (kind === 'pose') return table.poses?.[id] ?? 1.0;
+  const entry = table.actions?.[id];
+  if (entry === undefined) return 1.0;
+  if (Array.isArray(entry)) return entry[frameIndex] ?? 1.0;
+  return entry; // single scalar applied to all frames of this action
 }
 
 async function loadRgba(absPath) {
@@ -371,6 +407,33 @@ async function readLegacyFrames(character, runtimeCharId) {
   return poses;
 }
 
+// vNext PR1: a standalone full-canvas replacement for one pose within a sheet-split
+// action (currently: Godan's flinch). The override image is already alpha-cut, so it
+// flows through the same analyzeFrame pipeline as any other sheet cell (background
+// removal is a no-op on already-transparent pixels).
+async function analyzeOverrideFrame(overridePath, runtimeCharId, frameId) {
+  const source = await loadRgba(path.join(ROOT, overridePath));
+  const rect = { x: 0, y: 0, width: source.width, height: source.height };
+  const frame = analyzeFrame(cropRgba(source, rect), runtimeCharId, rect, frameId);
+  // A pose-override image is its own standalone canvas, not a cell cut from the same
+  // sheet as its sibling frames -- their bodyBounds live in unrelated coordinate
+  // spaces/scales. It must never feed the sheet-shared actionGroundY() below, or it
+  // silently drags idle/guard/victory's ground anchor onto the override's canvas.
+  return { ...frame, isOverride: true };
+}
+
+async function applyPoseOverrides(character, runtimeCharId, actions) {
+  const overrides = character.poseOverrides;
+  if (!overrides) return;
+  const commonFrames = actions.get('common_basic');
+  if (!commonFrames) throw new Error(`poseOverrides require common_basic frames: ${runtimeCharId}`);
+  for (const [poseId, descriptor] of Object.entries(overrides)) {
+    const index = commonFrames.findIndex((frame) => frame.frameId === poseId);
+    if (index === -1) throw new Error(`poseOverride target not found in common_basic: ${runtimeCharId}:${poseId}`);
+    commonFrames[index] = await analyzeOverrideFrame(descriptor.path, runtimeCharId, poseId);
+  }
+}
+
 async function collectCharacterFrames(character, sourceCharId, runtimeCharId) {
   const actions = new Map();
   for (const actionId of CURRENT_ACTIONS) {
@@ -378,6 +441,7 @@ async function collectCharacterFrames(character, sourceCharId, runtimeCharId) {
     if (!descriptor) continue;
     actions.set(actionId, await readActionFrames(descriptor, runtimeCharId));
   }
+  await applyPoseOverrides(character, runtimeCharId, actions);
   const legacyPoses = sourceCharId === 'dark_moguzo' ? new Map() : await readLegacyFrames(character, runtimeCharId);
   return { actions, legacyPoses };
 }
@@ -615,7 +679,9 @@ async function writePng(absPath, rgba, width, height) {
 }
 
 function actionGroundY(frames) {
-  return Math.max(...frames.map((frame) => frame.bodyBounds.y + frame.bodyBounds.height));
+  const sheetFrames = frames.filter((frame) => !frame.isOverride);
+  if (!sheetFrames.length) throw new Error('actionGroundY has no sheet-sourced frames to anchor on');
+  return Math.max(...sheetFrames.map((frame) => frame.bodyBounds.y + frame.bodyBounds.height));
 }
 
 async function emitFrame({
@@ -626,9 +692,10 @@ async function emitFrame({
   resizeScale,
   battleScale,
   darkTransfer,
+  presentationScale = 1.0,
 }) {
   const cropped = cropWithPadding(frame);
-  const resized = await resizeFrame(cropped, resizeScale);
+  const resized = await resizeFrame(cropped, resizeScale * presentationScale);
   const p1 = frame.deriveDarkPalette ? darkTransfer.transform(resized.data, resized.mask) : resized.data;
   const p2 = applyP2Palette(p1, resized.mask, runtimeCharId);
   const geometryHash = alphaGeometryHash(p1, resized.width, resized.height);
@@ -654,6 +721,7 @@ async function emitFrame({
     visualBounds,
     bodyBounds,
     battleScale,
+    presentationScale: round(presentationScale, 4),
     offset: { x: round(-centerX, 3), y: round(-groundAnchorY, 3) },
     footAnchor: { x: centerX, y: groundAnchorY },
     renderOnly: true,
@@ -669,7 +737,7 @@ function findIdleFrame(frames) {
   return frames.actions.get('common_basic')?.find((frame) => frame.frameId === 'idle');
 }
 
-async function emitCharacter({ sourceCharId, runtimeCharId, character, frames, darkTransfer }) {
+async function emitCharacter({ sourceCharId, runtimeCharId, character, frames, darkTransfer, corrections }) {
   const idle = findIdleFrame(frames);
   if (!idle) throw new Error(`missing current idle frame: ${runtimeCharId}`);
   const heightRatio = character.sizeTarget.heightRatioToMoguzo;
@@ -695,8 +763,12 @@ async function emitCharacter({ sourceCharId, runtimeCharId, character, frames, d
   for (const [actionId, actionFrames] of [...frames.actions.entries()].sort(([a], [b]) => (a < b ? -1 : a > b ? 1 : 0))) {
     const groundY = actionGroundY(actionFrames);
     const records = [];
-    for (const frame of actionFrames) {
-      const record = await emitFrame({ frame, runtimeCharId, actionId, groundY, resizeScale, battleScale, darkTransfer });
+    for (const [frameIndex, frame] of actionFrames.entries()) {
+      const presentationScale = POSE_ACTIONS.has(actionId)
+        ? presentationScaleFor(corrections, runtimeCharId, 'pose', frame.frameId)
+        : presentationScaleFor(corrections, runtimeCharId, 'action', actionId, frameIndex);
+      const frameGroundY = frame.isOverride ? frame.bodyBounds.y + frame.bodyBounds.height : groundY;
+      const record = await emitFrame({ frame, runtimeCharId, actionId, groundY: frameGroundY, resizeScale, battleScale, darkTransfer, presentationScale });
       records.push(record);
       if (POSE_ACTIONS.has(actionId)) output.poses[frame.frameId] = record;
     }
@@ -720,6 +792,7 @@ async function emitCharacter({ sourceCharId, runtimeCharId, character, frames, d
       resizeScale,
       battleScale,
       darkTransfer,
+      presentationScale: presentationScaleFor(corrections, runtimeCharId, 'pose', poseId),
     });
     output.poses[poseId] = record;
   }
@@ -741,6 +814,7 @@ function runtimeManifestHash(manifest) {
 export async function buildCurrentArt() {
   const sourceManifest = readJson(SOURCE_MANIFEST_PATH);
   const verifiedSourceCount = validateSourceChecksums(sourceManifest);
+  const corrections = loadPresentationScaleCorrections();
   const darkTransfer = await buildDarkPaletteTransfer(sourceManifest);
   rmSync(OUTPUT_ROOT, { recursive: true, force: true });
   mkdirSync(OUTPUT_ROOT, { recursive: true });
@@ -759,13 +833,17 @@ export async function buildCurrentArt() {
   const runtimeManifest = {
     version: 'current-art-runtime-v1',
     sourceManifestVersion: sourceManifest.version,
-    buildId: 'mamoken-art-current-v1-2026-08-08',
+    buildId: 'mamoken-art-current-v2-2026-08-09',
     sourceToRuntimeId: SOURCE_TO_RUNTIME_ID,
     runtimeToSourceId: RUNTIME_TO_SOURCE_ID,
     policies: {
       alphaIsAuthoritative: true,
       legacyWhitenAssetAllowed: false,
-      poseScaleCorrectionAllowed: false,
+      // vNext SIZE_NORMALIZATION_FINAL: per-frame presentation-only face-scale
+      // correction is now allowed (data/art/presentation_scale_corrections.json),
+      // applied strictly on top of the existing per-character uniform resizeScale.
+      // It never touches bodyBoundsAffectCombat/frameTimingAuthority below.
+      poseScaleCorrectionAllowed: true,
       bodyBoundsAffectCombat: false,
       frameTimingAuthority: 'BAL phase/pf',
       p2Transform: 'build-time deterministic',
@@ -794,6 +872,7 @@ export async function buildCurrentArt() {
       character,
       frames: collected.get(sourceCharId),
       darkTransfer,
+      corrections,
     });
   }
 

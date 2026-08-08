@@ -53,6 +53,8 @@ const CURRENT_ART_MANIFEST_JS = path.join(ROOT, 'runtime', 'current-art-manifest
 const CURRENT_ART_MANIFEST_TAG = '<script src="../runtime/current-art-manifest-browser.js"></script>';
 const CURRENT_ART_RUNTIME_JS = path.join(ROOT, 'runtime', 'current-art-runtime-browser.js');
 const CURRENT_ART_RUNTIME_TAG = '<script src="../runtime/current-art-runtime-browser.js"></script>';
+const ABILITY_UI_MANIFEST_JS = path.join(ROOT, 'runtime', 'ability-ui-manifest-browser.js');
+const ABILITY_UI_MANIFEST_TAG = '<script src="../runtime/ability-ui-manifest-browser.js"></script>';
 // BGM(R2): 闘技場(昼)のWeb Audio実装がfile://下でのfetch/XHR不可を回避するために
 // prototype専用で読み込むbase64ペイロード。distは同じ音源を__ASSET_MAP__のdata URLで
 // 既に持っているため不要 → タグ自体を除去する(残すと単体配布時に404で壊れた参照になる)。
@@ -81,6 +83,10 @@ function isExcluded(relFromAssets) {
   if (relFromAssets.startsWith('art/current/')) return true;
   if (relFromAssets.startsWith('art/legacy_common24/')) return true;
   if (relFromAssets.startsWith('art/archive/')) return true;
+  // vNext PR1: raw pose-override source deliveries (e.g. Godan's flinch replacement)
+  // are build-time-only inputs to build_current_art.mjs -- the runtime only ever
+  // loads the derived art/runtime/** output, same reasoning as art/current/ above.
+  if (relFromAssets.startsWith('art/overrides/')) return true;
   return false;
 }
 
@@ -134,6 +140,7 @@ async function main() {
   const runtimeExtendedShadowSource = readFileSync(RUNTIME_EXTENDED_SHADOW_JS, 'utf8');
   const currentArtManifestSource = readFileSync(CURRENT_ART_MANIFEST_JS, 'utf8');
   const currentArtRuntimeSource = readFileSync(CURRENT_ART_RUNTIME_JS, 'utf8');
+  const abilityUiManifestSource = readFileSync(ABILITY_UI_MANIFEST_JS, 'utf8');
   const { map: assetMap, skipped, origTotal, outTotal, audioTotal, audioCount } = await buildAssetMap();
   const count = Object.keys(assetMap).length - audioCount; // 画像点数(BGMは別集計)
 
@@ -177,6 +184,11 @@ async function main() {
     throw new Error(`アンカー行が見つかりません: ${JSON.stringify(CURRENT_ART_RUNTIME_TAG)} (current art runtimeが未適用の可能性があります)`);
   }
   out = out.replace(CURRENT_ART_RUNTIME_TAG, `<script>\n${currentArtRuntimeSource}\n</script>`);
+
+  if (!out.includes(ABILITY_UI_MANIFEST_TAG)) {
+    throw new Error(`アンカー行が見つかりません: ${JSON.stringify(ABILITY_UI_MANIFEST_TAG)} (ability UI manifestが未適用の可能性があります)`);
+  }
+  out = out.replace(ABILITY_UI_MANIFEST_TAG, `<script>\n${abilityUiManifestSource}\n</script>`);
 
   if (!out.includes(RUNTIME_SHADOW_TAG)) {
     throw new Error(`アンカー行が見つかりません: ${JSON.stringify(RUNTIME_SHADOW_TAG)} (runtime shadow hookが未適用の可能性があります)`);

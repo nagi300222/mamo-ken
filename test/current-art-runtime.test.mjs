@@ -17,14 +17,14 @@ const expectedCharacters = ['moguzo', 'pisuke', 'godan', 'hakuma', 'chirka', 'ta
 
 assert.equal(manifest.version, 'current-art-runtime-v1');
 assert.equal(manifest.sourceManifestVersion, sourceManifest.version);
-assert.equal(manifest.buildId, 'mamoken-art-current-v1-2026-08-08');
+assert.equal(manifest.buildId, 'mamoken-art-current-v2-2026-08-09');
 assert.deepEqual(Object.keys(manifest.characters).sort(), [...expectedCharacters].sort());
 assert.equal(manifest.policies.alphaIsAuthoritative, true);
 assert.equal(manifest.policies.legacyWhitenAssetAllowed, false);
-assert.equal(manifest.policies.poseScaleCorrectionAllowed, false);
+assert.equal(manifest.policies.poseScaleCorrectionAllowed, true);
 assert.equal(manifest.policies.bodyBoundsAffectCombat, false);
 assert.equal(manifest.policies.frameTimingAuthority, 'BAL phase/pf');
-assert.equal(manifest.importer.verifiedSourceCount, 193);
+assert.equal(manifest.importer.verifiedSourceCount, 194);
 
 for (const characterId of expectedCharacters) {
   const character = manifest.characters[characterId];
@@ -47,6 +47,7 @@ for (const characterId of expectedCharacters) {
     assert.ok(frame.bodyBounds.width > 0 && frame.bodyBounds.height > 0);
     assert.ok(frame.visualBounds.width > 0 && frame.visualBounds.height > 0);
     assert.equal(frame.battleScale, 0.5);
+    assert.ok(frame.presentationScale > 0);
     for (const palette of ['p1', 'p2']) {
       const variant = frame.variants[palette];
       assert.ok(variant.path.startsWith(`assets/art/runtime/${characterId}/${palette}/`));
@@ -124,13 +125,16 @@ assert.ok(prototype.includes("loadImg(key,'../'+variant.path,true)"));
 assert.ok(prototype.includes('drawCurrentArtFighter(f,ox,oy,currentSprite,currentFrame)'));
 assert.ok(prototype.includes("currentArtTimedRequest(f,f.atkLv,{startupF:A.s,activeF:A.a,recoveryF:A.r})"));
 assert.ok(prototype.includes("return actionId?currentArtTimedRequest(f,actionId,{startupF:A.s,activeF:A.a,recoveryF:A.r}):null"));
-assert.ok(prototype.includes("const BUILD_ID='mamoken-art-current-v1-2026-08-08'"));
-assert.ok(dist.includes("const BUILD_ID='mamoken-art-current-v1-2026-08-08'"));
+assert.ok(prototype.includes("const BUILD_ID='mamoken-art-current-v2-2026-08-09'"));
+assert.ok(dist.includes("const BUILD_ID='mamoken-art-current-v2-2026-08-09'"));
 assert.ok(dist.includes('globalThis.MAMOKEN_CURRENT_ART_MANIFEST='));
 assert.ok(dist.includes('globalThis.MAMOKEN_CURRENT_ART_RUNTIME'));
 assert.ok(dist.includes('"../assets/art/runtime/moguzo/p1/common_basic/idle.png":"data:image/webp;base64,'));
 assert.equal(dist.includes('"../assets/art/current/'), false, 'opaque current source sheets must not be embedded in dist');
 assert.equal(dist.includes('"../assets/art/legacy_common24/'), false, 'legacy source sheets must not be embedded in dist');
+assert.equal(dist.includes('"../assets/art/overrides/'), false, 'raw pose-override source deliveries must not be embedded in dist');
+assert.ok(dist.includes('globalThis.MAMOKEN_ABILITY_UI_MANIFEST='), 'ability UI manifest must be connected into dist');
+assert.ok(dist.includes('"../assets/art/ability_ui/icon/UI-I-01_GUTS_MOGUZO.png":"data:image/webp;base64,'), 'ability UI assets must be embedded in dist');
 assert.equal(browserRuntime.includes('performance.now'), false);
 assert.equal(browserRuntime.includes('Date.now'), false);
 assert.equal(browserRuntime.includes('Math.random'), false);
