@@ -1783,7 +1783,8 @@ function applyClashResult(c){ // 3ミニゲーム共通のリワード適用(旧
   fxDmg(lose,dmg,'#ffe14d');
   fxBurst(W/2,336);
   sfx('hit2');B.shake=12;B.hitstop=BAL.HITSTOP.clash;
-  announce(w===0?'せりかち!!':'まけた…',44,42,w===0?'#7CFC00':'#ff6b6b');
+  const iWonClash=onlineActive()?(w===online.slot):(w===0); // BattleStateはp0視点で共通(w)。表示だけローカルプレイヤー視点(online.slot)へ変換する(rResult()のiWonと同じ変換パターン)
+  announce(iWonClash?'せりかち!!':'まけた…',44,42,iWonClash?'#7CFC00':'#ff6b6b');
   if(stk>=2)announce(stk+'連勝!! おしきり!!',50,30,'#ff9e2c');
   if(lose.hp<=0){lose.hp=0;B.pendKO=lose.side;}
   else if(win.ult>=BAL.ULT.stock)announce('奥義スタンバイ!!',56,34,'#ff2d78');
@@ -1794,7 +1795,7 @@ function endClash(){
   if(c.winner>=0){
     const lose=B.p[1-c.winner];
     lose.phase='hitstun';lose.pf=0;lose.stunDur=BAL.CLASH.loserStun;lose.cmdBufMove=null;lose.cmdBufIdx=null; // 勝者は追撃1発確定
-    if(c.winner===0)announce('追撃チャンス!!',40,30,'#7CFC00');
+    if(onlineActive()?(c.winner===online.slot):(c.winner===0))announce('追撃チャンス!!',40,30,'#7CFC00'); // 表示のみローカルプレイヤー視点(online.slot)へ変換(applyClashResultのiWonClashと同じ理由)
   }
   B.flow='fight';
   if(B.pendKO>=0){const s2=B.pendKO;B.pendKO=-1;startKO(s2);}
