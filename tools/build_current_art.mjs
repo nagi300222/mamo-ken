@@ -593,6 +593,29 @@ async function buildDarkPaletteTransfer(manifest) {
     };
   });
   const cache = new Map();
+  // ART-PRESENTATION-R1 (B): nearest-bucket master-to-master transfer faithfully reproduces the
+  // Dark master photo's shadow-toned fur pixels, which carry a wine-red tint that reads as
+  // blood rather than the intended dark brown/black-purple fur. Every Moguzo-common query pixel
+  // finds a confident bucket match (no unmapped fallback), so this is not a missing-coverage bug
+  // -- it is the master's own authored shadow tone being carried through unchanged. Since a global
+  // hue shift would also desaturate the genuinely-red source elements (headband/accessory, which
+  // must "match the Dark master" per spec and stay untouched), the correction is scoped to exactly
+  // the failure mode observed: an originally non-red Moguzo fur pixel (hue outside the vivid-red
+  // band, i.e. not already an accessory-like color) whose transferred output lands in the
+  // wine/red band. Only those get pulled toward a low-saturation dark brown/black-purple; true
+  // blacks (outlines/eyes/nose) and already-red source pixels (accessory) are left authoritative.
+  const WINE_HUE_MAX = 20, WINE_HUE_MIN = 330, WINE_SAT_MIN = 0.22;
+  const ACCESSORY_HUE_MAX = 20, ACCESSORY_HUE_MIN = 330, ACCESSORY_SAT_MIN = 0.5;
+  const isWineHue = (hue, sat) => (hue < WINE_HUE_MAX || hue >= WINE_HUE_MIN) && sat > WINE_SAT_MIN;
+  const isAccessoryLike = (hue, sat) => (hue < ACCESSORY_HUE_MAX || hue >= ACCESSORY_HUE_MIN) && sat > ACCESSORY_SAT_MIN;
+  const correctWineFur = (mappedRgb, sourceR, sourceG, sourceB) => {
+    const [mHue, mSat, mLight] = rgbToHsl(mappedRgb[0], mappedRgb[1], mappedRgb[2]);
+    if (mLight < 0.08) return mappedRgb; // true blacks (outlines/eyes/nose) stay authoritative
+    if (!isWineHue(mHue, mSat)) return mappedRgb;
+    const [sHue, sSat] = rgbToHsl(sourceR, sourceG, sourceB);
+    if (isAccessoryLike(sHue, sSat)) return mappedRgb; // already-red source (accessory) carries through as-is
+    return hslToRgb(268, Math.min(mSat * 0.5, 0.32), Math.max(0.05, mLight * 0.88));
+  };
   const mapColor = (r, g, b) => {
     const cacheKey = `${r >> 3},${g >> 3},${b >> 3}`;
     if (cache.has(cacheKey)) return cache.get(cacheKey);
@@ -606,7 +629,8 @@ async function buildDarkPaletteTransfer(manifest) {
         best = entry;
       }
     }
-    const mapped = best && bestDistance <= 42 ? [best.r, best.g, best.b] : [r, g, b];
+    const rawMapped = best && bestDistance <= 42 ? [best.r, best.g, best.b] : [r, g, b];
+    const mapped = correctWineFur(rawMapped, r, g, b);
     cache.set(cacheKey, mapped);
     return mapped;
   };
