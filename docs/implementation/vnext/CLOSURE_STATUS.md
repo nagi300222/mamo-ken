@@ -17,10 +17,13 @@ ORDER.md` line 4 — is honored throughout).
 
 ## PR5 closure work
 
-- Full regression: all 9 characters run crash-free across all 36
-  unordered pairings (each character therefore fought as both P1 and P2
-  against every other character), 6000 `fightStep()` ticks each — zero
-  exceptions, zero console errors.
+- Full offline regression: all 9 characters run crash-free across all 72
+  ordered pairings (every character as P1 against all 8 others, and again
+  as P2 against all 8 others — offline `fightStep()` routes P1 through
+  `evq`/`currentP1Hold()` and P2 through `cpuEv`/AI guard state, genuinely
+  different code paths, so both seatings of every matchup are exercised
+  separately), 3000-6000 `fightStep()` ticks each — zero exceptions, zero
+  console errors. (Online regression — see "Known gap" below.)
 - Round-reset audit: every PR4 Ability field (`gutsActive`,
   `gritAvailable`, `chaseReadyUntilF`, `chaseActive`, `armorStock`,
   `ironWallReady`, `trickMove/trickChoice/trickResolved/trickSuccess`,
@@ -33,11 +36,15 @@ ORDER.md` line 4 — is honored throughout).
   `mulberry32` seed, same character matchup, same AI difficulty (which is
   itself driven entirely by the shared seeded `rng()` — no
   `Math.random`/`Date.now`/`performance.now` anywhere in the battle
-  simulation), 8000 ticks each, produce a byte-identical snapshot of
-  every hash-relevant field on both fighters (HP/guard/S/phase/combo, and
-  every PR4 Ability field) plus an identical next `rng()` draw — confirms
-  the lockstep-determinism precondition every prior vNext PR reasoned
-  about is actually true, not just argued.
+  simulation), 6000 ticks each across two matchups, compared with a
+  per-tick FNV-1a hash of the **entire** `B` object minus `fx` (decorative
+  hit-spark particles — confirmed by direct diff to be the sole source of
+  divergence when `fx` is included, since `fxSpark()`'s particle
+  rotation/scale come from unseeded `Math.random()` used only for local
+  visual variety, never fed back into gameplay logic) — byte-identical at
+  every tick. Confirms the lockstep-determinism precondition every prior
+  vNext PR reasoned about is actually true, not just argued, and that the
+  *entire* gameplay-relevant state (not a hand-picked subset) matches.
 - `npm run build:mobile`: reproducible (byte-identical `dist/
   mamoken_mobile.html` across two independent, back-to-back builds — MD5
   match, not just `git diff --exit-code`, which only proves "matches the
@@ -68,7 +75,26 @@ ORDER.md` line 4 — is honored throughout).
   `src/core/**`, `test/**`, `tools/**`, `server/**`, `design/**` are
   untouched by either PR, matching every prior vNext PR's posture.
 
-## Known gap carried forward (not a blocker)
+## Known gap carried forward: online regression not run
+
+`NONSTOP_IMPLEMENTATION_ORDER.md`'s PR5 scope explicitly lists "all 9
+online" as part of "full regression." This was actively attempted this
+session — `cd server && npx wrangler dev --local` was run to try to stand
+up a local Cloudflare Durable Object relay for a genuine two-Playwright-
+client test — but the sandbox's network restrictions prevented the local
+Workers runtime from initializing correctly (`Request was cancelled`
+fetching `Request.cf`, and the local port never accepted a connection).
+The relay server itself only forwards raw messages between two connected
+clients and never reconstructs match state (`server/wrangler.toml`'s own
+comment), so this PR's offline full-state-hash determinism proof
+substantially de-risks online play, but it does not exercise
+`onlineStep()`/`netFightStep()`, slot-dependent queue mapping, real peer
+message ordering/latency, or disconnect handling. This item is left
+**open**, not claimed complete — whoever has a real 2-device or deployed-
+relay environment should run it before treating vNext FINAL as fully
+closed end-to-end.
+
+## Known gap carried forward: Ability UI/VFX not wired
 
 PR1's `MAMOKEN_ABILITY_UI_MANIFEST` (icon/gauge/VFX asset paths per
 character ability state) has never been wired to live rendering code —
