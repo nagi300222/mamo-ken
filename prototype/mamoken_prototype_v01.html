@@ -1268,7 +1268,16 @@ function chargeGainOnHit(f,moveName){ // vNext PR4 (Bullet CHARGE): current gain
   // failed(whiff/block)はこの関数自体を呼ばないためsignature不変が自然に満たされる
   if(f.chargeLastMove!==moveName){f.charge=Math.min(3,f.charge+1);f.chargeLastMove=moveName;}
 }
-function startCmdAtk(f,m,idx,preserveCombo){ // vNext PR3 (§9 Classic Cancel): preserveCombo=trueはcancel経由の発動(combo/scaling維持。§9「combo/scaling resetなし」)
+// GAME-UX-R1: Command成立時の技名フィードバック用、提示専用cache(ABILITY_PRESと同じ考え方でB/f外部に置き、
+// hash対象/combat判定に一切影響しない片方向read-only cache)。startCmdAtk/startCmdGrab/startCmdStanceが
+// 実際にresource消費して開始した(=戻り値true)瞬間だけ書き込む。Modern入力が不成立でNormalへfallbackした
+// 場合はこれらの関数自体が呼ばれないため、自然に「Modern失敗時は表示しない」を満たす。
+// abilityFlash()と同様にB.f(ラウンド毎に0リセット)ではなくgame.frame(セッション中単調増加)で期限管理する
+// (B.fで管理すると新ラウンド開始直後にB.fが巻き戻り、前ラウンド末の表示が長時間居座るバグになる)。
+const CMD_FEEDBACK_DUR_F=60; // 約1秒(60fps基準)
+const CMD_FEEDBACK=[{name:null,untilF:0,modern:false},{name:null,untilF:0,modern:false}];
+function cmdFeedback(f,m,viaModern){const side=f.side;CMD_FEEDBACK[side].name=m.name;CMD_FEEDBACK[side].untilF=game.frame+CMD_FEEDBACK_DUR_F;CMD_FEEDBACK[side].modern=!!viaModern;}
+function startCmdAtk(f,m,idx,preserveCombo,viaModern){ // vNext PR3 (§9 Classic Cancel): preserveCombo=trueはcancel経由の発動(combo/scaling維持。§9「combo/scaling resetなし」)
   // 戻り値false=資源不足で不発動(呼び出し側がnormal fallback等を行う)
   if(!hasResourceFor(f,m))return false;
   spendResourceFor(f,m);
@@ -1284,9 +1293,10 @@ function startCmdAtk(f,m,idx,preserveCombo){ // vNext PR3 (§9 Classic Cancel): 
   f.normalChainCount=0;f.dirBuf.length=0;
   resetModernHist(f); // vNext PR3 (§8 Modern R4 reset trigger: Command)
   sfx('swish');sfx(m.lv==='high'?'teleHigh':(m.lv==='low'?'teleLow':'teleMid'));
+  cmdFeedback(f,m,viaModern);
   return true;
 }
-function startCmdGrab(f,m,idx,preserveCombo){
+function startCmdGrab(f,m,idx,preserveCombo,viaModern){
   if(!hasResourceFor(f,m))return false;
   spendResourceFor(f,m);
   f.phase='grab';f.pf=0;f.guardLv=null;f.atkLv=null;f.buf=null;if(!preserveCombo)f.combo=0;f.normalChainCount=0;f.hasHit=false;f.landedHit=false;f.cmdArmorUsed=false;
@@ -1294,15 +1304,17 @@ function startCmdGrab(f,m,idx,preserveCombo){
   f.cmdMove=m;f.cmdIdx=idx;f.grabS=f.darkBodyActive?Math.max(1,m.s-2):m.s;f.dirBuf.length=0;
   resetModernHist(f); // vNext PR3 (§8 Modern R4 reset trigger: Command/Throw)
   sfx('grabGo');
+  cmdFeedback(f,m,viaModern);
   return true;
 }
-function startCmdStance(f,m,idx){
+function startCmdStance(f,m,idx,viaModern){
   if(!hasResourceFor(f,m))return false;
   spendResourceFor(f,m);
   f.phase='cmdStance';f.pf=0;f.cmdMove=m;f.cmdIdx=idx;f.atkLv=null;f.guardLv=null;f.buf=null;f.combo=0;f.normalChainCount=0;f.hasHit=false;f.landedHit=false;f.cmdArmorUsed=false;
   f.dirBuf.length=0;
   resetModernHist(f); // vNext PR3 (§8 Modern R4 reset trigger: Command)
   sfx(m.se||'guard');
+  cmdFeedback(f,m,viaModern);
   return true;
 }
 function whiffExtraFor(f){ // BAL-R1: 通常技の空振りのみ追加recovery。CMD-R1: コマンド打撃技もm.whiffがあれば同様に適用する
@@ -1550,8 +1562,8 @@ function applyInputs(f,opp,cmds,held){
         const mr=(mr0&&hasResourceFor(f,mr0.move))?mr0:null; // vNext PR4: state/resource不足ならnormal fallback(Godan/Bulletのcost付きModern対象技)
         if(mr&&mr.grab){ // Takimaru Modern Grab(丸抱え): target throw-eligibleなら即14F startup、そうでなければpending(tickPendingModernGrab参照)
           f.modernHist.length=0;
-          if(throwEligible(opp))startCmdGrab(f,mr.move,mr.idx);else f.pendingModernGrab={move:mr.move,idx:mr.idx};
-        }else if(mr)startCmdAtk(f,mr.move,mr.idx);
+          if(throwEligible(opp))startCmdGrab(f,mr.move,mr.idx,false,true);else f.pendingModernGrab={move:mr.move,idx:mr.idx};
+        }else if(mr)startCmdAtk(f,mr.move,mr.idx,false,true);
         else startAtk(f,c.lv,chain);
       }else if(cm&&(cm.move.type==='atk'||cm.move.type==='stance')&&cm.move.trigger===c.lv&&stunRemaining(f)!=null&&stunRemaining(f)<=BAL.CMD.buffer){
         f.cmdBufMove=cm.move;f.cmdBufIdx=cm.idx; // コマンド先行入力(v0.11 §6.9)
@@ -1577,8 +1589,8 @@ function tryBuf(f,opp){
     // 経由させる。ここを素通しでstartAtk()するとタイミングだけでpattern成立/不成立が分かれてしまう
     const mr0=tryModernReplace(f,lv);
     const mr=(mr0&&hasResourceFor(f,mr0.move))?mr0:null; // vNext PR4: resource不足ならnormal fallback
-    if(mr&&mr.grab){f.modernHist.length=0;if(throwEligible(opp))startCmdGrab(f,mr.move,mr.idx);else f.pendingModernGrab={move:mr.move,idx:mr.idx};}
-    else if(mr)startCmdAtk(f,mr.move,mr.idx);
+    if(mr&&mr.grab){f.modernHist.length=0;if(throwEligible(opp))startCmdGrab(f,mr.move,mr.idx,false,true);else f.pendingModernGrab={move:mr.move,idx:mr.idx};}
+    else if(mr)startCmdAtk(f,mr.move,mr.idx,false,true);
     else startAtk(f,lv,chain);
   }
 }
@@ -1856,7 +1868,7 @@ function tickPendingModernGrab(f,opp){ // vNext PR3 (§8 Takimaru Modern Grab): 
   // 主要経路(Hのrecoveryからcanchainでチェーン継続中=まだ'attack'phase)を同一tick内で即座に潰してしまう
   // (レビュー指摘: PR#76)。従って本関数はcancelを行わず、readyになった時だけ発動する
   if(!f.pendingModernGrab)return;
-  if(f.phase==='idle'&&throwEligible(opp)){const p=f.pendingModernGrab;f.pendingModernGrab=null;startCmdGrab(f,p.move,p.idx);}
+  if(f.phase==='idle'&&throwEligible(opp)){const p=f.pendingModernGrab;f.pendingModernGrab=null;startCmdGrab(f,p.move,p.idx,false,true);}
 }
 function tickPressureQueue(f,opp){ // vNext PR4 (Takimaru PRESSURE): 肩車崩しをqueued状態で待機させ、相手がthrow-eligibleになった瞬間に発動する
   if(f.pressureState!=='throwQueued')return;
@@ -3604,6 +3616,14 @@ function rFx(){
     }
   }
 }
+// GAME-UX-R1: HUD要素(HP/Guard/S/Ult/per-character ability gauge/P1-P2ラベル/ラウンドタイマー/
+// status text/入力アイコン/操作UI/小さい説明文)の統一拡大トークン。目標+15~20%。W=540論理解像度は
+// 既に390x844等どのビューポートでもfit()でCSS等比縮小されるため、ここでの数値変更だけで実機サイズも
+// 一律拡大される。HPバー幅のみ両側バーが既にほぼ横幅を使い切っており「幅」を15-20%広げると中央で
+// 相手側バー/タイマーと衝突するため、幅はHP_BAR_W_SCALEで安全な範囲に留め、太さ(高さ)側で拡大分を
+// 確保する(狭い場所は太さ/フォント/アイコンで「大きく見える」を達成し、はみ出し・衝突を避ける)。
+const HUD_SCALE=1.18;
+const HP_BAR_W_SCALE=1.06,HP_BAR_H_SCALE=1.2;
 const HP_FRAME_WIN=[0.0702,0.3231,0.9307,0.7467]; // hp_frame.png内の透過窓(左,上,右,下 比率)
 function hpBar(x,y,w,h,f,flip){
   ctx.fillStyle='#3b0d10';ctx.fillRect(x,y,w,h);
@@ -3668,7 +3688,7 @@ function drawAbilityGauge(x,y,w,f,flip){
   const d=abilityGaugeDescriptor(f);
   if(!d)return;
   if(d.kind==='segments'){
-    const gap=4,segW=Math.min(20,(w-(d.total-1)*gap)/Math.max(1,d.total)),h=12;
+    const gap=4,segW=Math.min(23,(w-(d.total-1)*gap)/Math.max(1,d.total)),h=14; // GAME-UX-R1: 20→23/12→14(+約15%)
     for(let i=0;i<d.total;i++){
       const sx=flip?(x+w-segW-i*(segW+gap)):(x+i*(segW+gap));
       const on=i<d.filled;
@@ -3679,17 +3699,17 @@ function drawAbilityGauge(x,y,w,f,flip){
     }
     if(d.max){
       const bx=flip?(x+10):(x+w-10);
-      if(!drawAbilityIcon(abilityAsset(d.charId,d.group,'max'),bx,y+h/2,16))txt('MAX',bx,y+h/2+4,10,'#ffd23f');
+      if(!drawAbilityIcon(abilityAsset(d.charId,d.group,'max'),bx,y+h/2,18))txt('MAX',bx,y+h/2+4,11,'#ffd23f');
     }
   }else if(d.kind==='mapped'){
     const cx=flip?(x+w-16):(x+16);
-    if(!drawAbilityIcon(abilityAsset(d.charId,d.group,d.mapKey),cx,y+6,26)){
-      ctx.fillStyle='#7a2fd9';ctx.beginPath();ctx.arc(cx,y+6,8,0,TAU);ctx.fill();
+    if(!drawAbilityIcon(abilityAsset(d.charId,d.group,d.mapKey),cx,y+6,30)){
+      ctx.fillStyle='#7a2fd9';ctx.beginPath();ctx.arc(cx,y+6,9,0,TAU);ctx.fill();
     }
   }else if(d.kind==='icon'){
     const cx=flip?(x+w-14):(x+14);
-    if(!drawAbilityIcon(abilityAsset(d.charId,d.group,d.sub),cx,y+6,22)){
-      ctx.fillStyle='#ff8b3d';ctx.beginPath();ctx.arc(cx,y+6,7,0,TAU);ctx.fill();
+    if(!drawAbilityIcon(abilityAsset(d.charId,d.group,d.sub),cx,y+6,25)){
+      ctx.fillStyle='#ff8b3d';ctx.beginPath();ctx.arc(cx,y+6,8,0,TAU);ctx.fill();
     }
   }
 }
@@ -3753,66 +3773,70 @@ function drawAbilityStatus(x,y,w,f,flip){
   const cx=flip?(x+w-16):(x+16);
   ctx.save();
   if(d.dim)ctx.globalAlpha=0.55;
-  if(!drawAbilityIcon(abilityAsset(d.charId,d.group,d.sub),cx,y+7,26)){
+  if(!drawAbilityIcon(abilityAsset(d.charId,d.group,d.sub),cx,y+7,30)){ // GAME-UX-R1: 26→30(+約15%)
     ctx.globalAlpha=(ctx.globalAlpha||1)*((game.frame%16<8)?1:0.6);
-    ctx.fillStyle='#ffdd55';ctx.beginPath();ctx.arc(cx,y+7,8,0,TAU);ctx.fill();
+    ctx.fillStyle='#ffdd55';ctx.beginPath();ctx.arc(cx,y+7,9,0,TAU);ctx.fill();
   }
   ctx.restore();
 }
 const SG_FRAME_WIN=[0.0965,0.4526,0.9000,0.6466]; // sgauge_frame.png内の透過窓(Sゲージ本体のみ。ガード/集中は現行のまま)
 function gauges(x,y,f,flip){
-  const w=150;
-  ctx.fillStyle='#222733';ctx.fillRect(x,y,w,10);
+  const w=Math.round(150*HUD_SCALE),sH=Math.round(10*HUD_SCALE*0.85),gH=Math.round(7*HUD_SCALE*0.85); // GAME-UX-R1: 中央の空きが十分な行は幅+18%/太さ+15%
+  const rowGuard=Math.round(15*HUD_SCALE*0.85),rowAbilityGauge=Math.round(22*HUD_SCALE*0.9),rowAbilityStatus=Math.round(35*HUD_SCALE*0.9),rowUlt=Math.round(49*HUD_SCALE*0.9);
+  ctx.fillStyle='#222733';ctx.fillRect(x,y,w,sH);
   const sw=f.s/BAL.SMAX*w;
   let col='#ffb300';
   if(f.s>=BAL.SMAX)col=(game.frame%20<10)?'#fff27a':'#ffd23f';
   if(f.sNo>0&&(game.frame%8<4))col='#ff5a5a';
   ctx.fillStyle=col;
-  if(flip)ctx.fillRect(x+w-sw,y,sw,10);else ctx.fillRect(x,y,sw,10);
-  const sFramed=drawUiFrame('ui_sgauge_frame',x,y,w,10,SG_FRAME_WIN[0],SG_FRAME_WIN[1],SG_FRAME_WIN[2],SG_FRAME_WIN[3],flip);
-  if(!sFramed){ctx.strokeStyle='#778';ctx.lineWidth=1.5;ctx.strokeRect(x,y,w,10);}
-  txt('S',flip?x+w+11:x-10,y+5,13,'#ffd23f');
-  ctx.fillStyle='#1c2a30';ctx.fillRect(x,y+15,w,7);
+  if(flip)ctx.fillRect(x+w-sw,y,sw,sH);else ctx.fillRect(x,y,sw,sH);
+  const sFramed=drawUiFrame('ui_sgauge_frame',x,y,w,sH,SG_FRAME_WIN[0],SG_FRAME_WIN[1],SG_FRAME_WIN[2],SG_FRAME_WIN[3],flip);
+  if(!sFramed){ctx.strokeStyle='#778';ctx.lineWidth=1.5;ctx.strokeRect(x,y,w,sH);}
+  txt('S',flip?x+w+11:x-10,y+Math.round(sH/2),Math.round(13*HUD_SCALE*0.9),'#ffd23f');
+  ctx.fillStyle='#1c2a30';ctx.fillRect(x,y+rowGuard,w,gH);
   const gw=Math.max(0,f.guard)/maxGuardFor(f.c)*w;
   ctx.fillStyle=(f.guard<30)?'#ff8b5a':'#6fd3ff';
-  if(flip)ctx.fillRect(x+w-gw,y+15,gw,7);else ctx.fillRect(x,y+15,gw,7);
-  ctx.strokeStyle='#778';ctx.strokeRect(x,y+15,w,7);
+  if(flip)ctx.fillRect(x+w-gw,y+rowGuard,gw,gH);else ctx.fillRect(x,y+rowGuard,gw,gH);
+  ctx.strokeStyle='#778';ctx.strokeRect(x,y+rowGuard,w,gH);
   // vNext PR2 (COMBAT_VNEXT_FINAL.md §10 Focus): 「外す: HUD」につき集中ゲージの描画を撤廃(f.focus/BAL.FOCUSは
   // schema compatibilityのみで参照しない)。vNext PRESENTATION-R1 (A): この空き(y+22..y+49)へability
   // gauge(y+22行、常設stock/ゲージ)とability status(y+35行、一時icon/VFX)を配置する(奥義ストック(y+49)
   // とは別行=重複なし)
-  drawAbilityGauge(x,y+22,w,f,flip);
-  drawAbilityStatus(x,y+35,w,f,flip);
+  drawAbilityGauge(x,y+rowAbilityGauge,w,f,flip);
+  drawAbilityStatus(x,y+rowAbilityStatus,w,f,flip);
+  const ultIconSize=Math.round(24*HUD_SCALE*0.9),ultGap=Math.round(26*HUD_SCALE*0.9),ultPad=Math.round(14*HUD_SCALE*0.9);
   for(let i=0;i<3;i++){
-    const px=flip?(x+w-14-i*26):(x+14+i*26),py=y+49;
+    const px=flip?(x+w-ultPad-i*ultGap):(x+ultPad+i*ultGap),py=y+rowUlt;
     const on=f.ult>i;
     const flashing=(f.ult>=3&&game.frame%14<7)||f.ultFlash>0;
     ctx.save();ctx.translate(px,py);
     if(assetReady('ui_paw_emblem')){ // 所持数だけ点灯・残りは減光(グレースケール)
       ctx.globalAlpha=on?1:0.35;
       ctx.filter=on?(flashing?'brightness(1.7) saturate(0.5)':'none'):'grayscale(1) brightness(0.7)';
-      drawUiIcon('ui_paw_emblem',0,0,24);
+      drawUiIcon('ui_paw_emblem',0,0,ultIconSize);
       ctx.filter='none';
     }else{
       ctx.rotate(Math.PI/4);
+      const hs=Math.round(ultIconSize/3); // 旧来fillRect(-8,-8,16,16)はultIconSize(旧24)の1/3相当。この比率を保つ(/1.5は大きすぎてstock間28pxで隣と重なる=Codexレビュー指摘)
       ctx.fillStyle=on?(flashing?'#ffffff':'#ff2d78'):'#2a2f3d';
-      ctx.fillRect(-8,-8,16,16);
-      ctx.strokeStyle='#fff';ctx.lineWidth=1.5;ctx.strokeRect(-8,-8,16,16);
+      ctx.fillRect(-hs,-hs,hs*2,hs*2);
+      ctx.strokeStyle='#fff';ctx.lineWidth=1.5;ctx.strokeRect(-hs,-hs,hs*2,hs*2);
     }
     ctx.restore();
   }
 }
 function comboTxt(x,y,n){
   ctx.save();ctx.translate(x,y);ctx.rotate(-0.08);
-  txt(n+' HIT!',0,0,28,'#ffa229');
+  txt(n+' HIT!',0,0,Math.round(28*HUD_SCALE*0.85),'#ffa229');
   ctx.restore();
 }
 const PAUSE_BTN={x:0,y:0,w:0,h:0}; // 戦闘中右上「II」(rHUDで毎フレーム位置確定・pressRouteと共有、§6.8 v2.5)
 function rHUD(){
   const p1=B.p[0],p2=B.p[1];
   updateAbilityPresentation(p1);updateAbilityPresentation(p2); // vNext PRESENTATION-R1 (A): B外部cache更新(描画1回につき1回。読み取り専用)
-  hpBar(16,14,232,20,p1,false);
-  hpBar(W-46-232,14,232,20,p2,true); // 右上に一時停止ボタン分の余白(30px)を確保
+  const hpW=232,hpH=Math.round(20*HP_BAR_H_SCALE); // GAME-UX-R1: 幅は両側バーが既に横幅を使い切っているため不変、太さのみ+20%
+  hpBar(16,14,hpW,hpH,p1,false);
+  hpBar(W-46-hpW,14,hpW,hpH,p2,true); // 右上に一時停止ボタン分の余白(30px)を確保
   PAUSE_BTN.x=W-38;PAUSE_BTN.y=8;PAUSE_BTN.w=30;PAUSE_BTN.h=30;
   ctx.save();
   ctx.fillStyle='rgba(0,0,0,0.35)';rr(PAUSE_BTN.x,PAUSE_BTN.y,PAUSE_BTN.w,PAUSE_BTN.h,8);ctx.fill();
@@ -3821,23 +3845,37 @@ function rHUD(){
   ctx.fillRect(PAUSE_BTN.x+9,PAUSE_BTN.y+7,5,16);
   ctx.fillRect(PAUSE_BTN.x+16,PAUSE_BTN.y+7,5,16);
   ctx.restore();
-  if(!drawUiIcon('ui_timer_medal',W/2,26,58)){
-    ctx.fillStyle='#12151c';ctx.beginPath();ctx.arc(W/2,26,25,0,TAU);ctx.fill();
-    ctx.strokeStyle='#fff';ctx.lineWidth=3;ctx.beginPath();ctx.arc(W/2,26,25,0,TAU);ctx.stroke();
+  const timerCy=29,timerR=Math.round(25*HUD_SCALE*0.9); // GAME-UX-R1: +12%程度に留め、win-dot行(y=64)との干渉を避ける
+  if(!drawUiIcon('ui_timer_medal',W/2,timerCy,Math.round(58*HUD_SCALE*0.9))){
+    ctx.fillStyle='#12151c';ctx.beginPath();ctx.arc(W/2,timerCy,timerR,0,TAU);ctx.fill();
+    ctx.strokeStyle='#fff';ctx.lineWidth=3;ctx.beginPath();ctx.arc(W/2,timerCy,timerR,0,TAU);ctx.stroke();
   }
-  txt(String(Math.max(0,Math.ceil(B.timer/60))),W/2,27,22,'#ffd23f');
-  txt(p1.c.name,18,48,15,'#fff','left');
-  txt(p2.c.name+(onlineActive()?'':'(CPU)'),W-18,48,15,'#fff','right');
+  txt(String(Math.max(0,Math.ceil(B.timer/60))),W/2,timerCy+1,Math.round(22*HUD_SCALE*0.9),'#ffd23f');
+  txt(p1.c.name,18,48,Math.round(15*HUD_SCALE*0.85),'#fff','left');
+  txt(p2.c.name+(onlineActive()?'':'(CPU)'),W-18,48,Math.round(15*HUD_SCALE*0.85),'#fff','right');
+  const dotR=8,dotGap=24; // GAME-UX-R1: 7px→8px(+14%)、間隔22→24
   for(let i=0;i<2;i++){
     ctx.fillStyle=(B.wins[0]>i)?'#ffd23f':'#3a4152';
-    ctx.beginPath();ctx.arc(26+i*22,64,7,0,TAU);ctx.fill();
+    ctx.beginPath();ctx.arc(26+i*dotGap,64,dotR,0,TAU);ctx.fill();
     ctx.fillStyle=(B.wins[1]>i)?'#ffd23f':'#3a4152';
-    ctx.beginPath();ctx.arc(W-26-i*22,64,7,0,TAU);ctx.fill();
+    ctx.beginPath();ctx.arc(W-26-i*dotGap,64,dotR,0,TAU);ctx.fill();
   }
+  drawCmdFeedback(0,66,64,'left'); // GAME-UX-R1: win-dot行(x=26..58)の右側の空き(x=66..hpバー終端)に自分側HUD近くで約1秒表示
+  drawCmdFeedback(1,W-66,64,'right');
+  const gw=Math.round(150*HUD_SCALE); // GAME-UX-R1: S/Guard/ability/ult行は中央に十分な空きがあるため+18%
   gauges(30,76,p1,false);
-  gauges(W-30-150,76,p2,true);
+  gauges(W-30-gw,76,p2,true);
   if(p1.combo>=2)comboTxt(72,158,p1.combo);
   if(p2.combo>=2)comboTxt(W-72,158,p2.combo);
+}
+function drawCmdFeedback(side,x,y,align){ // GAME-UX-R1: Command成立技名を約1秒表示(fade)。gameplay状態には一切触れない読み取り専用
+  const cf=CMD_FEEDBACK[side];
+  if(!cf.name||game.frame>cf.untilF)return;
+  const remain=cf.untilF-game.frame,fadeF=14;
+  const alpha=remain<fadeF?Math.max(0,remain/fadeF):1;
+  ctx.save();ctx.globalAlpha=alpha;
+  txt(cf.modern?cf.name+' [MODERN]':cf.name,x,y-4,15,'#7fe0ff',align); // y-4: 下のgauges行(y=76〜)と上の名前ラベル行(y=48)の間に収める
+  ctx.restore();
 }
 function drawShield(x,y,s){
   ctx.save();ctx.translate(x,y);
@@ -3921,9 +3959,9 @@ function rPad(){
   ctx.lineWidth=(p1Hold||justPhase)?3:1.5;
   rr(10,PT+8,W/2-20,upperH,20);ctx.stroke();
   ctx.restore();
-  drawShield(W/4,PT+upperH*0.4,26);
-  txt('ガード(ホールド)',W/4,PT+upperH*0.4+42,16,'rgba(207,232,255,0.85)');
-  txt('ジャストタップ＝見切り',W/4,PT+upperH*0.4+62,12,'rgba(255,225,90,0.75)');
+  drawShield(W/4,PT+upperH*0.4,30); // GAME-UX-R1: 26→30(+約15%)
+  txt('ガード(ホールド)',W/4,PT+upperH*0.4+42,18,'rgba(207,232,255,0.85)');
+  txt('ジャストタップ＝見切り',W/4,PT+upperH*0.4+62,14,'rgba(255,225,90,0.75)');
   for(const b of dirBtnRects()){ // 方向ボタン(←↓→): タップで即時発火、押下瞬間だけ発光させる(v0.11: 矢印→回避モーションの影絵アイコンに変更)
     const flashing=b.dir===dirBtnFlashKind&&performance.now()-dirBtnFlashAt<140;
     ctx.save();ctx.globalAlpha=flashing?0.9:0.5;
@@ -3934,9 +3972,9 @@ function rPad(){
     ctx.restore();
     ctx.save();
     if(flashing){ctx.shadowColor='#ffd23f';ctx.shadowBlur=18;} // 押下時の発光(§6.9)
-    const iconOk=drawUiIcon(DIR_BTN_ASSET[b.dir],b.x+b.w/2,b.y+b.h/2,Math.min(b.w,b.h)*0.62);
+    const iconOk=drawUiIcon(DIR_BTN_ASSET[b.dir],b.x+b.w/2,b.y+b.h/2,Math.min(b.w,b.h)*0.7); // GAME-UX-R1: 0.62→0.7(ボタン枠は不変・アイコンのみ拡大)
     ctx.restore();
-    if(!iconOk)txt(DIR_BTN_ARROW[b.dir],b.x+b.w/2,b.y+b.h/2+11,30,flashing?'#ffe14d':'rgba(160,230,180,0.85)');
+    if(!iconOk)txt(DIR_BTN_ARROW[b.dir],b.x+b.w/2,b.y+b.h/2+11,34,flashing?'#ffe14d':'rgba(160,230,180,0.85)');
   }
   // 右ゾーン: 高さタップ＝段（上/中/下）。発火はリリース時
   const rh=(H-PT)/3,labels=['上段','中段','下段'];
@@ -3948,9 +3986,9 @@ function rPad(){
     if(r>0){ctx.strokeStyle='rgba(255,255,255,0.10)';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(W/2,y);ctx.lineTo(W,y);ctx.stroke();}
     // 下段はつかみボタン(右下隅)と被らないよう上寄り・左寄りに配置
     const lx=(r===2)?W*0.62:W*0.75,ly=(r===2)?y+26:y+rh/2;
-    txt(labels[r],lx,ly,20,'rgba(255,214,180,0.8)');
+    txt(labels[r],lx,ly,23,'rgba(255,214,180,0.8)'); // GAME-UX-R1: 20→23(+15%)
   }
-  txt('タップの高さ＝段',W*0.6,PT+(H-PT)-14,12,'rgba(200,190,175,0.6)');
+  txt('タップの高さ＝段',W*0.6,PT+(H-PT)-14,14,'rgba(200,190,175,0.6)'); // GAME-UX-R1: 12→14
   { // つかみボタン(直径110px・肉球アイコン・薄縁取り、§6.6 v2.4)
     const flashing=performance.now()-grabBtnFlashAt<140;
     ctx.save();
@@ -4648,12 +4686,15 @@ function drawMovelistCommand(myF,startY){ // COMMAND: BAL.CMD.moves[myF.c.id]の
   detailCard(20,y,406,60,'#7fd8ff');
   detailWrapped('コマンド技7種の現行値(発生/持続/硬直・ダメージ・GuardDamage・Classic Cancel受付等)。',34,y+20,378,13,'#cfd6e6',2);y+=72;
   const moves=commandMovesFor(myF.c);
+  const modernPats=MODERN_PATTERNS[skeletonIdOf(myF.c)]||[];
   for(let i=0;i<moves.length;i++){
     const m=moves[i];
     const seqStr=m.seq.map(function(d){return DIR_ARROW[d];}).join('')+'＋'+(m.type==='grab'?'つかみ':LV_LABEL[m.trigger]);
+    const modernPat=modernPats.find(function(p){return p.move===m.name;});
+    const modernLine='MODERN: '+(modernPat?modernPat.seq.map(function(lv){return LV_LABEL[lv];}).join('→'):'—');
     const badges=moveBadges(m);
     const bodyLines=2+(badges.length?1:0);
-    const h=100+bodyLines*4;
+    const h=100+bodyLines*4+20;
     detailCard(20,y,406,h,m.type==='grab'?'#ff9500':(m.type==='stance'?'#ffd23f':'#7fd8ff'));
     txt((i+1)+'. '+m.name,34,y+24,18,'#fff','left');
     txt(seqStr,392,y+24,15,'#ffd23f','right');
@@ -4670,8 +4711,9 @@ function drawMovelistCommand(myF,startY){ // COMMAND: BAL.CMD.moves[myF.c.id]の
     }
     txt(frameLine,34,y+48,13,'#cfd6e6','left');
     txt(dmgLine,34,y+68,13,'#ffb6b6','left');
+    txt(modernLine,34,y+88,13,modernPat?'#9adfff':'#747c8d','left'); // GAME-UX-R1: MODERN_PATTERNS(既存ライブcatalog)からの逆引き表示のみ。新規truth tableは作らない
     if(m.ccWindow!=null)txt('CC受付'+m.ccWindow+'F',392,y+68,12,'#9adfff','right'); // 構え技(type='stance')はClassic Cancel対象外のためccWindow自体が無い(BAL.CMD.moves定義通り)
-    if(badges.length)drawMoveBadges(badges,34,y+84,358);
+    if(badges.length)drawMoveBadges(badges,34,y+108,358);
     y+=h+12;
   }
   return y;
