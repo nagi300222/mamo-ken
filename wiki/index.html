@@ -9,24 +9,23 @@
 </head>
 <body>
 <p id="loading" style="font-family:'MS Gothic','ＭＳ ゴシック','Osaka-Mono','Hiragino Kaku Gothic ProN','Yu Gothic UI',monospace;padding:20px">読み込み中…</p>
-<script src="p0.js"></script>
-<script src="p1.js"></script>
-<script src="p2.js"></script>
-<script src="p3.js"></script>
-<script src="p4.js"></script>
-<script src="p5.js"></script>
-<script src="p6.js"></script>
-<script src="p7.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/pako@2.1.0/dist/pako.min.js"></script>
+<script src="r00.js"></script>
+<script src="r01.js"></script>
+<script src="r02.js"></script>
+<script src="r03.js"></script>
+<script src="r04.js"></script>
+<script src="r05.js"></script>
+<script src="r06.js"></script>
+<script src="r07.js"></script>
 <script>
 (function(){
   try{
-    var b64=window.__MAMOKEN_WIKI_GZ||'';
+    var b64=window.__MAMOKEN_WIKI_RAW||'';
     if(!b64)throw new Error('Wikiデータを読み込めませんでした');
     var bin=atob(b64);
     var bytes=Uint8Array.from(bin,function(c){return c.charCodeAt(0);});
-    if(!window.pako)throw new Error('ページ展開ライブラリを読み込めませんでした');
-    var html=window.pako.ungzip(bytes,{to:'string'});
+    var html=new TextDecoder('utf-8').decode(bytes);
+    if(!/^<!doctype html>/i.test(html))throw new Error('Wikiデータの形式が正しくありません');
     document.open();document.write(html);document.close();
   }catch(e){
     document.body.innerHTML='<p style="font-family:\'MS Gothic\',\'ＭＳ ゴシック\',\'Osaka-Mono\',\'Hiragino Kaku Gothic ProN\',monospace;padding:20px">サイトの読み込みに失敗しました。<br>'+String(e)+'</p>';
