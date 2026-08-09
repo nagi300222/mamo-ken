@@ -1008,9 +1008,11 @@ function advanceOnlineResult(){ // 勝ち残り交代(v0.9 PR4)のサーバー�
     onlineReset();game.screen='title';
   }
 }
-function newFighter(ci,side){
+function newFighter(ci,side,palette){
   const c=CHARS[ci];
   return{c:c,side:side,baseX:side===0?152:388,y:428,
+    palette:palette||(side===1?'p2':'p1'), // PALETTE-R1: 提示専用(current-art battle spriteのバリアント選択のみに使用)。
+    // hitbox/timing/damageを一切読まない。roundInit()の対象外なのでRound reset/rematchを通じて自然に保持される。
     hp:maxHpFor(c),guard:maxGuardFor(c),s:0,ult:0,focus:0,
     phase:'idle',pf:0,atkLv:null,hasHit:false,landedHit:false, // landedHit(BAL-R1.1新設): hasHitは「active窓で解決を試みた(ガード/回避も含む)」を表す既存フラグのため、
     // 「確定ヒット(ガード/回避されず本当に命中した)」だけをchainのゲートに使うためlandedHitを分離する(hitApply()内でのみtrueにする)
@@ -1047,8 +1049,9 @@ function newFighter(ci,side){
 function startBattle(){
   lastMatchOnline=false;
   rng=mulberry32((Date.now()>>>0)^0x5f3759df);
+  const cpuPalette=resolveCpuPalette(game.p1,game.p2,selPalette); // PALETTE-R1: CPU color rule
   B={f:0,round:1,wins:[0,0],timer:BAL.TIME,fightStartF:0, // v0.10 (8): YOUマーカーの強調2秒判定に使う「fightに入ったF」
-    p:[newFighter(game.p1,0),newFighter(game.p2,1)],
+    p:[newFighter(game.p1,0,selPalette),newFighter(game.p2,1,cpuPalette)],
     flow:'intro',flowF:0,hitstop:0,shake:0,
     clash:null,ultUser:-1,ann:[],fx:[],koSide:-1,result:null,pendKO:-1,clashStreak:[0,0]};
   for(const f of B.p)preloadCurrentArtCharacter(f.c.id);
@@ -1059,6 +1062,10 @@ function startOnlineBattle(seed,charIdxBySlot,delayF){ // オンライン対戦�
   lastMatchOnline=true;
   rng=mulberry32(seed>>>0);
   game.p1=charIdxBySlot[0];game.p2=charIdxBySlot[1];
+  // PALETTE-R1: オンラインの手動色選択は今回のプロトコル変更コストに対して過大と判断し対象外とする。
+  // newFighter()にpaletteを渡さないことで既存のside既定(side0='p1'/side1='p2')にfallbackさせる
+  // ("安全なdeterministic fallback"側。両クライアントが同じcharIdxBySlot/slot割当から独立に同じ値を
+  // 導出するため、同キャラ同色の衝突自体が原理的に発生しない=協議・追加メッセージ不要)。
   B={f:0,round:1,wins:[0,0],timer:BAL.TIME,fightStartF:0, // v0.10 (8): YOUマーカーの強調2秒判定に使う「fightに入ったF」
     p:[newFighter(game.p1,0),newFighter(game.p2,1)],
     flow:'intro',flowF:0,hitstop:0,shake:0,
@@ -2822,6 +2829,14 @@ function diffRect(i){
 let selCharIdx=0;
 let selectFadeFromId=null,selectFadeStart=0; // P1追加: キャラ切替時のクロスフェード(旧キャラid・開始time)
 const SELECT_FADE_MS=220;
+// PALETTE-R1: プレイヤーが選ぶ配色(既存のcurrent-art p1/p2バリアントを流用。新規ジオメトリは追加しない)。
+// aiDifficultyと同様にキャラ選択画面で切替・デフォルト'p1'・セッション中保持。
+let selPalette='p1';
+function resolveCpuPalette(playerCharIdx,cpuCharIdx,playerPalette){
+  // CPUは既定で1P配色。プレイヤーと同キャラでプレイヤーが1P配色の時だけ衝突を避けて2Pへ切り替える
+  // (Player=1P→CPU=2P/Player=2P→CPU=1Pのまま/別キャラ→CPU=1Pのまま、の3ケースをこの1分岐で満たす)。
+  return(playerCharIdx===cpuCharIdx&&playerPalette==='p1')?'p2':'p1';
+}
 const SELECT_SLOTS=9; // P1: 3段×3列。全9キャラが実装済みのためミステリー枠は無し(CHARS/ROSTERに足すだけで枠が増える構造は維持)
 // P1追加: KOF/餓狼風レイアウト(縦画面翻訳)。上〜中央を左=大型立ち絵/右=顔アイコン密グリッドに分割
 const SELECT_SAFE_TOP=26,SELECT_SAFE_BOTTOM=22; // ノッチ/ホームバー避けの余白(canvasは常にletterboxで全体表示されるため実質は見た目の余白)
@@ -2838,6 +2853,18 @@ const SELECT_DETAIL_BTN={x:18,y:SELECT_TOP_Y+SELECT_TOP_H+14,w:W-36,h:60};
 const SELECT_DIFF_Y=SELECT_DETAIL_BTN.y+SELECT_DETAIL_BTN.h+34;
 const SELECT_CONFIRM_BTN={x:18,y:SELECT_DIFF_Y+46+14,w:W-36,h:68};
 const SELECT_BACK_BTN={x:18,y:SELECT_CONFIRM_BTN.y+SELECT_CONFIRM_BTN.h+10,w:W-36,h:50};
+// PALETTE-R1: 1P/2P配色選択(既存キャラの色バリエーションを流用)+ライブプレビュー。
+// 既存の帯状メニューの下、キャプション文の下に新規追加(既存要素の座標は一切変更しない)。
+const SELECT_PALETTE_Y=SELECT_BACK_BTN.y+SELECT_BACK_BTN.h+50;
+const SELECT_PALETTE_SWATCH_W=110,SELECT_PALETTE_SWATCH_H=60,SELECT_PALETTE_GAP=14;
+const SELECT_PALETTE_PREVIEW={w:96,h:76};
+const SELECT_PALETTE_GROUP_X=(W-(SELECT_PALETTE_SWATCH_W*2+SELECT_PALETTE_GAP*2+SELECT_PALETTE_PREVIEW.w))/2;
+function paletteSwatchRect(i){ // i=0→1P/i=1→2P
+  return{x:SELECT_PALETTE_GROUP_X+i*(SELECT_PALETTE_SWATCH_W+SELECT_PALETTE_GAP),y:SELECT_PALETTE_Y,w:SELECT_PALETTE_SWATCH_W,h:SELECT_PALETTE_SWATCH_H};
+}
+function palettePreviewRect(){
+  return{x:SELECT_PALETTE_GROUP_X+2*(SELECT_PALETTE_SWATCH_W+SELECT_PALETTE_GAP),y:SELECT_PALETTE_Y-8,w:SELECT_PALETTE_PREVIEW.w,h:SELECT_PALETTE_PREVIEW.h};
+}
 /* T22 character detail panel */
 const CHARACTER_DETAIL_CATALOG=window.__MAMOKEN_CHARACTER_CATALOG__||null;
 const CHARACTER_DETAIL_TABS=[
@@ -2886,6 +2913,10 @@ function selectPress(p){
     sfx('tap');startBattle();return;
   }
   if(inRect(p,SELECT_BACK_BTN.x,SELECT_BACK_BTN.y,SELECT_BACK_BTN.w,SELECT_BACK_BTN.h)){sfx('tap');game.screen='title';return;}
+  for(let i=0;i<2;i++){ // PALETTE-R1: 1P/2P配色選択
+    const r=paletteSwatchRect(i);
+    if(inRect(p,r.x,r.y,r.w,r.h)){selPalette=i===0?'p1':'p2';sfx('tap');return;}
+  }
 }
 function characterDetailPress(p){
   for(let i=0;i<CHARACTER_DETAIL_TABS.length;i++){
@@ -3271,7 +3302,7 @@ function currentArtFrame(f){return CURRENT_ART_RUNTIME&&CURRENT_ART_RUNTIME.reso
 function rFighter(f,ox,oy){ // 仮キャラは既存3体の骨格・共通24ポーズを明示的に流用
   const currentFrame=currentArtFrame(f);
   if(currentFrame){
-    const palette=CURRENT_ART_RUNTIME.paletteForSide(f.side),currentSprite=ensureCurrentArtFrameAsset(currentFrame,palette);
+    const palette=f.palette||CURRENT_ART_RUNTIME.paletteForSide(f.side),currentSprite=ensureCurrentArtFrameAsset(currentFrame,palette); // PALETTE-R1: 選択済みpaletteを優先、未設定時のみ既存side既定にfallback
     if(currentSprite&&currentSprite.ready&&!currentSprite.failed){drawCurrentArtFighter(f,ox,oy,currentSprite,currentFrame);return;}
   }
   const sid=skeletonIdOf(f.c),sp=SPRITES[sid]&&SPRITES[sid][poseId(f)];
@@ -4562,6 +4593,27 @@ function rSelect(){ // P1追加: KOF/餓狼風レイアウト(縦画面翻訳)�
   ctx.strokeStyle='rgba(255,255,255,0.3)';ctx.lineWidth=2;rr(SELECT_BACK_BTN.x,SELECT_BACK_BTN.y,SELECT_BACK_BTN.w,SELECT_BACK_BTN.h,12);ctx.stroke();
   txt('もどる',W/2,SELECT_BACK_BTN.y+SELECT_BACK_BTN.h/2,16,'#dfe4ee');
   txt('●青=オンライン対戦可(全員可)　9体ともオフラインで対戦可能',W/2,SELECT_BACK_BTN.y+SELECT_BACK_BTN.h+26,11,'#aeb6c8');
+  drawPaletteSelect(c);
+}
+function drawPaletteSelect(c){ // PALETTE-R1: 1P/2P配色選択+ライブプレビュー
+  txt('カラー',W/2,SELECT_PALETTE_Y-14,12,'#a2abc0');
+  const labels=['1P','2P'];
+  for(let i=0;i<2;i++){
+    const r=paletteSwatchRect(i),pal=i===0?'p1':'p2',active=selPalette===pal;
+    ctx.fillStyle=active?'rgba(255,255,255,0.14)':'#1a1d29';rr(r.x,r.y,r.w,r.h,10);ctx.fill();
+    ctx.strokeStyle=active?'#7fd8ff':'#3a4560';ctx.lineWidth=active?3:2;rr(r.x,r.y,r.w,r.h,10);ctx.stroke();
+    txt(labels[i]+'配色',r.x+r.w/2,r.y+r.h/2,15,active?'#eaf9ff':'#cfd6e6');
+  }
+  const pr=palettePreviewRect();
+  ctx.save();rr(pr.x,pr.y,pr.w,pr.h,10);ctx.clip();
+  ctx.fillStyle='#12151f';ctx.fillRect(pr.x,pr.y,pr.w,pr.h);
+  // current-art battle spriteは戦闘キャンバス基準の絶対サイズで描かれるため、小さなプレビュー枠に収める
+  // ためにtranslate+scaleで縮小する(このスケールは提示専用でbattleScale等gameplay値には触れない)。
+  const previewScale=0.19;
+  ctx.translate(pr.x+pr.w/2,pr.y+pr.h-6);ctx.scale(previewScale,previewScale);
+  rFighter({c:CHARS[c.combatIndex],side:0,palette:selPalette},0,0); // 実戦闘と同じCHARS[]エントリを使う(ROSTER表示用エントリとは別object)
+  ctx.restore();
+  ctx.strokeStyle='#3a4560';ctx.lineWidth=2;rr(pr.x,pr.y,pr.w,pr.h,10);ctx.stroke();
 }
 /* T29 visual audit fixes */
 function rCharacterDetail(){
