@@ -79,7 +79,7 @@ const BAL={ // 03_data_design.md v2.0 §2 balance table 準拠
   MIKIRI:{window:5,windowPinch:7,whiff:24}, // 見切り: 接触±5F(ピンチ±7F)。空振りは24Fガード不能(BAL-R1: 22→24)
   DOWNWAKE:{ // BAL-R1新設: ダウン種別ごとにdownF/wakeF/追撃可否を持つ(旧BAL.DOWNを置換)
     lightDown:{downF:36,wakeF:18,followupAllowed:true}, // 下段技のダウン(旧BAL.DOWN相当。45→36F/20→18F)
-    hardDown:{downF:48,wakeF:20,followupAllowed:false}, // 現状どの技からも未結線(将来の技追加向けの定義のみ。reports/balance/BAL_R1_MAPPING.md §5参照)
+    hardDown:{downF:48,wakeF:20,followupAllowed:false}, // godan天蓋落とし/弾丸頭突きがdown:'hardDown'で使用中(reports/balance/BAL_R1_MAPPING.md §5参照)
     throwDown:{downF:42,wakeF:18,followupAllowed:false}, // 投げヒット(BAL-R1で新規にdown化。旧は単純hitstun)
     ultimateDown:{downF:54,wakeF:24,followupAllowed:false}, // 奥義ヒット(BAL-R1で新規にdown化。旧は単純hitstun)
     followupDamageScale:0.45,maxFollowupHits:1,followupExtendsDown:false,

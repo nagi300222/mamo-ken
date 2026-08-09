@@ -112,6 +112,65 @@ exists for the new gauge frame assets; Bullet's `charge.over` asset is
 unreachable given the current cap-3 rule; Dark Moguzo's afterimage cadence
 is a documented cosmetic choice), and verification results.
 
+## Held due to insufficient spec (PRESENTATION-R1 (F))
+
+A sweep of `prototype/mamoken_prototype_v01.html`'s `BAL.CMD.moves` for
+`(未結線)`-tagged fields (internal-only annotations on the `tags` array —
+never rendered to players; `moveBadges()` reads individual named fields
+like `m.cost`/`m.armorStartF`/`m.unblockable`, never the raw `tags` array,
+so none of the text below has ever leaked into any UI) found exactly 4
+moves across 2 characters with unimplemented gated behavior noted in-line.
+Per this session's standing instruction — "一意に決まらないものは実装せ
+ず`CLOSURE_STATUS.md`へ列挙して残す" — none of the 4 are implemented by
+this PR; each is held here with the specific reason no unique
+implementation exists.
+
+- **Moguzo 胴押し** (`小Pushback(未結線)`) / **Hakuma 不動押し**
+  (`小Pushback(未結線)`): `COMBAT_VNEXT_FINAL.md` §13 confirms Pushback is
+  a real, intentional exception to the "Normal common root knockback=0"
+  rule (§6, "投げ/Roar/Ult/Gyuiin/down/明示Pushbackのみ例外") and tags both
+  moves qualitatively as "small Pushback"/"small push" — but no doc or
+  code anywhere gives an exact magnitude. There is no `BAL.KB` tier table
+  or named "small"/"large" knockback constant in the engine at all (every
+  other knockback-bearing effect in the codebase is an ad-hoc per-call-site
+  `f.kb=N` literal); a grep for `KB\.|kb:\d|BAL\.KB` across the prototype
+  confirms this. Picking any specific pixel/frame value to satisfy "small"
+  would be inventing a new BAL value under a qualitative label the spec
+  never quantified — exactly what the standing directive prohibits.
+  Deferred until a doc or contract states the exact magnitude.
+- **Pisuke すり抜け足** (`Hit→CLINCH(未結線)`) / **Pisuke つむじ返し**
+  (`CHASE_TO_CONTACT(未結線)`, `maximumApproachSteps2(未結線)`): unlike the
+  Pushback items, exact values genuinely exist —
+  `design/combat/contracts/MAMOKEN_CURRENT_3_CHARACTERS_MOVESPEC_CLOSURE_
+  v0.2.json` specifies `"forwardMovement":"ENTER_CLINCH"` for すり抜け足
+  and `"forwardMovement":"CHASE_TO_CONTACT","maximumApproachSteps":2` for
+  つむじ返し. But this contract (`MAMOKEN_COMBAT_CONTRACT_v0.2.md`)
+  describes a CLINCH posture and a stepwise opponent-approach mechanic that
+  the live engine has no architecture for at all: combat resolution here
+  is purely phase/state-machine driven (`striking()`/`attackResolve()`/
+  `resolveHits()`), with zero position- or distance-based gating anywhere
+  — `baseX` exists only for FX/visual placement, never read by any hit- or
+  movement-resolution function. Implementing either flag would mean
+  building a new spatial/movement subsystem from scratch, not filling in a
+  parameter on an existing one. That is disproportionate scope for a
+  presentation-only safe-fix pass and falls under this session's
+  "structurally impossible without a larger architecture change" stop
+  condition. Deferred; a dedicated PR scoped explicitly to adding
+  position/distance mechanics would be the right place to pick this up.
+- **Also flagged for consistency (not previously `(未結線)`-tagged)**:
+  Godan's 大山押し is tagged "small push" in the same `COMBAT_VNEXT_FINAL.
+  md` §13 table (line ~303) as 胴押し/不動押し, but its code entry (`tags:
+  ['Quick16','Modern','Stock2','Hyper']`) carries no `(未結線)` marker. Same
+  reasoning as the two Pushback items above applies (no numeric magnitude
+  exists anywhere) — noted here for completeness/honesty rather than left
+  silently inconsistent, but not implemented for the same reason.
+
+No code behavior changes result from this section. The one related fix
+made in this PR is a correction to a now-stale code *comment* (not a
+behavior change): `hardDown`'s inline note previously read "現状どの技か
+らも未結線" ("currently unused by any move") — no longer true since Godan's
+天蓋落とし and 弾丸頭突き both set `down:'hardDown'`. Corrected to say so.
+
 ## Explicit interpretation note carried forward from PR4
 
 Takimaru PRESSURE's Grab input is accepted for the fighter's entire
