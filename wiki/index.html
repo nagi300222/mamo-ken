@@ -7,32 +7,29 @@
 <title>マモ拳 攻略Wiki</title>
 </head>
 <body>
-<p style="font-family:'MS Gothic','ＭＳ ゴシック',monospace;padding:20px">読み込み中…</p>
-<script src="chunks/part00.js"></script>
-<script src="chunks/part01.js"></script>
-<script src="chunks/part02.js"></script>
-<script src="chunks/part03.js"></script>
-<script src="chunks/part04.js"></script>
-<script src="chunks/part05.js"></script>
-<script src="chunks/part06.js"></script>
-<script src="chunks/part07.js"></script>
-<script src="chunks/part08.js"></script>
-<script src="chunks/part09.js"></script>
-<script src="chunks/part10.js"></script>
-<script src="chunks/part11.js"></script>
-<script src="chunks/part12.js"></script>
-<script src="chunks/part13.js"></script>
-<script src="chunks/part14.js"></script>
-<script src="chunks/part15.js"></script>
-<script src="chunks/part16.js"></script>
-<script src="chunks/part17.js"></script>
-<script src="chunks/part18.js"></script>
+<p style="font-family:'MS Gothic','ＭＳ ゴシック','Osaka-Mono','Hiragino Kaku Gothic ProN','Yu Gothic UI',monospace;padding:20px">読み込み中…</p>
+<script src="p0.js"></script>
+<script src="p1.js"></script>
+<script src="p2.js"></script>
+<script src="p3.js"></script>
+<script src="p4.js"></script>
+<script src="p5.js"></script>
+<script src="p6.js"></script>
+<script src="p7.js"></script>
 <script>
-(function(){
-  var b64=(window.__MAMOKEN_WIKI_B64||[]).join('');
-  var bytes=Uint8Array.from(atob(b64),c=>c.charCodeAt(0));
-  var html=new TextDecoder('utf-8').decode(bytes);
-  document.open();document.write(html);document.close();
+(async function(){
+  try{
+    const b64=window.__MAMOKEN_WIKI_GZ||'';
+    const bin=atob(b64);
+    const bytes=Uint8Array.from(bin,function(c){return c.charCodeAt(0);});
+    if(!('DecompressionStream' in window))throw new Error('このブラウザは圧縮ページ展開に対応していません');
+    const ds=new DecompressionStream('gzip');
+    const stream=new Blob([bytes]).stream().pipeThrough(ds);
+    const html=await new Response(stream).text();
+    document.open();document.write(html);document.close();
+  }catch(e){
+    document.body.innerHTML='<p style="font-family:\'MS Gothic\',\'ＭＳ ゴシック\',monospace;padding:20px">サイトの読み込みに失敗しました。ブラウザを最新版に更新してください。<br>'+String(e)+'</p>';
+  }
 })();
 </script>
 </body>
