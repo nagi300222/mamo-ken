@@ -986,7 +986,8 @@ function newFighter(ci,side){
     dirBuf:[],cmdMove:null,cmdIdx:null, // コマンド技(v0.10 §6.8): 方向入力バッファ/発動中の技定義とインデックス
     cmdBufMove:null,cmdBufIdx:null, // コマンド先行入力(v0.11 §6.9): 硬直中に受理し行動可能Fで自動発動する技の保持先
     dodgeBufKind:null,dodgeBufF:0, // vNext PR2 (§2 Guard→Dodge 10F buffer): Blockstun中に受理したDodge入力の保持先(tryDodgeBuf()参照)
-    opNormalLv:null,opRepeat:0}; // vNext PR2 (§4 OP相殺): 直前に出した同一Normalの段/その連続回数(1〜4)。startAtk()/startCrouchAtk()で更新
+    opNormalLv:null,opRepeat:0, // vNext PR2 (§4 OP相殺): 直前に出した同一Normalの段/その連続回数(1〜4)。startAtk()/startCrouchAtk()で更新
+    dodgeSuccess:false}; // vNext PR2 (§2 Correct Dodge completion18F): このdodge instanceが正解回避(beats)だったかのフラグ。advance()の'dodge'分岐が完了Fの判定に使う
 }
 function startBattle(){
   lastMatchOnline=false;
@@ -1028,7 +1029,7 @@ function roundInit(first){
     f.guardLv=null;f.combo=0;f.normalChainCount=0;f.buf=null;f.kb=0;f.lunge=0;f.sNo=0;f.downHitUsed=false;
     f.guardRegenCooldownF=0;f.dizzyHits=0;f.dizzyDamage=0;f.postBreakActive=false;
     f.lastAtkLv=null;f.atkStreak=0;f.yomare=false;
-    f.dodgeType=null;f.counterReadyF=0;f.clinchF=0;f.comboCounter=false;
+    f.dodgeType=null;f.counterReadyF=0;f.clinchF=0;f.comboCounter=false;f.dodgeSuccess=false;
     f.dirBuf.length=0;f.cmdMove=null;f.cmdIdx=null;f.cmdBufMove=null;f.cmdBufIdx=null;
     f.dodgeBufKind=null;f.dodgeBufF=0;
     f.opNormalLv=null;f.opRepeat=0; // vNext PR2 (§4 OP相殺): ラウンド開始で持ち越さない
@@ -1139,7 +1140,7 @@ function startAtk(f,lv,chain){
 }
 function fxYomare(f){B.fx.push({k:'yomare',x:fpos(f),y:relY(f,1.027),f:0,dur:50});}
 function startDodge(f,kind){ // kind: 'crouch'|'sway'|'lunge'
-  f.phase='dodge';f.pf=0;f.dodgeType=kind;f.atkLv=null;f.guardLv=null;f.buf=null;f.combo=0;f.normalChainCount=0;f.hasHit=false;f.landedHit=false;f.cmdArmorUsed=false;
+  f.phase='dodge';f.pf=0;f.dodgeType=kind;f.atkLv=null;f.guardLv=null;f.buf=null;f.combo=0;f.normalChainCount=0;f.hasHit=false;f.landedHit=false;f.cmdArmorUsed=false;f.dodgeSuccess=false;
   sfx('swish');
 }
 function startCrouchAtk(f){ // しゃがみ中(1〜14F)の右ゾーンタップ＝しゃがみ突き。高さは問わない
@@ -1396,11 +1397,11 @@ function tryBuf(f){
 function tryDodgeBuf(f){ // vNext PR2 (§2 Guard→Dodge 10F buffer): Blockstun中に受理したDodge入力を、最初の
   // actionable frame(guard/idle復帰)から通常Dodgeとして開始する。10F以内にactionableへ到達しなければ破棄する
   if(!f.dodgeBufKind)return;
-  f.dodgeBufF--;
-  if(f.dodgeBufF<=0){f.dodgeBufKind=null;return;}
-  if(f.phase==='idle'||f.phase==='guard'){
-    const k=f.dodgeBufKind;f.dodgeBufKind=null;startDodge(f,k);
+  if(f.phase==='idle'||f.phase==='guard'){ // actionable復帰の判定を減算より先に行う(10フレーム目ちょうどの復帰も受理するため)
+    const k=f.dodgeBufKind;f.dodgeBufKind=null;startDodge(f,k);return;
   }
+  f.dodgeBufF--;
+  if(f.dodgeBufF<=0)f.dodgeBufKind=null;
 }
 function advance(f){
   f.pf++;
@@ -1456,8 +1457,10 @@ function advance(f){
     }
   }else if(f.phase==='mikiriRec'){ // 見切り空振り: ガード不能の硬直
     if(f.pf>=BAL.MIKIRI.whiff){f.pf=0;resolveToIdle(f);}
-  }else if(f.phase==='dodge'){ // 回避: 1-10F判定 / 11-22F戻り。位置は変えない
-    if(f.pf>=BAL.DODGE.totalF){f.pf=0;f.dodgeType=null;resolveToIdle(f);}
+  }else if(f.phase==='dodge'){ // 回避: 2-12F判定 / 戻り。位置は変えない。vNext PR2 (§2): 正解回避はcounterReadyF(18F)で完了、
+    // 誤回避/空振りはtotalF(22F)まで戻らない(dodgeSuccessは正解回避成立時のみtrue。startDodge()でリセット)
+    const dodgeCompF=f.dodgeSuccess?BAL.DODGE.counterReadyF:BAL.DODGE.totalF;
+    if(f.pf>=dodgeCompF){f.pf=0;f.dodgeType=null;f.dodgeSuccess=false;resolveToIdle(f);}
   }else if(f.phase==='down'){ // ダウン: 追撃1発を受けたら以後は無敵のまま起き上がりへ。BAL-R1: downTypeごとにdownF可変
     if(f.pf>=BAL.DOWNWAKE[f.downType].downF){f.phase='wake';f.pf=0;}
   }else if(f.phase==='wake'){ // 起き上がり全身無敵→強制起き上がり(起き攻め不可)。BAL-R1: downTypeごとにwakeF可変
@@ -1554,7 +1557,7 @@ function attackResolve(att,def){
   if(dodgeActive(def)){
     const rule=DODGE_TABLE[def.dodgeType];
     if(rule.beats.includes(att.atkLv)){ // vNext PR2 (§3): 回避成功(2種のうちどちらでも同格)。攻撃側はスカ扱い、防御側はcounterReadyを獲得
-      def.counterReadyF=BAL.DODGE.counterReadyF;
+      def.counterReadyF=BAL.DODGE.counterReadyF;def.dodgeSuccess=true; // vNext PR2 (§2 Correct Dodge completion18F): 正解回避は18Fで復帰(通常のtotalF=22Fより早い)
       if(def.dodgeType==='lunge')def.clinchF=BAL.DODGE.clinchF; // 踏み込み成功→追加で密着12F
       gainS(def,'dodge'); // vNext PR2 (§11 S Gain): Correct Dodge+6
       B.fx.push({k:'suki',x:fpos(att),y:relY(att,0.908),f:0,dur:20});
