@@ -3817,7 +3817,7 @@ function gauges(x,y,f,flip){
       ctx.filter='none';
     }else{
       ctx.rotate(Math.PI/4);
-      const hs=Math.round(ultIconSize/1.5);
+      const hs=Math.round(ultIconSize/3); // 旧来fillRect(-8,-8,16,16)はultIconSize(旧24)の1/3相当。この比率を保つ(/1.5は大きすぎてstock間28pxで隣と重なる=Codexレビュー指摘)
       ctx.fillStyle=on?(flashing?'#ffffff':'#ff2d78'):'#2a2f3d';
       ctx.fillRect(-hs,-hs,hs*2,hs*2);
       ctx.strokeStyle='#fff';ctx.lineWidth=1.5;ctx.strokeRect(-hs,-hs,hs*2,hs*2);
