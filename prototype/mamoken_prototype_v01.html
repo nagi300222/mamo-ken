@@ -4356,8 +4356,8 @@ function drawDetailMoves(c,startY){
   txt('技名・入力・属性・Reach・用途・実装状態',44,y+55,13,'#cfd6e6','left');y+=98;
   // vNext PRESENTATION-R1 (C): Classic Cancelの一般説明。per-move受付F(ccWindow)はキャラ/技ごとに
   // 12-16Fと異なる(わざ表COMMANDタブがBAL.CMD.movesからlive表示)ため、ここでは仕組みのみ触れる。
-  detailCard(26,y,414,86,'#a7d9c9');txt('クラシックキャンセル',44,y+23,13,'#a7d9c9','left');
-  detailWrapped('Command技がHITした瞬間から一定F(技により12〜16F)の間、別のCommand技をClassic(直接)入力でキャンセルして繋げられる。技ごとの受付Fはわざ表のCOMMANDタブを参照。',44,y+48,378,13,'#dfe4ee',3);y+=98;
+  detailCard(26,y,414,150,'#a7d9c9');txt('クラシックキャンセル',44,y+23,13,'#a7d9c9','left');
+  detailWrapped('打撃/つかみのCommand技(構え技・Pressure専用つかみは対象外)がHITした瞬間から12〜16Fの間、別の打撃/つかみCommand技へClassic(直接)入力でキャンセルできる(同技への連続キャンセルは不可)。技ごとの受付Fはわざ表COMMANDタブ参照。',44,y+48,378,13,'#dfe4ee',6);y+=164;
   // vNext PRESENTATION-R1 (C): character-catalog(src/core/character-catalog.ts)のmove.implementationStatus
   // はCMD-R1時代(9キャラ中3技のみ実装)のまま更新されておらず、大半が古い'design_confirmed'を返す
   // (PR#80の63/63 runtime監査で全63技が既にlive実装済みと確認済み)。表示はカタログ値を信用せず、常に
