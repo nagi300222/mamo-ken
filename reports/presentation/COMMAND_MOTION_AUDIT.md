@@ -79,32 +79,35 @@ resolve *a* valid frame via `frameAt()`'s index clamp, silently masking the bug 
 
 - godan 巌の構え: pf/frameIndex = 0:0, 1:0, 2:0, 3:1, 4:1, 5:1, 6:2, 7:2, 8:2, 9:2, 10:2, 11:2, 12:2, 13:2, 14:3, 15:3, 16:3, 17:3, 18:3, 19:3, 20:3, 21:3, 22:3, 23:3, 24:3, 25:3, 26:3, 27:3, 28:3, 29:3, 30:3, 31:3, 32:3, 33:3, 34:3
 
-## Modern entry-path parity
+## Modern entry-path parity (25/25 PASS)
 
-| charId | seq | expected move | replaced | actionId matches direct-call |
-|---|---|---|---|---|
-| moguzo | high-low-mid | 地走り | true | true |
-| moguzo | low-high-high | 昇撃 | true | true |
-| moguzo | mid-low-mid | 胴押し | true | true |
-| pisuke | high-high-high-mid | 二連牙 | true | true |
-| pisuke | low-mid-mid-low | スライディング | true | true |
-| pisuke | mid-high-high-high | 宙返り蹴 | true | true |
-| pisuke | low-high-high-mid | つむじ返し | true | true |
-| godan | low-mid | 岩砕き | true | true |
-| godan | mid-mid | 大山押し | true | true |
-| hakuma | mid-mid | 雪壁掌 | true | true |
-| hakuma | high-high | 白峰打ち | true | true |
-| chirka | high-low-mid | だまし突き | true | true |
-| chirka | low-mid-low | 影踏み | true | true |
-| chirka | mid-high-high | 戻り蹴り | true | true |
-| takimaru | low-high | 熊手払い | true | true |
-| takimaru | high-low | 丸抱え | true | grab-pending-path (see Takimaru note) |
-| yomikage | high-mid | 影縫い | true | true |
-| yomikage | mid-high | 月かすめ | true | true |
-| bullet | high-low-mid | 弾み突き | true | true |
-| bullet | mid-mid-low | 尾払い | true | true |
-| bullet | low-high-high | 跳ね上げ | true | true |
-| dark_moguzo | high-low-low-mid | 黒走り | true | true |
-| dark_moguzo | low-high-high-high | 逆昇撃 | true | true |
-| dark_moguzo | mid-low-low-mid | 闇押し | true | true |
-| dark_moguzo | low-mid-mid-low | 黒砂払い | true | true |
+(Takimaru's grab-type pattern is driven through the actual `pendingModernGrab`/
+`tickPendingModernGrab()` flow a non-throw-eligible opponent takes, not just asserted by move name.)
+
+| charId | seq | expected move | replaced | actionId matches | PASS/FAIL | note |
+|---|---|---|---|---|---|---|
+| moguzo | high-low-mid | 地走り | true | true | PASS |  |
+| moguzo | low-high-high | 昇撃 | true | true | PASS |  |
+| moguzo | mid-low-mid | 胴押し | true | true | PASS |  |
+| pisuke | high-high-high-mid | 二連牙 | true | true | PASS |  |
+| pisuke | low-mid-mid-low | スライディング | true | true | PASS |  |
+| pisuke | mid-high-high-high | 宙返り蹴 | true | true | PASS |  |
+| pisuke | low-high-high-mid | つむじ返し | true | true | PASS |  |
+| godan | low-mid | 岩砕き | true | true | PASS |  |
+| godan | mid-mid | 大山押し | true | true | PASS |  |
+| hakuma | mid-mid | 雪壁掌 | true | true | PASS |  |
+| hakuma | high-high | 白峰打ち | true | true | PASS |  |
+| chirka | high-low-mid | だまし突き | true | true | PASS |  |
+| chirka | low-mid-low | 影踏み | true | true | PASS |  |
+| chirka | mid-high-high | 戻り蹴り | true | true | PASS |  |
+| takimaru | low-high | 熊手払い | true | true | PASS |  |
+| takimaru | high-low | 丸抱え | true | true | PASS | via pendingModernGrab/tickPendingModernGrab() |
+| yomikage | high-mid | 影縫い | true | true | PASS |  |
+| yomikage | mid-high | 月かすめ | true | true | PASS |  |
+| bullet | high-low-mid | 弾み突き | true | true | PASS |  |
+| bullet | mid-mid-low | 尾払い | true | true | PASS |  |
+| bullet | low-high-high | 跳ね上げ | true | true | PASS |  |
+| dark_moguzo | high-low-low-mid | 黒走り | true | true | PASS |  |
+| dark_moguzo | low-high-high-high | 逆昇撃 | true | true | PASS |  |
+| dark_moguzo | mid-low-low-mid | 闇押し | true | true | PASS |  |
+| dark_moguzo | low-mid-mid-low | 黒砂払い | true | true | PASS |  |

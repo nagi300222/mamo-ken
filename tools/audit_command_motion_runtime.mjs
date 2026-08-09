@@ -103,26 +103,41 @@ const result = await page.evaluate(() => {
     const patterns = MODERN_PATTERNS[charId] || [];
     for (const p of patterns) {
       const f = setupSolo(charId);
+      const opp = B.p[1 - f.side];
       f.modernHist.length = 0;
       const seq = p.seq.slice(0, -1);
       const finalLv = p.seq[p.seq.length - 1];
       for (const lv of seq) f.modernHist.push({ lv, f: B.f });
       const mr = tryModernReplace(f, finalLv);
       const ok = !!mr && mr.move.name === p.move;
-      let actionMatches = null;
+      let actionMatches = false;
+      let note = '';
       if (ok && !mr.grab) {
         const idx = mr.idx;
         startCmdAtk(f, mr.move, idx);
         const req = currentArtRequest(f);
-        actionMatches = req && req.actionId === CURRENT_ART_RUNTIME.commandActionId(idx);
+        actionMatches = !!(req && req.actionId === CURRENT_ART_RUNTIME.commandActionId(idx));
       } else if (ok && mr.grab) {
-        actionMatches = 'grab-pending-path (see Takimaru note)';
+        // Takimaru Modern Grab pending path: drive it through the actual pendingModernGrab/
+        // tickPendingModernGrab() flow a non-throw-eligible opponent takes (not just an
+        // assertion on the descriptive move name), then verify the resulting phase/cmdMove/
+        // actionId once the opponent becomes throw-eligible and the pending grab fires.
+        opp.phase = 'attack'; opp.atkLv = 'mid'; opp.pf = 1; // deliberately not throw-eligible yet
+        f.modernHist.length = 0;
+        if (throwEligible(opp)) startCmdGrab(f, mr.move, mr.idx);
+        else f.pendingModernGrab = { move: mr.move, idx: mr.idx };
+        opp.phase = 'idle'; // now throw-eligible
+        tickPendingModernGrab(f, opp);
+        const req = currentArtRequest(f);
+        actionMatches = f.phase === 'grab' && f.cmdMove === mr.move && !!(req && req.actionId === CURRENT_ART_RUNTIME.commandActionId(mr.idx));
+        note = 'via pendingModernGrab/tickPendingModernGrab()';
       }
-      modernRows.push({ charId, seq: p.seq.join('-'), expectedMove: p.move, replaced: ok, actionMatches });
+      modernRows.push({ charId, seq: p.seq.join('-'), expectedMove: p.move, replaced: ok, actionMatches, note });
     }
   }
+  const modernFailCount = modernRows.filter((r) => !(r.replaced && r.actionMatches)).length;
 
-  return { rows, modernRows };
+  return { rows, modernRows, modernFailCount };
 });
 
 await browser.close();
@@ -144,9 +159,10 @@ for (const r of result.rows.filter((x) => x.type === 'stance')) {
 console.log('');
 console.log(`Total: ${result.rows.length}, PASS: ${result.rows.length - failCount}, FAIL: ${failCount}`);
 console.log('');
-console.log('Modern entry-path parity:');
+console.log(`Modern entry-path parity (${result.modernRows.length - result.modernFailCount}/${result.modernRows.length} PASS):`);
 for (const r of result.modernRows) {
-  console.log(`  ${r.charId} ${r.seq} -> ${r.expectedMove} replaced=${r.replaced} actionMatches=${r.actionMatches}`);
+  const pass = r.replaced && r.actionMatches;
+  console.log(`  [${pass ? 'PASS' : 'FAIL'}] ${r.charId} ${r.seq} -> ${r.expectedMove} replaced=${r.replaced} actionMatches=${r.actionMatches}${r.note ? ' (' + r.note + ')' : ''}`);
 }
 if (pageErrors.length) {
   console.log('PAGE ERRORS:', pageErrors.length);
@@ -172,14 +188,17 @@ if (OUT_PATH) {
     '',
     ...result.rows.filter((r) => r.type === 'stance').map((r) => `- ${r.charId} ${r.name}: pf/frameIndex = ${r.frames.map((fr) => `${fr.pf}:${fr.frameIndex}`).join(', ')}`),
     '',
-    '## Modern entry-path parity',
+    `## Modern entry-path parity (${result.modernRows.length - result.modernFailCount}/${result.modernRows.length} PASS)`,
     '',
-    '| charId | seq | expected move | replaced | actionId matches direct-call |',
-    '|---|---|---|---|---|',
-    ...result.modernRows.map((r) => `| ${r.charId} | ${r.seq} | ${r.expectedMove} | ${r.replaced} | ${r.actionMatches} |`),
+    '(Takimaru\'s grab-type pattern is driven through the actual `pendingModernGrab`/',
+    '`tickPendingModernGrab()` flow a non-throw-eligible opponent takes, not just asserted by move name.)',
+    '',
+    '| charId | seq | expected move | replaced | actionId matches | PASS/FAIL | note |',
+    '|---|---|---|---|---|---|---|',
+    ...result.modernRows.map((r) => `| ${r.charId} | ${r.seq} | ${r.expectedMove} | ${r.replaced} | ${r.actionMatches} | ${r.replaced && r.actionMatches ? 'PASS' : 'FAIL'} | ${r.note} |`),
   ].join('\n');
   writeFileSync(OUT_PATH, md);
   console.log('Wrote', OUT_PATH);
 }
 
-process.exit(failCount || pageErrors.length ? 1 : 0);
+process.exit(failCount || result.modernFailCount || pageErrors.length ? 1 : 0);
