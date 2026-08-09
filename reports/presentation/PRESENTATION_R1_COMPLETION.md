@@ -72,13 +72,34 @@ just matching move names.
   **actually executed** in the live engine via the same single-choke-point
   functions (`startAtk`/`startCmdAtk`/`startCmdGrab`) every real input path
   uses, with damage read from measured `hp` deltas — never from static
-  move data. All 27 are confirmed TRUE COMBO (opponent never actionable
-  between hits), validated by a deliberate adversarial control that proves
-  the harness correctly reports a whiff rather than rubber-stamping
-  success. Full methodology and table: `reports/balance/
+  move data. All 27 are confirmed TRUE COMBO in the sense the harness
+  checks (opponent never `idle`/`guard`-actionable between hits),
+  validated by a deliberate adversarial control that proves the harness
+  correctly reports a whiff rather than rubber-stamping success. Full
+  methodology and table: `reports/balance/
   VNEXT_PRESENTATION_COMBO_ROUTES.md`.
+  **Caveat confirmed during this report's own review (Codex, PR #86)**:
+  `applyInputs()` lets Roar interrupt `hitstun` unconditionally once
+  `f.s>=BAL.SMAX` (no frame-window restriction, unlike the `idle`/`guard`
+  actionable check the harness samples) — re-running the Route C sequence
+  for all 9 characters with the defender's `s` pre-set to `BAL.SMAX`
+  confirmed every route has at least one such Roar-escapable gap. This
+  does not change any measured damage number (Roar never fires in the
+  original verification, since the passive dummy defender starts and
+  stays at `s:0`), but "TRUE COMBO" here specifically means "unescapable
+  via block/dodge/normal reversal," not "unescapable under all
+  circumstances including a maxed S gauge" — the same caveat any combo
+  in this engine carries once the defender's meter is full. Tracked as a
+  documented limitation rather than a defect, since Roar-as-combo-breaker
+  is intentional combat-logic design (untouched by this presentation-only
+  pipeline) and re-classifying or renaming the label would itself be an
+  unrequested combat-logic-adjacent judgment call.
 
-### Measured combo damage (all 27 routes, TRUE COMBO)
+### Measured combo damage (all 27 routes, TRUE COMBO*)
+
+\* see the Roar-escape caveat above — true against block/dodge/normal
+reversal; a defender with a maxed S gauge can Roar out of the hitstun gap
+between any two hits in any of these 27 routes.
 
 | Character | A | B | C |
 |---|---|---|---|
@@ -134,12 +155,28 @@ presentation-only — regressed what PR5 already established:
   distinct code paths — P1 routes through `evq`/`currentP1Hold()`, P2
   through `cpuEv`/AI), run to natural round completion via the real
   `fightStep()` — **0 exceptions, 0 console errors, 72/72 pairs clean**.
-- **Full-state determinism hash**: 3 matchups, same fixed `mulberry32`
-  seed (bypassing `startBattle()`'s wall-clock seed, same technique PR5
-  used), 2 independent runs each, per-tick FNV-1a hash of the entire `B`
-  object minus `fx` (the one field PR5 already proved diverges only via
-  decorative unseeded `Math.random()` particle variance, never gameplay
-  logic) — **byte-identical at every tick, all 3 matchups, both runs**.
+- **Full-state determinism hash (repeatability)**: 3 matchups, same fixed
+  `mulberry32` seed (bypassing `startBattle()`'s wall-clock seed, same
+  technique PR5 used), 2 independent runs each on the final state, per-
+  tick FNV-1a hash of the entire `B` object minus `fx` (the one field PR5
+  already proved diverges only via decorative unseeded `Math.random()`
+  particle variance, never gameplay logic) — byte-identical at every
+  tick, all 3 matchups, both runs.
+- **Full-state determinism hash vs. the pre-pipeline baseline (actual
+  non-regression proof)**: a first pass of this report only compared the
+  final state against itself, which proves repeatability but — as
+  correctly flagged by a Codex review on this PR (PR #86) — cannot by
+  itself rule out a regression that is *itself* deterministic (identical
+  bug on both final-state runs). Fixed by actually running the same 3
+  matchups/seed/tick-count against `prototype/mamoken_prototype_v01.html`
+  checked out at `b8575cd` (the vNext PR5 closure merge commit,
+  immediately pre-PRESENTATION-R1, via `git worktree`) and diffing its
+  per-tick hash sequence against the final state's (`main` @ `2f3c333`)
+  — **byte-identical at every tick, same sequence length, all 3
+  matchups, zero page errors on either side**. This is the direct
+  comparison Codex asked for, not an inference from "no combat-logic
+  file was touched"; it now genuinely proves PRs #80-#85 introduced zero
+  gameplay-state divergence from the PR5 baseline.
 - **`npm run build:mobile` reproducibility**: 3 independent back-to-back
   builds produce MD5-identical `dist/mamoken_mobile.html`
   (`9c6ecaf195fd4f2c4d4a8ab5b3d25df8`).
@@ -147,7 +184,8 @@ presentation-only — regressed what PR5 already established:
 
 This confirms the presentation-only claim every individual PR made is
 still true in aggregate: the full gameplay-relevant state machine and its
-determinism are unchanged from vNext PR5's own baseline.
+determinism are unchanged from vNext PR5's own baseline — now backed by
+a direct baseline comparison rather than argued from omission.
 
 ## 6. Hash-invariance proofs (per-PR, already reported)
 
