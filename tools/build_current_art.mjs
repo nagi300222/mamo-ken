@@ -617,22 +617,29 @@ async function buildDarkPaletteTransfer(manifest) {
     return hslToRgb(268, Math.min(mSat * 0.5, 0.32), Math.max(0.05, mLight * 0.88));
   };
   const mapColor = (r, g, b) => {
+    // The bucket-level cache holds only the raw nearest-palette lookup (which is legitimately
+    // bucket-scoped -- it only depends on r5/g5/b5). correctWineFur() must run on every exact
+    // source pixel, not be cached at the bucket level: two exact colors sharing a bucket (e.g. a
+    // fur shadow and an accessory edge) can classify differently, and caching the corrected
+    // result would let whichever pixel hit the bucket first decide the outcome for the rest
+    // (Codex review finding on PR #96).
     const cacheKey = `${r >> 3},${g >> 3},${b >> 3}`;
-    if (cache.has(cacheKey)) return cache.get(cacheKey);
-    const [r5, g5, b5] = cacheKey.split(',').map(Number);
-    let best = null;
-    let bestDistance = Infinity;
-    for (const entry of palette) {
-      const distance = (entry.r5 - r5) ** 2 + (entry.g5 - g5) ** 2 + (entry.b5 - b5) ** 2;
-      if (distance < bestDistance) {
-        bestDistance = distance;
-        best = entry;
+    let rawMapped = cache.get(cacheKey);
+    if (!rawMapped) {
+      const [r5, g5, b5] = cacheKey.split(',').map(Number);
+      let best = null;
+      let bestDistance = Infinity;
+      for (const entry of palette) {
+        const distance = (entry.r5 - r5) ** 2 + (entry.g5 - g5) ** 2 + (entry.b5 - b5) ** 2;
+        if (distance < bestDistance) {
+          bestDistance = distance;
+          best = entry;
+        }
       }
+      rawMapped = best && bestDistance <= 42 ? [best.r, best.g, best.b] : [r, g, b];
+      cache.set(cacheKey, rawMapped);
     }
-    const rawMapped = best && bestDistance <= 42 ? [best.r, best.g, best.b] : [r, g, b];
-    const mapped = correctWineFur(rawMapped, r, g, b);
-    cache.set(cacheKey, mapped);
-    return mapped;
+    return correctWineFur(rawMapped, r, g, b);
   };
   const transform = (rgba, bodyMask) => {
     const out = Buffer.from(rgba);
