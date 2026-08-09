@@ -1,5 +1,5 @@
 {
-  "artifactHash": "e45de56ab88b78e28cfb6c6e59c9a6fb0a15b7b338c6f100673be7e3bf008a55",
+  "artifactHash": "ab52b836b51de79bf3212459af9fb6df50fae1517536c575761a38cdee628273",
   "buildId": "mamoken-art-current-v2-2026-08-09",
   "characters": {
     "bullet": {
@@ -7660,11 +7660,11 @@
               "variants": {
                 "p1": {
                   "path": "assets/art/runtime/dark_moguzo/p1/grab/f1.png",
-                  "sha256": "7fcd8315c3e357e01f27e2ee93e428c0c919dc853196a404fba693f485bb7d5a"
+                  "sha256": "b6e4b2d2177eaacaedc047342f86aaa343921b982f95799725674b2a34c195ca"
                 },
                 "p2": {
                   "path": "assets/art/runtime/dark_moguzo/p2/grab/f1.png",
-                  "sha256": "4b5c6e80c594901ae994b98c96d68a4056a93e4b66e7b16bbfbd3610046a2ca8"
+                  "sha256": "baf4ca890e4d005e8dad5d1c64ea4fc35664dc6f8d89b96aee9ffe684dc639bd"
                 }
               },
               "visualBounds": {
@@ -7705,11 +7705,11 @@
               "variants": {
                 "p1": {
                   "path": "assets/art/runtime/dark_moguzo/p1/grab/f2.png",
-                  "sha256": "fcd1bf1dcc45a34378616d7aa0509346c440ad397cc54fee5d7668511e62c1d2"
+                  "sha256": "a7c47df4f05cd345ba8a0ed0c3c9eccd4fead7db420579faad3d1ac4683b3e37"
                 },
                 "p2": {
                   "path": "assets/art/runtime/dark_moguzo/p2/grab/f2.png",
-                  "sha256": "14433d08d4e0c5ec0260b062497c7d3279fb43d69c67196e9ba5d2e7a4438f10"
+                  "sha256": "3508c14aaf460caa73c127c75d5167a504cf1200f70f9fda9aa51c1bfdb8dee4"
                 }
               },
               "visualBounds": {
@@ -7750,11 +7750,11 @@
               "variants": {
                 "p1": {
                   "path": "assets/art/runtime/dark_moguzo/p1/grab/f3.png",
-                  "sha256": "bece52677b688cc3f7be3b46907ec27d61880dffcdcdf28fd4e5373113461efe"
+                  "sha256": "9a7a88f56b1311d826f5dde5f253fdc57f35419f2880be9e38209bde6ad16b73"
                 },
                 "p2": {
                   "path": "assets/art/runtime/dark_moguzo/p2/grab/f3.png",
-                  "sha256": "f80feca806e5ad1067fcf535724aac3764d3434b4b4de05524ac08122239a605"
+                  "sha256": "e608876e7215fb7bd9da8621b2a2c5039c501502130a890a14302f4dd5fd0453"
                 }
               },
               "visualBounds": {
@@ -7795,11 +7795,11 @@
               "variants": {
                 "p1": {
                   "path": "assets/art/runtime/dark_moguzo/p1/grab/f4.png",
-                  "sha256": "dc822668f3c9414eea1fb42cbf1880da833e388af30f44bfe524dc8f776327fe"
+                  "sha256": "ec1c3990570b929110315ac09a5d3d43010025d6fa8624f872dfa97db404102a"
                 },
                 "p2": {
                   "path": "assets/art/runtime/dark_moguzo/p2/grab/f4.png",
-                  "sha256": "06e3057e63a5ece263951043e6e71b608f5bb9c6887daf468de58a1b06484468"
+                  "sha256": "1173e13c564458c37572de696b821fd05656377c6c004983f8865e28548dc206"
                 }
               },
               "visualBounds": {
@@ -7852,11 +7852,11 @@
               "variants": {
                 "p1": {
                   "path": "assets/art/runtime/dark_moguzo/p1/high/f1.png",
-                  "sha256": "19f1aaaba43f03f73c7bde0498d8fe2d5c22bf60e3844ba6f88c3d2903104b43"
+                  "sha256": "7366fcfbcdbe29f09313d1ea4e6a09b554b8eb04aadf1936c721c96e95b9150d"
                 },
                 "p2": {
                   "path": "assets/art/runtime/dark_moguzo/p2/high/f1.png",
-                  "sha256": "dfa4376d1c6711c687f3073e37ee2ec266d792ad4be3a64509396957698e93f4"
+                  "sha256": "c34d874a99d7e6cbc8419de73800bb9795152848f63ba7caec2bc37e3f13e6b1"
                 }
               },
               "visualBounds": {
@@ -7897,11 +7897,11 @@
               "variants": {
                 "p1": {
                   "path": "assets/art/runtime/dark_moguzo/p1/high/f2.png",
-                  "sha256": "122a0181957f3de2f88d09bfd22b9f682d4de6c106a55c77ce85cf2caed52b84"
+                  "sha256": "8152ad13b694b3de3bf4985ad98c985cf5cbd54f1fada453fe1e7a990665c0ed"
                 },
                 "p2": {
                   "path": "assets/art/runtime/dark_moguzo/p2/high/f2.png",
-                  "sha256": "084dce293977053be7d37ccaf5dda21588b6113e129da4e696ed2245cd2155f1"
+                  "sha256": "64b59d1067919f3986535c816f7652c2c0475574453d32c12e773aec0302ef96"
                 }
               },
               "visualBounds": {
@@ -7942,11 +7942,11 @@
               "variants": {
                 "p1": {
                   "path": "assets/art/runtime/dark_moguzo/p1/high/f3.png",
-                  "sha256": "6da80a38f2dc32b61ce384ad03c34f0285f7772f3cd45085843e06681330fac3"
+                  "sha256": "ce9b5154cf2a7c7a4aa86b21628da619052894fb9ceaf19a9349c09d2633fc06"
                 },
                 "p2": {
                   "path": "assets/art/runtime/dark_moguzo/p2/high/f3.png",
-                  "sha256": "f08e1d4cc27f16d1237acf62e996f35a7b1f355b580da2504b7233e7e5372b4f"
+                  "sha256": "ac1fabfa68d0ceb35ab40100304bf94f0cba65a6864493e4ea8a5750f46e8aeb"
                 }
               },
               "visualBounds": {
@@ -7987,11 +7987,11 @@
               "variants": {
                 "p1": {
                   "path": "assets/art/runtime/dark_moguzo/p1/high/f4.png",
-                  "sha256": "04e6b6427be101743e6dd587bb06fbe331e7d3b210f3ab023d32489e91758582"
+                  "sha256": "aecf132b1371aecf199ab2912bb198446593d819f5a71b45295a8e44d35e9c52"
                 },
                 "p2": {
                   "path": "assets/art/runtime/dark_moguzo/p2/high/f4.png",
-                  "sha256": "e9340629720350290d93dbf22f8ed82cdf09c3a65a8ff900536609d90155fad4"
+                  "sha256": "f1e1ca35eb16e00bf17db850205ac9cd99565c5f02315cfb330af1d5bc374c0f"
                 }
               },
               "visualBounds": {
@@ -8044,11 +8044,11 @@
               "variants": {
                 "p1": {
                   "path": "assets/art/runtime/dark_moguzo/p1/low/f1.png",
-                  "sha256": "797be3a9e782269a5de6b075e147be3a10a0387dccc63a22ff382202c6c5a066"
+                  "sha256": "4d73c4d3118c30bca8392b423bf6317e6be90f155e4771223535e204c185ffc6"
                 },
                 "p2": {
                   "path": "assets/art/runtime/dark_moguzo/p2/low/f1.png",
-                  "sha256": "c359dbbb9de10489972aefba8767ca743914486f2cd989793e64b521ecf00e4a"
+                  "sha256": "f52c8648caf1220741c8db9bf7925d4a7b0b05effcd03159f8f3448f9227eb7c"
                 }
               },
               "visualBounds": {
@@ -8089,11 +8089,11 @@
               "variants": {
                 "p1": {
                   "path": "assets/art/runtime/dark_moguzo/p1/low/f2.png",
-                  "sha256": "f8e255a7592011d28ac0002dc7cdf00025ca9db31b8f9268bac38a686241dc0c"
+                  "sha256": "e91f52ba3705ae0a9b0f0e443cda8436c9535fc782dd37359d64f9dcf702258e"
                 },
                 "p2": {
                   "path": "assets/art/runtime/dark_moguzo/p2/low/f2.png",
-                  "sha256": "d2718ffe8884c313f3e94168a1881fd012b2b57dbed8e908da913765e1d46cc3"
+                  "sha256": "e3f26800f4e490b20d956feb43189d02b4bfbc104a4315eb87543e4f4d35c7a5"
                 }
               },
               "visualBounds": {
@@ -8134,11 +8134,11 @@
               "variants": {
                 "p1": {
                   "path": "assets/art/runtime/dark_moguzo/p1/low/f3.png",
-                  "sha256": "acc57cac3e2f029669450a8f21b3c4ffe395e2fa108b5cf63aa31feaa99486f2"
+                  "sha256": "1930f37eb02260d5ff262c629da7a8d514b956eeb4ff2d954ac3426378339be5"
                 },
                 "p2": {
                   "path": "assets/art/runtime/dark_moguzo/p2/low/f3.png",
-                  "sha256": "9e87f4fbe89ea4f763e9f3df08d06f28d983fbb83b2142d9923b7bb3c0167772"
+                  "sha256": "0724749d2d7a2cb781c49c8961bca2a4df38735d5ca03213cd09327026736f27"
                 }
               },
               "visualBounds": {
@@ -8179,11 +8179,11 @@
               "variants": {
                 "p1": {
                   "path": "assets/art/runtime/dark_moguzo/p1/low/f4.png",
-                  "sha256": "194720d0a8caf9c978a3f388e5e8128fcbbac3b2152229a3798e81656c4407d2"
+                  "sha256": "5e91965ca0812870eb7cec6dcd0c765b8d75d2672818274515c54e57ea471b5d"
                 },
                 "p2": {
                   "path": "assets/art/runtime/dark_moguzo/p2/low/f4.png",
-                  "sha256": "64449e31c30e1c57507757aede841664e563f9e8deb81bfb70de8a6b8cab058b"
+                  "sha256": "fa6a398a5613e3788fcd570c1eff95f49ec0a91c59ac81d67ccc620eca4e71b0"
                 }
               },
               "visualBounds": {
@@ -8236,11 +8236,11 @@
               "variants": {
                 "p1": {
                   "path": "assets/art/runtime/dark_moguzo/p1/mid/f1.png",
-                  "sha256": "4a56beff2d169b7beac577893cf64764370291c4314abd8ccec4a2e1f19a38fa"
+                  "sha256": "d3a0ab77981e52c088cb5ad551813f951d86b3f341b033d8e1270e3d40aa7ada"
                 },
                 "p2": {
                   "path": "assets/art/runtime/dark_moguzo/p2/mid/f1.png",
-                  "sha256": "e9f6770e7cf7b546a693211091656647b4d6ddad863e4bd84757483d6cdd715c"
+                  "sha256": "b14a3e039f754ad960fc8eec7fd08b4535ec1cfc1f878e7217f10311c280aa8c"
                 }
               },
               "visualBounds": {
@@ -8281,11 +8281,11 @@
               "variants": {
                 "p1": {
                   "path": "assets/art/runtime/dark_moguzo/p1/mid/f2.png",
-                  "sha256": "030798ca312c26bba8bc1e574f6cc3e7d7ad92a77d8eb1f6fbad1037430fc4c9"
+                  "sha256": "9366acc4a63e2ee15412dbd6f3247aa7e569c34022f86ec327ebb375ada708f7"
                 },
                 "p2": {
                   "path": "assets/art/runtime/dark_moguzo/p2/mid/f2.png",
-                  "sha256": "2e4fcc8e1711371d109ed92837f6c2d81c536fdb4d345fa5988b4fb8aa4a0b13"
+                  "sha256": "f9c36e11d78e17fccf4e178f9314f134c43a9c52fdfc51492f69e50ceaf7cd34"
                 }
               },
               "visualBounds": {
@@ -8326,11 +8326,11 @@
               "variants": {
                 "p1": {
                   "path": "assets/art/runtime/dark_moguzo/p1/mid/f3.png",
-                  "sha256": "3c5d9abde2af29ecc2b5c8b07b0fe21ddb4fa55226d0a4d16e0b03060c86298d"
+                  "sha256": "a21034c51ba9ea73717d60d923a2667822515b0e41bded1d963b594ff9053ac7"
                 },
                 "p2": {
                   "path": "assets/art/runtime/dark_moguzo/p2/mid/f3.png",
-                  "sha256": "736c11abd52ee0f5fb297721825086ca4db89ef6490b24bdc3cb3a5a9d10da24"
+                  "sha256": "8a5fdf949f6786758e2782fca09552f27820e76cec46fd6e9dda5c0c8e7ad9dc"
                 }
               },
               "visualBounds": {
@@ -8371,11 +8371,11 @@
               "variants": {
                 "p1": {
                   "path": "assets/art/runtime/dark_moguzo/p1/mid/f4.png",
-                  "sha256": "0b185b5e674c8ffc8f1ab50591d99b3bb616b8563270a745c03b446d8665c0bf"
+                  "sha256": "9c13bf78e2f1ec283c502a46bb70e70075115d232d4323e86c0675ceb3764e84"
                 },
                 "p2": {
                   "path": "assets/art/runtime/dark_moguzo/p2/mid/f4.png",
-                  "sha256": "b8f5866e49f53fae4eca34511e3fa649928a913f3228addb12e583e4d164e705"
+                  "sha256": "a59ead7f80b112ed03b13b01f267944e5b71ab18910f13b869ab5b2417bcbd33"
                 }
               },
               "visualBounds": {
@@ -8428,11 +8428,11 @@
               "variants": {
                 "p1": {
                   "path": "assets/art/runtime/dark_moguzo/p1/mikiri/f1.png",
-                  "sha256": "316045117f6ac5199aa999fb558bd101cf37fbbc8785b8efd768d3e36b8da158"
+                  "sha256": "6f8809b7c7bd28932afa6f032554cb347a1004a73445fb7295e66a9338d90542"
                 },
                 "p2": {
                   "path": "assets/art/runtime/dark_moguzo/p2/mikiri/f1.png",
-                  "sha256": "994850745c2d6efdf949ee637ecd24687eea87a15b73d7bea02c516cc1d79598"
+                  "sha256": "8c0051de8376eb0803948ebf9bf266abebf8299367f8221258337ea66833d523"
                 }
               },
               "visualBounds": {
@@ -8473,11 +8473,11 @@
               "variants": {
                 "p1": {
                   "path": "assets/art/runtime/dark_moguzo/p1/mikiri/f2.png",
-                  "sha256": "cfdc7f859e2f79bcfc7ee4dd609cbdf7af64509465ceca025301ae6ff74b41ff"
+                  "sha256": "b1b34fdfc02f5f098f785bfaebbdc7a9dc072fa01593a21784ddd877f364f25f"
                 },
                 "p2": {
                   "path": "assets/art/runtime/dark_moguzo/p2/mikiri/f2.png",
-                  "sha256": "230b1a5ce7892ca61afccaf064fb6ccfbbfffc4f2a397c18aa686eeeb98035ca"
+                  "sha256": "a6bda09e1a789cbdce850fe38939dfa49b69b2b66f295ce46bd24eaaaf1d4361"
                 }
               },
               "visualBounds": {
@@ -8518,11 +8518,11 @@
               "variants": {
                 "p1": {
                   "path": "assets/art/runtime/dark_moguzo/p1/mikiri/f3.png",
-                  "sha256": "23eecf39b755f1cf138167ddc5c5a2b14318e2cb161f7c85803edc737c39effa"
+                  "sha256": "781d4cda83f1f0d56944c2d2100eeb0041f93f8405e4a75bde53d181e1ae97ce"
                 },
                 "p2": {
                   "path": "assets/art/runtime/dark_moguzo/p2/mikiri/f3.png",
-                  "sha256": "47374a879e83c0de64d9098b59ace151a3d8a180907d76b193c22a705b613e88"
+                  "sha256": "8fe964d00eebbc4f7652bdeec944e234d6ce9537802471aa2c64519dc3827afc"
                 }
               },
               "visualBounds": {
@@ -8563,11 +8563,11 @@
               "variants": {
                 "p1": {
                   "path": "assets/art/runtime/dark_moguzo/p1/mikiri/f4.png",
-                  "sha256": "eb08f6622b9d85ea42b9ad38afc1b5b4dc83a7cc4276fc44c0606370ce926888"
+                  "sha256": "32eb156d28aad17b157bb38f6fed5b87ee0f915ddf0ce30f9b5f4099803abdfb"
                 },
                 "p2": {
                   "path": "assets/art/runtime/dark_moguzo/p2/mikiri/f4.png",
-                  "sha256": "36e5bd220265ef2c3486393f9e1b2344fc708639b1e53cdf3bd8f32ea7a68033"
+                  "sha256": "2960d145d4b235141aaf3fecad16d7d9a972bf05222c8afb719a20ad76e42b5a"
                 }
               },
               "visualBounds": {
@@ -8620,11 +8620,11 @@
               "variants": {
                 "p1": {
                   "path": "assets/art/runtime/dark_moguzo/p1/roar/f1.png",
-                  "sha256": "700e12c8c525904df97f687a91e8e337a2196b1915842ea4242ad1dae6ef02fa"
+                  "sha256": "5d8dfc809c49c7b7280e5a01fcef9a2246acc3f569ccd70e4afa3958a6ea7057"
                 },
                 "p2": {
                   "path": "assets/art/runtime/dark_moguzo/p2/roar/f1.png",
-                  "sha256": "48b4477844977ee042303ca78b99b4d7acd82bb94e5323d967eea359b3dea170"
+                  "sha256": "46b9bba26b2abfb56d9b36f0f36bc8e24c677a4e620622a76010e999e1a8ae3c"
                 }
               },
               "visualBounds": {
@@ -8665,11 +8665,11 @@
               "variants": {
                 "p1": {
                   "path": "assets/art/runtime/dark_moguzo/p1/roar/f2.png",
-                  "sha256": "8f13db399f6850ea8ff644754b9ad514fdf51b081f00fec06678e904ac101080"
+                  "sha256": "70ac30917aaabb9c4aad5422fd0a2419b86c0b639df1b120bba3a7533f9ddf23"
                 },
                 "p2": {
                   "path": "assets/art/runtime/dark_moguzo/p2/roar/f2.png",
-                  "sha256": "11c11fad9b25d01088c393caa303623f3e249b98508191a38fbfd4246979e1f0"
+                  "sha256": "cc112434ec09d7380e3397d5be8b9cb272c3ea86153966261452a38702cfd648"
                 }
               },
               "visualBounds": {
@@ -8710,11 +8710,11 @@
               "variants": {
                 "p1": {
                   "path": "assets/art/runtime/dark_moguzo/p1/roar/f3.png",
-                  "sha256": "4196d2c62487d312e51d90ce665262a8da4f3110ca45d2498e10e01667b0ae15"
+                  "sha256": "a0e507cc2e80e76415a7ff88f0c9ac5c6c549e81e5c722f300c9083f69c45c58"
                 },
                 "p2": {
                   "path": "assets/art/runtime/dark_moguzo/p2/roar/f3.png",
-                  "sha256": "14705933d99bae8b0180aa88be58c2513c58daa11f2f4089cc4648f53d6ecae7"
+                  "sha256": "03853d29f47aef8b32658f82f31edd6bbe58249ff28b5ef11b1dd61252cabcc5"
                 }
               },
               "visualBounds": {
@@ -8755,11 +8755,11 @@
               "variants": {
                 "p1": {
                   "path": "assets/art/runtime/dark_moguzo/p1/roar/f4.png",
-                  "sha256": "c1ac4b5b6accdbacd34b099dbd7cc472c048e22aed3862cd5bb1364f2037a58c"
+                  "sha256": "174b5d5d24db43826a09f10c4c020732719362c416a307644ac5374e49f6503b"
                 },
                 "p2": {
                   "path": "assets/art/runtime/dark_moguzo/p2/roar/f4.png",
-                  "sha256": "a8a2b77001a6b5f3c953507b03175f1e34a2bf809c6153c58f2c0a0421daa9cc"
+                  "sha256": "31684fedbb96e4494381403ae17076c9029f0671b537777ecb43b5970697af6a"
                 }
               },
               "visualBounds": {
@@ -8841,11 +8841,11 @@
           "variants": {
             "p1": {
               "path": "assets/art/runtime/dark_moguzo/p1/legacy_crouch/crouch.png",
-              "sha256": "a9084c6e8b6ff03df806343ca0e577b0cdcaea077b1a067a69460e6a3f569532"
+              "sha256": "3d7b6f2d4289856d8d59a78d1092964e70d742a41c6b62fed0ba8d61e8af06e7"
             },
             "p2": {
               "path": "assets/art/runtime/dark_moguzo/p2/legacy_crouch/crouch.png",
-              "sha256": "224b1287de40034ff86dc2e2d59974dda0bc93480dde8e35ad48cd3396716e98"
+              "sha256": "68ed3485c2a836eff406d9470640e5f62e997f4a13a169165ddd31675954e5a8"
             }
           },
           "visualBounds": {
@@ -8886,11 +8886,11 @@
           "variants": {
             "p1": {
               "path": "assets/art/runtime/dark_moguzo/p1/legacy_crouch_atk/crouch_atk.png",
-              "sha256": "22fc0be96090508ec817a4ca6a2b05cdaf41c4a28c4e347c3f80a40a921d2321"
+              "sha256": "adbaf86c134d32976b8658a284e35b63ddf9a48b3e66c39118d368b5fa6c4c4a"
             },
             "p2": {
               "path": "assets/art/runtime/dark_moguzo/p2/legacy_crouch_atk/crouch_atk.png",
-              "sha256": "077ce839e20277bf2b36f6b1da452875f929ea21d1ab22b8e34970258e7d13ae"
+              "sha256": "2496c3749ec59e73048e64eceb6628d1ed4b0675a2aea73e343c5e17b828d854"
             }
           },
           "visualBounds": {
@@ -8931,11 +8931,11 @@
           "variants": {
             "p1": {
               "path": "assets/art/runtime/dark_moguzo/p1/downset/down.png",
-              "sha256": "3942bc4064fecd6cf8b9c4ba31fed6c8f9988e389717f6c7c30b0e5488cb6c46"
+              "sha256": "c5c0cae8c00279f69a4b9af47d1cee45769ffbea2211db4946fe1b483a1650e5"
             },
             "p2": {
               "path": "assets/art/runtime/dark_moguzo/p2/downset/down.png",
-              "sha256": "1e5feff5a03d057e299a823b2dcbb8b776af36ac8f7a264245daef13009a999f"
+              "sha256": "30408e2cdbec77d6125548fe108db422f9b20f036fb42ce7d45e5fc47ce1f05c"
             }
           },
           "visualBounds": {
@@ -8976,11 +8976,11 @@
           "variants": {
             "p1": {
               "path": "assets/art/runtime/dark_moguzo/p1/common_basic/flinch.png",
-              "sha256": "acb47c227ba1af3086b0eaa574ceca530d1694d8831ea3bf9ce81c2e978e056d"
+              "sha256": "8facb23468f18a2330f8abb6271051c4f46643f4dc5e9ad35db3ea4ac40ceb91"
             },
             "p2": {
               "path": "assets/art/runtime/dark_moguzo/p2/common_basic/flinch.png",
-              "sha256": "d44f6b666a110895662d91962c90a4ea47720475b5d0aca9bd9813bfe54651cb"
+              "sha256": "8760598b488695b28cd3d1828d327a912e39ec50a7daab3c5bfca34958da6b05"
             }
           },
           "visualBounds": {
@@ -9021,11 +9021,11 @@
           "variants": {
             "p1": {
               "path": "assets/art/runtime/dark_moguzo/p1/downset/getup.png",
-              "sha256": "81c54f1cb04fd3630cbf6c52e14b04653075140c9f31d4b9c11fc30004c1edcd"
+              "sha256": "e9126b61733ab6edba7e411ac255a4a0d2e61b8c0eb0d17e00ac4683ed2326cb"
             },
             "p2": {
               "path": "assets/art/runtime/dark_moguzo/p2/downset/getup.png",
-              "sha256": "c86b408f1685c5985add8984b6c0459e3b0796c6c0f73f5d7b7f6efa423ab1a4"
+              "sha256": "5090add3686c3a8a0eb513d96d08d97a1f1a5a479428f474f84f6f85d980afd5"
             }
           },
           "visualBounds": {
@@ -9066,11 +9066,11 @@
           "variants": {
             "p1": {
               "path": "assets/art/runtime/dark_moguzo/p1/legacy_grabbed/grabbed.png",
-              "sha256": "9544b78d547b37c244e73367cb6eb12fe7182af9e6f1ba715a28a8669ac1ff61"
+              "sha256": "1ee0a710cd83ce2c680ea9435b0638aedf6cf81bd90b41dee41918edb218371b"
             },
             "p2": {
               "path": "assets/art/runtime/dark_moguzo/p2/legacy_grabbed/grabbed.png",
-              "sha256": "ded7fe63bf7f49da70e82c668f5f6a64c56c8def85fde0029409591bba4219c6"
+              "sha256": "213d38561d91dcab9b8a72e44498618a17837f4263d9355b9d32016e15ead9f7"
             }
           },
           "visualBounds": {
@@ -9111,11 +9111,11 @@
           "variants": {
             "p1": {
               "path": "assets/art/runtime/dark_moguzo/p1/common_basic/guard.png",
-              "sha256": "9255e192a845dae0c70cd4a85fbe9ff8cf8e27a8c0f56301bd408d52b011012d"
+              "sha256": "7c4589f6fdf4a2d5994fe471c44e15bb92b825a9e7aedad9083e955e26102823"
             },
             "p2": {
               "path": "assets/art/runtime/dark_moguzo/p2/common_basic/guard.png",
-              "sha256": "d02a67bf4619fbeeb332d2dbfb76904625f6319ce3d78dc6940ad6bdf3fad1ce"
+              "sha256": "3f1baeb4092c0c4198c7731d06bedd10c83f603865bd0515c96a0c562858170f"
             }
           },
           "visualBounds": {
@@ -9156,11 +9156,11 @@
           "variants": {
             "p1": {
               "path": "assets/art/runtime/dark_moguzo/p1/common_basic/idle.png",
-              "sha256": "88ef7b0ecf09f34dc403ecfb00f069bb4d1ed80f45307bbfb01ab1a2c3144325"
+              "sha256": "16ce9d7f6b975717b11b1c3090061bb7c29e20deb4fd252fb0f042db6c174b3c"
             },
             "p2": {
               "path": "assets/art/runtime/dark_moguzo/p2/common_basic/idle.png",
-              "sha256": "d6efd4bfaa03cc55fbc17fde2070b31247e4ec1e546894e11d7f33a2e0a73bfe"
+              "sha256": "14e95e5e55493f24a1bbd3142a0a36337ec299fcec116b4a963b2965205f49c6"
             }
           },
           "visualBounds": {
@@ -9201,11 +9201,11 @@
           "variants": {
             "p1": {
               "path": "assets/art/runtime/dark_moguzo/p1/downset/ko.png",
-              "sha256": "bcd9bd9972b0d557666cd6a01e43493e8c0cf708291bf91ed3cc9b18563fd319"
+              "sha256": "ec6e098e66a520b823d9815d300786cc07d551c53e8b69d7f38f961c631cd75c"
             },
             "p2": {
               "path": "assets/art/runtime/dark_moguzo/p2/downset/ko.png",
-              "sha256": "b61fc9558b6e7ed6f33e9b171db696e84cd6616a53e068b65417f20df33e050a"
+              "sha256": "4d0151a87c4177918bd0060ef930aa9e8fdbf996ec044747a6da9464e8224051"
             }
           },
           "visualBounds": {
@@ -9246,11 +9246,11 @@
           "variants": {
             "p1": {
               "path": "assets/art/runtime/dark_moguzo/p1/legacy_lunge/lunge.png",
-              "sha256": "e04ea6e39ac0a274913d30a1fda708b995a75ecf947131f7b6cb58f673039765"
+              "sha256": "6b507923779f60186ac0d8c08c15b6412c46c9454206d96ed9759fb64dca7203"
             },
             "p2": {
               "path": "assets/art/runtime/dark_moguzo/p2/legacy_lunge/lunge.png",
-              "sha256": "dd668444244fea7f90729aec8aa23c77754ecbdc1084585dc07060bd7e8b0c75"
+              "sha256": "ad299c15445b3a59b7cec394e4f9e87517d0c5df81c86e78eff9666cd008276b"
             }
           },
           "visualBounds": {
@@ -9291,11 +9291,11 @@
           "variants": {
             "p1": {
               "path": "assets/art/runtime/dark_moguzo/p1/legacy_sway/sway.png",
-              "sha256": "1736db944367ef20be4a079917ce051c1192035bd865830b577d4a94eaf96a97"
+              "sha256": "e50d93079c6fee9fad4baff61a18ae726db36f3c26b4e46cb889f22d9fe49208"
             },
             "p2": {
               "path": "assets/art/runtime/dark_moguzo/p2/legacy_sway/sway.png",
-              "sha256": "41aa5cb5fa4f54bc73f1e5327b719a30d837b250002ad88bbdc1aba0b72bec45"
+              "sha256": "ed4d891279729e17609d8869888ac220d3efcfcf2ebcb88feefd7705d7b2490e"
             }
           },
           "visualBounds": {
@@ -9336,11 +9336,11 @@
           "variants": {
             "p1": {
               "path": "assets/art/runtime/dark_moguzo/p1/downset/ult_charge.png",
-              "sha256": "d307b67d1c2dddb07105d78b6fd0112c256b055e57b944075c7fc3310828a2e5"
+              "sha256": "92841ce058100d8a4c81447b95ab48e5f311ca8b6bd4e9d518a62c14e80eb471"
             },
             "p2": {
               "path": "assets/art/runtime/dark_moguzo/p2/downset/ult_charge.png",
-              "sha256": "7116339a058a3832efcef860a83ccbc23c76a2589bd75b3b7adff07b036e8871"
+              "sha256": "391d364540a8c07a6e0ae958226a6509f3afa7224fb238cf5a12772b7927167c"
             }
           },
           "visualBounds": {
@@ -9381,11 +9381,11 @@
           "variants": {
             "p1": {
               "path": "assets/art/runtime/dark_moguzo/p1/common_basic/victory.png",
-              "sha256": "388a534a160a65fc98eccd912e659283a253e85579b8dfc70f531583a5ccabb9"
+              "sha256": "a5105bbf39103a936ba257f8f88f676e5503b1a0554ed3c9a9d45a8ff776649f"
             },
             "p2": {
               "path": "assets/art/runtime/dark_moguzo/p2/common_basic/victory.png",
-              "sha256": "d82f98c307d5e23f734a328097ac236109683035e1d6e6611ccd5048f3662509"
+              "sha256": "9d00fc7119e23b1c84317792c89ad076bba8e26f21ffe2e236ff63c61e4e1ec8"
             }
           },
           "visualBounds": {
