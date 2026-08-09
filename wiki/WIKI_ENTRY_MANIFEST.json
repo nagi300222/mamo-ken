@@ -1,0 +1,38 @@
+{
+  "patch": "MAMOKEN Wiki PR92 direct HTML recovery",
+  "auditedMainShortSha": "ccc623f",
+  "entry": "wiki/index.html",
+  "bytes": 105771,
+  "sha256": "5e023e48f3256824f0824bc17ae22b8ef6c7add1cc63db185d37db4a5528820d",
+  "robots": "index,follow",
+  "expectedSuffix": "</script></body></html>",
+  "requiredCharacterIds": [
+    "moguzo",
+    "pisuke",
+    "godan",
+    "hakuma",
+    "chirka",
+    "takimaru",
+    "yomikage",
+    "bullet",
+    "dark_moguzo"
+  ],
+  "obsoleteFilesToDelete": [
+    "wiki/p0.js",
+    "wiki/p1.js",
+    "wiki/p2.js",
+    "wiki/p3.js",
+    "wiki/p4.js",
+    "wiki/p5.js",
+    "wiki/p6.js",
+    "wiki/p7.js",
+    "wiki/r00.js",
+    "wiki/r01.js",
+    "wiki/r02.js",
+    "wiki/r03.js",
+    "wiki/r04.js",
+    "wiki/r05.js",
+    "wiki/r06.js",
+    "wiki/r07.js"
+  ]
+}
