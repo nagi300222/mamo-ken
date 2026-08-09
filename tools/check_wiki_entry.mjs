@@ -91,22 +91,25 @@ const abilityUiRoot = path.join(repoRoot, manifest.localAssetRoots.abilityUi);
 const db = extractDbLiteral(html);
 assert.ok(db.characters && Object.keys(db.characters).length > 0, 'DB.characters is empty — nothing to verify');
 
-let localAssetChecks = 0;
+let portraitAssetChecks = 0;
+let characterAbilityUiChecks = 0;
+let commonAbilityUiChecks = 0;
 for (const id of Object.keys(db.characters)) {
   const c = db.characters[id];
   const slug = c.asset || id;
   assertLocalAssetExists(portraitRoot, `${slug}.webp`, `character portrait (${id})`);
-  localAssetChecks++;
+  portraitAssetChecks++;
   for (const ua of (c.ui_assets || [])) {
     assertLocalAssetExists(abilityUiRoot, ua.path, `ability UI asset (${id}: ${ua.name || ua.path})`);
-    localAssetChecks++;
+    characterAbilityUiChecks++;
   }
 }
 for (const ua of ((db.system && db.system.common_vfx) || [])) {
   assertLocalAssetExists(abilityUiRoot, ua.path, `common ability UI asset (${ua.name || ua.path})`);
-  localAssetChecks++;
+  commonAbilityUiChecks++;
 }
-assert.ok(localAssetChecks >= manifest.requiredCharacterIds.length,
+const totalLocalAssetChecks = portraitAssetChecks + characterAbilityUiChecks + commonAbilityUiChecks;
+assert.ok(totalLocalAssetChecks >= manifest.requiredCharacterIds.length,
   'fewer local asset references were checked than expected — extraction may be broken');
 
 console.log(JSON.stringify({
@@ -115,6 +118,9 @@ console.log(JSON.stringify({
   bytes: bytes.length,
   sha256,
   characters: manifest.requiredCharacterIds.length,
-  localAssetChecks,
+  portraitAssetChecks,
+  characterAbilityUiChecks,
+  commonAbilityUiChecks,
+  totalLocalAssetChecks,
   mode: 'direct-html-no-loader',
 }, null, 2));
