@@ -311,6 +311,10 @@ const PORTRAIT_NOSE_X_RATIO={moguzo:0.619,pisuke:0.476,godan:0.52,hakuma:0.395,c
 const OFFICIAL_CHARACTER_COUNT=3;
 const CURRENT_ART_MANIFEST=globalThis.MAMOKEN_CURRENT_ART_MANIFEST||null;
 const CURRENT_ART_RUNTIME=globalThis.MAMOKEN_CURRENT_ART_RUNTIME||null;
+// vNext PRESENTATION-R1 (A): presentationOnly:true/runtimeNumbersAndText:trueとmanifest自身が宣言する
+// asset path lookupのみ。ここから読むのはicon/gauge/vfxのファイルパス(文字列)だけで、combat側のBAL/f.*を
+// 書き換えることは一切ない(§一致: PR1 CLOSURE_STATUS.mdの既知gapを埋めるが、方向は常にf.*→UIの片方向)。
+const ABILITY_UI_MANIFEST=globalThis.MAMOKEN_ABILITY_UI_MANIFEST||null;
 function skeletonIdOf(c){return(c&&c.skeletonId)||c.id;}
 function spriteHeightForChar(c){
   const id=skeletonIdOf(c);
@@ -422,6 +426,31 @@ function preloadCurrentArtCharacter(charId){
   for(const frame of frames)for(const palette of ['p1','p2'])ensureCurrentArtFrameAsset(frame,palette);
 }
 function assetReady(key){const e=ASSETS[key];return!!(e&&e.ready&&!e.failed);}
+// vNext PRESENTATION-R1 (A): ability_ui_manifest.json(47アセット)をpreload。preserveWhite=trueは
+// roster3d/currentArt frameと同じ理由(キュレーション済みPNGの自前alphaが正=whitenAssetの白閾値抜きで
+// 意図しない不透明部を壊さない)。
+function abilityUiKey(relPath){return'ability_ui_'+relPath;}
+(function preloadAbilityUiAssets(){
+  if(!ABILITY_UI_MANIFEST)return;
+  const found=new Set();
+  (function walk(node){
+    if(!node||typeof node!=='object')return;
+    for(const v of Object.values(node)){
+      if(typeof v==='string'&&/\.(png|webp)$/i.test(v))found.add(v);
+      else if(v&&typeof v==='object')walk(v);
+    }
+  })(ABILITY_UI_MANIFEST.characters);
+  for(const v of Object.values(ABILITY_UI_MANIFEST.common||{}))if(typeof v==='string')found.add(v);
+  for(const relPath of found)loadImg(abilityUiKey(relPath),'../'+ABILITY_UI_MANIFEST.root+'/'+relPath,true);
+})();
+function abilityAsset(charId,group,sub){ // characters[charId][group][sub]のpath文字列を1口で取得(無ければnull)
+  if(!ABILITY_UI_MANIFEST)return null;
+  const c=ABILITY_UI_MANIFEST.characters[charId];if(!c)return null;
+  const g=c[group];if(!g)return null;
+  const v=sub?g[sub]:null;
+  return typeof v==='string'?v:null;
+}
+function drawAbilityIcon(relPath,cx,cy,w){return relPath?drawUiIcon(abilityUiKey(relPath),cx,cy,w):false;}
 function drawStanding(key,cx,bottomY,targetH){ // 足元アンカー・高さ基準でフィット
   if(!assetReady(key))return false;
   const e=ASSETS[key],src=e.canvas||e.img;
@@ -3490,6 +3519,149 @@ function hpBar(x,y,w,h,f,flip){
   const framed=drawUiFrame('ui_hp_frame',x,y,w,h,HP_FRAME_WIN[0],HP_FRAME_WIN[1],HP_FRAME_WIN[2],HP_FRAME_WIN[3],flip);
   if(!framed){ctx.strokeStyle='#fff';ctx.lineWidth=2.5;ctx.strokeRect(x,y,w,h);}
 }
+// vNext PRESENTATION-R1 (A): Ability UI/Gauge/VFXのlive接続。B(=hash対象/オンライン同期対象)の外に
+// 置く提示専用cache。前フレームのf.*値のスナップショットと、一定F表示するflashタイマーのみを持つ
+// (combat側からは一切参照されない=読み取り専用の片方向。ここが空でも/壊れてもfightStep()の結果は不変)。
+const ABILITY_PRES=[{prev:{},flash:{}},{prev:{},flash:{}}];
+function abilityFlash(side,key,dur){ABILITY_PRES[side].flash[key]=game.frame+dur;}
+function abilityFlashing(side,key){return(ABILITY_PRES[side].flash[key]||0)>=game.frame;}
+function armorWindowActive(f){ // Godan/Takimaru/Bulletのarmor窓(armorStartF..armorEndF)を汎用判定
+  const m=f.cmdMove;
+  if(!m||m.armorStartF==null)return false;
+  if(f.phase!=='cmdAtk'&&f.phase!=='cmdStance'&&f.phase!=='grab')return false;
+  return f.pf>=m.armorStartF&&f.pf<=m.armorEndF;
+}
+function updateAbilityPresentation(f){ // render()から毎描画フレーム1回呼ぶ。B/f.*は読むだけで書き換えない
+  const side=f.side,pres=ABILITY_PRES[side],p=pres.prev;
+  if(f.gutsActive===true&&p.gutsActive!==true)abilityFlash(side,'guts_active_vfx',24); // Moguzo GUTS trigger
+  if(f.gritAvailable===false&&p.gritAvailable===true)abilityFlash(side,'grit_trigger_vfx',30); // Moguzo 踏ん張りtrigger
+  if(f.ironWallReady===true&&p.ironWallReady!==true)abilityFlash(side,'iron_wall_ready_vfx',24); // Hakuma IRON WALL gain
+  if(f.charge>=3&&!(p.charge>=3))abilityFlash(side,'overcharge_vfx',24); // Bullet Overcharge(charge cap3到達)
+  if(f.cmdMove&&f.cmdMove.selfGuardRestore&&p.guard!=null&&f.guard>p.guard)abilityFlash(side,'pressure_release_vfx',20); // Bullet 圧抜き掌 Guard+15
+  if(f.darkChainUses>(p.darkChainUses||0)){ // Dark CHAIN発動瞬間
+    abilityFlash(side,'dark_chain_vfx',16);
+    if(f.darkBody)abilityFlash(side,'dark_hit_trail_vfx',16);
+  }
+  p.gutsActive=f.gutsActive;p.gritAvailable=f.gritAvailable;p.ironWallReady=f.ironWallReady;
+  p.charge=f.charge;p.guard=f.guard;p.darkChainUses=f.darkChainUses;
+}
+function abilityGaugeDescriptor(f){ // 常設ゲージ/ストック(y+22行): 数値化できるresourceのみ
+  const id=f.c.id;
+  if(id==='godan')return{kind:'segments',charId:'godan',group:'armor_stock',total:3,filled:f.armorStock};
+  if(id==='hakuma')return{kind:'segments',charId:'hakuma',group:'iron_wall',total:1,filled:f.ironWallReady?1:0};
+  if(id==='bullet')return{kind:'segments',charId:'bullet',group:'charge',total:3,filled:f.charge,max:f.charge>=3};
+  if(id==='dark_moguzo'){
+    const map=ABILITY_UI_MANIFEST&&ABILITY_UI_MANIFEST.characters.dark_moguzo.dark_gauge.presentationMap;
+    if(!map)return null;
+    let mapKey=map['0'];
+    if(f.darkBody)mapKey=map.BODY;
+    else{
+      const nums=Object.keys(map).filter(function(k){return k!=='BODY';}).map(Number).sort(function(a,b){return b-a;});
+      for(let i=0;i<nums.length;i++)if(f.darkGauge>=nums[i]){mapKey=map[String(nums[i])];break;}
+    }
+    return{kind:'mapped',charId:'dark_moguzo',group:'dark_gauge',mapKey:mapKey};
+  }
+  if(id==='moguzo'){
+    const group=f.gutsActive?'guts_active':(f.gritAvailable?'grit_available':null);
+    return group?{kind:'icon',charId:'moguzo',group:group,sub:'icon'}:null;
+  }
+  return null;
+}
+function drawAbilityGauge(x,y,w,f,flip){
+  const d=abilityGaugeDescriptor(f);
+  if(!d)return;
+  if(d.kind==='segments'){
+    const gap=4,segW=Math.min(20,(w-(d.total-1)*gap)/Math.max(1,d.total)),h=12;
+    for(let i=0;i<d.total;i++){
+      const sx=flip?(x+w-segW-i*(segW+gap)):(x+i*(segW+gap));
+      const on=i<d.filled;
+      if(!drawAbilityIcon(abilityAsset(d.charId,d.group,on?'on':'off'),sx+segW/2,y+h/2,segW)){
+        ctx.fillStyle=on?'#ffd23f':'#2a2f3d';ctx.fillRect(sx,y,segW,h);
+        ctx.strokeStyle='#778';ctx.lineWidth=1;ctx.strokeRect(sx,y,segW,h);
+      }
+    }
+    if(d.max){
+      const bx=flip?(x+10):(x+w-10);
+      if(!drawAbilityIcon(abilityAsset(d.charId,d.group,'max'),bx,y+h/2,16))txt('MAX',bx,y+h/2+4,10,'#ffd23f');
+    }
+  }else if(d.kind==='mapped'){
+    const cx=flip?(x+w-16):(x+16);
+    if(!drawAbilityIcon(abilityAsset(d.charId,d.group,d.mapKey),cx,y+6,26)){
+      ctx.fillStyle='#7a2fd9';ctx.beginPath();ctx.arc(cx,y+6,8,0,TAU);ctx.fill();
+    }
+  }else if(d.kind==='icon'){
+    const cx=flip?(x+w-14):(x+14);
+    if(!drawAbilityIcon(abilityAsset(d.charId,d.group,d.sub),cx,y+6,22)){
+      ctx.fillStyle='#ff8b3d';ctx.beginPath();ctx.arc(cx,y+6,7,0,TAU);ctx.fill();
+    }
+  }
+}
+function abilityStatusDescriptor(f){ // 一時アイコン/VFX(y+35行): live windowまたはflashのどちらか一つ(優先度順)
+  const id=f.c.id,side=f.side;
+  if(id==='moguzo'){
+    if(abilityFlashing(side,'guts_active_vfx'))return{charId:'moguzo',group:'guts_active',sub:'vfx'};
+    if(abilityFlashing(side,'grit_trigger_vfx'))return{charId:'moguzo',group:'grit_trigger',sub:'vfx'};
+    return null;
+  }
+  if(id==='pisuke'){
+    if(f.chaseActive)return{charId:'pisuke',group:'chase_active',sub:'vfx'};
+    if(f.chaseReadyUntilF>0&&B.f<=f.chaseReadyUntilF)return{charId:'pisuke',group:'chase_ready',sub:'icon'};
+    return null;
+  }
+  if(id==='godan'){
+    if(armorWindowActive(f))return{charId:'godan',group:f.cmdMove.hyperArmor?'hyper_armor_active':'armor_active',sub:'vfx'};
+    return null;
+  }
+  if(id==='hakuma'){
+    if(abilityFlashing(side,'iron_wall_ready_vfx'))return{charId:'hakuma',group:'iron_wall_ready',sub:'vfx'};
+    return null;
+  }
+  if(id==='chirka'){
+    if(f.cmdMove&&cmdUnblockable(f,f.cmdMove))return{charId:'chirka',group:'delayed_unblockable',sub:'vfx'};
+    if(f.trickChoice==='feint'&&f.trickResolved&&f.trickSuccess)return{charId:'chirka',group:'feint_success',sub:'vfx'};
+    if(f.trickChoice==='delay')return{charId:'chirka',group:'delay',sub:'vfx'};
+    return null;
+  }
+  if(id==='takimaru'){
+    if(armorWindowActive(f)&&f.cmdMove&&f.cmdMove.name==='大回転落とし')return{charId:'takimaru',group:'armor_throw',sub:'vfx'};
+    if(f.pressureState==='ready'||f.pressureState==='throwQueued')return{charId:'takimaru',group:'pressure_ready',sub:'icon',dim:f.pressureState==='throwQueued'};
+    return null;
+  }
+  if(id==='yomikage'){
+    if(f.yomiFiredJust)return{charId:'yomikage',group:'just_return',sub:'icon'};
+    if(f.yomiState==='ready')return{charId:'yomikage',group:'return_ready',sub:'icon'};
+    return null;
+  }
+  if(id==='bullet'){
+    if(f.phase==='cmdAtk'&&f.cmdMove&&f.cmdMove.unblockable&&f.pf<f.cmdMove.s)return{charId:'bullet',group:'unblockable',sub:'vfx'};
+    if(abilityFlashing(side,'overcharge_vfx'))return{charId:'bullet',group:'overcharge',sub:'vfx'};
+    if(armorWindowActive(f))return{charId:'bullet',group:'tackle_armor',sub:'vfx'};
+    if(abilityFlashing(side,'pressure_release_vfx'))return{charId:'bullet',group:'pressure_release',sub:'vfx'};
+    return null;
+  }
+  if(id==='dark_moguzo'){
+    if(abilityFlashing(side,'dark_hit_trail_vfx'))return{charId:'dark_moguzo',group:'dark_hit_trail',sub:'vfx'};
+    if(abilityFlashing(side,'dark_chain_vfx'))return{charId:'dark_moguzo',group:'dark_chain',sub:'vfx'};
+    // 「dark_afterimage」の正確な発火周期は仕様書に規定が無いため、BODY中の演出的な明滅(6F毎に
+    // dark_body/dark_afterimageを交互表示)として解釈する(=combat/hashに一切影響しないcosmetic選択。
+    // PRESENTATION_R1完了報告に解釈注記として記載)。
+    if(f.darkBody)return{charId:'dark_moguzo',group:(f.pf%12>=6)?'dark_afterimage':'dark_body',sub:'vfx'};
+    return null;
+  }
+  return null;
+}
+function drawAbilityStatus(x,y,w,f,flip){
+  const d=abilityStatusDescriptor(f);
+  if(!d)return;
+  const cx=flip?(x+w-16):(x+16);
+  ctx.save();
+  if(d.dim)ctx.globalAlpha=0.55;
+  if(!drawAbilityIcon(abilityAsset(d.charId,d.group,d.sub),cx,y+7,26)){
+    ctx.globalAlpha=(ctx.globalAlpha||1)*((game.frame%16<8)?1:0.6);
+    ctx.fillStyle='#ffdd55';ctx.beginPath();ctx.arc(cx,y+7,8,0,TAU);ctx.fill();
+  }
+  ctx.restore();
+}
 const SG_FRAME_WIN=[0.0965,0.4526,0.9000,0.6466]; // sgauge_frame.png内の透過窓(Sゲージ本体のみ。ガード/集中は現行のまま)
 function gauges(x,y,f,flip){
   const w=150;
@@ -3509,7 +3681,11 @@ function gauges(x,y,f,flip){
   if(flip)ctx.fillRect(x+w-gw,y+15,gw,7);else ctx.fillRect(x,y+15,gw,7);
   ctx.strokeStyle='#778';ctx.strokeRect(x,y+15,w,7);
   // vNext PR2 (COMBAT_VNEXT_FINAL.md §10 Focus): 「外す: HUD」につき集中ゲージの描画を撤廃(f.focus/BAL.FOCUSは
-  // schema compatibilityのみで参照しない)。この位置に他HUD要素は再配置していない(空白のまま)
+  // schema compatibilityのみで参照しない)。vNext PRESENTATION-R1 (A): この空き(y+22..y+49)へability
+  // gauge(y+22行、常設stock/ゲージ)とability status(y+35行、一時icon/VFX)を配置する(奥義ストック(y+49)
+  // とは別行=重複なし)
+  drawAbilityGauge(x,y+22,w,f,flip);
+  drawAbilityStatus(x,y+35,w,f,flip);
   for(let i=0;i<3;i++){
     const px=flip?(x+w-14-i*26):(x+14+i*26),py=y+49;
     const on=f.ult>i;
@@ -3537,6 +3713,7 @@ function comboTxt(x,y,n){
 const PAUSE_BTN={x:0,y:0,w:0,h:0}; // 戦闘中右上「II」(rHUDで毎フレーム位置確定・pressRouteと共有、§6.8 v2.5)
 function rHUD(){
   const p1=B.p[0],p2=B.p[1];
+  updateAbilityPresentation(p1);updateAbilityPresentation(p2); // vNext PRESENTATION-R1 (A): B外部cache更新(描画1回につき1回。読み取り専用)
   hpBar(16,14,232,20,p1,false);
   hpBar(W-46-232,14,232,20,p2,true); // 右上に一時停止ボタン分の余白(30px)を確保
   PAUSE_BTN.x=W-38;PAUSE_BTN.y=8;PAUSE_BTN.w=30;PAUSE_BTN.h=30;

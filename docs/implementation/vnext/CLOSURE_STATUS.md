@@ -94,23 +94,23 @@ message ordering/latency, or disconnect handling. This item is left
 relay environment should run it before treating vNext FINAL as fully
 closed end-to-end.
 
-## Known gap carried forward: Ability UI/VFX not wired
+## Closed: Ability UI/VFX now wired (PRESENTATION-R1 (A))
 
-PR1's `MAMOKEN_ABILITY_UI_MANIFEST` (icon/gauge/VFX asset paths per
-character ability state) has never been wired to live rendering code —
-no draw call in `prototype/mamoken_prototype_v01.html` reads any PR4
-Ability field (`chaseReadyUntilF`, `armorStock`, `ironWallReady`,
-`pressureState`, `yomiState`, `charge`, `darkGauge`/`darkBody`, etc.) to
-display a corresponding icon, gauge segment, or VFX during a battle. The
-manifest itself is structurally valid and asset-complete (confirmed by
-`check:ability-ui-manifest`), and every PR4 Ability mechanic is fully
-live and correct in gameplay — this gap is purely "the player currently
-has no on-screen indicator of these Ability states," not a gameplay,
-determinism, or hash-safety issue. Building 9 characters' worth of
-battle-HUD ability indicators (icon placement, gauge segment logic,
-VFX trigger timing) is a substantial art/UI implementation task in its
-own right, distinct from PR4/PR5's state-machine and regression scope,
-and is left for a future UI-focused pass.
+PR1's `MAMOKEN_ABILITY_UI_MANIFEST` is now live-connected to
+`prototype/mamoken_prototype_v01.html`'s HUD rendering
+(`gauges()`/`rHUD()` and the new `abilityGaugeDescriptor()`/
+`abilityStatusDescriptor()`/`drawAbilityGauge()`/`drawAbilityStatus()`
+functions) — all 9 characters now show a persistent gauge/stock icon and
+a status icon/VFX for their PR4 Ability state, placed in the HUD gap this
+section previously identified as unused. Presentation-only: the new code
+only reads `f.*` combat fields, never writes them, and a measured
+per-tick full-state hash comparison (pre- vs post-connection, 5 matchups
+covering all 9 characters, 4000 ticks each) confirmed zero divergence.
+See `reports/presentation/ABILITY_UI_VFX_CONNECTION.md` for the full
+binding table, interpretation notes (no 9-slice frame calibration data
+exists for the new gauge frame assets; Bullet's `charge.over` asset is
+unreachable given the current cap-3 rule; Dark Moguzo's afterimage cadence
+is a documented cosmetic choice), and verification results.
 
 ## Explicit interpretation note carried forward from PR4
 
