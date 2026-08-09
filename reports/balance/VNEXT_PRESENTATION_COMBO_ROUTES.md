@@ -109,6 +109,22 @@ per-step breakdown (per-hit damage, wait-ticks until each cancel window
 opened) is preserved in this session's tool output; the totals above are
 what's now surfaced in-game.
 
+**Addendum (raised by Codex review on PR #86, confirmed by direct
+verification)**: "TRUE COMBO" here means "never `idle`/`guard`-actionable"
+— exactly what the in-game explainer text says
+(`drawMovelistCombo()`: "TRUE COMBO=各hit間、相手が一度もガード/回避可能な
+状態に戻らない連続ヒット"). It does not mean "unescapable under all
+circumstances": `applyInputs()` lets Roar interrupt `hitstun`
+unconditionally once `f.s>=BAL.SMAX` (no frame-window restriction). Re-
+running each Route C sequence for all 9 characters with the defender's
+`s` pre-set to `BAL.SMAX` confirmed every route has at least one such
+Roar-escapable gap between hits. This doesn't affect the measured
+damage (the verification dummy starts and stays at `s:0`, so Roar never
+fires during the original runs) and doesn't change any route's
+classification under the criterion the label actually names — Roar as a
+comeback/combo-breaker resource is intentional, untouched combat-logic
+design, not a defect in this verification.
+
 ## 4. Where this is wired
 
 - **わざ表 COMBO tab** (`drawMovelistCombo()`, `prototype/
