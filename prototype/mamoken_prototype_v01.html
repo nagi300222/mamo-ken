@@ -2936,7 +2936,7 @@ const ABILITY_DESCRIPTIONS={
     effectJa:'フェイント(だまし突きのみ)は成功で技を中断(硬直6F)・失敗で12F隙を晒す。ディレイは対応技の再開を+8F遅らせ、あと出し頭突きのディレイ版のみガード不能になる。'},
   takimaru:{triggerJa:'ぶちかまし・熊手払いがHITまたはガードされると、相手が次に行動可能になる前後の一定時間「肩車崩し」(プレッシャー専用、直接入力不可のコマンド投げ)の予約入力を受け付ける。',
     effectJa:'予約しておくと、相手が実際に行動可能になった瞬間に肩車崩しが自動的に発動する(先出しでは発動せず、あくまで相手の行動可能Fに合わせて発動)。'},
-  yomikage:{triggerJa:'通常の回避(しゃがみ/スウェー/踏み込み)の硬直中に、H/M/L/つかみのいずれか1つだけを予約入力できる。回避開始5F～9Fの間に予約するとJust版になる。',
+  yomikage:{triggerJa:'通常の回避(しゃがみ/スウェー/踏み込み)が相手の攻撃と正解回避(接触)した瞬間の回避経過フレームが5F～9Fの間ならJust版になる(それ以外は通常版)。回避成立後の硬直中に、H/M/L/つかみのいずれか1つだけを予約入力できる。',
     effectJa:'回避が成功すると、予約しておいた入力に応じたRETURN系のコマンド技が自動発動する。Just版はRETURN技のstartupが-2F、ダメージが+10%になる。'},
   bullet:{triggerJa:'弾み突き・尾払い・跳ね上げのHIT、または抱え弾きの投げ成功時、直前に成功した技と異なる技であればCHARGEが1貯まる(上限3、同じ技の連続成功では増えない)。',
     effectJa:'蓄圧タックル(消費1)・圧抜き掌(消費1、成功でガード+15)・弾丸頭突き(消費3、ガード不能)は、このCHARGEを消費して発動する。'},
@@ -4313,6 +4313,17 @@ function drawDetailPerformance(c,startY){
   textCard('コンセプト',c.conceptJa,'#ffd23f');
   textCard('勝ち筋',c.winConditionJa,'#7CFC00');
   textCard('弱点',c.weaknessJa,'#ff8b8b');
+  // vNext PRESENTATION-R1 (C): 実測ステータス。displayStats(ATK/SPD/DEF/TEC/BRKの1-5相対評価、下の
+  // 表示性能カード)とは別に、prototype本体が実戦で使う生数値をそのまま表示する。character-catalog側
+  // にはこの生数値のフィールドが無い(意図的に相対評価のみ持つ設計)ため、常にBAL_R1_CHARS/
+  // NORMAL_CHAIN_LIMIT(r1Char()/normalChainLimitFor()の単一取得口経由)からlive読み出しする=
+  // バランス調整(BAL-R1/vNext等)が入ってもこの画面のコードは変更不要。
+  const r1=r1Char(c);
+  detailCard(26,y,414,92,'#7fd8ff');txt('実測ステータス(現行値)',44,y+23,14,'#7fd8ff','left');
+  txt('HP '+r1.hp,44,y+52,16,'#f0f2f7','left');
+  txt('Guard '+r1.guard,220,y+52,16,'#f0f2f7','left');
+  txt('通常技chain上限 '+normalChainLimitFor(c)+'回',44,y+78,13,'#cfd6e6','left');
+  y+=104;
   detailCard(26,y,414,218,'#7fd8ff');txt('表示性能',44,y+24,16,'#7fd8ff','left');
   const statRows=[['ATK','atk'],['SPD','spd'],['DEF','def'],['TEC','tec'],['BRK','brk']];
   let sy=y+54;
@@ -4343,15 +4354,29 @@ function drawDetailMoves(c,startY){
   let y=startY;
   detailCard(26,y,414,86,'#7fd8ff');txt('基本7技',44,y+24,18,'#7fd8ff','left');
   txt('技名・入力・属性・Reach・用途・実装状態',44,y+55,13,'#cfd6e6','left');y+=98;
+  // vNext PRESENTATION-R1 (C): Classic Cancelの一般説明。per-move受付F(ccWindow)はキャラ/技ごとに
+  // 12-16Fと異なる(わざ表COMMANDタブがBAL.CMD.movesからlive表示)ため、ここでは仕組みのみ触れる。
+  detailCard(26,y,414,150,'#a7d9c9');txt('クラシックキャンセル',44,y+23,13,'#a7d9c9','left');
+  detailWrapped('打撃/つかみのCommand技(構え技・Pressure専用つかみは対象外)がHITした瞬間から12〜16Fの間、別の打撃/つかみCommand技へClassic(直接)入力でキャンセルできる(同技への連続キャンセルは不可)。技ごとの受付Fはわざ表COMMANDタブ参照。',44,y+48,378,13,'#dfe4ee',6);y+=164;
+  // vNext PRESENTATION-R1 (C): character-catalog(src/core/character-catalog.ts)のmove.implementationStatus
+  // はCMD-R1時代(9キャラ中3技のみ実装)のまま更新されておらず、大半が古い'design_confirmed'を返す
+  // (PR#80の63/63 runtime監査で全63技が既にlive実装済みと確認済み)。表示はカタログ値を信用せず、常に
+  // 実際のBAL.CMD.movesに同名の技が存在するかどうかで判定し直す(見つかれば実装済み)。
+  const liveMoves=BAL.CMD.moves[c.id]||[];
+  const modernNames=new Set((MODERN_PATTERNS[c.id]||[]).map(function(p){return p.move;}));
   for(const move of c.moves){
-    const extra=move.conditionsJa.length?24:0,h=128+extra,accent=detailAttributeColor(move.attribute);
+    const isLive=liveMoves.some(function(m){return m.name===move.nameJa;});
+    const isModern=modernNames.has(move.nameJa);
+    const extra=(move.conditionsJa.length?24:0)+(isModern?22:0),h=128+extra,accent=detailAttributeColor(move.attribute);
     detailCard(26,y,414,h,accent);
     txt(move.slot+'. '+move.nameJa,44,y+25,19,'#fff','left');
     txt(move.command.notationJa,422,y+25,18,'#ffd23f','right');
     txt(move.attribute+' / Reach '+move.reach+' / '+detailDifficultyLabel(move.difficulty),44,y+52,13,accent,'left');
-    txt(detailStatusLabel(move.implementationStatus),422,y+52,12,move.implementationStatus==='current_runtime'?'#7CFC00':'#ffcf66','right');
+    txt(isLive?'実装済み':detailStatusLabel(move.implementationStatus),422,y+52,12,isLive?'#7CFC00':'#ffcf66','right');
     detailWrapped(move.roleJa,44,y+78,378,14,'#e2e7f0',2);
-    if(move.conditionsJa.length)txt('条件: '+move.conditionsJa.join('／'),44,y+116,12,'#b89cff','left');
+    let ly=y+116;
+    if(move.conditionsJa.length){txt('条件: '+move.conditionsJa.join('／'),44,ly,12,'#b89cff','left');ly+=24;}
+    if(isModern)txt('MODERN対応(わざ表MODERNタブ参照)',44,ly,11,'#7fd8ff','left');
     y+=h+12;
   }
   for(const special of c.specials){
