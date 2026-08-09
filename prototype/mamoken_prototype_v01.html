@@ -2908,12 +2908,53 @@ let pauseConfirmingQuit=false; // タイトルへ選択時の確認ステップ
 const PAUSE_RECT={resume:{x:60,y:380,w:W-120,h:76},movelist:{x:60,y:472,w:W-120,h:76},quit:{x:60,y:564,w:W-120,h:76}};
 const PAUSE_CONFIRM_RECT={yes:{x:60,y:520,w:(W-140)/2,h:76},no:{x:80+(W-140)/2,y:520,w:(W-140)/2,h:76}};
 const MOVELIST_BACK_RECT={x:60,y:H-96,w:W-120,h:64};
-const COMBO_ROUTES=[ // §6.6 基本コンボ4ルート(キャラ共通の参考値・わざ表表示専用)
+// vNext PRESENTATION-R1 (B): 旧「キャラ共通4ルート・参考値」は §6.6 時代のプレースホルダで、vNext
+// R2/R4でCommand/Modernの数値が全面刷新された現在は既に古い(dmgが現行値と一致しない)。PRESENTATION-R1
+// (D)でキャラ別・実engine検証済み(実際に入力列を実行しダメージ実測)のルートへ置き換えるまでの間、
+// COMBOタブは一時的に「検証中」プレースホルダを表示する(このconst自体はもう描画されないが、(D)の
+// 置き換え元データとして参照される可能性があるため残置。値は書き換えない=既存の参考表記のまま)。
+const COMBO_ROUTES=[ // §6.6 基本コンボ4ルート(キャラ共通の参考値・わざ表表示専用。PRESENTATION-R1(D)で置換予定)
   {name:'ルートA 中→上→下',note:'基本',dmg:'280＋ダウン追撃'},
   {name:'ルートB 回避成功→カウンター中→上→下',note:'読み勝ちの最大リターン',dmg:'323＋追撃'},
   {name:'ルートC しゃがみ突き→中→上',note:'ダウン無しの取り回し型',dmg:'193'},
   {name:'ルートD 踏み込み→つかみ(高速コマ投げ)',note:'ガード崩しの密着択',dmg:'90＋密着継続'}
 ];
+// vNext PRESENTATION-R1 (B): わざ表ABILITYタブ用の固有能力トリガー/効果テキスト。すべて既存の
+// ability state machine(vNext PR4、prototype内のf.gutsActive等)とBAL.CMD.movesの実数値をそのまま
+// 文章化したもの(新しい数値・仕様の発明ではない。各行が対応するコード箇所はreports/presentation/
+// MOVELIST_UI_UPDATE.md参照)。
+const ABILITY_DESCRIPTIONS={
+  moguzo:{triggerJa:'HPが最大値の30%以下になった瞬間に発動(そのRound中は継続)。加えて1Round1回、HPが2以上残っている状態で致死ダメージ(奥義含む)を受けてもHP1で耐える「踏ん張り」を持つ。',
+    effectJa:'発動後は通常技・コマンド技・つかみ・咆哮・奥義のダメージが+10%になる(ガードダメージ/chip/ギュイーンは対象外)。'},
+  pisuke:{triggerJa:'通常技(しゃがみ/中段/上段/下段)がガードされずにHITした瞬間から、ヒットストップ終了+12Fの間が受付。',
+    effectJa:'受付中にスウェーか踏み込みへ回避入力すると、その回避の残り硬直をキャンセルして密着距離まで一気に詰める(CHASE)。'},
+  godan:{triggerJa:'Round開始時にARMOR STOCKを3つ所持(自然回復なし)。山掴み(1)・岩砕き(1)・巌の構え(1)・大山押し(2)のいずれかを出すとストックを消費して発動する。',
+    effectJa:'消費した技のarmorStartF～armorEndFの間は被弾してものけぞらず、ダメージのみ軽減(山掴み60%/岩砕き60%/大山押し30%=ハイパーアーマー)して攻撃を継続できる。巌の構えは構え中に技を受けるとカウンター反撃(125dmg)になる。'},
+  hakuma:{triggerJa:'正解回避(Mikiri)成功、または相手の攻撃をガード成功させるたびにIRON WALLストックを1つ獲得(上限1、タイムアウトなし)。',
+    effectJa:'ストックがある状態で雪壁掌・白峰打ち・雪煙崩しを出すと、そのストックを消費して強化版(startup短縮・ダメージ増加など技ごとに個別)に切り替わる。'},
+  chirka:{triggerJa:'だまし突き・空鳴り爪・影踏み・あと出し頭突きは、技ごとに定められたtrickWindow(発生後の数F間)にH/M/Lの追加入力を受け付ける。',
+    effectJa:'フェイント(だまし突きのみ)は成功で技を中断(硬直6F)・失敗で12F隙を晒す。ディレイは対応技の再開を+8F遅らせ、あと出し頭突きのディレイ版のみガード不能になる。'},
+  takimaru:{triggerJa:'ぶちかまし・熊手払いがHITまたはガードされると、相手が次に行動可能になる前後の一定時間「肩車崩し」(プレッシャー専用、直接入力不可のコマンド投げ)の予約入力を受け付ける。',
+    effectJa:'予約しておくと、相手が実際に行動可能になった瞬間に肩車崩しが自動的に発動する(先出しでは発動せず、あくまで相手の行動可能Fに合わせて発動)。'},
+  yomikage:{triggerJa:'通常の回避(しゃがみ/スウェー/踏み込み)の硬直中に、H/M/L/つかみのいずれか1つだけを予約入力できる。回避開始5F～9Fの間に予約するとJust版になる。',
+    effectJa:'回避が成功すると、予約しておいた入力に応じたRETURN系のコマンド技が自動発動する。Just版はRETURN技のstartupが-2F、ダメージが+10%になる。'},
+  bullet:{triggerJa:'弾み突き・尾払い・跳ね上げのHIT、または抱え弾きの投げ成功時、直前に成功した技と異なる技であればCHARGEが1貯まる(上限3、同じ技の連続成功では増えない)。',
+    effectJa:'蓄圧タックル(消費1)・圧抜き掌(消費1、成功でガード+15)・弾丸頭突き(消費3、ガード不能)は、このCHARGEを消費して発動する。'},
+  dark_moguzo:{triggerJa:'黒走り・逆昇撃・黒砂払い・闇押し・裏山越えのいずれかがHITし、直前と異なる技であればDARKゲージ+30(通常は同一コンボ中2回まで、BODY中は3回まで)。',
+    effectJa:'ゲージが100に達するとREADY化し、消費してBODY(360F)へ突入する。BODY中は通常技のstartupが-1F、コマンド技のstartupが-2F、与ダメージが+8%になる(ガードダメージ/chip/ギュイーンは対象外)。'}
+};
+let movelistTab='command';
+let movelistScroll=0;
+let movelistMaxScroll=0;
+const MOVELIST_TABS=[{id:'command',label:'COMMAND'},{id:'modern',label:'MODERN'},{id:'ability',label:'ABILITY'}];
+// COMBOタブはPRESENTATION-R1(D)(エンジン実測済みのキャラ別おすすめコンボ)で追加予定。
+function movelistTabRect(i){
+  const n=MOVELIST_TABS.length,gap=8,w=(W-40-gap*(n-1))/n;
+  return{x:20+i*(w+gap),y:96,w:w,h:60};
+}
+const MOVELIST_CONTENT_CLIP={x:20,y:168,w:426,h:680};
+const MOVELIST_SCROLL_UP={x:454,y:172,w:66,h:66};
+const MOVELIST_SCROLL_DOWN={x:454,y:782,w:66,h:66};
 function pausePress(p){
   if(onlineActive()){ // オンライン中は「タイトルへ(切断)」のみ(§6.8 v2.5)
     if(pauseConfirmingQuit){
@@ -2938,10 +2979,22 @@ function pausePress(p){
     return;
   }
   if(inRect(p,PAUSE_RECT.resume.x,PAUSE_RECT.resume.y,PAUSE_RECT.resume.w,PAUSE_RECT.resume.h)){sfx('tap');game.screen='battle';return;}
-  if(inRect(p,PAUSE_RECT.movelist.x,PAUSE_RECT.movelist.y,PAUSE_RECT.movelist.w,PAUSE_RECT.movelist.h)){sfx('tap');game.screen='movelist';return;}
+  if(inRect(p,PAUSE_RECT.movelist.x,PAUSE_RECT.movelist.y,PAUSE_RECT.movelist.w,PAUSE_RECT.movelist.h)){
+    sfx('tap');movelistTab='command';movelistScroll=0;movelistMaxScroll=0;game.screen='movelist';return;
+  }
   if(inRect(p,PAUSE_RECT.quit.x,PAUSE_RECT.quit.y,PAUSE_RECT.quit.w,PAUSE_RECT.quit.h)){sfx('tap');pauseConfirmingQuit=true;return;}
 }
 function movelistPress(p){
+  for(let i=0;i<MOVELIST_TABS.length;i++){
+    const r=movelistTabRect(i);
+    if(inRect(p,r.x,r.y,r.w,r.h)){movelistTab=MOVELIST_TABS[i].id;movelistScroll=0;sfx('tap');return;}
+  }
+  if(inRect(p,MOVELIST_SCROLL_UP.x,MOVELIST_SCROLL_UP.y,MOVELIST_SCROLL_UP.w,MOVELIST_SCROLL_UP.h)){
+    movelistScroll=Math.max(0,movelistScroll-260);sfx('tap');return;
+  }
+  if(inRect(p,MOVELIST_SCROLL_DOWN.x,MOVELIST_SCROLL_DOWN.y,MOVELIST_SCROLL_DOWN.w,MOVELIST_SCROLL_DOWN.h)){
+    movelistScroll=Math.min(movelistMaxScroll,movelistScroll+260);sfx('tap');return;
+  }
   if(inRect(p,MOVELIST_BACK_RECT.x,MOVELIST_BACK_RECT.y,MOVELIST_BACK_RECT.w,MOVELIST_BACK_RECT.h)){sfx('tap');game.screen='pause';}
 }
 
@@ -4482,33 +4535,136 @@ function rPauseOverlay(){ // 戦闘中右上「II」→ポーズ画面(§6.8 v2.
   btn(PAUSE_RECT.movelist.x,PAUSE_RECT.movelist.y,PAUSE_RECT.movelist.w,PAUSE_RECT.movelist.h,'わざ表');
   btn(PAUSE_RECT.quit.x,PAUSE_RECT.quit.y,PAUSE_RECT.quit.w,PAUSE_RECT.quit.h,'タイトルへ');
 }
-function rMovelistOverlay(){ // わざ表=使用キャラのコマンド技3種+基本コンボ4ルート(§6.8/§6.6)
-  ctx.fillStyle='rgba(8,8,14,0.94)';ctx.fillRect(0,0,W,H);
-  const myF=onlineActive()?B.p[online.slot]:B.p[0];
-  txt('わざ表 - '+myF.c.name,W/2,52,28,'#ffd23f');
-  txt('コマンド技',60,90,17,'#7fd8ff','left');
+// vNext PRESENTATION-R1 (B): move(BAL.CMD.moves[].の1件)が持つゲート/特殊挙動フィールドを、そのまま
+// 数値を読んでバッジ文字列化する(新しい数値・仕様は一切足さない。既存tagsの内部向け注記(例:
+// "小Pushback(未結線)")はプレイヤー向け表示としては読みにくいため、フィールドを個別に見て
+// プレイヤー向けの文言へ書き直す)。
+function moveBadges(m){
+  const badges=[];
+  if(m.modern)badges.push({t:'MODERN対応',c:'#7fd8ff'});
+  if(m.cost)badges.push({t:(m.cost.res==='armorStock'?'アーマーストック':'チャージ')+'×'+m.cost.amt+' 消費',c:'#ffb84d'});
+  if(m.armorStartF!=null)badges.push({t:(m.hyperArmor?'ハイパーアーマー':'アーマー')+' '+m.armorStartF+'-'+m.armorEndF+'F(被弾時ダメージ'+Math.round(m.armorDmgMul*100)+'%)',c:'#ffd23f'});
+  if(m.ironWallAlt)badges.push({t:'IRON WALL消費で強化版に切替',c:'#a7d9c9'});
+  if(m.trickWindow){
+    const kinds=(m.trickWindow.feint?'フェイント':'')+(m.trickWindow.feint&&m.trickWindow.delay?'／':'')+(m.trickWindow.delay?'ディレイ':'');
+    badges.push({t:kinds+' 受付'+m.trickWindow.s+'-'+m.trickWindow.e+'F',c:'#caa6d9'});
+  }
+  if(m.delayedVariant&&m.delayedVariant.unblockable)badges.push({t:'ディレイ版はガード不能',c:'#ff8b8b'});
+  if(m.unblockable)badges.push({t:'ガード不能',c:'#ff8b8b'});
+  if(m.pressureOnly)badges.push({t:'PRESSURE専用(直接入力不可)',c:'#c9a24d'});
+  if(m.chargeGain)badges.push({t:'成功でCHARGE+1',c:'#ffb84d'});
+  if(m.selfGuardRestore)badges.push({t:'成功でガード+'+m.selfGuardRestore,c:'#6fd3ff'});
+  if(m.comboEnd)badges.push({t:'コンボ終着(Finisher)',c:'#ffd23f'});
+  if(m.hits>1)badges.push({t:m.hits+'ヒット技',c:'#9adfff'});
+  return badges;
+}
+function drawMoveBadges(badges,x,y,maxW){
+  let bx=x,by=y,rowH=22;
+  ctx.save();ctx.font='11px sans-serif';
+  for(const b of badges){
+    const w=ctx.measureText(b.t).width+16;
+    if(bx+w>x+maxW){bx=x;by+=rowH;}
+    ctx.fillStyle=b.c+'33';rr(bx,by,w,18,9);ctx.fill();
+    ctx.strokeStyle=b.c;ctx.lineWidth=1.2;rr(bx,by,w,18,9);ctx.stroke();
+    txt(b.t,bx+w/2,by+13,11,b.c);
+    bx+=w+6;
+  }
+  ctx.restore();
+  return by+rowH;
+}
+function drawMovelistCommand(myF,startY){ // COMMAND: BAL.CMD.moves[myF.c.id]の7技をR2現行値で全項目表示
+  let y=startY;
+  detailCard(20,y,406,60,'#7fd8ff');
+  detailWrapped('コマンド技7種の現行値(発生/持続/硬直・ダメージ・GuardDamage・Classic Cancel受付等)。',34,y+20,378,13,'#cfd6e6',2);y+=72;
   const moves=commandMovesFor(myF.c);
-  let y=104;
   for(let i=0;i<moves.length;i++){
     const m=moves[i];
     const seqStr=m.seq.map(function(d){return DIR_ARROW[d];}).join('')+'＋'+(m.type==='grab'?'つかみ':LV_LABEL[m.trigger]);
-    ctx.fillStyle='#232a3d';rr(50,y,W-100,66,14);ctx.fill();
-    ctx.strokeStyle='#3a4560';ctx.lineWidth=2;rr(50,y,W-100,66,14);ctx.stroke();
-    txt(seqStr,74,y+26,19,'#ffd23f','left');
-    txt(m.name,74,y+50,16,'#fff','left');
-    txt('dmg'+Math.round(m.type==='stance'?m.counterDmg:m.d),W-70,y+38,15,'#ffb6b6','right'); // 構え技はcounterDmgを表示(P1でdmgNaNを発見・修正)
-    y+=76;
+    const badges=moveBadges(m);
+    const bodyLines=2+(badges.length?1:0);
+    const h=100+bodyLines*4;
+    detailCard(20,y,406,h,m.type==='grab'?'#ff9500':(m.type==='stance'?'#ffd23f':'#7fd8ff'));
+    txt((i+1)+'. '+m.name,34,y+24,18,'#fff','left');
+    txt(seqStr,392,y+24,15,'#ffd23f','right');
+    let frameLine,dmgLine;
+    if(m.type==='stance'){
+      frameLine='構え発生'+m.startupF+'F／反撃受付'+m.counterActiveF+'F／不発硬直'+m.failRecF+'F';
+      dmgLine='カウンター成功dmg '+Math.round(m.counterDmg);
+    }else if(m.type==='grab'){
+      frameLine='発生'+m.s+'F／空振り硬直'+m.whiff+'F';
+      dmgLine='dmg '+Math.round(m.d);
+    }else{
+      frameLine='発生'+m.s+'F／持続'+m.a+'F／硬直'+m.r+'F'+(m.whiff?'(空振り+'+m.whiff+'F)':'');
+      dmgLine='dmg '+Math.round(m.d)+'／GD '+(m.guardDmg||0)+(m.hitstun?'／H'+m.hitstun+' B'+(m.blockstun||0):'');
+    }
+    txt(frameLine,34,y+48,13,'#cfd6e6','left');
+    txt(dmgLine,34,y+68,13,'#ffb6b6','left');
+    if(m.ccWindow!=null)txt('CC受付'+m.ccWindow+'F',392,y+68,12,'#9adfff','right'); // 構え技(type='stance')はClassic Cancel対象外のためccWindow自体が無い(BAL.CMD.moves定義通り)
+    if(badges.length)drawMoveBadges(badges,34,y+84,358);
+    y+=h+12;
   }
-  y+=8;
-  txt('基本コンボ 4ルート',60,y+18,17,'#7fd8ff','left');
-  y+=32;
-  for(const r of COMBO_ROUTES){
-    ctx.fillStyle='#1c2233';rr(50,y,W-100,58,12);ctx.fill();
-    ctx.strokeStyle='#33394f';ctx.lineWidth=2;rr(50,y,W-100,58,12);ctx.stroke();
-    txt(r.name,74,y+22,15,'#fff','left');
-    txt(r.note+' / dmg'+r.dmg,74,y+44,12,'#9aa2b8','left');
-    y+=64;
+  return y;
+}
+function drawMovelistModern(myF,startY){ // MODERN: MODERN_PATTERNS[myF.c.id]のR4パターンをそのまま表示
+  let y=startY;
+  detailCard(20,y,406,72,'#7CFC00');
+  detailWrapped('直近のNormal HIT/BLOCK履歴('+MODERN_HIST_TIMEOUT_F+'F以内)が下の並びに一致すると、コマンド入力なしで対応技へ自動的に置き換わる。',34,y+20,378,13,'#cfd6e6',3);y+=84;
+  const patterns=MODERN_PATTERNS[myF.c.id]||[];
+  if(!patterns.length){
+    detailCard(20,y,406,64,'#65708a');txt('このキャラにMODERNパターンはありません',34,y+38,14,'#aab3c8','left');y+=76;
+    return y;
   }
+  for(const p of patterns){
+    const seqJa=p.seq.map(function(lv){return LV_LABEL[lv];}).join('→');
+    detailCard(20,y,406,72,p.grab?'#ff9500':'#7CFC00');
+    txt(seqJa,34,y+30,18,'#ffd23f','left');
+    txt('→ '+p.move+(p.grab?'(つかみ)':''),34,y+54,15,'#fff','left');
+    y+=84;
+  }
+  return y;
+}
+function drawMovelistAbility(myF,startY){ // ABILITY: 9固有能力の発動条件・効果(ABILITY_DESCRIPTIONS)
+  let y=startY;
+  const rosterEntry=ROSTER.find(function(r){return r.id===myF.c.id;});
+  const desc=ABILITY_DESCRIPTIONS[myF.c.id];
+  detailCard(20,y,406,64,'#b89cff');
+  txt('固有能力: '+(rosterEntry?rosterEntry.ability:''),34,y+38,19,'#fff','left');y+=76;
+  if(!desc)return y;
+  detailCard(20,y,406,104,'#ffbf4a');txt('発動条件',34,y+23,14,'#ffbf4a','left');
+  y+=48+detailWrapped(desc.triggerJa,34,y+48,378,13,'#e2e7f0',6);y+=16;
+  detailCard(20,y,406,104,'#b89cff');txt('効果',34,y+23,14,'#b89cff','left');
+  y+=48+detailWrapped(desc.effectJa,34,y+48,378,13,'#e2e7f0',6);y+=16;
+  return y;
+}
+function rMovelistOverlay(){ // わざ表(§6.8)。vNext PRESENTATION-R1 (B): COMMAND/MODERN/ABILITYの3タブ
+  // (COMBOタブはPRESENTATION-R1(D)のエンジン実測ルート差し替えと同時に追加予定)。
+  // すべてBAL.CMD.moves/MODERN_PATTERNS/ABILITY_DESCRIPTIONSからのライブ生成=キャラ変更・バランス
+  // 調整があってもこの画面のコードは変更不要。
+  ctx.fillStyle='rgba(8,8,14,0.94)';ctx.fillRect(0,0,W,H);
+  const myF=onlineActive()?B.p[online.slot]:B.p[0];
+  txt('わざ表 - '+myF.c.name,W/2,44,26,'#ffd23f');
+  for(let i=0;i<MOVELIST_TABS.length;i++){
+    const tab=MOVELIST_TABS[i],r=movelistTabRect(i),active=movelistTab===tab.id;
+    ctx.fillStyle=active?'rgba(127,216,255,0.22)':'#252b3d';rr(r.x,r.y,r.w,r.h,14);ctx.fill();
+    ctx.strokeStyle=active?'#7fd8ff':'#414a62';ctx.lineWidth=active?3:2;rr(r.x,r.y,r.w,r.h,14);ctx.stroke();
+    txt(tab.label,r.x+r.w/2,r.y+r.h/2,16,active?'#eaf9ff':'#c3cad8');
+  }
+  ctx.save();ctx.beginPath();ctx.rect(MOVELIST_CONTENT_CLIP.x,MOVELIST_CONTENT_CLIP.y,MOVELIST_CONTENT_CLIP.w,MOVELIST_CONTENT_CLIP.h);ctx.clip();
+  let endY=MOVELIST_CONTENT_CLIP.y+10-movelistScroll;
+  if(movelistTab==='command')endY=drawMovelistCommand(myF,endY);
+  else if(movelistTab==='modern')endY=drawMovelistModern(myF,endY);
+  else endY=drawMovelistAbility(myF,endY);
+  ctx.restore();
+  const contentBottom=endY+movelistScroll;
+  movelistMaxScroll=Math.max(0,contentBottom-(MOVELIST_CONTENT_CLIP.y+MOVELIST_CONTENT_CLIP.h));
+  if(movelistScroll>movelistMaxScroll)movelistScroll=movelistMaxScroll;
+  const drawMovelistScrollButton=(r,label,enabled)=>{
+    ctx.fillStyle=enabled?'rgba(127,216,255,0.20)':'rgba(255,255,255,0.05)';rr(r.x,r.y,r.w,r.h,16);ctx.fill();
+    ctx.strokeStyle=enabled?'#7fd8ff':'#4b5262';ctx.lineWidth=2;rr(r.x,r.y,r.w,r.h,16);ctx.stroke();
+    txt(label,r.x+r.w/2,r.y+r.h/2,26,enabled?'#e9f8ff':'#747c8d');
+  };
+  drawMovelistScrollButton(MOVELIST_SCROLL_UP,'▲',movelistScroll>0);
+  drawMovelistScrollButton(MOVELIST_SCROLL_DOWN,'▼',movelistScroll<movelistMaxScroll);
   btn(MOVELIST_BACK_RECT.x,MOVELIST_BACK_RECT.y,MOVELIST_BACK_RECT.w,MOVELIST_BACK_RECT.h,'もどる');
 }
 function rOnlineLobby(){
