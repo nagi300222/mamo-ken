@@ -979,7 +979,6 @@ function advanceOnlineResult(){ // 勝ち残り交代(v0.9 PR4)のサーバー�
     onlineReset();game.screen='title';
   }
 }
-let focusSlowMs=0; // 集中(自動スロー)発動中の残り実時間(ms)。>0の間メインループが0.25倍速で進行
 function newFighter(ci,side){
   const c=CHARS[ci];
   return{c:c,side:side,baseX:side===0?152:388,y:428,
@@ -1082,7 +1081,6 @@ function roundInit(first){
     f.darkGauge=0;f.darkReady=false;f.darkBody=false;f.darkBodyRemainingF=0;f.darkChainUses=0;f.darkLastChainMove=null;f.darkWindowUntilF=0;f.darkWindowMax=0;f.darkBodyActive=false;
   }
   B.timer=BAL.TIME;B.flow='intro';B.flowF=0;B.clash=null;B.pendKO=-1;B.clashStreak=[0,0];
-  focusSlowMs=0;
   announce('ROUND '+B.round,66,50,'#ffd23f');
 }
 function announce(text,dur,size,color){B.ann.push({text:text,dur:dur,size:size,color:color,f:0});}
@@ -1174,14 +1172,10 @@ function guardRegenTick(f){ // BAL-R1新設: 被ガードダメ後regenDelayF(60
   const perSec=(f.phase==='down'||f.phase==='wake')?BAL.GUARD.downWakeRegenPerSecond:BAL.GUARD.regenPerSecond;
   f.guard=Math.min(maxGuardFor(f.c),f.guard+perSec/60);
 }
-function triggerFocus(){ // vNext PR2: 「外す: auto slow」によりcheckFocusTrigger()から呼ばれなくなったため
-  // 恒久的に未使用(呼び出し元が無いのでfocusSlowMsは常に0のまま=世界は絶対にスローにならない)
-  focusSlowMs=BAL.FOCUS.durationMs;
-  announce('集中!!',40,40,'#7fe8ff');
-}
 function checkFocusTrigger(att,def){ // vNext PR2 (§10): 「外す: auto slow」によりno-op化。
   // 旧: def.focus>=max時に相手attack発生FでtriggerFocus()を呼んでいた。gainFocus自体がno-opのため
-  // def.focusはmaxへ到達し得ないが、明示的にauto slow経路自体も断ち切っておく(旧gameplayの残存を禁止する§10指示)
+  // def.focusはmaxへ到達し得ないが、明示的にauto slow経路自体も断ち切っておく(旧gameplayの残存を禁止する§10指示)。
+  // vNext PR5: triggerFocus()自体(呼び出し元皆無のUI/timing死コード)はCLOSUREでUI cleanup対象として削除済み
 }
 function startAtk(f,lv,chain){
   f.phase='attack';f.pf=0;f.atkLv=lv;f.hasHit=false;f.landedHit=false;f.cmdArmorUsed=false;f.guardLv=null;
@@ -3934,8 +3928,6 @@ function rBattle(){
     if(c.phase==='in')zoom=1+0.18*Math.min(1,c.f/BAL.CLASH.inF);
     else if(c.phase==='reveal'&&c.f>=BAL.CLASH.revealHitF)zoom=1.18-0.18*Math.min(1,(c.f-BAL.CLASH.revealHitF)/30);
     else zoom=1.18;
-  }else if(focusSlowMs>0){
-    zoom=BAL.FOCUS.zoom; // 集中: 世界がスローになるのに合わせズームイン
   }
   if(zoom!==1){ctx.translate(W/2,300);ctx.scale(zoom,zoom);ctx.translate(-W/2,-300);}
   rStage();
@@ -3971,17 +3963,6 @@ function rBattle(){
     txt('ギュイーン!!',0,0,52,'#ffe14d');
     ctx.restore();
     txt(clashRouletteText(B.clash),W/2,166,28,'#fff'); // ルーレットテロップ: どのミニゲームが始まるか予告
-  }
-  if(focusSlowMs>0){ // 集中: 疑似ハイスピード演出の色調オーバーレイ
-    ctx.save();ctx.globalAlpha=0.16;ctx.fillStyle='#3fd8ff';ctx.fillRect(0,0,W,PT);ctx.restore();
-    ctx.strokeStyle='rgba(160,230,255,0.22)';ctx.lineWidth=2;
-    for(let i=0;i<7;i++){
-      const yy=40+i*54;
-      ctx.beginPath();ctx.moveTo(0,yy);ctx.lineTo(W,yy);ctx.stroke();
-    }
-    ctx.save();ctx.globalAlpha=Math.min(1,focusSlowMs/150);
-    txt('マーモットの0.5秒は、人間の0.05秒——',W/2,PT-26,15,'#bdeeff');
-    ctx.restore();
   }
   rHUD();
   rPad();
@@ -4463,12 +4444,7 @@ function frame(now){
   requestAnimationFrame(frame);
   let dt=now-last;last=now;
   if(dt>120)dt=120;
-  let simDt=dt;
-  if(focusSlowMs>0){ // 集中: 実0.6秒の間ロジックを0.25倍速で進める（体感スロー）
-    simDt=dt*BAL.FOCUS.slowMul;
-    focusSlowMs=Math.max(0,focusSlowMs-dt);
-  }
-  acc+=simDt;
+  acc+=dt;
   while(acc>=1000/60){
     acc-=1000/60;
     game.frame++;
