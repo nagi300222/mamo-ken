@@ -13,8 +13,11 @@ assert.ok(prototype.includes("{id:'moves',label:'わざ'}"));
 assert.ok(prototype.includes("{id:'combos',label:'コンボ'}"));
 assert.ok(prototype.includes("txt('性能・わざ・コンボを見る'"));
 assert.ok(prototype.includes("txt('キャラ選択へもどる'"));
-assert.ok(prototype.includes("txt('コンボは全枠 未検証'"));
-assert.ok(prototype.includes("txt('入力列: 未確定'"));
+// vNext PRESENTATION-R1 (D): 「コンボは全枠 未検証」プレースホルダは、実engineで入力列を実行し
+// ダメージを実測したVERIFIED_COMBO_ROUTESへ置き換えられた(理論値の掲載を止めるのが本PRの目的)。
+assert.ok(prototype.includes("txt('実engine検証済みルート'"));
+assert.ok(prototype.includes("VERIFIED_COMBO_ROUTES[c.id]||[]"));
+assert.ok(prototype.includes("route.trueCombo?'TRUE COMBO':'PRESSURE'"));
 assert.ok(prototype.includes("return '実装済み'"));
 assert.ok(prototype.includes("return '設計確定・未実装'"));
 assert.ok(prototype.includes("return '候補'"));
