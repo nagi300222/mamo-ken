@@ -3097,8 +3097,11 @@ function currentArtRequest(f){
   if(P==='attack'&&f.atkLv){const A=spec(f);return currentArtTimedRequest(f,f.atkLv,{startupF:A.s,activeF:A.a,recoveryF:A.r});}
   if(P==='cmdAtk'&&f.cmdMove){const A=spec(f),actionId=currentArtCommandAction(f);return actionId?currentArtTimedRequest(f,actionId,{startupF:A.s,activeF:A.a,recoveryF:A.r}):null;}
   if(P==='cmdStance'&&f.cmdMove){
-    const actionId=currentArtCommandAction(f),half=Math.max(1,Math.floor(f.cmdMove.stanceF/2));
-    return actionId?{kind:'frame',characterId:charId,actionId:actionId,frameIndex:t<=half?0:1}:null;
+    // vNext PRESENTATION-R1: 旧stanceF(PR3で廃止)参照の2F固定frameIndexを撤廃。
+    // startupF/counterActiveF/failRecFをそのままtiming{startupF,activeF,recoveryF}へ渡し、
+    // 他のCommand技と同じselectFourFrame()のF1-F4進行(構え入り前半/後半→反撃可能→隙)に統一する
+    const actionId=currentArtCommandAction(f);
+    return actionId?currentArtTimedRequest(f,actionId,{startupF:f.cmdMove.startupF,activeF:f.cmdMove.counterActiveF,recoveryF:f.cmdMove.failRecF}):null;
   }
   if(P==='roar')return currentArtTimedRequest(f,'roar',{startupF:BAL.ROAR.s,activeF:BAL.ROAR.a,recoveryF:BAL.ROAR.r});
   if(P==='mikiriRec')return currentArtTimedRequest(f,'mikiri',{startupF:BAL.MIKIRI.window,activeF:1,recoveryF:Math.max(0,BAL.MIKIRI.whiff-BAL.MIKIRI.window-1)});
