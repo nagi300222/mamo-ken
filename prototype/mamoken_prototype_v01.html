@@ -2908,17 +2908,62 @@ let pauseConfirmingQuit=false; // タイトルへ選択時の確認ステップ
 const PAUSE_RECT={resume:{x:60,y:380,w:W-120,h:76},movelist:{x:60,y:472,w:W-120,h:76},quit:{x:60,y:564,w:W-120,h:76}};
 const PAUSE_CONFIRM_RECT={yes:{x:60,y:520,w:(W-140)/2,h:76},no:{x:80+(W-140)/2,y:520,w:(W-140)/2,h:76}};
 const MOVELIST_BACK_RECT={x:60,y:H-96,w:W-120,h:64};
-// vNext PRESENTATION-R1 (B): 旧「キャラ共通4ルート・参考値」は §6.6 時代のプレースホルダで、vNext
-// R2/R4でCommand/Modernの数値が全面刷新された現在は既に古い(dmgが現行値と一致しない)。PRESENTATION-R1
-// (D)でキャラ別・実engine検証済み(実際に入力列を実行しダメージ実測)のルートへ置き換えるまでの間、
-// COMBOタブは一時的に「検証中」プレースホルダを表示する(このconst自体はもう描画されないが、(D)の
-// 置き換え元データとして参照される可能性があるため残置。値は書き換えない=既存の参考表記のまま)。
-const COMBO_ROUTES=[ // §6.6 基本コンボ4ルート(キャラ共通の参考値・わざ表表示専用。PRESENTATION-R1(D)で置換予定)
-  {name:'ルートA 中→上→下',note:'基本',dmg:'280＋ダウン追撃'},
-  {name:'ルートB 回避成功→カウンター中→上→下',note:'読み勝ちの最大リターン',dmg:'323＋追撃'},
-  {name:'ルートC しゃがみ突き→中→上',note:'ダウン無しの取り回し型',dmg:'193'},
-  {name:'ルートD 踏み込み→つかみ(高速コマ投げ)',note:'ガード崩しの密着択',dmg:'90＋密着継続'}
-];
+// vNext PRESENTATION-R1 (D): 旧「キャラ共通4ルート・参考値」(§6.6時代のプレースホルダ。vNext R2/R4で
+// Command/Modernの数値が全面刷新された後もdmgが更新されず古いまま=理論値のまま掲載されていた)を、
+// キャラ別・実engine検証済みルートへ置き換え。各ルートはtools/(session-only)
+// presentation_r1_d_combo_verify.mjsが実際にstartAtk()/startCmdAtk()を呼び、canChain()/
+// f.ccActive(通常チェイン/クラシックキャンセルそれぞれの実受付窓)で次の入力を注入し、
+// 相手が一度もactionable(idle/guard)にならなかったか(true combo)を実測してから確定した値のみ。
+// 理論値は一切含まない(成立しなかった候補=引き寄せ投げ等grab技をヒット後にCCで繋ぐ試みは
+// throwEligible()がhitstunを対象外とするため必ず空振りすることが判明し、除外した)。
+// 検証方法・全27ルートの実測ログはreports/balance/VNEXT_PRESENTATION_COMBO_ROUTES.md参照。
+const VERIFIED_COMBO_ROUTES={
+  moguzo:[
+    {label:'中段→上段(2段チェイン)',seqJa:['中段','上段'],dmg:146,trueCombo:true},
+    {label:'下段→中段→上段(3段チェイン)',seqJa:['下段','中段','上段'],dmg:262,trueCombo:true},
+    {label:'地走り→昇撃(クラシックキャンセル)',seqJa:['地走り','昇撃'],dmg:197,trueCombo:true},
+  ],
+  pisuke:[
+    {label:'中段→上段(2段チェイン)',seqJa:['中段','上段'],dmg:113,trueCombo:true},
+    {label:'下段→中段→上段→下段(4段チェイン=上限)',seqJa:['下段','中段','上段','下段'],dmg:268,trueCombo:true},
+    {label:'二連牙→宙返り蹴(クラシックキャンセル)',seqJa:['二連牙','宙返り蹴'],dmg:151,trueCombo:true},
+  ],
+  godan:[
+    {label:'中段→上段(2段チェイン=上限)',seqJa:['中段','上段'],dmg:200,trueCombo:true},
+    {label:'上段→下段(2段チェイン)',seqJa:['上段','下段'],dmg:289,trueCombo:true},
+    {label:'岩砕き→天蓋落とし(クラシックキャンセル)',seqJa:['岩砕き','天蓋落とし'],dmg:302,trueCombo:true},
+  ],
+  hakuma:[
+    {label:'中段→上段(2段チェイン=上限)',seqJa:['中段','上段'],dmg:137,trueCombo:true},
+    {label:'下段→中段(2段チェイン)',seqJa:['下段','中段'],dmg:181,trueCombo:true},
+    {label:'雪壁掌→氷柱返し(クラシックキャンセル)',seqJa:['雪壁掌','氷柱返し'],dmg:166,trueCombo:true},
+  ],
+  chirka:[
+    {label:'中段→上段(2段チェイン)',seqJa:['中段','上段'],dmg:133,trueCombo:true},
+    {label:'下段→中段→上段(3段チェイン)',seqJa:['下段','中段','上段'],dmg:237,trueCombo:true},
+    {label:'だまし突き→戻り蹴り(クラシックキャンセル)',seqJa:['だまし突き','戻り蹴り'],dmg:174,trueCombo:true},
+  ],
+  takimaru:[
+    {label:'中段→上段(2段チェイン=上限)',seqJa:['中段','上段'],dmg:162,trueCombo:true},
+    {label:'下段→中段(2段チェイン)',seqJa:['下段','中段'],dmg:213,trueCombo:true},
+    {label:'ぶちかまし→熊手払い(クラシックキャンセル)',seqJa:['ぶちかまし','熊手払い'],dmg:198,trueCombo:true},
+  ],
+  yomikage:[
+    {label:'中段→上段(2段チェイン=上限)',seqJa:['中段','上段'],dmg:118,trueCombo:true},
+    {label:'下段→中段(2段チェイン)',seqJa:['下段','中段'],dmg:158,trueCombo:true},
+    {label:'影縫い→月かすめ(クラシックキャンセル)',seqJa:['影縫い','月かすめ'],dmg:141,trueCombo:true},
+  ],
+  bullet:[
+    {label:'中段→上段(2段チェイン)',seqJa:['中段','上段'],dmg:146,trueCombo:true},
+    {label:'下段→中段→上段(3段チェイン)',seqJa:['下段','中段','上段'],dmg:259,trueCombo:true},
+    {label:'弾み突き→尾払い(クラシックキャンセル)',seqJa:['弾み突き','尾払い'],dmg:147,trueCombo:true},
+  ],
+  dark_moguzo:[
+    {label:'中段→上段(2段チェイン)',seqJa:['中段','上段'],dmg:123,trueCombo:true},
+    {label:'下段→中段→上段→下段(4段チェイン=上限)',seqJa:['下段','中段','上段','下段'],dmg:289,trueCombo:true},
+    {label:'黒走り→逆昇撃(クラシックキャンセル)',seqJa:['黒走り','逆昇撃'],dmg:145,trueCombo:true},
+  ],
+};
 // vNext PRESENTATION-R1 (B): わざ表ABILITYタブ用の固有能力トリガー/効果テキスト。すべて既存の
 // ability state machine(vNext PR4、prototype内のf.gutsActive等)とBAL.CMD.movesの実数値をそのまま
 // 文章化したもの(新しい数値・仕様の発明ではない。各行が対応するコード箇所はreports/presentation/
@@ -2946,8 +2991,7 @@ const ABILITY_DESCRIPTIONS={
 let movelistTab='command';
 let movelistScroll=0;
 let movelistMaxScroll=0;
-const MOVELIST_TABS=[{id:'command',label:'COMMAND'},{id:'modern',label:'MODERN'},{id:'ability',label:'ABILITY'}];
-// COMBOタブはPRESENTATION-R1(D)(エンジン実測済みのキャラ別おすすめコンボ)で追加予定。
+const MOVELIST_TABS=[{id:'command',label:'COMMAND'},{id:'modern',label:'MODERN'},{id:'combo',label:'COMBO'},{id:'ability',label:'ABILITY'}];
 function movelistTabRect(i){
   const n=MOVELIST_TABS.length,gap=8,w=(W-40-gap*(n-1))/n;
   return{x:20+i*(w+gap),y:96,w:w,h:60};
@@ -4386,18 +4430,20 @@ function drawDetailMoves(c,startY){
   }
   return y;
 }
-function drawDetailCombos(c,startY){
+function drawDetailCombos(c,startY){ // vNext PRESENTATION-R1 (D): character-catalogのUNVERIFIED_COMBOS
+  // (5枠・常にstatus='unverified_move_spec'・空routeJa。validateCharacterCatalog()自身がこの形を
+  // 強制するプレースホルダ)ではなく、VERIFIED_COMBO_ROUTES(実engineで入力列を実行し実測済み)を表示する。
   let y=startY;
-  detailCard(26,y,414,112,'#ffcf66');txt('コンボは全枠 未検証',44,y+25,18,'#ffcf66','left');
-  detailWrapped('技の発生・硬直・Capacityを実装し、実機で連続成立とダメージを確認してから確定します。',44,y+54,378,14,'#e1e5ee',3);y+=124;
-  for(const combo of c.combos){
-    detailCard(26,y,414,116,'#65708a');
-    txt(combo.labelJa,44,y+27,20,'#fff','left');txt('未検証',422,y+27,14,'#ffcf66','right');
-    txt('入力列: 未確定',44,y+58,14,'#aab3c8','left');
-    detailWrapped(combo.notesJa.join('／'),44,y+82,378,13,'#cfd6e6',2);y+=128;
+  const routes=VERIFIED_COMBO_ROUTES[c.id]||[];
+  detailCard(26,y,414,96,'#7CFC00');txt('実engine検証済みルート',44,y+25,18,'#7CFC00','left');
+  detailWrapped('入力列を実際に実行し、ダメージを実測してから掲載(理論値は載せない)。',44,y+54,378,14,'#e1e5ee',2);y+=108;
+  for(const route of routes){
+    detailCard(26,y,414,116,route.trueCombo?'#7CFC00':'#ffbf4a');
+    txt(route.seqJa.join(' → '),44,y+27,19,'#fff','left');
+    txt(route.trueCombo?'TRUE COMBO':'PRESSURE',422,y+27,13,route.trueCombo?'#7CFC00':'#ffbf4a','right');
+    txt('実測dmg '+route.dmg,44,y+58,14,'#ffb6b6','left');
+    detailWrapped(route.label,44,y+82,378,13,'#cfd6e6',2);y+=128;
   }
-  detailCard(26,y,414,104,'#7fd8ff');txt('確定時に追加する情報',44,y+24,15,'#7fd8ff','left');
-  detailWrapped('入力列／始動条件／消費リソース／用途／実測ダメージ／検証状態',44,y+53,378,14,'#dfe4ee',3);y+=116;
   return y;
 }
 function rSelect(){ // P1追加: KOF/餓狼風レイアウト(縦画面翻訳)。左=大型立ち絵(contain+クロスフェード)/右=顔アイコン密グリッド/下=帯状メニュー
@@ -4661,10 +4707,23 @@ function drawMovelistAbility(myF,startY){ // ABILITY: 9固有能力の発動条�
   y+=48+detailWrapped(desc.effectJa,34,y+48,378,13,'#e2e7f0',6);y+=16;
   return y;
 }
-function rMovelistOverlay(){ // わざ表(§6.8)。vNext PRESENTATION-R1 (B): COMMAND/MODERN/ABILITYの3タブ
-  // (COMBOタブはPRESENTATION-R1(D)のエンジン実測ルート差し替えと同時に追加予定)。
-  // すべてBAL.CMD.moves/MODERN_PATTERNS/ABILITY_DESCRIPTIONSからのライブ生成=キャラ変更・バランス
-  // 調整があってもこの画面のコードは変更不要。
+function drawMovelistCombo(myF,startY){ // COMBO: エンジン実測済みルート(VERIFIED_COMBO_ROUTES)のみ表示。理論値は載せない
+  let y=startY;
+  detailCard(20,y,406,72,'#ffd23f');
+  detailWrapped('実際にengine上で入力列を実行し、ダメージを実測してから確定したルートのみ掲載(理論値は載せない)。TRUE COMBO=各hit間、相手が一度もガード/回避可能な状態に戻らない連続ヒット。',34,y+20,378,13,'#cfd6e6',3);y+=84;
+  const routes=VERIFIED_COMBO_ROUTES[myF.c.id]||[];
+  for(const route of routes){
+    detailCard(20,y,406,88,route.trueCombo?'#7CFC00':'#ffbf4a');
+    txt(route.seqJa.join(' → '),34,y+28,18,'#fff','left');
+    txt('実測dmg '+route.dmg,34,y+56,14,'#ffb6b6','left');
+    txt(route.trueCombo?'TRUE COMBO':'PRESSURE',392,y+56,12,route.trueCombo?'#7CFC00':'#ffbf4a','right');
+    y+=100;
+  }
+  return y;
+}
+function rMovelistOverlay(){ // わざ表(§6.8)。COMMAND/MODERN/COMBO/ABILITYの4タブ。
+  // すべてBAL.CMD.moves/MODERN_PATTERNS/VERIFIED_COMBO_ROUTES/ABILITY_DESCRIPTIONSからのライブ
+  // 生成=キャラ変更・バランス調整があってもこの画面のコードは変更不要。
   ctx.fillStyle='rgba(8,8,14,0.94)';ctx.fillRect(0,0,W,H);
   const myF=onlineActive()?B.p[online.slot]:B.p[0];
   txt('わざ表 - '+myF.c.name,W/2,44,26,'#ffd23f');
@@ -4678,6 +4737,7 @@ function rMovelistOverlay(){ // わざ表(§6.8)。vNext PRESENTATION-R1 (B): CO
   let endY=MOVELIST_CONTENT_CLIP.y+10-movelistScroll;
   if(movelistTab==='command')endY=drawMovelistCommand(myF,endY);
   else if(movelistTab==='modern')endY=drawMovelistModern(myF,endY);
+  else if(movelistTab==='combo')endY=drawMovelistCombo(myF,endY);
   else endY=drawMovelistAbility(myF,endY);
   ctx.restore();
   const contentBottom=endY+movelistScroll;
