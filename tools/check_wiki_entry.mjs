@@ -36,11 +36,85 @@ assert.ok(scriptStart >= 0 && scriptEnd > scriptStart, 'inline Wiki script not f
 const script = html.slice(scriptStart + '<script>'.length, scriptEnd);
 new Function(script); // parse-only: constructing the function does not execute it.
 
+// Local image reference existence check. The Wiki's own per-character portrait (`asset`) and
+// Ability UI (`ui_assets[].path`) references are only ever exercised at runtime in a real
+// browser, which is exactly how the "piske"/"chilka" typo (wrong image, correct-looking data)
+// escaped review before this recovery PR. This walks the embedded `DB` data literal statically
+// and confirms every local reference actually resolves to a real file on disk.
+function extractDbLiteral(source) {
+  const marker = 'DB={';
+  const markerIdx = source.indexOf(marker);
+  assert.ok(markerIdx >= 0, 'DB={...} data literal not found in wiki/index.html');
+  const start = markerIdx + 'DB='.length;
+  let depth = 0, i = start, inStr = false, esc = false;
+  for (; i < source.length; i++) {
+    const c = source[i];
+    if (inStr) {
+      if (esc) esc = false;
+      else if (c === '\\') esc = true;
+      else if (c === '"') inStr = false;
+      continue;
+    }
+    if (c === '"') { inStr = true; continue; }
+    if (c === '{') depth++;
+    else if (c === '}') { depth--; if (depth === 0) { i++; break; } }
+  }
+  assert.ok(depth === 0, 'DB={...} data literal is not brace-balanced (truncated?)');
+  return JSON.parse(source.slice(start, i));
+}
+
+function isUrlLike(value) {
+  return /^[a-z][a-z0-9+.-]*:/i.test(value) || value.startsWith('//');
+}
+
+// Resolves `relPath` under `root` and asserts it (a) isn't a URL/data-URI (those are out of
+// scope — they aren't files in this repository), (b) can't escape `root` via `..`/absolute-path
+// traversal, and (c) actually exists on disk as a file.
+function assertLocalAssetExists(root, relPath, label) {
+  assert.ok(typeof relPath === 'string' && relPath.length > 0, `${label}: empty/invalid local asset reference`);
+  if (isUrlLike(relPath)) return; // external URLs / data URIs are not local-file references
+  assert.ok(!path.isAbsolute(relPath), `${label}: absolute paths are not allowed: ${relPath}`);
+  const resolvedRoot = path.resolve(root);
+  const resolvedTarget = path.resolve(root, relPath);
+  const rel = path.relative(resolvedRoot, resolvedTarget);
+  assert.ok(rel !== '' && !rel.startsWith('..') && !path.isAbsolute(rel),
+    `${label}: path escapes its asset root (path traversal): ${relPath}`);
+  assert.ok(fs.existsSync(resolvedTarget) && fs.statSync(resolvedTarget).isFile(),
+    `${label}: referenced local image does not exist: ${path.relative(repoRoot, resolvedTarget)}`);
+}
+
+assert.ok(manifest.localAssetRoots && manifest.localAssetRoots.characterPortrait && manifest.localAssetRoots.abilityUi,
+  'WIKI_ENTRY_MANIFEST.json is missing localAssetRoots.characterPortrait/abilityUi');
+const portraitRoot = path.join(repoRoot, manifest.localAssetRoots.characterPortrait);
+const abilityUiRoot = path.join(repoRoot, manifest.localAssetRoots.abilityUi);
+
+const db = extractDbLiteral(html);
+assert.ok(db.characters && Object.keys(db.characters).length > 0, 'DB.characters is empty — nothing to verify');
+
+let localAssetChecks = 0;
+for (const id of Object.keys(db.characters)) {
+  const c = db.characters[id];
+  const slug = c.asset || id;
+  assertLocalAssetExists(portraitRoot, `${slug}.webp`, `character portrait (${id})`);
+  localAssetChecks++;
+  for (const ua of (c.ui_assets || [])) {
+    assertLocalAssetExists(abilityUiRoot, ua.path, `ability UI asset (${id}: ${ua.name || ua.path})`);
+    localAssetChecks++;
+  }
+}
+for (const ua of ((db.system && db.system.common_vfx) || [])) {
+  assertLocalAssetExists(abilityUiRoot, ua.path, `common ability UI asset (${ua.name || ua.path})`);
+  localAssetChecks++;
+}
+assert.ok(localAssetChecks >= manifest.requiredCharacterIds.length,
+  'fewer local asset references were checked than expected — extraction may be broken');
+
 console.log(JSON.stringify({
   ok: true,
   entry: path.relative(repoRoot, entryPath),
   bytes: bytes.length,
   sha256,
   characters: manifest.requiredCharacterIds.length,
+  localAssetChecks,
   mode: 'direct-html-no-loader',
 }, null, 2));

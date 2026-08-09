@@ -2,10 +2,14 @@
   "patch": "MAMOKEN Wiki PR92 direct HTML recovery",
   "auditedMainShortSha": "ccc623f",
   "entry": "wiki/index.html",
-  "bytes": 105771,
-  "sha256": "5e023e48f3256824f0824bc17ae22b8ef6c7add1cc63db185d37db4a5528820d",
+  "bytes": 105763,
+  "sha256": "2b862dd1322235de1bf5f6052922392312eabbab2e3550fc44f6abde16a43904",
   "robots": "index,follow",
   "expectedSuffix": "</script></body></html>",
+  "localAssetRoots": {
+    "characterPortrait": "assets/roster3d",
+    "abilityUi": "assets/art/ability_ui"
+  },
   "requiredCharacterIds": [
     "moguzo",
     "pisuke",
