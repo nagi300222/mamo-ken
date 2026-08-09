@@ -6,6 +6,8 @@ on:
       - 'wiki/**'
       - 'tools/check_wiki_entry.mjs'
       - '.github/workflows/wiki-check.yml'
+      - 'assets/roster3d/**'
+      - 'assets/art/ability_ui/**'
   workflow_dispatch:
 
 permissions:

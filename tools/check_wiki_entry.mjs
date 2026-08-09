@@ -26,8 +26,15 @@ for (const forbidden of ['DecompressionStream', 'pako', 'atob(', 'TextDecoder(',
 for (const obsolete of manifest.obsoleteFilesToDelete) {
   assert.ok(!fs.existsSync(path.join(repoRoot, obsolete)), `obsolete payload file still exists: ${obsolete}`);
 }
+
+// Deliberately checks `db.characters` own-keys, not a raw substring search: a removed
+// character's id string can still linger elsewhere in the HTML (e.g. DB.system's
+// normal_chain_limits/dodge tables key every character id too), so `html.includes('"id"')`
+// would keep passing even after the character entry itself was deleted from DB.characters.
+const db = extractDbLiteral(html);
+assert.ok(db.characters && Object.keys(db.characters).length > 0, 'DB.characters is empty — nothing to verify');
 for (const id of manifest.requiredCharacterIds) {
-  assert.ok(html.includes(`"${id}"`), `character payload missing: ${id}`);
+  assert.ok(Object.prototype.hasOwnProperty.call(db.characters, id), `character payload missing: ${id}`);
 }
 
 const scriptStart = html.indexOf('<script>');
@@ -87,9 +94,6 @@ assert.ok(manifest.localAssetRoots && manifest.localAssetRoots.characterPortrait
   'WIKI_ENTRY_MANIFEST.json is missing localAssetRoots.characterPortrait/abilityUi');
 const portraitRoot = path.join(repoRoot, manifest.localAssetRoots.characterPortrait);
 const abilityUiRoot = path.join(repoRoot, manifest.localAssetRoots.abilityUi);
-
-const db = extractDbLiteral(html);
-assert.ok(db.characters && Object.keys(db.characters).length > 0, 'DB.characters is empty — nothing to verify');
 
 let portraitAssetChecks = 0;
 let characterAbilityUiChecks = 0;
