@@ -148,95 +148,102 @@ const BAL={ // 03_data_design.md v2.0 §2 balance table 準拠
     bufF:24, // 方向入力バッファ窓(F)
     buffer:12, // コマンド先行入力(v0.11 §6.9): 硬直の残りがこのF数以内なら「コマンド+攻撃入力」を保持し、行動可能Fで自動発動
     moves:{
-      // CMD-R1: 既存3体(moguzo/pisuke/godan)の枠1〜3(旧9技)は数値・seqとも無変更で維持し、
-      // 枠4〜7のみ今回追加する(R-D01準拠)。枠4〜7はm.exactDmg:trueを持ち、dMulを二重適用しない
-      // (damage/hitAdv/blockAdvがキャラ別の確定値のため)。hitstun/blockstunは既存契約式
-      // (stunDur=adv+(active+recovery-1))でHit+/Block-から逆算した値。Hit+が投入文に無い技は
-      // hitstunを明示せず共通BAL.HITSTUN[lv]へフォールバックする(blockstunのみ確定値)
-      moguzo:[ // 1:地走り(前進打撃) 2:昇撃(カウンター強化) 3:引き寄せ投げ(リーチ強化) — 旧9技(無変更)
-        {seq:['right','down'],trigger:'mid',type:'atk',lv:'mid',name:'地走り',s:18,a:3,r:18,d:95,fwd:40,guardDmg:8,color:'#ffb84d',se:'cmdHit'},
-        {seq:['down','right'],trigger:'high',type:'atk',lv:'high',name:'昇撃',s:24,a:3,r:30,d:120,counterMul:1.5,color:'#ff5a3c',se:'cmdHit'},
-        {seq:['left','right'],trigger:'grab',type:'grab',name:'引き寄せ投げ',s:14,d:100,reachMul:1.5,color:'#ffd23f',se:'cmdGrabHit'},
-        // CMD-R1新規(枠4〜7)
-        {seq:['down','left'],trigger:'low',type:'atk',lv:'low',name:'砂払い',s:20,a:4,r:23,d:82,down:false,guardDmg:10,hitstun:30,blockstun:18,whiff:6,scale:0.95,exactDmg:true,color:'#c9a24d',se:'cmdHit'},
-        {seq:['right','right'],trigger:'high',type:'atk',lv:'high',name:'山越え拳',s:25,a:4,r:29,d:125,guardDmg:18,hitstun:39,blockstun:19,whiff:10,scale:0.85,exactDmg:true,color:'#ff7a3c',se:'cmdHit'},
-        {seq:['left','down'],trigger:'mid',type:'atk',lv:'mid',name:'胴押し',s:12,a:3,r:16,d:55,guardDmg:16,blockstun:15,whiff:3,scale:1.0,exactDmg:true,tags:['NORMAL_RESET','Pushback2'],color:'#e0a860',se:'cmdHit'},
-        {seq:['left','down','right'],trigger:'mid',type:'atk',lv:'mid',name:'土煙突き',s:30,a:4,r:34,d:105,guardDmg:14,blockstun:23,whiff:12,scale:0.80,comboEnd:true,exactDmg:true,reach:3,tags:['NORMAL_RESET'],color:'#a97848',se:'cmdHit'}
+      // vNext PR3 (COMBAT_VNEXT_FINAL.md §13 Command R2): 全63技をFrames(S/A/R)/Damage/GuardDamage/
+      // HIT・BLOCK advantageから全面再計算した値へ置換(CMD-R1の「旧9技は無変更」方針をここで終了)。
+      // 全技exactDmg:true(§6 Normalの per-char確定値と同じ扱いに統一。dMul二重適用回避)。
+      // hitstun/blockstunはPR2と同じformula advantage=stun-(active-1)-recovery の逆算(§6注記)。
+      // H/Bが§13本文に無い技(down/grab/多くのYomikage・Bullet・Dark)はhitstun/blockstunを明示せず
+      // 共通BAL.HITSTUN/BLOCKSTUN[lv]へフォールバックする(specForCmd既定の挙動)。
+      // modern:true = §8 Patternsの一覧に載っている「そのキャラのパターン完成時に置換される技」
+      // (Modern R4の対象。runtimeCommandShadow等の判定には使わない、tryModernReplace()専用の読み出し口)。
+      // ccWindow = §9 Classic Cancelのwindow(F)。§13本文で明示されるHeavy14/Finisher12のみ個別設定し、
+      // 残りは既定Quick16(Quick16とStandard16は数値上同一のため、本文上「Standard」表記の技も16のまま)。
+      // comboEndは§13本文で明示的に"Finisher"+"comboEnd"と併記された技のみ(moguzo土煙突き/pisukeつむじ返し/
+      // dark黒煙突き)。旧CMD-R1で他キャラの7枠目にも一律付与していたcomboEnd/reach/NORMAL_RESETは、
+      // vNext本文がそれらを明示しない以上除去する(挙動変化。reports/balance/VNEXT_PR3_...MAPPING.md参照)。
+      // Stock/cost/Iron Wall/Just/Delay/Feint/Pressure/Charge/暗連等のability資源ゲートはPR4(9 State Machines)
+      // 対象のため今回は「常時使用可能な素の技」としてのみ実装し、tagsへ(未結線)注記のみ残す
+      // (PR2のFocus撤去/PR1のability UI接続と同じ「liveロジックとdata/表示を安全に分割」方針)。
+      moguzo:[
+        {seq:['right','down'],trigger:'mid',type:'atk',lv:'mid',name:'地走り',s:18,a:3,r:20,d:95,fwd:40,guardDmg:10,hitstun:24,blockstun:14,exactDmg:true,modern:true,ccWindow:16,tags:['Standard16','Modern'],color:'#ffb84d',se:'cmdHit'},
+        {seq:['down','right'],trigger:'high',type:'atk',lv:'high',name:'昇撃',s:24,a:3,r:30,d:120,guardDmg:14,hitstun:32,blockstun:16,counterMul:1.5,exactDmg:true,modern:true,ccWindow:14,tags:['Heavy14','Modern'],color:'#ff5a3c',se:'cmdHit'},
+        {seq:['left','right'],trigger:'grab',type:'grab',name:'引き寄せ投げ',s:14,d:100,whiff:34,down:'throwDown',exactDmg:true,ccWindow:16,tags:['Quick16'],color:'#ffd23f',se:'cmdGrabHit'},
+        {seq:['down','left'],trigger:'low',type:'atk',lv:'low',name:'砂払い',s:20,a:4,r:24,d:90,guardDmg:10,hitstun:29,blockstun:17,whiff:6,scale:0.95,exactDmg:true,ccWindow:16,tags:['Quick16'],color:'#c9a24d',se:'cmdHit'},
+        {seq:['right','right'],trigger:'high',type:'atk',lv:'high',name:'山越え拳',s:25,a:4,r:30,d:130,guardDmg:18,hitstun:35,blockstun:19,whiff:10,scale:0.85,exactDmg:true,ccWindow:16,tags:['Quick16'],color:'#ff7a3c',se:'cmdHit'},
+        {seq:['left','down'],trigger:'mid',type:'atk',lv:'mid',name:'胴押し',s:12,a:3,r:18,d:60,guardDmg:11,hitstun:21,blockstun:14,whiff:3,scale:1.0,exactDmg:true,modern:true,ccWindow:16,tags:['Quick16','Modern','小Pushback(未結線)'],color:'#e0a860',se:'cmdHit'},
+        {seq:['left','down','right'],trigger:'mid',type:'atk',lv:'mid',name:'土煙突き',s:30,a:4,r:36,d:150,guardDmg:18,hitstun:39,blockstun:21,whiff:12,scale:0.80,comboEnd:true,exactDmg:true,reach:3,ccWindow:12,tags:['Finisher12'],color:'#a97848',se:'cmdHit'}
       ],
-      pisuke:[ // 1:二連牙(高速・簡略化して単発ヒットで実装) 2:スライディング(下段) 3:宙返り蹴(投げ無敵) — 旧9技(無変更)
-        {seq:['right','right'],trigger:'mid',type:'atk',lv:'mid',name:'二連牙',s:8,a:3,r:18,d:95,color:'#5ab2ff',se:'cmdHit'},
-        {seq:['down','left'],trigger:'low',type:'atk',lv:'low',name:'スライディング',s:30,a:4,r:30,d:80,down:true,fwd:60,guardDmg:14,color:'#7cfc00',se:'cmdHit'},
-        {seq:['left','right'],trigger:'high',type:'atk',lv:'high',name:'宙返り蹴',s:20,a:3,r:24,d:90,fwd:20,color:'#5ab2ff',se:'cmdHit'},
-        // CMD-R1新規(枠4〜7)
-        {seq:['down','right'],trigger:'mid',type:'atk',lv:'mid',name:'かすみ連打',s:10,a:8,r:18,d:78,hits:3,guardDmg:13,hitstun:35,blockstun:20,whiff:4,scale:0.80,exactDmg:true,tags:['CLINCH'],color:'#4fc3ff',se:'cmdHit'},
-        {seq:['right','down'],trigger:'high',type:'atk',lv:'high',name:'風切り爪',s:15,a:3,r:21,d:82,guardDmg:9,hitstun:29,blockstun:16,whiff:6,scale:0.90,exactDmg:true,color:'#79d0ff',se:'cmdHit'},
-        {seq:['right','left'],trigger:'low',type:'atk',lv:'low',name:'すり抜け足',s:11,a:3,r:17,d:62,guardDmg:7,blockstun:15,whiff:6,scale:0.80,exactDmg:true,poseId:'lunge',tags:['LUNGE成功時限定','Hit→CLINCH'],color:'#8be26b',se:'cmdHit'},
-        {seq:['down','right','right'],trigger:'mid',type:'atk',lv:'mid',name:'つむじ返し',s:24,a:4,r:31,d:98,guardDmg:12,blockstun:22,whiff:12,scale:0.75,comboEnd:true,exactDmg:true,reach:3,poseId:'lunge',tags:['CHASE_TO_CONTACT','maximumApproachSteps2','NORMAL_RESET'],color:'#3aa0e0',se:'cmdHit'}
+      pisuke:[
+        {seq:['right','right'],trigger:'mid',type:'atk',lv:'mid',name:'二連牙',s:9,a:3,r:17,d:76,guardDmg:7,hitstun:20,blockstun:13,exactDmg:true,modern:true,ccWindow:16,tags:['Quick16','Modern'],color:'#5ab2ff',se:'cmdHit'},
+        {seq:['down','left'],trigger:'low',type:'atk',lv:'low',name:'スライディング',s:22,a:4,r:27,d:92,down:'lightDown',guardDmg:11,blockstun:16,fwd:60,exactDmg:true,modern:true,ccWindow:16,tags:['Quick16','Modern'],color:'#7cfc00',se:'cmdHit'},
+        {seq:['left','right'],trigger:'high',type:'atk',lv:'high',name:'宙返り蹴',s:18,a:3,r:23,d:88,guardDmg:9,hitstun:26,blockstun:16,fwd:20,exactDmg:true,modern:true,ccWindow:16,tags:['Quick16','Modern'],color:'#5ab2ff',se:'cmdHit'},
+        {seq:['down','right'],trigger:'mid',type:'atk',lv:'mid',name:'かすみ連打',s:10,a:8,r:19,d:74,hits:3,guardDmg:9,hitstun:27,blockstun:20,whiff:4,scale:0.80,exactDmg:true,ccWindow:16,tags:['Quick16','multi'],color:'#4fc3ff',se:'cmdHit'},
+        {seq:['right','down'],trigger:'high',type:'atk',lv:'high',name:'風切り爪',s:15,a:3,r:21,d:80,guardDmg:9,hitstun:24,blockstun:15,whiff:6,scale:0.90,exactDmg:true,ccWindow:16,tags:['Quick16'],color:'#79d0ff',se:'cmdHit'},
+        {seq:['right','left'],trigger:'low',type:'atk',lv:'low',name:'すり抜け足',s:11,a:3,r:17,d:64,guardDmg:7,hitstun:23,blockstun:14,whiff:6,scale:0.80,exactDmg:true,poseId:'lunge',ccWindow:16,tags:['Quick16','Lunge成功時限定','Hit→CLINCH(未結線)'],color:'#8be26b',se:'cmdHit'},
+        {seq:['down','right','right'],trigger:'mid',type:'atk',lv:'mid',name:'つむじ返し',s:23,a:4,r:30,d:120,guardDmg:14,hitstun:33,blockstun:18,whiff:12,scale:0.75,comboEnd:true,exactDmg:true,poseId:'lunge',modern:true,ccWindow:12,tags:['Finisher12','Modern','CHASE_TO_CONTACT(未結線)','maximumApproachSteps2(未結線)'],color:'#3aa0e0',se:'cmdHit'}
       ],
-      godan:[ // 1:地割れ(削り大) 2:山掴み(アーマー付き投げ) 3:巌の構え(自動見切り→反撃中段) — 旧9技(無変更)
-        {seq:['down','down'],trigger:'low',type:'atk',lv:'low',name:'地割れ',s:30,a:3,r:30,d:110,down:true,guardChip:30,color:'#8a6540',se:'cmdHit'},
-        {seq:['right','down'],trigger:'grab',type:'grab',name:'山掴み',s:16,d:110,armor:6,color:'#ff9500',se:'cmdGrabHit'},
-        {seq:['left','left'],trigger:'mid',type:'stance',name:'巌の構え',stanceF:12,counterLv:'mid',counterDmg:100,color:'#ffd23f',se:'guard'},
-        // CMD-R1新規(枠4〜7)
-        {seq:['down','right'],trigger:'mid',type:'atk',lv:'mid',name:'岩砕き',s:20,a:4,r:28,d:115,guardDmg:16,hitstun:38,blockstun:21,whiff:9,scale:0.85,exactDmg:true,armorStartF:4,armorEndF:19,color:'#7a5a38',se:'cmdHit'},
-        {seq:['right','right'],trigger:'high',type:'atk',lv:'high',name:'天蓋落とし',s:29,a:4,r:34,d:150,down:'hardDown',guardDmg:21,blockstun:21,whiff:12,scale:0.75,exactDmg:true,color:'#9a7248',se:'cmdHit'},
-        {seq:['left','down'],trigger:'low',type:'atk',lv:'low',name:'根こそぎ',s:22,a:4,r:28,d:105,down:'throwDown',guardDmg:14,blockstun:20,whiff:7,scale:0.80,comboEnd:true,exactDmg:true,tags:['追撃不可(throwDown流用)'],color:'#6b4d30',se:'cmdHit'},
-        {seq:['left','down','right'],trigger:'mid',type:'atk',lv:'mid',name:'大山押し',s:24,a:5,r:30,d:110,guardDmg:22,blockstun:26,whiff:9,scale:0.85,exactDmg:true,reach:2,tags:['NORMAL_RESET','Pushback2'],color:'#8a6540',se:'cmdHit'}
+      godan:[
+        {seq:['down','down'],trigger:'low',type:'atk',lv:'low',name:'地割れ',s:29,a:4,r:34,d:145,down:'lightDown',guardDmg:28,guardChip:15,blockstun:17,whiff:13,exactDmg:true,ccWindow:16,tags:['Quick16'],color:'#8a6540',se:'cmdHit'},
+        {seq:['right','down'],trigger:'grab',type:'grab',name:'山掴み',s:18,d:130,whiff:44,armor:6,down:'throwDown',exactDmg:true,ccWindow:16,tags:['Quick16','ArmorStock1(未結線)'],color:'#ff9500',se:'cmdGrabHit'},
+        {seq:['left','left'],trigger:'mid',type:'stance',name:'巌の構え',startupF:5,counterActiveF:8,failRecF:22,counterLv:'mid',counterDmg:125,tags:['Stock1(未結線)'],color:'#ffd23f',se:'guard'},
+        {seq:['down','right'],trigger:'mid',type:'atk',lv:'mid',name:'岩砕き',s:21,a:4,r:30,d:140,guardDmg:19,hitstun:35,blockstun:19,whiff:9,scale:0.85,exactDmg:true,armorStartF:4,armorEndF:19,modern:true,ccWindow:16,tags:['Quick16','Modern','Stock1(未結線)'],color:'#7a5a38',se:'cmdHit'},
+        {seq:['right','right'],trigger:'high',type:'atk',lv:'high',name:'天蓋落とし',s:30,a:4,r:37,d:190,down:'hardDown',guardDmg:23,blockstun:19,whiff:14,scale:0.75,exactDmg:true,ccWindow:16,tags:['Quick16'],color:'#9a7248',se:'cmdHit'},
+        {seq:['left','down'],trigger:'low',type:'atk',lv:'low',name:'根こそぎ',s:23,a:4,r:31,d:135,down:'throwDown',guardDmg:16,blockstun:18,scale:0.80,exactDmg:true,ccWindow:16,tags:['Quick16','追撃不可(throwDown流用)'],color:'#6b4d30',se:'cmdHit'},
+        {seq:['left','down','right'],trigger:'mid',type:'atk',lv:'mid',name:'大山押し',s:24,a:5,r:33,d:150,guardDmg:24,hitstun:39,blockstun:22,scale:0.85,exactDmg:true,modern:true,ccWindow:16,tags:['Quick16','Modern','Stock2(未結線)','Hyper','小Pushback(未結線)'],color:'#8a6540',se:'cmdHit'}
       ],
-      // CMD-R1: 新6キャラ(P1暫定18技)はすべて下記7技セットへ全面置換する
       hakuma:[
-        {seq:['left','down'],trigger:'mid',type:'atk',lv:'mid',name:'雪壁掌',s:16,a:3,r:20,d:78,guardDmg:10,hitstun:27,blockstun:16,whiff:4,scale:0.95,exactDmg:true,tags:['Iron Wall対応'],color:'#bfe3d0',se:'cmdHit'},
-        {seq:['down','right'],trigger:'high',type:'atk',lv:'high',name:'氷柱返し',s:24,a:4,r:27,d:108,guardDmg:14,hitstun:36,blockstun:20,whiff:8,scale:0.90,exactDmg:true,color:'#a7d9c9',se:'cmdHit'},
-        {seq:['left','right'],trigger:'grab',type:'grab',name:'雪崩抱え',s:14,d:100,armor:6,whiff:34,down:'throwDown',exactDmg:true,color:'#8fb8a0',se:'cmdGrabHit'},
-        {seq:['down','left'],trigger:'low',type:'atk',lv:'low',name:'地伏せ',s:23,a:4,r:27,d:88,down:false,guardDmg:12,hitstun:34,blockstun:20,whiff:7,scale:0.90,exactDmg:true,color:'#749c8a',se:'cmdHit'},
-        {seq:['left','left'],trigger:'mid',type:'atk',lv:'mid',name:'不動押し',s:13,a:4,r:17,d:58,guardDmg:17,blockstun:17,whiff:3,scale:1.0,exactDmg:true,tags:['NORMAL_RESET','Pushback2'],color:'#5f8a76',se:'cmdHit'},
-        {seq:['right','down'],trigger:'high',type:'atk',lv:'high',name:'白峰打ち',s:21,a:4,r:25,d:100,guardDmg:13,hitstun:35,blockstun:19,whiff:7,scale:0.90,exactDmg:true,tags:['Iron Wall対応'],color:'#dbe8e0',se:'cmdHit'},
-        {seq:['left','down','right'],trigger:'mid',type:'atk',lv:'mid',name:'雪煙崩し',s:28,a:4,r:34,d:115,guardDmg:15,blockstun:24,whiff:12,scale:0.80,comboEnd:true,exactDmg:true,reach:3,tags:['Iron Wall消費'],color:'#c7ece0',se:'cmdHit'}
+        {seq:['left','down'],trigger:'mid',type:'atk',lv:'mid',name:'雪壁掌',s:15,a:3,r:21,d:72,guardDmg:10,hitstun:24,blockstun:16,whiff:4,scale:0.95,exactDmg:true,modern:true,ccWindow:16,tags:['Quick16','Modern','IronWall対応(未結線:startup11/dmg83)'],color:'#bfe3d0',se:'cmdHit'},
+        {seq:['down','right'],trigger:'high',type:'atk',lv:'high',name:'氷柱返し',s:24,a:4,r:28,d:110,guardDmg:15,hitstun:33,blockstun:19,whiff:8,scale:0.90,exactDmg:true,ccWindow:16,tags:['Quick16'],color:'#a7d9c9',se:'cmdHit'},
+        {seq:['left','right'],trigger:'grab',type:'grab',name:'雪崩抱え',s:15,d:105,whiff:38,down:'throwDown',exactDmg:true,ccWindow:16,tags:['Quick16','NoArmor'],color:'#8fb8a0',se:'cmdGrabHit'},
+        {seq:['down','left'],trigger:'low',type:'atk',lv:'low',name:'地伏せ',s:23,a:4,r:28,d:95,guardDmg:12,hitstun:32,blockstun:20,whiff:7,scale:0.90,exactDmg:true,ccWindow:16,tags:['Quick16'],color:'#749c8a',se:'cmdHit'},
+        {seq:['left','left'],trigger:'mid',type:'atk',lv:'mid',name:'不動押し',s:13,a:4,r:19,d:62,guardDmg:16,hitstun:22,blockstun:18,whiff:3,scale:1.0,exactDmg:true,ccWindow:16,tags:['Quick16','小Pushback(未結線)'],color:'#5f8a76',se:'cmdHit'},
+        {seq:['right','down'],trigger:'high',type:'atk',lv:'high',name:'白峰打ち',s:22,a:4,r:27,d:105,guardDmg:14,hitstun:31,blockstun:19,whiff:7,scale:0.90,exactDmg:true,modern:true,ccWindow:16,tags:['Quick16','Modern','IronWall対応(未結線:recovery21/dmg121)'],color:'#dbe8e0',se:'cmdHit'},
+        {seq:['left','down','right'],trigger:'mid',type:'atk',lv:'mid',name:'雪煙崩し',s:28,a:4,r:35,d:135,guardDmg:18,hitstun:38,blockstun:21,whiff:12,scale:0.80,exactDmg:true,ccWindow:16,tags:['Quick16','IronWall消費(未結線:dmg155/GD28)'],color:'#c7ece0',se:'cmdHit'}
       ],
       chirka:[
-        {seq:['right','down'],trigger:'mid',type:'atk',lv:'mid',name:'だまし突き',s:15,a:3,r:20,d:72,guardDmg:9,hitstun:27,blockstun:16,whiff:5,scale:0.95,exactDmg:true,tags:['Feint','Delay'],color:'#b98cc7',se:'cmdHit'},
-        {seq:['down','right'],trigger:'high',type:'atk',lv:'high',name:'空鳴り爪',s:23,a:4,r:26,d:98,guardDmg:12,hitstun:35,blockstun:20,whiff:7,scale:0.90,exactDmg:true,tags:['Delay'],color:'#caa6d9',se:'cmdHit'},
-        {seq:['left','right'],trigger:'grab',type:'grab',name:'すかし抱き',s:15,d:92,whiff:36,down:'throwDown',exactDmg:true,tags:['独立GRAB telegraph'],color:'#9d6bb0',se:'cmdGrabHit'},
-        {seq:['down','left'],trigger:'low',type:'atk',lv:'low',name:'影踏み',s:21,a:4,r:25,d:82,down:false,guardDmg:10,hitstun:32,blockstun:19,whiff:6,scale:0.90,exactDmg:true,tags:['Delay'],color:'#7a5c8a',se:'cmdHit'},
-        {seq:['right','left','right'],trigger:'mid',type:'atk',lv:'mid',name:'つんのめり',s:12,a:3,r:19,d:65,guardDmg:8,hitstun:27,blockstun:16,whiff:10,scale:0.85,exactDmg:true,reach:0,color:'#c39ed4',se:'cmdHit'},
-        {seq:['left','down','right'],trigger:'high',type:'atk',lv:'high',name:'戻り蹴り',s:20,a:4,r:24,d:90,guardDmg:11,hitstun:32,blockstun:19,whiff:6,scale:0.90,exactDmg:true,reach:2,color:'#b98cc7',se:'cmdHit'},
-        {seq:['down','right','down'],trigger:'mid',type:'atk',lv:'mid',name:'あと出し頭突き',s:31,a:4,r:35,d:108,guardDmg:14,blockstun:24,whiff:12,scale:0.75,comboEnd:true,exactDmg:true,reach:3,tags:['Delay可','NORMAL_RESET'],color:'#8a6a99',se:'cmdHit'}
+        {seq:['right','down'],trigger:'mid',type:'atk',lv:'mid',name:'だまし突き',s:15,a:3,r:21,d:82,guardDmg:10,hitstun:25,blockstun:16,whiff:5,scale:0.95,exactDmg:true,modern:true,ccWindow:16,tags:['Quick16','Modern','Feint(未結線)','Delay(未結線)'],color:'#b98cc7',se:'cmdHit'},
+        {seq:['down','right'],trigger:'high',type:'atk',lv:'high',name:'空鳴り爪',s:22,a:4,r:28,d:115,guardDmg:14,hitstun:33,blockstun:19,whiff:7,scale:0.90,exactDmg:true,ccWindow:16,tags:['Quick16','Delay(未結線)'],color:'#caa6d9',se:'cmdHit'},
+        {seq:['left','right'],trigger:'grab',type:'grab',name:'すかし抱き',s:15,d:105,whiff:38,down:'throwDown',exactDmg:true,ccWindow:16,tags:['Quick16','独立GRAB telegraph'],color:'#9d6bb0',se:'cmdGrabHit'},
+        {seq:['down','left'],trigger:'low',type:'atk',lv:'low',name:'影踏み',s:20,a:4,r:26,d:95,guardDmg:12,hitstun:31,blockstun:19,whiff:6,scale:0.90,exactDmg:true,modern:true,ccWindow:16,tags:['Quick16','Modern','Delay(未結線)'],color:'#7a5c8a',se:'cmdHit'},
+        {seq:['right','left','right'],trigger:'mid',type:'atk',lv:'mid',name:'つんのめり',s:12,a:3,r:20,d:72,guardDmg:8,hitstun:23,blockstun:14,whiff:10,scale:0.85,exactDmg:true,reach:0,ccWindow:16,tags:['Quick16'],color:'#c39ed4',se:'cmdHit'},
+        {seq:['left','down','right'],trigger:'high',type:'atk',lv:'high',name:'戻り蹴り',s:20,a:4,r:26,d:108,guardDmg:13,hitstun:31,blockstun:19,whiff:6,scale:0.90,exactDmg:true,modern:true,ccWindow:16,tags:['Quick16','Modern'],color:'#b98cc7',se:'cmdHit'},
+        {seq:['down','right','down'],trigger:'mid',type:'atk',lv:'mid',name:'あと出し頭突き',s:30,a:4,r:36,d:150,guardDmg:17,hitstun:39,blockstun:21,whiff:12,scale:0.75,exactDmg:true,ccWindow:16,tags:['Quick16','Delay版あり(未結線:startup38/unblockable)'],color:'#8a6a99',se:'cmdHit'}
       ],
       takimaru:[
-        {seq:['right','down'],trigger:'grab',type:'grab',name:'丸抱え',s:12,d:110,whiff:32,down:'throwDown',exactDmg:true,color:'#c9a24d',se:'cmdGrabHit'},
-        {seq:['left','right'],trigger:'grab',type:'grab',name:'巻き投げ',s:17,d:125,whiff:42,down:'throwDown',exactDmg:true,reach:2,tags:['NORMAL_LONG'],color:'#b0aac2',se:'cmdGrabHit'},
-        {seq:['right','right'],trigger:'mid',type:'atk',lv:'mid',name:'ぶちかまし',s:15,a:4,r:22,d:92,guardDmg:14,hitstun:30,blockstun:19,whiff:5,scale:0.90,exactDmg:true,tags:['Pressure起点'],color:'#8a8398',se:'cmdHit'},
-        {seq:['down','left'],trigger:'low',type:'atk',lv:'low',name:'足さらい',s:18,a:4,r:24,d:82,down:false,guardDmg:11,hitstun:31,blockstun:18,whiff:6,scale:0.90,exactDmg:true,color:'#a08f6a',se:'cmdHit'},
-        {seq:['down','right'],trigger:'high',type:'atk',lv:'high',name:'熊手払い',s:21,a:4,r:27,d:100,guardDmg:14,hitstun:36,blockstun:21,whiff:7,scale:0.90,exactDmg:true,tags:['Pressure起点'],color:'#c9a24d',se:'cmdHit'},
-        {seq:['left','down'],trigger:'grab',type:'grab',name:'肩車崩し',s:13,d:118,whiff:34,down:'throwDown',exactDmg:true,tags:['Pressure条件限定'],color:'#b09354',se:'cmdGrabHit'},
-        {seq:['left','down','right'],trigger:'grab',type:'grab',name:'大回転落とし',s:20,d:145,whiff:46,down:'throwDown',comboEnd:true,exactDmg:true,reach:1,tags:['NORMAL_RESET'],color:'#8a8398',se:'cmdGrabHit'}
+        {seq:['right','down'],trigger:'grab',type:'grab',name:'丸抱え',s:14,d:115,whiff:36,down:'throwDown',exactDmg:true,modern:true,ccWindow:16,tags:['Quick16','Modern special(pending grab)'],color:'#c9a24d',se:'cmdGrabHit'},
+        {seq:['left','right'],trigger:'grab',type:'grab',name:'巻き投げ',s:18,d:135,whiff:44,down:'throwDown',exactDmg:true,ccWindow:16,tags:['Quick16'],color:'#b0aac2',se:'cmdGrabHit'},
+        {seq:['right','right'],trigger:'mid',type:'atk',lv:'mid',name:'ぶちかまし',s:16,a:4,r:24,d:100,guardDmg:14,hitstun:29,blockstun:21,whiff:5,scale:0.90,exactDmg:true,ccWindow:16,tags:['Quick16','Pressure起点(未結線)'],color:'#8a8398',se:'cmdHit'},
+        {seq:['down','left'],trigger:'low',type:'atk',lv:'low',name:'足さらい',s:19,a:4,r:26,d:95,guardDmg:11,hitstun:30,blockstun:18,whiff:6,scale:0.90,exactDmg:true,ccWindow:16,tags:['Quick16'],color:'#a08f6a',se:'cmdHit'},
+        {seq:['down','right'],trigger:'high',type:'atk',lv:'high',name:'熊手払い',s:22,a:4,r:29,d:115,guardDmg:16,hitstun:35,blockstun:23,whiff:7,scale:0.90,exactDmg:true,modern:true,ccWindow:16,tags:['Quick16','Modern','Pressure起点(未結線)'],color:'#c9a24d',se:'cmdHit'},
+        {seq:['left','down'],trigger:'grab',type:'grab',name:'肩車崩し',s:12,d:125,whiff:36,down:'throwDown',exactDmg:true,ccWindow:16,tags:['Quick16','Pressure条件限定(未結線)'],color:'#b09354',se:'cmdGrabHit'},
+        {seq:['left','down','right'],trigger:'grab',type:'grab',name:'大回転落とし',s:22,d:160,whiff:50,down:'throwDown',exactDmg:true,ccWindow:16,tags:['Quick16','Classic-only armor(未結線)'],color:'#8a8398',se:'cmdGrabHit'}
       ],
       yomikage:[
-        {seq:['right','down'],trigger:'mid',type:'atk',lv:'mid',name:'影縫い',s:11,a:3,r:18,d:62,guardDmg:8,hitstun:25,blockstun:16,whiff:4,scale:0.85,exactDmg:true,color:'#6b7fd6',se:'cmdHit'},
-        {seq:['down','left'],trigger:'low',type:'atk',lv:'low',name:'霞落とし',s:18,a:4,r:24,d:78,down:false,guardDmg:10,hitstun:31,blockstun:19,whiff:6,scale:0.90,exactDmg:true,color:'#4f5bb8',se:'cmdHit'},
-        {seq:['left','right'],trigger:'high',type:'atk',lv:'high',name:'月かすめ',s:16,a:3,r:22,d:82,guardDmg:10,hitstun:29,blockstun:17,whiff:6,scale:0.90,exactDmg:true,color:'#8695e0',se:'cmdHit'},
-        {seq:['left','down'],trigger:'grab',type:'grab',name:'腕返し',s:12,d:95,whiff:34,down:'throwDown',exactDmg:true,color:'#5a67ad',se:'cmdGrabHit'},
-        {seq:['right','right'],trigger:'high',type:'atk',lv:'high',name:'後の先・天',s:8,a:3,r:18,d:105,guardDmg:12,hitstun:28,blockstun:10,whiff:10,scale:0.90,exactDmg:true,tags:['Just状態限定'],color:'#8695e0',se:'cmdHit'},
-        {seq:['down','down'],trigger:'low',type:'atk',lv:'low',name:'後の先・地',s:10,a:4,r:22,d:115,down:'lightDown',guardDmg:13,blockstun:13,whiff:10,scale:0.85,comboEnd:true,exactDmg:true,tags:['Just限定'],color:'#4f5bb8',se:'cmdHit'},
-        {seq:['left','down','right'],trigger:'mid',type:'atk',lv:'mid',name:'後の先・芯',s:14,a:3,r:26,d:120,guardDmg:14,blockstun:14,whiff:12,scale:0.80,comboEnd:true,exactDmg:true,reach:3,tags:['Just限定','NORMAL_RESET'],color:'#6b7fd6',se:'cmdHit'}
+        {seq:['right','down'],trigger:'mid',type:'atk',lv:'mid',name:'影縫い',s:10,a:3,r:18,d:66,guardDmg:8,scale:0.85,exactDmg:true,modern:true,ccWindow:16,tags:['Quick16','Modern'],color:'#6b7fd6',se:'cmdHit'},
+        {seq:['down','left'],trigger:'low',type:'atk',lv:'low',name:'霞落とし',s:18,a:4,r:25,d:84,guardDmg:10,scale:0.90,exactDmg:true,ccWindow:16,tags:['Quick16','Classic'],color:'#4f5bb8',se:'cmdHit'},
+        {seq:['left','right'],trigger:'high',type:'atk',lv:'high',name:'月かすめ',s:16,a:3,r:22,d:88,guardDmg:10,scale:0.90,exactDmg:true,modern:true,ccWindow:16,tags:['Quick16','Modern'],color:'#8695e0',se:'cmdHit'},
+        {seq:['left','down'],trigger:'grab',type:'grab',name:'腕返し',s:11,d:105,whiff:34,down:'throwDown',exactDmg:true,ccWindow:16,tags:['Quick16','ReturnGrab'],color:'#5a67ad',se:'cmdGrabHit'},
+        {seq:['right','right'],trigger:'high',type:'atk',lv:'high',name:'後の先・天',s:8,a:3,r:18,d:100,guardDmg:11,whiff:10,scale:0.90,exactDmg:true,ccWindow:16,tags:['Quick16','Just限定(未結線:Just6F/dmg110)'],color:'#8695e0',se:'cmdHit'},
+        {seq:['down','down'],trigger:'low',type:'atk',lv:'low',name:'後の先・地',s:10,a:4,r:23,d:110,down:'lightDown',guardDmg:12,whiff:10,scale:0.85,exactDmg:true,ccWindow:16,tags:['Quick16','Just限定(未結線:Just8F/dmg121)'],color:'#4f5bb8',se:'cmdHit'},
+        {seq:['left','down','right'],trigger:'mid',type:'atk',lv:'mid',name:'後の先・芯',s:13,a:3,r:27,d:118,guardDmg:13,whiff:12,scale:0.80,exactDmg:true,ccWindow:16,tags:['Quick16','Just限定(未結線:Just11F/dmg130)'],color:'#6b7fd6',se:'cmdHit'}
       ],
       bullet:[
-        {seq:['right','down'],trigger:'mid',type:'atk',lv:'mid',name:'弾み突き',s:13,a:3,r:19,d:68,guardDmg:8,hitstun:26,blockstun:16,whiff:4,scale:0.90,exactDmg:true,color:'#8a2740',se:'cmdHit'},
-        {seq:['down','left'],trigger:'low',type:'atk',lv:'low',name:'尾払い',s:20,a:4,r:24,d:85,guardDmg:11,hitstun:31,blockstun:18,whiff:6,scale:0.90,exactDmg:true,tags:['尾攻撃hitbox','通常時の尾hurtboxなし'],color:'#a83250',se:'cmdHit'},
-        {seq:['down','right'],trigger:'high',type:'atk',lv:'high',name:'跳ね上げ',s:18,a:3,r:23,d:90,guardDmg:11,hitstun:31,blockstun:17,whiff:6,scale:0.90,exactDmg:true,color:'#c14a68',se:'cmdHit'},
-        {seq:['right','right'],trigger:'mid',type:'atk',lv:'mid',name:'蓄圧タックル',s:18,a:4,r:25,d:108,guardDmg:15,hitstun:34,blockstun:20,whiff:8,scale:0.85,exactDmg:true,poseId:'lunge',tags:['Charge1消費'],color:'#a83250',se:'cmdHit'},
-        {seq:['left','right'],trigger:'grab',type:'grab',name:'抱え弾き',s:14,d:95,whiff:35,down:'throwDown',exactDmg:true,tags:['成功Charge+1'],color:'#8a2740',se:'cmdGrabHit'},
-        {seq:['left','left'],trigger:'mid',type:'atk',lv:'mid',name:'圧抜き掌',s:16,a:3,r:21,d:72,guardDmg:13,blockstun:18,whiff:5,scale:0.90,exactDmg:true,tags:['Charge1消費','Guard+8','NORMAL_RESET'],color:'#c14a68',se:'cmdHit'},
-        {seq:['left','down','right','right'],trigger:'mid',type:'atk',lv:'mid',name:'弾丸頭突き',s:29,a:4,r:38,d:160,down:'hardDown',guardDmg:22,blockstun:23,whiff:14,scale:0.70,exactDmg:true,reach:3,tags:['Charge3全消費'],color:'#8a2740',se:'cmdHit'}
+        {seq:['right','down'],trigger:'mid',type:'atk',lv:'mid',name:'弾み突き',s:13,a:3,r:20,d:72,guardDmg:8,scale:0.90,exactDmg:true,modern:true,ccWindow:16,tags:['Quick16','Modern','Charge gain(未結線)'],color:'#8a2740',se:'cmdHit'},
+        {seq:['down','left'],trigger:'low',type:'atk',lv:'low',name:'尾払い',s:20,a:4,r:25,d:88,guardDmg:11,scale:0.90,exactDmg:true,modern:true,ccWindow:16,tags:['Quick16','Modern','Charge gain(未結線)','尾攻撃hitbox','通常時の尾hurtboxなし'],color:'#a83250',se:'cmdHit'},
+        {seq:['down','right'],trigger:'high',type:'atk',lv:'high',name:'跳ね上げ',s:18,a:3,r:24,d:94,guardDmg:11,scale:0.90,exactDmg:true,modern:true,ccWindow:16,tags:['Quick16','Modern','Charge gain(未結線)'],color:'#c14a68',se:'cmdHit'},
+        {seq:['right','right'],trigger:'mid',type:'atk',lv:'mid',name:'蓄圧タックル',s:18,a:4,r:27,d:120,guardDmg:16,hitstun:32,blockstun:20,whiff:8,scale:0.85,exactDmg:true,poseId:'lunge',ccWindow:16,tags:['Quick16','Charge1消費(未結線)','cost1(未結線)'],color:'#a83250',se:'cmdHit'},
+        {seq:['left','right'],trigger:'grab',type:'grab',name:'抱え弾き',s:15,d:105,whiff:37,down:'throwDown',exactDmg:true,ccWindow:16,tags:['Quick16','成功Charge+1(未結線)','gain(未結線)'],color:'#8a2740',se:'cmdGrabHit'},
+        {seq:['left','left'],trigger:'mid',type:'atk',lv:'mid',name:'圧抜き掌',s:16,a:3,r:22,d:78,guardDmg:12,hitstun:27,blockstun:24,whiff:5,scale:0.90,exactDmg:true,ccWindow:16,tags:['Quick16','Charge1消費(未結線)','cost1(未結線)','Guard+15(未結線)'],color:'#c14a68',se:'cmdHit'},
+        {seq:['left','down','right','right'],trigger:'mid',type:'atk',lv:'mid',name:'弾丸頭突き',s:31,a:4,r:42,d:200,down:'hardDown',whiff:15,unblockable:true,scale:0.70,exactDmg:true,ccWindow:16,tags:['Quick16','Charge3全消費(未結線)','cost3(未結線)'],color:'#8a2740',se:'cmdHit'}
       ],
       dark_moguzo:[
-        {seq:['right','down'],trigger:'mid',type:'atk',lv:'mid',name:'黒走り',s:11,a:3,r:18,d:68,guardDmg:9,hitstun:27,blockstun:15,whiff:5,scale:0.85,exactDmg:true,tags:['暗連可'],color:'#3d1f4a',se:'cmdHit'},
-        {seq:['down','right'],trigger:'high',type:'atk',lv:'high',name:'逆昇撃',s:14,a:3,r:20,d:80,guardDmg:10,hitstun:28,blockstun:15,whiff:6,scale:0.85,exactDmg:true,tags:['暗連可'],color:'#5a2f6b',se:'cmdHit'},
-        {seq:['left','right'],trigger:'grab',type:'grab',name:'闇引き',s:16,d:90,whiff:40,down:'throwDown',exactDmg:true,tags:['暗連不可'],color:'#7a1f2f',se:'cmdGrabHit'},
-        {seq:['down','left'],trigger:'low',type:'atk',lv:'low',name:'黒砂払い',s:16,a:4,r:22,d:72,guardDmg:9,hitstun:31,blockstun:17,whiff:6,scale:0.85,exactDmg:true,tags:['暗連可'],color:'#5a2f6b',se:'cmdHit'},
-        {seq:['right','right'],trigger:'high',type:'atk',lv:'high',name:'裏山越え',s:22,a:4,r:27,d:100,guardDmg:13,hitstun:37,blockstun:19,whiff:9,scale:0.80,exactDmg:true,tags:['暗連可'],color:'#3d1f4a',se:'cmdHit'},
-        {seq:['left','down'],trigger:'mid',type:'atk',lv:'mid',name:'闇押し',s:10,a:3,r:16,d:52,guardDmg:8,hitstun:26,blockstun:15,whiff:4,scale:0.80,exactDmg:true,tags:['暗連可'],color:'#5a2f6b',se:'cmdHit'},
-        {seq:['left','down','right'],trigger:'mid',type:'atk',lv:'mid',name:'黒煙突き',s:26,a:4,r:32,d:95,guardDmg:12,blockstun:21,whiff:12,scale:0.75,comboEnd:true,exactDmg:true,reach:3,tags:['暗連不可','NORMAL_RESET'],color:'#3d1f4a',se:'cmdHit'}
+        {seq:['right','down'],trigger:'mid',type:'atk',lv:'mid',name:'黒走り',s:11,a:3,r:19,d:70,guardDmg:8,scale:0.85,exactDmg:true,modern:true,ccWindow:16,tags:['Quick16','Modern','暗連可(未結線)'],color:'#3d1f4a',se:'cmdHit'},
+        {seq:['down','right'],trigger:'high',type:'atk',lv:'high',name:'逆昇撃',s:14,a:3,r:22,d:88,guardDmg:10,scale:0.85,exactDmg:true,modern:true,ccWindow:16,tags:['Quick16','Modern','暗連可(未結線)'],color:'#5a2f6b',se:'cmdHit'},
+        {seq:['left','right'],trigger:'grab',type:'grab',name:'闇引き',s:16,d:100,whiff:40,down:'throwDown',exactDmg:true,ccWindow:16,tags:['Quick16','暗連不可'],color:'#7a1f2f',se:'cmdGrabHit'},
+        {seq:['down','left'],trigger:'low',type:'atk',lv:'low',name:'黒砂払い',s:16,a:4,r:23,d:78,guardDmg:9,scale:0.85,exactDmg:true,modern:true,ccWindow:16,tags:['Quick16','Modern','暗連可(未結線)'],color:'#5a2f6b',se:'cmdHit'},
+        {seq:['right','right'],trigger:'high',type:'atk',lv:'high',name:'裏山越え',s:22,a:4,r:29,d:115,guardDmg:13,scale:0.80,exactDmg:true,ccWindow:16,tags:['Quick16','Classic','暗連可(未結線)'],color:'#3d1f4a',se:'cmdHit'},
+        {seq:['left','down'],trigger:'mid',type:'atk',lv:'mid',name:'闇押し',s:10,a:3,r:17,d:60,guardDmg:8,scale:0.80,exactDmg:true,modern:true,ccWindow:16,tags:['Quick16','Modern','暗連可(未結線)'],color:'#5a2f6b',se:'cmdHit'},
+        {seq:['left','down','right'],trigger:'mid',type:'atk',lv:'mid',name:'黒煙突き',s:27,a:4,r:35,d:140,guardDmg:16,hitstun:38,blockstun:20,comboEnd:true,exactDmg:true,ccWindow:12,tags:['Finisher12','暗連不可'],color:'#3d1f4a',se:'cmdHit'}
       ]
     }
   }
@@ -765,10 +772,14 @@ const NET={ // ロックステップ状態(startOnlineBattleで対戦ごとに�
   localQ:{},peerQ:{},  // frame番号 -> {cmds,hold}
   waiting:false,       // true="同期中…"(両者のF入力が揃うまでこのFのロジックは進めない)
   waitingF:0,          // 待機が連続何F続いているか。表示のちらつき防止にBAL.NET.waitingShowFで閾値判定
-  matchSeq:0           // 対戦(startOnlineBattle)ごとに+1する通し番号。勝ち残り交代等で対戦が
+  matchSeq:0,          // 対戦(startOnlineBattle)ごとに+1する通し番号。勝ち残り交代等で対戦が
                         // 連続する際、前の対戦の終盤に届いた遅延cmdが次の対戦のsimF(0番から
                         // 再カウント)と衝突してpeerQを汚染しないよう、cmdメッセージに載せて
                         // 世代を区別する(絶対にリセットしない・増加のみ)
+  pendCmds0:[],pendCmds1:[],pendHold0:null,pendHold1:null // vNext PR3レビュー指摘(PR#76・§9 Hitstop中方向仕込み可):
+  // Command hitstopでこのFのnetFightStep呼び出し自体をskipする間も、そのFに届いたcmds/holdを捨てずここへ
+  // 積んでおき、hitstopが明けた最初のFでまとめて渡す(netLogicTick参照。オフラインのevqがhitstop中も
+  // 貯まり続けるのと同じ挙動をオンラインでも再現する)
 };
 let netPendingPeerCmds=[]; // 自分がstartOnlineBattle前に受信したcmd(相手が先に対戦開始した場合の取りこぼし防止。matchSeq付き)
 function onlineActive(){return NET.active;}
@@ -987,7 +998,10 @@ function newFighter(ci,side){
     cmdBufMove:null,cmdBufIdx:null, // コマンド先行入力(v0.11 §6.9): 硬直中に受理し行動可能Fで自動発動する技の保持先
     dodgeBufKind:null,dodgeBufF:0, // vNext PR2 (§2 Guard→Dodge 10F buffer): Blockstun中に受理したDodge入力の保持先(tryDodgeBuf()参照)
     opNormalLv:null,opRepeat:0, // vNext PR2 (§4 OP相殺): 直前に出した同一Normalの段/その連続回数(1〜4)。startAtk()/startCrouchAtk()で更新
-    dodgeSuccess:false}; // vNext PR2 (§2 Correct Dodge completion18F): このdodge instanceが正解回避(beats)だったかのフラグ。advance()の'dodge'分岐が完了Fの判定に使う
+    dodgeSuccess:false, // vNext PR2 (§2 Correct Dodge completion18F): このdodge instanceが正解回避(beats)だったかのフラグ。advance()の'dodge'分岐が完了Fの判定に使う
+    modernHist:[],pendingModernGrab:null, // vNext PR3 (§8 Modern R4): 直近qualifying normal(HIT/BLOCK)の{lv,f}履歴(45F以内・WHIFF/EVADE/被弾/Throw/Roar/Ult/Command/Down/Roundでreset)。
+    // Takimaru固有のModern Grab(丸抱え)がtarget非throw-eligibleで即開始できない間の保留先(tickPendingModernGrab()参照)
+    ccActive:false,ccWindowUntil:0}; // vNext PR3 (§9 Classic Cancel): 直前のCommand HITが開いたcancel window(F)。tryClassicCancelで消費
 }
 function startBattle(){
   lastMatchOnline=false;
@@ -1015,6 +1029,7 @@ function startOnlineBattle(seed,charIdxBySlot,delayF){ // オンライン対戦�
   // 未計測(delayF未指定)の場合は安全側の上限にフォールバックする
   NET.delayF=delayF||BAL.NET.delayFMax;
   NET.capTick=0;NET.simF=0;NET.waiting=false;NET.waitingF=0;
+  NET.pendCmds0=[];NET.pendCmds1=[];NET.pendHold0=null;NET.pendHold1=null;
   NET.localQ={};NET.peerQ={};
   for(let i=0;i<NET.delayF;i++){NET.localQ[i]={cmds:[],hold:null};NET.peerQ[i]={cmds:[],hold:null};}
   for(const m of netPendingPeerCmds){if(m.matchSeq===NET.matchSeq)NET.peerQ[m.f]={cmds:m.cmds,hold:m.hold};} // 念のためこの世代宛て以外は捨てる
@@ -1032,6 +1047,7 @@ function roundInit(first){
     f.dodgeType=null;f.counterReadyF=0;f.clinchF=0;f.comboCounter=false;f.dodgeSuccess=false;
     f.dirBuf.length=0;f.cmdMove=null;f.cmdIdx=null;f.cmdBufMove=null;f.cmdBufIdx=null;
     f.dodgeBufKind=null;f.dodgeBufF=0;
+    f.modernHist.length=0;f.pendingModernGrab=null;f.ccActive=false;f.ccWindowUntil=0; // vNext PR3 (§8/§9): Round resetでModern history/pending grab/Classic Cancel窓を持ち越さない
     f.opNormalLv=null;f.opRepeat=0; // vNext PR2 (§4 OP相殺): ラウンド開始で持ち越さない
     // vNext PR2 (COMBAT_VNEXT_FINAL.md §11/§12): 固有Gauge/stock/tempはRound resetが原則。
     // S(§11 "Round start0")は毎ラウンド必ず0(以前はfirstラウンドのみ0にしていた=vNext以前の挙動)。
@@ -1090,9 +1106,10 @@ function specForCmd(f,m){ // コマンド技(v0.10): 数値はBAL.CMDの技定�
   // 旧9技(P1以前からの既存技、枠1〜3の一部)はキャラのdMul+共通BAL.HITSTUN/BLOCKSTUN/GDMG_Aを
   // 引き続き適用する(既存動作を維持)。CMD-R1で追加/置換した技(m.exactDmg:true)は既にキャラ別の
   // 確定値(damage/hitAdv/blockAdv由来のhitstun・blockstun)のため、二重適用しないよう素通しする
-  // CMD-R1: m.downが文字列ならBAL.DOWNWAKEのキーとして直接使う(hardDown/throwDown流用等)。
-  // true/未指定は既存どおりlightDown/(lowのみ既定でlightDown)。false/'downなし'相当は無ダウン
-  const downType=(typeof m.down==='string')?m.down:((m.down!=null?m.down:(m.trigger==='low'))?'lightDown':false);
+  // CMD-R1: m.downが文字列ならBAL.DOWNWAKEのキーとして直接使う(hardDown/throwDown流用等)。true=lightDown。
+  // vNext PR3: 旧来の「m.down未指定でもtrigger==='low'ならlightDownを既定付与」フォールバックは撤廃
+  // (§13本文がdownを明示しない下段Command技は無down。§4のNormal LOW共通lightDown撤廃と同じ方針)
+  const downType=(typeof m.down==='string')?m.down:(m.down===true?'lightDown':false);
   const dmg=m.exactDmg?m.d:m.d*f.c.dMul;
   return{s:m.s,a:m.a||3,r:m.r||BAL.ATK[m.lv].r,d:dmg,y:BAL.ATK[m.lv].y,down:downType,
     gd:(m.guardDmg!=null)?m.guardDmg:BAL.GDMG_A,
@@ -1141,6 +1158,7 @@ function startAtk(f,lv,chain){
 function fxYomare(f){B.fx.push({k:'yomare',x:fpos(f),y:relY(f,1.027),f:0,dur:50});}
 function startDodge(f,kind){ // kind: 'crouch'|'sway'|'lunge'
   f.phase='dodge';f.pf=0;f.dodgeType=kind;f.atkLv=null;f.guardLv=null;f.buf=null;f.combo=0;f.normalChainCount=0;f.hasHit=false;f.landedHit=false;f.cmdArmorUsed=false;f.dodgeSuccess=false;
+  resetModernHist(f); // vNext PR3 (§8 Modern R4 reset trigger: EVADE)
   sfx('swish');
 }
 function startCrouchAtk(f){ // しゃがみ中(1〜14F)の右ゾーンタップ＝しゃがみ突き。高さは問わない
@@ -1171,19 +1189,23 @@ function detectCommandMove(f){ // 直近nF方向がキャラのコマンド技�
   }
   return best;
 }
-function startCmdAtk(f,m,idx){
+function startCmdAtk(f,m,idx,preserveCombo){ // vNext PR3 (§9 Classic Cancel): preserveCombo=trueはcancel経由の発動(combo/scaling維持。§9「combo/scaling resetなし」)
   f.phase='cmdAtk';f.pf=0;f.atkLv=m.lv;f.cmdMove=m;f.cmdIdx=idx;f.hasHit=false;f.landedHit=false;f.cmdArmorUsed=false;f.guardLv=null;f.buf=null;
-  f.combo=0;f.normalChainCount=0;f.comboCounter=false;f.dirBuf.length=0;
+  if(!preserveCombo){f.combo=0;f.comboCounter=false;}
+  f.normalChainCount=0;f.dirBuf.length=0;
+  resetModernHist(f); // vNext PR3 (§8 Modern R4 reset trigger: Command)
   sfx('swish');sfx(m.lv==='high'?'teleHigh':(m.lv==='low'?'teleLow':'teleMid'));
 }
-function startCmdGrab(f,m,idx){
-  f.phase='grab';f.pf=0;f.guardLv=null;f.atkLv=null;f.buf=null;f.combo=0;f.normalChainCount=0;f.hasHit=false;f.landedHit=false;f.cmdArmorUsed=false;
+function startCmdGrab(f,m,idx,preserveCombo){
+  f.phase='grab';f.pf=0;f.guardLv=null;f.atkLv=null;f.buf=null;if(!preserveCombo)f.combo=0;f.normalChainCount=0;f.hasHit=false;f.landedHit=false;f.cmdArmorUsed=false;
   f.cmdMove=m;f.cmdIdx=idx;f.grabS=m.s;f.dirBuf.length=0;
+  resetModernHist(f); // vNext PR3 (§8 Modern R4 reset trigger: Command/Throw)
   sfx('grabGo');
 }
 function startCmdStance(f,m,idx){
   f.phase='cmdStance';f.pf=0;f.cmdMove=m;f.cmdIdx=idx;f.atkLv=null;f.guardLv=null;f.buf=null;f.combo=0;f.normalChainCount=0;f.hasHit=false;f.landedHit=false;f.cmdArmorUsed=false;
   f.dirBuf.length=0;
+  resetModernHist(f); // vNext PR3 (§8 Modern R4 reset trigger: Command)
   sfx(m.se||'guard');
 }
 function whiffExtraFor(f){ // BAL-R1: 通常技の空振りのみ追加recovery。CMD-R1: コマンド打撃技もm.whiffがあれば同様に適用する
@@ -1196,7 +1218,7 @@ function grabRecFor(f){return(f.cmdMove&&f.cmdMove.whiff!=null)?f.cmdMove.whiff:
 function stunRemaining(f){ // コマンド先行入力(v0.11 §6.9): 現在の硬直/回収フェーズがidleに戻るまでの残りF。対象外のフェーズはnull
   switch(f.phase){
     case 'attack':case 'cmdAtk':{const A=spec(f);return A.s+A.a+A.r+whiffExtraFor(f)-f.pf;}
-    case 'cmdStance':return(f.cmdMove?f.cmdMove.stanceF:0)-f.pf;
+    case 'cmdStance':return(f.cmdMove?(f.cmdMove.startupF+f.cmdMove.counterActiveF+f.cmdMove.failRecF):0)-f.pf; // vNext PR3レビュー指摘(PR#76): stanceF→3phase化に追従(旧stanceF参照はNaNになっていた)
     case 'roar':return BAL.ROAR.s+BAL.ROAR.a+BAL.ROAR.r-f.pf;
     case 'grabrec':return grabRecFor(f)-f.pf;
     case 'grabHit':return BAL.GRAB.seq-f.pf;
@@ -1333,12 +1355,16 @@ function applyInputs(f,opp,cmds,held){
         ||(f.phase==='attack'&&f.pf<=spec(f).s); // A発生キャンセル可
       if(f.s>=BAL.SMAX&&okPhase){
         f.s=0;f.phase='roar';f.pf=0;f.atkLv=null;f.guardLv=null;f.hasHit=false;f.landedHit=false;f.cmdArmorUsed=false;f.kb=0;f.buf=null;f.combo=0;f.normalChainCount=0;
+        resetModernHist(f); // vNext PR3 (§8 Modern R4 reset trigger: Roar)
         sfx('roarStart');
       }else if(f.s<BAL.SMAX){f.sNo=14;} // ゲージ不足時のS枠点滅フィードバックは両サイドとも出す(オンラインは両者とも人間のため)
     }else if(c.t==='grab'){
       const legacyCm=detectCommandMove(f);runtimeCommandShadowObserve(f,c,legacyCm); // コマンド技(v0.10): 直前2方向+つかみタップ=投げ系コマンド技
       const cm=runtimeCommandCanaryResolve(f,c,legacyCm);
-      if(cm&&cm.move.type==='grab'&&(f.phase==='idle'||f.phase==='guard')){
+      const ccOk=f.ccActive&&B.f<=f.ccWindowUntil&&(f.phase==='cmdAtk'||f.phase==='grab'||f.phase==='grabrec'||f.phase==='grabHit'); // vNext PR3 (§9): Command Grab対象・同一Command direct loop禁止
+      if(cm&&ccOk&&cm.move.type==='grab'&&cm.move!==f.cmdMove){
+        startCmdGrab(f,cm.move,cm.idx,true);f.ccActive=false;
+      }else if(cm&&cm.move.type==='grab'&&(f.phase==='idle'||f.phase==='guard')){
         startCmdGrab(f,cm.move,cm.idx);
       }else if(f.phase==='idle'||f.phase==='guard'){
         f.phase='grab';f.pf=0;f.guardLv=null;f.atkLv=null;f.buf=null;f.combo=0;f.normalChainCount=0;f.hasHit=false;f.landedHit=false;f.cmdArmorUsed=false;
@@ -1367,15 +1393,28 @@ function applyInputs(f,opp,cmds,held){
     }else if(c.t==='atk'){
       const legacyCm=detectCommandMove(f);runtimeCommandShadowObserve(f,c,legacyCm); // コマンド技(v0.10): 直前2方向+同じ高さの攻撃タップ=コマンド技
       const cm=runtimeCommandCanaryResolve(f,c,legacyCm);
-      if(cm&&cm.move.type==='atk'&&cm.move.trigger===c.lv&&f.phase==='idle'){
+      // vNext PR3 (§9 Classic Cancel): 直前のCommand HITが開いたwindow内に、別Commandの正式な方向入力(cm。
+      // Modern置換は対象外)が成立した場合のみcancel。同一Command→同一Command direct loopは禁止(cm.move!==f.cmdMove)
+      const ccOk=f.ccActive&&B.f<=f.ccWindowUntil&&(f.phase==='cmdAtk'||f.phase==='grab'||f.phase==='grabrec'||f.phase==='grabHit');
+      if(cm&&ccOk&&cm.move!==f.cmdMove&&(cm.move.type==='atk'||cm.move.type==='grab')&&cm.move.trigger===c.lv){
+        if(cm.move.type==='atk')startCmdAtk(f,cm.move,cm.idx,true);else startCmdGrab(f,cm.move,cm.idx,true); // preserveCombo=true(§9「combo/scaling resetなし」)
+        f.ccActive=false;
+      }else if(cm&&cm.move.type==='atk'&&cm.move.trigger===c.lv&&f.phase==='idle'){
         startCmdAtk(f,cm.move,cm.idx);
       }else if(cm&&cm.move.type==='stance'&&cm.move.trigger===c.lv&&f.phase==='idle'){
         startCmdStance(f,cm.move,cm.idx);
       }else if(f.phase==='dodge'&&f.dodgeType==='crouch'&&f.pf>=1&&f.pf<=BAL.DODGE.crouchAtkWindow){
         startCrouchAtk(f); // しゃがみ中は高さに関わらずしゃがみ突きへキャンセル
-      }else if(f.phase==='idle')startAtk(f,c.lv,false);
-      else if(canChain(f,c.lv))startAtk(f,c.lv,true);
-      else if(cm&&(cm.move.type==='atk'||cm.move.type==='stance')&&cm.move.trigger===c.lv&&stunRemaining(f)!=null&&stunRemaining(f)<=BAL.CMD.buffer){
+      }else if(f.phase==='idle'||canChain(f,c.lv)){
+        const chain=f.phase!=='idle';
+        const mr=tryModernReplace(f,c.lv); // vNext PR3 (§8 Modern R4): pattern完成時、最終Normalの代わりにCommandを開始する。
+        // state/resource不足時はnormal fallback(PR3時点ではability資源ゲートが未実装のため常に利用可=フォールバックは発生しない)
+        if(mr&&mr.grab){ // Takimaru Modern Grab(丸抱え): target throw-eligibleなら即14F startup、そうでなければpending(tickPendingModernGrab参照)
+          f.modernHist.length=0;
+          if(throwEligible(opp))startCmdGrab(f,mr.move,mr.idx);else f.pendingModernGrab={move:mr.move,idx:mr.idx};
+        }else if(mr)startCmdAtk(f,mr.move,mr.idx);
+        else startAtk(f,c.lv,chain);
+      }else if(cm&&(cm.move.type==='atk'||cm.move.type==='stance')&&cm.move.trigger===c.lv&&stunRemaining(f)!=null&&stunRemaining(f)<=BAL.CMD.buffer){
         f.cmdBufMove=cm.move;f.cmdBufIdx=cm.idx; // コマンド先行入力(v0.11 §6.9)
       }else{f.buf={lv:c.lv};f.bufF=BAL.BUF;}
     }
@@ -1386,13 +1425,20 @@ function applyInputs(f,opp,cmds,held){
     f.phase='idle';f.pf=0;f.guardLv=null;
   }
 }
-function tryBuf(f){
+function tryBuf(f,opp){
   if(!f.buf)return;
   f.bufF--;
   if(f.bufF<=0){f.buf=null;return;}
   if(f.ult>=BAL.ULT.stock){f.buf=null;return;}
-  if(f.phase==='idle'){startAtk(f,f.buf.lv,false);f.buf=null;}
-  else if(canChain(f,f.buf.lv)){startAtk(f,f.buf.lv,true);f.buf=null;}
+  if(f.phase==='idle'||canChain(f,f.buf.lv)){
+    const chain=f.phase!=='idle',lv=f.buf.lv;f.buf=null;
+    // vNext PR3 (§8 Modern R4, レビュー指摘PR#76): 早入力でf.bufに積まれた最終NormalもtryModernReplace()を
+    // 経由させる。ここを素通しでstartAtk()するとタイミングだけでpattern成立/不成立が分かれてしまう
+    const mr=tryModernReplace(f,lv);
+    if(mr&&mr.grab){f.modernHist.length=0;if(throwEligible(opp))startCmdGrab(f,mr.move,mr.idx);else f.pendingModernGrab={move:mr.move,idx:mr.idx};}
+    else if(mr)startCmdAtk(f,mr.move,mr.idx);
+    else startAtk(f,lv,chain);
+  }
 }
 function tryDodgeBuf(f){ // vNext PR2 (§2 Guard→Dodge 10F buffer): Blockstun中に受理したDodge入力を、最初の
   // actionable frame(guard/idle復帰)から通常Dodgeとして開始する。10F以内にactionableへ到達しなければ破棄する
@@ -1413,11 +1459,12 @@ function advance(f){
     if(t<=A.s+A.a)f.lunge=maxLunge*Math.min(1,t/A.s);
     else f.lunge=maxLunge*Math.max(0,1-(t-A.s-A.a)/A.r);
     if(t>=total){
-      if(!f.hasHit)gainS(f,'whiff');
+      if(!f.hasHit){gainS(f,'whiff');resetModernHist(f);} // vNext PR3 (§8 Modern R4 reset trigger: WHIFF)
       f.pf=0;f.atkLv=null;f.combo=0;f.normalChainCount=0;f.lunge=0;f.cmdMove=null;f.cmdIdx=null;resolveToIdle(f); // NORMAL-CHAIN-R1: 攻撃action終了(空振り、またはchainされずに硬直満了)で必ずリセット
     }
-  }else if(f.phase==='cmdStance'){ // 巌の構え等: stanceF内は無敵(下記attackResolveで処理)。時間切れは空振り扱いで終了
-    if(f.cmdMove&&f.pf>=f.cmdMove.stanceF){f.pf=0;f.cmdMove=null;f.cmdIdx=null;resolveToIdle(f);}
+  }else if(f.phase==='cmdStance'){ // 巌の構え等: vNext PR3 (§13) startupF(無防備)→counterActiveF(反撃窓。attackResolve側で判定)
+    // →failRecF(不成立時の空振り相当硬直)を一つの連続phaseとして扱う(attack/cmdAtkがS+A+Rを1phaseで扱うのと同型)
+    if(f.cmdMove&&f.pf>=(f.cmdMove.startupF+f.cmdMove.counterActiveF+f.cmdMove.failRecF)){f.pf=0;f.cmdMove=null;f.cmdIdx=null;resolveToIdle(f);}
   }else if(f.phase==='roar'){
     const R=BAL.ROAR;
     if(f.pf>=R.s+R.a+R.r){f.pf=0;resolveToIdle(f);}
@@ -1439,6 +1486,8 @@ function advance(f){
         opp.phase='down';opp.pf=0;opp.downType=BAL.GRAB.downType;opp.downHitUsed=false;opp.kb=34;
       }
       opp.cmdBufMove=null;opp.cmdBufIdx=null;
+      resetModernHist(opp); // vNext PR3 (§8 Modern R4 reset trigger: Throw/被弾)
+      if(f.cmdMove){f.ccActive=true;f.ccWindowUntil=B.f+(f.cmdMove.ccWindow||16);} // vNext PR3 (§9): Command Grab HITもcancel窓を開く(Command Grab対象)
       fxDmg(opp,dmg,(f.cmdMove&&f.cmdMove.color)||'#ffb6ff');fxBurst(opp.baseX,opp.y-40);
       sfx((f.cmdMove&&f.cmdMove.se)||'slam');B.shake=11;B.hitstop=Math.max(B.hitstop,f.cmdMove?6:BAL.HITSTOP.throw); // BAL-R1: 通常投げにHITSTOP.throwを新設適用
       gainSAmt(f,10);
@@ -1528,6 +1577,64 @@ function handleIfDowned(att,def,dmgBase){ // ダウン連: downTypeがfollowupAl
   }
   return true;
 }
+// vNext PR3 (COMBAT_VNEXT_FINAL.md §8 Modern R4): キャラ別完成パターン→置換先Command技名。
+// seqは末尾が「今まさに開始しようとしているNormalの段」で、それ以前がf.modernHist(直近の
+// qualifying normal HIT/BLOCK履歴)の末尾と一致するかで判定する(tryModernReplace参照)。
+// Takimaru「H-L 丸抱え」のみgrab:trueを持つ特殊系(§8 Takimaru Modern Grab、tickPendingModernGrab参照)。
+const MODERN_PATTERNS={
+  moguzo:[{seq:['high','low','mid'],move:'地走り'},{seq:['low','high','high'],move:'昇撃'},{seq:['mid','low','mid'],move:'胴押し'}],
+  pisuke:[{seq:['high','high','high','mid'],move:'二連牙'},{seq:['low','mid','mid','low'],move:'スライディング'},
+    {seq:['mid','high','high','high'],move:'宙返り蹴'},{seq:['low','high','high','mid'],move:'つむじ返し'}],
+  godan:[{seq:['low','mid'],move:'岩砕き'},{seq:['mid','mid'],move:'大山押し'}],
+  hakuma:[{seq:['mid','mid'],move:'雪壁掌'},{seq:['high','high'],move:'白峰打ち'}],
+  chirka:[{seq:['high','low','mid'],move:'だまし突き'},{seq:['low','mid','low'],move:'影踏み'},{seq:['mid','high','high'],move:'戻り蹴り'}],
+  takimaru:[{seq:['low','high'],move:'熊手払い'},{seq:['high','low'],move:'丸抱え',grab:true}],
+  yomikage:[{seq:['high','mid'],move:'影縫い'},{seq:['mid','high'],move:'月かすめ'}],
+  bullet:[{seq:['high','low','mid'],move:'弾み突き'},{seq:['mid','mid','low'],move:'尾払い'},{seq:['low','high','high'],move:'跳ね上げ'}],
+  dark_moguzo:[{seq:['high','low','low','mid'],move:'黒走り'},{seq:['low','high','high','high'],move:'逆昇撃'},
+    {seq:['mid','low','low','mid'],move:'闇押し'},{seq:['low','mid','mid','low'],move:'黒砂払い'}]
+};
+const MODERN_HIST_TIMEOUT_F=45,MODERN_HIST_MAX=4;
+function resetModernHist(f){f.modernHist.length=0;f.pendingModernGrab=null;} // vNext PR3 (§8): WHIFF/EVADE/被弾/Throw/Roar/Ult/Command/Down/Roundの各resetトリガーから呼ぶ単一口
+function modernHistTimeout(f){ // 前回のqualifying normal解決から45F超過していたら黙って失効させる(次qualifying normal開始は前HIT/BLOCKから45F以内)
+  if(f.modernHist.length&&B.f-f.modernHist[f.modernHist.length-1].f>MODERN_HIST_TIMEOUT_F)f.modernHist.length=0;
+}
+function pushModernHist(f,lv){ // Normal(crouch以外)のHIT/BLOCK確定時に呼ぶ。cmdMove(Command技)は対象外
+  if(lv!=='high'&&lv!=='mid'&&lv!=='low')return;
+  modernHistTimeout(f);
+  f.modernHist.push({lv:lv,f:B.f});
+  if(f.modernHist.length>MODERN_HIST_MAX)f.modernHist.shift();
+}
+function tryModernReplace(f,lv){ // 戻り値: {move,idx,grab}かnull。lvは今まさに開始しようとしているNormalの段
+  modernHistTimeout(f);
+  const pats=MODERN_PATTERNS[skeletonIdOf(f.c)];
+  if(!pats)return null;
+  const moves=commandMovesFor(f.c);
+  for(const p of pats){
+    const need=p.seq.length-1;
+    if(p.seq[need]!==lv||f.modernHist.length<need)continue;
+    const tail=need?f.modernHist.slice(-need):[];
+    if(tail.every(function(h,i){return h.lv===p.seq[i];})){
+      const idx=moves.findIndex(function(m){return m.name===p.move;});
+      if(idx>=0)return{move:moves[idx],idx:idx,grab:!!p.grab};
+    }
+  }
+  return null;
+}
+function throwEligible(def){ // つかみが成立し得るdef側phase(grabResolve()の判定を単一口化。Takimaru Modern Grab pendingでも使う)
+  return def.phase==='guard'||def.phase==='blockstun'||def.phase==='idle'
+    ||def.phase==='dizzy'||def.phase==='mikiriRec'||def.phase==='dodge'
+    ||(def.phase==='roar'&&def.pf>=BAL.ROAR.armorStartF&&def.pf<=BAL.ROAR.armorEndF);
+}
+function tickPendingModernGrab(f,opp){ // vNext PR3 (§8 Takimaru Modern Grab): 相手がthrow-eligibleになった最初のidle Fから14F startupのグラブを開始する。
+  // 被弾/投げ/別行動(=新たな別のactionの開始)/Roundでのpending cancelはresetModernHist()の各呼び出し口
+  // (startAtk/startCmdAtk/startCmdGrab/startCmdStance/startDodge/roar開始/fireUlt/hitApplyの被弾分岐/roundInit)
+  // に既に集約済み。ここで素朴にf.phase!=='idleを「別行動」とみなして即時cancelすると、H-Lパターン完成の
+  // 主要経路(Hのrecoveryからcanchainでチェーン継続中=まだ'attack'phase)を同一tick内で即座に潰してしまう
+  // (レビュー指摘: PR#76)。従って本関数はcancelを行わず、readyになった時だけ発動する
+  if(!f.pendingModernGrab)return;
+  if(f.phase==='idle'&&throwEligible(opp)){const p=f.pendingModernGrab;f.pendingModernGrab=null;startCmdGrab(f,p.move,p.idx);}
+}
 const DODGE_TABLE={ // vNext PR2 (COMBAT_VNEXT_FINAL.md §3 Dodge R2)。旧(03 §6.6)の三すくみ
   // (beats=正解成功/normal=通常被弾/counter=誤回避カウンター被弾)から、2種を回避しきる/1種にだけ誤回避となる
   // 新モデルへ変更: CROUCH avoids HIGH+MID / loses LOW。SWAY avoids HIGH+LOW / loses MID。
@@ -1540,9 +1647,11 @@ const DODGE_TABLE={ // vNext PR2 (COMBAT_VNEXT_FINAL.md §3 Dodge R2)。旧(03 �
 function dodgeActive(f){return f.phase==='dodge'&&f.pf>=2&&f.pf<=BAL.DODGE.judgeF;} // BAL-R1.1: 効果発生をF1→F2へ(1F GAPでは間に合わずガードのみ有効)
 function attackResolve(att,def){
   if(handleIfDowned(att,def,spec(att).d))return;
-  if(def.phase==='cmdStance'&&def.cmdMove&&def.pf>=1&&def.pf<=def.cmdMove.stanceF){
-    // 巌の構え等(v0.10): 構え成立中は相手の攻撃を無効化し、即座に反撃(construction技のcounterDmg)を与える
-    const m=def.cmdMove,dmg=Math.round(m.counterDmg*def.c.dMul);
+  if(def.phase==='cmdStance'&&def.cmdMove&&def.pf>=(def.cmdMove.startupF+1)&&def.pf<=(def.cmdMove.startupF+def.cmdMove.counterActiveF)){
+    // 巌の構え等: vNext PR3 (§13 Startup/CounterActive/FailRecovery) — startupF中(構え成立前)とFailRecovery中
+    // (counterActiveFを空費した後)は無防備な通常の的として以降の分岐(guard/hit)へ素通しし、
+    // counterActive窓の間だけ相手の攻撃を無効化し即座に反撃(counterDmgは§13確定値、dMul適用なし)
+    const m=def.cmdMove,dmg=Math.round(m.counterDmg);
     att.hp-=dmg;gainFocus(att,dmg*BAL.FOCUS.gainDmgMul);
     att.phase='hitstun';att.pf=0;att.stunDur=BAL.HITSTUN[m.counterLv]||24;att.combo=0;att.normalChainCount=0;att.kb=20;att.cmdBufMove=null;att.cmdBufIdx=null;
     att.atkLv=null;att.guardLv=null;att.buf=null;
@@ -1571,9 +1680,11 @@ function attackResolve(att,def){
     }
   }
   if(nearClash(att,def)){att.hasHit=true;def.hasHit=true;startClash('trade');return;}
-  const guarded=(def.phase==='guard')||(def.phase==='blockstun'&&def.held); // 統一ガード: 全段ふせぐ
+  const attCm=(att.phase==='cmdAtk')?att.cmdMove:null; // コマンド技(v0.10): 表の「被ガードN」「削りN」が既定値と異なる技のみ上書き
+  const guarded=!(attCm&&attCm.unblockable)&&((def.phase==='guard')||(def.phase==='blockstun'&&def.held)); // 統一ガード: 全段ふせぐ。
+  // vNext PR3 (§13 unblockable): Bullet弾丸頭突き等はガード不能につき素通しでhitApplyへ(下のelse分岐相当)
   if(guarded){
-    const cm2=(att.phase==='cmdAtk')?att.cmdMove:null; // コマンド技(v0.10): 表の「被ガードN」「削りN」が既定値と異なる技のみ上書き
+    const cm2=attCm;
     const A1=cm2?specForCmd(att,cm2):specForLv(att,att.atkLv); // BAL-R1: 通常技はper-charのblockstun/gdを使う(コマンド技は非対象のため共通表のまま)
     def.phase='blockstun';def.pf=0;def.stunDur=A1.blockstun;def.kb=6;
     const opScaleG=cm2?1:BAL.OP_SCALE[Math.min(att.opRepeat,BAL.OP_SCALE.length)-1]; // vNext PR2 (§4 OP相殺): 被ガードGuardDamageにも適用(Commandは対象外)
@@ -1584,6 +1695,8 @@ function attackResolve(att,def){
       if(def.hp<=0){def.hp=0;startKO(def.side);return;}
     }
     gainS(att,'aBlk');gainS(def,'gOk');gainFocus(def,BAL.FOCUS.gainGuard);
+    if(!cm2)pushModernHist(att,att.atkLv); // vNext PR3 (§8): NormalのBLOCKもModern historyへ記録(true chainは切れるがhistoryは維持)。
+    // Command BLOCKはClassic Cancel窓を開かない(§9「Command HITのみ」)
     const A2=spec(att),rem=A2.s+A2.a+A2.r-att.pf;
     if(rem>6)B.fx.push({k:'suki',x:fpos(att),y:relY(att,0.908),f:0,dur:rem});
     fxSpark(def,att.atkLv,1);sfx('guard');
@@ -1642,7 +1755,9 @@ function hitApply(att,def,counterHit,lvOverride,cmdOverride){
     def.hp-=dmg;gainFocus(def,dmg*BAL.FOCUS.gainDmgMul);
     att.landedHit=true; // BAL-R1.1: 確定ヒット時のみchain可(ガード/回避/アーマー吸収では立たない)
     if(cm&&cm.comboEnd)att.combo=0;else att.combo++; // CMD-R1: comboEndの技はここで正式にコンボを打ち切る(次のヒットのdamage scaleを最初から)
-    if(!cm)att.normalChainCount++; // NORMAL-CHAIN-R1: 通常打撃(crouch/mid/high/low)の確定ヒットのみカウント。コマンド技(cm truthy)はここでは増やさない(既存comboとは別概念)
+    if(!cm){att.normalChainCount++;pushModernHist(att,lv);} // NORMAL-CHAIN-R1: 通常打撃(crouch/mid/high/low)の確定ヒットのみカウント。コマンド技(cm truthy)はここでは増やさない(既存comboとは別概念)。vNext PR3 (§8): NormalのHITはModern historyへ記録
+    else{att.ccActive=true;att.ccWindowUntil=B.f+(cm.ccWindow||16);} // vNext PR3 (§9 Classic Cancel): Command HITでcancel windowを開く
+    resetModernHist(def); // vNext PR3 (§8 Modern R4 reset trigger: 被弾)
     // vNext PR2 (§11 S Gain): action1/2/3=aHitC[0..2]、action4+は明示的に0(旧実装はindexをclampしaction3の値を
     // action4+にも使い続けてしまっていた=spec不一致だったバグ修正)
     const hitGainIdx=att.combo-1;
@@ -1692,6 +1807,7 @@ function roarResolve(att,def){
     def.hp-=R.d;gainFocus(def,R.d*BAL.FOCUS.gainDmgMul);
     def.phase='hitstun';def.pf=0;def.stunDur=R.stun;def.cmdBufMove=null;def.cmdBufIdx=null;
     def.atkLv=null;def.guardLv=null;def.buf=null;def.combo=0;def.normalChainCount=0;def.kb=34;
+    resetModernHist(def); // vNext PR3 (§8 Modern R4 reset trigger: 被弾)
     // vNext PR2 (§12): Roar自身S gain0につきgainS(att,'aHit')を撤廃(defenderの'got'/gainUltStockは維持)
     gainS(def,'got');gainUltStock(att);
     fxDmg(def,R.d,'#ff8040');fxSpark(def,'mid',0,true); // 咆哮ヒット=大スパーク
@@ -1704,9 +1820,7 @@ function grabStriking(f){return f.phase==='grab'&&f.pf===grabStartup(f)+1;}
 function grabResolve(att,def){
   if(handleIfDowned(att,def,att.cmdMove?att.cmdMove.d:BAL.GRAB.d))return; // コマンド投げ(v0.10)はdmgをcmdMoveから取る
   if(def.phase==='grab'){startClash('grab');return;} // つかみ同士→ギュイーン
-  const ok=def.phase==='guard'||def.phase==='blockstun'||def.phase==='idle'
-    ||def.phase==='dizzy'||def.phase==='mikiriRec'||def.phase==='dodge' // 回避はつかみを防げない
-    ||(def.phase==='roar'&&def.pf>=BAL.ROAR.armorStartF&&def.pf<=BAL.ROAR.armorEndF); // BAL-R1: アーマー窓変更に追従
+  const ok=throwEligible(def); // 回避はつかみを防げない(throwEligible()に単一口化。vNext PR3 Takimaru Modern Grabと共有)
   if(ok){ // つかみ成立（ガードくずし）
     att.phase='grabHit';att.pf=0;
     def.phase='grabbed';def.pf=0;def.atkLv=null;def.guardLv=null;def.buf=null;def.combo=0;def.normalChainCount=0;def.kb=0;
@@ -1889,6 +2003,7 @@ function fireUlt(side){
   B.flow='ultCine';B.flowF=0;B.ultUser=side;
   const att=B.p[side];
   att.phase='ultAtk';att.pf=0;att.lunge=0;att.normalChainCount=0; // NORMAL-CHAIN-R1: 奥義へ移行した通常chainは打ち切る
+  resetModernHist(att); // vNext PR3 (§8 Modern R4 reset trigger: Ult)
   sfx('ult');
 }
 function ultStep(){
@@ -1910,6 +2025,7 @@ function ultStep(){
       def.hp-=dmg;gainFocus(def,dmg*BAL.FOCUS.gainDmgMul);
       def.phase='down';def.pf=0;def.downType=BAL.ULT.downType;def.downHitUsed=false;def.kb=46;def.cmdBufMove=null;def.cmdBufIdx=null; // BAL-R1: hitstun固定→ultimateDown化
       def.atkLv=null;def.guardLv=null;def.buf=null;def.combo=0;def.normalChainCount=0;
+      resetModernHist(def); // vNext PR3 (§8 Modern R4 reset trigger: 被弾)
       fxDmg(def,dmg,'#ff2d78');fxBurst(def.baseX,330);
       sfx('ultHit');B.shake=18;
       if(def.hp<=0){def.hp=0;B.pendKO=def.side;}
@@ -2128,11 +2244,22 @@ function netLogicTick(){
   NET.waiting=false;NET.waitingF=0;
   const local=NET.localQ[f],peer=NET.peerQ[f];
   delete NET.localQ[f];delete NET.peerQ[f];
-  const cmds0=online.slot===0?local.cmds:peer.cmds,hold0=online.slot===0?local.hold:peer.hold;
-  const cmds1=online.slot===1?local.cmds:peer.cmds,hold1=online.slot===1?local.hold:peer.hold;
+  let cmds0=online.slot===0?local.cmds:peer.cmds,hold0=online.slot===0?local.hold:peer.hold;
+  let cmds1=online.slot===1?local.cmds:peer.cmds,hold1=online.slot===1?local.hold:peer.hold;
   NET.simF++;
   B.f++;stepFx();
-  if(B.hitstop>0){B.hitstop--;return;}
+  // vNext PR3レビュー指摘(PR#76・§9 Hitstop中方向仕込み可): このF全体をhitstopでskipするなら、
+  // cmds/holdを捨てずpendCmds/pendHoldへ積み、hitstopが明けた最初のFでまとめて渡す
+  // (両クライアントは同一の決定的B.hitstopを計算するため、stash/mergeの発生Fも両者で一致し決定性は保たれる)
+  cmds0=NET.pendCmds0.length?NET.pendCmds0.concat(cmds0):cmds0;
+  cmds1=NET.pendCmds1.length?NET.pendCmds1.concat(cmds1):cmds1;
+  hold0=hold0!=null?hold0:NET.pendHold0;
+  hold1=hold1!=null?hold1:NET.pendHold1;
+  if(B.hitstop>0){
+    NET.pendCmds0=cmds0;NET.pendCmds1=cmds1;NET.pendHold0=hold0;NET.pendHold1=hold1;
+    B.hitstop--;return;
+  }
+  NET.pendCmds0=[];NET.pendCmds1=[];NET.pendHold0=null;NET.pendHold1=null;
   if(B.flow==='intro'){
     B.flowF++;
     if(B.flowF===58){announce('FIGHT!',44,64,'#ff5a3c');sfx('fight');}
@@ -2167,11 +2294,12 @@ function netFightStep(cmds0,hold0,cmds1,hold1){ // fightStep()のオンライン
   advance(p1);advance(p2);
   if(B.flow!=='fight')return;
   checkFocusTrigger(p1,p2);checkFocusTrigger(p2,p1);
-  tryBuf(p1);tryBuf(p2);tryDodgeBuf(p1);tryDodgeBuf(p2);
+  tryBuf(p1,p2);tryBuf(p2,p1);tryDodgeBuf(p1);tryDodgeBuf(p2);
   resolveHits();
   if(B.flow!=='fight')return;
   for(const f of B.p){
     guardRegenTick(f);
+    tickPendingModernGrab(f,B.p[1-f.side]); // vNext PR3 (§8 Takimaru Modern Grab pending)
     f.kb*=0.86;if(f.kb<0.5)f.kb=0;
     if(f.sNo>0)f.sNo--;
     if(f.phase!=='dodge'){
@@ -2194,11 +2322,12 @@ function fightStep(){
   advance(p1);advance(p2);
   if(B.flow!=='fight')return;
   checkFocusTrigger(p1,p2);checkFocusTrigger(p2,p1);
-  tryBuf(p1);tryBuf(p2);tryDodgeBuf(p1);tryDodgeBuf(p2);
+  tryBuf(p1,p2);tryBuf(p2,p1);tryDodgeBuf(p1);tryDodgeBuf(p2);
   resolveHits();
   if(B.flow!=='fight')return;
   for(const f of B.p){
     guardRegenTick(f);
+    tickPendingModernGrab(f,B.p[1-f.side]); // vNext PR3 (§8 Takimaru Modern Grab pending)
     f.kb*=0.86;if(f.kb<0.5)f.kb=0;
     if(f.sNo>0)f.sNo--;
     if(f.phase!=='dodge'){ // counterReady/密着は回避の戻りモーション中は消費せず、動けるようになってから起算
