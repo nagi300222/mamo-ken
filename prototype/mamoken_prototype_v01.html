@@ -66,7 +66,15 @@ const BAL={ // 03_data_design.md v2.0 §2 balance table 準拠
   // src/core/combat-moves.tsのCURRENT_COMBO_PROFILE(shadow layer)がCURRENT_BAL.CMAXを参照しているため、
   // reports/current_impl_constants.json経由の後方互換のためだけに残す(コマンド技の算出には元から使っていない)。
 
-  SCALE:[1.0,0.85,0.7,0.6,0.52,0.46],SCALE_FLOOR:0.4, // BAL-R1: コンボ補正6段+下限(reports/balance/BAL_R1_MAPPING.md §7)
+  SCALE:[1.0,0.85,0.7,0.6,0.5,0.42,0.35,0.3,0.25],SCALE_FLOOR:0.25, // vNext PR2 (COMBAT_VNEXT_FINAL.md §5 Combo Scaling R2): 9段floor25%。
+  // Classic Cancel/Dark Chain/Ability-normalChain-resetではreset禁止(§5)。それらのメカニクス自体はPR3/PR4で
+  // 追加されるためcombo(att.combo)のリセット箇所は既存のまま(HIT確定/ガード/回避/ダウン/ラウンド等の既存契機のみ)で、
+  // 未実装のPR3/PR4フックがこのリセットを新たに呼び出すことはない
+  OP_SCALE:[1.0,0.9,0.8,0.7], // vNext PR2 (§4 OP相殺): 同一Normal直連続の減衰(100/90/80/70%floor)。
+  // 対象はDamage/GuardDamage/技固有Knockbackのみ(Startup/Active/Recovery/Stun/Modern historyは非対象)。
+  // 別Normalへ切り替えるとreset(f.opNormalLv/f.opRepeat、startAtk()/startCrouchAtk()参照)。Commandは対象外
+  // (cm truthy時は常にscale=1)。技固有Knockback: このエンジンではNormal自体に技固有knockbackは存在しない
+  // (Normal共通knockback=0化により尚更。§6注記参照)ため、実質的にDamage/GuardDamageのみへ適用される
   PINCH_HP:300,
   MIKIRI:{window:5,windowPinch:7,whiff:24}, // 見切り: 接触±5F(ピンチ±7F)。空振りは24Fガード不能(BAL-R1: 22→24)
   DOWNWAKE:{ // BAL-R1新設: ダウン種別ごとにdownF/wakeF/追撃可否を持つ(旧BAL.DOWNを置換)
@@ -82,7 +90,11 @@ const BAL={ // 03_data_design.md v2.0 §2 balance table 準拠
   GUARD:{regenDelayF:60,regenPerSecond:12,downWakeRegenPerSecond:6, // BAL-R1新設: 被ガードダメ後60F回復停止+通常/ダウン中でレート分離(旧GREGEN:0.22/F一律を置換)
     breakStunF:36,breakMaxFollowupHits:2,breakMaxDamage:180,recoverTo:50}, // breakStunF=旧DIZZY(90→36)。recoverTo=旧GRECOVER(据え置き)
   COUNTER_MUL:1.2, // BAL-R1: 旧DODGE.counterMul/GRAB.counterMul(共に1.25・別定義)をこの1本に統合
-  SMAX:100,SG:{aHit:12,aHitC:[12,7,4],aBlk:8,whiff:2,gOk:6,got:5},
+  SMAX:100,SG:{aHit:12,aHitC:[12,7,4],aBlk:6,whiff:0,gOk:5,got:5,dodge:6,armor:3}, // vNext PR2 (COMBAT_VNEXT_FINAL.md §11 S Gain):
+  // combo action1/2/3=aHitC[0..2](12/7/4)・action4+=0(hitApply側でaHitC.length以降を明示的に0にする)。
+  // attack BLOCK=aBlk(旧8→6)。Guard成功=gOk(旧6→5)。被弾=got(5、旧から変更なし)。Correct Dodge=dodge(新設6)。
+  // Armor absorb=armor(新設3、旧来attacker側のaBlk流用をやめ、armorで吸収した側の専用gainへ分離)。
+  // Whiff/Mikiri/Gyuiin/down followup/Roar自身=+0(whiffは旧2→0。他は元から未実装=0のまま)
   ROAR:{s:17,armorStartF:4,armorEndF:15,armor:15,armorHits:1,a:4,r:24,d:120,guardDamage:38,chipDamage:10,stun:34,sCost:100,cleanHitUltGain:1}, // BAL-R1: s16→17,d130→120,アーマー窓を0-14F→4-15Fに変更。armorはtools/audit_current_impl.mjsの必須値チェック互換のためarmorEndFと同値を保持(実際の判定はarmorStartF/armorEndFを使用)
   CLASH:{sel:90,d:120,near:8,streakBonus:30,winS:30,loserStun:40,inF:26,revealHitF:24,revealF:60},
   MINIGAME:{
@@ -91,19 +103,26 @@ const BAL={ // 03_data_design.md v2.0 §2 balance table 準拠
     HAYAUCHI:{targets:5,radius:55,capF:600} // ハヤウチ(的あて連続タップ)。CPU撃破速度はBAL.AIDIFFへ難易度別に集約
   },
   AIDIFF:{ // 難易度プリセット(§6.7 v2.4)。現行AI(v0.8時点)=HARD、按分してNORMAL/EASYを算出。試遊後調整可
-    EASY:{reactMul:0.4,mikiriRate:0.04,dodgeRate:0.05,atkFreqMul:0.6,downFollowup:0,focusRestraint:false,
+    // vNext PR2 (COMBAT_VNEXT_FINAL.md §10 Focus): focusRestraintフィールドを削除(CPU logicがfocusを
+    // 一切参照しないようにするため。旧: EASY=false/NORMAL・HARD=trueだった攻め控えの分岐は下記aiStep()側で撤廃)
+    EASY:{reactMul:0.4,mikiriRate:0.04,dodgeRate:0.05,atkFreqMul:0.6,downFollowup:0,
       rendaCpuMin:0.085,rendaCpuRng:0,hayauchiF:[22,34],cmdMoveRate:0.05}, // コマンド技使用率(v0.10 (3)): EASY=ほぼ不使用
-    NORMAL:{reactMul:0.7,mikiriRate:0.12,dodgeRate:0.10,atkFreqMul:0.8,downFollowup:0.5,focusRestraint:true,
+    NORMAL:{reactMul:0.7,mikiriRate:0.12,dodgeRate:0.10,atkFreqMul:0.8,downFollowup:0.5,
       rendaCpuMin:0.100,rendaCpuRng:0,hayauchiF:[17,27],cmdMoveRate:0.25}, // NORMAL=たまに
-    HARD:{reactMul:1.0,mikiriRate:0.22,dodgeRate:0.15,atkFreqMul:1.0,downFollowup:1,focusRestraint:true,
+    HARD:{reactMul:1.0,mikiriRate:0.22,dodgeRate:0.15,atkFreqMul:1.0,downFollowup:1,
       rendaCpuMin:0.115,rendaCpuRng:0.02,hayauchiF:[14,24],cmdMoveRate:0.6} // HARD=積極的
   },
   GRAB:{s:12,a:2,rec:32,seq:28,d:90,stun:30,downType:'throwDown'}, // BAL-R1: 空振り硬直rec 28→32(=whiffRecovery)。ヒット時はdownType(throwDown)でdown状態化するためstunは現在未使用(counterMulはBAL.COUNTER_MULへ統合)
-  DODGE:{totalF:22,judgeF:10,counterReadyF:18,counterScale:[1.0,1.0,0.9], // 回避: 全体22F(BAL-R1.1: 効果発生2-10F判定/11-22F戻り。1F目は入力受付のみで無防備=GAP1Fはガードのみ間に合う)。成功でcounterReady18F(counterMulはBAL.COUNTER_MULへ統合)
+  DODGE:{totalF:22,judgeF:12,counterReadyF:18,counterScale:[1.0,1.0,0.9], // vNext PR2 (COMBAT_VNEXT_FINAL.md §2共通F):
+    // 回避: 全体22F・evade判定F2-F12(judgeF旧10→12へ拡大)・Correct Dodge completion18F(counterReadyFのまま)・
+    // Miss/empty Dodge completion22F(totalFのまま)。counterMulはBAL.COUNTER_MULへ統合(既存)
+    guardBufF:10, // vNext PR2 (§2 Guard→Dodge 10F buffer): Blockstun中の回避入力を10Fバッファし、最初の
+    // actionable frame(guard/idle復帰)から通常Dodgeとして開始する(新設。tryDodgeBuf()参照)
     clinchF:12,clinchGrabS:10,clinchHighBonus:15, // 踏み込み成功時の密着12F: つかみ発生12→10・上段ダメ+15
     crouchAtkWindow:14}, // しゃがみ中(1〜14F)の右ゾーンタップ=しゃがみ突き
 
-  ULT:{stock:3,d:300,impact:78,total:110,guardDamage:32,chipDamage:0,downType:'ultimateDown'}, // BAL-R1: ガード分岐(guardDamage/chipDamage)とヒット時down化を新設
+  ULT:{stock:3,d:300,impact:78,total:110,guardDamage:32,chipDamage:0,downType:'ultimateDown',roundCarryCap:2}, // BAL-R1: ガード分岐(guardDamage/chipDamage)とヒット時down化を新設。
+  // vNext PR2 (COMBAT_VNEXT_FINAL.md §12 Round carry): roundCarryCap=2。0→0/1→1/2→2/3→2(=Math.min(carry,2))。stock自体(奥義発動に必要な数)は3のまま不変
   HITSTOP:{mid:6,high:9,low:12,roar:12,clash:16,crouch:5,throw:10,counterBonus:2}, // BAL-R1: low 14→12。throw/counterBonusを新設(clash=ギュイーンは非対象のため据え置き)
   TELEGRAPH:{mid:8,high:13,low:18,crouch:6}, // 発生前半に構え+段色フラッシュ+固有SE（見てから対応の成立条件）
   BUF:10,FLICK_DX:60,FLICK_MS:300,JUST_TAP_MS:100,
@@ -222,25 +241,28 @@ const BAL={ // 03_data_design.md v2.0 §2 balance table 準拠
     }
   }
 };
-const BAL_R1_CHARS={ // BAL-R1: 9体共通4技(crouch/mid/high/low)のper-charデータ駆動spec。
-  // 正本はPLAYTEST_BAL_R1.json(発注元)。hitstun/blockstunは既存契約式
-  // stunDur=adv+(active+recovery-1) でJSONのhitAdv/blockAdvから逆算した値
-  // (reports/balance/BAL_R1_MAPPING.md §0/§1参照)。lowはlightDown(down状態)へ
-  // 遷移するためhitstunを持たない(blockstunのみ)。gd=guardDamage(被ガード時のguard減少量)。
-  moguzo:{hp:1000,guard:100,crouch:{s:10,a:3,r:14,d:45,gd:6,hitstun:19,blockstun:12},mid:{s:14,a:3,r:15,d:65,gd:10,hitstun:21,blockstun:12},high:{s:21,a:4,r:21,d:95,gd:14,hitstun:30,blockstun:15},low:{s:28,a:5,r:30,d:140,gd:18,blockstun:18,down:'lightDown'}},
-  pisuke:{hp:920,guard:90,crouch:{s:9,a:3,r:13,d:38,gd:5,hitstun:18,blockstun:12},mid:{s:12,a:3,r:14,d:55,gd:8,hitstun:20,blockstun:12},high:{s:18,a:4,r:20,d:80,gd:11,hitstun:28,blockstun:15},low:{s:25,a:5,r:29,d:118,gd:15,blockstun:19,down:'lightDown'}},
-  godan:{hp:1080,guard:105,crouch:{s:11,a:3,r:16,d:55,gd:7,hitstun:21,blockstun:13},mid:{s:16,a:3,r:19,d:78,gd:12,hitstun:26,blockstun:14},high:{s:24,a:4,r:27,d:115,gd:17,hitstun:37,blockstun:18},low:{s:31,a:5,r:36,d:165,gd:22,blockstun:21,down:'lightDown'}},
-  hakuma:{hp:1050,guard:125,crouch:{s:10,a:3,r:15,d:42,gd:6,hitstun:20,blockstun:13},mid:{s:15,a:3,r:17,d:60,gd:9,hitstun:22,blockstun:14},high:{s:23,a:4,r:24,d:90,gd:13,hitstun:32,blockstun:17},low:{s:29,a:5,r:32,d:130,gd:18,blockstun:19,down:'lightDown'}},
-  chirka:{hp:940,guard:90,crouch:{s:10,a:3,r:14,d:40,gd:5,hitstun:19,blockstun:12},mid:{s:14,a:3,r:17,d:60,gd:9,hitstun:22,blockstun:13},high:{s:21,a:4,r:23,d:90,gd:13,hitstun:31,blockstun:16},low:{s:28,a:5,r:32,d:130,gd:17,blockstun:19,down:'lightDown'}},
-  takimaru:{hp:1040,guard:110,crouch:{s:11,a:3,r:16,d:48,gd:7,hitstun:21,blockstun:13},mid:{s:16,a:3,r:20,d:72,gd:12,hitstun:26,blockstun:15},high:{s:23,a:4,r:27,d:105,gd:17,hitstun:36,blockstun:18},low:{s:30,a:5,r:35,d:150,gd:21,blockstun:21,down:'lightDown'}},
-  yomikage:{hp:950,guard:95,crouch:{s:9,a:3,r:14,d:38,gd:5,hitstun:19,blockstun:13},mid:{s:12,a:3,r:15,d:55,gd:8,hitstun:20,blockstun:13},high:{s:19,a:4,r:22,d:80,gd:11,hitstun:29,blockstun:17},low:{s:26,a:5,r:31,d:115,gd:15,blockstun:20,down:'lightDown'}},
-  bullet:{hp:1000,guard:100,crouch:{s:10,a:3,r:15,d:42,gd:6,hitstun:20,blockstun:13},mid:{s:14,a:3,r:16,d:60,gd:9,hitstun:21,blockstun:13},high:{s:21,a:4,r:22,d:90,gd:13,hitstun:30,blockstun:16},low:{s:28,a:5,r:31,d:130,gd:17,blockstun:19,down:'lightDown'}},
-  dark_moguzo:{hp:880,guard:80,crouch:{s:8,a:3,r:13,d:36,gd:4,hitstun:18,blockstun:12},mid:{s:11,a:3,r:14,d:52,gd:7,hitstun:20,blockstun:12},high:{s:17,a:4,r:20,d:78,gd:10,hitstun:28,blockstun:15},low:{s:24,a:5,r:28,d:110,gd:14,blockstun:18,down:'lightDown'}}
+const BAL_R1_CHARS={ // vNext PR2 (NORMAL-R2, COMBAT_VNEXT_FINAL.md §6): 9体共通4技(crouch/mid/high/low)の
+  // per-charデータ駆動spec。table名/取得口(r1Char())はBAL-R1由来のまま維持し(NORMAL-CHAIN-R1のCMAX
+  // 凍結と同じ「単一取得口を保ちデータだけ差し替える」方針)、内容は§6のFrames(S/A/R)/Damage/
+  // GuardDamage/HIT・BLOCK advantageから全面的に再計算した値へ置換した。
+  // hitstun/blockstunはformula advantage=stun-(active-1)-recovery(=stun-(active+recovery-1))を
+  // §6のH/B advantage目標値へ逆算して算出($6.6節参照)。§4「Normal LOWのcommon lightDownを撤廃」により
+  // lowも他段と同じ形(down無し・hitstunあり)になった。gd=guardDamage(被ガード時のguard減少量)。
+  moguzo:{hp:1000,guard:100,crouch:{s:10,a:3,r:14,d:45,gd:6,hitstun:17,blockstun:12},mid:{s:14,a:3,r:15,d:65,gd:10,hitstun:18,blockstun:12},high:{s:21,a:4,r:21,d:95,gd:14,hitstun:24,blockstun:15},low:{s:28,a:5,r:30,d:140,gd:18,hitstun:34,blockstun:18}},
+  pisuke:{hp:920,guard:90,crouch:{s:9,a:3,r:12,d:34,gd:4,hitstun:14,blockstun:9},mid:{s:12,a:3,r:13,d:50,gd:6,hitstun:15,blockstun:8},high:{s:18,a:4,r:18,d:74,gd:9,hitstun:22,blockstun:11},low:{s:25,a:5,r:26,d:108,gd:12,hitstun:30,blockstun:14}},
+  godan:{hp:1040,guard:100,crouch:{s:12,a:3,r:18,d:60,gd:8,hitstun:22,blockstun:14},mid:{s:17,a:3,r:21,d:88,gd:13,hitstun:25,blockstun:15},high:{s:25,a:4,r:30,d:132,gd:19,hitstun:36,blockstun:20},low:{s:32,a:5,r:39,d:185,gd:25,hitstun:45,blockstun:23}},
+  hakuma:{hp:1040,guard:125,crouch:{s:10,a:3,r:16,d:42,gd:5,hitstun:19,blockstun:13},mid:{s:15,a:3,r:18,d:60,gd:8,hitstun:21,blockstun:13},high:{s:23,a:4,r:25,d:90,gd:12,hitstun:30,blockstun:17},low:{s:29,a:5,r:34,d:130,gd:16,hitstun:39,blockstun:20}},
+  chirka:{hp:940,guard:90,crouch:{s:10,a:3,r:14,d:40,gd:4,hitstun:17,blockstun:12},mid:{s:14,a:3,r:16,d:58,gd:7,hitstun:19,blockstun:12},high:{s:21,a:4,r:23,d:88,gd:10,hitstun:27,blockstun:16},low:{s:28,a:5,r:32,d:126,gd:14,hitstun:37,blockstun:19}},
+  takimaru:{hp:1040,guard:110,crouch:{s:11,a:3,r:17,d:48,gd:5,hitstun:20,blockstun:13},mid:{s:16,a:3,r:20,d:72,gd:8,hitstun:24,blockstun:14},high:{s:23,a:4,r:28,d:106,gd:12,hitstun:34,blockstun:19},low:{s:30,a:5,r:36,d:152,gd:16,hitstun:42,blockstun:21}},
+  yomikage:{hp:930,guard:90,crouch:{s:9,a:3,r:13,d:36,gd:4,hitstun:15,blockstun:11},mid:{s:12,a:3,r:14,d:52,gd:7,hitstun:17,blockstun:11},high:{s:19,a:4,r:20,d:78,gd:10,hitstun:24,blockstun:14},low:{s:26,a:5,r:29,d:114,gd:13,hitstun:33,blockstun:17}},
+  bullet:{hp:1000,guard:95,crouch:{s:10,a:3,r:15,d:44,gd:5,hitstun:18,blockstun:12},mid:{s:14,a:3,r:16,d:64,gd:8,hitstun:19,blockstun:12},high:{s:21,a:4,r:22,d:96,gd:12,hitstun:26,blockstun:15},low:{s:28,a:5,r:31,d:138,gd:16,hitstun:36,blockstun:18}},
+  dark_moguzo:{hp:880,guard:80,crouch:{s:8,a:3,r:13,d:37,gd:4,hitstun:16,blockstun:11},mid:{s:11,a:3,r:14,d:54,gd:7,hitstun:18,blockstun:11},high:{s:17,a:4,r:20,d:81,gd:10,hitstun:25,blockstun:15},low:{s:24,a:5,r:28,d:116,gd:14,hitstun:33,blockstun:18}}
 };
 // NORMAL-CHAIN-R1: キャラ別「通常打撃(crouch/mid/high/low)chainの最大連続action数」。
 // 旧共通BAL.CMAX=3をcharId別の値へ置き換える(データ駆動。r1Char()と同じskeletonIdOf()経由の
 // 単一取得口にしておくことで、将来CharacterDef/BALデータへ移す際もこの関数の中身だけ差し替えれば済む)。
-// 既存のchain route(軽→重: crouch→mid→high→low、canChain()のBAL.ATK[lv].w比較)は変更しない。
+// chain route自体はvNext PR2(COMBAT_VNEXT_FINAL.md §4)でHIGH/MID/LOW自由順+同Normal連続可へ変更済み
+// (旧: 軽→重ルートのみ。canChain()のchainableTo()参照)。上限判定(normalChainLimitFor)自体はNORMAL-CHAIN-R1のまま不変。
 const NORMAL_CHAIN_LIMIT={moguzo:3,pisuke:4,godan:2,hakuma:2,chirka:3,takimaru:2,yomikage:2,bullet:3,dark_moguzo:4};
 const WHIFF_EXTRA_F={crouch:0,mid:2,high:5,low:9}; // BAL-R1新設: 通常技(cmdAtk以外)がhasHit=falseで
   // recovery終了を迎えた時のみ追加recoveryを与える。現状は存在しなかった機構(reports/balance/BAL_R1_MAPPING.md §2)
@@ -962,7 +984,10 @@ function newFighter(ci,side){
     shownHp:maxHpFor(c),ultFlash:0,sNo:0,
     guardRegenCooldownF:0,dizzyHits:0,dizzyDamage:0,postBreakActive:false, // BAL-R1新設: ガード回復遅延タイマー/ガードブレイク追撃キャップ用カウンタ
     dirBuf:[],cmdMove:null,cmdIdx:null, // コマンド技(v0.10 §6.8): 方向入力バッファ/発動中の技定義とインデックス
-    cmdBufMove:null,cmdBufIdx:null}; // コマンド先行入力(v0.11 §6.9): 硬直中に受理し行動可能Fで自動発動する技の保持先
+    cmdBufMove:null,cmdBufIdx:null, // コマンド先行入力(v0.11 §6.9): 硬直中に受理し行動可能Fで自動発動する技の保持先
+    dodgeBufKind:null,dodgeBufF:0, // vNext PR2 (§2 Guard→Dodge 10F buffer): Blockstun中に受理したDodge入力の保持先(tryDodgeBuf()参照)
+    opNormalLv:null,opRepeat:0, // vNext PR2 (§4 OP相殺): 直前に出した同一Normalの段/その連続回数(1〜4)。startAtk()/startCrouchAtk()で更新
+    dodgeSuccess:false}; // vNext PR2 (§2 Correct Dodge completion18F): このdodge instanceが正解回避(beats)だったかのフラグ。advance()の'dodge'分岐が完了Fの判定に使う
 }
 function startBattle(){
   lastMatchOnline=false;
@@ -1004,9 +1029,18 @@ function roundInit(first){
     f.guardLv=null;f.combo=0;f.normalChainCount=0;f.buf=null;f.kb=0;f.lunge=0;f.sNo=0;f.downHitUsed=false;
     f.guardRegenCooldownF=0;f.dizzyHits=0;f.dizzyDamage=0;f.postBreakActive=false;
     f.lastAtkLv=null;f.atkStreak=0;f.yomare=false;
-    f.dodgeType=null;f.counterReadyF=0;f.clinchF=0;f.comboCounter=false;
+    f.dodgeType=null;f.counterReadyF=0;f.clinchF=0;f.comboCounter=false;f.dodgeSuccess=false;
     f.dirBuf.length=0;f.cmdMove=null;f.cmdIdx=null;f.cmdBufMove=null;f.cmdBufIdx=null;
-    if(first){f.s=0;f.ult=0;f.focus=0;}
+    f.dodgeBufKind=null;f.dodgeBufF=0;
+    f.opNormalLv=null;f.opRepeat=0; // vNext PR2 (§4 OP相殺): ラウンド開始で持ち越さない
+    // vNext PR2 (COMBAT_VNEXT_FINAL.md §11/§12): 固有Gauge/stock/tempはRound resetが原則。
+    // S(§11 "Round start0")は毎ラウンド必ず0(以前はfirstラウンドのみ0にしていた=vNext以前の挙動)。
+    // Ult(§12 Round carry)は0→0/1→1/2→2/3→2(=前ラウンド終了値をBAL.ULT.roundCarryCapで頭打ちしたものを持ち越す)。
+    // focusはFocus liveゲームプレイ除去(§10)によりschema上の値でしかないが、他の固有gauge同様Round resetの対象に含める。
+    // このループ自体は「毎ラウンド無条件でリセットする」汎用の場所であり、PR4のAbility固有gauge/stock/tempも
+    // 将来ここに追加すればよい(Roar/Ult/Sの3つだけを前提にしたハードコードはしていない)
+    f.s=0;f.focus=0;
+    f.ult=first?0:Math.min(f.ult,BAL.ULT.roundCarryCap);
   }
   B.timer=BAL.TIME;B.flow='intro';B.flowF=0;B.clash=null;B.pendKO=-1;B.clashStreak=[0,0];
   focusSlowMs=0;
@@ -1071,25 +1105,31 @@ function spec(f){
 }
 function gainS(f,k){f.s=Math.min(BAL.SMAX,f.s+BAL.SG[k]*f.c.sMul);}
 function gainSAmt(f,amt){f.s=Math.min(BAL.SMAX,f.s+amt*f.c.sMul);}
-function gainFocus(f,amt){f.focus=Math.min(BAL.FOCUS.max,f.focus+amt);}
+function gainFocus(f,amt){ // vNext PR2 (COMBAT_VNEXT_FINAL.md §10 Focus): gameplay Focusをハード除去。
+  // 「外す: gain」につき本体をno-opにした(f.focus/BAL.FOCUSはshadow/schema compatibilityとして残置。
+  // 呼び出し側の全site(§10注記通り「live disableとschema cleanupを安全に分割可」)は変更していない)
+}
 function guardRegenTick(f){ // BAL-R1新設: 被ガードダメ後regenDelayF(60F)は回復停止。down/wake中は別レート(旧GREGEN一律を置換)
   if(f.phase==='guard'||f.phase==='blockstun'||f.phase==='dizzy')return;
   if(f.guardRegenCooldownF>0){f.guardRegenCooldownF--;return;}
   const perSec=(f.phase==='down'||f.phase==='wake')?BAL.GUARD.downWakeRegenPerSecond:BAL.GUARD.regenPerSecond;
   f.guard=Math.min(maxGuardFor(f.c),f.guard+perSec/60);
 }
-function triggerFocus(){ // 満タン時に相手攻撃が発生した瞬間、自動で世界がスローに
+function triggerFocus(){ // vNext PR2: 「外す: auto slow」によりcheckFocusTrigger()から呼ばれなくなったため
+  // 恒久的に未使用(呼び出し元が無いのでfocusSlowMsは常に0のまま=世界は絶対にスローにならない)
   focusSlowMs=BAL.FOCUS.durationMs;
   announce('集中!!',40,40,'#7fe8ff');
 }
-function checkFocusTrigger(att,def){
-  if(def.focus>=BAL.FOCUS.max&&(att.phase==='attack'||att.phase==='cmdAtk')&&att.atkLv&&att.pf===spec(att).s){
-    def.focus=0;triggerFocus();
-  }
+function checkFocusTrigger(att,def){ // vNext PR2 (§10): 「外す: auto slow」によりno-op化。
+  // 旧: def.focus>=max時に相手attack発生FでtriggerFocus()を呼んでいた。gainFocus自体がno-opのため
+  // def.focusはmaxへ到達し得ないが、明示的にauto slow経路自体も断ち切っておく(旧gameplayの残存を禁止する§10指示)
 }
 function startAtk(f,lv,chain){
   f.phase='attack';f.pf=0;f.atkLv=lv;f.hasHit=false;f.landedHit=false;f.cmdArmorUsed=false;f.guardLv=null;
   if(!chain){f.combo=0;f.comboCounter=false;f.normalChainCount=0;} // 新規始動でカウンターコンボの補正緩和もリセット。NORMAL-CHAIN-R1: chain継続時はnormalChainCountを保持する
+  // vNext PR2 (§4 OP相殺): 同一Normal直連続の判定(chain継続かどうかは問わない)。継続なら+1(4止まり=70%floor)、
+  // 別の段へ切替なら1にreset
+  if(f.opNormalLv===lv)f.opRepeat=Math.min(4,f.opRepeat+1);else{f.opNormalLv=lv;f.opRepeat=1;}
   sfx('swish');
   sfx(lv==='high'?'teleHigh':(lv==='low'?'teleLow':'teleMid')); // テレグラフ固有SE
   if(!chain){ // 読まれ表示: ニュートラルからの選択が同系統3連続で「読まれ!」
@@ -1100,11 +1140,12 @@ function startAtk(f,lv,chain){
 }
 function fxYomare(f){B.fx.push({k:'yomare',x:fpos(f),y:relY(f,1.027),f:0,dur:50});}
 function startDodge(f,kind){ // kind: 'crouch'|'sway'|'lunge'
-  f.phase='dodge';f.pf=0;f.dodgeType=kind;f.atkLv=null;f.guardLv=null;f.buf=null;f.combo=0;f.normalChainCount=0;f.hasHit=false;f.landedHit=false;f.cmdArmorUsed=false;
+  f.phase='dodge';f.pf=0;f.dodgeType=kind;f.atkLv=null;f.guardLv=null;f.buf=null;f.combo=0;f.normalChainCount=0;f.hasHit=false;f.landedHit=false;f.cmdArmorUsed=false;f.dodgeSuccess=false;
   sfx('swish');
 }
 function startCrouchAtk(f){ // しゃがみ中(1〜14F)の右ゾーンタップ＝しゃがみ突き。高さは問わない
   f.phase='attack';f.pf=0;f.atkLv='crouch';f.dodgeType=null;f.hasHit=false;f.landedHit=false;f.cmdArmorUsed=false;f.guardLv=null;f.combo=0;f.normalChainCount=0;f.comboCounter=false;
+  if(f.opNormalLv==='crouch')f.opRepeat=Math.min(4,f.opRepeat+1);else{f.opNormalLv='crouch';f.opRepeat=1;} // vNext PR2 (§4 OP相殺)
   sfx('swish');sfx('teleMid'); // 専用SEは無いため中段テレグラフSEを流用
 }
 /* ---- コマンド技(v0.10 §6.8) ---- */
@@ -1177,10 +1218,18 @@ function resolveToIdle(f){ // コマンド先行入力(v0.11 §6.9): idle復帰�
   }
   f.phase='idle';f.pf=0;
 }
+function chainableTo(lv,fromLv){ // vNext PR2 (COMBAT_VNEXT_FINAL.md §4 Normal Chain R2): HIGH/MID/LOW自由順+同Normal連続可。
+  // 旧来の「軽→重ルートのみ(BAL.ATK[lv].w比較)」を撤廃し、H/M/L間は順不問・同じ段の連続もOKにした。
+  // Crouchのみ「そこへ戻れない」起点段として残す(fromLv==='crouch'の場合のみcrouch→crouchの同段連続を許可、
+  // 他の段からcrouchへ戻ることは不可。spec文言はH/M/Lの自由順のみ明示しているため、crouchについては
+  // 従来の非対称な起点役を維持する最小限の解釈)
+  if(lv==='crouch')return fromLv==='crouch';
+  return true;
+}
 function canChain(f,lv){ // BAL-R1.1: chainは確定ヒット時のみ(landedHit)。hasHitは「ガード/回避も含め解決を試みた」の意でchain判定には使わない
   // NORMAL-CHAIN-R1: 上限判定はf.normalChainCount(通常chain専用カウンタ)とキャラ別normalChainLimitForで行う
   if(f.phase!=='attack'||!f.landedHit||f.normalChainCount>=normalChainLimitFor(f.c))return false;
-  if(BAL.ATK[lv].w<=BAL.ATK[f.atkLv].w)return false; // 軽→重ルートのみ（中→上→下）
+  if(!chainableTo(lv,f.atkLv))return false;
   const A=spec(f);
   return f.pf>A.s+A.a&&f.pf<=A.s+A.a+BAL.CHAIN;
 }
@@ -1303,6 +1352,9 @@ function applyInputs(f,opp,cmds,held){
       pushDirBuf(f,c.kind);
       if(f.phase==='idle'||f.phase==='guard'){
         startDodge(f,c.kind);
+      }else if(f.phase==='blockstun'){ // vNext PR2 (§2 Guard→Dodge 10F buffer): 10Fバッファし、最初のactionable
+        // frame(guard/idle復帰)からtryDodgeBuf()経由で通常Dodgeを開始する
+        f.dodgeBufKind=c.kind;f.dodgeBufF=BAL.DODGE.guardBufF;
       }
     }else if(c.t==='mikiri'){ // 見切り: ジャストタップ。窓内なら能動的にギュイーンを起こす
       if(f.phase==='idle'||f.phase==='guard'){
@@ -1341,6 +1393,15 @@ function tryBuf(f){
   if(f.ult>=BAL.ULT.stock){f.buf=null;return;}
   if(f.phase==='idle'){startAtk(f,f.buf.lv,false);f.buf=null;}
   else if(canChain(f,f.buf.lv)){startAtk(f,f.buf.lv,true);f.buf=null;}
+}
+function tryDodgeBuf(f){ // vNext PR2 (§2 Guard→Dodge 10F buffer): Blockstun中に受理したDodge入力を、最初の
+  // actionable frame(guard/idle復帰)から通常Dodgeとして開始する。10F以内にactionableへ到達しなければ破棄する
+  if(!f.dodgeBufKind)return;
+  if(f.phase==='idle'||f.phase==='guard'){ // actionable復帰の判定を減算より先に行う(10フレーム目ちょうどの復帰も受理するため)
+    const k=f.dodgeBufKind;f.dodgeBufKind=null;startDodge(f,k);return;
+  }
+  f.dodgeBufF--;
+  if(f.dodgeBufF<=0)f.dodgeBufKind=null;
 }
 function advance(f){
   f.pf++;
@@ -1396,8 +1457,10 @@ function advance(f){
     }
   }else if(f.phase==='mikiriRec'){ // 見切り空振り: ガード不能の硬直
     if(f.pf>=BAL.MIKIRI.whiff){f.pf=0;resolveToIdle(f);}
-  }else if(f.phase==='dodge'){ // 回避: 1-10F判定 / 11-22F戻り。位置は変えない
-    if(f.pf>=BAL.DODGE.totalF){f.pf=0;f.dodgeType=null;resolveToIdle(f);}
+  }else if(f.phase==='dodge'){ // 回避: 2-12F判定 / 戻り。位置は変えない。vNext PR2 (§2): 正解回避はcounterReadyF(18F)で完了、
+    // 誤回避/空振りはtotalF(22F)まで戻らない(dodgeSuccessは正解回避成立時のみtrue。startDodge()でリセット)
+    const dodgeCompF=f.dodgeSuccess?BAL.DODGE.counterReadyF:BAL.DODGE.totalF;
+    if(f.pf>=dodgeCompF){f.pf=0;f.dodgeType=null;f.dodgeSuccess=false;resolveToIdle(f);}
   }else if(f.phase==='down'){ // ダウン: 追撃1発を受けたら以後は無敵のまま起き上がりへ。BAL-R1: downTypeごとにdownF可変
     if(f.pf>=BAL.DOWNWAKE[f.downType].downF){f.phase='wake';f.pf=0;}
   }else if(f.phase==='wake'){ // 起き上がり全身無敵→強制起き上がり(起き攻め不可)。BAL-R1: downTypeごとにwakeF可変
@@ -1465,10 +1528,14 @@ function handleIfDowned(att,def,dmgBase){ // ダウン連: downTypeがfollowupAl
   }
   return true;
 }
-const DODGE_TABLE={ // 03 §6.6の三すくみ(避ける/通常被弾/カウンター被弾)
-  crouch:{beats:'high',normal:'mid',counter:'low'},
-  sway:{beats:'mid',normal:'low',counter:'high'},
-  lunge:{beats:'low',normal:'high',counter:'mid'}
+const DODGE_TABLE={ // vNext PR2 (COMBAT_VNEXT_FINAL.md §3 Dodge R2)。旧(03 §6.6)の三すくみ
+  // (beats=正解成功/normal=通常被弾/counter=誤回避カウンター被弾)から、2種を回避しきる/1種にだけ誤回避となる
+  // 新モデルへ変更: CROUCH avoids HIGH+MID / loses LOW。SWAY avoids HIGH+LOW / loses MID。
+  // LUNGE avoids MID+LOW / loses HIGH。"normal"(ただの素被弾)というカテゴリはvNextで消滅した
+  // (beats(2種)+counter(1種)で全レベルを尽くすため)。beatsの2種は成否上どちらも同格の成功(counterReady付与)。
+  crouch:{beats:['high','mid'],counter:'low'},
+  sway:{beats:['high','low'],counter:'mid'},
+  lunge:{beats:['mid','low'],counter:'high'}
 };
 function dodgeActive(f){return f.phase==='dodge'&&f.pf>=2&&f.pf<=BAL.DODGE.judgeF;} // BAL-R1.1: 効果発生をF1→F2へ(1F GAPでは間に合わずガードのみ有効)
 function attackResolve(att,def){
@@ -1489,18 +1556,19 @@ function attackResolve(att,def){
   }
   if(dodgeActive(def)){
     const rule=DODGE_TABLE[def.dodgeType];
-    if(rule.beats===att.atkLv){ // 回避成功: 攻撃側はスカ扱い、防御側はcounterReadyを獲得
-      def.counterReadyF=BAL.DODGE.counterReadyF;
+    if(rule.beats.includes(att.atkLv)){ // vNext PR2 (§3): 回避成功(2種のうちどちらでも同格)。攻撃側はスカ扱い、防御側はcounterReadyを獲得
+      def.counterReadyF=BAL.DODGE.counterReadyF;def.dodgeSuccess=true; // vNext PR2 (§2 Correct Dodge completion18F): 正解回避は18Fで復帰(通常のtotalF=22Fより早い)
       if(def.dodgeType==='lunge')def.clinchF=BAL.DODGE.clinchF; // 踏み込み成功→追加で密着12F
+      gainS(def,'dodge'); // vNext PR2 (§11 S Gain): Correct Dodge+6
       B.fx.push({k:'suki',x:fpos(att),y:relY(att,0.908),f:0,dur:20});
       sfx('whiffG');
       return;
     }
-    if(rule.counter===att.atkLv){ // カウンター被弾(通常よりダメージが伸びる)
+    if(rule.counter===att.atkLv){ // 誤回避カウンター被弾(通常よりダメージが伸びる)。vNext PR2: beats(2)+counter(1)で
+      // 全レベルを尽くすため、旧来の"normal"(素被弾)フォールスルーは発生しない
       hitApply(att,def,true);
       return;
     }
-    // rule.normal===att.atkLv: 回避は機能せず通常ヒットへフォールスルー
   }
   if(nearClash(att,def)){att.hasHit=true;def.hasHit=true;startClash('trade');return;}
   const guarded=(def.phase==='guard')||(def.phase==='blockstun'&&def.held); // 統一ガード: 全段ふせぐ
@@ -1508,7 +1576,8 @@ function attackResolve(att,def){
     const cm2=(att.phase==='cmdAtk')?att.cmdMove:null; // コマンド技(v0.10): 表の「被ガードN」「削りN」が既定値と異なる技のみ上書き
     const A1=cm2?specForCmd(att,cm2):specForLv(att,att.atkLv); // BAL-R1: 通常技はper-charのblockstun/gdを使う(コマンド技は非対象のため共通表のまま)
     def.phase='blockstun';def.pf=0;def.stunDur=A1.blockstun;def.kb=6;
-    def.guard-=A1.gd;def.guardRegenCooldownF=BAL.GUARD.regenDelayF; // BAL-R1: 被ガードダメで回復遅延をリセット
+    const opScaleG=cm2?1:BAL.OP_SCALE[Math.min(att.opRepeat,BAL.OP_SCALE.length)-1]; // vNext PR2 (§4 OP相殺): 被ガードGuardDamageにも適用(Commandは対象外)
+    def.guard-=Math.round(A1.gd*opScaleG);def.guardRegenCooldownF=BAL.GUARD.regenDelayF; // BAL-R1: 被ガードダメで回復遅延をリセット
     if(att.atkLv==='low'){ // 下段は被ガードでも削り10(コマンド技は個別のguardChip優先。非対象のため据え置き)
       const chip=(cm2&&cm2.guardChip!=null)?cm2.guardChip:BAL.CHIP_LOW;
       def.hp-=chip;gainFocus(def,chip*BAL.FOCUS.gainDmgMul);
@@ -1535,7 +1604,8 @@ function hitApply(att,def,counterHit,lvOverride,cmdOverride){
   // カウンター始動のコンボは、以後のチェーンも含めて[1,1,0.9]に緩和(§6.6コンボルートB)
   const scale=(counterHit||att.comboCounter)?BAL.DODGE.counterScale:BAL.SCALE;
   const scaleIdx=Math.min(att.combo,scale.length-1);
-  let dmg=Math.round(A.d*Math.max(BAL.SCALE_FLOOR,scale[scaleIdx])); // BAL-R1: SCALE_FLOORは配列長を超えるcombo数に対する安全弁
+  const opScale=cm?1:BAL.OP_SCALE[Math.min(att.opRepeat,BAL.OP_SCALE.length)-1]; // vNext PR2 (§4 OP相殺): Commandは対象外(常に1)
+  let dmg=Math.round(A.d*Math.max(BAL.SCALE_FLOOR,scale[scaleIdx])*opScale); // BAL-R1: SCALE_FLOORは配列長を超えるcombo数に対する安全弁。vNext PR2: OP相殺(同一Normal直連続の減衰)を乗算
   if(counterHit){
     const counterMul=(cm&&cm.counterMul!=null)?cm.counterMul:BAL.COUNTER_MUL; // 昇撃等: 技専用の倍率(§6.8)。既定値はBAL-R1でBAL.COUNTER_MULへ統合
     dmg=Math.round(dmg*counterMul);att.comboCounter=true;
@@ -1549,17 +1619,17 @@ function hitApply(att,def,counterHit,lvOverride,cmdOverride){
   if(counterFx)B.fx.push({k:'counter',x:def.baseX,y:relY(def,1.005),f:0,dur:38});
   const cmArmorF=(def.phase==='grab'&&def.cmdMove&&def.cmdMove.armor)?def.cmdMove.armor:0; // 山掴み等: 投げ側のアーマー(§6.8)
   if(def.phase==='roar'&&def.pf>=BAL.ROAR.armorStartF&&def.pf<=BAL.ROAR.armorEndF){ // 咆哮アーマー。BAL-R1: アーマー窓変更に追従
-    dmg=Math.round(dmg*0.5);def.hp-=dmg;gainS(att,'aBlk');gainFocus(def,dmg*BAL.FOCUS.gainDmgMul);
+    dmg=Math.round(dmg*0.5);def.hp-=dmg;gainS(def,'armor');gainFocus(def,dmg*BAL.FOCUS.gainDmgMul); // vNext PR2 (§11): Armor absorb+3は吸収した側(def)。旧来attacker(att)へのaBlk流用は撤廃
     fxDmg(def,dmg,'#ffb020');fxSpark(def,lv,0);sfx(HIT_SE[lv]||'hit');
     B.hitstop=Math.max(B.hitstop,BAL.HITSTOP[lv]);B.shake=Math.max(B.shake,4);
   }else if(cmArmorF&&def.pf<=cmArmorF){ // コマンド投げのアーマー: 進行中の投げ自体は継続する
-    dmg=Math.round(dmg*0.5);def.hp-=dmg;gainS(att,'aBlk');gainFocus(def,dmg*BAL.FOCUS.gainDmgMul);
+    dmg=Math.round(dmg*0.5);def.hp-=dmg;gainS(def,'armor');gainFocus(def,dmg*BAL.FOCUS.gainDmgMul); // vNext PR2 (§11): Armor absorb+3(def側)
     fxDmg(def,dmg,'#ffb020');fxSpark(def,lv,0);sfx(HIT_SE[lv]||'hit');
     B.hitstop=Math.max(B.hitstop,BAL.HITSTOP[lv]);B.shake=Math.max(B.shake,4);
   }else if(def.phase==='cmdAtk'&&def.cmdMove&&def.cmdMove.armorStartF!=null&&!def.cmdArmorUsed&&def.pf>=def.cmdMove.armorStartF&&def.pf<=def.cmdMove.armorEndF){
     // CMD-R1新設: コマンド打撃技のアーマー窓(咆哮と同型式)。1hitのみ吸収し、以降は素通し(def.cmdArmorUsedで管理)
     def.cmdArmorUsed=true;
-    dmg=Math.round(dmg*0.5);def.hp-=dmg;gainS(att,'aBlk');gainFocus(def,dmg*BAL.FOCUS.gainDmgMul);
+    dmg=Math.round(dmg*0.5);def.hp-=dmg;gainS(def,'armor');gainFocus(def,dmg*BAL.FOCUS.gainDmgMul); // vNext PR2 (§11): Armor absorb+3(def側)
     fxDmg(def,dmg,'#ffb020');fxSpark(def,lv,0);sfx(HIT_SE[lv]||'hit');
     B.hitstop=Math.max(B.hitstop,BAL.HITSTOP[lv]);B.shake=Math.max(B.shake,4);
   }else{
@@ -1573,7 +1643,11 @@ function hitApply(att,def,counterHit,lvOverride,cmdOverride){
     att.landedHit=true; // BAL-R1.1: 確定ヒット時のみchain可(ガード/回避/アーマー吸収では立たない)
     if(cm&&cm.comboEnd)att.combo=0;else att.combo++; // CMD-R1: comboEndの技はここで正式にコンボを打ち切る(次のヒットのdamage scaleを最初から)
     if(!cm)att.normalChainCount++; // NORMAL-CHAIN-R1: 通常打撃(crouch/mid/high/low)の確定ヒットのみカウント。コマンド技(cm truthy)はここでは増やさない(既存comboとは別概念)
-    gainSAmt(att,BAL.SG.aHitC[Math.min(att.combo-1,2)]);gainS(def,'got');
+    // vNext PR2 (§11 S Gain): action1/2/3=aHitC[0..2]、action4+は明示的に0(旧実装はindexをclampしaction3の値を
+    // action4+にも使い続けてしまっていた=spec不一致だったバグ修正)
+    const hitGainIdx=att.combo-1;
+    gainSAmt(att,hitGainIdx<BAL.SG.aHitC.length?BAL.SG.aHitC[hitGainIdx]:0);
+    gainS(def,'got');
     fxDmg(def,dmg,cm&&cm.color||'#ffffff');fxSpark(def,lv,0);
     if(counterHit)sfx('counterHit'); // カウンター専用の高い抜け音をヒットストップと同フレームで重ねる(v0.11 (4))
     const cBonus=counterHit?BAL.HITSTOP.counterBonus:0; // BAL-R1新設: カウンターヒットのヒットストップ加算
@@ -1587,7 +1661,11 @@ function hitApply(att,def,counterHit,lvOverride,cmdOverride){
       def.phase='down';def.pf=0;def.downType=A.down;def.downHitUsed=false;def.combo=0;def.normalChainCount=0;def.kb=20;def.cmdBufMove=null;def.cmdBufIdx=null;
       sfx((cm&&cm.se)||HIT_SE[lv]||'hit2');B.hitstop=Math.max(B.hitstop,BAL.HITSTOP.low+cBonus);B.shake=Math.max(B.shake,8);
     }else{
-      def.phase='hitstun';def.pf=0;def.stunDur=A.hitstun;def.combo=0;def.normalChainCount=0;def.kb=11;def.cmdBufMove=null;def.cmdBufIdx=null;
+      // vNext PR2 (COMBAT_VNEXT_FINAL.md §6 Normal R2): Normal common root knockback=0
+      // (投げ/Roar/Ult/Gyuiin/down/明示Pushbackのみ例外)。この分岐は通常技(crouch/mid/high/low)の
+      // 素ヒット(down無し)経路であり、`cm`が無い(=通常技)場合はkb=0。コマンド技(`cm`真)は個別のnumeric値
+      // (§13、PR3対象外)を変更しない方針のため、旧来の共通kb=11をそのまま維持する
+      def.phase='hitstun';def.pf=0;def.stunDur=A.hitstun;def.combo=0;def.normalChainCount=0;def.kb=cm?11:0;def.cmdBufMove=null;def.cmdBufIdx=null;
       sfx((cm&&cm.se)||HIT_SE[lv]||'hit'); // ヒット音3階層(v0.11 (4)): 段属性で選ぶ。コマンド技はcm.seの専用音が優先
       B.hitstop=Math.max(B.hitstop,BAL.HITSTOP[lv]+cBonus);B.shake=Math.max(B.shake,5);
     }
@@ -1602,17 +1680,20 @@ function roarResolve(att,def){
     def.guard-=R.guardDamage;def.hp-=R.chipDamage;gainFocus(def,R.chipDamage*BAL.FOCUS.gainDmgMul+BAL.FOCUS.gainGuard);
     def.guardRegenCooldownF=BAL.GUARD.regenDelayF;
     def.phase='blockstun';def.pf=0;def.stunDur=16;def.kb=20;
-    gainS(att,'aBlk');fxSpark(def,'mid',1);
+    // vNext PR2 (COMBAT_VNEXT_FINAL.md §12 Roar/Ult): 「Roar自身S gain0」につきattacker(att)側のS gainを撤廃
+    // (旧: gainS(att,'aBlk')で被ガード時も咆哮側がS獲得していた)
+    fxSpark(def,'mid',1);
     B.shake=Math.max(B.shake,8);B.hitstop=Math.max(B.hitstop,BAL.HITSTOP.roar);
     if(def.guard<=0)doBreak(def);
   }else if(def.phase==='roar'&&def.pf>=R.armorStartF&&def.pf<=R.armorEndF){ // BAL-R1: アーマー窓を0-armor→armorStartF-armorEndFに変更(発生直後はノーアーマー)
-    const d=Math.round(R.d*0.5);def.hp-=d;gainS(att,'aBlk');gainFocus(def,d*BAL.FOCUS.gainDmgMul);
+    const d=Math.round(R.d*0.5);def.hp-=d;gainFocus(def,d*BAL.FOCUS.gainDmgMul); // vNext PR2 (§12): Roar自身S gain0につきgainS(att,'aBlk')を撤廃
     fxDmg(def,d,'#ffb020');B.shake=Math.max(B.shake,6);
   }else{ // 咆哮クリーンヒット(被ガード/アーマー減衰以外): 奥義ストック+1(v2.3)
     def.hp-=R.d;gainFocus(def,R.d*BAL.FOCUS.gainDmgMul);
     def.phase='hitstun';def.pf=0;def.stunDur=R.stun;def.cmdBufMove=null;def.cmdBufIdx=null;
     def.atkLv=null;def.guardLv=null;def.buf=null;def.combo=0;def.normalChainCount=0;def.kb=34;
-    gainS(att,'aHit');gainS(def,'got');gainUltStock(att);
+    // vNext PR2 (§12): Roar自身S gain0につきgainS(att,'aHit')を撤廃(defenderの'got'/gainUltStockは維持)
+    gainS(def,'got');gainUltStock(att);
     fxDmg(def,R.d,'#ff8040');fxSpark(def,'mid',0,true); // 咆哮ヒット=大スパーク
     B.shake=Math.max(B.shake,10);B.hitstop=Math.max(B.hitstop,BAL.HITSTOP.roar);
   }
@@ -1957,11 +2038,12 @@ function aiStep(){
   if(ai.guardT>0){ai.guardT--;if(ai.guardT<=0)ai.guardOn=false;}
   // ガードから崩し返し（たまに投げに切替）
   if(me.phase==='guard'&&rng()<0.006){ai.guardOn=false;ai.guardT=0;cpuEv.push({t:'grab'});}
-  // チェーン継続（軽→重ルート準拠）。NORMAL-CHAIN-R1: 判定をキャラ別normalChainLimitへ追従させる
+  // チェーン継続。NORMAL-CHAIN-R1: 判定をキャラ別normalChainLimitへ追従させる。
+  // vNext PR2 (§4): H/M/L自由順+同Normal連続可へ追従(chainableTo()が実際のcanChain()と同じ判定)
   if(me.phase==='attack'&&me.hasHit&&me.normalChainCount<normalChainLimitFor(me.c)&&me.atkLv){
     const A=spec(me);
     if(me.pf===A.s+A.a+2&&rng()<0.75){
-      const nxt=LEVELS.filter(function(l){return BAL.ATK[l].w>BAL.ATK[me.atkLv].w;});
+      const nxt=LEVELS.filter(function(l){return chainableTo(l,me.atkLv);});
       if(nxt.length)cpuEv.push({t:'atk',lv:nxt[(rng()*nxt.length)|0]});
     }
   }
@@ -1976,9 +2058,10 @@ function aiStep(){
     if(ai.think<=0){
       ai.think=14+((rng()*12)|0);
       const roll=rng();
-      const focusThreat=D.focusRestraint&&you.focus>=BAL.FOCUS.max; // 相手の集中が満タン→打撃を振ると即返される。攻めを控える(EASYは自重しない)
-      const aggr=Math.max(0.1,0.36-ai.mash*0.03-(focusThreat?0.16:0))*D.atkFreqMul; // 難易度別の攻撃頻度
-      const grabW=0.1+(focusThreat?0.14:0); // つかみは"発生"扱いされず集中を誘発しないため踏み込みやすい
+      // vNext PR2 (§10 Focus): 「外す: CPU logic」につきfocusThreat分岐(旧: 相手の集中が満タン→攻めを控える)を撤廃。
+      // CPU判断はfocus/BAL.FOCUSを一切参照しない
+      const aggr=Math.max(0.1,0.36-ai.mash*0.03)*D.atkFreqMul; // 難易度別の攻撃頻度
+      const grabW=0.1; // つかみの基礎重み(旧focusThreat加算は撤廃)
       const gsel=0.24+Math.min(0.3,ai.mash*0.04);
       if(roll<aggr){
         if(ai.cmdQueue.length===0&&rng()<D.cmdMoveRate){ // 難易度別のコマンド技使用率(v0.10 (3): EASY=ほぼ不使用/NORMAL=たまに/HARD=積極的)
@@ -2084,7 +2167,7 @@ function netFightStep(cmds0,hold0,cmds1,hold1){ // fightStep()のオンライン
   advance(p1);advance(p2);
   if(B.flow!=='fight')return;
   checkFocusTrigger(p1,p2);checkFocusTrigger(p2,p1);
-  tryBuf(p1);tryBuf(p2);
+  tryBuf(p1);tryBuf(p2);tryDodgeBuf(p1);tryDodgeBuf(p2);
   resolveHits();
   if(B.flow!=='fight')return;
   for(const f of B.p){
@@ -2111,7 +2194,7 @@ function fightStep(){
   advance(p1);advance(p2);
   if(B.flow!=='fight')return;
   checkFocusTrigger(p1,p2);checkFocusTrigger(p2,p1);
-  tryBuf(p1);tryBuf(p2);
+  tryBuf(p1);tryBuf(p2);tryDodgeBuf(p1);tryDodgeBuf(p2);
   resolveHits();
   if(B.flow!=='fight')return;
   for(const f of B.p){
@@ -3046,11 +3129,8 @@ function gauges(x,y,f,flip){
   ctx.fillStyle=(f.guard<30)?'#ff8b5a':'#6fd3ff';
   if(flip)ctx.fillRect(x+w-gw,y+15,gw,7);else ctx.fillRect(x,y+15,gw,7);
   ctx.strokeStyle='#778';ctx.strokeRect(x,y+15,w,7);
-  ctx.fillStyle='#231a33';ctx.fillRect(x,y+26,w,6); // 集中ゲージ
-  const fw=f.focus/BAL.FOCUS.max*w;
-  ctx.fillStyle=(f.focus>=BAL.FOCUS.max)?((game.frame%16<8)?'#ffffff':'#7fe8ff'):'#9d6bff';
-  if(flip)ctx.fillRect(x+w-fw,y+26,fw,6);else ctx.fillRect(x,y+26,fw,6);
-  ctx.strokeStyle='#665088';ctx.lineWidth=1;ctx.strokeRect(x,y+26,w,6);
+  // vNext PR2 (COMBAT_VNEXT_FINAL.md §10 Focus): 「外す: HUD」につき集中ゲージの描画を撤廃(f.focus/BAL.FOCUSは
+  // schema compatibilityのみで参照しない)。この位置に他HUD要素は再配置していない(空白のまま)
   for(let i=0;i<3;i++){
     const px=flip?(x+w-14-i*26):(x+14+i*26),py=y+49;
     const on=f.ult>i;
