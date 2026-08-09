@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow,noarchive">
+<title>マモ拳 攻略Wiki</title>
+</head>
+<body>
+<p style="font-family:'MS Gothic','ＭＳ ゴシック','Osaka-Mono','Hiragino Kaku Gothic ProN','Yu Gothic UI',monospace;padding:20px">読み込み中…</p>
+<script src="p0.js"></script>
+<script src="p1.js"></script>
+<script src="p2.js"></script>
+<script src="p3.js"></script>
+<script src="p4.js"></script>
+<script src="p5.js"></script>
+<script src="p6.js"></script>
+<script src="p7.js"></script>
+<script>
+(async function(){
+  try{
+    const b64=window.__MAMOKEN_WIKI_GZ||'';
+    const bin=atob(b64);
+    const bytes=Uint8Array.from(bin,function(c){return c.charCodeAt(0);});
+    if(!('DecompressionStream' in window))throw new Error('このブラウザは圧縮ページ展開に対応していません');
+    const ds=new DecompressionStream('gzip');
+    const stream=new Blob([bytes]).stream().pipeThrough(ds);
+    const html=await new Response(stream).text();
+    document.open();document.write(html);document.close();
+  }catch(e){
+    document.body.innerHTML='<p style="font-family:\'MS Gothic\',\'ＭＳ ゴシック\',monospace;padding:20px">サイトの読み込みに失敗しました。ブラウザを最新版に更新してください。<br>'+String(e)+'</p>';
+  }
+})();
+</script>
+</body>
+</html>
