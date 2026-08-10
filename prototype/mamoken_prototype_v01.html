@@ -756,7 +756,7 @@ document.addEventListener('visibilitychange',()=>{
 const BGM_SCREEN_MAP={
   title:'title',
   menuBattle:'title',menuMinigame:'title',menuOptions:'title',miniPractice:'title', // MENU-R1(#111): タイトル系メニュー内は一貫してtitle BGMを継続
-  select:'select',characterDetail:'select',
+  select:'select',characterDetail:'select',arcadeDialogue:'select',arcadeClear:'select', // ARCADE-R1(#99): 対戦前後の非戦闘画面はselect BGMを継続
   battle:'arena',pause:'arena',movelist:'arena',onlineInterrupted:'arena',
   result:null,
   onlineLobby:null, // ロビー/ルーム待機(online.stateのconnecting/waiting/ready/errorは全てこの画面のまま)
@@ -1211,6 +1211,88 @@ function startOnlineBattle(seed,charIdxBySlot,delayF){ // オンライン対戦�
   NET.active=true;
   game.screen='battle';
 }
+/* ================= ARCADE-R1(#99): 9キャラ総当たり型シングルプレイ・アーケードモード =================
+ * 別戦闘エンジンは作らない: 各ステージは既存startBattle()をそのまま呼び出し、B.vsMeta.mode='arcade'を
+ * 上書きするだけで既存VS-SCREEN-R1(#110)のdarkFinal/purple演出・通常CPU/ROAR/SPECIAL/ability挙動を
+ * そのまま再利用する。ARCADEのメタ状態(ARCADE.*)はcombat per-tick hashの外(презентation層のみ)。
+ */
+function shuffle(arr){for(let i=arr.length-1;i>0;i--){const j=(Math.random()*(i+1))|0;const t=arr[i];arr[i]=arr[j];arr[j]=t;}return arr;} // メタ進行のルート抽選専用。battle rng()は消費しない(オフライン専用モードのため決定性要件はない)
+let ARCADE=null; // 非アーケード中はnull。{charIdx,palette,cpuLv,route:[8体分combatIndex],stageIds:[8],battleIdx:0-7,continueCount}
+let arcadePending=false; // 既存select画面をARCADE用のキャラ選択として使う際のフラグ(ステージ行は自動選択のため隠す)
+let arcadeDialoguePick={challengeIdx:0,responseIdx:0}; // 表示中の掛け合いで使う行index(presentation-only)
+const ARCADE_DIALOGUE={ // Issue本文§Pre-fight dialogueの承認済み台詞をそのまま使用(新規生成しない)。dark_moguzoは掛け合い対象外(別途narration-only分岐)
+  moguzo:{challenge:['（正面から勝つ！）','（最後まで立ってるのはオレだ！）'],response:['（逃げずに来い！）','（この拳で決める！）']},
+  pisuke:{challenge:['（ついて来られる？）','（先に当てるよ！）'],response:['（遅い方が負け！）','（捕まえられるならね！）']},
+  godan:{challenge:['（力比べだ）','（小細工はいらん）'],response:['（受け止めてみろ）','（一撃で沈める）']},
+  hakuma:{challenge:['（焦らず、受けて返す）','（その力を見せてください）'],response:['（攻めるほど崩れます）','（守りは破らせません）']},
+  chirka:{challenge:['（本物はどっちかな？）','（じわじわと倒してあげる）'],response:['（もう引っかかってるよ）','（強くなさそうね）']},
+  takimaru:{challenge:['（掴んだら離さねえぜ？）','（胸貸してやるよ）'],response:['（近づいた時点で終わりだ！）','（まとめて投げ飛ばす！）']},
+  yomikage:{challenge:['（手合わせ願う）','（影の力、見せてやる）'],response:['（……楽しませてもらおう）','（本気で来い）']},
+  bullet:{challenge:['（止めてみろ、この力！）','（耐えられるか、この一撃）'],response:['（全部ひっくり返してやる！）','（圧が足りてないな！）']}
+};
+const ARCADE_VOCAL_CHALLENGE=['キュキュッ！','キュルルッ！'],ARCADE_VOCAL_RESPONSE=['キュッ！','キュキュ！']; // マーモット鳴き声(演出上のフィクション。動物言語の翻訳と主張しない)
+const ARCADE_NORMAL_STAGE_POOL=[null,'alpine_meadow_arena','rock_canyon','snowmelt_stream','underground_burrow_arena']; // null=既存フォールバックの「集落の闘技場/昼」(bg_stage_day)。new_moon_dark_arenaはFINAL専用のためここに含めない
+function arcadeDarkCombatIndex(){return CHARS.findIndex(function(c){return c.id==='dark_moguzo';});}
+function arcadePickStageAvoiding(prev){
+  if(ARCADE_NORMAL_STAGE_POOL.length<=1)return ARCADE_NORMAL_STAGE_POOL[0];
+  let pick;do{pick=ARCADE_NORMAL_STAGE_POOL[(Math.random()*ARCADE_NORMAL_STAGE_POOL.length)|0];}while(pick===prev);
+  return pick;
+}
+function arcadeGenerateRoute(charIdx){ // Stage1-7: 自分+FINAL相手を除く7体をshuffle/Stage8: FINAL相手
+  const darkIdx=arcadeDarkCombatIndex(),isDarkSelected=charIdx===darkIdx;
+  const finalIdx=isDarkSelected?CHARS.findIndex(function(c){return c.id==='moguzo';}):darkIdx;
+  const pool=[];
+  for(let i=0;i<CHARS.length;i++)if(i!==charIdx&&i!==finalIdx)pool.push(i);
+  return shuffle(pool).concat([finalIdx]);
+}
+function arcadeGenerateStages(route){ // Stage1-7: 通常プールからランダム(隣接同背景は可能な範囲で回避)/Stage8: FINAL相手がdark_moguzoならnew_moon_dark_arena、それ以外は通常プール
+  const stages=[];
+  for(let i=0;i<7;i++)stages.push(arcadePickStageAvoiding(i>0?stages[i-1]:undefined)); // Codexレビュー指摘(PR#123): nullは「前回無し」の目印ではなく「集落の闘技場/昼」を表す有効なプール値なので、Stage1ではnullと衝突しないundefinedを使う
+  const darkIdx=arcadeDarkCombatIndex();
+  stages.push(route[7]===darkIdx?'new_moon_dark_arena':arcadePickStageAvoiding(stages[6]));
+  return stages;
+}
+function arcadeOpponentIdx(){return ARCADE.route[ARCADE.battleIdx];}
+function arcadeInvolvesDark(){const darkIdx=arcadeDarkCombatIndex();return ARCADE.charIdx===darkIdx||arcadeOpponentIdx()===darkIdx;}
+function arcadeDarkFinalFlag(){ // Dark Moguzoが絡む対戦は基本darkFinal演出。ただしDark選択ラン自身のFINAL(vs通常モグゾー)は
+  // Issue本文§Stage selectionの明示的除外により通常presentationへ戻す
+  if(!arcadeInvolvesDark())return false;
+  const darkIdx=arcadeDarkCombatIndex();
+  const isDarkRunOwnFinal=ARCADE.charIdx===darkIdx&&ARCADE.battleIdx===7;
+  return!isDarkRunOwnFinal;
+}
+function startArcadeRun(){ // select画面のけっていボタン(arcadePending時)から呼ばれる
+  arcadePending=false;
+  const charIdx=ROSTER[selCharIdx].combatIndex;
+  const route=arcadeGenerateRoute(charIdx);
+  ARCADE={charIdx:charIdx,palette:selPalette,cpuLv:cpuLv,route:route,stageIds:arcadeGenerateStages(route),battleIdx:0,continueCount:0};
+  arcadeBeginStage();
+}
+function arcadeBeginStage(){ // 現在のARCADE.battleIdxのcharacter/palette/CPU Lv/stageを確定し、dialogue→VSへ進む(CONTINUE時もここから再入)
+  game.p1=ARCADE.charIdx;game.p2=arcadeOpponentIdx();
+  selPalette=ARCADE.palette;cpuLv=ARCADE.cpuLv;
+  game.stageId=ARCADE.stageIds[ARCADE.battleIdx];
+  if(arcadeInvolvesDark()){arcadeStartVs();return;} // dark_moguzoは承認済み台詞セットを持たないため掛け合いをskip(Issue本文§Dark Moguzo dialogue rule)
+  const oppLines=ARCADE_DIALOGUE[CHARS[arcadeOpponentIdx()].id],selfLines=ARCADE_DIALOGUE[CHARS[ARCADE.charIdx].id];
+  arcadeDialoguePick={challengeIdx:(Math.random()*oppLines.challenge.length)|0,responseIdx:(Math.random()*selfLines.response.length)|0};
+  sfx('tap');game.screen='arcadeDialogue';
+}
+function arcadeStartVs(){ // 既存startBattle()を呼ぶだけ(別エンジンを作らない)。直後にvsMetaだけARCADE用へ上書きする
+  const isFinal=ARCADE.battleIdx===7,darkFinal=arcadeDarkFinalFlag();
+  startBattle();
+  B.vsMeta={mode:'arcade',darkFinal:darkFinal,survivalInfo:null,arcadeInfo:{battleNum:ARCADE.battleIdx+1,total:8,isFinal:isFinal}};
+}
+function arcadeContinue(){ // 敗北時のCONTINUE: 同じstage/相手/route順のまま(reroll無し)、フルHPで再戦
+  ARCADE.continueCount++;
+  arcadeBeginStage();
+}
+function arcadeAdvance(){ // 勝利時: 次stageへ、Stage8勝利ならARCADE CLEARへ
+  ARCADE.battleIdx++;
+  if(ARCADE.battleIdx>=8){game.screen='arcadeClear';return;}
+  arcadeBeginStage();
+}
+function arcadeWon(winSide){return winSide===0;} // B.resultは常にB.p[0](=プレイヤー)視点。DRAW(winSide<0)はArcadeでは規定が無いため安全側でloss(CONTINUE対象)扱い
+/* ================= /ARCADE-R1 ================= */
 function roundInit(first){
   for(const f of B.p){
     f.hp=maxHpFor(f.c);f.shownHp=maxHpFor(f.c);f.guard=maxGuardFor(f.c);
@@ -3200,6 +3282,8 @@ function pressRoute(p){
   if(game.screen==='menuMinigame'){menuMinigamePress(p);return null;}
   if(game.screen==='menuOptions'){menuOptionsPress(p);return null;}
   if(game.screen==='miniPractice'){miniPracticePress(p);return null;}
+  if(game.screen==='arcadeDialogue'){arcadeDialoguePress();return null;}
+  if(game.screen==='arcadeClear'){arcadeClearPress(p);return null;}
   if(game.screen==='select'){selectPress(p);return null;}
   if(game.screen==='characterDetail'){characterDetailPress(p);return null;}
   if(game.screen==='result'){resultPress(p);return null;}
@@ -3441,6 +3525,7 @@ function selectPress(p){
     if(inRect(p,r.x,r.y,r.w,r.h)){cpuLv=CPU_LV_LEVELS[i];sfx('tap');return;}
   }
   if(inRect(p,SELECT_CONFIRM_BTN.x,SELECT_CONFIRM_BTN.y,SELECT_CONFIRM_BTN.w,SELECT_CONFIRM_BTN.h)){
+    if(arcadePending){sfx('tap');startArcadeRun();return;} // ARCADE-R1(#99): ステージは自動抽選のためselStageId/game.stageIdはstartArcadeRun側で都度確定する
     const selected=ROSTER[selCharIdx];
     game.p1=selected.combatIndex;
     game.p2=(Math.random()*CHARS.length)|0;
@@ -3448,11 +3533,12 @@ function selectPress(p){
     game.stageId=resolveStageId(selStageId); // STAGE-ART-IMPORT: 選択画面で選んだステージを対戦へ持ち込む。MENU-R1(#111): ランダムはここで実IDへ解決
     sfx('tap');startBattle();return;
   }
-  if(inRect(p,SELECT_BACK_BTN.x,SELECT_BACK_BTN.y,SELECT_BACK_BTN.w,SELECT_BACK_BTN.h)){sfx('tap');game.screen='menuBattle';return;}
+  if(inRect(p,SELECT_BACK_BTN.x,SELECT_BACK_BTN.y,SELECT_BACK_BTN.w,SELECT_BACK_BTN.h)){arcadePending=false;sfx('tap');game.screen='menuBattle';return;}
   for(let i=0;i<2;i++){ // PALETTE-R1: 1P/2P配色選択
     const r=paletteSwatchRect(i);
     if(inRect(p,r.x,r.y,r.w,r.h)){selPalette=i===0?'p1':'p2';sfx('tap');return;}
   }
+  if(arcadePending)return; // ARCADE-R1(#99): ステージ行は自動抽選のため選択画面では非表示・非タップ対象
   for(let i=0;i<BATTLE_STAGES.length+1;i++){ // STAGE-ART-IMPORT: ステージ選択。MENU-R1(#111): 末尾(BATTLE_STAGES.length)はランダム
     const r=stageRect(i);
     if(inRect(p,r.x,r.y,r.w,r.h)){selStageId=(i<BATTLE_STAGES.length)?BATTLE_STAGES[i].id:STAGE_RANDOM_ID;sfx('tap');return;}
@@ -3480,6 +3566,16 @@ function resultPress(p){
   if(lastMatchOnline){ // オンライン対戦後: 最低RESULT_HOLD_MIN_MS(180F/3秒)は保持し、以降タップで次戦へ(8秒で自動進行)
     if(performance.now()-resultShownAt<RESULT_HOLD_MIN_MS)return;
     sfx('tap');advanceOnlineResult();
+    return;
+  }
+  if(ARCADE){ // ARCADE-R1(#99)
+    const winSide=(B.result==='WIN')?0:(B.result==='LOSE'?1:-1);
+    if(arcadeWon(winSide)){
+      if(inRect(p,60,560,W-120,88)){sfx('tap');arcadeAdvance();}
+      return;
+    }
+    if(inRect(p,60,560,W-120,88)){sfx('tap');arcadeContinue();return;}
+    if(inRect(p,60,676,W-120,88)){sfx('tap');ARCADE=null;game.screen='title';return;}
     return;
   }
   if(inRect(p,60,560,W-120,88)){sfx('tap');startBattle();return;}
@@ -3598,7 +3694,7 @@ function pausePress(p){
   }
   if(pauseConfirmingQuit){
     if(inRect(p,PAUSE_CONFIRM_RECT.yes.x,PAUSE_CONFIRM_RECT.yes.y,PAUSE_CONFIRM_RECT.yes.w,PAUSE_CONFIRM_RECT.yes.h)){
-      sfx('tap');pauseConfirmingQuit=false;game.screen='title';return;
+      sfx('tap');pauseConfirmingQuit=false;ARCADE=null;game.screen='title';return; // ARCADE-R1(#99): 対戦中断でのタイトル帰還時はrunを破棄(次のVS CPU/ARCADEへ持ち越さない)
     }
     if(inRect(p,PAUSE_CONFIRM_RECT.no.x,PAUSE_CONFIRM_RECT.no.y,PAUSE_CONFIRM_RECT.no.w,PAUSE_CONFIRM_RECT.no.h)){
       sfx('tap');pauseConfirmingQuit=false;return;
@@ -4981,6 +5077,8 @@ function rVsScreen(){
     ctx.restore();
     if(meta.darkFinal)txt('闇の力が高まっている……！',W/2,H-64,16,'#c9a2ff'); // ARCADE最終戦専用ナレーション(Issue本文§Mode rules)
     if(meta.survivalInfo)txt('SURVIVAL / BATTLE '+meta.survivalInfo.battleNum+' / CPU LV'+meta.survivalInfo.cpuLv,W/2,72,15,'#ffe6a3'); // SURVIVAL専用ラベル(同§)
+    if(meta.arcadeInfo)txt(meta.arcadeInfo.isFinal?'ARCADE FINAL':('ARCADE '+meta.arcadeInfo.battleNum+' / '+meta.arcadeInfo.total),W/2,72,15,'#ffe6a3'); // ARCADE-R1(#99): survivalInfoと同じ表示口を流用(Issue本文「show FINAL clearly」)
+
     const flashF=slamF+4;
     if(f<flashF){ctx.save();ctx.globalAlpha=0.5*(1-(f-slamF)/4)*flashScale();ctx.fillStyle='#fff';ctx.fillRect(0,0,W,H);ctx.restore();} // 雷インパクトの白フラッシュ(短時間)。Codexレビュー対応(PR#121): 他の全画面フラッシュ(roarImpact)と同じくflashScale()でOPTIONS.flash==='reduced'を尊重する
   }
@@ -5166,11 +5264,12 @@ function drawMenuHeader(title){
   txt(title,W/2,86,32,'#ffd23f');
 }
 // --- BATTLE ---
-// VS CPUは既存select画面(character+palette+CPU Lv+stage統合済み)へ直行、ONLINEは既存onlineLobbyへ。
-// ARCADE/SURVIVAL/TRAININGは各々専用issue(#99/#101/#112)が未実装のため、実装済みの2項目のみを並べる
+// VS CPU/ARCADEは既存select画面(character+palette+CPU Lv+stage統合済み)へ直行、ONLINEは既存onlineLobbyへ。
+// SURVIVAL/TRAININGは各々専用issue(#101/#112)が未実装のため、実装済みの項目のみを並べる
 // (dead button/coming soonを残さないため。配列駆動なので各issueは1行追加するだけで済む)
 const MENU_BATTLE_ITEMS=[
   {key:'vscpu',labelJa:'VS CPU',sub:'キャラ・カラー・CPU Lv・ステージを選ぶ'},
+  {key:'arcade',labelJa:'ARCADE',sub:'8戦勝ち抜きシングルプレイ'},
   {key:'online',labelJa:'ONLINE',sub:'オンライン対戦ロビーへ'}
 ];
 function menuBattleRect(i){
@@ -5192,8 +5291,10 @@ function menuBattlePress(p){
   for(let i=0;i<MENU_BATTLE_ITEMS.length;i++){
     const r=menuBattleRect(i);
     if(inRect(p,r.x,r.y,r.w,r.h)){
+      const key=MENU_BATTLE_ITEMS[i].key;
       sfx('tap');
-      if(MENU_BATTLE_ITEMS[i].key==='vscpu')game.screen='select';
+      if(key==='vscpu'){game.screen='select';}
+      else if(key==='arcade'){arcadePending=true;game.screen='select';}
       else{onlineReset();game.screen='onlineLobby';}
       return;
     }
@@ -5414,6 +5515,45 @@ function menuOptionsPress(p){
   if(menuBackHit(p)){sfx('tap');game.screen='title';return;}
 }
 /* ================= /MENU-R1 ================= */
+/* ================= ARCADE-R1(#99): 掛け合い画面・ARCADE CLEAR画面 =================
+ * rVsScreen()の「向き合う2ポートレート」レイアウト(drawRosterCrop/drawRosterCropFlipped+heroCrop)を流用。
+ * B/battle stateは一切読まない(ARCADEオブジェクトとCHARS/ROSTERのみ)ので、この画面自体はgameplay hashに無関係。
+ */
+function rArcadeDialogue(){
+  drawMenuHeader('');
+  const oppC=CHARS[arcadeOpponentIdx()],selfC=CHARS[ARCADE.charIdx];
+  const oppR=rosterEntryFor(oppC.id),selfR=rosterEntryFor(selfC.id);
+  const boxW=220,boxH=280,boxY=340,leftX=30,rightX=W-30-boxW; // プレイヤー=左/対戦相手=右(rBattle/rVsScreenの左右規則に合わせる)
+  drawRosterCrop('roster_'+selfC.id,leftX,boxY,boxW,boxH,selfR&&selfR.heroCrop,16);
+  drawRosterCropFlipped('roster_'+oppC.id,rightX,boxY,boxW,boxH,oppR&&oppR.heroCrop,16);
+  const oppLines=ARCADE_DIALOGUE[oppC.id],selfLines=ARCADE_DIALOGUE[selfC.id];
+  txt(oppC.name,rightX+boxW/2,boxY-20,16,'#ff9a4d');
+  txt(ARCADE_VOCAL_CHALLENGE[arcadeDialoguePick.challengeIdx%ARCADE_VOCAL_CHALLENGE.length],rightX+boxW/2,boxY+boxH+30,22,'#fff');
+  txt(oppLines.challenge[arcadeDialoguePick.challengeIdx],rightX+boxW/2,boxY+boxH+58,14,'#ffe6a3');
+  txt(selfC.name,leftX+boxW/2,boxY-20,16,'#5ab2ff');
+  txt(ARCADE_VOCAL_RESPONSE[arcadeDialoguePick.responseIdx%ARCADE_VOCAL_RESPONSE.length],leftX+boxW/2,boxY+boxH+30,22,'#fff');
+  txt(selfLines.response[arcadeDialoguePick.responseIdx],leftX+boxW/2,boxY+boxH+58,14,'#e7ebf4');
+  txt('タップしてつづける',W/2,900,14,'#8891a6');
+}
+function arcadeDialoguePress(){arcadeStartVs();}
+function rArcadeClear(){
+  ctx.fillStyle='#0c0e15';ctx.fillRect(0,0,W,H);
+  const bg=ctx.createLinearGradient(0,0,W,H);bg.addColorStop(0,'#3a2f12');bg.addColorStop(1,'#0a0b10');ctx.fillStyle=bg;ctx.fillRect(0,0,W,H);
+  const c=CHARS[ARCADE.charIdx],r=rosterEntryFor(c.id);
+  txt('ARCADE CLEAR!!',W/2,150,40,'#ffd23f');
+  txt(c.name,W/2,196,24,'#fff');
+  drawRosterCrop('roster_'+c.id,W/2-150,240,300,300,r&&r.heroCrop,20);
+  txt('CPU Lv '+ARCADE.cpuLv,W/2,584,18,'#cfd6e6');
+  txt('コンティニュー回数: '+ARCADE.continueCount,W/2,616,16,'#cfd6e6');
+  txt('8戦8勝',W/2,650,18,'#7CFC00');
+  btn(60,700,W-120,80,'タイトルへ');
+  btn(60,796,W-120,64,'アーケードに再挑戦');
+}
+function arcadeClearPress(p){
+  if(inRect(p,60,700,W-120,80)){sfx('tap');ARCADE=null;game.screen='title';return;}
+  if(inRect(p,60,796,W-120,64)){sfx('tap');ARCADE=null;arcadePending=true;game.screen='select';return;}
+}
+/* ================= /ARCADE-R1(dialogue/clear) ================= */
 // CPU-R2 PR5(#106 §12): 旧DIFF_COL(EASY緑/NORMAL黄/HARD赤の3色)をLv1-9の連続グラデーションへ拡張。
 // 色そのものに強さ以外の意味(「ズル」等)は持たせない(Issueの「Do not label Lv9 as cheat」に対応、装飾のみ)
 function cpuLvColor(lv){
@@ -5639,14 +5779,14 @@ function rSelect(){ // P1追加: KOF/餓狼風レイアウト(縦画面翻訳)�
   }
   ctx.fillStyle='#2c4a1f';rr(SELECT_CONFIRM_BTN.x,SELECT_CONFIRM_BTN.y,SELECT_CONFIRM_BTN.w,SELECT_CONFIRM_BTN.h,16);ctx.fill();
   ctx.strokeStyle='#7CFC00';ctx.lineWidth=3;rr(SELECT_CONFIRM_BTN.x,SELECT_CONFIRM_BTN.y,SELECT_CONFIRM_BTN.w,SELECT_CONFIRM_BTN.h,16);ctx.stroke();
-  txt('けってい',W/2,SELECT_CONFIRM_BTN.y+29,20,'#fff');
-  txt('相手は9体からランダム',W/2,SELECT_CONFIRM_BTN.y+52,12,'#cceac3');
+  txt(arcadePending?'アーケード開始':'けってい',W/2,SELECT_CONFIRM_BTN.y+29,20,'#fff'); // ARCADE-R1(#99): 同じ選択導線をVS CPU/ARCADEで共有(Issue本文「操作回数を不必要に増やさない」)
+  txt(arcadePending?'8戦勝ち抜き・CPU Lvはこのランに適用':'相手は9体からランダム',W/2,SELECT_CONFIRM_BTN.y+52,12,'#cceac3');
   ctx.fillStyle='rgba(255,255,255,0.05)';rr(SELECT_BACK_BTN.x,SELECT_BACK_BTN.y,SELECT_BACK_BTN.w,SELECT_BACK_BTN.h,12);ctx.fill();
   ctx.strokeStyle='rgba(255,255,255,0.3)';ctx.lineWidth=2;rr(SELECT_BACK_BTN.x,SELECT_BACK_BTN.y,SELECT_BACK_BTN.w,SELECT_BACK_BTN.h,12);ctx.stroke();
   txt('もどる',W/2,SELECT_BACK_BTN.y+SELECT_BACK_BTN.h/2,16,'#dfe4ee');
   txt('●青=オンライン対戦可(全員可)　9体ともオフラインで対戦可能',W/2,SELECT_BACK_BTN.y+SELECT_BACK_BTN.h+26,11,'#aeb6c8');
   drawPaletteSelect(c);
-  drawStageSelect();
+  if(!arcadePending)drawStageSelect(); // ARCADE-R1(#99): アーケードはstageを毎戦自動抽選するため選択行を出さない
 }
 function drawStageSelect(){ // STAGE-ART-IMPORT: 通常対戦ステージ選択(5枚を短ラベルで並べる)。MENU-R1(#111): 末尾に「ランダム」を追加
   txt('ステージ',W/2,SELECT_STAGE_Y-10,12,'#a2abc0');
@@ -5729,6 +5869,18 @@ function rResult(){
   }
   txt(label,W/2,280,62,col);
   txt(CHARS[game.p1].name+'  vs  '+CHARS[game.p2].name+(lastMatchOnline?'':'(CPU)'),W/2,362,22,'#cfd6e6');
+  if(ARCADE){ // ARCADE-R1(#99): 通常のrematch/選択画面ボタンではなく、勝敗に応じてSTAGE CLEAR進行/CONTINUE-QUIT導線を出す
+    if(arcadeWon(winSide)){
+      txt('STAGE '+(ARCADE.battleIdx+1)+' CLEAR!!',W/2,420,32,'#7CFC00'); // Issue本文: 勝利は常に短いSTAGE CLEAR。ARCADE CLEARは8戦目後の専用画面(rArcadeClear)側の表示
+      btn(60,560,W-120,88,ARCADE.battleIdx>=7?'リザルトへ':'つぎへ');
+    }else{
+      txt('CONTINUE?',W/2,420,30,'#ffd23f');
+      txt('コンティニュー回数: '+ARCADE.continueCount,W/2,456,14,'#a2abc0');
+      btn(60,560,W-120,88,'コンティニュー');
+      btn(60,676,W-120,88,'タイトルへ戻る');
+    }
+    return;
+  }
   if(lastMatchOnline){
     // v0.9.2: 最低RESULT_HOLD_MIN_MS(180F/3秒)は保持し、以降タップで次戦へ(8秒で自動進行)
     const held=performance.now()-resultShownAt,ready=held>=RESULT_HOLD_MIN_MS;
@@ -5979,6 +6131,8 @@ function render(){
   else if(game.screen==='menuMinigame')rMenuMinigame();
   else if(game.screen==='menuOptions')rMenuOptions();
   else if(game.screen==='miniPractice')rMiniPractice();
+  else if(game.screen==='arcadeDialogue')rArcadeDialogue();
+  else if(game.screen==='arcadeClear')rArcadeClear();
   else if(game.screen==='select')rSelect();
   else if(game.screen==='characterDetail')rCharacterDetail();
   else if(game.screen==='battle')rBattle();
