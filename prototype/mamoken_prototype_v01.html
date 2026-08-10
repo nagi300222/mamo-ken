@@ -95,7 +95,7 @@ const BAL={ // 03_data_design.md v2.0 §2 balance table 準拠
   // attack BLOCK=aBlk(旧8→6)。Guard成功=gOk(旧6→5)。被弾=got(5、旧から変更なし)。Correct Dodge=dodge(新設6)。
   // Armor absorb=armor(新設3、旧来attacker側のaBlk流用をやめ、armorで吸収した側の専用gainへ分離)。
   // Whiff/Mikiri/Gyuiin/down followup/Roar自身=+0(whiffは旧2→0。他は元から未実装=0のまま)
-  ROAR:{s:17,armorStartF:4,armorEndF:15,armor:15,armorHits:1,a:4,r:24,d:120,guardDamage:38,chipDamage:10,stun:34,sCost:100,cleanHitUltGain:1}, // BAL-R1: s16→17,d130→120,アーマー窓を0-14F→4-15Fに変更。armorはtools/audit_current_impl.mjsの必須値チェック互換のためarmorEndFと同値を保持(実際の判定はarmorStartF/armorEndFを使用)
+  ROAR:{s:20,armorStartF:11,armorEndF:20,armor:20,armorHits:2,a:4,r:28,d:120,guardDamage:38,chipDamage:10,stun:34,sCost:100,cleanHitUltGain:1}, // ROAR-R2(#98): Startup20F/Armor F11-F20 explicit 2-hit/Recovery28F。armorはtools/audit_current_impl.mjsの必須値チェック互換のためarmorEndFと同値を保持(実際の判定はarmorStartF/armorEndF+armorHitsを使用)
   CLASH:{sel:90,d:120,near:8,streakBonus:30,winS:30,loserStun:40,inF:26,revealHitF:24,revealF:60},
   MINIGAME:{
     weights:{jyanken:0.5,renda:0.25,hayauchi:0.25},
@@ -123,7 +123,7 @@ const BAL={ // 03_data_design.md v2.0 §2 balance table 準拠
 
   ULT:{stock:3,d:300,impact:78,total:110,guardDamage:32,chipDamage:0,downType:'ultimateDown',roundCarryCap:2}, // BAL-R1: ガード分岐(guardDamage/chipDamage)とヒット時down化を新設。
   // vNext PR2 (COMBAT_VNEXT_FINAL.md §12 Round carry): roundCarryCap=2。0→0/1→1/2→2/3→2(=Math.min(carry,2))。stock自体(奥義発動に必要な数)は3のまま不変
-  HITSTOP:{mid:6,high:9,low:12,roar:12,clash:16,crouch:5,throw:10,counterBonus:2}, // BAL-R1: low 14→12。throw/counterBonusを新設(clash=ギュイーンは非対象のため据え置き)
+  HITSTOP:{mid:6,high:9,low:12,roar:18,roarArmor:24,roarGuard:14,clash:16,crouch:5,throw:10,counterBonus:2}, // BAL-R1: low 14→12。throw/counterBonusを新設(clash=ギュイーンは非対象のため据え置き)。ROAR-R2(#98): roar=clean18F/roarArmor=armor-success後の着地24F/roarGuard=被ガード14F
   TELEGRAPH:{mid:8,high:13,low:18,crouch:6}, // 発生前半に構え+段色フラッシュ+固有SE（見てから対応の成立条件）
   BUF:10,FLICK_DX:60,FLICK_MS:300,JUST_TAP_MS:100,
   // 戦闘スプライトの表示身長(px)。新6キャラはdesign/character_art/source_manifest.json由来の
@@ -608,6 +608,8 @@ function sfx(n){
   else if(n==='guiin'){tone(480,0.55,'sawtooth',0.15,1500);tone(486,0.55,'sawtooth',0.09,1540);}
   else if(n==='roarStart'){tone(330,0.16,'sine',0.1,150);}
   else if(n==='roar'){tone(110,0.5,'sawtooth',0.22,190);noiseS(0.4,0.2);tone(1900,0.12,'sine',0.09,3200);} // 咆哮=専用の派手めな音(低音+ノイズ+高音の煌めき)
+  else if(n==='roarImpactHeavy'){tone(55,0.4,'sine',0.28,30);tone(40,0.55,'sawtooth',0.2,22);} // ROAR-R2(#98): clean/armor-success着地専用の追加低音レイヤー(既存'roar'に重ねる)
+  else if(n==='roarArmorBoom'){tone(30,0.6,'sine',0.3,16);noiseS(0.18,0.16);} // ROAR-R2(#98): armor-success(最強ケース)のみ更に重ねる超低音+ノイズ
   else if(n==='break'){tone(420,0.35,'square',0.18,110);noiseS(0.25,0.18);}
   else if(n==='ko'){noiseS(0.5,0.28);tone(90,0.7,'sine',0.28,45);}
   else if(n==='fight'){tone(660,0.1,'square',0.13);tone(880,0.16,'square',0.13);}
@@ -800,7 +802,7 @@ const CONFIG={WS_URL:'wss://mamoken-relay.n-kyosuke1121.workers.dev'}; // デプ
 // 対戦を開始しない。手動で採番する版数タグ(オンラインの同期仕様や9キャラ化のような互換性を破る
 // 変更を配布するたびに更新すること)。サーバー(server/)はメッセージ種別を解釈せず中継するだけ
 // なので、このチェックはサーバー変更なしにクライアント同士だけで実装できる
-const BUILD_ID='mamoken-ability-r2-special-core-2026-08-10';
+const BUILD_ID='mamoken-roar-r2-2026-08-10'; // ROAR-R2(#98): Roarのstartup/armor窓/hitstop timingがsimulation-relevantに変更されたためbump(Codexレビュー指摘 PR#115)
 const ONLINE_BTN={x:0,y:0,w:0,h:0}; // rTitle()で毎フレーム位置を確定(pressRouteと共有)
 const ONLINE_BACK_RECT={x:70,y:864,w:400,h:60};
 const online={
@@ -1145,7 +1147,8 @@ function newFighter(ci,side,palette){
     pressureState:'none',pressureUntilF:0,pressureQueuedMove:null,pressureQueuedIdx:null, // Takimaru PRESSURE
     yomiState:'none',yomiJust:false,yomiQueuedLv:null,yomiReadyUntilF:0,yomiFiredJust:false, // Yomikage RETURN/JUST: state=none|pending|ready
     charge:0,chargeSub:0,overheat:false, // Bullet CHARGE(ABILITY-R2-C: OVERHEAT/sub-charge追加、chargeLastMoveは撤去)
-    darkChainUses:0,darkLastChainMove:null,darkWindowUntilF:0,darkWindowMax:0,darkBodyActive:false // Dark Moguzo DARK CHAIN/BODY(ABILITY-R2-C: 旧DARK gauge/darkBodyトグルは撤去、specialActiveF駆動に統一)
+    darkChainUses:0,darkLastChainMove:null,darkWindowUntilF:0,darkWindowMax:0,darkBodyActive:false, // Dark Moguzo DARK CHAIN/BODY(ABILITY-R2-C: 旧DARK gauge/darkBodyトグルは撤去、specialActiveF駆動に統一)
+    roarArmorAbsorbed:0 // ROAR-R2(#98): このRoar action中にF11-F20のarmor窓で吸収した回数(0-2、explicit stateとして正式管理)。action開始(Roar発動時)にリセット
   };
 }
 function startBattle(){
@@ -1155,7 +1158,7 @@ function startBattle(){
   B={f:0,round:1,wins:[0,0],timer:BAL.TIME,fightStartF:0, // v0.10 (8): YOUマーカーの強調2秒判定に使う「fightに入ったF」
     p:[newFighter(game.p1,0,selPalette),newFighter(game.p2,1,cpuPalette)],
     flow:'intro',flowF:0,hitstop:0,shake:0,
-    clash:null,ultUser:-1,ann:[],fx:[],koSide:-1,result:null,pendKO:-1,clashStreak:[0,0]};
+    clash:null,ultUser:-1,ann:[],fx:[],koSide:-1,result:null,pendKO:-1,clashStreak:[0,0],roarImpact:null};
   for(const f of B.p)preloadCurrentArtCharacter(f.c.id);
   aiReset();runtimeCommandShadowReset();roundInit(true);
   game.screen='battle';
@@ -1171,7 +1174,7 @@ function startOnlineBattle(seed,charIdxBySlot,delayF){ // オンライン対戦�
   B={f:0,round:1,wins:[0,0],timer:BAL.TIME,fightStartF:0, // v0.10 (8): YOUマーカーの強調2秒判定に使う「fightに入ったF」
     p:[newFighter(game.p1,0),newFighter(game.p2,1)],
     flow:'intro',flowF:0,hitstop:0,shake:0,
-    clash:null,ultUser:-1,ann:[],fx:[],koSide:-1,result:null,pendKO:-1,clashStreak:[0,0]};
+    clash:null,ultUser:-1,ann:[],fx:[],koSide:-1,result:null,pendKO:-1,clashStreak:[0,0],roarImpact:null};
   for(const f of B.p)preloadCurrentArtCharacter(f.c.id);
   runtimeCommandShadowReset();roundInit(true);
   NET.matchSeq++; // 対戦世代を進める(前の対戦の遅延cmd残骸を弾くため)
@@ -1220,8 +1223,9 @@ function roundInit(first){
     f.yomiState='none';f.yomiJust=false;f.yomiQueuedLv=null;f.yomiReadyUntilF=0;f.yomiFiredJust=false;
     f.charge=0;f.chargeSub=0;f.overheat=false;
     f.darkChainUses=0;f.darkLastChainMove=null;f.darkWindowUntilF=0;f.darkWindowMax=0;f.darkBodyActive=false;
+    f.roarArmorAbsorbed=0; // ROAR-R2(#98)
   }
-  B.timer=BAL.TIME;B.flow='intro';B.flowF=0;B.clash=null;B.pendKO=-1;B.clashStreak=[0,0];
+  B.timer=BAL.TIME;B.flow='intro';B.flowF=0;B.clash=null;B.pendKO=-1;B.clashStreak=[0,0];B.roarImpact=null; // ROAR-R2(#98): presentation-only impact timer、Round跨ぎで持ち越さない
   announce('ROUND '+B.round,66,50,'#ffd23f');
 }
 function announce(text,dur,size,color){B.ann.push({text:text,dur:dur,size:size,color:color,f:0});}
@@ -1237,6 +1241,7 @@ function stepFx(){
     if(f.ultFlash>0)f.ultFlash--;
   }
   if(B.shake>0){B.shake*=0.88;if(B.shake<0.3)B.shake=0;}
+  if(B.roarImpact){B.roarImpact.f++;if(B.roarImpact.f>=B.roarImpact.dur)B.roarImpact=null;} // ROAR-R2(#98): presentation-only、gameplay/hashに一切影響しない
 }
 function lvY(f,lv){return f.y+BAL.ATK[lv].y;}
 function fxSpark(def,lv,guard,big){ // big: 呼び出し側で強制指定(咆哮ヒットなど、lvが位置算出専用でサイズと無関係な場合用)
@@ -1255,6 +1260,10 @@ function fxBurst(x,y){B.fx.push({k:'burst',x:x,y:y,f:0,dur:22});}
 function fxStars(f){B.fx.push({k:'stars',x:f.baseX,y:relY(f,0.789),f:0,dur:BAL.GUARD.breakStunF});}
 function fxRoarImg(charId){ // 咆哮演出画(該当キャラの画像が無ければ何も足さず現行のfxWaveのみ)
   if(assetReady('roar_'+charId))B.fx.push({k:'roarImg',charId:charId,f:0,dur:24});
+}
+function triggerRoarImpact(kind,def){ // ROAR-R2(#98): guard(14F)/clean(18F)/armor(24F=最強)の演出タイマー。
+  // presentation-onlyでgameplay/hash/timingには一切影響しない(B.hitstop自体は呼び出し側で既にBAL.HITSTOP定数から設定済み)
+  B.roarImpact={kind:kind,f:0,dur:kind==='armor'?26:(kind==='clean'?20:12),x:def.baseX,y:def.y};
 }
 
 /* ================= コア戦闘 ================= */
@@ -1577,6 +1586,7 @@ function applyInputs(f,opp,cmds,held){
         ||(f.phase==='attack'&&f.pf<=spec(f).s); // A発生キャンセル可
       if(f.s>=BAL.SMAX&&okPhase){
         f.s=0;f.phase='roar';f.pf=0;f.atkLv=null;f.guardLv=null;f.hasHit=false;f.landedHit=false;f.cmdArmorUsed=false;f.kb=0;f.buf=null;f.combo=0;f.normalChainCount=0;
+        f.roarArmorAbsorbed=0; // ROAR-R2(#98): action開始時にリセット(explicit absorbed-hit count)
         f.darkBodyActive=(f.c.id==='dark_moguzo'&&f.specialActiveF>0); // ABILITY-R2-C (Dark Moguzo BODY): Damage x1.08をaction開始時点でsnapshot
         resetModernHist(f); // vNext PR3 (§8 Modern R4 reset trigger: Roar)
         sfx('roarStart');
@@ -1844,7 +1854,12 @@ function resolveHits(){
     gainUltStock(a);gainUltStock(b);
     for(const f of B.p){f.phase='hitstun';f.pf=0;f.stunDur=BAL.ROAR.stun;f.kb=30;f.atkLv=null;f.cmdBufMove=null;f.cmdBufIdx=null;}
     fxDmg(a,dToA,'#ff8040');fxDmg(b,dToB,'#ff8040');sfx('roar');fxRoarImg(a.c.id);fxRoarImg(b.c.id);
-    B.shake=10;B.hitstop=BAL.HITSTOP.roar;
+    // ROAR-R2(#98): 相打ちも各side自身のroarArmorAbsorbedに応じてclean18F/armor-success24Fを個別判定し、より強い方をB.hitstopへ採用
+    const aArmorSuccess=a.roarArmorAbsorbed>=1,bArmorSuccess=b.roarArmorAbsorbed>=1;
+    const hsA=aArmorSuccess?BAL.HITSTOP.roarArmor:BAL.HITSTOP.roar,hsB=bArmorSuccess?BAL.HITSTOP.roarArmor:BAL.HITSTOP.roar;
+    B.shake=Math.max(B.shake,(Math.max(hsA,hsB)>=BAL.HITSTOP.roarArmor?20:14)*shakeScale());B.hitstop=Math.max(B.hitstop,hsA,hsB);
+    sfx('roarImpactHeavy');if(aArmorSuccess||bArmorSuccess)sfx('roarArmorBoom');
+    triggerRoarImpact((aArmorSuccess||bArmorSuccess)?'armor':'clean',a.hp<=b.hp?a:b); // 位置は演出目的でHP低い側(=より効いた側)を基準にする
     if(a.hp<=0)a.hp=0;if(b.hp<=0)b.hp=0;
     if(a.hp===0||b.hp===0)startKO(a.hp===0?0:1);
     return;
@@ -2247,7 +2262,8 @@ function hitApply(att,def,counterHit,lvOverride,cmdOverride){
   // vNext PR4 (Godan山掴み等): 投げ側armorもcmdAtkと同じarmorStartF/armorEndF+armorDmgMul形式に統一(旧armor:単一値=F1起算モデルを廃止。
   // §「山掴み: F6-F16 1hit armor incoming dmg x0.60」のようにF1始まりでない窓を表現できる必要があるため)
   const cmArmorWin=def.phase==='grab'&&def.cmdMove&&def.cmdMove.armorStartF!=null&&def.pf>=def.cmdMove.armorStartF&&def.pf<=def.cmdMove.armorEndF;
-  if(def.phase==='roar'&&def.pf>=BAL.ROAR.armorStartF&&def.pf<=BAL.ROAR.armorEndF){ // 咆哮アーマー。BAL-R1: アーマー窓変更に追従
+  if(def.phase==='roar'&&def.roarArmorAbsorbed<BAL.ROAR.armorHits&&def.pf>=BAL.ROAR.armorStartF&&def.pf<=BAL.ROAR.armorEndF){ // 咆哮アーマー。ROAR-R2(#98): explicit 2-hit cap(3rd Strikeはこの分岐を通らずelse以降の通常解決へfall through=Roarを止める)
+    def.roarArmorAbsorbed++; // ROAR-R2(#98): 吸収回数を明示的なstateとして記録(1st/2nd hit判定・24F hitstop分岐の根拠)
     dmg=Math.round(dmg*0.5);dealDamage(def,dmg);gainS(def,'armor');gainFocus(def,dmg*BAL.FOCUS.gainDmgMul); // vNext PR2 (§11): Armor absorb+3は吸収した側(def)。旧来attacker(att)へのaBlk流用は撤廃
     fxDmg(def,dmg,'#ffb020');fxSpark(def,lv,0);sfx(HIT_SE[lv]||'hit');
     B.hitstop=Math.max(B.hitstop,BAL.HITSTOP[lv]);B.shake=Math.max(B.shake,4);
@@ -2338,12 +2354,12 @@ function roarResolve(att,def){
     // vNext PR2 (COMBAT_VNEXT_FINAL.md §12 Roar/Ult): 「Roar自身S gain0」につきattacker(att)側のS gainを撤廃
     // (旧: gainS(att,'aBlk')で被ガード時も咆哮側がS獲得していた)
     fxSpark(def,'mid',1);
-    B.shake=Math.max(B.shake,8);B.hitstop=Math.max(B.hitstop,BAL.HITSTOP.roar);
+    B.shake=Math.max(B.shake,8*shakeScale());B.hitstop=Math.max(B.hitstop,BAL.HITSTOP.roarGuard); // ROAR-R2(#98): 被ガード14F。armor-successより明確に弱い
+    triggerRoarImpact('guard',def);
     if(def.guard<=0)doBreak(def);
-  }else if(def.phase==='roar'&&def.pf>=R.armorStartF&&def.pf<=R.armorEndF){ // BAL-R1: アーマー窓を0-armor→armorStartF-armorEndFに変更(発生直後はノーアーマー)
-    const d=Math.round(R.d*0.5);def.hp-=d;gainFocus(def,d*BAL.FOCUS.gainDmgMul); // vNext PR2 (§12): Roar自身S gain0につきgainS(att,'aBlk')を撤廃
-    fxDmg(def,d,'#ffb020');B.shake=Math.max(B.shake,6);
-  }else{ // 咆哮クリーンヒット(被ガード/アーマー減衰以外): 奥義ストック+1(v2.3)
+  }else{ // ROAR-R2(#98): 「Grab/Roar/Ult penetrate armor」につき、旧「def.phase==='roar'かつdefの自armor窓中はx0.5減衰」分岐(BAL-R1)を撤去。
+    // 相手のRoar自armorはStrike(Normal/Command)専用でRoar自体には常に無力=以下は常にclean resolution
+    const armorSuccess=att.roarArmorAbsorbed>=1; // ROAR-R2(#98): このRoar(att側)がF11-F20で>=1 Strikeを吸収済みなら「armor-success着地」= hitstop24F+より強い演出
     def.hp-=R.d;gainFocus(def,R.d*BAL.FOCUS.gainDmgMul);
     def.phase='hitstun';def.pf=0;def.stunDur=R.stun;def.cmdBufMove=null;def.cmdBufIdx=null;
     def.atkLv=null;def.guardLv=null;def.buf=null;def.combo=0;def.normalChainCount=0;def.kb=34;
@@ -2351,7 +2367,10 @@ function roarResolve(att,def){
     // vNext PR2 (§12): Roar自身S gain0につきgainS(att,'aHit')を撤廃(defenderの'got'/gainUltStockは維持)
     gainS(def,'got');gainUltStock(att);
     fxDmg(def,R.d,'#ff8040');fxSpark(def,'mid',0,true); // 咆哮ヒット=大スパーク
-    B.shake=Math.max(B.shake,10);B.hitstop=Math.max(B.hitstop,BAL.HITSTOP.roar);
+    B.shake=Math.max(B.shake,(armorSuccess?20:14)*shakeScale());
+    B.hitstop=Math.max(B.hitstop,armorSuccess?BAL.HITSTOP.roarArmor:BAL.HITSTOP.roar);
+    sfx('roarImpactHeavy');if(armorSuccess)sfx('roarArmorBoom'); // ROAR-R2(#98): 既存'roar'(冒頭で再生済み)に重ねる追加の低音レイヤー
+    triggerRoarImpact(armorSuccess?'armor':'clean',def);
   }
   if(def.hp<=0){def.hp=0;startKO(def.side);}
 }
@@ -2609,6 +2628,15 @@ function timeUp(){
   else{B.flow='roundEnd';B.flowF=0;}
 }
 
+/* ================= OPTIONS(#111 MENU-R1の最小限scaffold) ================= */
+// ROAR-R2(#98)がscreen shake/flashの強度を要求するため、実際のOPTIONS画面(#111。BGM/SE/vibration/
+// default Modern-Classic/reset settings等を含む完全な形)より先行して、このPRで必要な2項目だけを
+// 最小限の値付きオブジェクトとして用意する。#111はこのOPTIONSオブジェクトへUIを結線するだけでよい
+// (=truth tableの重複を作らない)。shake/flashはpresentation-onlyであり、B.hitstop/simulation timingは
+// 常に一定でこれらの値に影響されない(disable/reduceしてもgameplay/hashは変化しない)
+let OPTIONS={shake:'normal',flash:'normal'}; // shake: 'strong'|'normal'|'off'。flash: 'normal'|'reduced'
+function shakeScale(){return OPTIONS.shake==='off'?0:(OPTIONS.shake==='strong'?1.35:1);}
+function flashScale(){return OPTIONS.flash==='reduced'?0.4:1;}
 /* ================= CPU AI ================= */
 const cpuEv=[];
 let aiDifficulty='NORMAL'; // EASY/NORMAL/HARD。キャラ選択画面で変更・セッション中保持(明示的にリセットしない)
@@ -4666,6 +4694,10 @@ function rBattle(){
     if(c.phase==='in')zoom=1+0.18*Math.min(1,c.f/BAL.CLASH.inF);
     else if(c.phase==='reveal'&&c.f>=BAL.CLASH.revealHitF)zoom=1.18-0.18*Math.min(1,(c.f-BAL.CLASH.revealHitF)/30);
     else zoom=1.18;
+  }else if(B.roarImpact){ // ROAR-R2(#98): 短い camera punch/zoom(数F以内にピークへ→急速に1へ戻す)。screen shake OPTIONSと同じ扱い(offなら無効)
+    const punchF=6,t=Math.min(1,B.roarImpact.f/punchF);
+    const amt=B.roarImpact.kind==='armor'?0.09:(B.roarImpact.kind==='clean'?0.05:0.02);
+    zoom=1+amt*(1-t)*shakeScale();
   }
   if(zoom!==1){ctx.translate(W/2,300);ctx.scale(zoom,zoom);ctx.translate(-W/2,-300);}
   // STAGE-FIX (Issue #107): ギュイーンは現在の試合内で発生する演出であり、対戦背景(rStage)を維持する。
@@ -4684,6 +4716,10 @@ function rBattle(){
       ctx.lineTo(W/2+Math.cos(a)*180,300+Math.sin(a)*180);
       ctx.stroke();
     }
+  }else if(B.roarImpact&&B.roarImpact.kind==='armor'){ // ROAR-R2(#98): armor-success(最強ケース)専用。「briefly darken background immediately around impact, then restore」
+    // 真の desaturate はpixel操作が必要で過大なため、既存clash vignetteと同じ手法(半透明の暗色矩形)で近似する
+    const a=0.34*Math.max(0,1-B.roarImpact.f/B.roarImpact.dur)*flashScale();
+    if(a>0.01){ctx.fillStyle='rgba(6,4,10,'+a+')';ctx.fillRect(-60,-60,W+120,PT+120);}
   }
   const xyB=fighterXY(B.p[1]),xyA=fighterXY(B.p[0]);
   rFighter(B.p[1],xyB[0],xyB[1]);rFighter(B.p[0],xyA[0],xyA[1]);
@@ -4693,6 +4729,21 @@ function rBattle(){
   rClashPicks();
   inMirrorZone=false;
   ctx.restore();
+  if(B.roarImpact&&B.roarImpact.kind!=='guard'){ // ROAR-R2(#98): 短い impact flash(white/orange radial)。shake/zoomのtransformは解除済みの絶対座標へ描く
+    const fadeF=B.roarImpact.kind==='armor'?6:4;
+    if(B.roarImpact.f<fadeF){
+      const a=(B.roarImpact.kind==='armor'?0.55:0.35)*(1-B.roarImpact.f/fadeF)*flashScale();
+      if(a>0.01){
+        const fx=mirror?(W-B.roarImpact.x):B.roarImpact.x; // Codexレビュー指摘(PR#115): ctx.restore()後の絶対座標描画のため、オンラインslot1側の水平ミラーを自前で反映する
+        ctx.save();ctx.globalAlpha=a;
+        const g=ctx.createRadialGradient(fx,B.roarImpact.y,10,fx,B.roarImpact.y,260);
+        g.addColorStop(0,B.roarImpact.kind==='armor'?'#fff3d0':'#ffe8c0');
+        g.addColorStop(1,'rgba(255,255,255,0)');
+        ctx.fillStyle=g;ctx.fillRect(0,0,W,PT);
+        ctx.restore();
+      }
+    }
+  }
   if(B.flow==='clash'&&B.clash&&B.clash.phase==='in'){
     const k=B.clash.f/BAL.CLASH.inF;
     if(assetReady('clash_guiin')){ // ギュイーン突入演出画(対戦カードと絵の不一致は演出カットとして許容)
