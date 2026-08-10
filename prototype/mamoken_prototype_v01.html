@@ -1060,6 +1060,7 @@ function newFighter(ci,side,palette){
     // 読むだけで、ここに逆流はしない(共通原則「UI stateとinternal stateを分離」)
     gutsActive:false,gritAvailable:true, // Moguzo GUTS/踏ん張り: Round内false/true開始
     chaseReadyUntilF:0,chaseSourceLv:null,chaseActive:false, // Pisuke CHASE
+    pisukeSpecialRecoveryActive:false, // ABILITY-R2-A (Pisuke SPECIAL recovery x0.70): darkBodyActiveと同型のaction開始時snapshot
     armorStock:3, // Godan ARMOR STOCK: stock3 Round、自然回復なし
     ironWallReady:false, // Hakuma IRON WALL
     trickMove:null,trickChoice:null,trickResolved:false,trickSuccess:false, // Chirka FEINT/DELAY: per action。trickMove=対象技名、trickChoice=none|feint|delay
@@ -1132,7 +1133,7 @@ function roundInit(first){
     f.ult=first?0:Math.min(f.ult,BAL.ULT.roundCarryCap);
     // vNext PR4 (共通: 「Roundで全固有Gauge/stock/temp/pending reset」「KO/Round/Matchでpending clear」)
     f.gutsActive=false;f.gritAvailable=true;
-    f.chaseReadyUntilF=0;f.chaseSourceLv=null;f.chaseActive=false;
+    f.chaseReadyUntilF=0;f.chaseSourceLv=null;f.chaseActive=false;f.pisukeSpecialRecoveryActive=false;
     f.armorStock=3;
     f.ironWallReady=false;
     f.trickMove=null;f.trickChoice=null;f.trickResolved=false;f.trickSuccess=false;
@@ -1185,9 +1186,10 @@ function specForLv(f,lv){ // BAL-R1: 通常技(crouch/mid/high/low)はBAL_R1_CHA
   // vNext PR4 (Dark Moguzo BODY): 「Normal startup -1」。f.darkBodyActiveはaction開始時点のsnapshot
   // (Damage x1.08はGuts同様darkBodyOutgoing()でhitApply側の最終damageへ適用=A.dへ二重適用しない)
   const s=f.darkBodyActive?Math.max(1,b.s-1):b.s;
-  // ABILITY-R2-A (Issue #97 §4 Pisuke SPECIAL CHASE RUSH): 「atk recovery x0.70」。darkBodyFire(Dark Moguzo BODY
-  // startup短縮)と同じくf.specialActiveFを毎フレームそのまま見る方式(既存のBODY実装と同型の許容挙動)
-  const r=(f.c.id==='pisuke'&&f.specialActiveF>0)?Math.max(1,Math.round(b.r*0.70)):b.r;
+  // ABILITY-R2-A (Issue #97 §4 Pisuke SPECIAL CHASE RUSH): 「atk recovery x0.70」。darkBodyActiveと同じく
+  // action開始時にf.pisukeSpecialRecoveryActiveへsnapshot済み(Codex #103レビュー対応: 生のf.specialActiveFを
+  // 毎フレーム見ると、action中にSPECIALが切れた瞬間にrecoveryが急に伸びてしまうため)
+  const r=f.pisukeSpecialRecoveryActive?Math.max(1,Math.round(b.r*0.70)):b.r;
   return{s:s,a:b.a,r:r,d:b.d,y:BAL.ATK[lv].y,down:b.down||false,gd:b.gd,hitstun:b.hitstun||22,blockstun:b.blockstun};
 }
 function specForCmd(f,m){ // コマンド技(v0.10): 数値はBAL.CMDの技定義そのもの(キャラのsOfsは適用しない=技ごとに調整済みの値)。
@@ -1214,8 +1216,9 @@ function specForCmd(f,m){ // コマンド技(v0.10): 数値はBAL.CMDの技定�
   const s=Math.max(1,(delayed?m.s+8:m.s)-(yomiJustFire?2:0)-(darkBodyFire?2:0));
   const a=feintResolved?0:(m.a||3);
   const rBase=feintResolved?(f.trickSuccess?6:12):(m.r||BAL.ATK[m.lv].r);
-  // ABILITY-R2-A (Issue #97 §4 Pisuke SPECIAL CHASE RUSH): 「atk recovery x0.70」はCommand技も対象
-  const r=(f.c.id==='pisuke'&&f.specialActiveF>0)?Math.max(1,Math.round(rBase*0.70)):rBase;
+  // ABILITY-R2-A (Issue #97 §4 Pisuke SPECIAL CHASE RUSH): 「atk recovery x0.70」はCommand技も対象。
+  // darkBodyFireと同じくaction開始時snapshot(f.pisukeSpecialRecoveryActive)を見る(Codex #103レビュー対応)
+  const r=f.pisukeSpecialRecoveryActive?Math.max(1,Math.round(rBase*0.70)):rBase;
   const dmg=yomiJustFire?Math.round(dmgBase*1.10):dmgBase;
   return{s:s,a:a,r:r,d:dmg,y:BAL.ATK[m.lv].y,down:downType,
     gd:(m.guardDmg!=null)?m.guardDmg:BAL.GDMG_A,
@@ -1248,6 +1251,7 @@ function startAtk(f,lv,chain){
   clearPressure(f); // vNext PR4 (Takimaru PRESSURE clear): non-pressure action(素のNormal開始)
   clearYomiReturn(f); // vNext PR4 (Yomikage RETURN clear): 「Normal」開始(resetModernHist経由の他clearとは別に明示)
   f.darkBodyActive=(f.c.id==='dark_moguzo'&&f.darkBody); // vNext PR4 (Dark Moguzo BODY): Normal startup-1をaction開始時にsnapshot(§「midaction expiryはcurrent action snapshot保持」)
+  f.pisukeSpecialRecoveryActive=(f.c.id==='pisuke'&&f.specialActiveF>0); // ABILITY-R2-A (Pisuke SPECIAL recovery x0.70): 同上のパターンでaction開始時にsnapshot(中途でSPECIALが切れても this actionのrecoveryは変えない)
   if(!chain){
     f.combo=0;f.comboCounter=false;f.normalChainCount=0;
     if(f.c.id==='dark_moguzo'){f.darkChainUses=0;f.darkLastChainMove=null;} // vNext PR4 (Dark Moguzo DARK CHAIN): 新規comboの始動でuses/lastをリセット(解釈: darkChainTrigger()のコメント参照)
@@ -1271,6 +1275,7 @@ function startDodge(f,kind){ // kind: 'crouch'|'sway'|'lunge'
 }
 function startCrouchAtk(f){ // しゃがみ中(1〜14F)の右ゾーンタップ＝しゃがみ突き。高さは問わない
   f.phase='attack';f.pf=0;f.atkLv='crouch';f.dodgeType=null;f.hasHit=false;f.landedHit=false;f.cmdArmorUsed=false;f.guardLv=null;f.combo=0;f.normalChainCount=0;f.comboCounter=false;
+  f.pisukeSpecialRecoveryActive=(f.c.id==='pisuke'&&f.specialActiveF>0); // ABILITY-R2-A (Pisuke SPECIAL recovery x0.70): action開始時にsnapshot
   if(f.opNormalLv==='crouch')f.opRepeat=Math.min(4,f.opRepeat+1);else{f.opNormalLv='crouch';f.opRepeat=1;} // vNext PR2 (§4 OP相殺)
   sfx('swish');sfx('teleMid'); // 専用SEは無いため中段テレグラフSEを流用
 }
@@ -1323,6 +1328,7 @@ function startCmdAtk(f,m,idx,preserveCombo,viaModern){ // vNext PR3 (§9 Classic
   f.trickMove=null;f.trickChoice=null;f.trickResolved=false;f.trickSuccess=false; // vNext PR4 (Chirka FEINT/DELAY): per action。新しいCommand開始で必ずリセット
   f.yomiFiredJust=false; // vNext PR4 (Yomikage RETURN/JUST): per action。startYomiReturn()がstartCmdAtk直後に必要なら立て直す
   f.darkWindowUntilF=0;f.darkBodyActive=(f.c.id==='dark_moguzo'&&f.darkBody); // vNext PR4 (Dark Moguzo): 新Command開始で必ずNormal windowを閉じる。Body適用有無はaction開始時にsnapshot(§「midaction expiryはcurrent action snapshot保持」)
+  f.pisukeSpecialRecoveryActive=(f.c.id==='pisuke'&&f.specialActiveF>0); // ABILITY-R2-A (Pisuke SPECIAL recovery x0.70): action開始時にsnapshot
   if(!preserveCombo){
     f.combo=0;f.comboCounter=false;
     if(f.c.id==='dark_moguzo'){f.darkChainUses=0;f.darkLastChainMove=null;} // vNext PR4 (Dark Moguzo DARK CHAIN): 新規comboの始動でuses/lastをリセット
