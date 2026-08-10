@@ -802,7 +802,7 @@ const CONFIG={WS_URL:'wss://mamoken-relay.n-kyosuke1121.workers.dev'}; // デプ
 // 対戦を開始しない。手動で採番する版数タグ(オンラインの同期仕様や9キャラ化のような互換性を破る
 // 変更を配布するたびに更新すること)。サーバー(server/)はメッセージ種別を解釈せず中継するだけ
 // なので、このチェックはサーバー変更なしにクライアント同士だけで実装できる
-const BUILD_ID='mamoken-ability-r2-special-core-2026-08-10';
+const BUILD_ID='mamoken-roar-r2-2026-08-10'; // ROAR-R2(#98): Roarのstartup/armor窓/hitstop timingがsimulation-relevantに変更されたためbump(Codexレビュー指摘 PR#115)
 const ONLINE_BTN={x:0,y:0,w:0,h:0}; // rTitle()で毎フレーム位置を確定(pressRouteと共有)
 const ONLINE_BACK_RECT={x:70,y:864,w:400,h:60};
 const online={
@@ -4734,8 +4734,9 @@ function rBattle(){
     if(B.roarImpact.f<fadeF){
       const a=(B.roarImpact.kind==='armor'?0.55:0.35)*(1-B.roarImpact.f/fadeF)*flashScale();
       if(a>0.01){
+        const fx=mirror?(W-B.roarImpact.x):B.roarImpact.x; // Codexレビュー指摘(PR#115): ctx.restore()後の絶対座標描画のため、オンラインslot1側の水平ミラーを自前で反映する
         ctx.save();ctx.globalAlpha=a;
-        const g=ctx.createRadialGradient(B.roarImpact.x,B.roarImpact.y,10,B.roarImpact.x,B.roarImpact.y,260);
+        const g=ctx.createRadialGradient(fx,B.roarImpact.y,10,fx,B.roarImpact.y,260);
         g.addColorStop(0,B.roarImpact.kind==='armor'?'#fff3d0':'#ffe8c0');
         g.addColorStop(1,'rgba(255,255,255,0)');
         ctx.fillStyle=g;ctx.fillRect(0,0,W,PT);
