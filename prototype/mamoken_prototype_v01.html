@@ -776,7 +776,7 @@ const CONFIG={WS_URL:'wss://mamoken-relay.n-kyosuke1121.workers.dev'}; // デプ
 // 対戦を開始しない。手動で採番する版数タグ(オンラインの同期仕様や9キャラ化のような互換性を破る
 // 変更を配布するたびに更新すること)。サーバー(server/)はメッセージ種別を解釈せず中継するだけ
 // なので、このチェックはサーバー変更なしにクライアント同士だけで実装できる
-const BUILD_ID='mamoken-art-current-v2-2026-08-09';
+const BUILD_ID='mamoken-ability-r2-special-core-2026-08-10';
 const ONLINE_BTN={x:0,y:0,w:0,h:0}; // rTitle()で毎フレーム位置を確定(pressRouteと共有)
 const ONLINE_BACK_RECT={x:70,y:864,w:400,h:60};
 const online={
@@ -1008,9 +1008,32 @@ function advanceOnlineResult(){ // 勝ち残り交代(v0.9 PR4)のサーバー�
     onlineReset();game.screen='title';
   }
 }
+// ================= ABILITY-R2 (SPECIAL-CORE): 共通SPECIAL入力 =================
+// Issue #97 §2: 共通Cooldown2400F(=40秒)。Match開始READY、正常発動開始時からCooldown開始、
+// Round跨ぎで残量保持(roundInitではリセットしない)。全timerはsimulation frameのみ(wall-clock禁止)。
+const SPECIAL_COOLDOWN_F=2400,SPECIAL_LOCK_F=8;
+// mode-type SPECIALの仮ActiveF(Issue #97の各キャラ節の値をそのまま流用)。Chirka/Takimaru/Bulletは
+// 後続PRで攻撃type(Startup/Active/Recovery)実装に置き換わるため、SPECIAL-COREでは同じ仮モード値を使う
+// (性能自体は旧仕様のままでよい=安全なscaffoldingの範囲)。
+const SPECIAL_DURATION_F={dark_moguzo:360};
+function specialDurationFor(c){return SPECIAL_DURATION_F[c.id]||300;}
+function specialButtonState(f){ // READY/ACTIVE/COOLDOWN/CONDITION LOCK(CONDITION LOCKは各キャラPRで条件追加)
+  if(f.phase==='special'||f.specialActiveF>0)return'ACTIVE';
+  if(f.specialCooldownF>0)return'COOLDOWN';
+  return'READY';
+}
+function canStartSpecial(f){ // Issue #97 §2: neutral/actionable時のみ。attack/guard/blockstun/hitstun/down/dodge/mikiri/grab/roar/ult中は不可
+  return f.phase==='idle'&&f.specialCooldownF<=0&&f.specialActiveF<=0;
+}
+function startSpecial(f){ // 不成立時はcooldownを消費しない(呼び出し側でcanStartSpecial()を必ず確認)
+  f.phase='special';f.pf=0;f.buf=null;f.combo=0;f.normalChainCount=0;f.dirBuf.length=0;
+  f.specialCooldownF=SPECIAL_COOLDOWN_F;f.specialActiveF=specialDurationFor(f.c);
+  resetModernHist(f); // Issue #97 §2/§14: SPECIALはModern command historyへ絶対に入れない(=開始時に必ずクリア)
+}
 function newFighter(ci,side,palette){
   const c=CHARS[ci];
   return{c:c,side:side,baseX:side===0?152:388,y:428,
+    specialCooldownF:0,specialActiveF:0, // ABILITY-R2 SPECIAL-CORE: 0=READY。specialActiveF>0の間はmode-type SPECIAL発動中
     palette:palette||(side===1?'p2':'p1'), // PALETTE-R1: 提示専用(current-art battle spriteのバリアント選択のみに使用)。
     // hitbox/timing/damageを一切読まない。roundInit()の対象外なのでRound reset/rematchを通じて自然に保持される。
     hp:maxHpFor(c),guard:maxGuardFor(c),s:0,ult:0,focus:0,
@@ -1097,6 +1120,8 @@ function roundInit(first){
     f.dodgeBufKind=null;f.dodgeBufF=0;
     f.modernHist.length=0;f.pendingModernGrab=null;f.ccActive=false;f.ccWindowUntil=0; // vNext PR3 (§8/§9): Round resetでModern history/pending grab/Classic Cancel窓を持ち越さない
     f.opNormalLv=null;f.opRepeat=0; // vNext PR2 (§4 OP相殺): ラウンド開始で持ち越さない
+    f.specialActiveF=0; // ABILITY-R2 SPECIAL-CORE(Issue #97 §2): Round transitionでactive中のmode/debuffは終了。
+    // specialCooldownFはここで意図的にリセットしない(Round跨ぎで残量保持する仕様)
     // vNext PR2 (COMBAT_VNEXT_FINAL.md §11/§12): 固有Gauge/stock/tempはRound resetが原則。
     // S(§11 "Round start0")は毎ラウンド必ず0(以前はfirstラウンドのみ0にしていた=vNext以前の挙動)。
     // Ult(§12 Round carry)は0→0/1→1/2→2/3→2(=前ラウンド終了値をBAL.ULT.roundCarryCapで頭打ちしたものを持ち越す)。
@@ -1475,6 +1500,8 @@ function applyInputs(f,opp,cmds,held){
         resetModernHist(f); // vNext PR3 (§8 Modern R4 reset trigger: Roar)
         sfx('roarStart');
       }else if(f.s<BAL.SMAX){f.sNo=14;} // ゲージ不足時のS枠点滅フィードバックは両サイドとも出す(オンラインは両者とも人間のため)
+    }else if(c.t==='special'){ // ABILITY-R2 SPECIAL-CORE: 不成立(非neutral/actionable時やcooldown中)はcooldownを消費せず、bufferしない
+      if(canStartSpecial(f))startSpecial(f);
     }else if(c.t==='grab'){
       if(f.phase==='dodge'&&f.c.id==='yomikage'&&f.yomiState==='pending'&&f.yomiQueuedLv==null){
         f.yomiQueuedLv='grab'; // vNext PR4 (Yomikage RETURN): Dodge recovery中のprebuffer(H/M/L/Grab 1つ)
@@ -1695,6 +1722,9 @@ function advance(f){
     if(f.pf>=BAL.DOWNWAKE[f.downType].wakeF){f.pf=0;f.downHitUsed=false;f.downType=null;resolveToIdle(f);}
   }else if(f.phase==='dizzy'){
     if(f.pf>=BAL.GUARD.breakStunF){f.pf=0;f.guard=BAL.GUARD.recoverTo;f.dizzyHits=0;f.dizzyDamage=0;resolveToIdle(f);}
+  }else if(f.phase==='special'){ // ABILITY-R2 SPECIAL-CORE: 8F activation lock(効果自体はstartSpecial()のF1から有効。
+    // ここではロック解除=通常行動可能への復帰のみを扱う。ロック中はcannot act/guard/dodgeだが通常に被弾可能(既存hit解決は素通り)
+    if(f.pf>=SPECIAL_LOCK_F){f.pf=0;resolveToIdle(f);}
   }
 }
 function striking(f){
@@ -1862,6 +1892,10 @@ function tickDarkBody(f,opp){ // vNext PR4 (Dark Moguzo BODY): 「first neutral�
   if(f.phase!=='idle'&&f.phase!=='guard')return; // Dark idle/actionable
   if(DARK_BODY_NEUTRAL_EXCLUDE.has(opp.phase))return; // opponent not hit/blockstun/grab/down
   f.darkGauge=0;f.darkReady=false;f.darkBody=true;f.darkBodyRemainingF=360;
+}
+function tickSpecial(f){ // ABILITY-R2 SPECIAL-CORE: cooldownはstartSpecial()開始Fから減算開始、Roundを跨いで残量保持
+  if(f.specialCooldownF>0)f.specialCooldownF--;
+  if(f.specialActiveF>0)f.specialActiveF--; // mode-type SPECIALのActive窓。0になった後の個別後始末は各キャラPRで追加する
 }
 function cmdUnblockable(f,cm){ // vNext PR4 (Chirka Delayedあと出し頭突き): 通常はブロック可能だがDelay採用時のみUnblockable化
   if(!cm)return false;
@@ -2481,6 +2515,9 @@ function aiStep(){
         ai.guardOn=true;ai.guardT=24+((rng()*24)|0);
       }
       if(me.s>=BAL.SMAX&&rng()<0.3)cpuEv.push({t:'roar'});
+      // ABILITY-R2 SPECIAL-CORE(Issue #97 §13): 汎用の中立確率トリガー(プレイヤーの現在入力を一切見ない・
+      // 既存のai.think思考サイクルに従うだけ)。キャラ別バイアス(HP<=60%等)は各キャラ実装PRでここに追加する
+      if(canStartSpecial(me)&&rng()<0.015)cpuEv.push({t:'special'});
     }
   }
 }
@@ -2592,6 +2629,7 @@ function netFightStep(cmds0,hold0,cmds1,hold1){ // fightStep()のオンライン
     tickPressureQueue(f,B.p[1-f.side]); // vNext PR4 (Takimaru PRESSURE queued throw)
     tickYomiReady(f); // vNext PR4 (Yomikage RETURN/JUST Ready timeout)
     tickDarkBody(f,B.p[1-f.side]); // vNext PR4 (Dark Moguzo BODY): first neutral activate + 360F timer
+    tickSpecial(f); // ABILITY-R2 SPECIAL-CORE: cooldown/activeF共通の1F減算
     f.kb*=0.86;if(f.kb<0.5)f.kb=0;
     if(f.sNo>0)f.sNo--;
     if(f.phase!=='dodge'){
@@ -2623,6 +2661,7 @@ function fightStep(){
     tickPressureQueue(f,B.p[1-f.side]); // vNext PR4 (Takimaru PRESSURE queued throw)
     tickYomiReady(f); // vNext PR4 (Yomikage RETURN/JUST Ready timeout)
     tickDarkBody(f,B.p[1-f.side]); // vNext PR4 (Dark Moguzo BODY): first neutral activate + 360F timer
+    tickSpecial(f); // ABILITY-R2 SPECIAL-CORE: cooldown/activeF共通の1F減算
     f.kb*=0.86;if(f.kb<0.5)f.kb=0;
     if(f.sNo>0)f.sNo--;
     if(f.phase!=='dodge'){ // counterReady/密着は回避の戻りモーション中は消費せず、動けるようになってから起算
@@ -2638,13 +2677,20 @@ const evq=[];
 let p1Hold=null,padPress=null,tstate=null;
 let dragRow=1,lastThrownRow=1; // 右ゾーン: 現在ドラッグ中の段 / 直前に投げた段（残像ガイド用）
 let grabBtnFlashAt=0; // つかみボタン押下の一時ハイライト用タイムスタンプ
+let specialBtnFlashAt=0; // ABILITY-R2 SPECIAL-CORE: SPECIALボタン押下の一時ハイライト用タイムスタンプ
 let dirBtnFlashAt=0,dirBtnFlashKind=null; // 方向ボタン押下の一時ハイライト用(§6.8 v2.5)
 function toL(cx2,cy2){
   const r=cv.getBoundingClientRect();
   return{x:(cx2-r.left)/vScale,y:(cy2-r.top)/vScale};
 }
-const GRAB_BTN={r:55,cx:70,cy:PT+70}; // つかみボタン(直径110px・左上=Lトリガー位置イメージ、§6.8 v2.5)
-function inGrabBtn(p){const dx=p.x-GRAB_BTN.cx,dy=p.y-GRAB_BTN.cy;return dx*dx+dy*dy<=GRAB_BTN.r*GRAB_BTN.r;}
+// ABILITY-R2 SPECIAL-CORE(Issue #97 §1): 攻撃側操作UIをSPECIAL/GRABの上段2分割+HIGH/MID/LOWの3段へ変更。
+// 右ゾーンをrh=(H-PT)/4の4等分にし、最上段だけ左右2つのボタン(SPECIAL|GRAB)に分割する。
+// 旧GRAB_BTNは左寄り円形(cx:70)だったが、新レイアウトでは右ゾーン最上段の右半分の矩形ボタンへ統一する。
+function attackTopRowH(){return(H-PT)/4;}
+function specialBtnRect(){const rh=attackTopRowH();return{x:W/2,y:PT,w:W/4,h:rh};}
+function grabBtnRect(){const rh=attackTopRowH();return{x:W/2+W/4,y:PT,w:W/4,h:rh};}
+function inGrabBtn(p){const r=grabBtnRect();return inRect(p,r.x,r.y,r.w,r.h);}
+function inSpecialBtn(p){const r=specialBtnRect();return inRect(p,r.x,r.y,r.w,r.h);}
 const DIR_BTN_ARROW={sway:'←',crouch:'↓',lunge:'→'}; // 画像未読込時の図形フォールバック用
 const DIR_BTN_ASSET={sway:'dirbtn_left',crouch:'dirbtn_down',lunge:'dirbtn_right'}; // 回避モーションの影絵アイコン(v0.11 §6.9)
 function leftLowerRect(){ // 左ゾーン下半分(方向ボタン用の矩形)
@@ -2663,11 +2709,12 @@ function inDirBtn(p){
   for(const b of dirBtnRects())if(inRect(p,b.x,b.y,b.w,b.h))return b;
   return null;
 }
-function rowAt(py,prevRow){ // 段境界±20pxスナップ（誤爆防止）
-  const rh=(H-PT)/3;
-  let r=Math.min(2,Math.max(0,Math.floor((py-PT)/rh)));
+function rowAt(py,prevRow){ // 段境界±20pxスナップ（誤爆防止）。ABILITY-R2: 最上段はSPECIAL/GRABなので
+  // HIGH/MID/LOWの3段はそれを除いた残りの範囲(top以降)をrh刻みで分割する
+  const rh=attackTopRowH(),top=PT+rh;
+  let r=Math.min(2,Math.max(0,Math.floor((py-top)/rh)));
   if(prevRow!=null&&r!==prevRow){
-    const b=PT+Math.max(r,prevRow)*rh;
+    const b=top+Math.max(r,prevRow)*rh;
     if(Math.abs(py-b)<20)r=prevRow;
   }
   return r;
@@ -2730,7 +2777,11 @@ function pressRoute(p){
     return null;
   }
   if(B.flow!=='fight'&&B.flow!=='intro')return null;
-  if(inGrabBtn(p)){ // つかみボタン: 左上(Lトリガー位置)。左ゾーン判定より先に判定(§6.8 v2.5)
+  if(inSpecialBtn(p)){ // ABILITY-R2 SPECIAL-CORE(Issue #97 §1): 右ゾーン最上段左半分。不成立でもcooldownは消費しない
+    evq.push({t:'special'});sfx('tap');specialBtnFlashAt=performance.now();
+    return null;
+  }
+  if(inGrabBtn(p)){ // つかみボタン: 右ゾーン最上段右半分(旧・左上circleから移設、§6.8 v2.5→ABILITY-R2で再配置)
     evq.push({t:'grab'});sfx('tap');grabBtnFlashAt=performance.now();
     return null;
   }
@@ -3967,6 +4018,38 @@ function drawScissors(x,y,s){ // ✌️チョキ（新規: 爪2本）
   ctx.restore();
 }
 const HAND_ICON={guu:drawFist,choki:drawScissors,paa:drawPalm};
+const SPECIAL_STATE_COLOR={READY:'#7CFC00',ACTIVE:'#7fd8ff',COOLDOWN:'#8a93a8','CONDITION LOCK':'#5a5f6b'};
+function drawSpecialGrabRow(){ // ABILITY-R2 SPECIAL-CORE(Issue #97 §1): 右ゾーン最上段=SPECIAL(左)|GRAB(右)
+  const sr=specialBtnRect(),gr=grabBtnRect();
+  const myF=onlineActive()?B.p[online.slot]:B.p[0]; // 自分側のSPECIAL状態を表示(オンラインは自分のslot)
+  const state=specialButtonState(myF),stateColor=SPECIAL_STATE_COLOR[state]||'#8a93a8';
+  const sFlashing=performance.now()-specialBtnFlashAt<140;
+  ctx.save();
+  ctx.fillStyle=sFlashing?'rgba(255,210,60,0.28)':'rgba(255,255,255,0.05)';
+  rr(sr.x+4,sr.y+4,sr.w-8,sr.h-8,14);ctx.fill();
+  ctx.strokeStyle=state==='READY'?stateColor:(sFlashing?'#ffd23f':'rgba(255,255,255,0.25)');
+  ctx.lineWidth=(state==='READY'||sFlashing)?3:1.5;
+  rr(sr.x+4,sr.y+4,sr.w-8,sr.h-8,14);ctx.stroke();
+  ctx.restore();
+  txt('SPECIAL',sr.x+sr.w/2,sr.y+sr.h/2-6,17,'#fff');
+  txt(state,sr.x+sr.w/2,sr.y+sr.h/2+14,12,stateColor);
+  if(state==='COOLDOWN'){
+    // simulation frame基準の残量表示(wall-clock不使用)。40秒基準の目安秒数のみ提示
+    txt(Math.ceil(myF.specialCooldownF/60)+'s',sr.x+sr.w/2,sr.y+sr.h-8,11,'rgba(255,255,255,0.55)');
+    const frac=1-myF.specialCooldownF/SPECIAL_COOLDOWN_F;
+    ctx.fillStyle='rgba(255,255,255,0.12)';ctx.fillRect(sr.x+10,sr.y+sr.h-6,sr.w-20,3);
+    ctx.fillStyle=stateColor;ctx.fillRect(sr.x+10,sr.y+sr.h-6,(sr.w-20)*Math.max(0,Math.min(1,frac)),3);
+  }
+  const gFlashing=performance.now()-grabBtnFlashAt<140;
+  ctx.save();
+  ctx.fillStyle=gFlashing?'rgba(255,210,60,0.28)':'rgba(255,255,255,0.05)';
+  rr(gr.x+4,gr.y+4,gr.w-8,gr.h-8,14);ctx.fill();
+  ctx.strokeStyle=gFlashing?'#ffd23f':'rgba(255,255,255,0.25)';ctx.lineWidth=gFlashing?3:1.5;
+  rr(gr.x+4,gr.y+4,gr.w-8,gr.h-8,14);ctx.stroke();
+  ctx.restore();
+  const gcx=gr.x+gr.w/2,gcy=gr.y+gr.h/2,gs=Math.min(gr.w,gr.h);
+  if(!drawUiIcon('ui_paw_emblem',gcx,gcy,gs*0.62))drawPawIcon(gcx,gcy,gs*0.34);
+}
 function rPad(){
   ctx.fillStyle='#12141a';ctx.fillRect(0,PT,W,H-PT);
   if(game.screen==='battle'&&B){
@@ -4007,28 +4090,19 @@ function rPad(){
     ctx.restore();
     if(!iconOk)txt(DIR_BTN_ARROW[b.dir],b.x+b.w/2,b.y+b.h/2+11,34,flashing?'#ffe14d':'rgba(160,230,180,0.85)');
   }
-  // 右ゾーン: 高さタップ＝段（上/中/下）。発火はリリース時
-  const rh=(H-PT)/3,labels=['上段','中段','下段'];
+  // ABILITY-R2 SPECIAL-CORE(Issue #97 §1): 右ゾーンをrh=(H-PT)/4の4段へ変更。最上段=SPECIAL|GRAB、
+  // 残り3段=HIGH/MID/LOW(発火はリリース時、旧来通り)
+  const rh=attackTopRowH(),rowTop=PT+rh,labels=['上段','中段','下段'];
   for(let r=0;r<3;r++){
-    const y=PT+r*rh;
+    const y=rowTop+r*rh;
     const active=padPress&&padPress.zone==='R'&&padPress.row===r;
     if(lastThrownRow===r){ctx.save();ctx.globalAlpha=0.09;ctx.fillStyle='#ffffff';ctx.fillRect(W/2+4,y+4,W/2-8,rh-8);ctx.restore();}
     if(active){ctx.save();ctx.globalAlpha=0.22;ctx.fillStyle='#ffd23f';ctx.fillRect(W/2+4,y+4,W/2-8,rh-8);ctx.restore();}
-    if(r>0){ctx.strokeStyle='rgba(255,255,255,0.10)';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(W/2,y);ctx.lineTo(W,y);ctx.stroke();}
-    // 下段はつかみボタン(右下隅)と被らないよう上寄り・左寄りに配置
-    const lx=(r===2)?W*0.62:W*0.75,ly=(r===2)?y+26:y+rh/2;
-    txt(labels[r],lx,ly,23,'rgba(255,214,180,0.8)'); // GAME-UX-R1: 20→23(+15%)
+    ctx.strokeStyle='rgba(255,255,255,0.10)';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(W/2,y);ctx.lineTo(W,y);ctx.stroke();
+    txt(labels[r],W*0.75,y+rh/2,23,'rgba(255,214,180,0.8)'); // GAME-UX-R1: 20→23(+15%)。GRABが上段へ移動したため中央寄せに戻す
   }
-  txt('タップの高さ＝段',W*0.6,PT+(H-PT)-14,14,'rgba(200,190,175,0.6)'); // GAME-UX-R1: 12→14
-  { // つかみボタン(直径110px・肉球アイコン・薄縁取り、§6.6 v2.4)
-    const flashing=performance.now()-grabBtnFlashAt<140;
-    ctx.save();
-    ctx.beginPath();ctx.arc(GRAB_BTN.cx,GRAB_BTN.cy,GRAB_BTN.r,0,TAU);
-    ctx.fillStyle=flashing?'rgba(255,210,60,0.32)':'rgba(255,255,255,0.08)';ctx.fill();
-    ctx.strokeStyle=flashing?'#ffd23f':'rgba(255,255,255,0.4)';ctx.lineWidth=flashing?3:1.5;ctx.stroke();
-    ctx.restore();
-    if(!drawUiIcon('ui_paw_emblem',GRAB_BTN.cx,GRAB_BTN.cy,GRAB_BTN.r*1.1))drawPawIcon(GRAB_BTN.cx,GRAB_BTN.cy,GRAB_BTN.r*0.8);
-  }
+  txt('タップの高さ＝段',W*0.75,H-14,14,'rgba(200,190,175,0.6)'); // GAME-UX-R1: 12→14
+  drawSpecialGrabRow(); // ABILITY-R2 SPECIAL-CORE: 最上段のSPECIAL(左半)/GRAB(右半)ボタン
   if(game.screen==='battle'&&B&&B.flow==='fight'&&(onlineActive()?B.p[online.slot]:B.p[0]).s>=BAL.SMAX){ // 右ゾーン内に収め左のガード表示と被らないようにする。オンラインは自分のスロット側のSゲージを見る
     const a=0.5+0.4*Math.sin(game.frame*0.25);
     ctx.save();ctx.globalAlpha=a;
