@@ -2694,6 +2694,17 @@ function specialAiThreshold(me,you){ // ABILITY-R2-C (Issue #97 §13 CPU): キ�
     default:return base;
   }
 }
+function cpuFindGuaranteedPunish(me,you){ // CPU-R2 PR2(#106 §5): 相手の攻撃action残り(startup+active+recovery-pf)にCPU側Normalの
+  // startupが収まるかを判定する。you.phase/pf/atkLv(=既に開始済みの現在action)のみを参照し、未来の入力は一切見ない(§1準拠)
+  if(!(you.phase==='attack'||you.phase==='cmdAtk')||you.pf<=0)return null;
+  const A=spec(you);
+  const remainF=A.s+A.a+A.r-you.pf; // 相手が復帰するまでの残りF
+  if(remainF<=0)return null;
+  const candidates=LEVELS.filter(function(lv){return specForLv(me,lv).s<=remainF;}); // 発生が間に合う通常技のみ(違法選択なし)
+  if(!candidates.length)return null;
+  candidates.sort(function(a,b){return specForLv(me,b).d-specForLv(me,a).d;}); // 最大ダメージの技を優先
+  return{lv:candidates[0],remainF:remainF};
+}
 function aiStep(){
   const me=B.p[1],you=B.p[0];
   const D=curDiff();
@@ -2702,26 +2713,15 @@ function aiStep(){
     if(ai.ultT>30&&actionable(me))cpuEv.push({t:'ult'});
     return;
   }
-  // 観測: プレイヤーの攻撃を記録して反応 / テレグラフを見て差し込み or 見切りを狙う
+  // 観測: プレイヤーの攻撃を記録し、反応(防御)をスケジュールする。CPU-R2 PR2(#106 §4):
+  // reaction delayはCPU Lv依存(row.reactDelayMinF-MaxF)。実際の防御選択(既定Guard/advDefShareでDodge・Mikiri)
+  // はai.react消費時点(下記)でLv依存に決める。旧来のここでの即時差し込み(cw)判定は撤去(§4の公式アルゴリズムに
+  // Guard/Dodge/Mikiriの3択のみが定義されているため。挙動再設計はIssue #106の意図的な仕様変更)
   if(you.phase==='attack'&&you.pf===1){
     ai.hist.push({lv:you.atkLv,f:B.f});
     if(ai.hist.length>14)ai.hist.shift();
-    ai.react={at:B.f+11+((rng()*6)|0),lv:you.atkLv};
-    const tg=BAL.TELEGRAPH[you.atkLv]; // テレグラフが長い(=見てから対応しやすい)ほど差し込み精度が上がる
-    const cw=(0.16+Math.min(0.3,ai.mash*0.05)+(tg-BAL.TELEGRAPH.mid)*0.012)*D.reactMul; // 難易度の反応正解率
-    if(me.phase==='idle'&&rng()<cw){
-      cpuEv.push({t:'atk',lv:you.atkLv});ai.react=null;
-    }else if(me.phase==='idle'&&ai.mikiriAt==null&&rng()<D.mikiriRate){ // 見切り試行(完璧な精度ではない)
-      const win=(me.hp<=BAL.PINCH_HP)?BAL.MIKIRI.windowPinch:BAL.MIKIRI.window;
-      ai.mikiriAt=B.f+spec(you).s+Math.round((rng()*2-1)*win*2);
-      ai.react=null;
-    }else if(me.phase==='idle'&&ai.dodgeAt==null&&rng()<D.dodgeRate){ // 回避試行: テレグラフを見て正解の回避を狙うが、見切り同様タイミングにブレを入れる
-      const contact=B.f+spec(you).s; // 接触(pf=s+1)までの残りF
-      const jitter=Math.round((rng()*2-1)*BAL.DODGE.judgeF);
-      ai.dodgeAt=contact-5+jitter; // 判定窓(1-10F)の中央付近を狙うが外すこともある
-      ai.dodgeKind=LEVEL_TO_DODGE[you.atkLv];
-      ai.react=null;
-    }
+    const row=curAilvRow();
+    ai.react={at:B.f+row.reactDelayMinF+((rng()*(row.reactDelayMaxF-row.reactDelayMinF+1))|0),lv:you.atkLv,seenAt:B.f,atkStartupF:spec(you).s};
   }
   if(ai.mikiriAt!=null&&B.f>=ai.mikiriAt){cpuEv.push({t:'mikiri'});ai.mikiriAt=null;}
   if(ai.dodgeAt!=null&&B.f>=ai.dodgeAt){cpuEv.push({t:'dodge',kind:ai.dodgeKind});ai.dodgeAt=null;}
@@ -2737,24 +2737,49 @@ function aiStep(){
   ai.mash=0;
   for(const h of ai.hist)if(B.f-h.f<100)ai.mash++;
   ai.pHoldF=(you.phase==='guard')?ai.pHoldF+1:0;
-  // 被ガード確反
+  // 被ガード確反。CPU-R2 PR2(#106 §5): punishUseロールに成功した場合のみcpuFindGuaranteedPunish()で
+  // 発生Fが間に合う技を選ぶ(見つからない/ロール失敗時は旧来の汎用報復=mid70%/ランダム30%へフォールバック)
   if(me.phase==='blockstun'&&me.pf===Math.max(1,me.stunDur-4)&&rng()<0.9){
     ai.guardOn=false;ai.guardT=0;
-    cpuEv.push({t:'atk',lv:rng()<0.7?'mid':LEVELS[(rng()*3)|0]});
+    const row=curAilvRow();
+    const gp=rng()<row.punishUse?cpuFindGuaranteedPunish(me,you):null;
+    cpuEv.push(gp?{t:'atk',lv:gp.lv}:{t:'atk',lv:rng()<0.7?'mid':LEVELS[(rng()*3)|0]});
   }
-  // ガードブレイク追撃（打撃 or 投げ）
+  // ガードブレイク追撃（打撃 or 投げ）: dizzyは既に確定ヒット状態のためguaranteed punish計算は不要
   if(you.phase==='dizzy'&&me.phase==='idle'&&you.pf<BAL.GUARD.breakStunF-30){
     cpuEv.push(rng()<0.35?{t:'grab'}:{t:'atk',lv:'mid'});
   }
   // 咆哮バースト
   if(me.s>=BAL.SMAX&&me.phase==='hitstun'&&you.combo>=2&&rng()<0.08)cpuEv.push({t:'roar'});
-  // 反応行動: 統一ガードで守りが機能する
+  // 汎用punish機会(#106 §5): 相手が攻撃のrecovery帯(startup+active終了後=もう当たらない安全な状態)にいて
+  // me.phase==='idle'の時、punishUseに応じてcpuFindGuaranteedPunish()を毎F低確率で試みる(recovery帯が長いほど、
+  // また高Lvほど捕捉しやすい。低LvはpunishUseが低くほぼ発火しない)。ブロック直後(上記)以外の全punish機会をここで拾う
+  if(me.phase==='idle'&&(you.phase==='attack'||you.phase==='cmdAtk')){
+    const yA=spec(you);
+    if(you.pf>=yA.s+yA.a){
+      const row=curAilvRow();
+      if(rng()<row.punishUse*0.25){
+        const gp=cpuFindGuaranteedPunish(me,you);
+        if(gp)cpuEv.push({t:'atk',lv:gp.lv});
+      }
+    }
+  }
+  // 反応行動(#106 §4): reactRateで意図的な防御を試みるか判定→既定はGuard、advDefShareで正解Dodge/Mikiriへ切替。
+  // ロール失敗時(reactRate)は「反応できず」何もしない(低Lvで頻発する想定通り)
   if(ai.react&&B.f>=ai.react.at){
-    const r=ai.react;ai.react=null;
-    if(me.phase==='idle'){
-      const gp=(0.45+Math.min(0.35,ai.mash*0.05))*D.reactMul; // 難易度の反応正解率
-      if(rng()<gp){ai.guardOn=true;ai.guardT=24+((rng()*20)|0);}
-      else if(rng()<0.2)cpuEv.push({t:'atk',lv:LEVELS[(rng()*3)|0]});
+    const r=ai.react,row=curAilvRow();ai.react=null;
+    if(me.phase==='idle'&&rng()<row.reactRate){
+      if(rng()<row.advDefShare){
+        const jitter=Math.round((rng()*2-1)*row.jitterF),contact=r.seenAt+r.atkStartupF;
+        if(rng()<0.5&&ai.mikiriAt==null){
+          const win=(me.hp<=BAL.PINCH_HP)?BAL.MIKIRI.windowPinch:BAL.MIKIRI.window;
+          ai.mikiriAt=contact+jitter+Math.round((rng()*2-1)*win);
+        }else if(ai.dodgeAt==null){
+          ai.dodgeAt=contact-5+jitter;ai.dodgeKind=LEVEL_TO_DODGE[r.lv];
+        }
+      }else{
+        ai.guardOn=true;ai.guardT=24+((rng()*20)|0);
+      }
     }
   }
   if(ai.guardT>0){ai.guardT--;if(ai.guardT<=0)ai.guardOn=false;}
@@ -2762,9 +2787,10 @@ function aiStep(){
   if(me.phase==='guard'&&rng()<0.006){ai.guardOn=false;ai.guardT=0;cpuEv.push({t:'grab'});}
   // チェーン継続。NORMAL-CHAIN-R1: 判定をキャラ別normalChainLimitへ追従させる。
   // vNext PR2 (§4): H/M/L自由順+同Normal連続可へ追従(chainableTo()が実際のcanChain()と同じ判定)
+  // CPU-R2 PR2(#106 §6): 継続確率を旧固定0.75からcomboContinue(Lv依存)へ変更
   if(me.phase==='attack'&&me.hasHit&&me.normalChainCount<normalChainLimitFor(me.c)&&me.atkLv){
     const A=spec(me);
-    if(me.pf===A.s+A.a+2&&rng()<0.75){
+    if(me.pf===A.s+A.a+2&&rng()<curAilvRow().comboContinue){
       const nxt=LEVELS.filter(function(l){return chainableTo(l,me.atkLv);});
       if(nxt.length)cpuEv.push({t:'atk',lv:nxt[(rng()*nxt.length)|0]});
     }
