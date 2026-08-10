@@ -4668,11 +4668,12 @@ function rBattle(){
     else zoom=1.18;
   }
   if(zoom!==1){ctx.translate(W/2,300);ctx.scale(zoom,zoom);ctx.translate(-W/2,-300);}
-  // STAGE-ART-IMPORT: ミニゲーム中(B.flow==='clash')はB.clash.mgに応じた専用背景があれば
-  // それをcover配置で表示し、対戦ステージの背景(rStage)は使わない。未読込ならrStage()に
-  // フォールバックし、その上に既存の暗転+放射線ビネットを重ねる(見た目の後方互換を維持)。
-  const clashBg=(B.flow==='clash'&&B.clash&&MINIGAME_BG[B.clash.mg])?MINIGAME_BG[B.clash.mg].assetKey:null;
-  if(!clashBg||!drawCoverBg(clashBg))rStage();
+  // STAGE-FIX (Issue #107): ギュイーンは現在の試合内で発生する演出であり、対戦背景(rStage)を維持する。
+  // MINIGAME_BG(集落の広場/草原の的場/山道ランコース)は独立したMINIGAMEモード専用で、本リポジトリには
+  // まだそのモード自体が存在しない(=B.clashは常にVS CPU/ARCADE/SURVIVAL/ONLINEの対戦内から発生する)ため、
+  // ここでB.clash.mgに応じて背景を差し替えるのは常に誤り(旧STAGE-ART-IMPORT #105のバグ)だった。
+  // MINIGAME_BGの定義/preloadは将来の独立MINIGAMEモード実装のため削除せず維持し、ここでの参照のみ撤去する。
+  rStage();
   if(B.flow==='clash'){
     ctx.fillStyle='rgba(10,5,20,0.3)';ctx.fillRect(-60,-60,W+120,PT+120);
     ctx.strokeStyle='rgba(255,255,255,0.12)';ctx.lineWidth=3;
