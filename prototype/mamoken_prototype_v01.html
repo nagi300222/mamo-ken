@@ -116,16 +116,17 @@ const BAL={ // 03_data_design.md v2.0 §2 balance table 準拠
   // このPRでは追加のみ(aiStep()/stepRenda()/stepHayauchi()はまだAIDIFF/curDiff()を読んでおり挙動は無変更)。
   // PR2以降でreactionDelay/reactRate/advDefShare/jitterF等を実際の意思決定ロジックへ接続していく。
   // 互換: 旧EASY≈Lv2/NORMAL≈Lv3/HARD≈Lv5(curAiLv()参照)
+  // roarEscapeUse: CPU-R2 PR3(#106 §7 ROAR): Issue #106 §7が明示するLv別Roar escape-use確率をそのまま採用(独立の列)
   AILV:{
-    1:{thinkMinF:28,thinkMaxF:44,reactDelayMinF:20,reactDelayMaxF:28,reactRate:0.25,advDefShare:0.05,jitterF:14,cmdUse:0.05,punishUse:0.10,comboContinue:0.30,grabMix:0.05,resourceQuality:0.10,habitAdapt:0.00},
-    2:{thinkMinF:24,thinkMaxF:38,reactDelayMinF:18,reactDelayMaxF:25,reactRate:0.35,advDefShare:0.08,jitterF:12,cmdUse:0.10,punishUse:0.20,comboContinue:0.45,grabMix:0.07,resourceQuality:0.20,habitAdapt:0.00},
-    3:{thinkMinF:20,thinkMaxF:32,reactDelayMinF:16,reactDelayMaxF:22,reactRate:0.45,advDefShare:0.12,jitterF:10,cmdUse:0.20,punishUse:0.35,comboContinue:0.60,grabMix:0.08,resourceQuality:0.30,habitAdapt:0.00},
-    4:{thinkMinF:16,thinkMaxF:28,reactDelayMinF:13,reactDelayMaxF:20,reactRate:0.58,advDefShare:0.18,jitterF:9,cmdUse:0.40,punishUse:0.60,comboContinue:0.72,grabMix:0.10,resourceQuality:0.45,habitAdapt:0.10},
-    5:{thinkMinF:14,thinkMaxF:25,reactDelayMinF:11,reactDelayMaxF:16,reactRate:0.68,advDefShare:0.27,jitterF:8,cmdUse:0.60,punishUse:0.90,comboContinue:0.65,grabMix:0.10,resourceQuality:0.50,habitAdapt:0.15},
-    6:{thinkMinF:12,thinkMaxF:22,reactDelayMinF:10,reactDelayMaxF:15,reactRate:0.75,advDefShare:0.34,jitterF:7,cmdUse:0.68,punishUse:0.92,comboContinue:0.78,grabMix:0.13,resourceQuality:0.62,habitAdapt:0.25},
-    7:{thinkMinF:10,thinkMaxF:20,reactDelayMinF:9,reactDelayMaxF:14,reactRate:0.82,advDefShare:0.42,jitterF:6,cmdUse:0.76,punishUse:0.95,comboContinue:0.86,grabMix:0.15,resourceQuality:0.75,habitAdapt:0.45},
-    8:{thinkMinF:9,thinkMaxF:18,reactDelayMinF:8,reactDelayMaxF:13,reactRate:0.88,advDefShare:0.50,jitterF:5,cmdUse:0.84,punishUse:0.97,comboContinue:0.92,grabMix:0.17,resourceQuality:0.88,habitAdapt:0.65},
-    9:{thinkMinF:8,thinkMaxF:16,reactDelayMinF:8,reactDelayMaxF:12,reactRate:0.92,advDefShare:0.58,jitterF:4,cmdUse:0.90,punishUse:0.98,comboContinue:0.97,grabMix:0.20,resourceQuality:0.96,habitAdapt:0.85}
+    1:{thinkMinF:28,thinkMaxF:44,reactDelayMinF:20,reactDelayMaxF:28,reactRate:0.25,advDefShare:0.05,jitterF:14,cmdUse:0.05,punishUse:0.10,comboContinue:0.30,grabMix:0.05,resourceQuality:0.10,habitAdapt:0.00,roarEscapeUse:0.02},
+    2:{thinkMinF:24,thinkMaxF:38,reactDelayMinF:18,reactDelayMaxF:25,reactRate:0.35,advDefShare:0.08,jitterF:12,cmdUse:0.10,punishUse:0.20,comboContinue:0.45,grabMix:0.07,resourceQuality:0.20,habitAdapt:0.00,roarEscapeUse:0.03},
+    3:{thinkMinF:20,thinkMaxF:32,reactDelayMinF:16,reactDelayMaxF:22,reactRate:0.45,advDefShare:0.12,jitterF:10,cmdUse:0.20,punishUse:0.35,comboContinue:0.60,grabMix:0.08,resourceQuality:0.30,habitAdapt:0.00,roarEscapeUse:0.05},
+    4:{thinkMinF:16,thinkMaxF:28,reactDelayMinF:13,reactDelayMaxF:20,reactRate:0.58,advDefShare:0.18,jitterF:9,cmdUse:0.40,punishUse:0.60,comboContinue:0.72,grabMix:0.10,resourceQuality:0.45,habitAdapt:0.10,roarEscapeUse:0.07},
+    5:{thinkMinF:14,thinkMaxF:25,reactDelayMinF:11,reactDelayMaxF:16,reactRate:0.68,advDefShare:0.27,jitterF:8,cmdUse:0.60,punishUse:0.90,comboContinue:0.65,grabMix:0.10,resourceQuality:0.50,habitAdapt:0.15,roarEscapeUse:0.08},
+    6:{thinkMinF:12,thinkMaxF:22,reactDelayMinF:10,reactDelayMaxF:15,reactRate:0.75,advDefShare:0.34,jitterF:7,cmdUse:0.68,punishUse:0.92,comboContinue:0.78,grabMix:0.13,resourceQuality:0.62,habitAdapt:0.25,roarEscapeUse:0.18},
+    7:{thinkMinF:10,thinkMaxF:20,reactDelayMinF:9,reactDelayMaxF:14,reactRate:0.82,advDefShare:0.42,jitterF:6,cmdUse:0.76,punishUse:0.95,comboContinue:0.86,grabMix:0.15,resourceQuality:0.75,habitAdapt:0.45,roarEscapeUse:0.30},
+    8:{thinkMinF:9,thinkMaxF:18,reactDelayMinF:8,reactDelayMaxF:13,reactRate:0.88,advDefShare:0.50,jitterF:5,cmdUse:0.84,punishUse:0.97,comboContinue:0.92,grabMix:0.17,resourceQuality:0.88,habitAdapt:0.65,roarEscapeUse:0.45},
+    9:{thinkMinF:8,thinkMaxF:16,reactDelayMinF:8,reactDelayMaxF:12,reactRate:0.92,advDefShare:0.58,jitterF:4,cmdUse:0.90,punishUse:0.98,comboContinue:0.97,grabMix:0.20,resourceQuality:0.96,habitAdapt:0.85,roarEscapeUse:0.60}
   },
   GRAB:{s:12,a:2,rec:32,seq:28,d:90,stun:30,downType:'throwDown'}, // BAL-R1: 空振り硬直rec 28→32(=whiffRecovery)。ヒット時はdownType(throwDown)でdown状態化するためstunは現在未使用(counterMulはBAL.COUNTER_MULへ統合)
   DODGE:{totalF:22,judgeF:12,counterReadyF:18,counterScale:[1.0,1.0,0.9], // vNext PR2 (COMBAT_VNEXT_FINAL.md §2共通F):
@@ -2662,10 +2663,18 @@ function curAiLv(){return onlineActive()?3:AIDIFF_TO_LV[aiDifficulty];} // 現�
 function curAilvRow(){return BAL.AILV[curAiLv()];}
 const LEVEL_TO_DODGE={high:'crouch',mid:'sway',low:'lunge'}; // その段を避ける回避(DODGE_TABLE.beatsの逆引き)
 const DIR_TO_DODGE_KIND={left:'sway',down:'crouch',right:'lunge'}; // BAL.CMD.seqの方向文字列→dodgeコマンドのkind(DODGE_DIRの逆引き、v0.10 (3))
-const ai={think:0,guardT:0,guardOn:false,react:null,ultT:0,hist:[],mash:0,pHoldF:0,mikiriAt:null,dodgeAt:null,dodgeKind:null,cmdQueue:[]};
+const ai={think:0,guardT:0,guardOn:false,react:null,ultT:0,hist:[],mash:0,pHoldF:0,mikiriAt:null,dodgeAt:null,dodgeKind:null,cmdQueue:[],
+  habitHist:[],oppGuardStartF:null,oppBlockEndF:null}; // CPU-R2 PR3(#106 §8): habitHistは直近の相手の意味ある行動(atkLv/dodge/guardHold/grab/mashAfterBlock)を最大16件保持
 function aiReset(){
   ai.think=30;ai.guardT=0;ai.guardOn=false;ai.react=null;ai.ultT=0;
   ai.hist=[];ai.mash=0;ai.pHoldF=0;ai.mikiriAt=null;ai.dodgeAt=null;ai.dodgeKind=null;ai.cmdQueue=[];
+  ai.habitHist=[];ai.oppGuardStartF=null;ai.oppBlockEndF=null;
+}
+function aiPushHabit(t,v){ai.habitHist.push({t:t,v:v,f:B.f});if(ai.habitHist.length>16)ai.habitHist.shift();} // CPU-R2 PR3(#106 §8): 直近12-16件の指示に沿い16件キャップ
+function habitFreq(t,pred){ // CPU-R2 PR3(#106 §8): habitHist内でtype===tかつpred(v)を満たす割合(0-1)。データが無ければ0(=中立、shiftしない)
+  const entries=ai.habitHist.filter(function(h){return h.t===t;});
+  if(!entries.length)return 0;
+  return entries.filter(function(h){return pred(h.v);}).length/entries.length;
 }
 function aiQueueCommandMove(me){ // コマンド技(v0.10 (3)): 方向2つ+トリガーを予約し、人間の連続タップと同じ入力経路(cpuEv)で発火させる
   // 1つ目の方向入力は実際の回避(BAL.DODGE.totalF=22F)を伴うため、idleに復帰する直後(dir1から23F後、
@@ -2694,6 +2703,13 @@ function specialAiThreshold(me,you){ // ABILITY-R2-C (Issue #97 §13 CPU): キ�
     default:return base;
   }
 }
+function specialUseThreshold(me,you){ // CPU-R2 PR3(#106 §7 SPECIAL): 「Lower levels may mistime/waste Specials.
+  // Higher levels should preserve them for relevant conditions」。既存のキャラ別条件付きthreshold(specialAiThreshold、
+  // 「良い」条件下の値)と条件無視のflatベース(=0.015。汎用の初期sane値)をresourceQualityで線形補間する。
+  // Lv1(quality低)ほどflatに近づく=条件を無視しがちで浪費/ミスタイミング。Lv9はconditionedそのもの=好条件を厳密に待つ
+  const conditioned=specialAiThreshold(me,you),generic=0.015,q=curAilvRow().resourceQuality;
+  return generic+(conditioned-generic)*q;
+}
 function cpuFindGuaranteedPunish(me,you,delayF){ // CPU-R2 PR2(#106 §5): 相手の攻撃action残り(startup+active+recovery-pf)にCPU側Normalの
   // startupが収まるかを判定する。you.phase/pf/atkLv(=既に開始済みの現在action)のみを参照し、未来の入力は一切見ない(§1準拠)
   // delayF: 判定時点からCPU側の技が実際にstartupを開始できるまでの遅延(既定0。被ガード確反はme自身の残りblockstunを渡す)
@@ -2712,11 +2728,28 @@ function cpuFindGuaranteedPunish(me,you,delayF){ // CPU-R2 PR2(#106 §5): 相手
 function aiStep(){
   const me=B.p[1],you=B.p[0];
   const D=curDiff();
+  // CPU-R2 PR3(#106 §7 ULT): 「stock満タン後、待って生打ち」を廃し、相手の脆弱window(hitstun/dizzy/
+  // whiff-recovery帯=もう反撃されない安全な確定チャンス)を優先する。resourceQuality低=すぐ諦めて生打ち(Lv1-3相当)、
+  // 高=脆弱windowを長く待てる(Lv8-9は"rarely raw unless...reasonable"に対応し、待機上限が長くなる)
   if(me.ult>=BAL.ULT.stock){
     ai.guardOn=false;ai.ultT++;
-    if(ai.ultT>30&&actionable(me))cpuEv.push({t:'ult'});
+    if(actionable(me)){
+      const row=curAilvRow();
+      const yA=(you.phase==='attack'||you.phase==='cmdAtk')?spec(you):null;
+      const vulnerable=you.phase==='hitstun'||you.phase==='dizzy'||(yA!=null&&you.pf>=yA.s+yA.a);
+      const patienceF=10+Math.round(row.resourceQuality*100);
+      if(vulnerable||ai.ultT>=patienceF)cpuEv.push({t:'ult'});
+    }
     return;
   }
+  ai.ultT=0; // Codexレビュー対応(PR#118): stockが満タンでない間は待機タイマーをリセットする。
+  // 消費後(ultStep()がme.ultをクリア)にリセットしないと、Roar等で再度満タンになった際、既にpatienceF超過で即生打ちになってしまう
+  // habitHist(#106 §8)の掃除: 古いoppBlockEndFは長時間経過したら破棄(無関係な後発攻撃をmashAfterBlockと誤検知しない)
+  if(ai.oppBlockEndF!=null&&B.f-ai.oppBlockEndF>8)ai.oppBlockEndF=null;
+  if(you.phase==='blockstun'&&you.pf>=you.stunDur-1)ai.oppBlockEndF=B.f+1;
+  // ガード継続時間の観測(#106 §8): frequent/long Guardの検出に使う
+  if(you.phase==='guard'){if(ai.oppGuardStartF==null)ai.oppGuardStartF=B.f;}
+  else if(ai.oppGuardStartF!=null){aiPushHabit('guardHold',B.f-ai.oppGuardStartF);ai.oppGuardStartF=null;}
   // 観測: プレイヤーの攻撃を記録し、反応(防御)をスケジュールする。CPU-R2 PR2(#106 §4):
   // reaction delayはCPU Lv依存(row.reactDelayMinF-MaxF)。実際の防御選択(既定Guard/advDefShareでDodge・Mikiri)
   // はai.react消費時点(下記)でLv依存に決める。旧来のここでの即時差し込み(cw)判定は撤去(§4の公式アルゴリズムに
@@ -2724,9 +2757,13 @@ function aiStep(){
   if(you.phase==='attack'&&you.pf===1){
     ai.hist.push({lv:you.atkLv,f:B.f});
     if(ai.hist.length>14)ai.hist.shift();
+    aiPushHabit('atkLv',you.atkLv); // #106 §8
+    if(ai.oppBlockEndF!=null){if(B.f-ai.oppBlockEndF<=8)aiPushHabit('mashAfterBlock',true);ai.oppBlockEndF=null;} // #106 §8
     const row=curAilvRow();
     ai.react={at:B.f+row.reactDelayMinF+((rng()*(row.reactDelayMaxF-row.reactDelayMinF+1))|0),lv:you.atkLv,seenAt:B.f,atkStartupF:spec(you).s};
   }
+  // 回避種別の観測(#106 §8): frequent CROUCH/SWAY/LUNGEの検出に使う(相手が実際にDodgeを開始した瞬間)
+  if(you.phase==='dodge'&&you.pf===1)aiPushHabit('dodge',you.dodgeType);
   if(ai.mikiriAt!=null&&B.f>=ai.mikiriAt){cpuEv.push({t:'mikiri'});ai.mikiriAt=null;}
   if(ai.dodgeAt!=null&&B.f>=ai.dodgeAt){cpuEv.push({t:'dodge',kind:ai.dodgeKind});ai.dodgeAt=null;}
   while(ai.cmdQueue.length&&B.f>=ai.cmdQueue[0].at)cpuEv.push(ai.cmdQueue.shift().cmd); // 予約済みコマンド技入力の発火(v0.10 (3))
@@ -2734,6 +2771,9 @@ function aiStep(){
   if(you.phase==='down'&&!you.downHitUsed&&me.phase==='idle'&&rng()<D.downFollowup){
     cpuEv.push({t:'atk',lv:'mid'});
   }
+  // つかみ試行の観測(#106 §8): repeated Grab attemptsの検出に使う(現時点では収集のみ。消費はPR4の
+  // キャラ別アーキタイプ層で検討する。生の入力は見ず、既に開始済みのyou.phase==='grab'のみ観測=§1準拠)
+  if(you.phase==='grab'&&you.pf===1)aiPushHabit('grab',null);
   // つかみ返し: 相手のつかみを見たらつかみ合いへ
   if(you.phase==='grab'&&you.pf===1&&me.phase==='guard'&&rng()<0.3){
     ai.guardOn=false;ai.guardT=0;cpuEv.push({t:'grab'});
@@ -2756,8 +2796,10 @@ function aiStep(){
   if(you.phase==='dizzy'&&me.phase==='idle'&&you.pf<BAL.GUARD.breakStunF-30){
     cpuEv.push(rng()<0.35?{t:'grab'}:{t:'atk',lv:'mid'});
   }
-  // 咆哮バースト
-  if(me.s>=BAL.SMAX&&me.phase==='hitstun'&&you.combo>=2&&rng()<0.08)cpuEv.push({t:'roar'});
+  // 咆哮escape-use(#106 §7 ROAR): 「prefer Roar when pressured, in hit/block stun」。hitstun中のコンボ被弾または
+  // blockstun中(固められている)を「legitimate pressure condition」として扱い、Lv別のroarEscapeUse確率表を適用。
+  // ROAR-R2(#98)のvulnerable startup/armor timingは通常のRoar発動経路と同一のため自動的に respect される
+  if(me.s>=BAL.SMAX&&((me.phase==='hitstun'&&you.combo>=2)||me.phase==='blockstun')&&rng()<curAilvRow().roarEscapeUse)cpuEv.push({t:'roar'});
   // 汎用punish機会(#106 §5): 相手が攻撃のrecovery帯(startup+active終了後=もう当たらない安全な状態)にいて
   // me.phase==='idle'の時、punishUseに応じてcpuFindGuaranteedPunish()を毎F低確率で試みる(recovery帯が長いほど、
   // また高Lvほど捕捉しやすい。低LvはpunishUseが低くほぼ発火しない)。ブロック直後(上記)以外の全punish機会をここで拾う
@@ -2816,25 +2858,37 @@ function aiStep(){
       // vNext PR2 (§10 Focus): 「外す: CPU logic」につきfocusThreat分岐(旧: 相手の集中が満タン→攻めを控える)を撤廃。
       // CPU判断はfocus/BAL.FOCUSを一切参照しない
       const aggr=Math.max(0.1,0.36-ai.mash*0.03)*D.atkFreqMul; // 難易度別の攻撃頻度
-      const grabW=0.1; // つかみの基礎重み(旧focusThreat加算は撤廃)
+      const row=curAilvRow();
+      // habit adaptation(#106 §8): 直近のhabitHistに応じて重みを僅かにシフトする。row.habitAdaptが
+      // 最大シフト量(Lv1-3は0%=無効)。「frequent Guard→Grab/Guard-break pressure重み上げ」の例に対応
+      const guardHoldFreq=habitFreq('guardHold',function(v){return v>=20;}); // 20F以上の保持を「長押し」とみなす(解釈判断)
+      const grabW=0.1*(1+guardHoldFreq*row.habitAdapt*3); // つかみの基礎重み(旧focusThreat加算は撤廃)+habit shift
       const gsel=0.24+Math.min(0.3,ai.mash*0.04);
       if(roll<aggr){
         if(ai.cmdQueue.length===0&&rng()<D.cmdMoveRate){ // 難易度別のコマンド技使用率(v0.10 (3): EASY=ほぼ不使用/NORMAL=たまに/HARD=積極的)
           aiQueueCommandMove(me);
         }else{
-          const rw=rng();
-          cpuEv.push({t:'atk',lv:rw<0.34?'high':(rw<0.72?'mid':'low')});
+          // habit adaptation(#106 §8): 「frequent SWAY→MID重み上げ/frequent CROUCH→LOW重み上げ/frequent LUNGE→
+          // HIGH重み上げ」の例に対応。相手のDodge種別履歴(habitHist 'dodge')から各段の重みを僅かにシフトする
+          const shift=row.habitAdapt;
+          const wH=0.34+habitFreq('dodge',function(v){return v==='lunge';})*shift;
+          const wM=0.38+habitFreq('dodge',function(v){return v==='sway';})*shift;
+          const wL=0.28+habitFreq('dodge',function(v){return v==='crouch';})*shift;
+          const wSum=wH+wM+wL,rw=rng();
+          cpuEv.push({t:'atk',lv:rw<wH/wSum?'high':(rw<(wH+wM)/wSum?'mid':'low')});
         }
       }else if(roll<aggr+grabW){
         cpuEv.push({t:'grab'});
       }else if(roll<aggr+grabW+gsel){
         ai.guardOn=true;ai.guardT=24+((rng()*24)|0);
       }
-      if(me.s>=BAL.SMAX&&rng()<0.3)cpuEv.push({t:'roar'});
+      // 咆哮neutral-waste(#106 §7 ROAR): 「neutral-waste probability should decrease as level rises」。
+      // resourceQualityが高いほど(高Lv)この無条件消費を控える
+      if(me.s>=BAL.SMAX&&rng()<0.3*(1-row.resourceQuality))cpuEv.push({t:'roar'});
       // ABILITY-R2-C (Issue #97 §13): 汎用の中立確率トリガー(プレイヤーの現在入力を一切見ない・既存のai.think
-      // 思考サイクルに従うだけ)にキャラ別バイアスを乗せる。Lv1-5最終バランス調整はスコープ外(§18)、
-      // ここでは「sane usage」目的の初期実装値(解釈判断箇所はspecialAiThreshold()内コメント参照)
-      if(canStartSpecial(me)&&rng()<specialAiThreshold(me,you))cpuEv.push({t:'special'});
+      // 思考サイクルに従うだけ)にキャラ別バイアスを乗せる。CPU-R2 PR3(#106 §7 SPECIAL): specialUseThreshold()で
+      // resourceQuality(Lv依存)によりconditioned/genericを補間する
+      if(canStartSpecial(me)&&rng()<specialUseThreshold(me,you))cpuEv.push({t:'special'});
     }
   }
 }
