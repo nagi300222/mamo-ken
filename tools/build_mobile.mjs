@@ -87,6 +87,11 @@ function isExcluded(relFromAssets) {
   // are build-time-only inputs to build_current_art.mjs -- the runtime only ever
   // loads the derived art/runtime/** output, same reasoning as art/current/ above.
   if (relFromAssets.startsWith('art/overrides/')) return true;
+  // STAGE-ART-IMPORT: bg/source/ holds the untouched original stage/minigame background
+  // deliveries (see data/art/stage_source_manifest.json). The runtime only ever loads the
+  // derived assets/bg/*.png siblings placed alongside stage_day.png, same reasoning as
+  // art/current/ above -- source stays in GitHub, dist embeds only the derived copy.
+  if (relFromAssets.startsWith('bg/source/')) return true;
   return false;
 }
 
