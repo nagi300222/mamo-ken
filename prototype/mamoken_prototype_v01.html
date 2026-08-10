@@ -97,6 +97,11 @@ const BAL={ // 03_data_design.md v2.0 §2 balance table 準拠
   // Whiff/Mikiri/Gyuiin/down followup/Roar自身=+0(whiffは旧2→0。他は元から未実装=0のまま)
   ROAR:{s:20,armorStartF:11,armorEndF:20,armor:20,armorHits:2,a:4,r:28,d:120,guardDamage:38,chipDamage:10,stun:34,sCost:100,cleanHitUltGain:1}, // ROAR-R2(#98): Startup20F/Armor F11-F20 explicit 2-hit/Recovery28F。armorはtools/audit_current_impl.mjsの必須値チェック互換のためarmorEndFと同値を保持(実際の判定はarmorStartF/armorEndF+armorHitsを使用)
   CLASH:{sel:90,d:120,near:8,streakBonus:30,winS:30,loserStun:40,inF:26,revealHitF:24,revealF:60},
+  // VS-SCREEN-R1(#110): BATTLE/ONLINE共通(将来ARCADE/SURVIVALも消費予定)のマッチ開始VS演出タイミング。
+  // durF=通常(~100F)/survivalDurF=SURVIVAL想定の短縮版(~60-70F、#101未実装のため今は未使用の予約値)。
+  // 各frac値はdurFに対する比率で5段(暗転+斜め分割/ポートレートスライドイン/VSスラム+雷閃光/名前・パレット保持/白フラッシュ)の
+  // 境界を決める。演出専用でB.p[]の値やrng()を一切読み書きしないためgameplay hash/決定性には影響しない
+  VS:{durF:100,survivalDurF:65,splitFrac:0.15,slideFrac:0.45,slamFrac:0.55,holdFrac:0.85},
   MINIGAME:{
     weights:{jyanken:0.5,renda:0.25,hayauchi:0.25},
     RENDA:{durationF:120,tapGain:1,barRange:20}, // レンダ(連打の綱引き)。CPU加算率はBAL.AILVへLv別に集約(#106 §10)
@@ -1170,7 +1175,8 @@ function startBattle(){
   B={f:0,round:1,wins:[0,0],timer:BAL.TIME,fightStartF:0, // v0.10 (8): YOUマーカーの強調2秒判定に使う「fightに入ったF」
     p:[newFighter(game.p1,0,selPalette),newFighter(game.p2,1,cpuPalette)],
     flow:'intro',flowF:0,hitstop:0,shake:0,
-    clash:null,ultUser:-1,ann:[],fx:[],koSide:-1,result:null,pendKO:-1,clashStreak:[0,0],roarImpact:null};
+    clash:null,ultUser:-1,ann:[],fx:[],koSide:-1,result:null,pendKO:-1,clashStreak:[0,0],roarImpact:null,
+    vsMeta:{mode:'battle',darkFinal:false,survivalInfo:null}}; // VS-SCREEN-R1(#110): 通常BATTLE(VS CPU)。ARCADE/SURVIVALは#99/#101実装時にmode/darkFinal/survivalInfoを設定して同じ仕組みを再利用する
   for(const f of B.p)preloadCurrentArtCharacter(f.c.id);
   aiReset();runtimeCommandShadowReset();roundInit(true);
   game.screen='battle';
@@ -1186,7 +1192,8 @@ function startOnlineBattle(seed,charIdxBySlot,delayF){ // オンライン対戦�
   B={f:0,round:1,wins:[0,0],timer:BAL.TIME,fightStartF:0, // v0.10 (8): YOUマーカーの強調2秒判定に使う「fightに入ったF」
     p:[newFighter(game.p1,0),newFighter(game.p2,1)],
     flow:'intro',flowF:0,hitstop:0,shake:0,
-    clash:null,ultUser:-1,ann:[],fx:[],koSide:-1,result:null,pendKO:-1,clashStreak:[0,0],roarImpact:null};
+    clash:null,ultUser:-1,ann:[],fx:[],koSide:-1,result:null,pendKO:-1,clashStreak:[0,0],roarImpact:null,
+    vsMeta:{mode:'online',darkFinal:false,survivalInfo:null}}; // VS-SCREEN-R1(#110): 両クライアントとも同じmode文字列(rng()を読まない純粋なB.flowF駆動)なので描画は自然に一致する
   for(const f of B.p)preloadCurrentArtCharacter(f.c.id);
   runtimeCommandShadowReset();roundInit(true);
   NET.matchSeq++; // 対戦世代を進める(前の対戦の遅延cmd残骸を弾くため)
@@ -1237,10 +1244,13 @@ function roundInit(first){
     f.darkChainUses=0;f.darkLastChainMove=null;f.darkWindowUntilF=0;f.darkWindowMax=0;f.darkBodyActive=false;
     f.roarArmorAbsorbed=0; // ROAR-R2(#98)
   }
-  B.timer=BAL.TIME;B.flow='intro';B.flowF=0;B.clash=null;B.pendKO=-1;B.clashStreak=[0,0];B.roarImpact=null; // ROAR-R2(#98): presentation-only impact timer、Round跨ぎで持ち越さない
-  announce('ROUND '+B.round,66,50,'#ffd23f');
+  B.timer=BAL.TIME;B.flow=first?'vs':'intro';B.flowF=0;B.clash=null;B.pendKO=-1;B.clashStreak=[0,0];B.roarImpact=null; // ROAR-R2(#98): presentation-only impact timer、Round跨ぎで持ち越さない
+  // VS-SCREEN-R1(#110): マッチ開始(first)時はVS画面を'intro'の前に挿入する(Round 2+は従来通り即'intro')。
+  // 「ROUND N」announceはVS画面と重ねて表示させないため、vs→intro遷移時(logic()/netLogicTick())へ移動した
+  if(!first)announce('ROUND '+B.round,66,50,'#ffd23f');
 }
 function announce(text,dur,size,color){B.ann.push({text:text,dur:dur,size:size,color:color,f:0});}
+function vsDurationF(){return(B.vsMeta&&B.vsMeta.mode==='survival')?BAL.VS.survivalDurF:BAL.VS.durF;} // VS-SCREEN-R1(#110)
 
 /* ================= FX ================= */
 function stepFx(){
@@ -2967,7 +2977,10 @@ function logic(){
   if(onlineActive()){netLogicTick();return;}
   B.f++;stepFx();
   if(B.hitstop>0){B.hitstop--;return;}
-  if(B.flow==='intro'){
+  if(B.flow==='vs'){ // VS-SCREEN-R1(#110): マッチ開始時のみ'intro'の前に挿入される演出専用flow。rng()は読まない
+    evq.length=0;B.flowF++;
+    if(B.flowF>=vsDurationF()){B.flow='intro';B.flowF=0;announce('ROUND '+B.round,66,50,'#ffd23f');}
+  }else if(B.flow==='intro'){
     evq.length=0;B.flowF++;
     if(B.flowF===58){announce('FIGHT!',44,64,'#ff5a3c');sfx('fight');}
     if(B.flowF>=70){B.flow='fight';B.fightStartF=B.f;} // ラウンド開始時刻(YOUマーカーの強調2秒判定用、v0.10 (8))
@@ -3026,7 +3039,11 @@ function netLogicTick(){
     B.hitstop--;return;
   }
   NET.pendCmds0=[];NET.pendCmds1=[];NET.pendHold0=null;NET.pendHold1=null;
-  if(B.flow==='intro'){
+  if(B.flow==='vs'){ // VS-SCREEN-R1(#110): 両クライアントとも同じNET.simF/haveLocal&&havePeerゲートの下で1F進むため、
+    // rng()を読まないB.flowF駆動の演出はそのまま両者で一致する('intro'と同じロックステップ安全性)
+    B.flowF++;
+    if(B.flowF>=vsDurationF()){B.flow='intro';B.flowF=0;announce('ROUND '+B.round,66,50,'#ffd23f');}
+  }else if(B.flow==='intro'){
     B.flowF++;
     if(B.flowF===58){announce('FIGHT!',44,64,'#ff5a3c');sfx('fight');}
     if(B.flowF>=70){B.flow='fight';B.fightStartF=B.f;} // ラウンド開始時刻(YOUマーカーの強調2秒判定用、v0.10 (8))
@@ -4860,10 +4877,109 @@ function drawStatusDebuffs(f,ox,oy){
     by+=r*2+gap;
   }
 }
+// VS-SCREEN-R1(#110): BATTLE/ONLINE(+将来ARCADE/SURVIVAL)共通のマッチ開始VS演出。
+// B.p[]/B.vsMeta/B.flowFを読むだけで、fighterのHP/ゲージ/フラグ等は一切変更しない(gameplay hash/決定性に影響しない、
+// 演出専用のgame.frame/Math.randomのみ使用しrng()は消費しない)。P1=roster3d左向き素のまま/P2=向き合う演出として
+// 見た目だけ水平反転(元アートは変更しない、Issue本文の「horizontally mirrored presentation-only」に対応)。
+function rosterEntryFor(charId){return ROSTER.find(function(r){return r.id===charId;});}
+function drawRosterCropFlipped(key,x,y,w,h,crop,radius){
+  ctx.save();ctx.translate(x+w,y);ctx.scale(-1,1);
+  drawRosterCrop(key,0,0,w,h,crop,radius);
+  ctx.restore();
+}
+function vsPaletteLabel(f){return f.palette==='p2'?'2P配色':'1P配色';}
+function vsPaletteColor(f,meta){return f.palette==='p2'?(meta.darkFinal?'#8a4dff':'#5ab2ff'):(meta.darkFinal?'#c07dff':'#ff9a4d');} // グロー枠と同色にして冗長に対応付ける
+function rVsScreen(){
+  const meta=B.vsMeta||{mode:'battle',darkFinal:false,survivalInfo:null};
+  const dur=vsDurationF(),f=B.flowF;
+  const splitEndF=Math.max(1,Math.round(dur*BAL.VS.splitFrac)),slideEndF=Math.max(1,Math.round(dur*BAL.VS.slideFrac)),
+    slamF=Math.round(dur*BAL.VS.slamFrac),holdEndF=Math.round(dur*BAL.VS.holdFrac);
+  const p1=B.p[0],p2=B.p[1];
+  ctx.fillStyle=meta.darkFinal?'#0a0410':'#05060c';ctx.fillRect(0,0,W,H);
+  // 1) 暗転+斜め分割(暖色P1側/寒色P2側。darkFinalは両側とも紫系に統一)
+  const splitT=Math.min(1,f/splitEndF);
+  if(splitT>0){
+    const skew=180,midX=W/2;
+    ctx.save();
+    ctx.beginPath();ctx.moveTo(0,0);ctx.lineTo(midX+skew,0);ctx.lineTo(midX-skew,H);ctx.lineTo(0,H);ctx.closePath();ctx.clip();
+    const g1=ctx.createLinearGradient(0,0,midX,H);
+    if(meta.darkFinal){g1.addColorStop(0,'rgba(70,25,110,'+(0.55*splitT)+')');g1.addColorStop(1,'rgba(20,8,40,'+(0.3*splitT)+')');}
+    else{g1.addColorStop(0,'rgba(255,90,40,'+(0.5*splitT)+')');g1.addColorStop(1,'rgba(120,20,10,'+(0.25*splitT)+')');}
+    ctx.fillStyle=g1;ctx.fillRect(0,0,W,H);
+    ctx.restore();
+    ctx.save();
+    ctx.beginPath();ctx.moveTo(midX+skew,0);ctx.lineTo(W,0);ctx.lineTo(W,H);ctx.lineTo(midX-skew,H);ctx.closePath();ctx.clip();
+    const g2=ctx.createLinearGradient(midX,0,W,H);
+    if(meta.darkFinal){g2.addColorStop(0,'rgba(80,25,130,'+(0.3*splitT)+')');g2.addColorStop(1,'rgba(30,10,55,'+(0.55*splitT)+')');}
+    else{g2.addColorStop(0,'rgba(40,70,255,'+(0.25*splitT)+')');g2.addColorStop(1,'rgba(120,30,220,'+(0.5*splitT)+')');}
+    ctx.fillStyle=g2;ctx.fillRect(0,0,W,H);
+    ctx.restore();
+    ctx.strokeStyle='rgba(255,255,255,'+(0.5*splitT)+')';ctx.lineWidth=4;
+    ctx.beginPath();ctx.moveTo(midX+skew,0);ctx.lineTo(midX-skew,H);ctx.stroke();
+  }
+  // 2) 雷背景(常時・演出専用。Math.random/game.frameのみでrng()は不使用=オンライン同期に無関係)
+  ctx.save();ctx.globalAlpha=Math.max(0,0.55+0.25*Math.sin(game.frame*0.4));
+  ctx.strokeStyle=meta.darkFinal?'rgba(200,140,255,0.8)':'rgba(255,255,255,0.75)';ctx.lineWidth=2;
+  for(let i=0;i<5;i++){
+    const seedX=(i*137+Math.floor(game.frame/6)*53)%W;
+    ctx.beginPath();ctx.moveTo(seedX,0);
+    let cx=seedX;
+    for(let s=0;s<6;s++){cx+=(((seedX*7+s*31+i*19)%17)-8)*4;ctx.lineTo(cx,(s+1)*H/6);}
+    ctx.stroke();
+  }
+  ctx.restore();
+  // 3) ポートレート(スライドイン。P2は「向き合う」向きに水平反転)
+  const boxW=228,boxH=520,boxY=(H-boxH)/2-20;
+  const slideT=Math.min(1,Math.max(0,f/slideEndF)),ease=1-Math.pow(1-slideT,3);
+  const p1RestX=26,p2RestX=W-26-boxW;
+  const p1X=p1RestX-(1-ease)*(boxW+80),p2X=p2RestX+(1-ease)*(boxW+80);
+  if(slideT>0){
+    // 背後グロー: Dark Moguzoのような暗色キャラでも輪郭が背景に沈まないよう、パネル背後へ必ず明るいハローを敷く
+    const glow1=ctx.createRadialGradient(p1X+boxW/2,boxY+boxH/2,10,p1X+boxW/2,boxY+boxH/2,boxW*0.9);
+    glow1.addColorStop(0,meta.darkFinal?'rgba(180,120,255,0.35)':'rgba(255,150,80,0.35)');glow1.addColorStop(1,'rgba(0,0,0,0)');
+    ctx.fillStyle=glow1;ctx.fillRect(p1X-60,boxY-60,boxW+120,boxH+120);
+    const glow2=ctx.createRadialGradient(p2X+boxW/2,boxY+boxH/2,10,p2X+boxW/2,boxY+boxH/2,boxW*0.9);
+    glow2.addColorStop(0,meta.darkFinal?'rgba(140,90,255,0.35)':'rgba(90,160,255,0.35)');glow2.addColorStop(1,'rgba(0,0,0,0)');
+    ctx.fillStyle=glow2;ctx.fillRect(p2X-60,boxY-60,boxW+120,boxH+120);
+    const r1=rosterEntryFor(p1.c.id),r2=rosterEntryFor(p2.c.id);
+    ctx.save();rr(p1X,boxY,boxW,boxH,14);ctx.clip();ctx.fillStyle='#1a1420';ctx.fillRect(p1X,boxY,boxW,boxH);ctx.restore();
+    ctx.save();rr(p2X,boxY,boxW,boxH,14);ctx.clip();ctx.fillStyle='#141a24';ctx.fillRect(p2X,boxY,boxW,boxH);ctx.restore();
+    drawRosterCrop('roster_'+p1.c.id,p1X,boxY,boxW,boxH,r1&&r1.heroCrop,14);
+    drawRosterCropFlipped('roster_'+p2.c.id,p2X,boxY,boxW,boxH,r2&&r2.heroCrop,14);
+    ctx.save();ctx.globalAlpha=slideT;
+    ctx.strokeStyle=meta.darkFinal?'#c07dff':'#ff9a4d';ctx.lineWidth=4;rr(p1X,boxY,boxW,boxH,14);ctx.stroke();
+    ctx.strokeStyle=meta.darkFinal?'#8a4dff':'#5ab2ff';ctx.lineWidth=4;rr(p2X,boxY,boxW,boxH,14);ctx.stroke();
+    ctx.restore();
+  }
+  // 4) VSスラム+名前・パレット表示(名前欄はSELECT_ART_BOXのPALETTE-R1表記と同じ「1P配色/2P配色」を使う)
+  if(f>=slamF){
+    const slamT=Math.min(1,(f-slamF)/10),pop=1+(1-slamT)*0.6;
+    ctx.save();ctx.translate(W/2,H/2-40);ctx.scale(pop,pop);
+    txt('VS',0,0,96,meta.darkFinal?'#e0c0ff':'#ffe14d');
+    ctx.restore();
+    const nameAlpha=Math.min(1,(f-slamF)/8);
+    ctx.save();ctx.globalAlpha=nameAlpha;
+    txt(p1.c.name,p1RestX+boxW/2,boxY+boxH+34,20,'#ffd8a8');
+    txt(vsPaletteLabel(p1),p1RestX+boxW/2,boxY+boxH+58,13,vsPaletteColor(p1,meta)); // 同キャラ対戦でも文字色自体で1P/2Pを冗長に判別できるようにする
+    txt(p2.c.name,p2RestX+boxW/2,boxY+boxH+34,20,'#a8d8ff');                        // (Issue本文「same-character match must visibly distinguish palette」)
+    txt(vsPaletteLabel(p2),p2RestX+boxW/2,boxY+boxH+58,13,vsPaletteColor(p2,meta));
+    ctx.restore();
+    if(meta.darkFinal)txt('闇の力が高まっている……！',W/2,H-64,16,'#c9a2ff'); // ARCADE最終戦専用ナレーション(Issue本文§Mode rules)
+    if(meta.survivalInfo)txt('SURVIVAL / BATTLE '+meta.survivalInfo.battleNum+' / CPU LV'+meta.survivalInfo.cpuLv,W/2,72,15,'#ffe6a3'); // SURVIVAL専用ラベル(同§)
+    const flashF=slamF+4;
+    if(f<flashF){ctx.save();ctx.globalAlpha=0.5*(1-(f-slamF)/4)*flashScale();ctx.fillStyle='#fff';ctx.fillRect(0,0,W,H);ctx.restore();} // 雷インパクトの白フラッシュ(短時間)。Codexレビュー対応(PR#121): 他の全画面フラッシュ(roarImpact)と同じくflashScale()でOPTIONS.flash==='reduced'を尊重する
+  }
+  // 5) 白フラッシュ→battle(intro遷移の直前)
+  if(f>=holdEndF){
+    const outT=Math.min(1,(f-holdEndF)/Math.max(1,dur-holdEndF));
+    ctx.save();ctx.globalAlpha=outT*flashScale();ctx.fillStyle='#fff';ctx.fillRect(0,0,W,H);ctx.restore(); // Codexレビュー対応(PR#121): 同上
+  }
+}
 function rBattle(){
   ctx.save();
   const mirror=onlineActive()&&online.slot===1; // 2P側クライアントのみ描画層で水平ミラー(§6.8 v2.5.1(7)。シミュレーション/入力/パッドUI/HUDは対象外)
   if(mirror){ctx.translate(W,0);ctx.scale(-1,1);inMirrorZone=true;}
+  if(B.flow==='vs'){rVsScreen();inMirrorZone=false;ctx.restore();return;} // VS-SCREEN-R1(#110): ステージ/ファイター/HUD/パッドは描画せず専用画面に丸ごと差し替える
   if(B.shake>0)ctx.translate((Math.random()*2-1)*B.shake,(Math.random()*2-1)*B.shake);
   let zoom=1;
   if(B.flow==='clash'&&B.clash){
