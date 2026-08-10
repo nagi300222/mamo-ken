@@ -1247,7 +1247,7 @@ function arcadeGenerateRoute(charIdx){ // Stage1-7: 自分+FINAL相手を除く7
 }
 function arcadeGenerateStages(route){ // Stage1-7: 通常プールからランダム(隣接同背景は可能な範囲で回避)/Stage8: FINAL相手がdark_moguzoならnew_moon_dark_arena、それ以外は通常プール
   const stages=[];
-  for(let i=0;i<7;i++)stages.push(arcadePickStageAvoiding(i>0?stages[i-1]:null));
+  for(let i=0;i<7;i++)stages.push(arcadePickStageAvoiding(i>0?stages[i-1]:undefined)); // Codexレビュー指摘(PR#123): nullは「前回無し」の目印ではなく「集落の闘技場/昼」を表す有効なプール値なので、Stage1ではnullと衝突しないundefinedを使う
   const darkIdx=arcadeDarkCombatIndex();
   stages.push(route[7]===darkIdx?'new_moon_dark_arena':arcadePickStageAvoiding(stages[6]));
   return stages;
