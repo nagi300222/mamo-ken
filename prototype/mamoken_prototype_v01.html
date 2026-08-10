@@ -2180,6 +2180,14 @@ function chargeGainDirect(f){ // Issue #97 §10: Direct Charge acquisition。C3�
   f.charge=Math.min(3,f.charge+1);f.chargeSub=0;
 }
 const BULLET_RELEASE_DMG={1:110,2:165,3:230}; // ABILITY-R2-C (Issue #97 §10 Bullet SPECIAL Full Release): Charge1/2/3時の確定ダメージ(levelMulは別途二重適用しない)
+function tickBulletReleaseInterrupt(f){ // Codexレビュー指摘(PR#109): OVERHEATED状態でFull Releaseが被弾等によりcmdAtkから強制中断されると、
+  // advance()側の自然完了パス(t>=total、hit/whiff問わずここでoverheatを解除している)を経由しないため、overheatが
+  // 解除されず次のcooldown/round終了までx0.70+charge gain停止が固着する。加えて古いcmdMove(isSpecial:true)が残ると
+  // specialButtonState()がSPECIALボタンをACTIVE表示のまま固着させる。中断させる側の全call siteを個別に追うのではなく、
+  // 「phaseが既にcmdAtkでなくなっているのにbulletFullReleaseのcmdMoveが残っている」を毎F汎用的に検出して解消する
+  // (fightStep/netFightStepの共通per-fighter tickloopから両方呼ぶため、オンライン/オフラインで挙動は同一=決定的)
+  if(f.c.id==='bullet'&&f.phase!=='cmdAtk'&&f.cmdMove&&f.cmdMove.bulletFullRelease){f.cmdMove=null;f.cmdIdx=null;f.overheat=false;}
+}
 function dealDamage(def,dmg){
   if(def.c.id==='hakuma')def.ironWallReady=false; // vNext PR4 (Hakuma IRON WALL lose): 被弾/Throw/Down/GuardBreak(いずれもHP減少を伴う)で消失
   if(def.gritAvailable&&def.hp>=2&&(def.hp-dmg)<=0){def.gritAvailable=false;def.hp=1;return;}
@@ -2249,7 +2257,7 @@ function hitApply(att,def,counterHit,lvOverride,cmdOverride){
     if(cm&&cm.comboEnd)att.combo=0;else att.combo++; // CMD-R1: comboEndの技はここで正式にコンボを打ち切る(次のヒットのdamage scaleを最初から)
     if(!cm){
       att.normalChainCount++;pushModernHist(att,lv); // NORMAL-CHAIN-R1: 通常打撃(crouch/mid/high/low)の確定ヒットのみカウント。コマンド技(cm truthy)はここでは増やさない(既存comboとは別概念)。vNext PR3 (§8): NormalのHITはModern historyへ記録
-      if(att.c.id==='bullet'){if(att.normalChainCount>=4)chargeGainDirect(att);else chargeGainOrdinary(att);} // ABILITY-R2-C (Issue #97 §10): 「Normal chain final hit」=Direct Charge。既存chain limit4(Pisukeと同じ基準値)を「final hit」の解釈に採用(仕様に数値指定なし=解釈判断、PR説明に記載)
+      if(att.c.id==='bullet'){if(att.normalChainCount>=normalChainLimitFor(att.c))chargeGainDirect(att);else chargeGainOrdinary(att);} // ABILITY-R2-C (Issue #97 §10): 「Normal chain final hit」=Direct Charge。Bullet自身のNORMAL_CHAIN_LIMIT(3)をfinal hitの基準に使う(Codexレビュー指摘#109: 固定4はBulletのchain上限3では到達せず常にunreachableだった)
     }else{
       att.ccActive=true;att.ccWindowUntil=B.f+(cm.ccWindow||16); // vNext PR3 (§9 Classic Cancel): Command HITでcancel windowを開く
       if(cm.chargeGain)chargeGainDirect(att); // ABILITY-R2-C (Bullet CHARGE Direct): 弾み突き/尾払い/跳ね上げのHIT。旧A-B-A再取得禁止は撤廃(同一技の連続Chargeも許可)
@@ -2834,6 +2842,7 @@ function netFightStep(cmds0,hold0,cmds1,hold1){ // fightStep()のオンライン
     tickPressureQueue(f,B.p[1-f.side]); // vNext PR4 (Takimaru PRESSURE queued throw)
     tickYomiReady(f); // vNext PR4 (Yomikage RETURN/JUST Ready timeout)
     tickSpecial(f); // ABILITY-R2 SPECIAL-CORE: cooldown/activeF共通の1F減算
+    tickBulletReleaseInterrupt(f); // ABILITY-R2-C (Codexレビュー指摘 PR#109): Full Release中断時のoverheat/cmdMove固着防止
     tickPoison(f);tickBind(f);tickFeintFollowup(f); // ABILITY-R2-B: POISON tick/BIND減算/Chirka FEINT follow-up発火
     f.kb*=0.86;if(f.kb<0.5)f.kb=0;
     if(f.sNo>0)f.sNo--;
@@ -2866,6 +2875,7 @@ function fightStep(){
     tickPressureQueue(f,B.p[1-f.side]); // vNext PR4 (Takimaru PRESSURE queued throw)
     tickYomiReady(f); // vNext PR4 (Yomikage RETURN/JUST Ready timeout)
     tickSpecial(f); // ABILITY-R2 SPECIAL-CORE: cooldown/activeF共通の1F減算
+    tickBulletReleaseInterrupt(f); // ABILITY-R2-C (Codexレビュー指摘 PR#109): Full Release中断時のoverheat/cmdMove固着防止
     tickPoison(f);tickBind(f);tickFeintFollowup(f); // ABILITY-R2-B: POISON tick/BIND減算/Chirka FEINT follow-up発火
     f.kb*=0.86;if(f.kb<0.5)f.kb=0;
     if(f.sNo>0)f.sNo--;
