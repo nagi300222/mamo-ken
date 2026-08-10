@@ -2676,12 +2676,35 @@ function habitFreq(t,pred){ // CPU-R2 PR3(#106 §8): habitHist内でtype===tか�
   if(!entries.length)return 0;
   return entries.filter(function(h){return pred(h.v);}).length/entries.length;
 }
+function aiCmdMoveWeight(me,mv){ // CPU-R2 PR4(#106 §9): キャラ別アーキタイプに応じたコマンド技選択の重み(既定1.0=無変更)。
+  // 違法選択は生成しない(発生不可な技はhasResourceFor側で最終的に弾かれるため、ここでのweight=0は選好上の無駄を避けるだけの最適化)
+  let w=1;
+  // Hakuma/Defense: 「Iron Wall/Reflect integration」。ironWallReadyがある時はironWallAlt持ちの技を優先して起動・消費する
+  if(me.c.id==='hakuma'&&me.ironWallReady&&mv.ironWallAlt)w*=3;
+  // Chirka/Trick: 「FEINT/DELAY/POISON choice should respond to observed defense habits」。frequent Guard->POISON
+  // (削りが効く)/frequent Dodge->DELAY(タイミング外しが効く)をai.habitHist由来の頻度で優先
+  if(me.c.id==='chirka'){
+    if(mv.poison)w*=1+habitFreq('guardHold',function(v){return v>=20;})*2;
+    if(mv.delay)w*=1+habitFreq('dodge',function(){return true;})*2;
+  }
+  // Bullet/Charge: 「high levels...avoid accidental OVERHEAT」。現在charge不足で発生し得ない技は選好から外す
+  if(me.c.id==='bullet'&&mv.cost&&mv.cost.res==='charge'&&me.charge<mv.cost.amt)w=0;
+  return w;
+}
 function aiQueueCommandMove(me){ // コマンド技(v0.10 (3)): 方向2つ+トリガーを予約し、人間の連続タップと同じ入力経路(cpuEv)で発火させる
   // 1つ目の方向入力は実際の回避(BAL.DODGE.totalF=22F)を伴うため、idleに復帰する直後(dir1から23F後、
   // 24Fバッファに収まる最終タイミング)でトリガーを送る。2つ目の方向は回避演技中でもdirBufには積まれる。
   const moves=commandMovesFor(me.c);
   if(!moves||!moves.length)return;
-  const idx=(rng()*moves.length)|0,mv=moves[idx],dir1At=B.f+1;
+  // CPU-R2 PR4(#106 §9): 旧来の完全均等ランダム選択を、キャラ別アーキタイプ重み付き抽選へ変更
+  const weights=moves.map(function(mv){return aiCmdMoveWeight(me,mv);});
+  const wSum=weights.reduce(function(a,b){return a+b;},0);
+  let idx=(rng()*moves.length)|0;
+  if(wSum>0){
+    let r=rng()*wSum,acc=0;
+    for(let i=0;i<weights.length;i++){acc+=weights[i];if(r<acc){idx=i;break;}}
+  }
+  const mv=moves[idx],dir1At=B.f+1;
   ai.cmdQueue.push({at:dir1At,cmd:{t:'dodge',kind:DIR_TO_DODGE_KIND[mv.seq[0]]}});
   ai.cmdQueue.push({at:dir1At+1,cmd:{t:'dodge',kind:DIR_TO_DODGE_KIND[mv.seq[1]]}});
   ai.cmdQueue.push({at:dir1At+BAL.DODGE.totalF+1,cmd:(mv.type==='grab')?{t:'grab'}:{t:'atk',lv:mv.trigger}});
@@ -2691,13 +2714,23 @@ function specialAiThreshold(me,you){ // ABILITY-R2-C (Issue #97 §13 CPU): キ�
   // プレイヤーの現在入力は一切参照しない(既存ai.think cadenceのみ使用)。数値は初期sane値であり最終チューニング対象外(§18)
   const base=0.015;
   switch(me.c.id){
-    case 'moguzo':return me.hp<=maxHpFor(me.c)*0.60?base*3:base; // bias HP<=60%
+    // CPU-R2 PR4(#106 §9 Moguzo/Standard): 「strongest bias when GUTS active」に対応(GUTS=HP<=30%でdealDamage側が
+    // 自動セットする既存gutsActiveフラグ。HP<=60%の従来biasはそのまま残し、GUTS成立時はさらに強く優先する)
+    case 'moguzo':return me.gutsActive?base*5:(me.hp<=maxHpFor(me.c)*0.60?base*3:base);
     case 'pisuke':return me.chaseActive?base:base*2; // neutral before offense: CHASEループ開始前を優先(解釈判断)
-    case 'godan':return(you.phase==='attack'||you.phase==='cmdAtk')?base*3:base; // neutral under pressure
-    case 'hakuma':return base*1.5; // neutral before Guard strategy(解釈判断: flat bias。Guard分岐自体はai.think内の既存ロジックのまま)
+    // CPU-R2 PR4(#106 §9 Godan/Power): armorStock(コマンド技armorの原資)が尽きている時ほど、無制限armorの
+    // Hyper Armor SPECIALを代替手段として優先する(既存のyou攻撃中バイアスに追加で乗算)
+    case 'godan':return((you.phase==='attack'||you.phase==='cmdAtk')?base*3:base)*(me.armorStock<=1?1.5:1);
+    // CPU-R2 PR4(#106 §9 Hakuma/Defense): 「Iron Wall/Reflect integration」。Reflect(SPECIAL中のガード反射)は
+    // ガード姿勢でなければ意味が無いため、現在ガード中/ガード予定(ai.guardOn)の時に優先度を上げる
+    case 'hakuma':return base*1.5*((me.phase==='guard'||ai.guardOn)?2:1);
     case 'chirka':return base*2; // treat special as an attack candidate: 通常attack候補相当の頻度まで上げる
-    case 'takimaru':return me.pressureState==='ready'?base*4:base*1.5; // pressure/grab opportunity
-    case 'yomikage':return base; // probabilistic neutral use、追加biasなし(現在入力への即応を明示的に避ける)
+    // CPU-R2 PR4(#106 §9 Takimaru/Grappler): 「BIND Special vs Dodge-heavy opponents」。ai.habitHist(#106 §8、
+    // 既に成立した相手の行動の履歴のみ)由来のdodge頻度が高いほど優先度を上げる
+    case 'takimaru':return(me.pressureState==='ready'?base*4:base*1.5)*(1+habitFreq('dodge',function(){return true;}));
+    // CPU-R2 PR4(#106 §9 Yomikage/Counter): 「Auto Counter Special used predictively」。ai.mash(ai.hist=既に観測した
+    // 過去の相手の攻撃頻度由来。現在/未来の入力は一切見ない、§1準拠)が高いほど予測的にSPECIALを構える優先度を上げる
+    case 'yomikage':return base*(1+Math.min(1,ai.mash/4)*3);
     case 'bullet':return me.overheat?base*6:(me.charge>=2?base*3:base); // C2/C3 release choice + OVERHEAT high priority
     case 'dark_moguzo':return base*8; // HP<=30% high priority(canStartSpecial側のCONDITION LOCKで既にHP<=30%の時のみ到達)
     default:return base;
@@ -2710,6 +2743,16 @@ function specialUseThreshold(me,you){ // CPU-R2 PR3(#106 §7 SPECIAL): 「Lower 
   const conditioned=specialAiThreshold(me,you),generic=0.015,q=curAilvRow().resourceQuality;
   return generic+(conditioned-generic)*q;
 }
+// CPU-R2 PR4(#106 §9): 中立思考(aggr/grabW/gsel)・コマンド技使用率・punishUse・見切り選好への
+// キャラ別アーキタイプ乗算バイアス(既定1.0=無変更)。違法アクション/ステータス付与は一切行わない(既存の合法な
+// 汎用ノブへの僅かな重み付けのみ)。mikiriShareは反応行動でのMikiri対Dodge分岐(既定0.5)への乗数
+const ARCHETYPE_BIAS={
+  pisuke:{gsel:0.6}, // Rush: 「lower passive Guard weight」
+  godan:{cmdMoveRate:1.6,mikiriShare:1.4}, // Power: 「more...Command usage」+「lower frivolous Dodge frequency」
+  hakuma:{gsel:1.4,punishUse:1.2}, // Defense: 「higher Guard weight」+「punish-oriented offense」
+  yomikage:{aggr:0.6,gsel:1.3} // Counter: 「lower raw offense, higher wait/counter」
+};
+function archetypeMul(id,key){const b=ARCHETYPE_BIAS[id];return(b&&b[key]!=null)?b[key]:1;}
 function cpuFindGuaranteedPunish(me,you,delayF){ // CPU-R2 PR2(#106 §5): 相手の攻撃action残り(startup+active+recovery-pf)にCPU側Normalの
   // startupが収まるかを判定する。you.phase/pf/atkLv(=既に開始済みの現在action)のみを参照し、未来の入力は一切見ない(§1準拠)
   // delayF: 判定時点からCPU側の技が実際にstartupを開始できるまでの遅延(既定0。被ガード確反はme自身の残りblockstunを渡す)
@@ -2789,7 +2832,7 @@ function aiStep(){
     // Codexレビュー対応(PR#117): この時点でme(自分)はまだblockstun残りがあり、この技はtryBuf()で
     // 先行入力として保持され実際の発生はme自身のblockstun終了後になる。その遅延(me.stunDur-me.pf)を
     // delayFとして渡さないと、実際に発生する頃には相手の残り復帰F(remainF)を超えて「保証されない」選択になる
-    const gp=rng()<row.punishUse?cpuFindGuaranteedPunish(me,you,me.stunDur-me.pf):null;
+    const gp=rng()<row.punishUse*archetypeMul(me.c.id,'punishUse')?cpuFindGuaranteedPunish(me,you,me.stunDur-me.pf):null; // #106 §9 Hakuma: punish-oriented offense
     cpuEv.push(gp?{t:'atk',lv:gp.lv}:{t:'atk',lv:rng()<0.7?'mid':LEVELS[(rng()*3)|0]});
   }
   // ガードブレイク追撃（打撃 or 投げ）: dizzyは既に確定ヒット状態のためguaranteed punish計算は不要
@@ -2807,7 +2850,7 @@ function aiStep(){
     const yA=spec(you);
     if(you.pf>=yA.s+yA.a){
       const row=curAilvRow();
-      if(rng()<row.punishUse*0.25){
+      if(rng()<row.punishUse*archetypeMul(me.c.id,'punishUse')*0.25){ // #106 §9 Hakuma: punish-oriented offense
         const gp=cpuFindGuaranteedPunish(me,you);
         if(gp)cpuEv.push({t:'atk',lv:gp.lv});
       }
@@ -2820,7 +2863,7 @@ function aiStep(){
     if(me.phase==='idle'&&rng()<row.reactRate){
       if(rng()<row.advDefShare){
         const jitter=Math.round((rng()*2-1)*row.jitterF),contact=r.seenAt+r.atkStartupF;
-        if(rng()<0.5&&ai.mikiriAt==null){
+        if(rng()<0.5*archetypeMul(me.c.id,'mikiriShare')&&ai.mikiriAt==null){ // #106 §9 Godan: lower frivolous Dodge frequency(Mikiri優先度を上げる分だけDodgeが減る)
           const win=(me.hp<=BAL.PINCH_HP)?BAL.MIKIRI.windowPinch:BAL.MIKIRI.window;
           ai.mikiriAt=contact+jitter+Math.round((rng()*2-1)*win);
         }else if(ai.dodgeAt==null){
@@ -2844,6 +2887,16 @@ function aiStep(){
       if(nxt.length)cpuEv.push({t:'atk',lv:nxt[(rng()*nxt.length)|0]});
     }
   }
+  // CPU-R2 PR4(#106 §9 Pisuke/Rush): 「higher offense/CHASE continuation」。既存の合法トリガー入力
+  // (chaseReadyUntilF窓中、me.phase==='attack'時のsway/lunge Dodge入力)をcmdUse(Lv依存)で撃つ
+  if(me.c.id==='pisuke'&&me.phase==='attack'&&me.chaseReadyUntilF>0&&B.f<=me.chaseReadyUntilF&&rng()<curAilvRow().cmdUse){
+    cpuEv.push({t:'dodge',kind:rng()<0.5?'sway':'lunge'});
+  }
+  // CPU-R2 PR4(#106 §9 Dark Moguzo/Dark Chain): 「maximize legal Dark Chain routes」。既存の合法トリガー入力
+  // (darkWindowUntilF窓中、me.phase==='cmdAtk'時のNormal atk入力)をcmdUse(Lv依存)で撃ち、Dark Chainを繋ぐ
+  if(me.c.id==='dark_moguzo'&&me.phase==='cmdAtk'&&me.darkWindowUntilF>0&&B.f<=me.darkWindowUntilF&&rng()<curAilvRow().cmdUse){
+    cpuEv.push({t:'atk',lv:LEVELS[(rng()*3)|0]});
+  }
   // ガード硬め対策: つかみ本命 / S咆哮
   if(ai.pHoldF>30&&me.phase==='idle'){
     if(rng()<0.5){cpuEv.push({t:'grab'});ai.pHoldF=0;}
@@ -2857,15 +2910,19 @@ function aiStep(){
       const roll=rng();
       // vNext PR2 (§10 Focus): 「外す: CPU logic」につきfocusThreat分岐(旧: 相手の集中が満タン→攻めを控える)を撤廃。
       // CPU判断はfocus/BAL.FOCUSを一切参照しない
-      const aggr=Math.max(0.1,0.36-ai.mash*0.03)*D.atkFreqMul; // 難易度別の攻撃頻度
+      // #106 §9: 難易度別の攻撃頻度にキャラ別アーキタイプ乗算バイアスを乗せる(Yomikage=lower raw offense)
+      const aggr=Math.max(0.1,0.36-ai.mash*0.03)*D.atkFreqMul*archetypeMul(me.c.id,'aggr');
       const row=curAilvRow();
       // habit adaptation(#106 §8): 直近のhabitHistに応じて重みを僅かにシフトする。row.habitAdaptが
       // 最大シフト量(Lv1-3は0%=無効)。「frequent Guard→Grab/Guard-break pressure重み上げ」の例に対応
       const guardHoldFreq=habitFreq('guardHold',function(v){return v>=20;}); // 20F以上の保持を「長押し」とみなす(解釈判断)
-      const grabW=0.1*(1+guardHoldFreq*row.habitAdapt*3); // つかみの基礎重み(旧focusThreat加算は撤廃)+habit shift
-      const gsel=0.24+Math.min(0.3,ai.mash*0.04);
+      // #106 §9 Takimaru/Grappler: 「higher Grab weight under Pressure」。pressureState==='ready'時は追加でつかみ重みを上げる
+      const grabW=0.1*(1+guardHoldFreq*row.habitAdapt*3)*(me.c.id==='takimaru'&&me.pressureState==='ready'?2.5:1); // つかみの基礎重み(旧focusThreat加算は撤廃)+habit shift
+      // #106 §9: Hakuma=higher Guard weight/Pisuke=lower passive Guard weight/Yomikage=higher wait&counter
+      const gsel=(0.24+Math.min(0.3,ai.mash*0.04))*archetypeMul(me.c.id,'gsel');
       if(roll<aggr){
-        if(ai.cmdQueue.length===0&&rng()<D.cmdMoveRate){ // 難易度別のコマンド技使用率(v0.10 (3): EASY=ほぼ不使用/NORMAL=たまに/HARD=積極的)
+        // #106 §9 Godan/Power: more Command usage(cmdMoveRateへの乗算バイアス)
+        if(ai.cmdQueue.length===0&&rng()<D.cmdMoveRate*archetypeMul(me.c.id,'cmdMoveRate')){ // 難易度別のコマンド技使用率(v0.10 (3): EASY=ほぼ不使用/NORMAL=たまに/HARD=積極的)
           aiQueueCommandMove(me);
         }else{
           // habit adaptation(#106 §8): 「frequent SWAY→MID重み上げ/frequent CROUCH→LOW重み上げ/frequent LUNGE→
