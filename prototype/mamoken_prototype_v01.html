@@ -1971,13 +1971,29 @@ function resolveFeintFollowup(att,cm){
       dealDamage(def,chip);
       if(def.hp<=0){def.hp=0;startKO(def.side);return;}
     }
+    // Codex #104レビュー対応: 通常の被ガード分岐と同じくblockstunへ遷移させる(元は素通しで即actionableに戻っていた)
+    def.phase='blockstun';def.pf=0;def.stunDur=(cm.blockstun!=null?cm.blockstun:(BAL.BLOCKSTUN[lv]||16));def.kb=6;
     fxSpark(def,lv,1);sfx('guard');B.hitstop=Math.max(B.hitstop,2);
     if(def.guard<=0)doBreak(def);
     return;
   }
   if(def.phase==='dodge'){
     const rule=DODGE_TABLE[def.dodgeType];
-    if(rule&&rule.beats.includes(lv)){fxSpark(def,lv,1);sfx('whiffG');return;} // 正解回避: follow-upはスカ(counterReady等の付与はしない=素のwhiff扱い)
+    if(rule&&rule.beats.includes(lv)){
+      // Codex #104レビュー対応: 正解回避はattackResolve()の通常分岐と同じ効果(counterReady/clinch/S gain/
+      // Hakuma IRON WALL/Yomikage SPECIAL auto-Return)を付与する(元は素のwhiff扱いで何も付与していなかった)
+      def.counterReadyF=BAL.DODGE.counterReadyF;def.dodgeSuccess=true;
+      if(def.dodgeType==='lunge')def.clinchF=BAL.DODGE.clinchF;
+      gainS(def,'dodge');
+      if(def.c.id==='hakuma')def.ironWallReady=true;
+      if(def.c.id==='yomikage'){
+        def.yomiJust=(def.pf>=5&&def.pf<=9);def.yomiState='pending';
+        def.yomiQueuedLv=(def.specialActiveF>0)?lv:null;
+      }
+      B.fx.push({k:'suki',x:fpos(att),y:relY(att,0.908),f:0,dur:20});
+      sfx('whiffG');
+      return;
+    }
   }
   let dmg=cm.exactDmg?cm.d:Math.round(cm.d*att.c.dMul);
   dmg=gutsOutgoing(att,dmg);dmg=darkBodyOutgoing(att,dmg);dmg=moguzoSpecialOutgoing(att,dmg);dmg=moguzoSpecialIncoming(def,dmg);
@@ -2035,6 +2051,8 @@ function attackResolve(att,def){
     // に関わらずStrike接触は自動的にRETURN発動へ変換する(=通常のヒット/ガード解決を完全に置き換える専用カウンター)。
     // 1回のactivationにつき最初の接触1回のみ変換(以後は通常解決に戻る)
     def.yomiAutoCounterUntilF=0;
+    def.yomiJust=false; // Codex #104レビュー対応: 過去のJust DodgeでyomiJustがtrueのまま残っていると、この
+    // auto-counter(Just Dodge起因ではない)まで誤ってJust版のRETURN(startup-2F/dmg+10%)になってしまうため明示的にfalse化
     startYomiReturn(def,att.atkLv);
     return;
   }
