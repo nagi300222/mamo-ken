@@ -5459,6 +5459,12 @@ function rendaDriftMulAt(elapsedSec){ // Issue本文§Opposing pushback: 10秒�
   return 1+R.driftStepPct*Math.floor(elapsedSec/R.driftStepSec);
 }
 function minigameRandTarget(){return{x:70+Math.random()*(W-140),y:260+Math.random()*(780-260)};} // 安全領域(y:260〜780、backボタン帯y844+と重ならない)
+function drawMinigamePlayerFighter(charIdx,palette,x,y){ // Codexレビュー指摘(PR#125): standing_/roster_はpalette非対応の単一アセットのため選択したP1/P2配色が反映されない。
+  // rFighter()のcurrent-art経路(f.palette優先、PALETTE-R1)はpalette対応なので、既存demoF(rTitle/rResult同様の使い捨てfighterスナップショット)経由でそれを使う
+  demoF.c=CHARS[charIdx];demoF.side=0;demoF.palette=palette;demoF.phase='idle';demoF.pf=0;demoF.atkLv=null;demoF.guardLv=null;
+  demoF.held=null;demoF.lunge=0;demoF.kb=0;demoF.s=0;demoF.ult=0;demoF.combo=0;demoF.normalChainCount=0;demoF.sNo=0;
+  rFighter(demoF,x,y);
+}
 function startMinigameRun(kind){ // select画面のけっていボタン(minigamePendingKind時)から呼ばれる
   minigamePendingKind=null;
   const charIdx=ROSTER[selCharIdx].combatIndex,palette=selPalette;
@@ -5536,7 +5542,7 @@ function drawMinigameScrollBg(key,scrollX){ // RENDA専用の横スクロールc
 }
 function rMiniJyanken(){
   const hands={guu:'グー',choki:'チョキ',paa:'パー'};
-  const selfC=CHARS[MG.charIdx],enemyC=CHARS[MG.enemyCharIdx],selfR=rosterEntryFor(selfC.id),enemyR=rosterEntryFor(enemyC.id);
+  const selfC=CHARS[MG.charIdx],enemyC=CHARS[MG.enemyCharIdx],enemyR=rosterEntryFor(enemyC.id);
   txt('JYANKEN',W/2,90,26,'#ffd23f');
   drawRosterCropFlipped('roster_'+enemyC.id,W/2-90,110,180,180,enemyR&&enemyR.heroCrop,14); // 敵=中央上、向き合う向き
   txt(enemyC.name,W/2,300,14,'#ff9a4d');
@@ -5557,10 +5563,10 @@ function rMiniJyanken(){
     if(w===0&&MG.presentF>0){ // WIN presentation: 既存立ち絵を使った演出専用の一瞬の強調(実際の攻撃判定はしない=Issue本文「No combat hit resolver」)
       const pop=1+Math.max(0,MG.presentF)/30*0.15;
       ctx.save();ctx.translate(W/2,600);ctx.scale(pop,pop);
-      if(!drawStanding('standing_'+selfC.id,0,0,240*portraitRatioForChar(selfC)))drawRosterCrop('roster_'+selfC.id,-90,-90,180,180,selfR&&selfR.heroCrop,14);
+      drawMinigamePlayerFighter(MG.charIdx,MG.palette,0,0);
       ctx.restore();
     }else{
-      if(!drawStanding('standing_'+selfC.id,W/2,600,240*portraitRatioForChar(selfC)))drawRosterCrop('roster_'+selfC.id,W/2-90,510,180,180,selfR&&selfR.heroCrop,14);
+      drawMinigamePlayerFighter(MG.charIdx,MG.palette,W/2,600);
     }
     txt('あなた:'+hands[MG.pick]+'　CPU:'+hands[MG.cpuPick],W/2,430,16,'#e7ebf4');
     txt(w===-1?'あいこ':(w===0?'WIN! +'+BAL.MINIGAME.STANDALONE.JYANKEN.winHp+'HP':'LOSE -'+BAL.MINIGAME.STANDALONE.JYANKEN.loseHp+'HP'),W/2,470,26,w===0?'#7CFC00':(w===-1?'#ffd23f':'#ff6b6b'));
@@ -5574,6 +5580,7 @@ function rMiniHayauchi(){
   const enemyC=CHARS[MG.enemyCharIdx],enemyR=rosterEntryFor(enemyC.id);
   txt('HAYAUCHI',W/2,90,26,'#ffd23f');
   drawRosterCropFlipped('roster_'+enemyC.id,W-116,110,80,80,enemyR&&enemyR.heroCrop,10); // 右上の小さな敵バッジ(10 hit毎に切替、演出専用)
+  ctx.save();ctx.translate(76,150);ctx.scale(0.32,0.32);drawMinigamePlayerFighter(MG.charIdx,MG.palette,0,0);ctx.restore(); // Codexレビュー指摘(PR#125): HAYAUCHIは選択したcharIdx/paletteを画面上のどこにも表示していなかったため左上に選択キャラのバッジを追加
   if(MG.phase==='play'){
     txt('HITS '+MG.hits,W/2,220,20,'#e7ebf4');
     txt(MG.timer.toFixed(2)+'秒 (制限'+hayauchiMaxTimeFor(MG.hits).toFixed(1)+'秒)',W/2,254,14,'#a2abc0');
@@ -5587,11 +5594,10 @@ function rMiniHayauchi(){
   }
 }
 function rMiniRenda(){
-  const c=CHARS[MG.charIdx];
   drawMinigameScrollBg(MINIGAME_BG.renda.assetKey,MG.scrollX); // rMiniPractice()のdrawCoverBgFull()の上に横スクロール版で上書き(RENDAのみ)
   txt('RENDA',W/2,90,26,'#ffd23f');
   const runY=560,bob=Math.sin(MG.scrollX*0.08)*10; // #113の四足1x4ループ未取込のため、既存の立ち絵に簡易バウンスを付けて「走行中」を仮に表現(Issue本文「existing closest motion if formal run loop is not yet merged」)
-  if(!drawStanding('standing_'+c.id,160,runY+bob,220*portraitRatioForChar(c)))drawRosterCrop('roster_'+c.id,80,runY-70+bob,160,160,rosterEntryFor(c.id)&&rosterEntryFor(c.id).heroCrop,14);
+  drawMinigamePlayerFighter(MG.charIdx,MG.palette,160,runY+bob);
   if(MG.phase==='play'){
     const gaugeX=40,gaugeW=W-80,gaugeY=250,gaugeH=28;
     ctx.fillStyle='#1a1d29';rr(gaugeX,gaugeY,gaugeW,gaugeH,14);ctx.fill();
