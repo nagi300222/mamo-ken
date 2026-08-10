@@ -4967,12 +4967,12 @@ function rVsScreen(){
     if(meta.darkFinal)txt('闇の力が高まっている……！',W/2,H-64,16,'#c9a2ff'); // ARCADE最終戦専用ナレーション(Issue本文§Mode rules)
     if(meta.survivalInfo)txt('SURVIVAL / BATTLE '+meta.survivalInfo.battleNum+' / CPU LV'+meta.survivalInfo.cpuLv,W/2,72,15,'#ffe6a3'); // SURVIVAL専用ラベル(同§)
     const flashF=slamF+4;
-    if(f<flashF){ctx.save();ctx.globalAlpha=0.5*(1-(f-slamF)/4);ctx.fillStyle='#fff';ctx.fillRect(0,0,W,H);ctx.restore();} // 雷インパクトの白フラッシュ(短時間)
+    if(f<flashF){ctx.save();ctx.globalAlpha=0.5*(1-(f-slamF)/4)*flashScale();ctx.fillStyle='#fff';ctx.fillRect(0,0,W,H);ctx.restore();} // 雷インパクトの白フラッシュ(短時間)。Codexレビュー対応(PR#121): 他の全画面フラッシュ(roarImpact)と同じくflashScale()でOPTIONS.flash==='reduced'を尊重する
   }
   // 5) 白フラッシュ→battle(intro遷移の直前)
   if(f>=holdEndF){
     const outT=Math.min(1,(f-holdEndF)/Math.max(1,dur-holdEndF));
-    ctx.save();ctx.globalAlpha=outT;ctx.fillStyle='#fff';ctx.fillRect(0,0,W,H);ctx.restore();
+    ctx.save();ctx.globalAlpha=outT*flashScale();ctx.fillStyle='#fff';ctx.fillRect(0,0,W,H);ctx.restore(); // Codexレビュー対応(PR#121): 同上
   }
 }
 function rBattle(){
