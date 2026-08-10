@@ -398,13 +398,16 @@ const BATTLE_STAGES=[
   {id:'underground_burrow_arena',nameJa:'地下巣穴闘技場',shortJa:'巣穴',assetKey:'bg_stage_underground_burrow_arena',file:'stage_underground_burrow_arena.png'},
   {id:'new_moon_dark_arena',nameJa:'新月の闇闘技場',shortJa:'闇夜',assetKey:'bg_stage_new_moon_dark_arena',file:'stage_new_moon_dark_arena.png'},
 ];
-for(const s of BATTLE_STAGES)loadImg(s.assetKey,'../assets/bg/'+s.file);
+// preserveWhite=true: これらは不透明の写実背景写真であり、whitenAsset()の白しきい値抜き
+// (RGB>=238を透過化)を通すと雲/雪など明るい部分に穴が開く(キャラsprite用の処理であり
+// 背景には不要)。Codexレビュー指摘により追加。canvas複製も作られなくなり省メモリにもなる。
+for(const s of BATTLE_STAGES)loadImg(s.assetKey,'../assets/bg/'+s.file,true);
 const MINIGAME_BG={ // clashRender()のmg('jyanken'/'renda'/'hayauchi')から検索
   jyanken:{assetKey:'bg_minigame_janken',file:'minigame_janken_village_square.png'},
   hayauchi:{assetKey:'bg_minigame_hayauchi',file:'minigame_hayauchi_grassland_range.png'},
   renda:{assetKey:'bg_minigame_renda',file:'minigame_renda_mountain_run_course.png'},
 };
-for(const mg in MINIGAME_BG)loadImg(MINIGAME_BG[mg].assetKey,'../assets/bg/'+MINIGAME_BG[mg].file);
+for(const mg in MINIGAME_BG)loadImg(MINIGAME_BG[mg].assetKey,'../assets/bg/'+MINIGAME_BG[mg].file,true);
 let selStageId=BATTLE_STAGES[0].id; // キャラ選択画面で切替・デフォルト先頭ステージ・セッション中保持(selPalette/aiDifficultyと同様)
 function battleStageById(id){return BATTLE_STAGES.find(function(s){return s.id===id;})||BATTLE_STAGES[0];}
 loadImg('ui_hp_frame','../assets/ui/hp_frame.png');
@@ -3264,10 +3267,12 @@ function drawCoverBg(key){ // 背景画像: 下端を地面ライン(PT)に合�
   return true;
 }
 function rStage(){
-  // STAGE-ART-IMPORT: game.stageIdで選ばれた対戦ステージを表示する。未設定(オンライン対戦等、
-  // 選択画面を経由しないフロー)や画像未読込の場合は既存の昼アリーナへフォールバックし、
-  // それも無ければ従来のベクター描画フォールバックへ落ちる(挙動を後方互換に保つ)。
-  const stageKey=game.stageId?battleStageById(game.stageId).assetKey:'bg_stage_day';
+  // STAGE-ART-IMPORT: game.stageIdで選ばれた対戦ステージを表示する。オンライン対戦は明示的に
+  // 除外する(onlineActive())。選択画面を経由しないため片側だけがstageIdを持つ可能性があり、
+  // それを使うと両クライアントで異なる背景を描く不整合が起きる(Codexレビュー指摘)。
+  // game.stageId未設定/画像未読込の場合も既存の昼アリーナへフォールバックし、それも無ければ
+  // 従来のベクター描画フォールバックへ落ちる(挙動を後方互換に保つ)。
+  const stageKey=(game.stageId&&!onlineActive())?battleStageById(game.stageId).assetKey:'bg_stage_day';
   if(drawCoverBg(stageKey))return;
   if(stageKey!=='bg_stage_day'&&drawCoverBg('bg_stage_day'))return;
   let g=ctx.createLinearGradient(0,0,0,330);

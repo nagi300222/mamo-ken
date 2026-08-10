@@ -22,6 +22,17 @@ const prototype = readFileSync(path.join(ROOT, 'prototype', 'mamoken_prototype_v
 const distPath = path.join(ROOT, 'dist', 'mamoken_mobile.html');
 const dist = existsSync(distPath) ? readFileSync(distPath, 'utf8') : null;
 
+// dist embeds a generated `const __ASSET_MAP__={...};` literal (see build_mobile.mjs) mapping
+// each prototype-relative asset path to a data: URL. Parse it out of the actual generated file
+// rather than string-searching the copied prototype markup, so this test would actually fail if
+// build_mobile.mjs stopped embedding an asset or a stale dist were checked in (Codex review).
+let distAssetMap = null;
+if (dist) {
+  const m = dist.match(/const __ASSET_MAP__=(\{.*?\});\nconst ASSETS=/s);
+  assert.ok(m, 'dist must contain a generated const __ASSET_MAP__=...; literal');
+  distAssetMap = JSON.parse(m[1]);
+}
+
 function sha256(absPath) {
   return createHash('sha256').update(readFileSync(absPath)).digest('hex');
 }
@@ -55,16 +66,21 @@ for (const entry of entries) {
   assert.ok(prototype.includes(`'${entry.file}'`), `prototype must reference the derived runtime filename: ${entry.file}`);
   assert.ok(prototype.includes(`'${entry.assetKey}'`), `prototype must reference assetKey ${entry.assetKey}`);
 
-  if (dist) {
-    // dist embeds images as base64 data URLs; we only assert the derived asset's
-    // *source PNG bytes* are not what got embedded (bg/source/ must be excluded),
-    // and that the runtime key made it into the prototype markup dist was built from.
-    assert.ok(dist.includes(entry.assetKey), `dist missing embedded reference for ${entry.assetKey}`);
+  if (distAssetMap) {
+    const runtimeKey = '../assets/' + manifest.runtimeRoot.replace(/^assets\//, '') + '/' + entry.file;
+    const sourceKey = '../assets/' + manifest.sourceRoot.replace(/^assets\//, '') + '/' + entry.file;
+    assert.ok(Object.prototype.hasOwnProperty.call(distAssetMap, runtimeKey), `dist __ASSET_MAP__ missing entry for ${runtimeKey}`);
+    assert.match(distAssetMap[runtimeKey], /^data:image\//, `dist __ASSET_MAP__[${runtimeKey}] must be an embedded image data URL`);
+    assert.equal(Object.prototype.hasOwnProperty.call(distAssetMap, sourceKey), false, `dist __ASSET_MAP__ must NOT embed the untouched source: ${sourceKey}`);
   }
 }
 
 // bg/source/ must never be walked into dist (mirrors art/current/ exclusion policy).
 const buildMobileSrc = readFileSync(path.join(ROOT, 'tools', 'build_mobile.mjs'), 'utf8');
 assert.ok(buildMobileSrc.includes("relFromAssets.startsWith('bg/source/')"), 'build_mobile.mjs must exclude bg/source/ from dist embedding');
+if (distAssetMap) {
+  const leakedSourceKeys = Object.keys(distAssetMap).filter((k) => k.startsWith('../assets/bg/source/'));
+  assert.deepEqual(leakedSourceKeys, [], 'dist __ASSET_MAP__ must not contain any bg/source/ keys');
+}
 
 console.log(`stage bg asset tests passed; battleStages=${manifest.battleStages.length}; minigameBackgrounds=${manifest.minigameBackgrounds.length}`);
