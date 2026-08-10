@@ -201,13 +201,13 @@ const BAL={ // 03_data_design.md v2.0 §2 balance table 準拠
         {seq:['left','down','right'],trigger:'mid',type:'atk',lv:'mid',name:'雪煙崩し',s:28,a:4,r:35,d:135,guardDmg:18,hitstun:38,blockstun:21,whiff:12,scale:0.80,exactDmg:true,ccWindow:16,ironWallAlt:{d:155,guardDmg:28},tags:['Quick16','IronWall消費(dmg155/GD28)'],color:'#c7ece0',se:'cmdHit'}
       ],
       chirka:[
-        {seq:['right','down'],trigger:'mid',type:'atk',lv:'mid',name:'だまし突き',s:15,a:3,r:21,d:82,guardDmg:10,hitstun:25,blockstun:16,whiff:5,scale:0.95,exactDmg:true,modern:true,ccWindow:16,trickWindow:{s:4,e:10,feint:true,delay:true},tags:['Quick16','Modern','Feint','Delay'],color:'#b98cc7',se:'cmdHit'},
-        {seq:['down','right'],trigger:'high',type:'atk',lv:'high',name:'空鳴り爪',s:22,a:4,r:28,d:115,guardDmg:14,hitstun:33,blockstun:19,whiff:7,scale:0.90,exactDmg:true,ccWindow:16,trickWindow:{s:6,e:14,feint:false,delay:true},tags:['Quick16','Delay'],color:'#caa6d9',se:'cmdHit'},
+        {seq:['right','down'],trigger:'mid',type:'atk',lv:'mid',name:'だまし突き',s:15,a:3,r:21,d:82,guardDmg:10,hitstun:25,blockstun:16,whiff:5,scale:0.95,exactDmg:true,modern:true,ccWindow:16,feint:true,tags:['Quick16','Modern','FEINT'],color:'#b98cc7',se:'cmdHit'},
+        {seq:['down','right'],trigger:'high',type:'atk',lv:'high',name:'空鳴り爪',s:22,a:4,r:28,d:115,guardDmg:14,hitstun:33,blockstun:19,whiff:7,scale:0.90,exactDmg:true,ccWindow:16,tags:['Quick16'],color:'#caa6d9',se:'cmdHit'},
         {seq:['left','right'],trigger:'grab',type:'grab',name:'すかし抱き',s:15,d:105,whiff:38,down:'throwDown',exactDmg:true,ccWindow:16,tags:['Quick16','独立GRAB telegraph'],color:'#9d6bb0',se:'cmdGrabHit'},
-        {seq:['down','left'],trigger:'low',type:'atk',lv:'low',name:'影踏み',s:20,a:4,r:26,d:95,guardDmg:12,hitstun:31,blockstun:19,whiff:6,scale:0.90,exactDmg:true,modern:true,ccWindow:16,trickWindow:{s:5,e:13,feint:false,delay:true},tags:['Quick16','Modern','Delay'],color:'#7a5c8a',se:'cmdHit'},
+        {seq:['down','left'],trigger:'low',type:'atk',lv:'low',name:'影踏み',s:20,a:4,r:26,d:95,guardDmg:12,hitstun:31,blockstun:19,whiff:6,scale:0.90,exactDmg:true,modern:true,ccWindow:16,poison:true,tags:['Quick16','Modern','POISON'],color:'#7a5c8a',se:'cmdHit'},
         {seq:['right','left','right'],trigger:'mid',type:'atk',lv:'mid',name:'つんのめり',s:12,a:3,r:20,d:72,guardDmg:8,hitstun:23,blockstun:14,whiff:10,scale:0.85,exactDmg:true,reach:0,ccWindow:16,tags:['Quick16'],color:'#c39ed4',se:'cmdHit'},
-        {seq:['left','down','right'],trigger:'high',type:'atk',lv:'high',name:'戻り蹴り',s:20,a:4,r:26,d:108,guardDmg:13,hitstun:31,blockstun:19,whiff:6,scale:0.90,exactDmg:true,modern:true,ccWindow:16,tags:['Quick16','Modern'],color:'#b98cc7',se:'cmdHit'},
-        {seq:['down','right','down'],trigger:'mid',type:'atk',lv:'mid',name:'あと出し頭突き',s:30,a:4,r:36,d:150,guardDmg:17,hitstun:39,blockstun:21,whiff:12,scale:0.75,exactDmg:true,ccWindow:16,trickWindow:{s:8,e:18,feint:false,delay:true},delayedVariant:{unblockable:true},tags:['Quick16','Delay版=startup38/unblockable'],color:'#8a6a99',se:'cmdHit'}
+        {seq:['left','down','right'],trigger:'high',type:'atk',lv:'high',name:'戻り蹴り',s:20,a:4,r:26,d:108,guardDmg:13,hitstun:31,blockstun:19,whiff:6,scale:0.90,exactDmg:true,modern:true,ccWindow:16,delay:true,tags:['Quick16','Modern','DELAY'],color:'#b98cc7',se:'cmdHit'},
+        {seq:['down','right','down'],trigger:'mid',type:'atk',lv:'mid',name:'あと出し頭突き',s:30,a:4,r:36,d:150,guardDmg:17,hitstun:39,blockstun:21,whiff:12,scale:0.75,exactDmg:true,ccWindow:16,tags:['Quick16'],color:'#8a6a99',se:'cmdHit'}
       ],
       takimaru:[
         {seq:['right','down'],trigger:'grab',type:'grab',name:'丸抱え',s:14,d:115,whiff:36,down:'throwDown',exactDmg:true,modern:true,ccWindow:16,tags:['Quick16','Modern special(pending grab)'],color:'#c9a24d',se:'cmdGrabHit'},
@@ -1012,13 +1012,25 @@ function advanceOnlineResult(){ // 勝ち残り交代(v0.9 PR4)のサーバー�
 // Issue #97 §2: 共通Cooldown2400F(=40秒)。Match開始READY、正常発動開始時からCooldown開始、
 // Round跨ぎで残量保持(roundInitではリセットしない)。全timerはsimulation frameのみ(wall-clock禁止)。
 const SPECIAL_COOLDOWN_F=2400,SPECIAL_LOCK_F=8;
-// mode-type SPECIALの仮ActiveF(Issue #97の各キャラ節の値をそのまま流用)。Chirka/Takimaru/Bulletは
-// 後続PRで攻撃type(Startup/Active/Recovery)実装に置き換わるため、SPECIAL-COREでは同じ仮モード値を使う
-// (性能自体は旧仕様のままでよい=安全なscaffoldingの範囲)。
+// mode-type SPECIALの仮ActiveF(Issue #97の各キャラ節の値をそのまま流用)。Bulletは後続PRで攻撃type
+// (Startup/Active/Recovery)実装に置き換わるため、SPECIAL-COREでは同じ仮モード値を使う
+// (性能自体は旧仕様のままでよい=安全なscaffoldingの範囲)。Chirka/TakimaruはABILITY-R2-Bで攻撃type化済み
 const SPECIAL_DURATION_F={dark_moguzo:360};
 function specialDurationFor(c){return SPECIAL_DURATION_F[c.id]||300;}
+// ABILITY-R2-B (Issue #97 §7 Chirka SPECIAL): attack-type(Strike)。FEINT+DELAY+POISON triple。既存の
+// specForCmd/hitApply/attackResolveのcmdAtk経路をそのまま流用するため合成move objectとして表現する
+// (通常のBAL.CMD.movesと同じ形式=「no duplicate truth table」を維持)。Startup26F/Active3F/first-hit45。
+// r(base recovery)はIssueに明記が無いため近傍のCommand技(空鳴り爪 s22/r28)から類推した保守的な値、
+// whiff32FはwhiffExtraFor()の既存の「additive」convention(m.r+m.whiff)に合わせて追加分として解釈した
+const CHIRKA_SPECIAL_MOVE={name:'鏖しの舞',type:'atk',lv:'mid',s:26,a:3,r:28,d:45,guardDmg:14,hitstun:31,blockstun:19,whiff:32,exactDmg:true,feint:true,delay:true,poison:true,isSpecial:true,color:'#e0a8ff',se:'cmdHit'};
+// ABILITY-R2-B (Issue #97 §8 Takimaru SPECIAL): attack-type(Grab)。既存grabResolve/grabHit/hitApplyのcmArmorWin
+// 経路をそのまま流用。Startup20F/Grab active3F(=BAL.GRAB.seq/grabStartupの既存挙動に委ねる)/armor F5-19(1-hit、
+// armorDmgMul未指定=既存fallbackの0.5)/dmg80/Whiff Recovery40F(grabRecFor()はm.whiffを絶対値として使うため
+// そのまま40を指定)。bind:trueが叩きつけ成功時にBIND480Fを付与する
+const TAKIMARU_SPECIAL_MOVE={name:'縛鎖の型',type:'grab',s:20,d:80,whiff:40,armorStartF:5,armorEndF:19,down:'throwDown',exactDmg:true,bind:true,isSpecial:true,color:'#c9a24d',se:'cmdGrabHit'};
 function specialButtonState(f){ // READY/ACTIVE/COOLDOWN/CONDITION LOCK(CONDITION LOCKは各キャラPRで条件追加)
   if(f.phase==='special'||f.specialActiveF>0)return'ACTIVE';
+  if(f.cmdMove&&f.cmdMove.isSpecial)return'ACTIVE'; // ABILITY-R2-B: attack-type(cmdAtk/grab phaseへ直接合成moveで乗る)はspecialActiveFを使わない
   if(f.specialCooldownF>0)return'COOLDOWN';
   return'READY';
 }
@@ -1026,9 +1038,24 @@ function canStartSpecial(f){ // Issue #97 §2: neutral/actionable時のみ。att
   return f.phase==='idle'&&f.specialCooldownF<=0&&f.specialActiveF<=0;
 }
 function startSpecial(f){ // 不成立時はcooldownを消費しない(呼び出し側でcanStartSpecial()を必ず確認)
-  f.phase='special';f.pf=0;f.buf=null;f.combo=0;f.normalChainCount=0;f.dirBuf.length=0;
-  f.specialCooldownF=SPECIAL_COOLDOWN_F;f.specialActiveF=specialDurationFor(f.c);
+  f.specialCooldownF=SPECIAL_COOLDOWN_F;
   resetModernHist(f); // Issue #97 §2/§14: SPECIALはModern command historyへ絶対に入れない(=開始時に必ずクリア)
+  if(f.c.id==='chirka'){ // ABILITY-R2-B: attack-type。既存cmdAtk phaseへ合成moveで直接乗せる(startCmdAtkのresource判定は不要=SPECIAL自身のcooldown/canStartSpecialが既にgate済み)
+    const m=CHIRKA_SPECIAL_MOVE;
+    f.phase='cmdAtk';f.pf=0;f.atkLv=m.lv;f.cmdMove=m;f.cmdIdx=-1;f.hasHit=false;f.landedHit=false;f.cmdArmorUsed=false;f.guardLv=null;f.buf=null;
+    f.cmdDelayExtraF=0;f.cmdDelayResolved=false;f.combo=0;f.normalChainCount=0;f.comboCounter=false;f.dirBuf.length=0;
+    return;
+  }
+  if(f.c.id==='takimaru'){ // ABILITY-R2-B: attack-type(Grab)。既存grab phaseへ合成moveで直接乗せる
+    const m=TAKIMARU_SPECIAL_MOVE;
+    f.phase='grab';f.pf=0;f.guardLv=null;f.atkLv=null;f.buf=null;f.combo=0;f.normalChainCount=0;f.hasHit=false;f.landedHit=false;f.cmdArmorUsed=false;
+    f.cmdMove=m;f.cmdIdx=-1;f.grabS=m.s;f.dirBuf.length=0;
+    return;
+  }
+  // mode-type(既存): phase='special'の8Fロック+specialActiveFカウントダウン
+  f.phase='special';f.pf=0;f.buf=null;f.combo=0;f.normalChainCount=0;f.dirBuf.length=0;
+  f.specialActiveF=specialDurationFor(f.c);
+  if(f.c.id==='yomikage')f.yomiAutoCounterUntilF=B.f+14; // ABILITY-R2-B (Issue #97 §9 Yomikage SPECIAL): 発動直後14FのStrike Counter Window(絶対F)
 }
 function newFighter(ci,side,palette){
   const c=CHARS[ci];
@@ -1063,7 +1090,11 @@ function newFighter(ci,side,palette){
     pisukeSpecialRecoveryActive:false, // ABILITY-R2-A (Pisuke SPECIAL recovery x0.70): darkBodyActiveと同型のaction開始時snapshot
     armorStock:3, // Godan ARMOR STOCK: stock3 Round、自然回復なし
     ironWallReady:false, // Hakuma IRON WALL
-    trickMove:null,trickChoice:null,trickResolved:false,trickSuccess:false, // Chirka FEINT/DELAY: per action。trickMove=対象技名、trickChoice=none|feint|delay
+    feintPendingAtF:0,feintPendingCm:null, // ABILITY-R2-B (Issue #97 §7 Chirka FEINT属性): HIT/BLOCKで18F後に予約されるfollow-upの発火F(0=none)と対象move
+    cmdDelayExtraF:0,cmdDelayResolved:false, // ABILITY-R2-B (Issue #97 §7 Chirka DELAY属性): Active開始境界での相手Guard/Dodge判定による最大+12F保留のカウンタ
+    poisonActive:false,poisonTicksLeft:0,poisonNextTickF:0, // ABILITY-R2-B (Issue #97 §7 POISON属性/Chirka SPECIAL): 被弾側の状態。300F=10tick×30F、キャラ非依存(誰が食らってもよい)
+    bindActiveF:0, // ABILITY-R2-B (Issue #97 §8 Takimaru SPECIAL BIND): 被弾側の状態。480F、キャラ非依存
+    yomiAutoCounterUntilF:0, // ABILITY-R2-B (Issue #97 §9 Yomikage SPECIAL): 発動直後14FのStrike Counter Window(絶対F)
     pressureState:'none',pressureUntilF:0,pressureQueuedMove:null,pressureQueuedIdx:null, // Takimaru PRESSURE
     yomiState:'none',yomiJust:false,yomiQueuedLv:null,yomiReadyUntilF:0,yomiFiredJust:false, // Yomikage RETURN/JUST: state=none|pending|ready
     charge:0,chargeLastMove:null, // Bullet CHARGE
@@ -1136,7 +1167,8 @@ function roundInit(first){
     f.chaseReadyUntilF=0;f.chaseSourceLv=null;f.chaseActive=false;f.pisukeSpecialRecoveryActive=false;
     f.armorStock=3;
     f.ironWallReady=false;
-    f.trickMove=null;f.trickChoice=null;f.trickResolved=false;f.trickSuccess=false;
+    f.feintPendingAtF=0;f.feintPendingCm=null;f.cmdDelayExtraF=0;f.cmdDelayResolved=false;
+    f.poisonActive=false;f.poisonTicksLeft=0;f.poisonNextTickF=0;f.bindActiveF=0;f.yomiAutoCounterUntilF=0;
     f.pressureState='none';f.pressureUntilF=0;f.pressureQueuedMove=null;f.pressureQueuedIdx=null;
     f.yomiState='none';f.yomiJust=false;f.yomiQueuedLv=null;f.yomiReadyUntilF=0;f.yomiFiredJust=false;
     f.charge=0;f.chargeLastMove=null;
@@ -1201,21 +1233,15 @@ function specForCmd(f,m){ // コマンド技(v0.10): 数値はBAL.CMDの技定�
   // (§13本文がdownを明示しない下段Command技は無down。§4のNormal LOW共通lightDown撤廃と同じ方針)
   const downType=(typeof m.down==='string')?m.down:(m.down===true?'lightDown':false);
   const dmgBase=m.exactDmg?m.d:m.d*f.c.dMul;
-  // vNext PR4 (Chirka FEINT/DELAY): Delayはsame-height reinputでstartup+8のみ(Damage/GD/stun/armor bonusなし)。
-  // Feintはtelegraph後の成否確定(f.trickResolved)まで通常通り(=判定はadvance()のcmdAtk分岐が担う)、
-  // 確定後はactive0(=striking()が二度と成立しない)+recovery6(success)/12(fail)へ差し替えて実攻撃を無かったことにする
-  const isTrick=f.cmdMove===m&&f.trickMove===m.name;
-  const delayed=isTrick&&f.trickChoice==='delay';
-  const feintResolved=isTrick&&f.trickChoice==='feint'&&f.trickResolved;
   // vNext PR4 (Yomikage RETURN/JUST): Just成立で発動したReturn(天/地/芯のみ。腕返しは対象外)は
   // 「Return startup -2F / dmg x1.10 / GD unchanged」を適用する
   const yomiJustFire=f.cmdMove===m&&f.c.id==='yomikage'&&f.yomiFiredJust&&YOMI_JUST_MOVES.has(m.name);
   // vNext PR4 (Dark Moguzo BODY): 「Command startup -2」。f.darkBodyActiveはaction開始時点のsnapshot
   // (Damage x1.08はGuts同様darkBodyOutgoing()でhitApply側の最終damageへ適用=A.dへ二重適用しない)
   const darkBodyFire=f.cmdMove===m&&f.c.id==='dark_moguzo'&&f.darkBodyActive;
-  const s=Math.max(1,(delayed?m.s+8:m.s)-(yomiJustFire?2:0)-(darkBodyFire?2:0));
-  const a=feintResolved?0:(m.a||3);
-  const rBase=feintResolved?(f.trickSuccess?6:12):(m.r||BAL.ATK[m.lv].r);
+  const s=Math.max(1,m.s-(yomiJustFire?2:0)-(darkBodyFire?2:0));
+  const a=m.a||3;
+  const rBase=m.r||BAL.ATK[m.lv].r;
   // ABILITY-R2-A (Issue #97 §4 Pisuke SPECIAL CHASE RUSH): 「atk recovery x0.70」はCommand技も対象。
   // darkBodyFireと同じくaction開始時snapshot(f.pisukeSpecialRecoveryActive)を見る(Codex #103レビュー対応)
   const r=f.pisukeSpecialRecoveryActive?Math.max(1,Math.round(rBase*0.70)):rBase;
@@ -1325,7 +1351,7 @@ function startCmdAtk(f,m,idx,preserveCombo,viaModern){ // vNext PR3 (§9 Classic
   spendResourceFor(f,m);
   if(f.ironWallReady&&m.ironWallAlt){m=Object.assign({},m,m.ironWallAlt);f.ironWallReady=false;} // vNext PR4 (Hakuma IRON WALL): consume start(spend only。他技はready保持)
   f.phase='cmdAtk';f.pf=0;f.atkLv=m.lv;f.cmdMove=m;f.cmdIdx=idx;f.hasHit=false;f.landedHit=false;f.cmdArmorUsed=false;f.guardLv=null;f.buf=null;
-  f.trickMove=null;f.trickChoice=null;f.trickResolved=false;f.trickSuccess=false; // vNext PR4 (Chirka FEINT/DELAY): per action。新しいCommand開始で必ずリセット
+  f.cmdDelayExtraF=0;f.cmdDelayResolved=false; // ABILITY-R2-B (Chirka DELAY属性): per action。feintPendingAtF/Cmは「interruptでcancelしない」仕様のためここではリセットしない
   f.yomiFiredJust=false; // vNext PR4 (Yomikage RETURN/JUST): per action。startYomiReturn()がstartCmdAtk直後に必要なら立て直す
   f.darkWindowUntilF=0;f.darkBodyActive=(f.c.id==='dark_moguzo'&&f.darkBody); // vNext PR4 (Dark Moguzo): 新Command開始で必ずNormal windowを閉じる。Body適用有無はaction開始時にsnapshot(§「midaction expiryはcurrent action snapshot保持」)
   f.pisukeSpecialRecoveryActive=(f.c.id==='pisuke'&&f.specialActiveF>0); // ABILITY-R2-A (Pisuke SPECIAL recovery x0.70): action開始時にsnapshot
@@ -1547,7 +1573,11 @@ function applyInputs(f,opp,cmds,held){
       }
     }else if(c.t==='dodge'){ // 回避: idle/guardから発生。押下履歴は成否に関わらず常にバッファへ積む(コマンド技判定用)
       pushDirBuf(f,c.kind);
-      if(f.phase==='idle'||f.phase==='guard'){
+      if(f.bindActiveF>0){ // ABILITY-R2-B (Issue #97 §8 Takimaru SPECIAL BIND): CROUCH/SWAY/LUNGE dodgeのみ不成立
+        // (Guard/Mikiri/Normal/Command/Grab/Roar/Ult/Specialはこのelse ifの対象外=他の分岐に一切触れない)。
+        // 「blocked dodge input simply fails + flashes Bind indicator(no remapping)」を素直に再現する
+        abilityFlash(f.side,'bind_blocked_vfx',16);
+      }else if(f.phase==='idle'||f.phase==='guard'){
         startDodge(f,c.kind);
       }else if(f.phase==='blockstun'){ // vNext PR2 (§2 Guard→Dodge 10F buffer): 10Fバッファし、最初のactionable
         // frame(guard/idle復帰)からtryDodgeBuf()経由で通常Dodgeを開始する
@@ -1559,12 +1589,7 @@ function applyInputs(f,opp,cmds,held){
         f.chaseActive=true;
       }
     }else if(c.t==='mikiri'){ // 見切り: ジャストタップ。窓内なら能動的にギュイーンを起こす
-      if(f.phase==='cmdAtk'&&f.cmdMove&&f.cmdMove.trickWindow&&f.cmdMove.trickWindow.feint&&!f.trickChoice&&f.pf>=f.cmdMove.trickWindow.s&&f.pf<=f.cmdMove.trickWindow.e){
-        // vNext PR4 (Chirka FEINT): だまし突きtelegraph中(F4-F10)のGuard TapはFeint選択として採用する。
-        // 元々このphase(cmdAtk)ではMikiriの通常条件(idle/guard)自体が不成立のため、ここに割り込むだけで
-        // 「Mikiriより優先」の仕様(=Mikiriとして処理させない)を満たす
-        f.trickChoice='feint';f.trickMove=f.cmdMove.name;
-      }else if(f.phase==='idle'||f.phase==='guard'){
+      if(f.phase==='idle'||f.phase==='guard'){
         const win=(f.hp<=BAL.PINCH_HP)?BAL.MIKIRI.windowPinch:BAL.MIKIRI.window;
         const opAtk=(opp.phase==='attack'||opp.phase==='cmdAtk')&&opp.atkLv;
         const success=opAtk&&Math.abs(opp.pf-(spec(opp).s+1))<=win;
@@ -1576,10 +1601,6 @@ function applyInputs(f,opp,cmds,held){
         f.yomiQueuedLv=c.lv; // vNext PR4 (Yomikage RETURN): Dodge recovery中のprebuffer(H/M/L/Grab 1つ)
       }else if(f.phase==='idle'&&f.c.id==='yomikage'&&f.yomiState==='ready'&&B.f<=f.yomiReadyUntilF){
         startYomiReturn(f,c.lv); // vNext PR4 (Yomikage RETURN): Readyウィンドウ中の手動発動(H=天/L=地/M=芯)
-      }else if(f.phase==='cmdAtk'&&f.cmdMove&&f.cmdMove.trickWindow&&f.cmdMove.trickWindow.delay&&!f.trickChoice&&c.lv===f.cmdMove.trigger&&f.pf>=f.cmdMove.trickWindow.s&&f.pf<=f.cmdMove.trickWindow.e){
-        // vNext PR4 (Chirka DELAY): 発動中Commandと同じ高さのreinputをtrickWindow内で受けたらDelay採用
-        // (startup+8はspecForCmd側が f.trickChoice==='delay' を見て適用する。Damage/GD/stun/armor bonusなし)
-        f.trickChoice='delay';f.trickMove=f.cmdMove.name;
       }else{
       const legacyCm=detectCommandMove(f);runtimeCommandShadowObserve(f,c,legacyCm); // コマンド技(v0.10): 直前2方向+同じ高さの攻撃タップ=コマンド技
       const cm=runtimeCommandCanaryResolve(f,c,legacyCm);
@@ -1651,13 +1672,19 @@ function tryDodgeBuf(f){ // vNext PR2 (§2 Guard→Dodge 10F buffer): Blockstun�
 function advance(f){
   f.pf++;
   if(f.phase==='attack'||f.phase==='cmdAtk'){
-    if(f.phase==='cmdAtk'&&f.cmdMove&&f.cmdMove.trickWindow&&f.trickChoice==='feint'&&!f.trickResolved&&f.pf>=f.cmdMove.trickWindow.e){
-      // vNext PR4 (Chirka FEINT success判定): telegraph(trickWindow)終了直後の1Fで相手の直前アクションを判定。
-      // 「相手がCROUCH/SWAY/LUNGE/MIKIRI開始」=Dodge中またはMikiri空振り硬直中。Mikiri成立(→startClash)は
-      // 双方即座にphase='clash'へ強制遷移するため、この分岐に到達する前に自然に消滅する(clash優先は既存仕様のまま)
+    if(f.phase==='cmdAtk'&&f.cmdMove&&f.cmdMove.delay&&!f.cmdDelayResolved){
+      // ABILITY-R2-B (Issue #97 §7 Chirka DELAY属性): 「at normal Active-start、相手がGuard中またはDodge-evade中なら
+      // 最大+12F Active開始を遅らせる(Guard: releaseまで待機/継続してholdなら+12Fで打ち切り。Dodge: +12F以内に
+      // evadeが終わればその直後のFでActive開始、そうでなければ+12Fで打ち切り)」。素のf.cmdMove.s(このmoveでは
+      // darkBodyFire等の他modifierと重複しない前提)に達した瞬間から判定を開始し、hold中はf.pf--で足踏みさせる
+      // ことで「Active境界に到達させない」を実現する(=A.s自体は書き換えない。呼び出し側=specForCmdは変更不要)
       const opp=B.p[1-f.side];
-      f.trickSuccess=(opp.phase==='dodge'||opp.phase==='mikiriRec');
-      f.trickResolved=true;
+      const baseS=f.cmdMove.s;
+      if(f.pf>=baseS){
+        const holding=(opp.phase==='guard')||(opp.phase==='blockstun'&&opp.held)||(opp.phase==='dodge');
+        if(holding&&f.cmdDelayExtraF<12){f.cmdDelayExtraF++;f.pf--;}
+        else f.cmdDelayResolved=true;
+      }
     }
     const A=spec(f),t=f.pf;
     const whiffExtra=whiffExtraFor(f); // BAL-R1: 通常技の空振り追加recovery。CMD-R1: m.whiff指定のコマンド打撃技も対象
@@ -1697,6 +1724,7 @@ function advance(f){
       }
       opp.cmdBufMove=null;opp.cmdBufIdx=null;
       resetModernHist(opp); // vNext PR3 (§8 Modern R4 reset trigger: Throw/被弾)
+      if(f.cmdMove&&f.cmdMove.bind)opp.bindActiveF=480; // ABILITY-R2-B (Issue #97 §8 Takimaru SPECIAL BIND): 480F=8s。no-stack(常に上書き=リフレッシュ)
       if(f.cmdMove){f.ccActive=true;f.ccWindowUntil=B.f+(f.cmdMove.ccWindow||16);} // vNext PR3 (§9): Command Grab HITもcancel窓を開く(Command Grab対象)
       fxDmg(opp,dmg,(f.cmdMove&&f.cmdMove.color)||'#ffb6ff');fxBurst(opp.baseX,opp.y-40);
       sfx((f.cmdMove&&f.cmdMove.se)||'slam');B.shake=11;B.hitstop=Math.max(B.hitstop,f.cmdMove?6:BAL.HITSTOP.throw); // BAL-R1: 通常投げにHITSTOP.throwを新設適用
@@ -1912,10 +1940,61 @@ function tickSpecial(f){ // ABILITY-R2 SPECIAL-CORE: cooldownはstartSpecial()�
   if(f.specialCooldownF>0)f.specialCooldownF--;
   if(f.specialActiveF>0)f.specialActiveF--; // mode-type SPECIALのActive窓。0になった後の個別後始末は各キャラPRで追加する
 }
-function cmdUnblockable(f,cm){ // vNext PR4 (Chirka Delayedあと出し頭突き): 通常はブロック可能だがDelay採用時のみUnblockable化
-  if(!cm)return false;
-  if(cm.unblockable)return true;
-  return f.trickChoice==='delay'&&f.trickMove===cm.name&&cm.delayedVariant&&cm.delayedVariant.unblockable===true;
+function cmdUnblockable(f,cm){return!!(cm&&cm.unblockable);} // Bullet弾丸頭突き等、m.unblockable:true指定の技のみガード不能
+// ABILITY-R2-B (Issue #97 §7 POISON属性): 被弾側の状態。誰が食らってもよい共通ロジック(Chirka影踏み/SPECIAL専用ではない)。
+// 300F=10tick×30F/計210dmg。dealDamage()経由のためGrit(踏ん張り)は通常通り機能する(「can KO」も自然に満たす)。
+// no-stack: 既に有効ならticksLeft/nextTickFを丸ごと上書き=リフレッシュ(旧分の残りtickは失われる)
+function applyPoison(f){f.poisonActive=true;f.poisonTicksLeft=10;f.poisonNextTickF=B.f+30;}
+function tickPoison(f){
+  if(!f.poisonActive)return;
+  if(B.f<f.poisonNextTickF)return;
+  dealDamage(f,21); // hitstun/knockback/hitstop/GuardDamage/combo/scaling/S/Ult/Counter/OP-repeatを一切経由しない直接HP減算
+  f.poisonTicksLeft--;
+  if(f.poisonTicksLeft<=0)f.poisonActive=false;else f.poisonNextTickF+=30;
+  if(f.hp<=0){f.hp=0;startKO(f.side);}
+}
+// ABILITY-R2-B (Issue #97 §8 Takimaru SPECIAL BIND): 被弾側の状態。480F、キャラ非依存。ダメージ/咆哮では解除されず
+// (dealDamage/roarResolve等はf.bindActiveFへ一切触れない)、Round終了(roundInit)でのみクリアされる
+function tickBind(f){if(f.bindActiveF>0)f.bindActiveF--;}
+// ABILITY-R2-B (Issue #97 §7 Chirka FEINT属性): HIT/BLOCKで予約された18F後のfollow-up。攻撃側(att)の現在phase/pf
+// には一切触れない(「being interrupted does not cancel it」=攻撃側が別の行動中でもfollow-up自体は独立して発火する)。
+// Guard/Dodgeの成否判定は「follow-up resolves normally (guardable/dodgeable)」を素直に再現するための簡易版
+// (att側のcombo/S/Classic Cancel等は、発火時点でattが元のactionをとうに終えている可能性が高いため対象外とする)
+function resolveFeintFollowup(att,cm){
+  const def=B.p[1-att.side];
+  if(att.hp<=0||def.hp<=0||B.flow!=='fight')return; // 「only KO/round-end cancels」: 発火時点でどちらかがKO/ラウンド終了していれば何もしない
+  const lv=cm.lv;
+  if((def.phase==='guard')||(def.phase==='blockstun'&&def.held)){
+    def.guard-=Math.round(cm.guardDmg!=null?cm.guardDmg:BAL.GDMG_A);def.guardRegenCooldownF=BAL.GUARD.regenDelayF;
+    if(lv==='low'){
+      const chip=(cm.guardChip!=null)?cm.guardChip:BAL.CHIP_LOW;
+      dealDamage(def,chip);
+      if(def.hp<=0){def.hp=0;startKO(def.side);return;}
+    }
+    fxSpark(def,lv,1);sfx('guard');B.hitstop=Math.max(B.hitstop,2);
+    if(def.guard<=0)doBreak(def);
+    return;
+  }
+  if(def.phase==='dodge'){
+    const rule=DODGE_TABLE[def.dodgeType];
+    if(rule&&rule.beats.includes(lv)){fxSpark(def,lv,1);sfx('whiffG');return;} // 正解回避: follow-upはスカ(counterReady等の付与はしない=素のwhiff扱い)
+  }
+  let dmg=cm.exactDmg?cm.d:Math.round(cm.d*att.c.dMul);
+  dmg=gutsOutgoing(att,dmg);dmg=darkBodyOutgoing(att,dmg);dmg=moguzoSpecialOutgoing(att,dmg);dmg=moguzoSpecialIncoming(def,dmg);
+  dealDamage(def,dmg);
+  if(cm.poison)applyPoison(def);
+  def.atkLv=null;def.guardLv=null;def.buf=null;
+  if(cm.down){def.phase='down';def.pf=0;def.downType=cm.down;def.downHitUsed=false;def.combo=0;def.normalChainCount=0;def.kb=20;def.cmdBufMove=null;def.cmdBufIdx=null;}
+  else{def.phase='hitstun';def.pf=0;def.stunDur=(cm.hitstun!=null?cm.hitstun:(BAL.HITSTUN[lv]||22));def.combo=0;def.normalChainCount=0;def.kb=0;def.cmdBufMove=null;def.cmdBufIdx=null;}
+  resetModernHist(def);
+  fxDmg(def,dmg,cm.color||'#ffffff');fxSpark(def,lv,0);sfx(cm.se||HIT_SE[lv]||'hit');
+  B.hitstop=Math.max(B.hitstop,BAL.HITSTOP[lv]);B.shake=Math.max(B.shake,5);
+  if(def.hp<=0){def.hp=0;startKO(def.side);}
+}
+function tickFeintFollowup(f){
+  if(f.feintPendingAtF<=0||B.f<f.feintPendingAtF)return;
+  const cm=f.feintPendingCm;f.feintPendingAtF=0;f.feintPendingCm=null;
+  resolveFeintFollowup(f,cm);
 }
 function tickPendingModernGrab(f,opp){ // vNext PR3 (§8 Takimaru Modern Grab): 相手がthrow-eligibleになった最初のidle Fから14F startupのグラブを開始する。
   // 被弾/投げ/別行動(=新たな別のactionの開始)/Roundでのpending cancelはresetModernHist()の各呼び出し口
@@ -1944,9 +2023,21 @@ const DODGE_TABLE={ // vNext PR2 (COMBAT_VNEXT_FINAL.md §3 Dodge R2)。旧(03 �
   sway:{beats:['high','low'],counter:'mid'},
   lunge:{beats:['mid','low'],counter:'high'}
 };
-function dodgeActive(f){return f.phase==='dodge'&&f.pf>=2&&f.pf<=BAL.DODGE.judgeF;} // BAL-R1.1: 効果発生をF1→F2へ(1F GAPでは間に合わずガードのみ有効)
+function dodgeActive(f){ // BAL-R1.1: 効果発生をF1→F2へ(1F GAPでは間に合わずガードのみ有効)
+  const judgeF=(f.c.id==='yomikage'&&f.specialActiveF>0)?18:BAL.DODGE.judgeF; // ABILITY-R2-B (Issue #97 §9 Yomikage SPECIAL): 「Dodge evade window expands F2-F12→F2-F18」
+  return f.phase==='dodge'&&f.pf>=2&&f.pf<=judgeF;
+}
 function attackResolve(att,def){
   if(handleIfDowned(att,def,spec(att).d))return;
+  if(def.c.id==='yomikage'&&def.yomiAutoCounterUntilF>0&&B.f<=def.yomiAutoCounterUntilF){
+    // ABILITY-R2-B (Issue #97 §9 Yomikage SPECIAL): 発動直後14FのStrike Counter Window。この関数(attackResolve)は
+    // Strike(Normal/Command)専用のためGrab/Roar/Ultは自動的に対象外(「not counterable」)。現在のdef.phase(guard中でも)
+    // に関わらずStrike接触は自動的にRETURN発動へ変換する(=通常のヒット/ガード解決を完全に置き換える専用カウンター)。
+    // 1回のactivationにつき最初の接触1回のみ変換(以後は通常解決に戻る)
+    def.yomiAutoCounterUntilF=0;
+    startYomiReturn(def,att.atkLv);
+    return;
+  }
   if(def.phase==='cmdStance'&&def.cmdMove&&def.pf>=(def.cmdMove.startupF+1)&&def.pf<=(def.cmdMove.startupF+def.cmdMove.counterActiveF)){
     // 巌の構え等: vNext PR3 (§13 Startup/CounterActive/FailRecovery) — startupF中(構え成立前)とFailRecovery中
     // (counterActiveFを空費した後)は無防備な通常の的として以降の分岐(guard/hit)へ素通しし、
@@ -1974,7 +2065,11 @@ function attackResolve(att,def){
       gainS(def,'dodge'); // vNext PR2 (§11 S Gain): Correct Dodge+6
       if(def.c.id==='hakuma')def.ironWallReady=true; // vNext PR4 (Hakuma IRON WALL gain: Correct Dodge)
       if(def.c.id==='yomikage'){ // vNext PR4 (Yomikage RETURN/JUST): 「Correct ordinary Dodgeのみ」「Just: evade contact at Dodge pf F5-F9」
-        def.yomiJust=(def.pf>=5&&def.pf<=9);def.yomiState='pending';def.yomiQueuedLv=null;
+        def.yomiJust=(def.pf>=5&&def.pf<=9);def.yomiState='pending';
+        // ABILITY-R2-B (Issue #97 §9 Yomikage SPECIAL): 「Correct Dodge auto-performs Return」「Just range(既存のF5-F9=
+        // yomiJust)はauto-performs Just Return」。SPECIAL中は手動入力を待たずqueuedLvへ即auto-populateするだけで、
+        // dodge recovery完了時の既存pending処理(§2実装)がそのままJust/通常の分岐込みで発動してくれる(新規分岐不要)
+        def.yomiQueuedLv=(def.specialActiveF>0)?att.atkLv:null;
       }
       B.fx.push({k:'suki',x:fpos(att),y:relY(att,0.908),f:0,dur:20});
       sfx('whiffG');
@@ -2017,6 +2112,7 @@ function attackResolve(att,def){
     // Command BLOCKはClassic Cancel窓を開かない(§9「Command HITのみ」)
     if(cm2&&cm2.selfGuardRestore)att.guard=Math.min(maxGuardFor(att.c),att.guard+cm2.selfGuardRestore); // vNext PR4 (Bullet圧抜き掌): BLOCK時もGuard+15 cap
     if(cm2&&(cm2.name==='ぶちかまし'||cm2.name==='熊手払い')){att.pressureState='ready';att.pressureUntilF=B.f+A1.blockstun+12;} // vNext PR4 (Takimaru PRESSURE): BLOCKでもtrigger
+    if(cm2&&cm2.feint){att.feintPendingAtF=B.f+18;att.feintPendingCm=cm2;} // ABILITY-R2-B (Chirka FEINT属性): BLOCKでも18F後のfollow-upを予約
     const A2=spec(att),rem=A2.s+A2.a+A2.r-att.pf;
     if(rem>6)B.fx.push({k:'suki',x:fpos(att),y:relY(att,0.908),f:0,dur:rem});
     fxSpark(def,att.atkLv,1);sfx('guard');
@@ -2113,6 +2209,8 @@ function hitApply(att,def,counterHit,lvOverride,cmdOverride){
       if(cm.selfGuardRestore)att.guard=Math.min(maxGuardFor(att.c),att.guard+cm.selfGuardRestore); // vNext PR4 (Bullet圧抜き掌): HIT時Guard+15 cap
       if(cm.name==='ぶちかまし'||cm.name==='熊手払い'){att.pressureState='ready';att.pressureUntilF=B.f+A.hitstun+12;} // vNext PR4 (Takimaru PRESSURE): HIT起点(opponent actionableの予測F+12がwindow末端)
       if(att.c.id==='dark_moguzo'&&DARK_CHAIN_MOVES.has(cm.name))darkChainTrigger(att); // vNext PR4 (Dark Moguzo DARK CHAIN): compatible技のHIT
+      if(cm.feint){att.feintPendingAtF=B.f+18;att.feintPendingCm=cm;} // ABILITY-R2-B (Chirka FEINT属性): HITで18F後のfollow-upを予約(完全空振りはこの分岐を通らないため自然に対象外)
+      if(cm.poison)applyPoison(def); // ABILITY-R2-B (POISON属性): 直撃HITで300F毒付与(スタックなし=既存ならリフレッシュ)
     }
     resetModernHist(def); // vNext PR3 (§8 Modern R4 reset trigger: 被弾)
     // vNext PR2 (§11 S Gain): action1/2/3=aHitC[0..2]、action4+は明示的に0(旧実装はindexをclampしaction3の値を
@@ -2672,6 +2770,7 @@ function netFightStep(cmds0,hold0,cmds1,hold1){ // fightStep()のオンライン
     tickYomiReady(f); // vNext PR4 (Yomikage RETURN/JUST Ready timeout)
     tickDarkBody(f,B.p[1-f.side]); // vNext PR4 (Dark Moguzo BODY): first neutral activate + 360F timer
     tickSpecial(f); // ABILITY-R2 SPECIAL-CORE: cooldown/activeF共通の1F減算
+    tickPoison(f);tickBind(f);tickFeintFollowup(f); // ABILITY-R2-B: POISON tick/BIND減算/Chirka FEINT follow-up発火
     f.kb*=0.86;if(f.kb<0.5)f.kb=0;
     if(f.sNo>0)f.sNo--;
     if(f.phase!=='dodge'){
@@ -2704,6 +2803,7 @@ function fightStep(){
     tickYomiReady(f); // vNext PR4 (Yomikage RETURN/JUST Ready timeout)
     tickDarkBody(f,B.p[1-f.side]); // vNext PR4 (Dark Moguzo BODY): first neutral activate + 360F timer
     tickSpecial(f); // ABILITY-R2 SPECIAL-CORE: cooldown/activeF共通の1F減算
+    tickPoison(f);tickBind(f);tickFeintFollowup(f); // ABILITY-R2-B: POISON tick/BIND減算/Chirka FEINT follow-up発火
     f.kb*=0.86;if(f.kb<0.5)f.kb=0;
     if(f.sNo>0)f.sNo--;
     if(f.phase!=='dodge'){ // counterReady/密着は回避の戻りモーション中は消費せず、動けるようになってから起算
@@ -3113,8 +3213,8 @@ const ABILITY_DESCRIPTIONS={
     effectJa:'消費した技のarmorStartF～armorEndFの間は被弾してものけぞらず、ダメージのみ軽減(山掴み60%/岩砕き60%/大山押し30%=ハイパーアーマー)して攻撃を継続できる。巌の構えは構え中に技を受けるとカウンター反撃(125dmg)になる。'},
   hakuma:{triggerJa:'正解回避(Mikiri)成功、または相手の攻撃をガード成功させるたびにIRON WALLストックを1つ獲得(上限1、タイムアウトなし)。',
     effectJa:'ストックがある状態で雪壁掌・白峰打ち・雪煙崩しを出すと、そのストックを消費して強化版(startup短縮・ダメージ増加など技ごとに個別)に切り替わる。'},
-  chirka:{triggerJa:'だまし突き・空鳴り爪・影踏み・あと出し頭突きは、技ごとに定められたtrickWindow(発生後の数F間)にH/M/Lの追加入力を受け付ける。',
-    effectJa:'フェイント(だまし突きのみ)は成功で技を中断(硬直6F)・失敗で12F隙を晒す。ディレイは対応技の再開を+8F遅らせ、あと出し頭突きのディレイ版のみガード不能になる。'},
+  chirka:{triggerJa:'だまし突き=FEINT、影踏み=POISON、戻り蹴り=DELAYの属性を持つ(追加入力は不要、命中/ガード等の結果で自動的に発動)。',
+    effectJa:'FEINT: HITまたはBLOCKで18F後に追撃(同じ技の再ヒット)を自動予約する(完全空振りなら予約しない。妨害されても予約自体は消えない)。POISON: HITで300F(10hit×21、計210dmg)の毒を付与(のけぞり/ダメージ増減/コンボ等に影響なし、スタックしない)。DELAY: 発生の瞬間に相手がガード中または回避中なら、最大12Fまで発生を遅らせて様子を見る。'},
   takimaru:{triggerJa:'ぶちかまし・熊手払いがHITまたはガードされると、相手が次に行動可能になる前後の一定時間「肩車崩し」(プレッシャー専用、直接入力不可のコマンド投げ)の予約入力を受け付ける。',
     effectJa:'予約しておくと、相手が実際に行動可能になった瞬間に肩車崩しが自動的に発動する(先出しでは発動せず、あくまで相手の行動可能Fに合わせて発動)。'},
   yomikage:{triggerJa:'通常の回避(しゃがみ/スウェー/踏み込み)が相手の攻撃と正解回避(接触)した瞬間の回避経過フレームが5F～9Fの間ならJust版になる(それ以外は通常版)。回避成立後の硬直中に、H/M/L/つかみのいずれか1つだけを予約入力できる。',
@@ -3865,13 +3965,14 @@ function abilityStatusDescriptor(f){ // 一時アイコン/VFX(y+35行): live wi
     return null;
   }
   if(id==='chirka'){
-    if(f.cmdMove&&cmdUnblockable(f,f.cmdMove))return{charId:'chirka',group:'delayed_unblockable',sub:'vfx'};
-    if(f.trickChoice==='feint'&&f.trickResolved&&f.trickSuccess)return{charId:'chirka',group:'feint_success',sub:'vfx'};
-    if(f.trickChoice==='delay')return{charId:'chirka',group:'delay',sub:'vfx'};
+    // ABILITY-R2-B (Issue #97 §7): 旧trickWindow系UIを、新しい属性ベースFEINT/DELAYの視覚合図として流用(新規アセットなし)
+    if(f.feintPendingAtF>0)return{charId:'chirka',group:'feint_success',sub:'vfx'}; // follow-up予約中(既存feint_successを「フェイント発動中」の合図として再利用)
+    if(f.cmdDelayExtraF>0&&!f.cmdDelayResolved)return{charId:'chirka',group:'delay',sub:'vfx'}; // Active開始保留中
     return null;
   }
   if(id==='takimaru'){
-    if(armorWindowActive(f)&&f.cmdMove&&f.cmdMove.name==='大回転落とし')return{charId:'takimaru',group:'armor_throw',sub:'vfx'};
+    // ABILITY-R2-B (Issue #97 §8 Takimaru SPECIAL): 既存armor_throw VFXをSPECIALの1-hit armor窓でも流用(新規アセットなし)
+    if(armorWindowActive(f)&&f.cmdMove&&(f.cmdMove.name==='大回転落とし'||f.cmdMove.isSpecial))return{charId:'takimaru',group:'armor_throw',sub:'vfx'};
     if(f.pressureState==='ready'||f.pressureState==='throwQueued')return{charId:'takimaru',group:'pressure_ready',sub:'icon',dim:f.pressureState==='throwQueued'};
     return null;
   }
@@ -4386,6 +4487,30 @@ function rAnn(){
     ctx.restore();
   }
 }
+// ABILITY-R2-B (Issue #97 §12): POISON/BIND(被弾側の持続debuff)は「対象キャラの右上/viewport内clamp/複数なら縦積み/
+// icon(glyph)+timer ring」で表示する。永続的なtop-HUDバーは追加しない(既存gauges()の行とは無関係)。新規アセットなし
+// (☠/⛓はcanvasへ直接描画=runtime-drawn)
+function drawStatusDebuffs(f,ox,oy){
+  const items=[];
+  if(f.poisonActive)items.push({glyph:'☠',frac:Math.max(0,Math.min(1,f.poisonTicksLeft/10)),color:'#8fd98f'});
+  if(f.bindActiveF>0)items.push({glyph:'⛓',frac:Math.max(0,Math.min(1,f.bindActiveF/480)),color:'#c9b98a'});
+  if(!items.length)return;
+  const r=14,gap=6;
+  let bx=ox+34;
+  bx=Math.min(W-r-4,Math.max(r+4,bx));
+  let by=Math.max(r+4,oy-spriteHeightForChar(f.c)-6);
+  for(const it of items){
+    ctx.save();
+    ctx.beginPath();ctx.arc(bx,by,r,0,TAU);ctx.fillStyle='rgba(10,10,14,0.72)';ctx.fill();
+    ctx.lineWidth=2;ctx.strokeStyle='#444a55';ctx.stroke();
+    ctx.beginPath();ctx.moveTo(bx,by);ctx.arc(bx,by,r-2,-Math.PI/2,-Math.PI/2+TAU*it.frac);ctx.lineTo(bx,by);
+    ctx.globalAlpha=0.85;ctx.fillStyle=it.color;ctx.fill();ctx.globalAlpha=1;
+    ctx.font=Math.round(r*1.3)+'px sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';
+    ctx.fillStyle='#fff';ctx.fillText(it.glyph,bx,by+1);
+    ctx.restore();
+    by+=r*2+gap;
+  }
+}
 function rBattle(){
   ctx.save();
   const mirror=onlineActive()&&online.slot===1; // 2P側クライアントのみ描画層で水平ミラー(§6.8 v2.5.1(7)。シミュレーション/入力/パッドUI/HUDは対象外)
@@ -4413,6 +4538,7 @@ function rBattle(){
   }
   const xyB=fighterXY(B.p[1]),xyA=fighterXY(B.p[0]);
   rFighter(B.p[1],xyB[0],xyB[1]);rFighter(B.p[0],xyA[0],xyA[1]);
+  drawStatusDebuffs(B.p[1],xyB[0],xyB[1]);drawStatusDebuffs(B.p[0],xyA[0],xyA[1]); // ABILITY-R2-B (§12 POISON/BIND status UI)
   if(onlineActive()&&(B.flow==='fight'||B.flow==='intro'))rYouMarker();
   rFx();
   rClashPicks();
@@ -4829,11 +4955,10 @@ function moveBadges(m){
   if(m.cost)badges.push({t:(m.cost.res==='armorStock'?'アーマーストック':'チャージ')+'×'+m.cost.amt+' 消費',c:'#ffb84d'});
   if(m.armorStartF!=null)badges.push({t:(m.hyperArmor?'ハイパーアーマー':'アーマー')+' '+m.armorStartF+'-'+m.armorEndF+'F(被弾時ダメージ'+Math.round(m.armorDmgMul*100)+'%)',c:'#ffd23f'});
   if(m.ironWallAlt)badges.push({t:'IRON WALL消費で強化版に切替',c:'#a7d9c9'});
-  if(m.trickWindow){
-    const kinds=(m.trickWindow.feint?'フェイント':'')+(m.trickWindow.feint&&m.trickWindow.delay?'／':'')+(m.trickWindow.delay?'ディレイ':'');
-    badges.push({t:kinds+' 受付'+m.trickWindow.s+'-'+m.trickWindow.e+'F',c:'#caa6d9'});
-  }
-  if(m.delayedVariant&&m.delayedVariant.unblockable)badges.push({t:'ディレイ版はガード不能',c:'#ff8b8b'});
+  // ABILITY-R2-B (Issue #97 §7): FEINT/DELAY/POISONはmove自体の属性(m.feint/m.delay/m.poison)として表現
+  if(m.feint)badges.push({t:'FEINT: HIT/BLOCKで18F後に追撃予約',c:'#caa6d9'});
+  if(m.delay)badges.push({t:'DELAY: 相手Guard/Dodge中はActive開始を最大+12F遅延',c:'#caa6d9'});
+  if(m.poison)badges.push({t:'POISON: HITで300F毒(10hit×21、計210)',c:'#8fd98f'});
   if(m.unblockable)badges.push({t:'ガード不能',c:'#ff8b8b'});
   if(m.pressureOnly)badges.push({t:'PRESSURE専用(直接入力不可)',c:'#c9a24d'});
   if(m.chargeGain)badges.push({t:'成功でCHARGE+1',c:'#ffb84d'});
