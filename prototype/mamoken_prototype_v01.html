@@ -1881,7 +1881,7 @@ function resolveHits(){
     // ROAR-R2(#98): 相打ちも各side自身のroarArmorAbsorbedに応じてclean18F/armor-success24Fを個別判定し、より強い方をB.hitstopへ採用
     const aArmorSuccess=a.roarArmorAbsorbed>=1,bArmorSuccess=b.roarArmorAbsorbed>=1;
     const hsA=aArmorSuccess?BAL.HITSTOP.roarArmor:BAL.HITSTOP.roar,hsB=bArmorSuccess?BAL.HITSTOP.roarArmor:BAL.HITSTOP.roar;
-    B.shake=Math.max(B.shake,(Math.max(hsA,hsB)>=BAL.HITSTOP.roarArmor?20:14)*shakeScale());B.hitstop=Math.max(B.hitstop,hsA,hsB);
+    B.shake=Math.max(B.shake,Math.max(hsA,hsB)>=BAL.HITSTOP.roarArmor?20:14);B.hitstop=Math.max(B.hitstop,hsA,hsB); // shakeScale()はrBattle()の描画消費地点で一括適用(重複適用回避)
     sfx('roarImpactHeavy');if(aArmorSuccess||bArmorSuccess)sfx('roarArmorBoom');
     triggerRoarImpact((aArmorSuccess||bArmorSuccess)?'armor':'clean',a.hp<=b.hp?a:b); // 位置は演出目的でHP低い側(=より効いた側)を基準にする
     if(a.hp<=0)a.hp=0;if(b.hp<=0)b.hp=0;
@@ -1952,7 +1952,7 @@ function pushModernHist(f,lv){ // Normal(crouch以外)のHIT/BLOCK確定時に�
   if(f.modernHist.length>MODERN_HIST_MAX)f.modernHist.shift();
 }
 function tryModernReplace(f,lv){ // 戻り値: {move,idx,grab}かnull。lvは今まさに開始しようとしているNormalの段
-  if(curControlScheme()==='classic')return null; // MENU-R1(#111): Classic選択時はModernの自動コマンド解決を行わず、常に手動コマンド入力のみとする
+  if(curControlScheme()==='classic'&&isLocalPlayerFighter(f))return null; // MENU-R1(#111): Classic選択時はModernの自動コマンド解決を行わず、常に手動コマンド入力のみとする(CPU側は対象外、CPU-R2 baseline保持)
   modernHistTimeout(f);
   const pats=MODERN_PATTERNS[skeletonIdOf(f.c)];
   if(!pats)return null;
@@ -2379,7 +2379,7 @@ function roarResolve(att,def){
     // vNext PR2 (COMBAT_VNEXT_FINAL.md §12 Roar/Ult): 「Roar自身S gain0」につきattacker(att)側のS gainを撤廃
     // (旧: gainS(att,'aBlk')で被ガード時も咆哮側がS獲得していた)
     fxSpark(def,'mid',1);
-    B.shake=Math.max(B.shake,8*shakeScale());B.hitstop=Math.max(B.hitstop,BAL.HITSTOP.roarGuard); // ROAR-R2(#98): 被ガード14F。armor-successより明確に弱い
+    B.shake=Math.max(B.shake,8);B.hitstop=Math.max(B.hitstop,BAL.HITSTOP.roarGuard); // ROAR-R2(#98): 被ガード14F。armor-successより明確に弱い。shakeScale()はrBattle()の描画消費地点で一括適用
     triggerRoarImpact('guard',def);
     if(def.guard<=0)doBreak(def);
   }else{ // ROAR-R2(#98): 「Grab/Roar/Ult penetrate armor」につき、旧「def.phase==='roar'かつdefの自armor窓中はx0.5減衰」分岐(BAL-R1)を撤去。
@@ -2392,7 +2392,7 @@ function roarResolve(att,def){
     // vNext PR2 (§12): Roar自身S gain0につきgainS(att,'aHit')を撤廃(defenderの'got'/gainUltStockは維持)
     gainS(def,'got');gainUltStock(att);
     fxDmg(def,R.d,'#ff8040');fxSpark(def,'mid',0,true); // 咆哮ヒット=大スパーク
-    B.shake=Math.max(B.shake,(armorSuccess?20:14)*shakeScale());
+    B.shake=Math.max(B.shake,armorSuccess?20:14); // shakeScale()はrBattle()の描画消費地点で一括適用(重複適用回避)
     B.hitstop=Math.max(B.hitstop,armorSuccess?BAL.HITSTOP.roarArmor:BAL.HITSTOP.roar);
     sfx('roarImpactHeavy');if(armorSuccess)sfx('roarArmorBoom'); // ROAR-R2(#98): 既存'roar'(冒頭で再生済み)に重ねる追加の低音レイヤー
     triggerRoarImpact(armorSuccess?'armor':'clean',def);
@@ -2664,6 +2664,7 @@ let OPTIONS={shake:'normal',flash:'normal',vibration:'on',controlScheme:'modern'
 function shakeScale(){return OPTIONS.shake==='off'?0:(OPTIONS.shake==='strong'?1.35:1);}
 function flashScale(){return OPTIONS.flash==='reduced'?0.4:1;}
 function curControlScheme(){return onlineActive()?'modern':OPTIONS.controlScheme;} // curAiLv()と同じ理由(§12): オンライン中は両クライアントのsimulation分岐を一致させるため常時'modern'固定
+function isLocalPlayerFighter(f){return onlineActive()?f===B.p[online.slot]:f===B.p[0];} // Codexレビュー指摘(PR#122): controlSchemeは「プレイヤーの操作方式」であり、CPU(B.p[1])のModern自動変換まで止めるとCPU-R2のLv別挙動baselineが変わってしまう。ローカルの人間操作Fighterのみに絞る
 function vibrate(ms){if(OPTIONS.vibration==='on'&&typeof navigator!=='undefined'&&navigator.vibrate)navigator.vibrate(ms);} // presentation-only。未対応環境はnavigator.vibrate自体が無くno-op
 function resetOptions(){OPTIONS.shake='normal';OPTIONS.flash='normal';OPTIONS.vibration='on';OPTIONS.controlScheme='modern';BGM_VOLUME=0.35;SE_VOLUME=1.0;if(bgmGainNode)bgmGainNode.gain.value=BGM_VOLUME;}
 /* ================= CPU AI ================= */
@@ -4994,7 +4995,7 @@ function rBattle(){
   const mirror=onlineActive()&&online.slot===1; // 2P側クライアントのみ描画層で水平ミラー(§6.8 v2.5.1(7)。シミュレーション/入力/パッドUI/HUDは対象外)
   if(mirror){ctx.translate(W,0);ctx.scale(-1,1);inMirrorZone=true;}
   if(B.flow==='vs'){rVsScreen();inMirrorZone=false;ctx.restore();return;} // VS-SCREEN-R1(#110): ステージ/ファイター/HUD/パッドは描画せず専用画面に丸ごと差し替える
-  if(B.shake>0)ctx.translate((Math.random()*2-1)*B.shake,(Math.random()*2-1)*B.shake);
+  if(B.shake>0){const shk=B.shake*shakeScale();ctx.translate((Math.random()*2-1)*shk,(Math.random()*2-1)*shk);} // Codexレビュー指摘(PR#122): B.shakeは唯一この描画消費地点でのみ読まれるため、ここでshakeScale()を掛ければ全B.shake代入元(通常ヒット/投げ/カウンター/奥義/クラッシュ/KO含む)に一括適用される。各代入側の個別*shakeScale()(Roar系)は重複適用になるため撤去する
   let zoom=1;
   if(B.flow==='clash'&&B.clash){
     const c=B.clash;
@@ -5237,7 +5238,8 @@ const MINI_ACTION_BTN={x:W/2-140,y:640,w:280,h:120};
 function startMiniPractice(kind){
   sfx('tap');
   const prevBest=(MG&&MG.kind===kind)?MG.best:null;
-  if(kind==='jyanken')MG={kind:kind,phase:'pick',pick:null,cpuPick:null,winner:null,wins:0,losses:0,draws:0};
+  const prevTally=(MG&&MG.kind==='jyanken'&&kind==='jyanken')?{wins:MG.wins,losses:MG.losses,draws:MG.draws}:{wins:0,losses:0,draws:0}; // Codexレビュー指摘(PR#122): もう一度時に集計をリセットしない(hayauchi/rendaのbest維持と揃える)
+  if(kind==='jyanken')MG={kind:kind,phase:'pick',pick:null,cpuPick:null,winner:null,wins:prevTally.wins,losses:prevTally.losses,draws:prevTally.draws};
   else if(kind==='hayauchi')MG={kind:kind,phase:'play',hits:0,target:miniRandTarget(),startedAt:performance.now(),elapsedMs:0,best:prevBest};
   else MG={kind:kind,phase:'play',taps:0,deadline:performance.now()+5000,best:prevBest};
   game.screen='miniPractice';
