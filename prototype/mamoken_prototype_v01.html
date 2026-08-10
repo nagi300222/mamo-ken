@@ -99,34 +99,29 @@ const BAL={ // 03_data_design.md v2.0 §2 balance table 準拠
   CLASH:{sel:90,d:120,near:8,streakBonus:30,winS:30,loserStun:40,inF:26,revealHitF:24,revealF:60},
   MINIGAME:{
     weights:{jyanken:0.5,renda:0.25,hayauchi:0.25},
-    RENDA:{durationF:120,tapGain:1,barRange:20}, // レンダ(連打の綱引き)。CPU加算率はBAL.AIDIFFへ難易度別に集約
-    HAYAUCHI:{targets:5,radius:55,capF:600} // ハヤウチ(的あて連続タップ)。CPU撃破速度はBAL.AIDIFFへ難易度別に集約
-  },
-  AIDIFF:{ // 難易度プリセット(§6.7 v2.4)。現行AI(v0.8時点)=HARD、按分してNORMAL/EASYを算出。試遊後調整可
-    // vNext PR2 (COMBAT_VNEXT_FINAL.md §10 Focus): focusRestraintフィールドを削除(CPU logicがfocusを
-    // 一切参照しないようにするため。旧: EASY=false/NORMAL・HARD=trueだった攻め控えの分岐は下記aiStep()側で撤廃)
-    EASY:{reactMul:0.4,mikiriRate:0.04,dodgeRate:0.05,atkFreqMul:0.6,downFollowup:0,
-      rendaCpuMin:0.085,rendaCpuRng:0,hayauchiF:[22,34],cmdMoveRate:0.05}, // コマンド技使用率(v0.10 (3)): EASY=ほぼ不使用
-    NORMAL:{reactMul:0.7,mikiriRate:0.12,dodgeRate:0.10,atkFreqMul:0.8,downFollowup:0.5,
-      rendaCpuMin:0.100,rendaCpuRng:0,hayauchiF:[17,27],cmdMoveRate:0.25}, // NORMAL=たまに
-    HARD:{reactMul:1.0,mikiriRate:0.22,dodgeRate:0.15,atkFreqMul:1.0,downFollowup:1,
-      rendaCpuMin:0.115,rendaCpuRng:0.02,hayauchiF:[14,24],cmdMoveRate:0.6} // HARD=積極的
+    RENDA:{durationF:120,tapGain:1,barRange:20}, // レンダ(連打の綱引き)。CPU加算率はBAL.AILVへLv別に集約(#106 §10)
+    HAYAUCHI:{targets:5,radius:55,capF:600} // ハヤウチ(的あて連続タップ)。CPU撃破速度はBAL.AILVへLv別に集約(#106 §10)
   },
   // CPU-R2 PR1(#106 §3): 正式なCPU Lv1-9テーブル。Issue #106の初期チューニング値をそのまま採用(将来のTraining後BAL調整対象)。
-  // このPRでは追加のみ(aiStep()/stepRenda()/stepHayauchi()はまだAIDIFF/curDiff()を読んでおり挙動は無変更)。
-  // PR2以降でreactionDelay/reactRate/advDefShare/jitterF等を実際の意思決定ロジックへ接続していく。
-  // 互換: 旧EASY≈Lv2/NORMAL≈Lv3/HARD≈Lv5(curAiLv()参照)
+  // PR2-4でreactionDelay/reactRate/advDefShare/jitterF等を実際の意思決定ロジックへ接続済み。
   // roarEscapeUse: CPU-R2 PR3(#106 §7 ROAR): Issue #106 §7が明示するLv別Roar escape-use確率をそのまま採用(独立の列)
+  // atkFreqMul/downFollowup: CPU-R2 PR5(#106 §12 UI移行): 旧BAL.AIDIFF(EASY/NORMAL/HARD)を廃止するにあたり、
+  // Issue本文に直接の表が無い2列を旧EASY(Lv2)/NORMAL(Lv3)/HARD(Lv5)の実測値をアンカーとして残りのLvへ単調に補間・
+  // 外挿した(旧cmdMoveRateは§3が明示するcmdUse列の定義「offensive intentがCommand routeを使う確率」と同義のため、
+  // 別列を持たずcmdUseへ統合=旧D.cmdMoveRate参照箇所はcmdUseを直接読む)。
+  // hayauchiF/rendaCpuMin/rendaCpuRng: CPU-R2 PR5(#106 §10 Gyuiin): Issue #106 §10が明示するHAYAUCHI/RENDAの
+  // Gyuiin専用Lv別テーブルをそのまま採用(battle AIのcmdUse等とは独立のGyuiin専用列。旧HARD[14,24]F/0.115/0.02が
+  // 新Lv9[14,24]F/0.130/0.115に極めて近い=Issue本文の「current HARD ≈ Lv9 baseline for Gyuiin」と整合)
   AILV:{
-    1:{thinkMinF:28,thinkMaxF:44,reactDelayMinF:20,reactDelayMaxF:28,reactRate:0.25,advDefShare:0.05,jitterF:14,cmdUse:0.05,punishUse:0.10,comboContinue:0.30,grabMix:0.05,resourceQuality:0.10,habitAdapt:0.00,roarEscapeUse:0.02},
-    2:{thinkMinF:24,thinkMaxF:38,reactDelayMinF:18,reactDelayMaxF:25,reactRate:0.35,advDefShare:0.08,jitterF:12,cmdUse:0.10,punishUse:0.20,comboContinue:0.45,grabMix:0.07,resourceQuality:0.20,habitAdapt:0.00,roarEscapeUse:0.03},
-    3:{thinkMinF:20,thinkMaxF:32,reactDelayMinF:16,reactDelayMaxF:22,reactRate:0.45,advDefShare:0.12,jitterF:10,cmdUse:0.20,punishUse:0.35,comboContinue:0.60,grabMix:0.08,resourceQuality:0.30,habitAdapt:0.00,roarEscapeUse:0.05},
-    4:{thinkMinF:16,thinkMaxF:28,reactDelayMinF:13,reactDelayMaxF:20,reactRate:0.58,advDefShare:0.18,jitterF:9,cmdUse:0.40,punishUse:0.60,comboContinue:0.72,grabMix:0.10,resourceQuality:0.45,habitAdapt:0.10,roarEscapeUse:0.07},
-    5:{thinkMinF:14,thinkMaxF:25,reactDelayMinF:11,reactDelayMaxF:16,reactRate:0.68,advDefShare:0.27,jitterF:8,cmdUse:0.60,punishUse:0.90,comboContinue:0.65,grabMix:0.10,resourceQuality:0.50,habitAdapt:0.15,roarEscapeUse:0.08},
-    6:{thinkMinF:12,thinkMaxF:22,reactDelayMinF:10,reactDelayMaxF:15,reactRate:0.75,advDefShare:0.34,jitterF:7,cmdUse:0.68,punishUse:0.92,comboContinue:0.78,grabMix:0.13,resourceQuality:0.62,habitAdapt:0.25,roarEscapeUse:0.18},
-    7:{thinkMinF:10,thinkMaxF:20,reactDelayMinF:9,reactDelayMaxF:14,reactRate:0.82,advDefShare:0.42,jitterF:6,cmdUse:0.76,punishUse:0.95,comboContinue:0.86,grabMix:0.15,resourceQuality:0.75,habitAdapt:0.45,roarEscapeUse:0.30},
-    8:{thinkMinF:9,thinkMaxF:18,reactDelayMinF:8,reactDelayMaxF:13,reactRate:0.88,advDefShare:0.50,jitterF:5,cmdUse:0.84,punishUse:0.97,comboContinue:0.92,grabMix:0.17,resourceQuality:0.88,habitAdapt:0.65,roarEscapeUse:0.45},
-    9:{thinkMinF:8,thinkMaxF:16,reactDelayMinF:8,reactDelayMaxF:12,reactRate:0.92,advDefShare:0.58,jitterF:4,cmdUse:0.90,punishUse:0.98,comboContinue:0.97,grabMix:0.20,resourceQuality:0.96,habitAdapt:0.85,roarEscapeUse:0.60}
+    1:{thinkMinF:28,thinkMaxF:44,reactDelayMinF:20,reactDelayMaxF:28,reactRate:0.25,advDefShare:0.05,jitterF:14,cmdUse:0.05,punishUse:0.10,comboContinue:0.30,grabMix:0.05,resourceQuality:0.10,habitAdapt:0.00,roarEscapeUse:0.02,atkFreqMul:0.50,downFollowup:0.00,hayauchiF:[42,54],rendaCpuMin:0.060,rendaCpuRng:0.010},
+    2:{thinkMinF:24,thinkMaxF:38,reactDelayMinF:18,reactDelayMaxF:25,reactRate:0.35,advDefShare:0.08,jitterF:12,cmdUse:0.10,punishUse:0.20,comboContinue:0.45,grabMix:0.07,resourceQuality:0.20,habitAdapt:0.00,roarEscapeUse:0.03,atkFreqMul:0.60,downFollowup:0.00,hayauchiF:[36,48],rendaCpuMin:0.070,rendaCpuRng:0.012},
+    3:{thinkMinF:20,thinkMaxF:32,reactDelayMinF:16,reactDelayMaxF:22,reactRate:0.45,advDefShare:0.12,jitterF:10,cmdUse:0.20,punishUse:0.35,comboContinue:0.60,grabMix:0.08,resourceQuality:0.30,habitAdapt:0.00,roarEscapeUse:0.05,atkFreqMul:0.80,downFollowup:0.50,hayauchiF:[30,42],rendaCpuMin:0.080,rendaCpuRng:0.014},
+    4:{thinkMinF:16,thinkMaxF:28,reactDelayMinF:13,reactDelayMaxF:20,reactRate:0.58,advDefShare:0.18,jitterF:9,cmdUse:0.40,punishUse:0.60,comboContinue:0.72,grabMix:0.10,resourceQuality:0.45,habitAdapt:0.10,roarEscapeUse:0.07,atkFreqMul:0.90,downFollowup:0.75,hayauchiF:[26,36],rendaCpuMin:0.090,rendaCpuRng:0.016},
+    5:{thinkMinF:14,thinkMaxF:25,reactDelayMinF:11,reactDelayMaxF:16,reactRate:0.68,advDefShare:0.27,jitterF:8,cmdUse:0.60,punishUse:0.90,comboContinue:0.65,grabMix:0.10,resourceQuality:0.50,habitAdapt:0.15,roarEscapeUse:0.08,atkFreqMul:1.00,downFollowup:1.00,hayauchiF:[22,32],rendaCpuMin:0.100,rendaCpuRng:0.018},
+    6:{thinkMinF:12,thinkMaxF:22,reactDelayMinF:10,reactDelayMaxF:15,reactRate:0.75,advDefShare:0.34,jitterF:7,cmdUse:0.68,punishUse:0.92,comboContinue:0.78,grabMix:0.13,resourceQuality:0.62,habitAdapt:0.25,roarEscapeUse:0.18,atkFreqMul:1.05,downFollowup:1.00,hayauchiF:[20,30],rendaCpuMin:0.107,rendaCpuRng:0.019},
+    7:{thinkMinF:10,thinkMaxF:20,reactDelayMinF:9,reactDelayMaxF:14,reactRate:0.82,advDefShare:0.42,jitterF:6,cmdUse:0.76,punishUse:0.95,comboContinue:0.86,grabMix:0.15,resourceQuality:0.75,habitAdapt:0.45,roarEscapeUse:0.30,atkFreqMul:1.10,downFollowup:1.00,hayauchiF:[18,28],rendaCpuMin:0.115,rendaCpuRng:0.020},
+    8:{thinkMinF:9,thinkMaxF:18,reactDelayMinF:8,reactDelayMaxF:13,reactRate:0.88,advDefShare:0.50,jitterF:5,cmdUse:0.84,punishUse:0.97,comboContinue:0.92,grabMix:0.17,resourceQuality:0.88,habitAdapt:0.65,roarEscapeUse:0.45,atkFreqMul:1.15,downFollowup:1.00,hayauchiF:[16,26],rendaCpuMin:0.122,rendaCpuRng:0.021},
+    9:{thinkMinF:8,thinkMaxF:16,reactDelayMinF:8,reactDelayMaxF:12,reactRate:0.92,advDefShare:0.58,jitterF:4,cmdUse:0.90,punishUse:0.98,comboContinue:0.97,grabMix:0.20,resourceQuality:0.96,habitAdapt:0.85,roarEscapeUse:0.60,atkFreqMul:1.20,downFollowup:1.00,hayauchiF:[14,24],rendaCpuMin:0.130,rendaCpuRng:0.022}
   },
   GRAB:{s:12,a:2,rec:32,seq:28,d:90,stun:30,downType:'throwDown'}, // BAL-R1: 空振り硬直rec 28→32(=whiffRecovery)。ヒット時はdownType(throwDown)でdown状態化するためstunは現在未使用(counterMulはBAL.COUNTER_MULへ統合)
   DODGE:{totalF:22,judgeF:12,counterReadyF:18,counterScale:[1.0,1.0,0.9], // vNext PR2 (COMBAT_VNEXT_FINAL.md §2共通F):
@@ -424,7 +419,7 @@ const MINIGAME_BG={ // clashRender()のmg('jyanken'/'renda'/'hayauchi')から検
   renda:{assetKey:'bg_minigame_renda',file:'minigame_renda_mountain_run_course.png'},
 };
 for(const mg in MINIGAME_BG)loadImg(MINIGAME_BG[mg].assetKey,'../assets/bg/'+MINIGAME_BG[mg].file,true);
-let selStageId=BATTLE_STAGES[0].id; // キャラ選択画面で切替・デフォルト先頭ステージ・セッション中保持(selPalette/aiDifficultyと同様)
+let selStageId=BATTLE_STAGES[0].id; // キャラ選択画面で切替・デフォルト先頭ステージ・セッション中保持(selPalette/cpuLvと同様)
 function battleStageById(id){return BATTLE_STAGES.find(function(s){return s.id===id;})||BATTLE_STAGES[0];}
 loadImg('ui_hp_frame','../assets/ui/hp_frame.png');
 loadImg('ui_sgauge_frame','../assets/ui/sgauge_frame.png');
@@ -2460,7 +2455,7 @@ function clashStep(cmds0,cmds1){ // cmds0/cmds1: オンライン時のみ(ロッ
         if(onlineActive()){
           c.p1target=randHayauchiTarget(); // オンライン: 両者とも実タップで狙う的を個別に持つ(位置は共有rng生成で決定論)
         }else{
-          const hf=curDiff().hayauchiF;
+          const hf=BAL.AILV[curAiLv()].hayauchiF; // CPU-R2 PR5(#106 §10): Gyuiin専用Lv別テーブル
           c.cpuNextAt=hf[0]+((rng()*(hf[1]-hf[0]+1))|0);
         }
       }
@@ -2499,14 +2494,14 @@ function resolveJyankenPicks(c){ // 手の組み合わせ→勝者(あいこ=-1)
   const x=c.pick[0],y=c.pick[1];
   c.winner=(x===y)?-1:(BEATS[x]===y?0:1);
 }
-function stepRenda(c,cmds0,cmds1){ // 120Fのタップ連打綱引き。オンラインは実タップ(ロックステップ入力)集計/オフラインはCPU自動加算(難易度別)
+function stepRenda(c,cmds0,cmds1){ // 120Fのタップ連打綱引き。オンラインは実タップ(ロックステップ入力)集計/オフラインはCPU自動加算(CPU Lv別)
   const R=BAL.MINIGAME.RENDA;
   if(onlineActive()){ // 両者とも同期された入力列から同一計算(タップ自体の演出はpressRoute側で即時反映済み)
     if(cmds0)for(const cm of cmds0)if(cm.t==='mgTap')c.rendaP+=R.tapGain;
     if(cmds1)for(const cm of cmds1)if(cm.t==='mgTap')c.rendaC+=R.tapGain;
   }else{
-    const D=curDiff();
-    c.rendaC+=D.rendaCpuMin+rng()*D.rendaCpuRng;
+    const row=BAL.AILV[curAiLv()]; // CPU-R2 PR5(#106 §10): Gyuiin専用Lv別テーブル
+    c.rendaC+=row.rendaCpuMin+rng()*row.rendaCpuRng;
   }
   if(c.f>=R.durationF){
     c.winner=(c.rendaP===c.rendaC)?-1:(c.rendaP>c.rendaC?0:1);
@@ -2522,7 +2517,7 @@ function stepHayauchi(c,cmds0,cmds1){ // 的あて連続タップ。オンライ
     if(cmds0)for(const cm of cmds0)if(cm.t==='mgHit'&&c.p0hits<H2.targets){c.p0hits++;c.p0target=(c.p0hits<H2.targets)?randHayauchiTarget():null;}
     if(cmds1)for(const cm of cmds1)if(cm.t==='mgHit'&&c.p1hits<H2.targets){c.p1hits++;c.p1target=(c.p1hits<H2.targets)?randHayauchiTarget():null;}
   }else{
-    const hf=curDiff().hayauchiF;
+    const hf=BAL.AILV[curAiLv()].hayauchiF; // CPU-R2 PR5(#106 §10): Gyuiin専用Lv別テーブル
     if(c.p1hits<H2.targets&&c.f>=c.cpuNextAt){
       c.p1hits++;
       c.cpuNextAt=c.f+hf[0]+((rng()*(hf[1]-hf[0]+1))|0);
@@ -2656,10 +2651,9 @@ function shakeScale(){return OPTIONS.shake==='off'?0:(OPTIONS.shake==='strong'?1
 function flashScale(){return OPTIONS.flash==='reduced'?0.4:1;}
 /* ================= CPU AI ================= */
 const cpuEv=[];
-let aiDifficulty='NORMAL'; // EASY/NORMAL/HARD。キャラ選択画面で変更・セッション中保持(明示的にリセットしない)
-function curDiff(){return BAL.AIDIFF[onlineActive()?'NORMAL':aiDifficulty];} // オンライン中はローカルのaiDifficulty設定に関わらずNORMAL固定(両クライアントのrng消費を一致させ決定性を維持)
-const AIDIFF_TO_LV={EASY:2,NORMAL:3,HARD:5}; // CPU-R2 PR1(#106 §2): 旧名→CPU Lv互換マッピング(Issue #106 Suggested compatibility)
-function curAiLv(){return onlineActive()?3:AIDIFF_TO_LV[aiDifficulty];} // 現状はaiDifficultyから導出するだけの純粋関数(新規mutable stateは追加しない)。オンラインは決定性のためNORMAL相当のLv3固定
+let cpuLv=3; // CPU-R2 PR5(#106 §2/§12): 旧aiDifficulty(EASY/NORMAL/HARD)を廃し、数値CPU Lv1-9を直接の session state とする。
+// デフォルト3=旧NORMALのデフォルトと同値(互換)。キャラ選択画面で変更・セッション中保持(明示的にリセットしない)
+function curAiLv(){return onlineActive()?3:cpuLv;} // オンライン中はローカルのcpuLv設定に関わらずLv3固定(両クライアントのrng消費を一致させ決定性を維持)
 function curAilvRow(){return BAL.AILV[curAiLv()];}
 const LEVEL_TO_DODGE={high:'crouch',mid:'sway',low:'lunge'}; // その段を避ける回避(DODGE_TABLE.beatsの逆引き)
 const DIR_TO_DODGE_KIND={left:'sway',down:'crouch',right:'lunge'}; // BAL.CMD.seqの方向文字列→dodgeコマンドのkind(DODGE_DIRの逆引き、v0.10 (3))
@@ -2781,7 +2775,7 @@ function cpuFindGuaranteedPunish(me,you,delayF){ // CPU-R2 PR2(#106 §5): 相手
 }
 function aiStep(){
   const me=B.p[1],you=B.p[0];
-  const D=curDiff();
+  const row=curAilvRow(); // CPU-R2 PR5(#106 §12): 旧D=curDiff()(EASY/NORMAL/HARD)を廃し、Lv別rowを直接使う
   // CPU-R2 PR3(#106 §7 ULT): 「stock満タン後、待って生打ち」を廃し、相手の脆弱window(hitstun/dizzy/
   // whiff-recovery帯=もう反撃されない安全な確定チャンス)を優先する。resourceQuality低=すぐ諦めて生打ち(Lv1-3相当)、
   // 高=脆弱windowを長く待てる(Lv8-9は"rarely raw unless...reasonable"に対応し、待機上限が長くなる)
@@ -2821,8 +2815,8 @@ function aiStep(){
   if(ai.mikiriAt!=null&&B.f>=ai.mikiriAt){cpuEv.push({t:'mikiri'});ai.mikiriAt=null;}
   if(ai.dodgeAt!=null&&B.f>=ai.dodgeAt){cpuEv.push({t:'dodge',kind:ai.dodgeKind});ai.dodgeAt=null;}
   while(ai.cmdQueue.length&&B.f>=ai.cmdQueue[0].at)cpuEv.push(ai.cmdQueue.shift().cmd); // 予約済みコマンド技入力の発火(v0.10 (3))
-  // ダウン連追撃: 難易度別の実行率で1発叩き込む(EASY=しない/NORMAL=50%/HARD=常に)
-  if(you.phase==='down'&&!you.downHitUsed&&me.phase==='idle'&&rng()<D.downFollowup){
+  // ダウン連追撃: CPU Lv別のdownFollowupで1発叩き込む(Lv1-2=しない/Lv3-4=たまに/Lv5+=常に)
+  if(you.phase==='down'&&!you.downHitUsed&&me.phase==='idle'&&rng()<row.downFollowup){
     cpuEv.push({t:'atk',lv:'mid'});
   }
   // つかみ試行の観測(#106 §8): repeated Grab attemptsの検出に使う(現時点では収集のみ。消費はPR4の
@@ -2927,9 +2921,8 @@ function aiStep(){
       const roll=rng();
       // vNext PR2 (§10 Focus): 「外す: CPU logic」につきfocusThreat分岐(旧: 相手の集中が満タン→攻めを控える)を撤廃。
       // CPU判断はfocus/BAL.FOCUSを一切参照しない
-      // #106 §9: 難易度別の攻撃頻度にキャラ別アーキタイプ乗算バイアスを乗せる(Yomikage=lower raw offense)
-      const aggr=Math.max(0.1,0.36-ai.mash*0.03)*D.atkFreqMul*archetypeMul(me.c.id,'aggr');
-      const row=curAilvRow();
+      // #106 §9: CPU Lv別の攻撃頻度(atkFreqMul)にキャラ別アーキタイプ乗算バイアスを乗せる(Yomikage=lower raw offense)
+      const aggr=Math.max(0.1,0.36-ai.mash*0.03)*row.atkFreqMul*archetypeMul(me.c.id,'aggr');
       // habit adaptation(#106 §8): 直近のhabitHistに応じて重みを僅かにシフトする。row.habitAdaptが
       // 最大シフト量(Lv1-3は0%=無効)。「frequent Guard→Grab/Guard-break pressure重み上げ」の例に対応
       const guardHoldFreq=habitOccurRate('guardHold'); // Codexレビュー対応(PR#119): 「20F以上の長押しの割合」ではなく
@@ -2939,8 +2932,9 @@ function aiStep(){
       // #106 §9: Hakuma=higher Guard weight/Pisuke=lower passive Guard weight/Yomikage=higher wait&counter
       const gsel=(0.24+Math.min(0.3,ai.mash*0.04))*archetypeMul(me.c.id,'gsel');
       if(roll<aggr){
-        // #106 §9 Godan/Power: more Command usage(cmdMoveRateへの乗算バイアス)
-        if(ai.cmdQueue.length===0&&rng()<D.cmdMoveRate*archetypeMul(me.c.id,'cmdMoveRate')){ // 難易度別のコマンド技使用率(v0.10 (3): EASY=ほぼ不使用/NORMAL=たまに/HARD=積極的)
+        // #106 §9 Godan/Power: more Command usage(cmdUseへの乗算バイアス)。cmdUseは§3の定義上
+        // 「offensive intentがCommand routeを使う確率」そのものなので、旧cmdMoveRate専用列は持たず直接読む
+        if(ai.cmdQueue.length===0&&rng()<row.cmdUse*archetypeMul(me.c.id,'cmdMoveRate')){
           aiQueueCommandMove(me);
         }else{
           // habit adaptation(#106 §8): 「frequent SWAY→MID重み上げ/frequent CROUCH→LOW重み上げ/frequent LUNGE→
@@ -3320,16 +3314,18 @@ function onlineSlotRect(i){
   const col=i%cols,row=Math.floor(i/cols);
   return{x:g.x+col*(cell+g.cellGap),y:g.y+row*(cell+g.cellGap),w:cell,h:cell};
 }
-const DIFF_LEVELS=['EASY','NORMAL','HARD']; // §6.7 v2.4: キャラ選択画面で切替・デフォルトNORMAL・セッション中保持
-function diffRect(i){
-  const w=160,gap=8,totalW=3*w+2*gap,x0=(W-totalW)/2;
+// CPU-R2 PR5(#106 §12 UI移行): 旧DIFF_LEVELS(EASY/NORMAL/HARD 3択)を廃し、CPU LV 1-9の9択セレクタへ置き換える。
+// レイアウトはdiffRect(w160×3)と同じ帯(SELECT_DIFF_Y)へ9個詰め込む(既存の周辺ジオメトリ座標は変更しない)。
+const CPU_LV_LEVELS=[1,2,3,4,5,6,7,8,9];
+function cpuLvRect(i){
+  const n=CPU_LV_LEVELS.length,w=48,gap=4,totalW=n*w+(n-1)*gap,x0=(W-totalW)/2;
   return{x:x0+i*(w+gap),y:SELECT_DIFF_Y,w:w,h:46};
 }
 let selCharIdx=0;
 let selectFadeFromId=null,selectFadeStart=0; // P1追加: キャラ切替時のクロスフェード(旧キャラid・開始time)
 const SELECT_FADE_MS=220;
 // PALETTE-R1: プレイヤーが選ぶ配色(既存のcurrent-art p1/p2バリアントを流用。新規ジオメトリは追加しない)。
-// aiDifficultyと同様にキャラ選択画面で切替・デフォルト'p1'・セッション中保持。
+// cpuLvと同様にキャラ選択画面で切替・デフォルト'p1'・セッション中保持。
 let selPalette='p1';
 function resolveCpuPalette(playerCharIdx,cpuCharIdx,playerPalette){
   // CPUは既定で1P配色。プレイヤーと同キャラでプレイヤーが1P配色の時だけ衝突を避けて2Pへ切り替える
@@ -3408,9 +3404,9 @@ function selectPress(p){
     }
   }
   if(inRect(p,SELECT_DETAIL_BTN.x,SELECT_DETAIL_BTN.y,SELECT_DETAIL_BTN.w,SELECT_DETAIL_BTN.h)){openCharacterDetail();return;}
-  for(let i=0;i<3;i++){
-    const r=diffRect(i);
-    if(inRect(p,r.x,r.y,r.w,r.h)){aiDifficulty=DIFF_LEVELS[i];sfx('tap');return;}
+  for(let i=0;i<CPU_LV_LEVELS.length;i++){
+    const r=cpuLvRect(i);
+    if(inRect(p,r.x,r.y,r.w,r.h)){cpuLv=CPU_LV_LEVELS[i];sfx('tap');return;}
   }
   if(inRect(p,SELECT_CONFIRM_BTN.x,SELECT_CONFIRM_BTN.y,SELECT_CONFIRM_BTN.w,SELECT_CONFIRM_BTN.h)){
     const selected=ROSTER[selCharIdx];
@@ -4956,7 +4952,7 @@ function rDebugCpu(){ // CPU-R2 PR1(#106 §13新設): 現在のCPU Lv+BAL.AILV�
   const lv=curAiLv(),row=curAilvRow();
   ctx.save();ctx.globalAlpha=0.82;ctx.fillStyle='#000';ctx.fillRect(0,PT-96,W,96);ctx.restore();
   const lines=[
-    `aiDifficulty=${aiDifficulty} -> Lv${lv}${onlineActive()?'(online固定)':''}`,
+    `CPU LV${cpuLv} -> Lv${lv}${onlineActive()?'(online固定)':''}`,
     `think interval${row.thinkMinF}-${row.thinkMaxF}F  reactDelay${row.reactDelayMinF}-${row.reactDelayMaxF}F  jitter±${row.jitterF}F`,
     `reactRate${row.reactRate} advDefShare${row.advDefShare} cmdUse${row.cmdUse} punishUse${row.punishUse}`,
     `comboContinue${row.comboContinue} grabMix${row.grabMix} resourceQ${row.resourceQuality} habitAdapt${row.habitAdapt}`,
@@ -5012,7 +5008,12 @@ function rTitle(){ // P1: keyvisual.pngをcover全面採用。ロゴ/TAP TO STAR
   ctx.strokeStyle='#7fd8ff';ctx.lineWidth=2;rr(ONLINE_BTN.x,ONLINE_BTN.y,ONLINE_BTN.w,ONLINE_BTN.h,10);ctx.stroke();
   txt('オンライン対戦',ONLINE_BTN.x+ONLINE_BTN.w/2,ONLINE_BTN.y+ONLINE_BTN.h/2,13,'#dff4ff');
 }
-const DIFF_COL={EASY:'#7CFC00',NORMAL:'#ffd23f',HARD:'#ff6b6b'};
+// CPU-R2 PR5(#106 §12): 旧DIFF_COL(EASY緑/NORMAL黄/HARD赤の3色)をLv1-9の連続グラデーションへ拡張。
+// 色そのものに強さ以外の意味(「ズル」等)は持たせない(Issueの「Do not label Lv9 as cheat」に対応、装飾のみ)
+function cpuLvColor(lv){
+  const t=(lv-1)/8,hue=120-120*t; // Lv1=緑(120°)→Lv9=赤(0°)
+  return 'hsl('+Math.round(hue)+',72%,58%)';
+}
 function drawLockIcon(x,y,s){ // 未実装枠の鍵アイコン(簡易図形、§6.9 v2.6)
   ctx.save();ctx.translate(x,y);
   ctx.strokeStyle='#8892a6';ctx.lineWidth=2.5;ctx.lineCap='round';
@@ -5223,12 +5224,12 @@ function rSelect(){ // P1追加: KOF/餓狼風レイアウト(縦画面翻訳)�
   ctx.fillStyle=detail?'rgba(85,118,181,0.30)':'#20263a';rr(SELECT_DETAIL_BTN.x,SELECT_DETAIL_BTN.y,SELECT_DETAIL_BTN.w,SELECT_DETAIL_BTN.h,14);ctx.fill();
   ctx.strokeStyle=detail?'#7fd8ff':'#4a5470';ctx.lineWidth=2.5;rr(SELECT_DETAIL_BTN.x,SELECT_DETAIL_BTN.y,SELECT_DETAIL_BTN.w,SELECT_DETAIL_BTN.h,14);ctx.stroke();
   txt('性能・わざ・コンボを見る',W/2,SELECT_DETAIL_BTN.y+SELECT_DETAIL_BTN.h/2,18,detail?'#e8f6ff':'#9da5b5');
-  txt('CPUむずかしさ',W/2,SELECT_DIFF_Y-14,12,'#a2abc0');
-  for(let i=0;i<3;i++){
-    const dl=DIFF_LEVELS[i],r=diffRect(i),active=aiDifficulty===dl;
+  txt('CPU LV',W/2,SELECT_DIFF_Y-14,12,'#a2abc0');
+  for(let i=0;i<CPU_LV_LEVELS.length;i++){
+    const dl=CPU_LV_LEVELS[i],r=cpuLvRect(i),active=cpuLv===dl,col=cpuLvColor(dl);
     ctx.fillStyle=active?'rgba(255,255,255,0.14)':'#1a1d29';rr(r.x,r.y,r.w,r.h,10);ctx.fill();
-    ctx.strokeStyle=active?DIFF_COL[dl]:'#3a4560';ctx.lineWidth=active?3:2;rr(r.x,r.y,r.w,r.h,10);ctx.stroke();
-    txt(dl,r.x+r.w/2,r.y+r.h/2,15,active?DIFF_COL[dl]:'#cfd6e6');
+    ctx.strokeStyle=active?col:'#3a4560';ctx.lineWidth=active?3:2;rr(r.x,r.y,r.w,r.h,10);ctx.stroke();
+    txt(String(dl),r.x+r.w/2,r.y+r.h/2,17,active?col:'#cfd6e6');
   }
   ctx.fillStyle='#2c4a1f';rr(SELECT_CONFIRM_BTN.x,SELECT_CONFIRM_BTN.y,SELECT_CONFIRM_BTN.w,SELECT_CONFIRM_BTN.h,16);ctx.fill();
   ctx.strokeStyle='#7CFC00';ctx.lineWidth=3;rr(SELECT_CONFIRM_BTN.x,SELECT_CONFIRM_BTN.y,SELECT_CONFIRM_BTN.w,SELECT_CONFIRM_BTN.h,16);ctx.stroke();
