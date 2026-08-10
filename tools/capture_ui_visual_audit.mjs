@@ -47,7 +47,8 @@ for(const viewport of VIEWPORTS){
   const files=[];
   files.push(await shot(page,viewport.id,'01-title'));
 
-  await clickLogical(page,270,700);
+  await clickLogical(page,270,700); // MENU-R1(#111): タイトルのBATTLEボタン(旧: タップ場所を問わずselectへ遷移)
+  await clickLogical(page,270,250); // menuBattleのVS CPUボタン→select
   files.push(await shot(page,viewport.id,'02-select-moguzo'));
 
   await clickLogical(page,270,420); // Bullet: row 2, column 3
