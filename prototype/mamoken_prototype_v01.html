@@ -386,6 +386,27 @@ loadImg('roar_moguzo','../assets/fx/roar_moguzo.png');
 for(const c of CHARS)loadImg('cutin_'+c.id,'../assets/art/cutins/'+(c.id==='pisuke'?'piske':(c.id==='chirka'?'chilka':c.id))+'_ultimate_cutin.png',true);
 /* ---- v0.8.5: UI画像（asset_map v3準拠。フレーム系は内側の透過窓に現行の塗りを合わせる）---- */
 loadImg('bg_stage_day','../assets/bg/stage_day.png');
+/* ---- STAGE-ART-IMPORT: 通常対戦5ステージ+ミニゲーム3背景(data/art/stage_source_manifest.json準拠) ----
+ * 原寸source(assets/bg/source/**)は無加工で保持し、ここでloadImgする派生runtime版
+ * (assets/bg/*.png、stage_day.pngと同階層)を読み込む。dist側の縮小/WebP変換は
+ * build_mobile.mjsの既存bgカテゴリ規則(height<=1200 / quality80)がそのまま適用される。
+ */
+const BATTLE_STAGES=[
+  {id:'alpine_meadow_arena',nameJa:'アルプス草原アリーナ',shortJa:'草原',assetKey:'bg_stage_alpine_meadow_arena',file:'stage_alpine_meadow_arena.png'},
+  {id:'rock_canyon',nameJa:'岩壁の峡谷',shortJa:'峡谷',assetKey:'bg_stage_rock_canyon',file:'stage_rock_canyon.png'},
+  {id:'snowmelt_stream',nameJa:'雪解けの渓流',shortJa:'渓流',assetKey:'bg_stage_snowmelt_stream',file:'stage_snowmelt_stream.png'},
+  {id:'underground_burrow_arena',nameJa:'地下巣穴闘技場',shortJa:'巣穴',assetKey:'bg_stage_underground_burrow_arena',file:'stage_underground_burrow_arena.png'},
+  {id:'new_moon_dark_arena',nameJa:'新月の闇闘技場',shortJa:'闇夜',assetKey:'bg_stage_new_moon_dark_arena',file:'stage_new_moon_dark_arena.png'},
+];
+for(const s of BATTLE_STAGES)loadImg(s.assetKey,'../assets/bg/'+s.file);
+const MINIGAME_BG={ // clashRender()のmg('jyanken'/'renda'/'hayauchi')から検索
+  jyanken:{assetKey:'bg_minigame_janken',file:'minigame_janken_village_square.png'},
+  hayauchi:{assetKey:'bg_minigame_hayauchi',file:'minigame_hayauchi_grassland_range.png'},
+  renda:{assetKey:'bg_minigame_renda',file:'minigame_renda_mountain_run_course.png'},
+};
+for(const mg in MINIGAME_BG)loadImg(MINIGAME_BG[mg].assetKey,'../assets/bg/'+MINIGAME_BG[mg].file);
+let selStageId=BATTLE_STAGES[0].id; // キャラ選択画面で切替・デフォルト先頭ステージ・セッション中保持(selPalette/aiDifficultyと同様)
+function battleStageById(id){return BATTLE_STAGES.find(function(s){return s.id===id;})||BATTLE_STAGES[0];}
 loadImg('ui_hp_frame','../assets/ui/hp_frame.png');
 loadImg('ui_sgauge_frame','../assets/ui/sgauge_frame.png');
 loadImg('ui_timer_medal','../assets/ui/timer_medal.png');
@@ -2958,6 +2979,14 @@ function paletteSwatchRect(i){ // i=0→1P/i=1→2P
 function palettePreviewRect(){
   return{x:SELECT_PALETTE_GROUP_X+2*(SELECT_PALETTE_SWATCH_W+SELECT_PALETTE_GAP),y:SELECT_PALETTE_Y-8,w:SELECT_PALETTE_PREVIEW.w,h:SELECT_PALETTE_PREVIEW.h};
 }
+// STAGE-ART-IMPORT: ステージ選択(既存のパレット行のさらに下、safe-bottomの直前の
+// 残り余白に収める帯。既存要素の座標は一切変更しない)。5ステージを短ラベルで並べる。
+const SELECT_STAGE_Y=palettePreviewRect().y+palettePreviewRect().h+22;
+const SELECT_STAGE_H=40;
+function stageRect(i){
+  const n=BATTLE_STAGES.length,gap=6,w=Math.floor((W-36-(n-1)*gap)/n);
+  return{x:18+i*(w+gap),y:SELECT_STAGE_Y,w:w,h:SELECT_STAGE_H};
+}
 /* T22 character detail panel */
 const CHARACTER_DETAIL_CATALOG=window.__MAMOKEN_CHARACTER_CATALOG__||null;
 const CHARACTER_DETAIL_TABS=[
@@ -3003,12 +3032,17 @@ function selectPress(p){
     game.p1=selected.combatIndex;
     game.p2=(Math.random()*CHARS.length)|0;
     if(game.p2===game.p1)game.p2=(game.p2+1)%CHARS.length;
+    game.stageId=selStageId; // STAGE-ART-IMPORT: 選択画面で選んだステージを対戦へ持ち込む
     sfx('tap');startBattle();return;
   }
   if(inRect(p,SELECT_BACK_BTN.x,SELECT_BACK_BTN.y,SELECT_BACK_BTN.w,SELECT_BACK_BTN.h)){sfx('tap');game.screen='title';return;}
   for(let i=0;i<2;i++){ // PALETTE-R1: 1P/2P配色選択
     const r=paletteSwatchRect(i);
     if(inRect(p,r.x,r.y,r.w,r.h)){selPalette=i===0?'p1':'p2';sfx('tap');return;}
+  }
+  for(let i=0;i<BATTLE_STAGES.length;i++){ // STAGE-ART-IMPORT: ステージ選択
+    const r=stageRect(i);
+    if(inRect(p,r.x,r.y,r.w,r.h)){selStageId=BATTLE_STAGES[i].id;sfx('tap');return;}
   }
 }
 function characterDetailPress(p){
@@ -3220,15 +3254,22 @@ function fighterXY(f){
   }
   return[fpos(f),f.y];
 }
+function drawCoverBg(key){ // 背景画像: 下端を地面ライン(PT)に合わせたcover配置。描けたらtrueを返す
+  if(!assetReady(key))return false;
+  const e=ASSETS[key],img=e.canvas||e.img;
+  const iw=e.img.naturalWidth,ih=e.img.naturalHeight;
+  const scale=Math.max(W/iw,PT/ih);
+  const dw=iw*scale,dh=ih*scale;
+  ctx.drawImage(img,(W-dw)/2,PT-dh,dw,dh);
+  return true;
+}
 function rStage(){
-  if(assetReady('bg_stage_day')){ // 背景画像: 下端を地面ライン(PT)に合わせたcover配置
-    const e=ASSETS['bg_stage_day'],img=e.canvas||e.img;
-    const iw=e.img.naturalWidth,ih=e.img.naturalHeight;
-    const scale=Math.max(W/iw,PT/ih);
-    const dw=iw*scale,dh=ih*scale;
-    ctx.drawImage(img,(W-dw)/2,PT-dh,dw,dh);
-    return;
-  }
+  // STAGE-ART-IMPORT: game.stageIdで選ばれた対戦ステージを表示する。未設定(オンライン対戦等、
+  // 選択画面を経由しないフロー)や画像未読込の場合は既存の昼アリーナへフォールバックし、
+  // それも無ければ従来のベクター描画フォールバックへ落ちる(挙動を後方互換に保つ)。
+  const stageKey=game.stageId?battleStageById(game.stageId).assetKey:'bg_stage_day';
+  if(drawCoverBg(stageKey))return;
+  if(stageKey!=='bg_stage_day'&&drawCoverBg('bg_stage_day'))return;
   let g=ctx.createLinearGradient(0,0,0,330);
   g.addColorStop(0,'#6fb7f2');g.addColorStop(0.7,'#cfe8ff');g.addColorStop(1,'#ffe7bd');
   ctx.fillStyle=g;ctx.fillRect(0,0,W,330);
@@ -4399,7 +4440,11 @@ function rBattle(){
     else zoom=1.18;
   }
   if(zoom!==1){ctx.translate(W/2,300);ctx.scale(zoom,zoom);ctx.translate(-W/2,-300);}
-  rStage();
+  // STAGE-ART-IMPORT: ミニゲーム中(B.flow==='clash')はB.clash.mgに応じた専用背景があれば
+  // それをcover配置で表示し、対戦ステージの背景(rStage)は使わない。未読込ならrStage()に
+  // フォールバックし、その上に既存の暗転+放射線ビネットを重ねる(見た目の後方互換を維持)。
+  const clashBg=(B.flow==='clash'&&B.clash&&MINIGAME_BG[B.clash.mg])?MINIGAME_BG[B.clash.mg].assetKey:null;
+  if(!clashBg||!drawCoverBg(clashBg))rStage();
   if(B.flow==='clash'){
     ctx.fillStyle='rgba(10,5,20,0.3)';ctx.fillRect(-60,-60,W+120,PT+120);
     ctx.strokeStyle='rgba(255,255,255,0.12)';ctx.lineWidth=3;
@@ -4717,6 +4762,16 @@ function rSelect(){ // P1追加: KOF/餓狼風レイアウト(縦画面翻訳)�
   txt('もどる',W/2,SELECT_BACK_BTN.y+SELECT_BACK_BTN.h/2,16,'#dfe4ee');
   txt('●青=オンライン対戦可(全員可)　9体ともオフラインで対戦可能',W/2,SELECT_BACK_BTN.y+SELECT_BACK_BTN.h+26,11,'#aeb6c8');
   drawPaletteSelect(c);
+  drawStageSelect();
+}
+function drawStageSelect(){ // STAGE-ART-IMPORT: 通常対戦ステージ選択(5枚を短ラベルで並べる)
+  txt('ステージ',W/2,SELECT_STAGE_Y-10,12,'#a2abc0');
+  for(let i=0;i<BATTLE_STAGES.length;i++){
+    const s=BATTLE_STAGES[i],r=stageRect(i),active=selStageId===s.id;
+    ctx.fillStyle=active?'rgba(255,255,255,0.14)':'#1a1d29';rr(r.x,r.y,r.w,r.h,9);ctx.fill();
+    ctx.strokeStyle=active?'#ffd23f':'#3a4560';ctx.lineWidth=active?3:2;rr(r.x,r.y,r.w,r.h,9);ctx.stroke();
+    txt(s.shortJa,r.x+r.w/2,r.y+r.h/2,14,active?'#ffe9a8':'#cfd6e6');
+  }
 }
 function drawPaletteSelect(c){ // PALETTE-R1: 1P/2P配色選択+ライブプレビュー
   txt('カラー',W/2,SELECT_PALETTE_Y-14,12,'#a2abc0');

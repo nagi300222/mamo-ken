@@ -1,0 +1,108 @@
+{
+  "version": "2026-08-10",
+  "note": "New stage/minigame background deliveries (STAGE-ART-IMPORT). Mirrors the provenance role of source_uuid_map.json for character art: sourceRoot holds the untouched original PNGs (sha256-verified, never overwritten), runtimeRoot holds the derived copies the prototype actually loadImg()s and that tools/build_mobile.mjs walks + resizes + WebP-encodes into dist/mamoken_mobile.html (bg category: height<=1200, quality 80).",
+  "sourceRoot": "assets/bg/source",
+  "runtimeRoot": "assets/bg",
+  "battleStages": [
+    {
+      "id": "alpine_meadow_arena",
+      "labelJa": "アルプス草原アリーナ",
+      "shortLabelJa": "草原",
+      "file": "stage_alpine_meadow_arena.png",
+      "assetKey": "bg_stage_alpine_meadow_arena",
+      "originalUuidFile": "1b43a5ab-2102-44ce-a7fc-a00ed9b20bbb.png",
+      "width": 1330,
+      "height": 1182,
+      "sha256": "d2320a482eab1443fc8c80b28e3bf61532c70cc042643dde937912016bc222a1",
+      "connections": ["battle-select"]
+    },
+    {
+      "id": "rock_canyon",
+      "labelJa": "岩壁の峡谷",
+      "shortLabelJa": "峡谷",
+      "file": "stage_rock_canyon.png",
+      "assetKey": "bg_stage_rock_canyon",
+      "originalUuidFile": "d9336ada-bd15-40d6-897e-da1ef501a948.png",
+      "width": 1330,
+      "height": 1182,
+      "sha256": "49d42065e704c2cb8897f504fb0b5761a321896f10adcc0b712d56fa240bac4a",
+      "connections": ["battle-select"],
+      "auditNote": "check rock columns don't read as an unnatural artifact in-frame (individual attention item)"
+    },
+    {
+      "id": "snowmelt_stream",
+      "labelJa": "雪解けの渓流",
+      "shortLabelJa": "渓流",
+      "file": "stage_snowmelt_stream.png",
+      "assetKey": "bg_stage_snowmelt_stream",
+      "originalUuidFile": "27e292fc-504e-435d-aa75-8dca807fc768.png",
+      "width": 1330,
+      "height": 1182,
+      "sha256": "50373e336c20c5882b43850df08c82dfef1470386680b30eece30ea51ab55e51",
+      "connections": ["battle-select"]
+    },
+    {
+      "id": "underground_burrow_arena",
+      "labelJa": "地下巣穴闘技場",
+      "shortLabelJa": "巣穴",
+      "file": "stage_underground_burrow_arena.png",
+      "assetKey": "bg_stage_underground_burrow_arena",
+      "originalUuidFile": "b791557b-db5c-4bca-83e1-a4588d92a553.png",
+      "width": 1330,
+      "height": 1182,
+      "sha256": "eb1e90ee57e8a2cd98bf16a330349b2935bbee135df58593d58ace1d9455b426",
+      "connections": ["battle-select"],
+      "auditNote": "check top-of-frame roots don't collide with the HUD (individual attention item)"
+    },
+    {
+      "id": "new_moon_dark_arena",
+      "labelJa": "新月の闇闘技場",
+      "shortLabelJa": "闇夜",
+      "file": "stage_new_moon_dark_arena.png",
+      "assetKey": "bg_stage_new_moon_dark_arena",
+      "originalUuidFile": "104745a8-b6b5-4369-ae72-a3180690a7f3.png",
+      "width": 1330,
+      "height": 1182,
+      "sha256": "8a4985b66b970163a258c7252908c3cefdcb994d3580cf6c2dd9b5c236f380ad",
+      "connections": ["battle-select"],
+      "auditNote": "check dark-colored characters (esp. dark_moguzo) don't visually disappear into the background (individual attention item)"
+    }
+  ],
+  "minigameBackgrounds": [
+    {
+      "mg": "jyanken",
+      "labelJa": "集落の広場",
+      "file": "minigame_janken_village_square.png",
+      "assetKey": "bg_minigame_janken",
+      "originalUuidFile": "ce43b912-2af9-44d4-95ce-f0f379004f8f.png",
+      "width": 1330,
+      "height": 1182,
+      "sha256": "a6a601b6832f39a8310dc36a240f9ce7c86a3449a89d93e863d60f59cb060135",
+      "connections": ["clash-minigame:jyanken"],
+      "auditNote": "revised version with only a few flags tucked to the back-left, not the earlier many-flags-overhead version"
+    },
+    {
+      "mg": "hayauchi",
+      "labelJa": "草原の的場",
+      "file": "minigame_hayauchi_grassland_range.png",
+      "assetKey": "bg_minigame_hayauchi",
+      "originalUuidFile": "799c74f0-4bc2-4680-a9b0-4e72926c06b6.png",
+      "width": 1330,
+      "height": 1182,
+      "sha256": "99953da0041416a219961d4ccaefb09a401cd126fe660eb6bf975c25f64348d2",
+      "connections": ["clash-minigame:hayauchi"]
+    },
+    {
+      "mg": "renda",
+      "labelJa": "山道ランコース",
+      "file": "minigame_renda_mountain_run_course.png",
+      "assetKey": "bg_minigame_renda",
+      "originalUuidFile": "c26c44e9-0322-4a88-9a11-ed14a4ac97de.png",
+      "width": 1330,
+      "height": 1182,
+      "sha256": "8bed0ac96a1bf898786b67008e244e369bf87d8356c4485992823add00a7cccc",
+      "connections": ["clash-minigame:renda"],
+      "auditNote": "horizontal-scroll intent, not a seamless tile -- any future infinite-scroll wiring must handle the left/right seam (edge treatment or crossfade) in runtime code, not by re-editing the source image. Not wired to scroll in this delivery; drawn as a static cover-fit background like the other stages."
+    }
+  ]
+}
