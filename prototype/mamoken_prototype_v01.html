@@ -2694,13 +2694,17 @@ function specialAiThreshold(me,you){ // ABILITY-R2-C (Issue #97 §13 CPU): キ�
     default:return base;
   }
 }
-function cpuFindGuaranteedPunish(me,you){ // CPU-R2 PR2(#106 §5): 相手の攻撃action残り(startup+active+recovery-pf)にCPU側Normalの
+function cpuFindGuaranteedPunish(me,you,delayF){ // CPU-R2 PR2(#106 §5): 相手の攻撃action残り(startup+active+recovery-pf)にCPU側Normalの
   // startupが収まるかを判定する。you.phase/pf/atkLv(=既に開始済みの現在action)のみを参照し、未来の入力は一切見ない(§1準拠)
-  if(!(you.phase==='attack'||you.phase==='cmdAtk')||you.pf<=0)return null;
-  const A=spec(you);
-  const remainF=A.s+A.a+A.r-you.pf; // 相手が復帰するまでの残りF
-  if(remainF<=0)return null;
-  const candidates=LEVELS.filter(function(lv){return specForLv(me,lv).s<=remainF;}); // 発生が間に合う通常技のみ(違法選択なし)
+  // delayF: 判定時点からCPU側の技が実際にstartupを開始できるまでの遅延(既定0。被ガード確反はme自身の残りblockstunを渡す)
+  // Codexレビュー対応(PR#117): (1)stunRemaining()を使い空振り追加recovery(whiffExtraFor)を含めて判定
+  // (2)striking()はpf>A.sで成立するため、命中には発生+1F要る(s+1<=remainFで判定。s===remainFは実際は間に合わない)
+  // (3)呼び出し側の実行遅延(delayF)も加算しないと、その間に相手がidleへ復帰し得る
+  if(!(you.phase==='attack'||you.phase==='cmdAtk'))return null;
+  const remainF=stunRemaining(you);
+  if(remainF==null||remainF<=0)return null;
+  const d=delayF||0;
+  const candidates=LEVELS.filter(function(lv){return specForLv(me,lv).s+1+d<=remainF;}); // 発生+1F(striking成立)+delayFが相手のidle復帰前に収まる技のみ(違法選択なし)
   if(!candidates.length)return null;
   candidates.sort(function(a,b){return specForLv(me,b).d-specForLv(me,a).d;}); // 最大ダメージの技を優先
   return{lv:candidates[0],remainF:remainF};
@@ -2742,7 +2746,10 @@ function aiStep(){
   if(me.phase==='blockstun'&&me.pf===Math.max(1,me.stunDur-4)&&rng()<0.9){
     ai.guardOn=false;ai.guardT=0;
     const row=curAilvRow();
-    const gp=rng()<row.punishUse?cpuFindGuaranteedPunish(me,you):null;
+    // Codexレビュー対応(PR#117): この時点でme(自分)はまだblockstun残りがあり、この技はtryBuf()で
+    // 先行入力として保持され実際の発生はme自身のblockstun終了後になる。その遅延(me.stunDur-me.pf)を
+    // delayFとして渡さないと、実際に発生する頃には相手の残り復帰F(remainF)を超えて「保証されない」選択になる
+    const gp=rng()<row.punishUse?cpuFindGuaranteedPunish(me,you,me.stunDur-me.pf):null;
     cpuEv.push(gp?{t:'atk',lv:gp.lv}:{t:'atk',lv:rng()<0.7?'mid':LEVELS[(rng()*3)|0]});
   }
   // ガードブレイク追撃（打撃 or 投げ）: dizzyは既に確定ヒット状態のためguaranteed punish計算は不要
