@@ -112,6 +112,21 @@ const BAL={ // 03_data_design.md v2.0 §2 balance table 準拠
     HARD:{reactMul:1.0,mikiriRate:0.22,dodgeRate:0.15,atkFreqMul:1.0,downFollowup:1,
       rendaCpuMin:0.115,rendaCpuRng:0.02,hayauchiF:[14,24],cmdMoveRate:0.6} // HARD=積極的
   },
+  // CPU-R2 PR1(#106 §3): 正式なCPU Lv1-9テーブル。Issue #106の初期チューニング値をそのまま採用(将来のTraining後BAL調整対象)。
+  // このPRでは追加のみ(aiStep()/stepRenda()/stepHayauchi()はまだAIDIFF/curDiff()を読んでおり挙動は無変更)。
+  // PR2以降でreactionDelay/reactRate/advDefShare/jitterF等を実際の意思決定ロジックへ接続していく。
+  // 互換: 旧EASY≈Lv2/NORMAL≈Lv3/HARD≈Lv5(curAiLv()参照)
+  AILV:{
+    1:{thinkMinF:28,thinkMaxF:44,reactDelayMinF:20,reactDelayMaxF:28,reactRate:0.25,advDefShare:0.05,jitterF:14,cmdUse:0.05,punishUse:0.10,comboContinue:0.30,grabMix:0.05,resourceQuality:0.10,habitAdapt:0.00},
+    2:{thinkMinF:24,thinkMaxF:38,reactDelayMinF:18,reactDelayMaxF:25,reactRate:0.35,advDefShare:0.08,jitterF:12,cmdUse:0.10,punishUse:0.20,comboContinue:0.45,grabMix:0.07,resourceQuality:0.20,habitAdapt:0.00},
+    3:{thinkMinF:20,thinkMaxF:32,reactDelayMinF:16,reactDelayMaxF:22,reactRate:0.45,advDefShare:0.12,jitterF:10,cmdUse:0.20,punishUse:0.35,comboContinue:0.60,grabMix:0.08,resourceQuality:0.30,habitAdapt:0.00},
+    4:{thinkMinF:16,thinkMaxF:28,reactDelayMinF:13,reactDelayMaxF:20,reactRate:0.58,advDefShare:0.18,jitterF:9,cmdUse:0.40,punishUse:0.60,comboContinue:0.72,grabMix:0.10,resourceQuality:0.45,habitAdapt:0.10},
+    5:{thinkMinF:14,thinkMaxF:25,reactDelayMinF:11,reactDelayMaxF:16,reactRate:0.68,advDefShare:0.27,jitterF:8,cmdUse:0.60,punishUse:0.90,comboContinue:0.65,grabMix:0.10,resourceQuality:0.50,habitAdapt:0.15},
+    6:{thinkMinF:12,thinkMaxF:22,reactDelayMinF:10,reactDelayMaxF:15,reactRate:0.75,advDefShare:0.34,jitterF:7,cmdUse:0.68,punishUse:0.92,comboContinue:0.78,grabMix:0.13,resourceQuality:0.62,habitAdapt:0.25},
+    7:{thinkMinF:10,thinkMaxF:20,reactDelayMinF:9,reactDelayMaxF:14,reactRate:0.82,advDefShare:0.42,jitterF:6,cmdUse:0.76,punishUse:0.95,comboContinue:0.86,grabMix:0.15,resourceQuality:0.75,habitAdapt:0.45},
+    8:{thinkMinF:9,thinkMaxF:18,reactDelayMinF:8,reactDelayMaxF:13,reactRate:0.88,advDefShare:0.50,jitterF:5,cmdUse:0.84,punishUse:0.97,comboContinue:0.92,grabMix:0.17,resourceQuality:0.88,habitAdapt:0.65},
+    9:{thinkMinF:8,thinkMaxF:16,reactDelayMinF:8,reactDelayMaxF:12,reactRate:0.92,advDefShare:0.58,jitterF:4,cmdUse:0.90,punishUse:0.98,comboContinue:0.97,grabMix:0.20,resourceQuality:0.96,habitAdapt:0.85}
+  },
   GRAB:{s:12,a:2,rec:32,seq:28,d:90,stun:30,downType:'throwDown'}, // BAL-R1: 空振り硬直rec 28→32(=whiffRecovery)。ヒット時はdownType(throwDown)でdown状態化するためstunは現在未使用(counterMulはBAL.COUNTER_MULへ統合)
   DODGE:{totalF:22,judgeF:12,counterReadyF:18,counterScale:[1.0,1.0,0.9], // vNext PR2 (COMBAT_VNEXT_FINAL.md §2共通F):
     // 回避: 全体22F・evade判定F2-F12(judgeF旧10→12へ拡大)・Correct Dodge completion18F(counterReadyFのまま)・
@@ -1002,6 +1017,7 @@ const game={screen:'title',p1:0,p2:0,frame:0};
 if(new URLSearchParams(location.search).get('debug')==='sprites')game.screen='spriteCheck'; // P1 (7): 9キャラ×24ポーズの表示確認用デバッグ画面(?debug=sprites)
 const DEBUG_BAL=new URLSearchParams(location.search).get('debug')==='bal'; // BAL-R1: 戦闘中に開発用の数値パネルを重ねて表示する(?debug=bal)。通常プレイUIには常設しない
 const DEBUG_NET=new URLSearchParams(location.search).get('debug')==='net'; // 調査用一時ログ(?debug=net): ギュイーン勝敗判定の公平性調査(実機2台での再現用)。
+const DEBUG_CPU=new URLSearchParams(location.search).get('debug')==='cpu'; // CPU-R2 PR1(#106 §13新設): CPU AI内部状態を重ねて表示する(?debug=cpu)。通常プレイUIには常設しない
   // オンライン中のみ、ギュイーン開始/終了時にslot・tick・入力集計値・勝者・簡易state hashをconsoleへ出す。
   // 通常プレイでは無効。戦闘ロジック自体には一切影響しない(console.logのみ)
 if(DEBUG_BAL){ // BGM-R1.2 (4): BGM/SE音量スライダー(通常プレイでは非表示。canvas上のHTMLオーバーレイなので描画コード側の変更は不要)
@@ -2641,6 +2657,9 @@ function flashScale(){return OPTIONS.flash==='reduced'?0.4:1;}
 const cpuEv=[];
 let aiDifficulty='NORMAL'; // EASY/NORMAL/HARD。キャラ選択画面で変更・セッション中保持(明示的にリセットしない)
 function curDiff(){return BAL.AIDIFF[onlineActive()?'NORMAL':aiDifficulty];} // オンライン中はローカルのaiDifficulty設定に関わらずNORMAL固定(両クライアントのrng消費を一致させ決定性を維持)
+const AIDIFF_TO_LV={EASY:2,NORMAL:3,HARD:5}; // CPU-R2 PR1(#106 §2): 旧名→CPU Lv互換マッピング(Issue #106 Suggested compatibility)
+function curAiLv(){return onlineActive()?3:AIDIFF_TO_LV[aiDifficulty];} // 現状はaiDifficultyから導出するだけの純粋関数(新規mutable stateは追加しない)。オンラインは決定性のためNORMAL相当のLv3固定
+function curAilvRow(){return BAL.AILV[curAiLv()];}
 const LEVEL_TO_DODGE={high:'crouch',mid:'sway',low:'lunge'}; // その段を避ける回避(DODGE_TABLE.beatsの逆引き)
 const DIR_TO_DODGE_KIND={left:'sway',down:'crouch',right:'lunge'}; // BAL.CMD.seqの方向文字列→dodgeコマンドのkind(DODGE_DIRの逆引き、v0.10 (3))
 const ai={think:0,guardT:0,guardOn:false,react:null,ultT:0,hist:[],mash:0,pHoldF:0,mikiriAt:null,dodgeAt:null,dodgeKind:null,cmdQueue:[]};
@@ -4768,6 +4787,21 @@ function rBattle(){
     txt('同期中…',W/2,PT/2,26,'#ffe6a3');
   }
   if(DEBUG_BAL)rDebugBal(); // BAL-R1: ?debug=bal時のみ。通常プレイUIには常設しない
+  if(DEBUG_CPU&&!onlineActive())rDebugCpu(); // CPU-R2 PR1: ?debug=cpu時のみ。オンラインはaiStep()自体が動かないため対象外
+}
+function rDebugCpu(){ // CPU-R2 PR1(#106 §13新設): 現在のCPU Lv+BAL.AILV該当行+ai内部state(think/guardT/react/mash/pHoldF/
+  // mikiriAt・dodgeAt/cmdQueue長)を表示。decision reason code等はPR2/PR3で実際の意思決定層が入った時点で追加する
+  const lv=curAiLv(),row=curAilvRow();
+  ctx.save();ctx.globalAlpha=0.82;ctx.fillStyle='#000';ctx.fillRect(0,PT-96,W,96);ctx.restore();
+  const lines=[
+    `aiDifficulty=${aiDifficulty} -> Lv${lv}${onlineActive()?'(online固定)':''}`,
+    `think interval${row.thinkMinF}-${row.thinkMaxF}F  reactDelay${row.reactDelayMinF}-${row.reactDelayMaxF}F  jitter±${row.jitterF}F`,
+    `reactRate${row.reactRate} advDefShare${row.advDefShare} cmdUse${row.cmdUse} punishUse${row.punishUse}`,
+    `comboContinue${row.comboContinue} grabMix${row.grabMix} resourceQ${row.resourceQuality} habitAdapt${row.habitAdapt}`,
+    `ai: think${ai.think} guardT${ai.guardT} guardOn${ai.guardOn?'Y':'N'} react${ai.react?('@'+ai.react.at):'-'} mash${ai.mash} pHoldF${ai.pHoldF}`,
+    `ai: mikiriAt${ai.mikiriAt!=null?ai.mikiriAt:'-'} dodgeAt${ai.dodgeAt!=null?ai.dodgeAt+'('+ai.dodgeKind+')':'-'} cmdQueue${ai.cmdQueue.length}`
+  ];
+  lines.forEach((t,i)=>txt(t,8,PT-82+i*15,11,'#ffd27a','left'));
 }
 function rDebugBal(){ // BAL-R1新設: 開発用の数値パネル(charId/HP・Guard最大/現在行動のs・a・r/damage・GuardDamage/
   // block advantage実測/combo scale/counterフラグ)。?debug=balでのみ描画する
