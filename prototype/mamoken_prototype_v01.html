@@ -2742,6 +2742,8 @@ function aiStep(){
     }
     return;
   }
+  ai.ultT=0; // Codexレビュー対応(PR#118): stockが満タンでない間は待機タイマーをリセットする。
+  // 消費後(ultStep()がme.ultをクリア)にリセットしないと、Roar等で再度満タンになった際、既にpatienceF超過で即生打ちになってしまう
   // habitHist(#106 §8)の掃除: 古いoppBlockEndFは長時間経過したら破棄(無関係な後発攻撃をmashAfterBlockと誤検知しない)
   if(ai.oppBlockEndF!=null&&B.f-ai.oppBlockEndF>8)ai.oppBlockEndF=null;
   if(you.phase==='blockstun'&&you.pf>=you.stunDur-1)ai.oppBlockEndF=B.f+1;
