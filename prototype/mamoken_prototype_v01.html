@@ -2664,17 +2664,28 @@ function curAilvRow(){return BAL.AILV[curAiLv()];}
 const LEVEL_TO_DODGE={high:'crouch',mid:'sway',low:'lunge'}; // その段を避ける回避(DODGE_TABLE.beatsの逆引き)
 const DIR_TO_DODGE_KIND={left:'sway',down:'crouch',right:'lunge'}; // BAL.CMD.seqの方向文字列→dodgeコマンドのkind(DODGE_DIRの逆引き、v0.10 (3))
 const ai={think:0,guardT:0,guardOn:false,react:null,ultT:0,hist:[],mash:0,pHoldF:0,mikiriAt:null,dodgeAt:null,dodgeKind:null,cmdQueue:[],
-  habitHist:[],oppGuardStartF:null,oppBlockEndF:null}; // CPU-R2 PR3(#106 §8): habitHistは直近の相手の意味ある行動(atkLv/dodge/guardHold/grab/mashAfterBlock)を最大16件保持
+  habitHist:[],oppGuardStartF:null,oppBlockEndF:null, // CPU-R2 PR3(#106 §8): habitHistは直近の相手の意味ある行動(atkLv/dodge/guardHold/grab/mashAfterBlock)を最大16件保持
+  pisukeChaseRolledFor:null,darkChainRolledFor:null}; // CPU-R2 PR4(#106 §9): 窓(chaseReadyUntilF/darkWindowUntilF)ごとに1回だけ判定するための既判定マーカー(Codexレビュー対応、PR#119)
 function aiReset(){
   ai.think=30;ai.guardT=0;ai.guardOn=false;ai.react=null;ai.ultT=0;
   ai.hist=[];ai.mash=0;ai.pHoldF=0;ai.mikiriAt=null;ai.dodgeAt=null;ai.dodgeKind=null;ai.cmdQueue=[];
   ai.habitHist=[];ai.oppGuardStartF=null;ai.oppBlockEndF=null;
+  ai.pisukeChaseRolledFor=null;ai.darkChainRolledFor=null;
 }
 function aiPushHabit(t,v){ai.habitHist.push({t:t,v:v,f:B.f});if(ai.habitHist.length>16)ai.habitHist.shift();} // CPU-R2 PR3(#106 §8): 直近12-16件の指示に沿い16件キャップ
-function habitFreq(t,pred){ // CPU-R2 PR3(#106 §8): habitHist内でtype===tかつpred(v)を満たす割合(0-1)。データが無ければ0(=中立、shiftしない)
+function habitFreq(t,pred){ // CPU-R2 PR3(#106 §8): habitHist内でtype===tのエントリのうちpred(v)を満たす割合(0-1)。
+  // データが無ければ0(=中立、shiftしない)。「type=tの中でどのサブ種別が多いか」の判定に使う
+  // (例: dodgeエントリの中でlunge/sway/crouchどれが多いか)。predが常にtrueだと「type=t内の割合」が自明に1になり、
+  // 「そもそもtype=tをどれだけ行っているか」の指標にはならない(Codexレビュー対応、PR#119)。その用途にはhabitOccurRate()を使う
   const entries=ai.habitHist.filter(function(h){return h.t===t;});
   if(!entries.length)return 0;
   return entries.filter(function(h){return pred(h.v);}).length/entries.length;
+}
+function habitOccurRate(t){ // CPU-R2 PR4(#106 §9) Codexレビュー対応(PR#119): 「type=tがhabitHist全体に対してどれだけの
+  // 頻度で記録されているか」(dodge-heavy/frequent Guard等、行動そのものの頻度を測る指標。habitFreq()と違い
+  // 全体を分母にする)。データが無ければ0
+  if(!ai.habitHist.length)return 0;
+  return ai.habitHist.filter(function(h){return h.t===t;}).length/ai.habitHist.length;
 }
 function aiCmdMoveWeight(me,mv){ // CPU-R2 PR4(#106 §9): キャラ別アーキタイプに応じたコマンド技選択の重み(既定1.0=無変更)。
   // 違法選択は生成しない(発生不可な技はhasResourceFor側で最終的に弾かれるため、ここでのweight=0は選好上の無駄を避けるだけの最適化)
@@ -2684,8 +2695,8 @@ function aiCmdMoveWeight(me,mv){ // CPU-R2 PR4(#106 §9): キャラ別アーキ�
   // Chirka/Trick: 「FEINT/DELAY/POISON choice should respond to observed defense habits」。frequent Guard->POISON
   // (削りが効く)/frequent Dodge->DELAY(タイミング外しが効く)をai.habitHist由来の頻度で優先
   if(me.c.id==='chirka'){
-    if(mv.poison)w*=1+habitFreq('guardHold',function(v){return v>=20;})*2;
-    if(mv.delay)w*=1+habitFreq('dodge',function(){return true;})*2;
+    if(mv.poison)w*=1+habitOccurRate('guardHold')*2; // Codexレビュー対応(PR#119): habitHist全体に対するGuard頻度で判定
+    if(mv.delay)w*=1+habitOccurRate('dodge')*2; // Codexレビュー対応(PR#119): habitHist全体に対するDodge頻度で判定
   }
   // Bullet/Charge: 「high levels...avoid accidental OVERHEAT」。現在charge不足で発生し得ない技は選好から外す
   if(me.c.id==='bullet'&&mv.cost&&mv.cost.res==='charge'&&me.charge<mv.cost.amt)w=0;
@@ -2727,7 +2738,7 @@ function specialAiThreshold(me,you){ // ABILITY-R2-C (Issue #97 §13 CPU): キ�
     case 'chirka':return base*2; // treat special as an attack candidate: 通常attack候補相当の頻度まで上げる
     // CPU-R2 PR4(#106 §9 Takimaru/Grappler): 「BIND Special vs Dodge-heavy opponents」。ai.habitHist(#106 §8、
     // 既に成立した相手の行動の履歴のみ)由来のdodge頻度が高いほど優先度を上げる
-    case 'takimaru':return(me.pressureState==='ready'?base*4:base*1.5)*(1+habitFreq('dodge',function(){return true;}));
+    case 'takimaru':return(me.pressureState==='ready'?base*4:base*1.5)*(1+habitOccurRate('dodge')); // Codexレビュー対応(PR#119): habitHist全体に対するDodge頻度で判定
     // CPU-R2 PR4(#106 §9 Yomikage/Counter): 「Auto Counter Special used predictively」。ai.mash(ai.hist=既に観測した
     // 過去の相手の攻撃頻度由来。現在/未来の入力は一切見ない、§1準拠)が高いほど予測的にSPECIALを構える優先度を上げる
     case 'yomikage':return base*(1+Math.min(1,ai.mash/4)*3);
@@ -2888,14 +2899,20 @@ function aiStep(){
     }
   }
   // CPU-R2 PR4(#106 §9 Pisuke/Rush): 「higher offense/CHASE continuation」。既存の合法トリガー入力
-  // (chaseReadyUntilF窓中、me.phase==='attack'時のsway/lunge Dodge入力)をcmdUse(Lv依存)で撃つ
-  if(me.c.id==='pisuke'&&me.phase==='attack'&&me.chaseReadyUntilF>0&&B.f<=me.chaseReadyUntilF&&rng()<curAilvRow().cmdUse){
-    cpuEv.push({t:'dodge',kind:rng()<0.5?'sway':'lunge'});
+  // (chaseReadyUntilF窓中、me.phase==='attack'時のsway/lunge Dodge入力)をcmdUse(Lv依存)で撃つ。
+  // Codexレビュー対応(PR#119): この窓は複数F開き続けるため毎F判定するとcmdUseが「機会あたりの確率」ではなくなり
+  // (12F窓ならcmdUse=0.20でも累積約93%まで跳ね上がる)、Lv別の意味が実質消える。窓ごとに1回だけ判定するよう、
+  // 同じchaseReadyUntilFの値に対しては既に判定済みならスキップする(ai.pisukeChaseRolledForで記憶)
+  if(me.c.id==='pisuke'&&me.phase==='attack'&&me.chaseReadyUntilF>0&&B.f<=me.chaseReadyUntilF&&ai.pisukeChaseRolledFor!==me.chaseReadyUntilF){
+    ai.pisukeChaseRolledFor=me.chaseReadyUntilF;
+    if(rng()<curAilvRow().cmdUse)cpuEv.push({t:'dodge',kind:rng()<0.5?'sway':'lunge'});
   }
   // CPU-R2 PR4(#106 §9 Dark Moguzo/Dark Chain): 「maximize legal Dark Chain routes」。既存の合法トリガー入力
-  // (darkWindowUntilF窓中、me.phase==='cmdAtk'時のNormal atk入力)をcmdUse(Lv依存)で撃ち、Dark Chainを繋ぐ
-  if(me.c.id==='dark_moguzo'&&me.phase==='cmdAtk'&&me.darkWindowUntilF>0&&B.f<=me.darkWindowUntilF&&rng()<curAilvRow().cmdUse){
-    cpuEv.push({t:'atk',lv:LEVELS[(rng()*3)|0]});
+  // (darkWindowUntilF窓中、me.phase==='cmdAtk'時のNormal atk入力)をcmdUse(Lv依存)で撃ち、Dark Chainを繋ぐ。
+  // Codexレビュー対応(PR#119): 上記Pisukeと同じ理由で、同じdarkWindowUntilFの値に対しては窓ごとに1回だけ判定する
+  if(me.c.id==='dark_moguzo'&&me.phase==='cmdAtk'&&me.darkWindowUntilF>0&&B.f<=me.darkWindowUntilF&&ai.darkChainRolledFor!==me.darkWindowUntilF){
+    ai.darkChainRolledFor=me.darkWindowUntilF;
+    if(rng()<curAilvRow().cmdUse)cpuEv.push({t:'atk',lv:LEVELS[(rng()*3)|0]});
   }
   // ガード硬め対策: つかみ本命 / S咆哮
   if(ai.pHoldF>30&&me.phase==='idle'){
@@ -2915,7 +2932,8 @@ function aiStep(){
       const row=curAilvRow();
       // habit adaptation(#106 §8): 直近のhabitHistに応じて重みを僅かにシフトする。row.habitAdaptが
       // 最大シフト量(Lv1-3は0%=無効)。「frequent Guard→Grab/Guard-break pressure重み上げ」の例に対応
-      const guardHoldFreq=habitFreq('guardHold',function(v){return v>=20;}); // 20F以上の保持を「長押し」とみなす(解釈判断)
+      const guardHoldFreq=habitOccurRate('guardHold'); // Codexレビュー対応(PR#119): 「20F以上の長押しの割合」ではなく
+      // habitHist全体に対するGuard頻度そのもの(=frequent Guard)で判定する。PR3で導入した同種の測定ミスも本PRで併せて修正
       // #106 §9 Takimaru/Grappler: 「higher Grab weight under Pressure」。pressureState==='ready'時は追加でつかみ重みを上げる
       const grabW=0.1*(1+guardHoldFreq*row.habitAdapt*3)*(me.c.id==='takimaru'&&me.pressureState==='ready'?2.5:1); // つかみの基礎重み(旧focusThreat加算は撤廃)+habit shift
       // #106 §9: Hakuma=higher Guard weight/Pisuke=lower passive Guard weight/Yomikage=higher wait&counter
