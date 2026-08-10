@@ -233,8 +233,8 @@ const BAL={ // 03_data_design.md v2.0 §2 balance table 準拠
         {seq:['down','right'],trigger:'high',type:'atk',lv:'high',name:'跳ね上げ',s:18,a:3,r:24,d:94,guardDmg:11,scale:0.90,exactDmg:true,modern:true,chargeGain:true,ccWindow:16,tags:['Quick16','Modern','Charge gain'],color:'#c14a68',se:'cmdHit'},
         {seq:['right','right'],trigger:'mid',type:'atk',lv:'mid',name:'蓄圧タックル',s:18,a:4,r:27,d:120,guardDmg:16,hitstun:32,blockstun:20,whiff:8,scale:0.85,exactDmg:true,poseId:'lunge',armorStartF:6,armorEndF:17,armorDmgMul:0.85,cost:{res:'charge',amt:1},ccWindow:16,tags:['Quick16','cost1'],color:'#a83250',se:'cmdHit'},
         {seq:['left','right'],trigger:'grab',type:'grab',name:'抱え弾き',s:15,d:105,whiff:37,down:'throwDown',exactDmg:true,chargeGain:true,ccWindow:16,tags:['Quick16','成功Charge+1'],color:'#8a2740',se:'cmdGrabHit'},
-        {seq:['left','left'],trigger:'mid',type:'atk',lv:'mid',name:'圧抜き掌',s:16,a:3,r:22,d:78,guardDmg:12,hitstun:27,blockstun:24,whiff:5,scale:0.90,exactDmg:true,cost:{res:'charge',amt:1},selfGuardRestore:15,ccWindow:16,tags:['Quick16','cost1','Guard+15'],color:'#c14a68',se:'cmdHit'},
-        {seq:['left','down','right','right'],trigger:'mid',type:'atk',lv:'mid',name:'弾丸頭突き',s:31,a:4,r:42,d:200,down:'hardDown',whiff:15,unblockable:true,scale:0.70,exactDmg:true,cost:{res:'charge',amt:3},ccWindow:16,tags:['Quick16','cost3'],color:'#8a2740',se:'cmdHit'}
+        {seq:['left','left'],trigger:'mid',type:'atk',lv:'mid',name:'圧抜き掌',s:16,a:3,r:22,d:78,guardDmg:12,hitstun:27,blockstun:24,whiff:5,scale:0.90,exactDmg:true,cost:{res:'charge',amt:1},selfGuardRestore:15,releaseVent:true,ccWindow:16,tags:['Quick16','cost1','Guard+15'],color:'#c14a68',se:'cmdHit'},
+        {seq:['left','down','right','right'],trigger:'mid',type:'atk',lv:'mid',name:'弾丸頭突き',s:31,a:4,r:42,d:200,down:'hardDown',whiff:15,unblockable:true,scale:0.70,exactDmg:true,cost:{res:'charge',amt:3},releaseVent:true,ccWindow:16,tags:['Quick16','cost3'],color:'#8a2740',se:'cmdHit'}
       ],
       dark_moguzo:[
         {seq:['right','down'],trigger:'mid',type:'atk',lv:'mid',name:'黒走り',s:11,a:3,r:19,d:70,guardDmg:8,scale:0.85,exactDmg:true,modern:true,ccWindow:16,tags:['Quick16','Modern','暗連可'],color:'#3d1f4a',se:'cmdHit'},
@@ -1052,14 +1052,26 @@ const CHIRKA_SPECIAL_MOVE={name:'鏖しの舞',type:'atk',lv:'mid',s:26,a:3,r:28
 // armorDmgMul未指定=既存fallbackの0.5)/dmg80/Whiff Recovery40F(grabRecFor()はm.whiffを絶対値として使うため
 // そのまま40を指定)。bind:trueが叩きつけ成功時にBIND480Fを付与する
 const TAKIMARU_SPECIAL_MOVE={name:'縛鎖の型',type:'grab',s:20,d:80,whiff:40,armorStartF:5,armorEndF:19,down:'throwDown',exactDmg:true,bind:true,isSpecial:true,color:'#c9a24d',se:'cmdGrabHit'};
+// ABILITY-R2-C (Issue #97 §10 Bullet SPECIAL Full Release): attack-type。Startup18F/Active3F/Recovery30F(明記値をそのままs/a/rへ)。
+// dはC1/2/3別のBULLET_RELEASE_DMGから発動時に確定させ、Object.assignで都度生成する(startSpecial側)ためここのd/lvは仮の
+// placeholder(実際の発動時に上書きされる)。高さ(lv)はIssueに明記が無いため、既存の主力Release技(弾丸頭突き)と同じ'mid'に
+// 揃える解釈とした(PR説明に解釈注記として記載)。whiff未指定=Issueが単一のRecovery30Fのみを与えているため、HIT/WHIFFで
+// 総時間を区別しない(=Chirka/Takimaruのように明示的なwhiff加算値が与えられていない)と読む
+const BULLET_SPECIAL_MOVE={name:'フルリリース',type:'atk',lv:'mid',s:18,a:3,r:30,d:110,exactDmg:true,isSpecial:true,bulletFullRelease:true,color:'#ffb020',se:'cmdHit'};
+function specialConditionLocked(f){ // ABILITY-R2-C: Bullet(Issue #97 §10 Charge0かつ非OVERHEATはLOCK)/Dark Moguzo(§11 HP>30%はLOCK)
+  if(f.c.id==='bullet')return!(f.charge>=1||f.overheat);
+  if(f.c.id==='dark_moguzo')return f.hp>maxHpFor(f.c)*0.30;
+  return false;
+}
 function specialButtonState(f){ // READY/ACTIVE/COOLDOWN/CONDITION LOCK(CONDITION LOCKは各キャラPRで条件追加)
   if(f.phase==='special'||f.specialActiveF>0)return'ACTIVE';
   if(f.cmdMove&&f.cmdMove.isSpecial)return'ACTIVE'; // ABILITY-R2-B: attack-type(cmdAtk/grab phaseへ直接合成moveで乗る)はspecialActiveFを使わない
   if(f.specialCooldownF>0)return'COOLDOWN';
+  if(specialConditionLocked(f))return'CONDITION LOCK';
   return'READY';
 }
 function canStartSpecial(f){ // Issue #97 §2: neutral/actionable時のみ。attack/guard/blockstun/hitstun/down/dodge/mikiri/grab/roar/ult中は不可
-  return f.phase==='idle'&&f.specialCooldownF<=0&&f.specialActiveF<=0;
+  return f.phase==='idle'&&f.specialCooldownF<=0&&f.specialActiveF<=0&&!specialConditionLocked(f);
 }
 function startSpecial(f){ // 不成立時はcooldownを消費しない(呼び出し側でcanStartSpecial()を必ず確認)
   f.specialCooldownF=SPECIAL_COOLDOWN_F;
@@ -1074,6 +1086,17 @@ function startSpecial(f){ // 不成立時はcooldownを消費しない(呼び出
     const m=TAKIMARU_SPECIAL_MOVE;
     f.phase='grab';f.pf=0;f.guardLv=null;f.atkLv=null;f.buf=null;f.combo=0;f.normalChainCount=0;f.hasHit=false;f.landedHit=false;f.cmdArmorUsed=false;
     f.cmdMove=m;f.cmdIdx=-1;f.grabS=m.s;f.dirBuf.length=0;
+    return;
+  }
+  if(f.c.id==='bullet'){ // ABILITY-R2-C (Issue #97 §10 Full Release): attack-type。既存cmdAtk phaseへ合成moveで直接乗せる。
+    // 「On successful start, consume all current Charge」を発動と同時に行う(=dは消費前のlevelから確定させ、その後f.charge=0へ)。
+    // OVERHEATは「clear Overheat after resolution」= 消さずに残し、advance()の攻撃action終了(1697行st付近)で
+    // clearする(=hitApply側のbulletChargeMulがまだoverheat trueを見られるため、x0.70が自然に一度だけ乗る)
+    const lvl=Math.max(1,Math.min(3,f.charge));
+    const m=Object.assign({},BULLET_SPECIAL_MOVE,{d:BULLET_RELEASE_DMG[lvl]});
+    f.charge=0;f.chargeSub=0;
+    f.phase='cmdAtk';f.pf=0;f.atkLv=m.lv;f.cmdMove=m;f.cmdIdx=-1;f.hasHit=false;f.landedHit=false;f.cmdArmorUsed=false;f.guardLv=null;f.buf=null;
+    f.cmdDelayExtraF=0;f.cmdDelayResolved=false;f.combo=0;f.normalChainCount=0;f.comboCounter=false;f.dirBuf.length=0;
     return;
   }
   // mode-type(既存): phase='special'の8Fロック+specialActiveFカウントダウン
@@ -1121,8 +1144,8 @@ function newFighter(ci,side,palette){
     yomiAutoCounterUntilF:0, // ABILITY-R2-B (Issue #97 §9 Yomikage SPECIAL): 発動直後14FのStrike Counter Window(絶対F)
     pressureState:'none',pressureUntilF:0,pressureQueuedMove:null,pressureQueuedIdx:null, // Takimaru PRESSURE
     yomiState:'none',yomiJust:false,yomiQueuedLv:null,yomiReadyUntilF:0,yomiFiredJust:false, // Yomikage RETURN/JUST: state=none|pending|ready
-    charge:0,chargeLastMove:null, // Bullet CHARGE
-    darkGauge:0,darkReady:false,darkBody:false,darkBodyRemainingF:0,darkChainUses:0,darkLastChainMove:null,darkWindowUntilF:0,darkWindowMax:0,darkBodyActive:false // Dark Moguzo DARK CHAIN/BODY
+    charge:0,chargeSub:0,overheat:false, // Bullet CHARGE(ABILITY-R2-C: OVERHEAT/sub-charge追加、chargeLastMoveは撤去)
+    darkChainUses:0,darkLastChainMove:null,darkWindowUntilF:0,darkWindowMax:0,darkBodyActive:false // Dark Moguzo DARK CHAIN/BODY(ABILITY-R2-C: 旧DARK gauge/darkBodyトグルは撤去、specialActiveF駆動に統一)
   };
 }
 function startBattle(){
@@ -1195,8 +1218,8 @@ function roundInit(first){
     f.poisonActive=false;f.poisonTicksLeft=0;f.poisonNextTickF=0;f.bindActiveF=0;f.yomiAutoCounterUntilF=0;
     f.pressureState='none';f.pressureUntilF=0;f.pressureQueuedMove=null;f.pressureQueuedIdx=null;
     f.yomiState='none';f.yomiJust=false;f.yomiQueuedLv=null;f.yomiReadyUntilF=0;f.yomiFiredJust=false;
-    f.charge=0;f.chargeLastMove=null;
-    f.darkGauge=0;f.darkReady=false;f.darkBody=false;f.darkBodyRemainingF=0;f.darkChainUses=0;f.darkLastChainMove=null;f.darkWindowUntilF=0;f.darkWindowMax=0;f.darkBodyActive=false;
+    f.charge=0;f.chargeSub=0;f.overheat=false;
+    f.darkChainUses=0;f.darkLastChainMove=null;f.darkWindowUntilF=0;f.darkWindowMax=0;f.darkBodyActive=false;
   }
   B.timer=BAL.TIME;B.flow='intro';B.flowF=0;B.clash=null;B.pendKO=-1;B.clashStreak=[0,0];
   announce('ROUND '+B.round,66,50,'#ffd23f');
@@ -1300,7 +1323,7 @@ function startAtk(f,lv,chain){
   f.phase='attack';f.pf=0;f.atkLv=lv;f.hasHit=false;f.landedHit=false;f.cmdArmorUsed=false;f.guardLv=null;
   clearPressure(f); // vNext PR4 (Takimaru PRESSURE clear): non-pressure action(素のNormal開始)
   clearYomiReturn(f); // vNext PR4 (Yomikage RETURN clear): 「Normal」開始(resetModernHist経由の他clearとは別に明示)
-  f.darkBodyActive=(f.c.id==='dark_moguzo'&&f.darkBody); // vNext PR4 (Dark Moguzo BODY): Normal startup-1をaction開始時にsnapshot(§「midaction expiryはcurrent action snapshot保持」)
+  f.darkBodyActive=(f.c.id==='dark_moguzo'&&f.specialActiveF>0); // ABILITY-R2-C (Dark Moguzo BODY): Normal startup-1をaction開始時にsnapshot(§「midaction expiryはcurrent action snapshot保持」)
   f.pisukeSpecialRecoveryActive=(f.c.id==='pisuke'&&f.specialActiveF>0); // ABILITY-R2-A (Pisuke SPECIAL recovery x0.70): 同上のパターンでaction開始時にsnapshot(中途でSPECIALが切れても this actionのrecoveryは変えない)
   if(!chain){
     f.combo=0;f.comboCounter=false;f.normalChainCount=0;
@@ -1356,10 +1379,6 @@ function detectCommandMove(f){ // 直近nF方向がキャラのコマンド技�
 // m.cost={res:'armorStock'|'charge',amt:N}を持つCommand技の資源チェック+消費の単一口。
 function hasResourceFor(f,m){return!m.cost||(f[m.cost.res]||0)>=m.cost.amt;}
 function spendResourceFor(f,m){if(m.cost)f[m.cost.res]-=m.cost.amt;}
-function chargeGainOnHit(f,moveName){ // vNext PR4 (Bullet CHARGE): current gain move != lastSuccessful → +1 cap3、store。same→+0。
-  // failed(whiff/block)はこの関数自体を呼ばないためsignature不変が自然に満たされる
-  if(f.chargeLastMove!==moveName){f.charge=Math.min(3,f.charge+1);f.chargeLastMove=moveName;}
-}
 // GAME-UX-R1: Command成立時の技名フィードバック用、提示専用cache(ABILITY_PRESと同じ考え方でB/f外部に置き、
 // hash対象/combat判定に一切影響しない片方向read-only cache)。startCmdAtk/startCmdGrab/startCmdStanceが
 // 実際にresource消費して開始した(=戻り値true)瞬間だけ書き込む。Modern入力が不成立でNormalへfallbackした
@@ -1373,11 +1392,12 @@ function startCmdAtk(f,m,idx,preserveCombo,viaModern){ // vNext PR3 (§9 Classic
   // 戻り値false=資源不足で不発動(呼び出し側がnormal fallback等を行う)
   if(!hasResourceFor(f,m))return false;
   spendResourceFor(f,m);
+  if(m.releaseVent){f.chargeSub=0;f.overheat=false;} // ABILITY-R2-C (Issue #97 §10 Release: 圧抜き掌/弾丸頭突き): 「start spends Charge, resets sub-charge, clears OVERHEAT」。成功start時点(hit判定を待たず)で即時
   if(f.ironWallReady&&m.ironWallAlt){m=Object.assign({},m,m.ironWallAlt);f.ironWallReady=false;} // vNext PR4 (Hakuma IRON WALL): consume start(spend only。他技はready保持)
   f.phase='cmdAtk';f.pf=0;f.atkLv=m.lv;f.cmdMove=m;f.cmdIdx=idx;f.hasHit=false;f.landedHit=false;f.cmdArmorUsed=false;f.guardLv=null;f.buf=null;
   f.cmdDelayExtraF=0;f.cmdDelayResolved=false; // ABILITY-R2-B (Chirka DELAY属性): per action。feintPendingAtF/Cmは「interruptでcancelしない」仕様のためここではリセットしない
   f.yomiFiredJust=false; // vNext PR4 (Yomikage RETURN/JUST): per action。startYomiReturn()がstartCmdAtk直後に必要なら立て直す
-  f.darkWindowUntilF=0;f.darkBodyActive=(f.c.id==='dark_moguzo'&&f.darkBody); // vNext PR4 (Dark Moguzo): 新Command開始で必ずNormal windowを閉じる。Body適用有無はaction開始時にsnapshot(§「midaction expiryはcurrent action snapshot保持」)
+  f.darkWindowUntilF=0;f.darkBodyActive=(f.c.id==='dark_moguzo'&&f.specialActiveF>0); // ABILITY-R2-C: 新Command開始で必ずNormal windowを閉じる。Body適用有無はaction開始時にsnapshot(§「midaction expiryはcurrent action snapshot保持」)
   f.pisukeSpecialRecoveryActive=(f.c.id==='pisuke'&&f.specialActiveF>0); // ABILITY-R2-A (Pisuke SPECIAL recovery x0.70): action開始時にsnapshot
   if(!preserveCombo){
     f.combo=0;f.comboCounter=false;
@@ -1393,7 +1413,7 @@ function startCmdGrab(f,m,idx,preserveCombo,viaModern){
   if(!hasResourceFor(f,m))return false;
   spendResourceFor(f,m);
   f.phase='grab';f.pf=0;f.guardLv=null;f.atkLv=null;f.buf=null;if(!preserveCombo)f.combo=0;f.normalChainCount=0;f.hasHit=false;f.landedHit=false;f.cmdArmorUsed=false;
-  f.darkBodyActive=(f.c.id==='dark_moguzo'&&f.darkBody); // vNext PR4 (Dark Moguzo BODY): Command Grabにも「Command startup -2」を適用するためsnapshot
+  f.darkBodyActive=(f.c.id==='dark_moguzo'&&f.specialActiveF>0); // ABILITY-R2-C (Dark Moguzo BODY): Command Grabにも「Command startup -2」を適用するためsnapshot
   f.cmdMove=m;f.cmdIdx=idx;f.grabS=f.darkBodyActive?Math.max(1,m.s-2):m.s;f.dirBuf.length=0;
   resetModernHist(f); // vNext PR3 (§8 Modern R4 reset trigger: Command/Throw)
   sfx('grabGo');
@@ -1557,7 +1577,7 @@ function applyInputs(f,opp,cmds,held){
         ||(f.phase==='attack'&&f.pf<=spec(f).s); // A発生キャンセル可
       if(f.s>=BAL.SMAX&&okPhase){
         f.s=0;f.phase='roar';f.pf=0;f.atkLv=null;f.guardLv=null;f.hasHit=false;f.landedHit=false;f.cmdArmorUsed=false;f.kb=0;f.buf=null;f.combo=0;f.normalChainCount=0;
-        f.darkBodyActive=(f.c.id==='dark_moguzo'&&f.darkBody); // vNext PR4 (Dark Moguzo BODY): Damage x1.08をaction開始時点でsnapshot
+        f.darkBodyActive=(f.c.id==='dark_moguzo'&&f.specialActiveF>0); // ABILITY-R2-C (Dark Moguzo BODY): Damage x1.08をaction開始時点でsnapshot
         resetModernHist(f); // vNext PR3 (§8 Modern R4 reset trigger: Roar)
         sfx('roarStart');
       }else if(f.s<BAL.SMAX){f.sNo=14;} // ゲージ不足時のS枠点滅フィードバックは両サイドとも出す(オンラインは両者とも人間のため)
@@ -1718,6 +1738,7 @@ function advance(f){
     else f.lunge=maxLunge*Math.max(0,1-(t-A.s-A.a)/A.r);
     if(t>=total){
       if(!f.hasHit){gainS(f,'whiff');resetModernHist(f);} // vNext PR3 (§8 Modern R4 reset trigger: WHIFF)
+      if(f.cmdMove&&f.cmdMove.bulletFullRelease)f.overheat=false; // ABILITY-R2-C (Issue #97 §10 Full Release): 「consume all current Charge(=cast開始時に既にvent済み) and clear Overheat after resolution」。HIT/WHIFF双方でこのactionの終了(=resolution完了)時にoverheatを解除する
       f.pf=0;f.atkLv=null;f.combo=0;f.normalChainCount=0;f.lunge=0;f.cmdMove=null;f.cmdIdx=null;resolveToIdle(f); // NORMAL-CHAIN-R1: 攻撃action終了(空振り、またはchainされずに硬直満了)で必ずリセット
     }
   }else if(f.phase==='cmdStance'){ // 巌の構え等: vNext PR3 (§13) startupF(無防備)→counterActiveF(反撃窓。attackResolve側で判定)
@@ -1735,10 +1756,10 @@ function advance(f){
     if(f.pf===19&&opp.phase==='grabbed'){ // 叩きつけ
       // コマンド投げ(v0.10)はdmgをcmdMoveから取る。CMD-R1(m.exactDmg:true)は確定値のためdMulを適用しない
       let dmg=Math.round(f.cmdMove?(f.cmdMove.exactDmg?f.cmdMove.d:f.cmdMove.d*f.c.dMul):(BAL.GRAB.d*f.c.dMul));
-      dmg=gutsOutgoing(f,dmg);dmg=darkBodyOutgoing(f,dmg);dmg=moguzoSpecialOutgoing(f,dmg); // vNext PR4 (Moguzo GUTS/Dark Moguzo BODY)/ABILITY-R2-A (Moguzo SPECIAL): Grab対象
+      dmg=gutsOutgoing(f,dmg);dmg=darkBodyOutgoing(f,dmg);dmg=moguzoSpecialOutgoing(f,dmg);dmg=bulletChargeMul(f,dmg); // vNext PR4 (Moguzo GUTS/Dark Moguzo BODY)/ABILITY-R2-A (Moguzo SPECIAL)/ABILITY-R2-C (Bullet CHARGE): Grab対象
       dmg=moguzoSpecialIncoming(opp,dmg);
       dealDamage(opp,dmg);gainFocus(opp,dmg*BAL.FOCUS.gainDmgMul);
-      if(f.cmdMove&&f.cmdMove.chargeGain)chargeGainOnHit(f,f.cmdMove.name); // vNext PR4 (Bullet CHARGE): 抱え弾き success
+      if(f.cmdMove&&f.cmdMove.chargeGain)chargeGainDirect(f); // ABILITY-R2-C (Bullet CHARGE Direct): 抱え弾き success
       if(f.cmdMove&&f.cmdMove.down){ // CMD-R1新設: コマンド投げでもm.down指定があればdown状態(throwDown等)へ遷移する
         opp.phase='down';opp.pf=0;opp.downType=f.cmdMove.down;opp.downHitUsed=false;opp.kb=34;
       }else if(f.cmdMove){ // コマンド投げ(旧9技): 従来通りhitstun固定
@@ -1847,7 +1868,7 @@ function handleIfDowned(att,def,dmgBase){ // ダウン連: downTypeがfollowupAl
   if(def.phase==='down'&&BAL.DOWNWAKE[def.downType].followupAllowed&&!def.downHitUsed){
     def.downHitUsed=true;
     let dmg=Math.round(dmgBase*BAL.DOWNWAKE.followupDamageScale*att.c.dMul);
-    dmg=gutsOutgoing(att,dmg);dmg=darkBodyOutgoing(att,dmg);dmg=moguzoSpecialOutgoing(att,dmg); // vNext PR4 (Moguzo GUTS/Dark Moguzo BODY)/ABILITY-R2-A (Moguzo SPECIAL): Normal対象
+    dmg=gutsOutgoing(att,dmg);dmg=darkBodyOutgoing(att,dmg);dmg=moguzoSpecialOutgoing(att,dmg);dmg=bulletChargeMul(att,dmg); // vNext PR4 (Moguzo GUTS/Dark Moguzo BODY)/ABILITY-R2-A (Moguzo SPECIAL)/ABILITY-R2-C (Bullet CHARGE): Normal対象
     dmg=moguzoSpecialIncoming(def,dmg);
     dealDamage(def,dmg);gainFocus(def,dmg*BAL.FOCUS.gainDmgMul);
     fxDmg(def,dmg,'#ffb6ff');fxSpark(def,att.atkLv||'mid',0);sfx('hit');
@@ -1937,28 +1958,17 @@ function darkChainTrigger(att){ // vNext PR4 (Dark Moguzo DARK CHAIN): 「uses�
   // Modern history reset/gauge+30(outside Body)/Normal window。cap/windowはNormal(2/16F)・Body(3/20F)で切替
   // (解釈: uses/lastChainMoveのリセット契機は明記が「Round reset all」のみのため、実運用上は「現在のcomboが
   // 途切れる=f.comboが0に戻る」タイミング(startAtk(!chain)/startCmdAtk(!preserveCombo))に揃えている。詳細は完了報告参照)
-  const cap=att.darkBody?3:2;
+  // ABILITY-R2-C (Issue #97 §11 Dark Moguzo): 旧DARK 0-100蓄積+DARK+30 gainは撤去。BODY中かどうかは
+  // action開始時snapshot(f.darkBodyActive、以前と同じ「specialActiveF>0」を見るだけに変更)で判定する
+  const cap=att.darkBodyActive?3:2;
   if(att.darkChainUses>=cap)return;
   if(att.darkLastChainMove===att.cmdMove.name)return;
   att.darkChainUses++;
   att.darkLastChainMove=att.cmdMove.name;
   att.normalChainCount=0;
   resetModernHist(att);
-  if(!att.darkBody){att.darkGauge=Math.min(100,att.darkGauge+30);if(att.darkGauge>=100)att.darkReady=true;} // Body中はgauge gainなし
   att.darkWindowMax=cap;
-  att.darkWindowUntilF=B.f+(att.darkBody?20:16);
-}
-const DARK_BODY_NEUTRAL_EXCLUDE=new Set(['hitstun','blockstun','grab','grabrec','grabHit','grabbed','down','wake','dizzy']);
-function tickDarkBody(f,opp){ // vNext PR4 (Dark Moguzo BODY): 「first neutralでBody activate」+360F timer(simulation frame)
-  if(f.c.id!=='dark_moguzo')return;
-  if(f.darkBody){
-    if(f.darkBodyRemainingF>0){f.darkBodyRemainingF--;if(f.darkBodyRemainingF<=0)f.darkBody=false;} // 「midaction expiryはcurrent action snapshot保持」=既存action中のdarkBodyActiveは別途snapshot済みのためここでは即断で良い
-    return;
-  }
-  if(!f.darkReady)return;
-  if(f.phase!=='idle'&&f.phase!=='guard')return; // Dark idle/actionable
-  if(DARK_BODY_NEUTRAL_EXCLUDE.has(opp.phase))return; // opponent not hit/blockstun/grab/down
-  f.darkGauge=0;f.darkReady=false;f.darkBody=true;f.darkBodyRemainingF=360;
+  att.darkWindowUntilF=B.f+(att.darkBodyActive?20:16);
 }
 function tickSpecial(f){ // ABILITY-R2 SPECIAL-CORE: cooldownはstartSpecial()開始Fから減算開始、Roundを跨いで残量保持
   if(f.specialCooldownF>0)f.specialCooldownF--;
@@ -2086,7 +2096,7 @@ function attackResolve(att,def){
     // counterActive窓の間だけ相手の攻撃を無効化し即座に反撃(counterDmgは§13確定値、dMul適用なし)
     const m=def.cmdMove;
     let dmg=Math.round(m.counterDmg);
-    dmg=gutsOutgoing(def,dmg);dmg=moguzoSpecialOutgoing(def,dmg); // vNext PR4 (Moguzo GUTS)/ABILITY-R2-A (Moguzo SPECIAL): Command対象(この反撃はdefが攻撃側)
+    dmg=gutsOutgoing(def,dmg);dmg=moguzoSpecialOutgoing(def,dmg);dmg=bulletChargeMul(def,dmg); // vNext PR4 (Moguzo GUTS)/ABILITY-R2-A (Moguzo SPECIAL)/ABILITY-R2-C (Bullet CHARGE): Command対象(この反撃はdefが攻撃側)
     dmg=moguzoSpecialIncoming(att,dmg);
     dealDamage(att,dmg);gainFocus(att,dmg*BAL.FOCUS.gainDmgMul);
     att.phase='hitstun';att.pf=0;att.stunDur=BAL.HITSTUN[m.counterLv]||24;att.combo=0;att.normalChainCount=0;att.kb=20;att.cmdBufMove=null;att.cmdBufIdx=null;
@@ -2177,6 +2187,31 @@ function darkBodyOutgoing(att,dmg){return(att&&att.darkBodyActive)?Math.round(dm
 // Normal/Command/Grab/Roar-trade対象、GD/chip/Gyuiin対象外)にのみ適用する。互いに乗算のみなので呼び出し順は問わない
 function moguzoSpecialOutgoing(att,dmg){return(att&&att.c.id==='moguzo'&&att.specialActiveF>0)?Math.round(dmg*1.10):dmg;}
 function moguzoSpecialIncoming(def,dmg){return(def&&def.c.id==='moguzo'&&def.specialActiveF>0)?Math.round(dmg*0.90):dmg;}
+// ABILITY-R2-C (Issue #97 §10 Bullet CHARGE): C0 x1.00/C1 x1.05/C2 x1.10/C3 x1.18、OVERHEAT中はさらにx0.70。
+// Normal/Command/Grab対象、Roar/Ultは対象外(gutsOutgoing等と同じ呼び出し箇所群だがroar-trade箇所には意図的に組み込まない)。
+// Full Release SPECIALはcast開始時にf.charge=0へ即時venting済みなのでlevelMul=1.00、f.overheatは解決まで保持されるため
+// OVERHEATED時のx0.70はここで自然に一度だけ乗る(専用の特殊分岐なし)
+function bulletChargeLevelMul(charge){return charge>=3?1.18:charge>=2?1.10:charge>=1?1.05:1.00;}
+function bulletChargeMul(att,dmg){return(att&&att.c.id==='bullet')?Math.round(dmg*bulletChargeLevelMul(att.charge)*(att.overheat?0.70:1.00)):dmg;}
+function chargeGainOrdinary(f){ // Issue #97 §10: Ordinary non-direct HIT+1 sub-charge、sub3到達でCharge+1&sub reset(OVERHEAT中はgain停止)
+  if(f.overheat)return;
+  f.chargeSub++;
+  if(f.chargeSub>=3){f.chargeSub=0;chargeGainDirect(f);}
+}
+function chargeGainDirect(f){ // Issue #97 §10: Direct Charge acquisition。C3で既にOVERHEATでなければOVERHEATへ、C3未満ならCharge+1&sub reset
+  if(f.overheat)return;
+  if(f.charge>=3){f.overheat=true;return;}
+  f.charge=Math.min(3,f.charge+1);f.chargeSub=0;
+}
+const BULLET_RELEASE_DMG={1:110,2:165,3:230}; // ABILITY-R2-C (Issue #97 §10 Bullet SPECIAL Full Release): Charge1/2/3時の確定ダメージ(levelMulは別途二重適用しない)
+function tickBulletReleaseInterrupt(f){ // Codexレビュー指摘(PR#109): OVERHEATED状態でFull Releaseが被弾等によりcmdAtkから強制中断されると、
+  // advance()側の自然完了パス(t>=total、hit/whiff問わずここでoverheatを解除している)を経由しないため、overheatが
+  // 解除されず次のcooldown/round終了までx0.70+charge gain停止が固着する。加えて古いcmdMove(isSpecial:true)が残ると
+  // specialButtonState()がSPECIALボタンをACTIVE表示のまま固着させる。中断させる側の全call siteを個別に追うのではなく、
+  // 「phaseが既にcmdAtkでなくなっているのにbulletFullReleaseのcmdMoveが残っている」を毎F汎用的に検出して解消する
+  // (fightStep/netFightStepの共通per-fighter tickloopから両方呼ぶため、オンライン/オフラインで挙動は同一=決定的)
+  if(f.c.id==='bullet'&&f.phase!=='cmdAtk'&&f.cmdMove&&f.cmdMove.bulletFullRelease){f.cmdMove=null;f.cmdIdx=null;f.overheat=false;}
+}
 function dealDamage(def,dmg){
   if(def.c.id==='hakuma')def.ironWallReady=false; // vNext PR4 (Hakuma IRON WALL lose): 被弾/Throw/Down/GuardBreak(いずれもHP減少を伴う)で消失
   if(def.gritAvailable&&def.hp>=2&&(def.hp-dmg)<=0){def.gritAvailable=false;def.hp=1;return;}
@@ -2207,7 +2242,7 @@ function hitApply(att,def,counterHit,lvOverride,cmdOverride){
     counterFx=true;
   }
   if(counterFx)B.fx.push({k:'counter',x:def.baseX,y:relY(def,1.005),f:0,dur:38});
-  dmg=gutsOutgoing(att,dmg);dmg=darkBodyOutgoing(att,dmg);dmg=moguzoSpecialOutgoing(att,dmg); // vNext PR4 (Moguzo GUTS/Dark Moguzo BODY)/ABILITY-R2-A (Moguzo SPECIAL): Normal/Command/Grab対象。以降の armor減衰/dizzy capはこの値を元に計算する
+  dmg=gutsOutgoing(att,dmg);dmg=darkBodyOutgoing(att,dmg);dmg=moguzoSpecialOutgoing(att,dmg);dmg=bulletChargeMul(att,dmg); // vNext PR4 (Moguzo GUTS/Dark Moguzo BODY)/ABILITY-R2-A (Moguzo SPECIAL)/ABILITY-R2-C (Bullet CHARGE): Normal/Command/Grab対象。以降の armor減衰/dizzy capはこの値を元に計算する
   dmg=moguzoSpecialIncoming(def,dmg); // ABILITY-R2-A (Moguzo SPECIAL): incoming x0.90(防御側)。以降の全分岐(armor吸収含む)へ一律反映
   // vNext PR4 (Godan山掴み等): 投げ側armorもcmdAtkと同じarmorStartF/armorEndF+armorDmgMul形式に統一(旧armor:単一値=F1起算モデルを廃止。
   // §「山掴み: F6-F16 1hit armor incoming dmg x0.60」のようにF1始まりでない窓を表現できる必要があるため)
@@ -2244,10 +2279,12 @@ function hitApply(att,def,counterHit,lvOverride,cmdOverride){
     dealDamage(def,dmg);gainFocus(def,dmg*BAL.FOCUS.gainDmgMul);
     att.landedHit=true; // BAL-R1.1: 確定ヒット時のみchain可(ガード/回避/アーマー吸収では立たない)
     if(cm&&cm.comboEnd)att.combo=0;else att.combo++; // CMD-R1: comboEndの技はここで正式にコンボを打ち切る(次のヒットのdamage scaleを最初から)
-    if(!cm){att.normalChainCount++;pushModernHist(att,lv);} // NORMAL-CHAIN-R1: 通常打撃(crouch/mid/high/low)の確定ヒットのみカウント。コマンド技(cm truthy)はここでは増やさない(既存comboとは別概念)。vNext PR3 (§8): NormalのHITはModern historyへ記録
-    else{
+    if(!cm){
+      att.normalChainCount++;pushModernHist(att,lv); // NORMAL-CHAIN-R1: 通常打撃(crouch/mid/high/low)の確定ヒットのみカウント。コマンド技(cm truthy)はここでは増やさない(既存comboとは別概念)。vNext PR3 (§8): NormalのHITはModern historyへ記録
+      if(att.c.id==='bullet'){if(att.normalChainCount>=normalChainLimitFor(att.c))chargeGainDirect(att);else chargeGainOrdinary(att);} // ABILITY-R2-C (Issue #97 §10): 「Normal chain final hit」=Direct Charge。Bullet自身のNORMAL_CHAIN_LIMIT(3)をfinal hitの基準に使う(Codexレビュー指摘#109: 固定4はBulletのchain上限3では到達せず常にunreachableだった)
+    }else{
       att.ccActive=true;att.ccWindowUntil=B.f+(cm.ccWindow||16); // vNext PR3 (§9 Classic Cancel): Command HITでcancel windowを開く
-      if(cm.chargeGain)chargeGainOnHit(att,cm.name); // vNext PR4 (Bullet CHARGE): 弾み突き/尾払い/跳ね上げのHIT
+      if(cm.chargeGain)chargeGainDirect(att); // ABILITY-R2-C (Bullet CHARGE Direct): 弾み突き/尾払い/跳ね上げのHIT。旧A-B-A再取得禁止は撤廃(同一技の連続Chargeも許可)
       if(cm.selfGuardRestore)att.guard=Math.min(maxGuardFor(att.c),att.guard+cm.selfGuardRestore); // vNext PR4 (Bullet圧抜き掌): HIT時Guard+15 cap
       if(cm.name==='ぶちかまし'||cm.name==='熊手払い'){att.pressureState='ready';att.pressureUntilF=B.f+A.hitstun+12;} // vNext PR4 (Takimaru PRESSURE): HIT起点(opponent actionableの予測F+12がwindow末端)
       if(att.c.id==='dark_moguzo'&&DARK_CHAIN_MOVES.has(cm.name))darkChainTrigger(att); // vNext PR4 (Dark Moguzo DARK CHAIN): compatible技のHIT
@@ -2506,7 +2543,7 @@ function fireUlt(side){
   B.flow='ultCine';B.flowF=0;B.ultUser=side;
   const att=B.p[side];
   att.phase='ultAtk';att.pf=0;att.lunge=0;att.normalChainCount=0; // NORMAL-CHAIN-R1: 奥義へ移行した通常chainは打ち切る
-  att.darkBodyActive=(att.c.id==='dark_moguzo'&&att.darkBody); // vNext PR4 (Dark Moguzo BODY): Damage x1.08をaction開始時点でsnapshot
+  att.darkBodyActive=(att.c.id==='dark_moguzo'&&att.specialActiveF>0); // ABILITY-R2-C (Dark Moguzo BODY): Damage x1.08をaction開始時点でsnapshot
   resetModernHist(att); // vNext PR3 (§8 Modern R4 reset trigger: Ult)
   sfx('ult');
 }
@@ -2592,6 +2629,23 @@ function aiQueueCommandMove(me){ // コマンド技(v0.10 (3)): 方向2つ+ト�
   ai.cmdQueue.push({at:dir1At,cmd:{t:'dodge',kind:DIR_TO_DODGE_KIND[mv.seq[0]]}});
   ai.cmdQueue.push({at:dir1At+1,cmd:{t:'dodge',kind:DIR_TO_DODGE_KIND[mv.seq[1]]}});
   ai.cmdQueue.push({at:dir1At+BAL.DODGE.totalF+1,cmd:(mv.type==='grab')?{t:'grab'}:{t:'atk',lv:mv.trigger}});
+}
+function specialAiThreshold(me,you){ // ABILITY-R2-C (Issue #97 §13 CPU): キャラ別初期バイアス。canStartSpecial()呼び出し側が既に
+  // CONDITION LOCK(Bullet Charge0/Dark HP>30%)をgate済みのため、このboost値は「使える状況の中でどれだけ優先するか」のみを表す。
+  // プレイヤーの現在入力は一切参照しない(既存ai.think cadenceのみ使用)。数値は初期sane値であり最終チューニング対象外(§18)
+  const base=0.015;
+  switch(me.c.id){
+    case 'moguzo':return me.hp<=maxHpFor(me.c)*0.60?base*3:base; // bias HP<=60%
+    case 'pisuke':return me.chaseActive?base:base*2; // neutral before offense: CHASEループ開始前を優先(解釈判断)
+    case 'godan':return(you.phase==='attack'||you.phase==='cmdAtk')?base*3:base; // neutral under pressure
+    case 'hakuma':return base*1.5; // neutral before Guard strategy(解釈判断: flat bias。Guard分岐自体はai.think内の既存ロジックのまま)
+    case 'chirka':return base*2; // treat special as an attack candidate: 通常attack候補相当の頻度まで上げる
+    case 'takimaru':return me.pressureState==='ready'?base*4:base*1.5; // pressure/grab opportunity
+    case 'yomikage':return base; // probabilistic neutral use、追加biasなし(現在入力への即応を明示的に避ける)
+    case 'bullet':return me.overheat?base*6:(me.charge>=2?base*3:base); // C2/C3 release choice + OVERHEAT high priority
+    case 'dark_moguzo':return base*8; // HP<=30% high priority(canStartSpecial側のCONDITION LOCKで既にHP<=30%の時のみ到達)
+    default:return base;
+  }
 }
 function aiStep(){
   const me=B.p[1],you=B.p[0];
@@ -2697,9 +2751,10 @@ function aiStep(){
         ai.guardOn=true;ai.guardT=24+((rng()*24)|0);
       }
       if(me.s>=BAL.SMAX&&rng()<0.3)cpuEv.push({t:'roar'});
-      // ABILITY-R2 SPECIAL-CORE(Issue #97 §13): 汎用の中立確率トリガー(プレイヤーの現在入力を一切見ない・
-      // 既存のai.think思考サイクルに従うだけ)。キャラ別バイアス(HP<=60%等)は各キャラ実装PRでここに追加する
-      if(canStartSpecial(me)&&rng()<0.015)cpuEv.push({t:'special'});
+      // ABILITY-R2-C (Issue #97 §13): 汎用の中立確率トリガー(プレイヤーの現在入力を一切見ない・既存のai.think
+      // 思考サイクルに従うだけ)にキャラ別バイアスを乗せる。Lv1-5最終バランス調整はスコープ外(§18)、
+      // ここでは「sane usage」目的の初期実装値(解釈判断箇所はspecialAiThreshold()内コメント参照)
+      if(canStartSpecial(me)&&rng()<specialAiThreshold(me,you))cpuEv.push({t:'special'});
     }
   }
 }
@@ -2810,8 +2865,8 @@ function netFightStep(cmds0,hold0,cmds1,hold1){ // fightStep()のオンライン
     tickPendingModernGrab(f,B.p[1-f.side]); // vNext PR3 (§8 Takimaru Modern Grab pending)
     tickPressureQueue(f,B.p[1-f.side]); // vNext PR4 (Takimaru PRESSURE queued throw)
     tickYomiReady(f); // vNext PR4 (Yomikage RETURN/JUST Ready timeout)
-    tickDarkBody(f,B.p[1-f.side]); // vNext PR4 (Dark Moguzo BODY): first neutral activate + 360F timer
     tickSpecial(f); // ABILITY-R2 SPECIAL-CORE: cooldown/activeF共通の1F減算
+    tickBulletReleaseInterrupt(f); // ABILITY-R2-C (Codexレビュー指摘 PR#109): Full Release中断時のoverheat/cmdMove固着防止
     tickPoison(f);tickBind(f);tickFeintFollowup(f); // ABILITY-R2-B: POISON tick/BIND減算/Chirka FEINT follow-up発火
     f.kb*=0.86;if(f.kb<0.5)f.kb=0;
     if(f.sNo>0)f.sNo--;
@@ -2843,8 +2898,8 @@ function fightStep(){
     tickPendingModernGrab(f,B.p[1-f.side]); // vNext PR3 (§8 Takimaru Modern Grab pending)
     tickPressureQueue(f,B.p[1-f.side]); // vNext PR4 (Takimaru PRESSURE queued throw)
     tickYomiReady(f); // vNext PR4 (Yomikage RETURN/JUST Ready timeout)
-    tickDarkBody(f,B.p[1-f.side]); // vNext PR4 (Dark Moguzo BODY): first neutral activate + 360F timer
     tickSpecial(f); // ABILITY-R2 SPECIAL-CORE: cooldown/activeF共通の1F減算
+    tickBulletReleaseInterrupt(f); // ABILITY-R2-C (Codexレビュー指摘 PR#109): Full Release中断時のoverheat/cmdMove固着防止
     tickPoison(f);tickBind(f);tickFeintFollowup(f); // ABILITY-R2-B: POISON tick/BIND減算/Chirka FEINT follow-up発火
     f.kb*=0.86;if(f.kb<0.5)f.kb=0;
     if(f.sNo>0)f.sNo--;
@@ -3942,29 +3997,33 @@ function updateAbilityPresentation(f){ // render()から毎描画フレーム1�
   if(f.gritAvailable===false&&p.gritAvailable===true)abilityFlash(side,'grit_trigger_vfx',30); // Moguzo 踏ん張りtrigger
   if(f.ironWallReady===true&&p.ironWallReady!==true)abilityFlash(side,'iron_wall_ready_vfx',24); // Hakuma IRON WALL gain
   if(f.charge>=3&&!(p.charge>=3))abilityFlash(side,'overcharge_vfx',24); // Bullet Overcharge(charge cap3到達)
+  if(f.overheat===true&&p.overheat!==true)abilityFlash(side,'overcharge_vfx',24); // ABILITY-R2-C (Bullet OVERHEAT trigger): 既存overcharge_vfxを再利用(新規アセットなし)
   if(f.cmdMove&&f.cmdMove.selfGuardRestore&&p.guard!=null&&f.guard>p.guard)abilityFlash(side,'pressure_release_vfx',20); // Bullet 圧抜き掌 Guard+15
   if(f.darkChainUses>(p.darkChainUses||0)){ // Dark CHAIN発動瞬間
     abilityFlash(side,'dark_chain_vfx',16);
-    if(f.darkBody)abilityFlash(side,'dark_hit_trail_vfx',16);
+    if(f.specialActiveF>0)abilityFlash(side,'dark_hit_trail_vfx',16); // ABILITY-R2-C: 旧darkBodyトグル→specialActiveF駆動に変更
   }
   p.gutsActive=f.gutsActive;p.gritAvailable=f.gritAvailable;p.ironWallReady=f.ironWallReady;
-  p.charge=f.charge;p.guard=f.guard;p.darkChainUses=f.darkChainUses;
+  p.charge=f.charge;p.overheat=f.overheat;p.guard=f.guard;p.darkChainUses=f.darkChainUses;
 }
 function abilityGaugeDescriptor(f){ // 常設ゲージ/ストック(y+22行): 数値化できるresourceのみ
   const id=f.c.id;
   if(id==='godan')return{kind:'segments',charId:'godan',group:'armor_stock',total:3,filled:f.armorStock};
   if(id==='hakuma')return{kind:'segments',charId:'hakuma',group:'iron_wall',total:1,filled:f.ironWallReady?1:0};
-  if(id==='bullet')return{kind:'segments',charId:'bullet',group:'charge',total:3,filled:f.charge,max:f.charge>=3};
+  if(id==='bullet')return{kind:'segments',charId:'bullet',group:'charge',total:3,filled:f.charge,max:f.charge>=3,
+    // ABILITY-R2-C (Issue #97 §10): 「represent sub-charge via partial fill/clip of existing segments」。
+    // 次に埋まる予定のsegment(index=f.charge、cap3未満のみ)をf.chargeSub/3の比率で部分塗りする(新規アセットなし)
+    filledFrac:(f.charge<3)?f.chargeSub/3:0,overheat:f.overheat};
   if(id==='dark_moguzo'){
+    // ABILITY-R2-C (Issue #97 §11 Moon UI): 旧DARK 0-100の多段phase切替を撤去。既存new-moon/base asset(phase0)
+    // のみを使い、locked/ready/body/cooldownは呼び出し側(drawAbilityGauge)がbrightness/glow/timer ringで表現する
+    // (「do not delete old phase assets, just stop using obsolete phases at runtime」=マニフェスト自体は無変更)
     const map=ABILITY_UI_MANIFEST&&ABILITY_UI_MANIFEST.characters.dark_moguzo.dark_gauge.presentationMap;
     if(!map)return null;
-    let mapKey=map['0'];
-    if(f.darkBody)mapKey=map.BODY;
-    else{
-      const nums=Object.keys(map).filter(function(k){return k!=='BODY';}).map(Number).sort(function(a,b){return b-a;});
-      for(let i=0;i<nums.length;i++)if(f.darkGauge>=nums[i]){mapKey=map[String(nums[i])];break;}
-    }
-    return{kind:'mapped',charId:'dark_moguzo',group:'dark_gauge',mapKey:mapKey};
+    const locked=f.hp>maxHpFor(f.c)*0.30;
+    const state=locked?'locked':(f.specialActiveF>0?'body':(f.specialCooldownF>0?'cooldown':'ready'));
+    const frac=state==='cooldown'?Math.max(0,1-f.specialCooldownF/SPECIAL_COOLDOWN_F):(state==='body'?f.specialActiveF/specialDurationFor(f.c):1);
+    return{kind:'mapped',charId:'dark_moguzo',group:'dark_gauge',mapKey:map['0'],darkMoonState:state,darkMoonFrac:frac};
   }
   if(id==='moguzo'){
     const group=f.gutsActive?'guts_active':(f.gritAvailable?'grit_available':null);
@@ -3984,15 +4043,36 @@ function drawAbilityGauge(x,y,w,f,flip){
         ctx.fillStyle=on?'#ffd23f':'#2a2f3d';ctx.fillRect(sx,y,segW,h);
         ctx.strokeStyle='#778';ctx.lineWidth=1;ctx.strokeRect(sx,y,segW,h);
       }
+      if(i===d.filled&&d.filledFrac>0){ // ABILITY-R2-C (Bullet sub-charge): 進行中segmentを既存off背景の上に部分塗り(新規アセットなし)
+        const pw=Math.max(1,segW*Math.min(1,d.filledFrac)),px=flip?(sx+segW-pw):sx;
+        ctx.save();ctx.globalAlpha=0.85;ctx.fillStyle='#ffd23f';ctx.fillRect(px,y,pw,h);ctx.restore();
+      }
     }
     if(d.max){
       const bx=flip?(x+10):(x+w-10);
+      ctx.save();
+      if(d.overheat)ctx.globalAlpha=0.5+0.5*((game.frame%14<7)?1:0); // ABILITY-R2-C (Bullet OVERHEAT): 既存MAXバッジをそのまま流用しflashだけ追加(新規アセットなし)
       if(!drawAbilityIcon(abilityAsset(d.charId,d.group,'max'),bx,y+h/2,18))txt('MAX',bx,y+h/2+4,11,'#ffd23f');
+      ctx.restore();
     }
   }else if(d.kind==='mapped'){
     const cx=flip?(x+w-16):(x+16);
     if(!drawAbilityIcon(abilityAsset(d.charId,d.group,d.mapKey),cx,y+6,30)){
       ctx.fillStyle='#7a2fd9';ctx.beginPath();ctx.arc(cx,y+6,9,0,TAU);ctx.fill();
+    }
+    if(d.darkMoonState){ // ABILITY-R2-C (Issue #97 §11 Moon UI): 既存new-moon/base assetのみを使い、
+      // locked=暗転/ready=脈動glow/body=強glow/cooldown=薄glow+timer ringで状態を表現(新規アセットなし)
+      if(d.darkMoonState==='locked'){
+        ctx.save();ctx.globalAlpha=0.55;ctx.fillStyle='#000';ctx.beginPath();ctx.arc(cx,y+6,11,0,TAU);ctx.fill();ctx.restore();
+      }else{
+        const glow=d.darkMoonState==='body'?1:(d.darkMoonState==='ready'?0.55+0.3*Math.sin(game.frame*0.15):0.15);
+        ctx.save();ctx.globalCompositeOperation='lighter';ctx.globalAlpha=glow*0.7;
+        ctx.beginPath();ctx.arc(cx,y+6,11,0,TAU);ctx.fillStyle=d.darkMoonState==='body'?'#a86bff':'#6b8bff';ctx.fill();ctx.restore();
+        if(d.darkMoonFrac!=null&&d.darkMoonFrac<1){
+          ctx.save();ctx.lineWidth=2;ctx.strokeStyle='#cfd9ff';
+          ctx.beginPath();ctx.arc(cx,y+6,13,-Math.PI/2,-Math.PI/2+TAU*d.darkMoonFrac);ctx.stroke();ctx.restore();
+        }
+      }
     }
   }else if(d.kind==='icon'){
     const cx=flip?(x+w-14):(x+14);
@@ -4058,7 +4138,7 @@ function abilityStatusDescriptor(f){ // 一時アイコン/VFX(y+35行): live wi
     // 「dark_afterimage」の正確な発火周期は仕様書に規定が無いため、BODY中の演出的な明滅(6F毎に
     // dark_body/dark_afterimageを交互表示)として解釈する(=combat/hashに一切影響しないcosmetic選択。
     // PRESENTATION_R1完了報告に解釈注記として記載)。
-    if(f.darkBody)return{charId:'dark_moguzo',group:(f.pf%12>=6)?'dark_afterimage':'dark_body',sub:'vfx'};
+    if(f.specialActiveF>0)return{charId:'dark_moguzo',group:(f.pf%12>=6)?'dark_afterimage':'dark_body',sub:'vfx'};
     return null;
   }
   return null;
