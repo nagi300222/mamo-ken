@@ -1185,7 +1185,10 @@ function specForLv(f,lv){ // BAL-R1: 通常技(crouch/mid/high/low)はBAL_R1_CHA
   // vNext PR4 (Dark Moguzo BODY): 「Normal startup -1」。f.darkBodyActiveはaction開始時点のsnapshot
   // (Damage x1.08はGuts同様darkBodyOutgoing()でhitApply側の最終damageへ適用=A.dへ二重適用しない)
   const s=f.darkBodyActive?Math.max(1,b.s-1):b.s;
-  return{s:s,a:b.a,r:b.r,d:b.d,y:BAL.ATK[lv].y,down:b.down||false,gd:b.gd,hitstun:b.hitstun||22,blockstun:b.blockstun};
+  // ABILITY-R2-A (Issue #97 §4 Pisuke SPECIAL CHASE RUSH): 「atk recovery x0.70」。darkBodyFire(Dark Moguzo BODY
+  // startup短縮)と同じくf.specialActiveFを毎フレームそのまま見る方式(既存のBODY実装と同型の許容挙動)
+  const r=(f.c.id==='pisuke'&&f.specialActiveF>0)?Math.max(1,Math.round(b.r*0.70)):b.r;
+  return{s:s,a:b.a,r:r,d:b.d,y:BAL.ATK[lv].y,down:b.down||false,gd:b.gd,hitstun:b.hitstun||22,blockstun:b.blockstun};
 }
 function specForCmd(f,m){ // コマンド技(v0.10): 数値はBAL.CMDの技定義そのもの(キャラのsOfsは適用しない=技ごとに調整済みの値)。
   // 旧9技(P1以前からの既存技、枠1〜3の一部)はキャラのdMul+共通BAL.HITSTUN/BLOCKSTUN/GDMG_Aを
@@ -1210,7 +1213,9 @@ function specForCmd(f,m){ // コマンド技(v0.10): 数値はBAL.CMDの技定�
   const darkBodyFire=f.cmdMove===m&&f.c.id==='dark_moguzo'&&f.darkBodyActive;
   const s=Math.max(1,(delayed?m.s+8:m.s)-(yomiJustFire?2:0)-(darkBodyFire?2:0));
   const a=feintResolved?0:(m.a||3);
-  const r=feintResolved?(f.trickSuccess?6:12):(m.r||BAL.ATK[m.lv].r);
+  const rBase=feintResolved?(f.trickSuccess?6:12):(m.r||BAL.ATK[m.lv].r);
+  // ABILITY-R2-A (Issue #97 §4 Pisuke SPECIAL CHASE RUSH): 「atk recovery x0.70」はCommand技も対象
+  const r=(f.c.id==='pisuke'&&f.specialActiveF>0)?Math.max(1,Math.round(rBase*0.70)):rBase;
   const dmg=yomiJustFire?Math.round(dmgBase*1.10):dmgBase;
   return{s:s,a:a,r:r,d:dmg,y:BAL.ATK[m.lv].y,down:downType,
     gd:(m.guardDmg!=null)?m.guardDmg:BAL.GDMG_A,
@@ -1673,7 +1678,8 @@ function advance(f){
     if(f.pf===19&&opp.phase==='grabbed'){ // 叩きつけ
       // コマンド投げ(v0.10)はdmgをcmdMoveから取る。CMD-R1(m.exactDmg:true)は確定値のためdMulを適用しない
       let dmg=Math.round(f.cmdMove?(f.cmdMove.exactDmg?f.cmdMove.d:f.cmdMove.d*f.c.dMul):(BAL.GRAB.d*f.c.dMul));
-      dmg=gutsOutgoing(f,dmg);dmg=darkBodyOutgoing(f,dmg); // vNext PR4 (Moguzo GUTS/Dark Moguzo BODY): Grab対象
+      dmg=gutsOutgoing(f,dmg);dmg=darkBodyOutgoing(f,dmg);dmg=moguzoSpecialOutgoing(f,dmg); // vNext PR4 (Moguzo GUTS/Dark Moguzo BODY)/ABILITY-R2-A (Moguzo SPECIAL): Grab対象
+      dmg=moguzoSpecialIncoming(opp,dmg);
       dealDamage(opp,dmg);gainFocus(opp,dmg*BAL.FOCUS.gainDmgMul);
       if(f.cmdMove&&f.cmdMove.chargeGain)chargeGainOnHit(f,f.cmdMove.name); // vNext PR4 (Bullet CHARGE): 抱え弾き success
       if(f.cmdMove&&f.cmdMove.down){ // CMD-R1新設: コマンド投げでもm.down指定があればdown状態(throwDown等)へ遷移する
@@ -1753,6 +1759,8 @@ function resolveHits(){
     const d=BAL.ROAR.d;
     let dToB=gutsOutgoing(a,d),dToA=gutsOutgoing(b,d); // vNext PR4 (Moguzo GUTS): Roar対象。相打ちは互いが相手への攻撃側
     dToB=darkBodyOutgoing(a,dToB);dToA=darkBodyOutgoing(b,dToA); // vNext PR4 (Dark Moguzo BODY): 同上
+    dToB=moguzoSpecialOutgoing(a,dToB);dToA=moguzoSpecialOutgoing(b,dToA); // ABILITY-R2-A (Moguzo SPECIAL): 同上
+    dToB=moguzoSpecialIncoming(b,dToB);dToA=moguzoSpecialIncoming(a,dToA);
     dealDamage(b,dToB);dealDamage(a,dToA);gainFocus(a,dToA*BAL.FOCUS.gainDmgMul);gainFocus(b,dToB*BAL.FOCUS.gainDmgMul);
     gainUltStock(a);gainUltStock(b);
     for(const f of B.p){f.phase='hitstun';f.pf=0;f.stunDur=BAL.ROAR.stun;f.kb=30;f.atkLv=null;f.cmdBufMove=null;f.cmdBufIdx=null;}
@@ -1781,7 +1789,8 @@ function handleIfDowned(att,def,dmgBase){ // ダウン連: downTypeがfollowupAl
   if(def.phase==='down'&&BAL.DOWNWAKE[def.downType].followupAllowed&&!def.downHitUsed){
     def.downHitUsed=true;
     let dmg=Math.round(dmgBase*BAL.DOWNWAKE.followupDamageScale*att.c.dMul);
-    dmg=gutsOutgoing(att,dmg);dmg=darkBodyOutgoing(att,dmg); // vNext PR4 (Moguzo GUTS/Dark Moguzo BODY): Normal対象
+    dmg=gutsOutgoing(att,dmg);dmg=darkBodyOutgoing(att,dmg);dmg=moguzoSpecialOutgoing(att,dmg); // vNext PR4 (Moguzo GUTS/Dark Moguzo BODY)/ABILITY-R2-A (Moguzo SPECIAL): Normal対象
+    dmg=moguzoSpecialIncoming(def,dmg);
     dealDamage(def,dmg);gainFocus(def,dmg*BAL.FOCUS.gainDmgMul);
     fxDmg(def,dmg,'#ffb6ff');fxSpark(def,att.atkLv||'mid',0);sfx('hit');
     B.hitstop=Math.max(B.hitstop,BAL.HITSTOP.mid);B.shake=Math.max(B.shake,5);
@@ -1938,7 +1947,8 @@ function attackResolve(att,def){
     // counterActive窓の間だけ相手の攻撃を無効化し即座に反撃(counterDmgは§13確定値、dMul適用なし)
     const m=def.cmdMove;
     let dmg=Math.round(m.counterDmg);
-    dmg=gutsOutgoing(def,dmg); // vNext PR4 (Moguzo GUTS): Command対象(この反撃はdefが攻撃側)
+    dmg=gutsOutgoing(def,dmg);dmg=moguzoSpecialOutgoing(def,dmg); // vNext PR4 (Moguzo GUTS)/ABILITY-R2-A (Moguzo SPECIAL): Command対象(この反撃はdefが攻撃側)
+    dmg=moguzoSpecialIncoming(att,dmg);
     dealDamage(att,dmg);gainFocus(att,dmg*BAL.FOCUS.gainDmgMul);
     att.phase='hitstun';att.pf=0;att.stunDur=BAL.HITSTUN[m.counterLv]||24;att.combo=0;att.normalChainCount=0;att.kb=20;att.cmdBufMove=null;att.cmdBufIdx=null;
     att.atkLv=null;att.guardLv=null;att.buf=null;
@@ -1987,6 +1997,15 @@ function attackResolve(att,def){
     }
     gainS(att,'aBlk');gainS(def,'gOk');gainFocus(def,BAL.FOCUS.gainGuard);
     if(def.c.id==='hakuma')def.ironWallReady=true; // vNext PR4 (Hakuma IRON WALL gain: Guard success)
+    if(def.c.id==='hakuma'&&def.specialActiveF>0){ // ABILITY-R2-A (Issue #97 §6 Hakuma SPECIAL Reflect Guard):
+      // 「Guard成立時に40 HP reflect」「multi-hitでも1 attack actionにつき1回」。この関数(attackResolve)は
+      // att.hasHitゲート(fightStep側)により1 attack actionにつき最大1回しか呼ばれないため、追加のused-flag管理は不要。
+      // hitstun/knockback/hitstop/combo/S/Ult gainなし(=att.phase等やB.hitstop/B.shake、gainS/gainSAmt/gainUltStockを一切変更しない)。
+      // 通常のGuard Damage/Iron Wall gainは上のコードで既に反映済みのため無関係(=unaffected)。reflectはKOし得る
+      dealDamage(att,40);
+      fxDmg(att,40,'#a7d9c9');
+      if(att.hp<=0){att.hp=0;startKO(att.side);return;}
+    }
     if(att.c.id==='pisuke'){att.chaseReadyUntilF=0;att.chaseActive=false;} // vNext PR4 (Pisuke CHASE clear: BLOCK)
     if(!cm2)pushModernHist(att,att.atkLv); // vNext PR3 (§8): NormalのBLOCKもModern historyへ記録(true chainは切れるがhistoryは維持)。
     // Command BLOCKはClassic Cancel窓を開かない(§9「Command HITのみ」)
@@ -2009,6 +2028,11 @@ function attackResolve(att,def){
 // はそもそもHP経由のKOではなくこの関数を通らないため、除外は自然に満たされる)
 function gutsOutgoing(att,dmg){return(att&&att.gutsActive)?Math.round(dmg*1.10):dmg;}
 function darkBodyOutgoing(att,dmg){return(att&&att.darkBodyActive)?Math.round(dmg*1.08):dmg;} // vNext PR4 (Dark Moguzo BODY): 「Damage x1.08」。gutsOutgoingと同じ対象範囲(Normal/Command/Grab/Roar/Ult。GD/chip/Gyuiin対象外)で解釈
+// ABILITY-R2-A (Issue #97 §3 Moguzo SPECIAL): 「outgoing dmg x1.10」「incoming dmg x0.90」「stacks with GUTS
+// (combined x1.21 if both apply)」。GUTSと同じ対象範囲(gutsOutgoing/darkBodyOutgoingの呼び出し箇所と同一=
+// Normal/Command/Grab/Roar-trade対象、GD/chip/Gyuiin対象外)にのみ適用する。互いに乗算のみなので呼び出し順は問わない
+function moguzoSpecialOutgoing(att,dmg){return(att&&att.c.id==='moguzo'&&att.specialActiveF>0)?Math.round(dmg*1.10):dmg;}
+function moguzoSpecialIncoming(def,dmg){return(def&&def.c.id==='moguzo'&&def.specialActiveF>0)?Math.round(dmg*0.90):dmg;}
 function dealDamage(def,dmg){
   if(def.c.id==='hakuma')def.ironWallReady=false; // vNext PR4 (Hakuma IRON WALL lose): 被弾/Throw/Down/GuardBreak(いずれもHP減少を伴う)で消失
   if(def.gritAvailable&&def.hp>=2&&(def.hp-dmg)<=0){def.gritAvailable=false;def.hp=1;return;}
@@ -2039,7 +2063,8 @@ function hitApply(att,def,counterHit,lvOverride,cmdOverride){
     counterFx=true;
   }
   if(counterFx)B.fx.push({k:'counter',x:def.baseX,y:relY(def,1.005),f:0,dur:38});
-  dmg=gutsOutgoing(att,dmg);dmg=darkBodyOutgoing(att,dmg); // vNext PR4 (Moguzo GUTS/Dark Moguzo BODY): Normal/Command/Grab対象。以降の armor減衰/dizzy capはこの値を元に計算する
+  dmg=gutsOutgoing(att,dmg);dmg=darkBodyOutgoing(att,dmg);dmg=moguzoSpecialOutgoing(att,dmg); // vNext PR4 (Moguzo GUTS/Dark Moguzo BODY)/ABILITY-R2-A (Moguzo SPECIAL): Normal/Command/Grab対象。以降の armor減衰/dizzy capはこの値を元に計算する
+  dmg=moguzoSpecialIncoming(def,dmg); // ABILITY-R2-A (Moguzo SPECIAL): incoming x0.90(防御側)。以降の全分岐(armor吸収含む)へ一律反映
   // vNext PR4 (Godan山掴み等): 投げ側armorもcmdAtkと同じarmorStartF/armorEndF+armorDmgMul形式に統一(旧armor:単一値=F1起算モデルを廃止。
   // §「山掴み: F6-F16 1hit armor incoming dmg x0.60」のようにF1始まりでない窓を表現できる必要があるため)
   const cmArmorWin=def.phase==='grab'&&def.cmdMove&&def.cmdMove.armorStartF!=null&&def.pf>=def.cmdMove.armorStartF&&def.pf<=def.cmdMove.armorEndF;
@@ -2056,6 +2081,13 @@ function hitApply(att,def,counterHit,lvOverride,cmdOverride){
     // vNext PR4 (Godan大山押しHyper Armor): hyperArmor:trueの技はmulti-hit対応のためcmdArmorUsedを立てず、窓の間は何発でも吸収する
     if(!def.cmdMove.hyperArmor)def.cmdArmorUsed=true;
     dmg=Math.round(dmg*(def.cmdMove.armorDmgMul!=null?def.cmdMove.armorDmgMul:0.5));dealDamage(def,dmg);gainS(def,'armor');gainFocus(def,dmg*BAL.FOCUS.gainDmgMul); // vNext PR4: Godan/Takimaru/Bulletの各armor技はarmorDmgMulで軽減率を個別指定(既定0.5)
+    fxDmg(def,dmg,'#ffb020');fxSpark(def,lv,0);sfx(HIT_SE[lv]||'hit');
+    B.hitstop=Math.max(B.hitstop,BAL.HITSTOP[lv]);B.shake=Math.max(B.shake,4);
+  }else if(def.c.id==='godan'&&def.specialActiveF>0){ // ABILITY-R2-A (Issue #97 §5 Godan SPECIAL Hyper Armor): Strike(hitApplyはNormal/Command対象。
+    // Grab/Roar/Ultはこの関数を通らないため自動的にpenetrate=対象外)は無制限回数noHitstun(hitstopは発生)。
+    // incoming x0.80。armorStock/cmdArmorUsedのいずれも変更しない(既存per-move armorとは独立した別枠)。
+    // 既存の他armor分岐同様、def.phase/pf/atkLv等には触れない=攻撃側にもcombo/S/cancel等の付与なし(既存armor全般と同じ扱い)
+    dmg=Math.round(dmg*0.80);dealDamage(def,dmg);gainS(def,'armor');gainFocus(def,dmg*BAL.FOCUS.gainDmgMul);
     fxDmg(def,dmg,'#ffb020');fxSpark(def,lv,0);sfx(HIT_SE[lv]||'hit');
     B.hitstop=Math.max(B.hitstop,BAL.HITSTOP[lv]);B.shake=Math.max(B.shake,4);
   }else{
@@ -2103,7 +2135,11 @@ function hitApply(att,def,counterHit,lvOverride,cmdOverride){
       sfx((cm&&cm.se)||HIT_SE[lv]||'hit'); // ヒット音3階層(v0.11 (4)): 段属性で選ぶ。コマンド技はcm.seの専用音が優先
       B.hitstop=Math.max(B.hitstop,BAL.HITSTOP[lv]+cBonus);B.shake=Math.max(B.shake,5);
     }
-    if(!cm&&att.c.id==='pisuke'&&!dizzyCapped)att.chaseReadyUntilF=B.f+B.hitstop+12; // vNext PR4 (Pisuke CHASE): Normal HITのみtrigger。Hitstop end+12F ready。B.hitstopがこの分岐群でfinalizeされた直後に評価する
+    if(att.c.id==='pisuke'&&!dizzyCapped){ // vNext PR4 (Pisuke CHASE): Normal HITのみtrigger。Hitstop end+12F ready。B.hitstopがこの分岐群でfinalizeされた直後に評価する
+      // ABILITY-R2-A (Issue #97 §4 Pisuke SPECIAL CHASE RUSH): SPECIAL active中はCommand HITもtriggerに加わり、窓も12F→18Fへ拡張
+      const chaseSpecialActive=att.specialActiveF>0;
+      if(!cm||chaseSpecialActive)att.chaseReadyUntilF=B.f+B.hitstop+(chaseSpecialActive?18:12);
+    }
   }
   if(def.hp<=0){def.hp=0;startKO(def.side);}
 }
@@ -3798,7 +3834,9 @@ function drawAbilityGauge(x,y,w,f,flip){
 function abilityStatusDescriptor(f){ // 一時アイコン/VFX(y+35行): live windowまたはflashのどちらか一つ(優先度順)
   const id=f.c.id,side=f.side;
   if(id==='moguzo'){
-    if(abilityFlashing(side,'guts_active_vfx'))return{charId:'moguzo',group:'guts_active',sub:'vfx'};
+    // ABILITY-R2-A (Issue #97 §3 Moguzo SPECIAL): 新規VFXは作らず、既存guts_active_vfxを「outgoing1.10/incoming0.90」の
+    // 視覚合図として流用(実際のgutsActiveでなくてもSPECIAL中は同グループを表示)
+    if(abilityFlashing(side,'guts_active_vfx')||f.gutsActive||f.specialActiveF>0)return{charId:'moguzo',group:'guts_active',sub:'vfx'};
     if(abilityFlashing(side,'grit_trigger_vfx'))return{charId:'moguzo',group:'grit_trigger',sub:'vfx'};
     return null;
   }
@@ -3808,11 +3846,16 @@ function abilityStatusDescriptor(f){ // 一時アイコン/VFX(y+35行): live wi
     return null;
   }
   if(id==='godan'){
+    // ABILITY-R2-A (Issue #97 §5 Godan SPECIAL Hyper Armor): 既存armor窓と同じhyper_armor_active VFXを、
+    // per-move armor窓の有無に関わらずSPECIAL有効中(300F)は常時表示する(no-hitstunの視覚合図。新規VFXなし)
     if(armorWindowActive(f))return{charId:'godan',group:f.cmdMove.hyperArmor?'hyper_armor_active':'armor_active',sub:'vfx'};
+    if(f.specialActiveF>0)return{charId:'godan',group:'hyper_armor_active',sub:'vfx'};
     return null;
   }
   if(id==='hakuma'){
-    if(abilityFlashing(side,'iron_wall_ready_vfx'))return{charId:'hakuma',group:'iron_wall_ready',sub:'vfx'};
+    // ABILITY-R2-A (Issue #97 §6 Hakuma SPECIAL Reflect Guard): 既存iron_wall_ready VFXをReflect Guard中の
+    // 視覚合図として流用(新規VFXなし)
+    if(abilityFlashing(side,'iron_wall_ready_vfx')||f.specialActiveF>0)return{charId:'hakuma',group:'iron_wall_ready',sub:'vfx'};
     return null;
   }
   if(id==='chirka'){
