@@ -1173,7 +1173,7 @@ function newFighter(ci,side,palette){
     normalChainCount:0, // NORMAL-CHAIN-R1新設: 通常打撃chain専用カウンタ(既存combo=ダメージスケール/S/UI用とは別概念。canChain()のみがこれを見る)
     buf:null,bufF:0,held:null,lunge:0,kb:0,downHitUsed:false,
     lastAtkLv:null,atkStreak:0,yomare:false,
-    dodgeType:null,counterReadyF:0,clinchF:0,comboCounter:false,grabS:BAL.GRAB.s,
+    dodgeType:null,counterReadyF:0,clinchF:0,pendingClinch:false,comboCounter:false,grabS:BAL.GRAB.s,
     shownHp:maxHpFor(c),ultFlash:0,sNo:0,
     guardRegenCooldownF:0,dizzyHits:0,dizzyDamage:0,postBreakActive:false, // BAL-R1新設: ガード回復遅延タイマー/ガードブレイク追撃キャップ用カウンタ
     dirBuf:[],cmdMove:null,cmdIdx:null, // コマンド技(v0.10 §6.8): 方向入力バッファ/発動中の技定義とインデックス
@@ -1402,7 +1402,7 @@ function roundInit(first){
     f.guardLv=null;f.combo=0;f.normalChainCount=0;f.buf=null;f.kb=0;f.lunge=0;f.sNo=0;f.downHitUsed=false;
     f.guardRegenCooldownF=0;f.dizzyHits=0;f.dizzyDamage=0;f.postBreakActive=false;
     f.lastAtkLv=null;f.atkStreak=0;f.yomare=false;
-    f.dodgeType=null;f.counterReadyF=0;f.clinchF=0;f.comboCounter=false;f.dodgeSuccess=false;
+    f.dodgeType=null;f.counterReadyF=0;f.clinchF=0;f.pendingClinch=false;f.comboCounter=false;f.dodgeSuccess=false;
     f.dirBuf.length=0;f.cmdMove=null;f.cmdIdx=null;f.cmdBufMove=null;f.cmdBufIdx=null;
     f.dodgeBufKind=null;f.dodgeBufF=0;
     f.modernHist.length=0;f.pendingModernGrab=null;f.ccActive=false;f.ccWindowUntil=0; // vNext PR3 (§8/§9): Round resetでModern history/pending grab/Classic Cancel窓を持ち越さない
@@ -2277,6 +2277,12 @@ function tickFeintFollowup(f){
   const cm=f.feintPendingCm;f.feintPendingAtF=0;f.feintPendingCm=null;
   resolveFeintFollowup(f,cm);
 }
+function tickPendingClinch(f){ // DESIGN-R2(#87 §3 すり抜け足): Codexレビュー指摘(PR#132)対応。ClinchF自体は自身のaction
+  // (cmdAtk)のrecovery中もclinchF--が走る既存tickの対象なので、hit直後に即時clinchFを立てるとaction自体のrecovery中に
+  // 尽きてしまい密着ボーナス(つかみ発生短縮/上段ダメ増)が実質使えない。actionableに戻った最初のidle Fから起算する
+  if(!f.pendingClinch)return;
+  if(f.phase==='idle'){f.pendingClinch=false;f.clinchF=BAL.DODGE.clinchF;}
+}
 function tickPendingModernGrab(f,opp){ // vNext PR3 (§8 Takimaru Modern Grab): 相手がthrow-eligibleになった最初のidle Fから14F startupのグラブを開始する。
   // 被弾/投げ/別行動(=新たな別のactionの開始)/Roundでのpending cancelはresetModernHist()の各呼び出し口
   // (startAtk/startCmdAtk/startCmdGrab/startCmdStance/startDodge/roar開始/fireUlt/hitApplyの被弾分岐/roundInit)
@@ -2523,7 +2529,6 @@ function hitApply(att,def,counterHit,lvOverride,cmdOverride){
       if(att.c.id==='dark_moguzo'&&DARK_CHAIN_MOVES.has(cm.name))darkChainTrigger(att); // vNext PR4 (Dark Moguzo DARK CHAIN): compatible技のHIT
       if(cm.feint){att.feintPendingAtF=B.f+18;att.feintPendingCm=cm;} // ABILITY-R2-B (Chirka FEINT属性): HITで18F後のfollow-upを予約(完全空振りはこの分岐を通らないため自然に対象外)
       if(cm.poison)applyPoison(def); // ABILITY-R2-B (POISON属性): 直撃HITで300F毒付与(スタックなし=既存ならリフレッシュ)
-      if(cm.grantsClinch)att.clinchF=BAL.DODGE.clinchF; // DESIGN-R2(#87 §3): すり抜け足のClean HITのみ(Armor吸収/dizzyCapped分岐はここへ到達しないため自然に対象外)。既存の踏み込み成功時と同じclinchFをそのまま流用
     }
     resetModernHist(def); // vNext PR3 (§8 Modern R4 reset trigger: 被弾)
     // vNext PR2 (§11 S Gain): action1/2/3=aHitC[0..2]、action4+は明示的に0(旧実装はindexをclampしaction3の値を
@@ -2535,6 +2540,11 @@ function hitApply(att,def,counterHit,lvOverride,cmdOverride){
     if(counterHit)sfx('counterHit'); // カウンター専用の高い抜け音をヒットストップと同フレームで重ねる(v0.11 (4))
     const cBonus=counterHit?BAL.HITSTOP.counterBonus:0; // BAL-R1新設: カウンターヒットのヒットストップ加算
     const dizzyCapped=def.postBreakActive&&(def.dizzyHits>=BAL.GUARD.breakMaxFollowupHits||def.dizzyDamage>=BAL.GUARD.breakMaxDamage);
+    // DESIGN-R2(#87 §3): すり抜け足のCLINCHはClean HITのみ(Codexレビュー指摘 PR#132: guard-break追撃キャップの
+    // NORMAL_RESET(dizzyCapped)はここで明示的に除外する)。この時点ではattはまだ自身のaction(cmdAtk)のrecovery中
+    // のため即時clinchFを立てず、pendingClinchで「actionableに戻った瞬間」まで遅延する(Codexレビュー指摘: 即時付与だと
+    // action自体のrecovery中にclinchFが尽きてしまい、密着ボーナスが実質使えない不具合だった。tickPendingClinch()参照)
+    if(cm&&cm.grantsClinch&&!dizzyCapped)att.pendingClinch=true;
     def.atkLv=null;def.guardLv=null;def.buf=null;
     if(dizzyCapped){ // BAL-R1新設: 上限到達でNORMAL_RESET(ガードブレイクの punish窓を打ち切りidleへ即復帰)
       def.phase='idle';def.pf=0;def.combo=0;def.normalChainCount=0;def.kb=0;def.downType=null;def.cmdBufMove=null;def.cmdBufIdx=null;
@@ -3285,6 +3295,7 @@ function netFightStep(cmds0,hold0,cmds1,hold1){ // fightStep()のオンライン
   if(B.flow!=='fight')return;
   for(const f of B.p){
     guardRegenTick(f);
+    tickPendingClinch(f); // DESIGN-R2(#87 §3): すり抜け足Clean HIT後、attがactionable(idle)に戻った瞬間からclinchFを起算する
     tickPendingModernGrab(f,B.p[1-f.side]); // vNext PR3 (§8 Takimaru Modern Grab pending)
     tickPressureQueue(f,B.p[1-f.side]); // vNext PR4 (Takimaru PRESSURE queued throw)
     tickYomiReady(f); // vNext PR4 (Yomikage RETURN/JUST Ready timeout)
@@ -3318,6 +3329,7 @@ function fightStep(){
   if(B.flow!=='fight')return;
   for(const f of B.p){
     guardRegenTick(f);
+    tickPendingClinch(f); // DESIGN-R2(#87 §3): すり抜け足Clean HIT後、attがactionable(idle)に戻った瞬間からclinchFを起算する
     tickPendingModernGrab(f,B.p[1-f.side]); // vNext PR3 (§8 Takimaru Modern Grab pending)
     tickPressureQueue(f,B.p[1-f.side]); // vNext PR4 (Takimaru PRESSURE queued throw)
     tickYomiReady(f); // vNext PR4 (Yomikage RETURN/JUST Ready timeout)
