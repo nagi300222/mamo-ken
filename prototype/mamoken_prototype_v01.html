@@ -1431,7 +1431,8 @@ function roundInit(first){
     f.roarArmorAbsorbed=0; // ROAR-R2(#98)
   }
   B.timer=BAL.TIME;B.flow=first?'vs':'intro';B.flowF=0;B.clash=null;B.pendKO=-1;B.clashStreak=[0,0];B.roarImpact=null; // ROAR-R2(#98): presentation-only impact timer、Round跨ぎで持ち越さない
-  if(TRAINING)B.timer=999999; // TRAINING-R1(#112): 通常のround勝敗(KO/time up)ではmatchを終了させない
+  // HOTFIX-R3(#134): 999999巨大数センチネルは廃止。TRAININGはTRAININGグローバル自体を明示no-limit状態として使い、
+  // timeUp()呼び出し側(fightStep/netFightStep)とHUD表示側でTRAININGを直接判定する(B.timerへは書き込まない)
   // VS-SCREEN-R1(#110): マッチ開始(first)時はVS画面を'intro'の前に挿入する(Round 2+は従来通り即'intro')。
   // 「ROUND N」announceはVS画面と重ねて表示させないため、vs→intro遷移時(logic()/netLogicTick())へ移動した
   if(!first)announce('ROUND '+B.round,66,50,'#ffd23f');
@@ -2837,7 +2838,7 @@ function startKO(side){
 }
 function finishRound(){
   const w=1-B.koSide;B.wins[w]++;
-  if(B.wins[w]>=B.winsTarget){B.flow='matchEnd';B.flowF=0;B.result=(w===0)?'WIN':'LOSE';} // SURVIVAL-R1(#101): B.winsTargetは既定BAL.WINS(best-of-3)、SURVIVAL戦のみ1へ上書き
+  if(!TRAINING&&B.wins[w]>=B.winsTarget){B.flow='matchEnd';B.flowF=0;B.result=(w===0)?'WIN':'LOSE';} // SURVIVAL-R1(#101): B.winsTargetは既定BAL.WINS(best-of-3)、SURVIVAL戦のみ1へ上書き。HOTFIX-R3(#134): TRAININGはKO後も従来どおりroundEndへ落として自動resetを継続する(matchEndへ到達しない)
   else{B.flow='roundEnd';B.flowF=0;}
 }
 function timeUp(){
@@ -3309,7 +3310,7 @@ function netFightStep(cmds0,hold0,cmds1,hold1){ // fightStep()のオンライン
       if(f.clinchF>0)f.clinchF--;
     }
   }
-  if(B.timer<=0)timeUp();
+  if(!TRAINING&&B.timer<=0)timeUp(); // HOTFIX-R3(#134): TRAINING中はtime upで試合を終了させない(巨大数センチネルではなくTRAINING自体で判定)
 }
 function fightStep(){
   B.timer--;
@@ -3343,7 +3344,7 @@ function fightStep(){
       if(f.clinchF>0)f.clinchF--;
     }
   }
-  if(B.timer<=0)timeUp();
+  if(!TRAINING&&B.timer<=0)timeUp(); // HOTFIX-R3(#134): TRAINING中はtime upで試合を終了させない(巨大数センチネルではなくTRAINING自体で判定)
 }
 
 /* ================= 入力（見合いと交差 v2.0） ================= */
@@ -4710,15 +4711,17 @@ function rHUD(){
     ctx.fillStyle='#12151c';ctx.beginPath();ctx.arc(W/2,timerCy,timerR,0,TAU);ctx.fill();
     ctx.strokeStyle='#fff';ctx.lineWidth=3;ctx.beginPath();ctx.arc(W/2,timerCy,timerR,0,TAU);ctx.stroke();
   }
-  txt(String(Math.max(0,Math.ceil(B.timer/60))),W/2,timerCy+1,Math.round(22*HUD_SCALE*0.9),'#ffd23f');
+  txt(TRAINING?'∞':String(Math.max(0,Math.ceil(B.timer/60))),W/2,timerCy+1,Math.round(22*HUD_SCALE*0.9),'#ffd23f'); // HOTFIX-R3(#134): TRAININGはNO LIMITなので∞表示
   txt(p1.c.name,18,48,Math.round(15*HUD_SCALE*0.85),'#fff','left');
   txt(p2.c.name+(onlineActive()?'':'(CPU)'),W-18,48,Math.round(15*HUD_SCALE*0.85),'#fff','right');
   const dotR=8,dotGap=24; // GAME-UX-R1: 7px→8px(+14%)、間隔22→24
-  for(let i=0;i<B.winsTarget;i++){ // SURVIVAL-R1(#101): 1ラウンド先取戦では1個だけ表示(通常戦はBAL.WINS=2のまま)
-    ctx.fillStyle=(B.wins[0]>i)?'#ffd23f':'#3a4152';
-    ctx.beginPath();ctx.arc(26+i*dotGap,64,dotR,0,TAU);ctx.fill();
-    ctx.fillStyle=(B.wins[1]>i)?'#ffd23f':'#3a4152';
-    ctx.beginPath();ctx.arc(W-26-i*dotGap,64,dotR,0,TAU);ctx.fill();
+  if(!TRAINING){ // HOTFIX-R3(#134): TRAININGはround勝敗という概念がないため勝利pipを描画しない(旧B.winsTarget=999999巨大loopの完全撤去)
+    for(let i=0;i<B.winsTarget;i++){ // SURVIVAL-R1(#101): 1ラウンド先取戦では1個だけ表示(通常戦はBAL.WINS=2のまま)
+      ctx.fillStyle=(B.wins[0]>i)?'#ffd23f':'#3a4152';
+      ctx.beginPath();ctx.arc(26+i*dotGap,64,dotR,0,TAU);ctx.fill();
+      ctx.fillStyle=(B.wins[1]>i)?'#ffd23f':'#3a4152';
+      ctx.beginPath();ctx.arc(W-26-i*dotGap,64,dotR,0,TAU);ctx.fill();
+    }
   }
   drawCmdFeedback(0,66,64,'left'); // GAME-UX-R1: win-dot行(x=26..58)の右側の空き(x=66..hpバー終端)に自分側HUD近くで約1秒表示
   drawCmdFeedback(1,W-66,64,'right');
@@ -5573,14 +5576,18 @@ function minigameTick(){ // rMiniPractice()から毎フレーム呼ぶ(mini系�
   const now=performance.now();
   const dt=Math.min(0.25,(now-(MG.lastTickAt||now))/1000); // 初回/タブ非アクティブ復帰時の異常dtをクランプ
   MG.lastTickAt=now;
-  if(MG.kind==='jyanken'&&MG.phase==='reveal'&&now-MG.revealAt>=700)MG.phase=(MG.hp<=0)?'gameover':'pick';
-  if(MG.kind==='hayauchi'&&MG.phase==='play'){MG.timer-=dt;if(MG.timer<=0)MG.phase='gameover';}
+  if(MG.kind==='jyanken'&&MG.phase==='reveal'&&now-MG.revealAt>=700){
+    if(MG.hp<=0){MG.phase='gameover';MG.gameOverAt=now;}else MG.phase='pick';
+  }
+  if(MG.kind==='hayauchi'&&MG.phase==='play'){MG.timer-=dt;if(MG.timer<=0){MG.phase='gameover';MG.gameOverAt=now;}}
   if(MG.kind==='renda'&&MG.phase==='play'){
     MG.elapsedSec+=dt;
     const R=BAL.MINIGAME.STANDALONE.RENDA;
     MG.gauge=Math.max(0,Math.min(1,MG.gauge-R.baseDrift*rendaDriftMulAt(MG.elapsedSec)*dt));
-    if(MG.gauge<=rendaBoundaryAt(MG.elapsedSec))MG.phase='gameover';
+    if(MG.gauge<=rendaBoundaryAt(MG.elapsedSec)){MG.phase='gameover';MG.gameOverAt=now;}
   }
+  // HOTFIX-R3(#134): MG.gameOverAt(performance.now())はminiPracticePress()の1200msロック判定でのみ使う。
+  // gameover遷移の3箇所すべてで同時にセットすることで、連打中の残りタップがRETRY等を即座に拾うのを防ぐ
 }
 function rMiniPractice(){
   minigameTick();
@@ -5696,8 +5703,13 @@ function rMiniRenda(){
     drawMiniGameOverBtns();
   }
 }
+const MINIGAME_GAMEOVER_LOCK_MS=1200; // HOTFIX-R3(#134): GAME OVER直後はこの時間、結果画面のRETRY/MINIGAME/TITLEを含め入力を一切受け付けない
 function miniPracticePress(p){
-  if(MG.phase==='gameover'){minigameGameOverHit(p);return;}
+  if(MG.phase==='gameover'){
+    if(MG.gameOverAt==null||performance.now()-MG.gameOverAt<MINIGAME_GAMEOVER_LOCK_MS)return; // ロック中はゲーム中から持ち越したtap/releaseも無視する
+    minigameGameOverHit(p);
+    return;
+  }
   if(menuBackHit(p)){sfx('tap');MG=null;game.screen='menuMinigame';return;}
   if(MG.phase==='pick'&&MG.kind==='jyanken'){
     const choice=miniHandHit(p);
@@ -5871,7 +5883,8 @@ function startTrainingBattle(){ // 「この設定でトレーニング開始」
   startBattle();
   B.p[1].palette=TRAINING.dummyPalette; // startBattle()内resolveCpuPalette()による自動配色をダミー個別選択で上書き
   B.vsMeta={mode:'training',darkFinal:false,survivalInfo:null};
-  B.winsTarget=999999; // 「round勝敗で終了しない」。finishRound()/timeUp()のmatchEnd分岐(wins>=winsTarget)に到達しないようにする
+  // HOTFIX-R3(#134): 旧B.winsTarget=999999巨大数センチネルを廃止。B.winsTargetはstartBattle()の既定(BAL.WINS)のまま保持し、
+  // 「round勝敗で終了しない」はfinishRound()/timeUp()呼び出し側のTRAINING判定で実現する(HUD勝利pipもTRAININGでは非表示)
   TRAINING._reversalArmed=false;
   aiReset(); // ダミーの前回セッション分ai.*(guardOn/mikiriAt/dodgeAt/cmdQueue等)を確実に初期化する
   game.screen='battle';
