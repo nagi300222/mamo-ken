@@ -1428,6 +1428,7 @@ function roundInit(first){
     f.roarArmorAbsorbed=0; // ROAR-R2(#98)
   }
   B.timer=BAL.TIME;B.flow=first?'vs':'intro';B.flowF=0;B.clash=null;B.pendKO=-1;B.clashStreak=[0,0];B.roarImpact=null; // ROAR-R2(#98): presentation-only impact timer、Round跨ぎで持ち越さない
+  if(TRAINING)B.timer=999999; // TRAINING-R1(#112): 通常のround勝敗(KO/time up)ではmatchを終了させない
   // VS-SCREEN-R1(#110): マッチ開始(first)時はVS画面を'intro'の前に挿入する(Round 2+は従来通り即'intro')。
   // 「ROUND N」announceはVS画面と重ねて表示させないため、vs→intro遷移時(logic()/netLogicTick())へ移動した
   if(!first)announce('ROUND '+B.round,66,50,'#ffd23f');
@@ -3289,7 +3290,7 @@ function netFightStep(cmds0,hold0,cmds1,hold1){ // fightStep()のオンライン
 }
 function fightStep(){
   B.timer--;
-  aiStep();
+  if(TRAINING&&TRAINING.dummyMode!=='cpu')trainingDummyStep();else aiStep();
   const p1=B.p[0],p2=B.p[1];
   p1Hold=currentP1Hold();
   applyInputs(p1,p2,evq,p1Hold);
@@ -3621,7 +3622,7 @@ function selectPress(p){
     }
   }
   if(inRect(p,SELECT_DETAIL_BTN.x,SELECT_DETAIL_BTN.y,SELECT_DETAIL_BTN.w,SELECT_DETAIL_BTN.h)){openCharacterDetail();return;}
-  if(!survivalPending&&!minigamePendingKind){ // SURVIVAL-R1(#101)/MINIGAME-R1(#102): CPU Lv行は非表示のため非タップ対象にもする
+  if(!survivalPending&&!minigamePendingKind&&!trainingSelectStage){ // SURVIVAL-R1(#101)/MINIGAME-R1(#102)/TRAINING-R1(#112): CPU Lv行は非表示のため非タップ対象にもする
     for(let i=0;i<CPU_LV_LEVELS.length;i++){
       const r=cpuLvRect(i);
       if(inRect(p,r.x,r.y,r.w,r.h)){cpuLv=CPU_LV_LEVELS[i];sfx('tap');return;}
@@ -3631,6 +3632,7 @@ function selectPress(p){
     if(arcadePending){sfx('tap');startArcadeRun();return;} // ARCADE-R1(#99): ステージは自動抽選のためselStageId/game.stageIdはstartArcadeRun側で都度確定する
     if(survivalPending){sfx('tap');startSurvivalRun();return;} // SURVIVAL-R1(#101): ステージ/CPU Lvは戦ごとにsurvivalBeginBattle()側で都度確定する
     if(minigamePendingKind){sfx('tap');startMinigameRun(minigamePendingKind);return;} // MINIGAME-R1(#102): 背景は固定・CPU Lv概念が無いためstartMinigameRun側で確定
+    if(trainingSelectStage){trainingSelectConfirm();return;} // TRAINING-R1(#112): 自キャラ/ダミーキャラの2passでselectを流用
     const selected=ROSTER[selCharIdx];
     game.p1=selected.combatIndex;
     game.p2=(Math.random()*CHARS.length)|0;
@@ -3639,6 +3641,12 @@ function selectPress(p){
     sfx('tap');startBattle();return;
   }
   if(inRect(p,SELECT_BACK_BTN.x,SELECT_BACK_BTN.y,SELECT_BACK_BTN.w,SELECT_BACK_BTN.h)){
+    if(trainingSelectStage==='dummy'){ // TRAINING-R1(#112): ダミー選択からは自キャラ選択へ戻る(選択済み内容を復元)
+      trainingSelectStage='player';selCharIdx=ROSTER.findIndex(function(r){return r.combatIndex===TRAINING.playerCharIdx;});
+      if(selCharIdx<0)selCharIdx=0;
+      selPalette=TRAINING.playerPalette;sfx('tap');return;
+    }
+    if(trainingSelectStage==='player'){trainingSelectStage=null;TRAINING=null;sfx('tap');game.screen='menuBattle';return;}
     const toMinigame=!!minigamePendingKind;
     arcadePending=false;survivalPending=false;minigamePendingKind=null;
     sfx('tap');game.screen=toMinigame?'menuMinigame':'menuBattle';return;
@@ -3797,6 +3805,7 @@ const MOVELIST_CONTENT_CLIP={x:20,y:168,w:426,h:680};
 const MOVELIST_SCROLL_UP={x:454,y:172,w:66,h:66};
 const MOVELIST_SCROLL_DOWN={x:454,y:782,w:66,h:66};
 function pausePress(p){
+  if(TRAINING&&!onlineActive()){trainingPausePress(p);return;} // TRAINING-R1(#112): onlineとTRAININGは構造上排他だが、issue要求の明示のため二重に防御する
   if(onlineActive()){ // オンライン中は「タイトルへ(切断)」のみ(§6.8 v2.5)
     if(pauseConfirmingQuit){
       if(inRect(p,PAUSE_CONFIRM_RECT.yes.x,PAUSE_CONFIRM_RECT.yes.y,PAUSE_CONFIRM_RECT.yes.w,PAUSE_CONFIRM_RECT.yes.h)){
@@ -5293,6 +5302,10 @@ function rBattle(){
   }
   if(DEBUG_BAL)rDebugBal(); // BAL-R1: ?debug=bal時のみ。通常プレイUIには常設しない
   if(DEBUG_CPU&&!onlineActive())rDebugCpu(); // CPU-R2 PR1: ?debug=cpu時のみ。オンラインはaiStep()自体が動かないため対象外
+  if(TRAINING){ // TRAINING-R1(#112): ダミーのS/Ultゲージ+現在の挙動モード(CPU Lvの場合はDEBUG_CPU相当の内部stateパネル)を常設表示
+    drawTrainingResourceLine();
+    if(TRAINING.dummyMode==='cpu')rDebugCpu();else drawTrainingDummyModeLabel();
+  }
 }
 function rDebugCpu(){ // CPU-R2 PR1(#106 §13新設): 現在のCPU Lv+BAL.AILV該当行+ai内部state(think/guardT/react/mash/pHoldF/
   // mikiriAt・dodgeAt/cmdQueue長)を表示。decision reason code等はPR2/PR3で実際の意思決定層が入った時点で追加する
@@ -5389,6 +5402,7 @@ const MENU_BATTLE_ITEMS=[
   {key:'vscpu',labelJa:'VS CPU',sub:'キャラ・カラー・CPU Lv・ステージを選ぶ'},
   {key:'arcade',labelJa:'ARCADE',sub:'8戦勝ち抜きシングルプレイ'},
   {key:'survival',labelJa:'SURVIVAL',sub:'HP持ち越し無限勝ち抜き(CPU Lvは自動)'},
+  {key:'training',labelJa:'TRAINING',sub:'ダミー挙動・フレーム送り・リソース操作で練習'},
   {key:'online',labelJa:'ONLINE',sub:'オンライン対戦ロビーへ'}
 ];
 function menuBattleRect(i){
@@ -5415,6 +5429,7 @@ function menuBattlePress(p){
       if(key==='vscpu'){game.screen='select';}
       else if(key==='arcade'){arcadePending=true;game.screen='select';}
       else if(key==='survival'){survivalPending=true;game.screen='select';}
+      else if(key==='training'){trainingStart();}
       else{onlineReset();game.screen='onlineLobby';}
       return;
     }
@@ -5761,6 +5776,217 @@ function menuOptionsPress(p){
   if(menuBackHit(p)){sfx('tap');game.screen='title';return;}
 }
 /* ================= /MENU-R1 ================= */
+/* ================= TRAINING-R1(#112) =================
+ * 通常対戦と全く同じbattle engine/resolverをそのまま使う。別ルール・別hit resolverは作らない:
+ * startBattle()をそのまま呼びB.vsMeta.mode='training'を上書きするだけ(ARCADE-R1/SURVIVAL-R1と同じ手法)。
+ * TRAINING.*はcombat per-tick hashの外(ARCADE/SURVIVAL/MG同様presentation/meta層のみ)。onlineへの
+ * 導線はどこにも無い(menuBattle→training→selectのみ)ため、online snapshot/hashへ追加する概念自体が無い。
+ * 画面はselect(自キャラ/ダミーキャラ/カラー/ステージ選択に2回流用)とpause(ダミー設定パネル/対戦中メニューに
+ * 流用、B===nullの間は開始前設定パネルとして機能する)のみを使い、新しいgame.screenは増やさない。
+ *
+ * スコープの明示的な簡略化(検証時の指摘に対応するため事前に開示):
+ * - REVERSAL技は「通常/つかみ/咆哮/SPECIAL/コマンド技(ランダム)」の5カテゴリ選択とし、コマンド技個別の
+ *   一覧からの1手選択UIは設けない(aiQueueCommandMove()の既存ランダム選択にそのまま委ねる)。
+ * - リソース操作はHP/ガード全回復・S=100%・Ult=MAXの3種(+アビリティプリセット)に絞り、
+ *   「S/Ult auto refill」の継続トグルは今回のスコープでは実装しない(0/100・0/MAXの単発操作で代替)。
+ */
+let TRAINING=null; // {playerCharIdx,playerPalette,dummyCharIdx,dummyPalette,stageId,dummyMode,dummyCpuLv,dummyReversalMove,_reversalArmed}。null=トレーニング外
+let trainingSelectStage=null; // 'player'|'dummy'|null。select画面をキャラ選択に2回流用するための進行状態
+const TRAINING_DUMMY_MODES=[
+  {id:'stand',label:'STAND'},{id:'guardAll',label:'GUARD ALL'},{id:'guardAfterHit',label:'GUARD後'},
+  {id:'dodge',label:'DODGE'},{id:'mikiri',label:'MIKIRI'},{id:'reversal',label:'REVERSAL'},{id:'cpu',label:'CPU Lv'}
+];
+const TRAINING_REVERSAL_MOVES=[
+  {id:'normal',label:'通常'},{id:'grab',label:'つかみ'},{id:'roar',label:'咆哮'},{id:'special',label:'SPECIAL'},{id:'cmd',label:'コマンド技'}
+];
+const TRAINING_RESOURCE_ACTIONS=[
+  {id:'full',label:'HP/ガード全回復',apply:function(f){f.hp=maxHpFor(f.c);f.shownHp=f.hp;f.guard=maxGuardFor(f.c);}},
+  {id:'smax',label:'S=100%',apply:function(f){f.s=BAL.SMAX;}},
+  {id:'ultmax',label:'Ult=MAX',apply:function(f){f.ult=BAL.ULT.stock;}}
+];
+// Issue本文§Resource controls Examplesに列挙された9キャラ分のプリセットをそのまま実装(各キャラ最大2個)。
+// いずれも既存newFighter()/roundInit()が既に「毎ラウンド自由にリセットしてよい」と定義しているfighter状態
+// フィールドへ直接代入するだけで、新しい状態やhit/reach/timing関連の値は一切追加しない
+const TRAINING_ABILITY_PRESETS={
+  moguzo:[{label:'GUTS発動',apply:function(f){f.gutsActive=true;}}],
+  pisuke:[{label:'CHASE window',apply:function(f){f.chaseReadyUntilF=B.f+60;f.chaseSourceLv='mid';f.chaseActive=true;}}],
+  godan:[{label:'ARMOR STOCK=3',apply:function(f){f.armorStock=3;}},{label:'ARMOR STOCK=0',apply:function(f){f.armorStock=0;}}],
+  hakuma:[{label:'IRON WALL発動',apply:function(f){f.ironWallReady=true;}}],
+  chirka:[{label:'毒付与',apply:function(f){f.poisonActive=true;f.poisonTicksLeft=10;f.poisonNextTickF=B.f+30;}}],
+  takimaru:[{label:'PRESSURE ready',apply:function(f){f.pressureState='ready';f.pressureUntilF=B.f+300;}},{label:'BIND付与',apply:function(f){f.bindActiveF=480;}}],
+  yomikage:[{label:'RETURN ready',apply:function(f){f.yomiState='ready';f.yomiReadyUntilF=B.f+300;}}],
+  bullet:[{label:'CHARGE=3',apply:function(f){f.charge=3;}},{label:'OVERHEAT',apply:function(f){f.overheat=true;}}],
+  dark_moguzo:[{label:'HP30%(BODY READY)',apply:function(f){f.hp=Math.floor(maxHpFor(f.c)*0.29);f.shownHp=f.hp;}},{label:'DARK CHAIN window',apply:function(f){f.darkWindowUntilF=B.f+60;f.darkWindowMax=60;}}]
+};
+function trainingStart(){ // menuBattlePress('training')から(sfx('tap')は呼び出し元が既に鳴らしている)
+  TRAINING={playerCharIdx:null,playerPalette:'p1',dummyCharIdx:null,dummyPalette:'p2',stageId:null,
+    dummyMode:'guardAll',dummyCpuLv:5,dummyReversalMove:'normal',_reversalArmed:false};
+  B=null; // Codexレビュー指摘(PR#131): 前回対戦のBが残っているとtrainingRows()がB有(対戦中メニュー)扱いになり、
+  // 開始前設定パネル(Startボタン)が出ず古いBへResumeできてしまうため、設定開始時点で明示的に破棄する
+  trainingSelectStage='player';selPalette='p1';game.screen='select';
+}
+function trainingSelectConfirm(){ // selectPress()のけっていボタンから(trainingSelectStage!=null時)
+  const selected=ROSTER[selCharIdx];
+  if(trainingSelectStage==='player'){
+    TRAINING.playerCharIdx=selected.combatIndex;TRAINING.playerPalette=selPalette;
+    trainingSelectStage='dummy';selPalette='p2';sfx('tap');return;
+  }
+  TRAINING.dummyCharIdx=selected.combatIndex;TRAINING.dummyPalette=selPalette;
+  TRAINING.stageId=resolveStageId(selStageId);
+  trainingSelectStage=null;sfx('tap');game.screen='pause'; // B===nullの間はrTrainingPauseOverlay()が開始前設定パネルとして機能する
+}
+function startTrainingBattle(){ // 「この設定でトレーニング開始」/「同じ対戦をリセット」の両方から呼ぶ(TRAINING.*は保持したまま再構築)
+  game.p1=TRAINING.playerCharIdx;game.p2=TRAINING.dummyCharIdx;
+  selPalette=TRAINING.playerPalette;game.stageId=TRAINING.stageId;
+  if(TRAINING.dummyMode==='cpu')cpuLv=TRAINING.dummyCpuLv; // 「CPU Lv1-9 option」既存curAiLv()/aiStep()経路をそのまま使う。CPU-R2の既存挙動は無変更
+  startBattle();
+  B.p[1].palette=TRAINING.dummyPalette; // startBattle()内resolveCpuPalette()による自動配色をダミー個別選択で上書き
+  B.vsMeta={mode:'training',darkFinal:false,survivalInfo:null};
+  B.winsTarget=999999; // 「round勝敗で終了しない」。finishRound()/timeUp()のmatchEnd分岐(wins>=winsTarget)に到達しないようにする
+  TRAINING._reversalArmed=false;
+  aiReset(); // ダミーの前回セッション分ai.*(guardOn/mikiriAt/dodgeAt/cmdQueue等)を確実に初期化する
+  game.screen='battle';
+}
+function trainingReturnToSelect(){ // 設定パネルの「キャラ選択へ戻る」
+  TRAINING=null;B=null;game.screen='menuBattle';
+}
+function trainingDummyStep(){ // aiStep()の代わりにfightStep()から呼ばれる(TRAINING.dummyMode!=='cpu'の間)。
+  // 通常CPU logic(curAiLv/BAL.AILV)とは分離してよい(Issue本文)が、cpuEv/ai.guardOnという既存のnormal
+  // input/action pathへ差し込むことで、実際に発生する技自体は通常のapplyInputs()/resolveHits()を通す
+  const me=B.p[1],you=B.p[0],mode=TRAINING.dummyMode;
+  while(ai.cmdQueue.length&&B.f>=ai.cmdQueue[0].at)cpuEv.push(ai.cmdQueue.shift().cmd); // aiStep()と同じcmdQueue drain(REVERSAL='コマンド技'用)
+  if(mode==='stand'){ai.guardOn=false;return;}
+  if(mode==='guardAll'){ai.guardOn=(me.phase==='idle'||me.phase==='guard'||(me.phase==='blockstun'&&me.held));return;} // Codexレビュー指摘(PR#131): blockstun中もheld中はguardOnを保つ(guard/blockstun&&heldがガード継続中の統一判定。#2224等と同じ条件)。falseにすると次tickでapplyInputs()がf.heldを外し、ブロッキング文字列の後続段が素通しになる
+  if(mode==='guardAfterHit'){
+    if(me.phase==='hitstun'&&me.pf===1)ai.guardT=Math.max(ai.guardT,40);
+    if(ai.guardT>0){ai.guardOn=(me.phase==='idle'||me.phase==='guard'||(me.phase==='blockstun'&&me.held));ai.guardT--;}else ai.guardOn=false;
+    return;
+  }
+  if(mode==='dodge'){
+    ai.guardOn=false;
+    if(you.phase==='attack'&&you.pf===1&&ai.dodgeAt==null){const A=spec(you);ai.dodgeAt=B.f+Math.max(1,A.s-2);ai.dodgeKind=LEVEL_TO_DODGE[you.atkLv];}
+    if(ai.dodgeAt!=null&&B.f>=ai.dodgeAt){cpuEv.push({t:'dodge',kind:ai.dodgeKind});ai.dodgeAt=null;}
+    return;
+  }
+  if(mode==='mikiri'){
+    ai.guardOn=false;
+    if(you.phase==='attack'&&you.pf===1&&ai.mikiriAt==null){const A=spec(you);ai.mikiriAt=B.f+Math.max(1,A.s-1);}
+    if(ai.mikiriAt!=null&&B.f>=ai.mikiriAt){cpuEv.push({t:'mikiri'});ai.mikiriAt=null;}
+    return;
+  }
+  if(mode==='reversal'){
+    ai.guardOn=false;
+    if(me.phase==='down')TRAINING._reversalArmed=true;
+    else if(TRAINING._reversalArmed&&me.phase==='idle'){
+      TRAINING._reversalArmed=false;
+      const mv=TRAINING.dummyReversalMove;
+      if(mv==='normal')cpuEv.push({t:'atk',lv:LEVELS[(Math.random()*3)|0]});
+      else if(mv==='grab')cpuEv.push({t:'grab'});
+      else if(mv==='roar'){if(me.s>=BAL.SMAX)cpuEv.push({t:'roar'});} // legal gate: 既存Roar発動条件(Sゲージ満タン)をそのまま使う
+      else if(mv==='special'){if(canStartSpecial(me))cpuEv.push({t:'special'});} // legal gate: 既存canStartSpecial()をそのまま使う
+      else if(mv==='cmd')aiQueueCommandMove(me); // legal gate込みの既存CPUコマンド技キュー機構をそのまま流用
+    }
+    return;
+  }
+}
+function drawTrainingResourceLine(){ // 常設HUD: 両者のS/Ultを1行で表示(rDebugBal()の下、game.screen==='battle'限定)
+  const p1=B.p[0],p2=B.p[1];
+  ctx.save();ctx.globalAlpha=0.82;ctx.fillStyle='#000';ctx.fillRect(0,104,W,20);ctx.restore();
+  txt('P1 S'+Math.round(p1.s)+'/'+BAL.SMAX+' Ult'+p1.ult+'/'+BAL.ULT.stock+'   DUMMY S'+Math.round(p2.s)+'/'+BAL.SMAX+' Ult'+p2.ult+'/'+BAL.ULT.stock,8,118,11,'#9adfff','left');
+}
+function drawTrainingDummyModeLabel(){ // 常設HUD: dummyMode!=='cpu'の間、rDebugCpu()の代わりに現在のダミー挙動を表示
+  const labels={stand:'STAND',guardAll:'GUARD ALL',guardAfterHit:'GUARD AFTER HIT',dodge:'DODGE',mikiri:'MIKIRI'};
+  const label=TRAINING.dummyMode==='reversal'?('REVERSAL('+(TRAINING_REVERSAL_MOVES.find(function(m){return m.id===TRAINING.dummyReversalMove;})||{}).label+')'):(labels[TRAINING.dummyMode]||TRAINING.dummyMode);
+  ctx.save();ctx.globalAlpha=0.82;ctx.fillStyle='#000';ctx.fillRect(0,PT-40,W,40);ctx.restore();
+  txt('DUMMY: '+label,8,PT-16,13,'#ffd27a','left');
+}
+function trainingRows(){ // rTrainingPauseOverlay()(描画)とtrainingPausePress()(タップ判定)共通のsource of truth
+  const rows=[];
+  if(B){
+    rows.push({type:'buttons',h:44,items:[{id:'resume',label:'つづける'},{id:'movelist',label:'わざ表'},{id:'backSelect',label:'キャラ選択へ'}]});
+    rows.push({type:'buttons',h:44,items:[{id:'resetSame',label:'同じ対戦をリセット'},{id:'step1',label:'+1F'},{id:'step5',label:'+5F'}]});
+  }else{
+    rows.push({type:'buttons',h:52,cols:1,items:[{id:'start',label:'この設定でトレーニング開始'}]});
+    rows.push({type:'buttons',h:40,cols:1,items:[{id:'backSelect',label:'キャラ選択へ戻る'}]});
+  }
+  rows.push({type:'label',text:'ダミー挙動'});
+  rows.push({type:'buttons',h:36,cols:4,items:TRAINING_DUMMY_MODES.map(function(m){return{id:'mode_'+m.id,label:m.label,active:TRAINING.dummyMode===m.id};})});
+  if(TRAINING.dummyMode==='cpu'){
+    rows.push({type:'label',text:'ダミー CPU Lv'});
+    rows.push({type:'buttons',h:36,cols:5,items:CPU_LV_LEVELS.map(function(lv){return{id:'cpulv_'+lv,label:String(lv),active:TRAINING.dummyCpuLv===lv};})});
+  }else if(TRAINING.dummyMode==='reversal'){
+    rows.push({type:'label',text:'REVERSAL技'});
+    rows.push({type:'buttons',h:36,cols:5,items:TRAINING_REVERSAL_MOVES.map(function(m){return{id:'rev_'+m.id,label:m.label,active:TRAINING.dummyReversalMove===m.id};})});
+  }
+  if(B){
+    rows.push({type:'label',text:'あなたのリソース'});
+    rows.push({type:'buttons',h:36,cols:3,items:TRAINING_RESOURCE_ACTIONS.map(function(a){return{id:'p1_'+a.id,label:a.label};})});
+    rows.push({type:'label',text:'ダミーのリソース'});
+    rows.push({type:'buttons',h:36,cols:3,items:TRAINING_RESOURCE_ACTIONS.map(function(a){return{id:'d_'+a.id,label:a.label};})});
+    const p1Presets=(TRAINING_ABILITY_PRESETS[B.p[0].c.id]||[]).slice(0,2);
+    const dPresets=(TRAINING_ABILITY_PRESETS[B.p[1].c.id]||[]).slice(0,2);
+    if(p1Presets.length){rows.push({type:'label',text:'あなたのアビリティプリセット'});rows.push({type:'buttons',h:36,cols:2,items:p1Presets.map(function(pr,i){return{id:'p1_preset_'+i,label:pr.label};})});}
+    if(dPresets.length){rows.push({type:'label',text:'ダミーのアビリティプリセット'});rows.push({type:'buttons',h:36,cols:2,items:dPresets.map(function(pr,i){return{id:'d_preset_'+i,label:pr.label};})});}
+  }
+  return rows;
+}
+function trainingLayoutRects(){ // trainingRows()から実際の矩形を計算(描画/タップ判定で完全に同一の座標を使うため、双方がこの関数を呼ぶ)
+  const rows=trainingRows();
+  let y=92;const x0=20,fullW=W-40,gap=8;
+  const laid=[];
+  for(const row of rows){
+    if(row.type==='label'){laid.push({type:'label',text:row.text,y:y});y+=20;continue;}
+    const cols=row.cols||row.items.length,cw=(fullW-(cols-1)*gap)/cols,h=row.h;
+    const rects=row.items.map(function(it,i){
+      const col=i%cols,line=Math.floor(i/cols);
+      return Object.assign({},it,{rect:{x:x0+col*(cw+gap),y:y+line*(h+gap),w:cw,h:h}});
+    });
+    const lines=Math.ceil(row.items.length/cols);
+    laid.push({type:'buttons',rects:rects});
+    y+=lines*h+(lines-1)*gap+14;
+  }
+  return laid;
+}
+function rTrainingPauseOverlay(){ // B===nullなら開始前設定パネル、B存在なら対戦中メニュー(pauseの代わり)として機能する
+  ctx.fillStyle='rgba(8,8,14,0.94)';ctx.fillRect(0,0,W,H);
+  txt(B?'トレーニングメニュー':'トレーニング設定',W/2,58,24,'#ffd23f');
+  for(const row of trainingLayoutRects()){
+    if(row.type==='label'){txt(row.text,20,row.y+14,13,'#a2abc0','left');continue;}
+    for(const it of row.rects){
+      const r=it.rect;
+      ctx.fillStyle=it.active?'rgba(255,255,255,0.18)':'#1a1d29';rr(r.x,r.y,r.w,r.h,8);ctx.fill();
+      ctx.strokeStyle=it.active?'#ffd23f':'#3a4560';ctx.lineWidth=it.active?2.5:1.5;rr(r.x,r.y,r.w,r.h,8);ctx.stroke();
+      txt(it.label,r.x+r.w/2,r.y+r.h/2,11,it.active?'#ffe9a8':'#cfd6e6');
+    }
+  }
+}
+function trainingPausePress(p){ // TRAINING&&!onlineActive()時のみ到達(pausePress()冒頭で分岐。オンラインは元々TRAININGへの導線が無い)
+  for(const row of trainingLayoutRects()){
+    if(row.type!=='buttons')continue;
+    for(const it of row.rects){
+      const r=it.rect;
+      if(inRect(p,r.x,r.y,r.w,r.h)){trainingHandleAction(it.id);return;}
+    }
+  }
+}
+function trainingHandleAction(id){
+  sfx('tap');
+  if(id==='start'){startTrainingBattle();return;}
+  if(id==='resume'){game.screen='battle';return;}
+  if(id==='movelist'){movelistTab='command';movelistScroll=0;movelistMaxScroll=0;game.screen='movelist';return;}
+  if(id==='backSelect'){trainingReturnToSelect();return;}
+  if(id==='resetSame'){startTrainingBattle();return;} // 「quick reset positions/state」/「reset same matchup」: TRAINING.*の設定は保持したまま再構築
+  if(id==='step1'){logic();return;} // 「Frame advance must step the same simulation tick function as ordinary battle」: 通常battleと同じlogic()を直接呼ぶ
+  if(id==='step5'){for(let i=0;i<5;i++)logic();return;}
+  if(id.indexOf('mode_')===0){TRAINING.dummyMode=id.slice(5);aiReset();if(TRAINING.dummyMode==='cpu')cpuLv=TRAINING.dummyCpuLv;return;} // モード切替時はai.*(guardOn/mikiriAt/dodgeAt等)を必ず初期化する。Codexレビュー指摘(PR#131): aiStep()はcurAiLv()経由でグローバルcpuLvを読むため、対戦中にCPU Lvモードへ切り替える時点でも同期する
+  if(id.indexOf('cpulv_')===0){TRAINING.dummyCpuLv=Number(id.slice(6));if(TRAINING.dummyMode==='cpu')cpuLv=TRAINING.dummyCpuLv;return;} // Codexレビュー指摘(PR#131): 対戦中にLvを変更した場合も即座にcurAiLv()へ反映する(リセット待ち不要)
+  if(id.indexOf('rev_')===0){TRAINING.dummyReversalMove=id.slice(4);return;}
+  if(id.indexOf('p1_preset_')===0){const i=Number(id.slice(10)),pr=(TRAINING_ABILITY_PRESETS[B.p[0].c.id]||[])[i];if(pr)pr.apply(B.p[0]);return;}
+  if(id.indexOf('d_preset_')===0){const i=Number(id.slice(9)),pr=(TRAINING_ABILITY_PRESETS[B.p[1].c.id]||[])[i];if(pr)pr.apply(B.p[1]);return;}
+  if(id.indexOf('p1_')===0){const a=TRAINING_RESOURCE_ACTIONS.find(function(x){return x.id===id.slice(3);});if(a)a.apply(B.p[0]);return;}
+  if(id.indexOf('d_')===0){const a=TRAINING_RESOURCE_ACTIONS.find(function(x){return x.id===id.slice(2);});if(a)a.apply(B.p[1]);return;}
+}
+/* ================= /TRAINING-R1 ================= */
 /* ================= ARCADE-R1(#99): 掛け合い画面・ARCADE CLEAR画面 =================
  * rVsScreen()の「向き合う2ポートレート」レイアウト(drawRosterCrop/drawRosterCropFlipped+heroCrop)を流用。
  * B/battle stateは一切読まない(ARCADEオブジェクトとCHARS/ROSTERのみ)ので、この画面自体はgameplay hashに無関係。
@@ -6035,7 +6261,7 @@ function rSelect(){ // P1追加: KOF/餓狼風レイアウト(縦画面翻訳)�
   ctx.fillStyle=detail?'rgba(85,118,181,0.30)':'#20263a';rr(SELECT_DETAIL_BTN.x,SELECT_DETAIL_BTN.y,SELECT_DETAIL_BTN.w,SELECT_DETAIL_BTN.h,14);ctx.fill();
   ctx.strokeStyle=detail?'#7fd8ff':'#4a5470';ctx.lineWidth=2.5;rr(SELECT_DETAIL_BTN.x,SELECT_DETAIL_BTN.y,SELECT_DETAIL_BTN.w,SELECT_DETAIL_BTN.h,14);ctx.stroke();
   txt('性能・わざ・コンボを見る',W/2,SELECT_DETAIL_BTN.y+SELECT_DETAIL_BTN.h/2,18,detail?'#e8f6ff':'#9da5b5');
-  if(!survivalPending&&!minigamePendingKind){ // SURVIVAL-R1(#101)/MINIGAME-R1(#102): 「CPU Lvは手動選択しない」/CPU Lv概念が無いため行自体を非表示にする(dead buttonを残さない)
+  if(!survivalPending&&!minigamePendingKind&&!trainingSelectStage){ // SURVIVAL-R1(#101)/MINIGAME-R1(#102)/TRAINING-R1(#112): 「CPU Lvは手動選択しない」/CPU Lv概念が無いため行自体を非表示にする(dead buttonを残さない)
     txt('CPU LV',W/2,SELECT_DIFF_Y-14,12,'#a2abc0');
     for(let i=0;i<CPU_LV_LEVELS.length;i++){
       const dl=CPU_LV_LEVELS[i],r=cpuLvRect(i),active=cpuLv===dl,col=cpuLvColor(dl);
@@ -6046,8 +6272,8 @@ function rSelect(){ // P1追加: KOF/餓狼風レイアウト(縦画面翻訳)�
   }
   ctx.fillStyle='#2c4a1f';rr(SELECT_CONFIRM_BTN.x,SELECT_CONFIRM_BTN.y,SELECT_CONFIRM_BTN.w,SELECT_CONFIRM_BTN.h,16);ctx.fill();
   ctx.strokeStyle='#7CFC00';ctx.lineWidth=3;rr(SELECT_CONFIRM_BTN.x,SELECT_CONFIRM_BTN.y,SELECT_CONFIRM_BTN.w,SELECT_CONFIRM_BTN.h,16);ctx.stroke();
-  txt(arcadePending?'アーケード開始':(survivalPending?'サバイバル開始':(minigamePendingKind?MINI_TITLE[minigamePendingKind]+'開始':'けってい')),W/2,SELECT_CONFIRM_BTN.y+29,20,'#fff'); // ARCADE-R1(#99)/SURVIVAL-R1(#101)/MINIGAME-R1(#102): 同じ選択導線を共有(Issue本文「操作回数を不必要に増やさない」)
-  txt(arcadePending?'8戦勝ち抜き・CPU Lvはこのランに適用':(survivalPending?'HP持ち越し無限勝ち抜き・CPU Lvは自動調整':(minigamePendingKind?'専用背景のエンドレスモードへ':'相手は9体からランダム')),W/2,SELECT_CONFIRM_BTN.y+52,12,'#cceac3');
+  txt(arcadePending?'アーケード開始':(survivalPending?'サバイバル開始':(minigamePendingKind?MINI_TITLE[minigamePendingKind]+'開始':(trainingSelectStage==='player'?'つぎ(ダミーを選ぶ)':(trainingSelectStage==='dummy'?'ダミー確定・設定へ':'けってい')))),W/2,SELECT_CONFIRM_BTN.y+29,20,'#fff'); // ARCADE-R1(#99)/SURVIVAL-R1(#101)/MINIGAME-R1(#102)/TRAINING-R1(#112): 同じ選択導線を共有(Issue本文「操作回数を不必要に増やさない」)
+  txt(arcadePending?'8戦勝ち抜き・CPU Lvはこのランに適用':(survivalPending?'HP持ち越し無限勝ち抜き・CPU Lvは自動調整':(minigamePendingKind?'専用背景のエンドレスモードへ':(trainingSelectStage==='player'?'このキャラで練習する':(trainingSelectStage==='dummy'?'挙動・CPU Lvなどを設定':'相手は9体からランダム')))),W/2,SELECT_CONFIRM_BTN.y+52,12,'#cceac3');
   ctx.fillStyle='rgba(255,255,255,0.05)';rr(SELECT_BACK_BTN.x,SELECT_BACK_BTN.y,SELECT_BACK_BTN.w,SELECT_BACK_BTN.h,12);ctx.fill();
   ctx.strokeStyle='rgba(255,255,255,0.3)';ctx.lineWidth=2;rr(SELECT_BACK_BTN.x,SELECT_BACK_BTN.y,SELECT_BACK_BTN.w,SELECT_BACK_BTN.h,12);ctx.stroke();
   txt('もどる',W/2,SELECT_BACK_BTN.y+SELECT_BACK_BTN.h/2,16,'#dfe4ee');
@@ -6175,6 +6401,7 @@ function btn(x,y,w,h,label){
   txt(label,x+w/2,y+h/2,28,'#fff');
 }
 function rPauseOverlay(){ // 戦闘中右上「II」→ポーズ画面(§6.8 v2.5)
+  if(TRAINING){rTrainingPauseOverlay();return;} // TRAINING-R1(#112): pauseを開始前設定パネル/対戦中メニューに流用
   ctx.fillStyle='rgba(8,8,14,0.82)';ctx.fillRect(0,0,W,H);
   txt('ポーズ',W/2,220,40,'#ffd23f');
   if(pauseConfirmingQuit){
