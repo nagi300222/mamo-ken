@@ -145,6 +145,9 @@ const BAL={ // 03_data_design.md v2.0 §2 balance table 準拠
     9:{thinkMinF:8,thinkMaxF:16,reactDelayMinF:8,reactDelayMaxF:12,reactRate:0.92,advDefShare:0.58,jitterF:4,cmdUse:0.90,punishUse:0.98,comboContinue:0.97,grabMix:0.20,resourceQuality:0.96,habitAdapt:0.85,roarEscapeUse:0.60,atkFreqMul:1.20,downFollowup:1.00,hayauchiF:[14,24],rendaCpuMin:0.130,rendaCpuRng:0.022}
   },
   GRAB:{s:12,a:2,rec:32,seq:28,d:90,stun:30,downType:'throwDown'}, // BAL-R1: 空振り硬直rec 28→32(=whiffRecovery)。ヒット時はdownType(throwDown)でdown状態化するためstunは現在未使用(counterMulはBAL.COUNTER_MULへ統合)
+  PUSHBACK:{small:10}, // DESIGN-R2(#87 §2): 確定値10px。胴押し/不動押し/大山押し(各moveのpushbackPx)が参照する共有値の正本。
+  // BAL.CMD.movesはこのBALオブジェクト自身の内側にあり自己参照できないため、各move側はここと同じ10を直接リテラルで
+  // 持つ(ad-hoc値を増やさない=同じ性質の技は必ずこの10と揃える、という意味での「共有口」)
   DODGE:{totalF:22,judgeF:12,counterReadyF:18,counterScale:[1.0,1.0,0.9], // vNext PR2 (COMBAT_VNEXT_FINAL.md §2共通F):
     // 回避: 全体22F・evade判定F2-F12(judgeF旧10→12へ拡大)・Correct Dodge completion18F(counterReadyFのまま)・
     // Miss/empty Dodge completion22F(totalFのまま)。counterMulはBAL.COUNTER_MULへ統合(既存)
@@ -202,7 +205,7 @@ const BAL={ // 03_data_design.md v2.0 §2 balance table 準拠
         {seq:['left','right'],trigger:'grab',type:'grab',name:'引き寄せ投げ',s:14,d:100,whiff:34,down:'throwDown',exactDmg:true,ccWindow:16,tags:['Quick16'],color:'#ffd23f',se:'cmdGrabHit'},
         {seq:['down','left'],trigger:'low',type:'atk',lv:'low',name:'砂払い',s:20,a:4,r:24,d:90,guardDmg:10,hitstun:29,blockstun:17,whiff:6,scale:0.95,exactDmg:true,ccWindow:16,tags:['Quick16'],color:'#c9a24d',se:'cmdHit'},
         {seq:['right','right'],trigger:'high',type:'atk',lv:'high',name:'山越え拳',s:25,a:4,r:30,d:130,guardDmg:18,hitstun:35,blockstun:19,whiff:10,scale:0.85,exactDmg:true,ccWindow:16,tags:['Quick16'],color:'#ff7a3c',se:'cmdHit'},
-        {seq:['left','down'],trigger:'mid',type:'atk',lv:'mid',name:'胴押し',s:12,a:3,r:18,d:60,guardDmg:11,hitstun:21,blockstun:14,whiff:3,scale:1.0,exactDmg:true,modern:true,ccWindow:16,tags:['Quick16','Modern','小Pushback(未結線)'],color:'#e0a860',se:'cmdHit'},
+        {seq:['left','down'],trigger:'mid',type:'atk',lv:'mid',name:'胴押し',s:12,a:3,r:18,d:60,guardDmg:11,hitstun:21,blockstun:14,whiff:3,scale:1.0,exactDmg:true,modern:true,ccWindow:16,pushbackPx:10,tags:['Quick16','Modern','小Pushback'],color:'#e0a860',se:'cmdHit'},
         {seq:['left','down','right'],trigger:'mid',type:'atk',lv:'mid',name:'土煙突き',s:30,a:4,r:36,d:150,guardDmg:18,hitstun:39,blockstun:21,whiff:12,scale:0.80,comboEnd:true,exactDmg:true,reach:3,ccWindow:12,tags:['Finisher12'],color:'#a97848',se:'cmdHit'}
       ],
       pisuke:[
@@ -211,8 +214,8 @@ const BAL={ // 03_data_design.md v2.0 §2 balance table 準拠
         {seq:['left','right'],trigger:'high',type:'atk',lv:'high',name:'宙返り蹴',s:18,a:3,r:23,d:88,guardDmg:9,hitstun:26,blockstun:16,fwd:20,exactDmg:true,modern:true,ccWindow:16,tags:['Quick16','Modern'],color:'#5ab2ff',se:'cmdHit'},
         {seq:['down','right'],trigger:'mid',type:'atk',lv:'mid',name:'かすみ連打',s:10,a:8,r:19,d:74,hits:3,guardDmg:9,hitstun:27,blockstun:20,whiff:4,scale:0.80,exactDmg:true,ccWindow:16,tags:['Quick16','multi'],color:'#4fc3ff',se:'cmdHit'},
         {seq:['right','down'],trigger:'high',type:'atk',lv:'high',name:'風切り爪',s:15,a:3,r:21,d:80,guardDmg:9,hitstun:24,blockstun:15,whiff:6,scale:0.90,exactDmg:true,ccWindow:16,tags:['Quick16'],color:'#79d0ff',se:'cmdHit'},
-        {seq:['right','left'],trigger:'low',type:'atk',lv:'low',name:'すり抜け足',s:11,a:3,r:17,d:64,guardDmg:7,hitstun:23,blockstun:14,whiff:6,scale:0.80,exactDmg:true,poseId:'lunge',ccWindow:16,tags:['Quick16','Lunge成功時限定','Hit→CLINCH(未結線)'],color:'#8be26b',se:'cmdHit'},
-        {seq:['down','right','right'],trigger:'mid',type:'atk',lv:'mid',name:'つむじ返し',s:23,a:4,r:30,d:120,guardDmg:14,hitstun:33,blockstun:18,whiff:12,scale:0.75,comboEnd:true,exactDmg:true,poseId:'lunge',modern:true,ccWindow:12,tags:['Finisher12','Modern','CHASE_TO_CONTACT(未結線)','maximumApproachSteps2(未結線)'],color:'#3aa0e0',se:'cmdHit'}
+        {seq:['right','left'],trigger:'low',type:'atk',lv:'low',name:'すり抜け足',s:11,a:3,r:17,d:64,guardDmg:7,hitstun:23,blockstun:14,whiff:6,scale:0.80,exactDmg:true,poseId:'lunge',ccWindow:16,grantsClinch:true,tags:['Quick16','Lunge成功時限定','Hit→CLINCH'],color:'#8be26b',se:'cmdHit'},
+        {seq:['down','right','right'],trigger:'mid',type:'atk',lv:'mid',name:'つむじ返し',s:23,a:4,r:30,d:120,guardDmg:14,hitstun:33,blockstun:18,whiff:12,scale:0.75,comboEnd:true,exactDmg:true,poseId:'lunge',modern:true,ccWindow:12,twoStepLunge:true,tags:['Finisher12','Modern','CHASE_TO_CONTACT','2StepLunge'],color:'#3aa0e0',se:'cmdHit'}
       ],
       godan:[
         {seq:['down','down'],trigger:'low',type:'atk',lv:'low',name:'地割れ',s:29,a:4,r:34,d:145,down:'lightDown',guardDmg:28,guardChip:15,blockstun:17,whiff:13,exactDmg:true,ccWindow:16,tags:['Quick16'],color:'#8a6540',se:'cmdHit'},
@@ -221,14 +224,14 @@ const BAL={ // 03_data_design.md v2.0 §2 balance table 準拠
         {seq:['down','right'],trigger:'mid',type:'atk',lv:'mid',name:'岩砕き',s:21,a:4,r:30,d:140,guardDmg:19,hitstun:35,blockstun:19,whiff:9,scale:0.85,exactDmg:true,armorStartF:5,armorEndF:20,armorDmgMul:0.60,cost:{res:'armorStock',amt:1},modern:true,ccWindow:16,tags:['Quick16','Modern','Stock1'],color:'#7a5a38',se:'cmdHit'},
         {seq:['right','right'],trigger:'high',type:'atk',lv:'high',name:'天蓋落とし',s:30,a:4,r:37,d:190,down:'hardDown',guardDmg:23,blockstun:19,whiff:14,scale:0.75,exactDmg:true,ccWindow:16,tags:['Quick16'],color:'#9a7248',se:'cmdHit'},
         {seq:['left','down'],trigger:'low',type:'atk',lv:'low',name:'根こそぎ',s:23,a:4,r:31,d:135,down:'throwDown',guardDmg:16,blockstun:18,scale:0.80,exactDmg:true,ccWindow:16,tags:['Quick16','追撃不可(throwDown流用)'],color:'#6b4d30',se:'cmdHit'},
-        {seq:['left','down','right'],trigger:'mid',type:'atk',lv:'mid',name:'大山押し',s:24,a:5,r:33,d:150,guardDmg:24,hitstun:39,blockstun:22,scale:0.85,exactDmg:true,armorStartF:5,armorEndF:29,armorDmgMul:0.30,hyperArmor:true,cost:{res:'armorStock',amt:2},modern:true,ccWindow:16,tags:['Quick16','Modern','Stock2','Hyper'],color:'#8a6540',se:'cmdHit'}
+        {seq:['left','down','right'],trigger:'mid',type:'atk',lv:'mid',name:'大山押し',s:24,a:5,r:33,d:150,guardDmg:24,hitstun:39,blockstun:22,scale:0.85,exactDmg:true,armorStartF:5,armorEndF:29,armorDmgMul:0.30,hyperArmor:true,cost:{res:'armorStock',amt:2},modern:true,ccWindow:16,pushbackPx:10,tags:['Quick16','Modern','Stock2','Hyper','小Pushback'],color:'#8a6540',se:'cmdHit'}
       ],
       hakuma:[
         {seq:['left','down'],trigger:'mid',type:'atk',lv:'mid',name:'雪壁掌',s:15,a:3,r:21,d:72,guardDmg:10,hitstun:24,blockstun:16,whiff:4,scale:0.95,exactDmg:true,modern:true,ccWindow:16,ironWallAlt:{s:11,d:83},tags:['Quick16','Modern','IronWall対応(startup11/dmg83)'],color:'#bfe3d0',se:'cmdHit'},
         {seq:['down','right'],trigger:'high',type:'atk',lv:'high',name:'氷柱返し',s:24,a:4,r:28,d:110,guardDmg:15,hitstun:33,blockstun:19,whiff:8,scale:0.90,exactDmg:true,ccWindow:16,tags:['Quick16'],color:'#a7d9c9',se:'cmdHit'},
         {seq:['left','right'],trigger:'grab',type:'grab',name:'雪崩抱え',s:15,d:105,whiff:38,down:'throwDown',exactDmg:true,ccWindow:16,tags:['Quick16','NoArmor'],color:'#8fb8a0',se:'cmdGrabHit'},
         {seq:['down','left'],trigger:'low',type:'atk',lv:'low',name:'地伏せ',s:23,a:4,r:28,d:95,guardDmg:12,hitstun:32,blockstun:20,whiff:7,scale:0.90,exactDmg:true,ccWindow:16,tags:['Quick16'],color:'#749c8a',se:'cmdHit'},
-        {seq:['left','left'],trigger:'mid',type:'atk',lv:'mid',name:'不動押し',s:13,a:4,r:19,d:62,guardDmg:16,hitstun:22,blockstun:18,whiff:3,scale:1.0,exactDmg:true,ccWindow:16,tags:['Quick16','小Pushback(未結線)'],color:'#5f8a76',se:'cmdHit'},
+        {seq:['left','left'],trigger:'mid',type:'atk',lv:'mid',name:'不動押し',s:13,a:4,r:19,d:62,guardDmg:16,hitstun:22,blockstun:18,whiff:3,scale:1.0,exactDmg:true,ccWindow:16,pushbackPx:10,tags:['Quick16','小Pushback'],color:'#5f8a76',se:'cmdHit'},
         {seq:['right','down'],trigger:'high',type:'atk',lv:'high',name:'白峰打ち',s:22,a:4,r:27,d:105,guardDmg:14,hitstun:31,blockstun:19,whiff:7,scale:0.90,exactDmg:true,modern:true,ccWindow:16,ironWallAlt:{r:21,d:121,hitstun:25,blockstun:13},tags:['Quick16','Modern','IronWall対応(recovery21/dmg121)'],color:'#dbe8e0',se:'cmdHit'},
         {seq:['left','down','right'],trigger:'mid',type:'atk',lv:'mid',name:'雪煙崩し',s:28,a:4,r:35,d:135,guardDmg:18,hitstun:38,blockstun:21,whiff:12,scale:0.80,exactDmg:true,ccWindow:16,ironWallAlt:{d:155,guardDmg:28},tags:['Quick16','IronWall消費(dmg155/GD28)'],color:'#c7ece0',se:'cmdHit'}
       ],
@@ -1950,8 +1953,13 @@ function advance(f){
     const whiffExtra=whiffExtraFor(f); // BAL-R1: 通常技の空振り追加recovery。CMD-R1: m.whiff指定のコマンド打撃技も対象
     const total=A.s+A.a+A.r+whiffExtra;
     const maxLunge=(f.cmdMove&&f.cmdMove.fwd!=null)?f.cmdMove.fwd:142; // コマンド技の前進距離(§6.8。指定無しは通常技と同じ142)
-    if(t<=A.s+A.a)f.lunge=maxLunge*Math.min(1,t/A.s);
-    else f.lunge=maxLunge*Math.max(0,1-(t-A.s-A.a)/A.r);
+    if(t<=A.s+A.a){
+      if(f.cmdMove&&f.cmdMove.twoStepLunge){ // DESIGN-R2(#87 §4 つむじ返しCHASE_TO_CONTACT): Startup全体を2段階のpresentation-only前進に変換する。
+        // 追跡distance systemは新設しない(hit判定はbaseXを一切参照しない現行ルールのまま)。Step1=Startup前半で50%、
+        // Step2=Startup後半〜Active入口で100%(maximumApproachSteps=2の意訳。contact判定/BAL/Recoveryは無変更)
+        f.lunge=(t<A.s/2)?maxLunge*0.5:maxLunge;
+      }else f.lunge=maxLunge*Math.min(1,t/A.s);
+    }else f.lunge=maxLunge*Math.max(0,1-(t-A.s-A.a)/A.r);
     if(t>=total){
       if(!f.hasHit){gainS(f,'whiff');resetModernHist(f);} // vNext PR3 (§8 Modern R4 reset trigger: WHIFF)
       if(f.cmdMove&&f.cmdMove.bulletFullRelease)f.overheat=false; // ABILITY-R2-C (Issue #97 §10 Full Release): 「consume all current Charge(=cast開始時に既にvent済み) and clear Overheat after resolution」。HIT/WHIFF双方でこのactionの終了(=resolution完了)時にoverheatを解除する
@@ -2364,6 +2372,7 @@ function attackResolve(att,def){
     const cm2=attCm;
     const A1=cm2?specForCmd(att,cm2):specForLv(att,att.atkLv); // BAL-R1: 通常技はper-charのblockstun/gdを使う(コマンド技は非対象のため共通表のまま)
     def.phase='blockstun';def.pf=0;def.stunDur=A1.blockstun;def.kb=6;
+    if(cm2&&cm2.pushbackPx)def.kb=Math.max(def.kb,cm2.pushbackPx); // DESIGN-R2(#87 §2): 胴押し/不動押し/大山押しはBLOCK成立時も小さくpushback(hit/reach/advantageには影響しない描画専用のkb)
     const opScaleG=cm2?1:BAL.OP_SCALE[Math.min(att.opRepeat,BAL.OP_SCALE.length)-1]; // vNext PR2 (§4 OP相殺): 被ガードGuardDamageにも適用(Commandは対象外)
     def.guard-=Math.round(A1.gd*opScaleG);def.guardRegenCooldownF=BAL.GUARD.regenDelayF; // BAL-R1: 被ガードダメで回復遅延をリセット
     if(att.atkLv==='low'){ // 下段は被ガードでも削り10(コマンド技は個別のguardChip優先。非対象のため据え置き)
@@ -2514,6 +2523,7 @@ function hitApply(att,def,counterHit,lvOverride,cmdOverride){
       if(att.c.id==='dark_moguzo'&&DARK_CHAIN_MOVES.has(cm.name))darkChainTrigger(att); // vNext PR4 (Dark Moguzo DARK CHAIN): compatible技のHIT
       if(cm.feint){att.feintPendingAtF=B.f+18;att.feintPendingCm=cm;} // ABILITY-R2-B (Chirka FEINT属性): HITで18F後のfollow-upを予約(完全空振りはこの分岐を通らないため自然に対象外)
       if(cm.poison)applyPoison(def); // ABILITY-R2-B (POISON属性): 直撃HITで300F毒付与(スタックなし=既存ならリフレッシュ)
+      if(cm.grantsClinch)att.clinchF=BAL.DODGE.clinchF; // DESIGN-R2(#87 §3): すり抜け足のClean HITのみ(Armor吸収/dizzyCapped分岐はここへ到達しないため自然に対象外)。既存の踏み込み成功時と同じclinchFをそのまま流用
     }
     resetModernHist(def); // vNext PR3 (§8 Modern R4 reset trigger: 被弾)
     // vNext PR2 (§11 S Gain): action1/2/3=aHitC[0..2]、action4+は明示的に0(旧実装はindexをclampしaction3の値を
@@ -2529,6 +2539,7 @@ function hitApply(att,def,counterHit,lvOverride,cmdOverride){
     if(dizzyCapped){ // BAL-R1新設: 上限到達でNORMAL_RESET(ガードブレイクの punish窓を打ち切りidleへ即復帰)
       def.phase='idle';def.pf=0;def.combo=0;def.normalChainCount=0;def.kb=0;def.downType=null;def.cmdBufMove=null;def.cmdBufIdx=null;
       def.guard=BAL.GUARD.recoverTo;def.dizzyHits=0;def.dizzyDamage=0;def.postBreakActive=false;
+      if(cm&&cm.pushbackPx)def.kb=cm.pushbackPx; // DESIGN-R2(#87 §2): guard-break追撃キャップ後のNORMAL_RESETでもpushback自体は見せる
       sfx((cm&&cm.se)||HIT_SE[lv]||'hit');B.hitstop=Math.max(B.hitstop,BAL.HITSTOP[lv]+cBonus);B.shake=Math.max(B.shake,5);
     }else if(A.down){ // 下段等: ダウンを奪う大技（スマブラ式ダウン連へ）。BAL-R1: downTypeごとのBAL.DOWNWAKEを使う
       def.phase='down';def.pf=0;def.downType=A.down;def.downHitUsed=false;def.combo=0;def.normalChainCount=0;def.kb=20;def.cmdBufMove=null;def.cmdBufIdx=null;
@@ -2539,6 +2550,7 @@ function hitApply(att,def,counterHit,lvOverride,cmdOverride){
       // 素ヒット(down無し)経路であり、`cm`が無い(=通常技)場合はkb=0。コマンド技(`cm`真)は個別のnumeric値
       // (§13、PR3対象外)を変更しない方針のため、旧来の共通kb=11をそのまま維持する
       def.phase='hitstun';def.pf=0;def.stunDur=A.hitstun;def.combo=0;def.normalChainCount=0;def.kb=cm?11:0;def.cmdBufMove=null;def.cmdBufIdx=null;
+      if(cm&&cm.pushbackPx)def.kb=Math.max(def.kb,cm.pushbackPx); // DESIGN-R2(#87 §2): 胴押し/不動押し/大山押しはHIT成立時もdef.kb=max(kb,10)相当(既存共通kb=11は既にこれを満たすが、共有定数で明示する)
       sfx((cm&&cm.se)||HIT_SE[lv]||'hit'); // ヒット音3階層(v0.11 (4)): 段属性で選ぶ。コマンド技はcm.seの専用音が優先
       B.hitstop=Math.max(B.hitstop,BAL.HITSTOP[lv]+cBonus);B.shake=Math.max(B.shake,5);
     }
@@ -6438,6 +6450,10 @@ function moveBadges(m){
   if(m.selfGuardRestore)badges.push({t:'成功でガード+'+m.selfGuardRestore,c:'#6fd3ff'});
   if(m.comboEnd)badges.push({t:'コンボ終着(Finisher)',c:'#ffd23f'});
   if(m.hits>1)badges.push({t:m.hits+'ヒット技',c:'#9adfff'});
+  // DESIGN-R2(#87 §2-4): Pushback/CLINCH/2段階踏み込みも同じ「moveの属性を個別に見て書き直す」方式で表示する
+  if(m.pushbackPx)badges.push({t:'HIT/BLOCKで相手を少し押し出す',c:'#e0a860'});
+  if(m.grantsClinch)badges.push({t:'HITで密着(つかみ発生短縮・上段ダメ増)',c:'#8be26b'});
+  if(m.twoStepLunge)badges.push({t:'2段階の踏み込みで接近',c:'#3aa0e0'});
   return badges;
 }
 function drawMoveBadges(badges,x,y,maxW){
@@ -6524,8 +6540,12 @@ function drawMovelistAbility(myF,startY){ // ABILITY: 9固有能力の発動条�
 }
 function drawMovelistCombo(myF,startY){ // COMBO: エンジン実測済みルート(VERIFIED_COMBO_ROUTES)のみ表示。理論値は載せない
   let y=startY;
-  detailCard(20,y,406,72,'#ffd23f');
-  detailWrapped('実際にengine上で入力列を実行し、ダメージを実測してから確定したルートのみ掲載(理論値は載せない)。TRUE COMBO=各hit間、相手が一度もガード/回避可能な状態に戻らない連続ヒット。',34,y+20,378,13,'#cfd6e6',3);y+=84;
+  detailCard(20,y,406,132,'#ffd23f');
+  // DESIGN-R2(#87 §5 咆哮割り込み/Roar Escape正本化): TRUE COMBOの定義文言を「相手が通常のガード・しゃがみ・
+  // スウェー・踏み込み等へ復帰できない連続攻撃」へ更新し、S満タン時はhitstun/blockstun中でも咆哮入力を開始できる
+  // (=TRUE COMBO=Guard/Dodge不能を意味するが、Roar開始不能までは意味しない)ことを明記する。combat logic側は
+  // 元からこの仕様のまま(applyInputs()のokPhaseがhitstun/blockstunを常に許容)なので、この変更はUI文言のみ
+  detailWrapped('実際にengine上で入力列を実行し、ダメージを実測してから確定したルートのみ掲載(理論値は載せない)。TRUE COMBO=相手が次の攻撃までに通常のガード・しゃがみ・スウェー・踏み込み等へ復帰できない連続攻撃。Sが満タンの場合は、ヒット硬直中でも「咆哮割り込み」を試みることができる。※ TRUE COMBOでもS100の相手は咆哮を開始可能。咆哮が成立するかは次の攻撃までの間隔と咆哮の発生/アーマータイミングによる。',34,y+20,378,13,'#cfd6e6',7);y+=144;
   const routes=VERIFIED_COMBO_ROUTES[myF.c.id]||[];
   for(const route of routes){
     detailCard(20,y,406,88,route.trueCombo?'#7CFC00':'#ffbf4a');
