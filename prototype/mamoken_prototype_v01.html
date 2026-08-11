@@ -5743,6 +5743,7 @@ function menuOptionsSegRect(row,seg,segCount){
   return{x:r.x+pad+seg*segW,y:r.y+44,w:segW-6,h:30};
 }
 const MENU_OPTIONS_RESET_BTN={x:36,y:170+MENU_OPTIONS_ROWS.length*94+10,w:W-72,h:52};
+const MENU_OPTIONS_WIKI_BTN={x:36,y:MENU_OPTIONS_RESET_BTN.y+MENU_OPTIONS_RESET_BTN.h+14,w:W-72,h:52}; // WEB-R2(#108): index.htmlは即時redirectでbody未到達のため、実際に辿り着けるgame内リンクをOPTIONSへ設置
 function rMenuOptions(){
   drawMenuHeader('OPTIONS');
   for(let i=0;i<MENU_OPTIONS_ROWS.length;i++){
@@ -5771,6 +5772,9 @@ function rMenuOptions(){
   ctx.fillStyle='#3a2020';rr(MENU_OPTIONS_RESET_BTN.x,MENU_OPTIONS_RESET_BTN.y,MENU_OPTIONS_RESET_BTN.w,MENU_OPTIONS_RESET_BTN.h,12);ctx.fill();
   ctx.strokeStyle='#ff6b6b';ctx.lineWidth=2.5;rr(MENU_OPTIONS_RESET_BTN.x,MENU_OPTIONS_RESET_BTN.y,MENU_OPTIONS_RESET_BTN.w,MENU_OPTIONS_RESET_BTN.h,12);ctx.stroke();
   txt('せっていをリセット',W/2,MENU_OPTIONS_RESET_BTN.y+MENU_OPTIONS_RESET_BTN.h/2,16,'#ffd6d6');
+  ctx.fillStyle='#1a2436';rr(MENU_OPTIONS_WIKI_BTN.x,MENU_OPTIONS_WIKI_BTN.y,MENU_OPTIONS_WIKI_BTN.w,MENU_OPTIONS_WIKI_BTN.h,12);ctx.fill();
+  ctx.strokeStyle='#7fd8ff';ctx.lineWidth=2;rr(MENU_OPTIONS_WIKI_BTN.x,MENU_OPTIONS_WIKI_BTN.y,MENU_OPTIONS_WIKI_BTN.w,MENU_OPTIONS_WIKI_BTN.h,12);ctx.stroke();
+  txt('攻略Wikiを開く',W/2,MENU_OPTIONS_WIKI_BTN.y+MENU_OPTIONS_WIKI_BTN.h/2,16,'#cdeeff');
   drawMenuBack('タイトルへ戻る');
 }
 function menuOptionsPress(p){
@@ -5797,6 +5801,7 @@ function menuOptionsPress(p){
     return;
   }
   if(inRect(p,MENU_OPTIONS_RESET_BTN.x,MENU_OPTIONS_RESET_BTN.y,MENU_OPTIONS_RESET_BTN.w,MENU_OPTIONS_RESET_BTN.h)){resetOptions();sfx('tap');return;}
+  if(inRect(p,MENU_OPTIONS_WIKI_BTN.x,MENU_OPTIONS_WIKI_BTN.y,MENU_OPTIONS_WIKI_BTN.w,MENU_OPTIONS_WIKI_BTN.h)){sfx('tap');if(typeof window!=='undefined'&&window.open)window.open('../wiki/index.html','_blank','noopener');return;}
   if(menuBackHit(p)){sfx('tap');game.screen='title';return;}
 }
 /* ================= /MENU-R1 ================= */
