@@ -2,8 +2,8 @@
   "patch": "MAMOKEN Wiki WEB-R2 final sync (Issue #108)",
   "auditedMainShortSha": "2f1bae7",
   "entry": "wiki/index.html",
-  "bytes": 127095,
-  "sha256": "ba4ef17d014f5ff461a9d3c68df69a16fb2394e28db95124dcb4563be0205940",
+  "bytes": 127240,
+  "sha256": "04e17f71728aabedb89fa75a4cbd32dc6d16b46f71316872bcae523cbdd0d50c",
   "robots": "index,follow",
   "expectedSuffix": "</script></body></html>",
   "localAssetRoots": {
