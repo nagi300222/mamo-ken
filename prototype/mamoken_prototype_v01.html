@@ -434,6 +434,13 @@ const MINIGAME_BG={ // clashRender()のmg('jyanken'/'renda'/'hayauchi')から検
   renda:{assetKey:'bg_minigame_renda',file:'minigame_renda_mountain_run_course.png'},
 };
 for(const mg in MINIGAME_BG)loadImg(MINIGAME_BG[mg].assetKey,'../assets/bg/'+MINIGAME_BG[mg].file,true);
+// RUN-LOOP-R1(#113): 標準MINIGAME RENDA専用・四足走行F1-F4ループ(data/art/run_loop_source_manifest.json→
+// tools/build_run_loop_art.mjs導出、assets/art/runtime/<id>/run_loop/p1|p2/f{1-4}.png)。
+// preserveWhite=true: 導出済みalphaが正(current-art/roster3dと同じ理由でwhitenAsset()の白閾値抜きを通さない)。
+// Battle Gyuiin RENDA(stepRenda/BAL.MINIGAME.RENDA)は無関係・未変更。
+function runLoopAssetKey(charId,palette,frameIdx){return'run_loop_'+charId+'_'+palette+'_f'+(frameIdx+1);}
+for(const c of CHARS)for(const pal of['p1','p2'])for(let fi=0;fi<4;fi++)
+  loadImg(runLoopAssetKey(c.id,pal,fi),'../assets/art/runtime/'+c.id+'/run_loop/'+pal+'/f'+(fi+1)+'.png',true);
 let selStageId=BATTLE_STAGES[0].id; // キャラ選択画面で切替・デフォルト先頭ステージ・セッション中保持(selPalette/cpuLvと同様)
 function battleStageById(id){return BATTLE_STAGES.find(function(s){return s.id===id;})||BATTLE_STAGES[0];}
 const STAGE_RANDOM_ID='random'; // MENU-R1(#111): ステージ選択の末尾に追加する「ランダム」選択肢のid。BATTLE_STAGESには加えない(loadImg対象を増やさない)
@@ -5465,6 +5472,14 @@ function drawMinigamePlayerFighter(charIdx,palette,x,y){ // Codexレビュー指
   demoF.held=null;demoF.lunge=0;demoF.kb=0;demoF.s=0;demoF.ult=0;demoF.combo=0;demoF.normalChainCount=0;demoF.sNo=0;
   rFighter(demoF,x,y);
 }
+const RUN_LOOP_FRAME_STEP_PX=40; // RENDA-R1(#113): tapごとのMG.scrollX増分(+=40)そのままをフレーム送り速度に使う=「タップ/走行速度に連動、gameplayの正とはしない」の要求を素直に満たす
+const RUN_LOOP_DISPLAY_H=210;
+function drawMinigameRunLoop(charIdx,palette,x,y){ // #113: 四足走行1x4(F1→F2→F3→F4→F1)。右向き固定・接地線/縮尺はビルド時に4フレーム共通クロップで統一済み
+  const charId=CHARS[charIdx].id,frameIdx=Math.floor(MG.scrollX/RUN_LOOP_FRAME_STEP_PX)%4;
+  const key=runLoopAssetKey(charId,palette,frameIdx);
+  if(!assetReady(key)){drawMinigamePlayerFighter(charIdx,palette,x,y);return;} // 読込未完了時のみ既存の代替表示にフォールバック(Issue本文のart遅延許容フォールバックと同じ考え方)
+  drawStanding(key,x,y,RUN_LOOP_DISPLAY_H);
+}
 function startMinigameRun(kind){ // select画面のけっていボタン(minigamePendingKind時)から呼ばれる
   minigamePendingKind=null;
   const charIdx=ROSTER[selCharIdx].combatIndex,palette=selPalette;
@@ -5596,8 +5611,8 @@ function rMiniHayauchi(){
 function rMiniRenda(){
   drawMinigameScrollBg(MINIGAME_BG.renda.assetKey,MG.scrollX); // rMiniPractice()のdrawCoverBgFull()の上に横スクロール版で上書き(RENDAのみ)
   txt('RENDA',W/2,90,26,'#ffd23f');
-  const runY=560,bob=Math.sin(MG.scrollX*0.08)*10; // #113の四足1x4ループ未取込のため、既存の立ち絵に簡易バウンスを付けて「走行中」を仮に表現(Issue本文「existing closest motion if formal run loop is not yet merged」)
-  drawMinigamePlayerFighter(MG.charIdx,MG.palette,160,runY+bob);
+  const runY=560; // #113: 四足1x4ループ導入により追加の疑似バウンスは撤去(接地線はビルド時の4フレーム共通クロップで統一済み。走行そのもののブレはフレームの絵作り側で表現)
+  drawMinigameRunLoop(MG.charIdx,MG.palette,160,runY);
   if(MG.phase==='play'){
     const gaugeX=40,gaugeW=W-80,gaugeY=250,gaugeH=28;
     ctx.fillStyle='#1a1d29';rr(gaugeX,gaugeY,gaugeW,gaugeH,14);ctx.fill();

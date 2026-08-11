@@ -1,0 +1,465 @@
+{
+  "manifestVersion": "mamoken-run-loop-source-v1",
+  "issue": 113,
+  "sourceDelivery": "MAMOKEN_RUN_LOOP_EDITED_GODAN_UPDATED(1).zip",
+  "sourceRoot": "assets/art/run_loop_source",
+  "runtimeRoot": "assets/art/runtime/<id>/run_loop",
+  "note": "Delivered quadruped run-loop art (9 characters, 3072x768 sheets / 768x768 RGBA frames, F1-F4 loop). Source bytes are retained untouched under sourceRoot (directory/file names normalized to the ASCII runtime IDs below; pixel content is byte-identical to the delivered ZIP). tools/build_run_loop_art.mjs derives runtimeRoot from this source: (1) connected-component cleanup removes disconnected extraction-artifact alpha islands only (see cleanupFindings below), (2) a per-character union bbox crop+uniform resize keeps scale/ground-line consistent across F1-F4, (3) P2 palette is derived via the existing applyP2Palette()/P2_PROFILES pipeline from tools/build_current_art.mjs (no ad-hoc recolor). Battle Gyuiin RENDA (stepRenda/BAL.MINIGAME.RENDA) is unrelated and untouched -- this art is wired only into standalone MINIGAME RENDA (#102).",
+  "characterMapping": {
+    "モグゾー": "moguzo",
+    "ピスケ": "pisuke",
+    "ゴダン": "godan",
+    "ハクマ": "hakuma",
+    "チルカ": "chirka",
+    "タキマル": "takimaru",
+    "ヨミカゲ": "yomikage",
+    "バレット": "bullet",
+    "ダークモグゾー": "dark_moguzo"
+  },
+  "cleanupFindings": {
+    "bullet": {
+      "F2": "tiny detached alpha island near left edge of silhouette (26px, removed)",
+      "F4": "detached orange fragment left of character (357px, removed)"
+    },
+    "takimaru": {
+      "F1": "tiny disconnected alpha/near-ground island incl. short white-ish line near rear foot (101px, removed)",
+      "F2": "tiny disconnected alpha island (6px, removed)",
+      "F3": "tiny disconnected alpha island (11px, removed)"
+    }
+  },
+  "characters": {
+    "moguzo": {
+      "original": {
+        "path": "assets/art/run_loop_source/moguzo/original.png",
+        "sha256": "65b14c6375b651339d8a037bc221a9099059d5a519e1b0c260c740f9e42f690d",
+        "bytes": 1092545,
+        "width": 2172,
+        "height": 724
+      },
+      "sheet1x4": {
+        "path": "assets/art/run_loop_source/moguzo/sheet_1x4.png",
+        "sha256": "d88cd84089bddf28257c31b76c3a70fa9291bc965768824f77cd89a58827aa20",
+        "bytes": 645940,
+        "width": 3072,
+        "height": 768
+      },
+      "frames": {
+        "F1": {
+          "path": "assets/art/run_loop_source/moguzo/frames/f1.png",
+          "sha256": "4b5a24f98ecd69552231f9197abb26e4c0d8db5b917e20f3cf91deeac30980c8",
+          "bytes": 173230,
+          "width": 768,
+          "height": 768
+        },
+        "F2": {
+          "path": "assets/art/run_loop_source/moguzo/frames/f2.png",
+          "sha256": "1f48bee570eacfff094a6e5d3ffa7f3f2ee031fb3139bc81d353de26a9e33e3b",
+          "bytes": 146420,
+          "width": 768,
+          "height": 768
+        },
+        "F3": {
+          "path": "assets/art/run_loop_source/moguzo/frames/f3.png",
+          "sha256": "c24c902f1538b614071a1e9a7fdbfc8f0be821702695a9cdc1e2615c9278c77b",
+          "bytes": 175789,
+          "width": 768,
+          "height": 768
+        },
+        "F4": {
+          "path": "assets/art/run_loop_source/moguzo/frames/f4.png",
+          "sha256": "67edcd38e0b43be66bd8a33a70cc3a8c8c93479413e0786a375650b5bba3f3e3",
+          "bytes": 155798,
+          "width": 768,
+          "height": 768
+        }
+      }
+    },
+    "pisuke": {
+      "original": {
+        "path": "assets/art/run_loop_source/pisuke/original.png",
+        "sha256": "3c053190c13ab44fbdb716ca4bc1ba666846c236cb5742ab2a2a5674f342da78",
+        "bytes": 1040958,
+        "width": 1774,
+        "height": 887
+      },
+      "sheet1x4": {
+        "path": "assets/art/run_loop_source/pisuke/sheet_1x4.png",
+        "sha256": "b3a07d68c39a7954af45e117d206240f4db60776045395033fc596c750f07c42",
+        "bytes": 511684,
+        "width": 3072,
+        "height": 768
+      },
+      "frames": {
+        "F1": {
+          "path": "assets/art/run_loop_source/pisuke/frames/f1.png",
+          "sha256": "5ed6bdf1b81c28dfd59c65a00f6eeee9305ac0b489fa7e8d6fd9b9c0d1c66e7b",
+          "bytes": 138155,
+          "width": 768,
+          "height": 768
+        },
+        "F2": {
+          "path": "assets/art/run_loop_source/pisuke/frames/f2.png",
+          "sha256": "0aa64d8d2d096314801e339e1c63d43aafaac2d05f0eed30cfd2ff2f5368e6c6",
+          "bytes": 116048,
+          "width": 768,
+          "height": 768
+        },
+        "F3": {
+          "path": "assets/art/run_loop_source/pisuke/frames/f3.png",
+          "sha256": "a39263130f6781cfb72159db5096e3836bcd507cbd963424d77c74b133bcd09c",
+          "bytes": 137191,
+          "width": 768,
+          "height": 768
+        },
+        "F4": {
+          "path": "assets/art/run_loop_source/pisuke/frames/f4.png",
+          "sha256": "6d39d12aa86070d57666198b970a76f5959710ba4c2ce3f64a4678f5e0645d22",
+          "bytes": 126594,
+          "width": 768,
+          "height": 768
+        }
+      }
+    },
+    "godan": {
+      "original": {
+        "path": "assets/art/run_loop_source/godan/original.png",
+        "sha256": "bd6f83e2150f6479a61f0abc56d09ab756d4e9a3ebf8cda954ba9285abab355c",
+        "bytes": 2274497,
+        "width": 1916,
+        "height": 821
+      },
+      "sheet1x4": {
+        "path": "assets/art/run_loop_source/godan/sheet_1x4.png",
+        "sha256": "f0a52d51ce5c172d28be34eadf24d1aa12036ebee9f9c1007d856ce890783f42",
+        "bytes": 594286,
+        "width": 3072,
+        "height": 768
+      },
+      "frames": {
+        "F1": {
+          "path": "assets/art/run_loop_source/godan/frames/f1.png",
+          "sha256": "f8b4e5c2661a8654b2a0d5b0d904e6d956bf972a6ddeb8368aa1ced87f3d1c87",
+          "bytes": 162915,
+          "width": 768,
+          "height": 768
+        },
+        "F2": {
+          "path": "assets/art/run_loop_source/godan/frames/f2.png",
+          "sha256": "1da0c271f784c1ad28741bdaad9b53bf7ea46ff9ea090211704217fe015772c1",
+          "bytes": 131762,
+          "width": 768,
+          "height": 768
+        },
+        "F3": {
+          "path": "assets/art/run_loop_source/godan/frames/f3.png",
+          "sha256": "d904dba779a2564c65d6a54195e909b6a7f00a28f653e3a38a144f97b4a5459d",
+          "bytes": 159686,
+          "width": 768,
+          "height": 768
+        },
+        "F4": {
+          "path": "assets/art/run_loop_source/godan/frames/f4.png",
+          "sha256": "d460abb68a840802e8f05b5ee82b965528761e72045bc094553895d60e9934a3",
+          "bytes": 147758,
+          "width": 768,
+          "height": 768
+        }
+      }
+    },
+    "hakuma": {
+      "original": {
+        "path": "assets/art/run_loop_source/hakuma/original.png",
+        "sha256": "69ca5290c29e47225608976e847b6530b030590f8dc7acf858085d5ece17a66f",
+        "bytes": 984831,
+        "width": 1672,
+        "height": 941
+      },
+      "sheet1x4": {
+        "path": "assets/art/run_loop_source/hakuma/sheet_1x4.png",
+        "sha256": "a1fa72e9f252476e5bc2425dc3e32a7a272fc1d440a7127e3ab718d3283d7f25",
+        "bytes": 444894,
+        "width": 3072,
+        "height": 768
+      },
+      "frames": {
+        "F1": {
+          "path": "assets/art/run_loop_source/hakuma/frames/f1.png",
+          "sha256": "5ddb8c706181a4f46bda0c92f771215fcc8a9b3242a2a52a99b3416f85836efc",
+          "bytes": 118513,
+          "width": 768,
+          "height": 768
+        },
+        "F2": {
+          "path": "assets/art/run_loop_source/hakuma/frames/f2.png",
+          "sha256": "4744f093583e76011d7a200c5eda814950bee8dd1e4739a2a473e0cbb6ca251c",
+          "bytes": 114553,
+          "width": 768,
+          "height": 768
+        },
+        "F3": {
+          "path": "assets/art/run_loop_source/hakuma/frames/f3.png",
+          "sha256": "d6d8c64e45804811411805c4129a6b4445da177c0e68d8e728eeb28f9e3ef68c",
+          "bytes": 120093,
+          "width": 768,
+          "height": 768
+        },
+        "F4": {
+          "path": "assets/art/run_loop_source/hakuma/frames/f4.png",
+          "sha256": "6cae61d19ab50c29f4bf066ac6828e35f71b1ed5da975aba62c8eb5649557102",
+          "bytes": 96709,
+          "width": 768,
+          "height": 768
+        }
+      }
+    },
+    "chirka": {
+      "original": {
+        "path": "assets/art/run_loop_source/chirka/original.png",
+        "sha256": "3639de81c69eae3e4a8600b60ee1b18c495af08866e6fb4b4662d96d10650d0f",
+        "bytes": 1014275,
+        "width": 1672,
+        "height": 941
+      },
+      "sheet1x4": {
+        "path": "assets/art/run_loop_source/chirka/sheet_1x4.png",
+        "sha256": "62ba40e026c1bc612a53afe97d6b3baa7bc8e2527ab86cc3129350a4c3683cb1",
+        "bytes": 462476,
+        "width": 3072,
+        "height": 768
+      },
+      "frames": {
+        "F1": {
+          "path": "assets/art/run_loop_source/chirka/frames/f1.png",
+          "sha256": "3eba17fbc381035ccb60a006cdd010b349513c645131f9abd20b5c9a7847cfa6",
+          "bytes": 130204,
+          "width": 768,
+          "height": 768
+        },
+        "F2": {
+          "path": "assets/art/run_loop_source/chirka/frames/f2.png",
+          "sha256": "1346f59c398c4259d31e419ce8c6917204d53b1693ec0bcfd9743cfc1e94b0ba",
+          "bytes": 109827,
+          "width": 768,
+          "height": 768
+        },
+        "F3": {
+          "path": "assets/art/run_loop_source/chirka/frames/f3.png",
+          "sha256": "d3a6770996f06f88a300b2963e47c4e384b0c59c9328d47fd7f7e267a18b2fee",
+          "bytes": 124490,
+          "width": 768,
+          "height": 768
+        },
+        "F4": {
+          "path": "assets/art/run_loop_source/chirka/frames/f4.png",
+          "sha256": "d92c2a354658dca3245b314767ab9bc8f168582990c5fe0852450302b5c1a7ad",
+          "bytes": 102207,
+          "width": 768,
+          "height": 768
+        }
+      }
+    },
+    "takimaru": {
+      "original": {
+        "path": "assets/art/run_loop_source/takimaru/original.png",
+        "sha256": "3094fadd4e5d9ee54fe81e0b9da0e7bfc8b1aff25035702d2a9cfec38be0c844",
+        "bytes": 962968,
+        "width": 1823,
+        "height": 863
+      },
+      "sheet1x4": {
+        "path": "assets/art/run_loop_source/takimaru/sheet_1x4.png",
+        "sha256": "8d246a226a79b1e49b59fa69a02a5e7feb20db88d240525a4536126f0f45cd6c",
+        "bytes": 421193,
+        "width": 3072,
+        "height": 768
+      },
+      "frames": {
+        "F1": {
+          "path": "assets/art/run_loop_source/takimaru/frames/f1.png",
+          "sha256": "54cf857b838a5dd0abd9162197ee40a05352f9cb03534305e2f0c04667104268",
+          "bytes": 116068,
+          "width": 768,
+          "height": 768
+        },
+        "F2": {
+          "path": "assets/art/run_loop_source/takimaru/frames/f2.png",
+          "sha256": "5e4b190c72df67f03e9c2b47996019a07f42002e518ff225416ca45095c58543",
+          "bytes": 98040,
+          "width": 768,
+          "height": 768
+        },
+        "F3": {
+          "path": "assets/art/run_loop_source/takimaru/frames/f3.png",
+          "sha256": "4f06e6f0a0026e513fc3c9383a279ba2d2ab45c29b55dc8e41cf001fa61ad017",
+          "bytes": 119863,
+          "width": 768,
+          "height": 768
+        },
+        "F4": {
+          "path": "assets/art/run_loop_source/takimaru/frames/f4.png",
+          "sha256": "4795093d9eeedc98675db1861127ee7e10b36bb67496fb0cf9cd2a1ef628dafe",
+          "bytes": 94060,
+          "width": 768,
+          "height": 768
+        }
+      }
+    },
+    "yomikage": {
+      "original": {
+        "path": "assets/art/run_loop_source/yomikage/original.png",
+        "sha256": "6e641a6e157b102160ec511b4e2001bddf3507c10a68c9933c769bc602d67d41",
+        "bytes": 1098170,
+        "width": 2172,
+        "height": 724
+      },
+      "sheet1x4": {
+        "path": "assets/art/run_loop_source/yomikage/sheet_1x4.png",
+        "sha256": "1bf887346e5f2cfbbff9d9454f561f88163e3086564eadf9caca69ce6c3b7fec",
+        "bytes": 618291,
+        "width": 3072,
+        "height": 768
+      },
+      "frames": {
+        "F1": {
+          "path": "assets/art/run_loop_source/yomikage/frames/f1.png",
+          "sha256": "ae75ed0b32cb6e596a28042b3e40b09f0bf1abb94b3e52b0dc240fea98daaf3d",
+          "bytes": 163758,
+          "width": 768,
+          "height": 768
+        },
+        "F2": {
+          "path": "assets/art/run_loop_source/yomikage/frames/f2.png",
+          "sha256": "c39787b065d9ab544d71133a2942585704970199a4268f3f00aacd6289dac326",
+          "bytes": 152509,
+          "width": 768,
+          "height": 768
+        },
+        "F3": {
+          "path": "assets/art/run_loop_source/yomikage/frames/f3.png",
+          "sha256": "5fd37ba0fbc7da5174cc16c17e0617965015d781276710ef388f86221b7e2bd5",
+          "bytes": 163058,
+          "width": 768,
+          "height": 768
+        },
+        "F4": {
+          "path": "assets/art/run_loop_source/yomikage/frames/f4.png",
+          "sha256": "51e5594557ebe2419aebb486c6723cbc44d863458c08b6fb32941cf633b9cde8",
+          "bytes": 142492,
+          "width": 768,
+          "height": 768
+        }
+      }
+    },
+    "bullet": {
+      "original": {
+        "path": "assets/art/run_loop_source/bullet/original.png",
+        "sha256": "1df499833f98e4a22f55044ba07dc339c37c9d202e8d8819ab26d82c2e0db8aa",
+        "bytes": 952451,
+        "width": 1774,
+        "height": 887
+      },
+      "sheet1x4": {
+        "path": "assets/art/run_loop_source/bullet/sheet_1x4.png",
+        "sha256": "3bfd21e4a92419e977ad5ff37884edb989cedf677dfbdf0e772cb5188e741e51",
+        "bytes": 387371,
+        "width": 3072,
+        "height": 768
+      },
+      "frames": {
+        "F1": {
+          "path": "assets/art/run_loop_source/bullet/frames/f1.png",
+          "sha256": "812dee5fe29b20091ced09a31f99ba5f6c025b5241988f48de3b07b534c2f769",
+          "bytes": 102212,
+          "width": 768,
+          "height": 768
+        },
+        "F2": {
+          "path": "assets/art/run_loop_source/bullet/frames/f2.png",
+          "sha256": "bc030ec2dad65f02261b30505100035cfecbe9dad4eb786442e80455577c76cc",
+          "bytes": 95306,
+          "width": 768,
+          "height": 768
+        },
+        "F3": {
+          "path": "assets/art/run_loop_source/bullet/frames/f3.png",
+          "sha256": "34d62367e69dbcf40b69c02285045e7d7ed0b654f832f98c6f5c1ee4fd36988c",
+          "bytes": 102441,
+          "width": 768,
+          "height": 768
+        },
+        "F4": {
+          "path": "assets/art/run_loop_source/bullet/frames/f4.png",
+          "sha256": "e62a6cb3a443e95805d08c0ffb2d6f4610c3d6c8869158e326141cf922ff33fc",
+          "bytes": 94995,
+          "width": 768,
+          "height": 768
+        }
+      }
+    },
+    "dark_moguzo": {
+      "original": {
+        "path": "assets/art/run_loop_source/dark_moguzo/original.png",
+        "sha256": "0867d6906ecde052b507477a087f7c6ffdf767bac6a163c227009c0c11b22aa1",
+        "bytes": 1275898,
+        "width": 2172,
+        "height": 724
+      },
+      "sheet1x4": {
+        "path": "assets/art/run_loop_source/dark_moguzo/sheet_1x4.png",
+        "sha256": "5c5ee39fc009796ffa81acaa0793b89a714cbef67d4d03124ee4d5ba8af3b2d0",
+        "bytes": 506074,
+        "width": 3072,
+        "height": 768
+      },
+      "frames": {
+        "F1": {
+          "path": "assets/art/run_loop_source/dark_moguzo/frames/f1.png",
+          "sha256": "f90290878067350ccc6d8e10398dbedf3bb979ca10b7e595e0c20427b28b5222",
+          "bytes": 134379,
+          "width": 768,
+          "height": 768
+        },
+        "F2": {
+          "path": "assets/art/run_loop_source/dark_moguzo/frames/f2.png",
+          "sha256": "a4f0cb4c81c2437f21ab0ddbdcec8e236d7b9f341a6c0012374ce07876482274",
+          "bytes": 116095,
+          "width": 768,
+          "height": 768
+        },
+        "F3": {
+          "path": "assets/art/run_loop_source/dark_moguzo/frames/f3.png",
+          "sha256": "f82f5d6892e78460f927ad08cf3448fb54e3f0d50e5b92c23689f7c9a9ac6c30",
+          "bytes": 136841,
+          "width": 768,
+          "height": 768
+        },
+        "F4": {
+          "path": "assets/art/run_loop_source/dark_moguzo/frames/f4.png",
+          "sha256": "788404c5443cd3b8d0b6c934aa4da26371d76f7b8642a5ce796ba49115e66d73",
+          "bytes": 123721,
+          "width": 768,
+          "height": 768
+        }
+      }
+    }
+  },
+  "delivery": {
+    "contactSheet": {
+      "path": "assets/art/run_loop_source/_delivery/contact_sheet.png",
+      "sha256": "2c3ffa6c8fa7dd5f1bc8b47629578e96e0122197358453f8d6dc8c2a39bb1b5d",
+      "bytes": 784844,
+      "width": 1216,
+      "height": 2844
+    },
+    "readme": {
+      "path": "assets/art/run_loop_source/_delivery/README.md",
+      "sha256": "f51239ea755a69175c8fb82df66b185891efd137bb93a8b7fc62f105136fa037",
+      "bytes": 901
+    },
+    "editingReport": {
+      "path": "assets/art/run_loop_source/_delivery/EDITING_REPORT.json",
+      "sha256": "2633cf55fc6d22bd2a48b02393292262956fb1ae3e06105ddb5a40a835454e98",
+      "bytes": 11536
+    }
+  }
+}
