@@ -10,6 +10,7 @@
     "check:ability-ui-manifest": "node tools/build_ability_ui_manifest.mjs && node test/ability-ui-manifest.test.mjs",
     "check:stage-bg": "node test/stage-bg-assets.test.mjs",
     "check:run-loop": "node tools/build_run_loop_art.mjs && node test/run-loop-assets.test.mjs",
+    "check:renda-tune": "node test/renda-tune-r2-contract.test.mjs",
     "build:character-catalog-browser": "node --experimental-strip-types tools/build_character_catalog_browser.mjs",
     "check:core": "npm run typecheck:core && node --experimental-strip-types test/core-spec.test.mjs",
     "check:command": "npm run typecheck:core && node --experimental-strip-types test/command-parser.test.mjs",

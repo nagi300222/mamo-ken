@@ -110,10 +110,16 @@ const BAL={ // 03_data_design.md v2.0 §2 balance table 準拠
     STANDALONE:{
       JYANKEN:{startHp:1000,maxHp:1000,winHp:300,loseHp:400}, // Issue本文§JYANKEN
       HAYAUCHI:{startMaxTime:3.0,tierHits:10,tiers:[3.0,2.0,1.0,0.5]}, // 0-9/10-19/20-29/30+の4段(Issue本文§FINAL R1 START)
-      RENDA:{ // Issue本文§RENDA。「Derive from current Gyuiin feel first, then tune on device」の初期チューニング値(実機調整前提)
-        tapGain:0.03,baseDrift:0.02, // gauge(0..1、0.5=center)への1タップ加算/秒あたりの継続吸引
-        boundaryStepSec:5,boundaryStep:1/16,boundaryFloor:0.375, // 5秒毎に1/16ずつ境界が中央へ、center-1/8で停止(0.5-0.125)
-        driftStepSec:10,driftStepPct:0.10 // 10秒毎に+10%(Issue本文の例: 10s=1.10/30s=1.30/60s=1.60/120s=2.20)
+      RENDA:{ // RENDA-TUNE-R2(#128): 開始時点からbattle Gyuiin CPU Lv9相当の圧力へ高難度化
+        // baseDrift算出根拠(Issue本文§1): battle Gyuiin Lv9(BAL.AILV[9])のrendaCpuMin=0.130/rendaCpuRng=0.022の
+        // 平均加算/F = 0.130+0.022/2 = 0.141 → 120F(≈2秒)分 = 16.92タップ相当 → 中立維持に必要な等価タップ速度
+        // ≈8.46タップ/秒。standalone tapGain=0.03のまま維持する場合、baseDriftPerSec = 0.03*8.46 ≈ 0.2538
+        // (中立=タップ速度8.46/秒でgauge変化ゼロ。baseDrift/tapGain=8.46を検証で確認する)
+        tapGain:0.03,baseDrift:0.2538, // gauge(0..1、0.5=center)への1タップ加算/秒あたりの継続吸引
+        boundaryStepSec:5,boundaryStep:1/16,boundaryFloor:0.375, // 5秒毎に1/16ずつ境界が中央へ、center-1/8で停止(0.5-0.125、#128でも変更なし)
+        driftStepSec:10,driftStepPct:0.10 // 10秒毎+10%相当の傾き(Issue本文の例: 10s=1.10/30s=1.30/60s=1.60/120s=2.20)。
+        // rendaDriftMulAt()は離散段差ではなく連続線形補間(1+driftStepPct/driftStepSec*t)で実装し、上記チェックポイントの
+        // 値は厳密に一致させたまま急激な難易度の飛びを無くす(Issue本文「smooth linear interpolation...is preferred」)
       }
     }
   },
@@ -5469,9 +5475,10 @@ function rendaBoundaryAt(elapsedSec){ // Issue本文§RENDA Safe boundary: 5秒�
   const steps=Math.floor(elapsedSec/R.boundaryStepSec);
   return Math.min(R.boundaryFloor,steps*R.boundaryStep);
 }
-function rendaDriftMulAt(elapsedSec){ // Issue本文§Opposing pushback: 10秒毎+10%(例: 10s=1.10/30s=1.30/60s=1.60/120s=2.20)
+function rendaDriftMulAt(elapsedSec){ // RENDA-TUNE-R2(#128): 連続線形(1+傾き*t)。10/30/60/120秒で1.10/1.30/1.60/2.20と厳密一致するが、
+  // 離散段差(旧floor実装)を無くして急な難易度の飛びを回避する(Issue本文「smooth linear interpolation...preferred」)
   const R=BAL.MINIGAME.STANDALONE.RENDA;
-  return 1+R.driftStepPct*Math.floor(elapsedSec/R.driftStepSec);
+  return 1+(R.driftStepPct/R.driftStepSec)*elapsedSec;
 }
 function minigameRandTarget(){return{x:70+Math.random()*(W-140),y:260+Math.random()*(780-260)};} // 安全領域(y:260〜780、backボタン帯y844+と重ならない)
 function drawMinigamePlayerFighter(charIdx,palette,x,y){ // Codexレビュー指摘(PR#125): standing_/roster_はpalette非対応の単一アセットのため選択したP1/P2配色が反映されない。
@@ -5551,17 +5558,26 @@ function drawCoverBgFull(key){ // rTitle()と同じ全面cover(drawCoverBg()はP
   ctx.drawImage(img,(W-dw)/2,(H-dh)/2,dw,dh);
   return true;
 }
-function drawMinigameScrollBg(key,scrollX){ // RENDA専用の横スクロールcover。同画像を2枚並べてループし、継ぎ目をわずかにフェードして視覚的な硬いシームを避ける(Issue #113本文)
+function drawMinigameScrollBg(key,scrollX){ // RENDA専用の横スクロールcover。ミラーリピート(偶数タイル=正像/奇数タイル=左右反転)で
+  // 継ぎ目を数学的に完全一致させる(#128でIssue #113当初の暗転帯オーバーレイ→単純クロスフェードも試したが、
+  // 素材が非シームレスなため両端のどちらの手法でも実写素材の内容差そのものが暗いバンド/ゴースト状の帯として
+  // 視認できてしまうことをPlaywright実測で確認した。ミラーリピートは隣接タイル境界が常に同一の元画素へ収束する
+  // ため、alpha合成やフェード処理を一切使わずに継ぎ目そのものを無くせる=Issue本文が許容する
+  // 「Alternative accepted implementation: derived seamless runtime background with...edge extension」に該当)
   if(!assetReady(key)){ctx.fillStyle='#1a2436';ctx.fillRect(0,0,W,H);return;}
   const e=ASSETS[key],img=e.canvas||e.img,iw=e.img.naturalWidth,ih=e.img.naturalHeight;
   const scale=Math.max(W/iw,H/ih),dw=iw*scale,dh=ih*scale,y=(H-dh)/2;
-  const off=((scrollX%dw)+dw)%dw;
-  ctx.drawImage(img,-off,y,dw,dh);
-  ctx.drawImage(img,-off+dw,y,dw,dh);
-  const seamX=dw-off,fadeW=Math.min(60,dw*0.08);
-  const g=ctx.createLinearGradient(seamX-fadeW,0,seamX+fadeW,0);
-  g.addColorStop(0,'rgba(20,24,36,0)');g.addColorStop(0.5,'rgba(20,24,36,0.35)');g.addColorStop(1,'rgba(20,24,36,0)');
-  ctx.fillStyle=g;ctx.fillRect(seamX-fadeW,y,fadeW*2,dh);
+  let i=Math.floor(scrollX/dw)-1,x=i*dw-scrollX; // 画面左端より確実に手前のタイルから開始し、画面右端まで並べる
+  while(x<W){
+    if(x+dw>0){
+      const mirrored=(((i%2)+2)%2)===1; // 負数対応の偶奇判定
+      ctx.save();
+      if(mirrored){ctx.translate(x+dw,y);ctx.scale(-1,1);ctx.drawImage(img,0,0,dw,dh);}
+      else ctx.drawImage(img,x,y,dw,dh);
+      ctx.restore();
+    }
+    i++;x+=dw;
+  }
 }
 function rMiniJyanken(){
   const hands={guu:'グー',choki:'チョキ',paa:'パー'};
