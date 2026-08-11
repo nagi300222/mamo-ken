@@ -1,9 +1,9 @@
 {
-  "patch": "MAMOKEN Wiki PR92 direct HTML recovery",
-  "auditedMainShortSha": "ccc623f",
+  "patch": "MAMOKEN Wiki WEB-R2 final sync (Issue #108)",
+  "auditedMainShortSha": "2f1bae7",
   "entry": "wiki/index.html",
-  "bytes": 106324,
-  "sha256": "f39141ff5802674add9d8b370d29135074d21e68a456591af50ac469dd24c03d",
+  "bytes": 127095,
+  "sha256": "ba4ef17d014f5ff461a9d3c68df69a16fb2394e28db95124dcb4563be0205940",
   "robots": "index,follow",
   "expectedSuffix": "</script></body></html>",
   "localAssetRoots": {
