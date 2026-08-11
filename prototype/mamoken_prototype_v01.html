@@ -2133,7 +2133,8 @@ function pushModernHist(f,lv){ // Normal(crouch以外)のHIT/BLOCK確定時に�
   if(f.modernHist.length>MODERN_HIST_MAX)f.modernHist.shift();
 }
 function tryModernReplace(f,lv){ // 戻り値: {move,idx,grab}かnull。lvは今まさに開始しようとしているNormalの段
-  if(curControlScheme()==='classic'&&isLocalPlayerFighter(f))return null; // MENU-R1(#111): Classic選択時はModernの自動コマンド解決を行わず、常に手動コマンド入力のみとする(CPU側は対象外、CPU-R2 baseline保持)
+  // CONTROL-HYBRID-R1(#127): Modern自動派生とClassic直接入力は「選べる操作モード」ではなく常時併用の
+  // 2つの入力経路であり、ここにmode分岐は存在しない(human/CPU/offline/online問わず常時有効)
   modernHistTimeout(f);
   const pats=MODERN_PATTERNS[skeletonIdOf(f.c)];
   if(!pats)return null;
@@ -2840,14 +2841,14 @@ function timeUp(){
 // 最小限の値付きオブジェクトとして用意する。#111はこのOPTIONSオブジェクトへUIを結線するだけでよい
 // (=truth tableの重複を作らない)。shake/flashはpresentation-onlyであり、B.hitstop/simulation timingは
 // 常に一定でこれらの値に影響されない(disable/reduceしてもgameplay/hashは変化しない)
-let OPTIONS={shake:'normal',flash:'normal',vibration:'on',controlScheme:'modern'}; // MENU-R1(#111): shake: 'strong'|'normal'|'off'。flash: 'normal'|'reduced'。
-// vibration: 'on'|'off'(presentation-only)。controlScheme: 'modern'|'classic'(既定のコマンド解決方式。オンライン中はcurControlScheme()が常に'modern'を返し決定性を維持する)
+let OPTIONS={shake:'normal',flash:'normal',vibration:'on'}; // MENU-R1(#111): shake: 'strong'|'normal'|'off'。flash: 'normal'|'reduced'。
+// vibration: 'on'|'off'(presentation-only)
+// CONTROL-HYBRID-R1(#127): OPTIONS.controlScheme/curControlScheme()/isLocalPlayerFighter()は撤去した
+// (Modern/Classicは選択式の操作モードではなく常時併用の2入力経路であり、選択状態自体が存在しない)
 function shakeScale(){return OPTIONS.shake==='off'?0:(OPTIONS.shake==='strong'?1.35:1);}
 function flashScale(){return OPTIONS.flash==='reduced'?0.4:1;}
-function curControlScheme(){return onlineActive()?'modern':OPTIONS.controlScheme;} // curAiLv()と同じ理由(§12): オンライン中は両クライアントのsimulation分岐を一致させるため常時'modern'固定
-function isLocalPlayerFighter(f){return onlineActive()?f===B.p[online.slot]:f===B.p[0];} // Codexレビュー指摘(PR#122): controlSchemeは「プレイヤーの操作方式」であり、CPU(B.p[1])のModern自動変換まで止めるとCPU-R2のLv別挙動baselineが変わってしまう。ローカルの人間操作Fighterのみに絞る
 function vibrate(ms){if(OPTIONS.vibration==='on'&&typeof navigator!=='undefined'&&navigator.vibrate)navigator.vibrate(ms);} // presentation-only。未対応環境はnavigator.vibrate自体が無くno-op
-function resetOptions(){OPTIONS.shake='normal';OPTIONS.flash='normal';OPTIONS.vibration='on';OPTIONS.controlScheme='modern';BGM_VOLUME=0.35;SE_VOLUME=1.0;if(bgmGainNode)bgmGainNode.gain.value=BGM_VOLUME;}
+function resetOptions(){OPTIONS.shake='normal';OPTIONS.flash='normal';OPTIONS.vibration='on';BGM_VOLUME=0.35;SE_VOLUME=1.0;if(bgmGainNode)bgmGainNode.gain.value=BGM_VOLUME;}
 /* ================= CPU AI ================= */
 const cpuEv=[];
 let cpuLv=3; // CPU-R2 PR5(#106 §2/§12): 旧aiDifficulty(EASY/NORMAL/HARD)を廃し、数値CPU Lv1-9を直接の session state とする。
@@ -5694,7 +5695,6 @@ const MENU_OPTIONS_ROWS=[
   {key:'bgm',label:'BGM音量',type:'volume'},
   {key:'se',label:'SE音量',type:'volume'},
   {key:'vibration',label:'バイブ',type:'toggle2',values:['on','off'],labels:['ON','OFF']},
-  {key:'controlScheme',label:'操作方式(既定)',type:'toggle2',values:['modern','classic'],labels:['モダン','クラシック']},
   {key:'shake',label:'画面シェイク',type:'toggle3',values:['strong','normal','off'],labels:['強','標準','OFF']},
   {key:'flash',label:'フラッシュ',type:'toggle2',values:['normal','reduced'],labels:['標準','低減']}
 ];
