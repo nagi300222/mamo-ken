@@ -105,7 +105,17 @@ const BAL={ // 03_data_design.md v2.0 §2 balance table 準拠
   MINIGAME:{
     weights:{jyanken:0.5,renda:0.25,hayauchi:0.25},
     RENDA:{durationF:120,tapGain:1,barRange:20}, // レンダ(連打の綱引き)。CPU加算率はBAL.AILVへLv別に集約(#106 §10)
-    HAYAUCHI:{targets:5,radius:55,capF:600} // ハヤウチ(的あて連続タップ)。CPU撃破速度はBAL.AILVへLv別に集約(#106 §10)
+    HAYAUCHI:{targets:5,radius:55,capF:600}, // ハヤウチ(的あて連続タップ)。CPU撃破速度はBAL.AILVへLv別に集約(#106 §10)
+    // MINIGAME-R1(#102): 独立エンドレスモード専用の値(battle Gyuiin側のRENDA/HAYAUCHIとは完全分離、参照/依存させない)
+    STANDALONE:{
+      JYANKEN:{startHp:1000,maxHp:1000,winHp:300,loseHp:400}, // Issue本文§JYANKEN
+      HAYAUCHI:{startMaxTime:3.0,tierHits:10,tiers:[3.0,2.0,1.0,0.5]}, // 0-9/10-19/20-29/30+の4段(Issue本文§FINAL R1 START)
+      RENDA:{ // Issue本文§RENDA。「Derive from current Gyuiin feel first, then tune on device」の初期チューニング値(実機調整前提)
+        tapGain:0.03,baseDrift:0.02, // gauge(0..1、0.5=center)への1タップ加算/秒あたりの継続吸引
+        boundaryStepSec:5,boundaryStep:1/16,boundaryFloor:0.375, // 5秒毎に1/16ずつ境界が中央へ、center-1/8で停止(0.5-0.125)
+        driftStepSec:10,driftStepPct:0.10 // 10秒毎に+10%(Issue本文の例: 10s=1.10/30s=1.30/60s=1.60/120s=2.20)
+      }
+    }
   },
   // CPU-R2 PR1(#106 §3): 正式なCPU Lv1-9テーブル。Issue #106の初期チューニング値をそのまま採用(将来のTraining後BAL調整対象)。
   // PR2-4でreactionDelay/reactRate/advDefShare/jitterF等を実際の意思決定ロジックへ接続済み。
@@ -3589,7 +3599,7 @@ function selectPress(p){
     }
   }
   if(inRect(p,SELECT_DETAIL_BTN.x,SELECT_DETAIL_BTN.y,SELECT_DETAIL_BTN.w,SELECT_DETAIL_BTN.h)){openCharacterDetail();return;}
-  if(!survivalPending){ // SURVIVAL-R1(#101): CPU Lv行は非表示のため非タップ対象にもする
+  if(!survivalPending&&!minigamePendingKind){ // SURVIVAL-R1(#101)/MINIGAME-R1(#102): CPU Lv行は非表示のため非タップ対象にもする
     for(let i=0;i<CPU_LV_LEVELS.length;i++){
       const r=cpuLvRect(i);
       if(inRect(p,r.x,r.y,r.w,r.h)){cpuLv=CPU_LV_LEVELS[i];sfx('tap');return;}
@@ -3598,6 +3608,7 @@ function selectPress(p){
   if(inRect(p,SELECT_CONFIRM_BTN.x,SELECT_CONFIRM_BTN.y,SELECT_CONFIRM_BTN.w,SELECT_CONFIRM_BTN.h)){
     if(arcadePending){sfx('tap');startArcadeRun();return;} // ARCADE-R1(#99): ステージは自動抽選のためselStageId/game.stageIdはstartArcadeRun側で都度確定する
     if(survivalPending){sfx('tap');startSurvivalRun();return;} // SURVIVAL-R1(#101): ステージ/CPU Lvは戦ごとにsurvivalBeginBattle()側で都度確定する
+    if(minigamePendingKind){sfx('tap');startMinigameRun(minigamePendingKind);return;} // MINIGAME-R1(#102): 背景は固定・CPU Lv概念が無いためstartMinigameRun側で確定
     const selected=ROSTER[selCharIdx];
     game.p1=selected.combatIndex;
     game.p2=(Math.random()*CHARS.length)|0;
@@ -3605,12 +3616,16 @@ function selectPress(p){
     game.stageId=resolveStageId(selStageId); // STAGE-ART-IMPORT: 選択画面で選んだステージを対戦へ持ち込む。MENU-R1(#111): ランダムはここで実IDへ解決
     sfx('tap');startBattle();return;
   }
-  if(inRect(p,SELECT_BACK_BTN.x,SELECT_BACK_BTN.y,SELECT_BACK_BTN.w,SELECT_BACK_BTN.h)){arcadePending=false;survivalPending=false;sfx('tap');game.screen='menuBattle';return;}
+  if(inRect(p,SELECT_BACK_BTN.x,SELECT_BACK_BTN.y,SELECT_BACK_BTN.w,SELECT_BACK_BTN.h)){
+    const toMinigame=!!minigamePendingKind;
+    arcadePending=false;survivalPending=false;minigamePendingKind=null;
+    sfx('tap');game.screen=toMinigame?'menuMinigame':'menuBattle';return;
+  }
   for(let i=0;i<2;i++){ // PALETTE-R1: 1P/2P配色選択
     const r=paletteSwatchRect(i);
     if(inRect(p,r.x,r.y,r.w,r.h)){selPalette=i===0?'p1':'p2';sfx('tap');return;}
   }
-  if(arcadePending||survivalPending)return; // ARCADE-R1(#99)/SURVIVAL-R1(#101): ステージ行は自動抽選のため選択画面では非表示・非タップ対象
+  if(arcadePending||survivalPending||minigamePendingKind)return; // ARCADE-R1(#99)/SURVIVAL-R1(#101)/MINIGAME-R1(#102): ステージ行は自動抽選または固定背景のため選択画面では非表示・非タップ対象
   for(let i=0;i<BATTLE_STAGES.length+1;i++){ // STAGE-ART-IMPORT: ステージ選択。MENU-R1(#111): 末尾(BATTLE_STAGES.length)はランダム
     const r=stageRect(i);
     if(inRect(p,r.x,r.y,r.w,r.h)){selStageId=(i<BATTLE_STAGES.length)?BATTLE_STAGES[i].id:STAGE_RANDOM_ID;sfx('tap');return;}
@@ -5389,9 +5404,9 @@ function menuBattlePress(p){
 // 単発プラクティス(1回対戦・タイムアタック等)として実装する。#102 MINIGAME-R1 + #113 RUN-LOOP-R1が
 // この上にスコア進行・連戦ループを載せる想定(このPRでは土台の単発プレイのみ)
 const MENU_MINIGAME_ITEMS=[
-  {key:'jyanken',labelJa:'ジャンケン',sub:'1回勝負でCPUと対戦'},
-  {key:'hayauchi',labelJa:'早撃ち',sub:'的あてタイムアタック'},
-  {key:'renda',labelJa:'連打',sub:'制限時間内の連打数勝負'}
+  {key:'jyanken',labelJa:'ジャンケン',sub:'HP勝負のエンドレスジャンケン'},
+  {key:'hayauchi',labelJa:'早撃ち',sub:'的あてエンドレス(制限時間が段々短縮)'},
+  {key:'renda',labelJa:'連打',sub:'押し負けたら終わりのエンドレス連打'}
 ];
 function menuMinigameRect(i){
   const w=W-72,h=100,gap=20,y0=200;
@@ -5411,120 +5426,229 @@ function rMenuMinigame(){
 function menuMinigamePress(p){
   for(let i=0;i<MENU_MINIGAME_ITEMS.length;i++){
     const r=menuMinigameRect(i);
-    if(inRect(p,r.x,r.y,r.w,r.h)){startMiniPractice(MENU_MINIGAME_ITEMS[i].key);return;}
+    if(inRect(p,r.x,r.y,r.w,r.h)){sfx('tap');minigamePendingKind=MENU_MINIGAME_ITEMS[i].key;game.screen='select';return;} // MINIGAME-R1(#102): Issue本文「Character select: 9 characters, palette P1/P2」のため既存select画面へ経由する
   }
   if(menuBackHit(p)){sfx('tap');game.screen='title';return;}
 }
-// --- 単発プラクティス(ジャンケン/早撃ち/連打)。本編Bとは完全分離、Math.random()/performance.now()駆動で
-// オンライン同期・rng()決定性のいずれにも触れない(スコアはこの画面内のみのsession scoped記録) ---
-let MG=null;
-const MINI_ACTION_BTN={x:W/2-140,y:640,w:280,h:120};
-function startMiniPractice(kind){
-  sfx('tap');
-  const prevBest=(MG&&MG.kind===kind)?MG.best:null;
-  const prevTally=(MG&&MG.kind==='jyanken'&&kind==='jyanken')?{wins:MG.wins,losses:MG.losses,draws:MG.draws}:{wins:0,losses:0,draws:0}; // Codexレビュー指摘(PR#122): もう一度時に集計をリセットしない(hayauchi/rendaのbest維持と揃える)
-  if(kind==='jyanken')MG={kind:kind,phase:'pick',pick:null,cpuPick:null,winner:null,wins:prevTally.wins,losses:prevTally.losses,draws:prevTally.draws};
-  else if(kind==='hayauchi')MG={kind:kind,phase:'play',hits:0,target:miniRandTarget(),startedAt:performance.now(),elapsedMs:0,best:prevBest};
-  else MG={kind:kind,phase:'play',taps:0,deadline:performance.now()+5000,best:prevBest};
+/* ================= MINIGAME-R1(#102): ギュイーン3種の独立エンドレスモード =================
+ * 本編Bとは完全分離(Math.random()/performance.now()駆動、rng()もB.*も一切読まない=オンライン同期・
+ * gameplay hashに無関係)。battle Gyuiin本体(stepJyanken/stepRenda/stepHayauchi、BAL.MINIGAME.RENDA/
+ * HAYAUCHI)には依存も影響もさせない(Issue本文「Do NOT make battle Gyuiin depend on standalone UI
+ * controller」「Battle Gyuiin behavior stays separate and must not switch backgrounds」)。
+ */
+let MG=null; // 非プレイ中はnull。{kind,charIdx,palette,...mode別state}
+let minigamePendingKind=null; // 既存select画面をMINIGAME用のキャラ選択として使う際のkind('jyanken'|'hayauchi'|'renda')
+function pickDifferentChar(excludeIdx){ // 「直前と同じ敵キャラは避ける」の共通実装(JYANKEN勝利時/HAYAUCHI10 hit毎)
+  if(CHARS.length<=1)return excludeIdx;
+  let idx;do{idx=(Math.random()*CHARS.length)|0;}while(idx===excludeIdx);
+  return idx;
+}
+function jankenCpuPick(){return CHOICES[(Math.random()*3)|0];} // 引数無し=プレイヤーの選択を一切参照できない構造にして「後出し無し」を自明にする(Issue本文「never choose after seeing player's committed choice」)
+function hayauchiMaxTimeFor(hits){ // Issue本文§FINAL R1 START: 0-9=3.0s/10-19=2.0s/20-29=1.0s/30+=0.5s floor
+  const t=BAL.MINIGAME.STANDALONE.HAYAUCHI.tiers,step=BAL.MINIGAME.STANDALONE.HAYAUCHI.tierHits;
+  const tier=Math.min(t.length-1,Math.floor(hits/step));
+  return t[tier];
+}
+function rendaBoundaryAt(elapsedSec){ // Issue本文§RENDA Safe boundary: 5秒毎に1/16ずつ、center-1/8で停止
+  const R=BAL.MINIGAME.STANDALONE.RENDA;
+  const steps=Math.floor(elapsedSec/R.boundaryStepSec);
+  return Math.min(R.boundaryFloor,steps*R.boundaryStep);
+}
+function rendaDriftMulAt(elapsedSec){ // Issue本文§Opposing pushback: 10秒毎+10%(例: 10s=1.10/30s=1.30/60s=1.60/120s=2.20)
+  const R=BAL.MINIGAME.STANDALONE.RENDA;
+  return 1+R.driftStepPct*Math.floor(elapsedSec/R.driftStepSec);
+}
+function minigameRandTarget(){return{x:70+Math.random()*(W-140),y:260+Math.random()*(780-260)};} // 安全領域(y:260〜780、backボタン帯y844+と重ならない)
+function drawMinigamePlayerFighter(charIdx,palette,x,y){ // Codexレビュー指摘(PR#125): standing_/roster_はpalette非対応の単一アセットのため選択したP1/P2配色が反映されない。
+  // rFighter()のcurrent-art経路(f.palette優先、PALETTE-R1)はpalette対応なので、既存demoF(rTitle/rResult同様の使い捨てfighterスナップショット)経由でそれを使う
+  demoF.c=CHARS[charIdx];demoF.side=0;demoF.palette=palette;demoF.phase='idle';demoF.pf=0;demoF.atkLv=null;demoF.guardLv=null;
+  demoF.held=null;demoF.lunge=0;demoF.kb=0;demoF.s=0;demoF.ult=0;demoF.combo=0;demoF.normalChainCount=0;demoF.sNo=0;
+  rFighter(demoF,x,y);
+}
+function startMinigameRun(kind){ // select画面のけっていボタン(minigamePendingKind時)から呼ばれる
+  minigamePendingKind=null;
+  const charIdx=ROSTER[selCharIdx].combatIndex,palette=selPalette;
+  const J=BAL.MINIGAME.STANDALONE.JYANKEN;
+  if(kind==='jyanken')MG={kind:kind,charIdx:charIdx,palette:palette,hp:J.startHp,maxHp:J.maxHp,wins:0,rounds:0,phase:'pick',pick:null,cpuPick:null,winner:null,enemyCharIdx:pickDifferentChar(charIdx),presentF:0,revealAt:0};
+  else if(kind==='hayauchi')MG={kind:kind,charIdx:charIdx,palette:palette,hits:0,timer:BAL.MINIGAME.STANDALONE.HAYAUCHI.startMaxTime,target:minigameRandTarget(),enemyCharIdx:pickDifferentChar(charIdx),phase:'play',lastTickAt:null};
+  else MG={kind:kind,charIdx:charIdx,palette:palette,gauge:0.5,taps:0,elapsedSec:0,scrollX:0,phase:'play',lastTickAt:null};
   game.screen='miniPractice';
 }
 const MINI_TITLE={jyanken:'ジャンケン',hayauchi:'早撃ち',renda:'連打'};
-// miniPractice専用の座標ヘルパー: clashBtns()/randHayauchiTarget()は対戦中クラッシュ(PT基準・rng()決定論)向けの
-// 座標系のため使わず、この画面の安全領域(y:260〜780、backボタン帯y844+と重ならない)専用に別途定義する
-function miniHandBtns(){return[
-  {c:'guu',x:W/2,y:440,col:'#ffd23f',label:'グー'},
-  {c:'choki',x:W-150,y:620,col:'#ff5a5a',label:'チョキ'},
-  {c:'paa',x:150,y:620,col:'#5ab2ff',label:'パー'}];}
+function miniHandBtns(){return[ // この画面の安全領域(y:260〜780、backボタン帯y844+と重ならない)専用配置
+  {c:'guu',x:W/2,y:700,col:'#ffd23f',label:'グー'},
+  {c:'choki',x:W-150,y:600,col:'#ff5a5a',label:'チョキ'},
+  {c:'paa',x:150,y:600,col:'#5ab2ff',label:'パー'}];}
 function miniHandHit(p){for(const b of miniHandBtns())if(Math.hypot(p.x-b.x,p.y-b.y)<=76)return b.c;return null;}
-function miniRandTarget(){return{x:70+Math.random()*(W-140),y:260+Math.random()*(780-260)};}
+const MINI_ACTION_BTN={x:W/2-140,y:660,w:280,h:100};
+const MINI_RETRY_BTN={x:36,y:700,w:W-72,h:60},MINI_MENU_BTN={x:36,y:770,w:(W-72-16)/2,h:56},MINI_TITLE_BTN={x:36+(W-72-16)/2+16,y:770,w:(W-72-16)/2,h:56};
+function drawMiniGameOverBtns(){
+  ctx.fillStyle='#2c4a1f';rr(MINI_RETRY_BTN.x,MINI_RETRY_BTN.y,MINI_RETRY_BTN.w,MINI_RETRY_BTN.h,14);ctx.fill();
+  ctx.strokeStyle='#7CFC00';ctx.lineWidth=3;rr(MINI_RETRY_BTN.x,MINI_RETRY_BTN.y,MINI_RETRY_BTN.w,MINI_RETRY_BTN.h,14);ctx.stroke();
+  txt('RETRY',W/2,MINI_RETRY_BTN.y+MINI_RETRY_BTN.h/2,20,'#fff');
+  ctx.fillStyle='#1a1d29';rr(MINI_MENU_BTN.x,MINI_MENU_BTN.y,MINI_MENU_BTN.w,MINI_MENU_BTN.h,12);ctx.fill();
+  ctx.strokeStyle='#4a5470';ctx.lineWidth=2;rr(MINI_MENU_BTN.x,MINI_MENU_BTN.y,MINI_MENU_BTN.w,MINI_MENU_BTN.h,12);ctx.stroke();
+  txt('MINIGAME',MINI_MENU_BTN.x+MINI_MENU_BTN.w/2,MINI_MENU_BTN.y+MINI_MENU_BTN.h/2,15,'#cfd6e6');
+  ctx.fillStyle='#1a1d29';rr(MINI_TITLE_BTN.x,MINI_TITLE_BTN.y,MINI_TITLE_BTN.w,MINI_TITLE_BTN.h,12);ctx.fill();
+  ctx.strokeStyle='#4a5470';ctx.lineWidth=2;rr(MINI_TITLE_BTN.x,MINI_TITLE_BTN.y,MINI_TITLE_BTN.w,MINI_TITLE_BTN.h,12);ctx.stroke();
+  txt('TITLE',MINI_TITLE_BTN.x+MINI_TITLE_BTN.w/2,MINI_TITLE_BTN.y+MINI_TITLE_BTN.h/2,15,'#cfd6e6');
+}
+function minigameGameOverHit(p){ // 3画面共通のRETRY/MINIGAME/TITLE押下判定(Issue本文§Result)
+  if(inRect(p,MINI_RETRY_BTN.x,MINI_RETRY_BTN.y,MINI_RETRY_BTN.w,MINI_RETRY_BTN.h)){sfx('tap');startMinigameRun(MG.kind);return true;}
+  if(inRect(p,MINI_MENU_BTN.x,MINI_MENU_BTN.y,MINI_MENU_BTN.w,MINI_MENU_BTN.h)){sfx('tap');MG=null;game.screen='menuMinigame';return true;}
+  if(inRect(p,MINI_TITLE_BTN.x,MINI_TITLE_BTN.y,MINI_TITLE_BTN.w,MINI_TITLE_BTN.h)){sfx('tap');MG=null;game.screen='title';return true;}
+  return false;
+}
+function minigameTick(){ // rMiniPractice()から毎フレーム呼ぶ(mini系はrequestAnimationFrame直結。fixed60fps前提のB.f更新とは別系統のためperformance.now()差分で時間を測る)
+  const now=performance.now();
+  const dt=Math.min(0.25,(now-(MG.lastTickAt||now))/1000); // 初回/タブ非アクティブ復帰時の異常dtをクランプ
+  MG.lastTickAt=now;
+  if(MG.kind==='jyanken'&&MG.phase==='reveal'&&now-MG.revealAt>=700)MG.phase=(MG.hp<=0)?'gameover':'pick';
+  if(MG.kind==='hayauchi'&&MG.phase==='play'){MG.timer-=dt;if(MG.timer<=0)MG.phase='gameover';}
+  if(MG.kind==='renda'&&MG.phase==='play'){
+    MG.elapsedSec+=dt;
+    const R=BAL.MINIGAME.STANDALONE.RENDA;
+    MG.gauge=Math.max(0,Math.min(1,MG.gauge-R.baseDrift*rendaDriftMulAt(MG.elapsedSec)*dt));
+    if(MG.gauge<=rendaBoundaryAt(MG.elapsedSec))MG.phase='gameover';
+  }
+}
 function rMiniPractice(){
-  drawMenuHeader('MINIGAME - '+MINI_TITLE[MG.kind]);
-  if(MG.kind==='renda'&&MG.phase==='play'&&performance.now()>=MG.deadline){MG.phase='result';MG.best=(MG.best==null)?MG.taps:Math.max(MG.best,MG.taps);}
+  minigameTick();
+  drawMenuHeader('');
+  drawCoverBgFull(MINIGAME_BG[MG.kind].assetKey); // MINIGAME-R1(#102): 専用背景(集落の広場/草原の的場/山道ランコース)。読込前はdrawMenuHeader()の暗色地のまま
   if(MG.kind==='jyanken')rMiniJyanken();
   else if(MG.kind==='hayauchi')rMiniHayauchi();
   else rMiniRenda();
-  drawMenuBack('ミニゲーム選択へ戻る');
+  if(MG.phase!=='gameover')drawMenuBack('ミニゲーム選択へ戻る');
+}
+function drawCoverBgFull(key){ // rTitle()と同じ全面cover(drawCoverBg()はPT基準の対戦床合わせのため、非戦闘screenのここでは使わない)
+  if(!assetReady(key))return false;
+  const e=ASSETS[key],img=e.canvas||e.img,iw=e.img.naturalWidth,ih=e.img.naturalHeight;
+  const scale=Math.max(W/iw,H/ih),dw=iw*scale,dh=ih*scale;
+  ctx.drawImage(img,(W-dw)/2,(H-dh)/2,dw,dh);
+  return true;
+}
+function drawMinigameScrollBg(key,scrollX){ // RENDA専用の横スクロールcover。同画像を2枚並べてループし、継ぎ目をわずかにフェードして視覚的な硬いシームを避ける(Issue #113本文)
+  if(!assetReady(key)){ctx.fillStyle='#1a2436';ctx.fillRect(0,0,W,H);return;}
+  const e=ASSETS[key],img=e.canvas||e.img,iw=e.img.naturalWidth,ih=e.img.naturalHeight;
+  const scale=Math.max(W/iw,H/ih),dw=iw*scale,dh=ih*scale,y=(H-dh)/2;
+  const off=((scrollX%dw)+dw)%dw;
+  ctx.drawImage(img,-off,y,dw,dh);
+  ctx.drawImage(img,-off+dw,y,dw,dh);
+  const seamX=dw-off,fadeW=Math.min(60,dw*0.08);
+  const g=ctx.createLinearGradient(seamX-fadeW,0,seamX+fadeW,0);
+  g.addColorStop(0,'rgba(20,24,36,0)');g.addColorStop(0.5,'rgba(20,24,36,0.35)');g.addColorStop(1,'rgba(20,24,36,0)');
+  ctx.fillStyle=g;ctx.fillRect(seamX-fadeW,y,fadeW*2,dh);
 }
 function rMiniJyanken(){
   const hands={guu:'グー',choki:'チョキ',paa:'パー'};
+  const selfC=CHARS[MG.charIdx],enemyC=CHARS[MG.enemyCharIdx],enemyR=rosterEntryFor(enemyC.id);
+  txt('JYANKEN',W/2,90,26,'#ffd23f');
+  drawRosterCropFlipped('roster_'+enemyC.id,W/2-90,110,180,180,enemyR&&enemyR.heroCrop,14); // 敵=中央上、向き合う向き
+  txt(enemyC.name,W/2,300,14,'#ff9a4d');
+  const hpW=280,hpX=W/2-hpW/2,hpY=330;
+  ctx.fillStyle='#1a1d29';rr(hpX,hpY,hpW,18,9);ctx.fill();
+  ctx.fillStyle=MG.hp>MG.maxHp*0.3?'#7CFC00':'#ff6b6b';rr(hpX,hpY,hpW*Math.max(0,MG.hp)/MG.maxHp,18,9);ctx.fill();
+  txt('HP '+Math.max(0,MG.hp)+' / '+MG.maxHp,W/2,hpY+34,13,'#cfd6e6');
+  txt('勝ち'+MG.wins+'　ラウンド'+MG.rounds,W/2,hpY+56,12,'#a2abc0');
   if(MG.phase==='pick'){
-    txt('手を選んでください',W/2,220,18,'#e7ebf4');
-    const bs=miniHandBtns();
-    for(const b of bs){
+    txt('手を選んでください',W/2,430,16,'#e7ebf4');
+    for(const b of miniHandBtns()){
       ctx.fillStyle='rgba(255,255,255,0.08)';ctx.beginPath();ctx.arc(b.x,b.y,72,0,TAU);ctx.fill();
       ctx.strokeStyle=b.col;ctx.lineWidth=3;ctx.beginPath();ctx.arc(b.x,b.y,72,0,TAU);ctx.stroke();
       txt(b.label,b.x,b.y,20,b.col);
     }
-  }else{
+  }else if(MG.phase==='reveal'){
     const w=MG.winner;
-    txt('あなた:'+hands[MG.pick]+'　CPU:'+hands[MG.cpuPick],W/2,240,18,'#e7ebf4');
-    txt(w===-1?'あいこ':(w===0?'あなたの勝ち！':'あなたの負け'),W/2,290,30,w===0?'#7CFC00':(w===-1?'#ffd23f':'#ff6b6b'));
-    txt('勝ち'+MG.wins+'　負け'+MG.losses+'　あいこ'+MG.draws,W/2,340,14,'#a2abc0');
-    drawMiniRetryBtn();
+    if(w===0&&MG.presentF>0){ // WIN presentation: 既存立ち絵を使った演出専用の一瞬の強調(実際の攻撃判定はしない=Issue本文「No combat hit resolver」)
+      const pop=1+Math.max(0,MG.presentF)/30*0.15;
+      ctx.save();ctx.translate(W/2,600);ctx.scale(pop,pop);
+      drawMinigamePlayerFighter(MG.charIdx,MG.palette,0,0);
+      ctx.restore();
+    }else{
+      drawMinigamePlayerFighter(MG.charIdx,MG.palette,W/2,600);
+    }
+    txt('あなた:'+hands[MG.pick]+'　CPU:'+hands[MG.cpuPick],W/2,430,16,'#e7ebf4');
+    txt(w===-1?'あいこ':(w===0?'WIN! +'+BAL.MINIGAME.STANDALONE.JYANKEN.winHp+'HP':'LOSE -'+BAL.MINIGAME.STANDALONE.JYANKEN.loseHp+'HP'),W/2,470,26,w===0?'#7CFC00':(w===-1?'#ffd23f':'#ff6b6b'));
+  }else if(MG.phase==='gameover'){
+    txt('GAME OVER',W/2,440,36,'#ff6b6b');
+    txt('勝ち'+MG.wins+'　ラウンド'+MG.rounds+'　最終HP'+Math.max(0,MG.hp),W/2,486,16,'#cfd6e6');
+    drawMiniGameOverBtns();
   }
 }
 function rMiniHayauchi(){
+  const enemyC=CHARS[MG.enemyCharIdx],enemyR=rosterEntryFor(enemyC.id);
+  txt('HAYAUCHI',W/2,90,26,'#ffd23f');
+  drawRosterCropFlipped('roster_'+enemyC.id,W-116,110,80,80,enemyR&&enemyR.heroCrop,10); // 右上の小さな敵バッジ(10 hit毎に切替、演出専用)
+  ctx.save();ctx.translate(76,150);ctx.scale(0.32,0.32);drawMinigamePlayerFighter(MG.charIdx,MG.palette,0,0);ctx.restore(); // Codexレビュー指摘(PR#125): HAYAUCHIは選択したcharIdx/paletteを画面上のどこにも表示していなかったため左上に選択キャラのバッジを追加
   if(MG.phase==='play'){
-    txt('的をタップ '+MG.hits+'/5',W/2,220,18,'#e7ebf4');
-    txt(((performance.now()-MG.startedAt)/1000).toFixed(1)+'秒',W/2,254,14,'#a2abc0');
+    txt('HITS '+MG.hits,W/2,220,20,'#e7ebf4');
+    txt(MG.timer.toFixed(2)+'秒 (制限'+hayauchiMaxTimeFor(MG.hits).toFixed(1)+'秒)',W/2,254,14,'#a2abc0');
     ctx.fillStyle='rgba(255,90,90,0.85)';ctx.beginPath();ctx.arc(MG.target.x,MG.target.y,48,0,TAU);ctx.fill();
     ctx.strokeStyle='#fff';ctx.lineWidth=3;ctx.beginPath();ctx.arc(MG.target.x,MG.target.y,48,0,TAU);ctx.stroke();
   }else{
-    const sec=(MG.elapsedMs/1000).toFixed(2);
-    txt('クリア！ '+sec+'秒',W/2,290,28,'#7CFC00');
-    txt('ベスト:'+(MG.best!=null?(MG.best/1000).toFixed(2)+'秒':'-'),W/2,330,14,'#a2abc0');
-    drawMiniRetryBtn();
+    txt('GAME OVER',W/2,300,36,'#ff6b6b');
+    txt('TOTAL HITS '+MG.hits,W/2,346,20,'#7CFC00');
+    txt('到達段階: '+hayauchiMaxTimeFor(MG.hits).toFixed(1)+'秒',W/2,378,15,'#cfd6e6');
+    drawMiniGameOverBtns();
   }
 }
 function rMiniRenda(){
+  drawMinigameScrollBg(MINIGAME_BG.renda.assetKey,MG.scrollX); // rMiniPractice()のdrawCoverBgFull()の上に横スクロール版で上書き(RENDAのみ)
+  txt('RENDA',W/2,90,26,'#ffd23f');
+  const runY=560,bob=Math.sin(MG.scrollX*0.08)*10; // #113の四足1x4ループ未取込のため、既存の立ち絵に簡易バウンスを付けて「走行中」を仮に表現(Issue本文「existing closest motion if formal run loop is not yet merged」)
+  drawMinigamePlayerFighter(MG.charIdx,MG.palette,160,runY+bob);
   if(MG.phase==='play'){
-    const remain=Math.max(0,(MG.deadline-performance.now())/1000);
-    txt('連打数 '+MG.taps,W/2,220,18,'#e7ebf4');
-    txt('残り'+remain.toFixed(1)+'秒',W/2,254,14,'#a2abc0');
+    const gaugeX=40,gaugeW=W-80,gaugeY=250,gaugeH=28;
+    ctx.fillStyle='#1a1d29';rr(gaugeX,gaugeY,gaugeW,gaugeH,14);ctx.fill();
+    const boundary=rendaBoundaryAt(MG.elapsedSec);
+    ctx.fillStyle='rgba(255,90,90,0.45)';ctx.fillRect(gaugeX,gaugeY,gaugeW*boundary,gaugeH); // 危険域(境界まで)
+    const cx=gaugeX+gaugeW*MG.gauge;
+    ctx.fillStyle='#7fd8ff';ctx.beginPath();ctx.arc(cx,gaugeY+gaugeH/2,16,0,TAU);ctx.fill();
+    ctx.strokeStyle='#fff';ctx.lineWidth=2;rr(gaugeX,gaugeY,gaugeW,gaugeH,14);ctx.stroke();
+    txt('連打数 '+MG.taps,W/2,308,16,'#e7ebf4');
+    txt('生存 '+MG.elapsedSec.toFixed(1)+'秒',W/2,332,14,'#a2abc0');
     ctx.fillStyle='rgba(127,216,255,0.16)';rr(MINI_ACTION_BTN.x,MINI_ACTION_BTN.y,MINI_ACTION_BTN.w,MINI_ACTION_BTN.h,20);ctx.fill();
     ctx.strokeStyle='#7fd8ff';ctx.lineWidth=3;rr(MINI_ACTION_BTN.x,MINI_ACTION_BTN.y,MINI_ACTION_BTN.w,MINI_ACTION_BTN.h,20);ctx.stroke();
     txt('タップ！',MINI_ACTION_BTN.x+MINI_ACTION_BTN.w/2,MINI_ACTION_BTN.y+MINI_ACTION_BTN.h/2,22,'#dff4ff');
   }else{
-    txt('連打数 '+MG.taps,W/2,290,28,'#7CFC00');
-    txt('ベスト:'+(MG.best!=null?MG.best:'-'),W/2,330,14,'#a2abc0');
-    drawMiniRetryBtn();
+    txt('GAME OVER',W/2,180,36,'#ff6b6b');
+    txt('生存 '+MG.elapsedSec.toFixed(1)+'秒　連打数 '+MG.taps,W/2,226,16,'#cfd6e6');
+    drawMiniGameOverBtns();
   }
 }
-const MINI_RETRY_BTN={x:W/2-140,y:420,w:280,h:64};
-function drawMiniRetryBtn(){
-  ctx.fillStyle='#2c4a1f';rr(MINI_RETRY_BTN.x,MINI_RETRY_BTN.y,MINI_RETRY_BTN.w,MINI_RETRY_BTN.h,14);ctx.fill();
-  ctx.strokeStyle='#7CFC00';ctx.lineWidth=3;rr(MINI_RETRY_BTN.x,MINI_RETRY_BTN.y,MINI_RETRY_BTN.w,MINI_RETRY_BTN.h,14);ctx.stroke();
-  txt('もう一度',W/2,MINI_RETRY_BTN.y+MINI_RETRY_BTN.h/2,20,'#fff');
-}
 function miniPracticePress(p){
+  if(MG.phase==='gameover'){minigameGameOverHit(p);return;}
   if(menuBackHit(p)){sfx('tap');MG=null;game.screen='menuMinigame';return;}
   if(MG.phase==='pick'&&MG.kind==='jyanken'){
     const choice=miniHandHit(p);
     if(choice){
-      MG.pick=choice;MG.cpuPick=CHOICES[(Math.random()*3)|0];
-      MG.winner=(MG.pick===MG.cpuPick)?-1:(BEATS[MG.pick]===MG.cpuPick?0:1);
-      if(MG.winner===0){MG.wins++;sfx('hit2');vibrate(30);}
-      else if(MG.winner===1){MG.losses++;sfx('guard');}
-      else{MG.draws++;sfx('tap');}
-      MG.phase='result';
+      const cpuPick=jankenCpuPick(); // プレイヤーの選択を見てから決めることが構造的にできない(引数無し関数、上のjankenCpuPick()参照)
+      MG.pick=choice;MG.cpuPick=cpuPick;MG.rounds++;
+      MG.winner=(choice===cpuPick)?-1:(BEATS[choice]===cpuPick?0:1);
+      if(MG.winner===0){
+        MG.wins++;MG.hp=Math.min(MG.maxHp,MG.hp+BAL.MINIGAME.STANDALONE.JYANKEN.winHp);MG.presentF=30;
+        MG.enemyCharIdx=pickDifferentChar(MG.enemyCharIdx);sfx('hit2');vibrate(30);
+      }else if(MG.winner===1){MG.hp-=BAL.MINIGAME.STANDALONE.JYANKEN.loseHp;sfx('guard');}
+      else sfx('tap');
+      MG.phase='reveal';MG.revealAt=performance.now();
     }
     return;
   }
   if(MG.phase==='play'&&MG.kind==='hayauchi'){
     if(Math.hypot(p.x-MG.target.x,p.y-MG.target.y)<=52){
       MG.hits++;sfx('hit');vibrate(20);
-      if(MG.hits>=5){
-        MG.elapsedMs=performance.now()-MG.startedAt;MG.phase='result';
-        MG.best=(MG.best==null)?MG.elapsedMs:Math.min(MG.best,MG.elapsedMs);
-      }else MG.target=miniRandTarget();
+      if(MG.hits%BAL.MINIGAME.STANDALONE.HAYAUCHI.tierHits===0)MG.enemyCharIdx=pickDifferentChar(MG.enemyCharIdx);
+      MG.timer=hayauchiMaxTimeFor(MG.hits);MG.target=minigameRandTarget();
     }
     return;
   }
   if(MG.phase==='play'&&MG.kind==='renda'){
-    if(performance.now()<MG.deadline&&inRect(p,MINI_ACTION_BTN.x,MINI_ACTION_BTN.y,MINI_ACTION_BTN.w,MINI_ACTION_BTN.h)){MG.taps++;sfx('tap');}
+    if(inRect(p,MINI_ACTION_BTN.x,MINI_ACTION_BTN.y,MINI_ACTION_BTN.w,MINI_ACTION_BTN.h)){
+      MG.gauge=Math.min(1,MG.gauge+BAL.MINIGAME.STANDALONE.RENDA.tapGain);MG.taps++;MG.scrollX+=40;sfx('tap');
+    }
     return;
   }
-  if(MG.phase==='result'&&inRect(p,MINI_RETRY_BTN.x,MINI_RETRY_BTN.y,MINI_RETRY_BTN.w,MINI_RETRY_BTN.h)){startMiniPractice(MG.kind);return;}
 }
 // --- OPTIONS ---
 const MENU_OPTIONS_ROWS=[
@@ -5872,7 +5996,7 @@ function rSelect(){ // P1追加: KOF/餓狼風レイアウト(縦画面翻訳)�
   ctx.fillStyle=detail?'rgba(85,118,181,0.30)':'#20263a';rr(SELECT_DETAIL_BTN.x,SELECT_DETAIL_BTN.y,SELECT_DETAIL_BTN.w,SELECT_DETAIL_BTN.h,14);ctx.fill();
   ctx.strokeStyle=detail?'#7fd8ff':'#4a5470';ctx.lineWidth=2.5;rr(SELECT_DETAIL_BTN.x,SELECT_DETAIL_BTN.y,SELECT_DETAIL_BTN.w,SELECT_DETAIL_BTN.h,14);ctx.stroke();
   txt('性能・わざ・コンボを見る',W/2,SELECT_DETAIL_BTN.y+SELECT_DETAIL_BTN.h/2,18,detail?'#e8f6ff':'#9da5b5');
-  if(!survivalPending){ // SURVIVAL-R1(#101): 「CPU Lvは手動選択しない」ため行自体を非表示にする(dead buttonを残さない)
+  if(!survivalPending&&!minigamePendingKind){ // SURVIVAL-R1(#101)/MINIGAME-R1(#102): 「CPU Lvは手動選択しない」/CPU Lv概念が無いため行自体を非表示にする(dead buttonを残さない)
     txt('CPU LV',W/2,SELECT_DIFF_Y-14,12,'#a2abc0');
     for(let i=0;i<CPU_LV_LEVELS.length;i++){
       const dl=CPU_LV_LEVELS[i],r=cpuLvRect(i),active=cpuLv===dl,col=cpuLvColor(dl);
@@ -5883,14 +6007,14 @@ function rSelect(){ // P1追加: KOF/餓狼風レイアウト(縦画面翻訳)�
   }
   ctx.fillStyle='#2c4a1f';rr(SELECT_CONFIRM_BTN.x,SELECT_CONFIRM_BTN.y,SELECT_CONFIRM_BTN.w,SELECT_CONFIRM_BTN.h,16);ctx.fill();
   ctx.strokeStyle='#7CFC00';ctx.lineWidth=3;rr(SELECT_CONFIRM_BTN.x,SELECT_CONFIRM_BTN.y,SELECT_CONFIRM_BTN.w,SELECT_CONFIRM_BTN.h,16);ctx.stroke();
-  txt(arcadePending?'アーケード開始':(survivalPending?'サバイバル開始':'けってい'),W/2,SELECT_CONFIRM_BTN.y+29,20,'#fff'); // ARCADE-R1(#99)/SURVIVAL-R1(#101): 同じ選択導線をVS CPU/ARCADE/SURVIVALで共有(Issue本文「操作回数を不必要に増やさない」)
-  txt(arcadePending?'8戦勝ち抜き・CPU Lvはこのランに適用':(survivalPending?'HP持ち越し無限勝ち抜き・CPU Lvは自動調整':'相手は9体からランダム'),W/2,SELECT_CONFIRM_BTN.y+52,12,'#cceac3');
+  txt(arcadePending?'アーケード開始':(survivalPending?'サバイバル開始':(minigamePendingKind?MINI_TITLE[minigamePendingKind]+'開始':'けってい')),W/2,SELECT_CONFIRM_BTN.y+29,20,'#fff'); // ARCADE-R1(#99)/SURVIVAL-R1(#101)/MINIGAME-R1(#102): 同じ選択導線を共有(Issue本文「操作回数を不必要に増やさない」)
+  txt(arcadePending?'8戦勝ち抜き・CPU Lvはこのランに適用':(survivalPending?'HP持ち越し無限勝ち抜き・CPU Lvは自動調整':(minigamePendingKind?'専用背景のエンドレスモードへ':'相手は9体からランダム')),W/2,SELECT_CONFIRM_BTN.y+52,12,'#cceac3');
   ctx.fillStyle='rgba(255,255,255,0.05)';rr(SELECT_BACK_BTN.x,SELECT_BACK_BTN.y,SELECT_BACK_BTN.w,SELECT_BACK_BTN.h,12);ctx.fill();
   ctx.strokeStyle='rgba(255,255,255,0.3)';ctx.lineWidth=2;rr(SELECT_BACK_BTN.x,SELECT_BACK_BTN.y,SELECT_BACK_BTN.w,SELECT_BACK_BTN.h,12);ctx.stroke();
   txt('もどる',W/2,SELECT_BACK_BTN.y+SELECT_BACK_BTN.h/2,16,'#dfe4ee');
   txt('●青=オンライン対戦可(全員可)　9体ともオフラインで対戦可能',W/2,SELECT_BACK_BTN.y+SELECT_BACK_BTN.h+26,11,'#aeb6c8');
   drawPaletteSelect(c);
-  if(!arcadePending&&!survivalPending)drawStageSelect(); // ARCADE-R1(#99)/SURVIVAL-R1(#101): いずれもstageを毎戦自動抽選するため選択行を出さない
+  if(!arcadePending&&!survivalPending&&!minigamePendingKind)drawStageSelect(); // ARCADE-R1(#99)/SURVIVAL-R1(#101)/MINIGAME-R1(#102): いずれもstageを毎戦自動抽選または固定背景のため選択行を出さない
 }
 function drawStageSelect(){ // STAGE-ART-IMPORT: 通常対戦ステージ選択(5枚を短ラベルで並べる)。MENU-R1(#111): 末尾に「ランダム」を追加
   txt('ステージ',W/2,SELECT_STAGE_Y-10,12,'#a2abc0');
