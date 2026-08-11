@@ -437,10 +437,18 @@ for(const mg in MINIGAME_BG)loadImg(MINIGAME_BG[mg].assetKey,'../assets/bg/'+MIN
 // RUN-LOOP-R1(#113): 標準MINIGAME RENDA専用・四足走行F1-F4ループ(data/art/run_loop_source_manifest.json→
 // tools/build_run_loop_art.mjs導出、assets/art/runtime/<id>/run_loop/p1|p2/f{1-4}.png)。
 // preserveWhite=true: 導出済みalphaが正(current-art/roster3dと同じ理由でwhitenAsset()の白閾値抜きを通さない)。
+// Codexレビュー指摘(PR#126): 9キャラ×2配色×4フレーム=72枚を起動時に無条件preloadすると、RENDAを一度も
+// 開かないユーザーにも17.6MiB(展開後約96MiB)の読込/メモリ負荷が発生するため、全キャラ分の即時loadImg()は
+// 行わない。ensureRunLoopFrames()でstartMinigameRun('renda')時に選択済みcharIdx/paletteの4枚だけを
+// 遅延preloadする(current-artのensureCurrentArtFrameAsset()と同じASSETS[key]既存チェックのパターン)。
 // Battle Gyuiin RENDA(stepRenda/BAL.MINIGAME.RENDA)は無関係・未変更。
 function runLoopAssetKey(charId,palette,frameIdx){return'run_loop_'+charId+'_'+palette+'_f'+(frameIdx+1);}
-for(const c of CHARS)for(const pal of['p1','p2'])for(let fi=0;fi<4;fi++)
-  loadImg(runLoopAssetKey(c.id,pal,fi),'../assets/art/runtime/'+c.id+'/run_loop/'+pal+'/f'+(fi+1)+'.png',true);
+function ensureRunLoopFrames(charId,palette){
+  for(let fi=0;fi<4;fi++){
+    const key=runLoopAssetKey(charId,palette,fi);
+    if(!ASSETS[key])loadImg(key,'../assets/art/runtime/'+charId+'/run_loop/'+palette+'/f'+(fi+1)+'.png',true);
+  }
+}
 let selStageId=BATTLE_STAGES[0].id; // キャラ選択画面で切替・デフォルト先頭ステージ・セッション中保持(selPalette/cpuLvと同様)
 function battleStageById(id){return BATTLE_STAGES.find(function(s){return s.id===id;})||BATTLE_STAGES[0];}
 const STAGE_RANDOM_ID='random'; // MENU-R1(#111): ステージ選択の末尾に追加する「ランダム」選択肢のid。BATTLE_STAGESには加えない(loadImg対象を増やさない)
@@ -5486,7 +5494,7 @@ function startMinigameRun(kind){ // select画面のけっていボタン(minigam
   const J=BAL.MINIGAME.STANDALONE.JYANKEN;
   if(kind==='jyanken')MG={kind:kind,charIdx:charIdx,palette:palette,hp:J.startHp,maxHp:J.maxHp,wins:0,rounds:0,phase:'pick',pick:null,cpuPick:null,winner:null,enemyCharIdx:pickDifferentChar(charIdx),presentF:0,revealAt:0};
   else if(kind==='hayauchi')MG={kind:kind,charIdx:charIdx,palette:palette,hits:0,timer:BAL.MINIGAME.STANDALONE.HAYAUCHI.startMaxTime,target:minigameRandTarget(),enemyCharIdx:pickDifferentChar(charIdx),phase:'play',lastTickAt:null};
-  else MG={kind:kind,charIdx:charIdx,palette:palette,gauge:0.5,taps:0,elapsedSec:0,scrollX:0,phase:'play',lastTickAt:null};
+  else{MG={kind:kind,charIdx:charIdx,palette:palette,gauge:0.5,taps:0,elapsedSec:0,scrollX:0,phase:'play',lastTickAt:null};ensureRunLoopFrames(CHARS[charIdx].id,palette);}
   game.screen='miniPractice';
 }
 const MINI_TITLE={jyanken:'ジャンケン',hayauchi:'早撃ち',renda:'連打'};
