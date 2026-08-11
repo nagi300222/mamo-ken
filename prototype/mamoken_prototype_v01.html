@@ -5821,6 +5821,8 @@ const TRAINING_ABILITY_PRESETS={
 function trainingStart(){ // menuBattlePress('training')から(sfx('tap')は呼び出し元が既に鳴らしている)
   TRAINING={playerCharIdx:null,playerPalette:'p1',dummyCharIdx:null,dummyPalette:'p2',stageId:null,
     dummyMode:'guardAll',dummyCpuLv:5,dummyReversalMove:'normal',_reversalArmed:false};
+  B=null; // Codexレビュー指摘(PR#131): 前回対戦のBが残っているとtrainingRows()がB有(対戦中メニュー)扱いになり、
+  // 開始前設定パネル(Startボタン)が出ず古いBへResumeできてしまうため、設定開始時点で明示的に破棄する
   trainingSelectStage='player';selPalette='p1';game.screen='select';
 }
 function trainingSelectConfirm(){ // selectPress()のけっていボタンから(trainingSelectStage!=null時)
@@ -5854,10 +5856,10 @@ function trainingDummyStep(){ // aiStep()の代わりにfightStep()から呼ば�
   const me=B.p[1],you=B.p[0],mode=TRAINING.dummyMode;
   while(ai.cmdQueue.length&&B.f>=ai.cmdQueue[0].at)cpuEv.push(ai.cmdQueue.shift().cmd); // aiStep()と同じcmdQueue drain(REVERSAL='コマンド技'用)
   if(mode==='stand'){ai.guardOn=false;return;}
-  if(mode==='guardAll'){ai.guardOn=(me.phase==='idle'||me.phase==='guard');return;}
+  if(mode==='guardAll'){ai.guardOn=(me.phase==='idle'||me.phase==='guard'||(me.phase==='blockstun'&&me.held));return;} // Codexレビュー指摘(PR#131): blockstun中もheld中はguardOnを保つ(guard/blockstun&&heldがガード継続中の統一判定。#2224等と同じ条件)。falseにすると次tickでapplyInputs()がf.heldを外し、ブロッキング文字列の後続段が素通しになる
   if(mode==='guardAfterHit'){
     if(me.phase==='hitstun'&&me.pf===1)ai.guardT=Math.max(ai.guardT,40);
-    if(ai.guardT>0){ai.guardOn=(me.phase==='idle'||me.phase==='guard');ai.guardT--;}else ai.guardOn=false;
+    if(ai.guardT>0){ai.guardOn=(me.phase==='idle'||me.phase==='guard'||(me.phase==='blockstun'&&me.held));ai.guardT--;}else ai.guardOn=false;
     return;
   }
   if(mode==='dodge'){
@@ -5976,8 +5978,8 @@ function trainingHandleAction(id){
   if(id==='resetSame'){startTrainingBattle();return;} // 「quick reset positions/state」/「reset same matchup」: TRAINING.*の設定は保持したまま再構築
   if(id==='step1'){logic();return;} // 「Frame advance must step the same simulation tick function as ordinary battle」: 通常battleと同じlogic()を直接呼ぶ
   if(id==='step5'){for(let i=0;i<5;i++)logic();return;}
-  if(id.indexOf('mode_')===0){TRAINING.dummyMode=id.slice(5);aiReset();return;} // モード切替時はai.*(guardOn/mikiriAt/dodgeAt等)を必ず初期化する
-  if(id.indexOf('cpulv_')===0){TRAINING.dummyCpuLv=Number(id.slice(6));return;}
+  if(id.indexOf('mode_')===0){TRAINING.dummyMode=id.slice(5);aiReset();if(TRAINING.dummyMode==='cpu')cpuLv=TRAINING.dummyCpuLv;return;} // モード切替時はai.*(guardOn/mikiriAt/dodgeAt等)を必ず初期化する。Codexレビュー指摘(PR#131): aiStep()はcurAiLv()経由でグローバルcpuLvを読むため、対戦中にCPU Lvモードへ切り替える時点でも同期する
+  if(id.indexOf('cpulv_')===0){TRAINING.dummyCpuLv=Number(id.slice(6));if(TRAINING.dummyMode==='cpu')cpuLv=TRAINING.dummyCpuLv;return;} // Codexレビュー指摘(PR#131): 対戦中にLvを変更した場合も即座にcurAiLv()へ反映する(リセット待ち不要)
   if(id.indexOf('rev_')===0){TRAINING.dummyReversalMove=id.slice(4);return;}
   if(id.indexOf('p1_preset_')===0){const i=Number(id.slice(10)),pr=(TRAINING_ABILITY_PRESETS[B.p[0].c.id]||[])[i];if(pr)pr.apply(B.p[0]);return;}
   if(id.indexOf('d_preset_')===0){const i=Number(id.slice(9)),pr=(TRAINING_ABILITY_PRESETS[B.p[1].c.id]||[])[i];if(pr)pr.apply(B.p[1]);return;}
