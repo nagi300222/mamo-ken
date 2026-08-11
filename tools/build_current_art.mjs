@@ -54,11 +54,11 @@ const RUNTIME_PIXELS_PER_DISPLAY_PIXEL = 2;
 const OUTPUT_PADDING = 3;
 const BACKGROUND_BRIGHTNESS_MIN = 200;
 const BACKGROUND_CHROMA_MAX = 48;
-const ALPHA_VISIBLE_MIN = 8;
+export const ALPHA_VISIBLE_MIN = 8;
 
 const PRESENTATION_SCALE_PATH = path.join(ROOT, 'data', 'art', 'presentation_scale_corrections.json');
 
-const P2_PROFILES = Object.freeze({
+export const P2_PROFILES = Object.freeze({
   moguzo: { furHue: -12, saturation: 0.92, light: -0.035, accessory: 'red_to_blue' },
   pisuke: { furHue: -8, saturation: 0.88, light: -0.025, accessory: 'blue_to_teal' },
   godan: { furHue: 8, saturation: 1.02, light: -0.025, accessory: 'dark_to_navy' },
@@ -526,7 +526,7 @@ function transformAccessory(profileId, hue, saturation, light) {
   return null;
 }
 
-function applyP2Palette(rgba, bodyMask, runtimeCharId) {
+export function applyP2Palette(rgba, bodyMask, runtimeCharId) {
   const profile = P2_PROFILES[runtimeCharId];
   if (!profile) throw new Error(`missing P2 profile: ${runtimeCharId}`);
   const out = Buffer.from(rgba);

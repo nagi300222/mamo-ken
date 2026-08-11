@@ -87,6 +87,11 @@ function isExcluded(relFromAssets) {
   // are build-time-only inputs to build_current_art.mjs -- the runtime only ever
   // loads the derived art/runtime/** output, same reasoning as art/current/ above.
   if (relFromAssets.startsWith('art/overrides/')) return true;
+  // RUN-LOOP-R1(#113): delivered quadruped run-loop source (originals/sheets/frames + contact
+  // sheet/report, see data/art/run_loop_source_manifest.json) is a build-time-only input to
+  // tools/build_run_loop_art.mjs -- the runtime only ever loads the derived
+  // art/runtime/<id>/run_loop/** output, same reasoning as art/current/ above.
+  if (relFromAssets.startsWith('art/run_loop_source/')) return true;
   // STAGE-ART-IMPORT: bg/source/ holds the untouched original stage/minigame background
   // deliveries (see data/art/stage_source_manifest.json). The runtime only ever loads the
   // derived assets/bg/*.png siblings placed alongside stage_day.png, same reasoning as
