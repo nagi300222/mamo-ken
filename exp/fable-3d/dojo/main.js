@@ -172,6 +172,12 @@ async function startMatch(){
     const ids=[selected,cpuChoice],loaded=await Promise.all(ids.map((id,i)=>createActor(id,i)));
     for(let i=0;i<2;i++)actors[i]=loaded[i];
     battle=new Battle(selected,cpuChoice,+$('difficulty').value);
+    const bulletActor=actors.find(a=>a?.id==='bullet');
+    if(bulletActor){
+      const path=bulletActor.meta?.clips?.sp_tail_whip?.tail_tip_path;
+      if(!path) throw Error('バレットの尾軌跡がモーションJSONにありません');
+      battle.setTailTipPath(path);
+    }
     $('name-0').textContent=ROSTER[selected].name;$('name-1').textContent=ROSTER[cpuChoice].name;
     for(let i=1;i<=3;i++){const button=$('special-'+i);button.textContent='必'+i;button.title=ROSTER[selected].specials[i-1].name;}
     $('selection').classList.add('hidden');$('game-over').classList.add('hidden');
