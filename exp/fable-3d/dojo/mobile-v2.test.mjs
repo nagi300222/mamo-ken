@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { Battle, DRIVE } from './battle.js';
+import { chooseClip } from './models.js';
 import { ROSTER } from './balance.js';
 import { directionCode, pushDirection, readCommand } from './commands.js';
 
@@ -112,4 +113,17 @@ test('スマホ配置：左右の操作エリアと中央対戦画面を分離�
   assert.deepEqual(buttons,['weak','strong','throw','roar','gyuiin']);
   assert.ok(!html.includes('data-control="special1"'));
   assert.match(css,/#combat-layout\s*\{/);
+});
+
+test('Claudeの新規リアクションクリップを優先し、未配信なら旧GLBで再生',()=>{
+  const p={state:'clinch',action:null,ko:false,stun:0};
+  assert.equal(chooseClip(p,['idle','guard_stand','clinch_hold']),'clinch_hold');
+  assert.equal(chooseClip(p,['idle','guard_stand']),'guard_stand');
+  p.state='clinch_recoil';p.stun=9;
+  assert.equal(chooseClip(p,['idle','hurt_light','clinch_recoil']),'clinch_recoil');
+  p.state='hit';p.reaction='roar_hit';
+  assert.equal(chooseClip(p,['idle','hurt_light','roar_hit']),'roar_hit');
+  assert.equal(chooseClip(p,['idle','hurt_light']),'hurt_light');
+  p.state='block';p.reaction='guard_crouch_hit';
+  assert.equal(chooseClip(p,['idle','guard_stand','guard_crouch_hit']),'guard_crouch_hit');
 });
