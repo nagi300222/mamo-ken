@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+    <title>マモ拳 ｜ 山岳道場</title>
+    <link rel="stylesheet" href="dojo.css" />
+  </head>
+  <body>
+    <header>
+      <div class="brand">
+        <img src="../../assets/ui/paw_emblem.png" alt="" />マモ拳 <small>山岳道場</small>
+      </div>
+      <button id="back" hidden>選手選択へ</button>
+    </header>
+    <main id="select">
+      <div class="heading">
+        <div>
+          <small>ROSTER SELECT</small>
+          <h1>選手選択</h1>
+        </div>
+        <div class="switch"><button id="pick1">1P</button><button id="pick2">CPU</button></div>
+      </div>
+      <section class="pick-layout">
+        <div id="grid" aria-label="選手一覧"></div>
+        <article id="profile">
+          <div class="portrait"><img id="hero" alt="" /></div>
+          <div class="bio">
+            <small id="style"></small>
+            <h2 id="name"></h2>
+            <p id="desc"></p>
+            <div id="moves"></div>
+          </div>
+        </article>
+      </section>
+      <footer>
+        <div><small>対戦カード</small><strong id="matchup"></strong></div>
+        <button id="start" class="primary">対戦開始　→</button>
+      </footer>
+    </main>
+    <main id="fight" hidden>
+      <div class="score">
+        <div id="s1"></div>
+        <strong id="clock"></strong>
+        <div id="s2"></div>
+      </div>
+      <section id="arena"><output id="event"></output><strong id="result"></strong></section>
+      <div class="pad">
+        <div class="group">
+          <button data-hold="left" aria-label="左移動">◀</button
+          ><button data-hold="down" aria-label="しゃがみ">▼</button
+          ><button data-hold="right" aria-label="右移動">▶</button
+          ><button data-tap="jump">跳</button>
+        </div>
+        <div class="group">
+          <button data-tap="light">弱</button><button data-tap="heavy">強</button
+          ><button data-tap="dodge">回避</button><button data-tap="grab">投</button
+          ><button data-tap="skill" class="skill">技</button>
+        </div>
+      </div>
+      <div class="settings">
+        <label
+          >技
+          <select id="skill"></select></label
+        ><label
+          >CPU
+          <select id="ai">
+            <option value="fight">対戦</option>
+            <option value="idle">待機</option>
+            <option value="guard">後退ガード</option>
+          </select></label
+        ><button id="reset">再戦</button
+        ><button id="tools" aria-expanded="false">操作・判定</button>
+      </div>
+      <section id="debug" hidden>
+        <p>
+          ← → 移動（後ろでガード）／ ↓ しゃがみ ／ ↑ ジャンプ ／ Z 弱・X 強・C 回避・V 投げ・B 技 ／
+          1〜7 技直出し。前＋回避＝踏み込み、後＋回避＝スウェー、下＋回避＝しゃがみ回避。
+        </p>
+        <label><input type="checkbox" id="guide" />判定・足元</label
+        ><button id="pause">一時停止</button><button id="step">1F 送り</button
+        ><label><input type="checkbox" id="slow" />¼速</label
+        ><label
+          >リーチ <input id="reach" type="range" min="0.6" max="1.4" step=".05" value="1" /></label
+        ><button id="reload">初期値に戻す</button><output id="frames"></output>
+      </section>
+    </main>
+    <p id="error" role="alert" hidden></p>
+    <script type="module" src="dojo.js"></script>
+  </body>
+</html>
