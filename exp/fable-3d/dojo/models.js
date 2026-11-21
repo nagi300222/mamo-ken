@@ -20,12 +20,12 @@ const actionClips={
   air_weak:'air_light',air_heavy:'air_heavy',throw:'throw_reach'
 };
 export function chooseClip(fighter, available=[], commandMap={}) {
+  if (fighter.ko) return select(available,['ko','down','hurt_heavy','hurt_light','idle']);
   if(fighter.state==='throw_hit')return select(available,['throw_hit','throw_reach','stand_heavy','idle']);
   if(fighter.state==='thrown')return select(available,['thrown','hurt_heavy','hurt_light','idle']);
   if(fighter.state==='land' || (fighter.landF>0&&!fighter.action&&!fighter.stun))
     return select(available,['land','idle']);
   if(fighter.state==='wakeup')return select(available,['wakeup','idle']);
-  if (fighter.ko) return select(available,['ko','down','hurt_heavy','hurt_light','idle']);
   if (fighter.state==='clinch') return select(available,['clinch_hold','gyuiin_hold','guard_stand','idle']);
   if (fighter.state==='clinch_recoil') return select(available,['clinch_recoil','hurt_heavy','hurt_light','idle']);
   if (fighter.stun && fighter.state==='block') {
