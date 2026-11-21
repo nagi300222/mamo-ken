@@ -4,15 +4,15 @@
 
 ## 1. 足滑り
 
-接地指定（`plant`）が続いている足について、連続する2コマの足先の地面座標の差を測った。
+接地指定（`plant`）が続いている区間ごとに、区間の最初のコマを基準にした足先の地面座標のずれ（累積）を測った。
 地面座標 = セル内の足先位置（描画と同じ整数丸め）＋ そのコマの移動量（`root` と `velocity × 開始フレーム`）。
-ループするモーションは最後のコマ→最初のコマも測っている。「連続値」は丸める前の計算値での差。
+ループするモーションは2周つないで、周回の継ぎ目も測っている。「連続値」は丸める前の計算値での差。
 
-| キャラ | モーション | 測った区間数 | 最大ずれ X (px) | 最大ずれ Y (px) | 連続値の最大ずれ (px) |
+| キャラ | モーション | 測ったコマ数 | 最大ずれ X (px) | 最大ずれ Y (px) | 連続値の最大ずれ (px) |
 |---|---|---:|---:|---:|---:|
-| moguzo | idle | 16 | 0 | 0 | 0 |
-| moguzo | walk_f | 6 | 0 | 0 | 0 |
-| moguzo | walk_b | 6 | 0 | 0 | 0 |
+| moguzo | idle | 30 | 0 | 0 | 0 |
+| moguzo | walk_f | 12 | 0 | 0 | 0 |
+| moguzo | walk_b | 12 | 0 | 0 | 0 |
 | moguzo | dash_f | 4 | 0 | 0 | 0 |
 | moguzo | crouch | 30 | 0 | 0 | 0 |
 | moguzo | jump_n | 4 | 0 | 0 | 0 |
@@ -20,9 +20,10 @@
 | moguzo | stand_heavy | 13 | 0 | 0 | 0 |
 | moguzo | guard_stand | 16 | 0 | 0 | 0 |
 | moguzo | hurt_light | 12 | 0 | 0 | 0 |
-| pisuke | idle | 16 | 0 | 0 | 0 |
-| pisuke | walk_f | 6 | 0 | 0 | 0 |
-| pisuke | walk_b | 6 | 0 | 0 | 0 |
+| moguzo | crouch_light | 10 | 0 | 0 | 0 |
+| pisuke | idle | 30 | 0 | 0 | 0 |
+| pisuke | walk_f | 12 | 0 | 0 | 0 |
+| pisuke | walk_b | 12 | 0 | 0 | 0 |
 | pisuke | dash_f | 4 | 0 | 0 | 0 |
 | pisuke | crouch | 30 | 0 | 0 | 0 |
 | pisuke | jump_n | 4 | 0 | 0 | 0 |
@@ -30,9 +31,9 @@
 | pisuke | stand_heavy | 8 | 0 | 0 | 0 |
 | pisuke | guard_stand | 16 | 0 | 0 | 0 |
 | pisuke | hurt_light | 12 | 0 | 0 | 0 |
-| godan | idle | 20 | 0 | 0 | 0 |
-| godan | walk_f | 14 | 1 | 0 | 1.00 |
-| godan | walk_b | 14 | 1 | 0 | 0.50 |
+| godan | idle | 38 | 0 | 0 | 0 |
+| godan | walk_f | 12 | 0 | 0 | 0 |
+| godan | walk_b | 12 | 0 | 0 | 0 |
 | godan | dash_f | 4 | 0 | 0 | 0 |
 | godan | crouch | 30 | 0 | 0 | 0 |
 | godan | jump_n | 8 | 0 | 0 | 0 |
@@ -41,7 +42,7 @@
 | godan | guard_stand | 16 | 0 | 0 | 0 |
 | godan | hurt_light | 12 | 0 | 0 | 0 |
 
-キャラごとの最大値: moguzo 0px / pisuke 0px / godan 1px
+キャラごとの最大値: moguzo 0px / pisuke 0px / godan 0px
 
 補足: 歩きは絵の更新が毎フレームではない（`step` フレームごと）ので、ゲーム側が毎フレーム等速で動かすと、絵が更新されるまでの間は足が `velocity × (step−1)` px だけ先に進んで見える。これはコマ送りのスプライト全般に付く揺れで、上の表には含めていない。
 
@@ -64,17 +65,18 @@
 | moguzo | idle | 110 | 110 | — | 0 | 109〜110 |
 | moguzo | walk_f | 109 | 110 | — | 0 | 109〜110 |
 | moguzo | walk_b | 111 | 111 | — | 0 | 111〜112 |
-| moguzo | dash_f | 106 | 110 | — | 0 | 104〜110 |
+| moguzo | dash_f | 106 | 110 | 0 | 0 | 104〜110 |
 | moguzo | crouch | 110 | 110 | 0 | 0 | 80〜110 |
 | moguzo | jump_n | 103 | 110 | 0 | 0 | 103〜113 |
 | moguzo | stand_light | 111 | 110 | 0 | 0 | 109〜111 |
 | moguzo | stand_heavy | 111 | 110 | 0 | 0 | 105〜111 |
 | moguzo | guard_stand | 110 | 110 | 0 | 0 | 109〜110 |
 | moguzo | hurt_light | 111 | 110 | 0 | 0 | 110〜111 |
+| moguzo | crouch_light | 80 | 80 | — | 0 | 78〜80 |
 | pisuke | idle | 111 | 111 | — | 0 | 109〜111 |
 | pisuke | walk_f | 110 | 110 | — | 0 | 110〜111 |
 | pisuke | walk_b | 113 | 113 | — | 0 | 113〜114 |
-| pisuke | dash_f | 103 | 111 | — | 0 | 95〜111 |
+| pisuke | dash_f | 103 | 111 | 0 | 0 | 95〜111 |
 | pisuke | crouch | 111 | 111 | 0 | 0 | 88〜111 |
 | pisuke | jump_n | 98 | 111 | 0 | 0 | 98〜117 |
 | pisuke | stand_light | 111 | 111 | 0 | 0 | 109〜111 |
@@ -84,7 +86,7 @@
 | godan | idle | 117 | 117 | — | 0 | 116〜117 |
 | godan | walk_f | 115 | 116 | — | 0 | 115〜117 |
 | godan | walk_b | 118 | 118 | — | 0 | 118〜119 |
-| godan | dash_f | 113 | 117 | — | 0 | 110〜117 |
+| godan | dash_f | 113 | 117 | 0 | 0 | 110〜117 |
 | godan | crouch | 117 | 117 | 0 | 0 | 101〜117 |
 | godan | jump_n | 107 | 117 | 0 | 0 | 107〜121 |
 | godan | stand_light | 118 | 117 | 0 | 0 | 116〜118 |
@@ -92,7 +94,7 @@
 | godan | guard_stand | 117 | 117 | 0 | 0 | 116〜117 |
 | godan | hurt_light | 120 | 117 | 0 | 0 | 117〜120 |
 
-最下端の行 0 は、足裏の1px下に付く外周アウトラインの行。全モーションで 0 なら足元原点はそろっている。dash_f は移動して終わるので、最後のコマは「移動後の構え」。
+最下端の行 0 は、足裏の1px下に付く外周アウトラインの行。全モーションで 0 なら足元原点はそろっている。dash_f は移動して終わるので、最後のコマは「移動後の構え」。「—」はループするモーションと、構えに戻らないモーション（`returnsToStance: false`）。
 
 ## 3. 体格比
 
@@ -118,6 +120,7 @@
 | moguzo | stand_heavy | 0 | 0 |
 | moguzo | guard_stand | 0 | 0 |
 | moguzo | hurt_light | 0 | 0 |
+| moguzo | crouch_light | 0 | 6（2.6） |
 | pisuke | idle | 0 | 0 |
 | pisuke | walk_f | 0 | 0 |
 | pisuke | walk_b | 0 | 0 |

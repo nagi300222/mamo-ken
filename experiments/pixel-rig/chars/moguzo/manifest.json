@@ -1,1 +1,1 @@
-{"id": "moguzo", "name": "モグゾー", "motions": ["idle", "walk_f", "walk_b", "dash_f", "crouch", "jump_n", "stand_light", "stand_heavy", "guard_stand", "hurt_light"]}
+{"id": "moguzo", "name": "モグゾー", "motions": ["idle", "walk_f", "walk_b", "dash_f", "crouch", "jump_n", "stand_light", "stand_heavy", "guard_stand", "hurt_light", "crouch_light"]}

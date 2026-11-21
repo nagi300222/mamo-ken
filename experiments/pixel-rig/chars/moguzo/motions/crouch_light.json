@@ -1,0 +1,14 @@
+{
+  "_": "しゃがみ弱（追加検証用）。既存リグにポーズデータだけで足したモーション。低い姿勢のまま前手（遠い側）で短く突く。",
+  "loop": false,
+  "returnsToStance": false,
+  "step": 3,
+  "plant": ["footL", "footR"],
+  "base": {"hip": [-5, -17], "pelvis": 30, "torso": 24, "chest": 16, "neck": -18, "head": -44, "handL": [14, 2, 0], "handR": [3, 26, 0], "tail": [130, 18, 16], "swap": {"fist_r": "fist_r_punch", "eye": "eye_half"}},
+  "keys": [
+    {"hold": 3, "pose": {"handL": [10, 4, 0], "shL": [-2, 0]}},
+    {"hold": 6, "pose": {"chest": 20, "shL": [4, 1], "handL": [25.5, 5, 0], "swap": {"fist_r": "fist_r_punch", "fist_l": "fist_l_punch", "brow": "brow_angry"}}},
+    {"hold": 6, "tween": "out", "pose": {"chest": 18, "shL": [1, 0], "handL": [19, 4, 0]}},
+    {"hold": 3, "pose": {}}
+  ]
+}

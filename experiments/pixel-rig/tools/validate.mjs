@@ -25,11 +25,11 @@ for (const ch of chars) { baked[ch.id] = {}; for (const m of ch.manifest.motions
 // ---------- 1) 足滑り ----------
 P('## 1. 足滑り');
 P();
-P('接地指定（`plant`）が続いている足について、連続する2コマの足先の地面座標の差を測った。');
+P('接地指定（`plant`）が続いている区間ごとに、区間の最初のコマを基準にした足先の地面座標のずれ（累積）を測った。');
 P('地面座標 = セル内の足先位置（描画と同じ整数丸め）＋ そのコマの移動量（`root` と `velocity × 開始フレーム`）。');
-P('ループするモーションは最後のコマ→最初のコマも測っている。「連続値」は丸める前の計算値での差。');
+P('ループするモーションは2周つないで、周回の継ぎ目も測っている。「連続値」は丸める前の計算値での差。');
 P();
-P('| キャラ | モーション | 測った区間数 | 最大ずれ X (px) | 最大ずれ Y (px) | 連続値の最大ずれ (px) |');
+P('| キャラ | モーション | 測ったコマ数 | 最大ずれ X (px) | 最大ずれ Y (px) | 連続値の最大ずれ (px) |');
 P('|---|---|---:|---:|---:|---:|');
 const slipMax = {};
 for (const ch of chars) {
@@ -43,13 +43,19 @@ for (const ch of chars) {
       const vx = b.velocity[0] * t, vy = b.velocity[1] * t;
       return { x: Math.round(c.x) + f.root[0] + Math.round(vx), y: Math.round(c.y) + f.root[1] + Math.round(vy), fx: c.x + f.solved.pose.root[0] + vx, fy: c.y + f.solved.pose.root[1] + vy };
     };
-    const pairs = b.frames.slice(1).map((f, i) => [b.frames[i], f, 0, 0]);
-    if (b.loop) pairs.push([b.frames[b.frames.length - 1], b.frames[0], 0, 1]);
-    for (const [a, c, ca, cc] of pairs) for (const key of a.plant) {
-      if (!c.plant.includes(key)) continue;
-      const wa = world(a, key, ca), wc = world(c, key, cc);
-      n++; mx = Math.max(mx, Math.abs(wc.x - wa.x)); my = Math.max(my, Math.abs(wc.y - wa.y));
-      mf = Math.max(mf, Math.hypot(wc.fx - wa.fx, wc.fy - wa.fy));
+    // 接地が続く区間ごとに、区間の最初のコマからの累積のずれを測る（1コマずつの差では、少しずつ流れる滑りを見逃すため）
+    const seq = b.frames.map((f) => [f, 0]);
+    if (b.loop) seq.push(...b.frames.map((f) => [f, 1])); // ループは2周目までつないで、周回の継ぎ目も測る
+    for (const L of ch.rig.limbs) {
+      if (L.type !== 'leg') continue;
+      let start = null;
+      for (const [f, cyc] of seq) {
+        if (!f.plant.includes(L.key)) { start = null; continue; }
+        const wc = world(f, L.key, cyc);
+        if (!start) { start = wc; continue; }
+        n++; mx = Math.max(mx, Math.abs(wc.x - start.x)); my = Math.max(my, Math.abs(wc.y - start.y));
+        mf = Math.max(mf, Math.hypot(wc.fx - start.fx, wc.fy - start.fy));
+      }
     }
     slipMax[ch.id] = Math.max(slipMax[ch.id], mx, my);
     if (Math.max(mx, my) > 1) problems++;
@@ -86,15 +92,16 @@ for (const ch of chars) {
     const hs = b.frames.map(hOf);
     const first = hs[0], last = hs[hs.length - 1];
     const bottoms = [...new Set(b.frames.map((f, i) => (f.plant.length ? hs[i].bottom : null)).filter((v) => v !== null))];
-    const loopOrIdleEnd = b.loop || m === 'dash_f' ? '—' : `${last.h - ref.h}`;
-    if (!b.loop && m !== 'dash_f' && last.h !== ref.h) problems++;
+    const skip = b.loop || ch.motions[m].returnsToStance === false; // しゃがみ中の技など、構えに戻らないモーションは対象外
+    const loopOrIdleEnd = skip ? '—' : `${last.h - ref.h}`;
+    if (!skip && last.h !== ref.h) problems++;
     if (bottoms.some((v) => v !== 0)) problems++;
     P(`| ${ch.id} | ${m} | ${first.h} | ${last.h} | ${loopOrIdleEnd} | ${bottoms.join(', ')} | ${Math.min(...hs.map((x) => x.h))}〜${Math.max(...hs.map((x) => x.h))} |`);
     for (const x of hs) if (x.bb[0] <= 0 || x.bb[1] <= 0 || x.bb[2] >= w - 1 || x.bb[3] >= h - 1) { problems++; P(`| ${ch.id} | ${m} | **セルからはみ出しています** | | | | |`); break; }
   }
 }
 P();
-P('最下端の行 0 は、足裏の1px下に付く外周アウトラインの行。全モーションで 0 なら足元原点はそろっている。dash_f は移動して終わるので、最後のコマは「移動後の構え」。');
+P('最下端の行 0 は、足裏の1px下に付く外周アウトラインの行。全モーションで 0 なら足元原点はそろっている。dash_f は移動して終わるので、最後のコマは「移動後の構え」。「—」はループするモーションと、構えに戻らないモーション（`returnsToStance: false`）。');
 P();
 
 // ---------- 3) 体格比 ----------

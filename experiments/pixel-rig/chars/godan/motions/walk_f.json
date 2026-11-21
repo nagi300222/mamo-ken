@@ -5,9 +5,9 @@
   "velocity": [0.5, 0],
   "base": {"torso": 6, "chest": 5},
   "keys": [
-    {"hold": 16, "tween": "linear", "plant": ["footR"], "pose": {"hip": [0, -22], "footL": [23, 0, 0, 0], "footR": [-23, 0, 0, 0]}},
-    {"hold": 16, "tween": "linear", "plant": ["footR"], "pose": {"hip": [1, -24], "footL": [27, -5, -10, 0], "footR": [-27, 0, 0, 0], "shL": [0, -1], "handL": [23, 5, 0], "handR": [14, 11, 0]}},
-    {"hold": 16, "tween": "linear", "plant": ["footL"], "pose": {"hip": [1, -22], "footL": [31, 0, 0, 0], "footR": [-31, 0, 0, 0]}},
-    {"hold": 16, "tween": "linear", "plant": ["footL"], "pose": {"hip": [0, -24], "footL": [27, 0, 0, 0], "footR": [-27, -5, 8, 0], "shR": [0, -1], "handL": [23, 5, 0], "handR": [14, 11, 0]}}
+    {"hold": 8, "tween": "linear", "plant": ["footR"], "pose": {"hip": [0, -22], "footL": [23, 0, 0, 0], "footR": [-23, 0, 0, 0]}},
+    {"hold": 8, "tween": "linear", "plant": ["footR"], "pose": {"hip": [1, -24], "footL": [27, -5, -10, 0], "footR": [-27, 0, 0, 0], "shL": [0, -1], "handL": [23, 5, 0], "handR": [14, 11, 0]}},
+    {"hold": 8, "tween": "linear", "plant": ["footL"], "pose": {"hip": [1, -22], "footL": [31, 0, 0, 0], "footR": [-31, 0, 0, 0]}},
+    {"hold": 8, "tween": "linear", "plant": ["footL"], "pose": {"hip": [0, -24], "footL": [27, 0, 0, 0], "footR": [-27, -5, 8, 0], "shR": [0, -1], "handL": [23, 5, 0], "handR": [14, 11, 0]}}
   ]
 }
