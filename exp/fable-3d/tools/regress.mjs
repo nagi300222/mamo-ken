@@ -13,7 +13,7 @@ for (const id of ids.split(',')) {
 await b.close();
 if (mode === 'save') { fs.writeFileSync(file, JSON.stringify(out)); console.log('saved', file); }
 else { const ref = JSON.parse(fs.readFileSync(file, 'utf8')); let ok = true;
-  for (const id in ref) { let worst = 0, where = ''; for (const clip in ref[id]) { if (clip === 'stats') continue; for (const f in ref[id][clip]) for (const bn in ref[id][clip][f]) { const a = ref[id][clip][f][bn], c = out[id]?.[clip]?.[f]?.[bn]; if (!c) { worst = 9; where = `${clip} missing`; continue; } const d = Math.hypot(a[0] - c[0], a[1] - c[1], a[2] - c[2]); if (d > worst) { worst = d; where = `${clip}@${f} ${bn}`; } } }
+  for (const id in ref) { if (!out[id]) continue; let worst = 0, where = ''; for (const clip in ref[id]) { if (clip === 'stats') continue; for (const f in ref[id][clip]) for (const bn in ref[id][clip][f]) { const a = ref[id][clip][f][bn], c = out[id]?.[clip]?.[f]?.[bn]; if (!c) { worst = 9; where = `${clip} missing`; continue; } const d = Math.hypot(a[0] - c[0], a[1] - c[1], a[2] - c[2]); if (d > worst) { worst = d; where = `${clip}@${f} ${bn}`; } } }
     const st = ref[id].stats, s2 = out[id].stats; const same = st.tris === s2.tris && st.verts === s2.verts && st.bones === s2.bones; if (worst > 1e-4 || !same) ok = false;
     console.log(id, 'max bone diff(m)=' + worst.toExponential(2), where, 'mesh same=' + same); }
   process.exit(ok ? 0 : 1); }

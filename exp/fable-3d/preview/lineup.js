@@ -40,5 +40,5 @@ Promise.all(CHARS.map(async (id) => { const [gltf, meta] = await Promise.all([lo
   gltf.scene.traverse(o => { if (o.isSkinnedMesh) o.frustumCulled = false; }); const mixer = new THREE.AnimationMixer(gltf.scene); const actions = {}; gltf.animations.forEach(c => actions[c.name] = mixer.clipAction(c));
   const root = new THREE.Group(); root.add(gltf.scene); scene.add(root); return { id, root, mixer, actions, meta }; }))
   .then((items) => { S.items = items; place(); $('names').replaceChildren(...items.map(it => { const s = document.createElement('span'); s.textContent = `${it.id}（全高 ${it.meta.height}）`; return s; }));
-    play(Q.get('clip') || 'idle'); window.lineup = { S, play, setTime, draw, place, ready: true, maxFrames: (name) => Math.max(...items.map(it => it.meta.clips[name === 'unique' ? it.meta.unique_clips[0] : name].frames)) }; tick(); })
+    play(Q.get('clip') || 'idle'); window.lineup = { S, play, setTime, draw, place, ready: true, maxFrames: (name) => Math.max(...items.map(it => (it.meta.clips[name === 'unique' ? it.meta.unique_clips[0] : name] || { frames: 1 }).frames)) }; tick(); })
   .catch(e => { $('hud').textContent = String(e); window.lineup = { error: String(e) }; });

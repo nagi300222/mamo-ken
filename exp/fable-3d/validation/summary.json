@@ -12,18 +12,31 @@
   "guard_stand",
   "hurt_light"
  ],
+ "clinch_pairs": {
+  "pass": true,
+  "pairs_checked": 81,
+  "palm_gap_worst": {
+   "pair": "pisuke_vs_pisuke",
+   "m": 0.0235
+  },
+  "head_distance_min": {
+   "pair": "godan_vs_godan",
+   "m": 0.309
+  }
+ },
  "characters": {
   "moguzo": {
    "all_pass": true,
    "failed": [],
    "triangles": 24884,
    "joints": 40,
-   "clips": 11,
+   "clips": 30,
    "unique_clips": [
     "sp_rising_upper"
    ],
+   "v2_clips": 19,
    "textures": 1,
-   "file_size_mb": 1.77,
+   "file_size_mb": 2.52,
    "draw_calls": 2
   },
   "pisuke": {
@@ -31,12 +44,13 @@
    "failed": [],
    "triangles": 24440,
    "joints": 36,
-   "clips": 11,
+   "clips": 30,
    "unique_clips": [
     "sp_double_kick"
    ],
+   "v2_clips": 19,
    "textures": 1,
-   "file_size_mb": 1.68,
+   "file_size_mb": 2.35,
    "draw_calls": 2
   },
   "godan": {
@@ -44,12 +58,13 @@
    "failed": [],
    "triangles": 28940,
    "joints": 40,
-   "clips": 11,
+   "clips": 30,
    "unique_clips": [
     "sp_shoulder_charge"
    ],
+   "v2_clips": 19,
    "textures": 1,
-   "file_size_mb": 1.83,
+   "file_size_mb": 2.59,
    "draw_calls": 2
   },
   "hakuma": {
@@ -57,12 +72,13 @@
    "failed": [],
    "triangles": 29464,
    "joints": 36,
-   "clips": 11,
+   "clips": 30,
    "unique_clips": [
     "sp_harite"
    ],
+   "v2_clips": 19,
    "textures": 1,
-   "file_size_mb": 1.91,
+   "file_size_mb": 2.58,
    "draw_calls": 2
   },
   "chirka": {
@@ -70,12 +86,13 @@
    "failed": [],
    "triangles": 24200,
    "joints": 36,
-   "clips": 11,
+   "clips": 30,
    "unique_clips": [
     "sp_feint_claw"
    ],
+   "v2_clips": 19,
    "textures": 1,
-   "file_size_mb": 1.64,
+   "file_size_mb": 2.3,
    "draw_calls": 2
   },
   "takimaru": {
@@ -83,12 +100,13 @@
    "failed": [],
    "triangles": 29312,
    "joints": 36,
-   "clips": 11,
+   "clips": 30,
    "unique_clips": [
     "sp_bear_grab"
    ],
+   "v2_clips": 19,
    "textures": 1,
-   "file_size_mb": 1.93,
+   "file_size_mb": 2.6,
    "draw_calls": 2
   },
   "yomikage": {
@@ -96,12 +114,13 @@
    "failed": [],
    "triangles": 23992,
    "joints": 36,
-   "clips": 11,
+   "clips": 30,
    "unique_clips": [
     "sp_counter"
    ],
+   "v2_clips": 19,
    "textures": 1,
-   "file_size_mb": 1.68,
+   "file_size_mb": 2.35,
    "draw_calls": 2
   },
   "bullet": {
@@ -109,12 +128,13 @@
    "failed": [],
    "triangles": 24472,
    "joints": 39,
-   "clips": 11,
+   "clips": 30,
    "unique_clips": [
     "sp_tail_whip"
    ],
+   "v2_clips": 19,
    "textures": 1,
-   "file_size_mb": 1.77,
+   "file_size_mb": 2.49,
    "draw_calls": 2
   },
   "dark_moguzo": {
@@ -122,12 +142,13 @@
    "failed": [],
    "triangles": 24884,
    "joints": 40,
-   "clips": 11,
+   "clips": 30,
    "unique_clips": [
     "sp_dark_rush"
    ],
+   "v2_clips": 19,
    "textures": 1,
-   "file_size_mb": 1.6,
+   "file_size_mb": 2.35,
    "draw_calls": 2
   }
  }
