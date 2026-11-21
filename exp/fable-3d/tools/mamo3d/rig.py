@@ -22,7 +22,8 @@ def bone_table(spec, extra_bones):
         A('thigh.' + sn, Hp, K, 'pelvis', True); A('shin.' + sn, K, An, 'thigh.' + sn, True)
         A('ankle.' + sn, An, J['foot.' + sn], 'shin.' + sn, True); A('foot.' + sn, J['foot.' + sn], J['toe.' + sn], 'ankle.' + sn, True)
         A('toe.' + sn, J['toe.' + sn], J['toe_tip.' + sn], 'foot.' + sn, True)
-    A('tail_01', J['tail_01'], J['tail_02'], 'pelvis', True); A('tail_02', J['tail_02'], J['tail_03'], 'tail_01', True); A('tail_03', J['tail_03'], J['tail_tip'], 'tail_02', True)
+    tn = spec.tail_names
+    for i, nm in enumerate(tn): A(nm, J[nm], J[tn[i + 1]] if i + 1 < len(tn) else J['tail_tip'], tn[i - 1] if i else 'pelvis', True)
     for name, h, t, par, dyn in extra_bones: A(name, h, t, par, True)
     return T
 

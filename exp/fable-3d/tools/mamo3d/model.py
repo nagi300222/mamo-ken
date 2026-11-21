@@ -64,7 +64,7 @@ def build_arrays(cid, out_dir, log=print, cache_dir=None):
     v, f = body.decimate(v, f, P.tris)
     field = body.Field(grid, F)
     parts, extra_bones = body.build_extras(spec, field)
-    bone_names = DEFORM + [b[0] for b in extra_bones]
+    bone_names = DEFORM + [t for t in spec.tail_names if t not in DEFORM] + [b[0] for b in extra_bones]
     Wb, Wp = skin.body_weights(spec.prims, v, f, bone_names)
     verts = [v]; faces = [f]; fpart = [np.zeros(len(f), int)]; Ws = [Wb]; ranges = {'body': (0, len(v))}; off = len(v)
     for p in parts:

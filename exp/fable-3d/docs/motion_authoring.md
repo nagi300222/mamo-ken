@@ -80,3 +80,20 @@ def stand_light(cid):
 - 歩きのような周期運動や、手を床につくような接地の多い動き: 1〜2時間。
 - 動きの良し悪しを判断する時間は別。数値でポーズを書くので、ひねりの効いた動きや見栄えのする中割りは、
   手付けのアニメーターが Blender で作るより試行回数が要る。
+
+## roster9 での追加
+
+- キャラ固有モーションは `sp_` で始まる名前にし、`UNIQUE` 辞書へ `キャラID: (クリップ名, 関数)` で登録する。ビルドは共通10種＋固有を自動で入れる。
+- キャラの個性は `STYLE[cid]` に足す。`heavy`（強攻撃の型: `straight` / `kick` / `hammer`）、`heavy_k`（その時間倍率）、`light`（弱攻撃の発生・持続・全体）、
+  `big`（重量級の移動）、`crouch`（沈み・前傾・手の届く距離）、`paw_open`（手を開いて構える）、`brow`（眉の初期値）、`wide`（肘を張る）。
+- 長い尻尾は `tail_bones`（ボーンごとの上げ・左右の角度）で形を決める。攻撃で尻尾をキーの形へ寄せたいときは、クリップに `tail_follow`（0〜1）と `tail_stiff` を付ける。
+  `measure_tail=True` を付けると、尻尾先端の軌道と最大リーチが `{id}_motions.json` に記録される。
+- 既存キャラの動きを変えていないことは次で確認できる（共通コードを触ったあとに使う）。
+
+```bash
+node exp/fable-3d/tools/regress.mjs save exp/fable-3d/_scratch/regress_base.json
+```
+
+```bash
+node exp/fable-3d/tools/regress.mjs compare exp/fable-3d/_scratch/regress_base.json
+```

@@ -1,6 +1,6 @@
 # ボーン構造とリグ仕様書
 
-対象: `chars/{id}/{id}.blend` と `chars/{id}/{id}.glb`（moguzo / pisuke / godan 共通の構造）。
+対象: `chars/{id}/{id}.blend` と `chars/{id}/{id}.glb`。9体（moguzo / pisuke / godan / hakuma / chirka / takimaru / yomikage / bullet / dark_moguzo）で共通の構造。
 
 ## 座標と単位
 
@@ -11,7 +11,7 @@
 | 本人の左 | +X | +X |
 | 原点 | 両足の間の床（`root_ground`） | 同じ |
 
-単位はメートル扱いで、仮の全高（耳を除く頭頂）は moguzo 0.60 / pisuke 0.63 / godan 0.66。
+単位はメートル扱いで、仮の全高（耳を除く頭頂）は moguzo 0.60 / pisuke 0.63 / godan 0.66 / hakuma 0.70 / chirka 0.58 / takimaru 0.74 / yomikage 0.64 / bullet 0.62 / dark_moguzo 0.60。
 レスト姿勢は腕を横に開いたTポーズ寄りで、膝は軽く曲げてある（スキニングとIKの曲げ方向のため）。構えは idle クリップが持つ。
 
 ## 変形ボーンの階層（GLB に入るもの）
@@ -29,13 +29,16 @@ root_ground
    ├─ thigh.L ─ shin.L ─ ankle.L ─ foot.L ─ toe.L
    ├─ thigh_fix.L                                                       （股関節の変形補正）
    ├─ thigh.R … 同じ
-   └─ tail_01 ─ tail_02 ─ tail_03
+   └─ tail_01 ─ tail_02 ─ tail_03 （─ tail_04 ─ tail_05 ─ tail_06: bullet のみ）
 ```
 
-ジョイント数: moguzo 40、pisuke 36、godan 40。
+ジョイント数: moguzo 40、pisuke 36、godan 40、hakuma 36、chirka 36、takimaru 36、yomikage 36、bullet 39、dark_moguzo 40。
+
+尻尾のボーン数はキャラごとに変えられる（`characters.py` の `tail_n`）。bullet は長い尻尾のため6本で、`{id}_motions.json` の `tail_bones` に実際の一覧が入る。
+スカーフ・首飾り・たすき縄・包帯は専用ボーンを持たず、首・胴・前腕のボーンに追従する。
 
 必須ボーン（root_ground, pelvis, spine, chest, neck, head, jaw, shoulder / upper_arm / forearm / wrist / paw、
-thigh / shin / ankle / foot / toe の左右、tail_01〜03）は3体ともこの名前で入っている。`validation/{id}.json` の `required_bones` で確認済み。
+thigh / shin / ankle / foot / toe の左右、tail_01〜03）は9体ともこの名前で入っている。`validation/{id}.json` の `required_bones` で確認済み。
 
 ### 名前の対応表（重要）
 
@@ -146,6 +149,12 @@ Three.js 側では IK の計算は不要で、普通のボーンアニメーシ�
 | `move_total_leg`, `move_frames` | ダッシュの総移動量と、移動させる区間 |
 | `prejump`, `airborne`, `land_recovery`, `jump_height_leg` | ジャンプの予備動作、空中の区間、着地硬直、高さの目安。上下移動はクリップに含まない |
 | `enter_frames`, `loop_from` | しゃがみ・ガードの入り終わりと、保持ループの開始フレーム |
+| `common_clips`, `unique_clips` | 共通10種と、キャラ固有モーション（`sp_*`）の名前 |
+| `unique`, `provisional`, `name_jp`, `proposal` | 固有モーションの印。技名・フレーム・性能はAIの仮案 |
+| `hits` | 多段技の各ヒットの持続区間 `[[開始, 終了], ...]` |
+| `tail_tip_max_forward_m`, `tail_tip_max_forward_frame`, `tail_tip_height_at_max_m` | bullet の尾打撃: 尻尾先端が最も前へ届く距離（原点から）、そのフレーム、そのときの高さ |
+| `tail_tip_path` | 尻尾先端の軌道（2フレームごと。列は `frame, forward_m, left_m, height_m`）。当たり判定を実際の尻尾の位置に合わせるために使う |
+| `tail_tip_min_height_m`, `tail_to_body_axis_min_m` | 尻尾先端の最低の高さ、尻尾と胴の軸の最小距離（床・胴への潜り込みの確認用） |
 
 ### つなぎ
 
@@ -158,3 +167,4 @@ Three.js 側では IK の計算は不要で、普通のボーンアニメーシ�
 - 指は1本ずつ動かせない（握りと開きのシェイプキーのみ）。
 - 脚が短い体型のため、脚を高く上げると太ももが胴の毛に引っ張られる。`thigh_fix` で軽減しているが残る。
 - 尻尾と垂れ布の揺れは焼き込みなので、ゲーム中の移動速度には反応しない。
+- bullet の長い尻尾は、移動や被弾ではバネで遅れて揺れ、尾打撃のときだけキーで決めた形へ強く寄せている（`tail_follow`）。尻尾と脚・床の接触は自動では防いでいない。

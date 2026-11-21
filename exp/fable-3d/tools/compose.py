@@ -38,3 +38,11 @@ elif mode == 'tojpg':            # リポジトリを重くしないよう、確
     for f in sorted(os.listdir(d)):
         if f.endswith('.png'):
             Image.open(os.path.join(d, f)).convert('RGB').save(os.path.join(d, f[:-4] + '.jpg'), quality=88, optimize=True); os.remove(os.path.join(d, f))
+elif mode == 'grid':             # 9体ぶんの比較画像・四方向画像を1枚にまとめる
+    kind, out = sys.argv[2:4]; ids = ['moguzo', 'pisuke', 'godan', 'hakuma', 'chirka', 'takimaru', 'yomikage', 'bullet', 'dark_moguzo']; ims = []
+    for cid in ids:
+        im = Image.open(os.path.join(ROOT, 'chars', cid, 'renders', kind + '.jpg')).convert('RGB'); W = 1100 if kind == 'compare' else 1200
+        im = im.resize((W, int(im.height * W / im.width)), Image.LANCZOS); d = ImageDraw.Draw(im); d.rectangle([W - 190, 0, W, 26], fill=(224, 161, 58)); d.text((W - 182, 4), cid, fill=(20, 16, 0), font=font(16)); ims.append(im)
+    cols = 1 if kind == 'turnaround' else 3; rows = (len(ims) + cols - 1) // cols; w = ims[0].width; h = max(i.height for i in ims); S = Image.new('RGB', (w * cols, h * rows), (35, 38, 46))
+    for i, im in enumerate(ims): S.paste(im, ((i % cols) * w, (i // cols) * h))
+    S.save(os.path.join(out, kind + '_all.jpg'), quality=86, optimize=True)

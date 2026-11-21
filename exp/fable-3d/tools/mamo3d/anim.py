@@ -57,11 +57,14 @@ class Animator:
     def __init__(self, arm, mesh_ob, spec, extra_bones):
         self.arm, self.ob, self.spec, self.M, self.J = arm, mesh_ob, spec, spec.M, spec.J
         self.R, self.par = rigmod.rest_data(arm); self.Ri = {k: np.linalg.inv(v) for k, v in self.R.items()}
-        self.chains = [(['tail_01', 'tail_02', 'tail_03'], 'pelvis', [dict(stiff=170, damp=17), dict(stiff=130, damp=14), dict(stiff=110, damp=12)])]
+        self.tail = list(spec.tail_names); nt = len(self.tail)
+        tp = [dict(stiff=170, damp=17), dict(stiff=130, damp=14), dict(stiff=110, damp=12)] if nt == 3 else \
+             [dict(stiff=150 - 9 * i, damp=15 - 0.6 * i, max=40) for i in range(nt)]
+        self.chains = [(self.tail, 'pelvis', tp)]
         by = {}
         for name, h, t, par, dyn in extra_bones: by.setdefault(name.rsplit('_', 1)[0], []).append((name, par, dyn))
         for k, lst in by.items(): self.chains.append(([x[0] for x in lst], lst[0][1], [x[2] for x in lst]))
-        self.warn = []
+        self.warn = []; self.idle_dyn = None
 
     # ---- 1フレームぶんを解く ----
     def solve(self, pose):
@@ -77,7 +80,10 @@ class Animator:
         for n in ('spine', 'chest', 'neck', 'head'): fk(n, pyr(pose[n]))
         fk('jaw', Rx(math.radians(pose.get('jaw', 0.0))))
         tp = pose.get('tail', (0, 0))
-        for i, n in enumerate(('tail_01', 'tail_02', 'tail_03')): fk(n, Rz(math.radians(tp[1]) * 0.5) @ Rx(math.radians(tp[0]) * (0.6 if i == 0 else 0.35)))
+        tb = pose.get('tail_bones')             # 長い尻尾用: ボーンごとの (上げ, 左右) 度。あれば tail に足す
+        for i, n in enumerate(self.tail):
+            ex = tb[i] if tb is not None and i < len(tb) else (0, 0)
+            fk(n, Rz(math.radians(tp[1] * 0.5 + ex[1])) @ Rx(math.radians(tp[0] * (0.6 if i == 0 else 0.35) + ex[0])))
         def carry(space):       # レスト座標 → その骨に付いて動いた後の座標
             return np.eye(4) if space in ('root', 'world') else W[space] @ Ri[space]
         out = {'B': B, 'W': W, 'keys': dict(pose.get('keys', {}))}
@@ -143,8 +149,9 @@ class Animator:
                         Mt = Mpar @ Ri[ppar] @ R[n] @ base; h = Mt[:3, 3]; ydir = Mt[:3, 1]; tgt = h + ydir * lens[i]
                         if state is None: p, v = tgt.copy(), np.zeros(3)
                         else:
-                            p, v = state[i]; pr = params[i]
-                            v = v + (pr['stiff'] * (tgt - p) - pr['damp'] * v + np.array([0, 0, -9.8 * pr.get('grav', 0.0)])) * dt; p = p + v * dt
+                            p, v = state[i]; pr = params[i]; km = self.dyn_mult if names is self.tail else 1.0
+                            v = v + (pr['stiff'] * km * (tgt - p) - pr['damp'] * (km ** 0.5) * v + np.array([0, 0, -9.8 * pr.get('grav', 0.0)])) * dt; p = p + v * dt
+                            if names is self.tail and self.dyn_follow: p = p + (tgt - p) * self.dyn_follow      # 攻撃用: キーで決めた形へ強く寄せ、遅れを1フレーム程度に抑える
                             d = p - h; p = h + d / (np.linalg.norm(d) + 1e-9) * lens[i]
                             mx = math.radians(pr.get('max', 55)); cs = np.clip(((p - h) / lens[i]) @ ydir, -1, 1)
                             if math.acos(cs) > mx:            # 振れすぎを制限
@@ -159,13 +166,31 @@ class Animator:
                         Mpar = Ms; ppar = n
                     state = newstate
             if loop: frames[-1]['B'].update({n: frames[0]['B'][n] for n in names})
+            elif names is self.tail and len(names) > 3 and self.idle_dyn:      # 長い尻尾: 終端を idle 0フレーム目の揺れ姿勢へ合わせる（静止姿勢との差が大きいため）
+                for k in range(SETTLE + 1):
+                    fr = frames[len(frames) - 1 - SETTLE + k]; u = k / SETTLE; u = u * u * (3 - 2 * u)
+                    for n in names:
+                        b = fr['B'][n].copy(); b[:3, :3] = slerp_m(b[:3, :3], self.idle_dyn[n][:3, :3], u); fr['B'][n] = b
 
     # ---- アクションへ書き込む ----
     def bake(self, name, clip):
         """clip: dict(frames=N, loop=bool, fn=frame→pose) → Action"""
-        N = clip['frames']; self.warn = []
+        N = clip['frames']; self.warn = []; self.dyn_mult = clip.get('tail_stiff', 1.0); self.dyn_follow = clip.get('tail_follow', 0.0)
         frames = [self.solve(clip['fn'](f)) for f in range(N + 1)]
         self.dynamics(frames, clip['loop'])
+        if name == 'idle': self.idle_dyn = {n: frames[0]['B'][n].copy() for n in self.tail}
+        self.measure = None
+        if clip.get('measure_tail'):          # 尻尾先端の軌道（アーマチュア座標: 前=-Y）と、胴・床との余裕を記録する
+            last = self.tail[-1]; L = np.linalg.norm(self.arm.data.bones[last].tail_local - self.arm.data.bones[last].head_local); tr = []; clear = 9.0
+            for f, fr in enumerate(frames):
+                Mt = fr['W'][last]; tip = Mt[:3, 3] + Mt[:3, 1] * L; tr.append((f, -tip[1], tip[0], tip[2]))
+                a0 = fr['W']['pelvis'][:3, 3]; b0 = fr['W']['head'][:3, 3]; ab = b0 - a0
+                for tn in self.tail[2:]:
+                    q = fr['W'][tn][:3, 3]; t = np.clip((q - a0) @ ab / (ab @ ab), 0, 1); clear = min(clear, float(np.linalg.norm(q - (a0 + t * ab))))
+            k = max(range(len(tr)), key=lambda i: tr[i][1])
+            self.measure = dict(tail_tip_max_forward_m=round(tr[k][1], 4), tail_tip_max_forward_frame=tr[k][0], tail_tip_height_at_max_m=round(tr[k][3], 4), tail_tip_side_at_max_m=round(tr[k][2], 4),
+                                tail_tip_min_height_m=round(min(t[3] for t in tr), 4), tail_to_body_axis_min_m=round(clear, 4),
+                                tail_tip_path=[[t[0], round(t[1], 3), round(t[2], 3), round(t[3], 3)] for t in tr[::2]], tail_tip_path_columns=['frame', 'forward_m', 'left_m', 'height_m'])
         ch = {}; prevq = {}
         for f, fr in enumerate(frames):
             for bn, b in fr['B'].items():

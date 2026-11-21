@@ -71,7 +71,7 @@ def shade(spec, field, pos, nrm, part):
     col = C['fur'] * (1 - dark[:, None]) + C['fur_dark'] * dark[:, None]
     # 腹〜胸の明色
     zt = P.neck_c[2] + P.neck_r[2] * 0.2; zb = P.belly_c[2] - P.belly_r[2] * 0.95; zc = (zt + zb) / 2
-    e = np.sqrt((x / (P.belly_r[0] * 0.80)) ** 2 + ((z - zc) / ((zt - zb) / 2)) ** 2) + (n1 - 0.5) * 0.35 + (n2 - 0.5) * 0.15
+    e = np.sqrt((x / (P.belly_r[0] * P.belly_w)) ** 2 + ((z - zc) / ((zt - zb) / 2)) ** 2) + (n1 - 0.5) * 0.35 + (n2 - 0.5) * 0.15
     mb = (1 - smoothstep(0.62, 1.05, e)) * smoothstep(0.05, 0.55, -nrm[:, 1]) * P.belly_patch * (1 - np.clip(g('arm', 'fist', 'fingers') * 3, 0, 1))
     col = col * (1 - mb[:, None]) + C['belly'] * mb[:, None]
     # マズル・頬・あご
@@ -79,6 +79,28 @@ def shade(spec, field, pos, nrm, part):
     col = col * (1 - mm[:, None]) + C['muzzle'] * mm[:, None]
     if 'brow' in C:
         m = smoothstep(0.35, 0.7, g('brow')); col = col * (1 - m[:, None]) + C['brow'] * m[:, None]
+    # --- roster9 の配色パターン（指定があるキャラだけ） ---
+    hc = np.array(P.head_c); hr = np.array(P.head_r); gh = np.clip(g('head', 'cheek', 'muzzle', 'ear', 'brow', 'chin'), 0, 1)
+    if 'tail' in C:
+        m = smoothstep(0.3, 0.7, g('tail') + (n1 - 0.5) * 0.3); col = col * (1 - m[:, None]) + C['tail'] * m[:, None]
+    if P.cap:                                # 頭頂の濃色。stripe があれば鼻筋へ細く下ろす
+        zr = (z - hc[2]) / hr[2] + (n1 - 0.5) * 0.25 + (n2 - 0.5) * 0.1
+        m = smoothstep(P.cap['z0'] - 0.12, P.cap['z0'] + 0.12, zr + 0.25 * smoothstep(-0.2, 0.6, nrm[:, 1]))
+        if P.cap.get('stripe'):
+            w = P.cap['stripe'] * (1 + 0.8 * np.clip((z - (hc[2] + P.nose_off[2])) / (hr[2] * 0.5), 0, 2))
+            m = np.maximum(m, (1 - smoothstep(w * 0.7, w * 1.3, np.abs(x) + (n2 - 0.5) * 0.006)) * smoothstep(0.0, 0.2, -nrm[:, 1]) * smoothstep(hc[2] + P.nose_off[2] + P.nose_r[2], hc[2] + P.nose_off[2] + P.nose_r[2] + 0.012, z))
+        m = m * smoothstep(0.4, 0.7, gh); col = col * (1 - m[:, None]) + C['cap'] * m[:, None]
+    if P.mask:                               # 目のまわり〜下の濃い斑
+        for (sn, s), ec in zip(SIDES, spec.eye_centers):
+            q = ec + np.array([s * P.mask['dx'], 0, P.mask['dz']]) * P.eye_r * 2.0
+            d = np.linalg.norm((pos - q) * np.array([1.0, 0.6, 1.15]), axis=1) / (P.eye_r * P.mask['r']) + (n1 - 0.5) * 0.3
+            m = (1 - smoothstep(0.75, 1.1, d)) * smoothstep(0.4, 0.7, gh); col = col * (1 - m[:, None]) + C['mask'] * m[:, None]
+    if P.blaze:                              # 額から鼻への白い筋
+        w = P.blaze['w'] * (0.7 + 0.9 * np.clip((hc[2] + hr[2] * 0.6 - z) / (hr[2] * 0.9), 0, 1.2))
+        m = (1 - smoothstep(w * 0.75, w * 1.25, np.abs(x) + (n2 - 0.5) * 0.008)) * smoothstep(0.05, 0.3, -nrm[:, 1]) * smoothstep(0.4, 0.7, gh) * smoothstep(hc[2] + P.nose_off[2] + P.nose_r[2], hc[2] + P.nose_off[2] + P.nose_r[2] + 0.01, z)
+        col = col * (1 - m[:, None]) + C['blaze'] * m[:, None]
+    if 'ear' in C:
+        m = smoothstep(0.3, 0.6, g('ear')); col = col * (1 - m[:, None]) + C['ear'] * m[:, None]
     # 耳の内側
     m = smoothstep(0.3, 0.7, g('ear')) * smoothstep(0.1, 0.6, -nrm[:, 1]); col = col * (1 - m[:, None] * 0.8) + C['ear_in'] * m[:, None] * 0.8
     bare = np.zeros(N)
@@ -97,7 +119,7 @@ def shade(spec, field, pos, nrm, part):
             col *= (1 - 0.35 * crease[:, None])
         # 足
         gl = g('leg' + sn, 'foot' + sn, 'toes' + sn, 'tclaws' + sn)
-        m = (1 - smoothstep(P.ankle_z * 0.75, P.ankle_z * 1.45, z + (n1 - 0.5) * 0.015)) * smoothstep(0.3, 0.6, gl)
+        m = (1 - smoothstep(P.ankle_z * 0.75, P.ankle_z * 1.45 * P.foot_fade, z + (n1 - 0.5) * 0.015)) * smoothstep(0.3, 0.6, gl)
         col = col * (1 - m[:, None]) + C['foot'] * m[:, None]
         mf = smoothstep(0.35, 0.65, g('foot' + sn, 'toes' + sn, 'tclaws' + sn)); bare = np.maximum(bare, mf)
         mc = smoothstep(0.45, 0.6, g('tclaws' + sn)); col = col * (1 - mc[:, None]) + C['claw'] * mc[:, None]
@@ -107,6 +129,7 @@ def shade(spec, field, pos, nrm, part):
     st2 = FW[:, 0] * vnoise(pos, (260, 260, 26), 6) + (1 - FW[:, 0]) * vnoise(pos, 200, 6)
     k = np.clip(0.35 + tuft * 0.75, 0, 1) * (1 - bare)
     f = 1 + k * (0.17 * (h1 - 0.45) + 0.13 * (h2 - 0.4) + P.strand * (0.26 * (st - 0.5) + 0.16 * (st2 - 0.5)))
+    if P.grizzle: f = f * (1 + P.grizzle * (1 - bare) * (vnoise(pos, 420, 11) - 0.5) * 1.2)      # ごま塩毛
     f = f * (1 + bare * 0.12 * (n2 - 0.5))
     col = col * f[:, None]
     # 鼻

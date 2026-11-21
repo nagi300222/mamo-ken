@@ -1,0 +1,494 @@
+{
+ "file": "chars/bullet/bullet.glb",
+ "file_size_bytes": 1766032,
+ "checks": {
+  "skin_exists": {
+   "pass": true,
+   "skins": 1,
+   "joints": 39
+  },
+  "required_bones": {
+   "pass": true,
+   "required": 30,
+   "missing": []
+  },
+  "joints_weights_attributes": {
+   "pass": true,
+   "primitives": 2
+  },
+  "weights_normalized": {
+   "pass": true,
+   "max_abs_deviation_from_1": 1.42e-7,
+   "joints_out_of_range": 0,
+   "max_influences": 4
+  },
+  "clips_present": {
+   "pass": true,
+   "expected": 11,
+   "found": 11,
+   "missing": []
+  },
+  "clip_durations_match_definition": {
+   "pass": true,
+   "mismatched": []
+  },
+  "has_unique_motion": {
+   "pass": true,
+   "unique_clips": [
+    "sp_tail_whip"
+   ]
+  },
+  "shape_keys_present": {
+   "pass": true,
+   "found": [
+    "paw_open.L",
+    "paw_open.R",
+    "blink",
+    "brow_angry"
+   ]
+  },
+  "three_loads_all_clips": {
+   "pass": true,
+   "loaded": 11
+  },
+  "three_bones_move_in_every_clip": {
+   "pass": true
+  },
+  "three_no_console_errors": {
+   "pass": true,
+   "errors": []
+  },
+  "loops_are_seamless": {
+   "pass": true
+  },
+  "attacks_return_to_idle": {
+   "pass": true
+  },
+  "secondary_motion_settles_at_end": {
+   "pass": true,
+   "threshold_m": 0.026
+  },
+  "crouch_lead_hand_on_ground": {
+   "pass": true,
+   "paw_bone_height_m": 0.0317,
+   "note": "手のボーンは拳の中心付近。0.045m 未満なら開いた手が床に触れている"
+  },
+  "bullet_tail_has_extra_bones": {
+   "pass": true,
+   "tail_bones": 6
+  },
+  "bullet_tail_whip_reach": {
+   "pass": true,
+   "tail_tip_max_forward_m": 0.6506,
+   "at_frame": 24,
+   "active_frames": [
+    19,
+    25
+   ],
+   "longest_punch_reach_m": 0.412,
+   "ratio": 1.58,
+   "reach_bone_in_glb": "tail_06"
+  },
+  "bullet_tail_clear_of_ground_and_body": {
+   "pass": true,
+   "tail_tip_min_height_m": 0.1576,
+   "tail_to_body_axis_min_m": 0.2341,
+   "note": "胴の軸からの距離が胴の半径(約0.14m)より小さいと胴に潜る"
+  },
+  "feet_not_below_ground": {
+   "pass": true
+  }
+ },
+ "joint_names": [
+  "root_ground",
+  "pelvis",
+  "spine",
+  "chest",
+  "neck",
+  "head",
+  "jaw",
+  "shoulder.L",
+  "shoulder_fix.L",
+  "upper_arm.L",
+  "forearm.L",
+  "forearm_twist.L",
+  "wrist.L",
+  "paw.L",
+  "shoulder.R",
+  "shoulder_fix.R",
+  "upper_arm.R",
+  "forearm.R",
+  "forearm_twist.R",
+  "wrist.R",
+  "paw.R",
+  "tail_01",
+  "tail_02",
+  "tail_03",
+  "tail_04",
+  "tail_05",
+  "tail_06",
+  "thigh.L",
+  "shin.L",
+  "ankle.L",
+  "foot.L",
+  "toe.L",
+  "thigh.R",
+  "shin.R",
+  "ankle.R",
+  "foot.R",
+  "toe.R",
+  "thigh_fix.L",
+  "thigh_fix.R"
+ ],
+ "bone_name_map_three": {
+  "root_ground": "root_ground",
+  "pelvis": "pelvis",
+  "spine": "spine",
+  "chest": "chest",
+  "neck": "neck",
+  "head": "head",
+  "jaw": "jaw",
+  "shoulder.L": "shoulderL",
+  "shoulder_fix.L": "shoulder_fixL",
+  "upper_arm.L": "upper_armL",
+  "forearm.L": "forearmL",
+  "forearm_twist.L": "forearm_twistL",
+  "wrist.L": "wristL",
+  "paw.L": "pawL",
+  "shoulder.R": "shoulderR",
+  "shoulder_fix.R": "shoulder_fixR",
+  "upper_arm.R": "upper_armR",
+  "forearm.R": "forearmR",
+  "forearm_twist.R": "forearm_twistR",
+  "wrist.R": "wristR",
+  "paw.R": "pawR",
+  "tail_01": "tail_01",
+  "tail_02": "tail_02",
+  "tail_03": "tail_03",
+  "tail_04": "tail_04",
+  "tail_05": "tail_05",
+  "tail_06": "tail_06",
+  "thigh.L": "thighL",
+  "shin.L": "shinL",
+  "ankle.L": "ankleL",
+  "foot.L": "footL",
+  "toe.L": "toeL",
+  "thigh.R": "thighR",
+  "shin.R": "shinR",
+  "ankle.R": "ankleR",
+  "foot.R": "footR",
+  "toe.R": "toeR",
+  "thigh_fix.L": "thigh_fixL",
+  "thigh_fix.R": "thigh_fixR"
+ },
+ "unique_clips": [
+  "sp_tail_whip"
+ ],
+ "animations": [
+  {
+   "name": "idle",
+   "duration": 1.0667,
+   "channels": 118,
+   "frames": 64,
+   "loop": true
+  },
+  {
+   "name": "walk_f",
+   "duration": 0.6333,
+   "channels": 118,
+   "frames": 38,
+   "loop": true
+  },
+  {
+   "name": "walk_b",
+   "duration": 0.7167,
+   "channels": 118,
+   "frames": 43,
+   "loop": true
+  },
+  {
+   "name": "dash_f",
+   "duration": 0.3667,
+   "channels": 118,
+   "frames": 22,
+   "loop": false
+  },
+  {
+   "name": "crouch",
+   "duration": 0.8,
+   "channels": 118,
+   "frames": 48,
+   "loop": false
+  },
+  {
+   "name": "jump_n",
+   "duration": 0.8,
+   "channels": 118,
+   "frames": 48,
+   "loop": false
+  },
+  {
+   "name": "stand_light",
+   "duration": 0.3,
+   "channels": 118,
+   "frames": 18,
+   "loop": false
+  },
+  {
+   "name": "stand_heavy",
+   "duration": 0.6667,
+   "channels": 118,
+   "frames": 40,
+   "loop": false
+  },
+  {
+   "name": "guard_stand",
+   "duration": 0.4833,
+   "channels": 118,
+   "frames": 29,
+   "loop": false
+  },
+  {
+   "name": "hurt_light",
+   "duration": 0.3333,
+   "channels": 118,
+   "frames": 20,
+   "loop": false
+  },
+  {
+   "name": "sp_tail_whip",
+   "duration": 0.8,
+   "channels": 118,
+   "frames": 48,
+   "loop": false
+  }
+ ],
+ "triangles": 24472,
+ "vertices_after_split": 15228,
+ "primitives": [
+  {
+   "material": "bullet_body",
+   "triangles": 24024,
+   "vertices": 14882,
+   "morph_targets": 4
+  },
+  {
+   "material": "bullet_eye",
+   "triangles": 448,
+   "vertices": 346,
+   "morph_targets": 4
+  }
+ ],
+ "textures": 1,
+ "images": [
+  {
+   "mime": "image/jpeg",
+   "bytes": 339906
+  }
+ ],
+ "materials": [
+  "bullet_body",
+  "bullet_eye"
+ ],
+ "morph_targets": [
+  "paw_open.L",
+  "paw_open.R",
+  "blink",
+  "brow_angry"
+ ],
+ "height": 0.62,
+ "tail_last": "tail_06",
+ "playback": {
+  "loaded_clips": [
+   {
+    "name": "idle",
+    "duration": 1.0666667222976685,
+    "tracks": 119
+   },
+   {
+    "name": "walk_f",
+    "duration": 0.6333333253860474,
+    "tracks": 119
+   },
+   {
+    "name": "walk_b",
+    "duration": 0.7166666388511658,
+    "tracks": 119
+   },
+   {
+    "name": "dash_f",
+    "duration": 0.36666667461395264,
+    "tracks": 119
+   },
+   {
+    "name": "crouch",
+    "duration": 0.800000011920929,
+    "tracks": 119
+   },
+   {
+    "name": "jump_n",
+    "duration": 0.800000011920929,
+    "tracks": 119
+   },
+   {
+    "name": "stand_light",
+    "duration": 0.30000001192092896,
+    "tracks": 119
+   },
+   {
+    "name": "stand_heavy",
+    "duration": 0.6666666865348816,
+    "tracks": 119
+   },
+   {
+    "name": "guard_stand",
+    "duration": 0.4833333194255829,
+    "tracks": 119
+   },
+   {
+    "name": "hurt_light",
+    "duration": 0.3333333432674408,
+    "tracks": 119
+   },
+   {
+    "name": "sp_tail_whip",
+    "duration": 0.800000011920929,
+    "tracks": 119
+   }
+  ],
+  "stats": {
+   "tris": 24472,
+   "verts": 15228,
+   "meshes": 2,
+   "bones": 39,
+   "morphs": [
+    "paw_open.L",
+    "paw_open.R",
+    "blink",
+    "brow_angry"
+   ],
+   "calls": 4
+  },
+  "clips": {
+   "idle": {
+    "bones_move_max_m": 0.0751,
+    "bones_animated": true,
+    "loop_seam_max_m": 0,
+    "loop_seam_ok": true,
+    "max_bone_step_per_frame_m": 0.0047,
+    "lowest_foot_bone_y_m": 0.0133,
+    "planted_foot_drift_max_m": 0
+   },
+   "walk_f": {
+    "bones_move_max_m": 0.1212,
+    "bones_animated": true,
+    "loop_seam_max_m": 0,
+    "loop_seam_ok": true,
+    "max_bone_step_per_frame_m": 0.0163,
+    "lowest_foot_bone_y_m": 0.0133
+   },
+   "walk_b": {
+    "bones_move_max_m": 0.1626,
+    "bones_animated": true,
+    "loop_seam_max_m": 0,
+    "loop_seam_ok": true,
+    "max_bone_step_per_frame_m": 0.0151,
+    "lowest_foot_bone_y_m": 0.0133
+   },
+   "dash_f": {
+    "bones_move_max_m": 0.1354,
+    "bones_animated": true,
+    "end_vs_idle_max_m": 0,
+    "end_vs_idle_worst_bone": "forearmR",
+    "returns_to_idle": true,
+    "end_vs_idle_secondary_bones_max_m": 0,
+    "secondary_settles": true,
+    "max_bone_step_per_frame_m": 0.0412,
+    "lowest_foot_bone_y_m": 0.0125
+   },
+   "crouch": {
+    "bones_move_max_m": 0.3577,
+    "bones_animated": true,
+    "max_bone_step_per_frame_m": 0.0543,
+    "lowest_foot_bone_y_m": 0.0132,
+    "pelvis_drop_m": 0.0653,
+    "lead_paw_height_m": 0.0317,
+    "lead_foot_drift_m": 0,
+    "paw_open_morph_at_end": 1
+   },
+   "jump_n": {
+    "bones_move_max_m": 0.159,
+    "bones_animated": true,
+    "end_vs_idle_max_m": 0,
+    "end_vs_idle_worst_bone": "pawL",
+    "returns_to_idle": true,
+    "end_vs_idle_secondary_bones_max_m": 0,
+    "secondary_settles": true,
+    "max_bone_step_per_frame_m": 0.1289,
+    "lowest_foot_bone_y_m": 0.0133
+   },
+   "stand_light": {
+    "bones_move_max_m": 0.1791,
+    "bones_animated": true,
+    "end_vs_idle_max_m": 0,
+    "end_vs_idle_worst_bone": "pawL",
+    "returns_to_idle": true,
+    "end_vs_idle_secondary_bones_max_m": 0,
+    "secondary_settles": true,
+    "max_bone_step_per_frame_m": 0.1667,
+    "lowest_foot_bone_y_m": 0.0128,
+    "max_forward_reach_m": 0.3432,
+    "max_reach_frame": 5,
+    "max_reach_bone": "pawL"
+   },
+   "stand_heavy": {
+    "bones_move_max_m": 0.453,
+    "bones_animated": true,
+    "end_vs_idle_max_m": 0,
+    "end_vs_idle_worst_bone": "forearmR",
+    "returns_to_idle": true,
+    "end_vs_idle_secondary_bones_max_m": 0,
+    "secondary_settles": true,
+    "max_bone_step_per_frame_m": 0.1927,
+    "lowest_foot_bone_y_m": 0.0099,
+    "max_forward_reach_m": 0.412,
+    "max_reach_frame": 14,
+    "max_reach_bone": "pawR"
+   },
+   "guard_stand": {
+    "bones_move_max_m": 0.1015,
+    "bones_animated": true,
+    "max_bone_step_per_frame_m": 0.0447,
+    "lowest_foot_bone_y_m": 0.0133,
+    "planted_foot_drift_max_m": 0.0087
+   },
+   "hurt_light": {
+    "bones_move_max_m": 0.1479,
+    "bones_animated": true,
+    "end_vs_idle_max_m": 0,
+    "end_vs_idle_worst_bone": "forearmL",
+    "returns_to_idle": true,
+    "end_vs_idle_secondary_bones_max_m": 0,
+    "secondary_settles": true,
+    "max_bone_step_per_frame_m": 0.1041,
+    "lowest_foot_bone_y_m": 0.013
+   },
+   "sp_tail_whip": {
+    "bones_move_max_m": 1.1143,
+    "bones_animated": true,
+    "end_vs_idle_max_m": 0,
+    "end_vs_idle_worst_bone": "pawL",
+    "returns_to_idle": true,
+    "end_vs_idle_secondary_bones_max_m": 0,
+    "secondary_settles": true,
+    "max_bone_step_per_frame_m": 0.2636,
+    "lowest_foot_bone_y_m": 0.0133,
+    "max_forward_reach_m": 0.5762,
+    "max_reach_frame": 23,
+    "max_reach_bone": "tail_06"
+   }
+  },
+  "console_errors": []
+ },
+ "all_pass": true
+}

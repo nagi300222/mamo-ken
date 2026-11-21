@@ -5,8 +5,8 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { OutlineEffect } from 'three/addons/effects/OutlineEffect.js';
 
-const CHARS = ['moguzo', 'pisuke', 'godan'];
-const CLIPS = ['idle', 'walk_f', 'walk_b', 'dash_f', 'crouch', 'jump_n', 'stand_light', 'stand_heavy', 'guard_stand', 'hurt_light'];
+const CHARS = ['moguzo', 'pisuke', 'godan', 'hakuma', 'chirka', 'takimaru', 'yomikage', 'bullet', 'dark_moguzo'];
+const CLIPS = ['idle', 'walk_f', 'walk_b', 'dash_f', 'crouch', 'jump_n', 'stand_light', 'stand_heavy', 'guard_stand', 'hurt_light'];   // 共通。固有モーション（sp_*）はGLBから拾う
 const FPS = 60;
 const Q = new URLSearchParams(location.search);
 const $ = (id) => document.getElementById(id);
@@ -113,7 +113,7 @@ function stepFrame(n) { S.paused = true; const a = S.actions[S.cur]; setTime(Mat
 function btn(parent, label, on, fn) { const b = document.createElement('button'); b.textContent = label; if (on) b.className = 'on'; b.onclick = fn; parent.appendChild(b); return b; }
 function buildUI() {
   $('chars').replaceChildren(); CHARS.forEach(c => btn($('chars'), c, c === S.id, () => load(c)));
-  $('clips').replaceChildren(); CLIPS.filter(c => S.actions[c]).forEach(c => btn($('clips'), c, c === S.cur, () => { S.paused = false; play(c); }));
+  $('clips').replaceChildren(); [...CLIPS.filter(c => S.actions[c]), ...Object.keys(S.actions).filter(c => !CLIPS.includes(c))].forEach(c => btn($('clips'), c.startsWith('sp_') ? `★ ${c}` : c, c === S.cur, () => { S.paused = false; play(c); }));
   $('speeds').replaceChildren(); [1, 0.5, 0.25, 0.1].forEach(v => btn($('speeds'), v === 1 ? '等速' : `×${v}`, v === S.speed, () => { S.speed = v; buildUI(); }));
   $('facing').replaceChildren(); [['right', '右向き'], ['left', '左向き（ミラー）'], ['left_rot', '左向き（回転）']].forEach(([k, l]) => btn($('facing'), l, k === S.facing, () => { S.facing = k; applyDisplay(); buildUI(); }));
   $('cams').replaceChildren(); [['game', 'ゲーム視点'], ['front', '正面'], ['three_quarter', '斜め'], ['back', '背面'], ['side_l', '反対側'], ['top', '上から']].forEach(([k, l]) => btn($('cams'), l, k === S.cam, () => setCamera(k)));

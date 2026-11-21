@@ -1,0 +1,161 @@
+{
+ "id": "chirka",
+ "height": 0.58,
+ "unit": "Blender単位（メートル扱い）。全高は耳を除く頭頂まで",
+ "fps": 60,
+ "forward": "glTF/Three.js では +Z が正面、+Y が上、+X が本人の左",
+ "metrics": {
+  "leg": 0.2179,
+  "arm": 0.182,
+  "note": "移動量の *_leg は脚の長さ(leg)を1とした値。実距離 = 値 × leg"
+ },
+ "common_clips": [
+  "idle",
+  "walk_f",
+  "walk_b",
+  "dash_f",
+  "crouch",
+  "jump_n",
+  "stand_light",
+  "stand_heavy",
+  "guard_stand",
+  "hurt_light"
+ ],
+ "unique_clips": [
+  "sp_feint_claw"
+ ],
+ "tail_bones": [
+  "tail_01",
+  "tail_02",
+  "tail_03"
+ ],
+ "rig_checks": {
+  "shoulder_fix.L_ratio": 0.5,
+  "thigh_fix.L_ratio": 0.5,
+  "shoulder_fix.R_ratio": 0.5,
+  "thigh_fix.R_ratio": 0.5
+ },
+ "clips": {
+  "idle": {
+   "frames": 40,
+   "fps": 60,
+   "duration_sec": 0.6667,
+   "loop": true,
+   "note": "待機。呼吸で上下する"
+  },
+  "walk_f": {
+   "frames": 28,
+   "fps": 60,
+   "duration_sec": 0.4667,
+   "loop": true,
+   "move_per_loop_leg": 0.8387,
+   "note": "足の接地中は一定速で後ろへ流れる。ゲーム側でこの速度で前進させれば滑らない"
+  },
+  "walk_b": {
+   "frames": 32,
+   "fps": 60,
+   "duration_sec": 0.5333,
+   "loop": true,
+   "move_per_loop_leg": -0.671,
+   "note": "足の接地中は一定速で後ろへ流れる。ゲーム側でこの速度で前進させれば滑らない"
+  },
+  "dash_f": {
+   "frames": 22,
+   "fps": 60,
+   "duration_sec": 0.3667,
+   "loop": false,
+   "move_total_leg": 2.2,
+   "move_frames": [
+    4,
+    17
+   ],
+   "note": "F4で踏み切り、F17で着地。移動はこの区間に配分する"
+  },
+  "crouch": {
+   "frames": 48,
+   "fps": 60,
+   "duration_sec": 0.8,
+   "loop": false,
+   "enter_frames": 12,
+   "loop_from": 12,
+   "note": "F12まででしゃがみ切り、F12〜F48は呼吸の保持ループ。リード手（左）を地面につく"
+  },
+  "jump_n": {
+   "frames": 48,
+   "fps": 60,
+   "duration_sec": 0.8,
+   "loop": false,
+   "prejump": 4,
+   "airborne": [
+    4,
+    40
+   ],
+   "land_recovery": 8,
+   "jump_height_leg": 2.6,
+   "note": "上下移動は含まない（ルートは地面のまま）。airborne の区間にゲーム側で放物線の高さを与える"
+  },
+  "stand_light": {
+   "frames": 14,
+   "fps": 60,
+   "duration_sec": 0.2333,
+   "loop": false,
+   "startup": 3,
+   "active": 3,
+   "recovery": 8,
+   "hand": "L",
+   "note": "前手（左）のジャブ"
+  },
+  "stand_heavy": {
+   "frames": 30,
+   "fps": 60,
+   "duration_sec": 0.5,
+   "loop": false,
+   "startup": 9,
+   "active": 3,
+   "recovery": 18,
+   "limb": "footR",
+   "note": "後ろ脚（右）を抱え込んでから前へ蹴り出す。軸足（左）は外へ回す"
+  },
+  "guard_stand": {
+   "frames": 29,
+   "fps": 60,
+   "duration_sec": 0.4833,
+   "loop": false,
+   "enter_frames": 5,
+   "loop_from": 5,
+   "note": "F5でガード姿勢。F5〜F29は保持ループ"
+  },
+  "hurt_light": {
+   "frames": 20,
+   "fps": 60,
+   "duration_sec": 0.3333,
+   "loop": false,
+   "hitstun": 20,
+   "note": "のけぞり。足は接地したまま、体は縮めない"
+  },
+  "sp_feint_claw": {
+   "frames": 40,
+   "fps": 60,
+   "duration_sec": 0.6667,
+   "loop": false,
+   "name_jp": "影引き爪（仮称）",
+   "feint_frames": [
+    0,
+    12
+   ],
+   "startup": 17,
+   "active": 3,
+   "recovery": 20,
+   "hand": "R",
+   "low_attack": true,
+   "move_total_leg": 0.9,
+   "move_frames": [
+    12,
+    20
+   ],
+   "note": "いったん身を引いて誘い、低く踏み込んで開いた右手で払う。毒などの効果は未定義",
+   "unique": true,
+   "provisional": true
+  }
+ }
+}

@@ -132,7 +132,7 @@ def uv_sphere(c, r, nu=14, nv=9, R=None):
     if R is not None: vs = vs @ np.asarray(R).T
     return vs + c, np.array(fs)
 
-def surface_ring(field, center, n, rmax, width, thick, nseg=56, rows=5, lift=0.0015, smooth=3):
+def surface_ring(field, center, n, rmax, width, thick, nseg=56, rows=5, lift=0.0015, smooth=3, mode='outer', ell=None):
     """表面に沿う帯（ハチマキ・帯・リストバンド）。戻り値: verts, faces, 外側半径関数用の情報"""
     n = norm(n); a = norm(np.cross(n, V(0.0, 1.0, 0.0)) if abs(n[1]) < 0.9 else np.cross(n, V(1.0, 0, 0))); b = np.cross(n, a)
     ws = np.linspace(-width / 2, width / 2, rows); phis = np.linspace(0, 2 * np.pi, nseg, endpoint=False)
@@ -140,7 +140,15 @@ def surface_ring(field, center, n, rmax, width, thick, nseg=56, rows=5, lift=0.0
     for j, w in enumerate(ws):
         for i, ph in enumerate(phis):
             d = np.cos(ph) * a + np.sin(ph) * b; pts = center + n * w + rs[:, None] * d
-            f = field(pts); k = np.argmax(f < 0)
+            f = field(pts)
+            if mode == 'inner':               # 中心から外へ向かって最初に体の外へ出る位置（首や胴のように腕が近い所で使う）
+                fi = f[::-1]; ri = rs[::-1]; k = np.argmax(fi > 0)
+                if fi[k] <= 0: Rin[i, j] = rmax; continue
+                k0 = max(k - 1, 0); t = fi[k0] / (fi[k0] - fi[k] + 1e-9) if k > 0 else 0
+                Rin[i, j] = ri[k0] + (ri[k] - ri[k0]) * t
+                if ell is not None: Rin[i, j] = min(Rin[i, j], 1.0 / np.linalg.norm(d / np.asarray(ell)))   # 腕や脚の方へ広がらないよう、胴の楕円で頭打ち
+                continue
+            k = np.argmax(f < 0)
             if f[k] >= 0: Rin[i, j] = 0.01; continue
             k0 = max(k - 1, 0); t = f[k0] / (f[k0] - f[k] + 1e-9) if k > 0 else 0
             Rin[i, j] = rs[k0] + (rs[k] - rs[k0]) * t
@@ -241,9 +249,39 @@ def build_extras(spec, field):
             parts.append(dict(verts=v, faces=f, part='cloth', weights=('chain', cl, nm, 'spine'), tag='belttail%d' % i))
             mid = cl[len(cl) // 2]
             bones += [(nm[0], cl[0], mid, 'spine', dict(stiff=110, damp=10, grav=0.5)), (nm[1], mid, cl[-1], nm[0], dict(stiff=90, damp=9, grav=0.5))]
+    torso_prims = [pr for pr in spec.prims if pr.name in ('belly', 'chest', 'neckmass')]
+    class _Torso:                       # 胴だけの距離場。首飾り・スカーフ・たすきが腕や脚の方へ広がらないようにする
+        def __call__(self, pts): return eval_points(torso_prims, np.atleast_2d(pts)) - P.tuft_amp * 1.2
+    torso = _Torso()
+    def ring_angle(n, want):
+        a_ = norm(np.cross(n, V(0.0, 1.0, 0.0)) if abs(n[1]) < 0.9 else np.cross(n, V(1.0, 0, 0))); b_ = np.cross(n, a_)
+        return np.arctan2(want @ b_, want @ a_) % (2 * np.pi)
+    if 'scarf' in acc:                      # 首に巻いた厚手の布。2本の輪を重ねて前に垂らす
+        for i, (dz, tilt, wd, th) in enumerate(((0.022, -0.10, 0.060, 0.020), (-0.016, -0.36, 0.056, 0.018))):
+            n = norm(V(0, tilt, 1)); c = V(0, P.neck_c[1], P.neck_c[2] + dz)
+            v, f, at = surface_ring(torso, c, n, P.neck_r[0] * 1.5, wd, th, nseg=48, rows=5, lift=0.002, mode='inner')
+            parts.append(dict(verts=v, faces=f, part='cloth', weights=('prim', 'neckmass'), tag='scarf%d' % i))
+    if 'necklace' in acc:                   # 細いひも＋飾り。前が低くなるよう傾ける
+        n = norm(V(0, -0.50, 1)); c = V(0, P.neck_c[1] + 0.010, P.neck_c[2] + 0.012)
+        v, f, at = surface_ring(torso, c, n, P.neck_r[0] * 1.45, 0.007, 0.0055, nseg=44, rows=3, lift=0.002, mode='inner')
+        parts.append(dict(verts=v, faces=f, part='cloth', weights=('prim', 'neckmass'), tag='necklace'))
+        ph0 = ring_angle(n, norm(V(0, -1.0, -0.5)))
+        if P.necklace.get('pendant') == 'beads':
+            for i, da in enumerate((-0.42, -0.14, 0.14, 0.42)):
+                kp, kd = at(ph0 + da, 0.004); v, f = uv_sphere(kp, 0.0115 if abs(da) < 0.2 else 0.010, nu=10, nv=6)
+                parts.append(dict(verts=v, faces=f, part='cloth', weights=('prim', 'neckmass'), tag='bead%d' % i))
+        else:
+            kp, kd = at(ph0, 0.004)
+            v, f = uv_sphere(kp + V(0, -0.002, -0.008), V(0.007, 0.007, 0.008), nu=8, nv=5); parts.append(dict(verts=v, faces=f, part='cloth', weights=('prim', 'neckmass'), tag='tassel_knot'))
+            v, f = uv_sphere(kp + V(0, -0.003, -0.026), V(0.008, 0.008, 0.016), nu=8, nv=5); parts.append(dict(verts=v, faces=f, part='cloth', weights=('prim', 'neckmass'), tag='tassel'))
+    if 'sash' in acc:                       # 左肩から右腰へ掛けた太い縄
+        zc = (P.sh_z + P.hip_z) / 2 + 0.035; n = norm(V(-1.15, 0, 1)); c = V(0.0, P.chest_c[1], zc)
+        v, f, at = surface_ring(torso, c, n, max(P.chest_r[0], P.belly_r[0]) * 1.6, 0.030, 0.020, nseg=64, rows=3, lift=0.002, mode='inner')
+        parts.append(dict(verts=v, faces=f, part='cloth', weights=('prim', 'chest'), tag='sash'))
     if 'wristbands' in acc:
         wb = P.wristband
         for sn, s in SIDES:
+            if sn not in wb.get('sides', 'LR'): continue
             W = J['wrist.' + sn]; d = norm(W - J['forearm.' + sn]); c = W - d * wb['width'] * 0.50
             v, f, _ = surface_ring(field, c, d, P.arm_r[2] * 2.2, wb['width'], wb['thick'], nseg=28, rows=4, lift=0.001)
             parts.append(dict(verts=v, faces=f, part='cloth', weights={'forearm_twist.' + sn: 0.6, 'wrist.' + sn: 0.4}, tag='wristband.' + sn))

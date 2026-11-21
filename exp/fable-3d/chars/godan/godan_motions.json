@@ -9,6 +9,26 @@
   "arm": 0.22,
   "note": "移動量の *_leg は脚の長さ(leg)を1とした値。実距離 = 値 × leg"
  },
+ "common_clips": [
+  "idle",
+  "walk_f",
+  "walk_b",
+  "dash_f",
+  "crouch",
+  "jump_n",
+  "stand_light",
+  "stand_heavy",
+  "guard_stand",
+  "hurt_light"
+ ],
+ "unique_clips": [
+  "sp_shoulder_charge"
+ ],
+ "tail_bones": [
+  "tail_01",
+  "tail_02",
+  "tail_03"
+ ],
  "rig_checks": {
   "shoulder_fix.L_ratio": 0.5,
   "thigh_fix.L_ratio": 0.5,
@@ -112,6 +132,28 @@
    "loop": false,
    "hitstun": 20,
    "note": "のけぞり。足は接地したまま、体は縮めない"
+  },
+  "sp_shoulder_charge": {
+   "frames": 48,
+   "fps": 60,
+   "duration_sec": 0.8,
+   "loop": false,
+   "name_jp": "肩当て突進（仮称）",
+   "startup": 14,
+   "active": 8,
+   "recovery": 26,
+   "move_total_leg": 1.6,
+   "move_frames": [
+    9,
+    22
+   ],
+   "armor_frames": [
+    6,
+    22
+   ],
+   "note": "左肩を前に出して体ごとぶつかる。アーマー区間は仮案",
+   "unique": true,
+   "provisional": true
   }
  }
 }

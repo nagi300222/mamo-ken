@@ -8,7 +8,7 @@
 import sys, os, json, argparse, time, struct
 HERE = os.path.dirname(os.path.abspath(__file__)); sys.path.insert(0, HERE)
 import bpy, numpy as np
-from mamo3d import model, rig, anim, motions, render
+from mamo3d import model, rig, anim, motions, render, characters
 
 ROOT = os.path.normpath(os.path.join(HERE, '..'))
 
@@ -38,6 +38,7 @@ def build_char(cid, clips, args):
     for name in clips:
         clip = motions.make(cid, name); act, warn = an.bake(name, clip); acts.append(act)
         meta[name] = dict(frames=clip['frames'], fps=60, duration_sec=round(clip['frames'] / 60, 4), loop=clip['loop'], **clip['info'])
+        if an.measure: meta[name].update(an.measure)
         if warn: meta[name]['warnings'] = warn; print('   warn', name, warn[:4])
     print('[%s] %d clips baked (%.1fs)' % (cid, len(acts), time.time() - t0))
     rigcheck = {}
@@ -74,16 +75,17 @@ def build_char(cid, clips, args):
         if warn: print('   warn deform_test', warn[:4])
     info = dict(id=cid, height=spec.P.H, unit='Blender単位（メートル扱い）。全高は耳を除く頭頂まで', fps=60, forward='glTF/Three.js では +Z が正面、+Y が上、+X が本人の左',
                 metrics=dict(leg=round(spec.M.leg, 4), arm=round(spec.M.arm, 4), note='移動量の *_leg は脚の長さ(leg)を1とした値。実距離 = 値 × leg'),
+                common_clips=[c for c in motions.CLIPS if c in meta], unique_clips=[c for c in meta if c.startswith('sp_')], tail_bones=list(spec.tail_names),
                 rig_checks=rigcheck, clips=meta)
     json.dump(info, open(os.path.join(out, cid + '_motions.json'), 'w'), indent=1, ensure_ascii=False)
     print('[%s] done %.1fs  glb=%.2fMB  anims=%s' % (cid, time.time() - t0, os.path.getsize(glb) / 1e6, [a['name'] for a in J.get('animations', [])]))
 
 if __name__ == '__main__':
     ap = argparse.ArgumentParser()
-    ap.add_argument('--only', default='moguzo,pisuke,godan'); ap.add_argument('--clips', default=','.join(motions.CLIPS))
+    ap.add_argument('--only', default=','.join(characters.ROSTER)); ap.add_argument('--clips', default='', help='省略時は共通10種＋そのキャラの固有モーション')
     ap.add_argument('--pose-check', default=''); ap.add_argument('--views', default='side,three_quarter,front,back34')
     ap.add_argument('--deform-test', action='store_true', help='変形確認用のGLBを _scratch/deform に追加で出す')
     ap.add_argument('--cache', action='store_true', help='メッシュ生成結果を _scratch に保存して再利用')
     ap.add_argument('--scratch', default=os.path.join(ROOT, '_scratch'))
     args = ap.parse_args()
-    for cid in args.only.split(','): build_char(cid, args.clips.split(','), args)
+    for cid in args.only.split(','): build_char(cid, args.clips.split(',') if args.clips else motions.clips_for(cid), args)
