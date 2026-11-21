@@ -85,7 +85,7 @@ class Animator:
             ex = tb[i] if tb is not None and i < len(tb) else (0, 0)
             fk(n, Rz(math.radians(tp[1] * 0.5 + ex[1])) @ Rx(math.radians(tp[0] * (0.6 if i == 0 else 0.35) + ex[0])))
         def carry(space):       # レスト座標 → その骨に付いて動いた後の座標
-            return np.eye(4) if space in ('root', 'world') else W[space] @ Ri[space]
+            return np.eye(4) if space in ('root', 'world', 'abs') else W[space] @ Ri[space]
         out = {'B': B, 'W': W, 'keys': dict(pose.get('keys', {}))}
         for sn, s in SIDES:
             # --- 手 ---
@@ -94,6 +94,7 @@ class Animator:
             for sp, w in pose['hand' + sn]:
                 space = sp.get('space', 'chest'); C = carry(space)
                 if space == 'root': p0 = np.array([s * (M.hip_x + sp['pos'][0] * M.leg), -sp['pos'][1] * M.leg, sp['pos'][2] * M.leg])
+                elif space == 'abs': p0 = np.array([s * sp['pos'][0], -sp['pos'][1], sp['pos'][2]])      # 原点からの実寸(m)。体格の違う相手と同じ位置で手を合わせるとき用
                 else: p0 = S0 + side_vec(sp['pos'], s) * M.arm
                 p = C[:3, :3] @ p0 + C[:3, 3]
                 if space == 'world':          # 肩の現在位置から、体の向きに関係なく正面基準で狙う（攻撃用）
@@ -120,6 +121,7 @@ class Animator:
                 T = side_vec(sp['pos'], s) * M.leg; yaw = Rz(s * math.radians(sp.get('yaw', 0))); pit = axis_rot(fs, -math.radians(sp.get('pitch', 0)))
                 Ag = A0 * np.array([1, 1, 0]); ball = Ag + yaw @ (b0 - Ag) + T
                 D = yaw @ pit; p = ball + D @ (A0 - b0)
+                if sp.get('pivot') == 'ankle': p = A0 + T          # 寝た姿勢など、足首の位置を直接決めたいとき
                 kd = nrm(yaw @ fd + side_vec((sp.get('knee', 0.35), 0, 0.25), s))
                 acc_p += w * p; acc_k += w * kd; wsum += w; Dm = D if Dm is None else slerp_m(Dm, D, w / wsum)
                 toe += w * sp.get('toe', max(sp.get('pitch', 0), 0) if sp['pos'][2] < 0.02 else 0.0)
@@ -166,7 +168,7 @@ class Animator:
                         Mpar = Ms; ppar = n
                     state = newstate
             if loop: frames[-1]['B'].update({n: frames[0]['B'][n] for n in names})
-            elif names is self.tail and len(names) > 3 and self.idle_dyn:      # 長い尻尾: 終端を idle 0フレーム目の揺れ姿勢へ合わせる（静止姿勢との差が大きいため）
+            elif names is self.tail and len(names) > 3 and self.idle_dyn and self.settle_idle:      # 長い尻尾: 終端を idle 0フレーム目の揺れ姿勢へ合わせる（静止姿勢との差が大きいため）
                 for k in range(SETTLE + 1):
                     fr = frames[len(frames) - 1 - SETTLE + k]; u = k / SETTLE; u = u * u * (3 - 2 * u)
                     for n in names:
@@ -176,6 +178,7 @@ class Animator:
     def bake(self, name, clip):
         """clip: dict(frames=N, loop=bool, fn=frame→pose) → Action"""
         N = clip['frames']; self.warn = []; self.dyn_mult = clip.get('tail_stiff', 1.0); self.dyn_follow = clip.get('tail_follow', 0.0)
+        self.settle_idle = clip.get('info', {}).get('end_pose', 'idle') == 'idle'      # idle 以外の姿勢で終わるクリップ（ダウンなど）は idle の尻尾へ寄せない
         frames = [self.solve(clip['fn'](f)) for f in range(N + 1)]
         self.dynamics(frames, clip['loop'])
         if name == 'idle': self.idle_dyn = {n: frames[0]['B'][n].copy() for n in self.tail}

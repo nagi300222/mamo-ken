@@ -31,6 +31,9 @@ function tick() { const dt = clock.getDelta(); if (!S.paused) { S.time += dt * S
 function btn(p, label, on, fn) { const b = document.createElement('button'); b.textContent = label; if (on) b.className = 'on'; b.onclick = fn; p.appendChild(b); }
 function ui() {
   $('clips').replaceChildren(); COMMON.forEach(c => btn($('clips'), c, c === S.clip, () => play(c))); btn($('clips'), '★ 固有モーション', S.clip === 'unique', () => play('unique'));
+  const v2 = [...new Set(S.items.flatMap(it => it.meta.v2_clips || []))];      // モーションv2（咆哮・ギュイーン・ガード・被弾・投げ・通常技・コマンド技）
+  if (v2.length) { const sel = document.createElement('select'); sel.style.cssText = 'background:#2a2e38;color:#e6e8ec;border:1px solid #31353f;border-radius:5px;padding:5px 8px;font:inherit';
+    sel.append(new Option('追加モーション v2 …', ''), ...v2.map(c => new Option(c, c, false, c === S.clip))); sel.onchange = () => { if (sel.value) play(sel.value); }; $('clips').appendChild(sel); }
   $('ctl').replaceChildren(); btn($('ctl'), S.paused ? '再生' : '一時停止', false, () => { S.paused = !S.paused; ui(); });
   [1, 0.25].forEach(v => btn($('ctl'), v === 1 ? '等速' : '×0.25', S.speed === v, () => { S.speed = v; ui(); }));
   [['side', '横（ゲーム視点）'], ['q', '斜め'], ['front', '正面']].forEach(([k, l]) => btn($('ctl'), l, S.view === k, () => { S.view = k; place(); ui(); }));
@@ -40,5 +43,5 @@ Promise.all(CHARS.map(async (id) => { const [gltf, meta] = await Promise.all([lo
   gltf.scene.traverse(o => { if (o.isSkinnedMesh) o.frustumCulled = false; }); const mixer = new THREE.AnimationMixer(gltf.scene); const actions = {}; gltf.animations.forEach(c => actions[c.name] = mixer.clipAction(c));
   const root = new THREE.Group(); root.add(gltf.scene); scene.add(root); return { id, root, mixer, actions, meta }; }))
   .then((items) => { S.items = items; place(); $('names').replaceChildren(...items.map(it => { const s = document.createElement('span'); s.textContent = `${it.id}（全高 ${it.meta.height}）`; return s; }));
-    play(Q.get('clip') || 'idle'); window.lineup = { S, play, setTime, draw, place, ready: true, maxFrames: (name) => Math.max(...items.map(it => it.meta.clips[name === 'unique' ? it.meta.unique_clips[0] : name].frames)) }; tick(); })
+    play(Q.get('clip') || 'idle'); window.lineup = { S, play, setTime, draw, place, ready: true, maxFrames: (name) => Math.max(...items.map(it => (it.meta.clips[name === 'unique' ? it.meta.unique_clips[0] : name] || { frames: 1 }).frames)) }; tick(); })
   .catch(e => { $('hud').textContent = String(e); window.lineup = { error: String(e) }; });
