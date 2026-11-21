@@ -156,3 +156,103 @@ button.primary:active{transform:translateY(1px)}
   .rail-sub{display:none}
   .rotate-hint{bottom:25px}
 }
+
+/* v0.3 UI select port from Astra #152.
+   Keep the APPROVED v0.3 camera, central canvas height and rail widths unchanged.
+   Unlike #152, HUD overlays the upper sky instead of consuming a new canvas row. */
+:root{--brass:#edca88;--ink-green:#d8ebdf}
+#commands-help[popover]{
+  margin:0;inset:var(--topbar-height) max(7px,env(safe-area-inset-right)) auto auto;
+  max-height:78dvh;max-width:min(355px,94vw);overflow:auto;
+  padding:12px;border:1px solid var(--brass);border-radius:7px;
+  background:#172826;color:#f5f1e8;box-shadow:0 4px 24px #0009;
+  font-size:12px;z-index:999;
+}
+#commands-help[popover] small{display:block;margin-top:3px;color:#bed1c7}
+#commands-help[popover] strong{color:var(--brass)}
+#commands-help[popover] dl{display:grid;grid-template-columns:auto 1fr;gap:6px 10px}
+#commands-help[popover] dt{color:var(--brass)}
+#commands-help[popover] dd{margin:0}
+#commands-help[popover] .ghost{margin-top:4px}
+#arena>.hud{
+  position:absolute;top:3px;left:5px;right:5px;z-index:3;
+  display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);
+  gap:clamp(4px,.6vw,10px);padding:3px 5px 5px;
+  background:linear-gradient(180deg,#213931e8,#152621ba);
+  border:1px solid #ad99738c;border-bottom:2px solid #cbb27d;
+  border-radius:3px;filter:none;font-variant-numeric:tabular-nums;
+  pointer-events:none;
+}
+.hud .hud-side{min-width:0}
+.hud .hud-name{display:flex;align-items:center;gap:4px;margin:0 0 2px;min-width:0;white-space:nowrap}
+.hud .hud-name b{flex:0 0 auto;color:#172823;background:#b7d8c6;padding:1px 3px;font:bold clamp(8px,.8vw,10px)/1.2 system-ui}
+.hud .hud-name span{min-width:0;flex:0 1 auto;font-size:clamp(9px,1.3vw,13px);font-weight:800;overflow:hidden;text-overflow:ellipsis}
+.hud .hud-name small{min-width:0;flex:1 1 auto;color:#d4dfd5;font-size:clamp(7px,.8vw,10px);overflow:hidden;text-overflow:ellipsis}
+.hud .mirrored .hud-name{flex-direction:row-reverse}
+.hud .mirrored .hud-name b{background:#ebc9a2}
+.hud .resource{display:flex;align-items:center;gap:3px;font-size:clamp(8px,1vw,10px);font-weight:700;line-height:1.25;white-space:nowrap}
+.hud .resource>span{flex:0 0 3.3em;min-width:0}
+.hud .resource>b{flex:0 0 2em;font-size:9px;text-align:center;line-height:1}
+.hud .resource .track{flex:1 1 auto;min-width:0;height:5px;background:#0c171b;border:1px solid #576860;overflow:hidden}
+.hud .resource .track i{display:block;height:100%;width:100%;font-style:normal;transition:width .08s linear}
+.hud .mirrored .resource{flex-direction:row-reverse}
+.hud .mirrored .resource>span{text-align:right}
+.hud .mirrored .resource .track i{margin-left:auto}
+.hud .health{color:#e6f3e8}
+.hud .health .track{height:10px}
+.hud .health .track i{background:#97d9b1}
+.hud .health .track i.low{background:repeating-linear-gradient(120deg,#f0b489 0 5px,#c77458 5px 8px)}
+.hud .drive{color:#f1d19e}
+.hud .drive .track i{background:repeating-linear-gradient(105deg,#f3be73 0 8px,#9b713f 8px 10px)}
+.hud .super{color:#aed6f5}
+.hud .super .track i{background:#90c6f3}
+.hud .round-center{
+  align-self:center;justify-self:center;min-width:39px;flex-basis:auto;
+  padding:1px 3px 3px;border:1px solid #c2a47d;border-block-width:2px;
+  border-radius:3px;background:#152825d9;color:#f9d9a2
+}
+.hud .round-center>span{font-size:clamp(17px,2.6vw,28px);line-height:1.05}
+.hud .round-center>small{font-size:clamp(6px,.7vw,8px)}
+#arena .note[data-kind="roar"]{color:#ffe1a1;border-color:#ddaf61}
+#arena .note[data-kind="clinch"]{color:#e5baff;border-color:#b38bd8}
+#arena .note[data-kind="hit"]{color:#ffceaa;border-color:#eaa16a}
+#arena .note[data-kind="block"]{color:#b4e8ff;border-color:#86c5ea}
+#buttons-rail .attack{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0;line-height:1.05}
+#buttons-rail .attack small{display:block;margin-top:2px;font-size:clamp(7px,.7vw,9px);font-weight:700;letter-spacing:0;line-height:1.05;text-shadow:none}
+#buttons-rail .attack[data-wait]{border-style:dashed;filter:saturate(.74)}
+#buttons-rail .attack[data-wait].held{filter:brightness(1.12)}
+#game-over.modal{
+  align-items:flex-start;justify-content:center;background:#101a1c55;backdrop-filter:none;
+  padding:clamp(60px,13vh,105px) 6px 0;
+}
+#game-over .result-panel{
+  width:min(96%,460px);min-width:0;text-align:left;
+  display:grid;grid-template-columns:minmax(0,1fr) auto;gap:3px 12px;
+  padding:10px 12px;border:1px solid #c5a875;border-top:3px solid var(--brass);
+  border-radius:6px;background:#172925ee;
+}
+#game-over .result-panel .eyebrow{grid-column:1;color:#e6c88d}
+#game-over .result-panel h2{grid-column:1;margin:0;font-size:clamp(18px,2.5vw,26px)}
+#game-over .result-panel p{grid-column:1;margin:0;font-size:11px;color:#c2cfc6}
+#game-over .result-actions{grid-column:2;grid-row:1/4;align-items:center;flex-direction:column;gap:5px;margin:0}
+#game-over .result-actions button{padding:5px 9px;font-size:11px}
+@media(max-height:530px) and (orientation:landscape){
+  #arena>.hud{top:2px;left:3px;right:3px;padding:2px 4px 3px;gap:3px}
+  .hud .hud-name{margin-bottom:1px;gap:2px}
+  .hud .hud-name span{font-size:10px}
+  .hud .hud-name small{font-size:7px}
+  .hud .resource{font-size:8px;line-height:1.1}
+  .hud .resource .track{height:4px}
+  .hud .health .track{height:9px}
+  .hud .resource>b{font-size:8px}
+  .hud .round-center{min-width:35px}
+  .hud .round-center>span{font-size:18px}
+  #arena .note{top:62px;font-size:9px}
+  #buttons-rail .attack small{font-size:7px}
+}
+@media(max-width:700px) and (orientation:landscape){
+  .hud .hud-name small{display:none}
+  .hud .resource>span{flex-basis:2.8em}
+  .hud .resource>b{flex-basis:1.65em}
+  #buttons-rail .attack small{font-size:6px}
+}
