@@ -1,0 +1,45 @@
+{
+ "bpy_version": "5.3.0",
+ "python": "3.13.18",
+ "checks": {
+  "slots": {
+   "clip_a": [
+    "OBRig",
+    "KEKey"
+   ],
+   "clip_b": [
+    "OBRig",
+    "KEKey"
+   ]
+  },
+  "ik_moves_bone": true,
+  "glb_animations": [
+   "clip_a",
+   "clip_b"
+  ],
+  "glb_nodes": [
+   "b.L",
+   "a.L",
+   "root",
+   "M",
+   "Rig"
+  ],
+  "glb_joints": [
+   "root",
+   "a.L",
+   "b.L"
+  ],
+  "glb_channel_paths": [
+   "rotation",
+   "scale",
+   "translation",
+   "weights"
+  ],
+  "glb_morph_targets": [
+   "puff"
+  ],
+  "render_BLENDER_EEVEE": "FAILED: Couldn't open libEGL.so.1: libEGL.so.1: cannot open shared object file: No such file or directory",
+  "render_BLENDER_WORKBENCH": "FAILED: Couldn't open libEGL.so.1: libEGL.so.1: cannot open shared object file: No such file or directory",
+  "render_CYCLES": true
+ }
+}
