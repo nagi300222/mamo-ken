@@ -40,6 +40,15 @@ def build_char(cid, clips, args):
         meta[name] = dict(frames=clip['frames'], fps=60, duration_sec=round(clip['frames'] / 60, 4), loop=clip['loop'], **clip['info'])
         if warn: meta[name]['warnings'] = warn; print('   warn', name, warn[:4])
     print('[%s] %d clips baked (%.1fs)' % (cid, len(acts), time.time() - t0))
+    rigcheck = {}
+    if 'stand_light' in clips:        # 補助ボーンが実際に半分だけ回っているかを数値で確認
+        import math
+        anim.assign(arm, ob, bpy.data.actions['stand_light']); sc.frame_set(meta['stand_light']['startup']); bpy.context.view_layer.update(); PB = arm.pose.bones
+        def loc_ang(n): return PB[n].bone.convert_local_to_pose(PB[n].matrix_basis, PB[n].bone.matrix_local).to_quaternion().angle if False else (PB[n].parent.matrix.inverted() @ PB[n].matrix).to_quaternion().rotation_difference((PB[n].parent.bone.matrix_local.inverted() @ PB[n].bone.matrix_local).to_quaternion()).angle
+        for sn in 'LR':
+            for fix, src in (('shoulder_fix', 'upper_arm'), ('thigh_fix', 'thigh')):
+                a = loc_ang(src + '.' + sn); rigcheck['%s.%s_ratio' % (fix, sn)] = round(loc_ang(fix + '.' + sn) / a, 3) if a > 1e-3 else None
+    anim.assign(arm, ob, None)
     if args.pose_check:
         render.setup(sc, (520, 560), 16); S = args.scratch; os.makedirs(S, exist_ok=True); H = spec.P.H
         for item in args.pose_check.split(','):
@@ -56,9 +65,16 @@ def build_char(cid, clips, args):
     if os.path.exists(blend + '1'): os.remove(blend + '1')
     glb = os.path.join(out, cid + '.glb'); export_glb(glb, arm, ob)
     J = glb_json(glb)
+    if args.deform_test:          # 変形確認用クリップだけを入れた GLB を _scratch に出す（コミットしない）
+        clip = motions.make(cid, 'deform_test'); act, warn = an.bake('deform_test', clip); idle_act = bpy.data.actions.get('idle')
+        anim.to_nla(arm, ob, [a for a in (idle_act, act) if a]); os.makedirs(os.path.join(args.scratch, 'deform'), exist_ok=True)
+        export_glb(os.path.join(args.scratch, 'deform', cid + '.glb'), arm, ob)
+        json.dump(dict(height=spec.P.H, fps=60, metrics=dict(leg=spec.M.leg, arm=spec.M.arm), clips=dict(idle=meta.get('idle', dict(frames=1, loop=True)), deform_test=dict(frames=clip['frames'], loop=False, **clip['info']))),
+                  open(os.path.join(args.scratch, 'deform', cid + '_motions.json'), 'w'))
+        if warn: print('   warn deform_test', warn[:4])
     info = dict(id=cid, height=spec.P.H, unit='Blender単位（メートル扱い）。全高は耳を除く頭頂まで', fps=60, forward='glTF/Three.js では +Z が正面、+Y が上、+X が本人の左',
                 metrics=dict(leg=round(spec.M.leg, 4), arm=round(spec.M.arm, 4), note='移動量の *_leg は脚の長さ(leg)を1とした値。実距離 = 値 × leg'),
-                clips=meta)
+                rig_checks=rigcheck, clips=meta)
     json.dump(info, open(os.path.join(out, cid + '_motions.json'), 'w'), indent=1, ensure_ascii=False)
     print('[%s] done %.1fs  glb=%.2fMB  anims=%s' % (cid, time.time() - t0, os.path.getsize(glb) / 1e6, [a['name'] for a in J.get('animations', [])]))
 
@@ -66,6 +82,7 @@ if __name__ == '__main__':
     ap = argparse.ArgumentParser()
     ap.add_argument('--only', default='moguzo,pisuke,godan'); ap.add_argument('--clips', default=','.join(motions.CLIPS))
     ap.add_argument('--pose-check', default=''); ap.add_argument('--views', default='side,three_quarter,front,back34')
+    ap.add_argument('--deform-test', action='store_true', help='変形確認用のGLBを _scratch/deform に追加で出す')
     ap.add_argument('--cache', action='store_true', help='メッシュ生成結果を _scratch に保存して再利用')
     ap.add_argument('--scratch', default=os.path.join(ROOT, '_scratch'))
     args = ap.parse_args()

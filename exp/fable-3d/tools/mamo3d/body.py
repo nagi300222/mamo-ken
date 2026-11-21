@@ -226,14 +226,14 @@ def build_extras(spec, field):
             mid = cl[len(cl) // 2]
             bones += [(nm[0], cl[0], mid, 'head', dict(stiff=90, damp=9, grav=0.35)), (nm[1], mid, cl[-1], nm[0], dict(stiff=70, damp=8, grav=0.35))]
     if 'belt' in acc:
-        zb = (P.belly_c[2] + P.belly_r[2] * 0.62); c = V(0, P.belly_c[1], zb)
-        v, f, at = surface_ring(field, c, V(0, 0, 1.0), 0.30, 0.042, 0.007, nseg=64)
-        parts.append(dict(verts=v, faces=f, part='cloth', weights='transfer', tag='belt'))
+        zb = (P.belly_c[2] + P.belly_r[2] * 0.50); c = V(0, P.belly_c[1], zb)
+        v, f, at = surface_ring(field, c, V(0, 0, 1.0), P.belly_r[0] * 1.22, 0.042, 0.007, nseg=64)
+        parts.append(dict(verts=v, faces=f, part='cloth', weights=('prim', 'belly'), tag='belt'))
         a_ = norm(np.cross(V(0, 0, 1.0), V(0.0, 1.0, 0.0))); b_ = np.cross(V(0, 0, 1.0), a_)
         want = V(0, -1.0, 0); ph = np.arctan2(want @ b_, want @ a_) % (2 * np.pi)
         kp, kd = at(ph, 0.008)
         v, f = uv_sphere(kp, V(0.030, 0.016, 0.026), nu=10, nv=6)
-        parts.append(dict(verts=v, faces=f, part='cloth', weights='transfer', tag='beltknot'))
+        parts.append(dict(verts=v, faces=f, part='cloth', weights=('prim', 'belly'), tag='beltknot'))
         for i, sx in enumerate((1, -1)):
             dv = V(sx * 0.40, -0.10, -0.91)
             v, f, cl = strip(kp + V(sx * 0.012, -0.006, -0.008), dv, 0.125, 0.040, 0.006, np.cross(dv, V(0, -1.0, 0)), field, taper=0.9)

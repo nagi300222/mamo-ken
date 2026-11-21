@@ -78,7 +78,7 @@ class Animator:
         tp = pose.get('tail', (0, 0))
         for i, n in enumerate(('tail_01', 'tail_02', 'tail_03')): fk(n, Rz(math.radians(tp[1]) * 0.5) @ Rx(math.radians(tp[0]) * (0.6 if i == 0 else 0.35)))
         def carry(space):       # レスト座標 → その骨に付いて動いた後の座標
-            return np.eye(4) if space == 'root' else W[space] @ Ri[space]
+            return np.eye(4) if space in ('root', 'world') else W[space] @ Ri[space]
         out = {'B': B, 'W': W, 'keys': dict(pose.get('keys', {}))}
         for sn, s in SIDES:
             # --- 手 ---
@@ -89,6 +89,8 @@ class Animator:
                 if space == 'root': p0 = np.array([s * (M.hip_x + sp['pos'][0] * M.leg), -sp['pos'][1] * M.leg, sp['pos'][2] * M.leg])
                 else: p0 = S0 + side_vec(sp['pos'], s) * M.arm
                 p = C[:3, :3] @ p0 + C[:3, 3]
+                if space == 'world':          # 肩の現在位置から、体の向きに関係なく正面基準で狙う（攻撃用）
+                    Cc0 = W['chest'] @ Ri['chest']; p = Cc0[:3, :3] @ S0 + Cc0[:3, 3] + side_vec(sp['pos'], s) * M.arm
                 D = C[:3, :3] @ frame_xz(side_vec(sp['fwd'], s), side_vec(sp['back'], s)) @ restF.T
                 e = W['chest'][:3, :3] @ R['chest'][:3, :3].T @ side_vec(sp.get('elbow', (0.5, -0.25, -0.85)), s)
                 acc_p += w * p; acc_e += w * e; wsum += w; Dm = D if Dm is None else slerp_m(Dm, D, w / wsum)

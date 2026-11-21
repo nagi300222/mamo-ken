@@ -35,11 +35,13 @@ def limit4(W):
     W = W.copy(); np.put_along_axis(W, idx, 0.0, axis=1); W[W < 0.01] = 0
     return W / W.sum(axis=1, keepdims=True)
 
-def part_weights(part, body_verts, body_W, bone_names):
+def part_weights(part, body_verts, body_W, bone_names, prims=None):
     bi = {b: i for i, b in enumerate(bone_names)}; nb = len(bone_names); v = part['verts']; w = part['weights']
     out = np.zeros((len(v), nb))
     if isinstance(w, dict):
         for b, x in w.items(): out[:, bi[b]] = x
+    elif isinstance(w, tuple) and w[0] == 'prim':        # 指定プリミティブの軸方向の分布だけを使う（帯: 腕や脚の影響を受けない）
+        pr = [p for p in prims if p.name == w[1]][0]; out = knot_weights(pr, v, bi, nb)
     elif w == 'transfer':
         d, ix = cKDTree(body_verts).query(v, k=4); ww = 1.0 / (d + 1e-4)
         out = (body_W[ix] * ww[:, :, None]).sum(axis=1) / ww.sum(axis=1, keepdims=True)

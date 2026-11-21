@@ -7,7 +7,7 @@ import fs from 'node:fs'; import path from 'node:path';
 const arg = (k, d) => { const i = process.argv.indexOf('--' + k); return i < 0 ? d : (process.argv[i + 1]?.startsWith('--') || process.argv[i + 1] === undefined ? true : process.argv[i + 1]); };
 const char = arg('char', 'moguzo'), poses = String(arg('poses', 'idle:0')).split(','), cams = String(arg('cams', 'game,three_quarter,front,back34')).split(',');
 const out = arg('out', '_scratch'), size = +arg('size', 420); fs.mkdirSync(out, { recursive: true });
-const b = await open({ width: size, height: size });
+const b = await open({ width: size, height: size, query: 'manual=1&bare=1&nohud=1' + (arg('base', '') ? `&flat=1&base=${arg('base', '')}&char=${char}` : `&char=${char}`) });
 await b.page.evaluate(async ([c, toon, bones, facing]) => { await window.mamo.load(c); window.mamo.set({ toon, bones, facing, paused: true }); }, [char, !!arg('toon', false), !!arg('bones', false), arg('facing', 'right')]);
 for (const p of poses) {
   const [clip, fr] = p.split(':'); const files = [];

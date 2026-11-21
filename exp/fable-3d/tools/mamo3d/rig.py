@@ -18,6 +18,7 @@ def bone_table(spec, extra_bones):
         A('forearm_twist.' + sn, (E + W) / 2, W, 'forearm.' + sn, True)
         A('wrist.' + sn, W, J['paw.' + sn], 'forearm.' + sn, True); A('paw.' + sn, J['paw.' + sn], J['paw_tip.' + sn], 'wrist.' + sn, True)
         Hp, K, An = J['thigh.' + sn], J['shin.' + sn], J['ankle.' + sn]
+        A('thigh_fix.' + sn, Hp, Hp + (K - Hp) * 0.4, 'pelvis', True)
         A('thigh.' + sn, Hp, K, 'pelvis', True); A('shin.' + sn, K, An, 'thigh.' + sn, True)
         A('ankle.' + sn, An, J['foot.' + sn], 'shin.' + sn, True); A('foot.' + sn, J['foot.' + sn], J['toe.' + sn], 'ankle.' + sn, True)
         A('toe.' + sn, J['toe.' + sn], J['toe_tip.' + sn], 'foot.' + sn, True)
@@ -62,6 +63,8 @@ def build(spec, extra_bones, name):
         for bone, tgt in (('wrist.' + sn, 'ik_hand.' + sn), ('ankle.' + sn, 'ik_foot.' + sn)):
             c = PB[bone].constraints.new('COPY_ROTATION'); c.name = 'FollowIK'; c.target = arm; c.subtarget = tgt
         c = PB['shoulder_fix.' + sn].constraints.new('COPY_ROTATION'); c.name = 'HalfArm'; c.target = arm; c.subtarget = 'upper_arm.' + sn
+        c.target_space = 'LOCAL'; c.owner_space = 'LOCAL'; c.influence = 0.5
+        c = PB['thigh_fix.' + sn].constraints.new('COPY_ROTATION'); c.name = 'HalfThigh'; c.target = arm; c.subtarget = 'thigh.' + sn
         c.target_space = 'LOCAL'; c.owner_space = 'LOCAL'; c.influence = 0.5
         c = PB['forearm_twist.' + sn].constraints.new('TRANSFORM'); c.name = 'HalfTwist'; c.target = arm; c.subtarget = 'wrist.' + sn
         c.target_space = 'LOCAL'; c.owner_space = 'LOCAL'; c.map_from = 'ROTATION'; c.map_to = 'ROTATION'; c.from_rotation_mode = 'SWING_TWIST_Y'

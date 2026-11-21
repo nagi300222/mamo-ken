@@ -59,8 +59,8 @@ CHARS['pisuke'] = dict(BASE,
     belly_c=(0, 0.010, 0.205), belly_r=(0.122, 0.112, 0.160),
     z_pelvis=0.195, z_spine=0.26, z_chest=0.335, z_neck=0.44, z_headbase=0.485,
     sh_x=0.072, sh_z=0.398, arm_down=20.0, ua=0.098, fa=0.098, arm_r=(0.042, 0.036, 0.031), fist=(0.058, 0.058, 0.050),
-    hip_x=0.070, hip_y=0.010, hip_z=0.185, thigh=0.118, thigh_dir=(0.24, -0.70, -0.67), thigh_r=(0.066, 0.046),
-    ankle_z=0.036, shin_r=(0.042, 0.032), foot_len=0.125, foot_w=0.060, foot_h=0.030, toe_out=14.0,
+    hip_x=0.070, hip_y=0.010, hip_z=0.190, thigh=0.125, thigh_dir=(0.24, -0.70, -0.67), thigh_r=(0.068, 0.052),
+    ankle_z=0.036, shin_r=(0.048, 0.038), foot_len=0.125, foot_w=0.060, foot_h=0.030, toe_out=14.0,
     tail_base=(0, 0.100, 0.120), tail_dir=(0, 0.92, -0.22), tail_len=0.11, tail_r=(0.034, 0.020),
     tuft_amp=0.004, tuft_w=0.042, tuft_h=0.040, strand=1.25,
     colors=dict(fur=(0.80, 0.66, 0.44), fur_dark=(0.66, 0.52, 0.33), belly=(0.88, 0.77, 0.56), muzzle=(0.88, 0.78, 0.60),
@@ -131,10 +131,12 @@ def build(cid):
         R = rot_from_axes(x=(1, s * 0.5, 0), z=(s * 0.7, 0, 1))
         add('ear.' + sn, 'ell', 'ear', k=0.012, center=ec, radii=P.ear_r, R=R, knots=HEAD, tuft=0, flow='v')
         add('earhole.' + sn, 'ell', 'ear', k=0.008, op='sub', center=ec + V(s * 0.004, -P.ear_r[1] * 1.25, -0.003), radii=V(*P.ear_r) * V(0.62, 0.9, 0.62), R=R, knots=HEAD, tuft=0, flow='v')
-        if P.brow:
-            bx = P.eye_x; bz = hc[2] + P.eye_dz + P.eye_r * 1.9
-            add('brow.' + sn, 'cap', 'brow', k=0.012, a=V(s * bx * 0.42, hc[1] - hr[1] * 0.86, bz - 0.010), b=V(s * bx * 1.5, hc[1] - hr[1] * 0.72, bz + 0.012),
-                ra=0.013, rb=0.010, knots=HEAD, tuft=0, flow='v')
+        if P.brow:                     # 怒り眉の盛り上がり（内側が低い）。頭の表面に沿わせて半分埋める
+            def onskull(x, z, sink=0.006):
+                q = max(0.0, 1 - (x / hr[0]) ** 2 - ((z - hc[2]) / hr[2]) ** 2); return V(x, hc[1] - hr[1] * np.sqrt(q) + sink, z)
+            ez = hc[2] + P.eye_dz
+            add('brow.' + sn, 'cap', 'brow', k=0.008, a=onskull(s * P.eye_x * 0.30, ez + P.eye_r * 1.5, 0.002), b=onskull(s * P.eye_x * 1.45, ez + P.eye_r * 3.0, 0.002),
+                ra=0.0135, rb=0.009, knots=HEAD, tuft=0, flow='v')
     # --- 腕（左右） ---
     ad = np.radians(P.arm_down)
     for sn, s in SIDES:
@@ -179,7 +181,7 @@ def build(cid):
         J['foot.' + sn] = A + (ball - A) * 0.30; J['toe.' + sn] = ball; J['toe_tip.' + sn] = tip; J['foot_dir.' + sn] = fd
         t0, t1 = P.thigh_r; s0, s1 = P.shin_r
         add('thigh.' + sn, 'cap', 'leg' + sn, k=0.04, a=Hp, b=K, ra=t0, rb=t1, tuft=1.0, flow='v',
-            knots=[(0, {'pelvis': 0.55, 'thigh.' + sn: 0.45}), (0.4, {'thigh.' + sn: 1}), (0.75, {'thigh.' + sn: 1}), (1.0, {'thigh.' + sn: 0.5, 'shin.' + sn: 0.5})])
+            knots=[(0, {'pelvis': 0.25, 'thigh_fix.' + sn: 0.60, 'thigh.' + sn: 0.15}), (0.4, {'thigh.' + sn: 0.8, 'thigh_fix.' + sn: 0.2}), (0.75, {'thigh.' + sn: 1}), (1.0, {'thigh.' + sn: 0.5, 'shin.' + sn: 0.5})])
         add('shin.' + sn, 'cap', 'leg' + sn, k=0.025, a=K, b=A, ra=s0, rb=s1, tuft=0.8, flow='v',
             knots=[(0, {'thigh.' + sn: 0.5, 'shin.' + sn: 0.5}), (0.3, {'shin.' + sn: 1}), (0.8, {'shin.' + sn: 1}), (1.0, {'shin.' + sn: 0.4, 'ankle.' + sn: 0.6})])
         fR = rot_from_axes(x=fs, y=fd)                                  # 列: 横, 前, 上

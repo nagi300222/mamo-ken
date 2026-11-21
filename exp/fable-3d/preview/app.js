@@ -10,6 +10,8 @@ const CLIPS = ['idle', 'walk_f', 'walk_b', 'dash_f', 'crouch', 'jump_n', 'stand_
 const FPS = 60;
 const Q = new URLSearchParams(location.search);
 const $ = (id) => document.getElementById(id);
+const BASE = Q.get('base') || '../chars';            // ?base=../_scratch/deform&flat=1 で確認用GLBを読む
+const DIR = (id) => Q.has('flat') ? '' : id + '/';
 
 if (Q.has('bare')) { $('panel').style.display = 'none'; $('app').style.gridTemplateColumns = '1fr'; $('app').style.gridTemplateRows = '1fr'; if (Q.has('nohud')) $('hud').style.display = 'none'; }
 const canvas = $('c');
@@ -21,8 +23,8 @@ const scene = new THREE.Scene();
 const BG = new THREE.Color(0x23262e); scene.background = BG;
 const camera = new THREE.PerspectiveCamera(24, 1, 0.05, 50);
 const controls = new OrbitControls(camera, canvas); controls.enableDamping = false;
-scene.add(new THREE.HemisphereLight(0xdfe8ff, 0x4a4038, 1.5));
-const key = new THREE.DirectionalLight(0xfff2e0, 2.4); key.position.set(-1.2, 2.4, 2.0); scene.add(key);
+scene.add(new THREE.HemisphereLight(0xe6ecff, 0x6a5a4c, 2.3));
+const key = new THREE.DirectionalLight(0xfff2e0, 2.6); key.position.set(-1.2, 2.4, 2.0); scene.add(key);
 const rim = new THREE.DirectionalLight(0xbfd4ff, 1.0); rim.position.set(1.5, 1.2, -2.0); scene.add(rim);
 const grid = new THREE.GridHelper(4, 40, 0x555b68, 0x343944); scene.add(grid);
 const shadow = new THREE.Mesh(new THREE.CircleGeometry(0.22, 32), new THREE.MeshBasicMaterial({ color: 0x000000, transparent: true, opacity: 0.28, depthWrite: false }));
@@ -39,7 +41,7 @@ const gradient = (() => { const d = new Uint8Array([90, 90, 90, 255, 170, 170, 1
 
 async function load(id) {
   if (!S.cache[id]) {
-    const [gltf, meta] = await Promise.all([new GLTFLoader().loadAsync(`../chars/${id}/${id}.glb`), fetch(`../chars/${id}/${id}_motions.json`).then(r => r.json())]);
+    const [gltf, meta] = await Promise.all([new GLTFLoader().loadAsync(`${BASE}/${DIR(id)}${id}.glb`), fetch(`${BASE}/${DIR(id)}${id}_motions.json`).then(r => r.json())]);
     S.cache[id] = { gltf, meta };
   }
   const { gltf, meta } = S.cache[id];

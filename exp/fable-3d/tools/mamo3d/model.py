@@ -7,7 +7,7 @@ from .characters import V, SIDES
 from .body import PART
 
 DEFORM = ['root_ground', 'pelvis', 'spine', 'chest', 'neck', 'head', 'jaw'] + \
-    [b + '.' + s for s in 'LR' for b in ('shoulder', 'shoulder_fix', 'upper_arm', 'forearm', 'forearm_twist', 'wrist', 'paw', 'thigh', 'shin', 'ankle', 'foot', 'toe')] + \
+    [b + '.' + s for s in 'LR' for b in ('shoulder', 'shoulder_fix', 'upper_arm', 'forearm', 'forearm_twist', 'wrist', 'paw', 'thigh_fix', 'thigh', 'shin', 'ankle', 'foot', 'toe')] + \
     ['tail_01', 'tail_02', 'tail_03']
 
 def vertex_normals(v, f):
@@ -42,7 +42,7 @@ def shape_keys(spec, verts, Wp, ranges):
         a, b = ranges['shine.' + sn]; D[a:b] = (c - verts[a:b]) * 0.95
         r = np.linalg.norm(verts[:nb] - c, axis=1); up = verts[:nb, 2] - c[2]
         fo = (1 - smoothstep(P.eye_r * 0.9, P.eye_r * 2.1, r)) * smoothstep(-0.2 * P.eye_r, 0.5 * P.eye_r, up)
-        D[:nb, 2] -= fo * np.maximum(up, 0) * 0.55
+        D[:nb, 2] -= fo * np.maximum(up, 0) * 0.8
         q0 = c + V(-s * P.eye_r * 0.7, 0, P.eye_r * 1.25); r2 = np.linalg.norm(verts[:nb] - q0, axis=1)
         fo = (1 - smoothstep(P.eye_r * 0.4, P.eye_r * 2.6, r2)) * smoothstep(-0.1 * P.eye_r, 0.6 * P.eye_r, up)
         B[:nb] += fo[:, None] * V(-s * 0.30, -0.25, -0.80) * P.eye_r
@@ -69,7 +69,7 @@ def build_arrays(cid, out_dir, log=print, cache_dir=None):
     verts = [v]; faces = [f]; fpart = [np.zeros(len(f), int)]; Ws = [Wb]; ranges = {'body': (0, len(v))}; off = len(v)
     for p in parts:
         verts.append(p['verts']); faces.append(p['faces'] + off); fpart.append(np.full(len(p['faces']), PART[p['part']]))
-        Ws.append(skin.part_weights(p, v, Wb, bone_names)); ranges[p['tag']] = (off, off + len(p['verts'])); off += len(p['verts'])
+        Ws.append(skin.part_weights(p, v, Wb, bone_names, spec.prims)); ranges[p['tag']] = (off, off + len(p['verts'])); off += len(p['verts'])
     verts = np.concatenate(verts); faces = np.concatenate(faces); fpart = np.concatenate(fpart); W = np.concatenate(Ws)
     vn = vertex_normals(verts, faces)
     spec.mouth = texture.mouth_lines(spec, field)

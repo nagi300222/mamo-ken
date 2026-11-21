@@ -97,7 +97,7 @@ def shade(spec, field, pos, nrm, part):
             col *= (1 - 0.35 * crease[:, None])
         # 足
         gl = g('leg' + sn, 'foot' + sn, 'toes' + sn, 'tclaws' + sn)
-        m = (1 - smoothstep(P.ankle_z * 0.85, P.ankle_z * 2.0, z + (n1 - 0.5) * 0.02)) * smoothstep(0.3, 0.6, gl)
+        m = (1 - smoothstep(P.ankle_z * 0.75, P.ankle_z * 1.45, z + (n1 - 0.5) * 0.015)) * smoothstep(0.3, 0.6, gl)
         col = col * (1 - m[:, None]) + C['foot'] * m[:, None]
         mf = smoothstep(0.35, 0.65, g('foot' + sn, 'toes' + sn, 'tclaws' + sn)); bare = np.maximum(bare, mf)
         mc = smoothstep(0.45, 0.6, g('tclaws' + sn)); col = col * (1 - mc[:, None]) + C['claw'] * mc[:, None]
@@ -115,7 +115,7 @@ def shade(spec, field, pos, nrm, part):
     for poly in spec.mouth:
         d = seg_dist(pos, poly); m = (1 - smoothstep(0.0012, 0.0030, d)) * 0.85; col = col * (1 - m[:, None]) + C['nose'] * 0.8 * m[:, None]
     for c in spec.eye_centers:
-        d = np.linalg.norm(pos - c, axis=1); m = (1 - smoothstep(P.eye_r * 1.02, P.eye_r * 1.55, d)) * 0.55; col = col * (1 - m[:, None]) + C['nose'] * m[:, None]
+        d = np.linalg.norm(pos - c, axis=1); m = (1 - smoothstep(P.eye_r * 1.0, P.eye_r * 1.38, d)) * 0.45; col = col * (1 - m[:, None]) + C['nose'] * m[:, None]
     # 簡易AO（距離場から）
     ao = np.clip(field(pos + nrm * 0.014) / 0.014, 0, 1) * 0.6 + np.clip(field(pos + nrm * 0.04) / 0.04, 0, 1) * 0.4
     col = col * (0.62 + 0.38 * ao)[:, None]
