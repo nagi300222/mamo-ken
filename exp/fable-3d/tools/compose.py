@@ -1,0 +1,40 @@
+"""capture.mjs から呼ばれる画像合成（Pillow）。"""
+import sys, os, json
+from PIL import Image, ImageDraw, ImageFont
+ROOT = os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..')); REPO = os.path.normpath(os.path.join(ROOT, '..', '..'))
+def font(sz):
+    for p in ('/usr/share/fonts/opentype/noto/NotoSansCJK-Regular.ttc', '/usr/share/fonts/truetype/noto/NotoSansCJK-Regular.ttc', '/usr/share/fonts/opentype/ipafont-gothic/ipag.ttf', '/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf'):
+        if os.path.exists(p): return ImageFont.truetype(p, sz)
+    return ImageFont.load_default()
+def label(im, text, sz=16):
+    d = ImageDraw.Draw(im); d.rectangle([0, 0, im.width, sz + 10], fill=(18, 20, 26)); d.text((8, 4), text, fill=(230, 232, 236), font=font(sz)); return im
+def hstack(ims, bg=(35, 38, 46)):
+    h = max(i.height for i in ims); out = Image.new('RGB', (sum(i.width for i in ims), h), bg); x = 0
+    for i in ims: out.paste(i, (x, 0)); x += i.width
+    return out
+mode = sys.argv[1]
+if mode == 'turnaround':
+    cid, out = sys.argv[2:4]; ims = [label(Image.open(os.path.join(out, n + '.png')).convert('RGB'), t) for n, t in (('front', 'front'), ('side', 'side (game view)'), ('three_quarter', 'three quarter'), ('back', 'back'))]
+    hstack(ims).save(os.path.join(out, 'turnaround.png'))
+elif mode == 'compare':
+    cid, tmp, out = sys.argv[2:5]; ref = Image.open(os.path.join(REPO, 'assets', 'portraits', cid + '.png')).convert('RGBA'); H = 600
+    bg = Image.new('RGBA', ref.size, (35, 38, 46, 255)); bg.alpha_composite(ref); r = bg.convert('RGB'); r = r.resize((int(r.width * (H - 40) / r.height), H - 40), Image.LANCZOS)
+    cell = Image.new('RGB', (max(r.width + 20, 480), H), (35, 38, 46)); cell.paste(r, ((cell.width - r.width) // 2, 34))
+    a = Image.open(os.path.join(tmp, cid + '_refangle.png')).convert('RGB'); g = Image.open(os.path.join(out, 'side.png')).convert('RGB')
+    hstack([label(cell, '元絵 assets/portraits/%s.png' % cid), label(a, '3D（元絵に近い角度・idle F0）'), label(g, '3D ゲーム視点（横・idle F0）')]).save(os.path.join(out, 'compare.png'))
+elif mode == 'facing':
+    cid, tmp, out = sys.argv[2:5]
+    hstack([label(Image.open(os.path.join(tmp, '%s_%s.png' % (cid, n))).convert('RGB'), t) for n, t in (('right', '右向き（1P）'), ('left_mirror', '左向き: ミラー scale.z=-1'), ('left_rot', '左向き: 回転 rotation.y=π'))]).save(os.path.join(out, 'facing.png'))
+elif mode == 'sheet':
+    cid, title, rows, out = sys.argv[2:6]; rows = json.loads(rows); strips = []
+    for text, files in rows: strips.append(label(hstack([Image.open(f).convert('RGB') for f in files]), text, 15))
+    W = strips[0].width; S = Image.new('RGB', (W, sum(s.height for s in strips) + 34), (18, 20, 26)); ImageDraw.Draw(S).text((8, 6), '%s  %s   （左から: ゲーム視点 / 斜め前 / 正面 / 斜め後ろ）' % (cid, title), fill=(224, 161, 58), font=font(17)); y = 34
+    for s in strips: S.paste(s, (0, y)); y += s.height
+    S.save(out, optimize=True)
+    for _, files in rows:
+        for f in files: os.remove(f)
+elif mode == 'tojpg':            # リポジトリを重くしないよう、確認用画像は JPEG にする
+    d = sys.argv[2]
+    for f in sorted(os.listdir(d)):
+        if f.endswith('.png'):
+            Image.open(os.path.join(d, f)).convert('RGB').save(os.path.join(d, f[:-4] + '.jpg'), quality=88, optimize=True); os.remove(os.path.join(d, f))

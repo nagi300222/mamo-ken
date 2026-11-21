@@ -16,7 +16,7 @@ BASE = dict(
     nose_off=(0, -0.122, -0.008), nose_r=(0.021, 0.013, 0.015),
     chin_off=(0, -0.072, -0.060), chin_r=(0.036, 0.036, 0.022),
     eye_x=0.064, eye_dz=0.022, eye_r=0.0175, eye_sink=0.40,
-    ear_off=(0.092, 0.030, 0.068), ear_r=(0.019, 0.011, 0.019),
+    ear_off=(0.094, 0.032, 0.062), ear_r=(0.016, 0.010, 0.016),
     brow=0.0,
     # 胴
     neck_c=(0, 0.005, 0.415), neck_r=(0.098, 0.092, 0.070),
@@ -49,11 +49,11 @@ CHARS['pisuke'] = dict(BASE,
     H=0.63,
     head_c=(0, -0.012, 0.540), head_r=(0.090, 0.094, 0.084), head_top_flat=0.35,
     cheek_off=(0.040, -0.034, -0.030), cheek_r=(0.050, 0.052, 0.046),
-    muzzle_off=(0, -0.082, -0.020), muzzle_r=(0.041, 0.050, 0.034),
-    nose_off=(0, -0.130, -0.004), nose_r=(0.016, 0.011, 0.012),
-    chin_off=(0, -0.072, -0.048), chin_r=(0.030, 0.034, 0.018),
-    eye_x=0.052, eye_dz=0.022, eye_r=0.0140,
-    ear_off=(0.062, 0.024, 0.074), ear_r=(0.020, 0.010, 0.021),
+    muzzle_off=(0, -0.090, -0.018), muzzle_r=(0.040, 0.056, 0.033),
+    nose_off=(0, -0.143, -0.004), nose_r=(0.016, 0.011, 0.012),
+    chin_off=(0, -0.080, -0.046), chin_r=(0.030, 0.038, 0.018),
+    eye_x=0.054, eye_dz=0.020, eye_r=0.0155,
+    ear_off=(0.068, 0.028, 0.058), ear_r=(0.014, 0.009, 0.015),
     neck_c=(0, 0.004, 0.455), neck_r=(0.074, 0.074, 0.075),
     chest_c=(0, 0.0, 0.365), chest_r=(0.092, 0.086, 0.105),
     belly_c=(0, 0.010, 0.205), belly_r=(0.122, 0.112, 0.160),
@@ -70,13 +70,13 @@ CHARS['pisuke'] = dict(BASE,
 )
 CHARS['godan'] = dict(BASE,
     H=0.66,
-    head_c=(0, -0.020, 0.560), head_r=(0.104, 0.104, 0.094), head_top_flat=0.2,
+    head_c=(0, -0.022, 0.560), head_r=(0.114, 0.108, 0.096), head_top_flat=0.3,
     cheek_off=(0.056, -0.032, -0.040), cheek_r=(0.066, 0.062, 0.058),
-    muzzle_off=(0, -0.080, -0.030), muzzle_r=(0.056, 0.046, 0.044),
-    nose_off=(0, -0.124, -0.010), nose_r=(0.025, 0.014, 0.018),
-    chin_off=(0, -0.070, -0.066), chin_r=(0.044, 0.036, 0.024),
-    eye_x=0.056, eye_dz=0.030, eye_r=0.0125, brow=1.0,
-    ear_off=(0.078, 0.026, 0.082), ear_r=(0.023, 0.012, 0.022),
+    muzzle_off=(0, -0.084, -0.030), muzzle_r=(0.064, 0.048, 0.046),
+    nose_off=(0, -0.130, -0.008), nose_r=(0.026, 0.014, 0.018),
+    chin_off=(0, -0.074, -0.068), chin_r=(0.052, 0.038, 0.024),
+    eye_x=0.058, eye_dz=0.026, eye_r=0.0125, brow=1.0,
+    ear_off=(0.092, 0.032, 0.066), ear_r=(0.017, 0.010, 0.016),
     neck_c=(0, 0.012, 0.465), neck_r=(0.135, 0.115, 0.080),
     chest_c=(0, 0.0, 0.375), chest_r=(0.170, 0.132, 0.120), shoulder_pad=1.0,
     belly_c=(0, 0.010, 0.200), belly_r=(0.190, 0.160, 0.160),
@@ -86,10 +86,10 @@ CHARS['godan'] = dict(BASE,
     ankle_z=0.042, shin_r=(0.062, 0.048), foot_len=0.150, foot_w=0.095, foot_h=0.042, toe_out=24.0,
     tail_base=(0, 0.145, 0.110), tail_dir=(0, 0.9, -0.35), tail_len=0.11, tail_r=(0.050, 0.030),
     tuft_amp=0.008, tuft_w=0.066, tuft_h=0.058, strand=0.8, tris=26000,
-    colors=dict(fur=(0.40, 0.26, 0.14), fur_dark=(0.27, 0.17, 0.09), belly=(0.62, 0.45, 0.24), muzzle=(0.68, 0.52, 0.30),
+    colors=dict(fur=(0.40, 0.26, 0.14), fur_dark=(0.28, 0.18, 0.10), belly=(0.70, 0.52, 0.28), muzzle=(0.74, 0.58, 0.34),
                 nose=(0.07, 0.06, 0.06), paw=(0.20, 0.14, 0.10), foot=(0.19, 0.14, 0.11), claw=(0.10, 0.10, 0.10),
                 ear_in=(0.25, 0.16, 0.10), cloth=(0.06, 0.06, 0.07), cloth2=(0.07, 0.07, 0.08), brow=(0.62, 0.46, 0.26)),
-    belly_patch=0.8, paw_fade=0.25, accessories=['belt', 'wristbands'], mouth_curve=-0.6, mouth_w=0.75, wristband=dict(width=0.032, thick=0.005),
+    belly_patch=1.0, paw_fade=0.25, accessories=['belt', 'wristbands'], mouth_curve=-0.6, mouth_w=0.75, wristband=dict(width=0.032, thick=0.005),
 )
 
 def torso_knots(P):
@@ -135,8 +135,8 @@ def build(cid):
             def onskull(x, z, sink=0.006):
                 q = max(0.0, 1 - (x / hr[0]) ** 2 - ((z - hc[2]) / hr[2]) ** 2); return V(x, hc[1] - hr[1] * np.sqrt(q) + sink, z)
             ez = hc[2] + P.eye_dz
-            add('brow.' + sn, 'cap', 'brow', k=0.008, a=onskull(s * P.eye_x * 0.30, ez + P.eye_r * 1.5, 0.002), b=onskull(s * P.eye_x * 1.45, ez + P.eye_r * 3.0, 0.002),
-                ra=0.0135, rb=0.009, knots=HEAD, tuft=0, flow='v')
+            add('brow.' + sn, 'cap', 'brow', k=0.008, a=onskull(s * P.eye_x * 0.34, ez + P.eye_r * 1.7, 0.001), b=onskull(s * P.eye_x * 1.55, ez + P.eye_r * 3.3, 0.001),
+                ra=0.015, rb=0.010, knots=HEAD, tuft=0, flow='v')
     # --- 腕（左右） ---
     ad = np.radians(P.arm_down)
     for sn, s in SIDES:

@@ -2,17 +2,45 @@
  "generated_by": "tools/validate.mjs",
  "clips_checked": [
   "idle",
-  "crouch"
+  "walk_f",
+  "walk_b",
+  "dash_f",
+  "crouch",
+  "jump_n",
+  "stand_light",
+  "stand_heavy",
+  "guard_stand",
+  "hurt_light"
  ],
  "characters": {
   "moguzo": {
    "all_pass": true,
    "failed": [],
    "triangles": 24884,
-   "joints": 38,
-   "clips": 2,
+   "joints": 40,
+   "clips": 10,
    "textures": 1,
-   "file_size_mb": 1.39,
+   "file_size_mb": 1.73,
+   "draw_calls": 2
+  },
+  "pisuke": {
+   "all_pass": true,
+   "failed": [],
+   "triangles": 24440,
+   "joints": 36,
+   "clips": 10,
+   "textures": 1,
+   "file_size_mb": 1.65,
+   "draw_calls": 2
+  },
+  "godan": {
+   "all_pass": true,
+   "failed": [],
+   "triangles": 28940,
+   "joints": 40,
+   "clips": 10,
+   "textures": 1,
+   "file_size_mb": 1.79,
    "draw_calls": 2
   }
  }

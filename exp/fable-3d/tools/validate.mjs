@@ -65,10 +65,11 @@ async function checkPlayback(b, id, R) {
     const N = a.frames; const frames = []; for (let f = 0; f <= N; f++) frames.push(await pose(a.name, f));
     let moved = 0; for (const f of frames) for (const k in f) moved = Math.max(moved, dist(f[k], frames[0][k]));
     const o = { bones_move_max_m: +moved.toFixed(4), bones_animated: moved > 1e-3 };
-    let dEnd = 0, worst = ''; for (const k in idle0) { const d = dist(frames[N][k], a.loop ? frames[0][k] : idle0[k]); if (d > dEnd) { dEnd = d; worst = k; } }
+    const SEC = /^(tail_|band_|belt_)/;   // 二次動作（バネ）のボーン。idle 側も揺れているので本体とは別に測る
+    let dEnd = 0, worst = '', dSec = 0; for (const k in idle0) { const d = dist(frames[N][k], a.loop ? frames[0][k] : idle0[k]); if (!a.loop && SEC.test(k)) { dSec = Math.max(dSec, d); continue; } if (d > dEnd) { dEnd = d; worst = k; } }
     const holds = ['crouch', 'guard_stand'].includes(a.name);
     if (a.loop) { o.loop_seam_max_m = +dEnd.toFixed(5); o.loop_seam_ok = dEnd < 0.002; }
-    else if (!holds) { o.end_vs_idle_max_m = +dEnd.toFixed(5); o.end_vs_idle_worst_bone = worst; o.returns_to_idle = dEnd < 0.004; }
+    else if (!holds) { o.end_vs_idle_max_m = +dEnd.toFixed(5); o.end_vs_idle_worst_bone = worst; o.returns_to_idle = dEnd < 0.004; o.end_vs_idle_secondary_bones_max_m = +dSec.toFixed(5); o.secondary_settles = dSec < 0.02; }
     let jump = 0; for (let f = 1; f <= N; f++) for (const k in idle0) jump = Math.max(jump, dist(frames[f][k], frames[f - 1][k])); o.max_bone_step_per_frame_m = +jump.toFixed(4);
     // 足の接地: 足首が低い（=接地している）フレームでの最低点と、地面より下への沈み込み
     let minY = 9, maxToe = 0; for (const f of frames) for (const s of ['L', 'R']) { minY = Math.min(minY, f['toe' + s][1], f['ankle' + s][1]); maxToe = Math.max(maxToe, f['toe' + s][1]); }
@@ -88,6 +89,8 @@ async function checkPlayback(b, id, R) {
   C.three_no_console_errors = { pass: P.console_errors.length === 0, errors: P.console_errors };
   C.loops_are_seamless = { pass: Object.values(P.clips).every(c => c.loop_seam_ok !== false) };
   C.attacks_return_to_idle = { pass: Object.values(P.clips).every(c => c.returns_to_idle !== false) };
+  C.secondary_motion_settles_at_end = { pass: Object.values(P.clips).every(c => c.secondary_settles !== false), threshold_m: 0.02 };
+  if (P.clips.crouch) C.crouch_lead_hand_on_ground = { pass: P.clips.crouch.lead_paw_height_m < 0.045, paw_bone_height_m: P.clips.crouch.lead_paw_height_m, note: '手のボーンは拳の中心付近。0.045m 未満なら開いた手が床に触れている' };
   C.feet_not_below_ground = { pass: Object.values(P.clips).every(c => c.lowest_foot_bone_y_m > -0.004) };
   R.playback = P;
 }

@@ -58,16 +58,7 @@
    "loop": false,
    "enter_frames": 12,
    "loop_from": 12,
-   "note": "F12まででしゃがみ切り、F12〜F48は呼吸の保持ループ。リード手（左）を地面につく",
-   "warnings": [
-    "handL reach 0.209 > 0.196",
-    "handL reach 0.225 > 0.196",
-    "handL reach 0.235 > 0.196",
-    "handL reach 0.241 > 0.196",
-    "handL reach 0.243 > 0.196",
-    "handL reach 0.244 > 0.196",
-    "handL reach 0.245 > 0.196"
-   ]
+   "note": "F12まででしゃがみ切り、F12〜F48は呼吸の保持ループ。リード手（左）を地面につく"
   },
   "jump_n": {
    "frames": 48,

@@ -16,8 +16,9 @@ for (const p of poses) {
     const f = path.join(out, `_${char}_${clip}_${fr}_${cam}.png`); await b.shot(f); files.push(f);
   }
   const sheet = path.join(out, `${char}_${clip}_${fr}.png`);
-  execFileSync('ffmpeg', ['-y', '-loglevel', 'error', ...files.flatMap(f => ['-i', f]), '-filter_complex', `hstack=inputs=${files.length}`, sheet]);
-  files.forEach(f => fs.unlinkSync(f)); console.log(sheet);
+  if (files.length === 1) fs.renameSync(files[0], sheet);
+  else { execFileSync('ffmpeg', ['-y', '-loglevel', 'error', ...files.flatMap(f => ['-i', f]), '-filter_complex', `hstack=inputs=${files.length}`, sheet]); files.forEach(f => fs.unlinkSync(f)); }
+  console.log(sheet);
 }
 if (b.errors.length) console.log('ERRORS', b.errors);
 await b.close();

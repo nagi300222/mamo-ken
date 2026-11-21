@@ -10,11 +10,11 @@ from .anim import merge, sample
 
 # ---- キャラごとの構えの個性 ----
 STYLE = {
-    'moguzo': dict(yaw=-26, low=0.03, lean=5, lead=(0.03, 0.26), rear=(0.10, -0.22), lead_yaw=-8, rear_yaw=28,
+    'moguzo': dict(yaw=-24, low=0.02, lean=5, lead=(0.00, 0.17), rear=(0.03, -0.15), lead_yaw=-8, rear_yaw=28,
                    handL=(0.12, 0.55, 0.00), handR=(0.10, 0.44, 0.06), idle_n=72, bob=0.014, walk_n=40, stride=0.42),
-    'pisuke': dict(yaw=-34, low=0.06, lean=7, lead=(0.02, 0.36), rear=(0.08, -0.32), lead_yaw=-8, rear_yaw=36,
+    'pisuke': dict(yaw=-34, low=0.06, lean=7, lead=(0.00, 0.30), rear=(0.04, -0.26), lead_yaw=-8, rear_yaw=36,
                    handL=(0.08, 0.60, 0.10), handR=(0.06, 0.46, 0.16), idle_n=44, bob=0.030, walk_n=30, stride=0.50),
-    'godan': dict(yaw=-14, low=-0.02, lean=7, lead=(0.20, 0.18), rear=(0.26, -0.16), lead_yaw=8, rear_yaw=30,
+    'godan': dict(yaw=-14, low=-0.02, lean=7, lead=(0.14, 0.14), rear=(0.18, -0.12), lead_yaw=8, rear_yaw=30,
                   handL=(0.30, 0.48, -0.14), handR=(0.28, 0.40, -0.10), idle_n=96, bob=0.012, walk_n=52, stride=0.34),
 }
 
@@ -85,10 +85,10 @@ def dash_f(cid):
     return dict(frames=N, loop=False, fn=keyed(keys), info=dict(move_total_leg=2.2 if cid != 'godan' else 1.7, move_frames=[F(4), F(17)], note='F4で踏み切り、F17で着地。移動はこの区間に配分する'))
 
 def crouch(cid):
-    n0 = neutral(cid); s = STYLE[cid]; deep = dict(moguzo=-0.26, pisuke=-0.30, godan=-0.24)[cid]
+    n0 = neutral(cid); s = STYLE[cid]; deep = dict(moguzo=-0.30, pisuke=-0.42, godan=-0.24)[cid]; lean = dict(moguzo=26, pisuke=32, godan=20)[cid]; reach = dict(moguzo=0.48, pisuke=0.40, godan=0.55)[cid]
     def low(br):
-        return merge(n0, pelvis=pel(n0, (0.0, 0.04, deep + br * 0.012), (20, 4, 4)), spine=add(n0['spine'], (10 + br, 0, 3)), chest=add(n0['chest'], (10, 4, 5)), neck=add(n0['neck'], (-10, 0, -4)), head=add(n0['head'], (-22, 0, -6)),
-                     handL=dict(space='root', pos=(0.20, s['lead'][1] + 0.55, 0.19), fwd=(0.05, 0.95, -0.30), back=(0.0, 0.25, 1.0), elbow=(0.9, -0.2, 0.3)),
+        return merge(n0, pelvis=pel(n0, (0.03, 0.06, deep + br * 0.012), (lean, 4, 7)), spine=add(n0['spine'], (lean * 0.55 + br, 0, 4)), chest=add(n0['chest'], (lean * 0.55, 6, 8)), neck=add(n0['neck'], (-lean * 0.5, 0, -6)), head=add(n0['head'], (-lean * 1.1, 0, -9)),
+                     handL=dict(space='root', pos=(0.10, s['lead'][1] + reach, 0.17), fwd=(0.05, 0.95, -0.30), back=(0.0, 0.25, 1.0), elbow=(0.9, -0.2, 0.3)),
                      handR=hand(n0, 'handR', (0.02, -0.04, 0.02)),
                      footL=foot(n0, 'footL', (0.10, -0.04, 0), knee=0.7), footR=foot(n0, 'footR', (0.08, 0.10, 0), knee=0.9, pitch=6),
                      tail=(-10, 0), keys=dict(n0['keys'], paw_open_L=1.0))
@@ -119,7 +119,7 @@ def stand_light(cid):
     hit = merge(n0, pelvis=pel(n0, (0, 0.10, -0.04), (6, -14, 0)), spine=add(n0['spine'], (2, -6, 0)), chest=add(n0['chest'], (4, -16, -3)), head=add(n0['head'], (-4, 26, 0)),
                 handL=dict(space='world', pos=(-0.14, 0.96, 0.02), fwd=(0.0, 1.0, 0.0), back=(0.2, 0.0, 1.0), elbow=(0.9, -0.1, -0.4)), handR=hand(n0, 'handR', (0.0, -0.10, 0.04)),
                 footL=foot(n0, 'footL', (0, 0.08, 0)), footR=foot(n0, 'footR', pitch=14), tail=(10, 12), keys=dict(n0['keys'], brow_angry=0.7))
-    keys = [(0, n0), (max(1, st - 2), wind, 'out'), (st, hit, 'in3'), (st + ac, hit, 'lin'), (N, n0, 'io')]
+    keys = [(0, n0), (max(1, st - 2), wind, 'out'), (st, hit, 'in'), (st + ac, hit, 'lin'), (N, n0, 'io')]
     return dict(frames=N, loop=False, fn=keyed(keys), info=dict(startup=st, active=ac, recovery=N - st - ac, hand='L', note='前手（左）のジャブ'))
 
 def stand_heavy(cid):
@@ -134,7 +134,7 @@ def stand_heavy(cid):
                     footL=foot(n0, 'footL', (0.02, 0.55, 0), yaw=6), footR=foot(n0, 'footR', (0, 0.10, 0), pitch=38, yaw=-10), tail=(12, 22), keys=dict(n0['keys'], brow_angry=1.0), jaw=10.0)
         rec = merge(n0, pelvis=pel(n0, (0, 0.18, -0.12), (10, 26, 0)), chest=add(n0['chest'], (5, 12, 0)), head=add(n0['head'], (-6, -30, 0)),
                     handR=dict(space='world', pos=(-0.10, 0.70, 0.0), fwd=(-0.05, 0.9, 0.4), back=(0.6, 0.2, 0.7), elbow=(0.7, -0.2, -0.6)), footL=foot(n0, 'footL', (0.02, 0.40, 0)), footR=foot(n0, 'footR', (0, 0.08, 0), pitch=20))
-        keys = [(0, n0), (7, wind, 'out'), (st, hit, 'in3'), (st + ac, hit, 'lin'), (st + ac + 8, rec, 'out'), (N, n0, 'io')]
+        keys = [(0, n0), (7, wind, 'out'), (st, hit, 'in'), (st + ac, hit, 'lin'), (st + ac + 8, rec, 'out'), (N, n0, 'io')]
         info = dict(startup=st, active=ac, recovery=N - st - ac, hand='R', note='左足で踏み込み、腰の回転で後ろ手（右）のストレート')
     elif cid == 'pisuke':     # 後ろ脚（右）の速いキック
         st, ac, N = 9, 3, 30
@@ -144,7 +144,7 @@ def stand_heavy(cid):
         hit = merge(n0, pelvis=pel(n0, (-0.04, 0.22, 0.10), (-16, 44, -12)), spine=add(n0['spine'], (-6, 8, -6)), chest=add(n0['chest'], (-8, 10, -6)), neck=add(n0['neck'], (8, -20, 6)), head=add(n0['head'], (10, -44, 8)),
                     handL=hand(n0, 'handL', (0.10, -0.15, 0.0)), handR=hand(n0, 'handR', (0.30, -0.25, -0.20)),
                     footL=foot(n0, 'footL', (-0.02, -0.10, 0), yaw=-42, pitch=6), footR=dict(pos=(-0.22, 1.12, 0.78), yaw=-24, pitch=-20, knee=0.0, toe=0), tail=(25, -30), keys=dict(n0['keys'], brow_angry=0.8))
-        keys = [(0, n0), (5, chamber, 'out'), (st, hit, 'in3'), (st + ac, hit, 'lin'), (st + ac + 6, chamber, 'io'), (N, n0, 'io')]
+        keys = [(0, n0), (5, chamber, 'out'), (st, hit, 'in'), (st + ac, hit, 'lin'), (st + ac + 6, chamber, 'io'), (N, n0, 'io')]
         info = dict(startup=st, active=ac, recovery=N - st - ac, limb='footR', note='後ろ脚（右）を抱え込んでから前へ蹴り出す。軸足（左）は外へ回す')
     else:                     # godan: 大きく構えて振り下ろす
         st, ac, N = 18, 5, 52
@@ -154,7 +154,7 @@ def stand_heavy(cid):
         hit = merge(n0, pelvis=pel(n0, (0, 0.18, -0.12), (13, 26, 0)), spine=add(n0['spine'], (8, 6, 0)), chest=add(n0['chest'], (10, 14, 0)), neck=add(n0['neck'], (-8, -14, 0)), head=add(n0['head'], (-14, -22, 0)),
                     handR=dict(space='world', pos=(-0.16, 0.90, -0.32), fwd=(0.0, 0.85, -0.5), back=(0.15, 0.5, 0.85), elbow=(0.9, -0.3, 0.2)), handL=dict(pos=(0.10, 0.05, -0.10), fwd=(-0.1, 0.5, 0.85), back=(0.9, 0.4, 0.0), elbow=(0.7, -0.6, -0.4)),
                     footL=foot(n0, 'footL', (0.02, 0.30, 0)), footR=foot(n0, 'footR', (0, 0.06, 0), pitch=22), tail=(20, 10), keys=dict(n0['keys'], brow_angry=1.0), jaw=14.0)
-        keys = [(0, n0), (11, wind, 'out'), (14, wind, 'lin'), (st, hit, 'in3'), (st + ac, hit, 'lin'), (st + ac + 12, merge(hit, pelvis=pel(n0, (0, 0.12, -0.08), (9, 14, 0))), 'out'), (N, n0, 'io')]
+        keys = [(0, n0), (11, wind, 'out'), (14, wind, 'lin'), (st, hit, 'in'), (st + ac, hit, 'lin'), (st + ac + 12, merge(hit, pelvis=pel(n0, (0, 0.12, -0.08), (9, 14, 0))), 'out'), (N, n0, 'io')]
         info = dict(startup=st, active=ac, recovery=N - st - ac, hand='R', note='右拳を頭上へ振りかぶり、体重を乗せて振り下ろす')
     return dict(frames=N, loop=False, fn=keyed(keys), info=info)
 

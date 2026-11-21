@@ -132,7 +132,7 @@ window.addEventListener('error', (e) => { $('err').textContent += e.message + '\
 
 // ---- ヘッドレス検証・キャプチャ用 API ----
 window.mamo = {
-  S, THREE, load, play, setTime, setCamera, draw, step,
+  S, THREE, load, play, setTime, setCamera, draw, step, cameraRef: () => camera,
   set(o) { Object.assign(S, o); applyDisplay(); if ('grid' in o) grid.visible = o.grid; if ('bg' in o) { scene.background = o.bg === null ? null : new THREE.Color(o.bg); } if ('shadow' in o) shadow.visible = o.shadow; },
   bones() { const out = {}; S.gltf.scene.updateMatrixWorld(true); S.skinned[0].skeleton.bones.forEach(b => { const v = new THREE.Vector3(); b.getWorldPosition(v); out[b.name] = [v.x, v.y, v.z]; }); return out; },
   clips() { return S.gltf.animations.map(c => ({ name: c.name, duration: c.duration, tracks: c.tracks.length })); },

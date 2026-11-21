@@ -26,6 +26,7 @@ def M4(R, t):
 EASE = {'lin': lambda u: u, 'io': lambda u: u * u * (3 - 2 * u), 'in': lambda u: u * u, 'out': lambda u: 1 - (1 - u) ** 2,
         'in3': lambda u: u ** 3, 'out3': lambda u: 1 - (1 - u) ** 3, 'hold': lambda u: 0.0 if u < 1 else 1.0}
 LIMBS = ('handL', 'handR', 'footL', 'footR')
+SETTLE = 8
 
 def merge(base, **over):
     """ポーズ辞書の上書き（1階層下まで）"""
@@ -56,7 +57,7 @@ class Animator:
     def __init__(self, arm, mesh_ob, spec, extra_bones):
         self.arm, self.ob, self.spec, self.M, self.J = arm, mesh_ob, spec, spec.M, spec.J
         self.R, self.par = rigmod.rest_data(arm); self.Ri = {k: np.linalg.inv(v) for k, v in self.R.items()}
-        self.chains = [(['tail_01', 'tail_02', 'tail_03'], 'pelvis', [dict(stiff=170, damp=13), dict(stiff=130, damp=11), dict(stiff=110, damp=10)])]
+        self.chains = [(['tail_01', 'tail_02', 'tail_03'], 'pelvis', [dict(stiff=170, damp=17), dict(stiff=130, damp=14), dict(stiff=110, damp=12)])]
         by = {}
         for name, h, t, par, dyn in extra_bones: by.setdefault(name.rsplit('_', 1)[0], []).append((name, par, dyn))
         for k, lst in by.items(): self.chains.append(([x[0] for x in lst], lst[0][1], [x[2] for x in lst]))
@@ -148,6 +149,9 @@ class Animator:
                             mx = math.radians(pr.get('max', 55)); cs = np.clip(((p - h) / lens[i]) @ ydir, -1, 1)
                             if math.acos(cs) > mx:            # 振れすぎを制限
                                 q = Quaternion(Vector(np.cross(ydir, p - h)), mx); p = h + np.array(q @ Vector(ydir)) * lens[i]
+                        if not loop and fi > len(seq) - 1 - SETTLE:      # 単発クリップは終端で揺れを収束させ、idle へつながる姿勢で終える
+                            u = (fi - (len(seq) - 1 - SETTLE)) / SETTLE; u = u * u * (3 - 2 * u)
+                            d = p + (tgt - p) * u - h; p = h + d / (np.linalg.norm(d) + 1e-9) * lens[i]; v = v * (1 - u)
                         newstate.append((p, v))
                         q = Vector(ydir).rotation_difference(Vector((p - h) / lens[i])); Ms = Mt.copy(); Ms[:3, :3] = np.array(q.to_matrix()) @ Mt[:3, :3]
                         if ps == passes - 1:

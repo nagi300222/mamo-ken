@@ -106,7 +106,7 @@ def shade(spec, field, pos, nrm, part):
     st = FW[:, 0] * vnoise(pos, (620, 620, 60), 5) + FW[:, 1] * vnoise(pos, (60, 620, 620), 5) + FW[:, 2] * vnoise(pos, (60, 620, 620), 5) + FW[:, 3] * vnoise(pos, (620, 60, 620), 5)
     st2 = FW[:, 0] * vnoise(pos, (260, 260, 26), 6) + (1 - FW[:, 0]) * vnoise(pos, 200, 6)
     k = np.clip(0.35 + tuft * 0.75, 0, 1) * (1 - bare)
-    f = 1 + k * (0.30 * (h1 - 0.45) + 0.16 * (h2 - 0.4) + P.strand * (0.20 * (st - 0.5) + 0.12 * (st2 - 0.5)))
+    f = 1 + k * (0.17 * (h1 - 0.45) + 0.13 * (h2 - 0.4) + P.strand * (0.26 * (st - 0.5) + 0.16 * (st2 - 0.5)))
     f = f * (1 + bare * 0.12 * (n2 - 0.5))
     col = col * f[:, None]
     # 鼻
@@ -114,6 +114,10 @@ def shade(spec, field, pos, nrm, part):
     # 口の線、目のふち
     for poly in spec.mouth:
         d = seg_dist(pos, poly); m = (1 - smoothstep(0.0012, 0.0030, d)) * 0.85; col = col * (1 - m[:, None]) + C['nose'] * 0.8 * m[:, None]
+    for pr in prims:                      # 怒り眉: 盛り上がりの下に濃い線を入れる
+        if pr.group == 'brow':
+            off = np.array([0, -0.004, -pr.p['ra'] * 0.95]); d = seg_dist(pos, np.array([pr.p['a'] + off, pr.p['b'] + off * 0.8]))
+            m = (1 - smoothstep(0.0022, 0.0048, d)) * 0.8; col = col * (1 - m[:, None]) + C['nose'] * m[:, None]
     for c in spec.eye_centers:
         d = np.linalg.norm(pos - c, axis=1); m = (1 - smoothstep(P.eye_r * 1.0, P.eye_r * 1.38, d)) * 0.45; col = col * (1 - m[:, None]) + C['nose'] * m[:, None]
     # 簡易AO（距離場から）

@@ -1,0 +1,22 @@
+{
+ "plays_in_realtime": true,
+ "character_select": true,
+ "clip_select": true,
+ "crossfade_blends": true,
+ "crossfade_weights_at_half": [
+  0.5,
+  0.4999999701976776
+ ],
+ "returns_to_idle_after_oneshot": true,
+ "pause": true,
+ "frame_step_is_1_60": true,
+ "slow": true,
+ "toggle_bones": true,
+ "toggle_wire": true,
+ "toggle_toon": true,
+ "toggle_root": true,
+ "facing_mirror": true,
+ "camera_switch": true,
+ "console_errors": [],
+ "all_pass": true
+}
