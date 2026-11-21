@@ -70,9 +70,11 @@ test('ギュイーンは双方が同じクリンチ状態になりHP無変化で
   g.fighters[0].x=-.3;g.fighters[1].x=.3;
   const hp=g.fighters.map(p=>p.hp);
   g.tick({gyuiin:true},{});
-  assert.ok(g.clinch);
-  assert.deepEqual(g.fighters.map(p=>p.state),['clinch','clinch']);
+  assert.equal(g.fighters[0].action?.kind,'clinch','先に超装甲で踏み込む');
   assert.equal(g.fighters[0].drive,DRIVE.initial-DRIVE.gyuiinCost);
+  for(let i=0;i<25&&!g.clinch;i++)g.tick({},{});
+  assert.ok(g.clinch,'間合い内で両者クリンチへ移行する');
+  assert.deepEqual(g.fighters.map(p=>p.state),['clinch','clinch']);
   for(let i=0;i<DRIVE.clinchFrames;i++)g.tick({},{});
   assert.equal(g.clinch,null);
   assert.deepEqual(g.fighters.map(p=>p.hp),hp);
