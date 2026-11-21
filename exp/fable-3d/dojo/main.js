@@ -185,20 +185,28 @@ function showSelection(){
   note('キャラクターを選んで対戦開始');setLoading('キャラ選択中');clearInput();
 }
 const pressedKeys=new Set(), pressedTouch=new Map();
+const lastDirectionTap={left:-999999,right:-999999};let dashPulse=0;
+function directionTap(k){
+  if(k!=='left'&&k!=='right')return;
+  const now=performance.now();
+  if(now-lastDirectionTap[k]<260)dashPulse=3;
+  lastDirectionTap[k]=now;
+}
 const keyMap={ArrowLeft:'left',ArrowRight:'right',ArrowUp:'up',ArrowDown:'down',KeyA:'left',KeyD:'right',KeyW:'up',KeyS:'down',KeyZ:'weak',KeyX:'strong',KeyV:'throw',KeyC:'dash',Digit1:'special1',Digit2:'special2',Digit3:'special3',KeyQ:'super'};
-function clearInput(){pressedKeys.clear();pressedTouch.clear();document.querySelectorAll('[data-control]').forEach(b=>b.classList.remove('held'));}
-document.addEventListener('keydown',e=>{const k=keyMap[e.code];if(!k)return;if(document.activeElement?.tagName==='SELECT')return;e.preventDefault();pressedKeys.add(k);});
+function clearInput(){pressedKeys.clear();pressedTouch.clear();dashPulse=0;document.querySelectorAll('[data-control]').forEach(b=>b.classList.remove('held'));}
+document.addEventListener('keydown',e=>{const k=keyMap[e.code];if(!k)return;if(document.activeElement?.tagName==='SELECT')return;e.preventDefault();if(!e.repeat)directionTap(k);pressedKeys.add(k);});
 document.addEventListener('keyup',e=>{const k=keyMap[e.code];if(k){e.preventDefault();pressedKeys.delete(k);}});
 window.addEventListener('blur',()=>{clearInput();paused=true;$('pause').textContent='再開';});
 document.querySelectorAll('[data-control]').forEach(button=>{
   const k=button.dataset.control;
-  button.addEventListener('pointerdown',e=>{e.preventDefault();button.setPointerCapture(e.pointerId);pressedTouch.set(e.pointerId,k);button.classList.add('held');});
+  button.addEventListener('pointerdown',e=>{e.preventDefault();directionTap(k);button.setPointerCapture(e.pointerId);pressedTouch.set(e.pointerId,k);button.classList.add('held');});
   const end=e=>{pressedTouch.delete(e.pointerId);if(![...pressedTouch.values()].includes(k))button.classList.remove('held');};
   button.addEventListener('pointerup',end);button.addEventListener('pointercancel',end);button.addEventListener('lostpointercapture',end);
   button.addEventListener('contextmenu',e=>e.preventDefault());
 });
 function input(){
   const o={};for(const k of pressedKeys)o[k]=true;for(const k of pressedTouch.values())o[k]=true;
+  if(dashPulse>0){o.dash=true;dashPulse--;}
   return o;
 }
 $('start').onclick=startMatch;$('select-back').onclick=showSelection;$('result-select').onclick=showSelection;$('rematch').onclick=startMatch;
