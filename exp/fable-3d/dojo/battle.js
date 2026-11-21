@@ -1,307 +1,348 @@
 import { FPS, ARENA, ROSTER, IDS, normalMove, specialMove, ultimateMove, tailTipAt } from './balance.js';
-// ロジックは Three.js / DOM / GLB に依存しない。論理60Hzの対戦用暫定エンジン。
-const KEYS=['left','right','up','down','weak','strong','special1','special2','special3','super','throw','dash'];
-const cap=(v,lo,hi)=>Math.max(lo,Math.min(hi,v));
-const own=(a,k)=>Object.prototype.hasOwnProperty.call(a,k);
+import { pushDirection, readCommand } from './commands.js';
+// 設計の正本はバランスデータ。GLB・Three.js・操作DOMには依存しない。
+const KEYS=['left','right','up','down','weak','strong','throw','roar','gyuiin','dash','special1','special2','special3','super'];
+const cap=(v,a,b)=>Math.max(a,Math.min(b,v));
 const inputOf=(raw={})=>Object.fromEntries(KEYS.map(k=>[k,!!raw[k]]));
-const frameLen=m=>m.startup+m.active+m.recovery;
-function createFighter(id,slot) {
-  if(!ROSTER[id]) throw Error('Unknown fighter: '+id);
-  const r=ROSTER[id];
-  return {id,slot,x:slot===0?-.72:.72,y:0,vy:0,facing:slot===0?1:-1,
-    hp:r.hp,guard:100,super:0,ability:{charge:0,lastCharge:'',iron:0,armor:3,chase:0,pressure:0,just:0,dark:0,grit:true},
-    state:'idle',frame:0,stun:0,stop:0,action:null,used:false,spawned:false,
-    poison:0,poisonTick:0,prev:inputOf({}), input:inputOf({}), strikes:0,ko:false,
-    impact:0, guardF:0, attackSerial:0, locomotion:0, lastHit:'', dashF:0, dashDir:0
+const total=m=>m.startup+m.active+m.recovery;
+const active=p=>!!p.action&&p.frame>=p.action.startup&&p.frame<p.action.startup+p.action.active;
+const facingBack=p=>p.facing===1?'left':'right';
+const moveX=(p,dx)=>p.x=cap(p.x+dx,ARENA.minX,ARENA.maxX);
+const ROAR=Object.freeze({name:'咆哮',kind:'roar',startup:16,active:7,recovery:27,damage:105,reach:.66,level:'mid',anim:'roar'});
+const GYUIIN=Object.freeze({name:'ギュイーン',kind:'clinch',startup:11,active:6,recovery:31,damage:42,reach:.31,travel:.17,level:'grab',anim:'gyuiin'});
+const GRAB=Object.freeze({name:'掴み',kind:'throw',startup:6,active:3,recovery:25,damage:78,reach:.31,level:'grab',anim:'grab'});
+export const UNIVERSAL_ACTIONS=Object.freeze({roar:ROAR,gyuiin:GYUIIN,grab:GRAB});
+function fighter(id,slot){
+  const r=ROSTER[id];if(!r)throw Error('unknown fighter '+id);
+  return {id,slot,x:slot===0?-.70:.70,y:0,vy:0,facing:slot===0?1:-1,
+    hp:r.hp,guard:100,super:0,state:'idle',frame:0,stun:0,stop:0,
+    action:null,used:false,spawned:false,ko:false,prev:inputOf({}),input:inputOf({}),
+    dirHistory:[],dashF:0,dashDir:0,roarCooldown:0,gyuiinCooldown:0,guardF:0,
+    ability:{charge:0,lastCharge:'',iron:0,armor:3,chase:0,pressure:0,just:0,dark:0,grit:true},
+    poison:0,poisonTick:0,attackSerial:0,locomotion:0
   };
 }
-const active=(p)=>p.action && p.frame>=p.action.startup && p.frame<p.action.startup+p.action.active;
-const isAttack=(p)=>p.action!==null;
-const facingAway=(p,key)=>p.facing===1?key.left:key.right;
-const advanceX=(p,dx)=>p.x=cap(p.x+dx,ARENA.minX,ARENA.maxX);
-function aiInput(g,p,op,level) {
-  const d=Math.abs(p.x-op.x), t=g.frame, out={};
-  const w=(op.x>p.x?'right':'left'),back=(op.x>p.x?'left':'right');
-  const busy=p.action||p.stun||p.stop;
-  if(op.action && d<.86 && p.y===0 && (t+level*5)%17<12) {
-    out[back]=true; if(op.action.level==='low')out.down=true; return out;
+function aiInput(g,p,op,level){
+  const t=g.frame,d=Math.abs(p.x-op.x),face=op.x>p.x?'right':'left',back=op.x>p.x?'left':'right',i={};
+  if(p.stun||p.stop)return i;
+  if(op.action&&d<.75&&p.y===0&&((t+level*7)%19)<11){
+    i[back]=true;if(op.action.level==='low')i.down=true;
+    if(op.action.kind==='roar'&&t%5===0&&level>=2)i.roar=true;
+    return i;
   }
-  if(p.y===0 && !busy && d>.64) {
-    out[w]=true;
-    if((t%170)===15 && level>=2) out.special2=true;
-    if((t%135)===13 && level===3) out.dash=true;
-    return out;
+  if(!p.action&&d>.60){
+    i[face]=true;if(t%146===12&&level>1)i.special1=true;
+    if(t%180===18&&level>1)i.dash=true;return i;
   }
-  if(p.y===0 && !busy) {
-    if(d>.4 && t%100===17) out.special1=true;
-    else if(d<.35 && t%83===18) out.throw=true;
-    else if(t%44===8)out.weak=true;
-    else if(t%71===28)out.strong=true;
-    else if(t%143===22)out.special3=true;
-    else if(p.super>=100 && t%220===5)out.super=true;
-    if(t%180===80)out.up=true;
+  if(!p.action){
+    if(d<.34&&t%109===12)i.throw=true;
+    else if(t%49===9)i.weak=true;
+    else if(t%83===24)i.strong=true;
+    else if(t%160===38)i.special2=true;
+    else if(t%185===42)i.special3=true;
+    if(d<.55&&level>=2&&t%311===20)i.gyuiin=true;
+    if(d<.75&&level>=2&&t%260===58)i.roar=true;
+    if(p.super>=100&&t%235===17)i.super=true;
+    if(t%195===82)i.up=true;
   }
-  return out;
+  return i;
 }
-function resetTimers(p) {
-  if(p.ability.chase>0)p.ability.chase--;
-  if(p.ability.pressure>0)p.ability.pressure--;
-  if(p.ability.just>0)p.ability.just--;
-  if(p.ability.dark>0)p.ability.dark--;
-  if(p.poison>0) {
-    p.poison--;
-    p.poisonTick++;
+function timer(p){
+  for(const k of ['chase','pressure','just','dark'])p.ability[k]=Math.max(0,p.ability[k]-1);
+  for(const k of ['roarCooldown','gyuiinCooldown'])p[k]=Math.max(0,p[k]-1);
+  if(p.poison>0){
+    p.poison--;p.poisonTick++;
     if(p.poisonTick>=30){p.poisonTick=0;p.hp=Math.max(0,p.hp-4);}
-  } else p.poisonTick=0;
+  }else p.poisonTick=0;
+  p.guard=cap(p.guard+(p.stun? .006:.025),0,100);
 }
 export class Battle {
-  constructor(left='moguzo',right='godan',level=2) {
+  constructor(left='moguzo',right='godan',level=2){
     this.frame=0;this.time=FPS*ARENA.roundSeconds;this.level=cap(Number(level)||2,1,3);
-    this.fighters=[createFighter(left,0),createFighter(right,1)];
-    this.projectiles=[];this.events=[];this.winner=null;this.phase='fight';this.seq=0;
+    this.fighters=[fighter(left,0),fighter(right,1)];
+    this.projectiles=[];this.events=[];this.pending=[];this.winner=null;this.phase='fight';this.seq=0;
     this.tailTipSamples=null;
   }
-  again(){const next=new Battle(this.fighters[0].id,this.fighters[1].id,this.level);next.tailTipSamples=this.tailTipSamples;return next;}
+  again(){
+    const n=new Battle(this.fighters[0].id,this.fighters[1].id,this.level);
+    n.tailTipSamples=this.tailTipSamples;return n;
+  }
   setTailTipPath(path){
     if(!Array.isArray(path)||path.length<2)throw Error('missing tail tip path');
-    let prior=-Infinity;
-    this.tailTipSamples=path.map(row=>{
-      if(!Array.isArray(row)||row.length<2||!Number.isFinite(row[0])||!Number.isFinite(row[1])||row[0]<=prior)throw Error('invalid tail path');
-      prior=row[0];return [row[0],row[1]];
-    });
-    return this;
+    let last=-Infinity;
+    this.tailTipSamples=path.map(r=>{
+      if(!Array.isArray(r)||r.length<2||!Number.isFinite(r[0])||!Number.isFinite(r[1])||r[0]<=last)throw Error('bad tail path');
+      last=r[0];return [r[0],r[1]];
+    });return this;
   }
   _tailAt(frame){
-    const a=this.tailTipSamples;
-    if(!a)return tailTipAt(frame);
+    const a=this.tailTipSamples;if(!a)return tailTipAt(frame);
     if(frame<=a[0][0])return a[0][1];
     for(let i=1;i<a.length;i++)if(frame<=a[i][0]){
-      const [f0,x0]=a[i-1],[f1,x1]=a[i];return x0+(x1-x0)*(frame-f0)/(f1-f0);
-    }
-    return a[a.length-1][1];
+      const [f0,x0]=a[i-1],[f1,x1]=a[i];
+      return x0+(x1-x0)*(frame-f0)/(f1-f0);
+    }return a.at(-1)[1];
   }
-  _begin(p,m,id) {
-    if(p.stun||p.stop||p.ko||p.y>0&&m.kind==='throw')return false;
-    if(m.isSuper && p.super<100) return false;
-    if(p.action && !(p.id==='dark_moguzo'&&p.ability.dark>0&&!m.isSuper&&id!==p.action.id)) return false;
-    if(p.action && id===p.action.id) return false;
+  _begin(p,m,id){
+    if(p.ko||p.stun||p.stop||(p.y>.06&&['throw','clinch','roar','projectile'].includes(m.kind)))return false;
+    if(m.isSuper&&p.super<100)return false;
+    if(m.kind==='roar'&&p.roarCooldown>0||m.kind==='clinch'&&p.gyuiinCooldown>0)return false;
+    // 技から別技へのキャンセルは暗連に限る。
+    if(p.action&&!(p.id==='dark_moguzo'&&p.ability.dark>0&&id!==p.action.id&&!m.isSuper))return false;
+    if(p.action&&p.action.id===id)return false;
     if(m.isSuper)p.super=0;
-    if(p.id==='godan'&&m.armor){
-      if(p.ability.armor<=0)return false;
-      p.ability.armor--;
-    }
-    if(p.id==='hakuma'&&p.ability.iron && (id.startsWith('s')||m.isSuper)) {
+    if(m.kind==='roar')p.roarCooldown=96;
+    if(m.kind==='clinch')p.gyuiinCooldown=135;
+    if(p.id==='godan'&&m.armor){if(p.ability.armor<1)return false;p.ability.armor--;}
+    if(p.id==='hakuma'&&p.ability.iron&&(id.startsWith('s')||m.isSuper)){
       m={...m,damage:Math.round(m.damage*1.23)};p.ability.iron=0;
     }
     if(p.id==='bullet'&&p.ability.charge>0&&(m.kind==='tail'||m.isSuper)){
-      m={...m,damage:Math.round(m.damage*(1+.08*p.ability.charge))};
-      p.ability.charge=0;
+      m={...m,damage:Math.round(m.damage*(1+.08*p.ability.charge))};p.ability.charge=0;
     }
-    if(p.id==='takimaru'&&m.kind==='throw'&&p.ability.pressure>0) {
+    if(p.id==='takimaru'&&(m.kind==='throw'||m.kind==='clinch')&&p.ability.pressure>0){
       m={...m,damage:Math.round(m.damage*1.2)};p.ability.pressure=0;
     }
-    if(p.id==='yomikage'&&p.ability.just>0 && m.kind==='counter') {
+    if(p.id==='yomikage'&&p.ability.just>0&&m.kind==='counter'){
       m={...m,startup:Math.max(3,m.startup-2),damage:Math.round(m.damage*1.15)};p.ability.just=0;
     }
-    p.action={...m,id,serial:++this.seq};p.state='attack';p.frame=0;p.used=false;p.spawned=false;p.strikes=0;
-    p.ability.dark=0;p.attackSerial++;
-    this.events.push({type:'move',slot:p.slot,name:m.name});
+    p.action={...m,id,serial:++this.seq,started:this.frame};
+    p.state=m.kind==='roar'?'roar':m.kind==='clinch'?'gyuiin':'attack';
+    p.frame=0;p.used=false;p.spawned=false;p.attackSerial++;
+    if(p.id==='dark_moguzo')p.ability.dark=0;
+    this.events.push({type:'move',slot:p.slot,name:m.name,action:id});
     return true;
   }
-  _input(p,other,raw) {
-    const n=inputOf(raw), edges={};
+  _input(p,other,raw){
+    const n=inputOf(raw),edges={};
     for(const k of KEYS)edges[k]=n[k]&&!p.prev[k];
-    p.prev=n;p.input=n;
-    // 斜めを含む移動と操作入力のエッジを分ける。
-    if(p.stop||p.ko)return;
-    if(p.stun>0)return;
+    p.prev=n;p.input=n;p.dirHistory=pushDirection(p.dirHistory,n,this.frame,p.facing);
+    if(p.stop||p.ko||p.stun)return;
+    // 組み合いと咆哮は技からの割り込み不可。咆哮返しは入力時の先読みで成立する。
     if(p.action){
       if(p.id==='pisuke'&&p.ability.chase>0&&edges.dash){
-        p.action=null;p.frame=0;p.ability.chase=0;
-        advanceX(p,p.facing*ROSTER[p.id].dash);
+        p.action=null;p.frame=0;p.ability.chase=0;moveX(p,p.facing*ROSTER[p.id].dash);
         this.events.push({type:'chase',slot:p.slot});
-      } else if(p.id==='dark_moguzo'&&p.ability.dark>0&&(edges.weak||edges.strong)) {
-        const id=edges.weak?'stand_weak':'stand_heavy';
-        this._begin(p,normalMove(p.id,id),id);
+      } else if(p.id==='dark_moguzo'&&p.ability.dark>0&&(edges.weak||edges.strong)){
+        const id=edges.weak?'stand_weak':'stand_heavy';this._begin(p,normalMove(p.id,id),id);
       }
       return;
     }
-    if(p.dashF>0){advanceX(p,p.dashDir*ROSTER[p.id].dash/18);p.dashF--;p.state='dash';p.frame++;return;}
+    if(p.dashF>0){moveX(p,p.dashDir*ROSTER[p.id].dash/18);p.dashF--;p.state='dash';p.frame++;return;}
+    if(edges.roar){this._begin(p,ROAR,'roar');return;}
+    if(edges.gyuiin){this._begin(p,GYUIIN,'gyuiin');return;}
+    if(edges.throw){this._begin(p,GRAB,'throw');return;}
+    // CPUは内部アクションIDで選ぶ。プレイヤーには必殺ボタンを表示しない。
     if(edges.super){this._begin(p,ultimateMove(p.id),'ultimate');return;}
-    for(let i=1;i<=3;i++)if(edges['special'+i]){this._begin(p,specialMove(p.id,i-1),'s'+i);return;}
-    if(edges.throw){this._begin(p,{name:'投げ',kind:'throw',startup:6,active:3,recovery:24,damage:76,reach:.32,level:'grab',anim:'sp_bear_grab'},'throw');return;}
+    for(let i=1;i<=3;i++)if(edges['special'+i]){
+      this._begin(p,specialMove(p.id,i-1),'s'+i);return;
+    }
     if(edges.weak||edges.strong){
-      const s=p.y>.02?'air_':n.down?'crouch_':'stand_';
-      const id=s+(edges.strong?'heavy':'weak');
+      const button=edges.strong?'strong':'weak';
+      const cmd=readCommand(p.dirHistory,button,this.frame,p.super>=100);
+      if(cmd){
+        const m=cmd==='super'?ultimateMove(p.id):specialMove(p.id,{qcf:0,dp:1,qcb:2}[cmd]);
+        const id=cmd==='super'?'ultimate':'s'+({qcf:1,dp:2,qcb:3}[cmd]);
+        if(this._begin(p,m,id)){this.events.push({type:'command',slot:p.slot,command:cmd});return;}
+      }
+      const stance=p.y>.02?'air_':n.down?'crouch_':'stand_';
+      const id=stance+(button==='strong'?'heavy':'weak');
       this._begin(p,normalMove(p.id,id),id);return;
     }
-    if(edges.dash && p.y===0){
-      const dir=n.left?-1:n.right?1:p.facing;
-      p.dashDir=dir;p.dashF=17;advanceX(p,dir*ROSTER[p.id].dash/18);
+    if(edges.dash&&p.y===0){
+      p.dashDir=n.left?-1:n.right?1:p.facing;p.dashF=17;
+      moveX(p,p.dashDir*ROSTER[p.id].dash/18);
       p.state='dash';p.frame=0;p.locomotion++;return;
     }
-    if(edges.up && p.y===0 && !n.down){
-      p.vy=ROSTER[p.id].jump;p.y=.005;p.state='jump';p.frame=0;p.locomotion++;return;
+    if(edges.up&&p.y===0&&!n.down){
+      p.vy=ROSTER[p.id].jump;p.y=.006;p.state='jump';p.frame=0;p.locomotion++;return;
     }
-    const toward=n.right?1:n.left?-1:0;
-    if(toward!==0&&!n.down){
-      const r=ROSTER[p.id],backward=toward!==p.facing;
-      advanceX(p,toward*(backward?r.back:r.walk));
-      p.state=backward?'walk_b':'walk_f';
-    } else p.state=n.down&&p.y===0?'crouch':p.y>0?'jump':'idle';
+    const dir=n.right?1:n.left?-1:0;
+    if(dir&&!n.down){
+      const rr=ROSTER[p.id],back=dir!==p.facing;
+      moveX(p,dir*(p.y>0?rr.walk*1.35:back?rr.back:rr.walk));
+      p.state=p.y>0?'jump':back?'walk_b':'walk_f';
+    }else p.state=p.y>0?'jump':n.down?'crouch':'idle';
   }
-  _guarding(target,attacker,level,isGrab=false) {
-    if(isGrab || target.y>.07 || target.action || target.stun>0)return false;
-    const back=facingAway(target,target.input);
-    return back && (level==='low'?target.input.down:level!=='overhead'||!target.input.down);
+  _guarding(t,m){
+    if(['throw','clinch'].includes(m.kind)||t.y>.07||t.action||t.stun)return false;
+    const back=t.input[facingBack(t)];
+    return back&&(m.level==='low'?t.input.down:m.level!=='overhead'||!t.input.down);
   }
-  _damage(attacker,target,m,distance,source='strike',force=false) {
-    if(target.ko||(this.phase!=='fight'&&!force))return;
-    const guard=this._guarding(target,attacker,m.level||'mid',m.kind==='throw');
+  _absorbing(t,m){
+    if(!t.action)return null;
+    const c=t.action.kind;
+    if(c==='roar'&&t.frame>=3&&t.frame<=t.action.startup+t.action.active){
+      if(m.kind!=='roar'&&m.kind!=='throw'&&m.kind!=='clinch')return 'roar';
+    }
+    if(c==='clinch'&&t.frame>=2&&t.frame<=t.action.startup+t.action.active){
+      if(m.kind!=='roar'&&m.kind!=='throw'&&m.kind!=='clinch')return 'clinch';
+    }
+    if(t.id==='godan'&&t.action.armor&&t.frame>=4&&m.kind!=='throw'&&m.kind!=='clinch')return 'godan';
+    return null;
+  }
+  _damage(a,t,m,_distance=0,source='strike',force=false){
+    if(t.ko||(this.phase!=='fight'&&!force))return;
+    if(m.kind==='roar'&&t.action?.kind==='roar'){
+      const later=t.action.started>a.action?.started;
+      const same=t.action.started===a.action?.started;
+      if(later||same){
+        a.action=null;a.stun=same?12:27;a.state='hit';a.frame=0;a.stop=7;
+        if(same){t.action=null;t.stun=12;t.state='hit';t.frame=0;t.stop=7;}
+        this.events.push({type:same?'roar_clash':'roar_counter',slot:t.slot,x:t.x,y:t.y+.35});
+        return;
+      }
+    }
+    const guard=this._guarding(t,m);
     let dmg=m.damage;
-    if(attacker.id==='moguzo'&&attacker.hp<=ROSTER.moguzo.hp*.3)dmg=Math.round(dmg*1.12);
-    if(attacker.id==='yomikage'&&attacker.ability.just>0)dmg=Math.round(dmg*1.08);
-    if(attacker.id==='dark_moguzo'&&attacker.hp<ROSTER.dark_moguzo.hp*.35)dmg=Math.round(dmg*1.1);
+    if(a.id==='moguzo'&&a.hp<=ROSTER.moguzo.hp*.30)dmg=Math.round(dmg*1.12);
+    if(a.id==='dark_moguzo'&&a.hp<=ROSTER.dark_moguzo.hp*.35)dmg=Math.round(dmg*1.10);
     if(guard){
-      target.dashF=0;
-      target.guard=cap(target.guard-Math.max(5,dmg*.16),0,100);
-      target.stun=target.guard<=0?20:Math.max(7,Math.round(m.damage*.08));
-      target.state='block';target.frame=0;
-      target.ability.iron=target.id==='hakuma'?1:target.ability.iron;
-      if(target.id==='yomikage'&&target.guardF<=7)target.ability.just=42;
-      if(attacker.id==='takimaru')attacker.ability.pressure=36;
-      this.events.push({type:'block',slot:target.slot,x:target.x,y:target.y+.33,damage:0});
-    } else {
-      target.dashF=0;
-      if(target.id==='yomikage'&&target.action?.kind==='counter'&&active(target)){
-        attacker.stun=15;attacker.hp=Math.max(0,attacker.hp-88);target.action=null;target.state='idle';
-        this.events.push({type:'counter',slot:target.slot,x:target.x,y:target.y+.34});return;
+      t.dashF=0;t.guard=cap(t.guard-Math.max(5,dmg*(m.kind==='roar'?.37:.16)),0,100);
+      t.stun=t.guard<=0?26:Math.max(8,Math.round(dmg*(m.kind==='roar'?.17:.08)));
+      t.state='block';t.frame=0;t.ability.iron=t.id==='hakuma'?1:t.ability.iron;
+      if(t.id==='yomikage'&&t.guardF<=7)t.ability.just=42;
+      if(a.id==='takimaru')a.ability.pressure=36;
+      this.events.push({type:'block',slot:t.slot,x:t.x,y:t.y+.35,damage:0});
+    }else{
+      const absorb=this._absorbing(t,m);
+      if(absorb==='roar'){
+        a.stop=Math.max(a.stop,4);
+        this.events.push({type:'roar_absorb',slot:t.slot,x:t.x,y:t.y+.38});return;
       }
-      if(target.id==='godan'&&target.action?.armor && target.frame>=4 && target.ability.armor>=0 && m.kind!=='throw'){
-        dmg=Math.round(dmg*.55);this.events.push({type:'armor',slot:target.slot});
-      }else{
-        target.stun=Math.max(12,Math.round(m.damage*.16));target.action=null;target.state='hit';target.frame=0;
+      if(t.id==='yomikage'&&t.action?.kind==='counter'&&active(t)&&m.kind!=='roar'&&m.kind!=='clinch'){
+        a.stun=16;a.hp=Math.max(0,a.hp-88);t.action=null;t.state='idle';
+        this.events.push({type:'counter',slot:t.slot,x:t.x,y:t.y+.34});return;
       }
-      target.hp=Math.max(0,target.hp-dmg);target.guard=cap(target.guard+2,0,100);
-      target.ability.iron=0;
-      if(target.id==='moguzo'&&target.hp===0&&target.ability.grit){
-        target.hp=1;target.ability.grit=false;this.events.push({type:'grit',slot:target.slot});
+      if(absorb==='clinch'){dmg=Math.max(1,Math.round(dmg*.4));this.events.push({type:'gyuiin_armor',slot:t.slot});}
+      else if(absorb==='godan'){dmg=Math.round(dmg*.55);this.events.push({type:'armor',slot:t.slot});}
+      else{
+        t.stun=m.kind==='clinch'?36:Math.max(12,Math.round(m.damage*.16));
+        t.action=null;t.dashF=0;t.state='hit';t.frame=0;
       }
-      if(attacker.id==='pisuke'&&m.id?.includes('stand_')||attacker.id==='pisuke'&&m.id?.includes('crouch_'))attacker.ability.chase=15;
-      if(attacker.id==='chirka' && m.poison) {target.poison=180;target.poisonTick=0;}
-      if(attacker.id==='takimaru')attacker.ability.pressure=30;
-      if(attacker.id==='bullet' && (m.id!==attacker.ability.lastCharge)) {
-        attacker.ability.charge=Math.min(3,attacker.ability.charge+1);attacker.ability.lastCharge=m.id;
-      }
-      if(attacker.id==='dark_moguzo'&&source==='strike'&&!m.isSuper)attacker.ability.dark=18;
-      this.events.push({type:'hit',slot:target.slot,x:target.x,y:target.y+.32,damage:dmg});
+      t.hp=Math.max(0,t.hp-dmg);t.guard=cap(t.guard+2,0,100);t.ability.iron=0;
+      if(t.id==='moguzo'&&t.hp===0&&t.ability.grit){t.hp=1;t.ability.grit=false;this.events.push({type:'grit',slot:t.slot});}
+      if(a.id==='pisuke'&&/^(stand|crouch)_/.test(m.id||''))a.ability.chase=15;
+      if(a.id==='chirka'&&m.poison){t.poison=180;t.poisonTick=0;}
+      if(a.id==='takimaru')a.ability.pressure=30;
+      if(a.id==='bullet'&&m.id!==a.ability.lastCharge){a.ability.charge=Math.min(3,a.ability.charge+1);a.ability.lastCharge=m.id;}
+      if(a.id==='dark_moguzo'&&source==='strike'&&!m.isSuper)a.ability.dark=18;
+      this.events.push({type:m.kind==='clinch'?'gyuiin_hit':'hit',slot:t.slot,x:t.x,y:t.y+.32,damage:dmg});
+      if(m.kind==='clinch'){a.stop=Math.max(a.stop,15);t.stop=Math.max(t.stop,15);}
+      if(m.kind==='roar'){t.stun=Math.max(t.stun,23);this.events.push({type:'roar_hit',slot:a.slot,x:t.x,y:t.y+.35});}
     }
-    attacker.super=cap(attacker.super+(guard?5:Math.round(dmg*.19)),0,100);
-    target.super=cap(target.super+(guard?5:Math.round(dmg*.09)),0,100);
-    attacker.stop=Math.max(attacker.stop,guard?3:6);
-    target.stop=Math.max(target.stop,guard?3:6);
-    advanceX(target,attacker.facing*(guard?.038:.082));
-    if(target.hp<=0){target.ko=true;target.state='ko';this.phase='ko';this.winner=attacker.slot;this.events.push({type:'ko',slot:attacker.slot});}
+    a.super=cap(a.super+(guard?5:Math.round(dmg*.19)),0,100);
+    t.super=cap(t.super+(guard?5:Math.round(dmg*.09)),0,100);
+    a.stop=Math.max(a.stop,guard?3:6);
+    t.stop=Math.max(t.stop,guard?3:6);
+    moveX(t,a.facing*(guard?.05:m.kind==='roar'?.16:.085));
+    if(t.hp<=0){t.ko=true;t.state='ko';this.phase='ko';this.winner=a.slot;this.events.push({type:'ko',slot:a.slot});}
   }
-  _contact(attacker,target,m) {
-    const dist=Math.abs(target.x-attacker.x);
-    if(target.y>.55&&m.kind!=='anti'&&attacker.y<.1)return false;
-    if(m.kind==='throw')return target.y<.07&&attacker.y<.07&&dist<=m.reach+.12;
-    if(m.kind==='tail') {
-      const tip=this._tailAt(attacker.frame);
-      return dist>=m.minReach && tip>=0 && dist<=tip+.16 && Math.abs(target.y-attacker.y)<.42;
+  _contact(a,t,m){
+    const dist=Math.abs(t.x-a.x);
+    if(m.kind==='clinch'||m.kind==='throw')return a.y<.09&&t.y<.10&&dist<m.reach+.12;
+    if(m.kind==='tail'){
+      const tip=this._tailAt(a.frame);
+      return dist>=m.minReach&&tip>0&&dist<=tip+.16&&Math.abs(t.y-a.y)<.43;
     }
-    const reach=m.reach||.5;
-    if(m.kind==='anti')return dist<reach+.16 && target.y<=.75;
-    if(attacker.y>.03&&target.y<.1&&attacker.y>.55)return false;
-    return dist<=reach+.16 && Math.abs(attacker.y-target.y)<.40;
+    if(m.kind==='anti')return dist<(m.reach||.4)+.16&&t.y<1.5;
+    if(a.y<.12&&t.y>.50)return false;
+    if(a.y>.28&&t.y<.1&&a.y>.7)return false;
+    return dist<=(m.reach||.5)+.16&&Math.abs(a.y-t.y)<.58;
   }
-  _act(p,other) {
-    if(!p.action)return;
-    const m=p.action;p.frame++;
-    if(m.travel && p.frame<=m.startup+m.active)
-      advanceX(p,p.facing*m.travel/(m.startup+m.active));
-    if(m.kind==='projectile' && !p.spawned && p.frame===m.startup) {
-      p.spawned=true;
-      this.projectiles.push({id:++this.seq,owner:p.slot,x:p.x+p.facing*.30,y:p.y+.30,
-        face:p.facing, speed:m.speed||.045, life:m.life||75,
-        damage:m.damage,poison:m.poison||0,effect:m.effect||'earth',level:m.level||'mid'});
+  _act(p,op){
+    const m=p.action;if(!m)return;
+    p.frame++;
+    if(m.travel&&p.frame<=m.startup+m.active)moveX(p,p.facing*m.travel/(m.startup+m.active));
+    if(m.kind==='projectile'&&!p.spawned&&p.frame===m.startup){
+      p.spawned=true;this.projectiles.push({id:++this.seq,owner:p.slot,x:p.x+p.facing*.30,y:p.y+.30,
+        face:p.facing,speed:m.speed||.045,life:m.life||75,damage:m.damage,poison:m.poison||0,
+        effect:m.effect||'earth',level:m.level||'mid'});
       this.events.push({type:'projectile',slot:p.slot});
     }
-    if(active(p)&&!p.used&&m.kind!=='projectile'){
-      if(this._contact(p,other,m)) {
-        p.used=true;
-        this.pending.push({p,other,m,dist:Math.abs(p.x-other.x)});
-      }
+    if(active(p)&&!p.used&&m.kind!=='projectile'&&this._contact(p,op,m)){
+      p.used=true;this.pending.push({p,op,m,d:Math.abs(p.x-op.x)});
     }
-    if(p.frame>=frameLen(m)) {
-      p.action=null;p.frame=0;
-      if(p.stun===0)p.state=p.y>.01?'jump':'idle';
-    }
+    if(p.frame>=total(m)){p.action=null;p.frame=0;p.state=p.y>.02?'jump':'idle';}
   }
-  _projectiles() {
-    for(const b of this.projectiles) {
+  _roarErase(p,b){
+    if(p.action?.kind!=='roar')return false;
+    if(p.frame<3||p.frame>p.action.startup+p.action.active)return false;
+    return b.owner!==p.slot && (b.x-p.x)*p.facing>=-.12 && (b.x-p.x)*p.facing<.86 && Math.abs((b.y-.30)-p.y)<.65;
+  }
+  _projectiles(){
+    for(const b of this.projectiles){
       b.x+=b.speed*b.face;b.life--;
       if(b.life<=0||Math.abs(b.x)>ARENA.maxX+.3)continue;
-      const target=this.fighters[1-b.owner],owner=this.fighters[b.owner];
-      if(!target.ko&&Math.abs(b.x-target.x)<.22 && Math.abs(target.y-(b.y-.3))<.47){
-        b.life=0;this._damage(owner,target,{kind:'projectile',id:'projectile',name:'弾',damage:b.damage,level:b.level,poison:b.poison},Math.abs(b.x-target.x),'projectile');
+      for(const t of this.fighters)if(this._roarErase(t,b)){
+        b.life=0;this.events.push({type:'roar_erase',slot:t.slot,x:b.x,y:b.y});break;
+      }
+      if(b.life<=0)continue;
+      const t=this.fighters[1-b.owner],a=this.fighters[b.owner];
+      if(!t.ko&&Math.abs(b.x-t.x)<.23&&Math.abs(t.y-(b.y-.3))<.50){
+        b.life=0;this._damage(a,t,{name:'飛び道具',id:'projectile',kind:'projectile',damage:b.damage,level:b.level,poison:b.poison},Math.abs(b.x-t.x),'projectile');
       }
     }
-    for(let i=0;i<this.projectiles.length;i++)for(let j=i+1;j<this.projectiles.length;j++) {
+    for(let i=0;i<this.projectiles.length;i++)for(let j=i+1;j<this.projectiles.length;j++){
       const a=this.projectiles[i],b=this.projectiles[j];
-      if(a.life>0&&b.life>0&&a.owner!==b.owner&&Math.abs(a.x-b.x)<.15) {
+      if(a.life>0&&b.life>0&&a.owner!==b.owner&&Math.abs(a.x-b.x)<.14){
         a.life=0;b.life=0;this.events.push({type:'clash',x:(a.x+b.x)/2,y:.3});
       }
     }
     this.projectiles=this.projectiles.filter(p=>p.life>0);
   }
-  _gravity(p) {
+  _gravity(p){
     if(p.y>0||p.vy>0){
       p.vy-=ARENA.gravity;p.y=Math.max(0,p.y+p.vy);
-      if(p.y===0){p.vy=0;if(!p.action&&p.stun===0)p.state='idle';}
+      if(p.y===0){p.vy=0;if(!p.action&&!p.stun)p.state='idle';}
     }
   }
-  tick(raw1={},raw2=null) {
+  tick(raw1={},raw2=null){
     if(this.phase!=='fight')return this;
-    this.frame++;this.time--;this.events=[];this.pending=[];
+    this.frame++;this.time--;this.pending=[];this.events=[];
     const [a,b]=this.fighters;
     if(this.time<=0){
-      this.phase='ko';this.winner=a.hp/ROSTER[a.id].hp===b.hp/ROSTER[b.id].hp?-1:
-        a.hp/ROSTER[a.id].hp>b.hp/ROSTER[b.id].hp?0:1;this.events.push({type:'timeout'});return this;
+      this.phase='ko';const q=a.hp/ROSTER[a.id].hp-b.hp/ROSTER[b.id].hp;
+      this.winner=Math.abs(q)<1e-9?-1:q>0?0:1;this.events.push({type:'timeout'});return this;
     }
-    for(const p of this.fighters){resetTimers(p);p.guard=cap(p.guard+(p.stun===0?.023:.005),0,100);}
-    if(a.hp<=0||b.hp<=0){this.phase='ko';this.winner=a.hp>0?0:1;return this;}
-    // 攻撃中・やられ中は向きを固定。待機・移動中だけ向きを更新。
-    for(let i=0;i<2;i++){const p=this.fighters[i],op=this.fighters[1-i];if(!p.action&&!p.stun)p.facing=op.x>=p.x?1:-1;}
-    const inputs=[inputOf(raw1),inputOf(raw2??aiInput(this,b,a,this.level))];
+    for(const p of this.fighters)timer(p);
+    if(a.hp<=0||b.hp<=0){this.phase='ko';this.winner=a.hp>0?0:b.hp>0?1:-1;return this;}
+    for(const [p,op] of [[a,b],[b,a]])if(!p.action&&!p.stun)p.facing=op.x>=p.x?1:-1;
+    const raw=[inputOf(raw1),inputOf(raw2??aiInput(this,b,a,this.level))];
     for(let i=0;i<2;i++){
       const p=this.fighters[i],op=this.fighters[1-i];
-      if(p.stop>0){p.stop--;p.prev=inputs[i];p.input=inputs[i];continue;}
-      if(p.stun>0){p.stun--;p.prev=inputs[i];p.input=inputs[i];if(!p.stun&&!p.action)p.state=p.y>0?'jump':'idle';p.frame++;continue;}
-      this._input(p,op,inputs[i]);
-      if(p.input[facingAway(p,p.input)?(p.facing===1?'left':'right'):'__none'])p.guardF++;else p.guardF=0;
-      this._act(p,op);
-      this._gravity(p);
-      if(this.phase!=='fight')break;
+      if(p.stop>0){p.stop--;p.input=raw[i];p.prev=raw[i];continue;}
+      if(p.stun>0){
+        p.stun--;p.input=raw[i];p.prev=raw[i];p.frame++;
+        if(!p.stun&&!p.action)p.state=p.y>0?'jump':'idle';
+        this._gravity(p);continue;
+      }
+      this._input(p,op,raw[i]);
+      p.guardF=p.input[facingBack(p)]?p.guardF+1:0;
+      this._act(p,op);this._gravity(p);
     }
-    // 同一フレームの攻撃を先に収集してから両者へ適用。行動更新順による先行KOを防ぐ。
-    for(const hit of this.pending)this._damage(hit.p,hit.other,hit.m,hit.dist,'strike',true);
-    if(this.fighters[0].hp<=0&&this.fighters[1].hp<=0){this.phase='ko';this.winner=-1;}
-    if(this.phase==='fight') {
-      const dist=b.x-a.x, overlap=2*ARENA.pushRadius-Math.abs(dist);
-      if(overlap>0){const dir=dist>=0?1:-1;advanceX(a,-dir*overlap/2);advanceX(b,dir*overlap/2);}
+    for(const e of this.pending)this._damage(e.p,e.op,e.m,e.d,'strike',true);
+    if(a.hp<=0&&b.hp<=0){this.phase='ko';this.winner=-1;}
+    if(this.phase==='fight'){
+      // 高く跳んだ相手の上を横切るときは横方向の押し合いを解除。
+      const sep=b.x-a.x,overlap=2*ARENA.pushRadius-Math.abs(sep);
+      if(overlap>0&&Math.abs(a.y-b.y)<.70){
+        const d=sep>=0?1:-1;moveX(a,-d*overlap/2);moveX(b,d*overlap/2);
+      }
       this._projectiles();
     }
     if(a.hp<=0||b.hp<=0){this.phase='ko';this.winner=a.hp>0?0:b.hp>0?1:-1;}
     return this;
   }
   info(){return {frame:this.frame,time:this.time,phase:this.phase,winner:this.winner,
-    players:this.fighters.map(p=>({id:p.id,hp:p.hp,guard:p.guard,super:p.super,state:p.state,x:p.x,y:p.y,ability:p.ability})),
+    players:this.fighters.map(p=>({id:p.id,x:p.x,y:p.y,hp:p.hp,guard:p.guard,super:p.super,state:p.state,ability:p.ability,action:p.action?.id})),
     projectiles:this.projectiles.length};}
 }
 export function simFight(left,right,frames=12000,level=2){
   const g=new Battle(left,right,level);
-  for(let i=0;i<frames&&g.phase==='fight';i++){const p=g.fighters[0],op=g.fighters[1];g.tick(aiInput({...g,frame:g.frame+1},p,op,level));}
+  for(let i=0;i<frames&&g.phase==='fight';i++){
+    const p=g.fighters[0],op=g.fighters[1];
+    g.tick(aiInput({...g,frame:g.frame+1},p,op,level));
+  }
   return g;
 }
