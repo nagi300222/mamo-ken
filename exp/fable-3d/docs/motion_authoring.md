@@ -97,3 +97,13 @@ node exp/fable-3d/tools/regress.mjs save exp/fable-3d/_scratch/regress_base.json
 ```bash
 node exp/fable-3d/tools/regress.mjs compare exp/fable-3d/_scratch/regress_base.json
 ```
+
+## モーション拡張 v2 での追加
+
+- 追加クリップは `tools/mamo3d/motions_v2.py` に書く。既存の `motions.py` は触らない（既存クリップを変えないため）。`CLIPS_V2` に登録すると9体へ入る。キャラ別のクリップは `{キャラID: 関数}` の辞書で登録する。
+- `idle` 以外の姿勢から始まる・終わるクリップは、基準の姿勢を既存クリップから取り出して使う: `GUARD(cid)`（立ちガード保持）、`CROUCH(cid)`（しゃがみ保持）、`AIR(cid)`（空中）。
+  `info(..., 始めの姿勢, 終わりの姿勢)` に書いた名前を検証スクリプトが見て、実際にその姿勢で始まり・終わっているかを確かめる。
+- 手の位置の `space='abs'` は、原点からの実寸（m）で指定する。体格の違う相手と同じ位置で手を合わせる組み合いに使っている。
+- 足の `pivot='ankle'` は、寝た姿勢など足首の位置を直接決めたいときに使う。
+- 反応の大きさは `REACT[cid]['mass']`（重いほど動かない）、咆哮の型は `REACT[cid]['roar']` で分けている。
+- 2体で対になる動きは `preview/versus.html`（撮影は `tools/versus_shots.mjs`）で、ゲームと同じ間隔・向きに置いて確かめる。

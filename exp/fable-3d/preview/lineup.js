@@ -31,6 +31,9 @@ function tick() { const dt = clock.getDelta(); if (!S.paused) { S.time += dt * S
 function btn(p, label, on, fn) { const b = document.createElement('button'); b.textContent = label; if (on) b.className = 'on'; b.onclick = fn; p.appendChild(b); }
 function ui() {
   $('clips').replaceChildren(); COMMON.forEach(c => btn($('clips'), c, c === S.clip, () => play(c))); btn($('clips'), '★ 固有モーション', S.clip === 'unique', () => play('unique'));
+  const v2 = [...new Set(S.items.flatMap(it => it.meta.v2_clips || []))];      // モーションv2（咆哮・ギュイーン・ガード・被弾・投げ・通常技・コマンド技）
+  if (v2.length) { const sel = document.createElement('select'); sel.style.cssText = 'background:#2a2e38;color:#e6e8ec;border:1px solid #31353f;border-radius:5px;padding:5px 8px;font:inherit';
+    sel.append(new Option('追加モーション v2 …', ''), ...v2.map(c => new Option(c, c, false, c === S.clip))); sel.onchange = () => { if (sel.value) play(sel.value); }; $('clips').appendChild(sel); }
   $('ctl').replaceChildren(); btn($('ctl'), S.paused ? '再生' : '一時停止', false, () => { S.paused = !S.paused; ui(); });
   [1, 0.25].forEach(v => btn($('ctl'), v === 1 ? '等速' : '×0.25', S.speed === v, () => { S.speed = v; ui(); }));
   [['side', '横（ゲーム視点）'], ['q', '斜め'], ['front', '正面']].forEach(([k, l]) => btn($('ctl'), l, S.view === k, () => { S.view = k; place(); ui(); }));

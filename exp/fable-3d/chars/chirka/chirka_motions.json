@@ -43,8 +43,21 @@
   "thrown",
   "land",
   "dash_stop",
-  "dash_b"
+  "dash_b",
+  "crouch_light",
+  "crouch_heavy",
+  "air_light",
+  "air_heavy",
+  "cmd_236",
+  "cmd_623",
+  "super"
  ],
+ "command_map": {
+  "236": "cmd_236",
+  "623": "cmd_623",
+  "214": "sp_feint_claw",
+  "236236": "super"
+ },
  "tail_bones": [
   "tail_01",
   "tail_02",
@@ -628,6 +641,176 @@
     16
    ],
    "note": "後ろへ小さく跳ぶバックダッシュ。移動はゲーム側"
+  },
+  "crouch_light": {
+   "frames": 18,
+   "fps": 60,
+   "duration_sec": 0.3,
+   "loop": false,
+   "group": "normal",
+   "priority": 2,
+   "start_pose": "crouch",
+   "end_pose": "crouch",
+   "v2": true,
+   "provisional": true,
+   "startup": 5,
+   "active": 2,
+   "recovery": 11,
+   "game_action": "crouch_weak",
+   "hand": "R",
+   "level": "low",
+   "note": "しゃがんだまま（左手は床）右手で低く突く。始めと終わりは crouch の保持姿勢"
+  },
+  "crouch_heavy": {
+   "frames": 35,
+   "fps": 60,
+   "duration_sec": 0.5833,
+   "loop": false,
+   "group": "normal",
+   "priority": 2,
+   "start_pose": "crouch",
+   "end_pose": "crouch",
+   "v2": true,
+   "provisional": true,
+   "startup": 11,
+   "active": 3,
+   "recovery": 21,
+   "game_action": "crouch_heavy",
+   "limb": "footR",
+   "level": "low",
+   "note": "左手を床についたまま、後ろ脚で低く払う足払い。腰を回して脚を伸ばす"
+  },
+  "air_light": {
+   "frames": 18,
+   "fps": 60,
+   "duration_sec": 0.3,
+   "loop": false,
+   "group": "normal",
+   "priority": 2,
+   "start_pose": "air",
+   "end_pose": "air",
+   "v2": true,
+   "provisional": true,
+   "startup": 5,
+   "active": 4,
+   "recovery": 9,
+   "game_action": "air_weak",
+   "level": "air",
+   "note": "空中姿勢のまま前脚を斜め下へ突き出す蹴り。上下移動は含まない"
+  },
+  "air_heavy": {
+   "frames": 30,
+   "fps": 60,
+   "duration_sec": 0.5,
+   "loop": false,
+   "group": "normal",
+   "priority": 2,
+   "start_pose": "air",
+   "end_pose": "air",
+   "v2": true,
+   "provisional": true,
+   "startup": 9,
+   "active": 5,
+   "recovery": 16,
+   "game_action": "air_heavy",
+   "level": "air",
+   "note": "空中姿勢から後ろ脚を伸ばして斜め下へ飛び込む蹴り。上下移動は含まない",
+   "warnings": [
+    "footR reach 0.229 > 0.218",
+    "footR reach 0.243 > 0.218",
+    "footR reach 0.254 > 0.218",
+    "footR reach 0.261 > 0.218",
+    "footR reach 0.263 > 0.218"
+   ]
+  },
+  "cmd_236": {
+   "frames": 34,
+   "fps": 60,
+   "duration_sec": 0.5667,
+   "loop": false,
+   "group": "command",
+   "priority": 3,
+   "start_pose": "idle",
+   "end_pose": "idle",
+   "v2": true,
+   "provisional": true,
+   "command": "236",
+   "name_jp": "毒気掌（仮称）",
+   "startup": 9,
+   "active": 4,
+   "recovery": 21,
+   "projectile_spawn_frame": 9,
+   "note": "片手の掌を素早く前へ押し出す。短い弾や崩しの発生はゲーム側"
+  },
+  "cmd_623": {
+   "frames": 42,
+   "fps": 60,
+   "duration_sec": 0.7,
+   "loop": false,
+   "group": "command",
+   "priority": 3,
+   "start_pose": "idle",
+   "end_pose": "idle",
+   "v2": true,
+   "provisional": true,
+   "command": "623",
+   "name_jp": "跳ね爪（仮称）",
+   "startup": 6,
+   "active": 9,
+   "recovery": 27,
+   "limb": "footR",
+   "anti_air": true,
+   "hop_frames": [
+    6,
+    29
+   ],
+   "note": "沈み込みから跳び上がり、後ろ脚を真上へ蹴り上げる対空"
+  },
+  "super": {
+   "frames": 62,
+   "fps": 60,
+   "duration_sec": 1.0333,
+   "loop": false,
+   "group": "command",
+   "priority": 3,
+   "start_pose": "idle",
+   "end_pose": "idle",
+   "v2": true,
+   "provisional": true,
+   "command": "236236",
+   "name_jp": "百面本命打ち（仮称）",
+   "super": true,
+   "flash_frames": [
+    0,
+    10
+   ],
+   "startup": 13,
+   "active": 29,
+   "recovery": 20,
+   "hits": [
+    [
+     13,
+     15
+    ],
+    [
+     19,
+     21
+    ],
+    [
+     25,
+     27
+    ],
+    [
+     36,
+     42
+    ]
+   ],
+   "move_total_leg": 1.0,
+   "move_frames": [
+    10,
+    40
+   ],
+   "note": "上・下・中と爪で惑わし、いったん引いてから低い本命の一撃"
   }
  }
 }

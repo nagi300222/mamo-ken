@@ -43,8 +43,21 @@
   "thrown",
   "land",
   "dash_stop",
-  "dash_b"
+  "dash_b",
+  "crouch_light",
+  "crouch_heavy",
+  "air_light",
+  "air_heavy",
+  "cmd_236",
+  "cmd_623",
+  "super"
  ],
+ "command_map": {
+  "236": "cmd_236",
+  "623": "cmd_623",
+  "214": "sp_tail_whip",
+  "236236": "super"
+ },
  "tail_bones": [
   "tail_01",
   "tail_02",
@@ -807,6 +820,460 @@
     16
    ],
    "note": "後ろへ小さく跳ぶバックダッシュ。移動はゲーム側"
+  },
+  "crouch_light": {
+   "frames": 22,
+   "fps": 60,
+   "duration_sec": 0.3667,
+   "loop": false,
+   "group": "normal",
+   "priority": 2,
+   "start_pose": "crouch",
+   "end_pose": "crouch",
+   "v2": true,
+   "provisional": true,
+   "startup": 6,
+   "active": 3,
+   "recovery": 13,
+   "game_action": "crouch_weak",
+   "hand": "R",
+   "level": "low",
+   "note": "しゃがんだまま（左手は床）右手で低く突く。始めと終わりは crouch の保持姿勢"
+  },
+  "crouch_heavy": {
+   "frames": 39,
+   "fps": 60,
+   "duration_sec": 0.65,
+   "loop": false,
+   "group": "normal",
+   "priority": 2,
+   "start_pose": "crouch",
+   "end_pose": "crouch",
+   "v2": true,
+   "provisional": true,
+   "startup": 12,
+   "active": 4,
+   "recovery": 23,
+   "game_action": "crouch_heavy",
+   "limb": "footR",
+   "level": "low",
+   "note": "左手を床についたまま、後ろ脚で低く払う足払い。腰を回して脚を伸ばす",
+   "warnings": [
+    "handL reach 0.193 > 0.185",
+    "handL reach 0.197 > 0.185",
+    "handL reach 0.206 > 0.185",
+    "handL reach 0.218 > 0.185",
+    "handL reach 0.228 > 0.185",
+    "handL reach 0.235 > 0.185",
+    "handL reach 0.238 > 0.185"
+   ]
+  },
+  "air_light": {
+   "frames": 23,
+   "fps": 60,
+   "duration_sec": 0.3833,
+   "loop": false,
+   "group": "normal",
+   "priority": 2,
+   "start_pose": "air",
+   "end_pose": "air",
+   "v2": true,
+   "provisional": true,
+   "startup": 6,
+   "active": 5,
+   "recovery": 12,
+   "game_action": "air_weak",
+   "level": "air",
+   "note": "空中姿勢のまま前手を斜め下へ突き出す。上下移動は含まない"
+  },
+  "air_heavy": {
+   "frames": 33,
+   "fps": 60,
+   "duration_sec": 0.55,
+   "loop": false,
+   "group": "normal",
+   "priority": 2,
+   "start_pose": "air",
+   "end_pose": "air",
+   "v2": true,
+   "provisional": true,
+   "startup": 10,
+   "active": 6,
+   "recovery": 17,
+   "game_action": "air_heavy",
+   "level": "air",
+   "note": "空中姿勢から両手を頭上から振り下ろす。上下移動は含まない"
+  },
+  "cmd_236": {
+   "frames": 44,
+   "fps": 60,
+   "duration_sec": 0.7333,
+   "loop": false,
+   "group": "command",
+   "priority": 3,
+   "start_pose": "idle",
+   "end_pose": "idle",
+   "v2": true,
+   "provisional": true,
+   "command": "236",
+   "name_jp": "尾弾き（仮称）",
+   "startup": 16,
+   "active": 5,
+   "recovery": 23,
+   "reach_part": "tail",
+   "projectile_spawn_frame": 16,
+   "note": "尻尾を下へ巻いて溜め、背中越しに縦に振り上げる。頭上を越えて前へ弾き出す（弾の発生はゲーム側）",
+   "tail_tip_max_forward_m": 0.1053,
+   "tail_tip_max_forward_frame": 20,
+   "tail_tip_height_at_max_m": 0.5105,
+   "tail_tip_side_at_max_m": -0.036,
+   "tail_tip_min_height_m": 0.0555,
+   "tail_to_body_axis_min_m": 0.2563,
+   "tail_tip_path": [
+    [
+     0,
+     -0.588,
+     -0.061,
+     0.2
+    ],
+    [
+     2,
+     -0.613,
+     -0.045,
+     0.152
+    ],
+    [
+     4,
+     -0.64,
+     0.029,
+     0.091
+    ],
+    [
+     6,
+     -0.645,
+     0.126,
+     0.061
+    ],
+    [
+     8,
+     -0.634,
+     0.2,
+     0.055
+    ],
+    [
+     10,
+     -0.624,
+     0.237,
+     0.062
+    ],
+    [
+     12,
+     -0.618,
+     0.245,
+     0.082
+    ],
+    [
+     14,
+     -0.552,
+     0.203,
+     0.297
+    ],
+    [
+     16,
+     -0.267,
+     0.066,
+     0.661
+    ],
+    [
+     18,
+     0.025,
+     -0.025,
+     0.627
+    ],
+    [
+     20,
+     0.105,
+     -0.036,
+     0.511
+    ],
+    [
+     22,
+     0.084,
+     -0.025,
+     0.484
+    ],
+    [
+     24,
+     0.006,
+     -0.006,
+     0.498
+    ],
+    [
+     26,
+     -0.134,
+     0.011,
+     0.504
+    ],
+    [
+     28,
+     -0.304,
+     0.011,
+     0.462
+    ],
+    [
+     30,
+     -0.45,
+     -0.011,
+     0.374
+    ],
+    [
+     32,
+     -0.541,
+     -0.043,
+     0.291
+    ],
+    [
+     34,
+     -0.574,
+     -0.061,
+     0.248
+    ],
+    [
+     36,
+     -0.578,
+     -0.064,
+     0.24
+    ],
+    [
+     38,
+     -0.576,
+     -0.061,
+     0.239
+    ],
+    [
+     40,
+     -0.58,
+     -0.059,
+     0.224
+    ],
+    [
+     42,
+     -0.587,
+     -0.061,
+     0.206
+    ],
+    [
+     44,
+     -0.588,
+     -0.061,
+     0.2
+    ]
+   ],
+   "tail_tip_path_columns": [
+    "frame",
+    "forward_m",
+    "left_m",
+    "height_m"
+   ]
+  },
+  "cmd_623": {
+   "frames": 40,
+   "fps": 60,
+   "duration_sec": 0.6667,
+   "loop": false,
+   "group": "command",
+   "priority": 3,
+   "start_pose": "idle",
+   "end_pose": "idle",
+   "v2": true,
+   "provisional": true,
+   "command": "623",
+   "name_jp": "尾跳ね（仮称）",
+   "startup": 10,
+   "active": 5,
+   "recovery": 25,
+   "reach_part": "tail",
+   "projectile_spawn_frame": null,
+   "note": "尻尾を下へ巻いて溜め、背中越しに縦に振り上げる。小さく跳びながら頭上を打つ対空",
+   "tail_tip_max_forward_m": -0.114,
+   "tail_tip_max_forward_frame": 15,
+   "tail_tip_height_at_max_m": 0.6421,
+   "tail_tip_side_at_max_m": 0.0559,
+   "tail_tip_min_height_m": 0.0077,
+   "tail_to_body_axis_min_m": 0.2742,
+   "tail_tip_path": [
+    [
+     0,
+     -0.588,
+     -0.061,
+     0.2
+    ],
+    [
+     2,
+     -0.623,
+     -0.008,
+     0.09
+    ],
+    [
+     4,
+     -0.629,
+     0.13,
+     0.016
+    ],
+    [
+     6,
+     -0.614,
+     0.223,
+     0.018
+    ],
+    [
+     8,
+     -0.575,
+     0.224,
+     0.174
+    ],
+    [
+     10,
+     -0.479,
+     0.174,
+     0.496
+    ],
+    [
+     12,
+     -0.253,
+     0.097,
+     0.677
+    ],
+    [
+     14,
+     -0.125,
+     0.059,
+     0.657
+    ],
+    [
+     16,
+     -0.121,
+     0.057,
+     0.629
+    ],
+    [
+     18,
+     -0.173,
+     0.058,
+     0.591
+    ],
+    [
+     20,
+     -0.268,
+     0.05,
+     0.527
+    ],
+    [
+     22,
+     -0.381,
+     0.028,
+     0.439
+    ],
+    [
+     24,
+     -0.481,
+     -0.008,
+     0.34
+    ],
+    [
+     26,
+     -0.55,
+     -0.044,
+     0.258
+    ],
+    [
+     28,
+     -0.577,
+     -0.063,
+     0.216
+    ],
+    [
+     30,
+     -0.582,
+     -0.066,
+     0.212
+    ],
+    [
+     32,
+     -0.581,
+     -0.063,
+     0.216
+    ],
+    [
+     34,
+     -0.581,
+     -0.061,
+     0.215
+    ],
+    [
+     36,
+     -0.585,
+     -0.06,
+     0.209
+    ],
+    [
+     38,
+     -0.588,
+     -0.061,
+     0.202
+    ],
+    [
+     40,
+     -0.588,
+     -0.061,
+     0.2
+    ]
+   ],
+   "tail_tip_path_columns": [
+    "frame",
+    "forward_m",
+    "left_m",
+    "height_m"
+   ]
+  },
+  "super": {
+   "frames": 64,
+   "fps": 60,
+   "duration_sec": 1.0667,
+   "loop": false,
+   "group": "command",
+   "priority": 3,
+   "start_pose": "idle",
+   "end_pose": "idle",
+   "v2": true,
+   "provisional": true,
+   "command": "236236",
+   "name_jp": "超圧縮・弾丸頭突き（仮称）",
+   "super": true,
+   "flash_frames": [
+    0,
+    10
+   ],
+   "startup": 16,
+   "active": 12,
+   "recovery": 36,
+   "hop_frames": [
+    13,
+    36
+   ],
+   "move_total_leg": 3.4,
+   "move_frames": [
+    13,
+    30
+   ],
+   "note": "体を丸めて溜め、頭から水平に飛び出す。尻尾は後ろへ真っすぐ伸ばす。前進はゲーム側",
+   "warnings": [
+    "footL reach 0.240 > 0.218",
+    "footL reach 0.267 > 0.218",
+    "footL reach 0.285 > 0.218",
+    "footL reach 0.292 > 0.218",
+    "footR reach 0.228 > 0.218"
+   ]
   }
  }
 }
