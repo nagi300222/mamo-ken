@@ -4,7 +4,7 @@ export const ARENA = Object.freeze({ minX: -1.76, maxX: 1.76, pushRadius: 0.17, 
 const S = (name, kind, startup, active, recovery, damage, reach, extra = {}) =>
   Object.freeze({ name, kind, startup, active, recovery, damage, reach, ...extra });
 const C = (name, role, hp, walk, dash, jump, power, ability, specials, ultimate, extra = {}) =>
-  Object.freeze({ name, role, hp, walk, back: Math.round(walk * 80) / 100, dash, jump, power,
+  Object.freeze({ name, role, hp, walk, back: +(walk * .8).toFixed(5), dash, jump, power,
     ability, specials, ultimate, ...extra });
 export const ROSTER = Object.freeze({
   moguzo: C('モグゾー', '万能・根性', 1000, .016, .27, .068, 1, 'guts', [
