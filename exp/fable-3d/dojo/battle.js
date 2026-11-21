@@ -59,8 +59,27 @@ export class Battle {
     this.frame=0;this.time=FPS*ARENA.roundSeconds;this.level=cap(Number(level)||2,1,3);
     this.fighters=[createFighter(left,0),createFighter(right,1)];
     this.projectiles=[];this.events=[];this.winner=null;this.phase='fight';this.seq=0;
+    this.tailTipSamples=null;
   }
-  again(){return new Battle(this.fighters[0].id,this.fighters[1].id,this.level);}
+  again(){const next=new Battle(this.fighters[0].id,this.fighters[1].id,this.level);next.tailTipSamples=this.tailTipSamples;return next;}
+  setTailTipPath(path){
+    if(!Array.isArray(path)||path.length<2)throw Error('missing tail tip path');
+    let prior=-Infinity;
+    this.tailTipSamples=path.map(row=>{
+      if(!Array.isArray(row)||row.length<2||!Number.isFinite(row[0])||!Number.isFinite(row[1])||row[0]<=prior)throw Error('invalid tail path');
+      prior=row[0];return [row[0],row[1]];
+    });
+    return this;
+  }
+  _tailAt(frame){
+    const a=this.tailTipSamples;
+    if(!a)return tailTipAt(frame);
+    if(frame<=a[0][0])return a[0][1];
+    for(let i=1;i<a.length;i++)if(frame<=a[i][0]){
+      const [f0,x0]=a[i-1],[f1,x1]=a[i];return x0+(x1-x0)*(frame-f0)/(f1-f0);
+    }
+    return a[a.length-1][1];
+  }
   _begin(p,m,id) {
     if(p.stun||p.stop||p.ko||p.y>0&&m.kind==='throw')return false;
     if(m.isSuper && p.super<100) return false;
@@ -189,7 +208,7 @@ export class Battle {
     if(target.y>.55&&m.kind!=='anti'&&attacker.y<.1)return false;
     if(m.kind==='throw')return target.y<.07&&attacker.y<.07&&dist<=m.reach+.12;
     if(m.kind==='tail') {
-      const tip=tailTipAt(attacker.frame);
+      const tip=this._tailAt(attacker.frame);
       return dist>=m.minReach && tip>=0 && dist<=tip+.16 && Math.abs(target.y-attacker.y)<.42;
     }
     const reach=m.reach||.5;
