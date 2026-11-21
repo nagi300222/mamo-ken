@@ -12,7 +12,7 @@ function createFighter(id,slot) {
     hp:r.hp,guard:100,super:0,ability:{charge:0,lastCharge:'',iron:0,armor:3,chase:0,pressure:0,just:0,dark:0,grit:true},
     state:'idle',frame:0,stun:0,stop:0,action:null,used:false,spawned:false,
     poison:0,poisonTick:0,prev:inputOf({}), input:inputOf({}), strikes:0,ko:false,
-    impact:0, guardF:0, attackSerial:0, locomotion:0, lastHit:'', canDash:true
+    impact:0, guardF:0, attackSerial:0, locomotion:0, lastHit:'', dashF:0, dashDir:0
   };
 }
 const active=(p)=>p.action && p.frame>=p.action.startup && p.frame<p.action.startup+p.action.active;
@@ -107,6 +107,7 @@ export class Battle {
       }
       return;
     }
+    if(p.dashF>0){advanceX(p,p.dashDir*ROSTER[p.id].dash/18);p.dashF--;p.state='dash';p.frame++;return;}
     if(edges.super){this._begin(p,ultimateMove(p.id),'ultimate');return;}
     for(let i=1;i<=3;i++)if(edges['special'+i]){this._begin(p,specialMove(p.id,i-1),'s'+i);return;}
     if(edges.throw){this._begin(p,{name:'投げ',kind:'throw',startup:6,active:3,recovery:24,damage:76,reach:.32,level:'grab',anim:'sp_bear_grab'},'throw');return;}
@@ -117,7 +118,7 @@ export class Battle {
     }
     if(edges.dash && p.y===0){
       const dir=n.left?-1:n.right?1:p.facing;
-      advanceX(p,dir*ROSTER[p.id].dash);
+      p.dashDir=dir;p.dashF=17;advanceX(p,dir*ROSTER[p.id].dash/18);
       p.state='dash';p.frame=0;p.locomotion++;return;
     }
     if(edges.up && p.y===0 && !n.down){
@@ -143,6 +144,7 @@ export class Battle {
     if(attacker.id==='yomikage'&&attacker.ability.just>0)dmg=Math.round(dmg*1.08);
     if(attacker.id==='dark_moguzo'&&attacker.hp<ROSTER.dark_moguzo.hp*.35)dmg=Math.round(dmg*1.1);
     if(guard){
+      target.dashF=0;
       target.guard=cap(target.guard-Math.max(5,dmg*.16),0,100);
       target.stun=target.guard<=0?20:Math.max(7,Math.round(m.damage*.08));
       target.state='block';target.frame=0;
@@ -151,6 +153,7 @@ export class Battle {
       if(attacker.id==='takimaru')attacker.ability.pressure=36;
       this.events.push({type:'block',slot:target.slot,x:target.x,y:target.y+.33,damage:0});
     } else {
+      target.dashF=0;
       if(target.id==='yomikage'&&target.action?.kind==='counter'&&active(target)){
         attacker.stun=15;attacker.hp=Math.max(0,attacker.hp-88);target.action=null;target.state='idle';
         this.events.push({type:'counter',slot:target.slot,x:target.x,y:target.y+.34});return;
