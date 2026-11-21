@@ -9,7 +9,7 @@ const active=p=>!!p.action&&p.frame>=p.action.startup&&p.frame<p.action.startup+
 const facingBack=p=>p.facing===1?'left':'right';
 const moveX=(p,dx)=>p.x=cap(p.x+dx,ARENA.minX,ARENA.maxX);
 const ROAR=Object.freeze({name:'咆哮',kind:'roar',startup:16,active:7,recovery:27,damage:105,reach:.66,level:'mid',anim:'roar'});
-const GYUIIN=Object.freeze({name:'ギュイーン',kind:'clinch',startup:3,active:15,recovery:21,damage:0,reach:.83,travel:.36,level:'grab',anim:'gyuiin'});
+const GYUIIN=Object.freeze({name:'ギュイーン',kind:'clinch',startup:8,active:14,recovery:24,damage:0,reach:.40,travel:.32,level:'grab',anim:'gyuiin'});
 export const DRIVE=Object.freeze({max:100,initial:100,roarCost:35,gyuiinCost:60,regenPerFrame:.11,regenDelay:90,clinchFrames:34,resetSpacing:1.35});
 const GRAB=Object.freeze({name:'掴み',kind:'throw',startup:6,active:3,recovery:25,damage:78,reach:.31,level:'grab',anim:'grab'});
 export const UNIVERSAL_ACTIONS=Object.freeze({roar:ROAR,gyuiin:GYUIIN,grab:GRAB});
@@ -87,13 +87,13 @@ export class Battle {
     }return a.at(-1)[1];
   }
   _startGyuiin(p,other){
-    if(p.ko||this.clinch||p.gyuiinCooldown>0||p.drive<DRIVE.gyuiinCost)return false;
+    if(p.ko||this.clinch||p.gyuiinCooldown>0||p.drive<DRIVE.gyuiinCost||p.y>.09)return false;
     p.drive-=DRIVE.gyuiinCost;p.driveDelay=DRIVE.regenDelay+60;p.gyuiinCooldown=145;
     // 超装甲は攻撃中・被弾中にも起動可能。ただし必要なドライブを消費する。
     p.action={...GYUIIN,id:'gyuiin',serial:++this.seq,started:this.frame};
     p.state='gyuiin';p.frame=0;p.stun=0;p.stop=0;p.dashF=0;p.used=false;p.spawned=false;
     this.events.push({type:'move',slot:p.slot,name:'ギュイーン',action:'gyuiin'});
-    if(Math.abs(p.x-other.x)<=.83 && Math.abs(p.y-other.y)<1.25)this._clinchPair(p,other);
+    // 即時に相手を拘束しない。アーマーで前進し、実際に接触したら成立する。
     return true;
   }
   _clinchPair(p,other){
@@ -225,10 +225,10 @@ export class Battle {
     return null;
   }
   _damage(a,t,m,_distance=0,source='strike',force=false){
-    if(t.ko||(this.phase!=='fight'&&!force))return;
+    if((t.ko&&!force)||(this.phase!=='fight'&&!force))return;
     if(t.action?.kind==='clinch'){
       // 何を受けてもギュイーンの姿勢に移行。距離外の弾もダメージなし。
-      if(Math.abs(a.x-t.x)<.93)this._clinchPair(t,a);
+      if(t.frame>=4&&Math.abs(a.x-t.x)<.46&&a.y<.10)this._clinchPair(t,a);
       else this.events.push({type:'gyuiin_armor',slot:t.slot,x:t.x,y:t.y+.33});
       return;
     }
@@ -381,7 +381,10 @@ export class Battle {
       this._act(p,op);if(this.clinch)break;this._gravity(p);
     }
     if(this.clinch)return this;
-    for(const e of this.pending)this._damage(e.p,e.op,e.m,e.d,'strike',true);
+    for(const e of this.pending){
+      if(e.m.kind==='roar'&&e.p.action?.kind!=='roar')continue; // 相殺後の残像ヒットを防ぐ
+      this._damage(e.p,e.op,e.m,e.d,'strike',true);
+    }
     if(a.hp<=0&&b.hp<=0){this.phase='ko';this.winner=-1;}
     if(this.phase==='fight'){
       // 高く跳んだ相手の上を横切るときは横方向の押し合いを解除。
