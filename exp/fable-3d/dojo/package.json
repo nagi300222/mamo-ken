@@ -1,0 +1,12 @@
+{
+  "name": "mamoken-3d-dojo",
+  "version": "0.1.0",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "start": "node server.mjs",
+    "test": "node --test",
+    "build:pages": "node build-pages.mjs"
+  },
+  "engines": { "node": ">=20" }
+}

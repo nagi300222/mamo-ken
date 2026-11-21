@@ -1,0 +1,55 @@
+name: MamoKen 3D Mobile Dojo
+
+on:
+  push:
+    branches:
+      - feat/mamoken-3d-mobile-fight
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify-and-preview:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      CF_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      CF_ACCOUNT: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      CF_PROJECT: ${{ vars.CLOUDFLARE_PAGES_PROJECT }}
+    steps:
+      - name: Checkout 3D models and dojo
+        uses: actions/checkout@v4
+      - name: Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Syntax checks
+        run: |
+          node --check exp/fable-3d/dojo/balance.js
+          node --check exp/fable-3d/dojo/battle.js
+          node --check exp/fable-3d/dojo/commands.js
+          node --check exp/fable-3d/dojo/models.js
+          node --check exp/fable-3d/dojo/main.js
+          node --check exp/fable-3d/dojo/build-pages.mjs
+          node --check exp/fable-3d/dojo/server.mjs
+      - name: Combat simulation tests
+        run: npm --prefix exp/fable-3d/dojo test
+      - name: Build static Cloudflare Pages assets
+        run: npm --prefix exp/fable-3d/dojo run build:pages
+      - name: Archive Pages preview bundle
+        uses: actions/upload-artifact@v4
+        with:
+          name: mamoken-3d-pages
+          path: exp/fable-3d/_pages/
+          retention-days: 14
+      - name: Deploy Cloudflare Pages preview (only when configured)
+        if: ${{ env.CF_TOKEN != '' && env.CF_ACCOUNT != '' && env.CF_PROJECT != '' }}
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ env.CF_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ env.CF_ACCOUNT }}
+        run: >
+          npx --yes wrangler@4 pages deploy exp/fable-3d/_pages
+          --project-name "$CF_PROJECT"
+          --branch feat/mamoken-3d-mobile-fight
+          --commit-hash "$GITHUB_SHA"

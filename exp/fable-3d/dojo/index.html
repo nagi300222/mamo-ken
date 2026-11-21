@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#141c23">
+<title>マモ拳 3D｜山岳道場</title>
+<link rel="stylesheet" href="./style.css">
+<script type="importmap">{"imports":{"three":"../preview/vendor/three.module.min.js","three/addons/":"../preview/vendor/addons/"}}</script>
+</head>
+<body>
+<main id="app">
+  <header class="topbar">
+    <div class="brand"><span class="brand-mark">拳</span><div><strong>マモ拳 <span>3D</span></strong><small>山岳道場 · 対戦試作 v0.2</small></div></div>
+    <div class="header-actions">
+      <span class="draft">仮バランス</span>
+      <button id="pause" class="ghost" title="一時停止">一時停止</button>
+      <button id="select-back" class="ghost">キャラ選択</button>
+    </div>
+  </header>
+  <div id="combat-layout">
+    <aside id="stick-rail" class="control-rail">
+      <span class="rail-caption">8方向 · MOVE</span>
+      <div class="stick-area">
+        <div id="joystick" class="joystick" role="group" aria-label="8方向スティック">
+          <div class="stick-ring"></div>
+          <div id="stick-thumb" class="stick-thumb"></div>
+          <span class="stick-label">MOVE</span>
+        </div>
+      </div>
+      <span class="rail-sub">スティックで移動・コマンド</span>
+    </aside>
+    <section id="arena" aria-label="対戦画面">
+    <canvas id="stage"></canvas>
+    <div class="hud">
+      <div class="hud-side">
+        <div class="hud-name"><span id="name-0">モグゾー</span><span id="ability-0">根性</span></div>
+        <div class="hp-track"><div id="hp-0" class="hp-fill"></div></div>
+        <div class="meter-track"><div id="meter-0" class="meter-fill"></div></div>
+        <div class="drive-track" title="咆哮・ギュイーンの共通ゲージ"><div id="drive-0" class="drive-fill"></div></div>
+      </div>
+      <div class="round-center"><span id="timer">75</span><small id="round-message">ROUND 1</small></div>
+      <div class="hud-side mirrored">
+        <div class="hud-name"><span id="name-1">ゴダン</span><span id="ability-1">装甲</span></div>
+        <div class="hp-track"><div id="hp-1" class="hp-fill"></div></div>
+        <div class="meter-track"><div id="meter-1" class="meter-fill"></div></div>
+        <div class="drive-track" title="咆哮・ギュイーンの共通ゲージ"><div id="drive-1" class="drive-fill"></div></div>
+      </div>
+    </div>
+    <div id="note" class="note" aria-live="polite">キャラクターを選んで対戦開始</div>
+    <div id="game-over" class="modal hidden">
+      <div class="result-panel">
+        <small class="eyebrow">ROUND FINISHED</small><h2 id="result-title">決着！</h2>
+        <p id="result-description"></p>
+        <div class="result-actions"><button id="rematch" class="primary">もう一戦</button><button id="result-select" class="ghost">キャラ選択</button></div>
+      </div>
+    </div>
+    <div id="selection" class="selection">
+      <div class="selection-inner">
+        <div class="selection-top"><div><small class="eyebrow">SELECT YOUR FIGHTER</small><h1>参戦するマーモットを選ぶ</h1></div><span class="select-info">全9キャラ · CPU対戦</span></div>
+        <div id="roster" class="roster" aria-label="キャラクター選択"></div>
+        <div class="selection-footer">
+          <div class="chosen"><strong id="chosen-name">モグゾー</strong><span id="chosen-role">万能・根性</span></div>
+          <label class="opponent">対戦相手 <select id="cpu-choice" aria-label="CPUキャラクター"></select></label>
+          <label class="opponent">CPU <select id="difficulty"><option value="1">やさしい</option><option value="2" selected>ふつう</option><option value="3">強い</option></select></label>
+          <button id="start" class="primary">対戦開始 <span>FIGHT</span></button>
+        </div>
+      </div>
+    </div>
+    <div id="commands-help" class="commands-help">↓↘→＋弱/強 <span>波動</span>　→↓↘＋弱/強 <span>昇龍</span>　↓↙←＋弱/強 <span>竜巻</span>　↓↘→↓↘→＋強 <span>奥義</span></div>
+    <div id="rotate" class="rotate-hint">スマホを横向きにすると遊びやすくなるよ</div>
+    </section>
+    <aside id="buttons-rail" class="control-rail">
+      <span class="rail-caption">ARCADE · ATTACK</span>
+      <div id="controls" class="overlay-controls">
+      <div class="attack-pad">
+        <button data-control="weak" class="attack weak" aria-label="弱攻撃">弱</button>
+        <button data-control="strong" class="attack heavy" aria-label="強攻撃">強</button>
+        <button data-control="throw" class="attack throw" aria-label="掴み">掴</button>
+        <button data-control="roar" class="attack roar" aria-label="咆哮">咆哮</button>
+        <button data-control="gyuiin" class="attack gyuiin" aria-label="ギュイーン">ギュイーン</button>
+      </div>
+
+      </div>
+      <span class="rail-sub">弱・強＋方向で必殺技</span>
+    </aside>
+  </div>
+  <footer class="footnote">
+    <span>PC：方向キー・WASD／Z弱・X強・V掴・B咆哮・Nギュイーン／コマンド＋弱・強</span>
+    <span id="loading-status">3Dモデル待機中</span>
+  </footer>
+</main>
+<script type="module" src="./main.js"></script>
+</body>
+</html>
