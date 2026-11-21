@@ -255,7 +255,7 @@ test('全9体が全9対戦相手を左右から飛び越え、着地後は後ろ
     p.x=o.x+side*.40;
     const hp=p.hp;
     for(let i=0;i<10;i++)g.tick({[forward]:true},{weak:i===0});
-    assert.ok(p.guard<100,label);
+    assert.ok(p.guard<ROSTER[p.id].guardMax,label);
     assert.equal(p.hp,hp,label);
   }
 });
