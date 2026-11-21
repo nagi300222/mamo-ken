@@ -9,13 +9,14 @@ const active=p=>!!p.action&&p.frame>=p.action.startup&&p.frame<p.action.startup+
 const facingBack=p=>p.facing===1?'left':'right';
 const moveX=(p,dx)=>p.x=cap(p.x+dx,ARENA.minX,ARENA.maxX);
 const ROAR=Object.freeze({name:'咆哮',kind:'roar',startup:16,active:7,recovery:27,damage:105,reach:.66,level:'mid',anim:'roar'});
-const GYUIIN=Object.freeze({name:'ギュイーン',kind:'clinch',startup:11,active:6,recovery:31,damage:42,reach:.31,travel:.17,level:'grab',anim:'gyuiin'});
+const GYUIIN=Object.freeze({name:'ギュイーン',kind:'clinch',startup:3,active:15,recovery:21,damage:0,reach:.83,travel:.36,level:'grab',anim:'gyuiin'});
+export const DRIVE=Object.freeze({max:100,initial:100,roarCost:35,gyuiinCost:60,regenPerFrame:.11,regenDelay:90,clinchFrames:34,resetSpacing:1.35});
 const GRAB=Object.freeze({name:'掴み',kind:'throw',startup:6,active:3,recovery:25,damage:78,reach:.31,level:'grab',anim:'grab'});
 export const UNIVERSAL_ACTIONS=Object.freeze({roar:ROAR,gyuiin:GYUIIN,grab:GRAB});
 function fighter(id,slot){
   const r=ROSTER[id];if(!r)throw Error('unknown fighter '+id);
   return {id,slot,x:slot===0?-.70:.70,y:0,vy:0,facing:slot===0?1:-1,
-    hp:r.hp,guard:100,super:0,state:'idle',frame:0,stun:0,stop:0,
+    hp:r.hp,guard:100,super:0,drive:DRIVE.initial,driveDelay:0,state:'idle',frame:0,stun:0,stop:0,
     action:null,used:false,spawned:false,ko:false,prev:inputOf({}),input:inputOf({}),
     dirHistory:[],dashF:0,dashDir:0,roarCooldown:0,gyuiinCooldown:0,guardF:0,
     ability:{charge:0,lastCharge:'',iron:0,armor:3,chase:0,pressure:0,just:0,dark:0,grit:true},
@@ -55,12 +56,14 @@ function timer(p){
     if(p.poisonTick>=30){p.poisonTick=0;p.hp=Math.max(0,p.hp-4);}
   }else p.poisonTick=0;
   p.guard=cap(p.guard+(p.stun? .006:.025),0,100);
+  if(p.driveDelay>0)p.driveDelay--;
+  else p.drive=cap(p.drive+DRIVE.regenPerFrame,0,DRIVE.max);
 }
 export class Battle {
   constructor(left='moguzo',right='godan',level=2){
     this.frame=0;this.time=FPS*ARENA.roundSeconds;this.level=cap(Number(level)||2,1,3);
     this.fighters=[fighter(left,0),fighter(right,1)];
-    this.projectiles=[];this.events=[];this.pending=[];this.winner=null;this.phase='fight';this.seq=0;
+    this.projectiles=[];this.events=[];this.pending=[];this.winner=null;this.phase='fight';this.seq=0;this.clinch=null;
     this.tailTipSamples=null;
   }
   again(){
@@ -83,16 +86,52 @@ export class Battle {
       return x0+(x1-x0)*(frame-f0)/(f1-f0);
     }return a.at(-1)[1];
   }
+  _startGyuiin(p,other){
+    if(p.ko||this.clinch||p.gyuiinCooldown>0||p.drive<DRIVE.gyuiinCost)return false;
+    p.drive-=DRIVE.gyuiinCost;p.driveDelay=DRIVE.regenDelay+60;p.gyuiinCooldown=145;
+    // 超装甲は攻撃中・被弾中にも起動可能。ただし必要なドライブを消費する。
+    p.action={...GYUIIN,id:'gyuiin',serial:++this.seq,started:this.frame};
+    p.state='gyuiin';p.frame=0;p.stun=0;p.stop=0;p.dashF=0;p.used=false;p.spawned=false;
+    this.events.push({type:'move',slot:p.slot,name:'ギュイーン',action:'gyuiin'});
+    if(Math.abs(p.x-other.x)<=.83 && Math.abs(p.y-other.y)<1.25)this._clinchPair(p,other);
+    return true;
+  }
+  _clinchPair(p,other){
+    if(this.clinch||p.ko||other.ko)return false;
+    this.clinch={frame:0,total:DRIVE.clinchFrames,initiator:p.slot};
+    const mid=cap((p.x+other.x)*.5,ARENA.minX+.35,ARENA.maxX-.35);
+    for(const f of [p,other]){
+      const dir=f===p?(p.x<=other.x?-1:1):(other.x<=p.x?-1:1);
+      f.x=mid+dir*.18;f.y=0;f.vy=0;f.action=null;f.stop=0;f.stun=0;f.dashF=0;
+      f.state='clinch';f.frame=0;f.facing=dir===-1?1:-1;
+    }
+    this.projectiles.length=0;
+    this.events.push({type:'gyuiin_start',slot:p.slot,x:mid,y:.35});
+    return true;
+  }
+  _clinchTick(){
+    const c=this.clinch;if(!c)return;
+    c.frame++;
+    for(const p of this.fighters){p.state='clinch';p.frame=c.frame;}
+    if(c.frame>=c.total){
+      const [a,b]=this.fighters,mid=cap((a.x+b.x)/2,ARENA.minX+DRIVE.resetSpacing/2,ARENA.maxX-DRIVE.resetSpacing/2);
+      const dir=a.x<=b.x?1:-1;
+      a.x=mid-dir*DRIVE.resetSpacing/2;b.x=mid+dir*DRIVE.resetSpacing/2;
+      for(const p of this.fighters){p.state='clinch_recoil';p.frame=0;p.stun=10;p.stop=0;p.facing=p===a?dir:-dir;}
+      this.clinch=null;
+      this.events.push({type:'gyuiin_break',x:mid,y:.35});
+    }
+  }
   _begin(p,m,id){
-    if(p.ko||p.stun||p.stop||(p.y>.06&&['throw','clinch','roar','projectile'].includes(m.kind)))return false;
+    if(m.kind==='clinch')return this._startGyuiin(p,this.fighters[1-p.slot]);
+    if(p.ko||p.stun||p.stop||(p.y>.06&&['throw','roar','projectile'].includes(m.kind)))return false;
     if(m.isSuper&&p.super<100)return false;
-    if(m.kind==='roar'&&p.roarCooldown>0||m.kind==='clinch'&&p.gyuiinCooldown>0)return false;
+    if(m.kind==='roar'&&(p.roarCooldown>0||p.drive<DRIVE.roarCost))return false;
     // 技から別技へのキャンセルは暗連に限る。
     if(p.action&&!(p.id==='dark_moguzo'&&p.ability.dark>0&&id!==p.action.id&&!m.isSuper))return false;
     if(p.action&&p.action.id===id)return false;
     if(m.isSuper)p.super=0;
-    if(m.kind==='roar')p.roarCooldown=96;
-    if(m.kind==='clinch')p.gyuiinCooldown=135;
+    if(m.kind==='roar'){p.roarCooldown=96;p.drive-=DRIVE.roarCost;p.driveDelay=DRIVE.regenDelay;}
     if(p.id==='godan'&&m.armor){if(p.ability.armor<1)return false;p.ability.armor--;}
     if(p.id==='hakuma'&&p.ability.iron&&(id.startsWith('s')||m.isSuper)){
       m={...m,damage:Math.round(m.damage*1.23)};p.ability.iron=0;
@@ -117,7 +156,12 @@ export class Battle {
     const n=inputOf(raw),edges={};
     for(const k of KEYS)edges[k]=n[k]&&!p.prev[k];
     p.prev=n;p.input=n;p.dirHistory=pushDirection(p.dirHistory,n,this.frame,p.facing);
-    if(p.stop||p.ko||p.stun)return;
+    if(p.ko)return;
+    // ギュイーンは攻撃・被弾の途中でも、ゲージを払って仕切り直しを試みられる。
+    if(edges.gyuiin&&this._startGyuiin(p,other))return;
+    if(p.stop||p.stun)return;
+    if(edges.roar&&p.action&&other.action?.kind==='roar'){p.action=null;p.frame=0;}
+
     // 組み合いと咆哮は技からの割り込み不可。咆哮返しは入力時の先読みで成立する。
     if(p.action){
       if(p.id==='pisuke'&&p.ability.chase>0&&edges.dash){
@@ -130,7 +174,6 @@ export class Battle {
     }
     if(p.dashF>0){moveX(p,p.dashDir*ROSTER[p.id].dash/18);p.dashF--;p.state='dash';p.frame++;return;}
     if(edges.roar){this._begin(p,ROAR,'roar');return;}
-    if(edges.gyuiin){this._begin(p,GYUIIN,'gyuiin');return;}
     if(edges.throw){this._begin(p,GRAB,'throw');return;}
     // CPUは内部アクションIDで選ぶ。プレイヤーには必殺ボタンを表示しない。
     if(edges.super){this._begin(p,ultimateMove(p.id),'ultimate');return;}
@@ -172,7 +215,7 @@ export class Battle {
   _absorbing(t,m){
     if(!t.action)return null;
     const c=t.action.kind;
-    if(c==='roar'&&t.frame>=3&&t.frame<=t.action.startup+t.action.active){
+    if(c==='roar'&&t.frame>=1&&t.frame<=t.action.startup+t.action.active){
       if(m.kind!=='roar'&&m.kind!=='throw'&&m.kind!=='clinch')return 'roar';
     }
     if(c==='clinch'&&t.frame>=2&&t.frame<=t.action.startup+t.action.active){
@@ -183,6 +226,12 @@ export class Battle {
   }
   _damage(a,t,m,_distance=0,source='strike',force=false){
     if(t.ko||(this.phase!=='fight'&&!force))return;
+    if(t.action?.kind==='clinch'){
+      // 何を受けてもギュイーンの姿勢に移行。距離外の弾もダメージなし。
+      if(Math.abs(a.x-t.x)<.93)this._clinchPair(t,a);
+      else this.events.push({type:'gyuiin_armor',slot:t.slot,x:t.x,y:t.y+.33});
+      return;
+    }
     if(m.kind==='roar'&&t.action?.kind==='roar'){
       const later=t.action.started>a.action?.started;
       const same=t.action.started===a.action?.started;
@@ -240,7 +289,8 @@ export class Battle {
   }
   _contact(a,t,m){
     const dist=Math.abs(t.x-a.x);
-    if(m.kind==='clinch'||m.kind==='throw')return a.y<.09&&t.y<.10&&dist<m.reach+.12;
+    if(m.kind==='clinch')return dist<=.83&&Math.abs(a.y-t.y)<1.25;
+    if(m.kind==='throw')return a.y<.09&&t.y<.10&&dist<m.reach+.12;
     if(m.kind==='tail'){
       const tip=this._tailAt(a.frame);
       return dist>=m.minReach&&tip>0&&dist<=tip+.16&&Math.abs(t.y-a.y)<.43;
@@ -254,6 +304,11 @@ export class Battle {
     const m=p.action;if(!m)return;
     p.frame++;
     if(m.travel&&p.frame<=m.startup+m.active)moveX(p,p.facing*m.travel/(m.startup+m.active));
+    if(m.kind==='clinch'){
+      if(this._contact(p,op,m))this._clinchPair(p,op);
+      else if(p.frame>=total(m)){p.action=null;p.frame=0;p.state='idle';this.events.push({type:'gyuiin_whiff',slot:p.slot});}
+      return;
+    }
     if(m.kind==='projectile'&&!p.spawned&&p.frame===m.startup){
       p.spawned=true;this.projectiles.push({id:++this.seq,owner:p.slot,x:p.x+p.facing*.30,y:p.y+.30,
         face:p.facing,speed:m.speed||.045,life:m.life||75,damage:m.damage,poison:m.poison||0,
@@ -267,15 +322,16 @@ export class Battle {
   }
   _roarErase(p,b){
     if(p.action?.kind!=='roar')return false;
-    if(p.frame<3||p.frame>p.action.startup+p.action.active)return false;
+    if(p.frame<1||p.frame>p.action.startup+p.action.active)return false;
     return b.owner!==p.slot && (b.x-p.x)*p.facing>=-.12 && (b.x-p.x)*p.facing<.86 && Math.abs((b.y-.30)-p.y)<.65;
   }
   _projectiles(){
     for(const b of this.projectiles){
       b.x+=b.speed*b.face;b.life--;
       if(b.life<=0||Math.abs(b.x)>ARENA.maxX+.3)continue;
-      for(const t of this.fighters)if(this._roarErase(t,b)){
-        b.life=0;this.events.push({type:'roar_erase',slot:t.slot,x:b.x,y:b.y});break;
+      for(const t of this.fighters)if(this._roarErase(t,b) || (t.action?.kind==='clinch'&&Math.abs(b.x-t.x)<.65)){
+
+        b.life=0;this.events.push({type:t.action?.kind==='clinch'?'gyuiin_armor':'roar_erase',slot:t.slot,x:b.x,y:b.y});break;
       }
       if(b.life<=0)continue;
       const t=this.fighters[1-b.owner],a=this.fighters[b.owner];
@@ -299,7 +355,9 @@ export class Battle {
   }
   tick(raw1={},raw2=null){
     if(this.phase!=='fight')return this;
-    this.frame++;this.time--;this.pending=[];this.events=[];
+    this.frame++;this.pending=[];this.events=[];
+    if(this.clinch){this._clinchTick();return this;}
+    this.time--;
     const [a,b]=this.fighters;
     if(this.time<=0){
       this.phase='ko';const q=a.hp/ROSTER[a.id].hp-b.hp/ROSTER[b.id].hp;
@@ -335,7 +393,7 @@ export class Battle {
     return this;
   }
   info(){return {frame:this.frame,time:this.time,phase:this.phase,winner:this.winner,
-    players:this.fighters.map(p=>({id:p.id,x:p.x,y:p.y,hp:p.hp,guard:p.guard,super:p.super,state:p.state,ability:p.ability,action:p.action?.id})),
+    players:this.fighters.map(p=>({id:p.id,x:p.x,y:p.y,hp:p.hp,guard:p.guard,super:p.super,drive:p.drive,state:p.state,ability:p.ability,action:p.action?.id})),
     projectiles:this.projectiles.length};}
 }
 export function simFight(left,right,frames=12000,level=2){
