@@ -160,7 +160,7 @@ export class Battle {
     // ギュイーンは攻撃・被弾の途中でも、ゲージを払って仕切り直しを試みられる。
     if(edges.gyuiin&&this._startGyuiin(p,other))return;
     if(p.stop||p.stun)return;
-    if(edges.roar&&p.action&&other.action?.kind==='roar'){p.action=null;p.frame=0;}
+    if(edges.roar&&p.action&&p.action.kind!=='roar'&&other.action?.kind==='roar'&&p.roarCooldown===0&&p.drive>=DRIVE.roarCost){p.action=null;p.frame=0;}
 
     // 組み合いと咆哮は技からの割り込み不可。咆哮返しは入力時の先読みで成立する。
     if(p.action){
