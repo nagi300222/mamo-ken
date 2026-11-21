@@ -1,0 +1,19 @@
+{
+ "generated_by": "tools/validate.mjs",
+ "clips_checked": [
+  "idle",
+  "crouch"
+ ],
+ "characters": {
+  "moguzo": {
+   "all_pass": true,
+   "failed": [],
+   "triangles": 24884,
+   "joints": 38,
+   "clips": 2,
+   "textures": 1,
+   "file_size_mb": 1.39,
+   "draw_calls": 2
+  }
+ }
+}

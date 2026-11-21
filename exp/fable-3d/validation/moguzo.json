@@ -1,0 +1,236 @@
+{
+ "file": "chars/moguzo/moguzo.glb",
+ "file_size_bytes": 1389416,
+ "checks": {
+  "skin_exists": {
+   "pass": true,
+   "skins": 1,
+   "joints": 38
+  },
+  "required_bones": {
+   "pass": true,
+   "required": 30,
+   "missing": []
+  },
+  "joints_weights_attributes": {
+   "pass": true,
+   "primitives": 2
+  },
+  "weights_normalized": {
+   "pass": true,
+   "max_abs_deviation_from_1": 1.27e-7,
+   "joints_out_of_range": 0,
+   "max_influences": 4
+  },
+  "clips_present": {
+   "pass": true,
+   "expected": 2,
+   "found": 2,
+   "missing": []
+  },
+  "clip_durations_match_definition": {
+   "pass": true,
+   "mismatched": []
+  },
+  "three_loads_all_clips": {
+   "pass": true,
+   "loaded": 2
+  },
+  "three_bones_move_in_every_clip": {
+   "pass": true
+  },
+  "three_no_console_errors": {
+   "pass": true,
+   "errors": []
+  },
+  "loops_are_seamless": {
+   "pass": true
+  },
+  "attacks_return_to_idle": {
+   "pass": true
+  },
+  "feet_not_below_ground": {
+   "pass": true
+  }
+ },
+ "joint_names": [
+  "root_ground",
+  "pelvis",
+  "spine",
+  "chest",
+  "neck",
+  "head",
+  "band_a_01",
+  "band_a_02",
+  "band_b_01",
+  "band_b_02",
+  "jaw",
+  "shoulder.L",
+  "shoulder_fix.L",
+  "upper_arm.L",
+  "forearm.L",
+  "forearm_twist.L",
+  "wrist.L",
+  "paw.L",
+  "shoulder.R",
+  "shoulder_fix.R",
+  "upper_arm.R",
+  "forearm.R",
+  "forearm_twist.R",
+  "wrist.R",
+  "paw.R",
+  "tail_01",
+  "tail_02",
+  "tail_03",
+  "thigh.L",
+  "shin.L",
+  "ankle.L",
+  "foot.L",
+  "toe.L",
+  "thigh.R",
+  "shin.R",
+  "ankle.R",
+  "foot.R",
+  "toe.R"
+ ],
+ "bone_name_map_three": {
+  "root_ground": "root_ground",
+  "pelvis": "pelvis",
+  "spine": "spine",
+  "chest": "chest",
+  "neck": "neck",
+  "head": "head",
+  "band_a_01": "band_a_01",
+  "band_a_02": "band_a_02",
+  "band_b_01": "band_b_01",
+  "band_b_02": "band_b_02",
+  "jaw": "jaw",
+  "shoulder.L": "shoulderL",
+  "shoulder_fix.L": "shoulder_fixL",
+  "upper_arm.L": "upper_armL",
+  "forearm.L": "forearmL",
+  "forearm_twist.L": "forearm_twistL",
+  "wrist.L": "wristL",
+  "paw.L": "pawL",
+  "shoulder.R": "shoulderR",
+  "shoulder_fix.R": "shoulder_fixR",
+  "upper_arm.R": "upper_armR",
+  "forearm.R": "forearmR",
+  "forearm_twist.R": "forearm_twistR",
+  "wrist.R": "wristR",
+  "paw.R": "pawR",
+  "tail_01": "tail_01",
+  "tail_02": "tail_02",
+  "tail_03": "tail_03",
+  "thigh.L": "thighL",
+  "shin.L": "shinL",
+  "ankle.L": "ankleL",
+  "foot.L": "footL",
+  "toe.L": "toeL",
+  "thigh.R": "thighR",
+  "shin.R": "shinR",
+  "ankle.R": "ankleR",
+  "foot.R": "footR",
+  "toe.R": "toeR"
+ },
+ "animations": [
+  {
+   "name": "idle",
+   "duration": 1.2,
+   "channels": 115,
+   "frames": 72,
+   "loop": true
+  },
+  {
+   "name": "crouch",
+   "duration": 0.8,
+   "channels": 115,
+   "frames": 48,
+   "loop": false
+  }
+ ],
+ "triangles": 24884,
+ "vertices_after_split": 15020,
+ "primitives": [
+  {
+   "material": "moguzo_body",
+   "triangles": 24436,
+   "vertices": 14675,
+   "morph_targets": 4
+  },
+  {
+   "material": "moguzo_eye",
+   "triangles": 448,
+   "vertices": 345,
+   "morph_targets": 4
+  }
+ ],
+ "textures": 1,
+ "images": [
+  {
+   "mime": "image/jpeg",
+   "bytes": 303825
+  }
+ ],
+ "materials": [
+  "moguzo_body",
+  "moguzo_eye"
+ ],
+ "morph_targets": [
+  "paw_open.L",
+  "paw_open.R",
+  "blink",
+  "brow_angry"
+ ],
+ "height": 0.6,
+ "playback": {
+  "loaded_clips": [
+   {
+    "name": "idle",
+    "duration": 1.2000000476837158,
+    "tracks": 116
+   },
+   {
+    "name": "crouch",
+    "duration": 0.800000011920929,
+    "tracks": 116
+   }
+  ],
+  "stats": {
+   "tris": 24884,
+   "verts": 15020,
+   "meshes": 2,
+   "bones": 38,
+   "morphs": [
+    "paw_open.L",
+    "paw_open.R",
+    "blink",
+    "brow_angry"
+   ],
+   "calls": 4
+  },
+  "clips": {
+   "idle": {
+    "bones_move_max_m": 0.0186,
+    "bones_animated": true,
+    "loop_seam_max_m": 0,
+    "loop_seam_ok": true,
+    "max_bone_step_per_frame_m": 0.0009,
+    "lowest_foot_bone_y_m": 0.0133,
+    "planted_foot_drift_max_m": 0
+   },
+   "crouch": {
+    "bones_move_max_m": 0.3752,
+    "bones_animated": true,
+    "max_bone_step_per_frame_m": 0.0564,
+    "lowest_foot_bone_y_m": 0.0131,
+    "pelvis_drop_m": 0.0777,
+    "lead_paw_height_m": 0.0379,
+    "lead_foot_drift_m": 0,
+    "paw_open_morph_at_end": 1
+   }
+  },
+  "console_errors": []
+ },
+ "all_pass": true
+}

@@ -1,0 +1,30 @@
+{
+ "id": "moguzo",
+ "height": 0.6,
+ "unit": "Blender単位（メートル扱い）。全高は耳を除く頭頂まで",
+ "fps": 60,
+ "forward": "glTF/Three.js では +Z が正面、+Y が上、+X が本人の左",
+ "metrics": {
+  "leg": 0.2158,
+  "arm": 0.185,
+  "note": "移動量の *_leg は脚の長さ(leg)を1とした値。実距離 = 値 × leg"
+ },
+ "clips": {
+  "idle": {
+   "frames": 72,
+   "fps": 60,
+   "duration_sec": 1.2,
+   "loop": true,
+   "note": "待機。呼吸で上下する"
+  },
+  "crouch": {
+   "frames": 48,
+   "fps": 60,
+   "duration_sec": 0.8,
+   "loop": false,
+   "enter_frames": 12,
+   "loop_from": 12,
+   "note": "F12まででしゃがみ切り、F12〜F48は呼吸の保持ループ。リード手（左）を地面につく"
+  }
+ }
+}
