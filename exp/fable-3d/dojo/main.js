@@ -58,7 +58,7 @@ function resize(){
   if(w<1||h<1)return;
   renderer.setSize(w,h,false);renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,1.5));
   const aspect=w/h,halfWidth=Math.max(1.96,.69*aspect);
-  camera.left=-halfWidth;camera.right=halfWidth;camera.top=1.18;camera.bottom=-.2;camera.updateProjectionMatrix();
+  camera.left=-halfWidth;camera.right=halfWidth;camera.top=1.28;camera.bottom=-.2;camera.updateProjectionMatrix();
 }
 const observer=new ResizeObserver(resize);observer.observe(canvas);window.addEventListener('resize',resize);
 function disposable(o){o.traverse(node=>{if(node.geometry)node.geometry.dispose();
