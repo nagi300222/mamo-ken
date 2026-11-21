@@ -105,7 +105,7 @@ export class Battle {
       f.x=mid+dir*.18;f.y=0;f.vy=0;f.action=null;f.stop=0;f.stun=0;f.dashF=0;
       f.state='clinch';f.frame=0;f.facing=dir===-1?1:-1;
     }
-    this.projectiles.length=0;
+    this.projectiles.length=0;this.pending.length=0;
     this.events.push({type:'gyuiin_start',slot:p.slot,x:mid,y:.35});
     return true;
   }
@@ -376,9 +376,11 @@ export class Battle {
         this._gravity(p);continue;
       }
       this._input(p,op,raw[i]);
+      if(this.clinch)break;
       p.guardF=p.input[facingBack(p)]?p.guardF+1:0;
-      this._act(p,op);this._gravity(p);
+      this._act(p,op);if(this.clinch)break;this._gravity(p);
     }
+    if(this.clinch)return this;
     for(const e of this.pending)this._damage(e.p,e.op,e.m,e.d,'strike',true);
     if(a.hp<=0&&b.hp<=0){this.phase='ko';this.winner=-1;}
     if(this.phase==='fight'){
