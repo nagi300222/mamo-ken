@@ -5,6 +5,7 @@ on:
     branches:
       - feat/mamoken-3d-mobile-fight
       - feat/mamoken-3d-motion-live-v04
+      - feat/mamoken-balance-v05
   pull_request:
     branches:
       - feat/mamoken-3d-mobile-fight
