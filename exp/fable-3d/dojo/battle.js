@@ -134,8 +134,8 @@ export class Battle {
     const back=facingAway(target,target.input);
     return back && (level==='low'?target.input.down:level!=='overhead'||!target.input.down);
   }
-  _damage(attacker,target,m,distance,source='strike') {
-    if(target.ko||this.phase!=='fight')return;
+  _damage(attacker,target,m,distance,source='strike',force=false) {
+    if(target.ko||(this.phase!=='fight'&&!force))return;
     const guard=this._guarding(target,attacker,m.level||'mid',m.kind==='throw');
     let dmg=m.damage;
     if(attacker.id==='moguzo'&&attacker.hp<=ROSTER.moguzo.hp*.3)dmg=Math.round(dmg*1.12);
@@ -165,7 +165,6 @@ export class Battle {
         target.hp=1;target.ability.grit=false;this.events.push({type:'grit',slot:target.slot});
       }
       if(attacker.id==='pisuke'&&m.id?.includes('stand_')||attacker.id==='pisuke'&&m.id?.includes('crouch_'))attacker.ability.chase=15;
-      if(attacker.id==='chir ka')attacker.ability.chase=0; // 防御的な保険（不使用）
       if(attacker.id==='chirka' && m.poison) {target.poison=180;target.poisonTick=0;}
       if(attacker.id==='takimaru')attacker.ability.pressure=30;
       if(attacker.id==='bullet' && (m.id!==attacker.ability.lastCharge)) {
@@ -209,7 +208,7 @@ export class Battle {
     if(active(p)&&!p.used&&m.kind!=='projectile'){
       if(this._contact(p,other,m)) {
         p.used=true;
-        this._damage(p,other,m,Math.abs(p.x-other.x));
+        this.pending.push({p,other,m,dist:Math.abs(p.x-other.x)});
       }
     }
     if(p.frame>=frameLen(m)) {
@@ -242,7 +241,7 @@ export class Battle {
   }
   tick(raw1={},raw2=null) {
     if(this.phase!=='fight')return this;
-    this.frame++;this.time--;this.events=[];
+    this.frame++;this.time--;this.events=[];this.pending=[];
     const [a,b]=this.fighters;
     if(this.time<=0){
       this.phase='ko';this.winner=a.hp/ROSTER[a.id].hp===b.hp/ROSTER[b.id].hp?-1:
@@ -263,8 +262,10 @@ export class Battle {
       this._gravity(p);
       if(this.phase!=='fight')break;
     }
+    // 同一フレームの攻撃を先に収集してから両者へ適用。行動更新順による先行KOを防ぐ。
+    for(const hit of this.pending)this._damage(hit.p,hit.other,hit.m,hit.dist,'strike',true);
+    if(this.fighters[0].hp<=0&&this.fighters[1].hp<=0){this.phase='ko';this.winner=-1;}
     if(this.phase==='fight') {
-      // 順番依存を完全には排除していない仮エンジン。相打ち精度は次工程。
       const dist=b.x-a.x, overlap=2*ARENA.pushRadius-Math.abs(dist);
       if(overlap>0){const dir=dist>=0?1:-1;advanceX(a,-dir*overlap/2);advanceX(b,dir*overlap/2);}
       this._projectiles();
@@ -278,6 +279,6 @@ export class Battle {
 }
 export function simFight(left,right,frames=12000,level=2){
   const g=new Battle(left,right,level);
-  for(let i=0;i<frames&&g.phase==='fight';i++){const p=g.fighters[0],op=g.fighters[1];g.tick(aiInput(g,p,op,level));}
+  for(let i=0;i<frames&&g.phase==='fight';i++){const p=g.fighters[0],op=g.fighters[1];g.tick(aiInput({...g,frame:g.frame+1},p,op,level));}
   return g;
 }
