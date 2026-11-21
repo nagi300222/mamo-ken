@@ -13,7 +13,18 @@
   <header class="topbar">
     <div class="brand"><span class="brand-mark">拳</span><div><strong>マモ拳 <span>3D</span></strong><small>山岳道場 · 対戦試作 v0.2</small></div></div>
     <div class="header-actions">
-      <span class="draft">仮バランス</span>
+      <button class="ghost" popovertarget="commands-help">技表</button>
+      <div id="commands-help" popover>
+        <strong>コマンド表</strong><small>右向き時 · 左向きは左右反転</small>
+        <dl>
+          <dt>波動</dt><dd>236　↓↘→ ＋ 弱／強</dd>
+          <dt>昇龍</dt><dd>623　→↓↘ ＋ 弱／強</dd>
+          <dt>竜巻</dt><dd>214　↓↙← ＋ 弱／強</dd>
+          <dt>奥義</dt><dd>236236　↓↘→↓↘→ ＋ 強<br>奥義ゲージ満タン時</dd>
+        </dl>
+        <p id="drive-costs"></p>
+        <button class="ghost" popovertarget="commands-help" popovertargetaction="hide">閉じる</button>
+      </div>
       <button id="pause" class="ghost" title="一時停止">一時停止</button>
       <button id="select-back" class="ghost">キャラ選択</button>
     </div>
@@ -34,23 +45,23 @@
     <canvas id="stage"></canvas>
     <div class="hud">
       <div class="hud-side">
-        <div class="hud-name"><span id="name-0">モグゾー</span><span id="ability-0">根性</span></div>
-        <div class="hp-track"><div id="hp-0" class="hp-fill"></div></div>
-        <div class="meter-track"><div id="meter-0" class="meter-fill"></div></div>
-        <div class="drive-track" title="咆哮・ギュイーンの共通ゲージ"><div id="drive-0" class="drive-fill"></div></div>
+        <div class="hud-name"><b>1P</b><span id="name-0">モグゾー</span><small id="ability-0"></small></div>
+        <div class="resource health"><span>体力</span><div class="track"><i id="hp-0"></i></div></div>
+        <div class="resource drive"><span>ドライブ</span><div class="track"><i id="drive-0"></i></div><b id="drive-value-0">100</b></div>
+        <div class="resource super"><span>奥義</span><div class="track"><i id="meter-0"></i></div><b id="super-value-0">0</b></div>
       </div>
       <div class="round-center"><span id="timer">75</span><small id="round-message">ROUND 1</small></div>
       <div class="hud-side mirrored">
-        <div class="hud-name"><span id="name-1">ゴダン</span><span id="ability-1">装甲</span></div>
-        <div class="hp-track"><div id="hp-1" class="hp-fill"></div></div>
-        <div class="meter-track"><div id="meter-1" class="meter-fill"></div></div>
-        <div class="drive-track" title="咆哮・ギュイーンの共通ゲージ"><div id="drive-1" class="drive-fill"></div></div>
+        <div class="hud-name"><b>CPU</b><span id="name-1">ゴダン</span><small id="ability-1"></small></div>
+        <div class="resource health"><span>体力</span><div class="track"><i id="hp-1"></i></div></div>
+        <div class="resource drive"><span>ドライブ</span><div class="track"><i id="drive-1"></i></div><b id="drive-value-1">100</b></div>
+        <div class="resource super"><span>奥義</span><div class="track"><i id="meter-1"></i></div><b id="super-value-1">0</b></div>
       </div>
     </div>
     <div id="note" class="note" aria-live="polite">キャラクターを選んで対戦開始</div>
     <div id="game-over" class="modal hidden">
       <div class="result-panel">
-        <small class="eyebrow">ROUND FINISHED</small><h2 id="result-title">決着！</h2>
+        <small class="eyebrow" id="result-reason">決着</small><h2 id="result-title">決着！</h2>
         <p id="result-description"></p>
         <div class="result-actions"><button id="rematch" class="primary">もう一戦</button><button id="result-select" class="ghost">キャラ選択</button></div>
       </div>
@@ -67,19 +78,18 @@
         </div>
       </div>
     </div>
-    <div id="commands-help" class="commands-help"><span>↓↘→＋弱/強 <b>波動</b></span> <span>→↓↘＋弱/強 <b>昇龍</b></span> <span>↓↙←＋弱/強 <b>竜巻</b></span> <span>↓↘→↓↘→＋強 <b>奥義</b></span></div>
     <div id="rotate" class="rotate-hint">スマホを横向きにすると遊びやすくなるよ</div>
     </section>
     <aside id="buttons-rail" class="control-rail">
       <span class="rail-caption">ARCADE · ATTACK</span>
       <div id="controls" class="overlay-controls">
       <div class="attack-pad">
-        <button data-control="weak" class="attack weak" aria-label="弱攻撃">弱</button>
-        <button data-control="strong" class="attack heavy" aria-label="強攻撃">強</button>
-        <button data-control="throw" class="attack throw" aria-label="掴み">掴</button>
-        <button data-control="roar" class="attack roar" aria-label="咆哮">咆哮</button>
-        <button data-control="gyuiin" class="attack gyuiin" aria-label="ギュイーン">ギュイーン</button>
-      </div>
+          <button data-control="weak" class="attack weak" aria-label="弱攻撃">弱</button>
+          <button data-control="strong" class="attack heavy" aria-label="強攻撃">強</button>
+          <button data-control="throw" class="attack throw" aria-label="掴み">掴み</button>
+          <button data-control="roar" class="attack roar" aria-label="咆哮">咆哮<small id="roar-status"></small></button>
+          <button data-control="gyuiin" class="attack gyuiin" aria-label="ギュイーン">ギュイーン<small id="gyuiin-status"></small></button>
+        </div>
 
       </div>
       <span class="rail-sub">弱・強＋方向で必殺技</span>
