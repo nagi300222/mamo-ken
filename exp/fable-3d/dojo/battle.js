@@ -203,7 +203,7 @@ export class Battle {
     const dir=n.right?1:n.left?-1:0;
     if(dir&&!n.down){
       const rr=ROSTER[p.id],back=dir!==p.facing;
-      moveX(p,dir*(p.y>0?rr.walk*1.35:back?rr.back:rr.walk));
+      moveX(p,dir*(p.y>0?Math.max(.025,rr.walk*1.25):back?rr.back:rr.walk));
       p.state=p.y>0?'jump':back?'walk_b':'walk_f';
     }else p.state=p.y>0?'jump':n.down?'crouch':'idle';
   }
