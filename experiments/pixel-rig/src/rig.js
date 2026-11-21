@@ -374,7 +374,7 @@ export function bakeMotion(rig, motion) {
       const wx = cur[0] + vel[0] * (ff + c * total), wy = cur[1] + vel[1] * (ff + c * total);
       stepChains(rig, solved, state, wx, wy);
       if (c === cycles - 1 && f >= 0 && f % step === 0) {
-        const rx = Math.round(pose.root[0]), ry = Math.round(pose.root[1]);
+        const rx = RI(pose.root[0]), ry = RI(pose.root[1]);
         applyChains(rig, solved, state, wx, wy);
         frames.push({
           index: frames.length, start: f, dur: Math.min(step, total - f), key, plant,
@@ -390,7 +390,10 @@ export function bakeMotion(rig, motion) {
 // 描画（低解像度バッファ）
 // ---------------------------------------------------------------------------
 
-const snapAngle = (deg, s) => (s > 0 ? Math.round(deg / s) * s : deg);
+// 実行環境（ブラウザ / Node）で三角関数の末尾ビットが違っても同じ絵になるよう、丸めの前に 1/4096 へ量子化する。
+const Q = (v) => Math.round(v * 4096) / 4096;
+const RI = (v) => Math.round(Q(v));
+const snapAngle = (deg, s) => (s > 0 ? Math.round(Q(deg / s)) * s : Q(deg));
 
 /** ポーズで差し替え指定されたパーツを考慮して、スロットごとに描くパーツ名を返す。 */
 function activeParts(rig, pose) {
@@ -406,7 +409,7 @@ function activeParts(rig, pose) {
 }
 
 function blitPart(buf, w, h, part, jx, jy, deg, yMax) {
-  const c = Math.cos(deg * DEG), s = Math.sin(deg * DEG);
+  const c = Math.round(Math.cos(deg * DEG) * 1e9) / 1e9, s = Math.round(Math.sin(deg * DEG) * 1e9) / 1e9;
   // 目的側の外接矩形
   const xs = [], ys = [];
   for (const [px, py] of [[0, 0], [part.w, 0], [0, part.h], [part.w, part.h]]) {
@@ -419,8 +422,8 @@ function blitPart(buf, w, h, part, jx, jy, deg, yMax) {
   for (let y = y0; y <= y1; y++) {
     for (let x = x0; x <= x1; x++) {
       const dx = x + 0.5 - jx, dy = y + 0.5 - jy;
-      const sx = Math.floor(dx * c + dy * s + part.pivot[0]);
-      const sy = Math.floor(-dx * s + dy * c + part.pivot[1]);
+      const sx = Math.floor(Q(dx * c + dy * s + part.pivot[0]));
+      const sy = Math.floor(Q(-dx * s + dy * c + part.pivot[1]));
       if (sx < 0 || sy < 0 || sx >= part.w || sy >= part.h) continue;
       const ci = part.idx[sy * part.w + sx];
       if (ci) buf[y * w + x] = ci;
@@ -472,8 +475,8 @@ export function renderPose(rig, solved, opts) {
       const A = solved.bones[f.a.bone], Bn = solved.bones[f.b.bone];
       if (!A || !Bn) continue;
       const pa = rot(f.a.at || [0, 0], A.rot), pb = rot(f.b.at || [0, 0], Bn.rot);
-      fillCapsule(gbuf, w, h, Math.round(A.x + pa[0]) + ox, Math.round(A.y + pa[1]) + oy, f.a.r,
-        Math.round(Bn.x + pb[0]) + ox, Math.round(Bn.y + pb[1]) + oy, f.b.r, f.colorIdx, oy);
+      fillCapsule(gbuf, w, h, RI(A.x + pa[0]) + ox, RI(A.y + pa[1]) + oy, f.a.r,
+        RI(Bn.x + pb[0]) + ox, RI(Bn.y + pb[1]) + oy, f.b.r, f.colorIdx, oy);
       any = true;
     }
     const ps = act.filter((p) => p.group === g.name).sort((a, b) => a.order - b.order);
@@ -482,7 +485,7 @@ export function renderPose(rig, solved, opts) {
       if (!b) throw new Error(`${p.name}: ボーン ${p.bone} が解かれていません`);
       const o = rot(p.at, b.rot);
       const deg = p.upright ? 0 : snapAngle(b.rot - p.baseAngle, p.snap);
-      blitPart(gbuf, w, h, p, Math.round(b.x + o[0]) + ox, Math.round(b.y + o[1]) + oy, deg, oy);
+      blitPart(gbuf, w, h, p, RI(b.x + o[0]) + ox, RI(b.y + o[1]) + oy, deg, oy);
       any = true;
     }
     if (!any) continue;
@@ -513,7 +516,7 @@ export function renderPose(rig, solved, opts) {
     // merge: 付け根（肩など）は線を引かず、下のグループとなじませる。
     const merges = (g.merge || []).map((m) => {
       const b = solved.bones[m.bone], o = rot(m.at || [0, 0], b.rot);
-      return [Math.round(b.x + o[0]) + ox, Math.round(b.y + o[1]) + oy, m.r * m.r];
+      return [RI(b.x + o[0]) + ox, RI(b.y + o[1]) + oy, m.r * m.r];
     });
     for (let y = 0; y < h; y++) {
       for (let x = 0; x < w; x++) {
