@@ -161,7 +161,7 @@ export class Battle {
       p.ability.pressure=0;
     }
     if(p.id==='yomikage'&&p.ability.just>0&&m.kind==='counter'){
-      m={...m,startup:Math.max(3,m.startup-2),damage:Math.round(m.damage*1.22)};p.ability.just=0;
+      m={...m,startup:Math.max(3,m.startup-2),damage:Math.round(m.damage*1.22),justBoosted:true};p.ability.just=0;
     }
     // 王道型：種類の違う成功から得た根性を次の必殺1回に回す。
     if(p.id==='moguzo'&&p.ability.gutsReady&&id.startsWith('s')){
@@ -301,6 +301,12 @@ export class Battle {
         return;
       }
     }
+    // 正解ステップの短い回避中は打撃をかわす。投げ/咆哮は対象外。
+    if(t.id==='yomikage'&&t.ability.evadeF>0&&
+       !['throw','roar','clinch'].includes(m.kind)){
+      this.events.push({type:'just_evade',slot:t.slot,x:t.x,y:t.y+.33});
+      return;
+    }
     const guard=this._guarding(t,m);
     let dmg=m.damage;
     if(a.id==='moguzo'&&a.hp<=ROSTER.moguzo.hp*.30)dmg=Math.round(dmg*1.06);
@@ -308,9 +314,13 @@ export class Battle {
     if(guard){
       t.dashF=0;t.guard=cap(t.guard-Math.max(5,dmg*(m.kind==='roar'?.37:.16)),0,ROSTER[t.id].guardMax);
       t.stun=t.guard<=0?26:Math.max(8,Math.round(dmg*(m.kind==='roar'?.17:.08)));
-      t.state='block';t.reaction=m.kind==='roar'?'guard_impact':t.input.down?'guard_crouch_hit':'guard_hit';t.frame=0;t.ability.iron=t.id==='hakuma'?1:t.ability.iron;
-      if(t.id==='yomikage'&&t.guardF<=7)t.ability.just=42;
-      if(a.id==='takimaru')a.ability.pressure=36;
+      t.state='block';t.reaction=m.kind==='roar'?'guard_impact':t.input.down?'guard_crouch_hit':'guard_hit';t.frame=0;
+      if(t.id==='hakuma'&&!['roar','throw','clinch'].includes(m.kind))t.ability.iron=1;
+      if(t.id==='bullet'&&t.ability.lastCharge!=='guard'){
+        t.ability.charge=Math.min(3,t.ability.charge+1);t.ability.lastCharge='guard';
+        this.events.push({type:'charge',slot:t.slot,value:t.ability.charge});
+      }
+      if(a.id==='takimaru'&&['strike','dash','anti','tail'].includes(m.kind))a.ability.pressure=36;
       this.events.push({type:'block',slot:t.slot,x:t.x,y:t.y+.35,damage:0});
     }else{
       const absorb=this._absorbing(t,m);
@@ -318,9 +328,14 @@ export class Battle {
         a.stop=Math.max(a.stop,4);
         this.events.push({type:'roar_absorb',slot:t.slot,x:t.x,y:t.y+.38});return;
       }
-      if(t.id==='yomikage'&&t.action?.kind==='counter'&&active(t)&&m.kind!=='roar'&&m.kind!=='clinch'){
-        a.stun=16;a.hp=Math.max(0,a.hp-88);t.action=null;t.state='idle';
-        this.events.push({type:'counter',slot:t.slot,x:t.x,y:t.y+.34});return;
+      if(t.id==='yomikage'&&t.action?.kind==='counter'&&active(t)&&
+          !['roar','clinch','throw'].includes(m.kind)){
+        const counterDamage=t.action.justBoosted?t.action.damage:Math.round(t.action.damage*.63);
+        a.stun=t.action.justBoosted?24:16;a.hp=Math.max(0,a.hp-counterDamage);
+        t.action=null;t.state='idle';
+        this.events.push({type:'counter',slot:t.slot,x:t.x,y:t.y+.34,damage:counterDamage});
+        if(a.hp===0){a.ko=true;a.state='ko';this.phase='ko';this.winner=t.slot;}
+        return;
       }
       if(absorb==='godan'){
           dmg=Math.round(dmg*.70);
@@ -333,11 +348,32 @@ export class Battle {
       }
       t.hp=Math.max(0,t.hp-dmg);t.guard=cap(t.guard+2,0,ROSTER[t.id].guardMax);t.ability.iron=0;
       if(t.id==='moguzo'&&t.hp===0&&t.ability.grit){t.hp=1;t.ability.grit=false;this.events.push({type:'grit',slot:t.slot});}
-      if(a.id==='pisuke'&&/^(stand|crouch)_/.test(m.id||''))a.ability.chase=15;
-      if(a.id==='chirka'&&m.poison){t.poison=180;t.poisonTick=0;}
-      if(a.id==='takimaru')a.ability.pressure=30;
-      if(a.id==='bullet'&&m.id!==a.ability.lastCharge){a.ability.charge=Math.min(3,a.ability.charge+1);a.ability.lastCharge=m.id;}
-      if(a.id==='dark_moguzo'&&source==='strike'&&!m.isSuper)a.ability.dark=18;
+      if(a.id==='pisuke'&&/^(stand|crouch)_/.test(m.id||'')&&a.ability.chaseCooldown===0)
+        a.ability.chase=18;
+      if(a.id==='takimaru'&&['strike','dash','anti','tail'].includes(m.kind))a.ability.pressure=34;
+      if(a.id==='moguzo'&&!m.isSuper&&!['roar','clinch'].includes(m.kind)){
+        const category=m.kind==='throw'?'throw':m.kind==='projectile'?'projectile':
+          m.level==='low'?'low':m.kind==='anti'?'anti':m.id?.startsWith('s')?'special':'strike';
+        if(category!==a.ability.lastGuts){
+          a.ability.lastGuts=category;
+          a.ability.gutsProgress=Math.min(2,a.ability.gutsProgress+1);
+          if(a.ability.gutsProgress===2)a.ability.gutsReady=true;
+        }
+      }
+      if(a.id==='bullet'&&!m.isSuper&&!['roar','clinch'].includes(m.kind)){
+        const category=m.kind==='projectile'?'projectile':m.kind==='throw'?'throw':
+          m.kind==='tail'?'tail':m.id?.startsWith('s')?'special':m.level==='low'?'low':'normal';
+        if(category!==a.ability.lastCharge){
+          a.ability.charge=Math.min(3,a.ability.charge+1);
+          a.ability.lastCharge=category;
+          this.events.push({type:'charge',slot:a.slot,value:a.ability.charge});
+        }
+      }
+      if(a.id==='dark_moguzo'&&!a.ability.darkUsed&&
+         ((/^s[123]$/.test(m.id||'')&&source==='strike')||
+          (m.kind==='projectile'&&a.action?.id==='s1'))){
+        a.ability.dark=18;
+      }
       this.events.push({type:m.kind==='clinch'?'gyuiin_hit':'hit',slot:t.slot,x:t.x,y:t.y+.32,damage:dmg});
       if(m.kind==='clinch'){a.stop=Math.max(a.stop,15);t.stop=Math.max(t.stop,15);}
       if(m.kind==='roar'){t.stun=Math.max(t.stun,23);t.reaction='roar_hit';this.events.push({type:'roar_hit',slot:a.slot,x:t.x,y:t.y+.35});}
