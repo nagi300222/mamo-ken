@@ -93,7 +93,7 @@ test('全9体がジャンプで相手の頭上を横切れる',()=>{
       peak=Math.max(peak,p.y);
       if(p.y>.45&&p.x>enemy.x+.05)cross=true;
     }
-    assert.ok(peak>.85,id+': 高さが足りない');
+    assert.ok(peak>.62&&peak<.83,id+': v0.3の低いジャンプの範囲外');
     assert.ok(cross,id+': 相手を飛び越せない');
   }
 });

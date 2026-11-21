@@ -99,7 +99,7 @@ test('ジャンプで相手を越え、左右の向きと後ろガードが入�
     g.tick({right:true,up:i===0},{});
     apex=Math.max(apex,g.fighters[0].y);
   }
-  assert.ok(apex>.80, 'apex higher than opponent character');
+  assert.ok(apex>.62&&apex<.83, 'v0.3 jump apex stays low but clears opponent');
   assert.ok(g.fighters[0].x>g.fighters[1].x,'crossed opponent');
   assert.equal(g.fighters[0].facing,-1,'facing switches after crossing');
 });
