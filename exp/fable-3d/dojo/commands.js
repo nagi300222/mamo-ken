@@ -44,9 +44,12 @@ function matches(history,pattern,now,maxAge) {
 }
 export function readCommand(history,button,frame,superReady=false) {
   if(button!=='weak'&&button!=='strong')return null;
-  for(const kind of ['super','dp','qcb','qcf']){
-    if(kind==='super'&&(!superReady||button!=='strong'))continue;
-    if(SHORTCUTS[kind].some(p=>matches(history,p,frame,WINDOWS[kind])))return kind;
-  }
+  if(superReady&&button==='strong'&&SHORTCUTS.super.some(p=>matches(history,p,frame,WINDOWS.super)))return 'super';
+  // 6→236（歩きながら波動）を誤って623と取らないよう、完全な236/214を先に優先。
+  if(matches(history,[2,3,6],frame,WINDOWS.qcf))return 'qcf';
+  if(matches(history,[2,1,4],frame,WINDOWS.qcb))return 'qcb';
+  if(SHORTCUTS.dp.some(p=>matches(history,p,frame,WINDOWS.dp)))return 'dp';
+  if(SHORTCUTS.qcb.some(p=>matches(history,p,frame,WINDOWS.qcb)))return 'qcb';
+  if(SHORTCUTS.qcf.some(p=>matches(history,p,frame,WINDOWS.qcf)))return 'qcf';
   return null;
 }
