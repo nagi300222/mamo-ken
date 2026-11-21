@@ -41,7 +41,7 @@ test('弱攻撃が命中し、後ろガードでHPを減らさない',()=>{
   const block=new Battle('moguzo','godan');block.fighters[0].x=-.21;block.fighters[1].x=.22;
   for(let f=0;f<45;f++)block.tick({weak:f===0},{right:true});
   assert.equal(block.fighters[1].hp,ROSTER.godan.hp,'back guard stops damage');
-  assert.ok(block.fighters[1].guard<100,'block costs guard');
+  assert.ok(block.fighters[1].guard<ROSTER.godan.guardMax,'block costs guard');
 });
 test('モグゾー踏ん張りは1回だけ致死を耐える',()=>{
   const g=new Battle('moguzo','godan');
