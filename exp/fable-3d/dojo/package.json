@@ -5,7 +5,7 @@
   "private": true,
   "scripts": {
     "start": "node server.mjs",
-    "test": "node --test battle.test.mjs",
+    "test": "node --test",
     "build:pages": "node build-pages.mjs"
   },
   "engines": { "node": ">=20" }
