@@ -18,7 +18,7 @@ function fighter(id,slot){
   return {id,slot,x:slot===0?-.70:.70,y:0,vy:0,facing:slot===0?1:-1,
     hp:r.hp,guard:100,super:0,drive:DRIVE.initial,driveDelay:0,state:'idle',reaction:null,frame:0,stun:0,stop:0,
     action:null,used:false,spawned:false,ko:false,prev:inputOf({}),input:inputOf({}),
-    dirHistory:[],dashF:0,dashDir:0,roarCooldown:0,gyuiinCooldown:0,guardF:0,
+    dirHistory:[],dirFacing:null,dashF:0,dashDir:0,roarCooldown:0,gyuiinCooldown:0,guardF:0,
     ability:{charge:0,lastCharge:'',iron:0,armor:3,chase:0,pressure:0,just:0,dark:0,grit:true},
     poison:0,poisonTick:0,attackSerial:0,locomotion:0
   };
@@ -51,13 +51,15 @@ function aiInput(g,p,op,level){
 function timer(p){
   for(const k of ['chase','pressure','just','dark'])p.ability[k]=Math.max(0,p.ability[k]-1);
   for(const k of ['roarCooldown','gyuiinCooldown'])p[k]=Math.max(0,p[k]-1);
-  if(p.poison>0){
-    p.poison--;p.poisonTick++;
-    if(p.poisonTick>=30){p.poisonTick=0;p.hp=Math.max(0,p.hp-4);}
-  }else p.poisonTick=0;
   p.guard=cap(p.guard+(p.stun? .006:.025),0,100);
   if(p.driveDelay>0)p.driveDelay--;
   else p.drive=cap(p.drive+DRIVE.regenPerFrame,0,DRIVE.max);
+}
+function tickPoison(p){
+  if(p.action?.kind==='clinch'||p.state==='clinch_recoil')return;
+  if(p.poison<=0){p.poisonTick=0;return;}
+  p.poison--;p.poisonTick++;
+  if(p.poisonTick>=30){p.poisonTick=0;p.hp=Math.max(0,p.hp-4);}
 }
 export class Battle {
   constructor(left='moguzo',right='godan',level=2){
@@ -86,8 +88,8 @@ export class Battle {
       return x0+(x1-x0)*(frame-f0)/(f1-f0);
     }return a.at(-1)[1];
   }
-  _startGyuiin(p,other){
-    if(p.ko||this.clinch||p.gyuiinCooldown>0||p.drive<DRIVE.gyuiinCost||p.y>.09)return false;
+  _startGyuiin(p){
+    if(p.ko||this.clinch||p.state==='clinch_recoil'||p.gyuiinCooldown>0||p.drive<DRIVE.gyuiinCost||p.y>.09)return false;
     p.drive-=DRIVE.gyuiinCost;p.driveDelay=DRIVE.regenDelay+60;p.gyuiinCooldown=145;
     // 超装甲は攻撃中・被弾中にも起動可能。ただし必要なドライブを消費する。
     p.action={...GYUIIN,id:'gyuiin',serial:++this.seq,started:this.frame};
@@ -100,10 +102,11 @@ export class Battle {
     if(this.clinch||p.ko||other.ko)return false;
     this.clinch={frame:0,total:DRIVE.clinchFrames,initiator:p.slot};
     const mid=cap((p.x+other.x)*.5,ARENA.minX+.35,ARENA.maxX-.35);
+    const side=p.x<other.x||(p.x===other.x&&p.slot<other.slot)?-1:1;
     for(const f of [p,other]){
-      const dir=f===p?(p.x<=other.x?-1:1):(other.x<=p.x?-1:1);
+      const dir=f===p?side:-side;
       f.x=mid+dir*.18;f.y=0;f.vy=0;f.action=null;f.stop=0;f.stun=0;f.dashF=0;
-      f.state='clinch';f.frame=0;f.facing=dir===-1?1:-1;
+      f.state='clinch';f.frame=0;f.facing=-dir;f.dirHistory=[];
     }
     this.projectiles.length=0;this.pending.length=0;
     this.events.push({type:'gyuiin_start',slot:p.slot,x:mid,y:.35});
@@ -123,7 +126,7 @@ export class Battle {
     }
   }
   _begin(p,m,id){
-    if(m.kind==='clinch')return this._startGyuiin(p,this.fighters[1-p.slot]);
+    if(m.kind==='clinch')return this._startGyuiin(p);
     if(p.ko||p.stun||p.stop||(p.y>.06&&['throw','roar','projectile'].includes(m.kind)))return false;
     if(m.isSuper&&p.super<100)return false;
     if(m.kind==='roar'&&(p.roarCooldown>0||p.drive<DRIVE.roarCost))return false;
@@ -155,10 +158,8 @@ export class Battle {
   _input(p,other,raw){
     const n=inputOf(raw),edges={};
     for(const k of KEYS)edges[k]=n[k]&&!p.prev[k];
-    p.prev=n;p.input=n;p.dirHistory=pushDirection(p.dirHistory,n,this.frame,p.facing);
+    p.prev=n;p.input=n;
     if(p.ko)return;
-    // ギュイーンは攻撃・被弾の途中でも、ゲージを払って仕切り直しを試みられる。
-    if(edges.gyuiin&&this._startGyuiin(p,other))return;
     if(p.stop||p.stun)return;
     if(edges.roar&&p.action&&p.action.kind!=='roar'&&other.action?.kind==='roar'&&p.roarCooldown===0&&p.drive>=DRIVE.roarCost){p.action=null;p.frame=0;}
 
@@ -218,9 +219,6 @@ export class Battle {
     if(c==='roar'&&t.frame>=1&&t.frame<=t.action.startup+t.action.active){
       if(m.kind!=='roar'&&m.kind!=='throw'&&m.kind!=='clinch')return 'roar';
     }
-    if(c==='clinch'&&t.frame>=2&&t.frame<=t.action.startup+t.action.active){
-      if(m.kind!=='roar'&&m.kind!=='throw'&&m.kind!=='clinch')return 'clinch';
-    }
     if(t.id==='godan'&&t.action.armor&&t.frame>=4&&m.kind!=='throw'&&m.kind!=='clinch')return 'godan';
     return null;
   }
@@ -263,8 +261,7 @@ export class Battle {
         a.stun=16;a.hp=Math.max(0,a.hp-88);t.action=null;t.state='idle';
         this.events.push({type:'counter',slot:t.slot,x:t.x,y:t.y+.34});return;
       }
-      if(absorb==='clinch'){dmg=Math.max(1,Math.round(dmg*.4));this.events.push({type:'gyuiin_armor',slot:t.slot});}
-      else if(absorb==='godan'){dmg=Math.round(dmg*.55);this.events.push({type:'armor',slot:t.slot});}
+      if(absorb==='godan'){dmg=Math.round(dmg*.55);this.events.push({type:'armor',slot:t.slot});}
       else{
         t.stun=m.kind==='clinch'?36:Math.max(12,Math.round(m.damage*.16));
         t.action=null;t.dashF=0;t.state='hit';t.reaction=m.kind==='roar'?'roar_hit':m.damage>=95?'hurt_heavy':'hurt_light';t.frame=0;
@@ -329,8 +326,7 @@ export class Battle {
     for(const b of this.projectiles){
       b.x+=b.speed*b.face;b.life--;
       if(b.life<=0||Math.abs(b.x)>ARENA.maxX+.3)continue;
-      for(const t of this.fighters)if(this._roarErase(t,b) || (t.action?.kind==='clinch'&&Math.abs(b.x-t.x)<.65)){
-
+      for(const t of this.fighters)if(this._roarErase(t,b) || (b.owner!==t.slot&&t.action?.kind==='clinch'&&Math.abs(b.x-t.x)<.65&&Math.abs((b.y-.30)-t.y)<.50)){
         b.life=0;this.events.push({type:t.action?.kind==='clinch'?'gyuiin_armor':'roar_erase',slot:t.slot,x:b.x,y:b.y});break;
       }
       if(b.life<=0)continue;
@@ -356,7 +352,10 @@ export class Battle {
   tick(raw1={},raw2=null){
     if(this.phase!=='fight')return this;
     this.frame++;this.pending=[];this.events=[];
-    if(this.clinch){this._clinchTick();return this;}
+    if(this.clinch){
+      this.fighters[0].prev=inputOf(raw1);this.fighters[1].prev=inputOf(raw2??{});
+      this._clinchTick();return this;
+    }
     this.time--;
     const [a,b]=this.fighters;
     if(this.time<=0){
@@ -367,15 +366,28 @@ export class Battle {
     if(a.hp<=0||b.hp<=0){this.phase='ko';this.winner=a.hp>0?0:b.hp>0?1:-1;return this;}
     for(const [p,op] of [[a,b],[b,a]])if(!p.action&&!p.stun)p.facing=op.x>=p.x?1:-1;
     const raw=[inputOf(raw1),inputOf(raw2??aiInput(this,b,a,this.level))];
+    // 被弾硬直・ヒットストップ中でも、入力フレームから超装甲で接近できる。
+    const started=this.fighters.map((p,i)=>raw[i].gyuiin&&!p.prev.gyuiin&&this._startGyuiin(p));
+    for(const p of this.fighters)tickPoison(p);
+    if(a.hp<=0||b.hp<=0){
+      this.phase='ko';this.winner=a.hp>0?0:b.hp>0?1:-1;
+      for(const p of this.fighters)if(p.hp<=0){p.ko=true;p.state='ko';}
+      return this;
+    }
     for(let i=0;i<2;i++){
       const p=this.fighters[i],op=this.fighters[1-i];
+      if(p.dirFacing!==p.facing){p.dirHistory=[];p.dirFacing=p.facing;}
+      const samples=i===0?raw1.directionSamples:raw2?.directionSamples;
+      for(const sample of samples??[])p.dirHistory=pushDirection(p.dirHistory,sample,this.frame,p.facing);
+      p.dirHistory=pushDirection(p.dirHistory,raw[i],this.frame,p.facing);
+      if(started[i]){p.prev=raw[i];p.input=raw[i];}
       if(p.stop>0){p.stop--;p.input=raw[i];p.prev=raw[i];continue;}
       if(p.stun>0){
         p.stun--;p.input=raw[i];p.prev=raw[i];p.frame++;
         if(!p.stun&&!p.action)p.state=p.y>0?'jump':'idle';
         this._gravity(p);continue;
       }
-      this._input(p,op,raw[i]);
+      if(!started[i])this._input(p,op,raw[i]);
       if(this.clinch)break;
       p.guardF=p.input[facingBack(p)]?p.guardF+1:0;
       this._act(p,op);if(this.clinch)break;this._gravity(p);

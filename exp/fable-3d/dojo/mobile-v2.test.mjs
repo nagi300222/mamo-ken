@@ -148,3 +148,125 @@ test('Cloudflare Pagesに入力コマンドモジュールも梱包する',()=>{
   const script=readFileSync(new URL('./build-pages.mjs',import.meta.url),'utf8');
   assert.match(script,/['"]commands\.js['"]/);
 });
+
+test('各コマンドの省略・ニュートラル・長押しを両向きで扱う',()=>{
+  for(const reverse of [false,true]){
+    const forward=reverse?B:F, back=reverse?F:B;
+    for(const button of ['weak','strong']){
+      for(const [sequence,expected] of [
+        [[DOWN,{},forward],'s1'],
+        [[forward,{},DOWN,{},forward],'s2'],
+        [[DOWN,{},back],'s3'],
+        [[DOWN,{},forward,{},DOWN,{},forward],button==='strong'?'ultimate':'s1']
+      ]){
+        const last={...sequence.at(-1),[button]:true};
+        const g=scripted([...Array(24).fill(sequence[0]),...sequence.slice(1,-1),last],{reverse,superReady:true});
+        assert.equal(g.fighters[0].action?.id,expected);
+      }
+    }
+  }
+});
+
+test('方向サンプルを取りこぼさず、無関係な方向や長押しにコマンドが暴発しない',()=>{
+  assert.equal(scripted([{directionSamples:[DOWN,DF,F,{}],weak:true}]).fighters[0].action?.id,'s1');
+  assert.equal(scripted([DOWN,DF,F,{up:true,weak:true}]).fighters[0].action?.id,'stand_weak');
+  assert.equal(scripted([DOWN,DF,...Array(65).fill(F),{...F,weak:true}]).fighters[0].action?.id,'stand_weak');
+  const g=scripted([DOWN,DF]);
+  g.fighters[0].x=.5;g.fighters[1].x=-.5;
+  g.tick({...B,weak:true},{});
+  assert.equal(g.fighters[0].action?.id,'stand_weak');
+});
+
+test('ギュイーンは被弾中に起動し、左右両側と同座標で正しく組み合う',()=>{
+  for(const slot of [0,1]){
+    const g=new Battle();
+    const p=g.fighters[slot],o=g.fighters[1-slot];
+    p.x=o.x=0;p.stun=30;p.stop=12;p.poison=180;p.poisonTick=29;
+    const inputs=slot===0?[{gyuiin:true},{}]:[{}, {gyuiin:true}];
+    const hp=g.fighters.map(f=>f.hp);
+    g.tick(...inputs);
+    assert.equal(p.action?.id,'gyuiin');
+    assert.equal(p.stun,0);
+    assert.equal(p.stop,0);
+    assert.equal(p.drive,DRIVE.initial-DRIVE.gyuiinCost);
+    while(!g.clinch&&g.frame<25)g.tick(...inputs);
+    assert.equal(g.clinch?.initiator,slot);
+    assert.equal(Math.abs(p.x-o.x),.36);
+    assert.equal(p.facing,-o.facing);
+    for(let i=0;i<DRIVE.clinchFrames+10;i++)g.tick({},{});
+    assert.deepEqual(g.fighters.map(f=>f.hp),hp);
+    assert.deepEqual(g.fighters.map(f=>f.state),['idle','idle']);
+    assert.ok(Math.abs(p.x-o.x)>=DRIVE.resetSpacing-.01);
+    g.tick({},{});
+    assert.equal(p.hp,hp[slot]-4,'毒はニュートラルに戻ると再開');
+  }
+});
+
+test('敵の打撃・弾・投げ・奥義・咆哮からギュイーンを保護し、自分の弾は消さない',()=>{
+  for(const kind of ['strike','projectile','throw','super','roar']){
+    const g=new Battle(),[p,o]=g.fighters;
+    g.tick({gyuiin:true},{});
+    const hp=p.hp;
+    g._damage(o,p,{kind,damage:999,level:'mid'});
+    assert.ok(g.events.some(e=>e.type==='gyuiin_armor'),kind);
+    assert.equal(p.hp,hp);
+    assert.equal(p.action?.id,'gyuiin');
+  }
+  const g=new Battle(),p=g.fighters[0];
+  g.projectiles.push({id:1,owner:0,x:p.x+.15,y:.30,face:1,speed:.01,life:20},
+    {id:2,owner:1,x:p.x+.20,y:.30,face:-1,speed:.01,life:20});
+  g.tick({gyuiin:true},{});
+  assert.deepEqual(g.projectiles.map(b=>b.id),[1]);
+  for(let i=0;i<46;i++)g.tick({gyuiin:true},{});
+  assert.equal(g.clinch,null);
+  assert.equal(p.action,null);
+  assert.equal(p.drive,DRIVE.initial-DRIVE.gyuiinCost);
+});
+
+test('追加クリップは旧通常技・掴みの再生先より優先する',()=>{
+  for(const [id,anim,added,kind] of [
+    ['crouch_weak','stand_light','crouch_light','strike'],
+    ['crouch_heavy','stand_heavy','crouch_heavy','strike'],
+    ['air_weak','stand_light','air_light','strike'],
+    ['air_heavy','stand_heavy','air_heavy','strike'],
+    ['throw','stand_heavy','throw_reach','throw']
+  ]){
+    const p={action:{id,anim,kind}};
+    assert.equal(chooseClip(p,['idle',anim,added]),added);
+    assert.equal(chooseClip(p,['idle',anim]),anim);
+  }
+});
+
+test('全9体が全9対戦相手を左右から飛び越え、着地後は後ろガードも反転する',()=>{
+  for(const left of Object.keys(ROSTER))for(const right of Object.keys(ROSTER))for(const side of [1,-1]){
+    const g=new Battle(left,right),[p,o]=g.fighters;
+    p.x=-side*.28;o.x=side*.28;
+    const forward=side===1?'right':'left';
+    let apex=0;
+    for(let i=0;i<42;i++){
+      g.tick({[forward]:true,up:i===0},{});
+      apex=Math.max(apex,p.y);
+      assert.ok(Math.abs(p.x)<=1.76);
+    }
+    const label=left+'/'+right+'/'+side;
+    assert.ok((p.x-o.x)*side>0&&p.y===0&&apex>.80,label);
+    assert.equal(p.facing,-side,label);
+    p.x=o.x+side*.40;
+    const hp=p.hp;
+    for(let i=0;i<10;i++)g.tick({[forward]:true},{weak:i===0});
+    assert.ok(p.guard<100,label);
+    assert.equal(p.hp,hp,label);
+  }
+});
+
+test('チルカの毒は通常対戦で付与・発生し、再戦で初期化される',()=>{
+  const g=scripted([{special1:true},...Array(36).fill({})],{left:'chirka',right:'hakuma'});
+  const target=g.fighters[1];
+  assert.ok(target.poison>0);
+  const hp=target.hp;
+  for(let i=0;i<30;i++)g.tick({},{});
+  assert.equal(target.hp,hp-4);
+  const next=g.again();
+  assert.equal(next.fighters[1].hp,ROSTER.hakuma.hp);
+  assert.equal(next.fighters[1].poison,0);
+});

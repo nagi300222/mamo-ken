@@ -30,8 +30,7 @@ for(let i=0;i<5;i++){const cloud=new THREE.Mesh(new THREE.SphereGeometry(.32+i*.
   cloud.position.set(-3+i*1.5,.95+(i%2)*.24,-3.9);cloud.scale.y=.28;scene.add(cloud);}
 const loader=new GLTFLoader();
 const actors=[null,null], bullets=new Map(), flashes=[];
-let battle=null,selected='moguzo',cpuChoice='godan',playing=false,paused=false,lastFrame=0,acc=0,finishShown=false;
-let debug=new URLSearchParams(location.search).has('debug');
+let battle=null,selected='moguzo',cpuChoice='godan',playing=false,paused=false,loading=false,lastFrame=0,acc=0,finishShown=false;
 
 const fwd=(v)=>Math.max(0,Math.min(100,v));
 function note(s){$('note').textContent=s;}
@@ -57,8 +56,9 @@ function resize(){
   const w=canvas.clientWidth,h=canvas.clientHeight;
   if(w<1||h<1)return;
   renderer.setSize(w,h,false);renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,1.5));
-  const aspect=w/h,halfWidth=Math.max(1.97,1.08*aspect);
-  camera.left=-halfWidth;camera.right=halfWidth;camera.top=1.38;camera.bottom=-.78;camera.updateProjectionMatrix();
+  const aspect=w/h,halfWidth=Math.max(2.22,1.32*aspect),halfHeight=halfWidth/aspect;
+  camera.left=-halfWidth;camera.right=halfWidth;
+  camera.top=.56+halfHeight;camera.bottom=.56-halfHeight;camera.updateProjectionMatrix();
 }
 const observer=new ResizeObserver(resize);observer.observe(canvas);window.addEventListener('resize',resize);
 function disposable(o){o.traverse(node=>{if(node.geometry)node.geometry.dispose();
@@ -73,10 +73,12 @@ async function createActor(id,slot) {
     loader.loadAsync(new URL(asset.glb,import.meta.url).href+'?v='+MODEL_REVISION),
     fetch(new URL(asset.motion,import.meta.url)).then(r=>{if(!r.ok)throw Error('motion JSON HTTP '+r.status);return r.json();})
   ]);
+  const mixer=new THREE.AnimationMixer(gltf.scene),actions=Object.fromEntries(gltf.animations.map(c=>[c.name,mixer.clipAction(c)]));
+  if(!actions.idle||!actions.stand_light||!actions.stand_heavy){
+    disposable(gltf.scene);throw Error(id+' のGLBに必須動作がない');
+  }
   const holder=new THREE.Group(),turn=new THREE.Group();holder.add(turn);turn.add(gltf.scene);scene.add(holder);
   gltf.scene.traverse(o=>{if(o.isSkinnedMesh)o.frustumCulled=false;});
-  const mixer=new THREE.AnimationMixer(gltf.scene),actions=Object.fromEntries(gltf.animations.map(c=>[c.name,mixer.clipAction(c)]));
-  if(!actions.idle||!actions.stand_light||!actions.stand_heavy)throw Error(id+' のGLBに必須動作がない');
   const sh=new THREE.Mesh(new THREE.CircleGeometry(.18,24),new THREE.MeshBasicMaterial({color:0x142128,transparent:true,opacity:.24,depthWrite:false}));
   sh.rotation.x=-Math.PI/2;sh.position.y=.003;holder.add(sh);
   return {id,slot,gltf,meta,holder,turn,shadow:sh,mixer,actions,current:null,previous:null,key:'',actionAge:0};
@@ -96,6 +98,7 @@ function syncActor(a,p){
   if(!a)return;clipChange(a,p);a.holder.position.set(p.x,p.y,0);
   a.turn.rotation.set(0,p.facing===1?Math.PI/2:-Math.PI/2,0);
   a.turn.scale.setScalar(1);
+  a.turn.position.z=0;
   if(p.action?.kind==='roar'){
     const phase=p.frame/(p.action.startup+p.action.active);
     a.turn.scale.setScalar(1+.06*Math.sin(Math.PI*Math.min(phase,1)));
@@ -104,7 +107,6 @@ function syncActor(a,p){
     a.turn.rotation.z=-p.facing*.14;
     a.turn.position.z=p.facing*.02;
   }else{
-    a.turn.position.z=0;
     if(p.state==='hit'||p.state==='clinch_recoil')a.turn.rotation.z=p.facing*.11;
     if(p.state==='block')a.turn.rotation.z=-p.facing*.06;
     if(p.state==='clinch'){
@@ -190,40 +192,56 @@ function hud(){
 }
 function setLoading(s){$('loading-status').textContent=s;}
 async function startMatch(){
+  if(loading)return;
+  loading=true;clearInput();
   playing=false;paused=false;finishShown=false;$('pause').textContent='一時停止';$('start').disabled=true;setLoading('GLBを読み込み中…');
+  const ids=[selected,cpuChoice],level=+$('difficulty').value;
   try{
     clearActors();
-    const ids=[selected,cpuChoice],loaded=await Promise.all(ids.map((id,i)=>createActor(id,i)));
-    for(let i=0;i<2;i++)actors[i]=loaded[i];
-    battle=new Battle(selected,cpuChoice,+$('difficulty').value);
+    const loaded=await Promise.allSettled(ids.map((id,i)=>createActor(id,i)));
+    for(const [i,result] of loaded.entries())if(result.status==='fulfilled')actors[i]=result.value;
+    const failed=loaded.find(result=>result.status==='rejected');
+    if(failed)throw failed.reason;
+    battle=new Battle(...ids,level);
     const bulletActor=actors.find(a=>a?.id==='bullet');
     if(bulletActor){
       const path=bulletActor.meta?.clips?.sp_tail_whip?.tail_tip_path;
       if(!path) throw Error('バレットの尾軌跡がモーションJSONにありません');
       battle.setTailTipPath(path);
     }
-    $('name-0').textContent=ROSTER[selected].name;$('name-1').textContent=ROSTER[cpuChoice].name;
     $('selection').classList.add('hidden');$('game-over').classList.add('hidden');
-    setLoading('9体の3Dモデルを選択可能 · 操作：方向＋攻撃'); note('FIGHT！ コマンドは236・623・214・236236');
+    const fallback=actors.some(a=>['roar','gyuiin','clinch_hold','clinch_recoil'].some(name=>!a.actions[name]));
+    setLoading(fallback?'咆哮・ギュイーンは仮モーション':'操作：方向＋攻撃'); note('FIGHT！ コマンドは236・623・214・236236');
+    clearInput();
     playing=true;lastFrame=0;acc=0;hud();
-  }catch(e){console.error(e);note('起動エラー: '+e.message);setLoading('モデルの読込に失敗: '+e.message);$('selection').classList.remove('hidden');}
-  finally{$('start').disabled=false;}
+  }catch(e){clearActors();battle=null;console.error(e);note('起動エラー: '+e.message);setLoading('モデルの読込に失敗: '+e.message);$('selection').classList.remove('hidden');}
+  finally{loading=false;$('start').disabled=false;}
 }
 function showSelection(){
+  if(loading)return;
   playing=false;paused=false;$('selection').classList.remove('hidden');$('game-over').classList.add('hidden');
   note('キャラクターを選んで対戦開始');setLoading('キャラ選択中');clearInput();
 }
 // アナログスティックは単独のポインターで制御。右側のボタンは別PointerIdで同時押し。
 const pressedKeys=new Set(),pressedTouch=new Map();
-const lastDirectionTap={left:-999999,right:-999999};
+const queuedActions=new Set(),directionSamples=[];
+const directions=['left','right','up','down'];
+let lastDirectionTap=null;
 let dashPulse=0;
 const stick=$('joystick'),thumb=$('stick-thumb');
 const analog={pointer:null,x:0,y:0,left:false,right:false,up:false,down:false};
 function directionTap(k){
-  if(k!=='left'&&k!=='right')return;
   const now=performance.now();
-  if(now-lastDirectionTap[k]<280)dashPulse=3;
-  lastDirectionTap[k]=now;
+  if(lastDirectionTap?.key===k&&now-lastDirectionTap.at<280)dashPulse=3;
+  lastDirectionTap={key:k,at:now};
+}
+function recordDirection(){
+  const sample=Object.fromEntries(directions.map(key=>[key,pressedKeys.has(key)||analog[key]]));
+  if(sample.up||sample.down){lastDirectionTap=null;dashPulse=0;}
+  const prev=directionSamples.at(-1);
+  if(prev&&directions.every(key=>sample[key]===prev[key]))return;
+  directionSamples.push(sample);
+  if(directionSamples.length>24)directionSamples.shift();
 }
 function analogMove(e){
   const r=stick.getBoundingClientRect(),cx=r.left+r.width/2,cy=r.top+r.height/2;
@@ -235,8 +253,9 @@ function analogMove(e){
   const previous=analog.left?-1:analog.right?1:0;
   const dirX=x>=.33?1:x<=-.33?-1:0;
   const dirY=y>=.33?1:y<=-.33?-1:0;
-  if(!previous&&dirX)directionTap(dirX===1?'right':'left');
+  if(!previous&&!analog.up&&!analog.down&&!dirY&&dirX)directionTap(dirX===1?'right':'left');
   Object.assign(analog,{x,y,left:dirX===-1,right:dirX===1,down:dirY===1,up:dirY===-1});
+  recordDirection();
   thumb.style.transform=`translate(calc(-50% + ${x*radius}px),calc(-50% + ${y*radius}px))`;
 }
 function resetAnalog(){
@@ -251,7 +270,7 @@ stick.addEventListener('pointerdown',e=>{
 });
 stick.addEventListener('pointermove',e=>{if(analog.pointer===e.pointerId){e.preventDefault();analogMove(e);}});
 for(const type of ['pointerup','pointercancel','lostpointercapture']){
-  stick.addEventListener(type,e=>{if(analog.pointer===e.pointerId)resetAnalog();});
+  stick.addEventListener(type,e=>{if(analog.pointer===e.pointerId){resetAnalog();recordDirection();}});
 }
 stick.addEventListener('contextmenu',e=>e.preventDefault());
 const keyMap={
@@ -260,23 +279,33 @@ const keyMap={
   KeyZ:'weak',KeyX:'strong',KeyV:'throw',KeyB:'roar',KeyN:'gyuiin',KeyC:'dash'
 };
 function clearInput(){
-  pressedKeys.clear();pressedTouch.clear();dashPulse=0;resetAnalog();
-  document.querySelectorAll('[data-control]').forEach(b=>b.classList.remove('held'));
+  if(analog.pointer!==null&&stick.hasPointerCapture(analog.pointer))stick.releasePointerCapture(analog.pointer);
+  document.querySelectorAll('[data-control]').forEach(button=>{
+    for(const pointer of pressedTouch.keys())if(button.hasPointerCapture(pointer))button.releasePointerCapture(pointer);
+    button.classList.remove('held');
+  });
+  pressedKeys.clear();pressedTouch.clear();queuedActions.clear();directionSamples.length=0;
+  lastDirectionTap=null;dashPulse=0;resetAnalog();
 }
 document.addEventListener('keydown',e=>{
   const k=keyMap[e.code];if(!k)return;
   if(document.activeElement?.tagName==='SELECT')return;
-  e.preventDefault();if(!e.repeat)directionTap(k);pressedKeys.add(k);
+  e.preventDefault();
+  if(e.repeat)return;
+  if((k==='left'||k==='right')&&!pressedKeys.has(k)&&!pressedKeys.has('up')&&!pressedKeys.has('down'))directionTap(k);
+  pressedKeys.add(k);
+  if(directions.includes(k))recordDirection();
+  else queuedActions.add(k);
 });
 document.addEventListener('keyup',e=>{
-  const k=keyMap[e.code];if(k){e.preventDefault();pressedKeys.delete(k);}
+  const k=keyMap[e.code];if(k){e.preventDefault();pressedKeys.delete(k);if(directions.includes(k))recordDirection();}
 });
 window.addEventListener('blur',()=>{clearInput();paused=true;$('pause').textContent='再開';});
 document.querySelectorAll('[data-control]').forEach(button=>{
   const k=button.dataset.control;
   button.addEventListener('pointerdown',e=>{
     e.preventDefault();button.setPointerCapture(e.pointerId);
-    pressedTouch.set(e.pointerId,k);button.classList.add('held');
+    pressedTouch.set(e.pointerId,k);queuedActions.add(k);button.classList.add('held');
   });
   const end=e=>{
     pressedTouch.delete(e.pointerId);
@@ -288,15 +317,17 @@ document.querySelectorAll('[data-control]').forEach(button=>{
   button.addEventListener('contextmenu',e=>e.preventDefault());
 });
 function input(){
-  const o={};
+  const o={directionSamples:directionSamples.splice(0)};
   for(const k of pressedKeys)o[k]=true;
-  for(const [key,enabled] of Object.entries(analog))if(enabled===true)o[key]=true;
+  for(const key of directions)if(analog[key])o[key]=true;
   for(const k of pressedTouch.values())o[k]=true;
+  for(const k of queuedActions)o[k]=true;
+  queuedActions.clear();
   if(dashPulse>0){o.dash=true;dashPulse--;}
   return o;
 }
 $('start').onclick=startMatch;$('select-back').onclick=showSelection;$('result-select').onclick=showSelection;$('rematch').onclick=startMatch;
-$('pause').onclick=()=>{if(!battle||battle.phase!=='fight')return;paused=!paused;$('pause').textContent=paused?'再開':'一時停止';note(paused?'一時停止':'対戦再開');};
+$('pause').onclick=()=>{if(!battle||battle.phase!=='fight')return;clearInput();paused=!paused;$('pause').textContent=paused?'再開':'一時停止';note(paused?'一時停止':'対戦再開');};
 
 const FIXED=1/FPS;
 function render(now){

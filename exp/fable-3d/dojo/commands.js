@@ -21,30 +21,24 @@ export function directionCode(input={},facing=1) {
 }
 export function pushDirection(history,input,frame,facing=1) {
   const dir=directionCode(input,facing);
-  const a=history.filter(e=>frame-e.frame<=62);
+  const a=history.filter(e=>frame-(e.heldThrough??e.frame)<=62);
   const last=a.at(-1);
   if(!last||last.dir!==dir)a.push({dir,frame});
+  else a[a.length-1]={...last,heldThrough:frame};
   return a.slice(-24);
 }
-// 方向離し(5)を挟んでもOK。斜めは任意。短縮受付・最後の方向から10Fの猶予。
+// 方向離し(5)を許容し、最後の方向に入れてから10Fだけボタンを受け付ける。
 function matches(history,pattern,now,maxAge) {
-  const a=history.filter(e=>e.dir!==5&&now-e.frame<=maxAge);
-  if(a.length<pattern.length || now-a.at(-1).frame>10)return false;
-  let index=a.length-1,latest=now;
-  for(let k=pattern.length-1;k>=0;k--) {
-    let found=false;
-    while(index>=0) {
-      const e=a[index--];
-      if(latest-e.frame>17)return false;
-      if(e.dir===pattern[k]){latest=e.frame;found=true;break;}
-    }
-    if(!found)return false;
-  }
-  return true;
+  const a=history.filter(e=>e.dir!==5).slice(-pattern.length);
+  if(a.length<pattern.length||now-a.at(-1).frame>10||now-(a[0].heldThrough??a[0].frame)>maxAge)return false;
+  return a.every((e,i)=>e.dir===pattern[i]&&
+    (i===0||e.frame-(a[i-1].heldThrough??a[i-1].frame)<=17));
 }
 export function readCommand(history,button,frame,superReady=false) {
   if(button!=='weak'&&button!=='strong')return null;
-  if(superReady&&button==='strong'&&SHORTCUTS.super.some(p=>matches(history,p,frame,WINDOWS.super)))return 'super';
+  if(SHORTCUTS.super.some(p=>matches(history,p,frame,WINDOWS.super))) {
+    return superReady&&button==='strong'?'super':'qcf';
+  }
   // 6→236（歩きながら波動）を誤って623と取らないよう、完全な236/214を先に優先。
   if(matches(history,[2,3,6],frame,WINDOWS.qcf))return 'qcf';
   if(matches(history,[2,1,4],frame,WINDOWS.qcb))return 'qcb';
