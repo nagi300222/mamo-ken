@@ -11,7 +11,7 @@
 <body>
 <main id="app">
   <header class="topbar">
-    <div class="brand"><span class="brand-mark">拳</span><div><strong>マモ拳 <span>3D</span></strong><small>山岳道場 · 対戦試作 v0.1</small></div></div>
+    <div class="brand"><span class="brand-mark">拳</span><div><strong>マモ拳 <span>3D</span></strong><small>山岳道場 · 対戦試作 v0.2</small></div></div>
     <div class="header-actions">
       <span class="draft">仮バランス</span>
       <button id="pause" class="ghost" title="一時停止">一時停止</button>
@@ -53,28 +53,27 @@
         </div>
       </div>
     </div>
+    <div id="controls" class="overlay-controls" aria-label="タッチ操作">
+      <div class="stick-area">
+        <div id="joystick" class="joystick" role="group" aria-label="8方向スティック">
+          <div class="stick-ring"></div>
+          <div id="stick-thumb" class="stick-thumb"></div>
+          <span class="stick-label">MOVE</span>
+        </div>
+      </div>
+      <div class="attack-pad">
+        <button data-control="weak" class="attack weak" aria-label="弱攻撃">弱</button>
+        <button data-control="strong" class="attack heavy" aria-label="強攻撃">強</button>
+        <button data-control="throw" class="attack throw" aria-label="掴み">掴</button>
+        <button data-control="roar" class="attack roar" aria-label="咆哮">咆哮</button>
+        <button data-control="gyuiin" class="attack gyuiin" aria-label="ギュイーン">ギュイーン</button>
+      </div>
+    </div>
+    <div id="commands-help" class="commands-help">↓↘→＋弱/強 <span>波動</span>　→↓↘＋弱/強 <span>昇龍</span>　↓↙←＋弱/強 <span>竜巻</span>　↓↘→↓↘→＋強 <span>奥義</span></div>
     <div id="rotate" class="rotate-hint">スマホを横向きにすると遊びやすくなるよ</div>
   </section>
-  <section id="controls" aria-label="タッチ操作">
-    <div class="direction-pad">
-      <button data-control="left" class="direction" aria-label="左">◀</button>
-      <button data-control="down" class="direction" aria-label="しゃがむ">▼</button>
-      <button data-control="right" class="direction" aria-label="右">▶</button>
-      <button data-control="up" class="direction" aria-label="ジャンプ">▲</button>
-      <button data-control="dash" class="direction dash">前ステップ</button>
-    </div>
-    <div class="attack-pad">
-      <button data-control="weak" class="attack weak">弱</button>
-      <button data-control="strong" class="attack heavy">強</button>
-      <button data-control="throw" class="attack throw">投げ</button>
-      <button data-control="special1" class="attack special" id="special-1">必1</button>
-      <button data-control="special2" class="attack special" id="special-2">必2</button>
-      <button data-control="special3" class="attack special" id="special-3">必3</button>
-      <button data-control="super" class="attack ultimate">奥義</button>
-    </div>
-  </section>
   <footer class="footnote">
-    <span>PC：← → ↑ ↓／弱Z・強X／必殺1・2・3／投V／奥義Q／ステップC</span>
+    <span>PC：方向キー・WASD／Z弱・X強・V掴・B咆哮・Nギュイーン／コマンド＋弱・強</span>
     <span id="loading-status">3Dモデル待機中</span>
   </footer>
 </main>
