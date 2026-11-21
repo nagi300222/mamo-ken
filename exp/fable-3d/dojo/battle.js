@@ -1,5 +1,6 @@
 import { FPS, ARENA, ROSTER, IDS, normalMove, specialMove, ultimateMove, tailTipAt } from './balance.js';
 import { pushDirection, readCommand } from './commands.js';
+import { cpuInput } from './cpu.js';
 // 設計の正本はバランスデータ。GLB・Three.js・操作DOMには依存しない。
 const KEYS=['left','right','up','down','weak','strong','throw','roar','gyuiin','dash','special1','special2','special3','super'];
 const cap=(v,a,b)=>Math.max(a,Math.min(b,v));
@@ -16,42 +17,24 @@ export const UNIVERSAL_ACTIONS=Object.freeze({roar:ROAR,gyuiin:GYUIIN,grab:GRAB}
 function fighter(id,slot){
   const r=ROSTER[id];if(!r)throw Error('unknown fighter '+id);
   return {id,slot,x:slot===0?-.70:.70,y:0,vy:0,facing:slot===0?1:-1,
-    hp:r.hp,guard:100,super:0,drive:DRIVE.initial,driveDelay:0,state:'idle',reaction:null,landF:0,frame:0,stun:0,stop:0,
+    hp:r.hp,guard:r.guardMax,super:0,drive:DRIVE.initial,driveDelay:0,state:'idle',reaction:null,landF:0,frame:0,stun:0,stop:0,
     action:null,used:false,spawned:false,ko:false,prev:inputOf({}),input:inputOf({}),
     dirHistory:[],dirFacing:null,dashF:0,dashDir:0,roarCooldown:0,gyuiinCooldown:0,guardF:0,
-    ability:{charge:0,lastCharge:'',iron:0,armor:3,chase:0,pressure:0,just:0,dark:0,grit:true},
+    ability:{charge:0,lastCharge:'',iron:0,armor:1,armorCooldown:0,chase:0,chaseCooldown:0,
+      pressure:0,just:0,evadeF:0,dark:0,darkUsed:false,darkCooldown:0,feintCount:0,
+      gutsProgress:0,lastGuts:'',gutsReady:false,grit:true},
     poison:0,poisonTick:0,attackSerial:0,locomotion:0
   };
 }
-function aiInput(g,p,op,level){
-  const t=g.frame,d=Math.abs(p.x-op.x),face=op.x>p.x?'right':'left',back=op.x>p.x?'left':'right',i={};
-  if(p.stun||p.stop)return i;
-  if(op.action&&d<.75&&p.y===0&&((t+level*7)%19)<11){
-    i[back]=true;if(op.action.level==='low')i.down=true;
-    if(op.action.kind==='roar'&&t%5===0&&level>=2)i.roar=true;
-    return i;
-  }
-  if(!p.action&&d>.60){
-    i[face]=true;if(t%146===12&&level>1)i.special1=true;
-    if(t%180===18&&level>1)i.dash=true;return i;
-  }
-  if(!p.action){
-    if(d<.34&&t%109===12)i.throw=true;
-    else if(t%49===9)i.weak=true;
-    else if(t%83===24)i.strong=true;
-    else if(t%160===38)i.special2=true;
-    else if(t%185===42)i.special3=true;
-    if(d<.55&&level>=2&&t%311===20)i.gyuiin=true;
-    if(d<.75&&level>=2&&t%260===58)i.roar=true;
-    if(p.super>=100&&t%235===17)i.super=true;
-    if(t%195===82)i.up=true;
-  }
-  return i;
-}
+// CPUは技を見てから遅れて反応する（cpu.js）。
+const aiInput=(g,p,op,level)=>cpuInput(g,p,op,level);
 function timer(p){
-  for(const k of ['chase','pressure','just','dark'])p.ability[k]=Math.max(0,p.ability[k]-1);
+  for(const k of ['chase','pressure','just','dark','chaseCooldown','armorCooldown','evadeF','darkCooldown'])
+    p.ability[k]=Math.max(0,p.ability[k]-1);
+  p.ability.armor=p.ability.armorCooldown===0?1:0;
+  if(!p.action&&p.ability.dark===0&&p.ability.darkCooldown===0)p.ability.darkUsed=false;
   for(const k of ['roarCooldown','gyuiinCooldown'])p[k]=Math.max(0,p[k]-1);
-  p.guard=cap(p.guard+(p.stun? .006:.025),0,100);
+  p.guard=cap(p.guard+(p.stun? .006:.025),0,ROSTER[p.id].guardMax);
   if(p.landF>0)p.landF--;
   if(p.driveDelay>0)p.driveDelay--;
   else p.drive=cap(p.drive+DRIVE.regenPerFrame,0,DRIVE.max);
@@ -163,7 +146,7 @@ export class Battle {
     if(p.action&&p.action.id===id)return false;
     if(m.isSuper)p.super=0;
     if(m.kind==='roar'){p.roarCooldown=96;p.drive-=DRIVE.roarCost;p.driveDelay=DRIVE.regenDelay;}
-    if(p.id==='godan'&&m.armor){if(p.ability.armor<1)return false;p.ability.armor--;}
+    if(p.id==='godan'&&m.armor)m={...m,armor:p.ability.armorCooldown===0?1:0,armorUsed:false};
     if(p.id==='hakuma'&&p.ability.iron&&(id.startsWith('s')||m.isSuper)){
       m={...m,damage:Math.round(m.damage*1.23)};p.ability.iron=0;
     }
@@ -247,7 +230,9 @@ export class Battle {
     if(c==='roar'&&t.frame>=1&&t.frame<=t.action.startup+t.action.active){
       if(m.kind!=='roar'&&m.kind!=='throw'&&m.kind!=='clinch')return 'roar';
     }
-    if(t.id==='godan'&&t.action.armor&&t.frame>=4&&m.kind!=='throw'&&m.kind!=='clinch')return 'godan';
+    if(t.id==='godan'&&t.action.armor&&!t.action.armorUsed&&
+      t.frame>=6&&t.frame<t.action.startup+t.action.active&&
+      !['throw','clinch','roar'].includes(m.kind))return 'godan';
     return null;
   }
   _damage(a,t,m,_distance=0,source='strike',force=false){
@@ -270,10 +255,10 @@ export class Battle {
     }
     const guard=this._guarding(t,m);
     let dmg=m.damage;
-    if(a.id==='moguzo'&&a.hp<=ROSTER.moguzo.hp*.30)dmg=Math.round(dmg*1.12);
-    if(a.id==='dark_moguzo'&&a.hp<=ROSTER.dark_moguzo.hp*.35)dmg=Math.round(dmg*1.10);
+    if(a.id==='moguzo'&&a.hp<=ROSTER.moguzo.hp*.30)dmg=Math.round(dmg*1.06);
+    // ダークモグゾーは高火力常時強化ではなく、低耐久と技派生で勝つ。
     if(guard){
-      t.dashF=0;t.guard=cap(t.guard-Math.max(5,dmg*(m.kind==='roar'?.37:.16)),0,100);
+      t.dashF=0;t.guard=cap(t.guard-Math.max(5,dmg*(m.kind==='roar'?.37:.16)),0,ROSTER[t.id].guardMax);
       t.stun=t.guard<=0?26:Math.max(8,Math.round(dmg*(m.kind==='roar'?.17:.08)));
       t.state='block';t.reaction=m.kind==='roar'?'guard_impact':t.input.down?'guard_crouch_hit':'guard_hit';t.frame=0;t.ability.iron=t.id==='hakuma'?1:t.ability.iron;
       if(t.id==='yomikage'&&t.guardF<=7)t.ability.just=42;
@@ -289,12 +274,16 @@ export class Battle {
         a.stun=16;a.hp=Math.max(0,a.hp-88);t.action=null;t.state='idle';
         this.events.push({type:'counter',slot:t.slot,x:t.x,y:t.y+.34});return;
       }
-      if(absorb==='godan'){dmg=Math.round(dmg*.55);this.events.push({type:'armor',slot:t.slot});}
+      if(absorb==='godan'){
+          dmg=Math.round(dmg*.70);
+          t.action.armorUsed=true;t.ability.armorCooldown=240;t.ability.armor=0;
+          this.events.push({type:'armor',slot:t.slot});
+        }
       else{
         t.stun=m.kind==='clinch'?36:Math.max(12,Math.round(m.damage*.16));
         t.action=null;t.dashF=0;t.state='hit';t.reaction=m.kind==='roar'?'roar_hit':m.damage>=95?'hurt_heavy':'hurt_light';t.frame=0;
       }
-      t.hp=Math.max(0,t.hp-dmg);t.guard=cap(t.guard+2,0,100);t.ability.iron=0;
+      t.hp=Math.max(0,t.hp-dmg);t.guard=cap(t.guard+2,0,ROSTER[t.id].guardMax);t.ability.iron=0;
       if(t.id==='moguzo'&&t.hp===0&&t.ability.grit){t.hp=1;t.ability.grit=false;this.events.push({type:'grit',slot:t.slot});}
       if(a.id==='pisuke'&&/^(stand|crouch)_/.test(m.id||''))a.ability.chase=15;
       if(a.id==='chirka'&&m.poison){t.poison=180;t.poisonTick=0;}
