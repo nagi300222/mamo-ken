@@ -10,7 +10,7 @@ export const FALLBACK_CLIPS = Object.freeze({
   stand_weak:'stand_light',stand_heavy:'stand_heavy',
   crouch_weak:'stand_light',crouch_heavy:'stand_heavy',
   air_weak:'stand_light',air_heavy:'stand_heavy',
-  throw:'stand_heavy',ultimate:'stand_heavy',
+  throw:'stand_heavy',roar:'guard_stand',gyuiin:'stand_heavy',ultimate:'stand_heavy',
   s1:'stand_heavy',s2:'stand_heavy',s3:'stand_heavy'
 });
 export function chooseClip(fighter, available=[]) {
