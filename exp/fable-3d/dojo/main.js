@@ -6,8 +6,8 @@ import { MODEL_ASSETS, MODEL_REVISION, chooseClip } from './models.js';
 
 const $=id=>document.getElementById(id), canvas=$('stage');
 const scene=new THREE.Scene();scene.background=new THREE.Color(0x758993);
-const camera=new THREE.OrthographicCamera(-2.15,2.15,1,-.25,.01,30);
-camera.position.set(0,1.10,4.5);camera.lookAt(0,.42,0);
+const camera=new THREE.OrthographicCamera(-2.15,2.15,1.38,-.78,.01,30);
+camera.position.set(0,1.55,5.5);camera.lookAt(0,.75,0);
 const renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:false,powerPreference:'high-performance'});
 renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,1.5));
 renderer.outputColorSpace=THREE.SRGBColorSpace;
@@ -57,8 +57,8 @@ function resize(){
   const w=canvas.clientWidth,h=canvas.clientHeight;
   if(w<1||h<1)return;
   renderer.setSize(w,h,false);renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,1.5));
-  const aspect=w/h,halfWidth=Math.max(1.96,.69*aspect);
-  camera.left=-halfWidth;camera.right=halfWidth;camera.top=1.28;camera.bottom=-.2;camera.updateProjectionMatrix();
+  const aspect=w/h,halfWidth=Math.max(1.97,1.08*aspect);
+  camera.left=-halfWidth;camera.right=halfWidth;camera.top=1.38;camera.bottom=-.78;camera.updateProjectionMatrix();
 }
 const observer=new ResizeObserver(resize);observer.observe(canvas);window.addEventListener('resize',resize);
 function disposable(o){o.traverse(node=>{if(node.geometry)node.geometry.dispose();
@@ -94,7 +94,20 @@ function clipChange(a,p){
 }
 function syncActor(a,p){
   if(!a)return;clipChange(a,p);a.holder.position.set(p.x,p.y,0);
-  a.turn.rotation.y=p.facing===1?Math.PI/2:-Math.PI/2;
+  a.turn.rotation.set(0,p.facing===1?Math.PI/2:-Math.PI/2,0);
+  a.turn.scale.setScalar(1);
+  if(p.action?.kind==='roar'){
+    const phase=p.frame/(p.action.startup+p.action.active);
+    a.turn.scale.setScalar(1+.06*Math.sin(Math.PI*Math.min(phase,1)));
+    a.turn.rotation.z=p.facing*.07*Math.sin(Math.PI*Math.min(phase,1));
+  }else if(p.action?.kind==='clinch'){
+    a.turn.rotation.z=-p.facing*.14;
+    a.turn.position.z=p.facing*.02;
+  }else{
+    a.turn.position.z=0;
+    if(p.state==='hit')a.turn.rotation.z=p.facing*.11;
+    if(p.state==='block')a.turn.rotation.z=-p.facing*.06;
+  }
   a.shadow.scale.setScalar(Math.max(.6,1-p.y*.65));
   a.shadow.material.opacity=Math.max(.11,.3-p.y*.13);
   if(!p.stop)a.mixer.update(1/FPS);
@@ -115,10 +128,15 @@ function syncProjectiles(){
 }
 function vfx(){
   for(const e of battle?.events||[]){
-    if(e.type==='move') {if(e.slot===0)note(e.name);continue;}
-    if(!['hit','block','clash','counter','grit','ko'].includes(e.type))continue;
+    if(e.type==='move'){if(e.slot===0)note(e.name);continue;}
+    if(e.type==='roar_absorb'&&e.slot===0)note('咆哮！ 攻撃を受け止めた');
+    if(e.type==='roar_counter')note('咆哮返し！');
+    if(e.type==='roar_erase')note('咆哮で飛び道具を消した！');
+    if(e.type==='gyuiin_hit')note('ギュイーン！ クリンチ成功');
+    if(e.type==='gyuiin_armor')note('ギュイーンのハイパーアーマー');
+    if(!['hit','block','clash','counter','grit','ko','roar_absorb','roar_counter','roar_hit','roar_clash','roar_erase','gyuiin_hit','gyuiin_armor'].includes(e.type))continue;
     const x=e.x??battle.fighters[e.slot||0].x,y=e.y??.42;
-    const col=e.type==='hit'?0xffd39c:e.type==='block'?0x9fdaf8:0xf7e9c3;
+    const col=e.type==='hit'?0xffd39c:e.type==='block'?0x9fdaf8:e.type.startsWith('roar')?0xffc06c:e.type.startsWith('gyuiin')?0xa98ef4:0xf7e9c3;
     const mesh=new THREE.Mesh(new THREE.OctahedronGeometry(.11,0),new THREE.MeshBasicMaterial({color:col,transparent:true,opacity:.8,depthWrite:false}));
     mesh.position.set(x,y,.07);scene.add(mesh);flashes.push({mesh,life:14});
     if(e.type==='grit')note('踏ん張り！ HP1で耐えた');
@@ -179,9 +197,8 @@ async function startMatch(){
       battle.setTailTipPath(path);
     }
     $('name-0').textContent=ROSTER[selected].name;$('name-1').textContent=ROSTER[cpuChoice].name;
-    for(let i=1;i<=3;i++){const button=$('special-'+i);button.textContent='必'+i;button.title=ROSTER[selected].specials[i-1].name;}
     $('selection').classList.add('hidden');$('game-over').classList.add('hidden');
-    setLoading('9体の3Dモデルを選択可能 · 操作：方向＋攻撃'); note('FIGHT！ 方向キーと弱・強で攻撃');
+    setLoading('9体の3Dモデルを選択可能 · 操作：方向＋攻撃'); note('FIGHT！ コマンドは236・623・214・236236');
     playing=true;lastFrame=0;acc=0;hud();
   }catch(e){console.error(e);note('起動エラー: '+e.message);setLoading('モデルの読込に失敗: '+e.message);$('selection').classList.remove('hidden');}
   finally{$('start').disabled=false;}
@@ -190,28 +207,85 @@ function showSelection(){
   playing=false;paused=false;$('selection').classList.remove('hidden');$('game-over').classList.add('hidden');
   note('キャラクターを選んで対戦開始');setLoading('キャラ選択中');clearInput();
 }
-const pressedKeys=new Set(), pressedTouch=new Map();
-const lastDirectionTap={left:-999999,right:-999999};let dashPulse=0;
+// アナログスティックは単独のポインターで制御。右側のボタンは別PointerIdで同時押し。
+const pressedKeys=new Set(),pressedTouch=new Map();
+const lastDirectionTap={left:-999999,right:-999999};
+let dashPulse=0;
+const stick=$('joystick'),thumb=$('stick-thumb');
+const analog={pointer:null,x:0,y:0,left:false,right:false,up:false,down:false};
 function directionTap(k){
   if(k!=='left'&&k!=='right')return;
   const now=performance.now();
-  if(now-lastDirectionTap[k]<260)dashPulse=3;
+  if(now-lastDirectionTap[k]<280)dashPulse=3;
   lastDirectionTap[k]=now;
 }
-const keyMap={ArrowLeft:'left',ArrowRight:'right',ArrowUp:'up',ArrowDown:'down',KeyA:'left',KeyD:'right',KeyW:'up',KeyS:'down',KeyZ:'weak',KeyX:'strong',KeyV:'throw',KeyC:'dash',Digit1:'special1',Digit2:'special2',Digit3:'special3',KeyQ:'super'};
-function clearInput(){pressedKeys.clear();pressedTouch.clear();dashPulse=0;document.querySelectorAll('[data-control]').forEach(b=>b.classList.remove('held'));}
-document.addEventListener('keydown',e=>{const k=keyMap[e.code];if(!k)return;if(document.activeElement?.tagName==='SELECT')return;e.preventDefault();if(!e.repeat)directionTap(k);pressedKeys.add(k);});
-document.addEventListener('keyup',e=>{const k=keyMap[e.code];if(k){e.preventDefault();pressedKeys.delete(k);}});
+function analogMove(e){
+  const r=stick.getBoundingClientRect(),cx=r.left+r.width/2,cy=r.top+r.height/2;
+  const radius=Math.min(r.width,r.height)*.34;
+  let x=(e.clientX-cx)/radius,y=(e.clientY-cy)/radius;
+  const norm=Math.hypot(x,y);
+  if(norm>1){x/=norm;y/=norm;}
+  if(norm<.24){x=0;y=0;}
+  const previous=analog.left?-1:analog.right?1:0;
+  const dirX=x>=.33?1:x<=-.33?-1:0;
+  const dirY=y>=.33?1:y<=-.33?-1:0;
+  if(!previous&&dirX)directionTap(dirX===1?'right':'left');
+  Object.assign(analog,{x,y,left:dirX===-1,right:dirX===1,down:dirY===1,up:dirY===-1});
+  thumb.style.transform=`translate(calc(-50% + ${x*radius}px),calc(-50% + ${y*radius}px))`;
+}
+function resetAnalog(){
+  Object.assign(analog,{pointer:null,x:0,y:0,left:false,right:false,up:false,down:false});
+  thumb.style.transform='translate(-50%,-50%)';
+  stick.classList.remove('held');
+}
+stick.addEventListener('pointerdown',e=>{
+  if(analog.pointer!==null)return;
+  e.preventDefault();analog.pointer=e.pointerId;stick.setPointerCapture(e.pointerId);
+  stick.classList.add('held');analogMove(e);
+});
+stick.addEventListener('pointermove',e=>{if(analog.pointer===e.pointerId){e.preventDefault();analogMove(e);}});
+for(const type of ['pointerup','pointercancel','lostpointercapture']){
+  stick.addEventListener(type,e=>{if(analog.pointer===e.pointerId)resetAnalog();});
+}
+stick.addEventListener('contextmenu',e=>e.preventDefault());
+const keyMap={
+  ArrowLeft:'left',ArrowRight:'right',ArrowUp:'up',ArrowDown:'down',
+  KeyA:'left',KeyD:'right',KeyW:'up',KeyS:'down',
+  KeyZ:'weak',KeyX:'strong',KeyV:'throw',KeyB:'roar',KeyN:'gyuiin',KeyC:'dash'
+};
+function clearInput(){
+  pressedKeys.clear();pressedTouch.clear();dashPulse=0;resetAnalog();
+  document.querySelectorAll('[data-control]').forEach(b=>b.classList.remove('held'));
+}
+document.addEventListener('keydown',e=>{
+  const k=keyMap[e.code];if(!k)return;
+  if(document.activeElement?.tagName==='SELECT')return;
+  e.preventDefault();if(!e.repeat)directionTap(k);pressedKeys.add(k);
+});
+document.addEventListener('keyup',e=>{
+  const k=keyMap[e.code];if(k){e.preventDefault();pressedKeys.delete(k);}
+});
 window.addEventListener('blur',()=>{clearInput();paused=true;$('pause').textContent='再開';});
 document.querySelectorAll('[data-control]').forEach(button=>{
   const k=button.dataset.control;
-  button.addEventListener('pointerdown',e=>{e.preventDefault();directionTap(k);button.setPointerCapture(e.pointerId);pressedTouch.set(e.pointerId,k);button.classList.add('held');});
-  const end=e=>{pressedTouch.delete(e.pointerId);if(![...pressedTouch.values()].includes(k))button.classList.remove('held');};
-  button.addEventListener('pointerup',end);button.addEventListener('pointercancel',end);button.addEventListener('lostpointercapture',end);
+  button.addEventListener('pointerdown',e=>{
+    e.preventDefault();button.setPointerCapture(e.pointerId);
+    pressedTouch.set(e.pointerId,k);button.classList.add('held');
+  });
+  const end=e=>{
+    pressedTouch.delete(e.pointerId);
+    if(![...pressedTouch.values()].includes(k))button.classList.remove('held');
+  };
+  button.addEventListener('pointerup',end);
+  button.addEventListener('pointercancel',end);
+  button.addEventListener('lostpointercapture',end);
   button.addEventListener('contextmenu',e=>e.preventDefault());
 });
 function input(){
-  const o={};for(const k of pressedKeys)o[k]=true;for(const k of pressedTouch.values())o[k]=true;
+  const o={};
+  for(const k of pressedKeys)o[k]=true;
+  for(const [key,enabled] of Object.entries(analog))if(enabled===true)o[key]=true;
+  for(const k of pressedTouch.values())o[k]=true;
   if(dashPulse>0){o.dash=true;dashPulse--;}
   return o;
 }
