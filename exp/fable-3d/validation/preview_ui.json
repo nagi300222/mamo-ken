@@ -4,8 +4,8 @@
  "clip_select": true,
  "crossfade_blends": true,
  "crossfade_weights_at_half": [
-  0.4999999701976776,
-  0.5000000596046448
+  0.5000000596046448,
+  0.4999999403953552
  ],
  "returns_to_idle_after_oneshot": true,
  "pause": true,
