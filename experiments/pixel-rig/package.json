@@ -1,0 +1,14 @@
+{
+  "name": "mamoken-pixel-rig-experiment",
+  "private": true,
+  "type": "module",
+  "description": "マモ拳 2Dピクセルアート・リグ方式の品質検証（依存パッケージなし）",
+  "scripts": {
+    "paint": "node tools/paint.mjs",
+    "export": "node tools/export.mjs",
+    "validate": "node tools/validate.mjs",
+    "compare": "node tools/compare.mjs",
+    "all": "node tools/paint.mjs && node tools/export.mjs && node tools/validate.mjs && node tools/compare.mjs",
+    "serve": "python3 -m http.server 8765 --directory ../.."
+  }
+}
