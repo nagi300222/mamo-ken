@@ -1,0 +1,18 @@
+chromium-narrow layout 568x320, arena 300x269, safe insets 0/0/0/0
+chromium-android-layout layout 800x360, arena 456x309, safe insets 0/0/0/0
+chromium-iphone-layout layout 852x393, arena 391.640625x321, safe insets 47/47/0/21
+19 touch command cases: left/right, held down, omitted diagonals, neutral, super priority and no false positives
+3 independent touch IDs, captured stick slide, no held controls after release; gyuiin during hitstop and two synchronized fallback poses
+touch roar drive, projectile erase, later CPU roar counter
+Touch jump crossed and turned, apex 0.978 m, clipped rising frames 0/6
+moguzo: idle, walk_f, walk_b, dash_f, crouch, jump_n, stand_light, stand_heavy, guard_stand, hurt_light, sp_rising_upper
+pisuke: idle, walk_f, walk_b, dash_f, crouch, jump_n, stand_light, stand_heavy, guard_stand, hurt_light, sp_double_kick
+godan: idle, walk_f, walk_b, dash_f, crouch, jump_n, stand_light, stand_heavy, guard_stand, hurt_light, sp_shoulder_charge
+hakuma: idle, walk_f, walk_b, dash_f, crouch, jump_n, stand_light, stand_heavy, guard_stand, hurt_light, sp_harite
+chirka: idle, walk_f, walk_b, dash_f, crouch, jump_n, stand_light, stand_heavy, guard_stand, hurt_light, sp_feint_claw
+takimaru: idle, walk_f, walk_b, dash_f, crouch, jump_n, stand_light, stand_heavy, guard_stand, hurt_light, sp_bear_grab
+yomikage: idle, walk_f, walk_b, dash_f, crouch, jump_n, stand_light, stand_heavy, guard_stand, hurt_light, sp_counter
+bullet: idle, walk_f, walk_b, dash_f, crouch, jump_n, stand_light, stand_heavy, guard_stand, hurt_light, sp_tail_whip
+dark_moguzo: idle, walk_f, walk_b, dash_f, crouch, jump_n, stand_light, stand_heavy, guard_stand, hurt_light, sp_dark_rush
+Touch KO, rematch gauges, reselect, loaded 99 GLTFLoader clips; Bullet tail path loaded
+No uncaught JS errors or failed app/asset requests
