@@ -81,6 +81,10 @@ def shade(spec, field, pos, nrm, part):
         m = smoothstep(0.35, 0.7, g('brow')); col = col * (1 - m[:, None]) + C['brow'] * m[:, None]
     # --- roster9 の配色パターン（指定があるキャラだけ） ---
     hc = np.array(P.head_c); hr = np.array(P.head_r); gh = np.clip(g('head', 'cheek', 'muzzle', 'ear', 'brow', 'chin'), 0, 1)
+    if getattr(P, 'face', None):             # 顔の前面を明るい色にする（z1 より下。額より上は体毛の色のまま）
+        zr0 = (z - hc[2]) / hr[2] + (n1 - 0.5) * 0.2
+        m = (1 - smoothstep(P.face['z1'] - 0.12, P.face['z1'] + 0.12, zr0)) * smoothstep(-0.05, 0.45, -nrm[:, 1]) * smoothstep(0.4, 0.7, gh)
+        col = col * (1 - m[:, None]) + C['muzzle'] * m[:, None]
     if 'tail' in C:
         m = smoothstep(0.3, 0.7, g('tail') + (n1 - 0.5) * 0.3); col = col * (1 - m[:, None]) + C['tail'] * m[:, None]
     if P.cap:                                # 頭頂の濃色。stripe があれば鼻筋へ細く下ろす
@@ -93,7 +97,7 @@ def shade(spec, field, pos, nrm, part):
     if P.mask:                               # 目のまわり〜下の濃い斑
         for (sn, s), ec in zip(SIDES, spec.eye_centers):
             q = ec + np.array([s * P.mask['dx'], 0, P.mask['dz']]) * P.eye_r * 2.0
-            d = np.linalg.norm((pos - q) * np.array([1.0, 0.6, 1.15]), axis=1) / (P.eye_r * P.mask['r']) + (n1 - 0.5) * 0.3
+            d = np.linalg.norm((pos - q) * np.array([1.0 / P.mask.get('sx', 1.0), 0.6, 1.15]), axis=1) / (P.eye_r * P.mask['r']) + (n1 - 0.5) * 0.3
             m = (1 - smoothstep(0.75, 1.1, d)) * smoothstep(0.4, 0.7, gh); col = col * (1 - m[:, None]) + C['mask'] * m[:, None]
     if P.blaze:                              # 額から鼻への白い筋
         w = P.blaze['w'] * (0.7 + 0.9 * np.clip((hc[2] + hr[2] * 0.6 - z) / (hr[2] * 0.9), 0, 1.2))

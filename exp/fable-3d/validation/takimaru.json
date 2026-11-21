@@ -1,6 +1,6 @@
 {
  "file": "chars/takimaru/takimaru.glb",
- "file_size_bytes": 1925872,
+ "file_size_bytes": 1926816,
  "checks": {
   "skin_exists": {
    "pass": true,
@@ -255,7 +255,7 @@
  "images": [
   {
    "mime": "image/jpeg",
-   "bytes": 353100
+   "bytes": 354042
   }
  ],
  "materials": [

@@ -277,7 +277,7 @@ def build_extras(spec, field):
     if 'sash' in acc:                       # 左肩から右腰へ掛けた太い縄
         zc = (P.sh_z + P.hip_z) / 2 + 0.035; n = norm(V(-1.15, 0, 1)); c = V(0.0, P.chest_c[1], zc)
         v, f, at = surface_ring(torso, c, n, max(P.chest_r[0], P.belly_r[0]) * 1.6, 0.030, 0.020, nseg=64, rows=3, lift=0.002, mode='inner')
-        parts.append(dict(verts=v, faces=f, part='cloth', weights=('prim', 'chest'), tag='sash'))
+        parts.append(dict(verts=v, faces=f, part='cloth', weights='transfer', tag='sash'))   # 近くの体表に追従させる（胴の上下分布だけだと腰まわりで浮く）
     if 'wristbands' in acc:
         wb = P.wristband
         for sn, s in SIDES:

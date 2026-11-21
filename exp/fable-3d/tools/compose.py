@@ -28,7 +28,7 @@ elif mode == 'facing':
 elif mode == 'sheet':
     cid, title, rows, out = sys.argv[2:6]; rows = json.loads(rows); strips = []
     for text, files in rows: strips.append(label(hstack([Image.open(f).convert('RGB') for f in files]), text, 15))
-    W = strips[0].width; S = Image.new('RGB', (W, sum(s.height for s in strips) + 34), (18, 20, 26)); ImageDraw.Draw(S).text((8, 6), '%s  %s   （左から: ゲーム視点 / 斜め前 / 正面 / 斜め後ろ）' % (cid, title), fill=(224, 161, 58), font=font(17)); y = 34
+    W = strips[0].width; S = Image.new('RGB', (W, sum(s.height for s in strips) + 34), (18, 20, 26)); ImageDraw.Draw(S).text((8, 6), '%s  %s%s' % (cid, title, '' if '左から' in title else '   （左から: ゲーム視点 / 斜め前 / 正面 / 斜め後ろ）'), fill=(224, 161, 58), font=font(17)); y = 34
     for s in strips: S.paste(s, (0, y)); y += s.height
     S.save(out, optimize=True)
     for _, files in rows:
@@ -37,7 +37,9 @@ elif mode == 'tojpg':            # リポジトリを重くしないよう、確
     d = sys.argv[2]
     for f in sorted(os.listdir(d)):
         if f.endswith('.png'):
-            Image.open(os.path.join(d, f)).convert('RGB').save(os.path.join(d, f[:-4] + '.jpg'), quality=88, optimize=True); os.remove(os.path.join(d, f))
+            im = Image.open(os.path.join(d, f)).convert('RGB')
+            if os.path.basename(os.path.normpath(d)) == 'deform' and im.width > 1080: im = im.resize((1080, int(im.height * 1080 / im.width)), Image.LANCZOS)   # 変形シートは枚数が多いので縮小
+            im.save(os.path.join(d, f[:-4] + '.jpg'), quality=82 if 'deform' in d else 88, optimize=True); os.remove(os.path.join(d, f))
 elif mode == 'grid':             # 9体ぶんの比較画像・四方向画像を1枚にまとめる
     kind, out = sys.argv[2:4]; ids = ['moguzo', 'pisuke', 'godan', 'hakuma', 'chirka', 'takimaru', 'yomikage', 'bullet', 'dark_moguzo']; ims = []
     for cid in ids:

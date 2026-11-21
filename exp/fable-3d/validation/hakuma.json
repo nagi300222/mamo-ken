@@ -1,6 +1,6 @@
 {
  "file": "chars/hakuma/hakuma.glb",
- "file_size_bytes": 1905188,
+ "file_size_bytes": 1910512,
  "checks": {
   "skin_exists": {
    "pass": true,
@@ -255,7 +255,7 @@
  "images": [
   {
    "mime": "image/jpeg",
-   "bytes": 308220
+   "bytes": 313541
   }
  ],
  "materials": [

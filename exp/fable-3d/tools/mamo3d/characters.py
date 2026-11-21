@@ -39,7 +39,7 @@ BASE = dict(
     # --- roster9 で追加（既定値は既存3体の見た目を変えない） ---
     tail_n=3, tail_prof=None,          # 尻尾のボーン数と太さの並び
     belly_w=0.80, foot_fade=1.0, grizzle=0.0,
-    cap=None, mask=None, blaze=None,   # 頭頂の濃色 / 目のまわりのマスク / 鼻筋の白
+    cap=None, mask=None, blaze=None, face=None,   # 頭頂の濃色 / 目のまわりのマスク / 鼻筋の白 / 顔前面の明色
 )
 
 CHARS = {}
@@ -116,8 +116,8 @@ CHARS['hakuma'] = dict(BASE,           # 大柄で丸い。灰色の背、クリ
     tuft_amp=0.006, tuft_w=0.060, tuft_h=0.055, tris=27000,
     colors=dict(fur=(0.52, 0.52, 0.52), fur_dark=(0.38, 0.38, 0.39), belly=(0.93, 0.88, 0.74), muzzle=(0.95, 0.90, 0.78),
                 nose=(0.12, 0.11, 0.11), paw=(0.24, 0.22, 0.22), foot=(0.80, 0.72, 0.60), claw=(0.12, 0.11, 0.11),
-                ear_in=(0.20, 0.18, 0.18), cloth=(0.13, 0.32, 0.20), cloth2=(0.13, 0.32, 0.20), tail=(0.26, 0.25, 0.25), mask=(0.24, 0.22, 0.22), ear=(0.26, 0.24, 0.24)),
-    belly_patch=1.0, belly_w=1.0, paw_fade=0.30, accessories=['scarf'], mask=dict(r=1.7, dx=0.25, dz=-0.75), mouth_curve=-0.15, mouth_w=0.6,
+                ear_in=(0.20, 0.18, 0.18), cloth=(0.13, 0.32, 0.20), cloth2=(0.13, 0.32, 0.20), tail=(0.26, 0.25, 0.25), mask=(0.24, 0.22, 0.22), ear=(0.26, 0.24, 0.24), blaze=(0.95, 0.90, 0.78)),
+    belly_patch=1.0, belly_w=1.0, paw_fade=0.30, accessories=['scarf'], face=dict(z1=0.62), blaze=dict(w=0.020), mask=dict(r=1.55, dx=0.75, dz=-0.05, sx=1.9), mouth_curve=-0.15, mouth_w=0.6,
 )
 CHARS['chirka'] = dict(BASE,           # 小柄で金色。頭頂から鼻筋が焦げ茶、腹が赤茶。紫のひもと房飾り
     H=0.58,
@@ -166,7 +166,7 @@ CHARS['takimaru'] = dict(BASE,         # 最も背が高い。灰白のごま塩
                 ear_in=(0.14, 0.14, 0.15), cloth=(0.90, 0.66, 0.10), cloth2=(0.90, 0.66, 0.10), tail=(0.20, 0.20, 0.21), cap=(0.20, 0.20, 0.22), mask=(0.13, 0.13, 0.14),
                 blaze=(0.95, 0.95, 0.94), ear=(0.18, 0.18, 0.19)),
     belly_patch=0.6, belly_w=0.9, paw_fade=1.25, foot_fade=2.4, grizzle=0.35, accessories=['sash'],
-    cap=dict(z0=0.20, stripe=0.0), blaze=dict(w=0.020), mask=dict(r=1.9, dx=0.1, dz=-0.2), mouth_curve=-0.05, mouth_w=0.6,
+    face=dict(z1=-0.10), cap=dict(z0=0.20, stripe=0.0), blaze=dict(w=0.022), mask=dict(r=1.9, dx=0.1, dz=-0.2), mouth_curve=-0.05, mouth_w=0.6,
 )
 CHARS['yomikage'] = dict(BASE,         # 中背でやや細身。暗いオリーブ灰のごま塩毛、胸と口元が黄土色。左前腕に白い包帯
     H=0.64,

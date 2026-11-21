@@ -99,7 +99,7 @@ async function roster() {
   await p.goto(url + '/preview/lineup.html?manual=1&bare=1'); await p.waitForFunction(() => window.lineup && (window.lineup.ready || window.lineup.error), null, { timeout: 180000 });
   const at = (clip, f, view) => p.evaluate(([clip, f, view]) => { const L = window.lineup; if (L.S.clip !== clip) L.play(clip); if (view) { L.S.view = view; L.place(); } L.setTime(f / 60); L.draw(); }, [clip, f, view]);
   for (const [v, name] of [['side', 'lineup_side'], ['q', 'lineup_three_quarter'], ['front', 'lineup_front']]) { await at('idle', 0, v); await p.screenshot({ path: path.join(out, name + '.png') }); }
-  if (!SKIP.includes('video')) { const list = [];
+  if (!SKIP.includes('lineupvideo')) { const list = [];
     for (const clip of ['idle', 'walk_f', 'dash_f', 'crouch', 'jump_n', 'stand_light', 'stand_heavy', 'guard_stand', 'hurt_light', 'unique']) {
       const N = await p.evaluate((c) => window.lineup.maxFrames(c), clip); const dir = path.join(TMP, 'lineup_' + clip); fs.rmSync(dir, { recursive: true, force: true }); fs.mkdirSync(dir, { recursive: true }); await at(clip, 0, 'side');
       const total = (clip === 'idle' || clip === 'walk_f') ? N : N + 10; for (let f = 0; f <= total; f++) { await at(clip, f); await p.screenshot({ path: path.join(dir, String(f).padStart(4, '0') + '.png') }); }
