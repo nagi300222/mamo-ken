@@ -1,0 +1,340 @@
+{
+ "pass": true,
+ "pairs_checked": 81,
+ "spacing_m": 0.36,
+ "palm_gap_worst": {
+  "pair": "pisuke_vs_pisuke",
+  "m": 0.0235
+ },
+ "head_distance_min": {
+  "pair": "godan_vs_godan",
+  "m": 0.309
+ },
+ "note": "手ボーン（拳の中心付近）どうしの距離。0.03m未満なら手のひらが合っている。頭ボーンどうしが0.16m以上離れていれば頭は重ならない",
+ "pairs": {
+  "moguzo_vs_moguzo": {
+   "palm_gap_max_m": 0.0065,
+   "head_distance_min_m": 0.326
+  },
+  "moguzo_vs_pisuke": {
+   "palm_gap_max_m": 0.0148,
+   "head_distance_min_m": 0.33
+  },
+  "moguzo_vs_godan": {
+   "palm_gap_max_m": 0.0078,
+   "head_distance_min_m": 0.323
+  },
+  "moguzo_vs_hakuma": {
+   "palm_gap_max_m": 0.007,
+   "head_distance_min_m": 0.327
+  },
+  "moguzo_vs_chirka": {
+   "palm_gap_max_m": 0.0136,
+   "head_distance_min_m": 0.329
+  },
+  "moguzo_vs_takimaru": {
+   "palm_gap_max_m": 0.0078,
+   "head_distance_min_m": 0.339
+  },
+  "moguzo_vs_yomikage": {
+   "palm_gap_max_m": 0.0064,
+   "head_distance_min_m": 0.328
+  },
+  "moguzo_vs_bullet": {
+   "palm_gap_max_m": 0.0065,
+   "head_distance_min_m": 0.325
+  },
+  "moguzo_vs_dark_moguzo": {
+   "palm_gap_max_m": 0.0065,
+   "head_distance_min_m": 0.326
+  },
+  "pisuke_vs_moguzo": {
+   "palm_gap_max_m": 0.0148,
+   "head_distance_min_m": 0.33
+  },
+  "pisuke_vs_pisuke": {
+   "palm_gap_max_m": 0.0235,
+   "head_distance_min_m": 0.33
+  },
+  "pisuke_vs_godan": {
+   "palm_gap_max_m": 0.013,
+   "head_distance_min_m": 0.32
+  },
+  "pisuke_vs_hakuma": {
+   "palm_gap_max_m": 0.0128,
+   "head_distance_min_m": 0.322
+  },
+  "pisuke_vs_chirka": {
+   "palm_gap_max_m": 0.0222,
+   "head_distance_min_m": 0.335
+  },
+  "pisuke_vs_takimaru": {
+   "palm_gap_max_m": 0.013,
+   "head_distance_min_m": 0.329
+  },
+  "pisuke_vs_yomikage": {
+   "palm_gap_max_m": 0.013,
+   "head_distance_min_m": 0.328
+  },
+  "pisuke_vs_bullet": {
+   "palm_gap_max_m": 0.0153,
+   "head_distance_min_m": 0.327
+  },
+  "pisuke_vs_dark_moguzo": {
+   "palm_gap_max_m": 0.0148,
+   "head_distance_min_m": 0.33
+  },
+  "godan_vs_moguzo": {
+   "palm_gap_max_m": 0.0078,
+   "head_distance_min_m": 0.323
+  },
+  "godan_vs_pisuke": {
+   "palm_gap_max_m": 0.013,
+   "head_distance_min_m": 0.32
+  },
+  "godan_vs_godan": {
+   "palm_gap_max_m": 0.0078,
+   "head_distance_min_m": 0.309
+  },
+  "godan_vs_hakuma": {
+   "palm_gap_max_m": 0.0076,
+   "head_distance_min_m": 0.311
+  },
+  "godan_vs_chirka": {
+   "palm_gap_max_m": 0.0119,
+   "head_distance_min_m": 0.328
+  },
+  "godan_vs_takimaru": {
+   "palm_gap_max_m": 0.0078,
+   "head_distance_min_m": 0.316
+  },
+  "godan_vs_yomikage": {
+   "palm_gap_max_m": 0.0083,
+   "head_distance_min_m": 0.319
+  },
+  "godan_vs_bullet": {
+   "palm_gap_max_m": 0.0078,
+   "head_distance_min_m": 0.319
+  },
+  "godan_vs_dark_moguzo": {
+   "palm_gap_max_m": 0.0078,
+   "head_distance_min_m": 0.323
+  },
+  "hakuma_vs_moguzo": {
+   "palm_gap_max_m": 0.007,
+   "head_distance_min_m": 0.327
+  },
+  "hakuma_vs_pisuke": {
+   "palm_gap_max_m": 0.0128,
+   "head_distance_min_m": 0.322
+  },
+  "hakuma_vs_godan": {
+   "palm_gap_max_m": 0.0076,
+   "head_distance_min_m": 0.311
+  },
+  "hakuma_vs_hakuma": {
+   "palm_gap_max_m": 0.0071,
+   "head_distance_min_m": 0.31
+  },
+  "hakuma_vs_chirka": {
+   "palm_gap_max_m": 0.0116,
+   "head_distance_min_m": 0.334
+  },
+  "hakuma_vs_takimaru": {
+   "palm_gap_max_m": 0.0076,
+   "head_distance_min_m": 0.314
+  },
+  "hakuma_vs_yomikage": {
+   "palm_gap_max_m": 0.0073,
+   "head_distance_min_m": 0.322
+  },
+  "hakuma_vs_bullet": {
+   "palm_gap_max_m": 0.007,
+   "head_distance_min_m": 0.322
+  },
+  "hakuma_vs_dark_moguzo": {
+   "palm_gap_max_m": 0.007,
+   "head_distance_min_m": 0.327
+  },
+  "chirka_vs_moguzo": {
+   "palm_gap_max_m": 0.0136,
+   "head_distance_min_m": 0.329
+  },
+  "chirka_vs_pisuke": {
+   "palm_gap_max_m": 0.0222,
+   "head_distance_min_m": 0.335
+  },
+  "chirka_vs_godan": {
+   "palm_gap_max_m": 0.0119,
+   "head_distance_min_m": 0.328
+  },
+  "chirka_vs_hakuma": {
+   "palm_gap_max_m": 0.0116,
+   "head_distance_min_m": 0.334
+  },
+  "chirka_vs_chirka": {
+   "palm_gap_max_m": 0.0209,
+   "head_distance_min_m": 0.332
+  },
+  "chirka_vs_takimaru": {
+   "palm_gap_max_m": 0.0119,
+   "head_distance_min_m": 0.347
+  },
+  "chirka_vs_yomikage": {
+   "palm_gap_max_m": 0.0117,
+   "head_distance_min_m": 0.333
+  },
+  "chirka_vs_bullet": {
+   "palm_gap_max_m": 0.0141,
+   "head_distance_min_m": 0.328
+  },
+  "chirka_vs_dark_moguzo": {
+   "palm_gap_max_m": 0.0136,
+   "head_distance_min_m": 0.329
+  },
+  "takimaru_vs_moguzo": {
+   "palm_gap_max_m": 0.0078,
+   "head_distance_min_m": 0.339
+  },
+  "takimaru_vs_pisuke": {
+   "palm_gap_max_m": 0.013,
+   "head_distance_min_m": 0.329
+  },
+  "takimaru_vs_godan": {
+   "palm_gap_max_m": 0.0078,
+   "head_distance_min_m": 0.316
+  },
+  "takimaru_vs_hakuma": {
+   "palm_gap_max_m": 0.0076,
+   "head_distance_min_m": 0.314
+  },
+  "takimaru_vs_chirka": {
+   "palm_gap_max_m": 0.0119,
+   "head_distance_min_m": 0.347
+  },
+  "takimaru_vs_takimaru": {
+   "palm_gap_max_m": 0.0078,
+   "head_distance_min_m": 0.313
+  },
+  "takimaru_vs_yomikage": {
+   "palm_gap_max_m": 0.0083,
+   "head_distance_min_m": 0.33
+  },
+  "takimaru_vs_bullet": {
+   "palm_gap_max_m": 0.0078,
+   "head_distance_min_m": 0.333
+  },
+  "takimaru_vs_dark_moguzo": {
+   "palm_gap_max_m": 0.0078,
+   "head_distance_min_m": 0.339
+  },
+  "yomikage_vs_moguzo": {
+   "palm_gap_max_m": 0.0064,
+   "head_distance_min_m": 0.328
+  },
+  "yomikage_vs_pisuke": {
+   "palm_gap_max_m": 0.013,
+   "head_distance_min_m": 0.328
+  },
+  "yomikage_vs_godan": {
+   "palm_gap_max_m": 0.0083,
+   "head_distance_min_m": 0.319
+  },
+  "yomikage_vs_hakuma": {
+   "palm_gap_max_m": 0.0073,
+   "head_distance_min_m": 0.322
+  },
+  "yomikage_vs_chirka": {
+   "palm_gap_max_m": 0.0117,
+   "head_distance_min_m": 0.333
+  },
+  "yomikage_vs_takimaru": {
+   "palm_gap_max_m": 0.0083,
+   "head_distance_min_m": 0.33
+  },
+  "yomikage_vs_yomikage": {
+   "palm_gap_max_m": 0.0055,
+   "head_distance_min_m": 0.327
+  },
+  "yomikage_vs_bullet": {
+   "palm_gap_max_m": 0.0064,
+   "head_distance_min_m": 0.325
+  },
+  "yomikage_vs_dark_moguzo": {
+   "palm_gap_max_m": 0.0064,
+   "head_distance_min_m": 0.328
+  },
+  "bullet_vs_moguzo": {
+   "palm_gap_max_m": 0.0065,
+   "head_distance_min_m": 0.325
+  },
+  "bullet_vs_pisuke": {
+   "palm_gap_max_m": 0.0153,
+   "head_distance_min_m": 0.327
+  },
+  "bullet_vs_godan": {
+   "palm_gap_max_m": 0.0078,
+   "head_distance_min_m": 0.319
+  },
+  "bullet_vs_hakuma": {
+   "palm_gap_max_m": 0.007,
+   "head_distance_min_m": 0.322
+  },
+  "bullet_vs_chirka": {
+   "palm_gap_max_m": 0.0141,
+   "head_distance_min_m": 0.328
+  },
+  "bullet_vs_takimaru": {
+   "palm_gap_max_m": 0.0078,
+   "head_distance_min_m": 0.333
+  },
+  "bullet_vs_yomikage": {
+   "palm_gap_max_m": 0.0064,
+   "head_distance_min_m": 0.325
+  },
+  "bullet_vs_bullet": {
+   "palm_gap_max_m": 0.0065,
+   "head_distance_min_m": 0.322
+  },
+  "bullet_vs_dark_moguzo": {
+   "palm_gap_max_m": 0.0065,
+   "head_distance_min_m": 0.325
+  },
+  "dark_moguzo_vs_moguzo": {
+   "palm_gap_max_m": 0.0065,
+   "head_distance_min_m": 0.326
+  },
+  "dark_moguzo_vs_pisuke": {
+   "palm_gap_max_m": 0.0148,
+   "head_distance_min_m": 0.33
+  },
+  "dark_moguzo_vs_godan": {
+   "palm_gap_max_m": 0.0078,
+   "head_distance_min_m": 0.323
+  },
+  "dark_moguzo_vs_hakuma": {
+   "palm_gap_max_m": 0.007,
+   "head_distance_min_m": 0.327
+  },
+  "dark_moguzo_vs_chirka": {
+   "palm_gap_max_m": 0.0136,
+   "head_distance_min_m": 0.329
+  },
+  "dark_moguzo_vs_takimaru": {
+   "palm_gap_max_m": 0.0078,
+   "head_distance_min_m": 0.339
+  },
+  "dark_moguzo_vs_yomikage": {
+   "palm_gap_max_m": 0.0064,
+   "head_distance_min_m": 0.328
+  },
+  "dark_moguzo_vs_bullet": {
+   "palm_gap_max_m": 0.0065,
+   "head_distance_min_m": 0.325
+  },
+  "dark_moguzo_vs_dark_moguzo": {
+   "palm_gap_max_m": 0.0065,
+   "head_distance_min_m": 0.326
+  }
+ }
+}

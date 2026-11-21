@@ -155,6 +155,12 @@ Three.js 側では IK の計算は不要で、普通のボーンアニメーシ�
 | `tail_tip_max_forward_m`, `tail_tip_max_forward_frame`, `tail_tip_height_at_max_m` | bullet の尾打撃: 尻尾先端が最も前へ届く距離（原点から）、そのフレーム、そのときの高さ |
 | `tail_tip_path` | 尻尾先端の軌道（2フレームごと。列は `frame, forward_m, left_m, height_m`）。当たり判定を実際の尻尾の位置に合わせるために使う |
 | `tail_tip_min_height_m`, `tail_to_body_axis_min_m` | 尻尾先端の最低の高さ、尻尾と胴の軸の最小距離（床・胴への潜り込みの確認用） |
+| `v2_clips` | モーション拡張 v2 で足したクリップの名前（Issue #147 / #148） |
+| `command_map` | コマンド入力（`236` / `623` / `214` / `236236`）→ 再生するクリップ名 |
+| `group`, `priority` | 追加クリップの分類（`universal` / `reaction` / `normal` / `command`）と優先度（1が最優先） |
+| `start_pose`, `end_pose` | 追加クリップが始まる・終わる姿勢（`idle` / `guard` / `guard_crouch` / `crouch` / `air` / `down` / `clinch` / `clinch_end`） |
+| `game_action`, `game_reaction`, `game_state` | ゲーム側（`dojo/battle.js`）のどの技・反応・状態に当てる想定か |
+| `pair_spacing_m`, `palm_contact_m` | 組み合い（`clinch_hold`）の2体の間隔と、手のひらを合わせる位置（横・前・高さ m） |
 
 ### つなぎ
 
