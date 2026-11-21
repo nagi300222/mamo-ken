@@ -49,7 +49,7 @@ Cloudflareアカウント認証とアップロード権限が必要。<プロジ
 ## モデル差し替え（造形修正後）
 **ゲームロジックを変更せず**差し替え可能。
 1. `exp/fable-3d/chars/<id>/<id>.glb` を新モデルへ更新する（同じIDとクリップ名を推奨）。
-2. 必要なら `<id>_motions.json` も更新。バレットの尾先端軌道が変わる場合は `balance.js`の`tailTipAt`も形状に合わせて再生成・再検証する。
+2. 必要なら `<id>_motions.json` も更新。バレットの尾先端軌道が変わる場合は、JSON の `sp_tail_whip.tail_tip_path` を新造形から再測定する。対戦開始時に自動で軌道を読み込み、尻尾判定に使う（`balance.js` の手編集は不要）。
 3. `dojo/models.js` の `MODEL_REVISION` を更新してキャッシュを更新。
 4. `npm test` → `npm run build:pages` → Cloudflareプレビューで差し替え確認。
 
