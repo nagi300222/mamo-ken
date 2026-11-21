@@ -16,7 +16,7 @@ export const UNIVERSAL_ACTIONS=Object.freeze({roar:ROAR,gyuiin:GYUIIN,grab:GRAB}
 function fighter(id,slot){
   const r=ROSTER[id];if(!r)throw Error('unknown fighter '+id);
   return {id,slot,x:slot===0?-.70:.70,y:0,vy:0,facing:slot===0?1:-1,
-    hp:r.hp,guard:100,super:0,drive:DRIVE.initial,driveDelay:0,state:'idle',reaction:null,frame:0,stun:0,stop:0,
+    hp:r.hp,guard:100,super:0,drive:DRIVE.initial,driveDelay:0,state:'idle',reaction:null,landF:0,frame:0,stun:0,stop:0,
     action:null,used:false,spawned:false,ko:false,prev:inputOf({}),input:inputOf({}),
     dirHistory:[],dirFacing:null,dashF:0,dashDir:0,roarCooldown:0,gyuiinCooldown:0,guardF:0,
     ability:{charge:0,lastCharge:'',iron:0,armor:3,chase:0,pressure:0,just:0,dark:0,grit:true},
@@ -52,6 +52,7 @@ function timer(p){
   for(const k of ['chase','pressure','just','dark'])p.ability[k]=Math.max(0,p.ability[k]-1);
   for(const k of ['roarCooldown','gyuiinCooldown'])p[k]=Math.max(0,p[k]-1);
   p.guard=cap(p.guard+(p.stun? .006:.025),0,100);
+  if(p.landF>0)p.landF--;
   if(p.driveDelay>0)p.driveDelay--;
   else p.drive=cap(p.drive+DRIVE.regenPerFrame,0,DRIVE.max);
 }
@@ -65,7 +66,7 @@ export class Battle {
   constructor(left='moguzo',right='godan',level=2){
     this.frame=0;this.time=FPS*ARENA.roundSeconds;this.level=cap(Number(level)||2,1,3);
     this.fighters=[fighter(left,0),fighter(right,1)];
-    this.projectiles=[];this.events=[];this.pending=[];this.winner=null;this.phase='fight';this.seq=0;this.clinch=null;
+    this.projectiles=[];this.events=[];this.pending=[];this.winner=null;this.phase='fight';this.seq=0;this.clinch=null;this.throwSequence=null;
     this.tailTipSamples=null;
   }
   again(){
@@ -120,9 +121,36 @@ export class Battle {
       const [a,b]=this.fighters,mid=cap((a.x+b.x)/2,ARENA.minX+DRIVE.resetSpacing/2,ARENA.maxX-DRIVE.resetSpacing/2);
       const dir=a.x<=b.x?1:-1;
       a.x=mid-dir*DRIVE.resetSpacing/2;b.x=mid+dir*DRIVE.resetSpacing/2;
-      for(const p of this.fighters){p.state='clinch_recoil';p.frame=0;p.stun=10;p.stop=0;p.facing=p===a?dir:-dir;}
+      for(const p of this.fighters){p.state='clinch_recoil';p.frame=0;p.stun=26;p.stop=0;p.facing=p===a?dir:-dir;}
       this.clinch=null;
       this.events.push({type:'gyuiin_break',x:mid,y:.35});
+    }
+  }
+  _beginThrow(a,t){
+    if(this.throwSequence||this.clinch||a.ko||t.ko)return false;
+    const mid=cap((a.x+t.x)*.5,ARENA.minX+.35,ARENA.maxX-.35);
+    const dir=a.x<=t.x?1:-1;
+    a.x=mid-dir*.18;t.x=mid+dir*.18;
+    a.facing=dir;t.facing=-dir;
+    for(const p of [a,t]){
+      p.y=0;p.vy=0;p.action=null;p.stun=0;p.stop=0;p.dashF=0;p.landF=0;p.frame=0;
+    }
+    a.state='throw_hit';t.state='thrown';
+    this.throwSequence={frame:0,total:48,attacker:a.slot};
+    this.events.push({type:'throw_pair',slot:a.slot,x:mid,y:.35});
+    return true;
+  }
+  _throwTick(){
+    const c=this.throwSequence;if(!c)return;
+    c.frame++;
+    const attacker=this.fighters[c.attacker],defender=this.fighters[1-c.attacker];
+    attacker.state='throw_hit';attacker.frame=c.frame;
+    defender.state='thrown';defender.frame=c.frame;
+    if(c.frame>=c.total){
+      attacker.state='idle';attacker.frame=0;
+      defender.state='wakeup';defender.frame=0;defender.stun=40;defender.stop=0;
+      this.throwSequence=null;
+      this.events.push({type:'throw_finish',slot:attacker.slot,x:attacker.x,y:.3});
     }
   }
   _begin(p,m,id){
@@ -282,6 +310,7 @@ export class Battle {
     a.stop=Math.max(a.stop,guard?3:6);
     t.stop=Math.max(t.stop,guard?3:6);
     moveX(t,a.facing*(guard?.05:m.kind==='roar'?.16:.085));
+    if(!guard&&m.kind==='throw'&&t.hp>0)this._beginThrow(a,t);
     if(t.hp<=0){t.ko=true;t.state='ko';this.phase='ko';this.winner=a.slot;this.events.push({type:'ko',slot:a.slot});}
   }
   _contact(a,t,m){
@@ -346,7 +375,7 @@ export class Battle {
   _gravity(p){
     if(p.y>0||p.vy>0){
       p.vy-=ARENA.gravity;p.y=Math.max(0,p.y+p.vy);
-      if(p.y===0){p.vy=0;if(!p.action&&!p.stun)p.state='idle';}
+      if(p.y===0){p.vy=0;p.landF=12;if(!p.action&&!p.stun)p.state='idle';}
     }
   }
   tick(raw1={},raw2=null){
@@ -355,6 +384,10 @@ export class Battle {
     if(this.clinch){
       this.fighters[0].prev=inputOf(raw1);this.fighters[1].prev=inputOf(raw2??{});
       this._clinchTick();return this;
+    }
+    if(this.throwSequence){
+      this.fighters[0].prev=inputOf(raw1);this.fighters[1].prev=inputOf(raw2??{});
+      this._throwTick();return this;
     }
     this.time--;
     const [a,b]=this.fighters;
@@ -398,6 +431,7 @@ export class Battle {
       this._damage(e.p,e.op,e.m,e.d,'strike',true);
     }
     if(a.hp<=0&&b.hp<=0){this.phase='ko';this.winner=-1;}
+    if(this.throwSequence)return this;
     if(this.phase==='fight'){
       // 高く跳んだ相手の上を横切るときは横方向の押し合いを解除。
       const sep=b.x-a.x,overlap=2*ARENA.pushRadius-Math.abs(sep);

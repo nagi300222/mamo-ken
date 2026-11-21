@@ -48,3 +48,10 @@ elif mode == 'grid':             # 9体ぶんの比較画像・四方向画像�
     cols = 1 if kind == 'turnaround' else 3; rows = (len(ims) + cols - 1) // cols; w = ims[0].width; h = max(i.height for i in ims); S = Image.new('RGB', (w * cols, h * rows), (35, 38, 46))
     for i, im in enumerate(ims): S.paste(im, ((i % cols) * w, (i // cols) * h))
     S.save(os.path.join(out, kind + '_all.jpg'), quality=86, optimize=True)
+elif mode == 'cells':            # ラベルつきの小さな画像を格子に並べる（モーションv2の一覧）
+    cid, cells, out = sys.argv[2:5]; cells = json.loads(cells); ims = []
+    for text, f in cells:
+        im = Image.open(f).convert('RGB'); d = ImageDraw.Draw(im); d.rectangle([0, 0, im.width, 22], fill=(18, 20, 26)); d.text((6, 3), text, fill=(230, 232, 236), font=font(13)); ims.append(im); os.remove(f)
+    cols = 7; w, h = ims[0].size; rows = (len(ims) + cols - 1) // cols; S = Image.new('RGB', (w * cols, h * rows + 30), (18, 20, 26)); ImageDraw.Draw(S).text((8, 6), '%s  モーションv2 一覧（ゲーム視点、各クリップの要所1フレーム）' % cid, fill=(224, 161, 58), font=font(16))
+    for i, im in enumerate(ims): S.paste(im, ((i % cols) * w, 30 + (i // cols) * h))
+    S.save(out, quality=84, optimize=True)

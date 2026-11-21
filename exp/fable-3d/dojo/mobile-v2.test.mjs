@@ -193,7 +193,8 @@ test('ギュイーンは被弾中に起動し、左右両側と同座標で正�
     assert.equal(g.clinch?.initiator,slot);
     assert.equal(Math.abs(p.x-o.x),.36);
     assert.equal(p.facing,-o.facing);
-    for(let i=0;i<DRIVE.clinchFrames+10;i++)g.tick({},{});
+    // Claudeの26Fクリップを最後まで見せるため、回帰条件も26Fに更新する。
+    for(let i=0;i<DRIVE.clinchFrames+26;i++)g.tick({},{});
     assert.deepEqual(g.fighters.map(f=>f.hp),hp);
     assert.deepEqual(g.fighters.map(f=>f.state),['idle','idle']);
     assert.ok(Math.abs(p.x-o.x)>=DRIVE.resetSpacing-.01);

@@ -4,20 +4,21 @@
 スクリプトだけで再生成できるスタイライズド3Dモデルとして作る実験。骨格と、共通10モーション＋キャラ固有モーション1つ入りの GLB を Three.js で再生できる。
 正本は [Issue #140](https://github.com/nagi300222/mamo-ken/issues/140)。
 
-今回は「9体のモーションを比べられる初版」で、**造形の完成ではない**。再現度と残課題は [REPORT.md](REPORT.md) にある。3体だけだった時点の報告は [docs/REPORT_3chars_2026-11-21.md](docs/REPORT_3chars_2026-11-21.md)。
+今回は「9体のモーションを比べられる初版」で、**造形の完成ではない**。再現度と残課題は [REPORT.md](REPORT.md) にある。
+咆哮・ギュイーン・ガード・被弾・投げ・通常技・コマンド技を足したモーション拡張 v2（[Issue #147](https://github.com/nagi300222/mamo-ken/issues/147) / [#148](https://github.com/nagi300222/mamo-ken/issues/148)）の一覧と、ゲーム側の接続点は [MOTION_V2_REPORT.md](MOTION_V2_REPORT.md)。3体だけだった時点の報告は [docs/REPORT_3chars_2026-11-21.md](docs/REPORT_3chars_2026-11-21.md)。
 
 ## 中身
 
 | 場所 | 内容 |
 |---|---|
-| `chars/{id}/{id}.glb` | リグ・スキニング・共通10クリップ＋固有モーション入り（Three.js 用の納品物） |
+| `chars/{id}/{id}.glb` | リグ・スキニング・共通10クリップ＋固有モーション＋モーションv2の26クリップ入り（Three.js 用の納品物） |
 | `chars/{id}/{id}.blend` | 編集可能な Blender ファイル（IK制御つき。Blender 5.3 で保存） |
 | `chars/{id}/{id}_albedo.jpg` | テクスチャ（1024×1024、1枚） |
 | `chars/{id}/{id}_motions.json` | モーション定義（フレーム数、発生・持続・硬直、移動量、ループ可否） |
 | `chars/{id}/renders/` | 正面・横・斜め・背面、元絵との比較、トゥーン表示、左右の向き |
 | `chars/{id}/motions/` | クリップごとの MP4 と、10本をつないだ `all.mp4` |
 | `roster/` | 9体まとめ: 同じ縮尺の並び、元絵比較の一覧、四方向の一覧、並べて再生した動画 |
-| `preview/` | Three.js プレビュー（GLTFLoader + AnimationMixer）。`index.html` は1体ずつ、`lineup.html` は9体を並べて同時再生 |
+| `preview/` | Three.js プレビュー（GLTFLoader + AnimationMixer）。`index.html` は1体ずつ、`lineup.html` は9体を並べて同時再生、`versus.html` は2体を向かい合わせて対になる動き（組み合い・ガード・被弾・投げ）を確認 |
 | `tools/` | 生成・書き出し・検証・撮影のスクリプト |
 | `validation/` | GLB のデータ検証結果（JSON）と、変形確認の画像 |
 | `docs/` | 参照画像の分析、リグ仕様書、モーションの追加方法 |
@@ -30,7 +31,7 @@
 pip install bpy scikit-image scipy xatlas pillow numpy
 ```
 
-9体の `.blend` / `.glb` / テクスチャ / モーションJSON を作り直す（1コマンド。1体あたり約20〜32秒、9体で約4分）:
+9体の `.blend` / `.glb` / テクスチャ / モーションJSON を作り直す（1コマンド。roster9 時点の実測は9体で3分50秒。モーションv2を足した後は1体あたり数秒増える見込みで、通しの時間は測り直していない）:
 
 ```bash
 python3 exp/fable-3d/tools/build_all.py
@@ -61,7 +62,7 @@ node exp/fable-3d/tools/capture.mjs
 よく使うオプション:
 
 - `build_all.py --only moguzo` … 1体だけ（`--only hakuma,bullet` のように複数も可）
-- `build_all.py --cache` … メッシュとテクスチャを `_scratch/` に保存して再利用する。モーションだけ直すときは1体3秒ほどで終わる
+- `build_all.py --cache` … メッシュとテクスチャを `_scratch/` に保存して再利用する。モーションだけ直すときは1体6〜7秒ほどで終わる
 - `build_all.py --clips idle,crouch` … 一部のクリップだけ（省略時は共通10種＋そのキャラの固有モーション）
 - `shots.mjs --char moguzo --poses stand_light:4,crouch:30` … 任意のフレームを4方向から撮る（調整用）
 
@@ -75,7 +76,7 @@ node exp/fable-3d/tools/capture.mjs
 python3 -m http.server 8765 --directory exp/fable-3d
 ```
 
-ブラウザで `http://localhost:8765/preview/index.html`（1体ずつ）か `http://localhost:8765/preview/lineup.html`（9体を並べて同時再生）を開く。Three.js は `preview/vendor/` に同梱してあり、外部への通信はない。
+ブラウザで `http://localhost:8765/preview/index.html`（1体ずつ）、`http://localhost:8765/preview/lineup.html`（9体を並べて同時再生）、`http://localhost:8765/preview/versus.html`（2体を向かい合わせる）を開く。Three.js は `preview/vendor/` に同梱してあり、外部への通信はない。
 
 できること: キャラ選択、アニメーション選択、一時停止、スロー（×0.5 / ×0.25 / ×0.1）、1フレーム送り、シーク、
 クロスフェード時間の調整、単発モーション後に idle へ戻す、移動量の適用、ボーン表示、ワイヤーフレーム、トゥーン表示、

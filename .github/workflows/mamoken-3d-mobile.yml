@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - feat/mamoken-3d-mobile-fight
+      - feat/mamoken-3d-motion-live-v04
   pull_request:
     branches:
       - feat/mamoken-3d-mobile-fight
@@ -58,7 +59,7 @@ jobs:
         run: >
           npx --yes wrangler@4 pages deploy exp/fable-3d/_pages
           --project-name "$CF_PROJECT"
-          --branch feat/mamoken-3d-mobile-fight
+          --branch "$GITHUB_REF_NAME"
           --commit-hash "$GITHUB_SHA"
       - name: Test the deployed Issue 150 preview in Chromium
         if: ${{ github.event_name == 'pull_request' && github.head_ref == 'fix/mobile-v2-acceptance-150' && github.event.pull_request.head.repo.full_name == github.repository }}

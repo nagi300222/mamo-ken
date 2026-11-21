@@ -99,34 +99,40 @@ async function createActor(id,slot) {
   return {id,slot,gltf,meta,holder,turn,shadow:sh,mixer,actions,current:null,previous:null,key:'',actionAge:0};
 }
 function clipChange(a,p){
-  const name=chooseClip(p,Object.keys(a.actions)),key=name+':'+(p.action?.serial||0);
+  const name=chooseClip(p,Object.keys(a.actions),a.meta.command_map||{});
+  const key=name+':'+(p.action?.serial||0)+':'+(p.state==='clinch'?p.state:p.state==='clinch_recoil'?p.state:'');
   if(key===a.key)return;
   const next=a.actions[name]||a.actions.idle,prev=a.current;
   const info=a.meta.clips[name]||{},isLoop=!!info.loop;
   next.reset();next.enabled=true;next.clampWhenFinished=true;
   next.setLoop(isLoop?THREE.LoopRepeat:THREE.LoopOnce,isLoop?Infinity:1);
-  next.setEffectiveTimeScale(1);next.setEffectiveWeight(1);next.play();
+  // Claudeのモーションの頭から末尾までを、既存の対戦フレームに合わせて再生。
+  const total=p.action?p.action.startup+p.action.active+p.action.recovery:0;
+  const rate=total&&info.frames&&!isLoop?Math.max(.55,Math.min(2.5,info.frames/total)):1;
+  next.setEffectiveTimeScale(rate);next.setEffectiveWeight(1);next.play();
   if(prev&&prev!==next)next.crossFadeFrom(prev,.055,false);
-  a.current=next;a.key=key;a.actionAge=0;
+  a.current=next;a.currentName=name;a.key=key;a.actionAge=0;
 }
 function syncActor(a,p){
   if(!a)return;clipChange(a,p);a.holder.position.set(p.x,p.y,0);
   a.turn.rotation.set(0,p.facing===1?Math.PI/2:-Math.PI/2,0);
   a.turn.scale.setScalar(1);
   a.turn.position.z=0;
-  if(p.action?.kind==='roar'){
-    const phase=p.frame/(p.action.startup+p.action.active);
-    a.turn.scale.setScalar(1+.06*Math.sin(Math.PI*Math.min(phase,1)));
-    a.turn.rotation.z=p.facing*.07*Math.sin(Math.PI*Math.min(phase,1));
-  }else if(p.action?.kind==='clinch'){
-    a.turn.rotation.z=-p.facing*.14;
-    a.turn.position.z=p.facing*.02;
-  }else{
-    if(p.state==='hit'||p.state==='clinch_recoil')a.turn.rotation.z=p.facing*.11;
-    if(p.state==='block')a.turn.rotation.z=-p.facing*.06;
-    if(p.state==='clinch'){
-      a.turn.rotation.z=-p.facing*.21;
-      a.turn.scale.setScalar(1.045);
+  // 新クリップに踏み込み・被弾・押し合いが入っているので、
+  // 旧版用のモデル全体の拡大/傾きを重ねない。
+  const authored=!!a.meta.clips[a.currentName]?.v2;
+  if(!authored){
+    if(p.action?.kind==='roar'){
+      const phase=p.frame/(p.action.startup+p.action.active);
+      a.turn.scale.setScalar(1+.06*Math.sin(Math.PI*Math.min(phase,1)));
+      a.turn.rotation.z=p.facing*.07*Math.sin(Math.PI*Math.min(phase,1));
+    }else if(p.action?.kind==='clinch'){
+      a.turn.rotation.z=-p.facing*.14;
+      a.turn.position.z=p.facing*.02;
+    }else{
+      if(p.state==='hit'||p.state==='clinch_recoil')a.turn.rotation.z=p.facing*.11;
+      if(p.state==='block')a.turn.rotation.z=-p.facing*.06;
+      if(p.state==='clinch'){a.turn.rotation.z=-p.facing*.21;a.turn.scale.setScalar(1.045);}
     }
   }
   a.shadow.scale.setScalar(Math.max(.6,1-p.y*.65));
@@ -407,6 +413,10 @@ function render(now){
       if(battle.phase!=='fight')break;
     }
     if(steps)hud();
+  }
+  // ラウンド終了後もKOアニメーションは最後まで再生する。
+  if(battle?.phase==='ko'&&!paused){
+    for(const actor of actors)if(actor)actor.mixer.update(delta);
   }
   updateCamera();
   renderer.render(scene,camera);
