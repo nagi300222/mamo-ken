@@ -105,8 +105,12 @@ function syncActor(a,p){
     a.turn.position.z=p.facing*.02;
   }else{
     a.turn.position.z=0;
-    if(p.state==='hit')a.turn.rotation.z=p.facing*.11;
+    if(p.state==='hit'||p.state==='clinch_recoil')a.turn.rotation.z=p.facing*.11;
     if(p.state==='block')a.turn.rotation.z=-p.facing*.06;
+    if(p.state==='clinch'){
+      a.turn.rotation.z=-p.facing*.21;
+      a.turn.scale.setScalar(1.045);
+    }
   }
   a.shadow.scale.setScalar(Math.max(.6,1-p.y*.65));
   a.shadow.material.opacity=Math.max(.11,.3-p.y*.13);
@@ -132,9 +136,10 @@ function vfx(){
     if(e.type==='roar_absorb'&&e.slot===0)note('咆哮！ 攻撃を受け止めた');
     if(e.type==='roar_counter')note('咆哮返し！');
     if(e.type==='roar_erase')note('咆哮で飛び道具を消した！');
-    if(e.type==='gyuiin_hit')note('ギュイーン！ クリンチ成功');
+    if(e.type==='gyuiin_hit'||e.type==='gyuiin_start')note('ギュイーン！ 組み合い開始');
+    if(e.type==='gyuiin_break')note('ギュイーン！ 仕切り直し');
     if(e.type==='gyuiin_armor')note('ギュイーンのハイパーアーマー');
-    if(!['hit','block','clash','counter','grit','ko','roar_absorb','roar_counter','roar_hit','roar_clash','roar_erase','gyuiin_hit','gyuiin_armor'].includes(e.type))continue;
+    if(!['hit','block','clash','counter','grit','ko','roar_absorb','roar_counter','roar_hit','roar_clash','roar_erase','gyuiin_hit','gyuiin_start','gyuiin_break','gyuiin_armor'].includes(e.type))continue;
     const x=e.x??battle.fighters[e.slot||0].x,y=e.y??.42;
     const col=e.type==='hit'?0xffd39c:e.type==='block'?0x9fdaf8:e.type.startsWith('roar')?0xffc06c:e.type.startsWith('gyuiin')?0xa98ef4:0xf7e9c3;
     const mesh=new THREE.Mesh(new THREE.OctahedronGeometry(.11,0),new THREE.MeshBasicMaterial({color:col,transparent:true,opacity:.8,depthWrite:false}));
@@ -172,6 +177,7 @@ function hud(){
     $('ability-'+i).textContent=abilityLabel(p);
     $('hp-'+i).style.width=fwd(p.hp/r.hp*100)+'%';
     $('meter-'+i).style.width=fwd(p.super)+'%';
+    $('drive-'+i).style.width=fwd(p.drive??100)+'%';
     $('hp-'+i).style.background=p.hp/r.hp<.25?'linear-gradient(90deg,#e46e69,#eab36b)':'linear-gradient(90deg,#72d0b0,#cce9a5)';
   }
   $('timer').textContent=String(Math.ceil(battle.time/FPS));
