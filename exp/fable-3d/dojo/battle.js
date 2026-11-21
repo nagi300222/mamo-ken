@@ -2,7 +2,7 @@ import { FPS, ARENA, ROSTER, IDS, normalMove, specialMove, ultimateMove, tailTip
 import { pushDirection, readCommand } from './commands.js';
 import { cpuInput } from './cpu.js';
 // 設計の正本はバランスデータ。GLB・Three.js・操作DOMには依存しない。
-const KEYS=['left','right','up','down','weak','strong','throw','roar','gyuiin','dash','special1','special2','special3','super'];
+const KEYS=['left','right','up','down','weak','strong','throw','roar','gyuiin','dash','stepForward','stepBack','special1','special2','special3','super'];
 const cap=(v,a,b)=>Math.max(a,Math.min(b,v));
 const inputOf=(raw={})=>Object.fromEntries(KEYS.map(k=>[k,!!raw[k]]));
 const total=m=>m.startup+m.active+m.recovery;
@@ -242,8 +242,11 @@ export class Battle {
       const id=stance+(button==='strong'?'heavy':'weak');
       this._begin(p,normalMove(p.id,id),id);return;
     }
-    if(edges.dash&&p.y===0){
-      p.dashDir=n.left?-1:n.right?1:p.facing;p.dashF=17;
+    if((edges.dash||edges.stepForward||edges.stepBack)&&p.y===0){
+      // 専用ボタンの「前後」は画面左右ではなく、今向いている相手を基準にする。
+      // スティックの向きに関係なく、後ステップは相手から離れる。
+      p.dashDir=edges.stepBack?-p.facing:edges.stepForward?p.facing:n.left?-1:n.right?1:p.facing;
+      p.dashF=17;
       // ヨミカゲ：相手の動作を見切った瞬間に「外へ」ステップできれば返し窓。
       const threat=other.action;
       const safeWindow=threat&&other.frame>=Math.max(0,threat.startup-5)&&

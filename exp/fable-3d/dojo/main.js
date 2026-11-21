@@ -360,7 +360,7 @@ stick.addEventListener('contextmenu',e=>e.preventDefault());
 const keyMap={
   ArrowLeft:'left',ArrowRight:'right',ArrowUp:'up',ArrowDown:'down',
   KeyA:'left',KeyD:'right',KeyW:'up',KeyS:'down',
-  KeyZ:'weak',KeyX:'strong',KeyV:'throw',KeyB:'roar',KeyN:'gyuiin',KeyC:'dash'
+  KeyZ:'weak',KeyX:'strong',KeyV:'throw',KeyB:'roar',KeyN:'gyuiin',KeyC:'dash',KeyF:'stepForward',KeyR:'stepBack'
 };
 function clearInput(){
   if(analog.pointer!==null&&stick.hasPointerCapture(analog.pointer))stick.releasePointerCapture(analog.pointer);

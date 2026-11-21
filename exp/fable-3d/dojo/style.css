@@ -261,3 +261,45 @@ button.primary:active{transform:translateY(1px)}
 #commands-help .ability-guide{margin-top:9px;padding-top:7px;border-top:1px solid #4f665b;color:#dbe9df}
 #commands-help .ability-guide strong{font-size:12px;color:#f2d59c}
 #commands-help .ability-guide p{margin:5px 0 0;font-size:12px;line-height:1.55}
+
+/* v0.6: 前後ステップはスティック下の左レール内に置く。
+   カメラ・中央の対戦画面・右5ボタンのサイズを変更しない。 */
+#stick-rail .step-pad{
+  width:min(100%,var(--stick-size));
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  column-gap:4px;
+  flex:0 0 auto;
+}
+#stick-rail .step-button{
+  min-width:0;
+  height:clamp(31px,9vh,39px);
+  padding:2px 1px;
+  border:1px solid #8396a5;
+  border-radius:7px;
+  background:linear-gradient(180deg,#304b5e,#1a3144);
+  color:#f5e5bc;
+  font-size:clamp(9px,1.8vh,11px);
+  font-weight:800;
+  letter-spacing:-.06em;
+  box-shadow:0 2px 0 #0b1721;
+  white-space:nowrap;
+  -webkit-user-select:none;
+  user-select:none;
+  touch-action:none;
+}
+#stick-rail .step-button.held{
+  background:#b99765;
+  border-color:#ffe4b1;
+  color:#172834;
+  transform:translateY(2px);
+  box-shadow:0 0 0 1px #ffe4b1 inset;
+}
+#stick-rail .step-button:focus-visible{
+  outline:2px solid #fff0bf;
+  outline-offset:2px;
+}
+@media(max-height:420px) and (orientation:landscape){
+  #stick-rail .step-pad{column-gap:3px}
+  #stick-rail .step-button{height:30px;font-size:9px}
+}

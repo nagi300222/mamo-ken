@@ -109,8 +109,11 @@ test('スマホ配置：左右の操作エリアと中央対戦画面を分離�
   assert.match(html,/id="combat-layout"/);
   assert.ok(html.indexOf('id="stick-rail"')<html.indexOf('id="arena"'));
   assert.ok(html.indexOf('id="buttons-rail"')>html.indexOf('</section>'));
-  const buttons=[...html.matchAll(/data-control="([^"]+)"/g)].map(m=>m[1]);
+  const rightRail=html.split('id="buttons-rail"')[1]||'';
+  const buttons=[...rightRail.matchAll(/data-control="([^"]+)"/g)].map(m=>m[1]);
   assert.deepEqual(buttons,['weak','strong','throw','roar','gyuiin']);
+  const stickRail=html.split('id="stick-rail"')[1].split('id="arena"')[0];
+  assert.deepEqual([...stickRail.matchAll(/data-control="([^"]+)"/g)].map(m=>m[1]),['stepBack','stepForward']);
   assert.ok(!html.includes('data-control="special1"'));
   assert.match(css,/#combat-layout\s*\{/);
 });
