@@ -36,6 +36,7 @@ jobs:
           node --check exp/fable-3d/dojo/battle.js
           node --check exp/fable-3d/dojo/commands.js
           node --check exp/fable-3d/dojo/models.js
+          node --check exp/fable-3d/dojo/camera-frame.js
           node --check exp/fable-3d/dojo/main.js
           node --check exp/fable-3d/dojo/build-pages.mjs
           node --check exp/fable-3d/dojo/server.mjs

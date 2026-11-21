@@ -3,11 +3,13 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { Battle } from './battle.js';
 import { ROSTER, IDS, FPS, ARENA } from './balance.js';
 import { MODEL_ASSETS, MODEL_REVISION, chooseClip } from './models.js';
+import { frameTargets } from './camera-frame.js';
 
 const $=id=>document.getElementById(id), canvas=$('stage');
 const scene=new THREE.Scene();scene.background=new THREE.Color(0x758993);
-const camera=new THREE.OrthographicCamera(-2.15,2.15,1.38,-.78,.01,30);
-camera.position.set(0,1.55,5.5);camera.lookAt(0,.75,0);
+const camera=new THREE.OrthographicCamera(-1.4,1.4,1,-1,.01,30);
+const cameraPose={x:0,y:.5,halfWidth:1.4};
+camera.position.set(0,1.2,5.5);camera.lookAt(0,.5,0);
 const renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:false,powerPreference:'high-performance'});
 renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,1.5));
 renderer.outputColorSpace=THREE.SRGBColorSpace;
@@ -52,13 +54,25 @@ function updateChoice(){
   $('chosen-name').textContent=ROSTER[selected].name;
   $('chosen-role').textContent=ROSTER[selected].role;
 }
+function updateCamera(snap=false){
+  const w=canvas.clientWidth,h=canvas.clientHeight;
+  if(w<1||h<1)return;
+  const t=frameTargets(battle?.fighters||[],w/h);
+  const blend=snap?1:.18;
+  cameraPose.x+=(t.centerX-cameraPose.x)*blend;
+  cameraPose.y+=(t.focusY-cameraPose.y)*blend;
+  cameraPose.halfWidth+=(t.halfWidth-cameraPose.halfWidth)*blend;
+  camera.position.set(cameraPose.x,cameraPose.y+.70,5.5);
+  camera.lookAt(cameraPose.x,cameraPose.y,0);
+  const halfHeight=cameraPose.halfWidth/(w/h);
+  camera.left=-cameraPose.halfWidth;camera.right=cameraPose.halfWidth;
+  camera.top=halfHeight;camera.bottom=-halfHeight;camera.updateProjectionMatrix();
+}
 function resize(){
   const w=canvas.clientWidth,h=canvas.clientHeight;
   if(w<1||h<1)return;
   renderer.setSize(w,h,false);renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,1.5));
-  const aspect=w/h,halfWidth=Math.max(2.22,1.32*aspect),halfHeight=halfWidth/aspect;
-  camera.left=-halfWidth;camera.right=halfWidth;
-  camera.top=.56+halfHeight;camera.bottom=.56-halfHeight;camera.updateProjectionMatrix();
+  updateCamera(true);
 }
 const observer=new ResizeObserver(resize);observer.observe(canvas);window.addEventListener('resize',resize);
 function disposable(o){o.traverse(node=>{if(node.geometry)node.geometry.dispose();
@@ -342,6 +356,7 @@ function render(now){
     }
     if(steps)hud();
   }
+  updateCamera();
   renderer.render(scene,camera);
 }
 makeChooser();resize();requestAnimationFrame(render);

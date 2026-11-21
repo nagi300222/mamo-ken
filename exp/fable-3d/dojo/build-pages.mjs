@@ -8,7 +8,7 @@ const IDS=['moguzo','pisuke','godan','hakuma','chirka','takimaru','yomikage','bu
 async function copyOne(source,target){await mkdir(path.dirname(target),{recursive:true});await copyFile(source,target);}
 await rm(OUTPUT,{recursive:true,force:true});await mkdir(OUTPUT,{recursive:true});
 const dojo=path.join(ROOT,'dojo');
-for(const name of ['index.html','style.css','models.js','balance.js','battle.js','commands.js','main.js'])
+for(const name of ['index.html','style.css','models.js','balance.js','battle.js','commands.js','camera-frame.js','main.js'])
   await copyOne(path.join(dojo,name),path.join(OUTPUT,'dojo',name));
 await cp(path.join(ROOT,'preview','vendor'),path.join(OUTPUT,'preview','vendor'),{recursive:true});
 let bytes=0;
