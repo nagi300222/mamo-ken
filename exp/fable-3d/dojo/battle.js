@@ -204,7 +204,7 @@ export class Battle {
     const dir=n.right?1:n.left?-1:0;
     if(dir&&!n.down){
       const rr=ROSTER[p.id],back=dir!==p.facing;
-      moveX(p,dir*(p.y>0?Math.max(.025,rr.walk*1.25):back?rr.back:rr.walk));
+      moveX(p,dir*(p.y>0?Math.max(.032,rr.walk*1.25):back?rr.back:rr.walk));
       p.state=p.y>0?'jump':back?'walk_b':'walk_f';
     }else p.state=p.y>0?'jump':n.down?'crouch':'idle';
   }
@@ -401,7 +401,7 @@ export class Battle {
     if(this.phase==='fight'){
       // 高く跳んだ相手の上を横切るときは横方向の押し合いを解除。
       const sep=b.x-a.x,overlap=2*ARENA.pushRadius-Math.abs(sep);
-      if(overlap>0&&Math.abs(a.y-b.y)<.70){
+      if(overlap>0&&Math.abs(a.y-b.y)<.38){
         const d=sep>=0?1:-1;moveX(a,-d*overlap/2);moveX(b,d*overlap/2);
       }
       this._projectiles();
