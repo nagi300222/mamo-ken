@@ -1,5 +1,6 @@
 import { FPS, ARENA, ROSTER, IDS, normalMove, specialMove, ultimateMove, tailTipAt } from './balance.js';
 import { pushDirection, readCommand } from './commands.js';
+import { cpuInput } from './cpu.js';
 // 設計の正本はバランスデータ。GLB・Three.js・操作DOMには依存しない。
 const KEYS=['left','right','up','down','weak','strong','throw','roar','gyuiin','dash','special1','special2','special3','super'];
 const cap=(v,a,b)=>Math.max(a,Math.min(b,v));
@@ -16,42 +17,24 @@ export const UNIVERSAL_ACTIONS=Object.freeze({roar:ROAR,gyuiin:GYUIIN,grab:GRAB}
 function fighter(id,slot){
   const r=ROSTER[id];if(!r)throw Error('unknown fighter '+id);
   return {id,slot,x:slot===0?-.70:.70,y:0,vy:0,facing:slot===0?1:-1,
-    hp:r.hp,guard:100,super:0,drive:DRIVE.initial,driveDelay:0,state:'idle',reaction:null,landF:0,frame:0,stun:0,stop:0,
+    hp:r.hp,guard:r.guardMax,super:0,drive:DRIVE.initial,driveDelay:0,state:'idle',reaction:null,landF:0,frame:0,stun:0,stop:0,
     action:null,used:false,spawned:false,ko:false,prev:inputOf({}),input:inputOf({}),
     dirHistory:[],dirFacing:null,dashF:0,dashDir:0,roarCooldown:0,gyuiinCooldown:0,guardF:0,
-    ability:{charge:0,lastCharge:'',iron:0,armor:3,chase:0,pressure:0,just:0,dark:0,grit:true},
+    ability:{charge:0,lastCharge:'',iron:0,armor:1,armorCooldown:0,chase:0,chaseCooldown:0,
+      pressure:0,just:0,evadeF:0,dark:0,darkUsed:false,darkCooldown:0,feintCount:0,
+      gutsProgress:0,lastGuts:'',gutsReady:false,grit:true},
     poison:0,poisonTick:0,attackSerial:0,locomotion:0
   };
 }
-function aiInput(g,p,op,level){
-  const t=g.frame,d=Math.abs(p.x-op.x),face=op.x>p.x?'right':'left',back=op.x>p.x?'left':'right',i={};
-  if(p.stun||p.stop)return i;
-  if(op.action&&d<.75&&p.y===0&&((t+level*7)%19)<11){
-    i[back]=true;if(op.action.level==='low')i.down=true;
-    if(op.action.kind==='roar'&&t%5===0&&level>=2)i.roar=true;
-    return i;
-  }
-  if(!p.action&&d>.60){
-    i[face]=true;if(t%146===12&&level>1)i.special1=true;
-    if(t%180===18&&level>1)i.dash=true;return i;
-  }
-  if(!p.action){
-    if(d<.34&&t%109===12)i.throw=true;
-    else if(t%49===9)i.weak=true;
-    else if(t%83===24)i.strong=true;
-    else if(t%160===38)i.special2=true;
-    else if(t%185===42)i.special3=true;
-    if(d<.55&&level>=2&&t%311===20)i.gyuiin=true;
-    if(d<.75&&level>=2&&t%260===58)i.roar=true;
-    if(p.super>=100&&t%235===17)i.super=true;
-    if(t%195===82)i.up=true;
-  }
-  return i;
-}
+// CPUは技を見てから遅れて反応する（cpu.js）。
+const aiInput=(g,p,op,level)=>cpuInput(g,p,op,level);
 function timer(p){
-  for(const k of ['chase','pressure','just','dark'])p.ability[k]=Math.max(0,p.ability[k]-1);
+  for(const k of ['chase','pressure','just','dark','chaseCooldown','armorCooldown','evadeF','darkCooldown'])
+    p.ability[k]=Math.max(0,p.ability[k]-1);
+  p.ability.armor=p.ability.armorCooldown===0?1:0;
+  if(!p.action&&p.ability.dark===0&&p.ability.darkCooldown===0)p.ability.darkUsed=false;
   for(const k of ['roarCooldown','gyuiinCooldown'])p[k]=Math.max(0,p[k]-1);
-  p.guard=cap(p.guard+(p.stun? .006:.025),0,100);
+  p.guard=cap(p.guard+(p.stun? .006:.025),0,ROSTER[p.id].guardMax);
   if(p.landF>0)p.landF--;
   if(p.driveDelay>0)p.driveDelay--;
   else p.drive=cap(p.drive+DRIVE.regenPerFrame,0,DRIVE.max);
@@ -163,18 +146,27 @@ export class Battle {
     if(p.action&&p.action.id===id)return false;
     if(m.isSuper)p.super=0;
     if(m.kind==='roar'){p.roarCooldown=96;p.drive-=DRIVE.roarCost;p.driveDelay=DRIVE.regenDelay;}
-    if(p.id==='godan'&&m.armor){if(p.ability.armor<1)return false;p.ability.armor--;}
-    if(p.id==='hakuma'&&p.ability.iron&&(id.startsWith('s')||m.isSuper)){
-      m={...m,damage:Math.round(m.damage*1.23)};p.ability.iron=0;
+    if(p.id==='godan'&&m.armor)m={...m,armor:p.ability.armorCooldown===0?1:0,armorUsed:false};
+    if(p.id==='hakuma'&&p.ability.iron&&id.startsWith('s')){
+      m={...m,damage:Math.round(m.damage*1.15)};p.ability.iron=0;
     }
-    if(p.id==='bullet'&&p.ability.charge>0&&(m.kind==='tail'||m.isSuper)){
-      m={...m,damage:Math.round(m.damage*(1+.08*p.ability.charge))};p.ability.charge=0;
+    // 溜めたチャージは尾薙ぎ（214）MAX版でだけ解放。奥義へは流用しない。
+    if(p.id==='bullet'&&m.chargeRelease&&p.ability.charge===3){
+      m={...m,damage:Math.round(m.damage*1.24)};
+      p.ability.charge=0;p.ability.lastCharge='';
     }
-    if(p.id==='takimaru'&&(m.kind==='throw'||m.kind==='clinch')&&p.ability.pressure>0){
-      m={...m,damage:Math.round(m.damage*1.2)};p.ability.pressure=0;
+    // ギュイーンは全キャラ同一。タキマルの圧は投げ間合いと微量の威力へ。
+    if(p.id==='takimaru'&&m.kind==='throw'&&p.ability.pressure>0){
+      m={...m,reach:m.reach+.07,damage:Math.round(m.damage*1.08)};
+      p.ability.pressure=0;
     }
     if(p.id==='yomikage'&&p.ability.just>0&&m.kind==='counter'){
-      m={...m,startup:Math.max(3,m.startup-2),damage:Math.round(m.damage*1.15)};p.ability.just=0;
+      m={...m,startup:Math.max(3,m.startup-2),damage:Math.round(m.damage*1.22),justBoosted:true};p.ability.just=0;
+    }
+    // 王道型：種類の違う成功から得た根性を次の必殺1回に回す。
+    if(p.id==='moguzo'&&p.ability.gutsReady&&id.startsWith('s')){
+      m={...m,damage:Math.round(m.damage*1.07)};
+      p.ability.gutsReady=false;p.ability.gutsProgress=0;
     }
     p.action={...m,id,serial:++this.seq,started:this.frame};
     p.state=m.kind==='roar'?'roar':m.kind==='clinch'?'gyuiin':'attack';
@@ -191,13 +183,42 @@ export class Battle {
     if(p.stop||p.stun)return;
     if(edges.roar&&p.action&&p.action.kind!=='roar'&&other.action?.kind==='roar'&&p.roarCooldown===0&&p.drive>=DRIVE.roarCost){p.action=null;p.frame=0;}
 
-    // 組み合いと咆哮は技からの割り込み不可。咆哮返しは入力時の先読みで成立する。
+    // チルカ：同じ予備動作から中止（後ろ）か一拍遅らせる（下）を選べる。
+    if(p.id==='chirka'&&p.action?.feintable&&p.frame>=2&&p.frame<p.action.startup){
+      if(edges[facingBack(p)]){
+        p.action={name:'フェイント',kind:'feint',startup:1,active:1,recovery:16,
+          damage:0,reach:0,id:'feint',anim:'sp_feint_claw',serial:++this.seq};
+        p.frame=0;p.ability.feintCount++;p.dirHistory=[];p.state='feint';
+        this.events.push({type:'feint',slot:p.slot});
+        return;
+      }
+      if(edges.down&&p.action.delayable&&!p.action.delayed){
+        p.action={...p.action,startup:p.action.startup+8,recovery:p.action.recovery+2,delayed:true};
+        this.events.push({type:'delay',slot:p.slot});
+        return;
+      }
+    }
+    // 連携はヒット成功後に別のコマンド技へ1回だけ。通常技連打には派生しない。
     if(p.action){
-      if(p.id==='pisuke'&&p.ability.chase>0&&edges.dash){
-        p.action=null;p.frame=0;p.ability.chase=0;moveX(p,p.facing*ROSTER[p.id].dash);
+      if(p.id==='pisuke'&&p.ability.chase>0&&p.ability.chaseCooldown===0&&edges.dash){
+        p.action=null;p.frame=0;p.ability.chase=0;p.ability.chaseCooldown=52;
+        const dir=n.left?-1:n.right?1:p.facing;
+        moveX(p,dir*ROSTER[p.id].dash);
         this.events.push({type:'chase',slot:p.slot});
-      } else if(p.id==='dark_moguzo'&&p.ability.dark>0&&(edges.weak||edges.strong)){
-        const id=edges.weak?'stand_weak':'stand_heavy';this._begin(p,normalMove(p.id,id),id);
+      } else if(p.id==='dark_moguzo'&&p.ability.dark>0&&!p.ability.darkUsed&&(edges.weak||edges.strong)){
+        const cmd=readCommand(p.dirHistory,edges.strong?'strong':'weak',this.frame,false);
+        const idx={qcf:0,dp:1,qcb:2}[cmd];
+        if(idx!==undefined){
+          const nextId='s'+(idx+1);
+          if(nextId!==p.action.id){
+            const next={...specialMove(p.id,idx)};
+            next.damage=Math.round(next.damage*.72);
+            if(this._begin(p,next,nextId)){
+              p.ability.darkUsed=true;p.ability.dark=0;p.ability.darkCooldown=50;
+              this.events.push({type:'dark_chain',slot:p.slot});
+            }
+          }
+        }
       }
       return;
     }
@@ -223,6 +244,16 @@ export class Battle {
     }
     if(edges.dash&&p.y===0){
       p.dashDir=n.left?-1:n.right?1:p.facing;p.dashF=17;
+      // ヨミカゲ：相手の動作を見切った瞬間に「外へ」ステップできれば返し窓。
+      const threat=other.action;
+      const safeWindow=threat&&other.frame>=Math.max(0,threat.startup-5)&&
+        other.frame<=threat.startup+threat.active&&
+        Math.abs(other.x-p.x)<(threat.reach||.47)+.18;
+      if(p.id==='yomikage'&&safeWindow&&
+         p.dashDir===(other.x>p.x?-1:1)){
+        p.ability.just=43;p.ability.evadeF=7;
+        this.events.push({type:'just_step',slot:p.slot});
+      }
       moveX(p,p.dashDir*ROSTER[p.id].dash/18);
       p.state='dash';p.frame=0;p.locomotion++;return;
     }
@@ -247,7 +278,9 @@ export class Battle {
     if(c==='roar'&&t.frame>=1&&t.frame<=t.action.startup+t.action.active){
       if(m.kind!=='roar'&&m.kind!=='throw'&&m.kind!=='clinch')return 'roar';
     }
-    if(t.id==='godan'&&t.action.armor&&t.frame>=4&&m.kind!=='throw'&&m.kind!=='clinch')return 'godan';
+    if(t.id==='godan'&&t.action.armor&&!t.action.armorUsed&&
+      t.frame>=6&&t.frame<t.action.startup+t.action.active&&
+      !['throw','clinch','roar'].includes(m.kind))return 'godan';
     return null;
   }
   _damage(a,t,m,_distance=0,source='strike',force=false){
@@ -268,16 +301,26 @@ export class Battle {
         return;
       }
     }
+    // 正解ステップの短い回避中は打撃をかわす。投げ/咆哮は対象外。
+    if(t.id==='yomikage'&&t.ability.evadeF>0&&
+       !['throw','roar','clinch'].includes(m.kind)){
+      this.events.push({type:'just_evade',slot:t.slot,x:t.x,y:t.y+.33});
+      return;
+    }
     const guard=this._guarding(t,m);
     let dmg=m.damage;
-    if(a.id==='moguzo'&&a.hp<=ROSTER.moguzo.hp*.30)dmg=Math.round(dmg*1.12);
-    if(a.id==='dark_moguzo'&&a.hp<=ROSTER.dark_moguzo.hp*.35)dmg=Math.round(dmg*1.10);
+    if(a.id==='moguzo'&&a.hp<=ROSTER.moguzo.hp*.30)dmg=Math.round(dmg*1.06);
+    // ダークモグゾーは高火力常時強化ではなく、低耐久と技派生で勝つ。
     if(guard){
-      t.dashF=0;t.guard=cap(t.guard-Math.max(5,dmg*(m.kind==='roar'?.37:.16)),0,100);
+      t.dashF=0;t.guard=cap(t.guard-Math.max(5,dmg*(m.kind==='roar'?.37:.16)),0,ROSTER[t.id].guardMax);
       t.stun=t.guard<=0?26:Math.max(8,Math.round(dmg*(m.kind==='roar'?.17:.08)));
-      t.state='block';t.reaction=m.kind==='roar'?'guard_impact':t.input.down?'guard_crouch_hit':'guard_hit';t.frame=0;t.ability.iron=t.id==='hakuma'?1:t.ability.iron;
-      if(t.id==='yomikage'&&t.guardF<=7)t.ability.just=42;
-      if(a.id==='takimaru')a.ability.pressure=36;
+      t.state='block';t.reaction=m.kind==='roar'?'guard_impact':t.input.down?'guard_crouch_hit':'guard_hit';t.frame=0;
+      if(t.id==='hakuma'&&!['roar','throw','clinch'].includes(m.kind))t.ability.iron=1;
+      if(t.id==='bullet'&&t.ability.lastCharge!=='guard'){
+        t.ability.charge=Math.min(3,t.ability.charge+1);t.ability.lastCharge='guard';
+        this.events.push({type:'charge',slot:t.slot,value:t.ability.charge});
+      }
+      if(a.id==='takimaru'&&['strike','dash','anti','tail'].includes(m.kind))a.ability.pressure=36;
       this.events.push({type:'block',slot:t.slot,x:t.x,y:t.y+.35,damage:0});
     }else{
       const absorb=this._absorbing(t,m);
@@ -285,22 +328,52 @@ export class Battle {
         a.stop=Math.max(a.stop,4);
         this.events.push({type:'roar_absorb',slot:t.slot,x:t.x,y:t.y+.38});return;
       }
-      if(t.id==='yomikage'&&t.action?.kind==='counter'&&active(t)&&m.kind!=='roar'&&m.kind!=='clinch'){
-        a.stun=16;a.hp=Math.max(0,a.hp-88);t.action=null;t.state='idle';
-        this.events.push({type:'counter',slot:t.slot,x:t.x,y:t.y+.34});return;
+      if(t.id==='yomikage'&&t.action?.kind==='counter'&&active(t)&&
+          !['roar','clinch','throw'].includes(m.kind)){
+        const counterDamage=t.action.justBoosted?t.action.damage:Math.round(t.action.damage*.63);
+        a.stun=t.action.justBoosted?24:16;a.hp=Math.max(0,a.hp-counterDamage);
+        t.action=null;t.state='idle';
+        this.events.push({type:'counter',slot:t.slot,x:t.x,y:t.y+.34,damage:counterDamage});
+        if(a.hp===0){a.ko=true;a.state='ko';this.phase='ko';this.winner=t.slot;}
+        return;
       }
-      if(absorb==='godan'){dmg=Math.round(dmg*.55);this.events.push({type:'armor',slot:t.slot});}
+      if(absorb==='godan'){
+          dmg=Math.round(dmg*.70);
+          t.action.armorUsed=true;t.ability.armorCooldown=240;t.ability.armor=0;
+          this.events.push({type:'armor',slot:t.slot});
+        }
       else{
         t.stun=m.kind==='clinch'?36:Math.max(12,Math.round(m.damage*.16));
         t.action=null;t.dashF=0;t.state='hit';t.reaction=m.kind==='roar'?'roar_hit':m.damage>=95?'hurt_heavy':'hurt_light';t.frame=0;
       }
-      t.hp=Math.max(0,t.hp-dmg);t.guard=cap(t.guard+2,0,100);t.ability.iron=0;
+      t.hp=Math.max(0,t.hp-dmg);t.guard=cap(t.guard+2,0,ROSTER[t.id].guardMax);t.ability.iron=0;
       if(t.id==='moguzo'&&t.hp===0&&t.ability.grit){t.hp=1;t.ability.grit=false;this.events.push({type:'grit',slot:t.slot});}
-      if(a.id==='pisuke'&&/^(stand|crouch)_/.test(m.id||''))a.ability.chase=15;
-      if(a.id==='chirka'&&m.poison){t.poison=180;t.poisonTick=0;}
-      if(a.id==='takimaru')a.ability.pressure=30;
-      if(a.id==='bullet'&&m.id!==a.ability.lastCharge){a.ability.charge=Math.min(3,a.ability.charge+1);a.ability.lastCharge=m.id;}
-      if(a.id==='dark_moguzo'&&source==='strike'&&!m.isSuper)a.ability.dark=18;
+      if(a.id==='pisuke'&&/^(stand|crouch)_/.test(m.id||'')&&a.ability.chaseCooldown===0)
+        a.ability.chase=18;
+      if(a.id==='takimaru'&&['strike','dash','anti','tail'].includes(m.kind))a.ability.pressure=34;
+      if(a.id==='moguzo'&&!m.isSuper&&!['roar','clinch'].includes(m.kind)){
+        const category=m.kind==='throw'?'throw':m.kind==='projectile'?'projectile':
+          m.level==='low'?'low':m.kind==='anti'?'anti':m.id?.startsWith('s')?'special':'strike';
+        if(category!==a.ability.lastGuts){
+          a.ability.lastGuts=category;
+          a.ability.gutsProgress=Math.min(2,a.ability.gutsProgress+1);
+          if(a.ability.gutsProgress===2)a.ability.gutsReady=true;
+        }
+      }
+      if(a.id==='bullet'&&!m.isSuper&&!['roar','clinch'].includes(m.kind)){
+        const category=m.kind==='projectile'?'projectile':m.kind==='throw'?'throw':
+          m.kind==='tail'?'tail':m.id?.startsWith('s')?'special':m.level==='low'?'low':'normal';
+        if(category!==a.ability.lastCharge){
+          a.ability.charge=Math.min(3,a.ability.charge+1);
+          a.ability.lastCharge=category;
+          this.events.push({type:'charge',slot:a.slot,value:a.ability.charge});
+        }
+      }
+      if(a.id==='dark_moguzo'&&!a.ability.darkUsed&&
+         ((/^s[123]$/.test(m.id||'')&&source==='strike')||
+          (m.kind==='projectile'&&a.action?.id==='s1'))){
+        a.ability.dark=18;
+      }
       this.events.push({type:m.kind==='clinch'?'gyuiin_hit':'hit',slot:t.slot,x:t.x,y:t.y+.32,damage:dmg});
       if(m.kind==='clinch'){a.stop=Math.max(a.stop,15);t.stop=Math.max(t.stop,15);}
       if(m.kind==='roar'){t.stun=Math.max(t.stun,23);t.reaction='roar_hit';this.events.push({type:'roar_hit',slot:a.slot,x:t.x,y:t.y+.35});}
@@ -341,7 +414,7 @@ export class Battle {
         effect:m.effect||'earth',level:m.level||'mid'});
       this.events.push({type:'projectile',slot:p.slot});
     }
-    if(active(p)&&!p.used&&m.kind!=='projectile'&&this._contact(p,op,m)){
+    if(active(p)&&!p.used&&!['projectile','feint','counter'].includes(m.kind)&&this._contact(p,op,m)){
       p.used=true;this.pending.push({p,op,m,d:Math.abs(p.x-op.x)});
     }
     if(p.frame>=total(m)){p.action=null;p.frame=0;p.state=p.y>.02?'jump':'idle';}

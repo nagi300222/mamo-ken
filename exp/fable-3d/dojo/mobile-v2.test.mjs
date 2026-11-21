@@ -255,19 +255,21 @@ test('全9体が全9対戦相手を左右から飛び越え、着地後は後ろ
     p.x=o.x+side*.40;
     const hp=p.hp;
     for(let i=0;i<10;i++)g.tick({[forward]:true},{weak:i===0});
-    assert.ok(p.guard<100,label);
+    assert.ok(p.guard<ROSTER[p.id].guardMax,label);
     assert.equal(p.hp,hp,label);
   }
 });
 
-test('チルカの毒は通常対戦で付与・発生し、再戦で初期化される',()=>{
-  const g=scripted([{special1:true},...Array(36).fill({})],{left:'chirka',right:'hakuma'});
-  const target=g.fighters[1];
-  assert.ok(target.poison>0);
-  const hp=target.hp;
-  for(let i=0;i<30;i++)g.tick({},{});
-  assert.equal(target.hp,hp-4);
+test('チルカは毒ダメージではなく予備動作フェイント/ディレイで相手を揺さぶる',()=>{
+  const g=new Battle('chirka','hakuma');
+  g.fighters[0].x=-.22;g.fighters[1].x=.22;
+  g.tick({special1:true},{});
+  g.tick({},{});g.tick({},{});
+  g.tick({left:true},{});
+  assert.equal(g.fighters[0].action?.kind,'feint');
+  for(let i=0;i<35;i++)g.tick({},{});
+  assert.equal(g.fighters[1].poison,0);
+  assert.equal(g.fighters[1].hp,ROSTER.hakuma.hp);
   const next=g.again();
-  assert.equal(next.fighters[1].hp,ROSTER.hakuma.hp);
-  assert.equal(next.fighters[1].poison,0);
+  assert.equal(next.fighters[0].ability.feintCount,0);
 });

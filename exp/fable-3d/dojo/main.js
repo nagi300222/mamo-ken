@@ -35,6 +35,17 @@ const actors=[null,null], bullets=new Map(), flashes=[];
 let battle=null,selected='moguzo',cpuChoice='godan',playing=false,paused=false,loading=false,lastFrame=0,acc=0,finishShown=false;
 
 const fwd=(v)=>Math.max(0,Math.min(100,v));
+const ABILITY_GUIDE=Object.freeze({
+  moguzo:'違う種類の技を2回当てる→次の必殺を小幅強化。ピンチで一度だけHP1で踏ん張る。',
+  pisuke:'通常技がヒットした直後、ステップで一度だけ攻めをつなげる。',
+  godan:'岩砕き/肩当ての途中で1ヒット装甲。投げや咆哮に弱く、発動後は回復時間がある。',
+  hakuma:'通常攻撃をガードして鉄壁を獲得。次のコマンド必殺1回を小幅強化。',
+  chirka:'だまし突き（236）/影引き爪（214）の予備動作中に←でフェイント、↓で発生を遅らせる。',
+  takimaru:'打撃ヒット・ガード後の短い間は次の掴みが少し長く届く。',
+  yomikage:'相手の攻撃発生直前に後ろステップで見切り。214の返しが強化される。',
+  bullet:'異なる攻撃・ガードの成功を3回重ねてMAXに。214の長い尻尾技で全消費。',
+  dark_moguzo:'コマンド技をヒットさせた直後、別のコマンド技へ1度だけ派生。単発威力は低い。'
+});
 let cueUntil=0;
 function note(message,kind=''){$('note').textContent=message;$('note').dataset.kind=kind;cueUntil=(battle?.frame??0)+48;}
 function makeChooser(){
@@ -54,6 +65,7 @@ function updateChoice(){
   [...$('roster').children].forEach((node,i)=>node.classList.toggle('chosen',IDS[i]===selected));
   $('chosen-name').textContent=ROSTER[selected].name;
   $('chosen-role').textContent=ROSTER[selected].role;
+  $('ability-guide').textContent=ABILITY_GUIDE[selected];
 }
 function updateCamera(snap=false){
   const w=canvas.clientWidth,h=canvas.clientHeight;
@@ -200,15 +212,15 @@ function animateFX(){
 function abilityLabel(p){
   const a=p.ability;
   switch(p.id){
-    case 'moguzo':return p.hp<=ROSTER.moguzo.hp*.3?'根性発動':'根性 / 踏ん張り'+(a.grit?'○':'×');
+    case 'moguzo':return a.gutsReady?'根性 READY':`根性 ${a.gutsProgress}/2`+(a.grit?' · 踏ん張り':'');
     case 'pisuke':return a.chase?'CHASE 受付中':'チェイス';
-    case 'godan':return '装甲 '+a.armor+'/3';
+    case 'godan':return a.armorCooldown?'装甲 回復中':'装甲 READY';
     case 'hakuma':return a.iron?'鉄壁 READY':'鉄壁';
-    case 'chirka':return '毒・奇襲';
+    case 'chirka':return 'フェイント/ディレイ';
     case 'takimaru':return a.pressure?'投げ派生 READY':'プレッシャー';
-    case 'yomikage':return a.just?'返し READY':'後の先';
+    case 'yomikage':return a.just?'見切り返し READY':'後の先';
     case 'bullet':return 'チャージ '+a.charge+'/3';
-    case 'dark_moguzo':return a.dark?'暗連 READY':'暗連';
+    case 'dark_moguzo':return a.dark&&!a.darkUsed?'暗連 READY':'暗連';
     default:return '';
   }
 }

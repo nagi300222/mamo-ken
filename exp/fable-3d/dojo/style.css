@@ -256,3 +256,8 @@ button.primary:active{transform:translateY(1px)}
   .hud .resource>b{flex-basis:1.65em}
   #buttons-rail .attack small{font-size:6px}
 }
+
+/* v0.5 ability description lives in collapsible move list, not over the battle. */
+#commands-help .ability-guide{margin-top:9px;padding-top:7px;border-top:1px solid #4f665b;color:#dbe9df}
+#commands-help .ability-guide strong{font-size:12px;color:#f2d59c}
+#commands-help .ability-guide p{margin:5px 0 0;font-size:12px;line-height:1.55}
