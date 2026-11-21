@@ -22,7 +22,7 @@ test('尾薙ぎのリーチはパンチを超え、F24に最大点',()=>{
   assert.ok(Math.abs(tailTipAt(24)-.651)<.001);
   assert.ok(tailTipAt(20)<tailTipAt(24));
   const g=new Battle('bullet','godan');g.fighters[0].x=-.55;g.fighters[1].x=.1;
-  const initial=g.fighters[1].hp;for(let f=0;f<70;f++)g.tick({special1:f===0},{});
+  const initial=g.fighters[1].hp;for(let f=0;f<70;f++)g.tick({special3:f===0},{});
   assert.ok(g.fighters[1].hp<initial,'tail should connect at 0.65m');
 });
 test('GLB差し替え時の尾判定はモーションJSONの軌跡を読み直す',()=>{
