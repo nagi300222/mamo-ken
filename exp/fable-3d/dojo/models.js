@@ -22,7 +22,7 @@ export function chooseClip(fighter, available=[]) {
     const exact=m.anim||FALLBACK_CLIPS[m.id]||'stand_heavy';
     return available.includes(exact)?exact:(available.includes(FALLBACK_CLIPS[m.id])?FALLBACK_CLIPS[m.id]:'stand_heavy');
   }
-  const states={dash:'dash_f',walk_f:'walk_f',walk_b:'walk_b',crouch:'crouch',jump:'jump_n',block:'guard_stand',hit:'hurt_light'};
+  const states={dash:'dash_f',walk_f:'walk_f',walk_b:'walk_b',crouch:'crouch',jump:'jump_n',block:'guard_stand',hit:'hurt_light',clinch:'guard_stand',clinch_recoil:'hurt_light'};
   const wanted=states[fighter.state]||'idle';
   return available.includes(wanted)?wanted:'idle';
 }
