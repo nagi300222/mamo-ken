@@ -15,18 +15,23 @@ export const FALLBACK_CLIPS = Object.freeze({
 });
 // Claudeの追加モーション名に優先対応。未追加のGLBでも既存の11クリップで再生可能。
 const select=(available, list)=>list.find(name=>available.includes(name))||'idle';
+const actionClips={
+  crouch_weak:'crouch_light',crouch_heavy:'crouch_heavy',
+  air_weak:'air_light',air_heavy:'air_heavy',throw:'throw_reach'
+};
 export function chooseClip(fighter, available=[]) {
   if (fighter.ko) return select(available,['ko','down','hurt_heavy','hurt_light','idle']);
   if (fighter.state==='clinch') return select(available,['clinch_hold','gyuiin_hold','guard_stand','idle']);
   if (fighter.state==='clinch_recoil') return select(available,['clinch_recoil','hurt_heavy','hurt_light','idle']);
   if (fighter.stun && fighter.state==='block') {
-    return select(available,[fighter.reaction,'guard_hit','guard_stand','idle'].filter(Boolean));
+    return select(available,[fighter.reaction,'guard_hit',fighter.input?.down?'guard_crouch':'guard_stand',
+      'guard_stand','idle'].filter(Boolean));
   }
   if (fighter.stun) return select(available,[fighter.reaction,'hurt_heavy','hurt_light','idle'].filter(Boolean));
   if (fighter.action) {
     const m=fighter.action;
     const exact=m.anim||FALLBACK_CLIPS[m.id]||'stand_heavy';
-    let list=[exact];
+    const list=[actionClips[m.id],exact].filter(Boolean);
     if (m.kind==='roar') list.push('roar','roar_burst','guard_stand');
     if (m.kind==='clinch') list.push('gyuiin','gyuiin_approach','guard_stand');
     if (m.kind==='throw') list.push('throw_reach','grab','stand_heavy');
