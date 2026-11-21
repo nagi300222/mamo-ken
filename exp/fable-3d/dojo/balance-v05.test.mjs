@@ -119,7 +119,7 @@ test('ヨミカゲ：ガードだけでは見切り発動せず、正解の後�
   const g=new Battle('yomikage','moguzo'),p=g.fighters[0],op=g.fighters[1];
   p.input={left:true};g._damage(op,p,{kind:'strike',damage:40,level:'mid'},.3);
   assert.equal(p.ability.just,0);
-  p.stun=0;p.stop=0;p.action=null;p.input={};p.prev={};p.x=-.2;op.x=.2;
+  p.stun=0;p.stop=0;p.action=null;p.input={};p.prev={};p.x=-.2;op.x=.2;op.stop=0;op.stun=0;
   g._begin(op,normalMove('moguzo','stand_heavy'),'stand_heavy');
   op.frame=9;
   g._input(p,op,{left:true,dash:true});
