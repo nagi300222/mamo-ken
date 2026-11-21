@@ -200,15 +200,15 @@ function animateFX(){
 function abilityLabel(p){
   const a=p.ability;
   switch(p.id){
-    case 'moguzo':return p.hp<=ROSTER.moguzo.hp*.3?'根性発動':'根性 / 踏ん張り'+(a.grit?'○':'×');
+    case 'moguzo':return a.gutsReady?'根性 READY':`根性 ${a.gutsProgress}/2`+(a.grit?' · 踏ん張り':'');
     case 'pisuke':return a.chase?'CHASE 受付中':'チェイス';
-    case 'godan':return '装甲 '+a.armor+'/3';
+    case 'godan':return a.armorCooldown?'装甲 回復中':'装甲 READY';
     case 'hakuma':return a.iron?'鉄壁 READY':'鉄壁';
-    case 'chirka':return '毒・奇襲';
+    case 'chirka':return 'フェイント/ディレイ';
     case 'takimaru':return a.pressure?'投げ派生 READY':'プレッシャー';
-    case 'yomikage':return a.just?'返し READY':'後の先';
+    case 'yomikage':return a.just?'見切り返し READY':'後の先';
     case 'bullet':return 'チャージ '+a.charge+'/3';
-    case 'dark_moguzo':return a.dark?'暗連 READY':'暗連';
+    case 'dark_moguzo':return a.dark&&!a.darkUsed?'暗連 READY':'暗連';
     default:return '';
   }
 }
