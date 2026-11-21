@@ -1,0 +1,12 @@
+{
+  "_": "弱のけぞり。重いので下半身はほぼ動かず、頭と肩だけが弾かれる。",
+  "loop": false,
+  "step": 3,
+  "plant": ["footL", "footR"],
+  "keys": [
+    {"hold": 3, "pose": {"hip": [-2, -23], "torso": -1, "chest": -5, "neck": -4, "head": -14, "handL": [20, 9, 0], "handR": [10, 14, 0], "jaw": 10, "swap": {"eye": "eye_hurt", "mouth": "mouth_grit"}}},
+    {"hold": 9, "pose": {"hip": [-4, -22], "torso": -3, "chest": -8, "neck": -2, "head": -10, "handL": [18, 11, 0], "handR": [8, 15, 0], "jaw": 6, "swap": {"eye": "eye_hurt", "mouth": "mouth_grit"}}},
+    {"hold": 6, "tween": "out", "pose": {"hip": [-2, -23], "torso": 1, "chest": -1, "head": -6, "handL": [21, 8, 0], "handR": [12, 13, 0], "swap": {"eye": "eye_half"}}},
+    {"hold": 3, "pose": {}}
+  ]
+}

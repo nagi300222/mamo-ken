@@ -1,0 +1,19 @@
+{
+  "_": "垂直ジャンプ。沈み込みと着地が長く、高さは3体でいちばん低い。上下の移動量は root。",
+  "loop": false,
+  "step": 4,
+  "poses": {
+    "squat": {"hip": [-1, -18], "pelvis": 8, "torso": 10, "chest": 8, "head": -16, "handL": [21, 10, 0], "handR": [12, 14, 0]},
+    "air": {"hip": [0, -23], "torso": 2, "chest": 0, "head": -2, "footL": [22, -7, 10, 0], "footR": [-22, -5, 18, 0], "handL": [22, 2, 0], "handR": [14, 8, 0]}
+  },
+  "keys": [
+    {"hold": 8, "plant": ["footL", "footR"], "root": [0, 0], "pose": "squat"},
+    {"hold": 4, "tween": "out", "root": [0, -8], "pose": {"hip": [0, -25], "torso": 0, "chest": -2, "footL": [24, 0, 24, 0], "footR": [-26, 0, 28, 0], "handL": [22, -2, 0], "handR": [14, 4, 0]}},
+    {"hold": 8, "tween": "out", "root": [0, -26], "pose": "air"},
+    {"hold": 8, "tween": "in", "root": [0, -36], "pose": {"use": "air", "footL": [22, -8, 6, 0], "footR": [-22, -6, 12, 0]}},
+    {"hold": 8, "tween": "in", "root": [0, -26], "pose": {"use": "air", "footL": [25, -3, -4, 0], "footR": [-27, -2, 4, 0]}},
+    {"hold": 8, "plant": ["footL", "footR"], "root": [0, 0], "pose": "squat"},
+    {"hold": 4, "tween": "out", "plant": ["footL", "footR"], "root": [0, 0], "pose": {"hip": [0, -21], "torso": 6, "chest": 6}},
+    {"hold": 4, "plant": ["footL", "footR"], "root": [0, 0], "pose": {}}
+  ]
+}

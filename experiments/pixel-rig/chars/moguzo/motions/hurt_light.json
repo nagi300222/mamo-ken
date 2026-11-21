@@ -1,0 +1,12 @@
+{
+  "_": "弱のけぞり。頭と胸が後ろへ弾かれるが、両足は接地したまま。体の大きさは変えない。",
+  "loop": false,
+  "step": 3,
+  "plant": ["footL", "footR"],
+  "keys": [
+    {"hold": 3, "pose": {"hip": [-3, -22], "torso": -5, "chest": -9, "neck": -4, "head": -12, "handL": [18, 6, 0], "handR": [9, 9, 0], "jaw": 12, "swap": {"eye": "eye_hurt", "mouth": "mouth_open"}}},
+    {"hold": 9, "pose": {"hip": [-6, -21], "torso": -8, "chest": -13, "neck": -3, "head": -6, "handL": [15, 9, 0], "handR": [6, 11, 0], "footR": [-17, 0, 0, 0], "jaw": 8, "swap": {"eye": "eye_hurt", "mouth": "mouth_grit"}}},
+    {"hold": 6, "tween": "out", "pose": {"hip": [-4, -21], "torso": -4, "chest": -6, "head": -2, "handL": [18, 6, 0], "handR": [10, 9, 0], "swap": {"eye": "eye_half"}}},
+    {"hold": 3, "pose": {}}
+  ]
+}

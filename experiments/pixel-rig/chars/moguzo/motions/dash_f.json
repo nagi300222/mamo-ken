@@ -1,0 +1,14 @@
+{
+  "_": "前ダッシュ。後ろ足で蹴って低く前へ跳び、前足から着地する。足は地面座標（feetSpace: world）で書いているので、接地中の足は同じ数値のまま。",
+  "loop": false,
+  "step": 3,
+  "feetSpace": "world",
+  "keys": [
+    {"hold": 3, "plant": ["footL", "footR"], "root": [0, 0], "pose": {"hip": [1, -20], "torso": 8, "chest": 9, "head": -4}},
+    {"hold": 3, "tween": "linear", "plant": ["footR"], "root": [6, 0], "pose": {"hip": [2, -20], "torso": 12, "chest": 12, "head": -8, "footL": [24, -3, -10, 0], "footR": [-17, 0, 0, 20], "handL": [20, 4, 0], "handR": [10, 8, 0]}},
+    {"hold": 6, "tween": "linear", "root": [18, -3], "pose": {"hip": [0, -21], "torso": 14, "chest": 13, "head": -10, "footL": [42, -3, -14, 0], "footR": [4, -6, 20, 0], "handL": [20, 5, 0], "handR": [8, 9, 0]}},
+    {"hold": 3, "plant": ["footL"], "root": [40, 0], "pose": {"hip": [-1, -20], "torso": 8, "chest": 8, "head": -4, "footL": [57, 0, 0, 0], "footR": [22, -3, 10, 0]}},
+    {"hold": 3, "tween": "out", "plant": ["footL", "footR"], "root": [44, 0], "pose": {"hip": [0, -20], "torso": 5, "chest": 6, "footL": [57, 0, 0, 0], "footR": [27, 0, 0, 0]}},
+    {"hold": 3, "plant": ["footL", "footR"], "root": [44, 0], "pose": {"footL": [57, 0, 0, 0], "footR": [27, 0, 0, 0]}}
+  ]
+}

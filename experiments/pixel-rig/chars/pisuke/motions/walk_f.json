@@ -1,0 +1,13 @@
+{
+  "_": "前歩き。歩幅が広く速い。後ろ足は母指球で地面を押し、かかとは浮いたまま。",
+  "loop": true,
+  "step": 3,
+  "velocity": [1, 0],
+  "base": {"pelvis": 10, "chest": 5},
+  "keys": [
+    {"hold": 6, "tween": "linear", "plant": ["footR"], "pose": {"hip": [0, -26], "footL": [11, 0, 0, 0], "footR": [-19, 0, 0, 18]}},
+    {"hold": 6, "tween": "linear", "plant": ["footR"], "pose": {"hip": [1, -27], "footL": [17, -5, -14, 0], "footR": [-25, 0, 0, 24], "handL": [21, 1, 0], "handR": [12, 4, 0]}},
+    {"hold": 6, "tween": "linear", "plant": ["footL"], "pose": {"hip": [1, -26], "footL": [23, 0, 0, 0], "footR": [-31, 0, 0, 32]}},
+    {"hold": 6, "tween": "linear", "plant": ["footL"], "pose": {"hip": [0, -27], "footL": [17, 0, 0, 0], "footR": [-25, -6, 14, 0], "handL": [21, 1, 0], "handR": [12, 4, 0]}}
+  ]
+}

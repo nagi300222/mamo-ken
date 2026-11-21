@@ -1,0 +1,18 @@
+{
+  "_": "しゃがみ。腰を落として深く前へ倒れ、後ろ手（近い側）を地面につく。胴体は縮めず、脚をたたんで低くなる。",
+  "loop": false,
+  "step": 4,
+  "plant": ["footL", "footR"],
+  "poses": {
+    "mid": {"hip": [-2, -19], "pelvis": 14, "torso": 12, "chest": 9, "neck": -8, "head": -18, "handL": [19, 0, 0], "handR": [10, 18, 20]},
+    "low": {"hip": [-5, -17], "pelvis": 30, "torso": 24, "chest": 16, "neck": -18, "head": -44, "handL": [14, 2, 0], "handR": [3, 26, 0], "tail": [130, 18, 16], "swap": {"fist_r": "fist_r_punch", "eye": "eye_half"}}
+  },
+  "keys": [
+    {"hold": 4, "pose": {}},
+    {"hold": 4, "pose": "mid"},
+    {"hold": 24, "pose": "low"},
+    {"hold": 24, "pose": {"use": "low", "hip": [-5, -16.4], "chest": 17}},
+    {"hold": 4, "pose": "mid"},
+    {"hold": 4, "pose": {}}
+  ]
+}

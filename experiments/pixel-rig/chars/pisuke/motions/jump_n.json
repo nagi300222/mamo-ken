@@ -1,0 +1,19 @@
+{
+  "_": "垂直ジャンプ。3体でいちばん高い。空中で脚をたたむ。上下の移動量は root。",
+  "loop": false,
+  "step": 4,
+  "poses": {
+    "squat": {"hip": [-1, -20], "pelvis": 18, "torso": 10, "chest": 6, "head": -26, "handL": [18, 8, 0], "handR": [10, 10, 0], "footR": [-25, 0, 0, 34]},
+    "air": {"hip": [0, -26], "pelvis": 2, "torso": 0, "chest": 0, "neck": 0, "head": 0, "footL": [12, -13, 16, 0], "footR": [-10, -10, 30, 0], "handL": [18, -6, 0], "handR": [10, -3, 0], "tail": [110, 14, 10]}
+  },
+  "keys": [
+    {"hold": 4, "plant": ["footL", "footR"], "root": [0, 0], "pose": "squat"},
+    {"hold": 4, "tween": "out", "root": [0, -14], "pose": {"hip": [0, -29], "pelvis": 2, "torso": 0, "chest": -2, "neck": 0, "head": -2, "footL": [10, 0, 40, 0], "footR": [-14, 0, 44, 0], "handL": [18, -10, 0], "handR": [10, -8, 0]}},
+    {"hold": 8, "tween": "out", "root": [0, -44], "pose": "air"},
+    {"hold": 8, "tween": "in", "root": [0, -62], "pose": {"use": "air", "footL": [12, -15, 8, 0], "footR": [-10, -13, 20, 0]}},
+    {"hold": 8, "tween": "in", "root": [0, -44], "pose": {"use": "air", "footL": [14, -5, -8, 0], "footR": [-18, -3, 10, 0], "handL": [20, -8, 0], "handR": [12, -6, 0]}},
+    {"hold": 4, "plant": ["footL", "footR"], "root": [0, 0], "pose": "squat"},
+    {"hold": 4, "tween": "out", "plant": ["footL", "footR"], "root": [0, 0], "pose": {"hip": [0, -24], "pelvis": 12}},
+    {"hold": 4, "plant": ["footL", "footR"], "root": [0, 0], "pose": {}}
+  ]
+}

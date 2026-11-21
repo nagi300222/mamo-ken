@@ -1,0 +1,14 @@
+{
+  "_": "前ダッシュ。跳ばずに、肩から押し込むように低く1歩踏み込む。距離は短い。足は地面座標（feetSpace: world）。",
+  "loop": false,
+  "step": 4,
+  "feetSpace": "world",
+  "keys": [
+    {"hold": 4, "plant": ["footL", "footR"], "root": [0, 0], "pose": {"hip": [1, -21], "torso": 9, "chest": 8, "head": -8}},
+    {"hold": 4, "plant": ["footR"], "root": [5, 0], "pose": {"hip": [2, -22], "torso": 12, "chest": 10, "head": -12, "shL": [2, 0], "footL": [38, -4, -10, 0], "footR": [-29, 0, 0, 22]}},
+    {"hold": 4, "root": [15, -1], "pose": {"hip": [1, -22], "torso": 13, "chest": 10, "head": -13, "shL": [3, 0], "footL": [49, -3, -8, 0], "footR": [-9, -4, 16, 0]}},
+    {"hold": 4, "plant": ["footL"], "root": [25, 0], "pose": {"hip": [0, -20], "torso": 12, "chest": 10, "head": -12, "shL": [3, 0], "footL": [55, 0, 0, 0], "footR": [-4, -2, 8, 0]}},
+    {"hold": 4, "tween": "out", "plant": ["footL", "footR"], "root": [28, 0], "pose": {"hip": [0, -21], "torso": 7, "chest": 6, "head": -6, "footL": [55, 0, 0, 0], "footR": [-1, 0, 0, 0]}},
+    {"hold": 4, "plant": ["footL", "footR"], "root": [28, 0], "pose": {"footL": [55, 0, 0, 0], "footR": [-1, 0, 0, 0]}}
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "_": "立ちガード。太い両腕を体の前で固め、あごを引く。足はほとんど動かさない。",
+  "loop": false,
+  "step": 4,
+  "plant": ["footL", "footR"],
+  "poses": {
+    "guard": {"hip": [-2, -22], "torso": 2, "chest": 0, "head": 2, "shL": [-2, -1], "shR": [1, -1], "handL": [15, -6, 0], "handR": [14, -1, 0], "swap": {"eye": "eye_half"}}
+  },
+  "keys": [
+    {"hold": 4, "tween": "out", "pose": {}},
+    {"hold": 12, "pose": "guard"},
+    {"hold": 12, "pose": {"use": "guard", "hip": [-2, -21.4], "chest": 1}},
+    {"hold": 4, "tween": "out", "pose": "guard"},
+    {"hold": 4, "pose": {}}
+  ]
+}

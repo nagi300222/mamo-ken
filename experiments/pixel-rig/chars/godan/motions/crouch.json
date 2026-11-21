@@ -1,0 +1,18 @@
+{
+  "_": "しゃがみ。脚を開いたまま腰を真下へ落とす。胴体の大きさは変えず、地面にめり込む分は補正で止まる。",
+  "loop": false,
+  "step": 4,
+  "plant": ["footL", "footR"],
+  "poses": {
+    "mid": {"hip": [-1, -20], "pelvis": 6, "torso": 8, "chest": 6, "head": -12},
+    "low": {"hip": [-3, -16], "pelvis": 14, "torso": 12, "chest": 8, "neck": -6, "head": -22, "handL": [21, 6, 0], "handR": [12, 12, 0], "swap": {"eye": "eye_half"}}
+  },
+  "keys": [
+    {"hold": 4, "pose": {}},
+    {"hold": 4, "pose": "mid"},
+    {"hold": 24, "pose": "low"},
+    {"hold": 24, "pose": {"use": "low", "chest": 9.5, "shL": [0, -1], "shR": [0, -1]}},
+    {"hold": 4, "pose": "mid"},
+    {"hold": 4, "pose": {}}
+  ]
+}

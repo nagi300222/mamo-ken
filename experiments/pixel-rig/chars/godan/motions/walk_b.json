@@ -1,0 +1,13 @@
+{
+  "_": "後ろ歩き。構えを崩さず、すり足でじりじり下がる。3体でいちばん遅い。",
+  "loop": true,
+  "step": 4,
+  "velocity": [-0.25, 0],
+  "base": {"torso": 3, "chest": 3},
+  "keys": [
+    {"hold": 16, "tween": "linear", "plant": ["footL"], "pose": {"hip": [0, -23], "footL": [25, 0, 0, 0], "footR": [-25, 0, 0, 0]}},
+    {"hold": 16, "tween": "linear", "plant": ["footL"], "pose": {"hip": [-1, -24], "footL": [27, 0, 0, 0], "footR": [-27, -3, 4, 0]}},
+    {"hold": 16, "tween": "linear", "plant": ["footR"], "pose": {"hip": [-1, -23], "footL": [29, 0, 0, 0], "footR": [-29, 0, 0, 0]}},
+    {"hold": 16, "tween": "linear", "plant": ["footR"], "pose": {"hip": [0, -24], "footL": [27, -3, -6, 0], "footR": [-27, 0, 0, 0]}}
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "_": "しゃがみ。腰を深く落として前へ丸まり、両拳は顔の前に残す。脚をたたむだけで胴体は縮めない。",
+  "loop": false,
+  "step": 4,
+  "plant": ["footL", "footR"],
+  "poses": {
+    "mid": {"hip": [-2, -22], "pelvis": 16, "torso": 10, "chest": 6, "neck": -8, "head": -22, "footR": [-25, 0, 0, 30]},
+    "low": {"hip": [-4, -19], "pelvis": 26, "torso": 16, "chest": 8, "neck": -14, "head": -36, "handL": [18, 4, 0], "handR": [11, 7, 0], "footR": [-25, 0, 0, 38], "tail": [140, 16, -10], "swap": {"eye": "eye_half"}}
+  },
+  "keys": [
+    {"hold": 4, "pose": {}},
+    {"hold": 4, "pose": "mid"},
+    {"hold": 24, "pose": "low"},
+    {"hold": 24, "pose": {"use": "low", "hip": [-4, -18.4], "chest": 9}},
+    {"hold": 4, "pose": "mid"},
+    {"hold": 4, "pose": {}}
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "_": "立ち弱。前手（遠い側）のジャブ。肩を前へ送り、伸ばしきったら拳を横拳の絵に差し替える。",
+  "loop": false,
+  "step": 3,
+  "plant": ["footL", "footR"],
+  "keys": [
+    {"hold": 3, "pose": {"handL": [15, 3, 0], "chest": 1, "shL": [-1, 0]}},
+    {"hold": 6, "pose": {"hip": [2, -22], "torso": 4, "chest": 8, "head": -3, "shL": [3, 0], "handL": [26.5, -2, 0], "handR": [12, 6, 0], "swap": {"fist_l": "fist_l_punch", "brow": "brow_angry"}}},
+    {"hold": 6, "tween": "out", "pose": {"hip": [1, -22], "torso": 3, "chest": 5, "shL": [1, 0], "handL": [19, 1, 0], "handR": [13, 6, 0]}},
+    {"hold": 3, "pose": {}}
+  ]
+}

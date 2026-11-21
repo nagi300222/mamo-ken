@@ -1,0 +1,16 @@
+{
+  "_": "立ちガード。上体を起こして両腕を顔の前でそろえる。後ろ足に体重を移す。",
+  "loop": false,
+  "step": 4,
+  "plant": ["footL", "footR"],
+  "poses": {
+    "guard": {"hip": [-3, -25], "pelvis": 2, "torso": 2, "chest": 0, "neck": -2, "head": 4, "shL": [-1, -1], "handL": [14, -8, 0], "handR": [12, -5, 0], "footR": [-25, 0, 0, 10], "swap": {"eye": "eye_half"}}
+  },
+  "keys": [
+    {"hold": 4, "tween": "out", "pose": {}},
+    {"hold": 12, "pose": "guard"},
+    {"hold": 12, "pose": {"use": "guard", "hip": [-3, -24.4], "chest": 1}},
+    {"hold": 4, "tween": "out", "pose": "guard"},
+    {"hold": 4, "pose": {}}
+  ]
+}

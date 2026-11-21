@@ -1,0 +1,10 @@
+{
+  "_": "構え。前傾で、後ろ足のかかとを浮かせて小さく弾む。モグゾーより周期が短い。",
+  "loop": true,
+  "step": 5,
+  "plant": ["footL", "footR"],
+  "keys": [
+    {"hold": 20, "tween": "inout", "pose": {}},
+    {"hold": 20, "tween": "inout", "pose": {"hip": [1, -24.5], "pelvis": 9, "chest": 6, "head": -11, "handL": [21, 5, 0], "handR": [13, 7, 0], "footR": [-25, 0, 0, 30], "tail": [150, 14, -14]}}
+  ]
+}

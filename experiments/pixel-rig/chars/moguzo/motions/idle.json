@@ -1,0 +1,10 @@
+{
+  "_": "構え。呼吸で腰と胸がわずかに上下する。両足は接地したまま。",
+  "loop": true,
+  "step": 8,
+  "plant": ["footL", "footR"],
+  "keys": [
+    {"hold": 32, "tween": "inout", "pose": {}},
+    {"hold": 32, "tween": "inout", "pose": {"hip": [0, -21], "torso": 3, "chest": 4.5, "head": -1.5, "handL": [22, 4, 0], "handR": [14, 8, 0], "tail": [154, 20, 16]}}
+  ]
+}

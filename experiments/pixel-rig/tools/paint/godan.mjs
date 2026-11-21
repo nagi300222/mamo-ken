@@ -12,11 +12,11 @@ export function paint() {
   const part = (name, fn) => { const p = new Part(name); fn(p); P.push(p); return p; };
 
   // ---- 胴体（骨盤・腹・胸の3つとも幅が広い。胸の上部だけ明るい毛） ----
-  const pelvisShape = (p) => p.ell(-2, -11, 31, 24, F);
+  const pelvisShape = (p) => p.ell(-2, -11, 32, 24, F);
   const torsoShape = (p, ox = 0, oy = 0) => p.ell(ox, oy - 9, 31, 22, F);
   part('pelvis', (p) => {
     pelvisShape(p);
-    p.tufts(-2, -11, 31, 24, [140, 158, 176, 194, 212], F, 3);
+    p.tufts(-2, -11, 32, 24, [140, 158, 176, 194, 212], F, 3);
     p.ticks([[-27, -12], [-20, -4], [-27, 0, 1, 2], [-14, 5], [-21, 7, 1, 2]], FS);
     p.ticks([[14, -8, -1], [20, 0, -1], [9, 5, -1]], FS);
   });

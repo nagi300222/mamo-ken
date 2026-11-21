@@ -1,0 +1,21 @@
+:root { color-scheme: dark; --bg: #1d222b; --panel: #272e3a; --text: #e6e9ef; --dim: #9aa4b5; --accent: #e0a24a; }
+* { box-sizing: border-box; }
+body { margin: 0; padding: 16px; background: var(--bg); color: var(--text); font: 14px/1.6 system-ui, "Hiragino Sans", "Noto Sans JP", sans-serif; }
+h1 { font-size: 18px; margin: 0; }
+.sub, footer p { color: var(--dim); margin: 4px 0 12px; font-size: 12px; }
+code { background: var(--panel); padding: 1px 5px; border-radius: 4px; }
+.controls, .timeline { display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center; background: var(--panel); padding: 10px 12px; border-radius: 8px; margin-bottom: 8px; }
+.controls label { display: inline-flex; gap: 5px; align-items: center; white-space: nowrap; }
+select, button { font: inherit; color: var(--text); background: #363f4f; border: 1px solid #4a556a; border-radius: 6px; padding: 4px 8px; }
+button { cursor: pointer; min-width: 44px; }
+button:hover, select:hover { border-color: var(--accent); }
+.group { display: inline-flex; gap: 4px; }
+.timeline input { flex: 1 1 240px; accent-color: var(--accent); }
+#info { font-variant-numeric: tabular-nums; color: var(--dim); min-width: 22em; }
+#stage { display: flex; flex-wrap: wrap; gap: 12px; align-items: flex-end; overflow-x: auto; }
+.slot { background: var(--panel); border-radius: 8px; padding: 8px; }
+.slot h2 { font-size: 13px; margin: 0 0 6px; color: var(--dim); font-weight: 600; }
+.slot .row { display: flex; gap: 8px; align-items: flex-end; }
+.slot canvas { display: block; image-rendering: pixelated; background: #485468; border-radius: 4px; max-width: 100%; }
+.slot img { display: block; max-height: 420px; border-radius: 4px; background: #485468; }
+#warn { color: #f0b36a; font-size: 12px; min-height: 1.6em; white-space: pre-wrap; }

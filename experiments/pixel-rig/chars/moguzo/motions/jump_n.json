@@ -1,0 +1,19 @@
+{
+  "_": "垂直ジャンプ。沈み込み→踏み切り→頂点→落下→着地。上下の移動量は root に入れてあり、スプライトのセルには含めない。",
+  "loop": false,
+  "step": 4,
+  "poses": {
+    "squat": {"hip": [-1, -17], "pelvis": 8, "torso": 8, "chest": 6, "head": -12, "handL": [18, 8, 0], "handR": [10, 12, 0]},
+    "air": {"hip": [0, -22], "torso": 0, "chest": -2, "head": 2, "footL": [11, -9, 14, 0], "footR": [-11, -7, 24, 0], "handL": [20, -2, 0], "handR": [12, 2, 0], "tail": [120, 20, 16]}
+  },
+  "keys": [
+    {"hold": 4, "plant": ["footL", "footR"], "root": [0, 0], "pose": "squat"},
+    {"hold": 4, "tween": "out", "root": [0, -10], "pose": {"hip": [0, -24], "torso": -2, "chest": -3, "footL": [12, 0, 30, 0], "footR": [-15, 0, 34, 0], "handL": [20, -6, 0], "handR": [12, -3, 0]}},
+    {"hold": 8, "tween": "out", "root": [0, -34], "pose": "air"},
+    {"hold": 8, "tween": "in", "root": [0, -50], "pose": {"use": "air", "footL": [11, -11, 8, 0], "footR": [-11, -9, 16, 0]}},
+    {"hold": 8, "tween": "in", "root": [0, -34], "pose": {"use": "air", "footL": [12, -4, -6, 0], "footR": [-15, -3, 4, 0], "handL": [20, -5, 0], "handR": [12, -1, 0]}},
+    {"hold": 4, "plant": ["footL", "footR"], "root": [0, 0], "pose": "squat"},
+    {"hold": 4, "tween": "out", "plant": ["footL", "footR"], "root": [0, 0], "pose": {"hip": [0, -20], "torso": 4, "chest": 4}},
+    {"hold": 4, "plant": ["footL", "footR"], "root": [0, 0], "pose": {}}
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "_": "立ち弱。前手（遠い側）の速いジャブ。発生も戻りも短い。",
+  "loop": false,
+  "step": 3,
+  "plant": ["footL", "footR"],
+  "keys": [
+    {"hold": 3, "pose": {"handL": [14, 3, 0], "shL": [-1, 0]}},
+    {"hold": 6, "pose": {"hip": [2, -26], "torso": 7, "chest": 9, "head": -12, "shL": [3, 0], "handL": [27.5, -1, 0], "handR": [11, 4, 0], "swap": {"fist_l": "fist_l_punch", "brow": "brow_angry"}}},
+    {"hold": 3, "tween": "out", "pose": {"hip": [1, -26], "chest": 6, "shL": [1, 0], "handL": [19, 2, 0]}},
+    {"hold": 3, "pose": {}}
+  ]
+}

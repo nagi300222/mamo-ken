@@ -1,0 +1,12 @@
+{
+  "_": "立ち弱。前手（遠い側）の短い突き。拳は横拳の絵に差し替える（親指側から見た形で、親指は下半分）。",
+  "loop": false,
+  "step": 4,
+  "plant": ["footL", "footR"],
+  "keys": [
+    {"hold": 4, "pose": {"handL": [16, 7, 0], "shL": [-2, 0], "chest": 2}},
+    {"hold": 8, "pose": {"hip": [2, -23], "torso": 6, "chest": 9, "head": -8, "shL": [4, 0], "handL": [28.5, 1, 0], "handR": [12, 11, 0], "swap": {"fist_l": "fist_l_punch", "brow": "brow_angry"}}},
+    {"hold": 8, "tween": "out", "pose": {"hip": [1, -23], "chest": 6, "shL": [2, 0], "handL": [20, 5, 0]}},
+    {"hold": 4, "pose": {}}
+  ]
+}

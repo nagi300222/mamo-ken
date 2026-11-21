@@ -1,0 +1,13 @@
+{
+  "_": "立ち強。前足を踏み込みながら後ろ手（近い側）のストレート。後ろ足は母指球を支点にかかとを上げ、接地点は動かさない。",
+  "loop": false,
+  "step": 3,
+  "keys": [
+    {"hold": 6, "plant": ["footR"], "pose": {"hip": [-2, -21], "torso": -2, "chest": -6, "head": 4, "shR": [-3, 0], "handR": [5, 6, 0], "handL": [18, 2, 0], "footL": [16, -2, -6, 0], "swap": {"brow": "brow_angry"}}},
+    {"hold": 3, "plant": ["footL", "footR"], "pose": {"hip": [5, -20], "torso": 8, "chest": 12, "head": -6, "shR": [2, 0], "handR": [15, 2, 0], "handL": [14, 4, 0], "footL": [22, 0, 0, 0], "footR": [-17, 0, 0, 14], "swap": {"brow": "brow_angry"}}},
+    {"hold": 9, "plant": ["footL", "footR"], "pose": {"hip": [10, -20], "torso": 10, "chest": 13, "head": -9, "shR": [13, 0], "handR": [26.5, 3, 0], "handL": [6, 7, 0], "footL": [22, 0, 0, 0], "footR": [-17, 0, 0, 26], "jaw": 14, "swap": {"fist_r": "fist_r_punch", "brow": "brow_angry", "mouth": "mouth_open"}}},
+    {"hold": 6, "tween": "out", "plant": ["footR"], "pose": {"hip": [6, -20], "torso": 8, "chest": 12, "head": -8, "shR": [8, 0], "handR": [20, 3, 0], "handL": [10, 6, 0], "footL": [22, 0, 0, 0], "footR": [-17, 0, 0, 18], "swap": {"brow": "brow_angry"}}},
+    {"hold": 6, "tween": "out", "plant": ["footR"], "pose": {"hip": [2, -21], "torso": 4, "chest": 5, "handR": [15, 6, 0], "handL": [18, 4, 0], "footL": [17, -2, -6, 0], "footR": [-17, 0, 0, 6]}},
+    {"hold": 3, "plant": ["footL", "footR"], "pose": {}}
+  ]
+}

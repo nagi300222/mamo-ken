@@ -288,7 +288,7 @@ function stepChains(rig, solved, state, rootX, rootY, dt = 1) {
         const d = Math.hypot(dx, dy) || 1e-6;
         s.p[i][0] = s.p[i - 1][0] + (dx / d) * len;
         s.p[i][1] = s.p[i - 1][1] + (dy / d) * len;
-        if (s.p[i][1] > rootY - 1 && ch.floor !== false) s.p[i][1] = rootY - 1; // 地面を突き抜けない
+        if (ch.floor !== false && s.p[i][1] > -(ch.floor ?? 1)) s.p[i][1] = -(ch.floor ?? 1); // 地面（y=0）を突き抜けない。floor = パーツの太さの半分
       }
     }
   }
@@ -326,8 +326,15 @@ export function solveStatic(rig, pose) {
  */
 export function bakeMotion(rig, motion) {
   const step = motion.step || 4;
+  // キーの pose は、その場のオブジェクトか motion.poses の名前。{"use": "名前", ...} で名前付きポーズに上書きもできる。
+  const named = motion.poses || {};
+  const resolve = (p) => {
+    if (typeof p === 'string') { if (!named[p]) throw new Error(`${motion.name}: 未定義のポーズ ${p}`); return [named[p]]; }
+    if (p && p.use) { const { use, ...rest } = p; if (!named[use]) throw new Error(`${motion.name}: 未定義のポーズ ${use}`); return [named[use], rest]; }
+    return [p];
+  };
   const keys = motion.keys.map((k) => {
-    const pose = mergePose(rig.stance, motion.base, k.pose);
+    const pose = mergePose(rig.stance, motion.base, ...resolve(k.pose));
     pose.root = k.root || [0, 0];
     return { ...k, pose, tween: k.tween || 'none', plant: k.plant || motion.plant || [] };
   });
@@ -341,7 +348,15 @@ export function bakeMotion(rig, motion) {
     const k = keys[i];
     const next = keys[i + 1] || (motion.loop ? keys[0] : k);
     const t = EASE[k.tween]((f - starts[i]) / k.hold);
-    return { pose: lerpPose(k.pose, next.pose, t), key: i, plant: k.plant };
+    const pose = lerpPose(k.pose, next.pose, t);
+    if (motion.feetSpace === 'world') {
+      // 足のターゲットを「モーション開始位置を原点とした地面座標」で書くモード。
+      // 接地中の足は同じ数値を書き続けるだけで、root が動いても滑らない。
+      const out = { ...pose };
+      for (const L of rig.limbs) if (L.type === 'leg') { const f = pose[L.key].slice(); f[0] -= pose.root[0]; f[1] -= pose.root[1]; out[L.key] = f; }
+      return { pose: out, key: i, plant: k.plant };
+    }
+    return { pose, key: i, plant: k.plant };
   };
 
   const frames = [];
@@ -390,7 +405,7 @@ function activeParts(rig, pose) {
   return out;
 }
 
-function blitPart(buf, w, h, part, jx, jy, deg) {
+function blitPart(buf, w, h, part, jx, jy, deg, yMax) {
   const c = Math.cos(deg * DEG), s = Math.sin(deg * DEG);
   // 目的側の外接矩形
   const xs = [], ys = [];
@@ -399,7 +414,8 @@ function blitPart(buf, w, h, part, jx, jy, deg) {
     xs.push(jx + lx * c - ly * s); ys.push(jy + lx * s + ly * c);
   }
   const x0 = Math.max(0, Math.floor(Math.min(...xs))), x1 = Math.min(w - 1, Math.ceil(Math.max(...xs)));
-  const y0 = Math.max(0, Math.floor(Math.min(...ys))), y1 = Math.min(h - 1, Math.ceil(Math.max(...ys)));
+  // yMax = 足裏の高さ。太ももや尻尾の丸みが地面より下へ出ないように切る（腰を落としたとき、腿が地面に乗った形になる）。
+  const y0 = Math.max(0, Math.floor(Math.min(...ys))), y1 = Math.min(h - 1, yMax - 1, Math.ceil(Math.max(...ys)));
   for (let y = y0; y <= y1; y++) {
     for (let x = x0; x <= x1; x++) {
       const dx = x + 0.5 - jx, dy = y + 0.5 - jy;
@@ -412,9 +428,10 @@ function blitPart(buf, w, h, part, jx, jy, deg) {
   }
 }
 
-function fillCapsule(buf, w, h, ax, ay, ra, bx, by, rb, ci) {
+function fillCapsule(buf, w, h, ax, ay, ra, bx, by, rb, ci, yMax) {
   const x0 = Math.max(0, Math.floor(Math.min(ax - ra, bx - rb))), x1 = Math.min(w - 1, Math.ceil(Math.max(ax + ra, bx + rb)));
-  const y0 = Math.max(0, Math.floor(Math.min(ay - ra, by - rb))), y1 = Math.min(h - 1, Math.ceil(Math.max(ay + ra, by + rb)));
+  // yMax: 足裏の高さ。補完の丸みが地面より下へはみ出さないように切る。
+  const y0 = Math.max(0, Math.floor(Math.min(ay - ra, by - rb))), y1 = Math.min(h - 1, yMax - 1, Math.ceil(Math.max(ay + ra, by + rb)));
   const dx = bx - ax, dy = by - ay, dd = dx * dx + dy * dy || 1e-6;
   for (let y = y0; y <= y1; y++) {
     for (let x = x0; x <= x1; x++) {
@@ -446,6 +463,7 @@ export function renderPose(rig, solved, opts) {
   const tmp = new Uint8Array(N);
 
   for (const g of groups) {
+    if (opts.groups && !opts.groups.includes(g.name)) continue; // 計測用: 指定グループだけ描く
     gbuf.fill(0);
     let any = false;
     // 関節の隙間を埋める補完（画面空間で直接ラスタライズするので回転しても欠けない）
@@ -455,7 +473,7 @@ export function renderPose(rig, solved, opts) {
       if (!A || !Bn) continue;
       const pa = rot(f.a.at || [0, 0], A.rot), pb = rot(f.b.at || [0, 0], Bn.rot);
       fillCapsule(gbuf, w, h, Math.round(A.x + pa[0]) + ox, Math.round(A.y + pa[1]) + oy, f.a.r,
-        Math.round(Bn.x + pb[0]) + ox, Math.round(Bn.y + pb[1]) + oy, f.b.r, f.colorIdx);
+        Math.round(Bn.x + pb[0]) + ox, Math.round(Bn.y + pb[1]) + oy, f.b.r, f.colorIdx, oy);
       any = true;
     }
     const ps = act.filter((p) => p.group === g.name).sort((a, b) => a.order - b.order);
@@ -464,7 +482,7 @@ export function renderPose(rig, solved, opts) {
       if (!b) throw new Error(`${p.name}: ボーン ${p.bone} が解かれていません`);
       const o = rot(p.at, b.rot);
       const deg = p.upright ? 0 : snapAngle(b.rot - p.baseAngle, p.snap);
-      blitPart(gbuf, w, h, p, Math.round(b.x + o[0]) + ox, Math.round(b.y + o[1]) + oy, deg);
+      blitPart(gbuf, w, h, p, Math.round(b.x + o[0]) + ox, Math.round(b.y + o[1]) + oy, deg, oy);
       any = true;
     }
     if (!any) continue;

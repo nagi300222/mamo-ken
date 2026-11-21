@@ -1,0 +1,13 @@
+{
+  "_": "前歩き。構えの前後関係を保ったまま、前足→後ろ足の順に送るすり足。足の座標は足元原点からの相対で、接地中の足は velocity と同じ速さで後ろへ流す。",
+  "loop": true,
+  "step": 4,
+  "velocity": [0.75, 0],
+  "base": {"torso": 4, "chest": 5},
+  "keys": [
+    {"hold": 8, "tween": "linear", "plant": ["footR"], "pose": {"hip": [0, -22], "footL": [7, 0, 0, 0], "footR": [-11, 0, 0, 0]}},
+    {"hold": 8, "tween": "linear", "plant": ["footR"], "pose": {"hip": [1, -23], "footL": [13, -4, -12, 0], "footR": [-17, 0, 0, 0], "handL": [22, 2, 0], "handR": [14, 6, 0]}},
+    {"hold": 8, "tween": "linear", "plant": ["footL"], "pose": {"hip": [1, -22], "footL": [19, 0, 0, 0], "footR": [-23, 0, 0, 0]}},
+    {"hold": 8, "tween": "linear", "plant": ["footL"], "pose": {"hip": [0, -23], "footL": [13, 0, 0, 0], "footR": [-17, -4, 8, 0], "handL": [22, 2, 0], "handR": [14, 6, 0]}}
+  ]
+}

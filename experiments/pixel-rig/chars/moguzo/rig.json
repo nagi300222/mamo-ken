@@ -54,9 +54,9 @@
     {"type": "leg", "key": "footR", "bendKey": "kneeR", "bend": 1, "ankleH": 5, "upper": "thigh_r", "lower": "shin_r", "ankle": "ankle_r", "foot": "foot_r", "toe": "toe_r"}
   ],
   "chains": [
-    {"name": "tail", "key": "tail", "anchor": "pelvis", "at": [-21,9], "bones": ["tail_base", "tail_mid", "tail_tip"], "rest": [150,20,20], "stiff": 0.35, "damp": 0.6, "gravity": 0},
-    {"name": "hachi_a", "key": "hachiA", "anchor": "head", "at": [-12,-15], "bones": ["hachi_a1", "hachi_a2"], "rest": [125,-15], "follow": false, "stiff": 0.03, "damp": 0.9, "gravity": 0.12},
-    {"name": "hachi_b", "key": "hachiB", "anchor": "head", "at": [-12,-14], "bones": ["hachi_b1", "hachi_b2"], "rest": [100,-10], "follow": false, "stiff": 0.04, "damp": 0.88, "gravity": 0.12}
+    {"name": "tail", "key": "tail", "anchor": "pelvis", "at": [-21,9], "bones": ["tail_base", "tail_mid", "tail_tip"], "rest": [150,20,20], "stiff": 0.35, "damp": 0.6, "gravity": 0, "floor": 5},
+    {"name": "hachi_a", "key": "hachiA", "anchor": "head", "at": [-12,-15], "bones": ["hachi_a1", "hachi_a2"], "rest": [125,-15], "follow": false, "stiff": 0.03, "damp": 0.9, "gravity": 0.12, "floor": 3},
+    {"name": "hachi_b", "key": "hachiB", "anchor": "head", "at": [-12,-14], "bones": ["hachi_b1", "hachi_b2"], "rest": [100,-10], "follow": false, "stiff": 0.04, "damp": 0.88, "gravity": 0.12, "floor": 3}
   ],
   "colliders": [
     {"bone": "pelvis", "at": [-1,-8], "r": 25, "clear": 2}
@@ -83,9 +83,9 @@
     {"_": "近い側の膝", "group": "body", "color": "fur.3", "a": {"bone": "shin_r", "at": [0,0], "r": 7}, "b": {"bone": "shin_r", "at": [0,0], "r": 7}},
     {"_": "遠い側の股関節", "group": "leg_l", "color": "fur.3", "a": {"bone": "pelvis", "at": [4,0], "r": 11}, "b": {"bone": "thigh_l", "at": [0,0], "r": 10}},
     {"_": "遠い側の膝", "group": "leg_l", "color": "fur.3", "a": {"bone": "shin_l", "at": [0,0], "r": 7}, "b": {"bone": "shin_l", "at": [0,0], "r": 7}},
-    {"_": "近い側の肩", "group": "arm_r", "color": "fur.3", "a": {"bone": "chest", "at": [-4,-8], "r": 7}, "b": {"bone": "upperarm_r", "at": [0,0], "r": 7}},
+    {"_": "近い側の肩", "group": "arm_r", "color": "fur.3", "a": {"bone": "shoulder_r", "at": [-3,1], "r": 7}, "b": {"bone": "upperarm_r", "at": [0,0], "r": 7}},
     {"_": "近い側の肘", "group": "arm_r", "color": "fur.3", "a": {"bone": "forearm_r", "at": [0,0], "r": 6}, "b": {"bone": "forearm_r", "at": [0,0], "r": 6}},
-    {"_": "遠い側の肩", "group": "arm_l", "color": "fur.3", "a": {"bone": "chest", "at": [8,-9], "r": 7}, "b": {"bone": "upperarm_l", "at": [0,0], "r": 7}},
+    {"_": "遠い側の肩", "group": "arm_l", "color": "fur.3", "a": {"bone": "shoulder_l", "at": [-2,1], "r": 7}, "b": {"bone": "upperarm_l", "at": [0,0], "r": 7}},
     {"_": "遠い側の肘", "group": "arm_l", "color": "fur.3", "a": {"bone": "forearm_l", "at": [0,0], "r": 6}, "b": {"bone": "forearm_l", "at": [0,0], "r": 6}}
   ],
   "slotDefaults": {"fist_l": "fist_l_guard", "fist_r": "fist_r_guard", "eye": "eye_open", "brow": "none", "mouth": "mouth_closed"},
@@ -100,7 +100,7 @@
     "thigh_l": {"bone": "thigh_l", "group": "leg_l", "order": 0, "baseAngle": 90, "size": [22,33], "pivot": [11,11]},
     "shin_l": {"bone": "shin_l", "group": "leg_l", "order": 1, "baseAngle": 90, "size": [14,24], "pivot": [7,7]},
     "foot_l": {"bone": "foot_l", "group": "leg_l", "order": 3, "size": [17,8], "pivot": [5,3]},
-    "toe_l": {"bone": "toe_l", "group": "leg_l", "order": 2, "size": [10,5], "pivot": [1,5]},
+    "toe_l": {"bone": "toe_l", "group": "leg_l", "order": 4, "size": [10,5], "pivot": [1,5]},
     "ear_l": {"bone": "ear_l", "group": "ear_far", "size": [6,6], "pivot": [3,4]},
     "hachi_a1": {"bone": "hachi_a1", "group": "hachi_tail", "order": 1, "size": [9,4], "pivot": [0,2]},
     "hachi_a2": {"bone": "hachi_a2", "group": "hachi_tail", "order": 0, "size": [9,6], "pivot": [0,3]},
@@ -113,7 +113,7 @@
     "thigh_r": {"bone": "thigh_r", "group": "body", "order": 4, "baseAngle": 90, "size": [22,33], "pivot": [11,11]},
     "shin_r": {"bone": "shin_r", "group": "leg_r", "order": 0, "baseAngle": 90, "size": [14,24], "pivot": [7,7]},
     "foot_r": {"bone": "foot_r", "group": "leg_r", "order": 2, "size": [17,8], "pivot": [5,3]},
-    "toe_r": {"bone": "toe_r", "group": "leg_r", "order": 1, "size": [10,5], "pivot": [1,5]},
+    "toe_r": {"bone": "toe_r", "group": "leg_r", "order": 3, "size": [10,5], "pivot": [1,5]},
     "ear_r": {"bone": "ear_r", "group": "head", "order": 0, "size": [8,7], "pivot": [4,5]},
     "head": {"bone": "head", "group": "head", "order": 1, "size": [40,33], "pivot": [12,26]},
     "jaw": {"bone": "jaw", "group": "head", "order": 2, "size": [14,6], "pivot": [0,1]},

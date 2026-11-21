@@ -1,0 +1,13 @@
+{
+  "_": "立ち強。後ろ手（近い側）の重量パンチ。大きく引いてためを作り、腰と肩を入れて打ち抜く。打ったあとの戻りも長い。",
+  "loop": false,
+  "step": 4,
+  "keys": [
+    {"hold": 8, "plant": ["footL", "footR"], "pose": {"hip": [-3, -22], "torso": -2, "chest": -8, "head": 6, "shR": [-5, 1], "handR": [-2, 10, 0], "handL": [20, 4, 0], "swap": {"brow": "brow_angry"}}},
+    {"hold": 4, "plant": ["footL", "footR"], "pose": {"hip": [3, -22], "torso": 8, "chest": 10, "head": -8, "shR": [2, 0], "handR": [14, 8, 0], "handL": [16, 8, 0], "footR": [-29, 0, 0, 10], "swap": {"brow": "brow_angry"}}},
+    {"hold": 12, "plant": ["footL", "footR"], "pose": {"hip": [9, -21], "torso": 10, "chest": 12, "head": -8, "shR": [16, 1], "handR": [28.5, 5, 0], "handL": [6, 12, 0], "footR": [-29, 0, 0, 22], "jaw": 14, "swap": {"fist_r": "fist_r_punch", "brow": "brow_angry", "mouth": "mouth_open"}}},
+    {"hold": 8, "tween": "out", "plant": ["footL", "footR"], "pose": {"hip": [5, -21], "torso": 10, "chest": 13, "head": -12, "shR": [10, 1], "handR": [23, 7, 0], "handL": [10, 11, 0], "footR": [-29, 0, 0, 16], "swap": {"brow": "brow_angry"}}},
+    {"hold": 8, "tween": "out", "plant": ["footL", "footR"], "pose": {"hip": [2, -22], "torso": 6, "chest": 7, "head": -6, "handR": [16, 11, 0], "handL": [19, 7, 0], "footR": [-29, 0, 0, 6]}},
+    {"hold": 4, "plant": ["footL", "footR"], "pose": {}}
+  ]
+}

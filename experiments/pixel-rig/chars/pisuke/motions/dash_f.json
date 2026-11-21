@@ -1,0 +1,14 @@
+{
+  "_": "前ダッシュ。3体でいちばん速く遠い。低い姿勢のまま後ろ足で蹴り出す。足は地面座標（feetSpace: world）。",
+  "loop": false,
+  "step": 3,
+  "feetSpace": "world",
+  "keys": [
+    {"hold": 3, "plant": ["footL", "footR"], "root": [0, 0], "pose": {"hip": [2, -23], "pelvis": 16, "torso": 9, "chest": 6, "head": -20}},
+    {"hold": 3, "tween": "linear", "plant": ["footR"], "root": [8, 0], "pose": {"hip": [3, -23], "pelvis": 22, "torso": 12, "chest": 8, "head": -30, "footL": [32, -4, -12, 0], "footR": [-25, 0, 0, 34], "handL": [20, 6, 0], "handR": [8, 8, 0]}},
+    {"hold": 6, "tween": "linear", "root": [24, -4], "pose": {"hip": [0, -24], "pelvis": 26, "torso": 14, "chest": 8, "head": -36, "footL": [54, -4, -16, 0], "footR": [2, -9, 30, 0], "handL": [20, 7, 0], "handR": [4, 8, 0], "tail": [175, 5, -5]}},
+    {"hold": 3, "plant": ["footL"], "root": [52, 0], "pose": {"hip": [-2, -23], "pelvis": 14, "torso": 8, "chest": 6, "head": -18, "footL": [73, 0, 0, 0], "footR": [26, -4, 14, 0]}},
+    {"hold": 3, "tween": "out", "plant": ["footL", "footR"], "root": [56, 0], "pose": {"hip": [0, -24], "footL": [73, 0, 0, 0], "footR": [31, 0, 0, 30]}},
+    {"hold": 3, "plant": ["footL", "footR"], "root": [56, 0], "pose": {"footL": [73, 0, 0, 0], "footR": [31, 0, 0, 24]}}
+  ]
+}

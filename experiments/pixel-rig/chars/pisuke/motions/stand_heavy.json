@@ -1,0 +1,13 @@
+{
+  "_": "立ち強。後ろ脚（近い側）の前蹴り。前足一本で立ち、上体を後ろへ倒してつり合いを取る。膝を抱え込む途中絵を挟んでから伸ばす。",
+  "loop": false,
+  "step": 3,
+  "keys": [
+    {"hold": 3, "plant": ["footL"], "pose": {"hip": [3, -27], "pelvis": 2, "torso": 2, "chest": 2, "head": -4, "footR": [-12, -8, 30, 0], "handL": [18, 2, 0], "handR": [10, 4, 0], "swap": {"brow": "brow_angry"}}},
+    {"hold": 3, "plant": ["footL"], "pose": {"hip": [6, -28], "pelvis": -6, "torso": -3, "chest": -2, "neck": 0, "head": 2, "footR": [10, -20, 30, 0], "handL": [16, 2, 0], "handR": [6, 6, 0], "swap": {"brow": "brow_angry"}}},
+    {"hold": 9, "plant": ["footL"], "pose": {"hip": [7, -28], "pelvis": -16, "torso": -6, "chest": -2, "neck": 2, "head": 10, "footR": [30, -27, -24, 0], "kneeR": 1, "handL": [14, 4, 0], "handR": [0, 8, 0], "jaw": 14, "tail": [170, -10, -10], "swap": {"brow": "brow_angry", "mouth": "mouth_open"}}},
+    {"hold": 3, "plant": ["footL"], "pose": {"hip": [6, -28], "pelvis": -8, "torso": -3, "chest": -2, "neck": 0, "head": 2, "footR": [12, -20, 24, 0], "handL": [16, 2, 0], "handR": [6, 6, 0]}},
+    {"hold": 6, "tween": "out", "plant": ["footL"], "pose": {"hip": [3, -27], "pelvis": 2, "torso": 2, "chest": 2, "head": -4, "footR": [-12, -7, 26, 0]}},
+    {"hold": 3, "plant": ["footL", "footR"], "pose": {}}
+  ]
+}

@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>マモ拳 pixel-rig ビューワー</title>
+<link rel="stylesheet" href="viewer/viewer.css">
+</head>
+<body>
+<header>
+  <h1>マモ拳 pixel-rig ビューワー</h1>
+  <p class="sub">リグ計算と描画は書き出しスクリプトと同じ <code>src/rig.js</code> を使っています。</p>
+</header>
+<section class="controls">
+  <label>キャラ <select id="char"></select></label>
+  <label><input type="checkbox" id="all"> 3体を並べる</label>
+  <label>モーション <select id="motion"></select></label>
+  <span class="group">
+    <button id="prev" title="1コマ戻る (←)">◀ 1コマ</button>
+    <button id="play" title="再生／一時停止 (Space)">一時停止</button>
+    <button id="next" title="1コマ送る (→)">1コマ ▶</button>
+  </span>
+  <label>速度 <select id="speed">
+    <option value="1">等速</option><option value="0.5">1/2</option><option value="0.25">1/4</option><option value="0.1">1/10</option>
+  </select></label>
+  <label>倍率 <select id="scale"><option>2</option><option>3</option><option selected>4</option><option>5</option><option>6</option></select></label>
+  <label><input type="checkbox" id="bones"> 骨</label>
+  <label><input type="checkbox" id="pivots"> 回転中心</label>
+  <label><input type="checkbox" id="flip"> 左右反転</label>
+  <label><input type="checkbox" id="travel" checked> 移動を反映</label>
+  <label><input type="checkbox" id="cell"> セル枠</label>
+  <label><input type="checkbox" id="ref"> 元絵を並べる</label>
+</section>
+<section class="timeline">
+  <input type="range" id="scrub" min="0" max="0" value="0">
+  <span id="info"></span>
+</section>
+<main id="stage"></main>
+<p id="warn"></p>
+<footer>
+  <p>キー操作: Space 再生／一時停止、← → 1コマ送り、B 骨、F 反転。コマは「絵として更新される1枚」で、60Hz での保持フレーム数を持ちます。</p>
+</footer>
+<script type="module" src="viewer/viewer.js"></script>
+</body>
+</html>

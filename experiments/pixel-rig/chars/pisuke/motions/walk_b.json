@@ -1,0 +1,13 @@
+{
+  "_": "後ろ歩き。上体を起こし、後ろ足から小刻みに下がる。",
+  "loop": true,
+  "step": 3,
+  "velocity": [-0.6666666667, 0],
+  "base": {"pelvis": 4, "torso": 3, "chest": 2, "head": -5},
+  "keys": [
+    {"hold": 6, "tween": "linear", "plant": ["footL"], "pose": {"hip": [0, -26], "footL": [13, 0, 0, 0], "footR": [-21, 0, 0, 20]}},
+    {"hold": 6, "tween": "linear", "plant": ["footL"], "pose": {"hip": [-1, -27], "footL": [17, 0, 0, 0], "footR": [-25, -4, 8, 0], "handL": [20, 1, 0], "handR": [12, 3, 0]}},
+    {"hold": 6, "tween": "linear", "plant": ["footR"], "pose": {"hip": [-1, -26], "footL": [21, 0, 0, 0], "footR": [-29, 0, 0, 24]}},
+    {"hold": 6, "tween": "linear", "plant": ["footR"], "pose": {"hip": [0, -27], "footL": [17, -4, -10, 0], "footR": [-25, 0, 0, 22], "handL": [20, 1, 0], "handR": [12, 3, 0]}}
+  ]
+}
