@@ -92,3 +92,65 @@ button.primary:active{transform:translateY(1px)}
 }
 @media(max-width:660px){.roster{grid-template-columns:repeat(3,minmax(0,1fr))}.selection-footer{flex-wrap:wrap}.chosen{flex-basis:100%}}
 @media(orientation:portrait) and (max-width:800px){.rotate-hint{display:block;position:absolute;z-index:6;bottom:calc(var(--stick-size) + 18px);left:50%;transform:translateX(-50%);background:#14293bdb;border-radius:8px;padding:7px;font-size:11px;white-space:nowrap;color:#f6cf82}.commands-help{display:none}}
+
+/* v0.2: 操作エリアは画面の上に重ねず、中央の対戦表示から独立させる。 */
+#combat-layout{
+  min-height:0;height:100%;width:100%;overflow:hidden;
+  display:grid;
+  grid-template-columns:clamp(124px,18vw,205px) minmax(0,1fr) clamp(183px,24vw,268px);
+  background:#0b1827;
+}
+#combat-layout > *{min-width:0;min-height:0}
+#combat-layout #arena{box-shadow:inset 3px 0 #0b182766,inset -3px 0 #0b182766}
+.control-rail{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:clamp(6px,1.7vh,14px);overflow:hidden;
+  background:linear-gradient(180deg,#1c3042,#0e2032 75%,#13263b);
+  border-inline:1px solid #304a5d;
+  padding:9px 4px max(9px,env(safe-area-inset-bottom));
+  touch-action:none;
+}
+.rail-caption{font-size:clamp(9px,1.4vw,12px);font-weight:900;letter-spacing:.12em;color:#d6e2ea;white-space:nowrap}
+.rail-sub{font-size:clamp(8px,1vw,10px);color:#94b0c5;text-align:center;line-height:1.25;white-space:normal;max-width:95%}
+#stick-rail .stick-area{width:var(--stick-size);height:var(--stick-size);max-width:100%;aspect-ratio:1;flex:0 0 auto}
+#buttons-rail .overlay-controls{position:static;display:block;left:auto;right:auto;bottom:auto;padding:0;margin:0;width:auto;pointer-events:auto}
+#buttons-rail .attack-pad{display:grid;grid-template-columns:repeat(3,var(--action-size));grid-template-rows:repeat(2,var(--action-size));gap:clamp(6px,1.35vh,12px);margin:0}
+#buttons-rail .attack.weak{grid-column:1;grid-row:1}
+#buttons-rail .attack.heavy{grid-column:2;grid-row:1}
+#buttons-rail .attack.throw{grid-column:3;grid-row:1}
+#buttons-rail .attack.roar{grid-column:1;grid-row:2}
+#buttons-rail .attack.gyuiin{grid-column:2/4;grid-row:2;justify-self:center}
+#buttons-rail .attack{width:var(--action-size);height:var(--action-size);min-width:42px;min-height:42px;font-size:clamp(11px,2.6vh,19px);border-radius:50%}
+#buttons-rail .attack.gyuiin{font-size:clamp(9px,1.9vh,13px)}
+#arena .commands-help{bottom:4px;max-width:95%;font-size:clamp(8px,1.15vw,10px)}
+#arena .hud{left:7px;right:7px;gap:7px}
+#arena .hud-name{font-size:clamp(9px,1.55vw,12px);white-space:nowrap}
+#arena .hud-name span:first-child{overflow:hidden;text-overflow:ellipsis}
+#arena .hud-name span:nth-child(2){font-size:clamp(8px,1.25vw,10px)}
+#arena .note{max-width:86%}
+@media(max-height:530px) and (orientation:landscape){
+  :root{--stick-size:clamp(105px,31vh,148px);--action-size:clamp(43px,12vh,53px)}
+  #combat-layout{grid-template-columns:clamp(112px,18vw,162px) minmax(0,1fr) clamp(164px,25vw,213px)}
+  .control-rail{gap:6px;padding:4px 2px 6px}
+  .rail-sub{display:none}
+  #arena .hud{top:3px;gap:5px}
+  #arena .hud-name{font-size:9px}
+  #arena .round-center{flex:0 0 38px}
+  #arena .round-center>span{font-size:18px}
+  #arena .note{top:49px;font-size:9px}
+  #arena .commands-help{font-size:8px;max-width:98%;bottom:3px}
+  #buttons-rail .attack-pad{gap:5px}
+}
+@media(max-width:700px) and (orientation:landscape){
+  #combat-layout{grid-template-columns:108px minmax(0,1fr) 160px}
+  :root{--stick-size:105px;--action-size:43px}
+  .rail-caption{font-size:8px}
+  #buttons-rail .attack-pad{gap:4px}
+}
+@media(orientation:portrait) and (max-width:800px){
+  #combat-layout{grid-template-columns:minmax(82px,22vw) minmax(0,1fr) minmax(140px,30vw)}
+  :root{--stick-size:min(21vw,115px);--action-size:clamp(38px,9vw,50px)}
+  .rail-caption{font-size:8px}
+  .rail-sub{display:none}
+  .rotate-hint{bottom:25px}
+}
