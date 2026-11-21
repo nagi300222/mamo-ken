@@ -24,6 +24,15 @@ test('尾薙ぎのリーチはパンチを超え、F24に最大点',()=>{
   const initial=g.fighters[1].hp;for(let f=0;f<70;f++)g.tick({special1:f===0},{});
   assert.ok(g.fighters[1].hp<initial,'tail should connect at 0.65m');
 });
+test('GLB差し替え時の尾判定はモーションJSONの軌跡を読み直す',()=>{
+  const g=new Battle('bullet','moguzo');
+  const oldReach=g._tailAt(24);
+  g.setTailTipPath([[0,-.4],[18,.15],[24,.73],[26,.70],[48,-.4]]);
+  assert.equal(g._tailAt(24),.73);
+  assert.ok(g._tailAt(24)>oldReach);
+  const again=g.again();assert.equal(again._tailAt(24),.73);
+});
+
 test('弱攻撃が命中し、後ろガードでHPを減らさない',()=>{
   const hit=new Battle('moguzo','godan');hit.fighters[0].x=-.21;hit.fighters[1].x=.22;
   const hp=hit.fighters[1].hp;for(let f=0;f<45;f++)hit.tick({weak:f===0},{});
