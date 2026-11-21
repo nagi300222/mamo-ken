@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
-import { Battle, DRIVE } from './battle.js';
+import { Battle, DRIVE, simFight } from './battle.js';
 import { chooseClip } from './models.js';
 import { ROSTER } from './balance.js';
 import { directionCode, pushDirection, readCommand } from './commands.js';
@@ -126,4 +126,25 @@ test('Claudeの新規リアクションクリップを優先し、未配信な�
   assert.equal(chooseClip(p,['idle','hurt_light']),'hurt_light');
   p.state='block';p.reaction='guard_crouch_hit';
   assert.equal(chooseClip(p,['idle','guard_stand','guard_crouch_hit']),'guard_crouch_hit');
+});
+
+test('同時咆哮入力中に自分の咆哮を消さない（左右差の回帰）',()=>{
+  const g=new Battle('moguzo','moguzo');
+  g.fighters[0].x=-.3;g.fighters[1].x=.3;
+  g.tick({roar:true},{roar:true});
+  g.tick({},{});
+  g.tick({roar:true},{roar:true});
+  assert.equal(g.fighters[0].action?.kind,'roar');
+  assert.equal(g.fighters[1].action?.kind,'roar');
+  assert.equal(g.fighters[0].drive,g.fighters[1].drive);
+});
+test('同キャラAIは両側の決着が同じ（初期対称性）',()=>{
+  for(const id of ['moguzo','pisuke','godan','hakuma','chirka','takimaru','yomikage','bullet','dark_moguzo']){
+    const g=simFight(id,id,4510);
+    assert.equal(g.winner,-1,id+' mirror');
+  }
+});
+test('Cloudflare Pagesに入力コマンドモジュールも梱包する',()=>{
+  const script=readFileSync(new URL('./build-pages.mjs',import.meta.url),'utf8');
+  assert.match(script,/['"]commands\.js['"]/);
 });
