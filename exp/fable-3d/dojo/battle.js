@@ -16,7 +16,7 @@ export const UNIVERSAL_ACTIONS=Object.freeze({roar:ROAR,gyuiin:GYUIIN,grab:GRAB}
 function fighter(id,slot){
   const r=ROSTER[id];if(!r)throw Error('unknown fighter '+id);
   return {id,slot,x:slot===0?-.70:.70,y:0,vy:0,facing:slot===0?1:-1,
-    hp:r.hp,guard:100,super:0,drive:DRIVE.initial,driveDelay:0,state:'idle',frame:0,stun:0,stop:0,
+    hp:r.hp,guard:100,super:0,drive:DRIVE.initial,driveDelay:0,state:'idle',reaction:null,frame:0,stun:0,stop:0,
     action:null,used:false,spawned:false,ko:false,prev:inputOf({}),input:inputOf({}),
     dirHistory:[],dashF:0,dashDir:0,roarCooldown:0,gyuiinCooldown:0,guardF:0,
     ability:{charge:0,lastCharge:'',iron:0,armor:3,chase:0,pressure:0,just:0,dark:0,grit:true},
@@ -236,8 +236,8 @@ export class Battle {
       const later=t.action.started>a.action?.started;
       const same=t.action.started===a.action?.started;
       if(later||same){
-        a.action=null;a.stun=same?12:27;a.state='hit';a.frame=0;a.stop=7;
-        if(same){t.action=null;t.stun=12;t.state='hit';t.frame=0;t.stop=7;}
+        a.action=null;a.stun=same?12:27;a.state='hit';a.reaction='roar_hit';a.frame=0;a.stop=7;
+        if(same){t.action=null;t.stun=12;t.state='hit';t.reaction='roar_hit';t.frame=0;t.stop=7;}
         this.events.push({type:same?'roar_clash':'roar_counter',slot:t.slot,x:t.x,y:t.y+.35});
         return;
       }
@@ -249,7 +249,7 @@ export class Battle {
     if(guard){
       t.dashF=0;t.guard=cap(t.guard-Math.max(5,dmg*(m.kind==='roar'?.37:.16)),0,100);
       t.stun=t.guard<=0?26:Math.max(8,Math.round(dmg*(m.kind==='roar'?.17:.08)));
-      t.state='block';t.frame=0;t.ability.iron=t.id==='hakuma'?1:t.ability.iron;
+      t.state='block';t.reaction=m.kind==='roar'?'guard_impact':t.input.down?'guard_crouch_hit':'guard_hit';t.frame=0;t.ability.iron=t.id==='hakuma'?1:t.ability.iron;
       if(t.id==='yomikage'&&t.guardF<=7)t.ability.just=42;
       if(a.id==='takimaru')a.ability.pressure=36;
       this.events.push({type:'block',slot:t.slot,x:t.x,y:t.y+.35,damage:0});
@@ -267,7 +267,7 @@ export class Battle {
       else if(absorb==='godan'){dmg=Math.round(dmg*.55);this.events.push({type:'armor',slot:t.slot});}
       else{
         t.stun=m.kind==='clinch'?36:Math.max(12,Math.round(m.damage*.16));
-        t.action=null;t.dashF=0;t.state='hit';t.frame=0;
+        t.action=null;t.dashF=0;t.state='hit';t.reaction=m.kind==='roar'?'roar_hit':m.damage>=95?'hurt_heavy':'hurt_light';t.frame=0;
       }
       t.hp=Math.max(0,t.hp-dmg);t.guard=cap(t.guard+2,0,100);t.ability.iron=0;
       if(t.id==='moguzo'&&t.hp===0&&t.ability.grit){t.hp=1;t.ability.grit=false;this.events.push({type:'grit',slot:t.slot});}
@@ -278,7 +278,7 @@ export class Battle {
       if(a.id==='dark_moguzo'&&source==='strike'&&!m.isSuper)a.ability.dark=18;
       this.events.push({type:m.kind==='clinch'?'gyuiin_hit':'hit',slot:t.slot,x:t.x,y:t.y+.32,damage:dmg});
       if(m.kind==='clinch'){a.stop=Math.max(a.stop,15);t.stop=Math.max(t.stop,15);}
-      if(m.kind==='roar'){t.stun=Math.max(t.stun,23);this.events.push({type:'roar_hit',slot:a.slot,x:t.x,y:t.y+.35});}
+      if(m.kind==='roar'){t.stun=Math.max(t.stun,23);t.reaction='roar_hit';this.events.push({type:'roar_hit',slot:a.slot,x:t.x,y:t.y+.35});}
     }
     a.super=cap(a.super+(guard?5:Math.round(dmg*.19)),0,100);
     t.super=cap(t.super+(guard?5:Math.round(dmg*.09)),0,100);
