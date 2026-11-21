@@ -47,7 +47,7 @@ export const ROSTER = Object.freeze({
     S('尾跳ね', 'anti', 9, 7, 27, 79, .46),
     S('尾薙ぎ', 'tail', 19, 6, 23, 100, .651, { minReach:.27,anim:'sp_tail_whip',dynamicTail:1,chargeRelease:true })
   ], S('超圧縮・弾丸頭突き', 'super', 12, 9, 34, 220, .90, { anim:'sp_tail_whip' }),{guardMax:95}),
-  dark_moguzo: C('ダークモグゾー', '高火力・低耐久', 820, .024, .34, .102, .92, 'dark_chain', [
+  dark_moguzo: C('ダークモグゾー', '高速連携・低耐久', 820, .024, .34, .102, .92, 'dark_chain', [
     S('黒い地走波', 'projectile', 11, 1, 19, 55, .42, { speed:.049, life:80, effect:'violet' }),
     S('逆昇撃', 'anti', 5, 8, 31, 102, .45, { anim:'sp_dark_rush' }),
     S('暗連', 'dash', 7, 9, 24, 88, .52, { travel:.39, anim:'sp_dark_rush' })
