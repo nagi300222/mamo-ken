@@ -236,3 +236,37 @@ test('追加クリップは旧通常技・掴みの再生先より優先する',
     assert.equal(chooseClip(p,['idle',anim]),anim);
   }
 });
+
+test('全9体が全9対戦相手を左右から飛び越え、着地後は後ろガードも反転する',()=>{
+  for(const left of Object.keys(ROSTER))for(const right of Object.keys(ROSTER))for(const side of [1,-1]){
+    const g=new Battle(left,right),[p,o]=g.fighters;
+    p.x=-side*.28;o.x=side*.28;
+    const forward=side===1?'right':'left';
+    let apex=0;
+    for(let i=0;i<42;i++){
+      g.tick({[forward]:true,up:i===0},{});
+      apex=Math.max(apex,p.y);
+      assert.ok(Math.abs(p.x)<=1.76);
+    }
+    const label=left+'/'+right+'/'+side;
+    assert.ok((p.x-o.x)*side>0&&p.y===0&&apex>.80,label);
+    assert.equal(p.facing,-side,label);
+    p.x=o.x+side*.40;
+    const hp=p.hp;
+    for(let i=0;i<10;i++)g.tick({[forward]:true},{weak:i===0});
+    assert.ok(p.guard<100,label);
+    assert.equal(p.hp,hp,label);
+  }
+});
+
+test('チルカの毒は通常対戦で付与・発生し、再戦で初期化される',()=>{
+  const g=scripted([{special1:true},...Array(36).fill({})],{left:'chirka',right:'hakuma'});
+  const target=g.fighters[1];
+  assert.ok(target.poison>0);
+  const hp=target.hp;
+  for(let i=0;i<30;i++)g.tick({},{});
+  assert.equal(target.hp,hp-4);
+  const next=g.again();
+  assert.equal(next.fighters[1].hp,ROSTER.hakuma.hp);
+  assert.equal(next.fighters[1].poison,0);
+});

@@ -4,6 +4,12 @@ on:
   push:
     branches:
       - feat/mamoken-3d-mobile-fight
+  pull_request:
+    branches:
+      - feat/mamoken-3d-mobile-fight
+    paths:
+      - .github/workflows/mamoken-3d-mobile.yml
+      - exp/fable-3d/**
   workflow_dispatch:
 
 permissions:
@@ -44,7 +50,7 @@ jobs:
           path: exp/fable-3d/_pages/
           retention-days: 14
       - name: Deploy Cloudflare Pages preview (only when configured)
-        if: ${{ env.CF_TOKEN != '' && env.CF_ACCOUNT != '' && env.CF_PROJECT != '' }}
+        if: ${{ github.event_name != 'pull_request' && env.CF_TOKEN != '' && env.CF_ACCOUNT != '' && env.CF_PROJECT != '' }}
         env:
           CLOUDFLARE_API_TOKEN: ${{ env.CF_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ env.CF_ACCOUNT }}
@@ -53,3 +59,42 @@ jobs:
           --project-name "$CF_PROJECT"
           --branch feat/mamoken-3d-mobile-fight
           --commit-hash "$GITHUB_SHA"
+      - name: Test the deployed Issue 150 preview in Chromium
+        if: ${{ github.event_name == 'pull_request' && github.head_ref == 'fix/mobile-v2-acceptance-150' && github.event.pull_request.head.repo.full_name == github.repository }}
+        env:
+          MAMOKEN_URL: https://fix-mobile-v2-acceptance-150.mamoken-3d.pages.dev/
+        run: |
+          set -euo pipefail
+          files=(index.html style.css main.js battle.js commands.js models.js)
+          ready=false
+          for attempt in {1..24}; do
+            ready=true
+            for file in "${files[@]}"; do
+              remote="$RUNNER_TEMP/mamoken-$file"
+              url="${MAMOKEN_URL}dojo/$file?audit=$GITHUB_SHA"
+              if ! curl -fsSL --max-time 10 "$url" -o "$remote" ||
+                ! cmp -s "exp/fable-3d/_pages/dojo/$file" "$remote"; then
+                ready=false
+                break
+              fi
+            done
+            if "$ready"; then break; fi
+            sleep 10
+          done
+          if ! "$ready"; then
+            echo "Cloudflare preview did not serve the files from this commit."
+            exit 1
+          fi
+          npm install --prefix "$RUNNER_TEMP/mamoken-browser" playwright-core@1.65.1
+          export NODE_PATH="$RUNNER_TEMP/mamoken-browser/node_modules"
+          export CHROMIUM_PATH="$(command -v google-chrome)"
+          export MAMOKEN_EVIDENCE="$RUNNER_TEMP/mamoken-evidence"
+          mkdir -p "$MAMOKEN_EVIDENCE"
+          node exp/fable-3d/dojo/acceptance/browser.mjs | tee "$MAMOKEN_EVIDENCE/browser.txt"
+      - name: Archive Cloudflare browser evidence
+        if: ${{ always() && github.event_name == 'pull_request' && github.head_ref == 'fix/mobile-v2-acceptance-150' && github.event.pull_request.head.repo.full_name == github.repository }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: mamoken-3d-browser
+          path: ${{ runner.temp }}/mamoken-evidence/
+          retention-days: 14
