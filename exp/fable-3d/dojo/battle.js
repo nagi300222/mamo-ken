@@ -305,7 +305,7 @@ export class Battle {
     p.frame++;
     if(m.travel&&p.frame<=m.startup+m.active)moveX(p,p.facing*m.travel/(m.startup+m.active));
     if(m.kind==='clinch'){
-      if(this._contact(p,op,m))this._clinchPair(p,op);
+      if(active(p)&&this._contact(p,op,m))this._clinchPair(p,op);
       else if(p.frame>=total(m)){p.action=null;p.frame=0;p.state='idle';this.events.push({type:'gyuiin_whiff',slot:p.slot});}
       return;
     }
