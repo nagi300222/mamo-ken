@@ -1,0 +1,11 @@
+{
+  "name": "mamoken-threejs-roster9",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "prepare": "node extract.mjs",
+    "start": "python3 -m http.server 4173 --bind 127.0.0.1 --directory ../..",
+    "test": "node --test battle.test.mjs"
+  },
+  "dependencies": { "three": "0.180.0" }
+}

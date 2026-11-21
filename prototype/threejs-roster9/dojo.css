@@ -1,0 +1,422 @@
+* {
+  box-sizing: border-box;
+}
+[hidden] {
+  display: none !important;
+}
+:root {
+  color-scheme: dark;
+  --paper: #fff3d6;
+  --gold: #ffc869;
+  --line: #78837955;
+  --surface: #202e30;
+}
+body {
+  margin: 0;
+  color: var(--paper);
+  font-family: Barlow, 'Noto Sans CJK JP', system-ui, sans-serif;
+  background: #101a1c;
+}
+button,
+select {
+  font: inherit;
+  font-weight: 700;
+  background: #293739;
+  color: var(--paper);
+  border: 1px solid #607073;
+  border-radius: 5px;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+button {
+  padding: 0.45em 0.85em;
+}
+button:hover,
+button:focus-visible,
+select:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 1px;
+}
+header {
+  height: 58px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 max(3vw, 16px);
+  border-bottom: 1px solid var(--line);
+  background: #162326;
+}
+.brand {
+  font-size: 25px;
+  font-weight: 950;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  letter-spacing: 0.08em;
+}
+.brand img {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+}
+.brand small {
+  border-left: 1px solid #5c6763;
+  padding-left: 12px;
+}
+small {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  color: var(--gold);
+}
+#select {
+  max-width: 1110px;
+  margin: auto;
+  padding: clamp(14px, 3.5vh, 40px) 3vw;
+}
+.heading,
+footer,
+.settings,
+.pad {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+h1,
+h2,
+p {
+  margin: 0;
+}
+h1 {
+  font-size: clamp(25px, 4vw, 48px);
+  line-height: 1.1;
+  letter-spacing: 0.04em;
+}
+.heading {
+  margin-bottom: 18px;
+}
+.switch {
+  display: flex;
+  gap: 4px;
+}
+button[aria-pressed='true'],
+.primary,
+.skill {
+  background: var(--gold);
+  color: #222326;
+  border-color: var(--gold);
+}
+.pick-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 20px;
+}
+#grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+.card {
+  position: relative;
+  min-width: 0;
+  padding: 0;
+  overflow: hidden;
+  display: grid;
+  grid-template-rows: 1fr auto;
+  background: radial-gradient(at 45% 65%, #53615c, #253334);
+  border: 1px solid #5c6965;
+}
+.card img {
+  width: 100%;
+  height: clamp(56px, 10vh, 102px);
+  object-fit: contain;
+  align-self: end;
+}
+.card span {
+  background: #172326eb;
+  padding: 4px 1px;
+  width: 100%;
+  font-size: clamp(11px, 1.3vw, 15px);
+}
+.card.selected {
+  outline: 2px solid var(--gold);
+  outline-offset: -2px;
+}
+.card b {
+  position: absolute;
+  left: 4px;
+  top: 4px;
+  color: #1c2524;
+  background: var(--gold);
+  font: 800 10px/1.6 monospace;
+  padding: 0 4px;
+}
+#profile {
+  margin: 0;
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) auto;
+  border: 1px solid #6e8074;
+  background: #213030;
+  border-radius: 5px;
+  overflow: hidden;
+}
+.portrait {
+  display: grid;
+  place-items: center;
+  min-height: 0;
+  background:
+    linear-gradient(0deg, #26352ecc, transparent 70%),
+    url('../../assets/bg/stage_alpine_meadow_arena.png') center 62% / cover;
+}
+#hero {
+  height: clamp(100px, 21vh, 210px);
+  max-width: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 5px 4px #26342d77);
+}
+.bio {
+  padding: 12px 18px;
+}
+.bio h2 {
+  font-size: clamp(21px, 2.5vw, 32px);
+}
+.bio p {
+  font-size: 14px;
+  line-height: 1.55;
+}
+.bio #moves {
+  font-size: 12px;
+  color: #d0dbcf;
+  margin-top: 6px;
+}
+footer {
+  border-top: 1px solid var(--line);
+  margin-top: 18px;
+  padding: 14px 0;
+}
+footer small,
+footer strong {
+  display: block;
+}
+footer strong {
+  font-size: 18px;
+}
+.primary {
+  padding: 0.7em 2.1em;
+}
+#fight {
+  max-width: 1250px;
+  margin: auto;
+  padding: 8px 2vw 14px;
+}
+.score {
+  display: grid;
+  grid-template-columns: 1fr 60px 1fr;
+  align-items: center;
+  gap: 12px;
+  padding-bottom: 6px;
+}
+.score span {
+  color: #cbd6cf;
+  font-size: 12px;
+}
+.score strong {
+  font-size: clamp(14px, 2vw, 21px);
+}
+.score #s2 {
+  text-align: right;
+}
+.hp {
+  height: 9px;
+  background: #41474a;
+  overflow: hidden;
+  border-radius: 2px;
+}
+.hp i {
+  display: block;
+  height: 100%;
+  background: #f2b44f;
+}
+.score #s2 i {
+  background: #7ed6c8;
+  margin-left: auto;
+}
+#clock {
+  text-align: center;
+  font: 800 30px monospace;
+}
+#arena {
+  height: clamp(180px, 51vh, 500px);
+  position: relative;
+  background: url('../../assets/bg/stage_alpine_meadow_arena.png') center 68% / cover;
+  border: 1px solid #68756c;
+  overflow: hidden;
+}
+#arena canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+#event,
+#result {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  pointer-events: none;
+  text-align: center;
+}
+#event {
+  top: 5%;
+  font-weight: 800;
+  color: white;
+  text-shadow: 0 1px 4px black;
+}
+#result:not(:empty) {
+  top: 35%;
+  font-size: 32px;
+  background: #142224ec;
+  padding: 8px 22px;
+  color: var(--gold);
+}
+.pad {
+  padding: 8px 0;
+}
+.group {
+  display: flex;
+  gap: 5px;
+}
+.pad button {
+  min-width: 46px;
+  height: 45px;
+  touch-action: none;
+  user-select: none;
+}
+.settings {
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  font-size: 13px;
+}
+.settings select {
+  max-width: 200px;
+  padding: 4px;
+}
+.settings button:last-child {
+  margin-left: auto;
+}
+#debug {
+  background: var(--surface);
+  margin-top: 8px;
+  padding: 8px 12px;
+  font-size: 12px;
+}
+#debug p {
+  margin-bottom: 7px;
+}
+#debug output {
+  display: block;
+  font-family: monospace;
+}
+#error {
+  background: #612c25;
+  padding: 12px;
+}
+button:active {
+  filter: brightness(1.25);
+}
+@media (max-height: 520px) and (orientation: landscape) {
+  header {
+    height: 32px;
+  }
+  .brand {
+    font-size: 18px;
+  }
+  .brand img {
+    height: 23px;
+  }
+  .heading {
+    margin-bottom: 6px;
+  }
+  #select {
+    padding: 6px 3vw;
+  }
+  .heading small {
+    display: none;
+  }
+  #grid {
+    gap: 4px;
+  }
+  .card img {
+    height: 11vh;
+  }
+  .card span {
+    padding: 1px;
+  }
+  .pick-layout {
+    gap: 12px;
+  }
+  .bio {
+    padding: 4px 10px;
+  }
+  .bio p,
+  .bio #moves {
+    font-size: 11px;
+  }
+  .portrait img#hero {
+    height: 19vh;
+  }
+  .bio h2 {
+    font-size: 18px;
+  }
+  footer {
+    margin-top: 7px;
+    padding: 5px 0;
+  }
+  footer strong {
+    font-size: 15px;
+  }
+  #fight {
+    padding: 3px 2vw;
+  }
+  #arena {
+    height: calc(100dvh - 164px);
+    min-height: 125px;
+  }
+  .pad {
+    padding: 3px 0;
+  }
+  .pad button {
+    height: 40px;
+  }
+  .score {
+    padding-bottom: 3px;
+  }
+  .settings {
+    gap: 6px;
+  }
+  .settings button,
+  header button {
+    padding: 2px 8px;
+  }
+}
+@media (max-width: 590px) and (orientation: portrait) {
+  .pick-layout {
+    grid-template-columns: 1fr;
+  }
+  .portrait {
+    display: none;
+  }
+  .pad button {
+    min-width: 0;
+    padding: 5px;
+  }
+  .group {
+    gap: 2px;
+  }
+}
+.card.selected span {
+  color: var(--paper);
+}
+#arena {
+  background-position: center 72%;
+}
