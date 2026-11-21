@@ -116,7 +116,8 @@ export class Battle {
       this._begin(p,normalMove(p.id,id),id);return;
     }
     if(edges.dash && p.y===0){
-      advanceX(p,p.facing*ROSTER[p.id].dash);
+      const dir=n.left?-1:n.right?1:p.facing;
+      advanceX(p,dir*ROSTER[p.id].dash);
       p.state='dash';p.frame=0;p.locomotion++;return;
     }
     if(edges.up && p.y===0 && !n.down){
