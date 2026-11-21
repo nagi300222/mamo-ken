@@ -18,7 +18,19 @@
       <button id="select-back" class="ghost">キャラ選択</button>
     </div>
   </header>
-  <section id="arena" aria-label="対戦画面">
+  <div id="combat-layout">
+    <aside id="stick-rail" class="control-rail">
+      <span class="rail-caption">8方向 · MOVE</span>
+      <div class="stick-area">
+        <div id="joystick" class="joystick" role="group" aria-label="8方向スティック">
+          <div class="stick-ring"></div>
+          <div id="stick-thumb" class="stick-thumb"></div>
+          <span class="stick-label">MOVE</span>
+        </div>
+      </div>
+      <span class="rail-sub">スティックで移動・コマンド</span>
+    </aside>
+    <section id="arena" aria-label="対戦画面">
     <canvas id="stage"></canvas>
     <div class="hud">
       <div class="hud-side">
@@ -55,14 +67,12 @@
         </div>
       </div>
     </div>
-    <div id="controls" class="overlay-controls" aria-label="タッチ操作">
-      <div class="stick-area">
-        <div id="joystick" class="joystick" role="group" aria-label="8方向スティック">
-          <div class="stick-ring"></div>
-          <div id="stick-thumb" class="stick-thumb"></div>
-          <span class="stick-label">MOVE</span>
-        </div>
-      </div>
+    <div id="commands-help" class="commands-help">↓↘→＋弱/強 <span>波動</span>　→↓↘＋弱/強 <span>昇龍</span>　↓↙←＋弱/強 <span>竜巻</span>　↓↘→↓↘→＋強 <span>奥義</span></div>
+    <div id="rotate" class="rotate-hint">スマホを横向きにすると遊びやすくなるよ</div>
+    </section>
+    <aside id="buttons-rail" class="control-rail">
+      <span class="rail-caption">ARCADE · ATTACK</span>
+      <div id="controls" class="overlay-controls">
       <div class="attack-pad">
         <button data-control="weak" class="attack weak" aria-label="弱攻撃">弱</button>
         <button data-control="strong" class="attack heavy" aria-label="強攻撃">強</button>
@@ -70,10 +80,11 @@
         <button data-control="roar" class="attack roar" aria-label="咆哮">咆哮</button>
         <button data-control="gyuiin" class="attack gyuiin" aria-label="ギュイーン">ギュイーン</button>
       </div>
-    </div>
-    <div id="commands-help" class="commands-help">↓↘→＋弱/強 <span>波動</span>　→↓↘＋弱/強 <span>昇龍</span>　↓↙←＋弱/強 <span>竜巻</span>　↓↘→↓↘→＋強 <span>奥義</span></div>
-    <div id="rotate" class="rotate-hint">スマホを横向きにすると遊びやすくなるよ</div>
-  </section>
+
+      </div>
+      <span class="rail-sub">弱・強＋方向で必殺技</span>
+    </aside>
+  </div>
   <footer class="footnote">
     <span>PC：方向キー・WASD／Z弱・X強・V掴・B咆哮・Nギュイーン／コマンド＋弱・強</span>
     <span id="loading-status">3Dモデル待機中</span>
