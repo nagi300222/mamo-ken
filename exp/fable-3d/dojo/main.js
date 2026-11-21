@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
-import { Battle } from './battle.js';
+import { Battle, DRIVE } from './battle.js';
 import { ROSTER, IDS, FPS, ARENA } from './balance.js';
 import { MODEL_ASSETS, MODEL_REVISION, chooseClip } from './models.js';
 import { frameTargets } from './camera-frame.js';
@@ -35,7 +35,8 @@ const actors=[null,null], bullets=new Map(), flashes=[];
 let battle=null,selected='moguzo',cpuChoice='godan',playing=false,paused=false,loading=false,lastFrame=0,acc=0,finishShown=false;
 
 const fwd=(v)=>Math.max(0,Math.min(100,v));
-function note(s){$('note').textContent=s;}
+let cueUntil=0;
+function note(message,kind=''){$('note').textContent=message;$('note').dataset.kind=kind;cueUntil=(battle?.frame??0)+48;}
 function makeChooser(){
   const r=$('roster');r.replaceChildren();
   IDS.forEach(id=>{
@@ -146,23 +147,43 @@ function syncProjectiles(){
   }
   for(const [id,mesh] of bullets)if(!alive.has(id)){scene.remove(mesh);mesh.geometry.dispose();mesh.material.dispose();bullets.delete(id);}
 }
+// 言葉と接触形状を対にし、色だけに頼らず結果を伝える。
+const cues={
+  hit:['ヒット','hit'], block:['ガード','block'], clash:['弾相殺','block'],
+  counter:['後の先','hit'], grit:['踏ん張り · HP 1','block'],
+  roar_hit:['咆哮ヒット','roar'], roar_absorb:['咆哮 · 受け止め','roar'],
+  roar_counter:['咆哮返し','roar'], roar_clash:['咆哮相殺','roar'], roar_erase:['咆哮 · 弾消し','roar'],
+  gyuiin_start:['組み合い','clinch'], gyuiin_break:['弾き戻し','clinch'],
+  gyuiin_armor:['ギュイーン · 装甲','clinch'], gyuiin_whiff:['ギュイーン · 空振り','clinch']
+};
+const cueColors={hit:0xffb77a,block:0x9fe0ff,roar:0xffcc65,clinch:0xd8a1fa};
 function vfx(){
-  for(const e of battle?.events||[]){
-    if(e.type==='move'){if(e.slot===0)note(e.name);continue;}
-    if(e.type==='roar_absorb'&&e.slot===0)note('咆哮！ 攻撃を受け止めた');
-    if(e.type==='roar_counter')note('咆哮返し！');
-    if(e.type==='roar_erase')note('咆哮で飛び道具を消した！');
-    if(e.type==='gyuiin_hit'||e.type==='gyuiin_start')note('ギュイーン！ 組み合い開始');
-    if(e.type==='gyuiin_break')note('ギュイーン！ 仕切り直し');
-    if(e.type==='gyuiin_armor')note('ギュイーンのハイパーアーマー');
-    if(!['hit','block','clash','counter','grit','ko','roar_absorb','roar_counter','roar_hit','roar_clash','roar_erase','gyuiin_hit','gyuiin_start','gyuiin_break','gyuiin_armor'].includes(e.type))continue;
-    const x=e.x??battle.fighters[e.slot||0].x,y=e.y??.42;
-    const col=e.type==='hit'?0xffd39c:e.type==='block'?0x9fdaf8:e.type.startsWith('roar')?0xffc06c:e.type.startsWith('gyuiin')?0xa98ef4:0xf7e9c3;
-    const mesh=new THREE.Mesh(new THREE.OctahedronGeometry(.11,0),new THREE.MeshBasicMaterial({color:col,transparent:true,opacity:.8,depthWrite:false}));
-    mesh.position.set(x,y,.07);scene.add(mesh);flashes.push({mesh,life:14});
-    if(e.type==='grit')note('踏ん張り！ HP1で耐えた');
-    if(e.type==='counter')note('後の先・カウンター！');
+  for(const e of battle.events){
+    if(e.type==='move'){
+      if(e.slot===0 || e.action==='roar' || e.action==='gyuiin'){
+        note(e.name,e.action==='gyuiin'?'clinch':e.action);
+      }
+      continue;
+    }
+    const cue=cues[e.type];
+    if(!cue)continue;
+    const [label,kind]=cue;
+    // hit.slot は被弾側。攻撃した側の手柄として表示する。
+    const owner=e.type==='hit'?1-e.slot:e.slot;
+    const side=owner===0?'1P':owner===1?'CPU':'';
+    note(side?side+' · '+label:label,kind);
+    if(e.x===undefined)continue;
+    // ガードは角のある盾、咆哮は輪、組み合いは角を立てた輪郭。
+    let shape;
+    if(kind==='hit')shape=new THREE.OctahedronGeometry(.10,0);
+    else if(kind==='block')shape=new THREE.RingGeometry(.085,.12,6);
+    else if(kind==='roar')shape=new THREE.RingGeometry(.12,.145,32);
+    else shape=new THREE.RingGeometry(.105,.14,4);
+    const mesh=new THREE.Mesh(shape,new THREE.MeshBasicMaterial({color:cueColors[kind],transparent:true,opacity:.85,depthWrite:false}));
+    mesh.position.set(e.x,e.y??.42,.23);
+    scene.add(mesh);flashes.push({mesh,life:14});
   }
+  if(battle.frame>=cueUntil && $('note').textContent)note('');
 }
 function animateFX(){
   for(let i=flashes.length-1;i>=0;i--){
@@ -185,6 +206,28 @@ function abilityLabel(p){
     default:return '';
   }
 }
+// 表示専用。入力を無効化せず、実際の技の成否は Battle が決める。
+function driveStatus(move,p,op){
+  if(battle.phase!=='fight')return '終了';
+  if(p.drive<DRIVE[move+'Cost'])return '不足';
+  if(p[move+'Cooldown']>0)return '回復中';
+  if(battle.clinch)return '待機';
+  // Codex #151: ギュイーンだけはヒットストップ・被弾中も発動できる。
+  if(move==='gyuiin')return p.y>.09?'空中':'発動可';
+  if(p.stop||p.stun)return '待機';
+  if(p.y>.06)return '空中';
+  const canCounter=p.action?.kind!=='roar' && op.action?.kind==='roar';
+  return p.dashF || (p.action&&!canCounter)?'待機':'発動可';
+}
+function showDriveStatus(move){
+  const status=driveStatus(move,...battle.fighters);
+  const label=$(move+'-status');
+  if(label.textContent===status)return;
+  label.textContent=status;
+  const button=label.parentElement;
+  button.toggleAttribute('data-wait',status!=='発動可');
+  button.setAttribute('aria-label',button.firstChild.textContent.trim()+'：'+status);
+}
 function hud(){
   if(!battle)return;
   for(let i=0;i<2;i++){
@@ -193,15 +236,24 @@ function hud(){
     $('ability-'+i).textContent=abilityLabel(p);
     $('hp-'+i).style.width=fwd(p.hp/r.hp*100)+'%';
     $('meter-'+i).style.width=fwd(p.super)+'%';
-    $('drive-'+i).style.width=fwd(p.drive??100)+'%';
-    $('hp-'+i).style.background=p.hp/r.hp<.25?'linear-gradient(90deg,#e46e69,#eab36b)':'linear-gradient(90deg,#72d0b0,#cce9a5)';
+    $('drive-'+i).style.width=fwd(p.drive/DRIVE.max*100)+'%';
+    $('drive-value-'+i).textContent=Math.floor(p.drive);
+    $('super-value-'+i).textContent=Math.floor(p.super);
+    $('hp-'+i).classList.toggle('low',p.hp/r.hp<.25);
   }
+  showDriveStatus('roar');
+  showDriveStatus('gyuiin');
   $('timer').textContent=String(Math.ceil(battle.time/FPS));
   $('round-message').textContent=battle.phase==='fight'?'ROUND 1':'FINISH';
   if(battle.phase==='ko'&&!finishShown) {
     finishShown=true;playing=false;$('game-over').classList.remove('hidden');
-    const w=battle.winner; $('result-title').textContent=w<0?'引き分け！':w===0?'勝利！':'敗北…';
-    $('result-description').textContent=w<0?'決着は次のラウンドへ':w===0?ROSTER[battle.fighters[0].id].name+'の勝ち！':ROSTER[battle.fighters[1].id].name+'の勝ち！';
+    const w=battle.winner;
+    const timedOut=battle.events.some(e=>e.type==='timeout');
+    $('result-reason').textContent=timedOut?'時間切れ':w<0?'ダブルKO':'KO';
+    $('result-title').textContent=w<0?'引き分け':w===0?'勝利':'敗北';
+    $('result-description').textContent=w<0?(timedOut?'残り体力が同率':'両者ダウン'):ROSTER[battle.fighters[w].id].name+'の勝ち';
+    note('');
+
   }
 }
 function setLoading(s){$('loading-status').textContent=s;}
@@ -359,5 +411,7 @@ function render(now){
   updateCamera();
   renderer.render(scene,camera);
 }
-makeChooser();resize();requestAnimationFrame(render);
+makeChooser();
+$('drive-costs').textContent=`咆哮：ドライブ${DRIVE.roarCost}消費　ギュイーン：${DRIVE.gyuiinCost}消費`;
+resize();requestAnimationFrame(render);
 window.mamoken3d={get battle(){return battle;},get actors(){return actors;},startMatch,showSelection,ROSTER,MODEL_ASSETS};
