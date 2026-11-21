@@ -147,17 +147,26 @@ export class Battle {
     if(m.isSuper)p.super=0;
     if(m.kind==='roar'){p.roarCooldown=96;p.drive-=DRIVE.roarCost;p.driveDelay=DRIVE.regenDelay;}
     if(p.id==='godan'&&m.armor)m={...m,armor:p.ability.armorCooldown===0?1:0,armorUsed:false};
-    if(p.id==='hakuma'&&p.ability.iron&&(id.startsWith('s')||m.isSuper)){
-      m={...m,damage:Math.round(m.damage*1.23)};p.ability.iron=0;
+    if(p.id==='hakuma'&&p.ability.iron&&id.startsWith('s')){
+      m={...m,damage:Math.round(m.damage*1.15)};p.ability.iron=0;
     }
-    if(p.id==='bullet'&&p.ability.charge>0&&(m.kind==='tail'||m.isSuper)){
-      m={...m,damage:Math.round(m.damage*(1+.08*p.ability.charge))};p.ability.charge=0;
+    // 溜めたチャージは尾薙ぎ（214）MAX版でだけ解放。奥義へは流用しない。
+    if(p.id==='bullet'&&m.chargeRelease&&p.ability.charge===3){
+      m={...m,damage:Math.round(m.damage*1.24)};
+      p.ability.charge=0;p.ability.lastCharge='';
     }
-    if(p.id==='takimaru'&&(m.kind==='throw'||m.kind==='clinch')&&p.ability.pressure>0){
-      m={...m,damage:Math.round(m.damage*1.2)};p.ability.pressure=0;
+    // ギュイーンは全キャラ同一。タキマルの圧は投げ間合いと微量の威力へ。
+    if(p.id==='takimaru'&&m.kind==='throw'&&p.ability.pressure>0){
+      m={...m,reach:m.reach+.07,damage:Math.round(m.damage*1.08)};
+      p.ability.pressure=0;
     }
     if(p.id==='yomikage'&&p.ability.just>0&&m.kind==='counter'){
-      m={...m,startup:Math.max(3,m.startup-2),damage:Math.round(m.damage*1.15)};p.ability.just=0;
+      m={...m,startup:Math.max(3,m.startup-2),damage:Math.round(m.damage*1.22)};p.ability.just=0;
+    }
+    // 王道型：種類の違う成功から得た根性を次の必殺1回に回す。
+    if(p.id==='moguzo'&&p.ability.gutsReady&&id.startsWith('s')){
+      m={...m,damage:Math.round(m.damage*1.07)};
+      p.ability.gutsReady=false;p.ability.gutsProgress=0;
     }
     p.action={...m,id,serial:++this.seq,started:this.frame};
     p.state=m.kind==='roar'?'roar':m.kind==='clinch'?'gyuiin':'attack';
@@ -174,13 +183,42 @@ export class Battle {
     if(p.stop||p.stun)return;
     if(edges.roar&&p.action&&p.action.kind!=='roar'&&other.action?.kind==='roar'&&p.roarCooldown===0&&p.drive>=DRIVE.roarCost){p.action=null;p.frame=0;}
 
-    // 組み合いと咆哮は技からの割り込み不可。咆哮返しは入力時の先読みで成立する。
+    // チルカ：同じ予備動作から中止（後ろ）か一拍遅らせる（下）を選べる。
+    if(p.id==='chirka'&&p.action?.feintable&&p.frame>=2&&p.frame<p.action.startup){
+      if(edges[facingBack(p)]){
+        p.action={name:'フェイント',kind:'feint',startup:1,active:1,recovery:16,
+          damage:0,reach:0,id:'feint',anim:'sp_feint_claw',serial:++this.seq};
+        p.frame=0;p.ability.feintCount++;p.dirHistory=[];p.state='feint';
+        this.events.push({type:'feint',slot:p.slot});
+        return;
+      }
+      if(edges.down&&p.action.delayable&&!p.action.delayed){
+        p.action={...p.action,startup:p.action.startup+8,recovery:p.action.recovery+2,delayed:true};
+        this.events.push({type:'delay',slot:p.slot});
+        return;
+      }
+    }
+    // 連携はヒット成功後に別のコマンド技へ1回だけ。通常技連打には派生しない。
     if(p.action){
-      if(p.id==='pisuke'&&p.ability.chase>0&&edges.dash){
-        p.action=null;p.frame=0;p.ability.chase=0;moveX(p,p.facing*ROSTER[p.id].dash);
+      if(p.id==='pisuke'&&p.ability.chase>0&&p.ability.chaseCooldown===0&&edges.dash){
+        p.action=null;p.frame=0;p.ability.chase=0;p.ability.chaseCooldown=52;
+        const dir=n.left?-1:n.right?1:p.facing;
+        moveX(p,dir*ROSTER[p.id].dash);
         this.events.push({type:'chase',slot:p.slot});
-      } else if(p.id==='dark_moguzo'&&p.ability.dark>0&&(edges.weak||edges.strong)){
-        const id=edges.weak?'stand_weak':'stand_heavy';this._begin(p,normalMove(p.id,id),id);
+      } else if(p.id==='dark_moguzo'&&p.ability.dark>0&&!p.ability.darkUsed&&(edges.weak||edges.strong)){
+        const cmd=readCommand(p.dirHistory,edges.strong?'strong':'weak',this.frame,false);
+        const idx={qcf:0,dp:1,qcb:2}[cmd];
+        if(idx!==undefined){
+          const nextId='s'+(idx+1);
+          if(nextId!==p.action.id){
+            const next={...specialMove(p.id,idx)};
+            next.damage=Math.round(next.damage*.72);
+            if(this._begin(p,next,nextId)){
+              p.ability.darkUsed=true;p.ability.dark=0;p.ability.darkCooldown=50;
+              this.events.push({type:'dark_chain',slot:p.slot});
+            }
+          }
+        }
       }
       return;
     }
@@ -206,6 +244,16 @@ export class Battle {
     }
     if(edges.dash&&p.y===0){
       p.dashDir=n.left?-1:n.right?1:p.facing;p.dashF=17;
+      // ヨミカゲ：相手の動作を見切った瞬間に「外へ」ステップできれば返し窓。
+      const threat=other.action;
+      const safeWindow=threat&&other.frame>=Math.max(0,threat.startup-5)&&
+        other.frame<=threat.startup+threat.active&&
+        Math.abs(other.x-p.x)<(threat.reach||.47)+.18;
+      if(p.id==='yomikage'&&safeWindow&&
+         p.dashDir===(other.x>p.x?-1:1)){
+        p.ability.just=43;p.ability.evadeF=7;
+        this.events.push({type:'just_step',slot:p.slot});
+      }
       moveX(p,p.dashDir*ROSTER[p.id].dash/18);
       p.state='dash';p.frame=0;p.locomotion++;return;
     }
@@ -330,7 +378,7 @@ export class Battle {
         effect:m.effect||'earth',level:m.level||'mid'});
       this.events.push({type:'projectile',slot:p.slot});
     }
-    if(active(p)&&!p.used&&m.kind!=='projectile'&&this._contact(p,op,m)){
+    if(active(p)&&!p.used&&!['projectile','feint','counter'].includes(m.kind)&&this._contact(p,op,m)){
       p.used=true;this.pending.push({p,op,m,d:Math.abs(p.x-op.x)});
     }
     if(p.frame>=total(m)){p.action=null;p.frame=0;p.state=p.y>.02?'jump':'idle';}
