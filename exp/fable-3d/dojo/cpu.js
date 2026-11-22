@@ -13,11 +13,11 @@ export function cpuInput(g,p,op,level=2){
   const distance=Math.abs(op.x-p.x);
   const i={};
   if(p.ko||p.stun>0||p.stop>0||p.action)return i;
-  const seed=hash(p.id);
+  const seed=(hash(p.id)+(g.cpuSeed??0)*7919)>>>0;
   // 防御は技の予備動作が反応時間ぶん経過した後のみ。
   // 完全ガードにはならず、レベル別に見逃しを残す。
-  const visible=op.action&&op.action.frame>=cfg.reactionFrames&&
-    op.action.frame<op.action.startup+op.action.active;
+  const visible=op.action&&op.frame>=cfg.reactionFrames&&
+    op.frame<op.action.startup+op.action.active;
   if(visible&&op.action.kind!=='throw'&&op.action.kind!=='clinch'&&
      distance<Math.max(.83,(op.action.reach||.45)+.27)){
     const chance=((seed+op.action.serial*37)%100)/100;
@@ -40,7 +40,7 @@ export function cpuInput(g,p,op,level=2){
     if(level>=2&&t%(cfg.attackPeriod*2)===17)i.special1=true;
     return i;
   }
-  const beat=cfg.attackPeriod;
+  const beat=cfg.attackPeriod+(g.cpuSeed??0)%7;
   const phase=seed%Math.max(1,Math.floor(beat/4));
   // 間合いを測る時間を残し、コンボ状況を無視した機械的な連打を抑える。
   if(t%beat===(phase+9)%beat)i.weak=true;

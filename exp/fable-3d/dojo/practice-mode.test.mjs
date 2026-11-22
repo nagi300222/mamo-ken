@@ -6,7 +6,7 @@ import {Battle} from './battle.js';
 import {FPS,ARENA,ROSTER} from './balance.js';
 test('practice dummy stop / guard low / CPU all work',()=>{
  const p=createPracticeController(),g=new Battle('moguzo','godan');
- assert.deepEqual(DUMMY_MODES,['stand','guard','cpu']);
+ assert.deepEqual(DUMMY_MODES,['stand','guard','guard_stand','guard_crouch','reversal','cpu']);
  assert.deepEqual(p.dummyInput(g),{});
  p.setDummy('guard');assert.deepEqual(p.dummyInput(g),{right:true,down:false});
  g.fighters[0].action={level:'low'};assert.deepEqual(p.dummyInput(g),{right:true,down:true});
@@ -20,14 +20,14 @@ test('HP, drive, super and timer refill but hitstun and events remain',()=>{
  p.prepare(g);assert.equal(g.time,FPS*ARENA.roundSeconds);
  assert.equal(g.fighters[0].hp,ROSTER.pisuke.hp);
  assert.equal(g.fighters[1].stun,14);
- g.frame=12;g.events=[{type:'hit',slot:1,damage:70}];p.after(g);
- assert.deepEqual(p.stats,{hits:1,damage:70,lastDamage:70});
- g.frame=22;g.events=[{type:'hit',slot:1,damage:23}];p.after(g);
- assert.deepEqual(p.stats,{hits:2,damage:93,lastDamage:23});
+ g.frame=12;g.events=[{type:'hit',slot:1,damage:70,comboHits:1}];p.after(g);
+ assert.deepEqual(p.stats,{hits:1,damage:70,lastDamage:70,advantage:null});
+ g.frame=22;g.events=[{type:'hit',slot:1,damage:23,comboHits:2}];p.after(g);
+ assert.deepEqual(p.stats,{hits:2,damage:93,lastDamage:23,advantage:null});
  g.phase='ko';g.winner=0;g.fighters[1].ko=true;g.frame=100;
- g.events=[{type:'hit',slot:1,damage:20}];p.after(g);
+ g.events=[{type:'hit',slot:1,damage:20,comboHits:1}];p.after(g);
  assert.equal(g.phase,'fight');assert.equal(g.fighters[1].ko,false);
- assert.deepEqual(p.stats,{hits:1,damage:20,lastDamage:20});
+ assert.deepEqual(p.stats,{hits:1,damage:20,lastDamage:20,advantage:null});
 });
 test('reset positions without GLB reload and preserve Bullet tail source',()=>{
  const p=createPracticeController(),g=new Battle('bullet','chirka');

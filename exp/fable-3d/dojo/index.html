@@ -81,10 +81,10 @@
     <div id="showtime-banner" class="showtime-banner" aria-live="off" aria-hidden="true"></div>
     <div id="practice-panel" class="practice-panel" hidden>
       <strong>PRACTICE</strong>
-      <label>相手 <select id="practice-dummy" aria-label="練習相手の行動"><option value="stand">停止</option><option value="guard">ガード</option><option value="cpu">CPU</option></select></label>
+      <label>相手 <select id="practice-dummy" aria-label="練習相手の行動"><option value="stand">停止</option><option value="guard">自動ガード</option><option value="guard_stand">立ガード</option><option value="guard_crouch">屈ガード</option><option value="reversal">反撃（弱）</option><option value="cpu">CPU</option></select></label>
       <span><b id="practice-hits">0</b> HITS</span>
       <span><b id="practice-damage">0</b> DMG</span>
-      <small>直近 <b id="practice-last">0</b></small>
+      <small>直近 <b id="practice-last">0</b> / 硬直差 <b id="practice-advantage">—</b>F</small>
       <button id="practice-reset" class="ghost" type="button">位置リセット</button>
     </div>
     <div id="game-over" class="modal hidden">

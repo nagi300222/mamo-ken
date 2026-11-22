@@ -3,6 +3,8 @@ name: MamoKen v15 54 authored normal attack rigs
 on:
   push:
     branches:
+      - feat/mamoken-v151-normal-balance
+      - feat/mamoken-v151-reviewed-integration
       - feat/mamoken-v15-54-distinct-normal-clips
   pull_request:
     branches:

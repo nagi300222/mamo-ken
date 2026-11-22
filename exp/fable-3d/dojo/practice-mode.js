@@ -1,9 +1,9 @@
 // Practice uses the real Battle: only resources / time are replenished.
 import {ROSTER,FPS,ARENA} from './balance.js';
 import {Battle} from './battle.js';
-export const DUMMY_MODES=Object.freeze(['stand','guard','cpu']);
+export const DUMMY_MODES=Object.freeze(['stand','guard','guard_stand','guard_crouch','reversal','cpu']);
 export function createPracticeController(){
-  let dummy='stand',hits=0,damage=0,lastDamage=0,lastFrame=-9999;
+  let dummy='stand',hits=0,damage=0,lastDamage=0,lastFrame=-9999,advantage=null,pending=null;
   function setDummy(mode){if(!DUMMY_MODES.includes(mode))throw Error('invalid dummy '+mode);dummy=mode;return dummy;}
   function prepare(b){
     if(!b)return;
@@ -14,14 +14,22 @@ export function createPracticeController(){
     if(dummy==='cpu')return null;
     if(dummy==='stand')return {};
     const p=b.fighters[1],a=b.fighters[0];
-    return {[p.facing===1?'left':'right']:true,down:a.action?.level==='low'};
+    if(dummy==='reversal'&&!p.stun&&!p.stop&&!p.action)return p.prev.weak?{}:{weak:true};
+    return {[p.facing===1?'left':'right']:true,down:dummy==='guard_crouch'||(dummy==='guard'&&a.action?.level==='low')};
   }
   function after(b){
     if(!b)return;
+    const ready=p=>!p.action&&!p.stun&&!p.stop&&!p.dashF;
+    if(pending){
+      for(let i=0;i<2;i++)if(pending.ready[i]===null&&ready(b.fighters[i]))pending.ready[i]=b.frame;
+      if(pending.ready.every(f=>f!==null)){advantage=pending.ready[1]-pending.ready[0];pending=null;}
+      else if(b.events.some(e=>e.type==='cancel'||e.type==='move'))pending=null;
+    }
     for(const e of b.events){
+      if(['hit','block'].includes(e.type)&&e.slot===1){pending={ready:[null,null]};advantage=null;}
       if(!['hit','gyuiin_hit'].includes(e.type)||e.slot!==1||!(e.damage>0))continue;
-      if(b.frame-lastFrame>42){hits=0;damage=0;}
-      hits++;damage+=e.damage;lastDamage=e.damage;lastFrame=b.frame;
+      if((e.comboHits??1)<=1){hits=0;damage=0;}
+      hits=e.comboHits??1;damage+=e.damage;lastDamage=e.damage;lastFrame=b.frame;
     }
     for(const p of b.fighters){p.hp=ROSTER[p.id].hp;p.drive=100;p.super=100;p.driveDelay=0;p.ko=false;}
     if(b.phase==='ko'){b.phase='fight';b.winner=null;}
@@ -32,7 +40,7 @@ export function createPracticeController(){
     if(old.tailTipSamples)next.setTailTipPath(old.tailTipSamples);
     clear();prepare(next);return next;
   }
-  function clear(){hits=0;damage=0;lastDamage=0;lastFrame=-9999;}
+  function clear(){hits=0;damage=0;lastDamage=0;lastFrame=-9999;advantage=null;pending=null;}
   return {setDummy,prepare,dummyInput,after,reset,clear,get dummy(){return dummy;},
-    get stats(){return {hits,damage,lastDamage};}};
+    get stats(){return {hits,damage,lastDamage,advantage};}};
 }

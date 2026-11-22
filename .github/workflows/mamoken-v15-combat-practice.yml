@@ -3,6 +3,8 @@ name: MamoKen v15 Practice + Cancel regression
 on:
   push:
     branches:
+      - feat/mamoken-v151-normal-balance
+      - feat/mamoken-v151-reviewed-integration
       - feat/mamoken-v15-combat-cancels
       - feat/mamoken-v15-practice-mode
   pull_request:
