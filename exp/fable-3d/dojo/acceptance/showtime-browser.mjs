@@ -193,6 +193,23 @@ try{
     assert.equal(await page.locator('#stage').evaluate(el=>el.parentElement.id),'arena');
     console.log('Authored clips and hit-confirmed KO verified:',id);
   }
+  if(!authoredFixture){
+    const recovery=await browser.newPage({viewport:{width:852,height:393}});
+    const recoveryErrors=[];
+    recovery.on('pageerror',error=>recoveryErrors.push(error.message));
+    await recovery.route('**/cinematic/v14/**/*.glb',route=>route.abort());
+    await recovery.goto(base);
+    await recovery.waitForFunction(()=>window.mamoken3d);
+    await recovery.locator('#start').click();
+    await recovery.waitForFunction(()=>document.getElementById('loading-status').textContent.includes('失敗'));
+    assert.equal(await recovery.locator('#selection').isVisible(),true);
+    assert.equal(await recovery.locator('#start').isEnabled(),true);
+    await recovery.unroute('**/cinematic/v14/**/*.glb');
+    await recovery.locator('#start').click();
+    await recovery.waitForFunction(()=>mamoken3d.battle?.frame>0,undefined,{timeout:30000});
+    assert.deepEqual(recoveryErrors,[]);
+    await recovery.close();
+  }
   assert.deepEqual(errors,[]);
   console.log('Cinematic browser PASS: super whiff no movie, specials dramatic, confirmed super fullscreen scene, freeze, skip, KO defer, SFX/BGM/FX, Bullet HUD');
 }catch(e){

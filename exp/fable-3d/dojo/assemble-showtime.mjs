@@ -1,5 +1,5 @@
 import { readFile, readdir, writeFile } from 'node:fs/promises';
-import { IDS } from './balance.js';
+import { IDS, ROSTER, FPS } from './balance.js';
 const base = new URL('../cinematic/v14/', import.meta.url);
 const json = async url => JSON.parse(await readFile(url, 'utf8'));
 const files = await readdir(new URL('manifest/', base));
@@ -10,11 +10,11 @@ for (const id of IDS) {
   const moves = [];
   if (files.includes(id + '_ultimate.json')) {
     for (const moveId of ['s1','s2','s3']) {
-      const name = moveId + '_v14', clip = meta.clips[name];
+      const name = meta.command_map[{s1:'236',s2:'623',s3:'214'}[moveId]], clip = meta.clips[name];
       if (!clip) throw new Error('Missing authored special: ' + id + '/' + name);
       moves.push({
         schemaVersion: 1, characterId: id, moveId,
-        contactSeconds: (clip.contact_pose_frame ?? clip.contact_frame) / (clip.fps ?? 60),
+        contactSeconds: (clip.contact_pose_frame ?? clip.contact_frame ?? ROSTER[id].specials[Number(moveId[1])-1].startup) / (clip.fps ?? FPS),
         animationSources: { attacker: { glb: model, clip: name } },
         cueTrack: [{ at: 0, type: 'sfx', key: 'special' }]
       });

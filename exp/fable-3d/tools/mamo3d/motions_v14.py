@@ -507,4 +507,5 @@ def make(cid, name):
     return _lead(clip) if name in SPECIALS else clip
 def command_map(cid):
     """v14 の見た目差し替え案。models.js の chooseClip は command_map を最優先で引くので、この対応だけで新クリップが再生される"""
-    return {'236': 's1_v14', '623': 's2_v14', '214': 's3_v14', '236236': 'ult_v14'} if cid in SPECIALS['s1_v14'] else {}
+    m = {'236': 's1_v14', '623': 's2_v14', '214': 's3_v14', '236236': 'ult_v14'} if cid in SPECIALS['s1_v14'] else {}
+    return {k: v for k, v in m.items() if k not in _B.COMMAND_KEEP.get(cid, ())}

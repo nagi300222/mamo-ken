@@ -152,6 +152,8 @@ function renderUltimateMovie(delta){
     if(movieLastPhase!==frame.shot){
       movieLastPhase=frame.shot;
       movieLayer.dataset.phase=frame.shot;
+    }
+    if($('cinematic-subtitle').textContent!==frame.caption){
       $('cinematic-subtitle').textContent=frame.caption;
     }
     animateFX(movieFlashes,delta*FPS);
@@ -399,7 +401,9 @@ async function createActor(id,slot) {
       return clip;
     });
   }catch(error){
-    console.warn(id+' の専用技素材が読めません',error);
+    mixer.stopAllAction();mixer.uncacheRoot(gltf.scene);
+    disposable(gltf.scene);
+    throw new Error(id+' の専用技素材を読み込めません: '+error.message);
   }
   for(const [moveId,entry] of Object.entries(showtime)){
     if(entry.start)entry.action=mixer.clipAction(entry.start);

@@ -2509,6 +2509,18 @@
     {
       "glb": "moguzo_v14.glb",
       "clip": "cinv_takimaru"
+    },
+    {
+      "glb": "moguzo_v14.glb",
+      "clip": "cinv_yomikage"
+    },
+    {
+      "glb": "moguzo_v14.glb",
+      "clip": "cinv_bullet"
+    },
+    {
+      "glb": "moguzo_v14.glb",
+      "clip": "cinv_dark_moguzo"
     }
   ]
 }

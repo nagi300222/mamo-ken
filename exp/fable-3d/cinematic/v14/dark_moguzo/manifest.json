@@ -1,5 +1,2464 @@
 {
-  "moves": [],
+  "moves": [
+    {
+      "schemaVersion": 1,
+      "characterId": "dark_moguzo",
+      "moveId": "s1",
+      "contactSeconds": 0.15,
+      "animationSources": {
+        "attacker": {
+          "glb": "dark_moguzo_v14.glb",
+          "clip": "s1_v14"
+        }
+      },
+      "cueTrack": [
+        {
+          "at": 0,
+          "type": "sfx",
+          "key": "special"
+        }
+      ]
+    },
+    {
+      "schemaVersion": 1,
+      "characterId": "dark_moguzo",
+      "moveId": "s2",
+      "contactSeconds": 0.05,
+      "animationSources": {
+        "attacker": {
+          "glb": "dark_moguzo_v14.glb",
+          "clip": "s2_v14"
+        }
+      },
+      "cueTrack": [
+        {
+          "at": 0,
+          "type": "sfx",
+          "key": "special"
+        }
+      ]
+    },
+    {
+      "schemaVersion": 1,
+      "characterId": "dark_moguzo",
+      "moveId": "s3",
+      "contactSeconds": 0.08333333333333333,
+      "animationSources": {
+        "attacker": {
+          "glb": "dark_moguzo_v14.glb",
+          "clip": "s3_v14"
+        }
+      },
+      "cueTrack": [
+        {
+          "at": 0,
+          "type": "sfx",
+          "key": "special"
+        }
+      ]
+    },
+    {
+      "schemaVersion": 1,
+      "contractRevision": "v14-wave1-10s",
+      "directionSource": "docs/mamoken-showtime-v14/ULTIMATE_10S_DIRECTION.md",
+      "characterId": "dark_moguzo",
+      "moveId": "ultimate",
+      "displayName": "暗連・黒天烈掌",
+      "trigger": "confirmed_unblocked_ultimate_hit",
+      "runtime": "threejs",
+      "durationSeconds": 10,
+      "fps": 60,
+      "concept": "喉をつかんだ間合いのまま、闇の中で八発。揺れる相手の前でゆっくり拳を沈め、真上から一撃。倒れた相手を残して背を向ける。",
+      "coordinateSystem": {
+        "origin": "命中時の両者の中点・地面",
+        "x": "攻撃側の向いている方向が +X",
+        "y": "上",
+        "z": "対戦カメラ側が +Z",
+        "unit": "m（GLBの単位）",
+        "mirror": "攻撃側が左向き（-X向き）のときはムービー全体を Y 軸まわりに 180 度回す（x・z の符号反転、rotY+180、rotZ・rotX の符号反転。カメラ roll はそのまま）"
+      },
+      "stage": {
+        "contactDistance": 0.46,
+        "backdrop": 1050648,
+        "fog": 1050648,
+        "fogNear": 4,
+        "fogFar": 14,
+        "sky": 13150463,
+        "ground": 1444898,
+        "ambient": 1,
+        "key": 14731519,
+        "keyPower": 2,
+        "rim": 10109183,
+        "rimPower": 3,
+        "floor": 2760760,
+        "mountain": 1445410,
+        "post": 3154494,
+        "accent": 12482815,
+        "accentCss": "#be78ff"
+      },
+      "animationSources": {
+        "attacker": {
+          "glb": "dark_moguzo_v14.glb",
+          "motions": "dark_moguzo/dark_moguzo_v14_motions.json",
+          "clip": "cin_dark_moguzo_atk"
+        },
+        "target": {
+          "clip": "cinv_dark_moguzo"
+        }
+      },
+      "inGameStartClip": {
+        "clip": "ult_v14",
+        "note": "命中前の始動。ここまでは通常の対戦カメラ。命中が確定した次のフレームでムービー t=0 へ"
+      },
+      "actorTracks": {
+        "attacker": {
+          "segments": [
+            {
+              "start": 0,
+              "clip": "cin_dark_moguzo_atk"
+            }
+          ],
+          "pivotHeight": 0.45,
+          "root": [
+            {
+              "t": 0,
+              "pos": [
+                -0.23,
+                0,
+                0
+              ],
+              "rotY": 90
+            },
+            {
+              "t": 1.2,
+              "pos": [
+                -0.21000000000000002,
+                0,
+                0
+              ],
+              "rotY": 90,
+              "ease": "linear"
+            },
+            {
+              "t": 4.2,
+              "pos": [
+                -0.13,
+                0,
+                0
+              ],
+              "rotY": 90,
+              "ease": "linear"
+            },
+            {
+              "t": 6.2,
+              "pos": [
+                -0.17,
+                0,
+                0
+              ],
+              "rotY": 90,
+              "ease": "inOutQuad"
+            },
+            {
+              "t": 6.3,
+              "pos": [
+                -0.07,
+                0,
+                0
+              ],
+              "rotY": 90,
+              "ease": "inQuad"
+            },
+            {
+              "t": 8.4,
+              "pos": [
+                -0.07,
+                0,
+                0
+              ],
+              "rotY": 90,
+              "ease": "hold"
+            },
+            {
+              "t": 8.8,
+              "pos": [
+                -0.07,
+                0,
+                0.02
+              ],
+              "rotY": 196,
+              "ease": "inOutCubic"
+            },
+            {
+              "t": 9.7,
+              "pos": [
+                -0.21000000000000002,
+                0,
+                -0.5
+              ],
+              "rotY": 196,
+              "ease": "linear"
+            },
+            {
+              "t": 10,
+              "pos": [
+                -0.21000000000000002,
+                0,
+                -0.5
+              ],
+              "rotY": 196
+            }
+          ]
+        },
+        "target": {
+          "segments": [
+            {
+              "start": 0,
+              "clip": "cinv_dark_moguzo"
+            }
+          ],
+          "pivotHeight": 0.45,
+          "root": [
+            {
+              "t": 0,
+              "pos": [
+                0.23,
+                0,
+                0
+              ],
+              "rotY": -90
+            },
+            {
+              "t": 1.2,
+              "pos": [
+                0.3,
+                0,
+                0
+              ],
+              "rotY": -90,
+              "ease": "outCubic"
+            },
+            {
+              "t": 1.52,
+              "pos": [
+                0.32,
+                0,
+                0.03
+              ],
+              "rotY": -90,
+              "ease": "outCubic"
+            },
+            {
+              "t": 1.84,
+              "pos": [
+                0.33999999999999997,
+                0,
+                -0.03
+              ],
+              "rotY": -90,
+              "ease": "outCubic"
+            },
+            {
+              "t": 2.32,
+              "pos": [
+                0.36,
+                0,
+                0.04
+              ],
+              "rotY": -90,
+              "ease": "outCubic"
+            },
+            {
+              "t": 2.64,
+              "pos": [
+                0.38,
+                0,
+                0
+              ],
+              "rotY": -90,
+              "ease": "outCubic"
+            },
+            {
+              "t": 3.1,
+              "pos": [
+                0.4,
+                0,
+                0
+              ],
+              "rotY": -90,
+              "ease": "outCubic"
+            },
+            {
+              "t": 3.36,
+              "pos": [
+                0.42,
+                0,
+                -0.04
+              ],
+              "rotY": -90,
+              "ease": "outCubic"
+            },
+            {
+              "t": 3.8,
+              "pos": [
+                0.44,
+                0,
+                0.05
+              ],
+              "rotY": -90,
+              "ease": "outCubic"
+            },
+            {
+              "t": 4.08,
+              "pos": [
+                0.45999999999999996,
+                0,
+                0
+              ],
+              "rotY": -90,
+              "ease": "outCubic"
+            },
+            {
+              "t": 6.3,
+              "pos": [
+                0.48,
+                0,
+                0
+              ],
+              "rotY": -90,
+              "ease": "linear"
+            },
+            {
+              "t": 7,
+              "pos": [
+                0.5,
+                0,
+                0
+              ],
+              "rotY": -90,
+              "ease": "linear"
+            },
+            {
+              "t": 10,
+              "pos": [
+                0.5,
+                0,
+                0
+              ],
+              "rotY": -90
+            }
+          ]
+        }
+      },
+      "shots": [
+        {
+          "id": "01-darkness",
+          "title": "闇が広がる",
+          "start": 0,
+          "end": 1.2,
+          "intent": "喉をつかんだ手元から、ダークモグゾーの目へ。足元から紫の霧が広がり、画面の周りが落ちる",
+          "actorPose": {
+            "attacker": "喉をつかんだまま腰を落とす",
+            "target": "のけぞったまま動けない"
+          },
+          "camera": {
+            "rig": "grip-to-eyes",
+            "projection": "perspective",
+            "position": {
+              "anchor": "target.chest",
+              "offset": [
+                -0.3,
+                0.06,
+                1.15
+              ]
+            },
+            "lookAt": {
+              "anchor": "target.chest",
+              "offset": [
+                -0.14,
+                0.04,
+                0
+              ]
+            },
+            "fov": 34,
+            "rollDeg": -6,
+            "easing": "inOutCubic",
+            "move": "つかんだ手から目へ寄せる",
+            "keys": [
+              {
+                "t": 0,
+                "pos": {
+                  "anchor": "target.chest",
+                  "offset": [
+                    -0.3,
+                    0.06,
+                    1.15
+                  ]
+                },
+                "look": {
+                  "anchor": "target.chest",
+                  "offset": [
+                    -0.14,
+                    0.04,
+                    0
+                  ]
+                },
+                "fov": 34,
+                "roll": -6,
+                "ease": "inOutCubic"
+              },
+              {
+                "t": 0.4,
+                "pos": {
+                  "anchor": "attacker.pawR",
+                  "offset": [
+                    -0.1,
+                    0.02,
+                    0.7
+                  ]
+                },
+                "look": {
+                  "anchor": "attacker.pawR",
+                  "offset": [
+                    0,
+                    0,
+                    0
+                  ]
+                },
+                "fov": 28,
+                "roll": 4,
+                "ease": "outExpo"
+              },
+              {
+                "t": 1.2,
+                "pos": {
+                  "anchor": "attacker.head",
+                  "offset": [
+                    0.3,
+                    0.02,
+                    0.62
+                  ]
+                },
+                "look": {
+                  "anchor": "attacker.head",
+                  "offset": [
+                    0.02,
+                    0,
+                    0
+                  ]
+                },
+                "fov": 24,
+                "roll": 8,
+                "ease": "inOutCubic"
+              }
+            ]
+          },
+          "fxCues": [
+            {
+              "at": 0,
+              "key": "flash",
+              "type": "vfx",
+              "dur": 0.1,
+              "opacity": 0.35,
+              "color": 11563263
+            },
+            {
+              "at": 0,
+              "key": "shake",
+              "type": "shake",
+              "dur": 0.2,
+              "amp": 0.03
+            },
+            {
+              "at": 0.2,
+              "key": "dim",
+              "type": "vfx",
+              "dur": 4.1,
+              "opacity": 0.24,
+              "color": 393740
+            },
+            {
+              "at": 0.2,
+              "key": "poison_mist",
+              "type": "vfx",
+              "offset": [
+                0.05,
+                0.3,
+                0
+              ],
+              "radius": 0.8,
+              "count": 22,
+              "dur": 4.2,
+              "color": 8006872
+            },
+            {
+              "at": 0.3,
+              "key": "shock_ring",
+              "type": "vfx",
+              "anchor": "attacker.root",
+              "radius": 1.6,
+              "dur": 0.8,
+              "color": 10109183
+            }
+          ],
+          "sfxCues": [
+            {
+              "at": 0,
+              "key": "grab"
+            },
+            {
+              "at": 0.3,
+              "key": "dark_aura"
+            }
+          ]
+        },
+        {
+          "id": "02-rush-a",
+          "title": "連打 1・2",
+          "start": 1.2,
+          "end": 2,
+          "intent": "手前側の寄り。左突き、右突き。相手が左右へ弾かれる",
+          "actorPose": {
+            "attacker": "左突き→右突き",
+            "target": "左へ、右へ弾かれる"
+          },
+          "camera": {
+            "rig": "rush-near-side",
+            "projection": "perspective",
+            "position": {
+              "anchor": "stage",
+              "offset": [
+                0.06,
+                0.34,
+                0.95
+              ]
+            },
+            "lookAt": {
+              "anchor": "target.chest",
+              "offset": [
+                -0.12,
+                0,
+                0
+              ]
+            },
+            "fov": 34,
+            "rollDeg": -8,
+            "easing": "linear",
+            "move": "固定の寄り。打撃で揺れる",
+            "keys": [
+              {
+                "t": 1.2,
+                "pos": {
+                  "anchor": "stage",
+                  "offset": [
+                    0.06,
+                    0.34,
+                    0.95
+                  ]
+                },
+                "look": {
+                  "anchor": "target.chest",
+                  "offset": [
+                    -0.12,
+                    0,
+                    0
+                  ]
+                },
+                "fov": 34,
+                "roll": -8,
+                "ease": "inOutCubic"
+              },
+              {
+                "t": 2,
+                "pos": {
+                  "anchor": "stage",
+                  "offset": [
+                    0.08,
+                    0.34,
+                    0.9
+                  ]
+                },
+                "look": {
+                  "anchor": "target.chest",
+                  "offset": [
+                    -0.12,
+                    0,
+                    0
+                  ]
+                },
+                "fov": 33,
+                "roll": -8,
+                "ease": "linear"
+              }
+            ]
+          },
+          "fxCues": [
+            {
+              "at": 1.4,
+              "key": "hitstop",
+              "type": "hitstop",
+              "dur": 0.1,
+              "strength": "light"
+            },
+            {
+              "at": 1.4,
+              "key": "impact_burst",
+              "type": "vfx",
+              "anchor": "target.chest",
+              "offset": [
+                -0.05,
+                0.02,
+                0.06
+              ],
+              "size": 0.42,
+              "color": 14199039
+            },
+            {
+              "at": 1.4,
+              "key": "flash",
+              "type": "vfx",
+              "dur": 0.07,
+              "opacity": 0.28,
+              "color": 11563263
+            },
+            {
+              "at": 1.4,
+              "key": "shake",
+              "type": "shake",
+              "dur": 0.14,
+              "amp": 0.03
+            },
+            {
+              "at": 1.72,
+              "key": "hitstop",
+              "type": "hitstop",
+              "dur": 0.1,
+              "strength": "light"
+            },
+            {
+              "at": 1.72,
+              "key": "impact_burst",
+              "type": "vfx",
+              "anchor": "target.chest",
+              "offset": [
+                -0.05,
+                -0.02,
+                0.06
+              ],
+              "size": 0.42,
+              "color": 14199039
+            },
+            {
+              "at": 1.72,
+              "key": "flash",
+              "type": "vfx",
+              "dur": 0.07,
+              "opacity": 0.28,
+              "color": 11563263
+            },
+            {
+              "at": 1.72,
+              "key": "shake",
+              "type": "shake",
+              "dur": 0.14,
+              "amp": 0.03
+            }
+          ],
+          "sfxCues": [
+            {
+              "at": 1.4,
+              "key": "ult_hit_rapid"
+            },
+            {
+              "at": 1.72,
+              "key": "ult_hit_rapid"
+            }
+          ]
+        },
+        {
+          "id": "03-rush-b",
+          "title": "連打 3・4",
+          "start": 2,
+          "end": 2.8,
+          "intent": "反対側（奥側）へ切り替え、傾きも逆。左の鉤突き、右の低い突き。相手が折れる",
+          "actorPose": {
+            "attacker": "左の鉤突き→沈んで右の低い突き",
+            "target": "横へ流れる→腹を突かれて折れる"
+          },
+          "camera": {
+            "rig": "rush-far-side",
+            "projection": "perspective",
+            "position": {
+              "anchor": "stage",
+              "offset": [
+                0.1,
+                0.3,
+                -0.95
+              ]
+            },
+            "lookAt": {
+              "anchor": "target.chest",
+              "offset": [
+                -0.12,
+                -0.02,
+                0
+              ]
+            },
+            "fov": 34,
+            "rollDeg": 9,
+            "easing": "linear",
+            "move": "奥側から。固定の寄り",
+            "keys": [
+              {
+                "t": 2,
+                "pos": {
+                  "anchor": "stage",
+                  "offset": [
+                    0.1,
+                    0.3,
+                    -0.95
+                  ]
+                },
+                "look": {
+                  "anchor": "target.chest",
+                  "offset": [
+                    -0.12,
+                    -0.02,
+                    0
+                  ]
+                },
+                "fov": 34,
+                "roll": 9,
+                "ease": "inOutCubic"
+              },
+              {
+                "t": 2.8,
+                "pos": {
+                  "anchor": "stage",
+                  "offset": [
+                    0.12,
+                    0.28,
+                    -0.9
+                  ]
+                },
+                "look": {
+                  "anchor": "target.chest",
+                  "offset": [
+                    -0.12,
+                    -0.04,
+                    0
+                  ]
+                },
+                "fov": 33,
+                "roll": 9,
+                "ease": "linear"
+              }
+            ]
+          },
+          "fxCues": [
+            {
+              "at": 2.2,
+              "key": "hitstop",
+              "type": "hitstop",
+              "dur": 0.1,
+              "strength": "light"
+            },
+            {
+              "at": 2.2,
+              "key": "impact_burst",
+              "type": "vfx",
+              "anchor": "target.chest",
+              "offset": [
+                -0.05,
+                0.12,
+                0.06
+              ],
+              "size": 0.42,
+              "color": 14199039
+            },
+            {
+              "at": 2.2,
+              "key": "flash",
+              "type": "vfx",
+              "dur": 0.07,
+              "opacity": 0.28,
+              "color": 11563263
+            },
+            {
+              "at": 2.2,
+              "key": "shake",
+              "type": "shake",
+              "dur": 0.14,
+              "amp": 0.03
+            },
+            {
+              "at": 2.52,
+              "key": "hitstop",
+              "type": "hitstop",
+              "dur": 0.1,
+              "strength": "light"
+            },
+            {
+              "at": 2.52,
+              "key": "impact_burst",
+              "type": "vfx",
+              "anchor": "target.chest",
+              "offset": [
+                -0.05,
+                -0.14,
+                0.06
+              ],
+              "size": 0.42,
+              "color": 14199039
+            },
+            {
+              "at": 2.52,
+              "key": "flash",
+              "type": "vfx",
+              "dur": 0.07,
+              "opacity": 0.28,
+              "color": 11563263
+            },
+            {
+              "at": 2.52,
+              "key": "shake",
+              "type": "shake",
+              "dur": 0.14,
+              "amp": 0.03
+            }
+          ],
+          "sfxCues": [
+            {
+              "at": 2.2,
+              "key": "ult_hit_rapid"
+            },
+            {
+              "at": 2.52,
+              "key": "ult_hit_rapid"
+            }
+          ]
+        },
+        {
+          "id": "04-rush-c",
+          "title": "連打 5・6",
+          "start": 2.8,
+          "end": 3.5,
+          "intent": "足元からのあおり。突き上げで相手のあごが跳ね、右の鉤で横へ",
+          "actorPose": {
+            "attacker": "左の突き上げ→右の鉤突き",
+            "target": "あごを跳ね上げられる→横へ弾かれる"
+          },
+          "camera": {
+            "rig": "rush-low-up",
+            "projection": "perspective",
+            "position": {
+              "anchor": "stage",
+              "offset": [
+                0.2,
+                0.06,
+                0.62
+              ]
+            },
+            "lookAt": {
+              "anchor": "target.head",
+              "offset": [
+                -0.14,
+                -0.1,
+                0
+              ]
+            },
+            "fov": 50,
+            "rollDeg": -12,
+            "easing": "linear",
+            "move": "足元から見上げる",
+            "keys": [
+              {
+                "t": 2.8,
+                "pos": {
+                  "anchor": "stage",
+                  "offset": [
+                    0.2,
+                    0.06,
+                    0.62
+                  ]
+                },
+                "look": {
+                  "anchor": "target.head",
+                  "offset": [
+                    -0.14,
+                    -0.1,
+                    0
+                  ]
+                },
+                "fov": 50,
+                "roll": -12,
+                "ease": "inOutCubic"
+              },
+              {
+                "t": 3.5,
+                "pos": {
+                  "anchor": "stage",
+                  "offset": [
+                    0.22,
+                    0.07,
+                    0.58
+                  ]
+                },
+                "look": {
+                  "anchor": "target.head",
+                  "offset": [
+                    -0.14,
+                    -0.1,
+                    0
+                  ]
+                },
+                "fov": 48,
+                "roll": -12,
+                "ease": "linear"
+              }
+            ]
+          },
+          "fxCues": [
+            {
+              "at": 2.98,
+              "key": "hitstop",
+              "type": "hitstop",
+              "dur": 0.1,
+              "strength": "light"
+            },
+            {
+              "at": 2.98,
+              "key": "impact_burst",
+              "type": "vfx",
+              "anchor": "target.chest",
+              "offset": [
+                -0.05,
+                0.2,
+                0.06
+              ],
+              "size": 0.42,
+              "color": 14199039
+            },
+            {
+              "at": 2.98,
+              "key": "flash",
+              "type": "vfx",
+              "dur": 0.07,
+              "opacity": 0.28,
+              "color": 11563263
+            },
+            {
+              "at": 2.98,
+              "key": "shake",
+              "type": "shake",
+              "dur": 0.14,
+              "amp": 0.03
+            },
+            {
+              "at": 3.24,
+              "key": "hitstop",
+              "type": "hitstop",
+              "dur": 0.1,
+              "strength": "light"
+            },
+            {
+              "at": 3.24,
+              "key": "impact_burst",
+              "type": "vfx",
+              "anchor": "target.chest",
+              "offset": [
+                -0.05,
+                0.1,
+                0.06
+              ],
+              "size": 0.42,
+              "color": 14199039
+            },
+            {
+              "at": 3.24,
+              "key": "flash",
+              "type": "vfx",
+              "dur": 0.07,
+              "opacity": 0.28,
+              "color": 11563263
+            },
+            {
+              "at": 3.24,
+              "key": "shake",
+              "type": "shake",
+              "dur": 0.14,
+              "amp": 0.03
+            }
+          ],
+          "sfxCues": [
+            {
+              "at": 2.98,
+              "key": "ult_hit_rapid"
+            },
+            {
+              "at": 3.24,
+              "key": "ult_hit_rapid"
+            }
+          ]
+        },
+        {
+          "id": "05-rush-d",
+          "title": "連打 7・8",
+          "start": 3.5,
+          "end": 4.2,
+          "intent": "真上から。左の裏拳、右の突き。足元の霧が打撃のたびに輪になって散る",
+          "actorPose": {
+            "attacker": "左の裏拳→右突き",
+            "target": "体が回りかけ、最後の一発でのけぞる"
+          },
+          "camera": {
+            "rig": "rush-overhead",
+            "projection": "perspective",
+            "position": {
+              "anchor": "stage",
+              "offset": [
+                0.12,
+                2.6,
+                0.25
+              ]
+            },
+            "lookAt": {
+              "anchor": "stage",
+              "offset": [
+                0.12,
+                0.3,
+                0
+              ]
+            },
+            "fov": 40,
+            "rollDeg": 20,
+            "easing": "linear",
+            "move": "真上で少し回る",
+            "keys": [
+              {
+                "t": 3.5,
+                "pos": {
+                  "anchor": "stage",
+                  "offset": [
+                    0.12,
+                    2.6,
+                    0.25
+                  ]
+                },
+                "look": {
+                  "anchor": "stage",
+                  "offset": [
+                    0.12,
+                    0.3,
+                    0
+                  ]
+                },
+                "fov": 40,
+                "roll": 20,
+                "ease": "inOutCubic"
+              },
+              {
+                "t": 4.2,
+                "pos": {
+                  "anchor": "stage",
+                  "offset": [
+                    0.12,
+                    2.5,
+                    0.25
+                  ]
+                },
+                "look": {
+                  "anchor": "stage",
+                  "offset": [
+                    0.12,
+                    0.3,
+                    0
+                  ]
+                },
+                "fov": 40,
+                "roll": 34,
+                "ease": "linear"
+              }
+            ]
+          },
+          "fxCues": [
+            {
+              "at": 3.68,
+              "key": "hitstop",
+              "type": "hitstop",
+              "dur": 0.1,
+              "strength": "light"
+            },
+            {
+              "at": 3.68,
+              "key": "impact_burst",
+              "type": "vfx",
+              "anchor": "target.chest",
+              "offset": [
+                -0.05,
+                0.06,
+                0.06
+              ],
+              "size": 0.42,
+              "color": 14199039
+            },
+            {
+              "at": 3.68,
+              "key": "flash",
+              "type": "vfx",
+              "dur": 0.07,
+              "opacity": 0.28,
+              "color": 11563263
+            },
+            {
+              "at": 3.68,
+              "key": "shake",
+              "type": "shake",
+              "dur": 0.14,
+              "amp": 0.03
+            },
+            {
+              "at": 3.96,
+              "key": "hitstop",
+              "type": "hitstop",
+              "dur": 0.1,
+              "strength": "light"
+            },
+            {
+              "at": 3.96,
+              "key": "impact_burst",
+              "type": "vfx",
+              "anchor": "target.chest",
+              "offset": [
+                -0.05,
+                0,
+                0.06
+              ],
+              "size": 0.42,
+              "color": 14199039
+            },
+            {
+              "at": 3.96,
+              "key": "flash",
+              "type": "vfx",
+              "dur": 0.07,
+              "opacity": 0.28,
+              "color": 11563263
+            },
+            {
+              "at": 3.96,
+              "key": "shake",
+              "type": "shake",
+              "dur": 0.14,
+              "amp": 0.03
+            },
+            {
+              "at": 3.68,
+              "key": "shock_ring",
+              "type": "vfx",
+              "anchor": "target.root",
+              "radius": 0.9,
+              "dur": 0.3,
+              "color": 10109183
+            },
+            {
+              "at": 3.96,
+              "key": "shock_ring",
+              "type": "vfx",
+              "anchor": "target.root",
+              "radius": 1.2,
+              "dur": 0.35,
+              "color": 12482815
+            }
+          ],
+          "sfxCues": [
+            {
+              "at": 3.68,
+              "key": "ult_hit_rapid"
+            },
+            {
+              "at": 3.96,
+              "key": "ult_hit_rapid"
+            }
+          ]
+        },
+        {
+          "id": "06-sink",
+          "title": "沈む拳",
+          "start": 4.2,
+          "end": 5.8,
+          "intent": "ここで止まる。引いた拳と肩の寄り。拳がゆっくり高く上がり、腰が沈む。奥で相手が立ったまま揺れる。音は消す",
+          "actorPose": {
+            "attacker": "拳を後ろへ引き、ゆっくり腰を沈める",
+            "target": "立ったまま左右に揺れる"
+          },
+          "camera": {
+            "rig": "fist-shoulder-still",
+            "projection": "perspective",
+            "position": {
+              "anchor": "attacker.pawR",
+              "offset": [
+                -0.55,
+                0.02,
+                1.05
+              ]
+            },
+            "lookAt": {
+              "anchor": "attacker.pawR",
+              "offset": [
+                0.22,
+                -0.06,
+                0
+              ]
+            },
+            "fov": 32,
+            "rollDeg": 4,
+            "easing": "linear",
+            "move": "動かない。拳にだけごくわずか寄る",
+            "keys": [
+              {
+                "t": 4.2,
+                "pos": {
+                  "anchor": "attacker.pawR",
+                  "offset": [
+                    -0.55,
+                    0.02,
+                    1.05
+                  ]
+                },
+                "look": {
+                  "anchor": "attacker.pawR",
+                  "offset": [
+                    0.22,
+                    -0.06,
+                    0
+                  ]
+                },
+                "fov": 32,
+                "roll": 4,
+                "ease": "inOutCubic"
+              },
+              {
+                "t": 5.8,
+                "pos": {
+                  "anchor": "attacker.pawR",
+                  "offset": [
+                    -0.5,
+                    0.02,
+                    0.96
+                  ]
+                },
+                "look": {
+                  "anchor": "attacker.pawR",
+                  "offset": [
+                    0.22,
+                    -0.06,
+                    0
+                  ]
+                },
+                "fov": 30,
+                "roll": 4,
+                "ease": "linear"
+              }
+            ]
+          },
+          "fxCues": [
+            {
+              "at": 4.6,
+              "key": "aura",
+              "type": "vfx",
+              "anchor": "attacker.root",
+              "dur": 1.5,
+              "color": 9056511,
+              "height": 0.7,
+              "opacity": 0.12
+            },
+            {
+              "at": 5,
+              "key": "sparks",
+              "type": "vfx",
+              "anchor": "attacker.pawR",
+              "count": 10,
+              "power": 0.3,
+              "up": 0.8,
+              "dur": 0.8,
+              "size": 0.5,
+              "color": 13144319
+            }
+          ],
+          "sfxCues": [
+            {
+              "at": 4.3,
+              "key": "silence"
+            },
+            {
+              "at": 5.2,
+              "key": "charge_low"
+            }
+          ]
+        },
+        {
+          "id": "07-heavy",
+          "title": "黒天",
+          "start": 5.8,
+          "end": 7.4,
+          "intent": "低い引きで二人を入れ、踏み込みと同時に一気に寄る。真上からの打ち下ろしで相手がひざから地面へ。いちばん長い止め",
+          "actorPose": {
+            "attacker": "踏み込んで真上から打ち下ろす→止め",
+            "target": "ひざから潰れる→止め→地面に伏す"
+          },
+          "camera": {
+            "rig": "low-wide-to-crash",
+            "projection": "perspective",
+            "position": {
+              "anchor": "stage",
+              "offset": [
+                0.3,
+                0.1,
+                2.2
+              ]
+            },
+            "lookAt": {
+              "anchor": "stage",
+              "offset": [
+                0.12,
+                0.36,
+                0
+              ]
+            },
+            "fov": 42,
+            "rollDeg": 0,
+            "easing": "outCubic",
+            "move": "低い引き→当たりで寄る→止めの間は動かない",
+            "keys": [
+              {
+                "t": 5.8,
+                "pos": {
+                  "anchor": "stage",
+                  "offset": [
+                    0.3,
+                    0.1,
+                    2.2
+                  ]
+                },
+                "look": {
+                  "anchor": "stage",
+                  "offset": [
+                    0.12,
+                    0.36,
+                    0
+                  ]
+                },
+                "fov": 42,
+                "roll": 0,
+                "ease": "inOutCubic"
+              },
+              {
+                "t": 6.24,
+                "pos": {
+                  "anchor": "stage",
+                  "offset": [
+                    0.3,
+                    0.1,
+                    2.14
+                  ]
+                },
+                "look": {
+                  "anchor": "stage",
+                  "offset": [
+                    0.14,
+                    0.34,
+                    0
+                  ]
+                },
+                "fov": 40,
+                "roll": 0,
+                "ease": "linear"
+              },
+              {
+                "t": 6.34,
+                "pos": {
+                  "anchor": "stage",
+                  "offset": [
+                    0.4,
+                    0.14,
+                    1.5
+                  ]
+                },
+                "look": {
+                  "anchor": "target.chest",
+                  "offset": [
+                    -0.1,
+                    -0.04,
+                    0
+                  ]
+                },
+                "fov": 28,
+                "roll": -8,
+                "ease": "outExpo"
+              },
+              {
+                "t": 7,
+                "pos": {
+                  "anchor": "stage",
+                  "offset": [
+                    0.4,
+                    0.14,
+                    1.44
+                  ]
+                },
+                "look": {
+                  "anchor": "target.chest",
+                  "offset": [
+                    -0.1,
+                    -0.04,
+                    0
+                  ]
+                },
+                "fov": 26,
+                "roll": -9,
+                "ease": "linear"
+              },
+              {
+                "t": 7.4,
+                "pos": {
+                  "anchor": "stage",
+                  "offset": [
+                    0.36,
+                    0.12,
+                    1.8
+                  ]
+                },
+                "look": {
+                  "anchor": "stage",
+                  "offset": [
+                    0.3,
+                    0.2,
+                    0
+                  ]
+                },
+                "fov": 36,
+                "roll": -4,
+                "ease": "outCubic"
+              }
+            ]
+          },
+          "fxCues": [
+            {
+              "at": 6.3,
+              "key": "hitstop",
+              "type": "hitstop",
+              "dur": 0.7,
+              "strength": "max"
+            },
+            {
+              "at": 6.3,
+              "key": "dim",
+              "type": "vfx",
+              "dur": 0.7,
+              "opacity": 0.36,
+              "color": 0
+            },
+            {
+              "at": 6.3,
+              "key": "flash",
+              "type": "vfx",
+              "dur": 0.12,
+              "opacity": 0.5,
+              "color": 14199039
+            },
+            {
+              "at": 6.3,
+              "key": "impact_burst",
+              "type": "vfx",
+              "anchor": "target.head",
+              "offset": [
+                -0.04,
+                0.02,
+                0.06
+              ],
+              "size": 0.8,
+              "rays": 18,
+              "color": 15124735
+            },
+            {
+              "at": 6.3,
+              "key": "shock_ring",
+              "type": "vfx",
+              "anchor": "target.root",
+              "radius": 2.4,
+              "dur": 0.7,
+              "color": 12482815
+            },
+            {
+              "at": 6.3,
+              "key": "shake",
+              "type": "shake",
+              "dur": 0.7,
+              "amp": 0.08
+            },
+            {
+              "at": 6.32,
+              "key": "ground_crack",
+              "type": "vfx",
+              "from": [
+                0.48,
+                0
+              ],
+              "to": [
+                1.2,
+                0.4
+              ],
+              "dur": 0.2,
+              "hold": 2.6,
+              "color": 10109183
+            },
+            {
+              "at": 6.32,
+              "key": "ground_crack",
+              "type": "vfx",
+              "from": [
+                0.48,
+                0
+              ],
+              "to": [
+                0.1,
+                -0.8
+              ],
+              "dur": 0.2,
+              "hold": 2.6,
+              "color": 10109183
+            },
+            {
+              "at": 6.32,
+              "key": "ground_crack",
+              "type": "vfx",
+              "from": [
+                0.48,
+                0
+              ],
+              "to": [
+                1.1,
+                -0.5
+              ],
+              "dur": 0.2,
+              "hold": 2.6,
+              "color": 10109183
+            },
+            {
+              "at": 7.3,
+              "key": "dust",
+              "type": "vfx",
+              "anchor": "target.root",
+              "count": 10,
+              "spread": 0.5,
+              "color": 4864096
+            }
+          ],
+          "sfxCues": [
+            {
+              "at": 6.3,
+              "key": "ult_hit_heavy_dark"
+            },
+            {
+              "at": 7,
+              "key": "hitstop_release"
+            }
+          ]
+        },
+        {
+          "id": "08-afterglow",
+          "title": "残光",
+          "start": 7.4,
+          "end": 8.6,
+          "intent": "倒れた相手の上をゆっくり上がるカメラ。地面のひびから黒紫の光が細く立ち、ダークモグゾーが立ち上がる",
+          "actorPose": {
+            "attacker": "打ち下ろしたまま→ゆっくり立つ",
+            "target": "地面に伏して動かない"
+          },
+          "camera": {
+            "rig": "slow-crane-up",
+            "projection": "perspective",
+            "position": {
+              "anchor": "stage",
+              "offset": [
+                0.95,
+                0.1,
+                0.95
+              ]
+            },
+            "lookAt": {
+              "anchor": "target.chest",
+              "offset": [
+                0,
+                0.02,
+                0
+              ]
+            },
+            "fov": 40,
+            "rollDeg": 5,
+            "easing": "inOutQuad",
+            "move": "ゆっくり上昇",
+            "keys": [
+              {
+                "t": 7.4,
+                "pos": {
+                  "anchor": "stage",
+                  "offset": [
+                    0.95,
+                    0.1,
+                    0.95
+                  ]
+                },
+                "look": {
+                  "anchor": "target.chest",
+                  "offset": [
+                    0,
+                    0.02,
+                    0
+                  ]
+                },
+                "fov": 40,
+                "roll": 5,
+                "ease": "inOutCubic"
+              },
+              {
+                "t": 8.6,
+                "pos": {
+                  "anchor": "stage",
+                  "offset": [
+                    0.9,
+                    0.62,
+                    1.05
+                  ]
+                },
+                "look": {
+                  "anchor": "stage",
+                  "offset": [
+                    0.3,
+                    0.26,
+                    0
+                  ]
+                },
+                "fov": 40,
+                "roll": 2,
+                "ease": "inOutQuad"
+              }
+            ]
+          },
+          "fxCues": [
+            {
+              "at": 7.5,
+              "key": "energy_pillar",
+              "type": "vfx",
+              "offset": [
+                0.48,
+                0,
+                0
+              ],
+              "height": 3.5,
+              "radius": 0.1,
+              "dur": 1.4,
+              "color": 9056511
+            },
+            {
+              "at": 7.5,
+              "key": "poison_mist",
+              "type": "vfx",
+              "anchor": "target.chest",
+              "radius": 0.35,
+              "count": 14,
+              "dur": 2.4,
+              "color": 8006872
+            }
+          ],
+          "sfxCues": [
+            {
+              "at": 7.5,
+              "key": "afterglow_hum"
+            }
+          ]
+        },
+        {
+          "id": "09-back",
+          "title": "後ろ姿",
+          "start": 8.6,
+          "end": 10,
+          "intent": "倒れた相手を手前に置いた低い位置。背を向けて三歩あるき、止まる。振り返らない。ハチマキの端だけが揺れる",
+          "actorPose": {
+            "attacker": "背を向けて三歩あるき、止まって目を閉じる",
+            "target": "手前で伏したまま"
+          },
+          "camera": {
+            "rig": "over-fallen-to-back",
+            "projection": "perspective",
+            "position": {
+              "anchor": "stage",
+              "offset": [
+                0.7,
+                0.12,
+                1.25
+              ]
+            },
+            "lookAt": {
+              "anchor": "attacker.chest",
+              "offset": [
+                0,
+                0.04,
+                0
+              ]
+            },
+            "fov": 40,
+            "rollDeg": -3,
+            "easing": "linear",
+            "move": "固定。遠ざかる背中を見送る",
+            "keys": [
+              {
+                "t": 8.6,
+                "pos": {
+                  "anchor": "stage",
+                  "offset": [
+                    0.7,
+                    0.12,
+                    1.25
+                  ]
+                },
+                "look": {
+                  "anchor": "attacker.chest",
+                  "offset": [
+                    0,
+                    0.04,
+                    0
+                  ]
+                },
+                "fov": 40,
+                "roll": -3,
+                "ease": "inOutCubic"
+              },
+              {
+                "t": 10,
+                "pos": {
+                  "anchor": "stage",
+                  "offset": [
+                    0.72,
+                    0.13,
+                    1.3
+                  ]
+                },
+                "look": {
+                  "anchor": "attacker.chest",
+                  "offset": [
+                    0,
+                    0.06,
+                    0
+                  ]
+                },
+                "fov": 38,
+                "roll": -2,
+                "ease": "linear"
+              }
+            ]
+          },
+          "fxCues": [],
+          "sfxCues": [
+            {
+              "at": 8.8,
+              "key": "step_slow"
+            },
+            {
+              "at": 9.1,
+              "key": "step_slow"
+            },
+            {
+              "at": 9.4,
+              "key": "step_slow"
+            },
+            {
+              "at": 9.7,
+              "key": "finish_pose_quiet"
+            }
+          ]
+        }
+      ],
+      "cues": [
+        {
+          "at": 0,
+          "type": "vfx",
+          "key": "flash",
+          "dur": 0.1,
+          "opacity": 0.35,
+          "color": 11563263,
+          "shot": "01-darkness"
+        },
+        {
+          "at": 0,
+          "type": "sfx",
+          "key": "grab",
+          "shot": "01-darkness"
+        },
+        {
+          "at": 0,
+          "type": "shake",
+          "dur": 0.2,
+          "amp": 0.03,
+          "shot": "01-darkness"
+        },
+        {
+          "at": 0.2,
+          "type": "vfx",
+          "key": "dim",
+          "dur": 4.1,
+          "opacity": 0.24,
+          "color": 393740,
+          "shot": "01-darkness"
+        },
+        {
+          "at": 0.2,
+          "type": "vfx",
+          "key": "poison_mist",
+          "offset": [
+            0.05,
+            0.3,
+            0
+          ],
+          "radius": 0.8,
+          "count": 22,
+          "dur": 4.2,
+          "color": 8006872,
+          "shot": "01-darkness"
+        },
+        {
+          "at": 0.3,
+          "type": "vfx",
+          "key": "shock_ring",
+          "anchor": "attacker.root",
+          "radius": 1.6,
+          "dur": 0.8,
+          "color": 10109183,
+          "shot": "01-darkness"
+        },
+        {
+          "at": 0.3,
+          "type": "sfx",
+          "key": "dark_aura",
+          "shot": "01-darkness"
+        },
+        {
+          "at": 1.4,
+          "type": "hitstop",
+          "dur": 0.1,
+          "strength": "light",
+          "shot": "02-rush-a"
+        },
+        {
+          "at": 1.4,
+          "type": "vfx",
+          "key": "impact_burst",
+          "anchor": "target.chest",
+          "offset": [
+            -0.05,
+            0.02,
+            0.06
+          ],
+          "size": 0.42,
+          "color": 14199039,
+          "shot": "02-rush-a"
+        },
+        {
+          "at": 1.4,
+          "type": "vfx",
+          "key": "flash",
+          "dur": 0.07,
+          "opacity": 0.28,
+          "color": 11563263,
+          "shot": "02-rush-a"
+        },
+        {
+          "at": 1.4,
+          "type": "shake",
+          "dur": 0.14,
+          "amp": 0.03,
+          "shot": "02-rush-a"
+        },
+        {
+          "at": 1.4,
+          "type": "sfx",
+          "key": "ult_hit_rapid",
+          "shot": "02-rush-a"
+        },
+        {
+          "at": 1.72,
+          "type": "hitstop",
+          "dur": 0.1,
+          "strength": "light",
+          "shot": "02-rush-a"
+        },
+        {
+          "at": 1.72,
+          "type": "vfx",
+          "key": "impact_burst",
+          "anchor": "target.chest",
+          "offset": [
+            -0.05,
+            -0.02,
+            0.06
+          ],
+          "size": 0.42,
+          "color": 14199039,
+          "shot": "02-rush-a"
+        },
+        {
+          "at": 1.72,
+          "type": "vfx",
+          "key": "flash",
+          "dur": 0.07,
+          "opacity": 0.28,
+          "color": 11563263,
+          "shot": "02-rush-a"
+        },
+        {
+          "at": 1.72,
+          "type": "shake",
+          "dur": 0.14,
+          "amp": 0.03,
+          "shot": "02-rush-a"
+        },
+        {
+          "at": 1.72,
+          "type": "sfx",
+          "key": "ult_hit_rapid",
+          "shot": "02-rush-a"
+        },
+        {
+          "at": 2.2,
+          "type": "hitstop",
+          "dur": 0.1,
+          "strength": "light",
+          "shot": "03-rush-b"
+        },
+        {
+          "at": 2.2,
+          "type": "vfx",
+          "key": "impact_burst",
+          "anchor": "target.chest",
+          "offset": [
+            -0.05,
+            0.12,
+            0.06
+          ],
+          "size": 0.42,
+          "color": 14199039,
+          "shot": "03-rush-b"
+        },
+        {
+          "at": 2.2,
+          "type": "vfx",
+          "key": "flash",
+          "dur": 0.07,
+          "opacity": 0.28,
+          "color": 11563263,
+          "shot": "03-rush-b"
+        },
+        {
+          "at": 2.2,
+          "type": "shake",
+          "dur": 0.14,
+          "amp": 0.03,
+          "shot": "03-rush-b"
+        },
+        {
+          "at": 2.2,
+          "type": "sfx",
+          "key": "ult_hit_rapid",
+          "shot": "03-rush-b"
+        },
+        {
+          "at": 2.52,
+          "type": "hitstop",
+          "dur": 0.1,
+          "strength": "light",
+          "shot": "03-rush-b"
+        },
+        {
+          "at": 2.52,
+          "type": "vfx",
+          "key": "impact_burst",
+          "anchor": "target.chest",
+          "offset": [
+            -0.05,
+            -0.14,
+            0.06
+          ],
+          "size": 0.42,
+          "color": 14199039,
+          "shot": "03-rush-b"
+        },
+        {
+          "at": 2.52,
+          "type": "vfx",
+          "key": "flash",
+          "dur": 0.07,
+          "opacity": 0.28,
+          "color": 11563263,
+          "shot": "03-rush-b"
+        },
+        {
+          "at": 2.52,
+          "type": "shake",
+          "dur": 0.14,
+          "amp": 0.03,
+          "shot": "03-rush-b"
+        },
+        {
+          "at": 2.52,
+          "type": "sfx",
+          "key": "ult_hit_rapid",
+          "shot": "03-rush-b"
+        },
+        {
+          "at": 2.98,
+          "type": "hitstop",
+          "dur": 0.1,
+          "strength": "light",
+          "shot": "04-rush-c"
+        },
+        {
+          "at": 2.98,
+          "type": "vfx",
+          "key": "impact_burst",
+          "anchor": "target.chest",
+          "offset": [
+            -0.05,
+            0.2,
+            0.06
+          ],
+          "size": 0.42,
+          "color": 14199039,
+          "shot": "04-rush-c"
+        },
+        {
+          "at": 2.98,
+          "type": "vfx",
+          "key": "flash",
+          "dur": 0.07,
+          "opacity": 0.28,
+          "color": 11563263,
+          "shot": "04-rush-c"
+        },
+        {
+          "at": 2.98,
+          "type": "shake",
+          "dur": 0.14,
+          "amp": 0.03,
+          "shot": "04-rush-c"
+        },
+        {
+          "at": 2.98,
+          "type": "sfx",
+          "key": "ult_hit_rapid",
+          "shot": "04-rush-c"
+        },
+        {
+          "at": 3.24,
+          "type": "hitstop",
+          "dur": 0.1,
+          "strength": "light",
+          "shot": "04-rush-c"
+        },
+        {
+          "at": 3.24,
+          "type": "vfx",
+          "key": "impact_burst",
+          "anchor": "target.chest",
+          "offset": [
+            -0.05,
+            0.1,
+            0.06
+          ],
+          "size": 0.42,
+          "color": 14199039,
+          "shot": "04-rush-c"
+        },
+        {
+          "at": 3.24,
+          "type": "vfx",
+          "key": "flash",
+          "dur": 0.07,
+          "opacity": 0.28,
+          "color": 11563263,
+          "shot": "04-rush-c"
+        },
+        {
+          "at": 3.24,
+          "type": "shake",
+          "dur": 0.14,
+          "amp": 0.03,
+          "shot": "04-rush-c"
+        },
+        {
+          "at": 3.24,
+          "type": "sfx",
+          "key": "ult_hit_rapid",
+          "shot": "04-rush-c"
+        },
+        {
+          "at": 3.68,
+          "type": "hitstop",
+          "dur": 0.1,
+          "strength": "light",
+          "shot": "05-rush-d"
+        },
+        {
+          "at": 3.68,
+          "type": "vfx",
+          "key": "impact_burst",
+          "anchor": "target.chest",
+          "offset": [
+            -0.05,
+            0.06,
+            0.06
+          ],
+          "size": 0.42,
+          "color": 14199039,
+          "shot": "05-rush-d"
+        },
+        {
+          "at": 3.68,
+          "type": "vfx",
+          "key": "flash",
+          "dur": 0.07,
+          "opacity": 0.28,
+          "color": 11563263,
+          "shot": "05-rush-d"
+        },
+        {
+          "at": 3.68,
+          "type": "shake",
+          "dur": 0.14,
+          "amp": 0.03,
+          "shot": "05-rush-d"
+        },
+        {
+          "at": 3.68,
+          "type": "sfx",
+          "key": "ult_hit_rapid",
+          "shot": "05-rush-d"
+        },
+        {
+          "at": 3.68,
+          "type": "vfx",
+          "key": "shock_ring",
+          "anchor": "target.root",
+          "radius": 0.9,
+          "dur": 0.3,
+          "color": 10109183,
+          "shot": "05-rush-d"
+        },
+        {
+          "at": 3.96,
+          "type": "hitstop",
+          "dur": 0.1,
+          "strength": "light",
+          "shot": "05-rush-d"
+        },
+        {
+          "at": 3.96,
+          "type": "vfx",
+          "key": "impact_burst",
+          "anchor": "target.chest",
+          "offset": [
+            -0.05,
+            0,
+            0.06
+          ],
+          "size": 0.42,
+          "color": 14199039,
+          "shot": "05-rush-d"
+        },
+        {
+          "at": 3.96,
+          "type": "vfx",
+          "key": "flash",
+          "dur": 0.07,
+          "opacity": 0.28,
+          "color": 11563263,
+          "shot": "05-rush-d"
+        },
+        {
+          "at": 3.96,
+          "type": "shake",
+          "dur": 0.14,
+          "amp": 0.03,
+          "shot": "05-rush-d"
+        },
+        {
+          "at": 3.96,
+          "type": "sfx",
+          "key": "ult_hit_rapid",
+          "shot": "05-rush-d"
+        },
+        {
+          "at": 3.96,
+          "type": "vfx",
+          "key": "shock_ring",
+          "anchor": "target.root",
+          "radius": 1.2,
+          "dur": 0.35,
+          "color": 12482815,
+          "shot": "05-rush-d"
+        },
+        {
+          "at": 4.3,
+          "type": "sfx",
+          "key": "silence",
+          "shot": "06-sink"
+        },
+        {
+          "at": 4.6,
+          "type": "vfx",
+          "key": "aura",
+          "anchor": "attacker.root",
+          "dur": 1.5,
+          "color": 9056511,
+          "height": 0.7,
+          "opacity": 0.12,
+          "shot": "06-sink"
+        },
+        {
+          "at": 5,
+          "type": "vfx",
+          "key": "sparks",
+          "anchor": "attacker.pawR",
+          "count": 10,
+          "power": 0.3,
+          "up": 0.8,
+          "dur": 0.8,
+          "size": 0.5,
+          "color": 13144319,
+          "shot": "06-sink"
+        },
+        {
+          "at": 5.2,
+          "type": "sfx",
+          "key": "charge_low",
+          "shot": "06-sink"
+        },
+        {
+          "at": 6.3,
+          "type": "hitstop",
+          "dur": 0.7,
+          "strength": "max",
+          "shot": "07-heavy"
+        },
+        {
+          "at": 6.3,
+          "type": "vfx",
+          "key": "dim",
+          "dur": 0.7,
+          "opacity": 0.36,
+          "color": 0,
+          "shot": "07-heavy"
+        },
+        {
+          "at": 6.3,
+          "type": "vfx",
+          "key": "flash",
+          "dur": 0.12,
+          "opacity": 0.5,
+          "color": 14199039,
+          "shot": "07-heavy"
+        },
+        {
+          "at": 6.3,
+          "type": "vfx",
+          "key": "impact_burst",
+          "anchor": "target.head",
+          "offset": [
+            -0.04,
+            0.02,
+            0.06
+          ],
+          "size": 0.8,
+          "rays": 18,
+          "color": 15124735,
+          "shot": "07-heavy"
+        },
+        {
+          "at": 6.3,
+          "type": "vfx",
+          "key": "shock_ring",
+          "anchor": "target.root",
+          "radius": 2.4,
+          "dur": 0.7,
+          "color": 12482815,
+          "shot": "07-heavy"
+        },
+        {
+          "at": 6.3,
+          "type": "shake",
+          "dur": 0.7,
+          "amp": 0.08,
+          "shot": "07-heavy"
+        },
+        {
+          "at": 6.3,
+          "type": "sfx",
+          "key": "ult_hit_heavy_dark",
+          "shot": "07-heavy"
+        },
+        {
+          "at": 6.32,
+          "type": "vfx",
+          "key": "ground_crack",
+          "from": [
+            0.48,
+            0
+          ],
+          "to": [
+            1.2,
+            0.4
+          ],
+          "dur": 0.2,
+          "hold": 2.6,
+          "color": 10109183,
+          "shot": "07-heavy"
+        },
+        {
+          "at": 6.32,
+          "type": "vfx",
+          "key": "ground_crack",
+          "from": [
+            0.48,
+            0
+          ],
+          "to": [
+            0.1,
+            -0.8
+          ],
+          "dur": 0.2,
+          "hold": 2.6,
+          "color": 10109183,
+          "shot": "07-heavy"
+        },
+        {
+          "at": 6.32,
+          "type": "vfx",
+          "key": "ground_crack",
+          "from": [
+            0.48,
+            0
+          ],
+          "to": [
+            1.1,
+            -0.5
+          ],
+          "dur": 0.2,
+          "hold": 2.6,
+          "color": 10109183,
+          "shot": "07-heavy"
+        },
+        {
+          "at": 7,
+          "type": "sfx",
+          "key": "hitstop_release",
+          "shot": "07-heavy"
+        },
+        {
+          "at": 7.3,
+          "type": "vfx",
+          "key": "dust",
+          "anchor": "target.root",
+          "count": 10,
+          "spread": 0.5,
+          "color": 4864096,
+          "shot": "07-heavy"
+        },
+        {
+          "at": 7.5,
+          "type": "vfx",
+          "key": "energy_pillar",
+          "offset": [
+            0.48,
+            0,
+            0
+          ],
+          "height": 3.5,
+          "radius": 0.1,
+          "dur": 1.4,
+          "color": 9056511,
+          "shot": "08-afterglow"
+        },
+        {
+          "at": 7.5,
+          "type": "vfx",
+          "key": "poison_mist",
+          "anchor": "target.chest",
+          "radius": 0.35,
+          "count": 14,
+          "dur": 2.4,
+          "color": 8006872,
+          "shot": "08-afterglow"
+        },
+        {
+          "at": 7.5,
+          "type": "sfx",
+          "key": "afterglow_hum",
+          "shot": "08-afterglow"
+        },
+        {
+          "at": 8.8,
+          "type": "sfx",
+          "key": "step_slow",
+          "shot": "09-back"
+        },
+        {
+          "at": 9.1,
+          "type": "sfx",
+          "key": "step_slow",
+          "shot": "09-back"
+        },
+        {
+          "at": 9.2,
+          "type": "caption",
+          "dur": 0.7,
+          "text": "暗連・黒天烈掌",
+          "sub": "ダークモグゾー",
+          "shot": "09-back"
+        },
+        {
+          "at": 9.4,
+          "type": "sfx",
+          "key": "step_slow",
+          "shot": "09-back"
+        },
+        {
+          "at": 9.7,
+          "type": "sfx",
+          "key": "finish_pose_quiet",
+          "shot": "09-back"
+        }
+      ],
+      "reducedMotion": {
+        "useShots": [
+          "02-rush-a",
+          "07-heavy",
+          "09-back"
+        ],
+        "disable": [
+          "shake",
+          "flash",
+          "speed_lines"
+        ],
+        "note": "3 カットを固定カメラ（各ショットの最初のキー）で見せる。打撃ごとの紫の光は消し、暗転（dim）は弱めて残す。役者とキューの時刻は変えない"
+      },
+      "skip": {
+        "allowedFrom": 0.4,
+        "landOn": "end",
+        "note": "スキップ時は役者を消してからゲームの立ち位置へ戻す。ムービー中の位置を戦闘へ持ち込まない"
+      },
+      "contactSeconds": 0.05
+    }
+  ],
   "reactions": [
     {
       "glb": "dark_moguzo_v14.glb",
@@ -24,6 +2483,18 @@
     {
       "glb": "dark_moguzo_v14.glb",
       "clip": "cinv_takimaru"
+    },
+    {
+      "glb": "dark_moguzo_v14.glb",
+      "clip": "cinv_yomikage"
+    },
+    {
+      "glb": "dark_moguzo_v14.glb",
+      "clip": "cinv_bullet"
+    },
+    {
+      "glb": "dark_moguzo_v14.glb",
+      "clip": "cinv_dark_moguzo"
     }
   ]
 }

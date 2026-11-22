@@ -46,3 +46,16 @@ test('normal ultimates use the ten-second production window', () => {
     assert.throws(() => validateMoveManifest(spec, 'chirka', 'ultimate'), /playback/);
   }
 });
+
+test('cinematic cues preserve quiet holds and distinguish material sounds', async () => {
+  const { cinematicSoundKind } = await import('./combat-audio.js');
+  assert.equal(cinematicSoundKind('tension_hold'), null);
+  assert.equal(cinematicSoundKind('silence_breath'), 'breath');
+  assert.equal(cinematicSoundKind('rock_wall_break'), 'crash');
+  assert.equal(cinematicSoundKind('wink_chime'), 'chime');
+  assert.equal(cinematicSoundKind('swing_whoosh_fast'), 'wind');
+  assert.equal(cinematicSoundKind('appear_silent'), null);
+  assert.equal(cinematicSoundKind('explosion_big'), 'crash');
+  assert.equal(cinematicSoundKind('fuse_beep_fast'), 'beep');
+  assert.equal(cinematicSoundKind('ult_hit_rapid'), 'hit');
+});

@@ -3,6 +3,7 @@ import { clone as cloneSkeleton } from 'three/addons/utils/SkeletonUtils.js';
 import { createCinePlayer } from '../cinematic/v14/player/cine-player.js';
 import { createFx } from '../cinematic/v14/player/fx.js';
 import { buildCinematicStage } from './cinematic-stage.js';
+import { cinematicSoundKind } from './combat-audio.js';
 
 function performer(actor, clips, illusion) {
   const model = cloneSkeleton(actor.gltf.scene), root = new THREE.Group();
@@ -43,14 +44,6 @@ function performer(actor, clips, illusion) {
     }
   };
 }
-
-const SOUND_KINDS = [
-  [/hitstop_release|whoosh|swoosh|wind|dash/, 'special'],
-  [/ult_hit|slam|rock_wall_break|explosion/, 'ultimate'],
-  [/land|step|stomp|foot/, 'clinch'],
-  [/claw|hit|punch/, 'hit'],
-  [/wink|finish|chime/, 'counter']
-];
 
 export function createChoreographedCinematic({ entry, attacker, target, reducedMotion, audioCue, mirror }) {
   const spec = entry.spec;
@@ -99,8 +92,8 @@ export function createChoreographedCinematic({ entry, attacker, target, reducedM
       scene, camera, manifest, actors, mirror, fx,
       onCue(cue) {
         if (cue.type !== 'sfx') return;
-        const kind = SOUND_KINDS.find(([pattern]) => pattern.test(cue.key))?.[1] ?? 'special';
-        audioCue(kind);
+        const kind = cinematicSoundKind(cue.key);
+        if(kind)audioCue(kind);
       }
     });
     let elapsed = 0, disposed = false;

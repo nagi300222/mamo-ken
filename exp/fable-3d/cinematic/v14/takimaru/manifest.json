@@ -2729,6 +2729,18 @@
     {
       "glb": "takimaru_v14.glb",
       "clip": "cinv_takimaru"
+    },
+    {
+      "glb": "takimaru_v14.glb",
+      "clip": "cinv_yomikage"
+    },
+    {
+      "glb": "takimaru_v14.glb",
+      "clip": "cinv_bullet"
+    },
+    {
+      "glb": "takimaru_v14.glb",
+      "clip": "cinv_dark_moguzo"
     }
   ]
 }

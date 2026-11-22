@@ -1,9 +1,9 @@
 {
  "moguzo": {
   "base_sha256": "8f25428c14e9cc58fe229367a1a2324cb9d6bdd716c2306b26c5061e82e44fdd",
-  "v14_sha256": "9521e6a90ad03ebde63d4a31c1ed15b12e672df6c27ac3cada4a90724ac57196",
+  "v14_sha256": "23296cfe2f57ec4b046cdf371c1b6de2f81dbc29b61a0e22ee361111e49686c3",
   "base_bytes": 2799880,
-  "v14_bytes": 5502452,
+  "v14_bytes": 6593220,
   "mesh_identical": true,
   "skeleton_identical": true,
   "texture_identical": true,
@@ -22,15 +22,18 @@
    "cinv_chirka",
    "cinv_pisuke",
    "cinv_hakuma",
-   "cinv_takimaru"
+   "cinv_takimaru",
+   "cinv_yomikage",
+   "cinv_bullet",
+   "cinv_dark_moguzo"
   ],
   "pass": true
  },
  "pisuke": {
   "base_sha256": "0636f1e1e30fbc4806acef3f5a0402225a83a50227799e96d17421adc92884f6",
-  "v14_sha256": "997f52d8f16ba05df98162d37e751903af3a793364c7b72371b12d0ce5499900",
+  "v14_sha256": "fdffab0dee5207866cc6328b0a20a6e09bccefca00eb255aead244d7b3db2e4d",
   "base_bytes": 2581344,
-  "v14_bytes": 4969156,
+  "v14_bytes": 5937764,
   "mesh_identical": true,
   "skeleton_identical": true,
   "texture_identical": true,
@@ -49,15 +52,18 @@
    "cinv_chirka",
    "cinv_pisuke",
    "cinv_hakuma",
-   "cinv_takimaru"
+   "cinv_takimaru",
+   "cinv_yomikage",
+   "cinv_bullet",
+   "cinv_dark_moguzo"
   ],
   "pass": true
  },
  "godan": {
   "base_sha256": "90711ae7d323cc01a1892979ea28d2358b329c19f04dce95c51ec74535b17f65",
-  "v14_sha256": "8ffa00ae01e5cdba01990db1c22d50eecbb3e8406848f50e03b9772a6256406e",
+  "v14_sha256": "275417dd67ae485c4292c609effd2da6e241d098b3b8d9b8dcebb4d0bd04958f",
   "base_bytes": 2891988,
-  "v14_bytes": 5635784,
+  "v14_bytes": 6725716,
   "mesh_identical": true,
   "skeleton_identical": true,
   "texture_identical": true,
@@ -76,15 +82,18 @@
    "cinv_chirka",
    "cinv_pisuke",
    "cinv_hakuma",
-   "cinv_takimaru"
+   "cinv_takimaru",
+   "cinv_yomikage",
+   "cinv_bullet",
+   "cinv_dark_moguzo"
   ],
   "pass": true
  },
  "hakuma": {
   "base_sha256": "bf00b34eb0930751ddcdf548c4866c4c72d1db28bbf6fcf1f78db4c0146d8bed",
-  "v14_sha256": "c47ec322b486e61060a8e3a2f1b8e4bb7223f2e888c7dfa8635fdf28ceecc6a5",
+  "v14_sha256": "e8669127ffb83adc80a2b0a7e02e07088504145d476237c53029427794b2fb68",
   "base_bytes": 2844344,
-  "v14_bytes": 5245400,
+  "v14_bytes": 6214148,
   "mesh_identical": true,
   "skeleton_identical": true,
   "texture_identical": true,
@@ -103,15 +112,18 @@
    "cinv_chirka",
    "cinv_pisuke",
    "cinv_hakuma",
-   "cinv_takimaru"
+   "cinv_takimaru",
+   "cinv_yomikage",
+   "cinv_bullet",
+   "cinv_dark_moguzo"
   ],
   "pass": true
  },
  "chirka": {
   "base_sha256": "1badcc2c8e7315b5acc08c25358d338cb71991cabc4b3ec9e616b9cbb6d432ae",
-  "v14_sha256": "5de4013b895621d937f07f9721774486b18c96c4fa089487bf41728d1f99bcb0",
+  "v14_sha256": "c30da56aaef6647521e09cab2b26001258f0a67ee6b97aa097abca87c3e96a9f",
   "base_bytes": 2534656,
-  "v14_bytes": 4963712,
+  "v14_bytes": 5932456,
   "mesh_identical": true,
   "skeleton_identical": true,
   "texture_identical": true,
@@ -131,15 +143,18 @@
    "cinv_chirka",
    "cinv_pisuke",
    "cinv_hakuma",
-   "cinv_takimaru"
+   "cinv_takimaru",
+   "cinv_yomikage",
+   "cinv_bullet",
+   "cinv_dark_moguzo"
   ],
   "pass": true
  },
  "takimaru": {
   "base_sha256": "d449bb56f5eda962763eefc9ab4e0291fb4ef4e553379c3f5adcc72ddd7427f1",
-  "v14_sha256": "2e818e8e535dd83d01b5202e9385be34cf58eaede877fe7fa29f226da90de210",
+  "v14_sha256": "5faaf87b5cef2890ecce871a974917a01b2b74e2c2af4ba24df6b803161d0782",
   "base_bytes": 2864996,
-  "v14_bytes": 5291316,
+  "v14_bytes": 6260064,
   "mesh_identical": true,
   "skeleton_identical": true,
   "texture_identical": true,
@@ -158,15 +173,18 @@
    "cinv_chirka",
    "cinv_pisuke",
    "cinv_hakuma",
-   "cinv_takimaru"
+   "cinv_takimaru",
+   "cinv_yomikage",
+   "cinv_bullet",
+   "cinv_dark_moguzo"
   ],
   "pass": true
  },
  "yomikage": {
   "base_sha256": "171a84e010037455dfaaf9c7b6d4a9dc8efe70775a772912c353057e08c01586",
-  "v14_sha256": "f91e82eab2aee74f0de243269e26a0ebc989c093960ef6a79d589627562697f5",
+  "v14_sha256": "878ff307dcab6b58e3e8b451b2bea867f20e749da57e954e8678ed87b0f2b781",
   "base_bytes": 2591440,
-  "v14_bytes": 4515712,
+  "v14_bytes": 5942816,
   "mesh_identical": true,
   "skeleton_identical": true,
   "texture_identical": true,
@@ -175,20 +193,28 @@
   "base_clips_identical": 37,
   "base_clips_changed": [],
   "v14_added_clips": [
+   "s1_v14",
+   "s2_v14",
+   "s3_v14",
+   "ult_v14",
+   "cin_yomikage_atk",
    "cinv_moguzo",
    "cinv_godan",
    "cinv_chirka",
    "cinv_pisuke",
    "cinv_hakuma",
-   "cinv_takimaru"
+   "cinv_takimaru",
+   "cinv_yomikage",
+   "cinv_bullet",
+   "cinv_dark_moguzo"
   ],
   "pass": true
  },
  "bullet": {
   "base_sha256": "abb2765bcf1f7d8fd696b55c992c84b9e52c00b6ba933ec792228f490bed03f4",
-  "v14_sha256": "90800dce2584a1fba42415ab77fe15a28f99ed67e1ab28dba50fc0309c06abac",
+  "v14_sha256": "5d44e9624af03f24f4c56ec11baf87403200fb597c2350ea1b24e153b182699f",
   "base_bytes": 2760604,
-  "v14_bytes": 4869292,
+  "v14_bytes": 6412172,
   "mesh_identical": true,
   "skeleton_identical": true,
   "texture_identical": true,
@@ -197,20 +223,27 @@
   "base_clips_identical": 37,
   "base_clips_changed": [],
   "v14_added_clips": [
+   "s1_v14",
+   "s2_v14",
+   "ult_v14",
+   "cin_bullet_atk",
    "cinv_moguzo",
    "cinv_godan",
    "cinv_chirka",
    "cinv_pisuke",
    "cinv_hakuma",
-   "cinv_takimaru"
+   "cinv_takimaru",
+   "cinv_yomikage",
+   "cinv_bullet",
+   "cinv_dark_moguzo"
   ],
   "pass": true
  },
  "dark_moguzo": {
   "base_sha256": "57c1ba36f5c7175d9c496a7bda3c329423022ad220ca7cd52b90688168f6e7ab",
-  "v14_sha256": "bdaf1b5eaac28f9db427691ac53d65a287fce03bc1a1042f2d0c8c51d981bdc8",
+  "v14_sha256": "5eba74bafe8eca621d974a12fbe617191d43829b80d5a737cf55088a5f8cb3b7",
   "base_bytes": 2616352,
-  "v14_bytes": 4787148,
+  "v14_bytes": 6407828,
   "mesh_identical": true,
   "skeleton_identical": true,
   "texture_identical": true,
@@ -219,12 +252,20 @@
   "base_clips_identical": 37,
   "base_clips_changed": [],
   "v14_added_clips": [
+   "s1_v14",
+   "s2_v14",
+   "s3_v14",
+   "ult_v14",
+   "cin_dark_moguzo_atk",
    "cinv_moguzo",
    "cinv_godan",
    "cinv_chirka",
    "cinv_pisuke",
    "cinv_hakuma",
-   "cinv_takimaru"
+   "cinv_takimaru",
+   "cinv_yomikage",
+   "cinv_bullet",
+   "cinv_dark_moguzo"
   ],
   "pass": true
  }

@@ -1126,7 +1126,7 @@
           "title": "突撃3・滑り込み",
           "start": 2.6,
           "end": 3.4,
-          "intent": "地面すれすれ。手前から滑り込んで足を払い、相手が宙に浮く",
+          "intent": "地面すれすれ・滑走路の真横。伸ばした脚が相手の足元に入る接触点を画面中央に置き、払われた相手が浮くまで同じ低さで見る",
           "actorPose": {
             "attacker": "低い滑り込み蹴り",
             "target": "足を払われて体が水平に浮く"
@@ -1137,66 +1137,88 @@
             "position": {
               "anchor": "stage",
               "offset": [
-                0.7,
-                0.05,
-                0.95
+                1.45,
+                0.07,
+                1.1
               ]
             },
             "lookAt": {
               "anchor": "attacker.chest",
               "offset": [
                 0,
-                0,
+                -0.04,
                 0
               ]
             },
-            "fov": 52,
-            "rollDeg": 10,
+            "fov": 44,
+            "rollDeg": 8,
             "easing": "outQuad",
-            "move": "滑るピスケの少し先を地面の高さで下がる",
+            "move": "滑走の真横・地面の高さで固定。ピスケを追って振り、接触点で止め、浮く相手に合わせて引く",
             "keys": [
               {
                 "t": 2.6,
                 "pos": {
                   "anchor": "stage",
                   "offset": [
-                    0.7,
-                    0.05,
-                    0.95
+                    1.45,
+                    0.07,
+                    1.1
                   ]
                 },
                 "look": {
                   "anchor": "attacker.chest",
                   "offset": [
                     0,
-                    0,
+                    -0.04,
                     0
                   ]
                 },
-                "fov": 52,
-                "roll": 10,
+                "fov": 44,
+                "roll": 8,
                 "ease": "inOutCubic"
               },
               {
-                "t": 2.95,
+                "t": 2.9,
                 "pos": {
                   "anchor": "stage",
                   "offset": [
-                    0.8,
-                    0.06,
-                    0.7
+                    1.45,
+                    0.07,
+                    1.1
                   ]
                 },
                 "look": {
-                  "anchor": "target.pelvis",
+                  "anchor": "stage",
                   "offset": [
-                    0,
-                    0.05,
-                    0
+                    0.2,
+                    0.13,
+                    0.12
                   ]
                 },
-                "fov": 50,
-                "roll": 12,
+                "fov": 40,
+                "roll": 8,
+                "ease": "linear"
+              },
+              {
+                "t": 3.06,
+                "pos": {
+                  "anchor": "stage",
+                  "offset": [
+                    1.45,
+                    0.07,
+                    1.1
+                  ]
+                },
+                "look": {
+                  "anchor": "stage",
+                  "offset": [
+                    0.24,
+                    0.14,
+                    0.1
+                  ]
+                },
+                "fov": 38,
+                "roll": 8,
                 "ease": "linear"
               },
               {
@@ -1204,21 +1226,21 @@
                 "pos": {
                   "anchor": "stage",
                   "offset": [
-                    0.95,
-                    0.1,
-                    0.85
+                    1.5,
+                    0.08,
+                    1.15
                   ]
                 },
                 "look": {
                   "anchor": "target.pelvis",
                   "offset": [
-                    0,
-                    0,
+                    0.1,
+                    -0.22,
                     0
                   ]
                 },
                 "fov": 48,
-                "roll": 6,
+                "roll": 5,
                 "ease": "outQuad"
               }
             ]
@@ -2767,6 +2789,18 @@
     {
       "glb": "pisuke_v14.glb",
       "clip": "cinv_takimaru"
+    },
+    {
+      "glb": "pisuke_v14.glb",
+      "clip": "cinv_yomikage"
+    },
+    {
+      "glb": "pisuke_v14.glb",
+      "clip": "cinv_bullet"
+    },
+    {
+      "glb": "pisuke_v14.glb",
+      "clip": "cinv_dark_moguzo"
     }
   ]
 }

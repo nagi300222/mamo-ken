@@ -2495,6 +2495,18 @@
     {
       "glb": "godan_v14.glb",
       "clip": "cinv_takimaru"
+    },
+    {
+      "glb": "godan_v14.glb",
+      "clip": "cinv_yomikage"
+    },
+    {
+      "glb": "godan_v14.glb",
+      "clip": "cinv_bullet"
+    },
+    {
+      "glb": "godan_v14.glb",
+      "clip": "cinv_dark_moguzo"
     }
   ]
 }

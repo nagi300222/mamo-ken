@@ -2446,6 +2446,18 @@
     {
       "glb": "hakuma_v14.glb",
       "clip": "cinv_takimaru"
+    },
+    {
+      "glb": "hakuma_v14.glb",
+      "clip": "cinv_yomikage"
+    },
+    {
+      "glb": "hakuma_v14.glb",
+      "clip": "cinv_bullet"
+    },
+    {
+      "glb": "hakuma_v14.glb",
+      "clip": "cinv_dark_moguzo"
     }
   ]
 }
