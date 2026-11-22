@@ -4,6 +4,8 @@ import { Battle, DRIVE } from './battle.js';
 import { ROSTER, IDS, FPS, ARENA } from './balance.js';
 import { MODEL_ASSETS, MODEL_REVISION, chooseClip } from './models.js';
 import { frameTargets } from './camera-frame.js';
+import { showtimeFor, showtimeHex, superCaption, isShowtimeMove } from './showtime-profiles.js';
+import { createCombatAudio } from './combat-audio.js';
 
 const $=id=>document.getElementById(id), canvas=$('stage');
 const scene=new THREE.Scene();scene.background=new THREE.Color(0x758993);
@@ -32,6 +34,123 @@ for(let i=0;i<5;i++){const cloud=new THREE.Mesh(new THREE.SphereGeometry(.32+i*.
   cloud.position.set(-3+i*1.5,.95+(i%2)*.24,-3.9);cloud.scale.y=.28;scene.add(cloud);}
 const loader=new GLTFLoader();
 const actors=[null,null], bullets=new Map(), flashes=[];
+const audioFX=createCombatAudio();
+const reducedMotion=window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches??false;
+// Shared buffers and geometry: no new geometry allocations for each hit.
+const fxGeometry=Object.freeze({
+  hit:new THREE.OctahedronGeometry(.10,0),
+  block:new THREE.RingGeometry(.085,.12,6),
+  roar:new THREE.RingGeometry(.12,.145,32),
+  clinch:new THREE.RingGeometry(.105,.14,4),
+  special:new THREE.RingGeometry(.19,.235,32),
+  ultimate:new THREE.RingGeometry(.30,.34,40),
+  shard:new THREE.TetrahedronGeometry(.09),
+  slash:new THREE.PlaneGeometry(.07,.47)
+});
+let cameraShake=0, cameraShakeStrength=0, bannerUntil=0;
+function shake(strength,frames=7){
+  if(reducedMotion)return;
+  cameraShake=Math.max(cameraShake,frames);
+  cameraShakeStrength=Math.max(cameraShakeStrength,strength);
+}
+function showBanner(slot,id,move){
+  const banner=$('showtime-banner'), profile=showtimeFor(id);
+  banner.style.setProperty('--showtime',showtimeHex(id));
+  banner.replaceChildren();
+  const lead=document.createElement('span'),body=document.createElement('strong');
+  lead.textContent=(slot===0?'1P':'CPU')+' · '+profile.signature;
+  body.textContent=move;
+  banner.append(lead,body);banner.classList.add('active');
+  bannerUntil=(battle?.frame??0)+68;
+}
+function impactFX(kind,color,x,y,scale=1,life=14){
+  if(reducedMotion)return;
+  while(flashes.length>24){
+    const old=flashes.shift();scene.remove(old.mesh);old.mesh.material.dispose();
+  }
+  const mat=new THREE.MeshBasicMaterial({color,transparent:true,opacity:.85,depthWrite:false,side:THREE.DoubleSide,blending:THREE.AdditiveBlending});
+  const mesh=new THREE.Mesh(fxGeometry[kind]||fxGeometry.hit,mat);
+  mesh.position.set(x,y,.23);mesh.scale.setScalar(scale);
+  scene.add(mesh);flashes.push({mesh,life,maxLife:life,scale});
+  return mesh;
+}
+function updateActionTrail(a,p){
+  if(!a)return;
+  const active=p.action&&isShowtimeMove(p.action.id)&&
+    p.frame>=Math.max(0,p.action.startup-3)&&
+    p.frame<=p.action.startup+p.action.active+4&&!p.stop&&!reducedMotion;
+  if(!active){if(a.trail){a.trail.mesh.visible=false;a.trail.points.length=0;a.trail.actionKey='';}return;}
+  const profile=showtimeFor(a.id),key=p.action.serial;
+  if(!a.trail){
+    const geometry=new THREE.BufferGeometry(),positions=new Float32Array(12*3);
+    const attr=new THREE.BufferAttribute(positions,3);attr.setUsage(THREE.DynamicDrawUsage);
+    geometry.setAttribute('position',attr);geometry.setDrawRange(0,0);
+    const material=new THREE.LineBasicMaterial({color:profile.color,transparent:true,opacity:.9,depthWrite:false,blending:THREE.AdditiveBlending});
+    const mesh=new THREE.Line(geometry,material);mesh.frustumCulled=false;scene.add(mesh);
+    a.trail={mesh,points:[],actionKey:''};
+  }
+  const trail=a.trail;
+  if(trail.actionKey!==key){trail.points.length=0;trail.actionKey=key;}
+  const source=a.gltf.scene.getObjectByName(profile.bone);
+  if(!source){trail.mesh.visible=false;return;}
+  a.holder.updateMatrixWorld(true);
+  const point=source.getWorldPosition(new THREE.Vector3());
+  trail.points.push([point.x,point.y,point.z+.1]);
+  if(trail.points.length>profile.tail)trail.points.shift();
+  const values=trail.mesh.geometry.attributes.position.array;
+  for(let i=0;i<trail.points.length;i++){
+    const pos=trail.points[i];values[i*3]=pos[0];values[i*3+1]=pos[1];values[i*3+2]=pos[2];
+  }
+  trail.mesh.geometry.setDrawRange(0,trail.points.length);
+  trail.mesh.geometry.attributes.position.needsUpdate=true;
+  trail.mesh.visible=trail.points.length>1;
+}
+// Nine ultra-lightweight super signatures using existing GLB and battle event data.
+function superSignature(p){
+  const color=showtimeFor(p.id).color,x=p.x,y=p.y+.33,d=p.facing;
+  impactFX('ultimate',color,x,y,1,23);
+  if(p.id==='moguzo'){ // warm, low earth ripples
+    for(const offset of [-.32,.32])impactFX('special',0xffc878,x+offset,y-.20,.82,19);
+  }else if(p.id==='pisuke'){ // rapid kicks in a rushing line
+    for(const [i,dy] of [-.22,0,.22].entries())
+      impactFX('special',0x86dcff,x+d*(.22+i*.15),y+dy,.55,14+i*3);
+  }else if(p.id==='godan'){ // heavy angular rock shards
+    for(const [dx,dy] of [[-.23,-.2],[.22,-.13],[-.08,.3],[.25,.23]])
+      impactFX('shard',0xffa369,x+dx,y+dy,1.1,20);
+  }else if(p.id==='hakuma'){ // three bright snow-white bursts
+    for(let i=0;i<3;i++)impactFX('shard',0xe4fff3,x+d*(i*.19),y+.16*i,1.15,19);
+  }else if(p.id==='chirka'){ // visual-only illusion; no 3D copies/hitboxes
+    for(const offset of [-.42,0,.42])impactFX('special',0xdd9aff,x+offset,y+.04,1,18);
+  }else if(p.id==='takimaru'){ // square grab-seal echoes
+    for(const offset of [-.23,.23])impactFX('clinch',0xffd695,x+offset,y,.98,21);
+  }else if(p.id==='yomikage'){ // moonlight crossing slashes
+    for(const dir of [-1,1]){
+      const slash=impactFX('slash',0x9defff,x+d*.28,y+dir*.15,1,19);
+      if(slash)slash.rotation.z=dir*.68;
+    }
+  }else if(p.id==='bullet'){ // three amber rounds, tail-guided
+    for(let i=0;i<3;i++)impactFX('shard',0xffb045,x+d*(.17+i*.17),y+.16*(i%2),.75,16+i*3);
+  }else if(p.id==='dark_moguzo'){ // violet diagonal strike echoes
+    for(let i=0;i<4;i++){
+      const slash=impactFX('slash',0xbe78ff,x+d*(i*.14),y+(i%2?-.14:.16),.85,15+i*2);
+      if(slash)slash.rotation.z=i%2?.6:-.6;
+    }
+  }
+}
+function actionShowtime(e){
+  const p=battle?.fighters[e.slot];if(!p)return;
+  if(e.action==='ultimate'){
+    showBanner(e.slot,p.id,e.name);
+    audioFX.play('ultimate',p.id);
+    superSignature(p); // character-specific shape pattern, visual only
+    shake(.014,10);
+  }else if(/^s[123]$/.test(e.action)){
+    audioFX.play('special',p.id);
+    $('note').style.setProperty('--special-accent',showtimeHex(p.id));
+    impactFX('special',showtimeFor(p.id).color,p.x+p.facing*.22,p.y+.32,.8,13);
+  }else if(e.action==='roar'){audioFX.play('roar',p.id);impactFX('roar',0xf6d17b,p.x,p.y+.31,1.3,12);}
+  else if(e.action==='gyuiin'){audioFX.play('clinch',p.id);}
+}
 let battle=null,selected='moguzo',cpuChoice='godan',playing=false,paused=false,loading=false,lastFrame=0,acc=0,finishShown=false;
 
 const fwd=(v)=>Math.max(0,Math.min(100,v));
@@ -77,6 +196,13 @@ function updateCamera(snap=false){
   cameraPose.halfWidth+=(t.halfWidth-cameraPose.halfWidth)*blend;
   camera.position.set(cameraPose.x,cameraPose.y+.70,5.5);
   camera.lookAt(cameraPose.x,cameraPose.y,0);
+  // Add only a tiny display shake to the approved v0.3 camera composition.
+  if(cameraShake>0){
+    const fraction=cameraShake/10;
+    camera.position.x+=Math.sin(cameraShake*2.57)*cameraShakeStrength*fraction;
+    camera.position.y+=Math.cos(cameraShake*3.11)*cameraShakeStrength*fraction*.5;
+    cameraShake--;if(cameraShake===0)cameraShakeStrength=0;
+  }
   const halfHeight=cameraPose.halfWidth/(w/h);
   camera.left=-cameraPose.halfWidth;camera.right=cameraPose.halfWidth;
   camera.top=halfHeight;camera.bottom=-halfHeight;camera.updateProjectionMatrix();
@@ -91,9 +217,12 @@ const observer=new ResizeObserver(resize);observer.observe(canvas);window.addEve
 function disposable(o){o.traverse(node=>{if(node.geometry)node.geometry.dispose();
   if(node.material)for(const m of (Array.isArray(node.material)?node.material:[node.material])){m.map?.dispose();m.dispose();}});
 }
-function clearActors(){for(let i=0;i<2;i++){const a=actors[i];if(!a)continue;a.mixer.stopAllAction();scene.remove(a.holder);disposable(a.gltf.scene);actors[i]=null;}
+function clearActors(){for(let i=0;i<2;i++){const a=actors[i];if(!a)continue;
+    if(a.trail){scene.remove(a.trail.mesh);a.trail.mesh.geometry.dispose();a.trail.mesh.material.dispose();}
+    a.mixer.stopAllAction();scene.remove(a.holder);disposable(a.gltf.scene);actors[i]=null;}
   for(const m of bullets.values()){scene.remove(m);m.geometry.dispose();m.material.dispose();}bullets.clear();
-  for(const f of flashes){scene.remove(f.mesh);f.mesh.geometry.dispose();f.mesh.material.dispose();}flashes.length=0;}
+  for(const f of flashes){scene.remove(f.mesh);f.mesh.material.dispose();}flashes.length=0;
+  cameraShake=0;cameraShakeStrength=0;$('showtime-banner').classList.remove('active');}
 async function createActor(id,slot) {
   const asset=MODEL_ASSETS[id];if(!asset)throw Error('3Dアセットが見つからない: '+id);
   const [gltf,meta]=await Promise.all([
@@ -150,6 +279,7 @@ function syncActor(a,p){
   a.shadow.scale.setScalar(Math.max(.6,1-p.y*.65));
   a.shadow.material.opacity=Math.max(.11,.3-p.y*.13);
   if(!p.stop)a.mixer.update(1/FPS);
+  updateActionTrail(a,p);
 }
 const projectileMat={
  earth:0xb1a579,wind:0x9de4c9,violet:0xb68ce9,amber:0xf6ca72,blue:0x83c4ed
@@ -178,9 +308,15 @@ const cueColors={hit:0xffb77a,block:0x9fe0ff,roar:0xffcc65,clinch:0xd8a1fa};
 function vfx(){
   for(const e of battle.events){
     if(e.type==='move'){
+      actionShowtime(e);
       if(e.slot===0 || e.action==='roar' || e.action==='gyuiin'){
         note(e.name,e.action==='gyuiin'?'clinch':e.action);
       }
+      continue;
+    }
+    if(e.type==='ko'){audioFX.play('ko',battle.fighters[e.slot]?.id);continue;}
+    if(e.type==='charge' && battle.fighters[e.slot]?.id==='bullet'){
+      audioFX.play('tap','bullet');
       continue;
     }
     const cue=cues[e.type];
@@ -190,23 +326,26 @@ function vfx(){
     const owner=e.type==='hit'?1-e.slot:e.slot;
     const side=owner===0?'1P':owner===1?'CPU':'';
     note(side?side+' · '+label:label,kind);
+    const id=battle.fighters[owner]?.id||'moguzo';
+    const soundKind=e.type==='block'?'block':e.type==='counter'?'counter':
+      kind==='clinch'?'clinch':kind==='roar'?'roar':'hit';
+    audioFX.play(soundKind,id);
     if(e.x===undefined)continue;
-    // ガードは角のある盾、咆哮は輪、組み合いは角を立てた輪郭。
-    let shape;
-    if(kind==='hit')shape=new THREE.OctahedronGeometry(.10,0);
-    else if(kind==='block')shape=new THREE.RingGeometry(.085,.12,6);
-    else if(kind==='roar')shape=new THREE.RingGeometry(.12,.145,32);
-    else shape=new THREE.RingGeometry(.105,.14,4);
-    const mesh=new THREE.Mesh(shape,new THREE.MeshBasicMaterial({color:cueColors[kind],transparent:true,opacity:.85,depthWrite:false}));
-    mesh.position.set(e.x,e.y??.42,.23);
-    scene.add(mesh);flashes.push({mesh,life:14});
+    const color=kind==='hit'?showtimeFor(id).color:cueColors[kind];
+    impactFX(kind,color,e.x,e.y??.42,1,e.damage>=100?18:14);
+    if(kind==='hit'&&e.damage>=95)shake(.012,7);
+    if(e.type==='roar_counter'||e.type==='counter')shake(.014,9);
   }
   if(battle.frame>=cueUntil && $('note').textContent)note('');
+  if(battle.frame>=bannerUntil)$('showtime-banner').classList.remove('active');
 }
 function animateFX(){
   for(let i=flashes.length-1;i>=0;i--){
-    const f=flashes[i];f.life--;f.mesh.scale.setScalar(1+(14-f.life)*.12);f.mesh.material.opacity=f.life/14*.8;
-    if(f.life<=0){scene.remove(f.mesh);f.mesh.geometry.dispose();f.mesh.material.dispose();flashes.splice(i,1);}
+    const f=flashes[i];f.life--;
+    const progress=(f.maxLife-f.life)/f.maxLife;
+    f.mesh.scale.setScalar(f.scale*(1+progress*1.5));
+    f.mesh.material.opacity=f.life/f.maxLife*.8;
+    if(f.life<=0){scene.remove(f.mesh);f.mesh.material.dispose();flashes.splice(i,1);}
   }
 }
 function abilityLabel(p){
@@ -265,6 +404,7 @@ function hud(){
   for(let i=0;i<2;i++){
     const p=battle.fighters[i],r=ROSTER[p.id];
     $('name-'+i).textContent=r.name;
+    $('arena').style.setProperty(i===0?'--p1-accent':'--p2-accent',showtimeHex(p.id));
     $('ability-'+i).textContent=abilityLabel(p);
     $('hp-'+i).style.width=fwd(p.hp/r.hp*100)+'%';
     $('meter-'+i).style.width=fwd(p.super)+'%';
@@ -272,6 +412,7 @@ function hud(){
     $('drive-value-'+i).textContent=Math.floor(p.drive);
     $('super-value-'+i).textContent=Math.floor(p.super);
     $('hp-'+i).classList.toggle('low',p.hp/r.hp<.25);
+    $('meter-'+i).classList.toggle('ready',p.super>=100);
   }
   showDriveStatus('roar');
   showDriveStatus('gyuiin');
@@ -292,6 +433,7 @@ function hud(){
 function setLoading(s){$('loading-status').textContent=s;}
 async function startMatch(){
   if(loading)return;
+  audioFX.unlock(); // Only during explicit user-initiated start/click.
   loading=true;clearInput();
   playing=false;paused=false;finishShown=false;$('pause').textContent='一時停止';$('start').disabled=true;setLoading('GLBを読み込み中…');
   const ids=[selected,cpuChoice],level=+$('difficulty').value;
@@ -400,6 +542,17 @@ document.addEventListener('keyup',e=>{
   const k=keyMap[e.code];if(k){e.preventDefault();pressedKeys.delete(k);if(directions.includes(k))recordDirection();}
 });
 window.addEventListener('blur',()=>{clearInput();paused=true;$('pause').textContent='再開';});
+$('sound-toggle').onclick=()=>{
+  audioFX.unlock();
+  const muted=audioFX.setMuted(!audioFX.muted);
+  $('sound-toggle').textContent=muted?'音 OFF':'音 ON';
+  $('sound-toggle').setAttribute('aria-pressed',String(!muted));
+  if(!muted)audioFX.play('tap',selected);
+};
+if(!audioFX.supported){
+  $('sound-toggle').textContent='音 非対応';
+  $('sound-toggle').disabled=true;
+}
 document.querySelectorAll('[data-control]').forEach(button=>{
   const k=button.dataset.control;
   button.addEventListener('pointerdown',e=>{
