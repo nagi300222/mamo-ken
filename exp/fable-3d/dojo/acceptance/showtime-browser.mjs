@@ -136,6 +136,55 @@ try{
   await page.waitForFunction(()=>document.querySelectorAll('#charge-pips-0 .filled').length===3,undefined,{timeout:4000});
   assert.equal(await page.locator('#hud-side-0').getAttribute('data-element'),'amber');
   await page.screenshot({path:evidence+'/bullet-after-movie.png'});
+  const index=await page.evaluate(async()=>{
+    const result=await fetch('../cinematic/v14/manifest.json');
+    if(!result.ok)throw new Error('Showtime index HTTP '+result.status);
+    return result.json();
+  });
+  for(const [id,path] of Object.entries(index.characters)){
+    const {moves}=await page.evaluate(async path=>(await fetch('../cinematic/v14/'+path)).json(),path);
+    await page.locator('#select-back').tap();
+    await choose(id);
+    const loaded=await page.evaluate(()=>Object.keys(mamoken3d.actors[0].showtime).sort());
+    assert.deepEqual(loaded,['s1','s2','s3','ultimate'], id+' missing authored clips');
+    await positions(.36);
+    for(const [move, direction] of [['s1',null],['s2','ArrowUp'],['s3','ArrowRight']]){
+      await page.evaluate(direction=>{
+        for(const code of [direction,'KeyB'].filter(Boolean)){
+          document.dispatchEvent(new KeyboardEvent('keydown',{code,cancelable:true}));
+        }
+      },direction);
+      await page.waitForFunction(move=>{
+        const actor=mamoken3d.actors[0];
+        return actor.current===actor.showtime[move].action;
+      },move,{timeout:5000});
+      await page.evaluate(direction=>{
+        for(const code of ['KeyB',direction].filter(Boolean)){
+          document.dispatchEvent(new KeyboardEvent('keyup',{code,cancelable:true}));
+        }
+      },direction);
+      assert.equal(await page.locator('#cinematic-layer').evaluate(el=>el.hidden),true);
+      await page.screenshot({path:evidence+'/'+id+'-'+move+'.png'});
+      await positions(.36);
+      await page.evaluate(()=>{
+        const p=mamoken3d.battle.fighters[0];
+        p.prev.special=false;
+      });
+    }
+    const spec=moves.find(move=>move.moveId==='ultimate');
+    await positions(.36,20);
+    await page.locator('[data-control="ultimateButton"]').tap();
+    await page.waitForFunction(()=>mamoken3d.cinematic.active,undefined,{timeout:7500});
+    assert.equal(await page.locator('#game-over').isVisible(),false);
+    const begin=await page.evaluate(()=>[mamoken3d.battle.frame,mamoken3d.battle.time]);
+    await page.waitForFunction(shot=>document.getElementById('cinematic-layer').dataset.phase===shot,
+      spec.shots[1].id,{timeout:15000});
+    assert.deepEqual(await page.evaluate(()=>[mamoken3d.battle.frame,mamoken3d.battle.time]),begin);
+    await page.screenshot({path:evidence+'/'+id+'-authored-ultimate.png'});
+    await page.locator('#game-over').waitFor({state:'visible',timeout:30000});
+    assert.equal(await page.locator('#stage').evaluate(el=>el.parentElement.id),'arena');
+    console.log('Authored clips and hit-confirmed KO verified:',id);
+  }
   assert.deepEqual(errors,[]);
   console.log('Cinematic browser PASS: super whiff no movie, specials dramatic, confirmed super fullscreen scene, freeze, skip, KO defer, SFX/BGM/FX, Bullet HUD');
 }catch(e){
