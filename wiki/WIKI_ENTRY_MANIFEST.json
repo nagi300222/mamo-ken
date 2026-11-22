@@ -1,9 +1,9 @@
 {
   "patch": "MAMOKEN Wiki WEB-R2 final sync (Issue #108)",
   "auditedMainShortSha": "2f1bae7",
-  "entry": "wiki/index.html",
-  "bytes": 127240,
-  "sha256": "04e17f71728aabedb89fa75a4cbd32dc6d16b46f71316872bcae523cbdd0d50c",
+  "entry": "wiki/legacy-2d.html",
+  "bytes": 127636,
+  "sha256": "8c9aa2456bf33cf9c4cd08f8d7e62f3878e889d2a7dfcd326b1f272f4f120c4b",
   "robots": "index,follow",
   "expectedSuffix": "</script></body></html>",
   "localAssetRoots": {
@@ -38,5 +38,13 @@
     "wiki/r05.js",
     "wiki/r06.js",
     "wiki/r07.js"
-  ]
+  ],
+  "developmentPage": "wiki/v14-development.html",
+  "developmentPageStatus": "Three.js v14 Draft only; not merged or live",
+  "latest3dDevelopmentPage": "wiki/index.html",
+  "latest3dData": "wiki/v151-data.json",
+  "latest3dSnapshot": "v15.1 PR #199 78dd0c685d78af617896c01bd95a277928e01368; published Wiki only, game runtime not merged",
+  "public3dEntry": "wiki/index.html",
+  "legacy2dEntry": "wiki/legacy-2d.html",
+  "latest3dLegacyRedirect": "wiki/v151-development.html"
 }
