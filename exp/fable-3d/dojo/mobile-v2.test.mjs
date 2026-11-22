@@ -253,7 +253,9 @@ test('全9体が全9対戦相手を左右から飛び越え、着地後は後ろ
       assert.ok(Math.abs(p.x)<=1.76);
     }
     const label=left+'/'+right+'/'+side;
-    assert.ok((p.x-o.x)*side>0&&p.y===0&&apex>.62&&apex<.83,label);
+    const valid=(p.x-o.x)*side>0&&p.y===0&&apex>.62&&apex<.83;
+    if(!valid)console.error('v15 jump detail',label,{px:p.x,ox:o.x,y:p.y,apex,facing:p.facing,airVX:p.airVX});
+    assert.ok(valid,label);
     assert.equal(p.facing,-side,label);
     p.x=o.x+side*.40;
     const hp=p.hp;

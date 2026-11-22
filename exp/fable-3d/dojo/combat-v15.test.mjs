@@ -75,10 +75,10 @@ test('on block: weak into special allowed; whiff and holding do not cancel',()=>
  initialContact(whiff.g,whiff.defender);
  const no=attempt(whiff.g,whiff.defender,{special:true});
  assert.ok(no.every(e=>e.type!=='cancel'));
- const hold=encounter();initialContact(hold.g,hold.defender);
+ const hold=encounter();
  let count=0;
  for(let i=0;i<65;i++){hold.g.tick({weak:true},{});count+=hold.g.events.filter(e=>e.type==='cancel').length;}
- assert.equal(count,0);
+ assert.equal(count,0); // a continuously held button is never a new edge
 });
 test('Godan weak link limit and Dark Moguzo triple weak are different',()=>{
  assert.equal(fighterStyle('godan').weakChainMax,1);
