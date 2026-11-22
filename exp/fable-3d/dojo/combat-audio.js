@@ -52,5 +52,5 @@ export function createCombatAudio(contextFactory=()=>globalThis.AudioContext||gl
       return true;
     }catch{return false;}
   }
-  return {unlock,play,setMuted,get muted(){return muted;},get supported(){return !!contextFactory();}};
+  return {unlock,play,setMuted,get muted(){return muted;},get context(){return context;},get supported(){return !!contextFactory();}};
 }
