@@ -4,8 +4,9 @@ import {readFileSync,existsSync} from 'node:fs';
 import test from 'node:test';
 const read=(p)=>readFileSync(new URL(p,import.meta.url),'utf8');
 const doc=JSON.parse(read('./v151-data.json'));
-const page=read('./v151-development.html');
-const index=read('./index.html');
+const page=read('./index.html');
+const legacy=read('./legacy-2d.html');
+const redirect=read('./v151-development.html');
 const roster=['moguzo','pisuke','godan','hakuma','chirka','takimaru','yomikage','bullet','dark_moguzo'];
 const slots=['stand_weak','stand_heavy','crouch_weak','crouch_heavy','air_weak','air_heavy'];
 
@@ -15,9 +16,12 @@ test('Wiki v15.1 is a fixed snapshot of reviewed PR199, not older 2D or v15',()=
  assert.deepEqual(doc.order,roster);
  assert.equal(doc.definitions.fps,60);
  assert.equal(doc.definitions.hurtRadius,.16);
- assert.match(index,/href="v151-development.html"/);
+ assert.match(page,/href="legacy-2d\.html"/);
+ assert.match(page,/旧2D版はこちら/);
  assert.match(page,/v151-data\.json/);
- assert.match(page,/noindex,nofollow/);
+ assert.match(page,/index,follow/);
+ assert.match(legacy,/DB=\{/);
+ assert.match(redirect,/index\.html/);
 });
 
 test('54 normal moves have complete, non-invented frame and reach data',()=>{

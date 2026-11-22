@@ -6,7 +6,8 @@ import { fileURLToPath } from 'node:url';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const repoRoot = path.resolve(here, '..');
-const entryPath = path.join(repoRoot, 'wiki', 'index.html');
+const entryPath = path.join(repoRoot, 'wiki', 'legacy-2d.html');
+const public3dPath = path.join(repoRoot, 'wiki', 'index.html');
 const manifestPath = path.join(repoRoot, 'wiki', 'WIKI_ENTRY_MANIFEST.json');
 
 const bytes = fs.readFileSync(entryPath);
@@ -14,11 +15,17 @@ const html = bytes.toString('utf8');
 const manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
 const sha256 = crypto.createHash('sha256').update(bytes).digest('hex');
 
-assert.equal(bytes.length, manifest.bytes, 'wiki/index.html byte length mismatch');
-assert.equal(sha256, manifest.sha256, 'wiki/index.html SHA-256 mismatch');
+assert.equal(bytes.length, manifest.bytes, 'wiki/legacy-2d.html byte length mismatch');
+assert.equal(sha256, manifest.sha256, 'wiki/legacy-2d.html SHA-256 mismatch');
 assert.match(html, /^<!doctype html>/i, 'missing HTML doctype');
-assert.ok(html.endsWith(manifest.expectedSuffix), 'wiki/index.html is truncated or has an unexpected suffix');
-assert.match(html, /<meta name="robots" content="index,follow">/, 'public robots directive is missing');
+assert.ok(html.endsWith(manifest.expectedSuffix), 'wiki/legacy-2d.html is truncated or has an unexpected suffix');
+assert.match(html, /<meta name="robots" content="index,follow">/, 'legacy 2D robots directive is missing');
+assert.equal(manifest.entry, 'wiki/legacy-2d.html');
+assert.equal(manifest.public3dEntry, 'wiki/index.html');
+const main3d = fs.readFileSync(public3dPath, 'utf8');
+assert.match(main3d, /マモ拳 3D v15\.1/, 'public Wiki root must show 3D v15.1');
+assert.match(main3d, /href="legacy-2d\.html"/, '3D Wiki must link to the 2D archive');
+assert.match(main3d, /v151-data\.json/, '3D Wiki must load 90-move data');
 
 for (const forbidden of ['DecompressionStream', 'pako', 'atob(', 'TextDecoder(', '__MAMOKEN_WIKI_RAW', '__MAMOKEN_WIKI_B64']) {
   assert.ok(!html.includes(forbidden), `obsolete loader/decompression token remains: ${forbidden}`);
@@ -51,7 +58,7 @@ new Function(script); // parse-only: constructing the function does not execute 
 function extractDbLiteral(source) {
   const marker = 'DB={';
   const markerIdx = source.indexOf(marker);
-  assert.ok(markerIdx >= 0, 'DB={...} data literal not found in wiki/index.html');
+  assert.ok(markerIdx >= 0, 'DB={...} data literal not found in wiki/legacy-2d.html');
   const start = markerIdx + 'DB='.length;
   let depth = 0, i = start, inStr = false, esc = false;
   for (; i < source.length; i++) {

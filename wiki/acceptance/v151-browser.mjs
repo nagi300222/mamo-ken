@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import {mkdir} from 'node:fs/promises';
 import {createRequire} from 'node:module';
 const {chromium}=createRequire(import.meta.url)('playwright-core');
-const base=process.env.MAMOKEN_WIKI_URL||'http://127.0.0.1:4174/wiki/v151-development.html';
+const base=process.env.MAMOKEN_WIKI_URL||'http://127.0.0.1:4174/wiki/';
 const evidence=process.env.MAMOKEN_WIKI_EVIDENCE||'/tmp/mamoken-wiki-acceptance';
 await mkdir(evidence,{recursive:true});
 const browser=await chromium.launch({
@@ -20,6 +20,19 @@ try{
  await page.goto(base,{waitUntil:'domcontentloaded'});
  await page.waitForFunction(()=>document.querySelectorAll('#fighter-nav button').length===9,undefined,{timeout:12000});
  assert.equal(await page.locator('#fighter-heading h2').textContent(),'モグゾー');
+ assert.match(await page.title(),/3D v15.1/);
+ const oldLink=page.getByRole('link',{name:'旧2D版はこちら'});
+ assert.equal(await oldLink.count(),1,'old wiki has a separate link');
+ const oldPage=await browser.newPage();
+ await oldPage.goto(new URL('legacy-2d.html',base),{waitUntil:'domcontentloaded'});
+ assert.match(await oldPage.title(),/マモ拳 攻略Wiki/);
+ assert.ok((await oldPage.locator('body').textContent()).includes('モグゾー'));
+ await oldPage.close();
+ const v14=await page.request.get(new URL('v14-development.html',base).href);
+ assert.equal(v14.status(),200,'v14 archive kept');
+ const historic=await page.request.get(new URL('v151-development.html',base).href);
+ assert.equal(historic.status(),200,'v15.1 old URL retained');
+ assert.ok((await historic.text()).includes("index.html"),'v15.1 old URL redirects');
  const checked=[];
  for(const id of fighters){
   await page.locator('[data-id="'+id+'"]').click();
