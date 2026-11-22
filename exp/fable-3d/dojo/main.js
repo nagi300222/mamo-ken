@@ -302,7 +302,7 @@ function actionShowtime(e){
     impactFX('special',showtimeFor(p.id).color,p.x,p.y+.36,1,10);
   }else if(/^s[123]$/.test(e.action)){
     // Specials now own the older super-level flourish during ordinary gameplay.
-    showBanner(e.slot,p.id,e.name);
+    showBanner(e.slot,p.id,e.action==='ultimate'?(actors[e.slot]?.showtime.ultimate?.spec.displayName??e.name):e.name);
     if(!actors[e.slot]?.showtime[e.action])audioFX.play('ultimate',p.id);
     $('note').style.setProperty('--special-accent',showtimeHex(p.id));
     if(!actors[e.slot]?.showtime[e.action]){superSignature(p);shake(.014,8);}
@@ -549,7 +549,7 @@ function vfx(){
     if(e.type==='move'){
       actionShowtime(e);
       if(e.slot===0 || e.action==='roar' || e.action==='gyuiin'){
-        note(e.name,e.action==='gyuiin'?'clinch':e.action);
+        note(e.action==='ultimate'?(actors[e.slot]?.showtime.ultimate?.spec.displayName??e.name):e.name,e.action==='gyuiin'?'clinch':e.action);
       }
       continue;
     }

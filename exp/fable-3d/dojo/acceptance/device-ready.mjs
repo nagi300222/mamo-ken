@@ -12,6 +12,10 @@ const report=[];
 try{
  await page.goto(root+'?check=1');await page.waitForFunction(()=>window.mamoken3d);
  assert.equal(await page.locator('#check-mode').isChecked(),true);
+ await page.setViewportSize({width:667,height:375});
+ const startBounds=await page.locator('#start').boundingBox();assert.ok(startBounds.x>=0&&startBounds.x+startBounds.width<=667);
+ await page.screenshot({path:evidence+'/selection-667.png'});
+ await page.setViewportSize({width:852,height:393});
  await page.locator('#start').tap();await page.waitForFunction(()=>mamoken3d.battle?.frame>0);
  for(let i=0;i<4;i++){
   await page.locator('[data-control="ultimateButton"]').tap();await page.waitForFunction(()=>mamoken3d.cinematic.active);
