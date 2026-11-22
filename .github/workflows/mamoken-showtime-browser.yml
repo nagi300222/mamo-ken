@@ -25,6 +25,8 @@ jobs:
           node-version: '22'
       - name: Existing gameplay and new audiovisual regression
         run: npm --prefix exp/fable-3d/dojo test
+      - name: Validate registered assets and build Pages
+        run: npm --prefix exp/fable-3d/dojo run build:pages
       - name: Install Chrome automation only in runner
         run: npm install --prefix "$RUNNER_TEMP/mamoken-browser" playwright-core@1.65.1
       - name: Run actual GLB/WebGL browser tests

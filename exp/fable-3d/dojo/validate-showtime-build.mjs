@@ -10,9 +10,16 @@ function glbJSON(buffer, url) {
   return JSON.parse(buffer.toString('utf8', 20, 20 + buffer.readUInt32LE(12)));
 }
 
-function getAnimation(doc, clip) {
+function getAnimation(doc, clip, rig) {
   const animation = doc.animations?.find(item => item.name === clip);
   if (!animation) throw new Error('Missing clip: ' + clip);
+  if (doc !== rig) {
+    const names = new Set(rig.nodes.map(node => node.name));
+    for (const channel of animation.channels) {
+      const joint = doc.nodes[channel.target.node]?.name;
+      if (!joint || !names.has(joint)) throw new Error('Animation channel cannot bind: ' + clip + '/' + joint);
+    }
+  }
   const duration = Math.max(...animation.samplers.map(sampler =>
     doc.accessors[sampler.input].max[0]));
   return { name: clip, duration };
@@ -46,15 +53,17 @@ export async function validateShowtimeBuild(base) {
         return readModel(new URL(source.glb, url));
       }
       const attackerModel = await sourceModel(spec.animationSources.attacker, id);
-      validateClipTiming(spec, getAnimation(attackerModel, spec.animationSources.attacker.clip));
+      const attackerRig = await rosterModel(id);
+      validateClipTiming(spec, getAnimation(attackerModel, spec.animationSources.attacker.clip, attackerRig));
       if (moveId === 'ultimate') {
         for (const target of IDS) {
           const targetSource = spec.animationSources.target;
           const targetModel = await sourceModel(targetSource, target);
-          getAnimation(targetModel, targetSource.clip);
+          const targetRig = await rosterModel(target);
+          getAnimation(targetModel, targetSource.clip, targetRig);
           const bones = {
-            attacker: new Set((await rosterModel(id)).nodes.map(node => node.name)),
-            target: new Set((await rosterModel(target)).nodes.map(node => node.name))
+            attacker: new Set(attackerRig.nodes.map(node => node.name)),
+            target: new Set(targetRig.nodes.map(node => node.name))
           };
           for (const { camera } of spec.shots) {
             for (const lookAt of [camera.lookAt, camera.endLookAt]) {
