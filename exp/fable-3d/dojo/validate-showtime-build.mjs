@@ -28,6 +28,7 @@ function getAnimation(doc, clip, rig) {
 export async function validateShowtimeBuild(base) {
   const readJSON = async url => JSON.parse(await readFile(url, 'utf8'));
   const index = validateShowtimeIndex(await readJSON(new URL('manifest.json', base)));
+  if(!IDS.every(id=>index[id]))throw new Error('Production requires all nine character manifests');
   const files = new Set(['manifest.json']);
   const documents = new Map();
   function readModel(url) {
@@ -41,7 +42,7 @@ export async function validateShowtimeBuild(base) {
     files.add(path);
     const url = new URL(path, base);
     const { moves } = await readJSON(url);
-    if (!Array.isArray(moves) || ![0,MOVE_IDS.length].includes(moves.length)) {
+    if (!Array.isArray(moves) || moves.length !== MOVE_IDS.length) {
       throw new Error('Expected all four authored moves: ' + id);
     }
     const clipsById = new Map(moves.map(move => [move.moveId, move]));

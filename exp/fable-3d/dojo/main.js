@@ -84,21 +84,24 @@ function beginUltimateMovie(event){
   const attacker=battle?.fighters[event.slot];
   if(!attacker||!movie.start(event,attacker.id))return false;
   const entry=actors[event.slot]?.showtime.ultimate;
-  if(entry){
-    try{
-      authoredMovie=createAuthoredCinematic({
-        entry,attacker:actors[event.slot],target:actors[event.target],mirror:attacker.facing<0,
-        background:MOVIE_BACKGROUND[attacker.id],lights:scene.children.filter(node=>node.isLight),
-        reducedMotion:!effectsAllowed(),
-        visualCue:(destination,kind,point)=>impactFX(kind,showtimeFor(attacker.id).color,
-          point.x,point.y,1,14,destination,movieFlashes,point.z),
-        audioCue:kind=>playMovieSound(kind,attacker.id)
-      });
-    }catch(error){
-      movie.cancel();
-      console.warn('奥義ムービーの再生準備に失敗',error);
-      return false;
-    }
+  if(!entry){
+    movie.cancel();
+    note('奥義の演出データを読み込めません');
+    return false;
+  }
+  try{
+    authoredMovie=createAuthoredCinematic({
+      entry,attacker:actors[event.slot],target:actors[event.target],mirror:attacker.facing<0,
+      background:MOVIE_BACKGROUND[attacker.id],lights:scene.children.filter(node=>node.isLight),
+      reducedMotion:!effectsAllowed(),
+      visualCue:(destination,kind,point)=>impactFX(kind,showtimeFor(attacker.id).color,
+        point.x,point.y,1,14,destination,movieFlashes,point.z),
+      audioCue:kind=>playMovieSound(kind,attacker.id)
+    });
+  }catch(error){
+    movie.cancel();
+    console.warn('奥義ムービーの再生準備に失敗',error);
+    return false;
   }
   clearInput();
   movieLastPhase='';
