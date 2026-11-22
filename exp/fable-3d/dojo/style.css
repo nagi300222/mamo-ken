@@ -433,3 +433,62 @@ button.primary:active{transform:translateY(1px)}
 #check-mode-label{font-size:.8rem;color:#f4d799;max-width:11rem} #check-mode-label input{accent-color:#f4d799} #device-stats{color:#f4d799}
 .selection-footer:has(#check-mode-label:not([hidden])){flex-wrap:wrap}
 #check-mode-label{order:5;flex-basis:100%;max-width:none}
+
+
+/* v14 P0: touch devices remain landscape-only even when iOS orientation lock is on.
+   100dvh becomes the width of the landscape game; 100vw becomes its height.
+   OS browser chrome is untouched. A -90deg pointer mapping is applied in JS. */
+@media (orientation:portrait){
+  html.landscape-locked{
+    --topbar-height:34px;
+    --stick-size:105px;
+    --action-size:43px;
+  }
+  html.landscape-locked #app{
+    position:fixed;inset:0 auto auto 0;
+    width:100dvh;height:100vw;
+    transform-origin:top left;
+    transform:translateX(100vw) rotate(90deg);
+    padding:env(safe-area-inset-right) env(safe-area-inset-bottom)
+      env(safe-area-inset-left) env(safe-area-inset-top);
+  }
+  html.landscape-locked #combat-layout{
+    grid-template-columns:clamp(108px,18dvh,162px) minmax(0,1fr) clamp(164px,25dvh,213px);
+  }
+  html.landscape-locked .rotate-hint{display:none!important}
+  html.landscape-locked .control-rail{gap:6px;padding:4px 2px 6px}
+  html.landscape-locked .rail-sub{display:none}
+  html.landscape-locked .rail-caption{font-size:8px}
+  html.landscape-locked #buttons-rail .attack-pad{gap:4px}
+  html.landscape-locked #buttons-rail .attack{min-width:42px;min-height:42px}
+  html.landscape-locked #arena>.hud{top:2px;left:3px;right:3px;padding:2px 4px 3px;gap:3px}
+  html.landscape-locked #arena .round-center{flex:0 0 38px}
+  html.landscape-locked #arena .round-center>span{font-size:18px}
+  html.landscape-locked #arena .note{top:49px;font-size:9px}
+  html.landscape-locked .selection{padding:7px 10px}
+  html.landscape-locked .selection-top{margin-bottom:5px}
+  html.landscape-locked .selection h1{font-size:15px}
+  html.landscape-locked .roster{grid-template-columns:repeat(9,minmax(0,1fr));gap:4px}
+  html.landscape-locked .fighter-card{padding:3px 1px;font-size:9px;border-radius:6px}
+  html.landscape-locked .fighter-card img{height:min(55px,12vw)}
+  html.landscape-locked .fighter-card small{display:none}
+  html.landscape-locked .selection-footer{gap:7px;margin-top:5px;padding:6px;flex-wrap:nowrap}
+  html.landscape-locked .chosen{flex-basis:auto}
+  html.landscape-locked #start{padding:6px 8px;font-size:11px}
+  html.landscape-locked .footnote{justify-content:flex-end;font-size:8px}
+  html.landscape-locked .footnote span:first-child{display:none}
+  /* Popovers enter the browser top layer, outside the transformed app; rotate them explicitly. */
+  html.landscape-locked #commands-help:popover-open,
+  html.landscape-locked #av-settings:popover-open{
+    position:fixed;inset:0 auto auto 0;margin:0;
+    transform-origin:top left;
+    transform:translateX(100vw) rotate(90deg);
+    max-width:min(76dvh,650px);
+    max-height:min(92vw,340px);
+    overflow-y:auto;
+    z-index:1000;
+  }
+  html.landscape-locked #av-settings:popover-open{width:min(285px,68dvh)}
+  html.landscape-locked #commands-help:popover-open{width:min(650px,82dvh)}
+  /* The fullscreen movie lives inside the transformed #app and follows it automatically. */
+}
