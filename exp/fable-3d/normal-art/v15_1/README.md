@@ -56,3 +56,8 @@ node exp/fable-3d/normal-art/v15_1/tools/build_contacts.mjs --dir exp/fable-3d/n
 3. バレットの尾（0.55〜0.66）とタキマルの手（0.54〜0.62）は旧判定より長い。見た目どおりなので判定は正しいが、発生・硬直側でリスクを付ける前提。
 4. PR195 から角度を変えていない24技のうち、屈強の数技（モグゾー `groundPound`、ゴダン `doubleGroundPound` など）は頭が拳とほぼ同じ前方位置にある（差 1cm 未満）。契約上は ok だが、接触の読みやすさは次の仕上げ候補。
 5. 空中技は跳躍頂点から出すと高さ条件で当たりが遅れる／当たらない（制作側試験の条件によるもの。契約の不一致ではない）。
+
+## リポジトリに入れていないもの
+- `exp/fable-3d/normal/v15/*_normals.glb`：`pack-normals-v15.mjs` の生成物（PR195 と同じくビルド時に生成）。
+- 計測時の生スクリーンショット（2倍解像度PNG、約30MB）と動画用の連番：`_scratch/`（git 管理外）。シートと動画に変換したものを `evidence/` に置いている。
+  `audit/v15/<id>.json` は before の毎フレーム実測（`measure_normals.mjs` の出力）。
