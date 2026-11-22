@@ -29,10 +29,10 @@ test('技表は対戦画面から撤去してヘッダーの開閉に移した',
   assert.match(html,/236236/);
   assert.ok(!html.includes('class="commands-help"'));
 });
-test('右側5ボタンを維持。ドライブ技は発動状態を読み上げ可能',()=>{
+test('右側6ボタン。ギュイーンと↓+必殺の咆哮は発動状態を読み上げ可能',()=>{
   const rightControls=html.split('id="buttons-rail"')[1]||'';
   assert.deepEqual([...rightControls.matchAll(/data-control="([^"]+)"/g)].map(x=>x[1]),
-    ['weak','strong','throw','roar','gyuiin']);
+    ['weak','strong','throw','gyuiin','special','ultimateButton']);
   for(const k of ['roar','gyuiin']){
     assert.match(html,new RegExp('id="'+k+'-status"'));
     assert.match(main,/button\.setAttribute\('aria-label'/);

@@ -1,8 +1,8 @@
 import { FPS, ARENA, ROSTER, IDS, normalMove, specialMove, ultimateMove, tailTipAt } from './balance.js';
-import { pushDirection, readCommand } from './commands.js';
+import { pushDirection, readCommand, specialButtonSlot } from './commands.js';
 import { cpuInput } from './cpu.js';
 // 設計の正本はバランスデータ。GLB・Three.js・操作DOMには依存しない。
-const KEYS=['left','right','up','down','weak','strong','throw','roar','gyuiin','dash','stepForward','stepBack','special1','special2','special3','super'];
+const KEYS=['left','right','up','down','weak','strong','throw','roar','gyuiin','dash','stepForward','stepBack','special','ultimateButton','special1','special2','special3','super'];
 const cap=(v,a,b)=>Math.max(a,Math.min(b,v));
 const inputOf=(raw={})=>Object.fromEntries(KEYS.map(k=>[k,!!raw[k]]));
 const total=m=>m.startup+m.active+m.recovery;
@@ -181,7 +181,9 @@ export class Battle {
     p.prev=n;p.input=n;
     if(p.ko)return;
     if(p.stop||p.stun)return;
-    if(edges.roar&&p.action&&p.action.kind!=='roar'&&other.action?.kind==='roar'&&p.roarCooldown===0&&p.drive>=DRIVE.roarCost){p.action=null;p.frame=0;}
+    const buttonSlot=edges.special?specialButtonSlot(n,p.facing):null;
+    const wantsRoar=edges.roar||buttonSlot==='roar';
+    if(wantsRoar&&p.action&&p.action.kind!=='roar'&&other.action?.kind==='roar'&&p.roarCooldown===0&&p.drive>=DRIVE.roarCost){p.action=null;p.frame=0;}
 
     // チルカ：同じ予備動作から中止（後ろ）か一拍遅らせる（下）を選べる。
     if(p.id==='chirka'&&p.action?.feintable&&p.frame>=2&&p.frame<p.action.startup){
@@ -223,9 +225,15 @@ export class Battle {
       return;
     }
     if(p.dashF>0){moveX(p,p.dashDir*ROSTER[p.id].dash/18);p.dashF--;p.state='dash';p.frame++;return;}
-    if(edges.roar){this._begin(p,ROAR,'roar');return;}
+    // v0.7: dedicated super has priority over special; no normal attack fallback if meter is insufficient.
+    if(edges.ultimateButton){this._begin(p,ultimateMove(p.id),'ultimate');return;}
+    if(wantsRoar){this._begin(p,ROAR,'roar');return;}
+    if(buttonSlot){
+      const index={s1:0,s2:1,s3:2}[buttonSlot];
+      this._begin(p,specialMove(p.id,index),buttonSlot);return;
+    }
     if(edges.throw){this._begin(p,GRAB,'throw');return;}
-    // CPUは内部アクションIDで選ぶ。プレイヤーには必殺ボタンを表示しない。
+    // CPU/legacy keyboard actions and classic motion-command tests remain supported.
     if(edges.super){this._begin(p,ultimateMove(p.id),'ultimate');return;}
     for(let i=1;i<=3;i++)if(edges['special'+i]){
       this._begin(p,specialMove(p.id,i-1),'s'+i);return;
