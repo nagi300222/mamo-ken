@@ -69,6 +69,7 @@ export function validateMoveManifest(manifest, id, moveId) {
     }
     return manifest;
   }
+  if (manifest.actorTracks) return validateChoreography(manifest, label);
   const { durationSeconds, shots, animationSources, cueTrack = [] } = manifest;
   requireValue(manifest.trigger === 'confirmed_unblocked_ultimate_hit' && manifest.runtime === 'threejs' &&
     Number.isFinite(durationSeconds) && durationSeconds >= 9 && durationSeconds <= 11 &&
@@ -103,6 +104,32 @@ export function validateMoveManifest(manifest, id, moveId) {
   return manifest;
 }
 
+export function validateChoreography(spec, label) {
+  requireValue(spec.trigger === 'confirmed_unblocked_ultimate_hit' && spec.runtime === 'threejs' &&
+    Number.isFinite(spec.durationSeconds) && spec.durationSeconds >= 9 && spec.durationSeconds <= 11 &&
+    source(spec.animationSources.target), 'Invalid authored duration or target: ' + label);
+  requireValue(spec.actorTracks.attacker && spec.actorTracks.target &&
+    Array.isArray(spec.shots) && spec.shots.length >= 2 &&
+    Array.isArray(spec.cues), 'Incomplete choreography: ' + label);
+  let end = 0;
+  for (const shot of spec.shots) {
+    requireValue(Math.abs(shot.start - end) < 1e-6 && shot.end > shot.start &&
+      Array.isArray(shot.camera?.keys) && shot.camera.keys.length > 0, 'Invalid authored shot: ' + label);
+    end = shot.end;
+    for (const key of shot.camera.keys) {
+      requireValue(Number.isFinite(key.t) && key.t >= shot.start && key.t <= shot.end &&
+        key.pos && key.look && Number.isFinite(key.fov) && key.fov > 0 && key.fov < 180,
+      'Invalid authored camera: ' + label);
+    }
+  }
+  requireValue(Math.abs(end - spec.durationSeconds) < 1e-6, 'Incomplete shot coverage: ' + label);
+  for (const track of Object.values(spec.actorTracks)) {
+    requireValue(Array.isArray(track.segments) && track.segments.length &&
+      Array.isArray(track.root) && track.root.length, 'Invalid actor track: ' + label);
+  }
+  return spec;
+}
+
 export function sampleCinematic(manifest, seconds) {
   const elapsed = Math.max(0, Math.min(manifest.durationSeconds, seconds));
   const shot = manifest.shots.find(item => elapsed < item.end) ?? manifest.shots.at(-1);
@@ -126,17 +153,21 @@ export function createShowtimeLoader(base) {
     if (!location) return {};
     const url = new URL(location, base);
     const character = await fetchJSON(url);
-    if (!Array.isArray(character.moves) || character.moves.length !== MOVE_IDS.length) {
+    if (!Array.isArray(character.moves) || ![0,MOVE_IDS.length].includes(character.moves.length)) {
       throw new Error('Expected all four authored moves: ' + id);
     }
     const byId = new Map(character.moves.map(move => [move.moveId, move]));
-    return Object.fromEntries(await Promise.all(MOVE_IDS.map(async moveId => {
+    const reactions = Object.fromEntries(await Promise.all((character.reactions ?? []).map(async source =>
+      [source.clip, await loadClip(source, url)])));
+    const entries = await Promise.all(character.moves.map(async move => {
+      const moveId = move.moveId;
       const spec = validateMoveManifest(byId.get(moveId), id, moveId);
       const attacker = await loadClip(spec.animationSources.attacker, url);
       validateClipTiming(spec, attacker);
       const targetSource = spec.animationSources.target;
       const target = targetSource?.glb ? await loadClip(targetSource, url) : null;
       return [moveId, { spec, attacker, target }];
-    })));
+    }));
+    return { ...Object.fromEntries(entries), reactions };
   };
 }

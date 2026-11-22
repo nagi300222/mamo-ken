@@ -145,7 +145,8 @@ try{
     const {moves}=await page.evaluate(async path=>(await fetch('../cinematic/v14/'+path)).json(),path);
     await page.locator('#select-back').tap();
     await choose(id);
-    const loaded=await page.evaluate(()=>Object.keys(mamoken3d.actors[0].showtime).sort());
+    if(!moves.length)continue;
+    const loaded=await page.evaluate(()=>Object.keys(mamoken3d.actors[0].showtime).filter(key=>key!=='reactions').sort());
     assert.deepEqual(loaded,['s1','s2','s3','ultimate'], id+' missing authored clips');
     await positions(.36);
     for(const [move, direction] of [['s1',null],['s2','ArrowUp'],['s3','ArrowRight']]){

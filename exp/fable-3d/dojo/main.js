@@ -87,7 +87,7 @@ function beginUltimateMovie(event){
   if(entry){
     try{
       authoredMovie=createAuthoredCinematic({
-        entry,attacker:actors[event.slot],target:actors[event.target],
+        entry,attacker:actors[event.slot],target:actors[event.target],mirror:attacker.facing<0,
         background:MOVIE_BACKGROUND[attacker.id],lights:scene.children.filter(node=>node.isLight),
         reducedMotion:!effectsAllowed(),
         visualCue:(destination,kind,point)=>impactFX(kind,showtimeFor(attacker.id).color,
@@ -402,7 +402,7 @@ async function createActor(id,slot) {
     console.warn(id+' の専用技素材が読めません',error);
   }
   for(const [moveId,entry] of Object.entries(showtime)){
-    if(moveId!=='ultimate')entry.action=mixer.clipAction(entry.attacker);
+    if(moveId!=='ultimate'&&entry.attacker)entry.action=mixer.clipAction(entry.attacker);
   }
   if(!actions.idle||!actions.stand_light||!actions.stand_heavy){
     disposable(gltf.scene);throw Error(id+' のGLBに必須動作がない');

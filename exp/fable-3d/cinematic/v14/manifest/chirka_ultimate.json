@@ -1,0 +1,3506 @@
+{
+ "schemaVersion": 1,
+ "contractRevision": "v14-wave1-10s",
+ "directionSource": "docs/mamoken-showtime-v14/ULTIMATE_10S_DIRECTION.md",
+ "characterId": "chirka",
+ "moveId": "ultimate",
+ "displayName": "百面本命打ち",
+ "trigger": "confirmed_unblocked_ultimate_hit",
+ "runtime": "threejs",
+ "durationSeconds": 10,
+ "fps": 60,
+ "concept": "可愛い顔で油断させて分身と入れ替わり、四方向からの爪で紫の爪痕を重ねる。毒でふらつく相手の前に本体が顔を出し、爪痕を一つに集めて打ち抜く。",
+ "coordinateSystem": {
+  "origin": "命中時の両者の中点・地面",
+  "x": "攻撃側の向いている方向が +X",
+  "y": "上",
+  "z": "対戦カメラ側が +Z",
+  "unit": "m（GLBの単位）",
+  "mirror": "攻撃側が左向き（-X向き）のときは x・rotY・rotZ・カメラ roll の符号を反転"
+ },
+ "stage": {
+  "contactDistance": 0.46,
+  "backdrop": 1708594,
+  "fog": 1708594,
+  "fogNear": 4,
+  "fogFar": 15,
+  "sky": 15128831,
+  "ground": 2892864,
+  "ambient": 1.35,
+  "key": 15784191,
+  "keyPower": 2.5,
+  "rim": 11824383,
+  "rimPower": 2.4,
+  "floor": 3880020,
+  "mountain": 2366524,
+  "post": 4864604,
+  "accent": 14523135,
+  "accentCss": "#dd9aff",
+  "illusion": {
+   "color": 11034879,
+   "opacity": 0.62,
+   "glow": 0.6
+  }
+ },
+ "animationSources": {
+  "attacker": {
+   "glb": "chirka/chirka_v14.glb",
+   "motions": "chirka/chirka_v14_motions.json",
+   "clip": "cin_chirka_atk"
+  },
+  "target": {
+   "glbPattern": "<targetId>/<targetId>_v14.glb",
+   "clip": "cinv_chirka",
+   "availableFor": [
+    "moguzo",
+    "pisuke",
+    "godan",
+    "hakuma",
+    "chirka",
+    "takimaru",
+    "yomikage",
+    "bullet",
+    "dark_moguzo"
+   ]
+  }
+ },
+ "inGameStartClip": {
+  "clip": "ult_v14",
+  "note": "命中前の始動。ここまでは通常の対戦カメラ。命中が確定した次のフレームでムービー t=0 へ"
+ },
+ "actorTracks": {
+  "attacker": {
+   "pivotHeight": 0.45,
+   "visible": [
+    [
+     0,
+     3.05
+    ],
+    [
+     5.6,
+     10.01
+    ]
+   ],
+   "segments": [
+    {
+     "start": 0,
+     "clip": "cin_chirka_atk"
+    },
+    {
+     "start": 2.1,
+     "clip": "walk_f",
+     "loop": true,
+     "rate": 2.4
+    },
+    {
+     "start": 3,
+     "clip": "cin_chirka_atk",
+     "clipStart": 3
+    }
+   ],
+   "root": [
+    {
+     "t": 0,
+     "pos": [
+      -0.23,
+      0,
+      0
+     ],
+     "rotY": 90
+    },
+    {
+     "t": 1.3,
+     "pos": [
+      -0.23,
+      0,
+      0
+     ],
+     "rotY": 90,
+     "ease": "hold"
+    },
+    {
+     "t": 1.44,
+     "pos": [
+      -0.43000000000000005,
+      0.13,
+      0
+     ],
+     "rotY": 90,
+     "ease": "outQuad"
+    },
+    {
+     "t": 1.6,
+     "pos": [
+      -0.5,
+      0,
+      0
+     ],
+     "rotY": 90,
+     "ease": "inQuad"
+    },
+    {
+     "t": 2.1,
+     "pos": [
+      -0.49,
+      0,
+      0
+     ],
+     "rotY": 0,
+     "ease": "inOutQuad"
+    },
+    {
+     "t": 2.325,
+     "pos": [
+      -0.11531396795013477,
+      0,
+      0.7046819366717855
+     ],
+     "rotY": -56,
+     "ease": "linear"
+    },
+    {
+     "t": 2.55,
+     "pos": [
+      0.6784156044035252,
+      0,
+      0.7881062763817693
+     ],
+     "rotY": -112,
+     "ease": "linear"
+    },
+    {
+     "t": 2.775,
+     "pos": [
+      1.1914254606237349,
+      0,
+      0.1767249371950954
+     ],
+     "rotY": -168,
+     "ease": "linear"
+    },
+    {
+     "t": 3,
+     "pos": [
+      0.9610407640085655,
+      0,
+      -0.6010407640085653
+     ],
+     "rotY": -225,
+     "ease": "linear"
+    },
+    {
+     "t": 3.05,
+     "pos": [
+      0.7850000000000004,
+      0,
+      -0.7361215932167727
+     ],
+     "rotY": -240,
+     "ease": "linear"
+    },
+    {
+     "t": 5.6,
+     "pos": [
+      0.38,
+      0,
+      1.1
+     ],
+     "rotY": 0,
+     "ease": "hold"
+    },
+    {
+     "t": 6.4,
+     "pos": [
+      0.38,
+      0,
+      1.1
+     ],
+     "rotY": 0,
+     "ease": "hold"
+    },
+    {
+     "t": 6.58,
+     "pos": [
+      0.38,
+      0,
+      1.08
+     ],
+     "rotY": 180,
+     "ease": "inOutQuad"
+    },
+    {
+     "t": 7.05,
+     "pos": [
+      0.38,
+      0,
+      1.08
+     ],
+     "rotY": 180,
+     "ease": "hold"
+    },
+    {
+     "t": 7.3,
+     "pos": [
+      0.38,
+      0.3,
+      0.34
+     ],
+     "rotY": 180,
+     "ease": "inQuad"
+    },
+    {
+     "t": 7.9,
+     "pos": [
+      0.38,
+      0.36,
+      0.3
+     ],
+     "rotY": 180,
+     "ease": "linear"
+    },
+    {
+     "t": 8.45,
+     "pos": [
+      0.6599999999999999,
+      0,
+      0.1
+     ],
+     "rotY": 180,
+     "ease": "inQuad"
+    },
+    {
+     "t": 8.6,
+     "pos": [
+      0.6599999999999999,
+      0,
+      0.1
+     ],
+     "rotY": 180,
+     "ease": "hold"
+    },
+    {
+     "t": 9.25,
+     "pos": [
+      0.6599999999999999,
+      0,
+      0.1
+     ],
+     "rotY": 105,
+     "ease": "inOutCubic"
+    },
+    {
+     "t": 10,
+     "pos": [
+      0.6599999999999999,
+      0,
+      0.1
+     ],
+     "rotY": 105
+    }
+   ]
+  },
+  "target": {
+   "segments": [
+    {
+     "start": 0,
+     "clip": "cinv_chirka"
+    }
+   ],
+   "pivotHeight": 0.45,
+   "root": [
+    {
+     "t": 0,
+     "pos": [
+      0.23,
+      0,
+      0
+     ],
+     "rotY": -90
+    },
+    {
+     "t": 0.45,
+     "pos": [
+      0.36,
+      0,
+      0
+     ],
+     "rotY": -90,
+     "ease": "outCubic"
+    },
+    {
+     "t": 2.1,
+     "pos": [
+      0.36,
+      0,
+      0
+     ],
+     "rotY": -90,
+     "ease": "hold"
+    },
+    {
+     "t": 2.4,
+     "pos": [
+      0.36,
+      0,
+      0
+     ],
+     "rotY": -150,
+     "ease": "inOutQuad"
+    },
+    {
+     "t": 2.7,
+     "pos": [
+      0.36,
+      0,
+      0
+     ],
+     "rotY": -30,
+     "ease": "inOutQuad"
+    },
+    {
+     "t": 3.1,
+     "pos": [
+      0.36,
+      0,
+      0
+     ],
+     "rotY": 0,
+     "ease": "inOutQuad"
+    },
+    {
+     "t": 3.3,
+     "pos": [
+      0.36,
+      0,
+      0
+     ],
+     "rotY": 0,
+     "ease": "hold"
+    },
+    {
+     "t": 3.6,
+     "pos": [
+      0.36,
+      0,
+      -0.1
+     ],
+     "rotY": 40,
+     "ease": "outCubic"
+    },
+    {
+     "t": 4.1,
+     "pos": [
+      0.36,
+      0,
+      -0.1
+     ],
+     "rotY": 20,
+     "ease": "inOutQuad"
+    },
+    {
+     "t": 4.8,
+     "pos": [
+      0.36,
+      0,
+      -0.08
+     ],
+     "rotY": -90,
+     "ease": "inOutQuad"
+    },
+    {
+     "t": 5,
+     "pos": [
+      0.44,
+      0,
+      -0.06
+     ],
+     "rotY": -100,
+     "ease": "outCubic"
+    },
+    {
+     "t": 5.1,
+     "pos": [
+      0.42,
+      0.05,
+      -0.06
+     ],
+     "rotY": 90,
+     "ease": "inOutQuad"
+    },
+    {
+     "t": 5.28,
+     "pos": [
+      0.38,
+      0.18,
+      -0.04
+     ],
+     "rotY": 90,
+     "ease": "outQuad"
+    },
+    {
+     "t": 5.55,
+     "pos": [
+      0.36,
+      0,
+      0
+     ],
+     "rotY": 60,
+     "ease": "inQuad"
+    },
+    {
+     "t": 6.8,
+     "pos": [
+      0.36,
+      0,
+      0
+     ],
+     "rotY": 150,
+     "ease": "inOutQuad"
+    },
+    {
+     "t": 7.3,
+     "pos": [
+      0.36,
+      0,
+      0
+     ],
+     "rotY": 180,
+     "ease": "inOutQuad"
+    },
+    {
+     "t": 7.9,
+     "pos": [
+      0.36,
+      0.03,
+      -0.03
+     ],
+     "rotY": 180,
+     "ease": "linear"
+    },
+    {
+     "t": 8.3,
+     "pos": [
+      0.010000000000000009,
+      0.85,
+      -0.7
+     ],
+     "rotY": 180,
+     "rotX": -200,
+     "ease": "outQuad"
+    },
+    {
+     "t": 8.62,
+     "pos": [
+      -0.19000000000000006,
+      0,
+      -1.15
+     ],
+     "rotY": 180,
+     "rotX": -360,
+     "ease": "inQuad"
+    },
+    {
+     "t": 8.76,
+     "pos": [
+      -0.21999999999999997,
+      0.12,
+      -1.22
+     ],
+     "rotY": 180,
+     "rotX": -360,
+     "ease": "outQuad"
+    },
+    {
+     "t": 8.9,
+     "pos": [
+      -0.24,
+      0,
+      -1.26
+     ],
+     "rotY": 180,
+     "rotX": -360,
+     "ease": "inQuad"
+    },
+    {
+     "t": 10,
+     "pos": [
+      -0.24,
+      0,
+      -1.26
+     ],
+     "rotY": 180,
+     "rotX": -360
+    }
+   ]
+  },
+  "cloneA": {
+   "cloneOf": "attacker",
+   "material": "illusion",
+   "pivotHeight": 0.45,
+   "visible": [
+    [
+     1.42,
+     7
+    ]
+   ],
+   "opacity": [
+    {
+     "t": 1.42,
+     "v": 0
+    },
+    {
+     "t": 1.62,
+     "v": 1
+    },
+    {
+     "t": 6.7,
+     "v": 1
+    },
+    {
+     "t": 6.98,
+     "v": 0
+    }
+   ],
+   "segments": [
+    {
+     "start": 0,
+     "clip": "cin_chirka_atk",
+     "clipStart": 1.42
+    },
+    {
+     "start": 2.1,
+     "clip": "walk_f",
+     "loop": true,
+     "rate": 2.4
+    },
+    {
+     "start": 3,
+     "clip": "idle",
+     "loop": true
+    },
+    {
+     "start": 3.08,
+     "clip": "s3_v14",
+     "clipStart": 0
+    },
+    {
+     "start": 3.75,
+     "clip": "idle",
+     "loop": true
+    }
+   ],
+   "root": [
+    {
+     "t": 0,
+     "pos": [
+      -0.5,
+      0,
+      0
+     ],
+     "rotY": 90
+    },
+    {
+     "t": 1.42,
+     "pos": [
+      -0.5,
+      0,
+      0
+     ],
+     "rotY": 90,
+     "ease": "hold"
+    },
+    {
+     "t": 2.1,
+     "pos": [
+      -0.2911377766511313,
+      0,
+      0.5463694682335584
+     ],
+     "rotY": -40,
+     "ease": "outCubic"
+    },
+    {
+     "t": 2.325,
+     "pos": [
+      0.4488491937775053,
+      0,
+      0.8453436110630324
+     ],
+     "rotY": -96,
+     "ease": "linear"
+    },
+    {
+     "t": 2.55,
+     "pos": [
+      1.1105054539300876,
+      0,
+      0.3990508283680074
+     ],
+     "rotY": -152,
+     "ease": "linear"
+    },
+    {
+     "t": 2.775,
+     "pos": [
+      1.1105054539300878,
+      0,
+      -0.3990508283680072
+     ],
+     "rotY": -208,
+     "ease": "linear"
+    },
+    {
+     "t": 3,
+     "pos": [
+      0.43408238133550947,
+      0,
+      -0.8467654933779837
+     ],
+     "rotY": -265,
+     "ease": "linear"
+    },
+    {
+     "t": 3.08,
+     "pos": [
+      0.39999999999999997,
+      0,
+      0.72
+     ],
+     "rotY": 180,
+     "ease": "outQuad"
+    },
+    {
+     "t": 3.3,
+     "pos": [
+      0.39999999999999997,
+      0,
+      0.42
+     ],
+     "rotY": 180,
+     "ease": "inQuad"
+    },
+    {
+     "t": 3.75,
+     "pos": [
+      0.39999999999999997,
+      0,
+      0.5
+     ],
+     "rotY": 180,
+     "ease": "outQuad"
+    },
+    {
+     "t": 4.4,
+     "pos": [
+      0.035080863840614596,
+      0,
+      0.8927079897466128
+     ],
+     "rotY": 200,
+     "ease": "inOutQuad"
+    },
+    {
+     "t": 7,
+     "pos": [
+      0.035080863840614596,
+      0,
+      0.8927079897466128
+     ],
+     "rotY": 200
+    }
+   ]
+  },
+  "cloneB": {
+   "cloneOf": "attacker",
+   "material": "illusion",
+   "pivotHeight": 0.45,
+   "visible": [
+    [
+     1.42,
+     7
+    ]
+   ],
+   "opacity": [
+    {
+     "t": 1.42,
+     "v": 0
+    },
+    {
+     "t": 1.62,
+     "v": 1
+    },
+    {
+     "t": 6.5,
+     "v": 1
+    },
+    {
+     "t": 6.78,
+     "v": 0
+    }
+   ],
+   "segments": [
+    {
+     "start": 0,
+     "clip": "cin_chirka_atk",
+     "clipStart": 1.42
+    },
+    {
+     "start": 2.1,
+     "clip": "walk_f",
+     "loop": true,
+     "rate": 2.4
+    },
+    {
+     "start": 3,
+     "clip": "idle",
+     "loop": true
+    },
+    {
+     "start": 3.8,
+     "clip": "cin_chirka_dive"
+    },
+    {
+     "start": 4.7,
+     "clip": "idle",
+     "loop": true
+    }
+   ],
+   "root": [
+    {
+     "t": 0,
+     "pos": [
+      -0.5,
+      0,
+      0
+     ],
+     "rotY": 90
+    },
+    {
+     "t": 1.42,
+     "pos": [
+      -0.5,
+      0,
+      0
+     ],
+     "rotY": 90,
+     "ease": "hold"
+    },
+    {
+     "t": 2.1,
+     "pos": [
+      -0.1863694682335585,
+      0,
+      -0.6511377766511313
+     ],
+     "rotY": 50,
+     "ease": "outCubic"
+    },
+    {
+     "t": 2.325,
+     "pos": [
+      -0.48534361106303225,
+      0,
+      0.08884919377750544
+     ],
+     "rotY": -6,
+     "ease": "linear"
+    },
+    {
+     "t": 2.55,
+     "pos": [
+      -0.03905082836800722,
+      0,
+      0.7505054539300878
+     ],
+     "rotY": -62,
+     "ease": "linear"
+    },
+    {
+     "t": 2.775,
+     "pos": [
+      0.7590508283680069,
+      0,
+      0.750505453930088
+     ],
+     "rotY": -118,
+     "ease": "linear"
+    },
+    {
+     "t": 3,
+     "pos": [
+      1.2067654933779837,
+      0,
+      0.07408238133550984
+     ],
+     "rotY": -175,
+     "ease": "linear"
+    },
+    {
+     "t": 3.6,
+     "pos": [
+      0.6599999999999999,
+      0,
+      -0.95
+     ],
+     "rotY": 0,
+     "ease": "outQuad"
+    },
+    {
+     "t": 3.8,
+     "pos": [
+      0.6599999999999999,
+      0,
+      -0.95
+     ],
+     "rotY": 0,
+     "ease": "hold"
+    },
+    {
+     "t": 3.81,
+     "pos": [
+      0.36,
+      2.4,
+      0.02
+     ],
+     "rotY": 0,
+     "rotZ": 180,
+     "ease": "hold"
+    },
+    {
+     "t": 4.1,
+     "pos": [
+      0.36,
+      1.28,
+      0.02
+     ],
+     "rotY": 0,
+     "rotZ": 180,
+     "ease": "inQuad"
+    },
+    {
+     "t": 4.3,
+     "pos": [
+      0.36,
+      1.3,
+      0.02
+     ],
+     "rotY": 0,
+     "rotZ": 180,
+     "ease": "linear"
+    },
+    {
+     "t": 4.7,
+     "pos": [
+      0.035080863840614596,
+      0,
+      -0.8927079897466128
+     ],
+     "rotY": -20,
+     "rotZ": 360,
+     "ease": "inOutQuad"
+    },
+    {
+     "t": 7,
+     "pos": [
+      0.035080863840614596,
+      0,
+      -0.8927079897466128
+     ],
+     "rotY": -20,
+     "rotZ": 360
+    }
+   ]
+  },
+  "cloneC": {
+   "cloneOf": "attacker",
+   "material": "illusion",
+   "pivotHeight": 0.45,
+   "visible": [
+    [
+     1.42,
+     7
+    ]
+   ],
+   "opacity": [
+    {
+     "t": 1.42,
+     "v": 0
+    },
+    {
+     "t": 1.62,
+     "v": 1
+    },
+    {
+     "t": 6.3,
+     "v": 1
+    },
+    {
+     "t": 6.58,
+     "v": 0
+    }
+   ],
+   "segments": [
+    {
+     "start": 0,
+     "clip": "cin_chirka_atk",
+     "clipStart": 1.42
+    },
+    {
+     "start": 2.1,
+     "clip": "walk_f",
+     "loop": true,
+     "rate": 2.4
+    },
+    {
+     "start": 3,
+     "clip": "idle",
+     "loop": true
+    },
+    {
+     "start": 4.6,
+     "clip": "s1_v14",
+     "clipStart": 0
+    },
+    {
+     "start": 5.2,
+     "clip": "idle",
+     "loop": true
+    }
+   ],
+   "root": [
+    {
+     "t": 0,
+     "pos": [
+      -0.5,
+      0,
+      0
+     ],
+     "rotY": 90
+    },
+    {
+     "t": 1.42,
+     "pos": [
+      -0.5,
+      0,
+      0
+     ],
+     "rotY": 90,
+     "ease": "hold"
+    },
+    {
+     "t": 2.1,
+     "pos": [
+      0.9063694682335585,
+      0,
+      0.6511377766511313
+     ],
+     "rotY": -130,
+     "ease": "outCubic"
+    },
+    {
+     "t": 2.325,
+     "pos": [
+      1.2053436110630322,
+      0,
+      -0.0888491937775051
+     ],
+     "rotY": -186,
+     "ease": "linear"
+    },
+    {
+     "t": 2.55,
+     "pos": [
+      0.7590508283680071,
+      0,
+      -0.7505054539300879
+     ],
+     "rotY": -242,
+     "ease": "linear"
+    },
+    {
+     "t": 2.775,
+     "pos": [
+      -0.039050828368006885,
+      0,
+      -0.750505453930088
+     ],
+     "rotY": -298,
+     "ease": "linear"
+    },
+    {
+     "t": 3,
+     "pos": [
+      -0.4867654933779837,
+      0,
+      -0.07408238133550957
+     ],
+     "rotY": -355,
+     "ease": "linear"
+    },
+    {
+     "t": 3.6,
+     "pos": [
+      -0.44000000000000006,
+      0,
+      -0.1
+     ],
+     "rotY": 90,
+     "ease": "outQuad"
+    },
+    {
+     "t": 4.58,
+     "pos": [
+      -0.26,
+      0,
+      -0.08
+     ],
+     "rotY": 90,
+     "ease": "linear"
+    },
+    {
+     "t": 4.8,
+     "pos": [
+      -0.14,
+      0,
+      -0.08
+     ],
+     "rotY": 90,
+     "ease": "inQuad"
+    },
+    {
+     "t": 5.3,
+     "pos": [
+      -0.49,
+      0,
+      -0.3
+     ],
+     "rotY": 80,
+     "ease": "inOutQuad"
+    },
+    {
+     "t": 7,
+     "pos": [
+      -0.49,
+      0,
+      -0.3
+     ],
+     "rotY": 80
+    }
+   ]
+  },
+  "cloneD": {
+   "cloneOf": "attacker",
+   "material": "illusion",
+   "pivotHeight": 0.45,
+   "visible": [
+    [
+     1.42,
+     7
+    ]
+   ],
+   "opacity": [
+    {
+     "t": 1.42,
+     "v": 0
+    },
+    {
+     "t": 1.62,
+     "v": 1
+    },
+    {
+     "t": 6.1,
+     "v": 1
+    },
+    {
+     "t": 6.38,
+     "v": 0
+    }
+   ],
+   "segments": [
+    {
+     "start": 0,
+     "clip": "cin_chirka_atk",
+     "clipStart": 1.42
+    },
+    {
+     "start": 2.1,
+     "clip": "walk_f",
+     "loop": true,
+     "rate": 2.4
+    },
+    {
+     "start": 3,
+     "clip": "idle",
+     "loop": true
+    },
+    {
+     "start": 5,
+     "clip": "s2_v14",
+     "clipStart": 0
+    },
+    {
+     "start": 5.67,
+     "clip": "idle",
+     "loop": true
+    }
+   ],
+   "root": [
+    {
+     "t": 0,
+     "pos": [
+      -0.5,
+      0,
+      0
+     ],
+     "rotY": 90
+    },
+    {
+     "t": 1.42,
+     "pos": [
+      -0.5,
+      0,
+      0
+     ],
+     "rotY": 90,
+     "ease": "hold"
+    },
+    {
+     "t": 2.1,
+     "pos": [
+      1.0111377766511311,
+      0,
+      -0.5463694682335586
+     ],
+     "rotY": 140,
+     "ease": "outCubic"
+    },
+    {
+     "t": 2.325,
+     "pos": [
+      0.27115080622249454,
+      0,
+      -0.8453436110630322
+     ],
+     "rotY": 84,
+     "ease": "linear"
+    },
+    {
+     "t": 2.55,
+     "pos": [
+      -0.39050545393008795,
+      0,
+      -0.39905082836800715
+     ],
+     "rotY": 28,
+     "ease": "linear"
+    },
+    {
+     "t": 2.775,
+     "pos": [
+      -0.39050545393008795,
+      0,
+      0.39905082836800715
+     ],
+     "rotY": -28,
+     "ease": "linear"
+    },
+    {
+     "t": 3,
+     "pos": [
+      0.28591761866449056,
+      0,
+      0.8467654933779837
+     ],
+     "rotY": -85,
+     "ease": "linear"
+    },
+    {
+     "t": 3.6,
+     "pos": [
+      1.21,
+      0,
+      -0.25
+     ],
+     "rotY": -90,
+     "ease": "outQuad"
+    },
+    {
+     "t": 4.9,
+     "pos": [
+      0.84,
+      0,
+      -0.06
+     ],
+     "rotY": -90,
+     "ease": "inOutQuad"
+    },
+    {
+     "t": 5.6,
+     "pos": [
+      0.86,
+      0,
+      -0.06
+     ],
+     "rotY": -90,
+     "ease": "linear"
+    },
+    {
+     "t": 6,
+     "pos": [
+      1.26,
+      0,
+      -0.35
+     ],
+     "rotY": -70,
+     "ease": "inOutQuad"
+    },
+    {
+     "t": 7,
+     "pos": [
+      1.26,
+      0,
+      -0.35
+     ],
+     "rotY": -70
+    }
+   ]
+  }
+ },
+ "shots": [
+  {
+   "id": "01-cute",
+   "title": "可愛い顔",
+   "start": 0,
+   "end": 1.3,
+   "intent": "正面寄りの顔アップ。顔を隠した手が下り、首をかしげてまばたき、反対へかしげて両手を頬に",
+   "actorPose": {
+    "attacker": "手を下ろす→首をかしげてまばたき→反対へかしげ、両手を頬へ",
+    "target": "のけぞり→構え直して首をかしげる（画面外）"
+   },
+   "camera": {
+    "rig": "cute-face-front",
+    "projection": "perspective",
+    "position": {
+     "anchor": "attacker.head",
+     "offset": [
+      0.2,
+      0.03,
+      0.9
+     ]
+    },
+    "lookAt": {
+     "anchor": "attacker.head",
+     "offset": [
+      0.02,
+      -0.02,
+      0
+     ]
+    },
+    "fov": 22,
+    "rollDeg": 8,
+    "easing": "inOutQuad",
+    "move": "顔の正面寄りで、ゆっくり寄りながら傾きを戻す",
+    "keys": [
+     {
+      "t": 0,
+      "pos": {
+       "anchor": "attacker.head",
+       "offset": [
+        0.2,
+        0.03,
+        0.9
+       ]
+      },
+      "look": {
+       "anchor": "attacker.head",
+       "offset": [
+        0.02,
+        -0.02,
+        0
+       ]
+      },
+      "fov": 22,
+      "roll": 8,
+      "ease": "inOutCubic"
+     },
+     {
+      "t": 0.4,
+      "pos": {
+       "anchor": "attacker.head",
+       "offset": [
+        0.1,
+        0.03,
+        0.82
+       ]
+      },
+      "look": {
+       "anchor": "attacker.head",
+       "offset": [
+        0.02,
+        -0.02,
+        0
+       ]
+      },
+      "fov": 21,
+      "roll": 4,
+      "ease": "outQuad"
+     },
+     {
+      "t": 1.3,
+      "pos": {
+       "anchor": "attacker.head",
+       "offset": [
+        -0.02,
+        0.02,
+        0.72
+       ]
+      },
+      "look": {
+       "anchor": "attacker.head",
+       "offset": [
+        0.02,
+        -0.03,
+        0
+       ]
+      },
+      "fov": 20,
+      "roll": -4,
+      "ease": "inOutQuad"
+     }
+    ]
+   },
+   "fxCues": [
+    {
+     "at": 0,
+     "key": "flash",
+     "type": "vfx",
+     "dur": 0.1,
+     "opacity": 0.4,
+     "color": 15255807
+    },
+    {
+     "at": 0.7,
+     "key": "sparks",
+     "type": "vfx",
+     "anchor": "attacker.head",
+     "offset": [
+      0.1,
+      0.06,
+      0.1
+     ],
+     "count": 8,
+     "power": 0.3,
+     "up": 0.5,
+     "dur": 0.5,
+     "size": 0.45,
+     "color": 16763120
+    }
+   ],
+   "sfxCues": [
+    {
+     "at": 0,
+     "key": "ult_hit_light"
+    },
+    {
+     "at": 0.4,
+     "key": "cute_chime"
+    },
+    {
+     "at": 0.68,
+     "key": "blink_pop"
+    },
+    {
+     "at": 0.98,
+     "key": "cute_chime_up"
+    }
+   ]
+  },
+  {
+   "id": "02-split",
+   "title": "分かれる",
+   "start": 1.3,
+   "end": 2.1,
+   "intent": "相手の肩越しの引き。跳び下がったチルカが 5 体に分かれて扇に広がる",
+   "actorPose": {
+    "attacker": "跳び下がり、低く構える。分身 4 体が左右へ",
+    "target": "分身を目で追い始める"
+   },
+   "camera": {
+    "rig": "over-target-shoulder-wide",
+    "projection": "perspective",
+    "position": {
+     "anchor": "stage",
+     "offset": [
+      1.28,
+      0.52,
+      0.42
+     ]
+    },
+    "lookAt": {
+     "anchor": "stage",
+     "offset": [
+      -0.35,
+      0.25,
+      0
+     ]
+    },
+    "fov": 46,
+    "rollDeg": -4,
+    "easing": "outQuad",
+    "move": "相手の背後で少し持ち上がる",
+    "keys": [
+     {
+      "t": 1.3,
+      "pos": {
+       "anchor": "stage",
+       "offset": [
+        1.28,
+        0.52,
+        0.42
+       ]
+      },
+      "look": {
+       "anchor": "stage",
+       "offset": [
+        -0.35,
+        0.25,
+        0
+       ]
+      },
+      "fov": 46,
+      "roll": -4,
+      "ease": "inOutCubic"
+     },
+     {
+      "t": 2.1,
+      "pos": {
+       "anchor": "stage",
+       "offset": [
+        1.38,
+        0.66,
+        0.3
+       ]
+      },
+      "look": {
+       "anchor": "stage",
+       "offset": [
+        -0.3,
+        0.2,
+        0
+       ]
+      },
+      "fov": 44,
+      "roll": 0,
+      "ease": "outQuad"
+     }
+    ]
+   },
+   "fxCues": [
+    {
+     "at": 1.44,
+     "key": "puff",
+     "type": "vfx",
+     "anchor": "attacker.root",
+     "offset": [
+      0,
+      0.2,
+      0
+     ],
+     "count": 14
+    },
+    {
+     "at": 1.44,
+     "key": "shock_ring",
+     "type": "vfx",
+     "offset": [
+      -0.5,
+      0,
+      0
+     ],
+     "radius": 0.9,
+     "dur": 0.45,
+     "color": 13144319
+    },
+    {
+     "at": 1.5,
+     "key": "poison_mist",
+     "type": "vfx",
+     "offset": [
+      0.36,
+      0.3,
+      0
+     ],
+     "radius": 0.9,
+     "count": 18,
+     "dur": 5.6,
+     "color": 8006872
+    }
+   ],
+   "sfxCues": [
+    {
+     "at": 1.42,
+     "key": "illusion_split"
+    }
+   ]
+  },
+  {
+   "id": "03-weave",
+   "title": "輪をすり抜ける",
+   "start": 2.1,
+   "end": 3,
+   "intent": "走る分身の輪の外から内へ、分身のあいだをすり抜けて相手の顔まで入る。相手は視線が泳ぐ",
+   "actorPose": {
+    "attacker": "分身と同じ走りで周回",
+    "target": "体ごと向きを変えながら目で追う"
+   },
+   "camera": {
+    "rig": "weave-through-ring",
+    "projection": "perspective",
+    "position": {
+     "anchor": "target.root",
+     "offset": [
+      -0.6,
+      0.5,
+      1.75
+     ]
+    },
+    "lookAt": {
+     "anchor": "target.head",
+     "offset": [
+      0,
+      -0.05,
+      0
+     ]
+    },
+    "fov": 44,
+    "rollDeg": 8,
+    "easing": "outQuad",
+    "move": "輪の外→分身の間を抜けて内側へ。回り込みながら低く",
+    "keys": [
+     {
+      "t": 2.1,
+      "pos": {
+       "anchor": "target.root",
+       "offset": [
+        -0.6,
+        0.5,
+        1.75
+       ]
+      },
+      "look": {
+       "anchor": "target.head",
+       "offset": [
+        0,
+        -0.05,
+        0
+       ]
+      },
+      "fov": 44,
+      "roll": 8,
+      "ease": "inOutCubic"
+     },
+     {
+      "t": 2.5,
+      "pos": {
+       "anchor": "target.root",
+       "offset": [
+        -1.25,
+        0.34,
+        0.7
+       ]
+      },
+      "look": {
+       "anchor": "target.head",
+       "offset": [
+        0,
+        -0.05,
+        0
+       ]
+      },
+      "fov": 44,
+      "roll": 4,
+      "ease": "linear"
+     },
+     {
+      "t": 2.8,
+      "pos": {
+       "anchor": "target.root",
+       "offset": [
+        -0.8,
+        0.26,
+        -0.3
+       ]
+      },
+      "look": {
+       "anchor": "target.head",
+       "offset": [
+        0,
+        -0.03,
+        0
+       ]
+      },
+      "fov": 42,
+      "roll": 0,
+      "ease": "linear"
+     },
+     {
+      "t": 3,
+      "pos": {
+       "anchor": "target.root",
+       "offset": [
+        -0.52,
+        0.24,
+        -0.42
+       ]
+      },
+      "look": {
+       "anchor": "target.head",
+       "offset": [
+        0,
+        -0.02,
+        0
+       ]
+      },
+      "fov": 38,
+      "roll": -4,
+      "ease": "outQuad"
+     }
+    ]
+   },
+   "fxCues": [
+    {
+     "at": 2.15,
+     "key": "speed_lines",
+     "type": "vfx",
+     "dur": 0.8,
+     "opacity": 0.2,
+     "color": 14201087
+    }
+   ],
+   "sfxCues": [
+    {
+     "at": 2.1,
+     "key": "footsteps_circle"
+    }
+   ]
+  },
+  {
+   "id": "04-hit-side",
+   "title": "連撃1・横から",
+   "start": 3,
+   "end": 3.8,
+   "intent": "強く傾けた低いあおり。カメラ側から地を這う分身の爪が入り、爪痕が空間に残る",
+   "actorPose": {
+    "attacker": "画面外",
+    "target": "カメラ側へ身構える→打たれて反対へ崩れる",
+    "cloneA": "地を這う踏み込みで引っかけ、引き戻す"
+   },
+   "camera": {
+    "rig": "dutch-low-attack",
+    "projection": "perspective",
+    "position": {
+     "anchor": "stage",
+     "offset": [
+      1.31,
+      0.1,
+      1.35
+     ]
+    },
+    "lookAt": {
+     "anchor": "cloneA.chest",
+     "offset": [
+      0,
+      0,
+      0
+     ]
+    },
+    "fov": 46,
+    "rollDeg": -18,
+    "easing": "outQuad",
+    "move": "分身に付いて相手へ振り、当たりで止まる",
+    "keys": [
+     {
+      "t": 3,
+      "pos": {
+       "anchor": "stage",
+       "offset": [
+        1.31,
+        0.1,
+        1.35
+       ]
+      },
+      "look": {
+       "anchor": "cloneA.chest",
+       "offset": [
+        0,
+        0,
+        0
+       ]
+      },
+      "fov": 46,
+      "roll": -18,
+      "ease": "inOutCubic"
+     },
+     {
+      "t": 3.3,
+      "pos": {
+       "anchor": "stage",
+       "offset": [
+        1.21,
+        0.12,
+        1.15
+       ]
+      },
+      "look": {
+       "anchor": "target.chest",
+       "offset": [
+        0,
+        -0.04,
+        0.1
+       ]
+      },
+      "fov": 38,
+      "roll": -14,
+      "ease": "inQuad"
+     },
+     {
+      "t": 3.48,
+      "pos": {
+       "anchor": "stage",
+       "offset": [
+        1.2,
+        0.12,
+        1.12
+       ]
+      },
+      "look": {
+       "anchor": "target.chest",
+       "offset": [
+        0,
+        -0.04,
+        0.1
+       ]
+      },
+      "fov": 36,
+      "roll": -13,
+      "ease": "linear"
+     },
+     {
+      "t": 3.8,
+      "pos": {
+       "anchor": "stage",
+       "offset": [
+        1.1600000000000001,
+        0.16,
+        1.2
+       ]
+      },
+      "look": {
+       "anchor": "target.chest",
+       "offset": [
+        0,
+        0,
+        0
+       ]
+      },
+      "fov": 40,
+      "roll": -8,
+      "ease": "outQuad"
+     }
+    ]
+   },
+   "fxCues": [
+    {
+     "at": 3.3,
+     "key": "hitstop",
+     "type": "hitstop",
+     "dur": 0.18,
+     "strength": "light"
+    },
+    {
+     "at": 3.3,
+     "key": "claw_mark",
+     "type": "vfx",
+     "offset": [
+      0.38,
+      0.4,
+      0.22
+     ],
+     "size": 0.5,
+     "angle": -30,
+     "dur": 0.1,
+     "convergeAt": 7.02,
+     "convergeTo": "target.chest",
+     "color": 11554047
+    },
+    {
+     "at": 3.3,
+     "key": "slash_arc",
+     "type": "vfx",
+     "offset": [
+      0.38,
+      0.4,
+      0.22
+     ],
+     "size": 0.6,
+     "angle": -30,
+     "color": 14264063
+    },
+    {
+     "at": 3.3,
+     "key": "flash",
+     "type": "vfx",
+     "dur": 0.08,
+     "opacity": 0.3,
+     "color": 14201087
+    },
+    {
+     "at": 3.3,
+     "key": "shake",
+     "type": "shake",
+     "dur": 0.25,
+     "amp": 0.035
+    }
+   ],
+   "sfxCues": [
+    {
+     "at": 3.08,
+     "key": "claw_whoosh"
+    },
+    {
+     "at": 3.3,
+     "key": "ult_hit_claw"
+    }
+   ]
+  },
+  {
+   "id": "05-hit-above",
+   "title": "連撃2・上から",
+   "start": 3.8,
+   "end": 4.5,
+   "intent": "真上の俯瞰を傾けて。逆さに降ってくる分身の両手の爪で、相手がひざから潰れる",
+   "actorPose": {
+    "attacker": "画面外",
+    "target": "見上げて頭をかばう→打たれてひざから潰れる",
+    "cloneB": "逆さまに落ちてきて両手の爪"
+   },
+   "camera": {
+    "rig": "rolled-overhead",
+    "projection": "perspective",
+    "position": {
+     "anchor": "target.root",
+     "offset": [
+      0.02,
+      3.5,
+      0.3
+     ]
+    },
+    "lookAt": {
+     "anchor": "target.head",
+     "offset": [
+      0,
+      0,
+      0
+     ]
+    },
+    "fov": 40,
+    "rollDeg": 80,
+    "easing": "outQuad",
+    "move": "俯瞰のまま回転しつつ下がる",
+    "keys": [
+     {
+      "t": 3.8,
+      "pos": {
+       "anchor": "target.root",
+       "offset": [
+        0.02,
+        3.5,
+        0.3
+       ]
+      },
+      "look": {
+       "anchor": "target.head",
+       "offset": [
+        0,
+        0,
+        0
+       ]
+      },
+      "fov": 40,
+      "roll": 80,
+      "ease": "inOutCubic"
+     },
+     {
+      "t": 4.1,
+      "pos": {
+       "anchor": "target.root",
+       "offset": [
+        0.02,
+        2.9,
+        0.34
+       ]
+      },
+      "look": {
+       "anchor": "target.head",
+       "offset": [
+        0,
+        0,
+        0
+       ]
+      },
+      "fov": 42,
+      "roll": 50,
+      "ease": "inQuad"
+     },
+     {
+      "t": 4.5,
+      "pos": {
+       "anchor": "target.root",
+       "offset": [
+        0.02,
+        2.7,
+        0.36
+       ]
+      },
+      "look": {
+       "anchor": "target.head",
+       "offset": [
+        0,
+        0,
+        0
+       ]
+      },
+      "fov": 42,
+      "roll": 40,
+      "ease": "outQuad"
+     }
+    ]
+   },
+   "fxCues": [
+    {
+     "at": 4.1,
+     "key": "hitstop",
+     "type": "hitstop",
+     "dur": 0.18,
+     "strength": "light"
+    },
+    {
+     "at": 4.1,
+     "key": "claw_mark",
+     "type": "vfx",
+     "offset": [
+      0.36,
+      0.62,
+      0.02
+     ],
+     "size": 0.5,
+     "angle": 85,
+     "dur": 0.1,
+     "convergeAt": 7.02,
+     "convergeTo": "target.chest",
+     "color": 11554047
+    },
+    {
+     "at": 4.1,
+     "key": "slash_arc",
+     "type": "vfx",
+     "offset": [
+      0.36,
+      0.62,
+      0.02
+     ],
+     "size": 0.6,
+     "angle": 85,
+     "color": 14264063
+    },
+    {
+     "at": 4.1,
+     "key": "flash",
+     "type": "vfx",
+     "dur": 0.08,
+     "opacity": 0.3,
+     "color": 14201087
+    },
+    {
+     "at": 4.1,
+     "key": "shake",
+     "type": "shake",
+     "dur": 0.25,
+     "amp": 0.04
+    },
+    {
+     "at": 4.12,
+     "key": "shock_ring",
+     "type": "vfx",
+     "anchor": "target.root",
+     "radius": 0.8,
+     "dur": 0.35,
+     "color": 11563263
+    }
+   ],
+   "sfxCues": [
+    {
+     "at": 3.82,
+     "key": "claw_whoosh"
+    },
+    {
+     "at": 4.1,
+     "key": "ult_hit_claw"
+    }
+   ]
+  },
+  {
+   "id": "06-hit-low-rising",
+   "title": "連撃3・4 下と突き上げ",
+   "start": 4.5,
+   "end": 5.4,
+   "intent": "真横の低い位置。正面からの低い貫手で折れ、すぐ背後からの跳ね爪で突き上げられる。カメラは左右へ振られる",
+   "actorPose": {
+    "attacker": "画面外",
+    "target": "腹を突かれて折れる→背後から突き上げられて浮く",
+    "cloneC": "正面から低い貫手",
+    "cloneD": "背後から回転の跳ね爪"
+   },
+   "camera": {
+    "rig": "side-whip-pair",
+    "projection": "perspective",
+    "position": {
+     "anchor": "stage",
+     "offset": [
+      0.06,
+      0.2,
+      1.6
+     ]
+    },
+    "lookAt": {
+     "anchor": "cloneC.chest",
+     "offset": [
+      0.1,
+      0,
+      0
+     ]
+    },
+    "fov": 40,
+    "rollDeg": 8,
+    "easing": "outQuad",
+    "move": "左（分身C）→相手→右（分身D）へ素早く振る",
+    "keys": [
+     {
+      "t": 4.5,
+      "pos": {
+       "anchor": "stage",
+       "offset": [
+        0.06,
+        0.2,
+        1.6
+       ]
+      },
+      "look": {
+       "anchor": "cloneC.chest",
+       "offset": [
+        0.1,
+        0,
+        0
+       ]
+      },
+      "fov": 40,
+      "roll": 8,
+      "ease": "inOutCubic"
+     },
+     {
+      "t": 4.8,
+      "pos": {
+       "anchor": "stage",
+       "offset": [
+        0.26,
+        0.2,
+        1.5
+       ]
+      },
+      "look": {
+       "anchor": "target.chest",
+       "offset": [
+        -0.06,
+        -0.06,
+        0
+       ]
+      },
+      "fov": 36,
+      "roll": 10,
+      "ease": "inQuad"
+     },
+     {
+      "t": 4.95,
+      "pos": {
+       "anchor": "stage",
+       "offset": [
+        0.27999999999999997,
+        0.2,
+        1.48
+       ]
+      },
+      "look": {
+       "anchor": "target.chest",
+       "offset": [
+        -0.06,
+        -0.06,
+        0
+       ]
+      },
+      "fov": 35,
+      "roll": 10,
+      "ease": "linear"
+     },
+     {
+      "t": 5.1,
+      "pos": {
+       "anchor": "stage",
+       "offset": [
+        0.56,
+        0.18,
+        1.5
+       ]
+      },
+      "look": {
+       "anchor": "target.chest",
+       "offset": [
+        0.06,
+        0.02,
+        0
+       ]
+      },
+      "fov": 36,
+      "roll": -10,
+      "ease": "inOutQuad"
+     },
+     {
+      "t": 5.4,
+      "pos": {
+       "anchor": "stage",
+       "offset": [
+        0.6,
+        0.2,
+        1.55
+       ]
+      },
+      "look": {
+       "anchor": "target.chest",
+       "offset": [
+        0.04,
+        0.06,
+        0
+       ]
+      },
+      "fov": 38,
+      "roll": -12,
+      "ease": "outQuad"
+     }
+    ]
+   },
+   "fxCues": [
+    {
+     "at": 4.8,
+     "key": "hitstop",
+     "type": "hitstop",
+     "dur": 0.15,
+     "strength": "light"
+    },
+    {
+     "at": 4.8,
+     "key": "claw_mark",
+     "type": "vfx",
+     "offset": [
+      0.15999999999999998,
+      0.26,
+      0.02
+     ],
+     "size": 0.5,
+     "angle": 10,
+     "dur": 0.1,
+     "convergeAt": 7.02,
+     "convergeTo": "target.chest",
+     "color": 11554047
+    },
+    {
+     "at": 4.8,
+     "key": "slash_arc",
+     "type": "vfx",
+     "offset": [
+      0.15999999999999998,
+      0.26,
+      0.02
+     ],
+     "size": 0.55,
+     "angle": 10,
+     "color": 14264063
+    },
+    {
+     "at": 4.8,
+     "key": "shake",
+     "type": "shake",
+     "dur": 0.2,
+     "amp": 0.035
+    },
+    {
+     "at": 5.1,
+     "key": "hitstop",
+     "type": "hitstop",
+     "dur": 0.18,
+     "strength": "light"
+    },
+    {
+     "at": 5.1,
+     "key": "claw_mark",
+     "type": "vfx",
+     "offset": [
+      0.52,
+      0.5,
+      0.1
+     ],
+     "size": 0.5,
+     "angle": -70,
+     "dur": 0.1,
+     "convergeAt": 7.02,
+     "convergeTo": "target.chest",
+     "color": 11554047
+    },
+    {
+     "at": 5.1,
+     "key": "slash_arc",
+     "type": "vfx",
+     "offset": [
+      0.52,
+      0.5,
+      0.1
+     ],
+     "size": 0.65,
+     "angle": -70,
+     "sweep": 1.5,
+     "color": 14264063
+    },
+    {
+     "at": 5.1,
+     "key": "flash",
+     "type": "vfx",
+     "dur": 0.08,
+     "opacity": 0.3,
+     "color": 14201087
+    },
+    {
+     "at": 5.1,
+     "key": "shake",
+     "type": "shake",
+     "dur": 0.25,
+     "amp": 0.045
+    }
+   ],
+   "sfxCues": [
+    {
+     "at": 4.62,
+     "key": "claw_whoosh"
+    },
+    {
+     "at": 4.8,
+     "key": "ult_hit_claw"
+    },
+    {
+     "at": 5.1,
+     "key": "ult_hit_claw"
+    }
+   ]
+  },
+  {
+   "id": "07-peekaboo",
+   "title": "本体はここ",
+   "start": 5.4,
+   "end": 6.6,
+   "intent": "四つの爪痕と毒の霧の中でふらつく相手へゆっくり寄る。そのレンズのすぐ前に、下から本体が顔を出して片目をつぶる。分身が一体ずつ霧に戻る",
+   "actorPose": {
+    "attacker": "カメラの前に下から顔を出し、両手を頬に、片目をつぶる→振り向く",
+    "target": "毒でふらつく。左右に揺れ、目は半開き",
+    "cloneD": "霧に戻る",
+    "cloneC": "霧に戻る"
+   },
+   "camera": {
+    "rig": "slow-push-foreground-reveal",
+    "projection": "perspective",
+    "position": {
+     "anchor": "stage",
+     "offset": [
+      0.45999999999999996,
+      0.36,
+      2.55
+     ]
+    },
+    "lookAt": {
+     "anchor": "target.chest",
+     "offset": [
+      0,
+      0.02,
+      0
+     ]
+    },
+    "fov": 32,
+    "rollDeg": 3,
+    "easing": "inOutQuad",
+    "move": "相手へのゆっくりした寄り。手前に本体が入ってくる",
+    "keys": [
+     {
+      "t": 5.4,
+      "pos": {
+       "anchor": "stage",
+       "offset": [
+        0.45999999999999996,
+        0.36,
+        2.55
+       ]
+      },
+      "look": {
+       "anchor": "target.chest",
+       "offset": [
+        0,
+        0.02,
+        0
+       ]
+      },
+      "fov": 32,
+      "roll": 3,
+      "ease": "inOutCubic"
+     },
+     {
+      "t": 6,
+      "pos": {
+       "anchor": "stage",
+       "offset": [
+        0.44,
+        0.36,
+        2.35
+       ]
+      },
+      "look": {
+       "anchor": "stage",
+       "offset": [
+        0.39,
+        0.34,
+        0.6
+       ]
+      },
+      "fov": 31,
+      "roll": 0,
+      "ease": "inOutQuad"
+     },
+     {
+      "t": 6.6,
+      "pos": {
+       "anchor": "stage",
+       "offset": [
+        0.42,
+        0.36,
+        2.25
+       ]
+      },
+      "look": {
+       "anchor": "stage",
+       "offset": [
+        0.39,
+        0.34,
+        0.6
+       ]
+      },
+      "fov": 30,
+      "roll": -3,
+      "ease": "inOutQuad"
+     }
+    ]
+   },
+   "fxCues": [
+    {
+     "at": 5.5,
+     "key": "poison_mist",
+     "type": "vfx",
+     "anchor": "target.chest",
+     "radius": 0.3,
+     "count": 16,
+     "dur": 1.9,
+     "color": 10502399
+    },
+    {
+     "at": 6.28,
+     "key": "sparks",
+     "type": "vfx",
+     "anchor": "attacker.head",
+     "offset": [
+      0.08,
+      0.04,
+      0.1
+     ],
+     "count": 8,
+     "power": 0.3,
+     "up": 0.5,
+     "dur": 0.5,
+     "size": 0.45,
+     "color": 16763120
+    },
+    {
+     "at": 6.12,
+     "key": "puff",
+     "type": "vfx",
+     "anchor": "cloneD.chest",
+     "count": 10
+    },
+    {
+     "at": 6.32,
+     "key": "puff",
+     "type": "vfx",
+     "anchor": "cloneC.chest",
+     "count": 10
+    }
+   ],
+   "sfxCues": [
+    {
+     "at": 5.5,
+     "key": "poison_bubble"
+    },
+    {
+     "at": 6,
+     "key": "peekaboo_pop"
+    },
+    {
+     "at": 6.28,
+     "key": "wink_chime"
+    },
+    {
+     "at": 6.12,
+     "key": "illusion_vanish"
+    }
+   ]
+  },
+  {
+   "id": "08-real",
+   "title": "本命",
+   "start": 6.6,
+   "end": 8.4,
+   "intent": "本体の背後・地面の高さ。尻を振って狙い、爪痕が相手の一点に集まった瞬間に回転の跳ね爪。長い止めのあと相手が奥へ飛ぶ",
+   "actorPose": {
+    "attacker": "四つ足で尻を振る→一回転しながら跳ね爪→止め→着地",
+    "target": "振り向きかける→背中を打たれて弓なり→止め→奥へ飛ばされて落ちる",
+    "cloneA": "霧に戻る",
+    "cloneB": "霧に戻る"
+   },
+   "camera": {
+    "rig": "behind-pounce-to-impact",
+    "projection": "perspective",
+    "position": {
+     "anchor": "stage",
+     "offset": [
+      0.86,
+      0.08,
+      1.95
+     ]
+    },
+    "lookAt": {
+     "anchor": "target.pelvis",
+     "offset": [
+      0,
+      0,
+      0
+     ]
+    },
+    "fov": 40,
+    "rollDeg": 5,
+    "easing": "outCubic",
+    "move": "地面すれすれで待つ→跳躍に合わせて寄り上がる→飛ぶ相手を追う",
+    "keys": [
+     {
+      "t": 6.6,
+      "pos": {
+       "anchor": "stage",
+       "offset": [
+        0.86,
+        0.08,
+        1.95
+       ]
+      },
+      "look": {
+       "anchor": "target.pelvis",
+       "offset": [
+        0,
+        0,
+        0
+       ]
+      },
+      "fov": 40,
+      "roll": 5,
+      "ease": "inOutCubic"
+     },
+     {
+      "t": 7.05,
+      "pos": {
+       "anchor": "stage",
+       "offset": [
+        0.8200000000000001,
+        0.08,
+        1.88
+       ]
+      },
+      "look": {
+       "anchor": "target.pelvis",
+       "offset": [
+        0,
+        0,
+        0
+       ]
+      },
+      "fov": 38,
+      "roll": 3,
+      "ease": "linear"
+     },
+     {
+      "t": 7.32,
+      "pos": {
+       "anchor": "stage",
+       "offset": [
+        1.21,
+        0.3,
+        1.1
+       ]
+      },
+      "look": {
+       "anchor": "target.chest",
+       "offset": [
+        0,
+        0,
+        0.12
+       ]
+      },
+      "fov": 30,
+      "roll": -10,
+      "ease": "inQuad"
+     },
+     {
+      "t": 7.9,
+      "pos": {
+       "anchor": "stage",
+       "offset": [
+        1.18,
+        0.3,
+        1.02
+       ]
+      },
+      "look": {
+       "anchor": "target.chest",
+       "offset": [
+        0,
+        0,
+        0.12
+       ]
+      },
+      "fov": 27,
+      "roll": -12,
+      "ease": "linear"
+     },
+     {
+      "t": 8.4,
+      "pos": {
+       "anchor": "stage",
+       "offset": [
+        1.31,
+        0.4,
+        1.45
+       ]
+      },
+      "look": {
+       "anchor": "target.pelvis",
+       "offset": [
+        0,
+        0,
+        0
+       ]
+      },
+      "fov": 40,
+      "roll": -4,
+      "ease": "outCubic"
+     }
+    ]
+   },
+   "fxCues": [
+    {
+     "at": 6.72,
+     "key": "puff",
+     "type": "vfx",
+     "anchor": "cloneB.chest",
+     "count": 10
+    },
+    {
+     "at": 6.92,
+     "key": "puff",
+     "type": "vfx",
+     "anchor": "cloneA.chest",
+     "count": 10
+    },
+    {
+     "at": 7.06,
+     "key": "dust",
+     "type": "vfx",
+     "anchor": "attacker.root",
+     "count": 8,
+     "spread": 0.35
+    },
+    {
+     "at": 7.3,
+     "key": "hitstop",
+     "type": "hitstop",
+     "dur": 0.6,
+     "strength": "max"
+    },
+    {
+     "at": 7.3,
+     "key": "dim",
+     "type": "vfx",
+     "dur": 0.6,
+     "opacity": 0.34,
+     "color": 656408
+    },
+    {
+     "at": 7.3,
+     "key": "flash",
+     "type": "vfx",
+     "dur": 0.1,
+     "opacity": 0.45,
+     "color": 15782143
+    },
+    {
+     "at": 7.3,
+     "key": "impact_burst",
+     "type": "vfx",
+     "anchor": "target.chest",
+     "size": 0.6,
+     "rays": 16,
+     "color": 16178431
+    },
+    {
+     "at": 7.3,
+     "key": "claw_mark",
+     "type": "vfx",
+     "anchor": "target.chest",
+     "offset": [
+      0,
+      0,
+      0.14
+     ],
+     "size": 0.6,
+     "angle": -40,
+     "dur": 0.1,
+     "hold": 0.9,
+     "color": 12607743
+    },
+    {
+     "at": 7.3,
+     "key": "slash_arc",
+     "type": "vfx",
+     "anchor": "target.chest",
+     "size": 0.7,
+     "angle": 60,
+     "sweep": 1.6,
+     "color": 14857471
+    },
+    {
+     "at": 7.3,
+     "key": "shake",
+     "type": "shake",
+     "dur": 0.6,
+     "amp": 0.06
+    },
+    {
+     "at": 7.9,
+     "key": "speed_lines",
+     "type": "vfx",
+     "dur": 0.3,
+     "opacity": 0.45,
+     "color": 15784191
+    }
+   ],
+   "sfxCues": [
+    {
+     "at": 6.6,
+     "key": "tension_hold"
+    },
+    {
+     "at": 7.02,
+     "key": "marks_converge"
+    },
+    {
+     "at": 7.05,
+     "key": "pounce"
+    },
+    {
+     "at": 7.3,
+     "key": "ult_hit_slash"
+    },
+    {
+     "at": 7.9,
+     "key": "launch"
+    }
+   ]
+  },
+  {
+   "id": "09-zanshin",
+   "title": "残心",
+   "start": 8.4,
+   "end": 10,
+   "intent": "傾けた正面。奥で相手が落ち、チルカはこちらへ向き直って爪をなめ、片目をつぶる",
+   "actorPose": {
+    "attacker": "着地→向き直って爪をなめ、尻尾を振り、片目をつぶる",
+    "target": "奥で落ちて跳ね、仰向けで止まる"
+   },
+   "camera": {
+    "rig": "dutch-front-push",
+    "projection": "perspective",
+    "position": {
+     "anchor": "stage",
+     "offset": [
+      0.98,
+      0.2,
+      1.6
+     ]
+    },
+    "lookAt": {
+     "anchor": "attacker.chest",
+     "offset": [
+      -0.1,
+      0.02,
+      0
+     ]
+    },
+    "fov": 36,
+    "rollDeg": -9,
+    "easing": "inOutQuad",
+    "move": "傾けたままゆっくり寄る",
+    "keys": [
+     {
+      "t": 8.4,
+      "pos": {
+       "anchor": "stage",
+       "offset": [
+        0.98,
+        0.2,
+        1.6
+       ]
+      },
+      "look": {
+       "anchor": "attacker.chest",
+       "offset": [
+        -0.1,
+        0.02,
+        0
+       ]
+      },
+      "fov": 36,
+      "roll": -9,
+      "ease": "inOutCubic"
+     },
+     {
+      "t": 10,
+      "pos": {
+       "anchor": "stage",
+       "offset": [
+        0.92,
+        0.24,
+        1.28
+       ]
+      },
+      "look": {
+       "anchor": "attacker.chest",
+       "offset": [
+        -0.06,
+        0.05,
+        0
+       ]
+      },
+      "fov": 31,
+      "roll": -7,
+      "ease": "inOutQuad"
+     }
+    ]
+   },
+   "fxCues": [
+    {
+     "at": 8.62,
+     "key": "dust",
+     "type": "vfx",
+     "anchor": "target.root",
+     "count": 8,
+     "spread": 0.45
+    },
+    {
+     "at": 8.7,
+     "key": "poison_mist",
+     "type": "vfx",
+     "anchor": "target.chest",
+     "radius": 0.3,
+     "count": 12,
+     "dur": 1.3,
+     "color": 10502399
+    }
+   ],
+   "sfxCues": [
+    {
+     "at": 8.62,
+     "key": "body_land"
+    },
+    {
+     "at": 9.25,
+     "key": "finish_pose"
+    },
+    {
+     "at": 9.7,
+     "key": "wink_chime"
+    }
+   ]
+  }
+ ],
+ "cues": [
+  {
+   "at": 0,
+   "type": "vfx",
+   "key": "flash",
+   "dur": 0.1,
+   "opacity": 0.4,
+   "color": 15255807,
+   "shot": "01-cute"
+  },
+  {
+   "at": 0,
+   "type": "sfx",
+   "key": "ult_hit_light",
+   "shot": "01-cute"
+  },
+  {
+   "at": 0.4,
+   "type": "sfx",
+   "key": "cute_chime",
+   "shot": "01-cute"
+  },
+  {
+   "at": 0.68,
+   "type": "sfx",
+   "key": "blink_pop",
+   "shot": "01-cute"
+  },
+  {
+   "at": 0.7,
+   "type": "vfx",
+   "key": "sparks",
+   "anchor": "attacker.head",
+   "offset": [
+    0.1,
+    0.06,
+    0.1
+   ],
+   "count": 8,
+   "power": 0.3,
+   "up": 0.5,
+   "dur": 0.5,
+   "size": 0.45,
+   "color": 16763120,
+   "shot": "01-cute"
+  },
+  {
+   "at": 0.98,
+   "type": "sfx",
+   "key": "cute_chime_up",
+   "shot": "01-cute"
+  },
+  {
+   "at": 1.42,
+   "type": "sfx",
+   "key": "illusion_split",
+   "shot": "02-split"
+  },
+  {
+   "at": 1.44,
+   "type": "vfx",
+   "key": "puff",
+   "anchor": "attacker.root",
+   "offset": [
+    0,
+    0.2,
+    0
+   ],
+   "count": 14,
+   "shot": "02-split"
+  },
+  {
+   "at": 1.44,
+   "type": "vfx",
+   "key": "shock_ring",
+   "offset": [
+    -0.5,
+    0,
+    0
+   ],
+   "radius": 0.9,
+   "dur": 0.45,
+   "color": 13144319,
+   "shot": "02-split"
+  },
+  {
+   "at": 1.5,
+   "type": "vfx",
+   "key": "poison_mist",
+   "offset": [
+    0.36,
+    0.3,
+    0
+   ],
+   "radius": 0.9,
+   "count": 18,
+   "dur": 5.6,
+   "color": 8006872,
+   "shot": "02-split"
+  },
+  {
+   "at": 2.1,
+   "type": "sfx",
+   "key": "footsteps_circle",
+   "shot": "03-weave"
+  },
+  {
+   "at": 2.15,
+   "type": "vfx",
+   "key": "speed_lines",
+   "dur": 0.8,
+   "opacity": 0.2,
+   "color": 14201087,
+   "shot": "03-weave"
+  },
+  {
+   "at": 3.08,
+   "type": "sfx",
+   "key": "claw_whoosh",
+   "shot": "04-hit-side"
+  },
+  {
+   "at": 3.3,
+   "type": "hitstop",
+   "dur": 0.18,
+   "strength": "light",
+   "shot": "04-hit-side"
+  },
+  {
+   "at": 3.3,
+   "type": "vfx",
+   "key": "claw_mark",
+   "offset": [
+    0.38,
+    0.4,
+    0.22
+   ],
+   "size": 0.5,
+   "angle": -30,
+   "dur": 0.1,
+   "convergeAt": 7.02,
+   "convergeTo": "target.chest",
+   "color": 11554047,
+   "shot": "04-hit-side"
+  },
+  {
+   "at": 3.3,
+   "type": "vfx",
+   "key": "slash_arc",
+   "offset": [
+    0.38,
+    0.4,
+    0.22
+   ],
+   "size": 0.6,
+   "angle": -30,
+   "color": 14264063,
+   "shot": "04-hit-side"
+  },
+  {
+   "at": 3.3,
+   "type": "vfx",
+   "key": "flash",
+   "dur": 0.08,
+   "opacity": 0.3,
+   "color": 14201087,
+   "shot": "04-hit-side"
+  },
+  {
+   "at": 3.3,
+   "type": "shake",
+   "dur": 0.25,
+   "amp": 0.035,
+   "shot": "04-hit-side"
+  },
+  {
+   "at": 3.3,
+   "type": "sfx",
+   "key": "ult_hit_claw",
+   "shot": "04-hit-side"
+  },
+  {
+   "at": 3.82,
+   "type": "sfx",
+   "key": "claw_whoosh",
+   "shot": "05-hit-above"
+  },
+  {
+   "at": 4.1,
+   "type": "hitstop",
+   "dur": 0.18,
+   "strength": "light",
+   "shot": "05-hit-above"
+  },
+  {
+   "at": 4.1,
+   "type": "vfx",
+   "key": "claw_mark",
+   "offset": [
+    0.36,
+    0.62,
+    0.02
+   ],
+   "size": 0.5,
+   "angle": 85,
+   "dur": 0.1,
+   "convergeAt": 7.02,
+   "convergeTo": "target.chest",
+   "color": 11554047,
+   "shot": "05-hit-above"
+  },
+  {
+   "at": 4.1,
+   "type": "vfx",
+   "key": "slash_arc",
+   "offset": [
+    0.36,
+    0.62,
+    0.02
+   ],
+   "size": 0.6,
+   "angle": 85,
+   "color": 14264063,
+   "shot": "05-hit-above"
+  },
+  {
+   "at": 4.1,
+   "type": "vfx",
+   "key": "flash",
+   "dur": 0.08,
+   "opacity": 0.3,
+   "color": 14201087,
+   "shot": "05-hit-above"
+  },
+  {
+   "at": 4.1,
+   "type": "shake",
+   "dur": 0.25,
+   "amp": 0.04,
+   "shot": "05-hit-above"
+  },
+  {
+   "at": 4.1,
+   "type": "sfx",
+   "key": "ult_hit_claw",
+   "shot": "05-hit-above"
+  },
+  {
+   "at": 4.12,
+   "type": "vfx",
+   "key": "shock_ring",
+   "anchor": "target.root",
+   "radius": 0.8,
+   "dur": 0.35,
+   "color": 11563263,
+   "shot": "05-hit-above"
+  },
+  {
+   "at": 4.62,
+   "type": "sfx",
+   "key": "claw_whoosh",
+   "shot": "06-hit-low-rising"
+  },
+  {
+   "at": 4.8,
+   "type": "hitstop",
+   "dur": 0.15,
+   "strength": "light",
+   "shot": "06-hit-low-rising"
+  },
+  {
+   "at": 4.8,
+   "type": "vfx",
+   "key": "claw_mark",
+   "offset": [
+    0.15999999999999998,
+    0.26,
+    0.02
+   ],
+   "size": 0.5,
+   "angle": 10,
+   "dur": 0.1,
+   "convergeAt": 7.02,
+   "convergeTo": "target.chest",
+   "color": 11554047,
+   "shot": "06-hit-low-rising"
+  },
+  {
+   "at": 4.8,
+   "type": "vfx",
+   "key": "slash_arc",
+   "offset": [
+    0.15999999999999998,
+    0.26,
+    0.02
+   ],
+   "size": 0.55,
+   "angle": 10,
+   "color": 14264063,
+   "shot": "06-hit-low-rising"
+  },
+  {
+   "at": 4.8,
+   "type": "shake",
+   "dur": 0.2,
+   "amp": 0.035,
+   "shot": "06-hit-low-rising"
+  },
+  {
+   "at": 4.8,
+   "type": "sfx",
+   "key": "ult_hit_claw",
+   "shot": "06-hit-low-rising"
+  },
+  {
+   "at": 5.1,
+   "type": "hitstop",
+   "dur": 0.18,
+   "strength": "light",
+   "shot": "06-hit-low-rising"
+  },
+  {
+   "at": 5.1,
+   "type": "vfx",
+   "key": "claw_mark",
+   "offset": [
+    0.52,
+    0.5,
+    0.1
+   ],
+   "size": 0.5,
+   "angle": -70,
+   "dur": 0.1,
+   "convergeAt": 7.02,
+   "convergeTo": "target.chest",
+   "color": 11554047,
+   "shot": "06-hit-low-rising"
+  },
+  {
+   "at": 5.1,
+   "type": "vfx",
+   "key": "slash_arc",
+   "offset": [
+    0.52,
+    0.5,
+    0.1
+   ],
+   "size": 0.65,
+   "angle": -70,
+   "sweep": 1.5,
+   "color": 14264063,
+   "shot": "06-hit-low-rising"
+  },
+  {
+   "at": 5.1,
+   "type": "vfx",
+   "key": "flash",
+   "dur": 0.08,
+   "opacity": 0.3,
+   "color": 14201087,
+   "shot": "06-hit-low-rising"
+  },
+  {
+   "at": 5.1,
+   "type": "shake",
+   "dur": 0.25,
+   "amp": 0.045,
+   "shot": "06-hit-low-rising"
+  },
+  {
+   "at": 5.1,
+   "type": "sfx",
+   "key": "ult_hit_claw",
+   "shot": "06-hit-low-rising"
+  },
+  {
+   "at": 5.5,
+   "type": "vfx",
+   "key": "poison_mist",
+   "anchor": "target.chest",
+   "radius": 0.3,
+   "count": 16,
+   "dur": 1.9,
+   "color": 10502399,
+   "shot": "07-peekaboo"
+  },
+  {
+   "at": 5.5,
+   "type": "sfx",
+   "key": "poison_bubble",
+   "shot": "07-peekaboo"
+  },
+  {
+   "at": 6,
+   "type": "sfx",
+   "key": "peekaboo_pop",
+   "shot": "07-peekaboo"
+  },
+  {
+   "at": 6.12,
+   "type": "vfx",
+   "key": "puff",
+   "anchor": "cloneD.chest",
+   "count": 10,
+   "shot": "07-peekaboo"
+  },
+  {
+   "at": 6.12,
+   "type": "sfx",
+   "key": "illusion_vanish",
+   "shot": "07-peekaboo"
+  },
+  {
+   "at": 6.28,
+   "type": "sfx",
+   "key": "wink_chime",
+   "shot": "07-peekaboo"
+  },
+  {
+   "at": 6.28,
+   "type": "vfx",
+   "key": "sparks",
+   "anchor": "attacker.head",
+   "offset": [
+    0.08,
+    0.04,
+    0.1
+   ],
+   "count": 8,
+   "power": 0.3,
+   "up": 0.5,
+   "dur": 0.5,
+   "size": 0.45,
+   "color": 16763120,
+   "shot": "07-peekaboo"
+  },
+  {
+   "at": 6.32,
+   "type": "vfx",
+   "key": "puff",
+   "anchor": "cloneC.chest",
+   "count": 10,
+   "shot": "07-peekaboo"
+  },
+  {
+   "at": 6.6,
+   "type": "sfx",
+   "key": "tension_hold",
+   "shot": "08-real"
+  },
+  {
+   "at": 6.72,
+   "type": "vfx",
+   "key": "puff",
+   "anchor": "cloneB.chest",
+   "count": 10,
+   "shot": "08-real"
+  },
+  {
+   "at": 6.92,
+   "type": "vfx",
+   "key": "puff",
+   "anchor": "cloneA.chest",
+   "count": 10,
+   "shot": "08-real"
+  },
+  {
+   "at": 7.02,
+   "type": "sfx",
+   "key": "marks_converge",
+   "shot": "08-real"
+  },
+  {
+   "at": 7.05,
+   "type": "sfx",
+   "key": "pounce",
+   "shot": "08-real"
+  },
+  {
+   "at": 7.06,
+   "type": "vfx",
+   "key": "dust",
+   "anchor": "attacker.root",
+   "count": 8,
+   "spread": 0.35,
+   "shot": "08-real"
+  },
+  {
+   "at": 7.3,
+   "type": "hitstop",
+   "dur": 0.6,
+   "strength": "max",
+   "shot": "08-real"
+  },
+  {
+   "at": 7.3,
+   "type": "vfx",
+   "key": "dim",
+   "dur": 0.6,
+   "opacity": 0.34,
+   "color": 656408,
+   "shot": "08-real"
+  },
+  {
+   "at": 7.3,
+   "type": "vfx",
+   "key": "flash",
+   "dur": 0.1,
+   "opacity": 0.45,
+   "color": 15782143,
+   "shot": "08-real"
+  },
+  {
+   "at": 7.3,
+   "type": "vfx",
+   "key": "impact_burst",
+   "anchor": "target.chest",
+   "size": 0.6,
+   "rays": 16,
+   "color": 16178431,
+   "shot": "08-real"
+  },
+  {
+   "at": 7.3,
+   "type": "vfx",
+   "key": "claw_mark",
+   "anchor": "target.chest",
+   "offset": [
+    0,
+    0,
+    0.14
+   ],
+   "size": 0.6,
+   "angle": -40,
+   "dur": 0.1,
+   "hold": 0.9,
+   "color": 12607743,
+   "shot": "08-real"
+  },
+  {
+   "at": 7.3,
+   "type": "vfx",
+   "key": "slash_arc",
+   "anchor": "target.chest",
+   "size": 0.7,
+   "angle": 60,
+   "sweep": 1.6,
+   "color": 14857471,
+   "shot": "08-real"
+  },
+  {
+   "at": 7.3,
+   "type": "shake",
+   "dur": 0.6,
+   "amp": 0.06,
+   "shot": "08-real"
+  },
+  {
+   "at": 7.3,
+   "type": "sfx",
+   "key": "ult_hit_slash",
+   "shot": "08-real"
+  },
+  {
+   "at": 7.9,
+   "type": "vfx",
+   "key": "speed_lines",
+   "dur": 0.3,
+   "opacity": 0.45,
+   "color": 15784191,
+   "shot": "08-real"
+  },
+  {
+   "at": 7.9,
+   "type": "sfx",
+   "key": "launch",
+   "shot": "08-real"
+  },
+  {
+   "at": 8.62,
+   "type": "vfx",
+   "key": "dust",
+   "anchor": "target.root",
+   "count": 8,
+   "spread": 0.45,
+   "shot": "09-zanshin"
+  },
+  {
+   "at": 8.62,
+   "type": "sfx",
+   "key": "body_land",
+   "shot": "09-zanshin"
+  },
+  {
+   "at": 8.7,
+   "type": "vfx",
+   "key": "poison_mist",
+   "anchor": "target.chest",
+   "radius": 0.3,
+   "count": 12,
+   "dur": 1.3,
+   "color": 10502399,
+   "shot": "09-zanshin"
+  },
+  {
+   "at": 9.2,
+   "type": "caption",
+   "dur": 0.75,
+   "text": "百面本命打ち",
+   "sub": "チルカ",
+   "shot": "09-zanshin"
+  },
+  {
+   "at": 9.25,
+   "type": "sfx",
+   "key": "finish_pose",
+   "shot": "09-zanshin"
+  },
+  {
+   "at": 9.7,
+   "type": "sfx",
+   "key": "wink_chime",
+   "shot": "09-zanshin"
+  }
+ ],
+ "reducedMotion": {
+  "useShots": [
+   "01-cute",
+   "08-real",
+   "09-zanshin"
+  ],
+  "disable": [
+   "shake",
+   "flash",
+   "speed_lines",
+   "dim"
+  ],
+  "note": "3 カットを固定カメラ（各ショットの最初のキー）で見せる。分身と爪痕は残す。役者とキューの時刻は変えない"
+ },
+ "skip": {
+  "allowedFrom": 0.4,
+  "landOn": "end",
+  "note": "スキップ時は役者を消してからゲームの立ち位置へ戻す。ムービー中の位置を戦闘へ持ち込まない"
+ }
+}

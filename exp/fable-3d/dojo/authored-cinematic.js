@@ -2,6 +2,8 @@ import * as THREE from 'three';
 import { clone as cloneSkeleton } from 'three/addons/utils/SkeletonUtils.js';
 import { sampleCinematic } from './showtime-assets.js';
 
+import { createChoreographedCinematic } from './choreographed-cinematic.js';
+
 const FORWARD = Math.PI / 2;
 
 function makePerformer(actor, clip, x, rotation) {
@@ -30,7 +32,9 @@ function makePerformer(actor, clip, x, rotation) {
   };
 }
 
-export function createAuthoredCinematic({ entry, attacker, target, background, lights, reducedMotion, visualCue, audioCue }) {
+export function createAuthoredCinematic(options) {
+  const { entry, attacker, target, background, lights, reducedMotion, visualCue, audioCue } = options;
+  if (entry.spec.actorTracks) return createChoreographedCinematic(options);
   const { spec } = entry;
   const targetClip = entry.target ?? target.gltf.animations.find(clip =>
     clip.name === spec.animationSources.target.clip);

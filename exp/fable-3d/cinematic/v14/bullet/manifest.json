@@ -1,0 +1,17 @@
+{
+  "moves": [],
+  "reactions": [
+    {
+      "glb": "bullet_v14.glb",
+      "clip": "cinv_moguzo"
+    },
+    {
+      "glb": "bullet_v14.glb",
+      "clip": "cinv_godan"
+    },
+    {
+      "glb": "bullet_v14.glb",
+      "clip": "cinv_chirka"
+    }
+  ]
+}

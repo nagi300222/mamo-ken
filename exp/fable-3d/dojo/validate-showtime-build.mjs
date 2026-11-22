@@ -41,11 +41,19 @@ export async function validateShowtimeBuild(base) {
     files.add(path);
     const url = new URL(path, base);
     const { moves } = await readJSON(url);
-    if (!Array.isArray(moves) || moves.length !== MOVE_IDS.length) {
+    if (!Array.isArray(moves) || ![0,MOVE_IDS.length].includes(moves.length)) {
       throw new Error('Expected all four authored moves: ' + id);
     }
     const clipsById = new Map(moves.map(move => [move.moveId, move]));
-    for (const moveId of MOVE_IDS) {
+    const character = await readJSON(url);
+    for (const reaction of character.reactions ?? []) {
+      const file = id + '/' + reaction.glb;
+      files.add(file);
+      const model = await readModel(new URL(reaction.glb, url));
+      getAnimation(model, reaction.clip, await rosterModel(id));
+    }
+    for (const move of moves) {
+      const moveId = move.moveId;
       const spec = validateMoveManifest(clipsById.get(moveId), id, moveId);
       async function sourceModel(source, fighter) {
         if (!source.glb) return rosterModel(fighter);
@@ -58,13 +66,28 @@ export async function validateShowtimeBuild(base) {
       if (moveId === 'ultimate') {
         for (const target of IDS) {
           const targetSource = spec.animationSources.target;
-          const targetModel = await sourceModel(targetSource, target);
+          const targetModel = spec.actorTracks ?
+            await readModel(new URL(target + '/' + target + '_v14.glb', base)) :
+            await sourceModel(targetSource, target);
           const targetRig = await rosterModel(target);
           getAnimation(targetModel, targetSource.clip, targetRig);
           const bones = {
             attacker: new Set(attackerRig.nodes.map(node => node.name)),
             target: new Set(targetRig.nodes.map(node => node.name))
           };
+          if (spec.actorTracks) {
+            for (const [role, track] of Object.entries(spec.actorTracks)) {
+              const doc = role === 'target' ? targetModel : attackerModel;
+              const rig = role === 'target' ? targetRig : attackerRig;
+              for (const segment of track.segments) {
+                const clip = getAnimation(doc, segment.clip, rig);
+                if (clip.duration + .02 < spec.durationSeconds && track.segments.length === 1) {
+                  throw new Error('Authored clip ends before the film: ' + segment.clip);
+                }
+              }
+            }
+            continue;
+          }
           for (const { camera } of spec.shots) {
             for (const lookAt of [camera.lookAt, camera.endLookAt]) {
               if (typeof lookAt !== 'string') continue;
