@@ -24,7 +24,7 @@ try{
  const oldLink=page.getByRole('link',{name:'旧2D版はこちら'});
  assert.equal(await oldLink.count(),1,'old wiki has a separate link');
  const oldPage=await browser.newPage();
- await oldPage.goto(new URL('legacy-2d.html',base),{waitUntil:'domcontentloaded'});
+ await oldPage.goto(new URL('legacy-2d.html',base).href,{waitUntil:'domcontentloaded'});
  assert.match(await oldPage.title(),/マモ拳 攻略Wiki/);
  assert.ok((await oldPage.locator('body').textContent()).includes('モグゾー'));
  await oldPage.close();
