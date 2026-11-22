@@ -17,3 +17,8 @@ Follow [Codex execution Issue #178](https://github.com/nagi300222/mamo-ken/issue
 - Do not claim any Codex run has started just because an Issue or this instruction file exists.
 
 Unless the user specifically asks again, avoid posting another early **“とりあえず試遊版”**. Deliver substantial, verifiable completed work first.
+
+
+## 2026-11-22 v15 new task (after v14 device-ready)
+
+The user has tested and really likes the v14 version, but wants stronger individual character identity, distinct ground/air control, startup/recovery and fighting-game combos (weak→weak, weak→strong and normal→special). **P0 orientation-locked landscape view first**: [Issue #186](https://github.com/nagi300222/mamo-ken/issues/186), [P0 PR #187](https://github.com/nagi300222/mamo-ken/pull/187). Read [docs/mamoken-v15/COMBAT_REDESIGN.md](docs/mamoken-v15/COMBAT_REDESIGN.md) and [Issue #189](https://github.com/nagi300222/mamo-ken/issues/189). Make *actual* Codex gameplay changes and tests in a separate Draft PR, not just a proposal. Do not overwrite the original v14 good cinematics or silently merge. Treat listed air speeds/combos as provisional tuning, not adopted fact.
