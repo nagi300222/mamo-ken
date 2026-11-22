@@ -1,0 +1,2275 @@
+{
+  "baseline": "b92717c",
+  "before": [
+    {
+      "id": "moguzo",
+      "slot": "stand_weak",
+      "startup": 5,
+      "active": 3,
+      "recovery": 12,
+      "reach": 0.39,
+      "damage": 38,
+      "hit": {
+        "outcome": "hit",
+        "damage": 38,
+        "contactFrame": 5,
+        "advantage": -3
+      },
+      "block": {
+        "outcome": "block",
+        "damage": 0,
+        "contactFrame": 5,
+        "advantage": -7
+      }
+    },
+    {
+      "id": "moguzo",
+      "slot": "stand_heavy",
+      "startup": 11,
+      "active": 4,
+      "recovery": 21,
+      "reach": 0.54,
+      "damage": 80,
+      "hit": {
+        "outcome": "hit",
+        "damage": 80,
+        "contactFrame": 11,
+        "advantage": -12
+      },
+      "block": {
+        "outcome": "block",
+        "damage": 0,
+        "contactFrame": 11,
+        "advantage": -17
+      }
+    },
+    {
+      "id": "moguzo",
+      "slot": "crouch_weak",
+      "startup": 6,
+      "active": 3,
+      "recovery": 13,
+      "reach": 0.39,
+      "damage": 32,
+      "hit": {
+        "outcome": "hit",
+        "damage": 32,
+        "contactFrame": 6,
+        "advantage": -4
+      },
+      "block": {
+        "outcome": "block",
+        "damage": 0,
+        "contactFrame": 6,
+        "advantage": -8
+      }
+    },
+    {
+      "id": "moguzo",
+      "slot": "crouch_heavy",
+      "startup": 12,
+      "active": 4,
+      "recovery": 23,
+      "reach": 0.57,
+      "damage": 76,
+      "hit": {
+        "outcome": "hit",
+        "damage": 76,
+        "contactFrame": 12,
+        "advantage": -15
+      },
+      "block": {
+        "outcome": "block",
+        "damage": 0,
+        "contactFrame": 12,
+        "advantage": -19
+      }
+    },
+    {
+      "id": "moguzo",
+      "slot": "air_weak",
+      "startup": 6,
+      "active": 5,
+      "recovery": 12,
+      "reach": 0.42,
+      "damage": 39,
+      "hit": {
+        "outcome": "hit",
+        "damage": 39,
+        "contactFrame": 6,
+        "advantage": -5
+      },
+      "block": {
+        "outcome": "block",
+        "damage": 0,
+        "contactFrame": 6,
+        "advantage": -9
+      }
+    },
+    {
+      "id": "moguzo",
+      "slot": "air_heavy",
+      "startup": 10,
+      "active": 6,
+      "recovery": 17,
+      "reach": 0.49,
+      "damage": 77,
+      "hit": {
+        "outcome": "hit",
+        "damage": 77,
+        "contactFrame": 10,
+        "advantage": -11
+      },
+      "block": {
+        "outcome": "block",
+        "damage": 0,
+        "contactFrame": 10,
+        "advantage": -15
+      }
+    },
+    {
+      "id": "pisuke",
+      "slot": "stand_weak",
+      "startup": 3,
+      "active": 3,
+      "recovery": 11,
+      "reach": 0.39,
+      "damage": 35,
+      "hit": {
+        "outcome": "hit",
+        "damage": 35,
+        "contactFrame": 3,
+        "advantage": -2
+      },
+      "block": {
+        "outcome": "block",
+        "damage": 0,
+        "contactFrame": 3,
+        "advantage": -6
+      }
+    },
+    {
+      "id": "pisuke",
+      "slot": "stand_heavy",
+      "startup": 10,
+      "active": 4,
+      "recovery": 21,
+      "reach": 0.54,
+      "damage": 74,
+      "hit": {
+        "outcome": "hit",
+        "damage": 74,
+        "contactFrame": 10,
+        "advantage": -13
+      },
+      "block": {
+        "outcome": "block",
+        "damage": 0,
+        "contactFrame": 10,
+        "advantage": -17
+      }
+    },
+    {
+      "id": "pisuke",
+      "slot": "crouch_weak",
+      "startup": 4,
+      "active": 3,
+      "recovery": 12,
+      "reach": 0.39,
+      "damage": 29,
+      "hit": {
+        "outcome": "hit",
+        "damage": 29,
+        "contactFrame": 4,
+        "advantage": -3
+      },
+      "block": {
+        "outcome": "block",
+        "damage": 0,
+        "contactFrame": 4,
+        "advantage": -7
+      }
+    },
+    {
+      "id": "pisuke",
+      "slot": "crouch_heavy",
+      "startup": 11,
+      "active": 4,
+      "recovery": 23,
+      "reach": 0.57,
+      "damage": 70,
+      "hit": {
+        "outcome": "hit",
+        "damage": 70,
+        "contactFrame": 11,
+        "advantage": -15
+      },
+      "block": {
+        "outcome": "block",
+        "damage": 0,
+        "contactFrame": 11,
+        "advantage": -19
+      }
+    },
+    {
+      "id": "pisuke",
+      "slot": "air_weak",
+      "startup": 4,
+      "active": 5,
+      "recovery": 11,
+      "reach": 0.42,
+      "damage": 36,
+      "hit": {
+        "outcome": "hit",
+        "damage": 36,
+        "contactFrame": 4,
+        "advantage": -4
+      },
+      "block": {
+        "outcome": "block",
+        "damage": 0,
+        "contactFrame": 4,
+        "advantage": -8
+      }
+    },
+    {
+      "id": "pisuke",
+      "slot": "air_heavy",
+      "startup": 9,
+      "active": 6,
+      "recovery": 17,
+      "reach": 0.49,
+      "damage": 71,
+      "hit": {
+        "outcome": "hit",
+        "damage": 71,
+        "contactFrame": 9,
+        "advantage": -11
+      },
+      "block": {
+        "outcome": "block",
+        "damage": 0,
+        "contactFrame": 9,
+        "advantage": -15
+      }
+    },
+    {
+      "id": "godan",
+      "slot": "stand_weak",
+      "startup": 9,
+      "active": 3,
+      "recovery": 16,
+      "reach": 0.435,
+      "damage": 40,
+      "hit": {
+        "outcome": "hit",
+        "damage": 40,
+        "contactFrame": 9,
+        "advantage": -7
+      },
+      "block": {
+        "outcome": "block",
+        "damage": 0,
+        "contactFrame": 9,
+        "advantage": -11
+      }
+    },
+    {
+      "id": "godan",
+      "slot": "stand_heavy",
+      "startup": 17,
+      "active": 4,
+      "recovery": 29,
+      "reach": 0.5850000000000001,
+      "damage": 83,
+      "hit": {
+        "outcome": "hit",
+        "damage": 83,
+        "contactFrame": 17,
+        "advantage": -20
+      },
+      "block": {
+        "outcome": "block",
+        "damage": 0,
+        "contactFrame": 17,
+        "advantage": -25
+      }
+    },
+    {
+      "id": "godan",
+      "slot": "crouch_weak",
+      "startup": 10,
+      "active": 3,
+      "recovery": 17,
+      "reach": 0.435,
+      "damage": 33,
+      "hit": {
+        "outcome": "hit",
+        "damage": 33,
+        "contactFrame": 10,
+        "advantage": -8
+      },
+      "block": {
+        "outcome": "block",
+        "damage": 0,
+        "contactFrame": 10,
+        "advantage": -12
+      }
+    },
+    {
+      "id": "godan",
+      "slot": "crouch_heavy",
+      "startup": 18,
+      "active": 4,
+      "recovery": 31,
+      "reach": 0.615,
+      "damage": 79,
+      "hit": {
+        "outcome": "hit",
+        "damage": 79,
+        "contactFrame": 18,
+        "advantage": -22
+      },
+      "block": {
+        "outcome": "block",
+        "damage": 0,
+        "contactFrame": 18,
+        "advantage": -27
+      }
+    },
+    {
+      "id": "godan",
+      "slot": "air_weak",
+      "startup": 10,
+      "active": 5,
+      "recovery": 16,
+      "reach": 0.46499999999999997,
+      "damage": 41,
+      "hit": {
+        "outcome": "hit",
+        "damage": 41,
+        "contactFrame": 10,
+        "advantage": -9
+      },
+      "block": {
+        "outcome": "block",
+        "damage": 0,
+        "contactFrame": 10,
+        "advantage": -13
+      }
+    },
+    {
+      "id": "godan",
+      "slot": "air_heavy",
+      "startup": 16,
+      "active": 6,
+      "recovery": 25,
+      "reach": 0.535,
+      "damage": 80,
+      "hit": {
+        "outcome": "hit",
+        "damage": 80,
+        "contactFrame": 16,
+        "advantage": -18
+      },
+      "block": {
+        "outcome": "block",
+        "damage": 0,
+        "contactFrame": 16,
+        "advantage": -23
+      }
+    },
+    {
+      "id": "hakuma",
+      "slot": "stand_weak",
+      "startup": 7,
+      "active": 3,
+      "recovery": 13,
+      "reach": 0.39,
+      "damage": 38,
+      "hit": {
+        "outcome": "hit",
+        "damage": 38,
+        "contactFrame": 7,
+        "advantage": -4
+      },
+      "block": {
+        "outcome": "block",
+        "damage": 0,
+        "contactFrame": 7,
+        "advantage": -8
+      }
+    },
+    {
+      "id": "hakuma",
+      "slot": "stand_heavy",
+      "startup": 14,
+      "active": 4,
+      "recovery": 23,
+      "reach": 0.54,
+      "damage": 80,
+      "hit": {
+        "outcome": "hit",
+        "damage": 80,
+        "contactFrame": 14,
+        "advantage": -14
+      },
+      "block": {
+        "outcome": "block",
+        "damage": 0,
+        "contactFrame": 14,
+        "advantage": -19
+      }
+    },
+    {
+      "id": "hakuma",
+      "slot": "crouch_weak",
+      "startup": 8,
+      "active": 3,
+      "recovery": 14,
+      "reach": 0.39,
+      "damage": 32,
+      "hit": {
+        "outcome": "hit",
+        "damage": 32,
+        "contactFrame": 8,
+        "advantage": -5
+      },
+      "block": {
+        "outcome": "block",
+        "damage": 0,
+        "contactFrame": 8,
+        "advantage": -9
+      }
+    },
+    {
+      "id": "hakuma",
+      "slot": "crouch_heavy",
+      "startup": 15,
+      "active": 4,
+      "recovery": 25,
+      "reach": 0.57,
+      "damage": 76,
+      "hit": {
+        "outcome": "hit",
+        "damage": 76,
+        "contactFrame": 15,
+        "advantage": -17
+      },
+      "block": {
+        "outcome": "block",
+        "damage": 0,
+        "contactFrame": 15,
+        "advantage": -21
+      }
+    },
+    {
+      "id": "hakuma",
+      "slot": "air_weak",
+      "startup": 8,
+      "active": 5,
+      "recovery": 13,
+      "reach": 0.42,
+      "damage": 39,
+      "hit": {
+        "outcome": "hit",
+        "damage": 39,
+        "contactFrame": 8,
+        "advantage": -6
+      },
+      "block": {
+        "outcome": "block",
+        "damage": 0,
+        "contactFrame": 8,
+        "advantage": -10
+      }
+    },
+    {
+      "id": "hakuma",
+      "slot": "air_heavy",
+      "startup": 13,
+      "active": 6,
+      "recovery": 19,
+      "reach": 0.49,
+      "damage": 77,
+      "hit": {
+        "outcome": "hit",
+        "damage": 77,
+        "contactFrame": 13,
+        "advantage": -13
+      },
+      "block": {
+        "outcome": "block",
+        "damage": 0,
+        "contactFrame": 13,
+        "advantage": -17
+      }
+    },
+    {
+      "id": "chirka",
+      "slot": "stand_weak",
+      "startup": 3,
+      "active": 3,
+      "recovery": 11,
+      "reach": 0.39,
+      "damage": 35,
+      "hit": {
+        "outcome": "hit",
+        "damage": 35,
+        "contactFrame": 3,
+        "advantage": -2
+      },
+      "block": {
+        "outcome": "block",
+        "damage": 0,
+        "contactFrame": 3,
+        "advantage": -6
+      }
+    },
+    {
+      "id": "chirka",
+      "slot": "stand_heavy",
+      "startup": 10,
+      "active": 4,
+      "recovery": 21,
+      "reach": 0.54,
+      "damage": 74,
+      "hit": {
+        "outcome": "hit",
+        "damage": 74,
+        "contactFrame": 10,
+        "advantage": -13
+      },
+      "block": {
+        "outcome": "block",
+        "damage": 0,
+        "contactFrame": 10,
+        "advantage": -17
+      }
+    },
+    {
+      "id": "chirka",
+      "slot": "crouch_weak",
+      "startup": 4,
+      "active": 3,
+      "recovery": 12,
+      "reach": 0.39,
+      "damage": 29,
+      "hit": {
+        "outcome": "hit",
+        "damage": 29,
+        "contactFrame": 4,
+        "advantage": -3
+      },
+      "block": {
+        "outcome": "block",
+        "damage": 0,
+        "contactFrame": 4,
+        "advantage": -7
+      }
+    },
+    {
+      "id": "chirka",
+      "slot": "crouch_heavy",
+      "startup": 11,
+      "active": 4,
+      "recovery": 23,
+      "reach": 0.57,
+      "damage": 70,
+      "hit": {
+        "outcome": "hit",
+        "damage": 70,
+        "contactFrame": 11,
+        "advantage": -15
+      },
+      "block": {
+        "outcome": "block",
+        "damage": 0,
+        "contactFrame": 11,
+        "advantage": -19
+      }
+    },
+    {
+      "id": "chirka",
+      "slot": "air_weak",
+      "startup": 4,
+      "active": 5,
+      "recovery": 11,
+      "reach": 0.42,
+      "damage": 36,
+      "hit": {
+        "outcome": "hit",
+        "damage": 36,
+        "contactFrame": 4,
+        "advantage": -4
+      },
+      "block": {
+        "outcome": "block",
+        "damage": 0,
+        "contactFrame": 4,
+        "advantage": -8
+      }
+    },
+    {
+      "id": "chirka",
+      "slot": "air_heavy",
+      "startup": 9,
+      "active": 6,
+      "recovery": 17,
+      "reach": 0.49,
+      "damage": 71,
+      "hit": {
+        "outcome": "hit",
+        "damage": 71,
+        "contactFrame": 9,
+        "advantage": -11
+      },
+      "block": {
+        "outcome": "block",
+        "damage": 0,
+        "contactFrame": 9,
+        "advantage": -15
+      }
+    },
+    {
+      "id": "takimaru",
+      "slot": "stand_weak",
+      "startup": 7,
+      "active": 3,
+      "recovery": 13,
+      "reach": 0.435,
+      "damage": 39,
+      "hit": {
+        "outcome": "hit",
+        "damage": 39,
+        "contactFrame": 7,
+        "advantage": -4
+      },
+      "block": {
+        "outcome": "block",
+        "damage": 0,
+        "contactFrame": 7,
+        "advantage": -8
+      }
+    },
+    {
+      "id": "takimaru",
+      "slot": "stand_heavy",
+      "startup": 14,
+      "active": 4,
+      "recovery": 24,
+      "reach": 0.5850000000000001,
+      "damage": 82,
+      "hit": {
+        "outcome": "hit",
+        "damage": 82,
+        "contactFrame": 14,
+        "advantage": -15
+      },
+      "block": {
+        "outcome": "block",
+        "damage": 0,
+        "contactFrame": 14,
+        "advantage": -20
+      }
+    },
+    {
+      "id": "takimaru",
+      "slot": "crouch_weak",
+      "startup": 8,
+      "active": 3,
+      "recovery": 14,
+      "reach": 0.435,
+      "damage": 33,
+      "hit": {
+        "outcome": "hit",
+        "damage": 33,
+        "contactFrame": 8,
+        "advantage": -5
+      },
+      "block": {
+        "outcome": "block",
+        "damage": 0,
+        "contactFrame": 8,
+        "advantage": -9
+      }
+    },
+    {
+      "id": "takimaru",
+      "slot": "crouch_heavy",
+      "startup": 15,
+      "active": 4,
+      "recovery": 26,
+      "reach": 0.615,
+      "damage": 78,
+      "hit": {
+        "outcome": "hit",
+        "damage": 78,
+        "contactFrame": 15,
+        "advantage": -18
+      },
+      "block": {
+        "outcome": "block",
+        "damage": 0,
+        "contactFrame": 15,
+        "advantage": -22
+      }
+    },
+    {
+      "id": "takimaru",
+      "slot": "air_weak",
+      "startup": 8,
+      "active": 5,
+      "recovery": 13,
+      "reach": 0.46499999999999997,
+      "damage": 40,
+      "hit": {
+        "outcome": "hit",
+        "damage": 40,
+        "contactFrame": 8,
+        "advantage": -6
+      },
+      "block": {
+        "outcome": "block",
+        "damage": 0,
+        "contactFrame": 8,
+        "advantage": -10
+      }
+    },
+    {
+      "id": "takimaru",
+      "slot": "air_heavy",
+      "startup": 13,
+      "active": 6,
+      "recovery": 20,
+      "reach": 0.535,
+      "damage": 79,
+      "hit": {
+        "outcome": "hit",
+        "damage": 79,
+        "contactFrame": 13,
+        "advantage": -13
+      },
+      "block": {
+        "outcome": "block",
+        "damage": 0,
+        "contactFrame": 13,
+        "advantage": -18
+      }
+    },
+    {
+      "id": "yomikage",
+      "slot": "stand_weak",
+      "startup": 5,
+      "active": 3,
+      "recovery": 12,
+      "reach": 0.39,
+      "damage": 36,
+      "hit": {
+        "outcome": "hit",
+        "damage": 36,
+        "contactFrame": 5,
+        "advantage": -3
+      },
+      "block": {
+        "outcome": "block",
+        "damage": 0,
+        "contactFrame": 5,
+        "advantage": -7
+      }
+    },
+    {
+      "id": "yomikage",
+      "slot": "stand_heavy",
+      "startup": 11,
+      "active": 4,
+      "recovery": 22,
+      "reach": 0.54,
+      "damage": 77,
+      "hit": {
+        "outcome": "hit",
+        "damage": 77,
+        "contactFrame": 11,
+        "advantage": -14
+      },
+      "block": {
+        "outcome": "block",
+        "damage": 0,
+        "contactFrame": 11,
+        "advantage": -18
+      }
+    },
+    {
+      "id": "yomikage",
+      "slot": "crouch_weak",
+      "startup": 6,
+      "active": 3,
+      "recovery": 13,
+      "reach": 0.39,
+      "damage": 31,
+      "hit": {
+        "outcome": "hit",
+        "damage": 31,
+        "contactFrame": 6,
+        "advantage": -4
+      },
+      "block": {
+        "outcome": "block",
+        "damage": 0,
+        "contactFrame": 6,
+        "advantage": -8
+      }
+    },
+    {
+      "id": "yomikage",
+      "slot": "crouch_heavy",
+      "startup": 12,
+      "active": 4,
+      "recovery": 24,
+      "reach": 0.57,
+      "damage": 73,
+      "hit": {
+        "outcome": "hit",
+        "damage": 73,
+        "contactFrame": 12,
+        "advantage": -16
+      },
+      "block": {
+        "outcome": "block",
+        "damage": 0,
+        "contactFrame": 12,
+        "advantage": -20
+      }
+    },
+    {
+      "id": "yomikage",
+      "slot": "air_weak",
+      "startup": 6,
+      "active": 5,
+      "recovery": 12,
+      "reach": 0.42,
+      "damage": 37,
+      "hit": {
+        "outcome": "hit",
+        "damage": 37,
+        "contactFrame": 6,
+        "advantage": -5
+      },
+      "block": {
+        "outcome": "block",
+        "damage": 0,
+        "contactFrame": 6,
+        "advantage": -9
+      }
+    },
+    {
+      "id": "yomikage",
+      "slot": "air_heavy",
+      "startup": 10,
+      "active": 6,
+      "recovery": 18,
+      "reach": 0.49,
+      "damage": 74,
+      "hit": {
+        "outcome": "hit",
+        "damage": 74,
+        "contactFrame": 10,
+        "advantage": -12
+      },
+      "block": {
+        "outcome": "block",
+        "damage": 0,
+        "contactFrame": 10,
+        "advantage": -16
+      }
+    },
+    {
+      "id": "bullet",
+      "slot": "stand_weak",
+      "startup": 5,
+      "active": 3,
+      "recovery": 13,
+      "reach": 0.39,
+      "damage": 35,
+      "hit": {
+        "outcome": "hit",
+        "damage": 35,
+        "contactFrame": 5,
+        "advantage": -4
+      },
+      "block": {
+        "outcome": "block",
+        "damage": 0,
+        "contactFrame": 5,
+        "advantage": -8
+      }
+    },
+    {
+      "id": "bullet",
+      "slot": "stand_heavy",
+      "startup": 12,
+      "active": 4,
+      "recovery": 25,
+      "reach": 0.54,
+      "damage": 73,
+      "hit": {
+        "outcome": "hit",
+        "damage": 73,
+        "contactFrame": 12,
+        "advantage": -17
+      },
+      "block": {
+        "outcome": "block",
+        "damage": 0,
+        "contactFrame": 12,
+        "advantage": -21
+      }
+    },
+    {
+      "id": "bullet",
+      "slot": "crouch_weak",
+      "startup": 6,
+      "active": 3,
+      "recovery": 14,
+      "reach": 0.39,
+      "damage": 29,
+      "hit": {
+        "outcome": "hit",
+        "damage": 29,
+        "contactFrame": 6,
+        "advantage": -5
+      },
+      "block": {
+        "outcome": "block",
+        "damage": 0,
+        "contactFrame": 6,
+        "advantage": -9
+      }
+    },
+    {
+      "id": "bullet",
+      "slot": "crouch_heavy",
+      "startup": 13,
+      "active": 4,
+      "recovery": 27,
+      "reach": 0.57,
+      "damage": 69,
+      "hit": {
+        "outcome": "hit",
+        "damage": 69,
+        "contactFrame": 13,
+        "advantage": -19
+      },
+      "block": {
+        "outcome": "block",
+        "damage": 0,
+        "contactFrame": 13,
+        "advantage": -23
+      }
+    },
+    {
+      "id": "bullet",
+      "slot": "air_weak",
+      "startup": 6,
+      "active": 5,
+      "recovery": 13,
+      "reach": 0.42,
+      "damage": 35,
+      "hit": {
+        "outcome": "hit",
+        "damage": 35,
+        "contactFrame": 6,
+        "advantage": -6
+      },
+      "block": {
+        "outcome": "block",
+        "damage": 0,
+        "contactFrame": 6,
+        "advantage": -10
+      }
+    },
+    {
+      "id": "bullet",
+      "slot": "air_heavy",
+      "startup": 11,
+      "active": 6,
+      "recovery": 21,
+      "reach": 0.49,
+      "damage": 70,
+      "hit": {
+        "outcome": "hit",
+        "damage": 70,
+        "contactFrame": 11,
+        "advantage": -15
+      },
+      "block": {
+        "outcome": "block",
+        "damage": 0,
+        "contactFrame": 11,
+        "advantage": -19
+      }
+    },
+    {
+      "id": "dark_moguzo",
+      "slot": "stand_weak",
+      "startup": 3,
+      "active": 3,
+      "recovery": 11,
+      "reach": 0.39,
+      "damage": 35,
+      "hit": {
+        "outcome": "hit",
+        "damage": 35,
+        "contactFrame": 3,
+        "advantage": -2
+      },
+      "block": {
+        "outcome": "block",
+        "damage": 0,
+        "contactFrame": 3,
+        "advantage": -6
+      }
+    },
+    {
+      "id": "dark_moguzo",
+      "slot": "stand_heavy",
+      "startup": 9,
+      "active": 4,
+      "recovery": 21,
+      "reach": 0.54,
+      "damage": 74,
+      "hit": {
+        "outcome": "hit",
+        "damage": 74,
+        "contactFrame": 9,
+        "advantage": -13
+      },
+      "block": {
+        "outcome": "block",
+        "damage": 0,
+        "contactFrame": 9,
+        "advantage": -17
+      }
+    },
+    {
+      "id": "dark_moguzo",
+      "slot": "crouch_weak",
+      "startup": 4,
+      "active": 3,
+      "recovery": 12,
+      "reach": 0.39,
+      "damage": 29,
+      "hit": {
+        "outcome": "hit",
+        "damage": 29,
+        "contactFrame": 4,
+        "advantage": -3
+      },
+      "block": {
+        "outcome": "block",
+        "damage": 0,
+        "contactFrame": 4,
+        "advantage": -7
+      }
+    },
+    {
+      "id": "dark_moguzo",
+      "slot": "crouch_heavy",
+      "startup": 10,
+      "active": 4,
+      "recovery": 23,
+      "reach": 0.57,
+      "damage": 70,
+      "hit": {
+        "outcome": "hit",
+        "damage": 70,
+        "contactFrame": 10,
+        "advantage": -15
+      },
+      "block": {
+        "outcome": "block",
+        "damage": 0,
+        "contactFrame": 10,
+        "advantage": -19
+      }
+    },
+    {
+      "id": "dark_moguzo",
+      "slot": "air_weak",
+      "startup": 4,
+      "active": 5,
+      "recovery": 11,
+      "reach": 0.42,
+      "damage": 36,
+      "hit": {
+        "outcome": "hit",
+        "damage": 36,
+        "contactFrame": 4,
+        "advantage": -4
+      },
+      "block": {
+        "outcome": "block",
+        "damage": 0,
+        "contactFrame": 4,
+        "advantage": -8
+      }
+    },
+    {
+      "id": "dark_moguzo",
+      "slot": "air_heavy",
+      "startup": 8,
+      "active": 6,
+      "recovery": 17,
+      "reach": 0.49,
+      "damage": 71,
+      "hit": {
+        "outcome": "hit",
+        "damage": 71,
+        "contactFrame": 8,
+        "advantage": -11
+      },
+      "block": {
+        "outcome": "block",
+        "damage": 0,
+        "contactFrame": 8,
+        "advantage": -15
+      }
+    }
+  ],
+  "after": [
+    {
+      "id": "moguzo",
+      "slot": "stand_weak",
+      "startup": 5,
+      "active": 3,
+      "recovery": 12,
+      "reach": 0.39,
+      "damage": 38,
+      "hit": {
+        "outcome": "hit",
+        "damage": 38,
+        "contactFrame": 5,
+        "advantage": 3
+      },
+      "block": {
+        "outcome": "block",
+        "damage": 0,
+        "contactFrame": 5,
+        "advantage": -4
+      }
+    },
+    {
+      "id": "moguzo",
+      "slot": "stand_heavy",
+      "startup": 12,
+      "active": 4,
+      "recovery": 22,
+      "reach": 0.54,
+      "damage": 80,
+      "hit": {
+        "outcome": "hit",
+        "damage": 80,
+        "contactFrame": 12,
+        "advantage": 2
+      },
+      "block": {
+        "outcome": "block",
+        "damage": 0,
+        "contactFrame": 12,
+        "advantage": -12
+      }
+    },
+    {
+      "id": "moguzo",
+      "slot": "crouch_weak",
+      "startup": 6,
+      "active": 3,
+      "recovery": 13,
+      "reach": 0.39,
+      "damage": 33,
+      "hit": {
+        "outcome": "hit",
+        "damage": 33,
+        "contactFrame": 6,
+        "advantage": 2
+      },
+      "block": {
+        "outcome": "block",
+        "damage": 0,
+        "contactFrame": 6,
+        "advantage": -5
+      }
+    },
+    {
+      "id": "moguzo",
+      "slot": "crouch_heavy",
+      "startup": 13,
+      "active": 4,
+      "recovery": 24,
+      "reach": 0.57,
+      "damage": 76,
+      "hit": {
+        "outcome": "hit",
+        "damage": 76,
+        "contactFrame": 13,
+        "advantage": 2
+      },
+      "block": {
+        "outcome": "block",
+        "damage": 0,
+        "contactFrame": 13,
+        "advantage": -15
+      }
+    },
+    {
+      "id": "moguzo",
+      "slot": "air_weak",
+      "startup": 6,
+      "active": 5,
+      "recovery": 12,
+      "reach": 0.42,
+      "damage": 39,
+      "hit": {
+        "outcome": "hit",
+        "damage": 39,
+        "contactFrame": 6,
+        "advantage": -1
+      },
+      "block": {
+        "outcome": "block",
+        "damage": 0,
+        "contactFrame": 6,
+        "advantage": -7
+      }
+    },
+    {
+      "id": "moguzo",
+      "slot": "air_heavy",
+      "startup": 11,
+      "active": 6,
+      "recovery": 18,
+      "reach": 0.49,
+      "damage": 77,
+      "hit": {
+        "outcome": "hit",
+        "damage": 77,
+        "contactFrame": 11,
+        "advantage": 1
+      },
+      "block": {
+        "outcome": "block",
+        "damage": 0,
+        "contactFrame": 11,
+        "advantage": -11
+      }
+    },
+    {
+      "id": "pisuke",
+      "slot": "stand_weak",
+      "startup": 3,
+      "active": 2,
+      "recovery": 11,
+      "reach": 0.39,
+      "damage": 31,
+      "hit": {
+        "outcome": "hit",
+        "damage": 31,
+        "contactFrame": 3,
+        "advantage": 3
+      },
+      "block": {
+        "outcome": "block",
+        "damage": 0,
+        "contactFrame": 3,
+        "advantage": -4
+      }
+    },
+    {
+      "id": "pisuke",
+      "slot": "stand_heavy",
+      "startup": 10,
+      "active": 3,
+      "recovery": 22,
+      "reach": 0.54,
+      "damage": 68,
+      "hit": {
+        "outcome": "hit",
+        "damage": 68,
+        "contactFrame": 10,
+        "advantage": 2
+      },
+      "block": {
+        "outcome": "block",
+        "damage": 0,
+        "contactFrame": 10,
+        "advantage": -13
+      }
+    },
+    {
+      "id": "pisuke",
+      "slot": "crouch_weak",
+      "startup": 4,
+      "active": 2,
+      "recovery": 12,
+      "reach": 0.39,
+      "damage": 27,
+      "hit": {
+        "outcome": "hit",
+        "damage": 27,
+        "contactFrame": 4,
+        "advantage": 2
+      },
+      "block": {
+        "outcome": "block",
+        "damage": 0,
+        "contactFrame": 4,
+        "advantage": -5
+      }
+    },
+    {
+      "id": "pisuke",
+      "slot": "crouch_heavy",
+      "startup": 11,
+      "active": 4,
+      "recovery": 24,
+      "reach": 0.57,
+      "damage": 65,
+      "hit": {
+        "outcome": "hit",
+        "damage": 65,
+        "contactFrame": 11,
+        "advantage": 2
+      },
+      "block": {
+        "outcome": "block",
+        "damage": 0,
+        "contactFrame": 11,
+        "advantage": -16
+      }
+    },
+    {
+      "id": "pisuke",
+      "slot": "air_weak",
+      "startup": 4,
+      "active": 4,
+      "recovery": 11,
+      "reach": 0.42,
+      "damage": 33,
+      "hit": {
+        "outcome": "hit",
+        "damage": 33,
+        "contactFrame": 4,
+        "advantage": 0
+      },
+      "block": {
+        "outcome": "block",
+        "damage": 0,
+        "contactFrame": 4,
+        "advantage": -6
+      }
+    },
+    {
+      "id": "pisuke",
+      "slot": "air_heavy",
+      "startup": 9,
+      "active": 5,
+      "recovery": 18,
+      "reach": 0.49,
+      "damage": 66,
+      "hit": {
+        "outcome": "hit",
+        "damage": 66,
+        "contactFrame": 9,
+        "advantage": 1
+      },
+      "block": {
+        "outcome": "block",
+        "damage": 0,
+        "contactFrame": 9,
+        "advantage": -11
+      }
+    },
+    {
+      "id": "godan",
+      "slot": "stand_weak",
+      "startup": 9,
+      "active": 3,
+      "recovery": 16,
+      "reach": 0.435,
+      "damage": 47,
+      "hit": {
+        "outcome": "hit",
+        "damage": 47,
+        "contactFrame": 9,
+        "advantage": 4
+      },
+      "block": {
+        "outcome": "block",
+        "damage": 0,
+        "contactFrame": 9,
+        "advantage": -7
+      }
+    },
+    {
+      "id": "godan",
+      "slot": "stand_heavy",
+      "startup": 18,
+      "active": 5,
+      "recovery": 29,
+      "reach": 0.5850000000000001,
+      "damage": 96,
+      "hit": {
+        "outcome": "hit",
+        "damage": 96,
+        "contactFrame": 18,
+        "advantage": 2
+      },
+      "block": {
+        "outcome": "block",
+        "damage": 0,
+        "contactFrame": 18,
+        "advantage": -19
+      }
+    },
+    {
+      "id": "godan",
+      "slot": "crouch_weak",
+      "startup": 10,
+      "active": 3,
+      "recovery": 17,
+      "reach": 0.435,
+      "damage": 41,
+      "hit": {
+        "outcome": "hit",
+        "damage": 41,
+        "contactFrame": 10,
+        "advantage": 3
+      },
+      "block": {
+        "outcome": "block",
+        "damage": 0,
+        "contactFrame": 10,
+        "advantage": -8
+      }
+    },
+    {
+      "id": "godan",
+      "slot": "crouch_heavy",
+      "startup": 19,
+      "active": 5,
+      "recovery": 31,
+      "reach": 0.615,
+      "damage": 91,
+      "hit": {
+        "outcome": "hit",
+        "damage": 91,
+        "contactFrame": 19,
+        "advantage": 2
+      },
+      "block": {
+        "outcome": "block",
+        "damage": 0,
+        "contactFrame": 19,
+        "advantage": -22
+      }
+    },
+    {
+      "id": "godan",
+      "slot": "air_weak",
+      "startup": 10,
+      "active": 5,
+      "recovery": 16,
+      "reach": 0.46499999999999997,
+      "damage": 48,
+      "hit": {
+        "outcome": "hit",
+        "damage": 48,
+        "contactFrame": 10,
+        "advantage": -1
+      },
+      "block": {
+        "outcome": "block",
+        "damage": 0,
+        "contactFrame": 10,
+        "advantage": -9
+      }
+    },
+    {
+      "id": "godan",
+      "slot": "air_heavy",
+      "startup": 16,
+      "active": 6,
+      "recovery": 25,
+      "reach": 0.535,
+      "damage": 93,
+      "hit": {
+        "outcome": "hit",
+        "damage": 93,
+        "contactFrame": 16,
+        "advantage": 1
+      },
+      "block": {
+        "outcome": "block",
+        "damage": 0,
+        "contactFrame": 16,
+        "advantage": -17
+      }
+    },
+    {
+      "id": "hakuma",
+      "slot": "stand_weak",
+      "startup": 7,
+      "active": 4,
+      "recovery": 13,
+      "reach": 0.39,
+      "damage": 39,
+      "hit": {
+        "outcome": "hit",
+        "damage": 39,
+        "contactFrame": 7,
+        "advantage": 3
+      },
+      "block": {
+        "outcome": "block",
+        "damage": 0,
+        "contactFrame": 7,
+        "advantage": -5
+      }
+    },
+    {
+      "id": "hakuma",
+      "slot": "stand_heavy",
+      "startup": 14,
+      "active": 5,
+      "recovery": 24,
+      "reach": 0.54,
+      "damage": 82,
+      "hit": {
+        "outcome": "hit",
+        "damage": 82,
+        "contactFrame": 14,
+        "advantage": 3
+      },
+      "block": {
+        "outcome": "block",
+        "damage": 0,
+        "contactFrame": 14,
+        "advantage": -14
+      }
+    },
+    {
+      "id": "hakuma",
+      "slot": "crouch_weak",
+      "startup": 8,
+      "active": 4,
+      "recovery": 14,
+      "reach": 0.39,
+      "damage": 34,
+      "hit": {
+        "outcome": "hit",
+        "damage": 34,
+        "contactFrame": 8,
+        "advantage": 2
+      },
+      "block": {
+        "outcome": "block",
+        "damage": 0,
+        "contactFrame": 8,
+        "advantage": -6
+      }
+    },
+    {
+      "id": "hakuma",
+      "slot": "crouch_heavy",
+      "startup": 15,
+      "active": 5,
+      "recovery": 26,
+      "reach": 0.57,
+      "damage": 78,
+      "hit": {
+        "outcome": "hit",
+        "damage": 78,
+        "contactFrame": 15,
+        "advantage": 3
+      },
+      "block": {
+        "outcome": "block",
+        "damage": 0,
+        "contactFrame": 15,
+        "advantage": -17
+      }
+    },
+    {
+      "id": "hakuma",
+      "slot": "air_weak",
+      "startup": 8,
+      "active": 5,
+      "recovery": 13,
+      "reach": 0.42,
+      "damage": 40,
+      "hit": {
+        "outcome": "hit",
+        "damage": 40,
+        "contactFrame": 8,
+        "advantage": 0
+      },
+      "block": {
+        "outcome": "block",
+        "damage": 0,
+        "contactFrame": 8,
+        "advantage": -7
+      }
+    },
+    {
+      "id": "hakuma",
+      "slot": "air_heavy",
+      "startup": 13,
+      "active": 6,
+      "recovery": 20,
+      "reach": 0.49,
+      "damage": 79,
+      "hit": {
+        "outcome": "hit",
+        "damage": 79,
+        "contactFrame": 13,
+        "advantage": 1
+      },
+      "block": {
+        "outcome": "block",
+        "damage": 0,
+        "contactFrame": 13,
+        "advantage": -12
+      }
+    },
+    {
+      "id": "chirka",
+      "slot": "stand_weak",
+      "startup": 4,
+      "active": 2,
+      "recovery": 11,
+      "reach": 0.39,
+      "damage": 32,
+      "hit": {
+        "outcome": "hit",
+        "damage": 32,
+        "contactFrame": 4,
+        "advantage": 5
+      },
+      "block": {
+        "outcome": "block",
+        "damage": 0,
+        "contactFrame": 4,
+        "advantage": -4
+      }
+    },
+    {
+      "id": "chirka",
+      "slot": "stand_heavy",
+      "startup": 11,
+      "active": 3,
+      "recovery": 22,
+      "reach": 0.54,
+      "damage": 68,
+      "hit": {
+        "outcome": "hit",
+        "damage": 68,
+        "contactFrame": 11,
+        "advantage": 2
+      },
+      "block": {
+        "outcome": "block",
+        "damage": 0,
+        "contactFrame": 11,
+        "advantage": -13
+      }
+    },
+    {
+      "id": "chirka",
+      "slot": "crouch_weak",
+      "startup": 5,
+      "active": 2,
+      "recovery": 12,
+      "reach": 0.39,
+      "damage": 28,
+      "hit": {
+        "outcome": "hit",
+        "damage": 28,
+        "contactFrame": 5,
+        "advantage": 4
+      },
+      "block": {
+        "outcome": "block",
+        "damage": 0,
+        "contactFrame": 5,
+        "advantage": -5
+      }
+    },
+    {
+      "id": "chirka",
+      "slot": "crouch_heavy",
+      "startup": 12,
+      "active": 4,
+      "recovery": 24,
+      "reach": 0.57,
+      "damage": 65,
+      "hit": {
+        "outcome": "hit",
+        "damage": 65,
+        "contactFrame": 12,
+        "advantage": 2
+      },
+      "block": {
+        "outcome": "block",
+        "damage": 0,
+        "contactFrame": 12,
+        "advantage": -16
+      }
+    },
+    {
+      "id": "chirka",
+      "slot": "air_weak",
+      "startup": 5,
+      "active": 4,
+      "recovery": 11,
+      "reach": 0.42,
+      "damage": 34,
+      "hit": {
+        "outcome": "hit",
+        "damage": 34,
+        "contactFrame": 5,
+        "advantage": 1
+      },
+      "block": {
+        "outcome": "block",
+        "damage": 0,
+        "contactFrame": 5,
+        "advantage": -6
+      }
+    },
+    {
+      "id": "chirka",
+      "slot": "air_heavy",
+      "startup": 10,
+      "active": 5,
+      "recovery": 18,
+      "reach": 0.49,
+      "damage": 68,
+      "hit": {
+        "outcome": "hit",
+        "damage": 68,
+        "contactFrame": 10,
+        "advantage": 1
+      },
+      "block": {
+        "outcome": "block",
+        "damage": 0,
+        "contactFrame": 10,
+        "advantage": -11
+      }
+    },
+    {
+      "id": "takimaru",
+      "slot": "stand_weak",
+      "startup": 7,
+      "active": 3,
+      "recovery": 14,
+      "reach": 0.435,
+      "damage": 41,
+      "hit": {
+        "outcome": "hit",
+        "damage": 41,
+        "contactFrame": 7,
+        "advantage": 4
+      },
+      "block": {
+        "outcome": "block",
+        "damage": 0,
+        "contactFrame": 7,
+        "advantage": -6
+      }
+    },
+    {
+      "id": "takimaru",
+      "slot": "stand_heavy",
+      "startup": 14,
+      "active": 4,
+      "recovery": 26,
+      "reach": 0.5850000000000001,
+      "damage": 85,
+      "hit": {
+        "outcome": "hit",
+        "damage": 85,
+        "contactFrame": 14,
+        "advantage": 3
+      },
+      "block": {
+        "outcome": "block",
+        "damage": 0,
+        "contactFrame": 14,
+        "advantage": -17
+      }
+    },
+    {
+      "id": "takimaru",
+      "slot": "crouch_weak",
+      "startup": 8,
+      "active": 3,
+      "recovery": 15,
+      "reach": 0.435,
+      "damage": 35,
+      "hit": {
+        "outcome": "hit",
+        "damage": 35,
+        "contactFrame": 8,
+        "advantage": 3
+      },
+      "block": {
+        "outcome": "block",
+        "damage": 0,
+        "contactFrame": 8,
+        "advantage": -7
+      }
+    },
+    {
+      "id": "takimaru",
+      "slot": "crouch_heavy",
+      "startup": 15,
+      "active": 4,
+      "recovery": 28,
+      "reach": 0.615,
+      "damage": 80,
+      "hit": {
+        "outcome": "hit",
+        "damage": 80,
+        "contactFrame": 15,
+        "advantage": 3
+      },
+      "block": {
+        "outcome": "block",
+        "damage": 0,
+        "contactFrame": 15,
+        "advantage": -19
+      }
+    },
+    {
+      "id": "takimaru",
+      "slot": "air_weak",
+      "startup": 8,
+      "active": 5,
+      "recovery": 14,
+      "reach": 0.46499999999999997,
+      "damage": 42,
+      "hit": {
+        "outcome": "hit",
+        "damage": 42,
+        "contactFrame": 8,
+        "advantage": -1
+      },
+      "block": {
+        "outcome": "block",
+        "damage": 0,
+        "contactFrame": 8,
+        "advantage": -8
+      }
+    },
+    {
+      "id": "takimaru",
+      "slot": "air_heavy",
+      "startup": 13,
+      "active": 6,
+      "recovery": 23,
+      "reach": 0.535,
+      "damage": 81,
+      "hit": {
+        "outcome": "hit",
+        "damage": 81,
+        "contactFrame": 13,
+        "advantage": 1
+      },
+      "block": {
+        "outcome": "block",
+        "damage": 0,
+        "contactFrame": 13,
+        "advantage": -16
+      }
+    },
+    {
+      "id": "yomikage",
+      "slot": "stand_weak",
+      "startup": 5,
+      "active": 2,
+      "recovery": 12,
+      "reach": 0.39,
+      "damage": 35,
+      "hit": {
+        "outcome": "hit",
+        "damage": 35,
+        "contactFrame": 5,
+        "advantage": 5
+      },
+      "block": {
+        "outcome": "block",
+        "damage": 0,
+        "contactFrame": 5,
+        "advantage": -4
+      }
+    },
+    {
+      "id": "yomikage",
+      "slot": "stand_heavy",
+      "startup": 12,
+      "active": 3,
+      "recovery": 24,
+      "reach": 0.54,
+      "damage": 74,
+      "hit": {
+        "outcome": "hit",
+        "damage": 74,
+        "contactFrame": 12,
+        "advantage": 3
+      },
+      "block": {
+        "outcome": "block",
+        "damage": 0,
+        "contactFrame": 12,
+        "advantage": -14
+      }
+    },
+    {
+      "id": "yomikage",
+      "slot": "crouch_weak",
+      "startup": 6,
+      "active": 2,
+      "recovery": 13,
+      "reach": 0.39,
+      "damage": 30,
+      "hit": {
+        "outcome": "hit",
+        "damage": 30,
+        "contactFrame": 6,
+        "advantage": 4
+      },
+      "block": {
+        "outcome": "block",
+        "damage": 0,
+        "contactFrame": 6,
+        "advantage": -5
+      }
+    },
+    {
+      "id": "yomikage",
+      "slot": "crouch_heavy",
+      "startup": 13,
+      "active": 4,
+      "recovery": 26,
+      "reach": 0.57,
+      "damage": 71,
+      "hit": {
+        "outcome": "hit",
+        "damage": 71,
+        "contactFrame": 13,
+        "advantage": 3
+      },
+      "block": {
+        "outcome": "block",
+        "damage": 0,
+        "contactFrame": 13,
+        "advantage": -17
+      }
+    },
+    {
+      "id": "yomikage",
+      "slot": "air_weak",
+      "startup": 6,
+      "active": 4,
+      "recovery": 12,
+      "reach": 0.42,
+      "damage": 36,
+      "hit": {
+        "outcome": "hit",
+        "damage": 36,
+        "contactFrame": 6,
+        "advantage": 1
+      },
+      "block": {
+        "outcome": "block",
+        "damage": 0,
+        "contactFrame": 6,
+        "advantage": -6
+      }
+    },
+    {
+      "id": "yomikage",
+      "slot": "air_heavy",
+      "startup": 11,
+      "active": 5,
+      "recovery": 20,
+      "reach": 0.49,
+      "damage": 73,
+      "hit": {
+        "outcome": "hit",
+        "damage": 73,
+        "contactFrame": 11,
+        "advantage": 1
+      },
+      "block": {
+        "outcome": "block",
+        "damage": 0,
+        "contactFrame": 11,
+        "advantage": -12
+      }
+    },
+    {
+      "id": "bullet",
+      "slot": "stand_weak",
+      "startup": 6,
+      "active": 3,
+      "recovery": 14,
+      "reach": 0.39,
+      "damage": 34,
+      "hit": {
+        "outcome": "hit",
+        "damage": 34,
+        "contactFrame": 6,
+        "advantage": 3
+      },
+      "block": {
+        "outcome": "block",
+        "damage": 0,
+        "contactFrame": 6,
+        "advantage": -7
+      }
+    },
+    {
+      "id": "bullet",
+      "slot": "stand_heavy",
+      "startup": 15,
+      "active": 4,
+      "recovery": 28,
+      "reach": 0.54,
+      "damage": 75,
+      "hit": {
+        "outcome": "hit",
+        "damage": 75,
+        "contactFrame": 15,
+        "advantage": 2
+      },
+      "block": {
+        "outcome": "block",
+        "damage": 0,
+        "contactFrame": 15,
+        "advantage": -19
+      }
+    },
+    {
+      "id": "bullet",
+      "slot": "crouch_weak",
+      "startup": 7,
+      "active": 3,
+      "recovery": 15,
+      "reach": 0.39,
+      "damage": 29,
+      "hit": {
+        "outcome": "hit",
+        "damage": 29,
+        "contactFrame": 7,
+        "advantage": 2
+      },
+      "block": {
+        "outcome": "block",
+        "damage": 0,
+        "contactFrame": 7,
+        "advantage": -8
+      }
+    },
+    {
+      "id": "bullet",
+      "slot": "crouch_heavy",
+      "startup": 16,
+      "active": 4,
+      "recovery": 30,
+      "reach": 0.57,
+      "damage": 71,
+      "hit": {
+        "outcome": "hit",
+        "damage": 71,
+        "contactFrame": 16,
+        "advantage": 2
+      },
+      "block": {
+        "outcome": "block",
+        "damage": 0,
+        "contactFrame": 16,
+        "advantage": -21
+      }
+    },
+    {
+      "id": "bullet",
+      "slot": "air_weak",
+      "startup": 7,
+      "active": 5,
+      "recovery": 14,
+      "reach": 0.42,
+      "damage": 35,
+      "hit": {
+        "outcome": "hit",
+        "damage": 35,
+        "contactFrame": 7,
+        "advantage": -1
+      },
+      "block": {
+        "outcome": "block",
+        "damage": 0,
+        "contactFrame": 7,
+        "advantage": -9
+      }
+    },
+    {
+      "id": "bullet",
+      "slot": "air_heavy",
+      "startup": 14,
+      "active": 6,
+      "recovery": 24,
+      "reach": 0.49,
+      "damage": 72,
+      "hit": {
+        "outcome": "hit",
+        "damage": 72,
+        "contactFrame": 14,
+        "advantage": 1
+      },
+      "block": {
+        "outcome": "block",
+        "damage": 0,
+        "contactFrame": 14,
+        "advantage": -17
+      }
+    },
+    {
+      "id": "dark_moguzo",
+      "slot": "stand_weak",
+      "startup": 3,
+      "active": 2,
+      "recovery": 12,
+      "reach": 0.39,
+      "damage": 29,
+      "hit": {
+        "outcome": "hit",
+        "damage": 29,
+        "contactFrame": 3,
+        "advantage": 3
+      },
+      "block": {
+        "outcome": "block",
+        "damage": 0,
+        "contactFrame": 3,
+        "advantage": -6
+      }
+    },
+    {
+      "id": "dark_moguzo",
+      "slot": "stand_heavy",
+      "startup": 10,
+      "active": 3,
+      "recovery": 24,
+      "reach": 0.54,
+      "damage": 65,
+      "hit": {
+        "outcome": "hit",
+        "damage": 65,
+        "contactFrame": 10,
+        "advantage": 2
+      },
+      "block": {
+        "outcome": "block",
+        "damage": 0,
+        "contactFrame": 10,
+        "advantage": -16
+      }
+    },
+    {
+      "id": "dark_moguzo",
+      "slot": "crouch_weak",
+      "startup": 4,
+      "active": 2,
+      "recovery": 13,
+      "reach": 0.39,
+      "damage": 25,
+      "hit": {
+        "outcome": "hit",
+        "damage": 25,
+        "contactFrame": 4,
+        "advantage": 2
+      },
+      "block": {
+        "outcome": "block",
+        "damage": 0,
+        "contactFrame": 4,
+        "advantage": -7
+      }
+    },
+    {
+      "id": "dark_moguzo",
+      "slot": "crouch_heavy",
+      "startup": 11,
+      "active": 4,
+      "recovery": 26,
+      "reach": 0.57,
+      "damage": 62,
+      "hit": {
+        "outcome": "hit",
+        "damage": 62,
+        "contactFrame": 11,
+        "advantage": 2
+      },
+      "block": {
+        "outcome": "block",
+        "damage": 0,
+        "contactFrame": 11,
+        "advantage": -19
+      }
+    },
+    {
+      "id": "dark_moguzo",
+      "slot": "air_weak",
+      "startup": 4,
+      "active": 4,
+      "recovery": 12,
+      "reach": 0.42,
+      "damage": 31,
+      "hit": {
+        "outcome": "hit",
+        "damage": 31,
+        "contactFrame": 4,
+        "advantage": 0
+      },
+      "block": {
+        "outcome": "block",
+        "damage": 0,
+        "contactFrame": 4,
+        "advantage": -7
+      }
+    },
+    {
+      "id": "dark_moguzo",
+      "slot": "air_heavy",
+      "startup": 9,
+      "active": 5,
+      "recovery": 20,
+      "reach": 0.49,
+      "damage": 64,
+      "hit": {
+        "outcome": "hit",
+        "damage": 64,
+        "contactFrame": 9,
+        "advantage": 1
+      },
+      "block": {
+        "outcome": "block",
+        "damage": 0,
+        "contactFrame": 9,
+        "advantage": -13
+      }
+    }
+  ]
+}

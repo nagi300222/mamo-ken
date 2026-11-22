@@ -2,6 +2,7 @@ import { FPS, ARENA, ROSTER, IDS, normalMove, specialMove, ultimateMove, tailTip
 import { pushDirection, readCommand, specialButtonSlot } from './commands.js';
 import { cpuInput } from './cpu.js';
 import {fighterStyle,isChainNormal,isChainWeak} from './fighter-style.js';
+import {normalReachAt} from './normal-contact-runtime-v151.js';
 // 設計の正本はバランスデータ。GLB・Three.js・操作DOMには依存しない。
 const KEYS=['left','right','up','down','weak','strong','throw','roar','gyuiin','dash','stepForward','stepBack','special','ultimateButton','special1','special2','special3','super'];
 const cap=(v,a,b)=>Math.max(a,Math.min(b,v));
@@ -219,25 +220,28 @@ export class Battle {
         return;
       }
     }
-    // v15: chain-cancel ONLY a landed or blocked normal, never a whiff/held button.
-    // The window ends with the original normal's remaining recovery.
-    if(p.action&&isChainNormal(p.action.id)&&p.comboContact&&
-       p.frame>=p.action.startup&&p.frame<total(p.action)){
+    // v15.1: finite windows measured from the actual contact, excluding hitstop.
+    const current=p.action,contact=p.comboContact;
+    const window=current?.cancelWindow?.[contact];
+    const contactAge=p.frame-p.comboContactFrame;
+    if(current&&isChainNormal(current.id)&&contact&&window&&
+       contactAge>=window[0]&&contactAge<=window[1]){
+      const permissions=contact==='hit'?current.cancelOnHit:current.cancelOnBlock;
       const source=buffered?.raw||n;
       const specialSlot=edges.special?specialButtonSlot(source,p.facing):
         (['special1','special2','special3'].find(key=>edges[key])||'').replace('special','s');
-      if(/^s[123]$/.test(specialSlot)){
-        const idx=+specialSlot.slice(1)-1;
-        if(this._begin(p,specialMove(p.id,idx),specialSlot,true)){
-          this.events.push({type:'cancel',slot:p.slot,from:'normal',to:specialSlot});
+      if(/^s[123]$/.test(specialSlot)&&permissions.includes(specialSlot)){
+        if(this._begin(p,specialMove(p.id,+specialSlot.slice(1)-1),specialSlot,true)){
+          this.events.push({type:'cancel',slot:p.slot,from:current.id,to:specialSlot,contact,contactAge});
           return;
         }
       }
-      if((edges.weak&&isChainWeak(p.action.id)&&p.chainWeakCount<fighterStyle(p.id).weakChainMax)|| 
-          (edges.strong&&isChainWeak(p.action.id))){
-        const id=p.action.id.split('_')[0]+'_'+(edges.strong?'heavy':'weak');
+      const target=edges.strong?'heavy':edges.weak?'weak':null;
+      if(target&&permissions.includes(target)&&isChainWeak(current.id)&&
+          (target!=='weak'||p.chainWeakCount<fighterStyle(p.id).weakChainMax)){
+        const id=current.id.split('_')[0]+'_'+target;
         if(this._begin(p,normalMove(p.id,id),id,true)){
-          this.events.push({type:'cancel',slot:p.slot,from:'normal',to:id});
+          this.events.push({type:'cancel',slot:p.slot,from:current.id,to:id,contact,contactAge});
           return;
         }
       }
@@ -336,9 +340,9 @@ export class Battle {
     }else p.state=n.down?'crouch':'idle';
   }
   _guarding(t,m){
-    if(['throw','clinch'].includes(m.kind)||t.y>.07||t.action||t.stun)return false;
+    if(['throw','clinch'].includes(m.kind)||t.y>.07||t.action||(t.stun&&t.state!=='block'))return false;
     const back=t.input[facingBack(t)];
-    return back&&(m.level==='low'?t.input.down:m.level!=='overhead'||!t.input.down);
+    return back&&(m.level==='low'?t.input.down:!['overhead','air'].includes(m.level)||!t.input.down);
   }
   _absorbing(t,m){
     if(!t.action)return null;
@@ -377,13 +381,14 @@ export class Battle {
     }
     const guard=this._guarding(t,m);
     let dmg=m.damage;
-    const links=!guard&&a.comboHits>0&&this.frame-a.lastComboFrame<=32&&t.stun>0;
+    const links=!guard&&a.comboHits>0&&t.comboOwner===a.slot&&t.state==='hit'&&t.stun>0;
     if(links)dmg=Math.max(1,Math.round(dmg*Math.max(.60,1-.10*a.comboHits)));
     if(a.id==='moguzo'&&a.hp<=ROSTER.moguzo.hp*.30)dmg=Math.round(dmg*1.06);
     // ダークモグゾーは高火力常時強化ではなく、低耐久と技派生で勝つ。
     if(guard){
       t.dashF=0;t.guard=cap(t.guard-Math.max(5,dmg*(m.kind==='roar'?.37:.16)),0,ROSTER[t.id].guardMax);
-      t.stun=t.guard<=0?26:Math.max(8,Math.round(dmg*(m.kind==='roar'?.17:.08)));
+      t.stun=t.guard<=0?26:(m.blockstun??Math.max(8,Math.round(dmg*(m.kind==='roar'?.17:.08))));
+      t.comboOwner=null;
       t.state='block';t.reaction=m.kind==='roar'?'guard_impact':t.input.down?'guard_crouch_hit':'guard_hit';t.frame=0;
       if(t.id==='hakuma'&&!['roar','throw','clinch'].includes(m.kind))t.ability.iron=1;
       if(t.id==='bullet'&&t.ability.lastCharge!=='guard'){
@@ -413,7 +418,8 @@ export class Battle {
           this.events.push({type:'armor',slot:t.slot});
         }
       else{
-        t.stun=m.kind==='clinch'?36:Math.max(12,Math.round(m.damage*.16));
+        t.stun=m.kind==='clinch'?36:(m.hitstun??Math.max(12,Math.round(m.damage*.16)));
+        t.comboOwner=a.slot;
         t.action=null;t.dashF=0;t.state='hit';t.reaction=m.kind==='roar'?'roar_hit':m.damage>=95?'hurt_heavy':'hurt_light';t.frame=0;
       }
       t.hp=Math.max(0,t.hp-dmg);t.guard=cap(t.guard+2,0,ROSTER[t.id].guardMax);t.ability.iron=0;
@@ -447,7 +453,7 @@ export class Battle {
       // Publish combo reads from real contacts only. HP is still modified once above.
       a.comboHits=links?a.comboHits+1:1;a.lastComboFrame=this.frame;
       if(a.comboHits>=2)this.events.push({type:'combo',slot:a.slot,hits:a.comboHits,damage:dmg});
-      this.events.push({type:m.kind==='clinch'?'gyuiin_hit':'hit',slot:t.slot,x:t.x,y:t.y+.32,damage:dmg});
+      this.events.push({type:m.kind==='clinch'?'gyuiin_hit':'hit',slot:t.slot,attacker:a.slot,comboHits:a.comboHits,x:t.x,y:t.y+.32,damage:dmg});
       // Presentation-only signal: emitted ONLY after a real unguarded, non-countered super hit.
       // The cinematic consumes this event; Battle's HP, frames, damage and KO logic remain the truth.
       if(m.isSuper && dmg>0)this.events.push({
@@ -458,18 +464,21 @@ export class Battle {
       if(m.kind==='roar'){t.stun=Math.max(t.stun,23);t.reaction='roar_hit';this.events.push({type:'roar_hit',slot:a.slot,x:t.x,y:t.y+.35});}
     }
     // A normal may chain only after a real guarded or landed contact.
-    if(a.action?.serial===m.serial && isChainNormal(m.id))
+    if(a.action?.serial===m.serial && isChainNormal(m.id)){
       a.comboContact=guard?'block':'hit';
+      a.comboContactFrame=a.frame;
+    }
     a.super=cap(a.super+(guard?5:Math.round(dmg*.19)),0,100);
     t.super=cap(t.super+(guard?5:Math.round(dmg*.09)),0,100);
     a.stop=Math.max(a.stop,guard?3:6);
     t.stop=Math.max(t.stop,guard?3:6);
-    moveX(t,a.facing*(guard?.05:m.kind==='roar'?.16:.085));
+    moveX(t,a.facing*(guard?(m.blockPushback??.05):m.kind==='roar'?.16:(m.knockback??.085)));
     if(!guard&&m.kind==='throw'&&t.hp>0)this._beginThrow(a,t);
     if(t.hp<=0){t.ko=true;t.state='ko';this.phase='ko';this.winner=a.slot;this.events.push({type:'ko',slot:a.slot});}
   }
   _contact(a,t,m){
     const dist=Math.abs(t.x-a.x);
+    if(m.normalVersion&&(t.x-a.x)*a.facing<0)return false;
     if(m.kind==='clinch')return dist<=.83&&Math.abs(a.y-t.y)<1.25;
     if(m.kind==='throw')return a.y<.09&&t.y<.10&&dist<m.reach+.12;
     if(m.kind==='tail'){
@@ -479,7 +488,7 @@ export class Battle {
     if(m.kind==='anti')return dist<(m.reach||.4)+.16&&t.y<1.5;
     if(a.y<.12&&t.y>.50)return false;
     if(a.y>.28&&t.y<.1&&a.y>.7)return false;
-    return dist<=(m.reach||.5)+.16&&Math.abs(a.y-t.y)<.58;
+    return dist<=(m.normalVersion?normalReachAt(m,a.frame):(m.reach||.5))+.16&&Math.abs(a.y-t.y)<.58;
   }
   _act(p,op){
     const m=p.action;if(!m)return;

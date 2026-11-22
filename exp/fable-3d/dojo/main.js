@@ -16,6 +16,7 @@ import { createAuthoredCinematic } from './authored-cinematic.js';
 import { bindMorphTargets } from './morph-binding.js';
 import { shouldRotateLandscape, localStickAxes } from './landscape-lock.js';
 import { createPracticeController } from './practice-mode.js';
+import { normalClipTime } from './normal-timing-v151.js';
 
 const $=id=>document.getElementById(id), canvas=$('stage');
 let gameRotated=false;
@@ -349,6 +350,7 @@ function syncPracticeUI(){
   $('practice-hits').textContent=String(stats.hits);
   $('practice-damage').textContent=String(stats.damage);
   $('practice-last').textContent=String(stats.lastDamage);
+  $('practice-advantage').textContent=stats.advantage===null?'—':(stats.advantage>0?'+':'')+stats.advantage;
 }
 
 
@@ -502,8 +504,8 @@ function clipChange(a,p){
   // Claudeのモーションの頭から末尾までを、既存の対戦フレームに合わせて再生。
   const total=p.action?p.action.startup+p.action.active+p.action.recovery:0;
   const rate=total&&info.frames&&!isLoop?Math.max(.55,Math.min(2.5,info.frames/total)):1;
-  next.setEffectiveTimeScale(special?.action?0:rate);next.setEffectiveWeight(1);next.play();
-  if(prev&&prev!==next)next.crossFadeFrom(prev,.055,false);
+  next.setEffectiveTimeScale(special?.action||originalNormal?0:rate);next.setEffectiveWeight(1);next.play();
+  if(prev&&prev!==next)next.crossFadeFrom(prev,originalNormal?Math.min(.055,Math.max(0,(p.action.startup-1)/FPS)):.055,false);
   a.current=next;a.currentName=name;a.key=key;a.specialCueIndex=0;
 }
 function syncActor(a,p){
@@ -541,6 +543,10 @@ function syncActor(a,p){
   a.shadow.material.opacity=Math.max(.11,.3-p.y*.13);
   if(special?.action){
     playSpecialFrame(a,p,special);
+  }else if(a.currentName?.startsWith('v15_')&&p.action){
+    if(!p.stop)a.mixer.update(1/FPS); // advance blending, never the attack clock
+    a.current.time=normalClipTime(p.id,p.action.id,p.frame,p.action,a.current.getClip().duration);
+    a.mixer.update(0);
   }else if(!p.stop)a.mixer.update(1/FPS);
   updateActionTrail(a,p);
   a.illusions?.step(p);

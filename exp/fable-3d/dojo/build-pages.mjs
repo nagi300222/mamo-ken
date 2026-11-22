@@ -11,7 +11,7 @@ const IDS=['moguzo','pisuke','godan','hakuma','chirka','takimaru','yomikage','bu
 async function copyOne(source,target){await mkdir(path.dirname(target),{recursive:true});await copyFile(source,target);}
 await rm(OUTPUT,{recursive:true,force:true});await mkdir(OUTPUT,{recursive:true});
 const dojo=path.join(ROOT,'dojo');
-for(const name of ['index.html','style.css','models.js','balance.js','battle.js','commands.js','cpu.js','camera-frame.js','main.js','showtime-profiles.js','combat-audio.js','showtime-illusions.js','arena-music.js','hud-themes.js','ultimate-cinematic.js','showtime-assets.js','authored-cinematic.js','choreographed-cinematic.js','cinematic-stage.js','morph-binding.js','landscape-lock.js','practice-mode.js','fighter-style.js'])
+for(const name of ['index.html','style.css','models.js','balance.js','battle.js','commands.js','cpu.js','camera-frame.js','main.js','showtime-profiles.js','combat-audio.js','showtime-illusions.js','arena-music.js','hud-themes.js','ultimate-cinematic.js','showtime-assets.js','authored-cinematic.js','choreographed-cinematic.js','cinematic-stage.js','morph-binding.js','landscape-lock.js','practice-mode.js','fighter-style.js','normal-balance-v151.js','normal-contact-runtime-v151.js','normal-timing-v151.js','normal-motifs-v15.js'])
   await copyOne(path.join(dojo,name),path.join(OUTPUT,'dojo',name));
 await cp(path.join(ROOT,'preview','vendor'),path.join(OUTPUT,'preview','vendor'),{recursive:true});
 for(const file of ['player/cine-player.js','player/fx.js']){

@@ -3,6 +3,8 @@ name: MamoKen v15 Practice + Cancel regression
 on:
   push:
     branches:
+      - feat/mamoken-v151-normal-balance
+      - feat/mamoken-v151-reviewed-integration
       - feat/mamoken-v15-combat-cancels
       - feat/mamoken-v15-practice-mode
   pull_request:
@@ -24,6 +26,10 @@ jobs:
           node-version: '22'
       - name: All pure game and UI tests
         run: npm --prefix exp/fable-3d/dojo test
+      - name: Measure 54 normals and repeated 9 by 9 CPU patterns
+        env:
+          MAMOKEN_AUDIT_DIR: ${{ runner.temp }}/mamoken-v15-evidence/balance
+        run: node exp/fable-3d/dojo/normal-audit-v151.mjs
       - name: Build actual WebGL game assets
         run: npm --prefix exp/fable-3d/dojo run build:pages
       - name: Install Playwright Chromium bridge
