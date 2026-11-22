@@ -22,7 +22,7 @@ export function createCombatAudio(contextFactory=()=>globalThis.AudioContext||gl
     if(master)master.gain.value=muted?0:.12;
     return muted;
   }
-  function play(kind,id='moguzo'){
+  function play(kind,id='moguzo',{voices}={}){
     if(muted||!context||context.state!=='running')return false;
     const now=context.currentTime,key=kind+':'+id;
     // Avoid noisy overlaps when several collision events share one simulation frame.
@@ -48,7 +48,12 @@ export function createCombatAudio(contextFactory=()=>globalThis.AudioContext||gl
       gain.gain.exponentialRampToValueAtTime(.0001,now+duration);
       oscillator.connect(gain);gain.connect(master);
       oscillator.start(now);oscillator.stop(now+duration+.016);
-      oscillator.onended=()=>{oscillator.disconnect();gain.disconnect();};
+      const stop=()=>{gain.disconnect();oscillator.stop();};
+      voices?.add(stop);
+      oscillator.onended=()=>{
+        voices?.delete(stop);
+        oscillator.disconnect();gain.disconnect();
+      };
       return true;
     }catch{return false;}
   }

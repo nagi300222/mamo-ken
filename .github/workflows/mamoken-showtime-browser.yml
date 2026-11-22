@@ -5,6 +5,7 @@ on:
     branches:
       - test/mamoken-showtime-browser-v12
       - feat/mamoken-super-hit-cinematic-v13
+      - feat/mamoken-v14-codex-integration
   pull_request:
     branches:
       - feat/mamoken-astra-hud-v11
@@ -41,6 +42,8 @@ jobs:
           export NODE_PATH="$RUNNER_TEMP/mamoken-browser/node_modules"
           export MAMOKEN_EVIDENCE="$RUNNER_TEMP/mamoken-evidence"
           node exp/fable-3d/dojo/acceptance/showtime-browser.mjs
+          MAMOKEN_TEST_AUTHORED=1 MAMOKEN_EVIDENCE="$MAMOKEN_EVIDENCE/authored-fixture" \
+            node exp/fable-3d/dojo/acceptance/showtime-browser.mjs
       - name: Upload screenshots and evidence
         if: always()
         uses: actions/upload-artifact@v4

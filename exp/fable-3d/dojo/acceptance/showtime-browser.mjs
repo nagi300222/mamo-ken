@@ -11,8 +11,31 @@ const browser=await chromium.launch({
   args:['--no-sandbox','--use-angle=swiftshader','--enable-unsafe-swiftshader']
 });
 const errors=[];
+const authoredFixture=process.env.MAMOKEN_TEST_AUTHORED==='1';
 const page=await browser.newPage({viewport:{width:852,height:393},isMobile:true,hasTouch:true,deviceScaleFactor:1});
 page.on('pageerror',e=>errors.push('JS: '+e.message));
+page.on('console',msg=>{if(msg.type()==='warning'&&/PropertyBinding|専用技素材|奥義ムービー/.test(msg.text()))errors.push(msg.text());});
+if(authoredFixture){
+  const common={schemaVersion:1,characterId:'chirka'};
+  const authored={
+    ...common,moveId:'ultimate',trigger:'confirmed_unblocked_ultimate_hit',runtime:'threejs',
+    durationSeconds:4,animationSources:{attacker:{clip:'super'},target:{clip:'throw_hit'}},
+    shots:Array.from({length:4},(_,i)=>({
+      id:'fixture-'+i,start:i,end:i+1,
+      camera:{position:{x:-.4+i*.3,y:.9,z:2-i*.14},endPosition:{x:-.16+i*.3,y:1,z:2-i*.14},
+        lookAt:i%2?'target.head':'attacker.head',projection:'perspective',fov:45,rollDeg:i*2}
+    })),
+    cueTrack:[{at:.8,type:'sfx',key:'hit'},{at:1.2,type:'vfx',key:'shard',bone:'head'}]
+  };
+  await page.route('**/cinematic/v14/manifest.json', route=>route.fulfill({
+    json:{schemaVersion:1,characters:{chirka:'chirka/manifest.json'}}
+  }));
+  await page.route('**/cinematic/v14/chirka/manifest.json',route=>route.fulfill({
+    json:{moves:[...['s1','s2','s3'].map(moveId=>({...common,moveId,
+      animationSources:{attacker:{clip:'cmd_236'}},cueTrack:[{at:0,type:'sfx',key:'special'}]})),authored]}
+  }));
+}
+
 page.on('response',r=>{if(r.status()>=400&&!r.url().endsWith('favicon.ico'))errors.push(r.status()+' '+r.url());});
 async function choose(id){
   await page.locator('#selection').waitFor({state:'visible'});
@@ -66,6 +89,10 @@ try{
   assert.equal(await page.locator('#stage').evaluate(el=>el.parentElement.id),'cinematic-viewport');
   assert.ok((await page.locator('#cinematic-portrait').getAttribute('src')).includes('chirka'));
   assert.equal(await page.locator('#cinematic-layer').getAttribute('data-character'),'chirka');
+  if(authoredFixture){
+    await page.waitForFunction(()=>document.getElementById('cinematic-layer').dataset.phase==='fixture-0');
+    await page.waitForFunction(()=>document.getElementById('cinematic-layer').dataset.phase==='fixture-1',undefined,{timeout:15000});
+  }
   const frozen=await page.evaluate(()=>({
     frame:mamoken3d.battle.frame,time:mamoken3d.battle.time,hp:mamoken3d.battle.fighters.map(p=>p.hp)
   }));
@@ -86,8 +113,8 @@ try{
   await page.waitForFunction(()=>window.mamoken3d.cinematic.active,undefined,{timeout:7500});
   assert.equal(await page.locator('#game-over').isVisible(),false,'KO result must wait');
   await page.screenshot({path:evidence+'/ko-cinematic-before-result.png'});
-  await page.locator('#cinematic-skip').tap();
-  await page.locator('#game-over').waitFor({state:'visible',timeout:5000});
+  if(!authoredFixture)await page.locator('#cinematic-skip').tap();
+  await page.locator('#game-over').waitFor({state:'visible',timeout:25000});
   assert.equal(await page.locator('#cinematic-layer').evaluate(el=>el.hidden),true);
 
   // 5. All independent controls stay functional after a movie and a KO.

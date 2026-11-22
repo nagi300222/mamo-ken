@@ -1,0 +1,73 @@
+import { readFile } from 'node:fs/promises';
+import { IDS } from './balance.js';
+import { MOVE_IDS, validateClipTiming, validateMoveManifest, validateShowtimeIndex } from './showtime-assets.js';
+
+function glbJSON(buffer, url) {
+  if (buffer.length < 20 || buffer.toString('ascii', 0, 4) !== 'glTF' ||
+      buffer.toString('ascii', 16, 20) !== 'JSON') {
+    throw new Error('Invalid GLB: ' + url.pathname);
+  }
+  return JSON.parse(buffer.toString('utf8', 20, 20 + buffer.readUInt32LE(12)));
+}
+
+function getAnimation(doc, clip) {
+  const animation = doc.animations?.find(item => item.name === clip);
+  if (!animation) throw new Error('Missing clip: ' + clip);
+  const duration = Math.max(...animation.samplers.map(sampler =>
+    doc.accessors[sampler.input].max[0]));
+  return { name: clip, duration };
+}
+
+export async function validateShowtimeBuild(base) {
+  const readJSON = async url => JSON.parse(await readFile(url, 'utf8'));
+  const index = validateShowtimeIndex(await readJSON(new URL('manifest.json', base)));
+  const files = new Set(['manifest.json']);
+  const documents = new Map();
+  function readModel(url) {
+    if (!documents.has(url.href)) {
+      documents.set(url.href, readFile(url).then(bytes => glbJSON(bytes, url)));
+    }
+    return documents.get(url.href);
+  }
+  const rosterModel = id => readModel(new URL('../../chars/' + id + '/' + id + '.glb', base));
+  for (const [id, path] of Object.entries(index)) {
+    files.add(path);
+    const url = new URL(path, base);
+    const { moves } = await readJSON(url);
+    if (!Array.isArray(moves) || moves.length !== MOVE_IDS.length) {
+      throw new Error('Expected all four authored moves: ' + id);
+    }
+    const clipsById = new Map(moves.map(move => [move.moveId, move]));
+    for (const moveId of MOVE_IDS) {
+      const spec = validateMoveManifest(clipsById.get(moveId), id, moveId);
+      async function sourceModel(source, fighter) {
+        if (!source.glb) return rosterModel(fighter);
+        files.add(id + '/' + source.glb);
+        return readModel(new URL(source.glb, url));
+      }
+      const attackerModel = await sourceModel(spec.animationSources.attacker, id);
+      validateClipTiming(spec, getAnimation(attackerModel, spec.animationSources.attacker.clip));
+      if (moveId === 'ultimate') {
+        for (const target of IDS) {
+          const targetSource = spec.animationSources.target;
+          const targetModel = await sourceModel(targetSource, target);
+          getAnimation(targetModel, targetSource.clip);
+          const bones = {
+            attacker: new Set((await rosterModel(id)).nodes.map(node => node.name)),
+            target: new Set((await rosterModel(target)).nodes.map(node => node.name))
+          };
+          for (const { camera } of spec.shots) {
+            for (const lookAt of [camera.lookAt, camera.endLookAt]) {
+              if (typeof lookAt !== 'string') continue;
+              const [role, anchor] = lookAt.split('.');
+              if (anchor && !bones[role]?.has(anchor)) {
+                throw new Error('Unknown cinematic camera anchor for ' + id + ' vs ' + target + ': ' + lookAt);
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  return files;
+}
