@@ -98,10 +98,10 @@ export function createFx(THREE, scene, camera, manifest) {
         const taper = 1 - .45 * (j / ny) ** 1.5, sy = H / ny, sz = W / nz * taper, sxz = D / nx; if (r() < .12 * j / ny) continue;
         const g = new THREE.DodecahedronGeometry(.62, 0); g.scale(sxz * 1.25, sy * 1.2, sz * 1.25); const m = add(g, r() < .3 ? dark : mat);
         const home = new V(p0.x + sx(ctx) * (i - .5) * sxz, sy * (j + .5), p0.z + (k2 - nz / 2 + .5) * sz + (r() - .5) * .04); m.rotation.set(r() * .5, r() * 6, r() * .5);
-        m.userData = { home, v: new V(sx(ctx) * (1.2 + r() * 3.2) * (c.power ?? 1), .6 + r() * 3.0, (r() - .5) * 3.4), w: new V(r() * 8 - 4, r() * 8 - 4, r() * 8 - 4), d: Math.hypot(home.y - (c.hitHeight ?? .45), home.z - p0.z) * .05 }; objs.push(m); }
+        m.userData = { home, rx: m.rotation.x, rz: m.rotation.z, v: new V(sx(ctx) * (1.2 + r() * 3.2) * (c.power ?? 1), .6 + r() * 3.0, (r() - .5) * 3.4), w: new V(r() * 8 - 4, r() * 8 - 4, r() * 8 - 4), d: Math.hypot(home.y - (c.hitHeight ?? .45), home.z - p0.z) * .05 }; objs.push(m); }
       const br = c.breakAt ?? 1e9, life = (c.life ?? 12), G = 6.5;
-      return { objs, life, update(age) { for (const m of objs) { const u = m.userData, a = age - br - u.d; if (a <= 0) { const q = age > br - (c.crackLead ?? 0) ? Math.sin(age * 90 + u.home.y * 9) * .006 : 0; m.position.set(u.home.x + q, u.home.y, u.home.z); m.scale.setScalar(1); m.visible = true; continue; }
-        let y = u.home.y + u.v.y * a - .5 * G * a * a; const fl = y < .05; if (fl) y = .05; const k = fl ? .55 : 1; m.position.set(u.home.x + u.v.x * a * k, y, u.home.z + u.v.z * a * k); m.rotation.x += fl ? 0 : u.w.x * .016; m.rotation.z += fl ? 0 : u.w.z * .016; m.scale.setScalar(Math.max(.25, 1 - a * .18)); } } };
+      return { objs, life, update(age) { for (const m of objs) { const u = m.userData, a = age - br - u.d; if (a <= 0) { const q = age > br - (c.crackLead ?? 0) ? Math.sin(age * 90 + u.home.y * 9) * .006 : 0; m.position.set(u.home.x + q, u.home.y, u.home.z); m.rotation.x = u.rx; m.rotation.z = u.rz; m.scale.setScalar(1); m.visible = true; continue; }
+        let y = u.home.y + u.v.y * a - .5 * G * a * a; const fl = y < .05; if (fl) y = .05; const k = fl ? .55 : 1; m.position.set(u.home.x + u.v.x * a * k, y, u.home.z + u.v.z * a * k); const spinTime = Math.min(a, (u.v.y + Math.sqrt(u.v.y ** 2 + 2 * G * Math.max(0, u.home.y - .05))) / G); m.rotation.x = u.rx + u.w.x * spinTime; m.rotation.z = u.rz + u.w.z * spinTime; m.scale.setScalar(Math.max(.25, 1 - a * .18)); } } };
     },
     // 空間に残る三本の爪痕。hold 秒残り、convergeTo があれば最後にそこへ吸い込まれる
     claw_mark(c, ctx) {
