@@ -110,14 +110,19 @@
 | `claw_mark` | 空間に残る三本の爪痕 | `size`, `angle`, `hold`、または `convergeAt`（絶対秒）+ `convergeTo`（集まる先の anchor） |
 | `poison_mist` | 湧き続ける紫の泡 | `radius`, `count`, `dur` |
 | `puff` | 霧になって消える（分身の出入り） | `count` |
+| `streak` | 残像の筋（高速移動の軌跡）。`from`→`to` を結ぶ帯 | `from:[x,y,z]`, `to:[x,y,z]`, `dur`, `width`, `grow` |
+| `snowfall` | 降り続ける雪（カメラのまわりの箱の中） | `dur`, `count`, `size`, `wind` |
+| `ink_slash` | 黒い一閃。黒い三日月の帯と白い芯が走って残る | `size`, `angle`, `bow`（反り）, `grow`, `hold`, `core` |
+| `nut` | 木の実。`from` から放物線で飛び、`toAnchor`+`to` に `stick` 秒残って点滅 | `from:[x,y,z]`, `toAnchor`, `to`, `fly`, `stick`, `arc`, `size` |
+| `explosion` | 爆発（火の玉・煙・光の芯） | `size`, `count`, `dur` |
 
-`rock_wall`・雲（`stage.clouds`）・雪山などは**ムービー内だけの舞台装置**。通常の対戦ステージには置かない。
+`rock_wall`・雲（`stage.clouds`）・雪山と降雪（`snowfall`）・月（`stage.moon`）などは**ムービー内だけの舞台装置**。通常の対戦ステージには置かない。
 
 ゲーム側は同じ key を自前の表現へ対応づければよい。見た目を揃える必要があるのは「いつ・どこに・どのくらいの大きさで」の3点。
 
 ## 6. 舞台 `stage`
 
-`contactDistance`（開始時の間合い）、背景・霧・照明・床の色、アクセント色、`illusion`（分身の色と透明度）、`clouds`（高さの手がかり用の雲の層）。参照プレイヤーは簡易な床・遠景の山・柱で描いている。ゲーム側の v13 の「キャラ色の舞台」に色だけ合わせれば足りる。
+`contactDistance`（開始時の間合い）、背景・霧・照明・床の色、アクセント色、`illusion`（分身の色と透明度）、`clouds`（高さの手がかり用の雲の層）。`moon`（月の位置と大きさ。ヨミカゲ）、`mountains: false`（遠景の山を出さない）、`posts`（近景の柱の本数）。参照プレイヤーは簡易な床・遠景の山・柱で描いている。ゲーム側の v13 の「キャラ色の舞台」に色だけ合わせれば足りる。
 
 ## 7. 音
 
