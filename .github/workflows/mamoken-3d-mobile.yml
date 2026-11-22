@@ -7,9 +7,11 @@ on:
       - feat/mamoken-3d-motion-live-v04
       - feat/mamoken-balance-v05
       - feat/mamoken-step-buttons-v06
+      - feat/mamoken-direction-special-v07
   pull_request:
     branches:
       - feat/mamoken-3d-mobile-fight
+      - feat/mamoken-step-buttons-v06
     paths:
       - .github/workflows/mamoken-3d-mobile.yml
       - exp/fable-3d/**
