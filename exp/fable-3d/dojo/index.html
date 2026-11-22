@@ -79,6 +79,14 @@
     </div>
     <div id="note" class="note" aria-live="polite">キャラクターを選んで対戦開始</div>
     <div id="showtime-banner" class="showtime-banner" aria-live="off" aria-hidden="true"></div>
+    <div id="practice-panel" class="practice-panel" hidden>
+      <strong>PRACTICE</strong>
+      <label>相手 <select id="practice-dummy" aria-label="練習相手の行動"><option value="stand">停止</option><option value="guard">ガード</option><option value="cpu">CPU</option></select></label>
+      <span><b id="practice-hits">0</b> HITS</span>
+      <span><b id="practice-damage">0</b> DMG</span>
+      <small>直近 <b id="practice-last">0</b></small>
+      <button id="practice-reset" class="ghost" type="button">位置リセット</button>
+    </div>
     <div id="game-over" class="modal hidden">
       <div class="result-panel">
         <small class="eyebrow" id="result-reason">決着</small><h2 id="result-title">決着！</h2>
@@ -93,6 +101,7 @@
         <div class="selection-footer">
           <div class="chosen"><strong id="chosen-name">モグゾー</strong><span id="chosen-role">万能・根性</span></div>
           <label class="opponent">対戦相手 <select id="cpu-choice" aria-label="CPUキャラクター"></select></label>
+          <label class="opponent">モード <select id="match-mode" aria-label="対戦モード"><option value="battle">通常対戦</option><option value="practice">プラクティス</option></select></label>
           <label class="opponent">CPU <select id="difficulty"><option value="1" selected>やさしい</option><option value="2">ふつう</option><option value="3">強い</option></select></label>
           <label id="check-mode-label" hidden><input id="check-mode" type="checkbox">演出確認（相手停止・奥義満タン）</label>
           <button id="start" class="primary">対戦開始 <span>FIGHT</span></button>
