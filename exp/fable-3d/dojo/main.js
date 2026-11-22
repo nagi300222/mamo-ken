@@ -432,11 +432,23 @@ function clearActors(){for(let i=0;i<2;i++){const a=actors[i];if(!a)continue;
   cameraShake=0;cameraShakeStrength=0;$('showtime-banner').classList.remove('active');}
 async function createActor(id,slot) {
   const asset=MODEL_ASSETS[id];if(!asset)throw Error('3Dアセットが見つからない: '+id);
-  const [gltf,meta]=await Promise.all([
+  // v15: load authored skeleton motion pack without replacing the original character GLB.
+  const [gltf,meta,normalGLB]=await Promise.all([
     loader.loadAsync(new URL(asset.glb,import.meta.url).href+'?v='+MODEL_REVISION),
-    fetch(new URL(asset.motion,import.meta.url)).then(r=>{if(!r.ok)throw Error('motion JSON HTTP '+r.status);return r.json();})
+    fetch(new URL(asset.motion,import.meta.url)).then(r=>{if(!r.ok)throw Error('motion JSON HTTP '+r.status);return r.json();}),
+    loader.loadAsync(new URL('../normal/v15/'+id+'_normals.glb',import.meta.url).href)
   ]);
   const mixer=new THREE.AnimationMixer(gltf.scene),actions=Object.fromEntries(gltf.animations.map(c=>[c.name,mixer.clipAction(c)]));
+  const normalIds=new Set(['stand_weak','stand_heavy','crouch_weak','crouch_heavy','air_weak','air_heavy'].map(s=>'v15_'+s));
+  if(normalGLB.animations.length!==normalIds.size)throw Error(id+' のv15通常技パックは6技必要');
+  for(const clip of normalGLB.animations){
+    if(!normalIds.has(clip.name)||!clip.tracks.length)throw Error(id+' の通常技クリップ不正: '+clip.name);
+    const bound=bindMorphTargets(clip,gltf.scene);
+    actions[bound.name]=mixer.clipAction(bound);
+  }
+  if(normalIds.size!==[...normalIds].filter(k=>actions[k]).length)throw Error(id+' の通常技が不足');
+  // Keep only the clips; animation pack rendering stubs must never become visible fighters.
+  disposable(normalGLB.scene);
   let showtime={};
   try{
     const animationFiles=animationCache;
@@ -479,7 +491,12 @@ function clipChange(a,p){
   const key=name+':'+(p.action?.serial||0)+':'+(p.state==='clinch'?p.state:p.state==='clinch_recoil'?p.state:'');
   if(key===a.key)return;
   const next=special?.action??a.actions[name]??a.actions.idle,prev=a.current;
-  const info=a.meta.clips[name]||{},isLoop=!special?.action&&!!info.loop;
+  const originalNormal={
+    v15_stand_weak:'stand_light',v15_stand_heavy:'stand_heavy',
+    v15_crouch_weak:'crouch_light',v15_crouch_heavy:'crouch_heavy',
+    v15_air_weak:'air_light',v15_air_heavy:'air_heavy'
+  }[name];
+  const info=a.meta.clips[originalNormal||name]||{},isLoop=!special?.action&&!!info.loop;
   next.reset();next.enabled=true;next.clampWhenFinished=true;
   next.setLoop(isLoop?THREE.LoopRepeat:THREE.LoopOnce,isLoop?Infinity:1);
   // Claudeのモーションの頭から末尾までを、既存の対戦フレームに合わせて再生。
@@ -505,7 +522,7 @@ function syncActor(a,p){
   // 新クリップに踏み込み・被弾・押し合いが入っているので、
   // 旧版用のモデル全体の拡大/傾きを重ねない。
   const special=a.showtime[p.action?.id];
-  const authored=!!special?.action||!!a.meta.clips[a.currentName]?.v2;
+  const authored=!!special?.action||a.currentName?.startsWith('v15_')||!!a.meta.clips[a.currentName]?.v2;
   if(!authored){
     if(p.action?.kind==='roar'){
       const phase=p.frame/(p.action.startup+p.action.active);

@@ -38,7 +38,9 @@ export function chooseClip(fighter, available=[], commandMap={}) {
     const exact=m.anim||FALLBACK_CLIPS[m.id]||'stand_heavy';
     const notation={s1:'236',s2:'623',s3:'214',ultimate:'236236'}[m.id];
     const mapped=notation?commandMap[notation]:null;
-    const list=[actionClips[m.id],mapped,exact].filter(Boolean);
+    // Nine individual real v15 normal-move clips take priority over generic inherited normals.
+    const authored=/^(stand|crouch|air)_(weak|heavy)$/.test(m.id||'')?'v15_'+m.id:null;
+    const list=[authored,actionClips[m.id],mapped,exact].filter(Boolean);
     if (m.kind==='roar') list.push('roar','roar_burst','guard_stand');
     if (m.kind==='clinch') list.push('gyuiin','gyuiin_approach','guard_stand');
     if (m.kind==='throw') list.push('throw_reach','grab','stand_heavy');

@@ -3,6 +3,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { validateShowtimeBuild } from './validate-showtime-build.mjs';
 await import('./pack-showtime.mjs');
+await import('./pack-normals-v15.mjs');
 const ROOT = path.resolve(fileURLToPath(new URL('..',import.meta.url)));
 const PROJECT = path.resolve(ROOT,'../..'); // repo root: exp/fable-3d -> ../.. 
 const OUTPUT = path.join(ROOT,'_pages');
@@ -28,12 +29,13 @@ for(const id of IDS){
   bytes+=(await stat(file)).size;
   await copyOne(file,path.join(OUTPUT,'chars',id,id+'.glb'));
   await copyOne(motion,path.join(OUTPUT,'chars',id,id+'_motions.json'));
+  await copyOne(path.join(ROOT,'normal','v15',id+'_normals.glb'),path.join(OUTPUT,'normal','v15',id+'_normals.glb'));
   for(const [folder,name] of [['ui','facesq_'+id+'.png'],['roster3d',id+'.webp']]){
     await copyOne(path.join(PROJECT,'assets',folder,name),path.join(OUTPUT,'assets',folder,name));
   }
 }
 await writeFile(path.join(OUTPUT,'index.html'),'<!doctype html><html lang="ja"><meta charset="utf-8"><meta http-equiv="refresh" content="0;url=./dojo/"><title>マモ拳3D</title><a href="./dojo/">ゲームを開く</a></html>');
-await writeFile(path.join(OUTPUT,'_headers'),'/chars/*\n  Cache-Control: public, max-age=120\n/dojo/*\n  Cache-Control: no-cache\n/cinematic/*\n  Cache-Control: no-cache\n');
+await writeFile(path.join(OUTPUT,'_headers'),'/chars/*\n  Cache-Control: public, max-age=120\n/normal/*\n  Cache-Control: public, max-age=120\n/dojo/*\n  Cache-Control: no-cache\n/cinematic/*\n  Cache-Control: no-cache\n');
 console.log('Cloudflare Pages static output:',OUTPUT);
 console.log('9 GLB total:',(bytes/1024/1024).toFixed(2)+' MiB');
 console.log('Cloudflare build command: node exp/fable-3d/dojo/build-pages.mjs');
