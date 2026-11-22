@@ -264,6 +264,35 @@ button.primary:active{transform:translateY(1px)}
 #commands-help .ability-guide strong{font-size:12px;color:#f2d59c}
 #commands-help .ability-guide p{margin:5px 0 0;font-size:12px;line-height:1.55}
 
+/* v0.8 Showtime: palette accents are per character, never changes the stage width. */
+#arena .hud-side:first-child .hud-name{border-bottom:2px solid var(--p1-accent,#c9d8da);padding-bottom:2px}
+#arena .hud-side.mirrored .hud-name{border-bottom:2px solid var(--p2-accent,#c9d8da);padding-bottom:2px}
+#arena .meter-track .ready, #arena .hud .super .track i.ready{box-shadow:0 0 7px #ffe5a8}
+.sound-toggle{white-space:nowrap;min-width:45px}
+#arena .showtime-banner{
+  --showtime:#f7d38a;
+  position:absolute;left:50%;top:clamp(78px,24%,135px);
+  transform:translateX(-50%) translateY(-3px);
+  display:flex;flex-direction:column;align-items:center;gap:2px;
+  width:max-content;max-width:76%;padding:5px 12px 7px;
+  border-top:2px solid var(--showtime);border-bottom:1px solid var(--showtime);
+  background:linear-gradient(90deg,#10202acc,#0b152de0,#10202acc);
+  color:#fff6e8;text-shadow:0 2px 4px #000;
+  pointer-events:none;opacity:0;transition:opacity .18s,transform .18s;
+  z-index:4;text-align:center
+}
+#arena .showtime-banner.active{opacity:1;transform:translateX(-50%) translateY(0)}
+.showtime-banner span{font-size:clamp(8px,1.5vw,11px);color:var(--showtime);letter-spacing:.06em}
+.showtime-banner strong{font-size:clamp(12px,2.2vw,20px);white-space:normal}
+@media(max-height:420px) and (orientation:landscape){
+  #arena .showtime-banner{top:65px;padding:3px 8px}
+  .showtime-banner strong{font-size:13px}
+  .sound-toggle{min-width:37px;font-size:9px;padding:3px 5px!important}
+}
+@media(prefers-reduced-motion:reduce){
+  #arena .showtime-banner{transition:none}
+}
+
 /* v0.6: 前後ステップはスティック下の左レール内に置く。
    カメラ・中央の対戦画面・右5ボタンのサイズを変更しない。 */
 #stick-rail .step-pad{
