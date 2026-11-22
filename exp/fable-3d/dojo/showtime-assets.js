@@ -166,7 +166,10 @@ export function createShowtimeLoader(base) {
       validateClipTiming(spec, attacker);
       const targetSource = spec.animationSources.target;
       const target = targetSource?.glb ? await loadClip(targetSource, url) : null;
-      return [moveId, { spec, attacker, target }];
+      const start = spec.inGameStartClip?.clip ? await loadClip({
+        ...spec.animationSources.attacker, clip: spec.inGameStartClip.clip
+      }, url) : null;
+      return [moveId, { spec, attacker, target, start }];
     }));
     return { ...Object.fromEntries(entries), reactions };
   };

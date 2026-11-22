@@ -63,6 +63,7 @@ export async function validateShowtimeBuild(base) {
       const attackerModel = await sourceModel(spec.animationSources.attacker, id);
       const attackerRig = await rosterModel(id);
       validateClipTiming(spec, getAnimation(attackerModel, spec.animationSources.attacker.clip, attackerRig));
+      if(spec.inGameStartClip?.clip)getAnimation(attackerModel,spec.inGameStartClip.clip,attackerRig);
       if (moveId === 'ultimate') {
         for (const target of IDS) {
           const targetSource = spec.animationSources.target;

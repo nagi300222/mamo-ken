@@ -402,7 +402,8 @@ async function createActor(id,slot) {
     console.warn(id+' の専用技素材が読めません',error);
   }
   for(const [moveId,entry] of Object.entries(showtime)){
-    if(moveId!=='ultimate'&&entry.attacker)entry.action=mixer.clipAction(entry.attacker);
+    if(entry.start)entry.action=mixer.clipAction(entry.start);
+    else if(moveId!=='ultimate'&&entry.attacker)entry.action=mixer.clipAction(entry.attacker);
   }
   if(!actions.idle||!actions.stand_light||!actions.stand_heavy){
     disposable(gltf.scene);throw Error(id+' のGLBに必須動作がない');
@@ -416,7 +417,7 @@ async function createActor(id,slot) {
 }
 function clipChange(a,p){
   const special=a.showtime[p.action?.id];
-  const name=special?.action?special.attacker.name:chooseClip(p,Object.keys(a.actions),a.meta.command_map||{});
+  const name=special?.action?special.action.getClip().name:chooseClip(p,Object.keys(a.actions),a.meta.command_map||{});
   const key=name+':'+(p.action?.serial||0)+':'+(p.state==='clinch'?p.state:p.state==='clinch_recoil'?p.state:'');
   if(key===a.key)return;
   const next=special?.action??a.actions[name]??a.actions.idle,prev=a.current;
@@ -463,7 +464,7 @@ function syncActor(a,p){
 }
 function playSpecialFrame(actor,fighter,entry){
   const { startup, active, recovery }=fighter.action;
-  const { duration }=entry.attacker;
+  const { duration }=entry.action.getClip();
   const contact=entry.spec.contactSeconds??duration*startup/(startup+active+recovery);
   const frame=fighter.frame;
   const tail=active+recovery;
