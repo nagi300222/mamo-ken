@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import {Battle} from './battle.js';
 import {IDS,normalMove} from './balance.js';
 import {NORMAL_SLOTS,MOTIFS} from './normal-motifs-v15.js';
+import {NORMAL_CONTACTS} from './normal-contacts-v151.js';
 import {normalClipTime} from './normal-timing-v151.js';
 import {normalReachAt} from './normal-contact-runtime-v151.js';
 import {fighterStyle} from './fighter-style.js';
@@ -30,7 +31,7 @@ test('54 explicit normal rows are legal, contact timing aligns on the actual sta
   const m=normalMove(id,slot);keys.add(id+'/'+slot);
   for(const k of ['startup','active','recovery','damage','hitstun','blockstun'])assert.ok(Number.isInteger(m[k])&&m[k]>0,id+'/'+slot+':'+k);
   assert.ok(m.blockstun<m.hitstun);
-  assert.ok(Math.abs(normalClipTime(id,slot,m.startup,m,2)-MOTIFS[id][slot].contact*2)<1e-12);
+  assert.ok(Math.abs(normalClipTime(id,slot,m.startup,m,2)-NORMAL_CONTACTS[id][slot].contact*2)<1e-12);
   assert.equal(normalClipTime(id,slot,m.startup+m.active+m.recovery,m,2),2);
   let previous=-1;
   for(let f=0;f<=m.startup+m.active+m.recovery;f++){
@@ -166,5 +167,19 @@ test('all nine crouch weak → crouch strong → special2 routes also beat conti
   const {hits,events}=route(id,.35,face,0,true);
   assert.deepEqual(hits.map(e=>e.comboHits),[1,2,3],id+' crouch '+face);
   assert.equal(events.filter(e=>e.type==='block').length,0,id);
+ }
+});
+test('all 54 integrated contacts are resolved and performance never extends the authored surface',()=>{
+ for(const id of IDS)for(const slot of NORMAL_SLOTS){
+  const c=NORMAL_CONTACTS[id][slot],m=normalMove(id,slot);
+  assert.equal(c.status,'ok',id+'/'+slot+' unresolved audit');
+  assert.ok(c.contact>0&&c.contact<c.contactEnd&&c.contactEnd<1,id+'/'+slot);
+  assert.equal(m.reach,c.reach,id+'/'+slot);
+  assert.equal(c.gesture,MOTIFS[id][slot].gesture,id+'/'+slot+' stale contact data');
+  assert.deepEqual(m.activeReach,c.activeReach);
+  assert.equal(normalReachAt(m,m.startup),c.activeReach[0].reach);
+  assert.equal(normalReachAt(m,m.startup+m.active-1),c.activeReach.at(-1).reach);
+  if(id==='bullet')assert.equal(c.attackPart,slot==='stand_weak'?'head':'tail',slot);
+  assert.ok(c.activeReach.every((p,i)=>Number.isFinite(p.reach)&&p.reach>0&&p.phase>=0&&p.phase<=1&&(!i||p.phase>c.activeReach[i-1].phase)));
  }
 });

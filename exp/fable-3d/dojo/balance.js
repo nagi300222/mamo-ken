@@ -1,5 +1,6 @@
 // マモ拳3D 対戦バランス v0.5（固有能力・CPU再設計） — すべて仮値。60Hz、距離はモデルのm単位。
 import {normalPerformance} from './normal-balance-v151.js';
+import {NORMAL_CONTACTS} from './normal-contacts-v151.js';
 export const FPS = 60;
 export const ARENA = Object.freeze({ minX: -1.76, maxX: 1.76, pushRadius: 0.17, gravity: 0.0062, roundSeconds: 75 });
 const S = (name, kind, startup, active, recovery, damage, reach, extra = {}) =>
@@ -57,7 +58,10 @@ export const ROSTER = Object.freeze({
 export const IDS = Object.freeze(Object.keys(ROSTER));
 export function normalMove(id, slot) {
   if (!ROSTER[id]) throw Error('unknown normal: '+id+'/'+slot);
-  return {...normalPerformance(id,slot),name:slot,kind:'strike',normalVersion:'15.1'};
+  const motion=NORMAL_CONTACTS[id]?.[slot];
+  if(!motion)throw Error('missing authored contact: '+id+'/'+slot);
+  return {...normalPerformance(id,slot),reach:motion.reach,activeReach:motion.activeReach.map(p=>({...p})),
+    name:slot,kind:'strike',normalVersion:'15.1'};
 }
 export function specialMove(id, index) {
   const r=ROSTER[id]; if (!r) throw Error('unknown fighter '+id);
