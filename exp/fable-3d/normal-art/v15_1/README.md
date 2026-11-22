@@ -33,6 +33,14 @@ node exp/fable-3d/normal-art/v15_1/tools/build_contacts.mjs --dir exp/fable-3d/n
 - `reach` = `contact` の時点で、打撃部位の**スキン後メッシュ表面の最前頂点**までの前方距離 [m]。相手の hurt radius 0.16m は含まない（判定側で加算）。
 - `activeReach` = `contact`→`contactEnd` を `phase` 0→1 としたときの同じ量。3点（0 / .5 / 1）。
 - `height` = その最前頂点の床からの高さ [m]（地上クリップで測った値。空中技は root の高さを足す）。
+- `activeReach[i].height` = 各 phase の時刻での同じ最前頂点の高さ [m]（root 基準、負値は 0 に丸め）。判定側は `strikeY = a.y + 補間 height`。
+  注意：打撃面の「最前の1点」の高さであって、部位の上下幅ではない（拳や尾先の太さは打撃半径で見てほしい）。
+- `NORMAL_HURT_BOUNDS[id] = {stand:{bottom,top}, crouch:{bottom,top}, detail}` = 被弾側の高さ範囲 [m]（root 基準）。
+  計測方法：実ゲームのページで元GLBのスキンメッシュを `idle`（u=0/.25/.5/.75）・`guard_stand`・`crouch`・`guard_crouch`（各終端）のポーズにし、
+  支配ボーンが腕（shoulder〜paw）と尾の頂点を除いた **body+head+leg の全頂点**の高さ分布を取る。
+  `top` = 98パーセンタイル（耳先など上位2%の突起を除く）。stand は idle 4時刻と guard_stand の高い方、crouch は crouch と guard_crouch の高い方。
+  `bottom` = 0（足裏。しゃがみで尻が床に 2〜4cm めり込む分は 0 に丸め）。`detail` に内訳と、突起込みの最大値 `idleTopMax`。
+  計測は `tools/sample_clips.mjs --bounds-only` → `audit/v151/<id>_bounds.json` → `build_contacts.mjs`。
 - `attackPart` = armL / armR / legL / legR / tail / head。`attackBone` は代表ボーン名。`bothHands` は両手技。
 - `status:'fix'` と `issues` は、まだ見た目の不一致が残っている技の印（値は現状の実測）。
 
