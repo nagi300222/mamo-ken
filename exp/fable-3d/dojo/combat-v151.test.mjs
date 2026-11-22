@@ -91,3 +91,43 @@ test('practice explicit guards and reversal use real battle states; separated hi
  assert.equal(pc.stats.hits,1);assert.equal(pc.stats.damage,normalMove('moguzo','stand_weak').damage);
  assert.equal(pc.stats.advantage,3); // measured readiness difference, not a raw formula
 });
+
+test('a continuous correct guard blocks canceled normals during blockstun; no false hit through stun',()=>{
+ for(const id of IDS){
+  const g=new Battle(id,'godan'),[p,t]=g.fighters;p.x=1.40;t.x=1.76;
+  let hits=0,blocks=0,max=0;
+  for(let f=0;f<360;f++){
+   t.guard=100;t.hp=9999;
+   const weak=(!p.action||p.comboContact)&&!p.prev.weak;
+   g.tick({weak},{right:true});
+   hits+=g.events.filter(e=>e.type==='hit').length;
+   blocks+=g.events.filter(e=>e.type==='block').length;
+   max=Math.max(max,p.chainWeakCount);
+  }
+  assert.equal(hits,0,id+' converted blockstun to hitstun');
+  assert.ok(blocks>1,id);assert.ok(max<=fighterStyle(id).weakChainMax,id);
+ }
+ const g=new Battle('moguzo','godan');const p=g.fighters[1];
+ p.state='block';p.stun=4;p.input={right:true,down:true};
+ assert.deepEqual(cpuInput(g,p,g.fighters[0],2),{right:true,down:true});
+});
+
+test('air normals demand standing guard and corner pressure cannot create an endless guaranteed weak loop',()=>{
+ for(const id of IDS){
+  const g=new Battle(id,'godan'),[p,t]=g.fighters;p.x=1.4;t.x=1.76;
+  let landed=false,maxHits=0,blocked=0;
+  for(let f=0;f<600;f++){
+   t.hp=99999;t.guard=100;
+   const weak=(!p.action||p.comboContact&&p.stop===0)&&!p.prev.weak;
+   g.tick({weak},landed?{right:true}:{});
+   if(g.events.some(e=>e.type==='hit'))landed=true;
+   maxHits=Math.max(maxHits,p.comboHits);
+   blocked+=g.events.filter(e=>e.type==='block').length;
+  }
+  assert.ok(landed&&blocked>0,id+' never provided a real guard gap');
+  assert.ok(maxHits<=fighterStyle(id).weakChainMax,id+' infinite raw link '+maxHits);
+  const air=normalMove(id,'air_weak');t.action=null;t.stun=0;t.y=0;t.input={right:true,down:true};
+  assert.equal(g._guarding(t,air),false,id+' air blocked crouching');
+  t.input.down=false;assert.equal(g._guarding(t,air),true,id+' air failed standing guard');
+ }
+});

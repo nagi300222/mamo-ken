@@ -339,7 +339,7 @@ export class Battle {
     }else p.state=n.down?'crouch':'idle';
   }
   _guarding(t,m){
-    if(['throw','clinch'].includes(m.kind)||t.y>.07||t.action||t.stun)return false;
+    if(['throw','clinch'].includes(m.kind)||t.y>.07||t.action||(t.stun&&t.state!=='block'))return false;
     const back=t.input[facingBack(t)];
     return back&&(m.level==='low'?t.input.down:!['overhead','air'].includes(m.level)||!t.input.down);
   }

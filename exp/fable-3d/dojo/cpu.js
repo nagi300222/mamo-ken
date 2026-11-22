@@ -12,7 +12,10 @@ export function cpuInput(g,p,op,level=2){
   const back=dir==='right'?'left':'right';
   const distance=Math.abs(op.x-p.x);
   const i={};
-  if(p.ko||p.stun>0||p.stop>0||p.action)return i;
+  if(p.ko)return i;
+  // Keep an already chosen guard through its blockstun/hitstop, without reading a new move.
+  if((p.stun>0||p.stop>0)&&p.state==='block')return {[back]:true,down:!!p.input?.down};
+  if(p.stun>0||p.stop>0||p.action)return i;
   const seed=g.cpuSeed===undefined?hash(p.id):hash('scenario:'+g.cpuSeed+':seat:'+p.slot);
   // 防御は技の予備動作が反応時間ぶん経過した後のみ。
   // 完全ガードにはならず、レベル別に見逃しを残す。
