@@ -20,6 +20,6 @@ Codex owns performance and rendering integration; Claude owns motif edits and co
 
 ## Validation
 
-134 Node tests pass; static Pages build passes. Nine real weak→strong→special2 routes hit three times against a defender holding guard after hit1, in both directions. Whiffs and expired contact windows do not cancel. The integrated candidate passes the 54 contact-clock/surface browser gate. The 1,458-round six-pattern CPU audit records residual fast/universal-fighter advantage; it does not certify final competitive balance.
+134 Node tests pass; static Pages build passes. Nine real weak→strong→special2 routes hit three times against a defender holding guard after hit1, in both directions. Whiffs and expired contact windows do not cancel. The integrated candidate passes all 54 contact-clock/surface/height browser checks and all 81 cinematic pairings. The 1,458-round six-pattern CPU audit records residual fast/universal-fighter advantage; it does not certify final competitive balance.
 
 Reciprocal-review follow-up: normal contact also samples activeReach.height against measured stand/crouch NORMAL_HURT_BOUNDS, with a vertical strike half-width of 0.06m. Floor tail attacks miss raised feet. This applies only to normals; special/ultimate collision rules are retained. Body bounds use the producer's measured body/head/leg P98 envelope across idle and guard poses.

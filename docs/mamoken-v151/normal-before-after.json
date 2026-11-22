@@ -2,7 +2,7 @@
   "baseline": "b92717c",
   "motion": "b8256ea",
   "performance": "33f73a2",
-  "integration": "cbd1da1",
+  "integration": "06c147860f31261f7b770852ff8b5538097b4e5d",
   "before": [
     {
       "id": "moguzo",
@@ -2274,5 +2274,6 @@
         "advantage": null
       }
     }
-  ]
+  ],
+  "art_evidence": "e7740538144bf2d67b8da8ca931a8cd95c4d6fb3"
 }

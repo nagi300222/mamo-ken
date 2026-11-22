@@ -69,3 +69,11 @@ node exp/fable-3d/normal-art/v15_1/tools/build_contacts.mjs --dir exp/fable-3d/n
 - `exp/fable-3d/normal/v15/*_normals.glb`：`pack-normals-v15.mjs` の生成物（PR195 と同じくビルド時に生成）。
 - 計測時の生スクリーンショット（2倍解像度PNG、約30MB）と動画用の連番：`_scratch/`（git 管理外）。シートと動画に変換したものを `evidence/` に置いている。
   `audit/v15/<id>.json` は before の毎フレーム実測（`measure_normals.mjs` の出力）。
+
+### 追記：高さ判定のレビュー（`06c1478`）
+対象：`normal-contact-runtime-v151.js` の `normalHeightAt` / `normalVerticalContact` と `battle.js` の `_contact`。コードレビューのみ（実ゲームでの再計測はしていない）。
+
+- 懸念1（打点の高さ未使用）は解消。`strikeY = a.y + activeReach の補間 height`、相手は地上の屈状態／屈ガード／屈技なら `crouch`、それ以外は `stand` の実測範囲、上下半幅 0.06m。phase の取り方は reach と同じで、制作データの定義どおり。通常技（`normalVersion`）だけに適用され、必殺・奥義の分岐は元のまま。
+- 制作データで机上確認：地上の通常技36本 × 相手9体 × 立ち／しゃがみ = 648通りで、高さ条件だけが理由で当たらなくなる組み合わせは 0。
+- 知っておいてほしい帰結（不具合ではない）：地上技の打点は最高でも 0.418m（タキマル立弱）。半幅 0.06 を足しても、足元が約 0.48m より高い相手には地上通常技が届かない。通常技での対空は低い跳躍にしか効かない設計になる。
+- `height` は打撃面の最前1点の高さなので、太い部位（尾の中ほど、両手）は実際の見た目より判定が上下に薄い。気になる場合は技ごとに `strikeRadius` を広げる余地がある。
