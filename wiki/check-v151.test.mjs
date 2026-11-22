@@ -78,7 +78,7 @@ test('nine video references for both new normal poses and existing specials / ul
 test('edit request textarea, source links and no automatic game code changes',()=>{
  assert.match(page,/変更依頼メモ/);
  assert.match(page,/navigator\.clipboard\.writeText/);
- assert.match(page,/cpu-rounds/);
+ assert.match(page,/cpuCsv/);
  assert.ok(!page.includes('automatically update battle.js'));
  assert.ok(doc.characters.pisuke.normals.find(x=>x.id==='stand_heavy').reach <
    doc.characters.pisuke.normals.find(x=>x.id==='stand_weak').reach);

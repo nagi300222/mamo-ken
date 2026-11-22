@@ -28,3 +28,5 @@ jobs:
 
       - name: Verify direct Wiki entry
         run: node tools/check_wiki_entry.mjs
+      - name: Verify v15.1 move reference snapshot
+        run: node --test wiki/check-v151.test.mjs
