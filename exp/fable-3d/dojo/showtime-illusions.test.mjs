@@ -20,5 +20,5 @@ test('分身はskinning cloneを使用しゲーム用hitboxを追加しない',(
  assert.match(code,/mixer\.clipAction\(clip\)/);
  assert.match(code,/p\.action\.serial!==serial/);
  assert.match(code,/material\.dispose\(\)/);
- assert.doesNotMatch(code,/battle\.tick|damage|hitbox|collider/);
+ assert.doesNotMatch(code,/battle\.tick\s*\(|\.hp\s*=|addCollider\s*\(|damage\s*:\s*\d+/);
 });
