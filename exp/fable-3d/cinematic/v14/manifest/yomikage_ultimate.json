@@ -35,15 +35,16 @@
   "mountain": 790556,
   "post": 1843764,
   "posts": 6,
+  "mountains": false,
   "accent": 10350591,
   "accentCss": "#9defff",
   "moon": {
    "pos": [
     0.4,
-    1.9,
-    -9
+    2.1,
+    -10
    ],
-   "r": 1.1,
+   "r": 1.25,
    "color": 15134463
   }
  },
