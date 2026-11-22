@@ -264,6 +264,8 @@ button.primary:active{transform:translateY(1px)}
 #commands-help .ability-guide strong{font-size:12px;color:#f2d59c}
 #commands-help .ability-guide p{margin:5px 0 0;font-size:12px;line-height:1.55}
 
+/* The small skill callout matches the active character without repainting the stage. */
+#arena .note[data-kind^="s"]{border-color:var(--special-accent,#f2c588);color:var(--special-accent,#f2c588)}
 /* v0.8 Showtime: palette accents are per character, never changes the stage width. */
 #arena .hud-side:first-child .hud-name{border-bottom:2px solid var(--p1-accent,#c9d8da);padding-bottom:2px}
 #arena .hud-side.mirrored .hud-name{border-bottom:2px solid var(--p2-accent,#c9d8da);padding-bottom:2px}
