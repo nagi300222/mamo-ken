@@ -14,8 +14,22 @@ import { createMovieDirector, movieScript } from './ultimate-cinematic.js';
 import { createShowtimeLoader } from './showtime-assets.js';
 import { createAuthoredCinematic } from './authored-cinematic.js';
 import { bindMorphTargets } from './morph-binding.js';
+import { shouldRotateLandscape, localStickAxes } from './landscape-lock.js';
 
 const $=id=>document.getElementById(id), canvas=$('stage');
+let gameRotated=false;
+function updateLandscapeLock(){
+  // Safari cannot be relied on to override the iOS rotation-lock switch.
+  // Rotate the entire Web game, never the OS viewport or touch targets individually.
+  const touchDevice=window.matchMedia?.('(pointer: coarse)')?.matches ||
+    (navigator.maxTouchPoints||0)>0;
+  const next=shouldRotateLandscape(window.innerWidth,window.innerHeight,touchDevice);
+  if(next===gameRotated)return;
+  gameRotated=next;
+  document.documentElement.classList.toggle('landscape-locked',next);
+  clearInput(); // discard joystick presses captured in the previous coordinate space
+  requestAnimationFrame(resize); // WebGL draws using CSS layout dimensions, not transformed bounds
+}
 const scene=new THREE.Scene();scene.background=new THREE.Color(0x758993);
 const camera=new THREE.OrthographicCamera(-1.4,1.4,1,-1,.01,30);
 const cameraPose={x:0,y:.5,halfWidth:1.4};
@@ -754,7 +768,7 @@ function recordDirection(){
 function analogMove(e){
   const r=stick.getBoundingClientRect(),cx=r.left+r.width/2,cy=r.top+r.height/2;
   const radius=Math.min(r.width,r.height)*.34;
-  let x=(e.clientX-cx)/radius,y=(e.clientY-cy)/radius;
+  let {x,y}=localStickAxes(e.clientX-cx,e.clientY-cy,radius,gameRotated);
   const norm=Math.hypot(x,y);
   if(norm>1){x/=norm;y/=norm;}
   if(norm<.24){x=0;y=0;}
@@ -926,7 +940,13 @@ function render(now){
 }
 makeChooser();
 $('drive-costs').textContent=`咆哮：ドライブ${DRIVE.roarCost}消費　ギュイーン：${DRIVE.gyuiinCost}消費`;
-resize();requestAnimationFrame(render);
+window.addEventListener('resize',updateLandscapeLock);
+window.addEventListener('orientationchange',updateLandscapeLock);
+window.visualViewport?.addEventListener('resize',updateLandscapeLock);
+window.addEventListener('pageshow',updateLandscapeLock);
+updateLandscapeLock();resize();requestAnimationFrame(render);
 window.mamoken3d={get battle(){return battle;},get actors(){return actors;},
   get cinematic(){return {active:movie.active,data:movie.data,elapsed:authoredMovie?.elapsed??movie.elapsed};},
-  startMatch,showSelection,ROSTER,MODEL_ASSETS,get diagnostics(){return {...metrics,checking,loading};}};
+  startMatch,showSelection,ROSTER,MODEL_ASSETS,
+  get landscapeLocked(){return gameRotated;},
+  get diagnostics(){return {...metrics,checking,loading};}};
