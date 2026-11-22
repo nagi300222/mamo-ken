@@ -1,0 +1,49 @@
+name: MamoKen Showtime browser acceptance
+
+on:
+  push:
+    branches:
+      - test/mamoken-showtime-browser-v12
+  pull_request:
+    branches:
+      - feat/mamoken-astra-hud-v11
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  actual-chromium:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Existing gameplay and new audiovisual regression
+        run: npm --prefix exp/fable-3d/dojo test
+      - name: Install Chrome automation only in runner
+        run: npm install --prefix "$RUNNER_TEMP/mamoken-browser" playwright-core@1.65.1
+      - name: Run actual GLB/WebGL browser tests
+        env:
+          CHROMIUM_PATH: /usr/bin/google-chrome
+        run: |
+          set -euo pipefail
+          node exp/fable-3d/dojo/server.mjs > "$RUNNER_TEMP/server.log" 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" || true' EXIT
+          for i in {1..20}; do
+            if curl -fsS http://127.0.0.1:4173/exp/fable-3d/dojo/ > /dev/null; then break; fi
+            sleep 1
+          done
+          export NODE_PATH="$RUNNER_TEMP/mamoken-browser/node_modules"
+          export MAMOKEN_EVIDENCE="$RUNNER_TEMP/mamoken-evidence"
+          node exp/fable-3d/dojo/acceptance/showtime-browser.mjs
+      - name: Upload screenshots and evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mamoken-showtime-chromium
+          path: ${{ runner.temp }}/mamoken-evidence/
+          retention-days: 14
