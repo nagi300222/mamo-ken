@@ -1,5 +1,7 @@
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { clone as cloneSkeleton } from 'three/addons/utils/SkeletonUtils.js';
+import { createChirkaIllusions } from './showtime-illusions.js';
 import { Battle, DRIVE } from './battle.js';
 import { ROSTER, IDS, FPS, ARENA } from './balance.js';
 import { MODEL_ASSETS, MODEL_REVISION, chooseClip } from './models.js';
@@ -119,8 +121,8 @@ function superSignature(p){
       impactFX('shard',0xffa369,x+dx,y+dy,1.1,20);
   }else if(p.id==='hakuma'){ // three bright snow-white bursts
     for(let i=0;i<3;i++)impactFX('shard',0xe4fff3,x+d*(i*.19),y+.16*i,1.15,19);
-  }else if(p.id==='chirka'){ // visual-only illusion; no 3D copies/hitboxes
-    for(const offset of [-.42,0,.42])impactFX('special',0xdd9aff,x+offset,y+.04,1,18);
+  }else if(p.id==='chirka'){ // real animated visual-only model echoes are handled independently
+    impactFX('special',0xdd9aff,x,y+.04,1,18);
   }else if(p.id==='takimaru'){ // square grab-seal echoes
     for(const offset of [-.23,.23])impactFX('clinch',0xffd695,x+offset,y,.98,21);
   }else if(p.id==='yomikage'){ // moonlight crossing slashes
@@ -143,6 +145,7 @@ function actionShowtime(e){
     showBanner(e.slot,p.id,e.name);
     audioFX.play('ultimate',p.id);
     superSignature(p); // character-specific shape pattern, visual only
+    actors[e.slot]?.illusions?.start(p);
     shake(.014,10);
   }else if(/^s[123]$/.test(e.action)){
     audioFX.play('special',p.id);
@@ -219,6 +222,7 @@ function disposable(o){o.traverse(node=>{if(node.geometry)node.geometry.dispose(
 }
 function clearActors(){for(let i=0;i<2;i++){const a=actors[i];if(!a)continue;
     if(a.trail){scene.remove(a.trail.mesh);a.trail.mesh.geometry.dispose();a.trail.mesh.material.dispose();}
+    a.illusions?.dispose();
     a.mixer.stopAllAction();scene.remove(a.holder);disposable(a.gltf.scene);actors[i]=null;}
   for(const m of bullets.values()){scene.remove(m);m.geometry.dispose();m.material.dispose();}bullets.clear();
   for(const f of flashes){scene.remove(f.mesh);f.mesh.material.dispose();}flashes.length=0;
@@ -237,7 +241,8 @@ async function createActor(id,slot) {
   gltf.scene.traverse(o=>{if(o.isSkinnedMesh)o.frustumCulled=false;});
   const sh=new THREE.Mesh(new THREE.CircleGeometry(.18,24),new THREE.MeshBasicMaterial({color:0x142128,transparent:true,opacity:.24,depthWrite:false}));
   sh.rotation.x=-Math.PI/2;sh.position.y=.003;holder.add(sh);
-  return {id,slot,gltf,meta,holder,turn,shadow:sh,mixer,actions,current:null,previous:null,key:'',actionAge:0};
+  const illusions=id==='chirka'?createChirkaIllusions({THREE,cloneSkeleton,gltf,scene,reducedMotion}):null;
+  return {id,slot,gltf,meta,holder,turn,shadow:sh,mixer,actions,illusions,current:null,previous:null,key:'',actionAge:0};
 }
 function clipChange(a,p){
   const name=chooseClip(p,Object.keys(a.actions),a.meta.command_map||{});
@@ -280,6 +285,7 @@ function syncActor(a,p){
   a.shadow.material.opacity=Math.max(.11,.3-p.y*.13);
   if(!p.stop)a.mixer.update(1/FPS);
   updateActionTrail(a,p);
+  a.illusions?.step(p);
 }
 const projectileMat={
  earth:0xb1a579,wind:0x9de4c9,violet:0xb68ce9,amber:0xf6ca72,blue:0x83c4ed
@@ -594,6 +600,8 @@ function render(now){
     }
     if(steps)hud();
   }
+  // Do not leave a visual ghost visible after a KO, regardless of which side won.
+  if(battle?.phase==='ko')for(const actor of actors)actor?.illusions?.stop();
   // ラウンド終了後もKOアニメーションは最後まで再生する。
   if(battle?.phase==='ko'&&!paused){
     for(const actor of actors)if(actor)actor.mixer.update(delta);
