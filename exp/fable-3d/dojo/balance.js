@@ -1,4 +1,5 @@
 // マモ拳3D 対戦バランス v0.5（固有能力・CPU再設計） — すべて仮値。60Hz、距離はモデルのm単位。
+import {fighterStyle} from './fighter-style.js';
 export const FPS = 60;
 export const ARENA = Object.freeze({ minX: -1.76, maxX: 1.76, pushRadius: 0.17, gravity: 0.0062, roundSeconds: 75 });
 const S = (name, kind, startup, active, recovery, damage, reach, extra = {}) =>
@@ -67,8 +68,10 @@ export function normalMove(id, slot) {
   if (!r || !m) throw Error('unknown normal: '+id+'/'+slot);
   const offset = id==='pisuke'||id==='chirka'||id==='dark_moguzo'?-1:
                  id==='godan'?4:id==='hakuma'||id==='takimaru'?2:0;
-  return { ...m, name: slot, kind:'strike', startup:Math.max(3,m.startup+offset),
-    recovery:m.recovery+(id==='godan'?(slot.includes('heavy')?4:1):0),
+  const feel=fighterStyle(id),heavy=slot.endsWith('_heavy');
+  return { ...m, name: slot, kind:'strike',
+    startup:Math.max(3,m.startup+offset+(heavy?feel.heavyStartup:feel.weakStartup)),
+    recovery:m.recovery+(id==='godan'?(heavy?4:1):0)+(heavy?feel.heavyRecovery:feel.weakRecovery),
     damage:Math.round(m.damage*r.power),
     reach:m.reach+(id==='godan'||id==='takimaru'? .045:0),
     knockback:slot.includes('heavy')?.14:.08 };

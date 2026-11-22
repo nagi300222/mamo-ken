@@ -1,6 +1,7 @@
 import { FPS, ARENA, ROSTER, IDS, normalMove, specialMove, ultimateMove, tailTipAt } from './balance.js';
 import { pushDirection, readCommand, specialButtonSlot } from './commands.js';
 import { cpuInput } from './cpu.js';
+import {fighterStyle,isChainNormal,isChainWeak} from './fighter-style.js';
 // 設計の正本はバランスデータ。GLB・Three.js・操作DOMには依存しない。
 const KEYS=['left','right','up','down','weak','strong','throw','roar','gyuiin','dash','stepForward','stepBack','special','ultimateButton','special1','special2','special3','super'];
 const cap=(v,a,b)=>Math.max(a,Math.min(b,v));
@@ -19,7 +20,9 @@ function fighter(id,slot){
   return {id,slot,x:slot===0?-.70:.70,y:0,vy:0,facing:slot===0?1:-1,
     hp:r.hp,guard:r.guardMax,super:0,drive:DRIVE.initial,driveDelay:0,state:'idle',reaction:null,landF:0,frame:0,stun:0,stop:0,
     action:null,used:false,spawned:false,ko:false,prev:inputOf({}),input:inputOf({}),
-    dirHistory:[],dirFacing:null,dashF:0,dashDir:0,roarCooldown:0,gyuiinCooldown:0,guardF:0,
+    dirHistory:[],dirFacing:null,dashF:0,dashDir:0,dashRecovery:0,airVX:0,
+    comboContact:null,chainWeakCount:0,comboHits:0,lastComboFrame:-9999,bufferedInput:null,
+    roarCooldown:0,gyuiinCooldown:0,guardF:0,
     ability:{charge:0,lastCharge:'',iron:0,armor:1,armorCooldown:0,chase:0,chaseCooldown:0,
       pressure:0,just:0,evadeF:0,dark:0,darkUsed:false,darkCooldown:0,feintCount:0,
       gutsProgress:0,lastGuts:'',gutsReady:false,grit:true},
@@ -136,14 +139,15 @@ export class Battle {
       this.events.push({type:'throw_finish',slot:attacker.slot,x:attacker.x,y:.3});
     }
   }
-  _begin(p,m,id){
+  _begin(p,m,id,allowCancel=false){
     if(m.kind==='clinch')return this._startGyuiin(p);
     if(p.ko||p.stun||p.stop||(p.y>.06&&['throw','roar','projectile'].includes(m.kind)))return false;
     if(m.isSuper&&p.super<100)return false;
     if(m.kind==='roar'&&(p.roarCooldown>0||p.drive<DRIVE.roarCost))return false;
     // 技から別技へのキャンセルは暗連に限る。
-    if(p.action&&!(p.id==='dark_moguzo'&&p.ability.dark>0&&id!==p.action.id&&!m.isSuper))return false;
-    if(p.action&&p.action.id===id)return false;
+    const darkFollow=p.id==='dark_moguzo'&&p.ability.dark>0&&id!==p.action?.id&&!m.isSuper;
+    if(p.action&&!allowCancel&&!darkFollow)return false;
+    if(p.action&&p.action.id===id&&!allowCancel)return false;
     if(m.isSuper)p.super=0;
     if(m.kind==='roar'){p.roarCooldown=96;p.drive-=DRIVE.roarCost;p.driveDelay=DRIVE.regenDelay;}
     if(p.id==='godan'&&m.armor)m={...m,armor:p.ability.armorCooldown===0?1:0,armorUsed:false};
@@ -168,16 +172,31 @@ export class Battle {
       m={...m,damage:Math.round(m.damage*1.07)};
       p.ability.gutsReady=false;p.ability.gutsProgress=0;
     }
+    const weakCount=isChainWeak(id)?(allowCancel?p.chainWeakCount+1:1):0;
     p.action={...m,id,serial:++this.seq,started:this.frame};
+    p.chainWeakCount=weakCount;
+    p.comboContact=null;p.bufferedInput=null;
     p.state=m.kind==='roar'?'roar':m.kind==='clinch'?'gyuiin':'attack';
     p.frame=0;p.used=false;p.spawned=false;p.attackSerial++;
     if(p.id==='dark_moguzo')p.ability.dark=0;
     this.events.push({type:'move',slot:p.slot,name:m.name,action:id});
     return true;
   }
+  _bufferHitstopInput(p,n){
+    // One attack press survives hitstop. Continuous holding is not a new command.
+    if(!p.action||!p.comboContact||!isChainNormal(p.action.id))return;
+    for(const key of ['special','special1','special2','special3','weak','strong']){
+      if(n[key]&&!p.prev[key]){p.bufferedInput={key,at:this.frame,raw:n};break;}
+    }
+  }
   _input(p,other,raw){
     const n=inputOf(raw),edges={};
     for(const k of KEYS)edges[k]=n[k]&&!p.prev[k];
+    const buffered=p.bufferedInput;
+    p.bufferedInput=null;
+    if(buffered&&this.frame-buffered.at<=9&&p.action){
+      edges[buffered.key]=true;
+    }
     p.prev=n;p.input=n;
     if(p.ko)return;
     if(p.stop||p.stun)return;
@@ -200,7 +219,30 @@ export class Battle {
         return;
       }
     }
-    // 連携はヒット成功後に別のコマンド技へ1回だけ。通常技連打には派生しない。
+    // v15: chain-cancel ONLY a landed or blocked normal, never a whiff/held button.
+    // The window ends with the original normal's remaining recovery.
+    if(p.action&&isChainNormal(p.action.id)&&p.comboContact&&
+       p.frame>=p.action.startup&&p.frame<total(p.action)){
+      const source=buffered?.raw||n;
+      const specialSlot=edges.special?specialButtonSlot(source,p.facing):
+        (['special1','special2','special3'].find(key=>edges[key])||'').replace('special','s');
+      if(/^s[123]$/.test(specialSlot)){
+        const idx=+specialSlot.slice(1)-1;
+        if(this._begin(p,specialMove(p.id,idx),specialSlot,true)){
+          this.events.push({type:'cancel',slot:p.slot,from:'normal',to:specialSlot});
+          return;
+        }
+      }
+      if((edges.weak&&isChainWeak(p.action.id)&&p.chainWeakCount<fighterStyle(p.id).weakChainMax)|| 
+          (edges.strong&&isChainWeak(p.action.id))){
+        const id=p.action.id.split('_')[0]+'_'+(edges.strong?'heavy':'weak');
+        if(this._begin(p,normalMove(p.id,id),id,true)){
+          this.events.push({type:'cancel',slot:p.slot,from:'normal',to:id});
+          return;
+        }
+      }
+    }
+    // Original unique chase / dark-chain rules stay independent from shared normal cancels.
     if(p.action){
       if(p.id==='pisuke'&&p.ability.chase>0&&p.ability.chaseCooldown===0&&edges.dash){
         p.action=null;p.frame=0;p.ability.chase=0;p.ability.chaseCooldown=52;
@@ -224,7 +266,14 @@ export class Battle {
       }
       return;
     }
-    if(p.dashF>0){moveX(p,p.dashDir*ROSTER[p.id].dash/18);p.dashF--;p.state='dash';p.frame++;return;}
+    if(p.dashF>0){
+      const feel=fighterStyle(p.id);
+      moveX(p,p.dashDir*ROSTER[p.id].dash/(feel.dashFrames+1));
+      p.dashF--;p.state='dash';p.frame++;
+      if(!p.dashF)p.dashRecovery=feel.dashRecovery;
+      return;
+    }
+    if(p.dashRecovery>0){p.dashRecovery--;return;}
     // v0.7: dedicated super has priority over special; no normal attack fallback if meter is insufficient.
     if(edges.ultimateButton){this._begin(p,ultimateMove(p.id),'ultimate');return;}
     if(wantsRoar){this._begin(p,ROAR,'roar');return;}
@@ -254,7 +303,7 @@ export class Battle {
       // 専用ボタンの「前後」は画面左右ではなく、今向いている相手を基準にする。
       // スティックの向きに関係なく、後ステップは相手から離れる。
       p.dashDir=edges.stepBack?-p.facing:edges.stepForward?p.facing:n.left?-1:n.right?1:p.facing;
-      p.dashF=17;
+      p.dashF=fighterStyle(p.id).dashFrames;
       // ヨミカゲ：相手の動作を見切った瞬間に「外へ」ステップできれば返し窓。
       const threat=other.action;
       const safeWindow=threat&&other.frame>=Math.max(0,threat.startup-5)&&
@@ -265,18 +314,26 @@ export class Battle {
         p.ability.just=43;p.ability.evadeF=7;
         this.events.push({type:'just_step',slot:p.slot});
       }
-      moveX(p,p.dashDir*ROSTER[p.id].dash/18);
+      moveX(p,p.dashDir*ROSTER[p.id].dash/(fighterStyle(p.id).dashFrames+1));
       p.state='dash';p.frame=0;p.locomotion++;return;
     }
     if(edges.up&&p.y===0&&!n.down){
-      p.vy=ROSTER[p.id].jump;p.y=.006;p.state='jump';p.frame=0;p.locomotion++;return;
+      p.vy=ROSTER[p.id].jump;p.y=.006;p.airVX=0;
+      p.state='jump';p.frame=0;p.locomotion++;return;
     }
     const dir=n.right?1:n.left?-1:0;
-    if(dir&&!n.down){
+    const feel=fighterStyle(p.id);
+    if(p.y>0){
+      const target=dir&&!n.down?dir*feel.airSpeed:0;
+      const delta=target-p.airVX;
+      p.airVX+=Math.max(-feel.airAccel,Math.min(feel.airAccel,delta));
+      if(!dir||n.down)p.airVX*=feel.airFriction;
+      moveX(p,p.airVX);p.state='jump';
+    }else if(dir&&!n.down){
       const rr=ROSTER[p.id],back=dir!==p.facing;
-      moveX(p,dir*(p.y>0?Math.max(.032,rr.walk*1.25):back?rr.back:rr.walk));
-      p.state=p.y>0?'jump':back?'walk_b':'walk_f';
-    }else p.state=p.y>0?'jump':n.down?'crouch':'idle';
+      moveX(p,dir*(back?rr.back:rr.walk));
+      p.state=back?'walk_b':'walk_f';
+    }else p.state=n.down?'crouch':'idle';
   }
   _guarding(t,m){
     if(['throw','clinch'].includes(m.kind)||t.y>.07||t.action||t.stun)return false;
@@ -320,6 +377,8 @@ export class Battle {
     }
     const guard=this._guarding(t,m);
     let dmg=m.damage;
+    const links=!guard&&a.comboHits>0&&this.frame-a.lastComboFrame<=32&&t.stun>0;
+    if(links)dmg=Math.max(1,Math.round(dmg*Math.max(.60,1-.10*a.comboHits)));
     if(a.id==='moguzo'&&a.hp<=ROSTER.moguzo.hp*.30)dmg=Math.round(dmg*1.06);
     // ダークモグゾーは高火力常時強化ではなく、低耐久と技派生で勝つ。
     if(guard){
@@ -385,6 +444,9 @@ export class Battle {
           (m.kind==='projectile'&&a.action?.id==='s1'))){
         a.ability.dark=18;
       }
+      // Publish combo reads from real contacts only. HP is still modified once above.
+      a.comboHits=links?a.comboHits+1:1;a.lastComboFrame=this.frame;
+      if(a.comboHits>=2)this.events.push({type:'combo',slot:a.slot,hits:a.comboHits,damage:dmg});
       this.events.push({type:m.kind==='clinch'?'gyuiin_hit':'hit',slot:t.slot,x:t.x,y:t.y+.32,damage:dmg});
       // Presentation-only signal: emitted ONLY after a real unguarded, non-countered super hit.
       // The cinematic consumes this event; Battle's HP, frames, damage and KO logic remain the truth.
@@ -395,6 +457,9 @@ export class Battle {
       if(m.kind==='clinch'){a.stop=Math.max(a.stop,15);t.stop=Math.max(t.stop,15);}
       if(m.kind==='roar'){t.stun=Math.max(t.stun,23);t.reaction='roar_hit';this.events.push({type:'roar_hit',slot:a.slot,x:t.x,y:t.y+.35});}
     }
+    // A normal may chain only after a real guarded or landed contact.
+    if(a.action?.serial===m.serial && isChainNormal(m.id))
+      a.comboContact=guard?'block':'hit';
     a.super=cap(a.super+(guard?5:Math.round(dmg*.19)),0,100);
     t.super=cap(t.super+(guard?5:Math.round(dmg*.09)),0,100);
     a.stop=Math.max(a.stop,guard?3:6);
@@ -434,7 +499,10 @@ export class Battle {
     if(active(p)&&!p.used&&!['projectile','feint','counter'].includes(m.kind)&&this._contact(p,op,m)){
       p.used=true;this.pending.push({p,op,m,d:Math.abs(p.x-op.x)});
     }
-    if(p.frame>=total(m)){p.action=null;p.frame=0;p.state=p.y>.02?'jump':'idle';}
+    if(p.frame>=total(m)){
+      p.action=null;p.frame=0;p.chainWeakCount=0;p.comboContact=null;p.bufferedInput=null;
+      p.state=p.y>.02?'jump':'idle';
+    }
   }
   _roarErase(p,b){
     if(p.action?.kind!=='roar')return false;
@@ -465,7 +533,7 @@ export class Battle {
   _gravity(p){
     if(p.y>0||p.vy>0){
       p.vy-=ARENA.gravity;p.y=Math.max(0,p.y+p.vy);
-      if(p.y===0){p.vy=0;p.landF=12;if(!p.action&&!p.stun)p.state='idle';}
+      if(p.y===0){p.vy=0;p.airVX=0;p.landF=12;if(!p.action&&!p.stun)p.state='idle';}
     }
   }
   tick(raw1={},raw2=null){
@@ -504,7 +572,10 @@ export class Battle {
       for(const sample of samples??[])p.dirHistory=pushDirection(p.dirHistory,sample,this.frame,p.facing);
       p.dirHistory=pushDirection(p.dirHistory,raw[i],this.frame,p.facing);
       if(started[i]){p.prev=raw[i];p.input=raw[i];}
-      if(p.stop>0){p.stop--;p.input=raw[i];p.prev=raw[i];continue;}
+      if(p.stop>0){
+        this._bufferHitstopInput(p,raw[i]);
+        p.stop--;p.input=raw[i];p.prev=raw[i];continue;
+      }
       if(p.stun>0){
         p.stun--;p.input=raw[i];p.prev=raw[i];p.frame++;
         if(!p.stun&&!p.action)p.state=p.y>0?'jump':'idle';

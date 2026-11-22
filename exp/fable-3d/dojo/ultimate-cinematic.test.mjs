@@ -76,7 +76,7 @@ test('nine cinematic scripts, full screen canvas handoff and KO gating are wired
  assert.match(main,/beginUltimateMovie\(e\)/);
  assert.match(main,/movieViewport\.appendChild\(canvas\)/);
  assert.match(main,/canvasHome\.insertBefore\(canvas,canvasFollowingNode\)/);
- assert.match(main,/if\(battle\.phase==='ko'&&!finishShown&&!movie\.active\)/);
+ assert.match(main,/if\(battle\.phase==='ko'&&!finishShown&&!movie\.active&&!practiceEnabled\)/);
  assert.match(main,/if\(movie\.active\|\|battle\.phase!=='fight'\)break/);
  assert.match(main,/superSignature\(p\)/);
  assert.match(html,/id="cinematic-skip"/);
