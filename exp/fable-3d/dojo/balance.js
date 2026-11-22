@@ -1,5 +1,6 @@
 // マモ拳3D 対戦バランス v0.5（固有能力・CPU再設計） — すべて仮値。60Hz、距離はモデルのm単位。
-import {fighterStyle} from './fighter-style.js';
+import {normalPerformance} from './normal-balance-v151.js';
+import {NORMAL_CONTACTS} from './normal-contacts-v151.js';
 export const FPS = 60;
 export const ARENA = Object.freeze({ minX: -1.76, maxX: 1.76, pushRadius: 0.17, gravity: 0.0062, roundSeconds: 75 });
 const S = (name, kind, startup, active, recovery, damage, reach, extra = {}) =>
@@ -55,26 +56,12 @@ export const ROSTER = Object.freeze({
   ], S('暗連・黒天烈掌', 'super', 5, 13, 32, 223, .76, { anim:'sp_dark_rush' }),{guardMax:78})
 });
 export const IDS = Object.freeze(Object.keys(ROSTER));
-const BASE_NORMAL = Object.freeze({
-  stand_weak:  { startup:5, active:3, recovery:12, damage:38, reach:.39, level:'mid', anim:'stand_light' },
-  stand_heavy: { startup:11, active:4, recovery:21, damage:80, reach:.54, level:'mid', anim:'stand_heavy' },
-  crouch_weak: { startup:6, active:3, recovery:13, damage:32, reach:.39, level:'low', anim:'stand_light' },
-  crouch_heavy:{ startup:12, active:4, recovery:23, damage:76, reach:.57, level:'low', anim:'stand_heavy' },
-  air_weak:   { startup:6, active:5, recovery:12, damage:39, reach:.42, level:'air', anim:'stand_light' },
-  air_heavy:  { startup:10,active:6, recovery:17, damage:77, reach:.49, level:'air', anim:'stand_heavy' }
-});
 export function normalMove(id, slot) {
-  const r=ROSTER[id], m=BASE_NORMAL[slot];
-  if (!r || !m) throw Error('unknown normal: '+id+'/'+slot);
-  const offset = id==='pisuke'||id==='chirka'||id==='dark_moguzo'?-1:
-                 id==='godan'?4:id==='hakuma'||id==='takimaru'?2:0;
-  const feel=fighterStyle(id),heavy=slot.endsWith('_heavy');
-  return { ...m, name: slot, kind:'strike',
-    startup:Math.max(3,m.startup+offset+(heavy?feel.heavyStartup:feel.weakStartup)),
-    recovery:m.recovery+(id==='godan'?(heavy?4:1):0)+(heavy?feel.heavyRecovery:feel.weakRecovery),
-    damage:Math.round(m.damage*r.power),
-    reach:m.reach+(id==='godan'||id==='takimaru'? .045:0),
-    knockback:slot.includes('heavy')?.14:.08 };
+  if (!ROSTER[id]) throw Error('unknown normal: '+id+'/'+slot);
+  const motion=NORMAL_CONTACTS[id]?.[slot];
+  if(!motion)throw Error('missing authored contact: '+id+'/'+slot);
+  return {...normalPerformance(id,slot),reach:motion.reach,strikeHeight:motion.height,activeReach:motion.activeReach.map(p=>({...p})),
+    name:slot,kind:'strike',normalVersion:'15.1'};
 }
 export function specialMove(id, index) {
   const r=ROSTER[id]; if (!r) throw Error('unknown fighter '+id);

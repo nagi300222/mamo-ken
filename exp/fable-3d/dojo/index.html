@@ -4,14 +4,14 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#141c23">
-<title>マモ拳 3D｜山岳道場</title>
+<title>マモ拳 3D｜山岳道場 v15.1</title>
 <link rel="stylesheet" href="./style.css">
 <script type="importmap">{"imports":{"three":"../preview/vendor/three.module.min.js","three/addons/":"../preview/vendor/addons/"}}</script>
 </head>
 <body>
 <main id="app">
   <header class="topbar">
-    <div class="brand"><span class="brand-mark">拳</span><div><strong>マモ拳 <span>3D</span></strong><small>山岳道場 · SHOWTIME v14</small></div></div>
+    <div class="brand"><span class="brand-mark">拳</span><div><strong>マモ拳 <span>3D</span></strong><small>山岳道場 · v15.1</small></div></div>
     <div class="header-actions">
       <button class="ghost" popovertarget="commands-help">技表</button>
       <div id="commands-help" popover>
@@ -81,10 +81,10 @@
     <div id="showtime-banner" class="showtime-banner" aria-live="off" aria-hidden="true"></div>
     <div id="practice-panel" class="practice-panel" hidden>
       <strong>PRACTICE</strong>
-      <label>相手 <select id="practice-dummy" aria-label="練習相手の行動"><option value="stand">停止</option><option value="guard">ガード</option><option value="cpu">CPU</option></select></label>
+      <label>相手 <select id="practice-dummy" aria-label="練習相手の行動"><option value="stand">停止</option><option value="guard">自動ガード</option><option value="guard_stand">立ガード</option><option value="guard_crouch">屈ガード</option><option value="reversal">反撃（弱）</option><option value="cpu">CPU</option></select></label>
       <span><b id="practice-hits">0</b> HITS</span>
       <span><b id="practice-damage">0</b> DMG</span>
-      <small>直近 <b id="practice-last">0</b></small>
+      <small>直近 <b id="practice-last">0</b> / 硬直差 <b id="practice-advantage">—</b>F</small>
       <button id="practice-reset" class="ghost" type="button">位置リセット</button>
     </div>
     <div id="game-over" class="modal hidden">

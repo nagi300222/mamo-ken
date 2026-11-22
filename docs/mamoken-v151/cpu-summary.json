@@ -1,0 +1,180 @@
+{
+  "baseline": {
+    "rounds": 1458,
+    "levels": [
+      1,
+      2,
+      3
+    ],
+    "seeds": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
+    "patterns": [
+      "neutral",
+      "confirm",
+      "low-pressure",
+      "air-footsies",
+      "grapple-pressure",
+      "ranged-control"
+    ],
+    "summary": [
+      {
+        "id": "moguzo",
+        "games": 288,
+        "wins": 194,
+        "draws": 12,
+        "score": 0.6944444444444444
+      },
+      {
+        "id": "pisuke",
+        "games": 288,
+        "wins": 167,
+        "draws": 12,
+        "score": 0.6006944444444444
+      },
+      {
+        "id": "godan",
+        "games": 288,
+        "wins": 112,
+        "draws": 0,
+        "score": 0.3888888888888889
+      },
+      {
+        "id": "hakuma",
+        "games": 288,
+        "wins": 138,
+        "draws": 0,
+        "score": 0.4791666666666667
+      },
+      {
+        "id": "chirka",
+        "games": 288,
+        "wins": 104,
+        "draws": 0,
+        "score": 0.3611111111111111
+      },
+      {
+        "id": "takimaru",
+        "games": 288,
+        "wins": 109,
+        "draws": 8,
+        "score": 0.3923611111111111
+      },
+      {
+        "id": "yomikage",
+        "games": 288,
+        "wins": 164,
+        "draws": 12,
+        "score": 0.5902777777777778
+      },
+      {
+        "id": "bullet",
+        "games": 288,
+        "wins": 106,
+        "draws": 13,
+        "score": 0.390625
+      },
+      {
+        "id": "dark_moguzo",
+        "games": 288,
+        "wins": 168,
+        "draws": 11,
+        "score": 0.6024305555555556
+      }
+    ]
+  },
+  "candidate": {
+    "rounds": 1458,
+    "levels": [
+      1,
+      2,
+      3
+    ],
+    "seeds": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
+    "patterns": [
+      "neutral",
+      "confirm",
+      "low-pressure",
+      "air-footsies",
+      "grapple-pressure",
+      "ranged-control"
+    ],
+    "summary": [
+      {
+        "id": "moguzo",
+        "games": 288,
+        "wins": 190,
+        "draws": 10,
+        "score": 0.6770833333333334
+      },
+      {
+        "id": "pisuke",
+        "games": 288,
+        "wins": 181,
+        "draws": 14,
+        "score": 0.6527777777777778
+      },
+      {
+        "id": "godan",
+        "games": 288,
+        "wins": 90,
+        "draws": 0,
+        "score": 0.3125
+      },
+      {
+        "id": "hakuma",
+        "games": 288,
+        "wins": 90,
+        "draws": 1,
+        "score": 0.3142361111111111
+      },
+      {
+        "id": "chirka",
+        "games": 288,
+        "wins": 174,
+        "draws": 2,
+        "score": 0.6076388888888888
+      },
+      {
+        "id": "takimaru",
+        "games": 288,
+        "wins": 100,
+        "draws": 9,
+        "score": 0.3628472222222222
+      },
+      {
+        "id": "yomikage",
+        "games": 288,
+        "wins": 163,
+        "draws": 18,
+        "score": 0.5972222222222222
+      },
+      {
+        "id": "bullet",
+        "games": 288,
+        "wins": 87,
+        "draws": 14,
+        "score": 0.3263888888888889
+      },
+      {
+        "id": "dark_moguzo",
+        "games": 288,
+        "wins": 181,
+        "draws": 12,
+        "score": 0.6493055555555556
+      }
+    ]
+  }
+}
