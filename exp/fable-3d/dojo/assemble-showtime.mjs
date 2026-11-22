@@ -5,7 +5,7 @@ const json = async url => JSON.parse(await readFile(url, 'utf8'));
 const files = await readdir(new URL('manifest/', base));
 const characters = {};
 for (const id of IDS) {
-  const model = id + '_v14.glb';
+  const model = id + '_animations.glb';
   const meta = await json(new URL(id + '/' + id + '_v14_motions.json', base));
   const moves = [];
   if (files.includes(id + '_ultimate.json')) {

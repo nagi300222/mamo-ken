@@ -7,7 +7,7 @@
       "contactSeconds": 0.15,
       "animationSources": {
         "attacker": {
-          "glb": "dark_moguzo_v14.glb",
+          "glb": "dark_moguzo_animations.glb",
           "clip": "s1_v14"
         }
       },
@@ -26,7 +26,7 @@
       "contactSeconds": 0.05,
       "animationSources": {
         "attacker": {
-          "glb": "dark_moguzo_v14.glb",
+          "glb": "dark_moguzo_animations.glb",
           "clip": "s2_v14"
         }
       },
@@ -45,7 +45,7 @@
       "contactSeconds": 0.08333333333333333,
       "animationSources": {
         "attacker": {
-          "glb": "dark_moguzo_v14.glb",
+          "glb": "dark_moguzo_animations.glb",
           "clip": "s3_v14"
         }
       },
@@ -98,7 +98,7 @@
       },
       "animationSources": {
         "attacker": {
-          "glb": "dark_moguzo_v14.glb",
+          "glb": "dark_moguzo_animations.glb",
           "motions": "dark_moguzo/dark_moguzo_v14_motions.json",
           "clip": "cin_dark_moguzo_atk"
         },
@@ -2461,39 +2461,39 @@
   ],
   "reactions": [
     {
-      "glb": "dark_moguzo_v14.glb",
+      "glb": "dark_moguzo_animations.glb",
       "clip": "cinv_moguzo"
     },
     {
-      "glb": "dark_moguzo_v14.glb",
+      "glb": "dark_moguzo_animations.glb",
       "clip": "cinv_godan"
     },
     {
-      "glb": "dark_moguzo_v14.glb",
+      "glb": "dark_moguzo_animations.glb",
       "clip": "cinv_chirka"
     },
     {
-      "glb": "dark_moguzo_v14.glb",
+      "glb": "dark_moguzo_animations.glb",
       "clip": "cinv_pisuke"
     },
     {
-      "glb": "dark_moguzo_v14.glb",
+      "glb": "dark_moguzo_animations.glb",
       "clip": "cinv_hakuma"
     },
     {
-      "glb": "dark_moguzo_v14.glb",
+      "glb": "dark_moguzo_animations.glb",
       "clip": "cinv_takimaru"
     },
     {
-      "glb": "dark_moguzo_v14.glb",
+      "glb": "dark_moguzo_animations.glb",
       "clip": "cinv_yomikage"
     },
     {
-      "glb": "dark_moguzo_v14.glb",
+      "glb": "dark_moguzo_animations.glb",
       "clip": "cinv_bullet"
     },
     {
-      "glb": "dark_moguzo_v14.glb",
+      "glb": "dark_moguzo_animations.glb",
       "clip": "cinv_dark_moguzo"
     }
   ]

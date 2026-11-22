@@ -7,7 +7,7 @@
       "contactSeconds": 0.31666666666666665,
       "animationSources": {
         "attacker": {
-          "glb": "godan_v14.glb",
+          "glb": "godan_animations.glb",
           "clip": "s1_v14"
         }
       },
@@ -26,7 +26,7 @@
       "contactSeconds": 0.15,
       "animationSources": {
         "attacker": {
-          "glb": "godan_v14.glb",
+          "glb": "godan_animations.glb",
           "clip": "s2_v14"
         }
       },
@@ -45,7 +45,7 @@
       "contactSeconds": 0.26666666666666666,
       "animationSources": {
         "attacker": {
-          "glb": "godan_v14.glb",
+          "glb": "godan_animations.glb",
           "clip": "s3_v14"
         }
       },
@@ -99,7 +99,7 @@
       },
       "animationSources": {
         "attacker": {
-          "glb": "godan_v14.glb",
+          "glb": "godan_animations.glb",
           "motions": "godan/godan_v14_motions.json",
           "clip": "cin_godan_atk"
         },
@@ -2473,39 +2473,39 @@
   ],
   "reactions": [
     {
-      "glb": "godan_v14.glb",
+      "glb": "godan_animations.glb",
       "clip": "cinv_moguzo"
     },
     {
-      "glb": "godan_v14.glb",
+      "glb": "godan_animations.glb",
       "clip": "cinv_godan"
     },
     {
-      "glb": "godan_v14.glb",
+      "glb": "godan_animations.glb",
       "clip": "cinv_chirka"
     },
     {
-      "glb": "godan_v14.glb",
+      "glb": "godan_animations.glb",
       "clip": "cinv_pisuke"
     },
     {
-      "glb": "godan_v14.glb",
+      "glb": "godan_animations.glb",
       "clip": "cinv_hakuma"
     },
     {
-      "glb": "godan_v14.glb",
+      "glb": "godan_animations.glb",
       "clip": "cinv_takimaru"
     },
     {
-      "glb": "godan_v14.glb",
+      "glb": "godan_animations.glb",
       "clip": "cinv_yomikage"
     },
     {
-      "glb": "godan_v14.glb",
+      "glb": "godan_animations.glb",
       "clip": "cinv_bullet"
     },
     {
-      "glb": "godan_v14.glb",
+      "glb": "godan_animations.glb",
       "clip": "cinv_dark_moguzo"
     }
   ]

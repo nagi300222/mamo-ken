@@ -7,7 +7,7 @@
       "contactSeconds": 0.15,
       "animationSources": {
         "attacker": {
-          "glb": "pisuke_v14.glb",
+          "glb": "pisuke_animations.glb",
           "clip": "s1_v14"
         }
       },
@@ -26,7 +26,7 @@
       "contactSeconds": 0.06666666666666667,
       "animationSources": {
         "attacker": {
-          "glb": "pisuke_v14.glb",
+          "glb": "pisuke_animations.glb",
           "clip": "s2_v14"
         }
       },
@@ -45,7 +45,7 @@
       "contactSeconds": 0.08333333333333333,
       "animationSources": {
         "attacker": {
-          "glb": "pisuke_v14.glb",
+          "glb": "pisuke_animations.glb",
           "clip": "s3_v14"
         }
       },
@@ -108,7 +108,7 @@
       },
       "animationSources": {
         "attacker": {
-          "glb": "pisuke_v14.glb",
+          "glb": "pisuke_animations.glb",
           "motions": "pisuke/pisuke_v14_motions.json",
           "clip": "cin_pisuke_atk"
         },
@@ -2767,39 +2767,39 @@
   ],
   "reactions": [
     {
-      "glb": "pisuke_v14.glb",
+      "glb": "pisuke_animations.glb",
       "clip": "cinv_moguzo"
     },
     {
-      "glb": "pisuke_v14.glb",
+      "glb": "pisuke_animations.glb",
       "clip": "cinv_godan"
     },
     {
-      "glb": "pisuke_v14.glb",
+      "glb": "pisuke_animations.glb",
       "clip": "cinv_chirka"
     },
     {
-      "glb": "pisuke_v14.glb",
+      "glb": "pisuke_animations.glb",
       "clip": "cinv_pisuke"
     },
     {
-      "glb": "pisuke_v14.glb",
+      "glb": "pisuke_animations.glb",
       "clip": "cinv_hakuma"
     },
     {
-      "glb": "pisuke_v14.glb",
+      "glb": "pisuke_animations.glb",
       "clip": "cinv_takimaru"
     },
     {
-      "glb": "pisuke_v14.glb",
+      "glb": "pisuke_animations.glb",
       "clip": "cinv_yomikage"
     },
     {
-      "glb": "pisuke_v14.glb",
+      "glb": "pisuke_animations.glb",
       "clip": "cinv_bullet"
     },
     {
-      "glb": "pisuke_v14.glb",
+      "glb": "pisuke_animations.glb",
       "clip": "cinv_dark_moguzo"
     }
   ]

@@ -19,7 +19,8 @@ const scene=new THREE.Scene();scene.background=new THREE.Color(0x758993);
 const camera=new THREE.OrthographicCamera(-1.4,1.4,1,-1,.01,30);
 const cameraPose={x:0,y:.5,halfWidth:1.4};
 camera.position.set(0,1.2,5.5);camera.lookAt(0,.5,0);
-const renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:false,powerPreference:'high-performance'});
+const renderer=(()=>{try{return new THREE.WebGLRenderer({canvas,antialias:true,alpha:false,powerPreference:'high-performance'});}
+catch(error){$('loading-status').textContent='3D表示を開始できません。Safari/Chromeで開き直してください。';$('start').disabled=true;throw error;}})();
 renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,1.5));
 renderer.outputColorSpace=THREE.SRGBColorSpace;
 scene.add(new THREE.HemisphereLight(0xe5f7ff,0x8f796a,2.25));
@@ -42,6 +43,7 @@ for(let i=0;i<5;i++){const cloud=new THREE.Mesh(new THREE.SphereGeometry(.32+i*.
   cloud.position.set(-3+i*1.5,.95+(i%2)*.24,-3.9);cloud.scale.y=.28;environment.add(cloud);}
 const loader=new GLTFLoader();
 const loadShowtime=createShowtimeLoader(new URL('../cinematic/v14/',import.meta.url));
+const animationCache=new Map();
 const actors=[null,null], bullets=new Map(), flashes=[];
 const audioFX=createCombatAudio();
 const music=createArenaMusic(()=>audioFX.context);
@@ -114,7 +116,7 @@ function beginUltimateMovie(event){
   movieLayer.style.setProperty('--cinematic-accent',showtimeHex(attacker.id));
   $('cinematic-portrait').src=MODEL_ASSETS[attacker.id].portrait;
   $('cinematic-name').textContent=ROSTER[attacker.id].name;
-  $('cinematic-move').textContent=event.move||ROSTER[attacker.id].ultimate.name;
+  $('cinematic-move').textContent=entry.spec.displayName||event.move||ROSTER[attacker.id].ultimate.name;
   $('cinematic-subtitle').textContent=authoredMovie?'':movieScript(attacker.id)[0];
   canvasHome=canvas.parentNode;canvasFollowingNode=canvas.nextSibling;
   movieViewport.appendChild(canvas);
@@ -144,6 +146,7 @@ function finishUltimateMovie(){
   // Re-establish the approved v0.3 match camera and pixel dimensions.
   resize();acc=0;lastFrame=0;
   clearInput();
+  if(checking)readyForCheck();
   if(battle)hud(); // KO result waits until the movie ends.
 }
 function renderUltimateMovie(delta){
@@ -306,6 +309,20 @@ function actionShowtime(e){
   }else if(e.action==='roar'){audioFX.play('roar',p.id);impactFX('roar',0xf6d17b,p.x,p.y+.31,1.3,12);}
   else if(e.action==='gyuiin'){audioFX.play('clinch',p.id);}
 }
+const checkAvailable=new URLSearchParams(location.search).get('check')==='1';
+$('check-mode-label').hidden=!checkAvailable;$('check-mode').checked=checkAvailable;
+$('device-stats').hidden=!checkAvailable;
+let checking=false;
+const metrics={fps:0,frameMs:0,loadMs:0,geometries:0,textures:0,drawCalls:0};
+let metricAt=0,metricFrames=0;
+function readyForCheck(){
+  if(!checking||!battle)return;
+  battle=new Battle(actors[0].id,actors[1].id,1);
+  const [a,t]=battle.fighters;a.x=-.18;t.x=.18;a.super=100;
+  const bullet=actors.find(actor=>actor.id==='bullet');
+  if(bullet)battle.setTailTipPath(bullet.meta.clips.sp_tail_whip.tail_tip_path);
+  finishShown=false;
+}
 let battle=null,selected='moguzo',cpuChoice='godan',playing=false,paused=false,loading=false,lastFrame=0,acc=0,finishShown=false;
 
 const fwd=(v)=>Math.max(0,Math.min(100,v));
@@ -389,14 +406,15 @@ async function createActor(id,slot) {
   const mixer=new THREE.AnimationMixer(gltf.scene),actions=Object.fromEntries(gltf.animations.map(c=>[c.name,mixer.clipAction(c)]));
   let showtime={};
   try{
-    const animationFiles=new Map();
+    const animationFiles=animationCache;
     showtime=await loadShowtime(id,async(source,manifestUrl)=>{
       const url=source.glb&&new URL(source.glb,manifestUrl).href;
       if(url&&!animationFiles.has(url)){
+        if(animationFiles.size>=2)animationFiles.delete(animationFiles.keys().next().value);
         animationFiles.set(url,loader.loadAsync(url).then(result=>{
           disposable(result.scene);
           return result.animations;
-        }));
+        }).catch(error=>{animationFiles.delete(url);throw error;}));
       }
       const clips=url?await animationFiles.get(url):gltf.animations;
       const clip=clips.find(item=>item.name===source.clip);
@@ -661,6 +679,8 @@ async function startMatch(){
   if(loading)return;
   if(movie.active)finishUltimateMovie();
   audioFX.unlock(); // Only during explicit user-initiated start/click.
+  const loadStarted=performance.now();
+  checking=checkAvailable&&$('check-mode').checked;
   loading=true;clearInput();
   playing=false;paused=false;finishShown=false;$('pause').textContent='一時停止';$('start').disabled=true;setLoading('GLBを読み込み中…');
   const ids=[selected,cpuChoice],level=+$('difficulty').value;
@@ -671,6 +691,7 @@ async function startMatch(){
     const failed=loaded.find(result=>result.status==='rejected');
     if(failed)throw failed.reason;
     battle=new Battle(...ids,level);
+    readyForCheck();
     const bulletActor=actors.find(a=>a?.id==='bullet');
     if(bulletActor){
       const path=bulletActor.meta?.clips?.sp_tail_whip?.tail_tip_path;
@@ -681,6 +702,7 @@ async function startMatch(){
     const fallback=actors.some(a=>['roar','gyuiin','clinch_hold','clinch_recoil'].some(name=>!a.actions[name]));
     setLoading(fallback?'咆哮・ギュイーンは仮モーション':'操作：方向＋必殺／奥義専用'); note('FIGHT！ 必殺は方向＋ボタン／奥義は専用ボタン');
     clearInput();
+    metrics.loadMs=performance.now()-loadStarted;
     playing=true;lastFrame=0;acc=0;hud();
   }catch(e){clearActors();battle=null;console.error(e);note('起動エラー: '+e.message);setLoading('モデルの読込に失敗: '+e.message);$('selection').classList.remove('hidden');}
   finally{loading=false;$('start').disabled=false;}
@@ -850,10 +872,20 @@ function render(now){
   music.update(!!(battle&&playing&&!paused&&battle.phase==='fight'&&!movie.active&&!document.hidden));
   const elapsed=lastFrame?Math.max(0,(now-lastFrame)/1000):FIXED;
   const delta=Math.min(.05,elapsed);lastFrame=now;
+  if(checkAvailable){
+    metricFrames++;
+    if(now-metricAt>=1000){
+      metrics.fps=Math.round(metricFrames*1000/(now-metricAt));metrics.frameMs=(now-metricAt)/metricFrames;
+      Object.assign(metrics,renderer.info.memory,{drawCalls:renderer.info.render.calls});
+      $('device-stats').textContent=`${metrics.fps} FPS · 読込 ${(metrics.loadMs/1000).toFixed(1)}秒`;
+      metricAt=now;metricFrames=0;
+    }
+  }
   if(battle&&playing&&!paused&&battle.phase==='fight'&&!movie.active) {
     acc=Math.min(.10,acc+delta);let steps=0;
     while(acc>=FIXED&&steps<5){
-      battle.tick(input());for(let i=0;i<2;i++)syncActor(actors[i],battle.fighters[i]);
+      if(checking){battle.time=75*FPS;if(!battle.fighters[0].action)battle.fighters[0].super=100;}
+      if(checking)battle.tick(input(),{});else battle.tick(input());for(let i=0;i<2;i++)syncActor(actors[i],battle.fighters[i]);
       syncProjectiles();vfx();animateFX();acc-=FIXED;steps++;
       if(movie.active||battle.phase!=='fight')break;
     }
@@ -880,4 +912,4 @@ $('drive-costs').textContent=`咆哮：ドライブ${DRIVE.roarCost}消費　ギ
 resize();requestAnimationFrame(render);
 window.mamoken3d={get battle(){return battle;},get actors(){return actors;},
   get cinematic(){return {active:movie.active,data:movie.data,elapsed:authoredMovie?.elapsed??movie.elapsed};},
-  startMatch,showSelection,ROSTER,MODEL_ASSETS};
+  startMatch,showSelection,ROSTER,MODEL_ASSETS,get diagnostics(){return {...metrics,checking};}};

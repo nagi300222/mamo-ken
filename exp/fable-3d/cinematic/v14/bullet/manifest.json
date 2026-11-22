@@ -7,7 +7,7 @@
       "contactSeconds": 0.25,
       "animationSources": {
         "attacker": {
-          "glb": "bullet_v14.glb",
+          "glb": "bullet_animations.glb",
           "clip": "s1_v14"
         }
       },
@@ -26,7 +26,7 @@
       "contactSeconds": 0.11666666666666667,
       "animationSources": {
         "attacker": {
-          "glb": "bullet_v14.glb",
+          "glb": "bullet_animations.glb",
           "clip": "s2_v14"
         }
       },
@@ -45,7 +45,7 @@
       "contactSeconds": 0.31666666666666665,
       "animationSources": {
         "attacker": {
-          "glb": "bullet_v14.glb",
+          "glb": "bullet_animations.glb",
           "clip": "sp_tail_whip"
         }
       },
@@ -98,7 +98,7 @@
       },
       "animationSources": {
         "attacker": {
-          "glb": "bullet_v14.glb",
+          "glb": "bullet_animations.glb",
           "motions": "bullet/bullet_v14_motions.json",
           "clip": "cin_bullet_atk"
         },
@@ -2156,39 +2156,39 @@
   ],
   "reactions": [
     {
-      "glb": "bullet_v14.glb",
+      "glb": "bullet_animations.glb",
       "clip": "cinv_moguzo"
     },
     {
-      "glb": "bullet_v14.glb",
+      "glb": "bullet_animations.glb",
       "clip": "cinv_godan"
     },
     {
-      "glb": "bullet_v14.glb",
+      "glb": "bullet_animations.glb",
       "clip": "cinv_chirka"
     },
     {
-      "glb": "bullet_v14.glb",
+      "glb": "bullet_animations.glb",
       "clip": "cinv_pisuke"
     },
     {
-      "glb": "bullet_v14.glb",
+      "glb": "bullet_animations.glb",
       "clip": "cinv_hakuma"
     },
     {
-      "glb": "bullet_v14.glb",
+      "glb": "bullet_animations.glb",
       "clip": "cinv_takimaru"
     },
     {
-      "glb": "bullet_v14.glb",
+      "glb": "bullet_animations.glb",
       "clip": "cinv_yomikage"
     },
     {
-      "glb": "bullet_v14.glb",
+      "glb": "bullet_animations.glb",
       "clip": "cinv_bullet"
     },
     {
-      "glb": "bullet_v14.glb",
+      "glb": "bullet_animations.glb",
       "clip": "cinv_dark_moguzo"
     }
   ]

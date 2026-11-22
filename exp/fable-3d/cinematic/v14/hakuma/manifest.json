@@ -7,7 +7,7 @@
       "contactSeconds": 0.15,
       "animationSources": {
         "attacker": {
-          "glb": "hakuma_v14.glb",
+          "glb": "hakuma_animations.glb",
           "clip": "s1_v14"
         }
       },
@@ -26,7 +26,7 @@
       "contactSeconds": 0.1,
       "animationSources": {
         "attacker": {
-          "glb": "hakuma_v14.glb",
+          "glb": "hakuma_animations.glb",
           "clip": "s2_v14"
         }
       },
@@ -45,7 +45,7 @@
       "contactSeconds": 0.16666666666666666,
       "animationSources": {
         "attacker": {
-          "glb": "hakuma_v14.glb",
+          "glb": "hakuma_animations.glb",
           "clip": "s3_v14"
         }
       },
@@ -99,7 +99,7 @@
       },
       "animationSources": {
         "attacker": {
-          "glb": "hakuma_v14.glb",
+          "glb": "hakuma_animations.glb",
           "motions": "hakuma/hakuma_v14_motions.json",
           "clip": "cin_hakuma_atk"
         },
@@ -2424,39 +2424,39 @@
   ],
   "reactions": [
     {
-      "glb": "hakuma_v14.glb",
+      "glb": "hakuma_animations.glb",
       "clip": "cinv_moguzo"
     },
     {
-      "glb": "hakuma_v14.glb",
+      "glb": "hakuma_animations.glb",
       "clip": "cinv_godan"
     },
     {
-      "glb": "hakuma_v14.glb",
+      "glb": "hakuma_animations.glb",
       "clip": "cinv_chirka"
     },
     {
-      "glb": "hakuma_v14.glb",
+      "glb": "hakuma_animations.glb",
       "clip": "cinv_pisuke"
     },
     {
-      "glb": "hakuma_v14.glb",
+      "glb": "hakuma_animations.glb",
       "clip": "cinv_hakuma"
     },
     {
-      "glb": "hakuma_v14.glb",
+      "glb": "hakuma_animations.glb",
       "clip": "cinv_takimaru"
     },
     {
-      "glb": "hakuma_v14.glb",
+      "glb": "hakuma_animations.glb",
       "clip": "cinv_yomikage"
     },
     {
-      "glb": "hakuma_v14.glb",
+      "glb": "hakuma_animations.glb",
       "clip": "cinv_bullet"
     },
     {
-      "glb": "hakuma_v14.glb",
+      "glb": "hakuma_animations.glb",
       "clip": "cinv_dark_moguzo"
     }
   ]

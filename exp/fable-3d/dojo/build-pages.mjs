@@ -2,6 +2,7 @@ import { cp, copyFile, mkdir, readdir, rm, stat, writeFile, access } from 'node:
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { validateShowtimeBuild } from './validate-showtime-build.mjs';
+await import('./pack-showtime.mjs');
 const ROOT = path.resolve(fileURLToPath(new URL('..',import.meta.url)));
 const PROJECT = path.resolve(ROOT,'../..'); // repo root: exp/fable-3d -> ../.. 
 const OUTPUT = path.join(ROOT,'_pages');

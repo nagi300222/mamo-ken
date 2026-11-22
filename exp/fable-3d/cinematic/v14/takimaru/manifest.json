@@ -7,7 +7,7 @@
       "contactSeconds": 0.3,
       "animationSources": {
         "attacker": {
-          "glb": "takimaru_v14.glb",
+          "glb": "takimaru_animations.glb",
           "clip": "s1_v14"
         }
       },
@@ -26,7 +26,7 @@
       "contactSeconds": 0.13333333333333333,
       "animationSources": {
         "attacker": {
-          "glb": "takimaru_v14.glb",
+          "glb": "takimaru_animations.glb",
           "clip": "s2_v14"
         }
       },
@@ -45,7 +45,7 @@
       "contactSeconds": 0.11666666666666667,
       "animationSources": {
         "attacker": {
-          "glb": "takimaru_v14.glb",
+          "glb": "takimaru_animations.glb",
           "clip": "s3_v14"
         }
       },
@@ -98,7 +98,7 @@
       },
       "animationSources": {
         "attacker": {
-          "glb": "takimaru_v14.glb",
+          "glb": "takimaru_animations.glb",
           "motions": "takimaru/takimaru_v14_motions.json",
           "clip": "cin_takimaru_atk"
         },
@@ -2707,39 +2707,39 @@
   ],
   "reactions": [
     {
-      "glb": "takimaru_v14.glb",
+      "glb": "takimaru_animations.glb",
       "clip": "cinv_moguzo"
     },
     {
-      "glb": "takimaru_v14.glb",
+      "glb": "takimaru_animations.glb",
       "clip": "cinv_godan"
     },
     {
-      "glb": "takimaru_v14.glb",
+      "glb": "takimaru_animations.glb",
       "clip": "cinv_chirka"
     },
     {
-      "glb": "takimaru_v14.glb",
+      "glb": "takimaru_animations.glb",
       "clip": "cinv_pisuke"
     },
     {
-      "glb": "takimaru_v14.glb",
+      "glb": "takimaru_animations.glb",
       "clip": "cinv_hakuma"
     },
     {
-      "glb": "takimaru_v14.glb",
+      "glb": "takimaru_animations.glb",
       "clip": "cinv_takimaru"
     },
     {
-      "glb": "takimaru_v14.glb",
+      "glb": "takimaru_animations.glb",
       "clip": "cinv_yomikage"
     },
     {
-      "glb": "takimaru_v14.glb",
+      "glb": "takimaru_animations.glb",
       "clip": "cinv_bullet"
     },
     {
-      "glb": "takimaru_v14.glb",
+      "glb": "takimaru_animations.glb",
       "clip": "cinv_dark_moguzo"
     }
   ]
