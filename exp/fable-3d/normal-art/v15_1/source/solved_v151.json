@@ -1,0 +1,2099 @@
+{
+ "moguzo": {
+  "metrics": {
+   "jab": 0.387,
+   "head": 0.439,
+   "leg": 0.179,
+   "tail": 0.218
+  },
+  "moves": {
+   "crouch_weak": {
+    "gesture": "lowPalmStep",
+    "label": "踏み込む低い掌（右）",
+    "contact": 0.36,
+    "power": 0.95,
+    "g": {
+     "chest": [
+      0,
+      8,
+      -36
+     ],
+     "upperarmr": [
+      0,
+      -1,
+      -19
+     ],
+     "forearmr": [
+      7,
+      -1,
+      -16
+     ],
+     "pawr": [
+      -2,
+      0,
+      1
+     ]
+    },
+    "tipAt": [
+     -0.032,
+     0.2,
+     0.429
+    ],
+    "target": [
+     -0.03,
+     0.2,
+     0.433
+    ],
+    "cost": 0.00054,
+    "head": [
+     0.03,
+     0.16,
+     0.31
+    ]
+   },
+   "air_heavy": {
+    "gesture": "overheadHeel",
+    "label": "前足の大きな踵落とし",
+    "contact": 0.46,
+    "power": 1.16,
+    "g": {
+     "pelvis": [
+      13,
+      7,
+      -12
+     ],
+     "chest": [
+      44,
+      -9,
+      -5
+     ],
+     "thighr": [
+      -26,
+      1,
+      -52
+     ],
+     "shinr": [
+      -56,
+      -7,
+      -6
+     ],
+     "footr": [
+      -16,
+      3,
+      -13
+     ],
+     "thighl": [
+      -14,
+      -25,
+      -2
+     ],
+     "upperarml": [
+      20,
+      0,
+      0
+     ],
+     "upperarmr": [
+      20,
+      0,
+      0
+     ],
+     "$mute": [
+      "shoulderl",
+      "shoulderfixl",
+      "upperarml",
+      "forearml",
+      "forearmtwistl",
+      "wristl",
+      "pawl",
+      "shoulderr",
+      "shoulderfixr",
+      "upperarmr",
+      "forearmr",
+      "forearmtwistr",
+      "wristr",
+      "pawr"
+     ]
+    },
+    "tipAt": [
+     -0.046,
+     0.073,
+     0.215
+    ],
+    "target": [
+     -0.04,
+     0.06,
+     0.224
+    ],
+    "cost": 0.00342,
+    "head": [
+     0,
+     0.09,
+     0.17
+    ]
+   }
+  }
+ },
+ "pisuke": {
+  "metrics": {
+   "jab": 0.371,
+   "head": 0.492,
+   "leg": 0.21,
+   "tail": 0.207
+  },
+  "moves": {
+   "crouch_weak": {
+    "gesture": "shinSnapL",
+    "label": "低空からの素早い脛蹴り",
+    "contact": 0.32,
+    "power": 0.97,
+    "g": {
+     "pelvis": [
+      -19,
+      -4,
+      16
+     ],
+     "chest": [
+      -13,
+      1,
+      -6
+     ],
+     "thighl": [
+      -41,
+      -3,
+      13
+     ],
+     "shinl": [
+      -46,
+      -20,
+      14
+     ],
+     "footl": [
+      22,
+      10,
+      37
+     ],
+     "$mute": [
+      "shoulderr",
+      "shoulderfixr",
+      "upperarmr",
+      "forearmr",
+      "forearmtwistr",
+      "wristr",
+      "pawr"
+     ]
+    },
+    "tipAt": [
+     0.033,
+     0.079,
+     0.303
+    ],
+    "target": [
+     0.03,
+     0.07,
+     0.315
+    ],
+    "cost": 0.0016,
+    "head": [
+     -0.17,
+     0.33,
+     0.25
+    ]
+   },
+   "crouch_heavy": {
+    "gesture": "lowSpinKick",
+    "label": "低姿勢の旋回蹴り",
+    "contact": 0.4,
+    "power": 1.2,
+    "g": {
+     "pelvis": [
+      0,
+      0,
+      1
+     ],
+     "chest": [
+      -21,
+      -2,
+      1
+     ],
+     "thighr": [
+      0,
+      -9,
+      0
+     ],
+     "shinr": [
+      -3,
+      8,
+      0
+     ],
+     "footr": [
+      8,
+      1,
+      0
+     ]
+    },
+    "tipAt": [
+     -0.019,
+     0.06,
+     0.364
+    ],
+    "target": [
+     -0.02,
+     0.06,
+     0.368
+    ],
+    "cost": 0.00008,
+    "head": [
+     0.08,
+     0.34,
+     0.31
+    ]
+   }
+  }
+ },
+ "godan": {
+  "metrics": {
+   "jab": 0.48,
+   "head": 0.487,
+   "leg": 0.185,
+   "tail": 0.245
+  },
+  "moves": {
+   "stand_weak": {
+    "gesture": "shortBodyR",
+    "label": "踏み込み短い重拳",
+    "contact": 0.4,
+    "power": 1.03,
+    "g": {
+     "pelvis": [
+      30,
+      -5,
+      -8
+     ],
+     "chest": [
+      -4,
+      2,
+      -79
+     ],
+     "upperarmr": [
+      8,
+      20,
+      15
+     ],
+     "forearmr": [
+      16,
+      0,
+      12
+     ],
+     "pawr": [
+      -1,
+      0,
+      -2
+     ],
+     "upperarml": [
+      -3,
+      9,
+      -8
+     ],
+     "$move": [
+      -0.01,
+      0,
+      0.09
+     ],
+     "$mute": [
+      "shoulderl",
+      "shoulderfixl",
+      "upperarml",
+      "forearml",
+      "forearmtwistl",
+      "wristl",
+      "pawl"
+     ]
+    },
+    "tipAt": [
+     -0.025,
+     0.304,
+     0.469
+    ],
+    "target": [
+     -0.02,
+     0.302,
+     0.471
+    ],
+    "cost": 0.00289,
+    "head": [
+     0.03,
+     0.1,
+     0.33
+    ]
+   },
+   "crouch_weak": {
+    "gesture": "sideElbowL",
+    "label": "低く重心を落とす肘",
+    "contact": 0.43,
+    "power": 1.02,
+    "g": {
+     "chest": [
+      35,
+      46,
+      51
+     ],
+     "upperarml": [
+      6,
+      3,
+      29
+     ],
+     "forearml": [
+      -60,
+      0,
+      0
+     ],
+     "$mute": [
+      "shoulderr",
+      "shoulderfixr",
+      "upperarmr",
+      "forearmr",
+      "forearmtwistr",
+      "wristr",
+      "pawr"
+     ]
+    },
+    "tipAt": [
+     0.029,
+     0.25,
+     0.377
+    ],
+    "target": [
+     0.02,
+     0.25,
+     0.375
+    ],
+    "cost": 0.00126,
+    "head": [
+     -0.16,
+     0.08,
+     0.22
+    ]
+   },
+   "air_weak": {
+    "gesture": "descendingForearm",
+    "label": "腕を地面へ振り下ろす",
+    "contact": 0.46,
+    "power": 1.02,
+    "g": {
+     "chest": [
+      38,
+      -19,
+      -94
+     ],
+     "upperarmr": [
+      17,
+      25,
+      19
+     ],
+     "forearmr": [
+      55,
+      -11,
+      -31
+     ],
+     "pawr": [
+      13,
+      -1,
+      -4
+     ],
+     "$mute": [
+      "shoulderl",
+      "shoulderfixl",
+      "upperarml",
+      "forearml",
+      "forearmtwistl",
+      "wristl",
+      "pawl"
+     ]
+    },
+    "tipAt": [
+     -0.036,
+     0.207,
+     0.444
+    ],
+    "target": [
+     -0.03,
+     0.204,
+     0.456
+    ],
+    "cost": 0.0039,
+    "head": [
+     0.06,
+     0.15,
+     0.1
+    ]
+   }
+  }
+ },
+ "hakuma": {
+  "metrics": {
+   "jab": 0.437,
+   "head": 0.51,
+   "leg": 0.2,
+   "tail": 0.267
+  },
+  "moves": {
+   "crouch_heavy": {
+    "gesture": "risingPalmL",
+    "label": "腰から持ち上げる張り手",
+    "contact": 0.44,
+    "power": 1.17,
+    "g": {
+     "pelvis": [
+      16,
+      1,
+      2
+     ],
+     "chest": [
+      -44,
+      -54,
+      27
+     ],
+     "upperarml": [
+      39,
+      -9,
+      -7
+     ],
+     "forearml": [
+      9,
+      3,
+      13
+     ],
+     "pawl": [
+      -6,
+      -1,
+      5
+     ],
+     "$move": [
+      0.02,
+      0.04,
+      0.05
+     ],
+     "$mute": [
+      "thighr",
+      "thighfixr",
+      "shinr",
+      "ankler",
+      "footr",
+      "toer"
+     ]
+    },
+    "tipAt": [
+     0.028,
+     0.395,
+     0.471
+    ],
+    "target": [
+     0.02,
+     0.398,
+     0.472
+    ],
+    "cost": 0.00329,
+    "head": [
+     -0.07,
+     0.45,
+     0.27
+    ]
+   },
+   "air_weak": {
+    "gesture": "shortPalmR",
+    "label": "体の正面を守る短い掌",
+    "contact": 0.41,
+    "power": 0.95,
+    "g": {
+     "chest": [
+      24,
+      5,
+      -90
+     ],
+     "upperarmr": [
+      13,
+      20,
+      25
+     ],
+     "forearmr": [
+      34,
+      -1,
+      -26
+     ],
+     "pawr": [
+      12,
+      -1,
+      -5
+     ],
+     "$mute": [
+      "shoulderl",
+      "shoulderfixl",
+      "upperarml",
+      "forearml",
+      "forearmtwistl",
+      "wristl",
+      "pawl"
+     ]
+    },
+    "tipAt": [
+     -0.026,
+     0.359,
+     0.393
+    ],
+    "target": [
+     -0.02,
+     0.357,
+     0.402
+    ],
+    "cost": 0.00322,
+    "head": [
+     0.09,
+     0.25,
+     0.19
+    ]
+   }
+  }
+ },
+ "chirka": {
+  "metrics": {
+   "jab": 0.371,
+   "head": 0.413,
+   "leg": 0.17,
+   "tail": 0.237
+  },
+  "moves": {
+   "stand_heavy": {
+    "gesture": "diagonalClawR",
+    "label": "体を反らし右爪を斜めに振る",
+    "contact": 0.44,
+    "power": 1.19,
+    "g": {
+     "pelvis": [
+      14,
+      -20,
+      -14
+     ],
+     "chest": [
+      49,
+      -6,
+      -43
+     ],
+     "upperarmr": [
+      7,
+      15,
+      19
+     ],
+     "forearmr": [
+      24,
+      -6,
+      -36
+     ],
+     "pawr": [
+      4,
+      -1,
+      -7
+     ],
+     "$move": [
+      0.07,
+      0.04,
+      0.05
+     ],
+     "$mute": [
+      "shoulderr",
+      "shoulderfixr",
+      "upperarmr",
+      "forearmr",
+      "forearmtwistr",
+      "wristr",
+      "pawr"
+     ]
+    },
+    "tipAt": [
+     0.04,
+     0.331,
+     0.416
+    ],
+    "target": [
+     0.04,
+     0.33,
+     0.426
+    ],
+    "cost": 0.00359,
+    "head": [
+     0.12,
+     0.29,
+     0.27
+    ]
+   },
+   "crouch_weak": {
+    "gesture": "lowClawSlide",
+    "label": "低く滑り込む爪",
+    "contact": 0.35,
+    "power": 0.96,
+    "g": {
+     "pelvis": [
+      19,
+      -4,
+      -5
+     ],
+     "chest": [
+      -16,
+      4,
+      -33
+     ],
+     "upperarmr": [
+      1,
+      1,
+      -8
+     ],
+     "forearmr": [
+      9,
+      -5,
+      -12
+     ],
+     "pawr": [
+      1,
+      0,
+      2
+     ],
+     "$move": [
+      -0.01,
+      0.02,
+      0.03
+     ]
+    },
+    "tipAt": [
+     -0.004,
+     0.134,
+     0.407
+    ],
+    "target": [
+     0,
+     0.13,
+     0.415
+    ],
+    "cost": 0.00073,
+    "head": [
+     -0.04,
+     0.07,
+     0.34
+    ]
+   },
+   "crouch_heavy": {
+    "gesture": "crossClawPair",
+    "label": "交差させる紫の両爪",
+    "contact": 0.5,
+    "power": 1.2,
+    "g": {
+     "pelvis": [
+      30,
+      -1,
+      0
+     ],
+     "chest": [
+      -60,
+      -19,
+      -14
+     ],
+     "upperarmr": [
+      -1,
+      3,
+      36
+     ],
+     "forearmr": [
+      17,
+      -1,
+      -22
+     ],
+     "pawr": [
+      -4,
+      0,
+      -6
+     ],
+     "upperarml": [
+      23,
+      -15,
+      -38
+     ],
+     "forearml": [
+      10,
+      -6,
+      6
+     ],
+     "pawl": [
+      -22,
+      2,
+      -3
+     ],
+     "head": [
+      -10,
+      18,
+      0
+     ],
+     "$move": [
+      0.01,
+      0.04,
+      0.07
+     ],
+     "$mute": [
+      "thighr",
+      "thighfixr",
+      "shinr",
+      "ankler",
+      "footr",
+      "toer",
+      "shoulderr",
+      "shoulderfixr",
+      "upperarmr",
+      "forearmr",
+      "forearmtwistr",
+      "wristr",
+      "pawr"
+     ]
+    },
+    "tipAt": [
+     0.018,
+     0.296,
+     0.415
+    ],
+    "target": [
+     0.03,
+     0.3,
+     0.415
+    ],
+    "cost": 0.0039,
+    "head": [
+     0.13,
+     0.29,
+     0.36
+    ]
+   },
+   "air_weak": {
+    "gesture": "airFeintClaw",
+    "label": "上体を捻って振り向き爪",
+    "contact": 0.37,
+    "power": 0.97,
+    "g": {
+     "chest": [
+      19,
+      -13,
+      -8
+     ],
+     "upperarml": [
+      37,
+      -12,
+      -17
+     ],
+     "forearml": [
+      41,
+      18,
+      64
+     ],
+     "pawl": [
+      13,
+      4,
+      15
+     ],
+     "head": [
+      0,
+      -20,
+      0
+     ],
+     "$mute": [
+      "shoulderl",
+      "shoulderfixl",
+      "upperarml",
+      "forearml",
+      "forearmtwistl",
+      "wristl",
+      "pawl"
+     ]
+    },
+    "tipAt": [
+     -0.027,
+     0.24,
+     0.338
+    ],
+    "target": [
+     -0.03,
+     0.227,
+     0.378
+    ],
+    "cost": 0.00438,
+    "head": [
+     -0.13,
+     0.34,
+     0.15
+    ]
+   },
+   "air_heavy": {
+    "gesture": "pounceClawPair",
+    "label": "爪を構えて跳びかかる",
+    "contact": 0.52,
+    "power": 1.27,
+    "g": {
+     "pelvis": [
+      39,
+      -6,
+      -5
+     ],
+     "chest": [
+      -3,
+      15,
+      9
+     ],
+     "upperarml": [
+      -16,
+      4,
+      -53
+     ],
+     "forearml": [
+      17,
+      7,
+      51
+     ],
+     "pawl": [
+      9,
+      4,
+      13
+     ],
+     "upperarmr": [
+      -8,
+      -4,
+      45
+     ],
+     "forearmr": [
+      19,
+      -11,
+      -62
+     ],
+     "pawr": [
+      -3,
+      0,
+      -10
+     ],
+     "thighl": [
+      -26,
+      0,
+      -34
+     ],
+     "thighr": [
+      -31,
+      -8,
+      18
+     ],
+     "$mute": [
+      "shoulderl",
+      "shoulderfixl",
+      "upperarml",
+      "forearml",
+      "forearmtwistl",
+      "wristl",
+      "pawl",
+      "shoulderr",
+      "shoulderfixr",
+      "upperarmr",
+      "forearmr",
+      "forearmtwistr",
+      "wristr",
+      "pawr"
+     ]
+    },
+    "tipAt": [
+     0.058,
+     0.236,
+     0.388
+    ],
+    "target": [
+     0.05,
+     0.227,
+     0.415
+    ],
+    "cost": 0.00699,
+    "head": [
+     0.02,
+     0.25,
+     0.27
+    ]
+   }
+  }
+ },
+ "takimaru": {
+  "metrics": {
+   "jab": 0.504,
+   "head": 0.552,
+   "leg": 0.225,
+   "tail": 0.254
+  },
+  "moves": {
+   "crouch_weak": {
+    "gesture": "lowReachAnkle",
+    "label": "足首近くへの手伸ばし",
+    "contact": 0.37,
+    "power": 0.91,
+    "g": {
+     "pelvis": [
+      28,
+      -2,
+      -6
+     ],
+     "chest": [
+      0,
+      16,
+      -17
+     ],
+     "upperarmr": [
+      8,
+      -5,
+      0
+     ],
+     "forearmr": [
+      -1,
+      1,
+      -3
+     ],
+     "pawr": [
+      -3,
+      0,
+      0
+     ],
+     "$move": [
+      -0.01,
+      0.01,
+      0.07
+     ]
+    },
+    "tipAt": [
+     -0.022,
+     0.091,
+     0.579
+    ],
+    "target": [
+     -0.02,
+     0.09,
+     0.579
+    ],
+    "cost": 0.00063,
+    "head": [
+     0.02,
+     0.15,
+     0.48
+    ]
+   },
+   "crouch_heavy": {
+    "gesture": "risingGrabPair",
+    "label": "しゃがみから両手で引き起こす",
+    "contact": 0.5,
+    "power": 1.2,
+    "g": {
+     "pelvis": [
+      22,
+      3,
+      3
+     ],
+     "chest": [
+      -59,
+      -28,
+      -7
+     ],
+     "upperarml": [
+      24,
+      -8,
+      -21
+     ],
+     "forearml": [
+      0,
+      -2,
+      3
+     ],
+     "pawl": [
+      -11,
+      0,
+      2
+     ],
+     "upperarmr": [
+      -16,
+      -7,
+      23
+     ],
+     "forearmr": [
+      6,
+      -1,
+      -27
+     ],
+     "pawr": [
+      9,
+      -1,
+      -7
+     ],
+     "$move": [
+      0.02,
+      0.05,
+      0.07
+     ],
+     "$mute": [
+      "thighr",
+      "thighfixr",
+      "shinr",
+      "ankler",
+      "footr",
+      "toer",
+      "shoulderr",
+      "shoulderfixr",
+      "upperarmr",
+      "forearmr",
+      "forearmtwistr",
+      "wristr",
+      "pawr"
+     ]
+    },
+    "tipAt": [
+     0.081,
+     0.403,
+     0.522
+    ],
+    "target": [
+     0.07,
+     0.398,
+     0.529
+    ],
+    "cost": 0.00241,
+    "head": [
+     0.09,
+     0.52,
+     0.36
+    ]
+   }
+  }
+ },
+ "yomikage": {
+  "metrics": {
+   "jab": 0.377,
+   "head": 0.479,
+   "leg": 0.197,
+   "tail": 0.231
+  },
+  "moves": {
+   "crouch_weak": {
+    "gesture": "shadowSliceLow",
+    "label": "相手の足元を狙う低い斬り",
+    "contact": 0.33,
+    "power": 0.95,
+    "g": {
+     "pelvis": [
+      31,
+      -9,
+      -12
+     ],
+     "chest": [
+      -5,
+      2,
+      -30
+     ],
+     "upperarmr": [
+      16,
+      7,
+      -1
+     ],
+     "forearmr": [
+      6,
+      -4,
+      -8
+     ],
+     "pawr": [
+      -4,
+      0,
+      3
+     ],
+     "head": [
+      9,
+      -4,
+      0
+     ],
+     "$move": [
+      -0.02,
+      0.02,
+      0.07
+     ]
+    },
+    "tipAt": [
+     0.018,
+     0.098,
+     0.425
+    ],
+    "target": [
+     0.02,
+     0.1,
+     0.422
+    ],
+    "cost": 0.00103,
+    "head": [
+     -0.09,
+     0.02,
+     0.38
+    ]
+   },
+   "crouch_heavy": {
+    "gesture": "sweepingBladeR",
+    "label": "地面すれすれの逆刃",
+    "contact": 0.45,
+    "power": 1.2,
+    "g": {
+     "pelvis": [
+      36,
+      -1,
+      -2
+     ],
+     "chest": [
+      21,
+      -33,
+      -24
+     ],
+     "upperarmr": [
+      4,
+      21,
+      14
+     ],
+     "forearmr": [
+      18,
+      3,
+      1
+     ],
+     "pawr": [
+      4,
+      0,
+      0
+     ],
+     "head": [
+      -5,
+      2,
+      0
+     ],
+     "$move": [
+      0.02,
+      0.05,
+      0.09
+     ],
+     "$mute": [
+      "thighr",
+      "thighfixr",
+      "shinr",
+      "ankler",
+      "footr",
+      "toer",
+      "shoulderr",
+      "shoulderfixr",
+      "upperarmr",
+      "forearmr",
+      "forearmtwistr",
+      "wristr",
+      "pawr"
+     ]
+    },
+    "tipAt": [
+     0.056,
+     0.072,
+     0.458
+    ],
+    "target": [
+     0.06,
+     0.07,
+     0.46
+    ],
+    "cost": 0.00156,
+    "head": [
+     0.17,
+     0.01,
+     0.34
+    ]
+   },
+   "air_heavy": {
+    "gesture": "descendingBladeR",
+    "label": "背面から斜め下へ手刀",
+    "contact": 0.45,
+    "power": 1.23,
+    "g": {
+     "pelvis": [
+      3,
+      0,
+      -3
+     ],
+     "chest": [
+      27,
+      -5,
+      -95
+     ],
+     "upperarmr": [
+      49,
+      11,
+      14
+     ],
+     "forearmr": [
+      64,
+      -20,
+      -37
+     ],
+     "pawr": [
+      9,
+      -2,
+      -7
+     ],
+     "upperarml": [
+      25,
+      0,
+      0
+     ],
+     "$mute": [
+      "shoulderl",
+      "shoulderfixl",
+      "upperarml",
+      "forearml",
+      "forearmtwistl",
+      "wristl",
+      "pawl",
+      "shoulderr",
+      "shoulderfixr",
+      "upperarmr",
+      "forearmr",
+      "forearmtwistr",
+      "wristr",
+      "pawr"
+     ]
+    },
+    "tipAt": [
+     0.011,
+     0.172,
+     0.397
+    ],
+    "target": [
+     0.02,
+     0.168,
+     0.415
+    ],
+    "cost": 0.0053,
+    "head": [
+     0.12,
+     0.24,
+     0.06
+    ]
+   }
+  }
+ },
+ "bullet": {
+  "metrics": {
+   "jab": 0.388,
+   "head": 0.455,
+   "leg": 0.184,
+   "tail": 0.643
+  },
+  "moves": {
+   "stand_weak": {
+    "gesture": "headFlick",
+    "label": "顔と肩で小さく突く",
+    "contact": 0.35,
+    "power": 0.92,
+    "g": {
+     "pelvis": [
+      25,
+      -4,
+      -8
+     ],
+     "spine": [
+      -10,
+      12,
+      -27
+     ],
+     "chest": [
+      18,
+      7,
+      -15
+     ],
+     "neck": [
+      -26,
+      0,
+      16
+     ],
+     "head": [
+      -37,
+      3,
+      0
+     ],
+     "upperarml": [
+      29,
+      19,
+      3
+     ],
+     "upperarmr": [
+      30,
+      0,
+      0
+     ],
+     "$move": [
+      -0.02,
+      0.02,
+      0.08
+     ],
+     "$mute": [
+      "shoulderl",
+      "shoulderfixl",
+      "upperarml",
+      "forearml",
+      "forearmtwistl",
+      "wristl",
+      "pawl"
+     ]
+    },
+    "tipAt": [
+     -0.003,
+     0.381,
+     0.382
+    ],
+    "target": [
+     0,
+     0.391,
+     0.388
+    ],
+    "cost": 0.00173,
+    "head": [
+     0,
+     0.38,
+     0.38
+    ]
+   },
+   "stand_heavy": {
+    "gesture": "tailWideRight",
+    "label": "重い尾を大きく横薙ぎ",
+    "contact": 0.46,
+    "power": 1.26,
+    "g": {
+     "pelvis": [
+      -34,
+      121,
+      7
+     ],
+     "tail01": [
+      11,
+      -11,
+      -4
+     ],
+     "tail02": [
+      -1,
+      5,
+      12
+     ],
+     "tail03": [
+      0,
+      6,
+      12
+     ],
+     "tail04": [
+      -12,
+      3,
+      6
+     ],
+     "tail05": [
+      -6,
+      2,
+      3
+     ],
+     "tail06": [
+      -2,
+      0,
+      5
+     ],
+     "chest": [
+      0,
+      -40,
+      0
+     ],
+     "head": [
+      0,
+      -40,
+      0
+     ],
+     "$mute": [
+      "shoulderr",
+      "shoulderfixr",
+      "upperarmr",
+      "forearmr",
+      "forearmtwistr",
+      "wristr",
+      "pawr",
+      "shoulderl",
+      "shoulderfixl",
+      "upperarml",
+      "forearml",
+      "forearmtwistl",
+      "wristl",
+      "pawl"
+     ]
+    },
+    "tipAt": [
+     -0.022,
+     0.259,
+     0.631
+    ],
+    "target": [
+     -0.02,
+     0.26,
+     0.63
+    ],
+    "cost": 0.00093,
+    "head": [
+     0.1,
+     0.43,
+     -0.02
+    ]
+   },
+   "crouch_weak": {
+    "gesture": "tailTipSnap",
+    "label": "低姿勢の尾先の一閃",
+    "contact": 0.36,
+    "power": 0.93,
+    "g": {
+     "pelvis": [
+      -76,
+      -180,
+      -20
+     ],
+     "tail01": [
+      -39,
+      28,
+      -34
+     ],
+     "tail02": [
+      -5,
+      1,
+      -8
+     ],
+     "tail03": [
+      12,
+      -2,
+      4
+     ],
+     "tail04": [
+      23,
+      0,
+      12
+     ],
+     "tail05": [
+      31,
+      4,
+      13
+     ],
+     "tail06": [
+      16,
+      2,
+      8
+     ],
+     "chest": [
+      -17,
+      53,
+      -19
+     ],
+     "head": [
+      8,
+      45,
+      1
+     ],
+     "$mute": [
+      "shoulderr",
+      "shoulderfixr",
+      "upperarmr",
+      "forearmr",
+      "forearmtwistr",
+      "wristr",
+      "pawr"
+     ]
+    },
+    "tipAt": [
+     0.024,
+     0.093,
+     0.516
+    ],
+    "target": [
+     0.02,
+     0.09,
+     0.514
+    ],
+    "cost": 0.00399,
+    "head": [
+     -0.14,
+     0.36,
+     -0.13
+    ]
+   },
+   "crouch_heavy": {
+    "gesture": "tailGroundSmash",
+    "label": "しっぽを床に叩き付ける",
+    "contact": 0.5,
+    "power": 1.27,
+    "g": {
+     "pelvis": [
+      -47,
+      139,
+      -1
+     ],
+     "tail01": [
+      7,
+      24,
+      -20
+     ],
+     "tail02": [
+      -10,
+      11,
+      -13
+     ],
+     "tail03": [
+      4,
+      0,
+      -6
+     ],
+     "tail04": [
+      -14,
+      -10,
+      17
+     ],
+     "tail05": [
+      -7,
+      1,
+      20
+     ],
+     "tail06": [
+      2,
+      -1,
+      7
+     ],
+     "chest": [
+      -12,
+      -65,
+      12
+     ],
+     "head": [
+      -7,
+      -45,
+      -1
+     ],
+     "$mute": [
+      "thighr",
+      "thighfixr",
+      "shinr",
+      "ankler",
+      "footr",
+      "toer",
+      "shoulderr",
+      "shoulderfixr",
+      "upperarmr",
+      "forearmr",
+      "forearmtwistr",
+      "wristr",
+      "pawr"
+     ]
+    },
+    "tipAt": [
+     -0.011,
+     0.032,
+     0.621
+    ],
+    "target": [
+     0,
+     0.04,
+     0.63
+    ],
+    "cost": 0.00236,
+    "head": [
+     0.02,
+     0.41,
+     -0.08
+    ]
+   },
+   "air_weak": {
+    "gesture": "airTailFlick",
+    "label": "空中で尾を短く振る",
+    "contact": 0.34,
+    "power": 0.93,
+    "g": {
+     "pelvis": [
+      -24,
+      -174,
+      -32
+     ],
+     "tail01": [
+      1,
+      23,
+      -1
+     ],
+     "tail02": [
+      2,
+      0,
+      0
+     ],
+     "tail03": [
+      -2,
+      1,
+      0
+     ],
+     "tail04": [
+      0,
+      1,
+      0
+     ],
+     "tail05": [
+      -9,
+      1,
+      0
+     ],
+     "tail06": [
+      -5,
+      0,
+      -6
+     ],
+     "chest": [
+      -2,
+      72,
+      -4
+     ],
+     "head": [
+      3,
+      45,
+      2
+     ],
+     "$mute": [
+      "shoulderl",
+      "shoulderfixl",
+      "upperarml",
+      "forearml",
+      "forearmtwistl",
+      "wristl",
+      "pawl"
+     ]
+    },
+    "tipAt": [
+     0.023,
+     0.298,
+     0.524
+    ],
+    "target": [
+     0.02,
+     0.3,
+     0.527
+    ],
+    "cost": 0.00108,
+    "head": [
+     -0.23,
+     0.39,
+     -0.03
+    ]
+   },
+   "air_heavy": {
+    "gesture": "airTailLash",
+    "label": "前転して尾全体を叩き下ろす",
+    "contact": 0.48,
+    "power": 1.23,
+    "g": {
+     "pelvis": [
+      141,
+      -25,
+      9
+     ],
+     "tail01": [
+      0,
+      3,
+      -1
+     ],
+     "tail02": [
+      0,
+      18,
+      -6
+     ],
+     "tail03": [
+      2,
+      3,
+      2
+     ],
+     "tail04": [
+      -1,
+      0,
+      0
+     ],
+     "tail05": [
+      0,
+      1,
+      0
+     ],
+     "tail06": [
+      0,
+      0,
+      -1
+     ],
+     "chest": [
+      36,
+      -6,
+      -7
+     ],
+     "head": [
+      17,
+      -3,
+      0
+     ],
+     "thighl": [
+      40,
+      0,
+      0
+     ],
+     "thighr": [
+      40,
+      0,
+      0
+     ],
+     "$mute": [
+      "shoulderl",
+      "shoulderfixl",
+      "upperarml",
+      "forearml",
+      "forearmtwistl",
+      "wristl",
+      "pawl",
+      "shoulderr",
+      "shoulderfixr",
+      "upperarmr",
+      "forearmr",
+      "forearmtwistr",
+      "wristr",
+      "pawr"
+     ]
+    },
+    "tipAt": [
+     -0.001,
+     0.021,
+     0.501
+    ],
+    "target": [
+     0,
+     0.02,
+     0.501
+    ],
+    "cost": 0.00045,
+    "head": [
+     -0.01,
+     0.21,
+     -0.19
+    ]
+   }
+  }
+ },
+ "dark_moguzo": {
+  "metrics": {
+   "jab": 0.394,
+   "head": 0.425,
+   "leg": 0.171,
+   "tail": 0.218
+  },
+  "moves": {
+   "stand_weak": {
+    "gesture": "reverseJabR",
+    "label": "闇に紛れた右拳",
+    "contact": 0.28,
+    "power": 0.94,
+    "g": {
+     "pelvis": [
+      4,
+      4,
+      -5
+     ],
+     "chest": [
+      -39,
+      110,
+      -1
+     ],
+     "upperarmr": [
+      -28,
+      -19,
+      28
+     ],
+     "forearmr": [
+      62,
+      -30,
+      -75
+     ],
+     "pawr": [
+      -1,
+      0,
+      -12
+     ],
+     "$mute": [
+      "shoulderl",
+      "shoulderfixl",
+      "upperarml",
+      "forearml",
+      "forearmtwistl",
+      "wristl",
+      "pawl"
+     ]
+    },
+    "tipAt": [
+     -0.012,
+     0.324,
+     0.346
+    ],
+    "target": [
+     0.02,
+     0.315,
+     0.394
+    ],
+    "cost": 0.01281,
+    "head": [
+     0.1,
+     0.4,
+     0.07
+    ]
+   },
+   "crouch_weak": {
+    "gesture": "lowBackfist",
+    "label": "返す拳で低く打つ",
+    "contact": 0.3,
+    "power": 0.93,
+    "g": {
+     "pelvis": [
+      20,
+      -3,
+      -6
+     ],
+     "chest": [
+      -6,
+      19,
+      -31
+     ],
+     "upperarmr": [
+      15,
+      3,
+      4
+     ],
+     "forearmr": [
+      1,
+      -2,
+      -12
+     ],
+     "pawr": [
+      -2,
+      0,
+      1
+     ],
+     "$move": [
+      -0.01,
+      0.02,
+      0.04
+     ]
+    },
+    "tipAt": [
+     0.025,
+     0.169,
+     0.426
+    ],
+    "target": [
+     0.03,
+     0.17,
+     0.433
+    ],
+    "cost": 0.00077,
+    "head": [
+     0,
+     0.09,
+     0.36
+    ]
+   },
+   "crouch_heavy": {
+    "gesture": "shadowRushPunch",
+    "label": "低い姿勢から鋭い重拳",
+    "contact": 0.43,
+    "power": 1.23,
+    "g": {
+     "pelvis": [
+      21,
+      1,
+      0
+     ],
+     "chest": [
+      -8,
+      -34,
+      -19
+     ],
+     "upperarmr": [
+      5,
+      19,
+      7
+     ],
+     "forearmr": [
+      26,
+      -6,
+      -20
+     ],
+     "pawr": [
+      6,
+      0,
+      -3
+     ],
+     "$move": [
+      0.01,
+      0.04,
+      0.05
+     ],
+     "$mute": [
+      "thighr",
+      "thighfixr",
+      "shinr",
+      "ankler",
+      "footr",
+      "toer",
+      "shoulderr",
+      "shoulderfixr",
+      "upperarmr",
+      "forearmr",
+      "forearmtwistr",
+      "wristr",
+      "pawr"
+     ]
+    },
+    "tipAt": [
+     0.024,
+     0.271,
+     0.487
+    ],
+    "target": [
+     0.02,
+     0.27,
+     0.492
+    ],
+    "cost": 0.00098,
+    "head": [
+     0.18,
+     0.17,
+     0.36
+    ]
+   },
+   "air_weak": {
+    "gesture": "airSpikeFistR",
+    "label": "闇の拳を斜め下へ",
+    "contact": 0.32,
+    "power": 0.95,
+    "g": {
+     "chest": [
+      47,
+      3,
+      -110
+     ],
+     "upperarmr": [
+      31,
+      24,
+      51
+     ],
+     "forearmr": [
+      38,
+      -20,
+      -64
+     ],
+     "pawr": [
+      1,
+      -1,
+      -11
+     ],
+     "$mute": [
+      "shoulderl",
+      "shoulderfixl",
+      "upperarml",
+      "forearml",
+      "forearmtwistl",
+      "wristl",
+      "pawl"
+     ]
+    },
+    "tipAt": [
+     -0.023,
+     0.184,
+     0.364
+    ],
+    "target": [
+     0,
+     0.17,
+     0.394
+    ],
+    "cost": 0.00738,
+    "head": [
+     0.08,
+     0.2,
+     0.09
+    ]
+   },
+   "air_heavy": {
+    "gesture": "darkSpinKick",
+    "label": "空中で体ごと回る高速蹴り",
+    "contact": 0.47,
+    "power": 1.2,
+    "g": {
+     "pelvis": [
+      -44,
+      26,
+      -8
+     ],
+     "chest": [
+      -13,
+      -31,
+      0
+     ],
+     "thighr": [
+      -28,
+      13,
+      -74
+     ],
+     "shinr": [
+      -37,
+      0,
+      -20
+     ],
+     "footr": [
+      -18,
+      0,
+      -6
+     ],
+     "thighl": [
+      -2,
+      -4,
+      15
+     ],
+     "$mute": [
+      "shoulderl",
+      "shoulderfixl",
+      "upperarml",
+      "forearml",
+      "forearmtwistl",
+      "wristl",
+      "pawl",
+      "shoulderr",
+      "shoulderfixr",
+      "upperarmr",
+      "forearmr",
+      "forearmtwistr",
+      "wristr",
+      "pawr"
+     ]
+    },
+    "tipAt": [
+     -0.007,
+     0.166,
+     0.223
+    ],
+    "target": [
+     0,
+     0.16,
+     0.23
+    ],
+    "cost": 0.00318,
+    "head": [
+     0.03,
+     0.48,
+     0.1
+    ]
+   }
+  }
+ }
+}

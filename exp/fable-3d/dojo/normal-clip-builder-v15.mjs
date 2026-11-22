@@ -1,7 +1,7 @@
 // Data-driven offline remix of existing GLB normal clips into 54 new actual 3D rig clips.
 // Output is an animation-only glTF 2.0 binary loaded by GLTFLoader, not a flat image.
 import {animationBundle} from './animation-bundle.mjs';
-import {MOTIFS,GESTURES,NORMAL_SOURCE,NORMAL_SLOTS} from './normal-motifs-v15.js';
+import {MOTIFS as DEFAULT_MOTIFS,GESTURES as DEFAULT_GESTURES,NORMAL_SOURCE,NORMAL_SLOTS} from './normal-motifs-v15.js';
 const TYPES=Object.freeze({SCALAR:1,VEC2:2,VEC3:3,VEC4:4,MAT4:16});
 const RAD=Math.PI/180;
 function quatAngles(rx,ry,rz){
@@ -17,11 +17,15 @@ function quatMul(u,v){
  return q.map(n=>n/m);
 }
 const canonical=n=>String(n||'').replace(/[^a-z0-9]/gi,'').toLowerCase();
-function poseAt(source,character,poseId,phase){
+function poseAt(source,character,poseId,MOTIFS,GESTURES){
  const spec=MOTIFS[character]?.[poseId];if(!spec)throw Error('no normal art for '+character+'/'+poseId);
  const pose=GESTURES[spec.gesture];if(!pose)throw Error('no normal gesture '+spec.gesture);
  const key=canonical(source);
- return {spec,angles:pose[key]||Object.entries(pose).find(([k])=>key.endsWith(k))?.[1]||null};
+ let angles=pose[key]||Object.entries(pose).find(([k])=>k[0]!=='$'&&key.endsWith(k))?.[1]||null;
+ const fix=/^thighfix([lr])$/.exec(key);
+ if(fix&&pose['thigh'+fix[1]])angles=pose['thigh'+fix[1]].map(n=>n/2);
+ const muted=(pose.$mute||[]).includes(key);
+ return {spec,angles:angles||(muted?[0,0,0]:null),muted};
 }
 function envelope(f,contact){
  const t=Math.max(0,Math.min(1,f)),hit=Math.max(.25,Math.min(.75,contact));
@@ -55,10 +59,16 @@ export function decodeNormalPack(bytes){
  const bin=Buffer.from(bytes.subarray(28+jlen)); // mutable standalone
  return {doc,bin};
 }
-export function buildNormalPack(originalGlb,id){
+// v15.1: opts={motifs,gestures,bundle,only} lets the art tools rebuild a single move from edited data.
+// Gesture extras (v15.1, animation-only):
+//   $mute:[bone,...]  hold that bone at the source clip's first key (the inherited punch/kick no longer leads)
+//   $move:[x,y,z]     pelvis translation in metres (x=fighter's left, y=up, z=forward), same envelope as rotations
+//   thigh_fix.* follows half of the authored thigh rotation, exactly like the original rig bake.
+export function buildNormalPack(originalGlb,id,opts={}){
+ const MOTIFS=opts.motifs||DEFAULT_MOTIFS,GESTURES=opts.gestures||DEFAULT_GESTURES;
  if(!MOTIFS[id])throw Error('unknown normal character '+id);
  const picked=new Set(Object.values(NORMAL_SOURCE));
- const {doc,bin:packedBin}=decodeNormalPack(animationBundle(originalGlb,picked));
+ const {doc,bin:packedBin}=decodeNormalPack(opts.bundle||animationBundle(originalGlb,picked));
  let bin=packedBin;
  // Insert authored keyframes on previously stationary bones as well as modifying
  // existing source tracks. Otherwise an air kick can have only two keyed limbs.
@@ -76,13 +86,26 @@ export function buildNormalPack(originalGlb,id){
  for(const [slot,source] of Object.entries(NORMAL_SOURCE)){
    const animation=doc.animations.find(a=>a.name===source);
    if(!animation)throw Error('source normal missing '+id+'/'+source);
+   if(opts.only&&opts.only!==slot){animation.name='v15_'+slot;continue;}
    const spec=MOTIFS[id][slot];if(!spec)throw Error('missing normal spec '+id+'/'+slot);
    let touched=0,changedSamples=0;
    const editedBones=new Set();
    for(const channel of animation.channels){
-     if(channel.target.path!=='rotation')continue;
      const boneName=doc.nodes[channel.target.node]?.name||'';
-     const {angles}=poseAt(boneName,id,slot);
+     if(channel.target.path==='translation'&&canonical(boneName)==='pelvis'&&GESTURES[spec.gesture].$move){
+       const mv=GESTURES[spec.gesture].$move,sm=animation.samplers[channel.sampler];
+       const tt=accessorView(doc,bin,sm.input),vv=accessorView(doc,bin,sm.output);
+       if(tt&&vv&&vv.dim===3&&(sm.interpolation||'LINEAR')!=='CUBICSPLINE'){
+         const t0=getNum(tt,0,0),sp=Math.max(.0001,getNum(tt,tt.count-1,0)-t0);
+         for(let i=0;i<vv.count;i++){
+           const amount=spec.power*envelope((getNum(tt,i,0)-t0)/sp,spec.contact);
+           for(let k=0;k<3;k++)setNum(vv,i,k,getNum(vv,i,k)+mv[k]*amount);
+         }
+       }
+       continue;
+     }
+     if(channel.target.path!=='rotation')continue;
+     const {angles,muted}=poseAt(boneName,id,slot,MOTIFS,GESTURES);
      if(!angles)continue;
      const sampler=animation.samplers[channel.sampler];
      if((sampler.interpolation||'LINEAR')==='CUBICSPLINE')continue;
@@ -93,8 +116,8 @@ export function buildNormalPack(originalGlb,id){
      for(let i=0;i<quats.count;i++){
        const time=(getNum(times,i,0)-min)/span;
        const amount=spec.power*envelope(time,spec.contact);
-       if(Math.abs(amount)<.0001)continue;
-       const q0=[0,1,2,3].map(k=>getNum(quats,i,k));
+       if(Math.abs(amount)<.0001&&!muted)continue;
+       const q0=[0,1,2,3].map(k=>getNum(quats,muted?0:i,k));
        const delta=quatAngles(angles[0]*amount,angles[1]*amount,angles[2]*amount);
        const q=quatMul(q0,delta);
        for(let k=0;k<4;k++)setNum(quats,i,k,q[k]);
@@ -112,6 +135,7 @@ export function buildNormalPack(originalGlb,id){
    const timeline=keys.map(t=>Number((t*duration).toFixed(5)));
    const authoredPose=GESTURES[spec.gesture];
    for(const [name,angles] of Object.entries(authoredPose)){
+     if(name[0]==='$')continue;
      const nodeIndex=doc.nodes.findIndex(node=>{
        const nodeName=canonical(node.name);
        return nodeName===name||nodeName.endsWith(name);
