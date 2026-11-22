@@ -136,6 +136,10 @@ try{
   await page.waitForFunction(()=>document.querySelectorAll('#charge-pips-0 .filled').length===3,undefined,{timeout:4000});
   assert.equal(await page.locator('#hud-side-0').getAttribute('data-element'),'amber');
   await page.screenshot({path:evidence+'/bullet-after-movie.png'});
+  await page.locator('.av-settings-toggle').tap();
+  await page.locator('#fx-toggle').tap();
+  assert.equal(await page.locator('#fx-toggle').getAttribute('aria-pressed'),'true');
+  await page.locator('.av-settings-toggle').tap();
   const index=await page.evaluate(async()=>{
     const result=await fetch('../cinematic/v14/manifest.json');
     if(!result.ok)throw new Error('Showtime index HTTP '+result.status);

@@ -63,19 +63,21 @@ export function createCinePlayer(THREE, { scene, camera, manifest, actors, mirro
     const piv = (tr.pivotHeight ?? .45) * (s.a.height || .6);
     const r = s.a.root; r.position.set(0, 0, 0); r.rotation.set(0, 0, 0); r.scale.setScalar(k.scale); r.updateMatrix();
     // M = T(pos) · T(0,piv,0) · Rz · Rx · T(0,-piv,0) · Ry   （回転軸はステージ基準。宙返りは rotZ）
-    const m = new THREE.Matrix4().makeTranslation(sx * k.pos[0], k.pos[1], k.pos[2]);
+    const m = new THREE.Matrix4().makeTranslation(sx * k.pos[0], k.pos[1], sx * k.pos[2]);
     m.multiply(new THREE.Matrix4().makeTranslation(0, piv, 0));
     m.multiply(new THREE.Matrix4().makeRotationZ(sx * THREE.MathUtils.degToRad(k.rotZ)));
-    m.multiply(new THREE.Matrix4().makeRotationX(THREE.MathUtils.degToRad(k.rotX)));
+    m.multiply(new THREE.Matrix4().makeRotationX(sx * THREE.MathUtils.degToRad(k.rotX)));
     m.multiply(new THREE.Matrix4().makeTranslation(0, -piv, 0));
-    m.multiply(new THREE.Matrix4().makeRotationY(sx * THREE.MathUtils.degToRad(k.rotY)));
+    m.multiply(new THREE.Matrix4().makeRotationY(THREE.MathUtils.degToRad(k.rotY + (mirror ? 180 : 0))));
     m.multiply(new THREE.Matrix4().makeScale(k.scale, k.scale, k.scale));
     r.matrixAutoUpdate = false; r.matrix.copy(m); r.updateMatrixWorld(true);
     const vis = tr.visible; r.visible = !vis || vis.some(([a, b]) => t >= a && t < b);
     if (tr.opacity) s.a.setOpacity?.(evalKeys(tr.opacity, t, { v: 1 }).v);
   }
   // ---- 位置の基準（anchor） ----
-  // 'stage' | '<actor>' | '<actor>.root' | '<actor>.<bone>'。offset はステージ軸（mirror 時は x 反転）。
+  // 'stage' | '<actor>' | '<actor>.root' | '<actor>.<bone>'。offset はステージ軸。
+  // mirror（攻撃側が -X 向きで当てたとき）は、ムービー全体を Y 軸まわりに 180 度回す: x と z の符号を反転、rotY に 180 を足し、rotZ・rotX の符号を反転。
+  // 鏡映ではなく回転なので、役者の「カメラへ体を開く」演技もカメラの roll もそのまま成り立つ（カメラは舞台の反対側に回る）。
   function anchorPos(ref, out) {
     const off = ref.offset || [0, 0, 0]; const [an, bn] = (ref.anchor || 'stage').split('.');
     out.set(0, 0, 0);
@@ -85,7 +87,7 @@ export function createCinePlayer(THREE, { scene, camera, manifest, actors, mirro
       else { const b = s.bones[BONE_ALIAS[bn] || bn];
         if (b) b.getWorldPosition(out); else { out.setFromMatrixPosition(s.a.root.matrixWorld); out.y += (FALLBACK_HEIGHT[bn] ?? .5) * (s.a.height || .6); } }
     }
-    out.x += sx * off[0]; out.y += off[1]; out.z += off[2]; return out;
+    out.x += sx * off[0]; out.y += off[1]; out.z += sx * off[2]; return out;
   }
   // ---- カメラ ----
   function shotAt(t) { return M.shots.find(s => t >= s.start && t < s.end) || M.shots.at(-1); }
@@ -110,7 +112,7 @@ export function createCinePlayer(THREE, { scene, camera, manifest, actors, mirro
     const [dx, dy, dr] = reduced ? [0, 0, 0] : applyShake(t);
     camera.position.copy(camState.pos); camera.up.set(0, 1, 0); camera.lookAt(camState.look);
     camera.translateX(dx); camera.translateY(dy);
-    camera.rotateZ(THREE.MathUtils.degToRad(sx * camState.roll + dr));
+    camera.rotateZ(THREE.MathUtils.degToRad(camState.roll + dr));
     if (camera.isPerspectiveCamera) { camera.fov = camState.fov; camera.updateProjectionMatrix(); }
     return shot;
   }
