@@ -169,7 +169,12 @@ export function createShowtimeLoader(base) {
       const start = spec.inGameStartClip?.clip ? await loadClip({
         ...spec.animationSources.attacker, clip: spec.inGameStartClip.clip
       }, url) : null;
-      return [moveId, { spec, attacker, target, start }];
+      const trackNames = new Set(Object.entries(spec.actorTracks ?? {})
+        .filter(([role]) => role !== 'target')
+        .flatMap(([,track]) => track.segments.map(segment => segment.clip)));
+      const clips = Object.fromEntries(await Promise.all([...trackNames].map(async clip =>
+        [clip, await loadClip({ ...spec.animationSources.attacker, clip }, url)])));
+      return [moveId, { spec, attacker, target, start, clips }];
     }));
     return { ...Object.fromEntries(entries), reactions };
   };
