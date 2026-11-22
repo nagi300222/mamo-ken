@@ -12,6 +12,7 @@ on:
       - feat/mamoken-y-illusion-v09
       - feat/mamoken-codex-audio-v10
       - feat/mamoken-astra-hud-v11
+      - feat/mamoken-super-hit-cinematic-v13
   pull_request:
     branches:
       - feat/mamoken-3d-mobile-fight
