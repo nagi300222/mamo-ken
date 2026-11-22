@@ -870,5 +870,5 @@ makeChooser();
 $('drive-costs').textContent=`咆哮：ドライブ${DRIVE.roarCost}消費　ギュイーン：${DRIVE.gyuiinCost}消費`;
 resize();requestAnimationFrame(render);
 window.mamoken3d={get battle(){return battle;},get actors(){return actors;},
-  get cinematic(){return {active:movie.active,data:movie.data,elapsed:movie.elapsed};},
+  get cinematic(){return {active:movie.active,data:movie.data,elapsed:authoredMovie?.elapsed??movie.elapsed};},
   startMatch,showSelection,ROSTER,MODEL_ASSETS};

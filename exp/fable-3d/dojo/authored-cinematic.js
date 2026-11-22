@@ -10,6 +10,7 @@ function makePerformer(actor, clip, x, rotation) {
   const action = mixer.clipAction(clip);
   action.setLoop(THREE.LoopOnce, 1);
   action.clampWhenFinished = true;
+  action.setEffectiveTimeScale(0);
   action.play();
   const turn = new THREE.Group();
   turn.position.x = x;
@@ -19,7 +20,7 @@ function makePerformer(actor, clip, x, rotation) {
   const bones = new Map();
   model.traverse(node => { if (node.isBone) bones.set(node.name, node); });
   return {
-    turn, origin, bones, mixer, clip,
+    turn, origin, bones, mixer, action, clip,
     dispose() {
       mixer.stopAllAction();
       mixer.uncacheRoot(model);
@@ -67,7 +68,8 @@ export function createAuthoredCinematic({ entry, attacker, target, background, l
       const seconds = elapsed / duration * spec.durationSeconds;
       const { shot, blend } = sampleCinematic(spec, seconds);
       for (const performer of Object.values(performers)) {
-        performer.mixer.setTime(Math.min(seconds, performer.clip.duration));
+        performer.action.time = Math.min(seconds, performer.clip.duration);
+        performer.mixer.update(0);
         performer.turn.updateMatrixWorld(true);
         performer.turn.getWorldPosition(performer.origin);
       }
@@ -112,6 +114,7 @@ export function createAuthoredCinematic({ entry, attacker, target, background, l
 
     return {
       update,
+      get elapsed() { return elapsed; },
       dispose() {
         if (disposed) return;
         disposed = true;
