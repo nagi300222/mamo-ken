@@ -103,7 +103,7 @@ test('ジャンプで相手を越え、左右の向きと後ろガードが入�
   assert.ok(g.fighters[0].x>g.fighters[1].x,'crossed opponent');
   assert.equal(g.fighters[0].facing,-1,'facing switches after crossing');
 });
-test('スマホ配置：左右の操作エリアと中央対戦画面を分離、5ボタンのみ',()=>{
+test('スマホ配置：左右の操作エリアと中央対戦画面を分離、右6ボタン',()=>{
   const html=readFileSync(new URL('./index.html',import.meta.url),'utf8');
   const css=readFileSync(new URL('./style.css',import.meta.url),'utf8');
   assert.match(html,/id="combat-layout"/);
@@ -111,7 +111,7 @@ test('スマホ配置：左右の操作エリアと中央対戦画面を分離�
   assert.ok(html.indexOf('id="buttons-rail"')>html.indexOf('</section>'));
   const rightRail=html.split('id="buttons-rail"')[1]||'';
   const buttons=[...rightRail.matchAll(/data-control="([^"]+)"/g)].map(m=>m[1]);
-  assert.deepEqual(buttons,['weak','strong','throw','roar','gyuiin']);
+  assert.deepEqual(buttons,['weak','strong','throw','gyuiin','special','ultimateButton']);
   const stickRail=html.split('id="stick-rail"')[1].split('id="arena"')[0];
   assert.deepEqual([...stickRail.matchAll(/data-control="([^"]+)"/g)].map(m=>m[1]),['stepBack','stepForward']);
   assert.ok(!html.includes('data-control="special1"'));

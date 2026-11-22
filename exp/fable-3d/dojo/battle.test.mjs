@@ -137,10 +137,12 @@ test('距離外の攻撃をハイパーアーマーで受けてもギュイー�
   g._damage(attacker,p,{kind:'strike',id:'test',damage:100,level:'mid'},.3);
   assert.equal(p.stun,0);assert.equal(p.action?.kind,'clinch');
 });
-test('UIの必殺専用ボタンはなく、5操作になっている',async()=>{
+test('v0.7は右6操作（方向+必殺と奥義専用）で左スティックも保持',async()=>{
   const {readFile}=await import('node:fs/promises');
   const html=await readFile(new URL('./index.html',import.meta.url),'utf8');
-  for(const k of ['weak','strong','throw','roar','gyuiin'])assert.ok(html.includes('data-control="'+k+'"'));
-  for(const k of ['special1','special2','special3','super'])assert.ok(!html.includes('data-control="'+k+'"'));
+  const rail=html.split('id="buttons-rail"')[1];
+  const buttons=[...rail.matchAll(/data-control="([^"]+)"/g)].map(x=>x[1]);
+  assert.deepEqual(buttons,['weak','strong','throw','gyuiin','special','ultimateButton']);
+  for(const k of ['roar','special1','special2','special3','super'])assert.ok(!buttons.includes(k));
   assert.ok(html.includes('id="joystick"'));
 });

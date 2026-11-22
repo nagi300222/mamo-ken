@@ -34,6 +34,16 @@ function matches(history,pattern,now,maxAge) {
   return a.every((e,i)=>e.dir===pattern[i]&&
     (i===0||e.frame-(a[i-1].heldThrough??a[i-1].frame)<=17));
 }
+// v0.7 PoC: held direction and one special press determine the move.
+// Down wins over diagonals, up wins over forward, back behaves as neutral.
+// This intentionally keeps the older motion-command recognizer for comparison.
+export function specialButtonSlot(input={},facing=1) {
+  if(input.down)return 'roar';
+  if(input.up)return 's2';
+  const forward=facing===-1?input.left:input.right;
+  if(forward)return 's3';
+  return 's1';
+}
 export function readCommand(history,button,frame,superReady=false) {
   if(button!=='weak'&&button!=='strong')return null;
   if(SHORTCUTS.super.some(p=>matches(history,p,frame,WINDOWS.super))) {

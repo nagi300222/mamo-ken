@@ -48,8 +48,9 @@ button.primary:active{transform:translateY(1px)}
 .attack.weak{grid-column:2;grid-row:1;background:linear-gradient(135deg,#55a2aa,#2e566e)}
 .attack.heavy{grid-column:3;grid-row:1;background:linear-gradient(135deg,#d3945e,#8c473b)}
 .attack.throw{grid-column:1;grid-row:2;background:linear-gradient(135deg,#7188b6,#354d7b);font-size:clamp(12px,2.5vh,19px)}
-.attack.roar{grid-column:2;grid-row:2;background:linear-gradient(135deg,#dcba7d,#906442);font-size:clamp(12px,2.5vh,19px)}
-.attack.gyuiin{grid-column:3;grid-row:2;background:linear-gradient(135deg,#aa85d3,#5b4d91);font-size:clamp(9px,2.05vh,14px);letter-spacing:-.04em}
+.attack.special{grid-column:2;grid-row:2;background:linear-gradient(135deg,#dcba7d,#906442);font-size:clamp(12px,2.5vh,19px)}
+.attack.gyuiin{grid-column:1;grid-row:2;background:linear-gradient(135deg,#aa85d3,#5b4d91);font-size:clamp(9px,2.05vh,14px);letter-spacing:-.04em}
+.attack.ultimateButton{grid-column:3;grid-row:2;background:linear-gradient(135deg,#e6a08a,#96344c);font-size:clamp(12px,2.5vh,19px)}
 .attack.held{filter:brightness(1.27);transform:translateY(3px);box-shadow:0 1px 0 #0c1725,0 0 13px #e7f1fd9d}
 .commands-help{position:absolute;z-index:3;bottom:max(7px,env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);max-width:48vw;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#d9e1e7c0;font-size:clamp(8px,1.5vw,11px);text-align:center;background:#0f25348f;padding:4px 10px;border-radius:12px;pointer-events:none}
 .commands-help span{display:inline-block;white-space:nowrap}
@@ -120,8 +121,9 @@ button.primary:active{transform:translateY(1px)}
 #buttons-rail .attack.weak{grid-column:1;grid-row:1}
 #buttons-rail .attack.heavy{grid-column:2;grid-row:1}
 #buttons-rail .attack.throw{grid-column:3;grid-row:1}
-#buttons-rail .attack.roar{grid-column:1;grid-row:2}
-#buttons-rail .attack.gyuiin{grid-column:2/4;grid-row:2;justify-self:center}
+#buttons-rail .attack.gyuiin{grid-column:1;grid-row:2}
+#buttons-rail .attack.special{grid-column:2;grid-row:2}
+#buttons-rail .attack.ultimateButton{grid-column:3;grid-row:2}
 #buttons-rail .attack{width:var(--action-size);height:var(--action-size);min-width:42px;min-height:42px;font-size:clamp(11px,2.6vh,19px);border-radius:50%}
 #buttons-rail .attack.gyuiin{font-size:clamp(9px,1.9vh,13px)}
 #arena .commands-help{bottom:4px;width:max-content;max-width:95%;white-space:normal;font-size:clamp(8px,1.15vw,10px)}

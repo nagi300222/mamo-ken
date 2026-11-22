@@ -11,17 +11,19 @@
 <body>
 <main id="app">
   <header class="topbar">
-    <div class="brand"><span class="brand-mark">拳</span><div><strong>マモ拳 <span>3D</span></strong><small>山岳道場 · 対戦試作 v0.2</small></div></div>
+    <div class="brand"><span class="brand-mark">拳</span><div><strong>マモ拳 <span>3D</span></strong><small>山岳道場 · 対戦試作 v0.7</small></div></div>
     <div class="header-actions">
       <button class="ghost" popovertarget="commands-help">技表</button>
       <div id="commands-help" popover>
-        <strong>コマンド表</strong><small>右向き時 · 左向きは左右反転</small>
+        <strong>直感操作 v0.7</strong><small>前後は相手方向に自動反転</small>
         <dl>
-          <dt>波動</dt><dd>236　↓↘→ ＋ 弱／強</dd>
-          <dt>昇龍</dt><dd>623　→↓↘ ＋ 弱／強</dd>
-          <dt>竜巻</dt><dd>214　↓↙← ＋ 弱／強</dd>
-          <dt>奥義</dt><dd>236236　↓↘→↓↘→ ＋ 強<br>奥義ゲージ満タン時</dd>
+          <dt>基本必殺</dt><dd>必殺のみ／後ろ＋必殺（s1・236系）</dd>
+          <dt>対空必殺</dt><dd>↑＋必殺（s2・623系）</dd>
+          <dt>攻め必殺</dt><dd>前＋必殺（s3・214系）</dd>
+          <dt>咆哮</dt><dd>↓＋必殺（ドライブ35消費。斜め下も咆哮を優先）</dd>
+          <dt>奥義</dt><dd>奥義ボタン（奥義ゲージ100で発動）</dd>
         </dl>
+        <small>比較用：従来の236／623／214／236236＋弱・強コマンドも残している。</small>
         <p id="drive-costs"></p>
         <div class="ability-guide"><strong>選択キャラの固有能力</strong><p id="ability-guide"></p></div>
         <button class="ghost" popovertarget="commands-help" popovertargetaction="hide">閉じる</button>
@@ -92,16 +94,17 @@
           <button data-control="weak" class="attack weak" aria-label="弱攻撃">弱</button>
           <button data-control="strong" class="attack heavy" aria-label="強攻撃">強</button>
           <button data-control="throw" class="attack throw" aria-label="掴み">掴み</button>
-          <button data-control="roar" class="attack roar" aria-label="咆哮">咆哮<small id="roar-status"></small></button>
           <button data-control="gyuiin" class="attack gyuiin" aria-label="ギュイーン">ギュイーン<small id="gyuiin-status"></small></button>
+          <button data-control="special" class="attack special" aria-label="方向と組み合わせて必殺技、下で咆哮">必殺<small id="roar-status"></small></button>
+          <button data-control="ultimateButton" class="attack ultimateButton" aria-label="奥義">奥義<small id="ultimate-status"></small></button>
         </div>
 
       </div>
-      <span class="rail-sub">弱・強＋方向で必殺技</span>
+      <span class="rail-sub">↑対空／前特殊／↓咆哮 ＋必殺</span>
     </aside>
   </div>
   <footer class="footnote">
-    <span>PC：矢印・WASD移動／F前ステップ・R後ステップ／Z弱・X強・V掴・B咆哮・Nギュイーン</span>
+    <span>PC：矢印・WASD移動／F前ステップ・R後ステップ／Z弱・X強・V掴・Nギュイーン・B必殺・M奥義</span>
     <span id="loading-status">3Dモデル待機中</span>
   </footer>
 </main>

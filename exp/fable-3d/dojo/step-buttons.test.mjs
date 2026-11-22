@@ -29,7 +29,7 @@ test('スティック直下に「後ステップ」「前ステップ」を独�
   assert.equal((html.match(/id="stage"/g)||[]).length,1);
   const right=html.split('id="buttons-rail"')[1];
   assert.deepEqual([...right.matchAll(/data-control="([^"]+)"/g)].map(m=>m[1]),
-    ['weak','strong','throw','roar','gyuiin']);
+    ['weak','strong','throw','gyuiin','special','ultimateButton']);
 });
 test('左向き・右向き、スティックと反対方向を入力していても前後ステップは相手基準',()=>{
   for(const facing of [1,-1]){

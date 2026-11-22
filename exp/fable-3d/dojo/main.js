@@ -240,11 +240,25 @@ function driveStatus(move,p,op){
 function showDriveStatus(move){
   const status=driveStatus(move,...battle.fighters);
   const label=$(move+'-status');
+  // The special button remains usable even when its down+special roar lacks Drive.
+  // Do not mark the entire special button unavailable on roar cooldown.
+  if(move==='roar'){
+    const message='咆哮 '+status;
+    if(label.textContent!==message)label.textContent=message;
+    return;
+  }
   if(label.textContent===status)return;
   label.textContent=status;
   const button=label.parentElement;
   button.toggleAttribute('data-wait',status!=='発動可');
   button.setAttribute('aria-label',button.firstChild.textContent.trim()+'：'+status);
+}
+function showUltimateStatus(){
+  const p=battle.fighters[0],label=$('ultimate-status'),button=label.parentElement;
+  const ready=p.super>=100;
+  label.textContent=ready?'発動可':'ゲージ不足';
+  button.toggleAttribute('data-wait',!ready);
+  button.setAttribute('aria-label',ready?'奥義：発動可':'奥義：ゲージ不足');
 }
 function hud(){
   if(!battle)return;
@@ -261,6 +275,7 @@ function hud(){
   }
   showDriveStatus('roar');
   showDriveStatus('gyuiin');
+  showUltimateStatus();
   $('timer').textContent=String(Math.ceil(battle.time/FPS));
   $('round-message').textContent=battle.phase==='fight'?'ROUND 1':'FINISH';
   if(battle.phase==='ko'&&!finishShown) {
@@ -295,7 +310,7 @@ async function startMatch(){
     }
     $('selection').classList.add('hidden');$('game-over').classList.add('hidden');
     const fallback=actors.some(a=>['roar','gyuiin','clinch_hold','clinch_recoil'].some(name=>!a.actions[name]));
-    setLoading(fallback?'咆哮・ギュイーンは仮モーション':'操作：方向＋攻撃'); note('FIGHT！ コマンドは236・623・214・236236');
+    setLoading(fallback?'咆哮・ギュイーンは仮モーション':'操作：方向＋必殺／奥義専用'); note('FIGHT！ 必殺は方向＋ボタン／奥義は専用ボタン');
     clearInput();
     playing=true;lastFrame=0;acc=0;hud();
   }catch(e){clearActors();battle=null;console.error(e);note('起動エラー: '+e.message);setLoading('モデルの読込に失敗: '+e.message);$('selection').classList.remove('hidden');}
@@ -360,7 +375,7 @@ stick.addEventListener('contextmenu',e=>e.preventDefault());
 const keyMap={
   ArrowLeft:'left',ArrowRight:'right',ArrowUp:'up',ArrowDown:'down',
   KeyA:'left',KeyD:'right',KeyW:'up',KeyS:'down',
-  KeyZ:'weak',KeyX:'strong',KeyV:'throw',KeyB:'roar',KeyN:'gyuiin',KeyC:'dash',KeyF:'stepForward',KeyR:'stepBack'
+  KeyZ:'weak',KeyX:'strong',KeyV:'throw',KeyB:'special',KeyM:'ultimateButton',KeyN:'gyuiin',KeyC:'dash',KeyF:'stepForward',KeyR:'stepBack'
 };
 function clearInput(){
   if(analog.pointer!==null&&stick.hasPointerCapture(analog.pointer))stick.releasePointerCapture(analog.pointer);
