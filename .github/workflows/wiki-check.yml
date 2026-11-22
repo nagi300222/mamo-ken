@@ -57,4 +57,14 @@ jobs:
           name: mamoken-wiki-v151-browser
           path: ${{ runner.temp }}/wiki-v151-evidence/
           retention-days: 14
+      - name: Package v15.1 Wiki and locally playable sample movies
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mamoken-wiki-v151-website
+          path: |
+            wiki/
+            assets/roster3d/
+          retention-days: 14
+
 
