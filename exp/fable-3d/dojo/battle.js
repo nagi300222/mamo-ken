@@ -341,7 +341,7 @@ export class Battle {
   _guarding(t,m){
     if(['throw','clinch'].includes(m.kind)||t.y>.07||t.action||t.stun)return false;
     const back=t.input[facingBack(t)];
-    return back&&(m.level==='low'?t.input.down:m.level!=='overhead'||!t.input.down);
+    return back&&(m.level==='low'?t.input.down:!['overhead','air'].includes(m.level)||!t.input.down);
   }
   _absorbing(t,m){
     if(!t.action)return null;

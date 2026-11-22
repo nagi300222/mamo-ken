@@ -505,7 +505,7 @@ function clipChange(a,p){
   const total=p.action?p.action.startup+p.action.active+p.action.recovery:0;
   const rate=total&&info.frames&&!isLoop?Math.max(.55,Math.min(2.5,info.frames/total)):1;
   next.setEffectiveTimeScale(special?.action||originalNormal?0:rate);next.setEffectiveWeight(1);next.play();
-  if(prev&&prev!==next)next.crossFadeFrom(prev,.055,false);
+  if(prev&&prev!==next)next.crossFadeFrom(prev,originalNormal?Math.min(.055,Math.max(0,(p.action.startup-1)/FPS)):.055,false);
   a.current=next;a.currentName=name;a.key=key;a.specialCueIndex=0;
 }
 function syncActor(a,p){
