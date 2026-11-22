@@ -28,7 +28,7 @@ try {
   await page.waitForFunction(() => window.mamoken3d);
   const ids = await page.evaluate(() => Object.keys(mamoken3d.ROSTER));
   for (const [index, target] of ids.entries()) {
-    if (index) await page.locator('#result-select').tap();
+    if (index) await page.locator(index === 1 ? '#select-back' : '#result-select').tap();
     await page.locator('.fighter-card').nth(ids.indexOf(attacker)).tap();
     await page.locator('#cpu-choice').selectOption(target);
     await page.locator('#start').tap();
@@ -53,7 +53,12 @@ try {
     await page.screenshot({path: evidence + '/' + attacker + '-vs-' + target + '.png'});
     await page.waitForFunction(() => mamoken3d.cinematic.elapsed >= 7, undefined, {timeout:20000});
     assert.deepEqual(await snapshot(), frozen);
-    await page.locator('#game-over').waitFor({state:'visible',timeout:20000});
+    if(target === 'moguzo'){
+      await page.waitForFunction(() => !mamoken3d.cinematic.active,undefined,{timeout:20000});
+      assert.equal(await page.locator('#game-over').isVisible(),false,'grit survival should resume the match');
+    }else{
+      await page.locator('#game-over').waitFor({state:'visible',timeout:20000});
+    }
     assert.equal(await page.locator('#stage').evaluate(node => node.parentElement.id), 'arena');
     results.push({attacker,target,mirror,passed:true});
   }
