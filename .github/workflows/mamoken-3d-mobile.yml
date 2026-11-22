@@ -8,6 +8,7 @@ on:
       - feat/mamoken-balance-v05
       - feat/mamoken-step-buttons-v06
       - feat/mamoken-direction-special-v07
+      - feat/mamoken-showtime-v08
   pull_request:
     branches:
       - feat/mamoken-3d-mobile-fight
