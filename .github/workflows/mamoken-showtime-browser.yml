@@ -7,6 +7,7 @@ on:
       - feat/mamoken-super-hit-cinematic-v13
       - feat/mamoken-v14-codex-integration
       - feat/mamoken-v14-device-ready
+      - feat/mamoken-v15-combat-cancels
   pull_request:
     branches:
       - feat/mamoken-astra-hud-v11
