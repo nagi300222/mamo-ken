@@ -32,5 +32,5 @@ for k,im in enumerate(ims): S.paste(im,((k%cols)*w,(k//cols)*im.height))
 S.save('${path.resolve(arg('sheet'))}',quality=86); print('${path.resolve(arg('sheet'))}',S.size)`;
   console.log(execFileSync('python3', ['-c', py]).toString().trim()); }
 if (arg('mp4')) { fs.mkdirSync(path.dirname(path.resolve(arg('mp4'))), { recursive: true });
-  execFileSync('ffmpeg', ['-y', '-loglevel', 'error', '-framerate', String(fps), '-i', path.join(out, '%04d.png'), '-c:v', 'libx264', '-pix_fmt', 'yuv420p', '-crf', arg('crf', '23'), '-movflags', '+faststart', path.resolve(arg('mp4'))]); console.log('mp4', path.resolve(arg('mp4')), fs.statSync(path.resolve(arg('mp4'))).size); }
+  execFileSync('ffmpeg', ['-y', '-loglevel', 'error', '-framerate', String(fps), '-i', path.join(out, '%04d.png'), '-vf', 'pad=ceil(iw/2)*2:ceil(ih/2)*2', '-c:v', 'libx264', '-pix_fmt', 'yuv420p', '-crf', arg('crf', '23'), '-movflags', '+faststart', path.resolve(arg('mp4'))]); console.log('mp4', path.resolve(arg('mp4')), fs.statSync(path.resolve(arg('mp4'))).size); }
 fs.writeFileSync(path.join(out, 'render_log.json'), JSON.stringify({ movie, target, fps, size: [W, H], duration: dur, frames: times.length, errors: [...new Set(errors)] }, null, 1));

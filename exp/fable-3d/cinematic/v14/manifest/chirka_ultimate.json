@@ -16,7 +16,7 @@
   "y": "上",
   "z": "対戦カメラ側が +Z",
   "unit": "m（GLBの単位）",
-  "mirror": "攻撃側が左向き（-X向き）のときは x・rotY・rotZ・カメラ roll の符号を反転"
+  "mirror": "攻撃側が左向き（-X向き）のときはムービー全体を Y 軸まわりに 180 度回す（x・z の符号反転、rotY+180、rotZ・rotX の符号反転。カメラ roll はそのまま）"
  },
  "stage": {
   "contactDistance": 0.46,

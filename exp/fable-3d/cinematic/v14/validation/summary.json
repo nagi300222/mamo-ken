@@ -1,0 +1,265 @@
+{
+ "generated": "2026-11-22",
+ "all_pass": true,
+ "passed": 52,
+ "total": 52,
+ "checks": [
+  {
+   "name": "元GLBと一致（造形・骨格・テクスチャ・既存37クリップ）9体",
+   "pass": true,
+   "detail": "validation/glb_identity.json"
+  },
+  {
+   "name": "manifest 3本の形式・クリップ・骨・相手役9体ぶん",
+   "pass": true,
+   "detail": "manifest/*.json"
+  },
+  {
+   "name": "moguzo s1: クリップ長=総フレーム、発生・持続が balance.js と同じ",
+   "pass": true,
+   "detail": "s1_v14 35F / balance 13+2+20=35F"
+  },
+  {
+   "name": "moguzo s1: 現行の models.js chooseClip が新クリップを選ぶ",
+   "pass": true,
+   "detail": "s1_v14"
+  },
+  {
+   "name": "moguzo s2: クリップ長=総フレーム、発生・持続が balance.js と同じ",
+   "pass": true,
+   "detail": "s2_v14 40F / balance 6+8+26=40F"
+  },
+  {
+   "name": "moguzo s2: 現行の models.js chooseClip が新クリップを選ぶ",
+   "pass": true,
+   "detail": "s2_v14"
+  },
+  {
+   "name": "moguzo s3: クリップ長=総フレーム、発生・持続が balance.js と同じ",
+   "pass": true,
+   "detail": "s3_v14 36F / balance 12+5+19=36F"
+  },
+  {
+   "name": "moguzo s3: 現行の models.js chooseClip が新クリップを選ぶ",
+   "pass": true,
+   "detail": "s3_v14"
+  },
+  {
+   "name": "moguzo ultimate: クリップ長=総フレーム、発生・持続が balance.js と同じ",
+   "pass": true,
+   "detail": "ult_v14 50F / balance 8+10+32=50F"
+  },
+  {
+   "name": "moguzo ultimate: 現行の models.js chooseClip が新クリップを選ぶ",
+   "pass": true,
+   "detail": "ult_v14"
+  },
+  {
+   "name": "godan s1: クリップ長=総フレーム、発生・持続が balance.js と同じ",
+   "pass": true,
+   "detail": "s1_v14 54F / balance 21+5+28=54F"
+  },
+  {
+   "name": "godan s1: 現行の models.js chooseClip が新クリップを選ぶ",
+   "pass": true,
+   "detail": "s1_v14"
+  },
+  {
+   "name": "godan s2: クリップ長=総フレーム、発生・持続が balance.js と同じ",
+   "pass": true,
+   "detail": "s2_v14 49F / balance 11+7+31=49F"
+  },
+  {
+   "name": "godan s2: 現行の models.js chooseClip が新クリップを選ぶ",
+   "pass": true,
+   "detail": "s2_v14"
+  },
+  {
+   "name": "godan s3: クリップ長=総フレーム、発生・持続が balance.js と同じ",
+   "pass": true,
+   "detail": "s3_v14 57F / balance 18+7+32=57F"
+  },
+  {
+   "name": "godan s3: 現行の models.js chooseClip が新クリップを選ぶ",
+   "pass": true,
+   "detail": "s3_v14"
+  },
+  {
+   "name": "godan ultimate: クリップ長=総フレーム、発生・持続が balance.js と同じ",
+   "pass": true,
+   "detail": "ult_v14 57F / balance 10+9+38=57F"
+  },
+  {
+   "name": "godan ultimate: 現行の models.js chooseClip が新クリップを選ぶ",
+   "pass": true,
+   "detail": "ult_v14"
+  },
+  {
+   "name": "chirka s1: クリップ長=総フレーム、発生・持続が balance.js と同じ",
+   "pass": true,
+   "detail": "s1_v14 36F / balance 13+4+19=36F"
+  },
+  {
+   "name": "chirka s1: 現行の models.js chooseClip が新クリップを選ぶ",
+   "pass": true,
+   "detail": "s1_v14"
+  },
+  {
+   "name": "chirka s2: クリップ長=総フレーム、発生・持続が balance.js と同じ",
+   "pass": true,
+   "detail": "s2_v14 40F / balance 8+7+25=40F"
+  },
+  {
+   "name": "chirka s2: 現行の models.js chooseClip が新クリップを選ぶ",
+   "pass": true,
+   "detail": "s2_v14"
+  },
+  {
+   "name": "chirka s3: クリップ長=総フレーム、発生・持続が balance.js と同じ",
+   "pass": true,
+   "detail": "s3_v14 40F / balance 13+5+22=40F"
+  },
+  {
+   "name": "chirka s3: 現行の models.js chooseClip が新クリップを選ぶ",
+   "pass": true,
+   "detail": "s3_v14"
+  },
+  {
+   "name": "chirka ultimate: クリップ長=総フレーム、発生・持続が balance.js と同じ",
+   "pass": true,
+   "detail": "ult_v14 50F / balance 9+11+30=50F"
+  },
+  {
+   "name": "chirka ultimate: 現行の models.js chooseClip が新クリップを選ぶ",
+   "pass": true,
+   "detail": "ult_v14"
+  },
+  {
+   "name": "実ゲーム moguzo s1: s1_v14 が再生され、相手の残り体力が旧と同じ",
+   "pass": true,
+   "detail": "clip=s1_v14 hp 旧843 新843"
+  },
+  {
+   "name": "実ゲーム moguzo s2: s2_v14 が再生され、相手の残り体力が旧と同じ",
+   "pass": true,
+   "detail": "clip=s2_v14 hp 旧805 新805"
+  },
+  {
+   "name": "実ゲーム moguzo s3: s3_v14 が再生され、相手の残り体力が旧と同じ",
+   "pass": true,
+   "detail": "clip=s3_v14 hp 旧820 新820"
+  },
+  {
+   "name": "実ゲーム moguzo ultimate: ult_v14 が再生され、相手の残り体力が旧と同じ",
+   "pass": true,
+   "detail": "clip=ult_v14 hp 旧695 新695"
+  },
+  {
+   "name": "実ゲーム godan s1: s1_v14 が再生され、相手の残り体力が旧と同じ",
+   "pass": true,
+   "detail": "clip=s1_v14 hp 旧806 新806"
+  },
+  {
+   "name": "実ゲーム godan s2: s2_v14 が再生され、相手の残り体力が旧と同じ",
+   "pass": true,
+   "detail": "clip=s2_v14 hp 旧791 新791"
+  },
+  {
+   "name": "実ゲーム godan s3: s3_v14 が再生され、相手の残り体力が旧と同じ",
+   "pass": true,
+   "detail": "clip=s3_v14 hp 旧788 新788"
+  },
+  {
+   "name": "実ゲーム godan ultimate: ult_v14 が再生され、相手の残り体力が旧と同じ",
+   "pass": true,
+   "detail": "clip=ult_v14 hp 旧652 新652"
+  },
+  {
+   "name": "実ゲーム chirka s1: s1_v14 が再生され、相手の残り体力が旧と同じ",
+   "pass": true,
+   "detail": "clip=s1_v14 hp 旧837 新837"
+  },
+  {
+   "name": "実ゲーム chirka s2: s2_v14 が再生され、相手の残り体力が旧と同じ",
+   "pass": true,
+   "detail": "clip=s2_v14 hp 旧832 新832"
+  },
+  {
+   "name": "実ゲーム chirka s3: s3_v14 が再生され、相手の残り体力が旧と同じ",
+   "pass": true,
+   "detail": "clip=s3_v14 hp 旧834 新834"
+  },
+  {
+   "name": "実ゲーム chirka ultimate: ult_v14 が再生され、相手の残り体力が旧と同じ",
+   "pass": true,
+   "detail": "clip=ult_v14 hp 旧729 新729"
+  },
+  {
+   "name": "実ゲームで 36 技を撮影済み",
+   "pass": true,
+   "detail": "36 技"
+  },
+  {
+   "name": "moguzo ムービー: 9〜11秒・6〜10カット・カメラの型がすべて別",
+   "pass": true,
+   "detail": "10s / 8 カット"
+  },
+  {
+   "name": "moguzo ムービー: 相手役の移動キーが 8 以上（棒立ちでない）",
+   "pass": true,
+   "detail": "14 キー"
+  },
+  {
+   "name": "moguzo ムービー: 動くカメラ（2キー以上）のカットが過半",
+   "pass": true,
+   "detail": "4/4/2/4/3/3/3/3"
+  },
+  {
+   "name": "godan ムービー: 9〜11秒・6〜10カット・カメラの型がすべて別",
+   "pass": true,
+   "detail": "10.2s / 8 カット"
+  },
+  {
+   "name": "godan ムービー: 相手役の移動キーが 8 以上（棒立ちでない）",
+   "pass": true,
+   "detail": "17 キー"
+  },
+  {
+   "name": "godan ムービー: 動くカメラ（2キー以上）のカットが過半",
+   "pass": true,
+   "detail": "4/2/4/5/3/5/2/2"
+  },
+  {
+   "name": "chirka ムービー: 9〜11秒・6〜10カット・カメラの型がすべて別",
+   "pass": true,
+   "detail": "10s / 9 カット"
+  },
+  {
+   "name": "chirka ムービー: 相手役の移動キーが 8 以上（棒立ちでない）",
+   "pass": true,
+   "detail": "22 キー"
+  },
+  {
+   "name": "chirka ムービー: 動くカメラ（2キー以上）のカットが過半",
+   "pass": true,
+   "detail": "3/2/4/4/3/5/3/5/2"
+  },
+  {
+   "name": "3本のムービーで同じカメラの型を共有しない",
+   "pass": true,
+   "detail": "25 型"
+  },
+  {
+   "name": "動画あり moguzo_ultimate_10s_vs_pisuke.mp4",
+   "pass": true
+  },
+  {
+   "name": "動画あり godan_ultimate_10s_vs_pisuke.mp4",
+   "pass": true
+  },
+  {
+   "name": "動画あり chirka_ultimate_10s_vs_pisuke.mp4",
+   "pass": true
+  }
+ ]
+}
