@@ -423,6 +423,7 @@ function hud(){
     const p=battle.fighters[i],r=ROSTER[p.id],theme=hudTheme(p.id);
     $('hud-side-'+i).dataset.element=theme.tone;
     $('hud-side-'+i).dataset.mark=theme.mark;
+    $('hud-side-'+i).querySelector('.hud-name').dataset.mark=theme.mark;
     $('name-'+i).textContent=r.name;
     $('trait-'+i).textContent=theme.word;
     const ready=isSuperReady(p.super);
