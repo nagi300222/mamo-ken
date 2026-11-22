@@ -1,0 +1,144 @@
+// v15 real, reproducible, per-fighter normal-attack choreography (source authoring data).
+// Each of 9 x 6 choices has a different expressive gesture, pose timing and purpose.
+// Numbers are animation-only angles (degrees); no gameplay hitbox, damage or timing changed.
+export const NORMAL_SOURCE=Object.freeze({
+ stand_weak:'stand_light',stand_heavy:'stand_heavy',
+ crouch_weak:'crouch_light',crouch_heavy:'crouch_heavy',
+ air_weak:'air_light',air_heavy:'air_heavy'
+});
+export const NORMAL_SLOTS=Object.freeze(Object.keys(NORMAL_SOURCE));
+const B=(gesture,power,contact,label)=>Object.freeze({gesture,power,contact,label});
+export const MOTIFS=Object.freeze({
+ moguzo:Object.freeze({
+  stand_weak:B('straightL',.9,.34,'左拳の突き。腰を回す'),
+  stand_heavy:B('risingR',1.22,.43,'右の重いすくい上げ'),
+  crouch_weak:B('lowPalmL',.95,.40,'踏み込む低い掌'),
+  crouch_heavy:B('groundPound',1.12,.48,'拳を地面へ叩き込む'),
+  air_weak:B('diveFistL',.93,.37,'飛び込みながら斜め下に左拳'),
+  air_heavy:B('overheadHeel',1.16,.48,'前足の大きな踵落とし')
+ }),
+ pisuke:Object.freeze({
+  stand_weak:B('snapJabL',.9,.27,'鋭い一歩の前拳'),
+  stand_heavy:B('roundKickR',1.25,.39,'体を反らした回し蹴り'),
+  crouch_weak:B('shinSnapL',.97,.32,'低空からの素早い脛蹴り'),
+  crouch_heavy:B('lowSpinKick',1.20,.43,'低姿勢の旋回蹴り'),
+  air_weak:B('airSnapKick',.95,.31,'空中から前足で素早く突く'),
+  air_heavy:B('heelDiveR',1.22,.46,'後足を振り上げて踵を落とす')
+ }),
+ godan:Object.freeze({
+  stand_weak:B('shortBodyR',1.03,.40,'踏み込み短い重拳'),
+  stand_heavy:B('doubleHammer',1.35,.61,'肩を振りかぶり全体重で叩く'),
+  crouch_weak:B('sideElbowL',1.02,.43,'低く重心を落とす肘'),
+  crouch_heavy:B('doubleGroundPound',1.32,.62,'床を砕く両拳'),
+  air_weak:B('descendingForearm',1.02,.46,'腕を地面へ振り下ろす'),
+  air_heavy:B('bodyCrush',1.30,.59,'全身を落として押し潰す')
+ }),
+ hakuma:Object.freeze({
+  stand_weak:B('palmPushL',1.00,.35,'左掌で押し返す'),
+  stand_heavy:B('doublePalmPush',1.28,.48,'肩から大きな両掌張り'),
+  crouch_weak:B('lowPalmR',.94,.38,'腰を落とす低い張り手'),
+  crouch_heavy:B('risingPalmL',1.17,.44,'腰から持ち上げる張り手'),
+  air_weak:B('shortPalmR',.95,.41,'体の正面を守る短い掌'),
+  air_heavy:B('hammerPalmPair',1.28,.51,'両掌の落下圧力')
+ }),
+ chirka:Object.freeze({
+  stand_weak:B('feintClawL',.98,.40,'視線を逸らした鋭い左爪'),
+  stand_heavy:B('diagonalClawR',1.19,.46,'体を反らし右爪を斜めに振る'),
+  crouch_weak:B('lowClawL',.96,.35,'低く滑り込む爪'),
+  crouch_heavy:B('crossClawPair',1.20,.52,'交差させる紫の両爪'),
+  air_weak:B('airFeintClaw',.97,.37,'上体を捻って振り向き爪'),
+  air_heavy:B('pounceClawPair',1.27,.55,'爪を構えて跳びかかる')
+ }),
+ takimaru:Object.freeze({
+  stand_weak:B('bearHookL',1.02,.42,'荒っぽい手首のフック'),
+  stand_heavy:B('grapplerHammerR',1.28,.55,'掴み込むような重い鉤拳'),
+  crouch_weak:B('lowReachL',.91,.39,'足首近くへの手伸ばし'),
+  crouch_heavy:B('risingGrabPair',1.20,.53,'しゃがみから両手で引き起こす'),
+  air_weak:B('airBearSwipe',1.00,.38,'大きく横に薙ぐ手'),
+  air_heavy:B('airBearHammer',1.28,.56,'両腕で叩き落とす')
+ }),
+ yomikage:Object.freeze({
+  stand_weak:B('knifeHandL',.93,.30,'短く鋭い左手刀'),
+  stand_heavy:B('crescentSlashR',1.21,.44,'横から入る右手の月斬り'),
+  crouch_weak:B('shadowSliceL',.95,.33,'相手の足元を狙う低い斬り'),
+  crouch_heavy:B('sweepingBladeR',1.20,.47,'地面すれすれの逆刃'),
+  air_weak:B('risingKnifeL',.94,.32,'反り返りながら手刀を抜く'),
+  air_heavy:B('descendingBladeR',1.23,.47,'背面から斜め下へ手刀')
+ }),
+ bullet:Object.freeze({
+  stand_weak:B('headFlick',.92,.35,'顔と肩で小さく突く'),
+  stand_heavy:B('tailWideRight',1.26,.48,'重い尾を大きく横薙ぎ'),
+  crouch_weak:B('tailTipSnap',.93,.34,'低姿勢の尾先の一閃'),
+  crouch_heavy:B('tailGroundSmash',1.27,.52,'しっぽを床に叩き付ける'),
+  air_weak:B('airTailFlick',.93,.32,'空中で尾を短く振る'),
+  air_heavy:B('airTailLash',1.23,.49,'下向きに尾全体を振り払う')
+ }),
+ dark_moguzo:Object.freeze({
+  stand_weak:B('reverseJabR',.94,.26,'闇に紛れた右拳'),
+  stand_heavy:B('blackDoubleHook',1.19,.38,'両拳を捻って放つ高速強攻撃'),
+  crouch_weak:B('lowBackfistL',.93,.29,'返す左拳で低く打つ'),
+  crouch_heavy:B('shadowRushPunch',1.23,.43,'低い姿勢から鋭い重拳'),
+  air_weak:B('airSpikeFistR',.95,.32,'闇の拳を斜め下へ'),
+  air_heavy:B('darkSpinKick',1.20,.47,'空中で体ごと回る高速蹴り')
+ })
+});
+// Authoring offsets are applied *after* the original source rig quaternions.
+// Bone names are canonicalized, so the generated glTF animation tracks bind to
+// the original untouched SkinnedMesh rig. Units are degrees in local bone coordinates.
+const K=(entries)=>Object.freeze(entries);
+export const GESTURES=Object.freeze({
+ straightL:K({chest:[-6,13,2],upperarml:[-30,8,10],forearml:[-15,3,5],pawl:[-7,0,8],upperarmr:[10,-8,-4],head:[4,-9,1]}),
+ risingR:K({chest:[-18,-15,8],upperarmr:[-70,10,-18],forearmr:[-25,0,4],pawr:[-20,5,0],thighr:[12,0,-9],head:[-9,2,0]}),
+ lowPalmL:K({pelvis:[-15,6,0],chest:[-23,12,2],upperarml:[-35,0,12],forearml:[-13,0,7],head:[13,0,0]}),
+ groundPound:K({chest:[26,-11,0],upperarmr:[35,0,-10],forearmr:[30,0,10],upperarml:[17,5,-6],head:[16,0,0],pelvis:[22,0,0]}),
+ diveFistL:K({chest:[25,4,8],upperarml:[38,0,16],forearml:[15,0,-4],head:[-10,0,0],thighr:[-10,0,0]}),
+ overheadHeel:K({chest:[-18,12,-16],thighr:[-73,16,14],shinr:[42,0,5],footr:[16,0,0],upperarml:[20,3,7],head:[7,-6,0]}),
+ snapJabL:K({chest:[-5,18,3],upperarml:[-48,0,8],forearml:[-17,0,4],thighl:[12,0,0],head:[0,-10,-3]}),
+ roundKickR:K({pelvis:[-8,-36,10],chest:[-12,-29,18],thighr:[-68,0,-26],shinr:[39,-3,7],footr:[20,0,0],upperarmr:[23,3,2]}),
+ shinSnapL:K({pelvis:[12,18,0],chest:[-10,13,0],thighl:[-46,0,10],shinl:[33,2,0],footl:[-10,0,0]}),
+ lowSpinKick:K({pelvis:[27,57,2],chest:[14,53,9],thighr:[-42,-10,-18],shinr:[18,0,5],thighl:[17,0,5],head:[9,-15,0]}),
+ airSnapKick:K({chest:[-5,14,6],thighl:[-52,7,7],shinl:[27,0,0],footl:[-15,0,0],head:[2,0,-3]}),
+ heelDiveR:K({pelvis:[24,-23,-8],chest:[18,-16,9],thighr:[-65,-4,14],shinr:[21,0,4],footr:[25,0,0],head:[-14,0,0]}),
+ shortBodyR:K({chest:[-12,-8,0],upperarmr:[-35,4,-11],forearmr:[-23,3,0],thighr:[14,3,-2],head:[7,0,0]}),
+ doubleHammer:K({chest:[34,6,0],upperarml:[44,-11,18],upperarmr:[46,12,-18],forearml:[35,0,4],forearmr:[35,0,-4],head:[13,0,0],pelvis:[18,0,0]}),
+ sideElbowL:K({chest:[11,12,7],upperarml:[25,5,28],forearml:[-27,0,-12],pelvis:[20,0,0],head:[-8,0,0]}),
+ doubleGroundPound:K({chest:[40,0,0],upperarml:[44,8,19],upperarmr:[44,-8,-19],forearml:[28,0,0],forearmr:[28,0,0],pelvis:[28,0,0]}),
+ descendingForearm:K({chest:[28,0,8],upperarmr:[39,-8,-14],forearmr:[26,0,0],head:[-13,0,0],thighl:[15,0,0]}),
+ bodyCrush:K({chest:[36,0,0],pelvis:[27,0,0],upperarml:[46,11,24],upperarmr:[46,-11,-24],thighl:[27,0,-3],thighr:[27,0,3],head:[8,0,0]}),
+ palmPushL:K({chest:[-5,8,0],upperarml:[-38,0,13],forearml:[-12,0,0],pawl:[-17,0,12],head:[-2,0,0]}),
+ doublePalmPush:K({chest:[-21,3,0],upperarml:[-53,5,12],upperarmr:[-53,-5,-12],forearml:[-19,0,0],forearmr:[-19,0,0],head:[-10,0,0]}),
+ lowPalmR:K({pelvis:[19,0,0],chest:[-9,-15,0],upperarmr:[-39,0,-12],forearmr:[-12,0,0],pawr:[-9,0,0]}),
+ risingPalmL:K({chest:[-15,17,-7],upperarml:[-62,5,14],forearml:[-21,0,0],thighl:[-10,0,0],head:[-12,0,0]}),
+ shortPalmR:K({chest:[-5,-6,0],upperarmr:[-34,1,-10],forearmr:[-7,0,0],pawr:[-4,0,0],head:[4,0,0]}),
+ hammerPalmPair:K({chest:[28,0,0],upperarml:[36,5,18],upperarmr:[36,-5,-18],forearml:[23,0,0],forearmr:[23,0,0],head:[12,0,0]}),
+ feintClawL:K({chest:[-8,22,11],head:[-9,-18,13],upperarml:[-33,13,21],forearml:[-18,0,12],pawl:[-8,0,20]}),
+ diagonalClawR:K({chest:[20,-26,16],upperarmr:[-41,-16,-33],forearmr:[-18,0,-17],pawr:[-12,0,-22],head:[-13,14,2]}),
+ lowClawL:K({pelvis:[25,11,0],chest:[-15,29,7],upperarml:[-34,8,23],pawl:[-14,0,17],head:[14,-8,0]}),
+ crossClawPair:K({chest:[-13,25,5],upperarml:[-49,21,25],upperarmr:[-47,-19,-22],pawr:[-12,0,-18],pawl:[-12,0,18],head:[-5,-8,0]}),
+ airFeintClaw:K({chest:[7,-38,13],head:[-11,27,-7],upperarml:[-40,19,19],pawl:[-8,0,19],thighr:[-12,3,0]}),
+ pounceClawPair:K({chest:[26,9,0],upperarml:[-52,11,27],upperarmr:[-45,-11,-25],pawl:[-22,0,8],pawr:[-22,0,-8],head:[-16,0,0]}),
+ bearHookL:K({chest:[6,25,5],upperarml:[-21,13,27],forearml:[-36,0,9],head:[-7,-6,0]}),
+ grapplerHammerR:K({chest:[25,-24,13],upperarmr:[-38,-8,-34],forearmr:[-42,0,-12],pawr:[-10,0,0],pelvis:[13,-6,0]}),
+ lowReachL:K({pelvis:[21,0,0],chest:[28,10,3],upperarml:[-26,4,24],forearml:[-17,0,0],head:[14,0,0]}),
+ risingGrabPair:K({pelvis:[-21,0,0],chest:[-30,3,0],upperarml:[-58,4,18],upperarmr:[-56,-4,-18],forearml:[-35,0,0],forearmr:[-35,0,0]}),
+ airBearSwipe:K({chest:[14,40,14],upperarml:[-25,12,38],forearml:[-19,0,0],pawr:[6,0,0],head:[-8,-14,0]}),
+ airBearHammer:K({chest:[33,0,0],upperarml:[34,5,18],upperarmr:[34,-5,-18],forearml:[30,0,0],forearmr:[30,0,0],head:[13,0,0]}),
+ knifeHandL:K({chest:[-4,23,4],upperarml:[-38,8,12],forearml:[-4,2,11],pawl:[-26,0,2],head:[-9,-11,0]}),
+ crescentSlashR:K({chest:[18,-50,15],upperarmr:[-18,-25,-41],forearmr:[-9,0,-15],pawr:[-31,0,-5],head:[-16,18,0]}),
+ shadowSliceL:K({pelvis:[20,18,0],chest:[15,34,4],upperarml:[-26,12,30],pawl:[-35,0,0],head:[11,-12,0]}),
+ sweepingBladeR:K({chest:[26,-57,-10],upperarmr:[-29,-30,-43],pawr:[-21,0,0],thighr:[-12,0,0],head:[-12,11,0]}),
+ risingKnifeL:K({chest:[-27,29,0],upperarml:[-53,9,19],forearml:[-9,0,4],pawl:[-27,0,0],head:[-12,0,0]}),
+ descendingBladeR:K({chest:[28,-31,9],upperarmr:[32,-18,-31],forearmr:[18,0,-12],pawr:[-26,0,0],head:[-12,11,0]}),
+ headFlick:K({head:[-40,9,0],neck:[-20,5,0],chest:[-14,0,0],upperarml:[9,4,0],upperarmr:[9,-4,0]}),
+ tailWideRight:K({pelvis:[1,45,4],chest:[11,29,7],tail01:[-15,42,0],tail02:[-12,37,0],tail03:[-4,26,0],tail04:[0,16,0],head:[-9,-12,0]}),
+ tailTipSnap:K({pelvis:[17,-13,0],chest:[12,-10,0],tail03:[-12,-21,0],tail04:[-13,-30,0],tail05:[-4,-38,0],head:[-13,0,0]}),
+ tailGroundSmash:K({chest:[21,13,0],pelvis:[18,0,0],tail01:[26,5,0],tail02:[31,0,0],tail03:[34,0,0],tail04:[25,0,0],head:[12,0,0]}),
+ airTailFlick:K({chest:[-7,15,11],tail02:[-8,17,0],tail03:[-12,29,0],tail04:[0,32,0],head:[-7,-10,0]}),
+ airTailLash:K({pelvis:[18,0,0],chest:[19,-12,0],tail01:[20,-16,0],tail02:[32,-20,0],tail03:[27,-28,0],tail04:[26,-32,0],head:[-10,0,0]}),
+ reverseJabR:K({chest:[-12,-30,8],upperarmr:[-39,-13,-15],forearmr:[-22,0,-6],pawr:[-9,0,-14],head:[-8,17,0]}),
+ blackDoubleHook:K({chest:[-17,38,14],upperarml:[-45,15,26],upperarmr:[-40,-18,-26],forearml:[-17,0,0],forearmr:[-22,0,0],head:[-9,-20,0]}),
+ lowBackfistL:K({pelvis:[15,28,0],chest:[16,34,4],upperarml:[-18,17,39],forearml:[-26,0,0],pawl:[-20,0,0],head:[8,0,0]}),
+ shadowRushPunch:K({chest:[-22,-39,8],upperarmr:[-56,-15,-21],forearmr:[-22,0,0],thighr:[-22,0,5],head:[-14,14,0]}),
+ airSpikeFistR:K({chest:[27,-18,10],upperarmr:[32,-11,-25],forearmr:[24,0,0],pawr:[-15,0,0],head:[-15,0,0]}),
+ darkSpinKick:K({pelvis:[16,67,12],chest:[9,53,14],thighr:[-55,0,-23],shinr:[35,0,3],thighl:[19,0,0],head:[-13,0,0]})
+});
