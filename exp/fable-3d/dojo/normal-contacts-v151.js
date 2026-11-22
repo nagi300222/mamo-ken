@@ -1,7 +1,7 @@
 // v15.1 通常技の接触同期データ（Claude 制作・実測）。生成: normal-art/v15_1/tools/build_contacts.mjs — 手で編集しない。
 // contact/contactEnd = クリップ正規化時刻。reach = 攻撃側 root から打撃部位表面までの前方距離 [m]（相手の hurt radius .16 は判定側で加算）。
 // activeReach = contact〜contactEnd を phase 0..1 としたときの実測の伸縮。status 'fix' は見た目の不一致が残る暫定値。
-export const NORMAL_CONTACTS_VERSION="15.1-wip1";
+export const NORMAL_CONTACTS_VERSION="15.1-wip2";
 export const NORMAL_CONTACTS=Object.freeze({
  "moguzo": {
   "stand_weak": {
@@ -59,20 +59,20 @@ export const NORMAL_CONTACTS=Object.freeze({
    "contactEnd": 0.495,
    "attackPart": "armR",
    "attackBone": "paw.R",
-   "reach": 0.457,
-   "height": 0.199,
+   "reach": 0.46,
+   "height": 0.188,
    "activeReach": [
     {
      "phase": 0,
-     "reach": 0.457
+     "reach": 0.46
     },
     {
      "phase": 0.5,
-     "reach": 0.451
+     "reach": 0.454
     },
     {
      "phase": 1,
-     "reach": 0.439
+     "reach": 0.442
     }
    ],
    "status": "ok",
@@ -131,29 +131,26 @@ export const NORMAL_CONTACTS=Object.freeze({
   },
   "air_heavy": {
    "contact": 0.475,
-   "contactEnd": 0.595,
+   "contactEnd": 0.535,
    "attackPart": "legR",
    "attackBone": "foot.R",
-   "reach": 0.269,
-   "height": 0.083,
+   "reach": 0.297,
+   "height": 0.098,
    "activeReach": [
     {
      "phase": 0,
-     "reach": 0.269
+     "reach": 0.297
     },
     {
      "phase": 0.5,
-     "reach": 0.263
+     "reach": 0.282
     },
     {
      "phase": 1,
-     "reach": 0.251
+     "reach": 0.262
     }
    ],
-   "status": "fix",
-   "issues": [
-    "head が 0.098m 先に出ている"
-   ],
+   "status": "ok",
    "gesture": "overheadHeel",
    "motifContact": 0.46
   }
@@ -215,7 +212,7 @@ export const NORMAL_CONTACTS=Object.freeze({
    "attackPart": "legL",
    "attackBone": "foot.L",
    "reach": 0.307,
-   "height": 0.106,
+   "height": 0.102,
    "activeReach": [
     {
      "phase": 0,
@@ -227,7 +224,7 @@ export const NORMAL_CONTACTS=Object.freeze({
     },
     {
      "phase": 1,
-     "reach": 0.294
+     "reach": 0.293
     }
    ],
    "status": "ok",
@@ -235,30 +232,27 @@ export const NORMAL_CONTACTS=Object.freeze({
    "motifContact": 0.32
   },
   "crouch_heavy": {
-   "contact": 0.325,
-   "contactEnd": 0.445,
-   "attackPart": "armR",
-   "attackBone": "paw.R",
-   "reach": 0.33,
-   "height": 0.221,
+   "contact": 0.4,
+   "contactEnd": 0.46,
+   "attackPart": "legR",
+   "attackBone": "foot.R",
+   "reach": 0.395,
+   "height": 0.069,
    "activeReach": [
     {
      "phase": 0,
-     "reach": 0.33
+     "reach": 0.395
     },
     {
      "phase": 0.5,
-     "reach": 0.324
+     "reach": 0.389
     },
     {
      "phase": 1,
-     "reach": 0.322
+     "reach": 0.372
     }
    ],
-   "status": "fix",
-   "issues": [
-    "head が 0.073m 先に出ている"
-   ],
+   "status": "ok",
    "gesture": "lowSpinKick",
    "motifContact": 0.4
   },
@@ -319,20 +313,20 @@ export const NORMAL_CONTACTS=Object.freeze({
    "contactEnd": 0.485,
    "attackPart": "armR",
    "attackBone": "paw.R",
-   "reach": 0.5,
-   "height": 0.307,
+   "reach": 0.459,
+   "height": 0.28,
    "activeReach": [
     {
      "phase": 0,
-     "reach": 0.5
+     "reach": 0.459
     },
     {
      "phase": 0.5,
-     "reach": 0.486
+     "reach": 0.449
     },
     {
      "phase": 1,
-     "reach": 0.47
+     "reach": 0.437
     }
    ],
    "status": "ok",
@@ -367,11 +361,11 @@ export const NORMAL_CONTACTS=Object.freeze({
   },
   "crouch_weak": {
    "contact": 0.45,
-   "contactEnd": 0.525,
+   "contactEnd": 0.55,
    "attackPart": "armL",
    "attackBone": "paw.L",
    "reach": 0.426,
-   "height": 0.265,
+   "height": 0.256,
    "activeReach": [
     {
      "phase": 0,
@@ -379,7 +373,7 @@ export const NORMAL_CONTACTS=Object.freeze({
     },
     {
      "phase": 0.5,
-     "reach": 0.418
+     "reach": 0.419
     },
     {
      "phase": 1,
@@ -417,24 +411,24 @@ export const NORMAL_CONTACTS=Object.freeze({
    "motifContact": 0.62
   },
   "air_weak": {
-   "contact": 0.45,
-   "contactEnd": 0.55,
+   "contact": 0.475,
+   "contactEnd": 0.535,
    "attackPart": "armR",
    "attackBone": "paw.R",
-   "reach": 0.459,
-   "height": 0.212,
+   "reach": 0.466,
+   "height": 0.187,
    "activeReach": [
     {
      "phase": 0,
-     "reach": 0.459
+     "reach": 0.466
     },
     {
      "phase": 0.5,
-     "reach": 0.457
+     "reach": 0.454
     },
     {
      "phase": 1,
-     "reach": 0.446
+     "reach": 0.442
     }
    ],
    "status": "ok",
@@ -546,20 +540,20 @@ export const NORMAL_CONTACTS=Object.freeze({
    "motifContact": 0.38
   },
   "crouch_heavy": {
-   "contact": 0.65,
+   "contact": 0.625,
    "contactEnd": 0.725,
    "attackPart": "armL",
    "attackBone": "paw.L",
-   "reach": 0.528,
-   "height": 0.346,
+   "reach": 0.532,
+   "height": 0.38,
    "activeReach": [
     {
      "phase": 0,
-     "reach": 0.528
+     "reach": 0.532
     },
     {
      "phase": 0.5,
-     "reach": 0.524
+     "reach": 0.528
     },
     {
      "phase": 1,
@@ -575,20 +569,20 @@ export const NORMAL_CONTACTS=Object.freeze({
    "contactEnd": 0.485,
    "attackPart": "armR",
    "attackBone": "paw.R",
-   "reach": 0.468,
-   "height": 0.349,
+   "reach": 0.467,
+   "height": 0.336,
    "activeReach": [
     {
      "phase": 0,
-     "reach": 0.468
+     "reach": 0.467
     },
     {
      "phase": 0.5,
-     "reach": 0.459
+     "reach": 0.46
     },
     {
      "phase": 1,
-     "reach": 0.443
+     "reach": 0.445
     }
    ],
    "status": "ok",
@@ -653,20 +647,20 @@ export const NORMAL_CONTACTS=Object.freeze({
    "contactEnd": 0.51,
    "attackPart": "armR",
    "attackBone": "paw.R",
-   "reach": 0.421,
-   "height": 0.357,
+   "reach": 0.4,
+   "height": 0.352,
    "activeReach": [
     {
      "phase": 0,
-     "reach": 0.421
+     "reach": 0.4
     },
     {
      "phase": 0.5,
-     "reach": 0.409
+     "reach": 0.391
     },
     {
      "phase": 1,
-     "reach": 0.388
+     "reach": 0.374
     }
    ],
    "status": "ok",
@@ -678,20 +672,20 @@ export const NORMAL_CONTACTS=Object.freeze({
    "contactEnd": 0.495,
    "attackPart": "armR",
    "attackBone": "paw.R",
-   "reach": 0.42,
-   "height": 0.13,
+   "reach": 0.398,
+   "height": 0.146,
    "activeReach": [
     {
      "phase": 0,
-     "reach": 0.42
+     "reach": 0.398
     },
     {
      "phase": 0.5,
-     "reach": 0.417
+     "reach": 0.395
     },
     {
      "phase": 1,
-     "reach": 0.406
+     "reach": 0.385
     }
    ],
    "status": "ok",
@@ -699,25 +693,25 @@ export const NORMAL_CONTACTS=Object.freeze({
    "motifContact": 0.35
   },
   "crouch_heavy": {
-   "contact": 0.475,
-   "contactEnd": 0.595,
+   "contact": 0.5,
+   "contactEnd": 0.575,
    "attackPart": "armL",
    "attackBone": "paw.L",
    "bothHands": true,
-   "reach": 0.461,
+   "reach": 0.451,
    "height": 0.226,
    "activeReach": [
     {
      "phase": 0,
-     "reach": 0.461
+     "reach": 0.451
     },
     {
      "phase": 0.5,
-     "reach": 0.457
+     "reach": 0.445
     },
     {
      "phase": 1,
-     "reach": 0.443
+     "reach": 0.431
     }
    ],
    "status": "ok",
@@ -729,20 +723,20 @@ export const NORMAL_CONTACTS=Object.freeze({
    "contactEnd": 0.52,
    "attackPart": "armL",
    "attackBone": "paw.L",
-   "reach": 0.355,
-   "height": 0.318,
+   "reach": 0.357,
+   "height": 0.323,
    "activeReach": [
     {
      "phase": 0,
-     "reach": 0.355
+     "reach": 0.357
     },
     {
      "phase": 0.5,
-     "reach": 0.347
+     "reach": 0.349
     },
     {
      "phase": 1,
-     "reach": 0.337
+     "reach": 0.34
     }
    ],
    "status": "ok",
@@ -751,24 +745,24 @@ export const NORMAL_CONTACTS=Object.freeze({
   },
   "air_heavy": {
    "contact": 0.525,
-   "contactEnd": 0.585,
+   "contactEnd": 0.6,
    "attackPart": "armR",
    "attackBone": "paw.R",
    "bothHands": true,
-   "reach": 0.404,
-   "height": 0.253,
+   "reach": 0.368,
+   "height": 0.261,
    "activeReach": [
     {
      "phase": 0,
-     "reach": 0.404
+     "reach": 0.368
     },
     {
      "phase": 0.5,
-     "reach": 0.399
+     "reach": 0.362
     },
     {
      "phase": 1,
-     "reach": 0.388
+     "reach": 0.35
     }
    ],
    "status": "ok",
@@ -832,20 +826,20 @@ export const NORMAL_CONTACTS=Object.freeze({
    "contactEnd": 0.495,
    "attackPart": "armR",
    "attackBone": "paw.R",
-   "reach": 0.661,
-   "height": 0.062,
+   "reach": 0.621,
+   "height": 0.09,
    "activeReach": [
     {
      "phase": 0,
-     "reach": 0.661
+     "reach": 0.621
     },
     {
      "phase": 0.5,
-     "reach": 0.657
+     "reach": 0.619
     },
     {
      "phase": 1,
-     "reach": 0.643
+     "reach": 0.608
     }
    ],
    "status": "ok",
@@ -858,20 +852,20 @@ export const NORMAL_CONTACTS=Object.freeze({
    "attackPart": "armL",
    "attackBone": "paw.L",
    "bothHands": true,
-   "reach": 0.601,
-   "height": 0.402,
+   "reach": 0.607,
+   "height": 0.386,
    "activeReach": [
     {
      "phase": 0,
-     "reach": 0.601
+     "reach": 0.607
     },
     {
      "phase": 0.5,
-     "reach": 0.593
+     "reach": 0.598
     },
     {
      "phase": 1,
-     "reach": 0.585
+     "reach": 0.588
     }
    ],
    "status": "ok",
@@ -986,48 +980,45 @@ export const NORMAL_CONTACTS=Object.freeze({
    "contactEnd": 0.47,
    "attackPart": "armR",
    "attackBone": "paw.R",
-   "reach": 0.445,
-   "height": 0.099,
+   "reach": 0.417,
+   "height": 0.154,
    "activeReach": [
     {
      "phase": 0,
-     "reach": 0.445
+     "reach": 0.417
     },
     {
      "phase": 0.5,
-     "reach": 0.442
+     "reach": 0.415
     },
     {
      "phase": 1,
-     "reach": 0.434
+     "reach": 0.409
     }
    ],
-   "status": "fix",
-   "issues": [
-    "head が 0.037m 先に出ている"
-   ],
+   "status": "ok",
    "gesture": "shadowSliceLow",
    "motifContact": 0.33
   },
   "crouch_heavy": {
-   "contact": 0.45,
-   "contactEnd": 0.51,
+   "contact": 0.475,
+   "contactEnd": 0.535,
    "attackPart": "armR",
    "attackBone": "paw.R",
-   "reach": 0.481,
-   "height": 0.112,
+   "reach": 0.437,
+   "height": 0.124,
    "activeReach": [
     {
      "phase": 0,
-     "reach": 0.481
+     "reach": 0.437
     },
     {
      "phase": 0.5,
-     "reach": 0.479
+     "reach": 0.429
     },
     {
      "phase": 1,
-     "reach": 0.467
+     "reach": 0.415
     }
    ],
    "status": "ok",
@@ -1060,24 +1051,24 @@ export const NORMAL_CONTACTS=Object.freeze({
    "motifContact": 0.32
   },
   "air_heavy": {
-   "contact": 0.475,
-   "contactEnd": 0.575,
+   "contact": 0.45,
+   "contactEnd": 0.525,
    "attackPart": "armR",
    "attackBone": "paw.R",
-   "reach": 0.412,
-   "height": 0.171,
+   "reach": 0.408,
+   "height": 0.19,
    "activeReach": [
     {
      "phase": 0,
-     "reach": 0.412
+     "reach": 0.408
     },
     {
      "phase": 0.5,
-     "reach": 0.41
+     "reach": 0.402
     },
     {
      "phase": 1,
-     "reach": 0.396
+     "reach": 0.389
     }
    ],
    "status": "ok",
@@ -1089,28 +1080,25 @@ export const NORMAL_CONTACTS=Object.freeze({
   "stand_weak": {
    "contact": 0.4,
    "contactEnd": 0.46,
-   "attackPart": "armR",
-   "attackBone": "paw.R",
-   "reach": 0.297,
-   "height": 0.392,
+   "attackPart": "head",
+   "attackBone": "head",
+   "reach": 0.417,
+   "height": 0.407,
    "activeReach": [
     {
      "phase": 0,
-     "reach": 0.297
+     "reach": 0.417
     },
     {
      "phase": 0.5,
-     "reach": 0.284
+     "reach": 0.409
     },
     {
      "phase": 1,
-     "reach": 0.27
+     "reach": 0.4
     }
    ],
-   "status": "fix",
-   "issues": [
-    "head が 0.128m 先に出ている"
-   ],
+   "status": "ok",
    "gesture": "headFlick",
    "motifContact": 0.35
   },
@@ -1144,26 +1132,23 @@ export const NORMAL_CONTACTS=Object.freeze({
    "contactEnd": 0.435,
    "attackPart": "tail",
    "attackBone": "tail",
-   "reach": 0.554,
-   "height": -0.014,
+   "reach": 0.548,
+   "height": 0.069,
    "activeReach": [
     {
      "phase": 0,
-     "reach": 0.554
+     "reach": 0.548
     },
     {
      "phase": 0.5,
-     "reach": 0.538
+     "reach": 0.532
     },
     {
      "phase": 1,
-     "reach": 0.508
+     "reach": 0.5
     }
    ],
-   "status": "fix",
-   "issues": [
-    "打撃部位が床下 -0.014m"
-   ],
+   "status": "ok",
    "gesture": "tailTipSnap",
    "motifContact": 0.36
   },
@@ -1172,20 +1157,20 @@ export const NORMAL_CONTACTS=Object.freeze({
    "contactEnd": 0.56,
    "attackPart": "tail",
    "attackBone": "tail",
-   "reach": 0.637,
-   "height": 0.001,
+   "reach": 0.641,
+   "height": 0.007,
    "activeReach": [
     {
      "phase": 0,
-     "reach": 0.637
+     "reach": 0.641
     },
     {
      "phase": 0.5,
-     "reach": 0.633
+     "reach": 0.621
     },
     {
      "phase": 1,
-     "reach": 0.615
+     "reach": 0.586
     }
    ],
    "status": "ok",
@@ -1198,7 +1183,7 @@ export const NORMAL_CONTACTS=Object.freeze({
    "attackPart": "tail",
    "attackBone": "tail",
    "reach": 0.551,
-   "height": 0.305,
+   "height": 0.304,
    "activeReach": [
     {
      "phase": 0,
@@ -1206,7 +1191,7 @@ export const NORMAL_CONTACTS=Object.freeze({
     },
     {
      "phase": 0.5,
-     "reach": 0.53
+     "reach": 0.531
     },
     {
      "phase": 1,
@@ -1218,31 +1203,27 @@ export const NORMAL_CONTACTS=Object.freeze({
    "motifContact": 0.34
   },
   "air_heavy": {
-   "contact": 0.3,
-   "contactEnd": 0.36,
-   "attackPart": "armR",
-   "attackBone": "paw.R",
-   "reach": 0.226,
-   "height": 0.236,
+   "contact": 0.475,
+   "contactEnd": 0.55,
+   "attackPart": "tail",
+   "attackBone": "tail",
+   "reach": 0.552,
+   "height": 0.097,
    "activeReach": [
     {
      "phase": 0,
-     "reach": 0.226
+     "reach": 0.552
     },
     {
      "phase": 0.5,
-     "reach": 0.199
+     "reach": 0.546
     },
     {
      "phase": 1,
-     "reach": 0.162
+     "reach": 0.543
     }
    ],
-   "status": "fix",
-   "issues": [
-    "head が 0.15m 先に出ている",
-    "打撃部位の前進が 0.071m しかない"
-   ],
+   "status": "ok",
    "gesture": "airTailLash",
    "motifContact": 0.48
   }
@@ -1253,20 +1234,20 @@ export const NORMAL_CONTACTS=Object.freeze({
    "contactEnd": 0.385,
    "attackPart": "armR",
    "attackBone": "paw.R",
-   "reach": 0.373,
-   "height": 0.354,
+   "reach": 0.395,
+   "height": 0.333,
    "activeReach": [
     {
      "phase": 0,
-     "reach": 0.373
+     "reach": 0.395
     },
     {
      "phase": 0.5,
-     "reach": 0.36
+     "reach": 0.386
     },
     {
      "phase": 1,
-     "reach": 0.343
+     "reach": 0.376
     }
    ],
    "status": "ok",
@@ -1304,20 +1285,20 @@ export const NORMAL_CONTACTS=Object.freeze({
    "contactEnd": 0.445,
    "attackPart": "armR",
    "attackBone": "paw.R",
-   "reach": 0.453,
-   "height": 0.153,
+   "reach": 0.437,
+   "height": 0.174,
    "activeReach": [
     {
      "phase": 0,
-     "reach": 0.453
+     "reach": 0.437
     },
     {
      "phase": 0.5,
-     "reach": 0.451
+     "reach": 0.435
     },
     {
      "phase": 1,
-     "reach": 0.445
+     "reach": 0.431
     }
    ],
    "status": "ok",
@@ -1329,20 +1310,20 @@ export const NORMAL_CONTACTS=Object.freeze({
    "contactEnd": 0.5,
    "attackPart": "armR",
    "attackBone": "paw.R",
-   "reach": 0.507,
-   "height": 0.265,
+   "reach": 0.509,
+   "height": 0.254,
    "activeReach": [
     {
      "phase": 0,
-     "reach": 0.507
+     "reach": 0.509
     },
     {
      "phase": 0.5,
-     "reach": 0.502
+     "reach": 0.504
     },
     {
      "phase": 1,
-     "reach": 0.49
+     "reach": 0.489
     }
    ],
    "status": "ok",
@@ -1354,20 +1335,20 @@ export const NORMAL_CONTACTS=Object.freeze({
    "contactEnd": 0.41,
    "attackPart": "armR",
    "attackBone": "paw.R",
-   "reach": 0.332,
-   "height": 0.104,
+   "reach": 0.336,
+   "height": 0.113,
    "activeReach": [
     {
      "phase": 0,
-     "reach": 0.332
+     "reach": 0.336
     },
     {
      "phase": 0.5,
-     "reach": 0.322
+     "reach": 0.321
     },
     {
      "phase": 1,
-     "reach": 0.31
+     "reach": 0.305
     }
    ],
    "status": "ok",
@@ -1379,20 +1360,20 @@ export const NORMAL_CONTACTS=Object.freeze({
    "contactEnd": 0.595,
    "attackPart": "legR",
    "attackBone": "foot.R",
-   "reach": 0.272,
-   "height": 0.19,
+   "reach": 0.262,
+   "height": 0.165,
    "activeReach": [
     {
      "phase": 0,
-     "reach": 0.272
+     "reach": 0.262
     },
     {
      "phase": 0.5,
-     "reach": 0.265
+     "reach": 0.255
     },
     {
      "phase": 1,
-     "reach": 0.256
+     "reach": 0.247
     }
    ],
    "status": "ok",

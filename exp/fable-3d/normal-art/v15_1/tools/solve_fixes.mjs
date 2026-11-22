@@ -10,7 +10,7 @@ const ids = arg('ids', null)?.split?.(','), slots = arg('slots', null)?.split?.(
 const SRC = { stand_weak: 'stand_light', stand_heavy: 'stand_heavy', crouch_weak: 'crouch_light', crouch_heavy: 'crouch_heavy', air_weak: 'air_light', air_heavy: 'air_heavy' };
 const RAD = Math.PI / 180, canon = n => String(n || '').replace(/[^a-z0-9]/gi, '').toLowerCase();
 const qang = (rx, ry, rz) => { const hx = rx * RAD / 2, hy = ry * RAD / 2, hz = rz * RAD / 2, x = Math.sin(hx), y = Math.sin(hy), z = Math.sin(hz), a = Math.cos(hx), b = Math.cos(hy), c = Math.cos(hz); return [x * b * c + a * y * z, a * y * c - x * b * z, a * b * z + x * y * c, a * b * c - x * y * z]; };
-const MUTE = { armL: ['shoulderl', 'shoulderfixl', 'upperarml', 'forearml', 'forearmtwistl', 'wristl', 'pawl'], armR: ['shoulderr', 'shoulderfixr', 'upperarmr', 'forearmr', 'forearmtwistr', 'wristr', 'pawr'], legL: ['thighl', 'thighfixl', 'shinl', 'anklel', 'footl', 'toel'], legR: ['thighr', 'thighfixr', 'shinr', 'ankler', 'footr', 'toer'] };
+const MUTE = { armL: ['shoulderl', 'shoulderfixl', 'upperarml', 'forearml', 'forearmtwistl', 'wristl', 'pawl'], armR: ['shoulderr', 'shoulderfixr', 'upperarmr', 'forearmr', 'forearmtwistr', 'wristr', 'pawr'], legL: ['thighl', 'thighfixl', 'shinl', 'anklel', 'footl', 'toel'], legR: ['thighr', 'thighfixr', 'shinr', 'ankler', 'footr', 'toer'], torso: ['spine', 'chest', 'neck', 'head'] };
 let seed = +arg('seed', 7); const rnd = () => (seed = (seed * 1664525 + 1013904223) >>> 0) / 4294967296;
 const results = {};
 for (const [id, moves] of Object.entries(FIXES)) { if (ids && !ids.includes(id)) continue;
@@ -31,13 +31,14 @@ for (const [id, moves] of Object.entries(FIXES)) { if (ids && !ids.includes(id))
       if (mv) { const i = B('pelvis'); out[i] = { r: out[i].r, t: out[i].t.map((v, k) => v + mv[k] * F.power / 100) }; } return out; };
     const Wb = fk(rig, base), T1 = F.at(m), T2 = F.at2?.(m), feet = ['toe.L', 'toe.R'].filter(t => t !== F.tip), others = ['head', 'paw.L', 'paw.R'].filter(t => t !== F.tip && t !== F.tip2 && !(F.tip.startsWith('elbow') && t === 'paw.' + F.tip.at(-1)));
     const x0 = new Array(nv).fill(0); vars.forEach((b, i) => (F.pose0?.[b] || [0, 0, 0]).forEach((v, k) => x0[i * 3 + k] = v));
-    const lim = i => i >= vars.length * 3 ? [8, 6, 10][i - vars.length * 3] : vars[Math.floor(i / 3)] === 'pelvis' ? (F.spin ? 200 : 45) : /^tail/.test(vars[Math.floor(i / 3)]) ? 50 : /forearm|shin/.test(vars[Math.floor(i / 3)]) ? 100 : /head|neck|paw|foot|spine/.test(vars[Math.floor(i / 3)]) ? 45 : 110;
+    const lim = i => i >= vars.length * 3 ? [8, 6, 10][i - vars.length * 3] : vars[Math.floor(i / 3)] === 'pelvis' ? (F.spin ? 200 : (F.pelvisLim ?? 22)) : /^tail/.test(vars[Math.floor(i / 3)]) ? 50 : /forearm|shin/.test(vars[Math.floor(i / 3)]) ? 100 : /head|neck|paw|foot|spine/.test(vars[Math.floor(i / 3)]) ? 45 : 110;
     const cost = x => { const W = fk(rig, pose(x)); let c = 0; const d = (p, T, w = 1) => { for (let k = 0; k < 3; k++) if (T[k] != null) c += w * (k === 0 ? .5 : 1) * (p[k] - T[k]) ** 2; };
       const p1 = tip(W, F.tip); d(p1, T1); if (T2) d(tip(W, F.tip2), T2);
       if (F.lead) for (const o of others) { const z = tip(W, o)[2] - (p1[2] - .05); if (z > 0) c += 2 * z * z; }
       if (!F.air) for (const f of feet) { const a = tip(W, f), b = tip(Wb, f); c += F.spin ? 3 * (a[1] - b[1]) ** 2 : 1.2 * ((a[0] - b[0]) ** 2 + (a[1] - b[1]) ** 2 + (a[2] - b[2]) ** 2); }
       for (const o of ['paw.L', 'paw.R', 'toe.L', 'toe.R', 'tail', 'head']) { const y = tip(W, o)[1] - .012; if (y < 0 && !(F.air)) c += 6 * y * y; }
-      if (F.spin) { const h = tip(W, 'head'), hb = W[B('head')].p; if (h[2] - hb[2] < .03) c += .3 * (h[2] - hb[2] - .03) ** 2; }   // 顔は相手へ向ける
+      if (F.spin) { const h = tip(W, 'head'), hb = W[B('head')].p; if (h[2] - hb[2] < .03) c += 2.5 * (h[2] - hb[2] - .03) ** 2; }
+      else if (F.tip !== 'head') { const dy = W[B('head')].p[1] - (Wb[B('head')].p[1] - (F.headDrop ?? .05)); if (dy < 0) c += 4 * dy * dy; }   // 突っ伏さない（頭の高さを保つ）   // 顔は相手へ向ける
       for (let i = 0; i < nv; i++) c += (i >= vars.length * 3 ? 4e-6 : 2.5e-7) * (x[i] - x0[i]) ** 2; return c; };
     let best = null;
     for (let r = 0; r < 6; r++) { let x = x0.map((v, i) => Math.max(-lim(i), Math.min(lim(i), v + (r ? (rnd() - .5) * 40 : 0)))), c = cost(x);

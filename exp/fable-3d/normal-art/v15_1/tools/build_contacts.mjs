@@ -13,12 +13,15 @@ const dir = path.resolve(arg('dir', path.join(HERE, '../audit/v15')));
 const { MOTIFS, GESTURES } = await import(pathToFileURL(path.resolve(arg('motifs', path.join(HERE, '../../../dojo/normal-motifs-v15.js')))).href);
 const { intended } = await import('./analyze_curves.mjs').catch(() => ({}));
 const OVR = arg('override', null) ? JSON.parse(fs.readFileSync(arg('override'))) : {};
+// 修正指定（source/fixes_v151.mjs）にある技は、そこで指定した打撃部位を正とする（--nofix で無効。before の監査用）
+const PART = t => t === 'tail' || t === 'head' ? t : (t.startsWith('toe') ? 'leg' : 'arm') + t.at(-1);
+if (!process.argv.includes('--nofix')) { const { FIXES } = await import('../source/fixes_v151.mjs'); for (const [id, mv] of Object.entries(FIXES)) for (const [slot, F] of Object.entries(mv)) if (MOTIFS[id][slot].gesture === F.gesture) (OVR[id] ||= {})[slot] = { parts: [PART(F.tip), ...(F.tip2 ? [PART(F.tip2)] : [])], ...(OVR[id]?.[slot] || {}) }; }
 const SLOTS = ['stand_weak', 'stand_heavy', 'crouch_weak', 'crouch_heavy', 'air_weak', 'air_heavy'];
 const BONE = { armL: 'paw.L', armR: 'paw.R', legL: 'foot.L', legR: 'foot.R', tail: 'tail', head: 'head', body: 'chest' };
 const r3 = x => +x.toFixed(3);
 const OUT = {}, notes = [];
 for (const id of Object.keys(MOTIFS)) { const C = JSON.parse(fs.readFileSync(path.join(dir, id + '_curves.json'))); OUT[id] = {};
-  for (const slot of SLOTS) { const spec = MOTIFS[id][slot], o = OVR[id]?.[slot] || {}, want = o.part ? [o.part] : intended(GESTURES[spec.gesture]); const S = C['new:' + slot].samples, N = S.length - 1;
+  for (const slot of SLOTS) { const spec = MOTIFS[id][slot], o = OVR[id]?.[slot] || {}, want = o.parts || (o.part ? [o.part] : intended(GESTURES[spec.gesture])); const S = C['new:' + slot].samples, N = S.length - 1;
     const at = (i, p) => S[i][p]?.[0] ?? -9, parts = ['armL', 'armR', 'legL', 'legR', 'tail', 'head', 'body'];
     const lerp = (u, p) => { const x = Math.max(0, Math.min(N, u * N)), i = Math.min(N - 1, Math.floor(x)); return at(i, p) + (at(i + 1, p) - at(i, p)) * (x - i); };
     // 意図部位のピーク（0.12 以降。構えの初期値を拾わない）
