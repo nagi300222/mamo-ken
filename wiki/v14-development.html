@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>マモ拳 3D開発版 Wiki｜v14</title>
+<meta name="description" content="マモ拳Three.js版の開発中の操作、9キャラクターの必殺・奥義演出、検証状況を整理したWiki。">
+<style>
+:root{color-scheme:light;--ink:#24221e;--sub:#665f54;--bg:#f1eee5;--paper:#fffcf6;--line:#d8d0c1;--accent:#8b4d2d;--gold:#e9b65e}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.8 -apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Yu Gothic",sans-serif}
+a{color:#6c351a}a:hover{text-decoration:none}
+header{background:#26221e;color:#fff;border-bottom:4px solid var(--gold);padding:22px max(16px,calc((100vw - 1000px)/2))}
+header a{color:#f5d5a3}header h1{font-size:clamp(23px,4vw,34px);margin:5px 0 0;line-height:1.35}header p{margin:8px 0;color:#e7dccc;font-size:14px}
+nav{display:flex;gap:16px;flex-wrap:wrap;font-size:13px;margin-top:12px}
+main{max-width:1000px;margin:24px auto 64px;padding:0 16px}
+section{background:var(--paper);border:1px solid var(--line);padding:20px 25px;margin:20px 0;box-shadow:0 3px 12px #3021130b;scroll-margin-top:16px}
+h2{font-size:22px;margin:0 0 14px;border-bottom:2px solid var(--line);padding-bottom:8px}h3{font-size:17px;margin:17px 0 5px}
+p{margin:10px 0}ul{padding-left:1.3em;margin:7px 0}li{margin:4px 0}
+.notice{background:#fff2d5;border-left:5px solid #ba7e32;padding:15px 18px}
+.small{font-size:13px;color:var(--sub)}.facts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.fact{background:#f7f2e8;border:1px solid var(--line);padding:12px}.fact strong{display:block;font-size:21px;line-height:1.35}.fact span{font-size:12px;color:var(--sub)}
+table{border-collapse:collapse;width:100%;font-size:14px}th,td{padding:10px;border:1px solid var(--line);text-align:left;vertical-align:top}th{background:#eae1d1}tbody tr:nth-child(2n){background:#faf6ed}
+.table-wrap{overflow-x:auto}.roster{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:11px}.roster article{border:1px solid var(--line);background:#f8f3e9;padding:14px}.roster h3{margin:0 0 4px;color:#633823}.roster p{font-size:14px;margin:0}.roster small{display:block;margin-top:7px;color:var(--sub)}
+code{background:#efe8db;border-radius:2px;padding:1px 5px;font-size:.9em}
+footer{text-align:center;font-size:12px;color:var(--sub);padding:20px}
+@media(max-width:760px){section{padding:16px}.roster{grid-template-columns:1fr 1fr}.facts{grid-template-columns:1fr 1fr}th,td{padding:8px}}
+@media(max-width:520px){.roster,.facts{grid-template-columns:1fr}header{padding:18px 16px}table{font-size:13px}}
+</style>
+</head>
+<body>
+<header>
+<div class="small">マモ拳 / 3D開発版Wiki / 2026-11-22 時点</div>
+<h1>マモ拳 3D開発版 <span style="color:#f2bb62">v14</span></h1>
+<p>スマホ横画面の本格2D対戦ルールを、Three.jsの3Dキャラクターで遊べるようにする開発中のプロジェクト。</p>
+<nav aria-label="ページ内メニュー">
+<a href="index.html">旧2D版の攻略Wiki</a><a href="#controls">操作</a><a href="#characters">9体の奥義</a><a href="#state">開発状況</a><a href="#sources">資料</a>
+</nav>
+</header>
+<main>
+<div class="notice" role="note"><strong>これは開発中の仕様・試作結果を整理したページです。</strong><br>旧2D版の攻略Wikiと、未マージのThree.js版を混同しないでください。性能値・正式な技名・実機での操作感は今後変わる可能性があります。mainへの反映・正式公開を示すものではありません。</div>
+<section aria-labelledby="overview">
+<h2 id="overview">現在の概要</h2>
+<div class="facts">
+<div class="fact"><strong>9体</strong><span>プレイアブル3Dキャラクター</span></div>
+<div class="fact"><strong>27必殺＋9奥義</strong><span>必殺26本を新モーション化、バレット尾薙ぎ1本は維持</span></div>
+<div class="fact"><strong>10.0〜10.4秒</strong><span>命中時のみ移行するキャラ別奥義ムービー</span></div>
+</div>
+<p>狙いは「スマブラの直感操作」と「対戦格闘の読み合い」の両立。旧2D版を捨てて一括移行したわけではなく、Three.js版を独立したDraft PRで育てています。<strong>のっかれボールズのUnity版は別作品・別開発</strong>です。</p>
+</section>
+<section id="controls">
+<h2>操作（スマホ横画面・v0.7の試作仕様）</h2>
+<p>左に8方向スティックと前後ステップ、右に<strong>弱／強／掴み／ギュイーン／必殺／奥義</strong>の6ボタンを置く構成です。コマンド入力による旧操作も比較・互換用に残しています。</p>
+<div class="table-wrap"><table>
+<thead><tr><th>入力</th><th>行動</th><th>補足</th></tr></thead>
+<tbody>
+<tr><td>必殺</td><td>必殺技1</td><td>従来の236系に相当</td></tr>
+<tr><td>↑＋必殺</td><td>必殺技2</td><td>対空を想定した623系</td></tr>
+<tr><td>相手方向＋必殺</td><td>必殺技3</td><td>従来の214系に相当。左右は相手位置基準</td></tr>
+<tr><td>↓＋必殺</td><td>咆哮</td><td>攻撃・飛び道具への対抗を想定した行動</td></tr>
+<tr><td>奥義</td><td>奥義の始動</td><td>ゲージが満タンのとき使用可能</td></tr>
+</tbody></table></div>
+<p class="small">方向割当は試作段階の設計で、本人による最終的な実機採用判断ではありません。通常攻撃・掴み・ギュイーン・後ろ入力ガードも使用します。CPUの強さやゴダンの強さなど、バランスの再調整は別レーンとして扱っています。</p>
+</section>
+<section>
+<h2>必殺技と奥義の違い</h2>
+<p><strong>必殺技</strong>は対戦画面の中でテンポを保ちながら迫力ある動きを見せる技。<strong>奥義</strong>は命中した場合にのみ、攻撃側と被弾側の3D演技・専用カメラ・エフェクト・効果音を組み合わせた約10秒のムービーへ移ります。</p>
+<ul>
+<li>空振り・ガードでは奥義ムービーに移行しません。</li>
+<li>ムービー中は戦闘、CPU、タイマー、HP・各種ゲージと入力進行を停止します。</li>
+<li>自然終了やスキップで通常対戦に復帰し、KOはムービー終了後に結果を表示します。</li>
+<li>キャラごとのカット割り、相手の反応、カメラの動きを制作。単純な共通ズームの使い回しにはしません。</li>
+</ul>
+</section>
+<section id="characters">
+<h2>全9キャラの奥義演出</h2>
+<p class="small">以下は本人が方向を指定した演出と、それに基づくv14制作内容の概要。技の正式名称ではなく、演技の見どころです。</p>
+<div class="roster">
+<article><h3>モグゾー</h3><p>地に足を付けた一段目から跳び上がる二段目へ。長いヒットストップで重さを残す二段アッパー。</p></article>
+<article><h3>ピスケ</h3><p>高速の蹴り突撃を複数方向から畳みかけ、最後にサマーソルトで打ち上げる。</p></article>
+<article><h3>ゴダン</h3><p>武道の構えと震脚、重い三連撃。追い詰めた相手を岩壁ごと破壊する。</p></article>
+<article><h3>ハクマ</h3><p>雪山で連続張り手。押し出してから反対方向へ背負い投げを決める。</p></article>
+<article><h3>チルカ</h3><p>かわいい顔のアップから分身が多方向攻撃。紫の爪痕が残り、本体が決める。</p></article>
+<article><h3>タキマル</h3><p>相手を放り、上から覗き込んで挑発。ジャイアントスイングで豪快に回す。</p></article>
+<article><h3>ヨミカゲ</h3><p>闇夜で姿を消し、背後から黒い一閃。うずくまる相手に二度目の一閃。</p></article>
+<article><h3>バレット</h3><p>尻尾の重打撃から爆発する木の実を投げ、振り向いた背後で爆発させる。</p><small>尾薙ぎ必殺は当たり判定との一致を優先して従来の尾軌道を維持。</small></article>
+<article><h3>ダークモグゾー</h3><p>闇の高速連撃、静止した溜めから重い一撃。背面の決めポーズで締める。</p></article>
+</div>
+</section>
+<section id="state">
+<h2>開発状況と確認できたこと</h2>
+<p><strong>v14統合：</strong>Claude制作の前後半2セットから9体の素材を取り込み、CodexのThree.js統合 [PR #180] で命中時ムービー・演技同期・カメラ・FX・Web Audio合成効果音を接続。元モデル本体と技性能テーブルの変更は含みません。</p>
+<p><strong>自動検証：</strong>2026-11-22時点で [Actions #45011268690] の10ジョブが成功。Node100件、素材148項目、Chromium WebGLで9奥義×相手9体=81組を検査。これらは各カットの目視の完成承認とは別です。</p>
+<p><strong>続く仕上げ：</strong>Claude [PR #183] ではヨミカゲの当て身反撃とバレットの尾軌道を維持したモーションを追加し、全ショットの見直しは制作途中。Codex [PR #184] では追加アニメデータの不要要素を除去し、9体の転送サイズを56.4MBから32.2MBへ削減する試作とFPS・読込時間の表示、実機確認モードを追加しています。</p>
+<p><strong>未確認：</strong>iPhone実機のFPS・発熱・メモリ・タッチ操作感、暗い奥義の屋外視認性、81通りすべての演技の肉眼評価。Draft PRはmainへマージされていません。録音済みボイス／効果音素材の導入も確認されておらず、現行音はWeb Audioの合成効果音です。</p>
+</section>
+<section id="sources">
+<h2>資料・制作の正本</h2>
+<ul>
+<li><a href="https://github.com/nagi300222/mamo-ken/pull/180">PR #180：Three.jsへの全9体統合</a>（検証済みDraft）</li>
+<li><a href="https://github.com/nagi300222/mamo-ken/pull/181">PR #181：Claude第一弾3体の制作素材</a></li>
+<li><a href="https://github.com/nagi300222/mamo-ken/pull/182">PR #182：Claude第二弾6体の制作素材</a></li>
+<li><a href="https://github.com/nagi300222/mamo-ken/pull/183">PR #183：モーション仕上げ</a>（制作中Draft）</li>
+<li><a href="https://github.com/nagi300222/mamo-ken/pull/184">PR #184：実機確認向け軽量化</a>（検証中Draft）</li>
+<li><a href="https://github.com/nagi300222/mamo-ken/actions/runs/45011268690">v14統合の成功したGitHub Actions</a></li>
+<li><a href="https://github.com/nagi300222/mamo-ken/blob/docs/mamoken-v14-claude-codex-production/docs/mamoken-showtime-v14/ULTIMATE_10S_DIRECTION.md">全9奥義の本人指定・制作指示</a></li>
+</ul>
+<p class="small">このページは開発状況の要約であり、技のダメージ・フレーム・コマンドの技術的な正本は各PRのコードと資料です。実機と本人の採用判断が済んでいない項目は「完成」と表記しません。</p>
+</section>
+</main>
+<footer>マモ拳 Wiki / 3D開発版 v14（2026-11-22） / <a href="index.html">旧2D版Wikiへ戻る</a></footer>
+</body></html>
