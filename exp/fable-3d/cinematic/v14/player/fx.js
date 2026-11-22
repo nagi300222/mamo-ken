@@ -15,7 +15,7 @@ export function createFx(THREE, scene, camera, manifest) {
   const BUILD = {
     // 地面を走る亀裂: from→to へ dur 秒で伸び、hold 秒残って消える
     ground_crack(c, ctx) {
-      const r = rnd(c.at * 100 + 3), a = new V(sx(ctx) * c.from[0], .004, c.from[1]), b = new V(sx(ctx) * c.to[0], .004, c.to[1]);
+      const r = rnd(c.at * 100 + 3), a = new V(sx(ctx) * c.from[0], .004, sx(ctx) * c.from[1]), b = new V(sx(ctx) * c.to[0], .004, sx(ctx) * c.to[1]);
       const n = 14, pts = [], w = c.width ?? .05, dir = b.clone().sub(a).normalize(), side = new V(-dir.z, 0, dir.x);
       for (let i = 0; i <= n; i++) { const p = a.clone().lerp(b, i / n).addScaledVector(side, (i === 0 || i === n ? 0 : (r() - .5) * w * 3.2)); pts.push(p); }
       const mk = (wd, y) => { const pos = []; for (let i = 0; i <= n; i++) { const t = Math.sin(Math.PI * Math.min(1, i / n * 1.15)) * .7 + .3; pos.push(...pts[i].clone().addScaledVector(side, wd * t).setY(y).toArray(), ...pts[i].clone().addScaledVector(side, -wd * t).setY(y).toArray()); }
@@ -28,7 +28,7 @@ export function createFx(THREE, scene, camera, manifest) {
     // 地面から突き出す岩: count 本が中心から外へ順に生える
     rock_spikes(c, ctx) {
       const r = rnd(c.at * 77 + 1), p0 = P(ctx, c), n = c.count ?? 5, objs = [], H = c.height ?? .5, R = c.radius ?? .18, mat = lit(col(c.color, 0x8a7458));
-      const line = c.line ? new V(sx(ctx) * c.line[0], 0, c.line[1]) : null;
+      const line = c.line ? new V(sx(ctx) * c.line[0], 0, sx(ctx) * c.line[1]) : null;
       for (let i = 0; i < n; i++) { const h = H * (.55 + .6 * r()) * (i === 0 ? 1.25 : 1), g = new THREE.ConeGeometry(h * .2, h, 5, 1); g.translate(0, h / 2, 0); const m = add(g, mat);
         const ang = r() * 6.28, rad = i === 0 ? 0 : R * (.4 + r() * .8); if (line) m.position.copy(p0).addScaledVector(line, i / Math.max(1, n - 1)).add(new V((r() - .5) * R, 0, (r() - .5) * R)); else m.position.set(p0.x + Math.cos(ang) * rad, 0, p0.z + Math.sin(ang) * rad);
         m.position.y = 0; m.rotation.set((r() - .5) * .5, r() * 6, (r() - .5) * .5); m.userData.d = (line ? i / n * (c.stagger ?? .25) : i * .025); objs.push(m); }
@@ -82,7 +82,7 @@ export function createFx(THREE, scene, camera, manifest) {
     slash_arc(c, ctx) {
       const p = P(ctx, c), g = new THREE.RingGeometry(.78, 1, 40, 1, 0, Math.PI * (c.arc ?? 1.1)), m = add(g, basic(col(c.color, 0xf1c8ff), { side: THREE.DoubleSide, blending: THREE.AdditiveBlending, depthTest: false }));
       m.position.copy(p); m.renderOrder = 19; const dur = c.dur ?? .26, S = c.size ?? .5;
-      return { objs: [m], life: dur, update(age) { const u = age / dur; m.quaternion.copy(camera.quaternion); m.rotateZ(THREE.MathUtils.degToRad((c.angle ?? 30) * sx(ctx)) + out3(u) * (c.sweep ?? 1.2) * sx(ctx)); m.scale.setScalar(S * (.8 + .5 * out3(u))); m.material.opacity = (1 - u) ** 1.3; } };
+      return { objs: [m], life: dur, update(age) { const u = age / dur; m.quaternion.copy(camera.quaternion); m.rotateZ(THREE.MathUtils.degToRad(c.angle ?? 30) + out3(u) * (c.sweep ?? 1.2)); m.scale.setScalar(S * (.8 + .5 * out3(u))); m.material.opacity = (1 - u) ** 1.3; } };
     },
     // 煙になって消える（分身の消滅）
     puff(c, ctx) {
@@ -112,7 +112,7 @@ export function createFx(THREE, scene, camera, manifest) {
       const dur = c.dur ?? .12, hold = c.hold ?? 2, cv = c.convergeAt != null ? c.convergeAt - c.at : null, life = cv != null ? cv + .3 : dur + hold; const tgt = new V();
       return { objs, life, update(age, ctx2) { const grow = clamp01(age / dur), fade = clamp01((life - age) / .25); let pos = p, sc = 1;
         if (cv != null && age > cv) { const u = clamp01((age - cv) / .28); ctx2.anchorPos({ anchor: c.convergeTo, offset: [0, 0, 0] }, tgt); pos = p.clone().lerp(tgt, u * u); sc = 1 - .7 * u; }
-        objs.forEach((m, i) => { m.position.copy(pos); m.quaternion.copy(camera.quaternion); m.rotateZ(THREE.MathUtils.degToRad((c.angle ?? -35) * sx(ctx))); const base = i % 2 ? 1.25 : 1; m.scale.set(base * sc * (.2 + .8 * out3(grow)), base * sc, 1); m.geometry.setDrawRange(0, Math.floor(grow * 14) * 6);
+        objs.forEach((m, i) => { m.position.copy(pos); m.quaternion.copy(camera.quaternion); m.rotateZ(THREE.MathUtils.degToRad(c.angle ?? -35)); const base = i % 2 ? 1.25 : 1; m.scale.set(base * sc * (.2 + .8 * out3(grow)), base * sc, 1); m.geometry.setDrawRange(0, Math.floor(grow * 14) * 6);
           m.material.opacity = (i % 2 ? .55 : .75 + .25 * Math.sin(age * 22 + i)) * fade; }); } };
     },
     // 毒の霧: 役者のまわりに紫の泡が湧き続ける
