@@ -337,3 +337,54 @@ button.primary:active{transform:translateY(1px)}
   #stick-rail .step-pad{column-gap:3px}
   #stick-rail .step-button{height:30px;font-size:9px}
 }
+
+
+/* v0.11 Astra UI lane. No changes to #combat-layout grid or camera sizing. */
+#av-settings[popover]{
+  inset:var(--topbar-height) max(6px,env(safe-area-inset-right)) auto auto;
+  margin:0;padding:10px 12px;width:min(285px,94vw);
+  color:#e9f3fb;background:#122535f5;border:1px solid #7894ad;
+  border-radius:9px;box-shadow:0 9px 30px #061019b8;z-index:30
+}
+#av-settings strong{display:block;font-size:12px;color:#ffe0a5;margin-bottom:8px}
+#av-settings .av-settings-buttons{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:5px}
+#av-settings .av-settings-buttons button{min-height:36px;white-space:nowrap}
+#av-settings small{display:block;font-size:9px;margin-top:7px;color:#a9bed1;line-height:1.35}
+#arena .hud-side{position:relative}
+#arena .hud-side .hud-name:after{content:attr(data-mark);display:none}
+#arena .hud-side[data-element] .hud-name{position:relative;padding-inline-start:16px}
+#arena .hud-side[data-element] .hud-name:before{
+  content:attr(data-mark);position:absolute;left:0;top:0;
+  display:grid;place-items:center;height:14px;width:14px;border-radius:3px;
+  background:var(--p1-accent,#edca88);color:#0c1825;font-size:9px;font-weight:900;text-shadow:none
+}
+#arena .hud-side.mirrored[data-element] .hud-name{padding-inline-start:0;padding-inline-end:16px}
+#arena .hud-side.mirrored[data-element] .hud-name:before{left:auto;right:0;background:var(--p2-accent,#e7ba8a)}
+#arena .hud-side[data-element="moon"] .hud-name:before,
+#arena .hud-side[data-element="wind"] .hud-name:before{border-radius:50%}
+#arena .hud-side[data-element="dark"] .hud-name:before,
+#arena .hud-side[data-element="stone"] .hud-name:before{clip-path:polygon(50% 0,100% 35%,80% 100%,20% 100%,0 35%)}
+#arena .trait-row{display:flex;justify-content:space-between;min-height:10px;align-items:center;gap:8px}
+#arena .trait-word{font-size:9px;font-weight:800;color:#ccdae3;letter-spacing:.12em}
+#arena .charge-pips{display:flex;gap:5px;align-items:center;flex-direction:row}
+#arena .charge-pips[hidden]{display:none}
+#arena .charge-pips i{display:block;width:10px;height:5px;border:1px solid #a37e4a;border-radius:5px;transform:skewX(-20deg);background:#3d342b}
+#arena .charge-pips i.filled{background:#ffbd55;box-shadow:0 0 4px #e9a93f}
+#arena .ultimate-ready{position:absolute;font-weight:900;right:0;bottom:0;color:#ffe6a7;font-size:9px;letter-spacing:.08em}
+#arena .ultimate-ready[hidden]{display:none}
+#arena .hud-side.mirrored .ultimate-ready{right:auto;left:0}
+#arena .showtime-banner{display:grid;grid-template-columns:40px minmax(0,1fr);gap:9px;align-items:center;max-width:min(79%,385px);padding:4px 9px;min-height:54px}
+#arena .showtime-banner .showtime-portrait{width:40px;height:40px;object-fit:cover;border-radius:5px;border:1px solid var(--showtime);background:#233340}
+#arena .showtime-banner .showtime-copy{display:grid;gap:1px;text-align:left}
+#arena .showtime-banner[data-element="illusion"]{background:linear-gradient(120deg,#392053dd,#111729ee,#4e2772b8)}
+#arena .showtime-banner[data-element="stone"]{background:linear-gradient(120deg,#593623df,#141922ed,#4e3a2b)}
+#arena .showtime-banner[data-element="moon"]{background:linear-gradient(120deg,#1c4c5fdc,#17202eea,#294a56)}
+#arena .showtime-banner[data-element="dark"]{background:linear-gradient(120deg,#32204eda,#101521ed,#43216ad0)}
+@media(max-height:420px) and (orientation:landscape){
+  #arena .trait-row{min-height:7px}
+  #arena .trait-word{font-size:7px}
+  #arena .charge-pips i{width:7px;height:4px}
+  #arena .showtime-banner{grid-template-columns:29px minmax(0,1fr);min-height:36px;top:56px}
+  #arena .showtime-banner .showtime-portrait{width:29px;height:29px}
+  #arena .showtime-banner .showtime-copy strong{font-size:11px}
+}

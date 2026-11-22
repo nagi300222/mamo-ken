@@ -9,6 +9,7 @@ import { frameTargets } from './camera-frame.js';
 import { showtimeFor, showtimeHex, superCaption, isShowtimeMove } from './showtime-profiles.js';
 import { createCombatAudio } from './combat-audio.js';
 import { createArenaMusic } from './arena-music.js';
+import { hudTheme, isSuperReady, chargePips } from './hud-themes.js';
 
 const $=id=>document.getElementById(id), canvas=$('stage');
 const scene=new THREE.Scene();scene.background=new THREE.Color(0x758993);
@@ -40,6 +41,8 @@ const actors=[null,null], bullets=new Map(), flashes=[];
 const audioFX=createCombatAudio();
 const music=createArenaMusic(()=>audioFX.context);
 const reducedMotion=window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches??false;
+let visualFXEnabled=true;
+const effectsAllowed=()=>visualFXEnabled&&!reducedMotion;
 // Shared buffers and geometry: no new geometry allocations for each hit.
 const fxGeometry=Object.freeze({
   hit:new THREE.OctahedronGeometry(.10,0),
@@ -49,26 +52,31 @@ const fxGeometry=Object.freeze({
   special:new THREE.RingGeometry(.19,.235,32),
   ultimate:new THREE.RingGeometry(.30,.34,40),
   shard:new THREE.TetrahedronGeometry(.09),
-  slash:new THREE.PlaneGeometry(.07,.47)
+  slash:new THREE.PlaneGeometry(.07,.47),
+  reticle:new THREE.RingGeometry(.17,.21,4)
 });
 let cameraShake=0, cameraShakeStrength=0, bannerUntil=0;
 function shake(strength,frames=7){
-  if(reducedMotion)return;
+  if(!effectsAllowed())return;
   cameraShake=Math.max(cameraShake,frames);
   cameraShakeStrength=Math.max(cameraShakeStrength,strength);
 }
 function showBanner(slot,id,move){
-  const banner=$('showtime-banner'), profile=showtimeFor(id);
+  const banner=$('showtime-banner'),profile=showtimeFor(id),theme=hudTheme(id);
   banner.style.setProperty('--showtime',showtimeHex(id));
+  banner.dataset.element=theme.tone;
   banner.replaceChildren();
+  const portrait=document.createElement('img'),copy=document.createElement('div');
+  portrait.className='showtime-portrait';portrait.alt='';portrait.src=MODEL_ASSETS[id].portrait;
   const lead=document.createElement('span'),body=document.createElement('strong');
-  lead.textContent=(slot===0?'1P':'CPU')+' · '+profile.signature;
+  lead.textContent=(slot===0?'1P':'CPU')+' · '+theme.mark+' / '+profile.signature;
   body.textContent=move;
-  banner.append(lead,body);banner.classList.add('active');
+  copy.className='showtime-copy';copy.append(lead,body);
+  banner.append(portrait,copy);banner.classList.add('active');
   bannerUntil=(battle?.frame??0)+68;
 }
 function impactFX(kind,color,x,y,scale=1,life=14){
-  if(reducedMotion)return;
+  if(!effectsAllowed())return;
   while(flashes.length>24){
     const old=flashes.shift();scene.remove(old.mesh);old.mesh.material.dispose();
   }
@@ -82,7 +90,7 @@ function updateActionTrail(a,p){
   if(!a)return;
   const active=p.action&&isShowtimeMove(p.action.id)&&
     p.frame>=Math.max(0,p.action.startup-3)&&
-    p.frame<=p.action.startup+p.action.active+4&&!p.stop&&!reducedMotion;
+    p.frame<=p.action.startup+p.action.active+4&&!p.stop&&effectsAllowed();
   if(!active){if(a.trail){a.trail.mesh.visible=false;a.trail.points.length=0;a.trail.actionKey='';}return;}
   const profile=showtimeFor(a.id),key=p.action.serial;
   if(!a.trail){
@@ -127,7 +135,9 @@ function superSignature(p){
     impactFX('special',0xdd9aff,x,y+.04,1,18);
   }else if(p.id==='takimaru'){ // square grab-seal echoes
     for(const offset of [-.23,.23])impactFX('clinch',0xffd695,x+offset,y,.98,21);
-  }else if(p.id==='yomikage'){ // moonlight crossing slashes
+  }else if(p.id==='yomikage'){ // moonlight crossing slashes and target reticle
+    const target=battle?.fighters?.[1-p.slot];
+    if(target)impactFX('reticle',0x9defff,target.x,target.y+.34,.85,20);
     for(const dir of [-1,1]){
       const slash=impactFX('slash',0x9defff,x+d*.28,y+dir*.15,1,19);
       if(slash)slash.rotation.z=dir*.68;
@@ -147,7 +157,7 @@ function actionShowtime(e){
     showBanner(e.slot,p.id,e.name);
     audioFX.play('ultimate',p.id);
     superSignature(p); // character-specific shape pattern, visual only
-    actors[e.slot]?.illusions?.start(p);
+    if(effectsAllowed())actors[e.slot]?.illusions?.start(p);
     shake(.014,10);
   }else if(/^s[123]$/.test(e.action)){
     audioFX.play('special',p.id);
@@ -410,8 +420,20 @@ function showUltimateStatus(){
 function hud(){
   if(!battle)return;
   for(let i=0;i<2;i++){
-    const p=battle.fighters[i],r=ROSTER[p.id];
+    const p=battle.fighters[i],r=ROSTER[p.id],theme=hudTheme(p.id);
+    $('hud-side-'+i).dataset.element=theme.tone;
+    $('hud-side-'+i).dataset.mark=theme.mark;
     $('name-'+i).textContent=r.name;
+    $('trait-'+i).textContent=theme.word;
+    const ready=isSuperReady(p.super);
+    $('ultimate-ready-'+i).hidden=!ready;
+    const chargeBar=$('charge-pips-'+i);
+    chargeBar.hidden=p.id!=='bullet';
+    if(p.id==='bullet'){
+      const pipState=chargePips(p.ability.charge);
+      [...chargeBar.children].forEach((node,k)=>node.classList.toggle('filled',pipState[k]));
+      chargeBar.setAttribute('aria-label','バレットのチャージ '+p.ability.charge+'/3');
+    }
     $('arena').style.setProperty(i===0?'--p1-accent':'--p2-accent',showtimeHex(p.id));
     $('ability-'+i).textContent=abilityLabel(p);
     $('hp-'+i).style.width=fwd(p.hp/r.hp*100)+'%';
@@ -551,6 +573,19 @@ document.addEventListener('keyup',e=>{
 });
 window.addEventListener('blur',()=>{clearInput();paused=true;$('pause').textContent='再開';music.update(false);});
 document.addEventListener('visibilitychange',()=>{if(document.hidden)music.update(false);});
+$('fx-toggle').onclick=()=>{
+  visualFXEnabled=!visualFXEnabled;
+  const enabled=effectsAllowed();
+  $('fx-toggle').textContent=enabled?'演出 ON':'演出 小';
+  $('fx-toggle').setAttribute('aria-pressed',String(enabled));
+  if(!enabled){
+    cameraShake=0;cameraShakeStrength=0;
+    for(const f of flashes){scene.remove(f.mesh);f.mesh.material.dispose();}
+    flashes.length=0;
+    for(const actor of actors){actor?.illusions?.stop();if(actor?.trail)actor.trail.mesh.visible=false;}
+  }
+};
+if(reducedMotion){$('fx-toggle').textContent='演出 小';$('fx-toggle').disabled=true;$('fx-toggle').title='OSの動きを減らす設定を優先';}
 $('music-toggle').onclick=()=>{
   if(!audioFX.unlock())return;
   const enabled=music.setEnabled(!music.enabled);
