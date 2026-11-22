@@ -8,6 +8,7 @@ on:
       - feat/mamoken-v14-codex-integration
       - feat/mamoken-v14-device-ready
       - feat/mamoken-v15-combat-cancels
+      - feat/mamoken-v15-54-distinct-normal-clips
   pull_request:
     branches:
       - feat/mamoken-astra-hud-v11
