@@ -1,3 +1,9 @@
+# 独立実測：PR197 f71b812 + 制作ブランチを NORMAL_CONTACTS 接続で結合したツリー、実ゲーム（Chromium/WebGL）毎フレーム計測
+# 結果：計測できた 53 技すべてで、発生フレームの打撃部位の実測前方距離 = 契約 reach（最大差 0.001m）、前方到達ピーク = 発生フレーム。
+# 「要確認」の読み方：
+#   空中技 9 件 … 試験が跳躍頂点（高さ約0.69m）から最大間合いで出しているため、高さ条件でヒットが遅れる／当たらない。reach の不一致ではない。
+#   hakuma stand_heavy … 計測ツールが発生フレーム(14F)のサンプルを1つ取りこぼした（1ステップで2戦闘フレーム進んだ）。前後フレームは正常。
+#   dark_moguzo air_heavy … 蹴り足 0.262 に対し反対の手が 0.266（4mm 前）。
 moguzo stand_weak S5 hit@5 armL 実測0.415 契約0.415 差+0.000 ピークF5(0.415) 最前=armL 0.415 OK
 moguzo stand_heavy S12 hit@12 armR 実測0.463 契約0.463 差+0.000 ピークF12(0.463) 最前=armR 0.463 OK
 moguzo crouch_weak S6 hit@6 armR 実測0.460 契約0.460 差+0.000 ピークF6(0.460) 最前=armR 0.460 OK
@@ -40,4 +46,16 @@ yomikage crouch_weak S6 hit@6 armR 実測0.417 契約0.417 差+0.000 ピークF6
 yomikage crouch_heavy S13 hit@13 armR 実測0.437 契約0.437 差+0.000 ピークF13(0.437) 最前=head 0.440 OK
 yomikage air_weak S6 hit@None armL 実測0.342 契約0.342 差+0.000 ピークF6(0.342) 最前=armL 0.342 <<< 要確認
 yomikage air_heavy S11 hit@11 armR 実測0.408 契約0.408 差+0.000 ピークF11(0.408) 最前=armR 0.408 OK
-checked 42 mismatch 7
+bullet stand_weak S6 hit@6 head 実測0.417 契約0.417 差+0.000 ピークF6(0.417) 最前=head 0.417 OK
+bullet stand_heavy S15 hit@15 tail 実測0.655 契約0.656 差-0.001 ピークF15(0.655) 最前=tail 0.655 OK
+bullet crouch_weak S7 hit@7 tail 実測0.548 契約0.548 差+0.000 ピークF7(0.548) 最前=tail 0.548 OK
+bullet crouch_heavy S16 hit@16 tail 実測0.641 契約0.641 差+0.000 ピークF16(0.641) 最前=tail 0.641 OK
+bullet air_weak S7 hit@None tail 実測0.551 契約0.551 差+0.000 ピークF7(0.551) 最前=tail 0.551 <<< 要確認
+bullet air_heavy S14 hit@14 tail 実測0.552 契約0.552 差+0.000 ピークF14(0.552) 最前=tail 0.552 OK
+dark_moguzo stand_weak S3 hit@3 armR 実測0.395 契約0.395 差+0.000 ピークF3(0.395) 最前=armR 0.395 OK
+dark_moguzo stand_heavy S10 hit@10 armR 実測0.440 契約0.440 差+0.000 ピークF10(0.440) 最前=armR 0.440 OK
+dark_moguzo crouch_weak S4 hit@4 armR 実測0.437 契約0.437 差+0.000 ピークF4(0.437) 最前=head 0.442 OK
+dark_moguzo crouch_heavy S11 hit@11 armR 実測0.509 契約0.509 差+0.000 ピークF11(0.509) 最前=armR 0.509 OK
+dark_moguzo air_weak S4 hit@None armR 実測0.336 契約0.336 差+0.000 ピークF4(0.336) 最前=armR 0.336 <<< 要確認
+dark_moguzo air_heavy S9 hit@11 legR 実測0.262 契約0.262 差+0.000 ピークF9(0.262) 最前=armL 0.266 <<< 要確認
+checked 54 mismatch 10
