@@ -1,0 +1,14 @@
+{
+  "schemaVersion": 1,
+  "characters": {
+    "moguzo": "moguzo/manifest.json",
+    "pisuke": "pisuke/manifest.json",
+    "godan": "godan/manifest.json",
+    "hakuma": "hakuma/manifest.json",
+    "chirka": "chirka/manifest.json",
+    "takimaru": "takimaru/manifest.json",
+    "yomikage": "yomikage/manifest.json",
+    "bullet": "bullet/manifest.json",
+    "dark_moguzo": "dark_moguzo/manifest.json"
+  }
+}

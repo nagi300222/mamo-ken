@@ -74,3 +74,16 @@ The final contract must define timeline semantics (seconds independent from froz
 - Claude: per-move visual storyboard, GLB/Blender/Fable animation sources, render/motion files, shot manifest, sample video, clip name list and rig compatibility.
 - Codex: manifest parser and types, asset loader, shot director and animation sync, safe combat transition, robust cleanup, Node/Chromium/CI, Web build and screenshots.
 - Integration begins with Moguzo/Godan/Chirka and expands to all nine. Claude's design should drive the feel; Codex must not independently invent simple ring effects as a substitute.
+
+## 6. Three.js runtime mapping (implementation branch)
+
+- The runtime entry point is `exp/fable-3d/cinematic/v14/manifest.json` with `{"schemaVersion":1,"characters":{"chirka":"chirka/manifest.json"}}`. Each registered character file is `{"moves":[...]}` with the four per-move objects described above. Keep source Blender files and videos in GitHub. The Pages build copies the index, registered manifests and referenced GLBs.
+- `animationSources.attacker.glb` and `animationSources.target.glb` are optional, sibling GLBs. Omit `glb` to select a clip on the corresponding fighter's original model. Custom clips bind to the original model by GLB node name. If using a single target clip across the roster, export tracks for common bones and preserve character proportions.
+- For specials, optional `contactSeconds` is the authored clip's contact time. The player aligns that point with the existing startup boundary and fits the remaining clip to the existing active and recovery frames. Set `cueTrack` in ascending clip seconds.
+- The cinematic uses a separate stage in meters. The attacker starts at `(0,0,0)` facing +X and the target at `(.65,0,0)` facing −X. Camera positions and vector `lookAt` are stage coordinates. A named `lookAt` can be `attacker`, `target`, `midpoint`, or a fighter and exact bone name such as `target.head`.
+- Shots cut at their start. For a move inside a shot, specify optional `endPosition`, `endLookAt`, `endRollDeg` and one of `endFov` or `endOrthoWidth`. Perspective uses `fov` in vertical degrees and orthographic uses `orthoWidth` in meters of visible stage width. Easing values are `linear`, `easeInCubic`, `easeOutCubic` and `easeInOutCubic`.
+- Cinematic `cueTrack` times are absolute movie seconds. A visual cue can have an `actor` (`attacker` or `target`) and a `bone`. Supported effect keys are `hit`, `block`, `roar`, `clinch`, `special`, `ultimate`, `shard`, `slash` and `reticle`. Existing sound keys are `tap`, `hit`, `block`, `special`, `ultimate`, `roar`, `clinch`, `counter` and `ko`. The first special and movie deliveries can propose additional authored effects with the assets that require them.
+
+## Latest duration revision
+
+The character directions in ULTIMATE_10S_DIRECTION.md supersede earlier shot-count and duration guidance. Normal films span 9–11 seconds, with approximately 6–10 shots as an editorial guide. Shot count is flexible. Both fighter performances, camera, contact holds and cues share the movie clock. Accessibility playback uses selected static shots and removes shake/flash while keeping the same actor timeline and duration.

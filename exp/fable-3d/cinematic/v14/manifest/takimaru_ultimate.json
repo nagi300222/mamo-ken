@@ -1,0 +1,2658 @@
+{
+ "schemaVersion": 1,
+ "contractRevision": "v14-wave1-10s",
+ "directionSource": "docs/mamoken-showtime-v14/ULTIMATE_10S_DIRECTION.md",
+ "characterId": "takimaru",
+ "moveId": "ultimate",
+ "displayName": "天地落とし",
+ "trigger": "confirmed_unblocked_ultimate_hit",
+ "runtime": "threejs",
+ "durationSeconds": 10.4,
+ "fps": 60,
+ "concept": "襟首をつかんで前へ放り、倒れた相手を覗き込んで煽り、足首をつかんで三回転のジャイアントスイングから放り出す。",
+ "coordinateSystem": {
+  "origin": "命中時の両者の中点・地面",
+  "x": "攻撃側の向いている方向が +X",
+  "y": "上",
+  "z": "対戦カメラ側が +Z",
+  "unit": "m（GLBの単位）",
+  "mirror": "攻撃側が左向き（-X向き）のときはムービー全体を Y 軸まわりに 180 度回す（x・z の符号反転、rotY+180、rotZ・rotX の符号反転。カメラ roll はそのまま）"
+ },
+ "stage": {
+  "contactDistance": 0.5,
+  "backdrop": 2760984,
+  "fog": 2760984,
+  "fogNear": 5,
+  "fogFar": 18,
+  "sky": 16771272,
+  "ground": 4864552,
+  "ambient": 1.35,
+  "key": 16768174,
+  "keyPower": 2.8,
+  "rim": 16756832,
+  "rimPower": 2,
+  "floor": 5917754,
+  "mountain": 3812898,
+  "post": 6967864,
+  "accent": 16766613,
+  "accentCss": "#ffd695"
+ },
+ "animationSources": {
+  "attacker": {
+   "glb": "takimaru/takimaru_v14.glb",
+   "motions": "takimaru/takimaru_v14_motions.json",
+   "clip": "cin_takimaru_atk"
+  },
+  "target": {
+   "glbPattern": "<targetId>/<targetId>_v14.glb",
+   "clip": "cinv_takimaru",
+   "availableFor": [
+    "moguzo",
+    "pisuke",
+    "godan",
+    "hakuma",
+    "chirka",
+    "takimaru",
+    "yomikage",
+    "bullet",
+    "dark_moguzo"
+   ]
+  }
+ },
+ "inGameStartClip": {
+  "clip": "ult_v14",
+  "note": "命中前の始動。ここまでは通常の対戦カメラ。命中が確定した次のフレームでムービー t=0 へ"
+ },
+ "actorTracks": {
+  "attacker": {
+   "segments": [
+    {
+     "start": 0,
+     "clip": "cin_takimaru_atk"
+    }
+   ],
+   "pivotHeight": 0.45,
+   "root": [
+    {
+     "t": 0,
+     "pos": [
+      -0.25,
+      0,
+      0
+     ],
+     "rotY": 90
+    },
+    {
+     "t": 0.5,
+     "pos": [
+      -0.25,
+      0,
+      0
+     ],
+     "rotY": 90,
+     "ease": "hold"
+    },
+    {
+     "t": 0.7,
+     "pos": [
+      -0.10999999999999999,
+      0,
+      0
+     ],
+     "rotY": 90,
+     "ease": "inQuad"
+    },
+    {
+     "t": 1.4,
+     "pos": [
+      -0.10999999999999999,
+      0,
+      0
+     ],
+     "rotY": 90,
+     "ease": "hold"
+    },
+    {
+     "t": 2.6,
+     "pos": [
+      0.98,
+      0,
+      0
+     ],
+     "rotY": 90,
+     "ease": "linear"
+    },
+    {
+     "t": 4,
+     "pos": [
+      0.98,
+      0,
+      0
+     ],
+     "rotY": 90,
+     "ease": "hold"
+    },
+    {
+     "t": 4.4,
+     "pos": [
+      1.2,
+      0,
+      0
+     ],
+     "rotY": 90,
+     "ease": "inOutQuad"
+    },
+    {
+     "t": 5.49,
+     "pos": [
+      1.2,
+      0,
+      0
+     ],
+     "rotY": 135,
+     "ease": "linear"
+    },
+    {
+     "t": 5.693,
+     "pos": [
+      1.2,
+      0,
+      0
+     ],
+     "rotY": 180,
+     "ease": "linear"
+    },
+    {
+     "t": 5.849,
+     "pos": [
+      1.2,
+      0,
+      0
+     ],
+     "rotY": 225,
+     "ease": "linear"
+    },
+    {
+     "t": 5.98,
+     "pos": [
+      1.2,
+      0,
+      0
+     ],
+     "rotY": 270,
+     "ease": "linear"
+    },
+    {
+     "t": 6.095,
+     "pos": [
+      1.2,
+      0,
+      0
+     ],
+     "rotY": 315,
+     "ease": "linear"
+    },
+    {
+     "t": 6.2,
+     "pos": [
+      1.2,
+      0,
+      0
+     ],
+     "rotY": 360,
+     "ease": "linear"
+    },
+    {
+     "t": 6.296,
+     "pos": [
+      1.2,
+      0,
+      0
+     ],
+     "rotY": 405,
+     "ease": "linear"
+    },
+    {
+     "t": 6.386,
+     "pos": [
+      1.2,
+      0,
+      0
+     ],
+     "rotY": 450,
+     "ease": "linear"
+    },
+    {
+     "t": 6.47,
+     "pos": [
+      1.2,
+      0,
+      0
+     ],
+     "rotY": 495,
+     "ease": "linear"
+    },
+    {
+     "t": 6.549,
+     "pos": [
+      1.2,
+      0,
+      0
+     ],
+     "rotY": 540,
+     "ease": "linear"
+    },
+    {
+     "t": 6.625,
+     "pos": [
+      1.2,
+      0,
+      0
+     ],
+     "rotY": 585,
+     "ease": "linear"
+    },
+    {
+     "t": 6.697,
+     "pos": [
+      1.2,
+      0,
+      0
+     ],
+     "rotY": 630,
+     "ease": "linear"
+    },
+    {
+     "t": 6.766,
+     "pos": [
+      1.2,
+      0,
+      0
+     ],
+     "rotY": 675,
+     "ease": "linear"
+    },
+    {
+     "t": 6.833,
+     "pos": [
+      1.2,
+      0,
+      0
+     ],
+     "rotY": 720,
+     "ease": "linear"
+    },
+    {
+     "t": 6.897,
+     "pos": [
+      1.2,
+      0,
+      0
+     ],
+     "rotY": 765,
+     "ease": "linear"
+    },
+    {
+     "t": 6.96,
+     "pos": [
+      1.2,
+      0,
+      0
+     ],
+     "rotY": 810,
+     "ease": "linear"
+    },
+    {
+     "t": 7.02,
+     "pos": [
+      1.2,
+      0,
+      0
+     ],
+     "rotY": 855,
+     "ease": "linear"
+    },
+    {
+     "t": 7.078,
+     "pos": [
+      1.2,
+      0,
+      0
+     ],
+     "rotY": 900,
+     "ease": "linear"
+    },
+    {
+     "t": 7.135,
+     "pos": [
+      1.2,
+      0,
+      0
+     ],
+     "rotY": 945,
+     "ease": "linear"
+    },
+    {
+     "t": 7.191,
+     "pos": [
+      1.2,
+      0,
+      0
+     ],
+     "rotY": 990,
+     "ease": "linear"
+    },
+    {
+     "t": 7.245,
+     "pos": [
+      1.2,
+      0,
+      0
+     ],
+     "rotY": 1035,
+     "ease": "linear"
+    },
+    {
+     "t": 7.298,
+     "pos": [
+      1.2,
+      0,
+      0
+     ],
+     "rotY": 1080,
+     "ease": "linear"
+    },
+    {
+     "t": 7.349,
+     "pos": [
+      1.2,
+      0,
+      0
+     ],
+     "rotY": 1125,
+     "ease": "linear"
+    },
+    {
+     "t": 7.4,
+     "pos": [
+      1.2,
+      0,
+      0
+     ],
+     "rotY": 1170,
+     "ease": "linear"
+    },
+    {
+     "t": 8.6,
+     "pos": [
+      1.2,
+      0,
+      0
+     ],
+     "rotY": 1170,
+     "ease": "hold"
+    },
+    {
+     "t": 9.4,
+     "pos": [
+      1.2,
+      0,
+      0
+     ],
+     "rotY": 1094,
+     "ease": "inOutCubic"
+    },
+    {
+     "t": 10.4,
+     "pos": [
+      1.2,
+      0,
+      0
+     ],
+     "rotY": 1094
+    }
+   ]
+  },
+  "target": {
+   "segments": [
+    {
+     "start": 0,
+     "clip": "cinv_takimaru"
+    }
+   ],
+   "pivotHeight": 0.45,
+   "root": [
+    {
+     "t": 0,
+     "pos": [
+      0.25,
+      0,
+      0
+     ],
+     "rotY": -90
+    },
+    {
+     "t": 0.5,
+     "pos": [
+      0.1,
+      0.05,
+      0
+     ],
+     "rotY": -90,
+     "ease": "inOutQuad"
+    },
+    {
+     "t": 0.7,
+     "pos": [
+      0.3,
+      0.3,
+      0
+     ],
+     "rotY": -90,
+     "ease": "inQuad"
+    },
+    {
+     "t": 0.95,
+     "pos": [
+      1,
+      0.62,
+      0
+     ],
+     "rotY": -90,
+     "rotZ": -150,
+     "ease": "linear"
+    },
+    {
+     "t": 1.2,
+     "pos": [
+      1.5,
+      0,
+      0
+     ],
+     "rotY": -90,
+     "rotZ": -360,
+     "ease": "inQuad"
+    },
+    {
+     "t": 1.34,
+     "pos": [
+      1.6,
+      0.13,
+      0
+     ],
+     "rotY": -90,
+     "rotZ": -360,
+     "ease": "outQuad"
+    },
+    {
+     "t": 1.5,
+     "pos": [
+      1.66,
+      0,
+      0
+     ],
+     "rotY": -90,
+     "rotZ": -360,
+     "ease": "inQuad"
+    },
+    {
+     "t": 3.4,
+     "pos": [
+      1.66,
+      0,
+      0
+     ],
+     "rotY": -90,
+     "rotZ": -360,
+     "ease": "hold"
+    },
+    {
+     "t": 4,
+     "pos": [
+      1.74,
+      0,
+      0
+     ],
+     "rotY": -90,
+     "rotZ": -360,
+     "ease": "inOutQuad"
+    },
+    {
+     "t": 4.4,
+     "pos": [
+      1.72,
+      0,
+      0
+     ],
+     "rotY": -90,
+     "rotZ": -360,
+     "ease": "linear"
+    },
+    {
+     "t": 5,
+     "pos": [
+      1.52,
+      0.3,
+      0
+     ],
+     "rotY": 270,
+     "rotZ": -360,
+     "ease": "inOutQuad"
+    },
+    {
+     "t": 5.49,
+     "pos": [
+      1.4262741699796952,
+      0.30666666666666664,
+      -0.22627416997969518
+     ],
+     "rotY": 315,
+     "ease": "linear",
+     "rotZ": -360
+    },
+    {
+     "t": 5.693,
+     "pos": [
+      1.2,
+      0.3133333333333333,
+      -0.32
+     ],
+     "rotY": 360,
+     "ease": "linear",
+     "rotZ": -360
+    },
+    {
+     "t": 5.849,
+     "pos": [
+      0.9737258300203048,
+      0.32,
+      -0.22627416997969527
+     ],
+     "rotY": 405,
+     "ease": "linear",
+     "rotZ": -360
+    },
+    {
+     "t": 5.98,
+     "pos": [
+      0.8799999999999999,
+      0.32666666666666666,
+      -5.878304635907295e-17
+     ],
+     "rotY": 450,
+     "ease": "linear",
+     "rotZ": -360
+    },
+    {
+     "t": 6.095,
+     "pos": [
+      0.9737258300203047,
+      0.3333333333333333,
+      0.22627416997969516
+     ],
+     "rotY": 495,
+     "ease": "linear",
+     "rotZ": -360
+    },
+    {
+     "t": 6.2,
+     "pos": [
+      1.2,
+      0.33999999999999997,
+      0.32
+     ],
+     "rotY": 540,
+     "ease": "linear",
+     "rotZ": -360
+    },
+    {
+     "t": 6.296,
+     "pos": [
+      1.4262741699796948,
+      0.3466666666666667,
+      0.2262741699796955
+     ],
+     "rotY": 585,
+     "ease": "linear",
+     "rotZ": -360
+    },
+    {
+     "t": 6.386,
+     "pos": [
+      1.52,
+      0.35333333333333333,
+      9.797174393178826e-17
+     ],
+     "rotY": 630,
+     "ease": "linear",
+     "rotZ": -360
+    },
+    {
+     "t": 6.47,
+     "pos": [
+      1.426274169979695,
+      0.36,
+      -0.22627416997969532
+     ],
+     "rotY": 675,
+     "ease": "linear",
+     "rotZ": -360
+    },
+    {
+     "t": 6.549,
+     "pos": [
+      1.2000000000000002,
+      0.36666666666666664,
+      -0.32
+     ],
+     "rotY": 720,
+     "ease": "linear",
+     "rotZ": -360
+    },
+    {
+     "t": 6.625,
+     "pos": [
+      0.9737258300203047,
+      0.3733333333333333,
+      -0.22627416997969507
+     ],
+     "rotY": 765,
+     "ease": "linear",
+     "rotZ": -360
+    },
+    {
+     "t": 6.697,
+     "pos": [
+      0.8799999999999999,
+      0.38,
+      -1.3716044150450355e-16
+     ],
+     "rotY": 810,
+     "ease": "linear",
+     "rotZ": -360
+    },
+    {
+     "t": 6.766,
+     "pos": [
+      0.9737258300203049,
+      0.38666666666666666,
+      0.2262741699796953
+     ],
+     "rotY": 855,
+     "ease": "linear",
+     "rotZ": -360
+    },
+    {
+     "t": 6.833,
+     "pos": [
+      1.1999999999999997,
+      0.3933333333333333,
+      0.32
+     ],
+     "rotY": 900,
+     "ease": "linear",
+     "rotZ": -360
+    },
+    {
+     "t": 6.897,
+     "pos": [
+      1.4262741699796948,
+      0.39999999999999997,
+      0.22627416997969554
+     ],
+     "rotY": 945,
+     "ease": "linear",
+     "rotZ": -360
+    },
+    {
+     "t": 6.96,
+     "pos": [
+      1.52,
+      0.4066666666666667,
+      7.44783327685299e-16
+     ],
+     "rotY": 990,
+     "ease": "linear",
+     "rotZ": -360
+    },
+    {
+     "t": 7.02,
+     "pos": [
+      1.426274169979695,
+      0.41333333333333333,
+      -0.22627416997969527
+     ],
+     "rotY": 1035,
+     "ease": "linear",
+     "rotZ": -360
+    },
+    {
+     "t": 7.078,
+     "pos": [
+      1.2000000000000002,
+      0.42,
+      -0.32
+     ],
+     "rotY": 1080,
+     "ease": "linear",
+     "rotZ": -360
+    },
+    {
+     "t": 7.135,
+     "pos": [
+      0.9737258300203054,
+      0.42666666666666664,
+      -0.22627416997969596
+     ],
+     "rotY": 1125,
+     "ease": "linear",
+     "rotZ": -360
+    },
+    {
+     "t": 7.191,
+     "pos": [
+      0.8799999999999999,
+      0.43333333333333335,
+      3.52896351958146e-16
+     ],
+     "rotY": 1170,
+     "ease": "linear",
+     "rotZ": -360
+    },
+    {
+     "t": 7.245,
+     "pos": [
+      0.9737258300203044,
+      0.43999999999999995,
+      0.22627416997969488
+     ],
+     "rotY": 1215,
+     "ease": "linear",
+     "rotZ": -360
+    },
+    {
+     "t": 7.298,
+     "pos": [
+      1.1999999999999997,
+      0.44666666666666666,
+      0.32
+     ],
+     "rotY": 1260,
+     "ease": "linear",
+     "rotZ": -360
+    },
+    {
+     "t": 7.349,
+     "pos": [
+      1.4262741699796952,
+      0.45333333333333337,
+      0.22627416997969518
+     ],
+     "rotY": 1305,
+     "ease": "linear",
+     "rotZ": -360
+    },
+    {
+     "t": 7.4,
+     "pos": [
+      1.52,
+      0.45999999999999996,
+      -3.1370765438543067e-16
+     ],
+     "rotY": 1350,
+     "ease": "linear",
+     "rotZ": -360
+    },
+    {
+     "t": 8.1,
+     "pos": [
+      4,
+      0,
+      0.1
+     ],
+     "rotY": 1890,
+     "rotZ": -360,
+     "ease": "linear"
+    },
+    {
+     "t": 8.24,
+     "pos": [
+      4.14,
+      0.13,
+      0.1
+     ],
+     "rotY": 1890,
+     "rotZ": -360,
+     "ease": "outQuad"
+    },
+    {
+     "t": 8.4,
+     "pos": [
+      4.25,
+      0,
+      0.1
+     ],
+     "rotY": 1890,
+     "rotZ": -360,
+     "ease": "inQuad"
+    },
+    {
+     "t": 10.4,
+     "pos": [
+      4.25,
+      0,
+      0.1
+     ],
+     "rotY": 1890,
+     "rotZ": -360
+    }
+   ]
+  }
+ },
+ "shots": [
+  {
+   "id": "01-toss",
+   "title": "前へ放る",
+   "start": 0,
+   "end": 1.4,
+   "intent": "落ちる位置の地面の高さで待つカメラ。引き寄せて放られた相手が、こちらへ飛んできて目の前に落ちる",
+   "actorPose": {
+    "attacker": "襟首を引き寄せ、体をひねって前へ放り投げる",
+    "target": "引かれて前のめり→放られて回り、地面で跳ねる"
+   },
+   "camera": {
+    "rig": "landing-spot-low",
+    "projection": "perspective",
+    "position": {
+     "anchor": "stage",
+     "offset": [
+      0.6,
+      0.3,
+      1.5
+     ]
+    },
+    "lookAt": {
+     "anchor": "stage",
+     "offset": [
+      0,
+      0.34,
+      0
+     ]
+    },
+    "fov": 40,
+    "rollDeg": -4,
+    "easing": "outQuad",
+    "move": "固定。相手が手前へ飛び込んでくる",
+    "keys": [
+     {
+      "t": 0,
+      "pos": {
+       "anchor": "stage",
+       "offset": [
+        0.6,
+        0.3,
+        1.5
+       ]
+      },
+      "look": {
+       "anchor": "stage",
+       "offset": [
+        0,
+        0.34,
+        0
+       ]
+      },
+      "fov": 40,
+      "roll": -4,
+      "ease": "inOutCubic"
+     },
+     {
+      "t": 0.5,
+      "pos": {
+       "anchor": "stage",
+       "offset": [
+        1.2,
+        0.14,
+        1.2
+       ]
+      },
+      "look": {
+       "anchor": "attacker.chest",
+       "offset": [
+        0.2,
+        0,
+        0
+       ]
+      },
+      "fov": 46,
+      "roll": 4,
+      "ease": "outExpo"
+     },
+     {
+      "t": 0.95,
+      "pos": {
+       "anchor": "stage",
+       "offset": [
+        1.95,
+        0.08,
+        0.9
+       ]
+      },
+      "look": {
+       "anchor": "target.pelvis",
+       "offset": [
+        0,
+        0,
+        0
+       ]
+      },
+      "fov": 50,
+      "roll": 8,
+      "ease": "inOutQuad"
+     },
+     {
+      "t": 1.4,
+      "pos": {
+       "anchor": "stage",
+       "offset": [
+        2.1,
+        0.07,
+        0.85
+       ]
+      },
+      "look": {
+       "anchor": "target.pelvis",
+       "offset": [
+        0,
+        0.04,
+        0
+       ]
+      },
+      "fov": 50,
+      "roll": 6,
+      "ease": "outQuad"
+     }
+    ]
+   },
+   "fxCues": [
+    {
+     "at": 0,
+     "key": "flash",
+     "type": "vfx",
+     "dur": 0.1,
+     "opacity": 0.35
+    },
+    {
+     "at": 0,
+     "key": "shake",
+     "type": "shake",
+     "dur": 0.2,
+     "amp": 0.03
+    },
+    {
+     "at": 0.72,
+     "key": "speed_lines",
+     "type": "vfx",
+     "dur": 0.4,
+     "opacity": 0.35
+    },
+    {
+     "at": 1.2,
+     "key": "hitstop",
+     "type": "hitstop",
+     "dur": 0.1,
+     "strength": "heavy"
+    },
+    {
+     "at": 1.2,
+     "key": "shake",
+     "type": "shake",
+     "dur": 0.5,
+     "amp": 0.07
+    },
+    {
+     "at": 1.2,
+     "key": "dust",
+     "type": "vfx",
+     "anchor": "target.root",
+     "count": 14,
+     "spread": 0.7
+    },
+    {
+     "at": 1.2,
+     "key": "debris",
+     "type": "vfx",
+     "anchor": "target.root",
+     "count": 12,
+     "power": 1.5
+    },
+    {
+     "at": 1.2,
+     "key": "shock_ring",
+     "type": "vfx",
+     "anchor": "target.root",
+     "radius": 1.3,
+     "dur": 0.4
+    }
+   ],
+   "sfxCues": [
+    {
+     "at": 0,
+     "key": "grab"
+    },
+    {
+     "at": 0.7,
+     "key": "throw_whoosh"
+    },
+    {
+     "at": 1.2,
+     "key": "body_slam"
+    }
+   ]
+  },
+  {
+   "id": "02-approach",
+   "title": "歩み寄る",
+   "start": 1.4,
+   "end": 2.6,
+   "intent": "倒れた相手の頭の横・地面の高さ。肩を揺らして歩いてくるタキマルが、一歩ごとに大きくなる",
+   "actorPose": {
+    "attacker": "肩を揺らして五歩で歩み寄る",
+    "target": "うめき、近づく相手に気づいて頭を起こす"
+   },
+   "camera": {
+    "rig": "victim-level-approach",
+    "projection": "perspective",
+    "position": {
+     "anchor": "target.head",
+     "offset": [
+      0.5,
+      0.03,
+      0.42
+     ]
+    },
+    "lookAt": {
+     "anchor": "attacker.chest",
+     "offset": [
+      0,
+      0.05,
+      0
+     ]
+    },
+    "fov": 46,
+    "rollDeg": 7,
+    "easing": "linear",
+    "move": "固定。一歩ごとに揺れる",
+    "keys": [
+     {
+      "t": 1.4,
+      "pos": {
+       "anchor": "target.head",
+       "offset": [
+        0.5,
+        0.03,
+        0.42
+       ]
+      },
+      "look": {
+       "anchor": "attacker.chest",
+       "offset": [
+        0,
+        0.05,
+        0
+       ]
+      },
+      "fov": 46,
+      "roll": 7,
+      "ease": "inOutCubic"
+     },
+     {
+      "t": 2.6,
+      "pos": {
+       "anchor": "target.head",
+       "offset": [
+        0.46,
+        0.03,
+        0.38
+       ]
+      },
+      "look": {
+       "anchor": "attacker.head",
+       "offset": [
+        0,
+        -0.1,
+        0
+       ]
+      },
+      "fov": 44,
+      "roll": 5,
+      "ease": "linear"
+     }
+    ]
+   },
+   "fxCues": [
+    {
+     "at": 1.76,
+     "key": "shake",
+     "type": "shake",
+     "dur": 0.22,
+     "amp": 0.03
+    },
+    {
+     "at": 1.76,
+     "key": "dust",
+     "type": "vfx",
+     "anchor": "attacker.root",
+     "count": 5,
+     "spread": 0.25
+    },
+    {
+     "at": 2.02,
+     "key": "shake",
+     "type": "shake",
+     "dur": 0.22,
+     "amp": 0.03
+    },
+    {
+     "at": 2.02,
+     "key": "dust",
+     "type": "vfx",
+     "anchor": "attacker.root",
+     "count": 5,
+     "spread": 0.25
+    },
+    {
+     "at": 2.28,
+     "key": "shake",
+     "type": "shake",
+     "dur": 0.22,
+     "amp": 0.03
+    },
+    {
+     "at": 2.28,
+     "key": "dust",
+     "type": "vfx",
+     "anchor": "attacker.root",
+     "count": 5,
+     "spread": 0.25
+    },
+    {
+     "at": 2.54,
+     "key": "shake",
+     "type": "shake",
+     "dur": 0.22,
+     "amp": 0.03
+    },
+    {
+     "at": 2.54,
+     "key": "dust",
+     "type": "vfx",
+     "anchor": "attacker.root",
+     "count": 5,
+     "spread": 0.25
+    }
+   ],
+   "sfxCues": [
+    {
+     "at": 1.76,
+     "key": "heavy_step"
+    },
+    {
+     "at": 2.02,
+     "key": "heavy_step"
+    },
+    {
+     "at": 2.28,
+     "key": "heavy_step"
+    },
+    {
+     "at": 2.54,
+     "key": "heavy_step"
+    }
+   ]
+  },
+  {
+   "id": "03-look-up",
+   "title": "見上げる",
+   "start": 2.6,
+   "end": 3.3,
+   "intent": "相手の目の位置から真上を見上げる。腰に手を当てて覗き込む顔が画面を覆う",
+   "actorPose": {
+    "attacker": "腰に手を当て、上体を倒して覗き込む",
+    "target": "仰向けで見上げる（カメラ位置）"
+   },
+   "camera": {
+    "rig": "worms-eye-pov",
+    "projection": "perspective",
+    "position": {
+     "anchor": "target.head",
+     "offset": [
+      0.02,
+      0.1,
+      0.06
+     ]
+    },
+    "lookAt": {
+     "anchor": "attacker.head",
+     "offset": [
+      0,
+      0.05,
+      0
+     ]
+    },
+    "fov": 62,
+    "rollDeg": -8,
+    "easing": "outQuad",
+    "move": "見上げたまま、覗き込みに合わせて少し下がる",
+    "keys": [
+     {
+      "t": 2.6,
+      "pos": {
+       "anchor": "target.head",
+       "offset": [
+        0.02,
+        0.1,
+        0.06
+       ]
+      },
+      "look": {
+       "anchor": "attacker.head",
+       "offset": [
+        0,
+        0.05,
+        0
+       ]
+      },
+      "fov": 62,
+      "roll": -8,
+      "ease": "inOutCubic"
+     },
+     {
+      "t": 3.3,
+      "pos": {
+       "anchor": "target.head",
+       "offset": [
+        0.04,
+        0.08,
+        0.08
+       ]
+      },
+      "look": {
+       "anchor": "attacker.head",
+       "offset": [
+        0,
+        0,
+        0
+       ]
+      },
+      "fov": 56,
+      "roll": -4,
+      "ease": "outQuad"
+     }
+    ]
+   },
+   "fxCues": [],
+   "sfxCues": [
+    {
+     "at": 2.95,
+     "key": "taunt_grunt"
+    }
+   ]
+  },
+  {
+   "id": "04-taunt",
+   "title": "煽る",
+   "start": 3.3,
+   "end": 4,
+   "intent": "タキマルの頭の上から見下ろす。指で「来い」と煽る手と、這って逃げようとする相手",
+   "actorPose": {
+    "attacker": "覗き込んだまま、指で二度「来い」",
+    "target": "這って逃げようとする"
+   },
+   "camera": {
+    "rig": "over-head-high-angle",
+    "projection": "perspective",
+    "position": {
+     "anchor": "attacker.head",
+     "offset": [
+      -0.34,
+      0.42,
+      0.34
+     ]
+    },
+    "lookAt": {
+     "anchor": "target.chest",
+     "offset": [
+      -0.1,
+      0,
+      0
+     ]
+    },
+    "fov": 48,
+    "rollDeg": 6,
+    "easing": "linear",
+    "move": "頭越しの見下ろし",
+    "keys": [
+     {
+      "t": 3.3,
+      "pos": {
+       "anchor": "attacker.head",
+       "offset": [
+        -0.34,
+        0.42,
+        0.34
+       ]
+      },
+      "look": {
+       "anchor": "target.chest",
+       "offset": [
+        -0.1,
+        0,
+        0
+       ]
+      },
+      "fov": 48,
+      "roll": 6,
+      "ease": "inOutCubic"
+     },
+     {
+      "t": 4,
+      "pos": {
+       "anchor": "attacker.head",
+       "offset": [
+        -0.3,
+        0.4,
+        0.3
+       ]
+      },
+      "look": {
+       "anchor": "target.chest",
+       "offset": [
+        -0.06,
+        0,
+        0
+       ]
+      },
+      "fov": 46,
+      "roll": 3,
+      "ease": "linear"
+     }
+    ]
+   },
+   "fxCues": [
+    {
+     "at": 3.5,
+     "key": "dust",
+     "type": "vfx",
+     "anchor": "target.root",
+     "count": 4,
+     "spread": 0.2
+    }
+   ],
+   "sfxCues": [
+    {
+     "at": 3.58,
+     "key": "taunt_beckon"
+    },
+    {
+     "at": 3.82,
+     "key": "taunt_beckon"
+    }
+   ]
+  },
+  {
+   "id": "05-ankles",
+   "title": "足首",
+   "start": 4,
+   "end": 5,
+   "intent": "手元の寄り。しゃがんで両足首をつかみ、のけぞって引き上げる",
+   "actorPose": {
+    "attacker": "しゃがんで足首をつかむ→のけぞって持ち上げる",
+    "target": "足をつかまれ、体が浮き始める"
+   },
+   "camera": {
+    "rig": "hands-close-rise",
+    "projection": "perspective",
+    "position": {
+     "anchor": "stage",
+     "offset": [
+      1.5,
+      0.16,
+      0.95
+     ]
+    },
+    "lookAt": {
+     "anchor": "attacker.pawR",
+     "offset": [
+      0.05,
+      0,
+      0
+     ]
+    },
+    "fov": 32,
+    "rollDeg": -4,
+    "easing": "outQuad",
+    "move": "手元の寄りから、持ち上げに合わせて引く",
+    "keys": [
+     {
+      "t": 4,
+      "pos": {
+       "anchor": "stage",
+       "offset": [
+        1.5,
+        0.16,
+        0.95
+       ]
+      },
+      "look": {
+       "anchor": "attacker.pawR",
+       "offset": [
+        0.05,
+        0,
+        0
+       ]
+      },
+      "fov": 32,
+      "roll": -4,
+      "ease": "inOutCubic"
+     },
+     {
+      "t": 4.5,
+      "pos": {
+       "anchor": "stage",
+       "offset": [
+        1.5,
+        0.16,
+        0.92
+       ]
+      },
+      "look": {
+       "anchor": "attacker.pawR",
+       "offset": [
+        0.05,
+        0,
+        0
+       ]
+      },
+      "fov": 30,
+      "roll": -2,
+      "ease": "linear"
+     },
+     {
+      "t": 5,
+      "pos": {
+       "anchor": "stage",
+       "offset": [
+        1.45,
+        0.34,
+        1.4
+       ]
+      },
+      "look": {
+       "anchor": "attacker.chest",
+       "offset": [
+        0.1,
+        0,
+        0
+       ]
+      },
+      "fov": 40,
+      "roll": 4,
+      "ease": "outQuad"
+     }
+    ]
+   },
+   "fxCues": [
+    {
+     "at": 4.4,
+     "key": "hitstop",
+     "type": "hitstop",
+     "dur": 0.2,
+     "strength": "light"
+    },
+    {
+     "at": 4.42,
+     "key": "dust",
+     "type": "vfx",
+     "anchor": "target.root",
+     "count": 6,
+     "spread": 0.3
+    }
+   ],
+   "sfxCues": [
+    {
+     "at": 4.4,
+     "key": "grab"
+    }
+   ]
+  },
+  {
+   "id": "06-swing-top",
+   "title": "スイング・真上",
+   "start": 5,
+   "end": 5.8,
+   "intent": "真上から。回り始め。足の踏み替えと、相手の体が外へ伸びるのが分かる",
+   "actorPose": {
+    "attacker": "のけぞって回り始める。足は交互に踏み替え",
+    "target": "仰向けのまま腕が頭の先へ流れる"
+   },
+   "camera": {
+    "rig": "overhead-spin",
+    "projection": "perspective",
+    "position": {
+     "anchor": "stage",
+     "offset": [
+      1.2,
+      3.4,
+      0.2
+     ]
+    },
+    "lookAt": {
+     "anchor": "stage",
+     "offset": [
+      1.2,
+      0.3,
+      0
+     ]
+    },
+    "fov": 42,
+    "rollDeg": 0,
+    "easing": "linear",
+    "move": "真上。回転と同じ向きにゆっくり回る",
+    "keys": [
+     {
+      "t": 5,
+      "pos": {
+       "anchor": "stage",
+       "offset": [
+        1.2,
+        3.4,
+        0.2
+       ]
+      },
+      "look": {
+       "anchor": "stage",
+       "offset": [
+        1.2,
+        0.3,
+        0
+       ]
+      },
+      "fov": 42,
+      "roll": 0,
+      "ease": "inOutCubic"
+     },
+     {
+      "t": 5.8,
+      "pos": {
+       "anchor": "stage",
+       "offset": [
+        1.2,
+        3,
+        0.2
+       ]
+      },
+      "look": {
+       "anchor": "stage",
+       "offset": [
+        1.2,
+        0.3,
+        0
+       ]
+      },
+      "fov": 42,
+      "roll": -50,
+      "ease": "linear"
+     }
+    ]
+   },
+   "fxCues": [
+    {
+     "at": 5,
+     "key": "dust",
+     "type": "vfx",
+     "offset": [
+      1.2,
+      0,
+      0
+     ],
+     "count": 8,
+     "spread": 0.5
+    }
+   ],
+   "sfxCues": [
+    {
+     "at": 5,
+     "key": "swing_whoosh_slow"
+    }
+   ]
+  },
+  {
+   "id": "07-swing-victim",
+   "title": "スイング・相手に付いたカメラ",
+   "start": 5.8,
+   "end": 6.6,
+   "intent": "振り回される相手の胸の上にカメラを付ける。タキマルの顔は止まって見え、背景だけが流れる",
+   "actorPose": {
+    "attacker": "回転が速くなる。吠える",
+    "target": "遠心力で体が伸びきる"
+   },
+   "camera": {
+    "rig": "victim-mounted-whirl",
+    "projection": "perspective",
+    "position": {
+     "anchor": "target.chest",
+     "offset": [
+      0,
+      0.3,
+      0
+     ]
+    },
+    "lookAt": {
+     "anchor": "attacker.head",
+     "offset": [
+      0,
+      -0.05,
+      0
+     ]
+    },
+    "fov": 62,
+    "rollDeg": 10,
+    "easing": "linear",
+    "move": "相手に固定。背景が回る",
+    "keys": [
+     {
+      "t": 5.8,
+      "pos": {
+       "anchor": "target.chest",
+       "offset": [
+        0,
+        0.3,
+        0
+       ]
+      },
+      "look": {
+       "anchor": "attacker.head",
+       "offset": [
+        0,
+        -0.05,
+        0
+       ]
+      },
+      "fov": 62,
+      "roll": 10,
+      "ease": "inOutCubic"
+     },
+     {
+      "t": 6.6,
+      "pos": {
+       "anchor": "target.chest",
+       "offset": [
+        0,
+        0.34,
+        0
+       ]
+      },
+      "look": {
+       "anchor": "attacker.head",
+       "offset": [
+        0,
+        -0.05,
+        0
+       ]
+      },
+      "fov": 66,
+      "roll": -10,
+      "ease": "linear"
+     }
+    ]
+   },
+   "fxCues": [
+    {
+     "at": 5.8,
+     "key": "speed_lines",
+     "type": "vfx",
+     "dur": 0.8,
+     "opacity": 0.4
+    }
+   ],
+   "sfxCues": [
+    {
+     "at": 5.8,
+     "key": "swing_whoosh_fast"
+    }
+   ]
+  },
+  {
+   "id": "08-swing-wide",
+   "title": "スイング・全景",
+   "start": 6.6,
+   "end": 7.4,
+   "intent": "低い引き。最高速。土煙が輪になり、放す向きへ相手が来る",
+   "actorPose": {
+    "attacker": "最高速で回る",
+    "target": "水平に伸びたまま回る"
+   },
+   "camera": {
+    "rig": "low-wide-spin",
+    "projection": "perspective",
+    "position": {
+     "anchor": "stage",
+     "offset": [
+      1,
+      0.12,
+      2.6
+     ]
+    },
+    "lookAt": {
+     "anchor": "stage",
+     "offset": [
+      1.2,
+      0.4,
+      0
+     ]
+    },
+    "fov": 44,
+    "rollDeg": 3,
+    "easing": "linear",
+    "move": "低い引きで固定",
+    "keys": [
+     {
+      "t": 6.6,
+      "pos": {
+       "anchor": "stage",
+       "offset": [
+        1,
+        0.12,
+        2.6
+       ]
+      },
+      "look": {
+       "anchor": "stage",
+       "offset": [
+        1.2,
+        0.4,
+        0
+       ]
+      },
+      "fov": 44,
+      "roll": 3,
+      "ease": "inOutCubic"
+     },
+     {
+      "t": 7.4,
+      "pos": {
+       "anchor": "stage",
+       "offset": [
+        1.2,
+        0.12,
+        2.5
+       ]
+      },
+      "look": {
+       "anchor": "stage",
+       "offset": [
+        1.4,
+        0.42,
+        0
+       ]
+      },
+      "fov": 44,
+      "roll": 0,
+      "ease": "linear"
+     }
+    ]
+   },
+   "fxCues": [
+    {
+     "at": 6.6,
+     "key": "dust",
+     "type": "vfx",
+     "offset": [
+      1.2,
+      0,
+      0
+     ],
+     "count": 16,
+     "spread": 0.9,
+     "dur": 0.9
+    },
+    {
+     "at": 6.6,
+     "key": "shock_ring",
+     "type": "vfx",
+     "offset": [
+      1.2,
+      0,
+      0
+     ],
+     "radius": 1.2,
+     "dur": 0.8
+    },
+    {
+     "at": 7,
+     "key": "shock_ring",
+     "type": "vfx",
+     "offset": [
+      1.2,
+      0,
+      0
+     ],
+     "radius": 1.4,
+     "dur": 0.5
+    }
+   ],
+   "sfxCues": [
+    {
+     "at": 6.6,
+     "key": "swing_whoosh_max"
+    }
+   ]
+  },
+  {
+   "id": "09-release",
+   "title": "放り出す",
+   "start": 7.4,
+   "end": 8.6,
+   "intent": "放す瞬間から、飛んでいく相手を追って一気に振る。遠くの地面に激突",
+   "actorPose": {
+    "attacker": "手を放し、両腕を開いたまま回転が残る",
+    "target": "水平に回りながら飛び、遠くで地面に落ちて跳ねる"
+   },
+   "camera": {
+    "rig": "release-whip-follow",
+    "projection": "perspective",
+    "position": {
+     "anchor": "stage",
+     "offset": [
+      1.5,
+      0.4,
+      1.9
+     ]
+    },
+    "lookAt": {
+     "anchor": "attacker.chest",
+     "offset": [
+      0.3,
+      0,
+      0
+     ]
+    },
+    "fov": 40,
+    "rollDeg": -8,
+    "easing": "outQuad",
+    "move": "放す瞬間に寄り、相手を追って振る",
+    "keys": [
+     {
+      "t": 7.4,
+      "pos": {
+       "anchor": "stage",
+       "offset": [
+        1.5,
+        0.4,
+        1.9
+       ]
+      },
+      "look": {
+       "anchor": "attacker.chest",
+       "offset": [
+        0.3,
+        0,
+        0
+       ]
+      },
+      "fov": 40,
+      "roll": -8,
+      "ease": "inOutCubic"
+     },
+     {
+      "t": 7.6,
+      "pos": {
+       "anchor": "stage",
+       "offset": [
+        1.7999999999999998,
+        0.42,
+        2
+       ]
+      },
+      "look": {
+       "anchor": "target.pelvis",
+       "offset": [
+        0,
+        0,
+        0
+       ]
+      },
+      "fov": 42,
+      "roll": -6,
+      "ease": "outQuad"
+     },
+     {
+      "t": 8.1,
+      "pos": {
+       "anchor": "stage",
+       "offset": [
+        2.9,
+        0.34,
+        2.2
+       ]
+      },
+      "look": {
+       "anchor": "target.pelvis",
+       "offset": [
+        0,
+        0,
+        0
+       ]
+      },
+      "fov": 44,
+      "roll": 0,
+      "ease": "linear"
+     },
+     {
+      "t": 8.6,
+      "pos": {
+       "anchor": "stage",
+       "offset": [
+        3,
+        0.3,
+        2.1
+       ]
+      },
+      "look": {
+       "anchor": "target.pelvis",
+       "offset": [
+        0,
+        0.05,
+        0
+       ]
+      },
+      "fov": 42,
+      "roll": 2,
+      "ease": "outQuad"
+     }
+    ]
+   },
+   "fxCues": [
+    {
+     "at": 7.4,
+     "key": "hitstop",
+     "type": "hitstop",
+     "dur": 0.1,
+     "strength": "heavy"
+    },
+    {
+     "at": 7.4,
+     "key": "flash",
+     "type": "vfx",
+     "dur": 0.1,
+     "opacity": 0.4
+    },
+    {
+     "at": 7.42,
+     "key": "speed_lines",
+     "type": "vfx",
+     "dur": 0.5,
+     "opacity": 0.45
+    },
+    {
+     "at": 7.42,
+     "key": "streak",
+     "type": "vfx",
+     "from": [
+      1.6,
+      0.5,
+      0
+     ],
+     "to": [
+      3.6,
+      0.5,
+      0.08
+     ],
+     "dur": 0.7,
+     "width": 0.08,
+     "color": 16769192
+    },
+    {
+     "at": 8.1,
+     "key": "shake",
+     "type": "shake",
+     "dur": 0.7,
+     "amp": 0.09
+    },
+    {
+     "at": 8.1,
+     "key": "rock_spikes",
+     "type": "vfx",
+     "offset": [
+      4.05,
+      0,
+      -0.2
+     ],
+     "count": 6,
+     "height": 0.3,
+     "radius": 0.4,
+     "hold": 1.6
+    },
+    {
+     "at": 8.1,
+     "key": "debris",
+     "type": "vfx",
+     "anchor": "target.root",
+     "count": 22,
+     "power": 2.4
+    },
+    {
+     "at": 8.1,
+     "key": "dust",
+     "type": "vfx",
+     "anchor": "target.root",
+     "count": 18,
+     "spread": 1,
+     "dur": 1.2
+    },
+    {
+     "at": 8.1,
+     "key": "shock_ring",
+     "type": "vfx",
+     "anchor": "target.root",
+     "radius": 2,
+     "dur": 0.5
+    }
+   ],
+   "sfxCues": [
+    {
+     "at": 7.4,
+     "key": "throw_release"
+    },
+    {
+     "at": 8.1,
+     "key": "ground_slam_big"
+    }
+   ]
+  },
+  {
+   "id": "10-flex",
+   "title": "手をはたく",
+   "start": 8.6,
+   "end": 10.4,
+   "intent": "正面の低い位置。手をはたき、腰に手を当てて胸を張る。相手ははるか奥",
+   "actorPose": {
+    "attacker": "こちらへ向き直り、手を四度はたく→腰に手を当てて胸を張る",
+    "target": "遠くで仰向け"
+   },
+   "camera": {
+    "rig": "low-front-swagger",
+    "projection": "perspective",
+    "position": {
+     "anchor": "stage",
+     "offset": [
+      1.45,
+      0.16,
+      2.3
+     ]
+    },
+    "lookAt": {
+     "anchor": "attacker.chest",
+     "offset": [
+      0.05,
+      0.08,
+      0
+     ]
+    },
+    "fov": 40,
+    "rollDeg": -4,
+    "easing": "outQuad",
+    "move": "低い正面からゆっくり寄る",
+    "keys": [
+     {
+      "t": 8.6,
+      "pos": {
+       "anchor": "stage",
+       "offset": [
+        1.45,
+        0.16,
+        2.3
+       ]
+      },
+      "look": {
+       "anchor": "attacker.chest",
+       "offset": [
+        0.05,
+        0.08,
+        0
+       ]
+      },
+      "fov": 40,
+      "roll": -4,
+      "ease": "inOutCubic"
+     },
+     {
+      "t": 10.4,
+      "pos": {
+       "anchor": "stage",
+       "offset": [
+        1.38,
+        0.2,
+        2
+       ]
+      },
+      "look": {
+       "anchor": "attacker.chest",
+       "offset": [
+        0.04,
+        0.1,
+        0
+       ]
+      },
+      "fov": 36,
+      "roll": 0,
+      "ease": "outQuad"
+     }
+    ]
+   },
+   "fxCues": [
+    {
+     "at": 8.9,
+     "key": "dust",
+     "type": "vfx",
+     "anchor": "attacker.pawR",
+     "count": 5,
+     "spread": 0.15
+    }
+   ],
+   "sfxCues": [
+    {
+     "at": 8.8,
+     "key": "hands_dust"
+    },
+    {
+     "at": 8.96,
+     "key": "hands_dust"
+    },
+    {
+     "at": 9.12,
+     "key": "hands_dust"
+    },
+    {
+     "at": 9.28,
+     "key": "hands_dust"
+    },
+    {
+     "at": 9.7,
+     "key": "finish_pose"
+    }
+   ]
+  }
+ ],
+ "cues": [
+  {
+   "at": 0,
+   "type": "vfx",
+   "key": "flash",
+   "dur": 0.1,
+   "opacity": 0.35,
+   "shot": "01-toss"
+  },
+  {
+   "at": 0,
+   "type": "sfx",
+   "key": "grab",
+   "shot": "01-toss"
+  },
+  {
+   "at": 0,
+   "type": "shake",
+   "dur": 0.2,
+   "amp": 0.03,
+   "shot": "01-toss"
+  },
+  {
+   "at": 0.7,
+   "type": "sfx",
+   "key": "throw_whoosh",
+   "shot": "01-toss"
+  },
+  {
+   "at": 0.72,
+   "type": "vfx",
+   "key": "speed_lines",
+   "dur": 0.4,
+   "opacity": 0.35,
+   "shot": "01-toss"
+  },
+  {
+   "at": 1.2,
+   "type": "hitstop",
+   "dur": 0.1,
+   "strength": "heavy",
+   "shot": "01-toss"
+  },
+  {
+   "at": 1.2,
+   "type": "shake",
+   "dur": 0.5,
+   "amp": 0.07,
+   "shot": "01-toss"
+  },
+  {
+   "at": 1.2,
+   "type": "vfx",
+   "key": "dust",
+   "anchor": "target.root",
+   "count": 14,
+   "spread": 0.7,
+   "shot": "01-toss"
+  },
+  {
+   "at": 1.2,
+   "type": "vfx",
+   "key": "debris",
+   "anchor": "target.root",
+   "count": 12,
+   "power": 1.5,
+   "shot": "01-toss"
+  },
+  {
+   "at": 1.2,
+   "type": "vfx",
+   "key": "shock_ring",
+   "anchor": "target.root",
+   "radius": 1.3,
+   "dur": 0.4,
+   "shot": "01-toss"
+  },
+  {
+   "at": 1.2,
+   "type": "sfx",
+   "key": "body_slam",
+   "shot": "01-toss"
+  },
+  {
+   "at": 1.76,
+   "type": "shake",
+   "dur": 0.22,
+   "amp": 0.03,
+   "shot": "02-approach"
+  },
+  {
+   "at": 1.76,
+   "type": "vfx",
+   "key": "dust",
+   "anchor": "attacker.root",
+   "count": 5,
+   "spread": 0.25,
+   "shot": "02-approach"
+  },
+  {
+   "at": 1.76,
+   "type": "sfx",
+   "key": "heavy_step",
+   "shot": "02-approach"
+  },
+  {
+   "at": 2.02,
+   "type": "shake",
+   "dur": 0.22,
+   "amp": 0.03,
+   "shot": "02-approach"
+  },
+  {
+   "at": 2.02,
+   "type": "vfx",
+   "key": "dust",
+   "anchor": "attacker.root",
+   "count": 5,
+   "spread": 0.25,
+   "shot": "02-approach"
+  },
+  {
+   "at": 2.02,
+   "type": "sfx",
+   "key": "heavy_step",
+   "shot": "02-approach"
+  },
+  {
+   "at": 2.28,
+   "type": "shake",
+   "dur": 0.22,
+   "amp": 0.03,
+   "shot": "02-approach"
+  },
+  {
+   "at": 2.28,
+   "type": "vfx",
+   "key": "dust",
+   "anchor": "attacker.root",
+   "count": 5,
+   "spread": 0.25,
+   "shot": "02-approach"
+  },
+  {
+   "at": 2.28,
+   "type": "sfx",
+   "key": "heavy_step",
+   "shot": "02-approach"
+  },
+  {
+   "at": 2.54,
+   "type": "shake",
+   "dur": 0.22,
+   "amp": 0.03,
+   "shot": "02-approach"
+  },
+  {
+   "at": 2.54,
+   "type": "vfx",
+   "key": "dust",
+   "anchor": "attacker.root",
+   "count": 5,
+   "spread": 0.25,
+   "shot": "02-approach"
+  },
+  {
+   "at": 2.54,
+   "type": "sfx",
+   "key": "heavy_step",
+   "shot": "02-approach"
+  },
+  {
+   "at": 2.95,
+   "type": "sfx",
+   "key": "taunt_grunt",
+   "shot": "03-look-up"
+  },
+  {
+   "at": 3.5,
+   "type": "vfx",
+   "key": "dust",
+   "anchor": "target.root",
+   "count": 4,
+   "spread": 0.2,
+   "shot": "04-taunt"
+  },
+  {
+   "at": 3.58,
+   "type": "sfx",
+   "key": "taunt_beckon",
+   "shot": "04-taunt"
+  },
+  {
+   "at": 3.82,
+   "type": "sfx",
+   "key": "taunt_beckon",
+   "shot": "04-taunt"
+  },
+  {
+   "at": 4.4,
+   "type": "sfx",
+   "key": "grab",
+   "shot": "05-ankles"
+  },
+  {
+   "at": 4.4,
+   "type": "hitstop",
+   "dur": 0.2,
+   "strength": "light",
+   "shot": "05-ankles"
+  },
+  {
+   "at": 4.42,
+   "type": "vfx",
+   "key": "dust",
+   "anchor": "target.root",
+   "count": 6,
+   "spread": 0.3,
+   "shot": "05-ankles"
+  },
+  {
+   "at": 5,
+   "type": "sfx",
+   "key": "swing_whoosh_slow",
+   "shot": "06-swing-top"
+  },
+  {
+   "at": 5,
+   "type": "vfx",
+   "key": "dust",
+   "offset": [
+    1.2,
+    0,
+    0
+   ],
+   "count": 8,
+   "spread": 0.5,
+   "shot": "06-swing-top"
+  },
+  {
+   "at": 5.8,
+   "type": "vfx",
+   "key": "speed_lines",
+   "dur": 0.8,
+   "opacity": 0.4,
+   "shot": "07-swing-victim"
+  },
+  {
+   "at": 5.8,
+   "type": "sfx",
+   "key": "swing_whoosh_fast",
+   "shot": "07-swing-victim"
+  },
+  {
+   "at": 6.6,
+   "type": "vfx",
+   "key": "dust",
+   "offset": [
+    1.2,
+    0,
+    0
+   ],
+   "count": 16,
+   "spread": 0.9,
+   "dur": 0.9,
+   "shot": "08-swing-wide"
+  },
+  {
+   "at": 6.6,
+   "type": "vfx",
+   "key": "shock_ring",
+   "offset": [
+    1.2,
+    0,
+    0
+   ],
+   "radius": 1.2,
+   "dur": 0.8,
+   "shot": "08-swing-wide"
+  },
+  {
+   "at": 6.6,
+   "type": "sfx",
+   "key": "swing_whoosh_max",
+   "shot": "08-swing-wide"
+  },
+  {
+   "at": 7,
+   "type": "vfx",
+   "key": "shock_ring",
+   "offset": [
+    1.2,
+    0,
+    0
+   ],
+   "radius": 1.4,
+   "dur": 0.5,
+   "shot": "08-swing-wide"
+  },
+  {
+   "at": 7.4,
+   "type": "hitstop",
+   "dur": 0.1,
+   "strength": "heavy",
+   "shot": "09-release"
+  },
+  {
+   "at": 7.4,
+   "type": "vfx",
+   "key": "flash",
+   "dur": 0.1,
+   "opacity": 0.4,
+   "shot": "09-release"
+  },
+  {
+   "at": 7.4,
+   "type": "sfx",
+   "key": "throw_release",
+   "shot": "09-release"
+  },
+  {
+   "at": 7.42,
+   "type": "vfx",
+   "key": "speed_lines",
+   "dur": 0.5,
+   "opacity": 0.45,
+   "shot": "09-release"
+  },
+  {
+   "at": 7.42,
+   "type": "vfx",
+   "key": "streak",
+   "from": [
+    1.6,
+    0.5,
+    0
+   ],
+   "to": [
+    3.6,
+    0.5,
+    0.08
+   ],
+   "dur": 0.7,
+   "width": 0.08,
+   "color": 16769192,
+   "shot": "09-release"
+  },
+  {
+   "at": 8.1,
+   "type": "shake",
+   "dur": 0.7,
+   "amp": 0.09,
+   "shot": "09-release"
+  },
+  {
+   "at": 8.1,
+   "type": "vfx",
+   "key": "rock_spikes",
+   "offset": [
+    4.05,
+    0,
+    -0.2
+   ],
+   "count": 6,
+   "height": 0.3,
+   "radius": 0.4,
+   "hold": 1.6,
+   "shot": "09-release"
+  },
+  {
+   "at": 8.1,
+   "type": "vfx",
+   "key": "debris",
+   "anchor": "target.root",
+   "count": 22,
+   "power": 2.4,
+   "shot": "09-release"
+  },
+  {
+   "at": 8.1,
+   "type": "vfx",
+   "key": "dust",
+   "anchor": "target.root",
+   "count": 18,
+   "spread": 1,
+   "dur": 1.2,
+   "shot": "09-release"
+  },
+  {
+   "at": 8.1,
+   "type": "vfx",
+   "key": "shock_ring",
+   "anchor": "target.root",
+   "radius": 2,
+   "dur": 0.5,
+   "shot": "09-release"
+  },
+  {
+   "at": 8.1,
+   "type": "sfx",
+   "key": "ground_slam_big",
+   "shot": "09-release"
+  },
+  {
+   "at": 8.8,
+   "type": "sfx",
+   "key": "hands_dust",
+   "shot": "10-flex"
+  },
+  {
+   "at": 8.9,
+   "type": "vfx",
+   "key": "dust",
+   "anchor": "attacker.pawR",
+   "count": 5,
+   "spread": 0.15,
+   "shot": "10-flex"
+  },
+  {
+   "at": 8.96,
+   "type": "sfx",
+   "key": "hands_dust",
+   "shot": "10-flex"
+  },
+  {
+   "at": 9.12,
+   "type": "sfx",
+   "key": "hands_dust",
+   "shot": "10-flex"
+  },
+  {
+   "at": 9.28,
+   "type": "sfx",
+   "key": "hands_dust",
+   "shot": "10-flex"
+  },
+  {
+   "at": 9.6,
+   "type": "caption",
+   "dur": 0.7,
+   "text": "天地落とし",
+   "sub": "タキマル",
+   "shot": "10-flex"
+  },
+  {
+   "at": 9.7,
+   "type": "sfx",
+   "key": "finish_pose",
+   "shot": "10-flex"
+  }
+ ],
+ "reducedMotion": {
+  "useShots": [
+   "01-toss",
+   "08-swing-wide",
+   "10-flex"
+  ],
+  "disable": [
+   "shake",
+   "flash",
+   "speed_lines",
+   "dim"
+  ],
+  "note": "3 カットを固定カメラ（各ショットの最初のキー）で見せる。回転する相手に付いたカメラ（07）は使わない。役者とキューの時刻は変えない"
+ },
+ "skip": {
+  "allowedFrom": 0.4,
+  "landOn": "end",
+  "note": "スキップ時は役者を消してからゲームの立ち位置へ戻す。ムービー中の位置を戦闘へ持ち込まない"
+ }
+}

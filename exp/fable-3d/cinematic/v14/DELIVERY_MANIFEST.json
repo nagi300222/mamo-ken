@@ -1,0 +1,1448 @@
+{
+ "version": "v14-9chars-10s",
+ "issue": "https://github.com/nagi300222/mamo-ken/issues/177",
+ "generated": "2026-11-22",
+ "root": "exp/fable-3d",
+ "status": {
+  "audited_moves": 36,
+  "redesign_catalog": "36（うち制作済み 36、案のみ 0）",
+  "produced_specials": [
+   {
+    "id": "moguzo",
+    "clips": [
+     "s1_v14",
+     "s2_v14",
+     "s3_v14"
+    ],
+    "ingame_ultimate_start": "ult_v14"
+   },
+   {
+    "id": "pisuke",
+    "clips": [
+     "s1_v14",
+     "s2_v14",
+     "s3_v14"
+    ],
+    "ingame_ultimate_start": "ult_v14"
+   },
+   {
+    "id": "godan",
+    "clips": [
+     "s1_v14",
+     "s2_v14",
+     "s3_v14"
+    ],
+    "ingame_ultimate_start": "ult_v14"
+   },
+   {
+    "id": "hakuma",
+    "clips": [
+     "s1_v14",
+     "s2_v14",
+     "s3_v14"
+    ],
+    "ingame_ultimate_start": "ult_v14"
+   },
+   {
+    "id": "chirka",
+    "clips": [
+     "s1_v14",
+     "s2_v14",
+     "s3_v14"
+    ],
+    "ingame_ultimate_start": "ult_v14"
+   },
+   {
+    "id": "takimaru",
+    "clips": [
+     "s1_v14",
+     "s2_v14",
+     "s3_v14"
+    ],
+    "ingame_ultimate_start": "ult_v14"
+   },
+   {
+    "id": "yomikage",
+    "clips": [
+     "s1_v14",
+     "s2_v14",
+     "s3_v14"
+    ],
+    "ingame_ultimate_start": "ult_v14"
+   },
+   {
+    "id": "bullet",
+    "clips": [
+     "s1_v14",
+     "s2_v14",
+     "s3_v14"
+    ],
+    "ingame_ultimate_start": "ult_v14"
+   },
+   {
+    "id": "dark_moguzo",
+    "clips": [
+     "s1_v14",
+     "s2_v14",
+     "s3_v14"
+    ],
+    "ingame_ultimate_start": "ult_v14"
+   }
+  ],
+  "produced_ultimate_movies": [
+   {
+    "id": "moguzo",
+    "name": "大地烈掌",
+    "seconds": 10,
+    "shots": 8,
+    "manifest": "cinematic/v14/manifest/moguzo_ultimate.json",
+    "storyboard_source": "cinematic/v14/storyboard/moguzo.mjs",
+    "attacker_clip": "cin_moguzo_atk",
+    "target_clip": "cinv_moguzo",
+    "target_clip_available_for": [
+     "moguzo",
+     "pisuke",
+     "godan",
+     "hakuma",
+     "chirka",
+     "takimaru",
+     "yomikage",
+     "bullet",
+     "dark_moguzo"
+    ]
+   },
+   {
+    "id": "pisuke",
+    "name": "音速連咆",
+    "seconds": 10,
+    "shots": 9,
+    "manifest": "cinematic/v14/manifest/pisuke_ultimate.json",
+    "storyboard_source": "cinematic/v14/storyboard/pisuke.mjs",
+    "attacker_clip": "cin_pisuke_atk",
+    "target_clip": "cinv_pisuke",
+    "target_clip_available_for": [
+     "moguzo",
+     "pisuke",
+     "godan",
+     "hakuma",
+     "chirka",
+     "takimaru",
+     "yomikage",
+     "bullet",
+     "dark_moguzo"
+    ]
+   },
+   {
+    "id": "godan",
+    "name": "山崩し",
+    "seconds": 10.2,
+    "shots": 8,
+    "manifest": "cinematic/v14/manifest/godan_ultimate.json",
+    "storyboard_source": "cinematic/v14/storyboard/godan.mjs",
+    "attacker_clip": "cin_godan_atk",
+    "target_clip": "cinv_godan",
+    "target_clip_available_for": [
+     "moguzo",
+     "pisuke",
+     "godan",
+     "hakuma",
+     "chirka",
+     "takimaru",
+     "yomikage",
+     "bullet",
+     "dark_moguzo"
+    ]
+   },
+   {
+    "id": "hakuma",
+    "name": "白峰不動掌",
+    "seconds": 10.2,
+    "shots": 8,
+    "manifest": "cinematic/v14/manifest/hakuma_ultimate.json",
+    "storyboard_source": "cinematic/v14/storyboard/hakuma.mjs",
+    "attacker_clip": "cin_hakuma_atk",
+    "target_clip": "cinv_hakuma",
+    "target_clip_available_for": [
+     "moguzo",
+     "pisuke",
+     "godan",
+     "hakuma",
+     "chirka",
+     "takimaru",
+     "yomikage",
+     "bullet",
+     "dark_moguzo"
+    ]
+   },
+   {
+    "id": "chirka",
+    "name": "百面本命打ち",
+    "seconds": 10,
+    "shots": 9,
+    "manifest": "cinematic/v14/manifest/chirka_ultimate.json",
+    "storyboard_source": "cinematic/v14/storyboard/chirka.mjs",
+    "attacker_clip": "cin_chirka_atk",
+    "target_clip": "cinv_chirka",
+    "target_clip_available_for": [
+     "moguzo",
+     "pisuke",
+     "godan",
+     "hakuma",
+     "chirka",
+     "takimaru",
+     "yomikage",
+     "bullet",
+     "dark_moguzo"
+    ]
+   },
+   {
+    "id": "takimaru",
+    "name": "天地落とし",
+    "seconds": 10.4,
+    "shots": 10,
+    "manifest": "cinematic/v14/manifest/takimaru_ultimate.json",
+    "storyboard_source": "cinematic/v14/storyboard/takimaru.mjs",
+    "attacker_clip": "cin_takimaru_atk",
+    "target_clip": "cinv_takimaru",
+    "target_clip_available_for": [
+     "moguzo",
+     "pisuke",
+     "godan",
+     "hakuma",
+     "chirka",
+     "takimaru",
+     "yomikage",
+     "bullet",
+     "dark_moguzo"
+    ]
+   },
+   {
+    "id": "yomikage",
+    "name": "後の先・月断",
+    "seconds": 10,
+    "shots": 8,
+    "manifest": "cinematic/v14/manifest/yomikage_ultimate.json",
+    "storyboard_source": "cinematic/v14/storyboard/yomikage.mjs",
+    "attacker_clip": "cin_yomikage_atk",
+    "target_clip": "cinv_yomikage",
+    "target_clip_available_for": [
+     "moguzo",
+     "pisuke",
+     "godan",
+     "hakuma",
+     "chirka",
+     "takimaru",
+     "yomikage",
+     "bullet",
+     "dark_moguzo"
+    ]
+   },
+   {
+    "id": "bullet",
+    "name": "超圧縮・弾丸頭突き",
+    "seconds": 10.2,
+    "shots": 8,
+    "manifest": "cinematic/v14/manifest/bullet_ultimate.json",
+    "storyboard_source": "cinematic/v14/storyboard/bullet.mjs",
+    "attacker_clip": "cin_bullet_atk",
+    "target_clip": "cinv_bullet",
+    "target_clip_available_for": [
+     "moguzo",
+     "pisuke",
+     "godan",
+     "hakuma",
+     "chirka",
+     "takimaru",
+     "yomikage",
+     "bullet",
+     "dark_moguzo"
+    ]
+   },
+   {
+    "id": "dark_moguzo",
+    "name": "暗連・黒天烈掌",
+    "seconds": 10,
+    "shots": 9,
+    "manifest": "cinematic/v14/manifest/dark_moguzo_ultimate.json",
+    "storyboard_source": "cinematic/v14/storyboard/dark_moguzo.mjs",
+    "attacker_clip": "cin_dark_moguzo_atk",
+    "target_clip": "cinv_dark_moguzo",
+    "target_clip_available_for": [
+     "moguzo",
+     "pisuke",
+     "godan",
+     "hakuma",
+     "chirka",
+     "takimaru",
+     "yomikage",
+     "bullet",
+     "dark_moguzo"
+    ]
+   }
+  ],
+  "not_produced": [],
+  "game_integration": "未統合（Codex PR #180 側）。本ブランチはゲームのソース dojo/ を変更していない"
+ },
+ "characters": {
+  "moguzo": {
+   "glb": "cinematic/v14/moguzo/moguzo_v14.glb",
+   "glb_sha256": "23296cfe2f57ec4b046cdf371c1b6de2f81dbc29b61a0e22ee361111e49686c3",
+   "glb_bytes": 6593220,
+   "motions": "cinematic/v14/moguzo/moguzo_v14_motions.json",
+   "base_glb": "chars/moguzo/moguzo.glb",
+   "base_glb_sha256": "8f25428c14e9cc58fe229367a1a2324cb9d6bdd716c2306b26c5061e82e44fdd",
+   "editable_blend": "cinematic/v14/moguzo/moguzo_v14.blend",
+   "added_clips": {
+    "s1_v14": {
+     "frames": 35,
+     "seconds": 0.5833,
+     "group": "special"
+    },
+    "s2_v14": {
+     "frames": 40,
+     "seconds": 0.6667,
+     "group": "special"
+    },
+    "s3_v14": {
+     "frames": 36,
+     "seconds": 0.6,
+     "group": "special"
+    },
+    "ult_v14": {
+     "frames": 50,
+     "seconds": 0.8333,
+     "group": "ultimate_ingame"
+    },
+    "cin_moguzo_atk": {
+     "frames": 600,
+     "seconds": 10,
+     "group": "cinematic"
+    },
+    "cinv_moguzo": {
+     "frames": 600,
+     "seconds": 10,
+     "group": "cinematic"
+    },
+    "cinv_godan": {
+     "frames": 612,
+     "seconds": 10.2,
+     "group": "cinematic"
+    },
+    "cinv_chirka": {
+     "frames": 600,
+     "seconds": 10,
+     "group": "cinematic"
+    },
+    "cinv_pisuke": {
+     "frames": 600,
+     "seconds": 10,
+     "group": "cinematic"
+    },
+    "cinv_hakuma": {
+     "frames": 612,
+     "seconds": 10.2,
+     "group": "cinematic"
+    },
+    "cinv_takimaru": {
+     "frames": 624,
+     "seconds": 10.4,
+     "group": "cinematic"
+    },
+    "cinv_yomikage": {
+     "frames": 600,
+     "seconds": 10,
+     "group": "cinematic"
+    },
+    "cinv_bullet": {
+     "frames": 612,
+     "seconds": 10.2,
+     "group": "cinematic"
+    },
+    "cinv_dark_moguzo": {
+     "frames": 600,
+     "seconds": 10,
+     "group": "cinematic"
+    }
+   },
+   "command_map_v14": {
+    "214": "s3_v14",
+    "236": "s1_v14",
+    "623": "s2_v14",
+    "236236": "ult_v14"
+   },
+   "command_map_base": {
+    "214": "cmd_214",
+    "236": "cmd_236",
+    "623": "sp_rising_upper",
+    "236236": "super"
+   }
+  },
+  "pisuke": {
+   "glb": "cinematic/v14/pisuke/pisuke_v14.glb",
+   "glb_sha256": "fdffab0dee5207866cc6328b0a20a6e09bccefca00eb255aead244d7b3db2e4d",
+   "glb_bytes": 5937764,
+   "motions": "cinematic/v14/pisuke/pisuke_v14_motions.json",
+   "base_glb": "chars/pisuke/pisuke.glb",
+   "base_glb_sha256": "0636f1e1e30fbc4806acef3f5a0402225a83a50227799e96d17421adc92884f6",
+   "editable_blend": null,
+   "added_clips": {
+    "s1_v14": {
+     "frames": 29,
+     "seconds": 0.4833,
+     "group": "special"
+    },
+    "s2_v14": {
+     "frames": 36,
+     "seconds": 0.6,
+     "group": "special"
+    },
+    "s3_v14": {
+     "frames": 36,
+     "seconds": 0.6,
+     "group": "special"
+    },
+    "ult_v14": {
+     "frames": 44,
+     "seconds": 0.7333,
+     "group": "ultimate_ingame"
+    },
+    "cin_pisuke_atk": {
+     "frames": 600,
+     "seconds": 10,
+     "group": "cinematic"
+    },
+    "cinv_moguzo": {
+     "frames": 600,
+     "seconds": 10,
+     "group": "cinematic"
+    },
+    "cinv_godan": {
+     "frames": 612,
+     "seconds": 10.2,
+     "group": "cinematic"
+    },
+    "cinv_chirka": {
+     "frames": 600,
+     "seconds": 10,
+     "group": "cinematic"
+    },
+    "cinv_pisuke": {
+     "frames": 600,
+     "seconds": 10,
+     "group": "cinematic"
+    },
+    "cinv_hakuma": {
+     "frames": 612,
+     "seconds": 10.2,
+     "group": "cinematic"
+    },
+    "cinv_takimaru": {
+     "frames": 624,
+     "seconds": 10.4,
+     "group": "cinematic"
+    },
+    "cinv_yomikage": {
+     "frames": 600,
+     "seconds": 10,
+     "group": "cinematic"
+    },
+    "cinv_bullet": {
+     "frames": 612,
+     "seconds": 10.2,
+     "group": "cinematic"
+    },
+    "cinv_dark_moguzo": {
+     "frames": 600,
+     "seconds": 10,
+     "group": "cinematic"
+    }
+   },
+   "command_map_v14": {
+    "214": "s3_v14",
+    "236": "s1_v14",
+    "623": "s2_v14",
+    "236236": "ult_v14"
+   },
+   "command_map_base": {
+    "214": "sp_double_kick",
+    "236": "cmd_236",
+    "623": "cmd_623",
+    "236236": "super"
+   }
+  },
+  "godan": {
+   "glb": "cinematic/v14/godan/godan_v14.glb",
+   "glb_sha256": "275417dd67ae485c4292c609effd2da6e241d098b3b8d9b8dcebb4d0bd04958f",
+   "glb_bytes": 6725716,
+   "motions": "cinematic/v14/godan/godan_v14_motions.json",
+   "base_glb": "chars/godan/godan.glb",
+   "base_glb_sha256": "90711ae7d323cc01a1892979ea28d2358b329c19f04dce95c51ec74535b17f65",
+   "editable_blend": "cinematic/v14/godan/godan_v14.blend",
+   "added_clips": {
+    "s1_v14": {
+     "frames": 54,
+     "seconds": 0.9,
+     "group": "special"
+    },
+    "s2_v14": {
+     "frames": 49,
+     "seconds": 0.8167,
+     "group": "special"
+    },
+    "s3_v14": {
+     "frames": 57,
+     "seconds": 0.95,
+     "group": "special"
+    },
+    "ult_v14": {
+     "frames": 57,
+     "seconds": 0.95,
+     "group": "ultimate_ingame"
+    },
+    "cin_godan_atk": {
+     "frames": 612,
+     "seconds": 10.2,
+     "group": "cinematic"
+    },
+    "cinv_moguzo": {
+     "frames": 600,
+     "seconds": 10,
+     "group": "cinematic"
+    },
+    "cinv_godan": {
+     "frames": 612,
+     "seconds": 10.2,
+     "group": "cinematic"
+    },
+    "cinv_chirka": {
+     "frames": 600,
+     "seconds": 10,
+     "group": "cinematic"
+    },
+    "cinv_pisuke": {
+     "frames": 600,
+     "seconds": 10,
+     "group": "cinematic"
+    },
+    "cinv_hakuma": {
+     "frames": 612,
+     "seconds": 10.2,
+     "group": "cinematic"
+    },
+    "cinv_takimaru": {
+     "frames": 624,
+     "seconds": 10.4,
+     "group": "cinematic"
+    },
+    "cinv_yomikage": {
+     "frames": 600,
+     "seconds": 10,
+     "group": "cinematic"
+    },
+    "cinv_bullet": {
+     "frames": 612,
+     "seconds": 10.2,
+     "group": "cinematic"
+    },
+    "cinv_dark_moguzo": {
+     "frames": 600,
+     "seconds": 10,
+     "group": "cinematic"
+    }
+   },
+   "command_map_v14": {
+    "214": "s3_v14",
+    "236": "s1_v14",
+    "623": "s2_v14",
+    "236236": "ult_v14"
+   },
+   "command_map_base": {
+    "214": "sp_shoulder_charge",
+    "236": "cmd_236",
+    "623": "cmd_623",
+    "236236": "super"
+   }
+  },
+  "hakuma": {
+   "glb": "cinematic/v14/hakuma/hakuma_v14.glb",
+   "glb_sha256": "e8669127ffb83adc80a2b0a7e02e07088504145d476237c53029427794b2fb68",
+   "glb_bytes": 6214148,
+   "motions": "cinematic/v14/hakuma/hakuma_v14_motions.json",
+   "base_glb": "chars/hakuma/hakuma.glb",
+   "base_glb_sha256": "bf00b34eb0930751ddcdf548c4866c4c72d1db28bbf6fcf1f78db4c0146d8bed",
+   "editable_blend": null,
+   "added_clips": {
+    "s1_v14": {
+     "frames": 39,
+     "seconds": 0.65,
+     "group": "special"
+    },
+    "s2_v14": {
+     "frames": 39,
+     "seconds": 0.65,
+     "group": "special"
+    },
+    "s3_v14": {
+     "frames": 46,
+     "seconds": 0.7667,
+     "group": "special"
+    },
+    "ult_v14": {
+     "frames": 55,
+     "seconds": 0.9167,
+     "group": "ultimate_ingame"
+    },
+    "cin_hakuma_atk": {
+     "frames": 612,
+     "seconds": 10.2,
+     "group": "cinematic"
+    },
+    "cinv_moguzo": {
+     "frames": 600,
+     "seconds": 10,
+     "group": "cinematic"
+    },
+    "cinv_godan": {
+     "frames": 612,
+     "seconds": 10.2,
+     "group": "cinematic"
+    },
+    "cinv_chirka": {
+     "frames": 600,
+     "seconds": 10,
+     "group": "cinematic"
+    },
+    "cinv_pisuke": {
+     "frames": 600,
+     "seconds": 10,
+     "group": "cinematic"
+    },
+    "cinv_hakuma": {
+     "frames": 612,
+     "seconds": 10.2,
+     "group": "cinematic"
+    },
+    "cinv_takimaru": {
+     "frames": 624,
+     "seconds": 10.4,
+     "group": "cinematic"
+    },
+    "cinv_yomikage": {
+     "frames": 600,
+     "seconds": 10,
+     "group": "cinematic"
+    },
+    "cinv_bullet": {
+     "frames": 612,
+     "seconds": 10.2,
+     "group": "cinematic"
+    },
+    "cinv_dark_moguzo": {
+     "frames": 600,
+     "seconds": 10,
+     "group": "cinematic"
+    }
+   },
+   "command_map_v14": {
+    "214": "s3_v14",
+    "236": "s1_v14",
+    "623": "s2_v14",
+    "236236": "ult_v14"
+   },
+   "command_map_base": {
+    "214": "sp_harite",
+    "236": "cmd_236",
+    "623": "cmd_623",
+    "236236": "super"
+   }
+  },
+  "chirka": {
+   "glb": "cinematic/v14/chirka/chirka_v14.glb",
+   "glb_sha256": "c30da56aaef6647521e09cab2b26001258f0a67ee6b97aa097abca87c3e96a9f",
+   "glb_bytes": 5932456,
+   "motions": "cinematic/v14/chirka/chirka_v14_motions.json",
+   "base_glb": "chars/chirka/chirka.glb",
+   "base_glb_sha256": "1badcc2c8e7315b5acc08c25358d338cb71991cabc4b3ec9e616b9cbb6d432ae",
+   "editable_blend": "cinematic/v14/chirka/chirka_v14.blend",
+   "added_clips": {
+    "s1_v14": {
+     "frames": 36,
+     "seconds": 0.6,
+     "group": "special"
+    },
+    "s2_v14": {
+     "frames": 40,
+     "seconds": 0.6667,
+     "group": "special"
+    },
+    "s3_v14": {
+     "frames": 40,
+     "seconds": 0.6667,
+     "group": "special"
+    },
+    "ult_v14": {
+     "frames": 50,
+     "seconds": 0.8333,
+     "group": "ultimate_ingame"
+    },
+    "cin_chirka_atk": {
+     "frames": 600,
+     "seconds": 10,
+     "group": "cinematic"
+    },
+    "cin_chirka_dive": {
+     "frames": 30,
+     "seconds": 0.5,
+     "group": "cinematic"
+    },
+    "cinv_moguzo": {
+     "frames": 600,
+     "seconds": 10,
+     "group": "cinematic"
+    },
+    "cinv_godan": {
+     "frames": 612,
+     "seconds": 10.2,
+     "group": "cinematic"
+    },
+    "cinv_chirka": {
+     "frames": 600,
+     "seconds": 10,
+     "group": "cinematic"
+    },
+    "cinv_pisuke": {
+     "frames": 600,
+     "seconds": 10,
+     "group": "cinematic"
+    },
+    "cinv_hakuma": {
+     "frames": 612,
+     "seconds": 10.2,
+     "group": "cinematic"
+    },
+    "cinv_takimaru": {
+     "frames": 624,
+     "seconds": 10.4,
+     "group": "cinematic"
+    },
+    "cinv_yomikage": {
+     "frames": 600,
+     "seconds": 10,
+     "group": "cinematic"
+    },
+    "cinv_bullet": {
+     "frames": 612,
+     "seconds": 10.2,
+     "group": "cinematic"
+    },
+    "cinv_dark_moguzo": {
+     "frames": 600,
+     "seconds": 10,
+     "group": "cinematic"
+    }
+   },
+   "command_map_v14": {
+    "214": "s3_v14",
+    "236": "s1_v14",
+    "623": "s2_v14",
+    "236236": "ult_v14"
+   },
+   "command_map_base": {
+    "214": "sp_feint_claw",
+    "236": "cmd_236",
+    "623": "cmd_623",
+    "236236": "super"
+   }
+  },
+  "takimaru": {
+   "glb": "cinematic/v14/takimaru/takimaru_v14.glb",
+   "glb_sha256": "5faaf87b5cef2890ecce871a974917a01b2b74e2c2af4ba24df6b803161d0782",
+   "glb_bytes": 6260064,
+   "motions": "cinematic/v14/takimaru/takimaru_v14_motions.json",
+   "base_glb": "chars/takimaru/takimaru.glb",
+   "base_glb_sha256": "d449bb56f5eda962763eefc9ab4e0291fb4ef4e553379c3f5adcc72ddd7427f1",
+   "editable_blend": null,
+   "added_clips": {
+    "s1_v14": {
+     "frames": 51,
+     "seconds": 0.85,
+     "group": "special"
+    },
+    "s2_v14": {
+     "frames": 44,
+     "seconds": 0.7333,
+     "group": "special"
+    },
+    "s3_v14": {
+     "frames": 49,
+     "seconds": 0.8167,
+     "group": "special"
+    },
+    "ult_v14": {
+     "frames": 56,
+     "seconds": 0.9333,
+     "group": "ultimate_ingame"
+    },
+    "cin_takimaru_atk": {
+     "frames": 624,
+     "seconds": 10.4,
+     "group": "cinematic"
+    },
+    "cinv_moguzo": {
+     "frames": 600,
+     "seconds": 10,
+     "group": "cinematic"
+    },
+    "cinv_godan": {
+     "frames": 612,
+     "seconds": 10.2,
+     "group": "cinematic"
+    },
+    "cinv_chirka": {
+     "frames": 600,
+     "seconds": 10,
+     "group": "cinematic"
+    },
+    "cinv_pisuke": {
+     "frames": 600,
+     "seconds": 10,
+     "group": "cinematic"
+    },
+    "cinv_hakuma": {
+     "frames": 612,
+     "seconds": 10.2,
+     "group": "cinematic"
+    },
+    "cinv_takimaru": {
+     "frames": 624,
+     "seconds": 10.4,
+     "group": "cinematic"
+    },
+    "cinv_yomikage": {
+     "frames": 600,
+     "seconds": 10,
+     "group": "cinematic"
+    },
+    "cinv_bullet": {
+     "frames": 612,
+     "seconds": 10.2,
+     "group": "cinematic"
+    },
+    "cinv_dark_moguzo": {
+     "frames": 600,
+     "seconds": 10,
+     "group": "cinematic"
+    }
+   },
+   "command_map_v14": {
+    "214": "s3_v14",
+    "236": "s1_v14",
+    "623": "s2_v14",
+    "236236": "ult_v14"
+   },
+   "command_map_base": {
+    "214": "sp_bear_grab",
+    "236": "cmd_236",
+    "623": "cmd_623",
+    "236236": "super"
+   }
+  },
+  "yomikage": {
+   "glb": "cinematic/v14/yomikage/yomikage_v14.glb",
+   "glb_sha256": "878ff307dcab6b58e3e8b451b2bea867f20e749da57e954e8678ed87b0f2b781",
+   "glb_bytes": 5942816,
+   "motions": "cinematic/v14/yomikage/yomikage_v14_motions.json",
+   "base_glb": "chars/yomikage/yomikage.glb",
+   "base_glb_sha256": "171a84e010037455dfaaf9c7b6d4a9dc8efe70775a772912c353057e08c01586",
+   "editable_blend": null,
+   "added_clips": {
+    "s1_v14": {
+     "frames": 37,
+     "seconds": 0.6167,
+     "group": "special"
+    },
+    "s2_v14": {
+     "frames": 40,
+     "seconds": 0.6667,
+     "group": "special"
+    },
+    "s3_v14": {
+     "frames": 51,
+     "seconds": 0.85,
+     "group": "special"
+    },
+    "ult_v14": {
+     "frames": 50,
+     "seconds": 0.8333,
+     "group": "ultimate_ingame"
+    },
+    "cin_yomikage_atk": {
+     "frames": 600,
+     "seconds": 10,
+     "group": "cinematic"
+    },
+    "cinv_moguzo": {
+     "frames": 600,
+     "seconds": 10,
+     "group": "cinematic"
+    },
+    "cinv_godan": {
+     "frames": 612,
+     "seconds": 10.2,
+     "group": "cinematic"
+    },
+    "cinv_chirka": {
+     "frames": 600,
+     "seconds": 10,
+     "group": "cinematic"
+    },
+    "cinv_pisuke": {
+     "frames": 600,
+     "seconds": 10,
+     "group": "cinematic"
+    },
+    "cinv_hakuma": {
+     "frames": 612,
+     "seconds": 10.2,
+     "group": "cinematic"
+    },
+    "cinv_takimaru": {
+     "frames": 624,
+     "seconds": 10.4,
+     "group": "cinematic"
+    },
+    "cinv_yomikage": {
+     "frames": 600,
+     "seconds": 10,
+     "group": "cinematic"
+    },
+    "cinv_bullet": {
+     "frames": 612,
+     "seconds": 10.2,
+     "group": "cinematic"
+    },
+    "cinv_dark_moguzo": {
+     "frames": 600,
+     "seconds": 10,
+     "group": "cinematic"
+    }
+   },
+   "command_map_v14": {
+    "214": "s3_v14",
+    "236": "s1_v14",
+    "623": "s2_v14",
+    "236236": "ult_v14"
+   },
+   "command_map_base": {
+    "214": "sp_counter",
+    "236": "cmd_236",
+    "623": "cmd_623",
+    "236236": "super"
+   }
+  },
+  "bullet": {
+   "glb": "cinematic/v14/bullet/bullet_v14.glb",
+   "glb_sha256": "5d44e9624af03f24f4c56ec11baf87403200fb597c2350ea1b24e153b182699f",
+   "glb_bytes": 6412172,
+   "motions": "cinematic/v14/bullet/bullet_v14_motions.json",
+   "base_glb": "chars/bullet/bullet.glb",
+   "base_glb_sha256": "abb2765bcf1f7d8fd696b55c992c84b9e52c00b6ba933ec792228f490bed03f4",
+   "editable_blend": null,
+   "added_clips": {
+    "s1_v14": {
+     "frames": 46,
+     "seconds": 0.7667,
+     "group": "special"
+    },
+    "s2_v14": {
+     "frames": 43,
+     "seconds": 0.7167,
+     "group": "special"
+    },
+    "ult_v14": {
+     "frames": 55,
+     "seconds": 0.9167,
+     "group": "ultimate_ingame"
+    },
+    "cin_bullet_atk": {
+     "frames": 612,
+     "seconds": 10.2,
+     "group": "cinematic"
+    },
+    "cinv_moguzo": {
+     "frames": 600,
+     "seconds": 10,
+     "group": "cinematic"
+    },
+    "cinv_godan": {
+     "frames": 612,
+     "seconds": 10.2,
+     "group": "cinematic"
+    },
+    "cinv_chirka": {
+     "frames": 600,
+     "seconds": 10,
+     "group": "cinematic"
+    },
+    "cinv_pisuke": {
+     "frames": 600,
+     "seconds": 10,
+     "group": "cinematic"
+    },
+    "cinv_hakuma": {
+     "frames": 612,
+     "seconds": 10.2,
+     "group": "cinematic"
+    },
+    "cinv_takimaru": {
+     "frames": 624,
+     "seconds": 10.4,
+     "group": "cinematic"
+    },
+    "cinv_yomikage": {
+     "frames": 600,
+     "seconds": 10,
+     "group": "cinematic"
+    },
+    "cinv_bullet": {
+     "frames": 612,
+     "seconds": 10.2,
+     "group": "cinematic"
+    },
+    "cinv_dark_moguzo": {
+     "frames": 600,
+     "seconds": 10,
+     "group": "cinematic"
+    }
+   },
+   "command_map_v14": {
+    "214": "sp_tail_whip",
+    "236": "s1_v14",
+    "623": "s2_v14",
+    "236236": "ult_v14"
+   },
+   "command_map_base": {
+    "214": "sp_tail_whip",
+    "236": "cmd_236",
+    "623": "cmd_623",
+    "236236": "super"
+   }
+  },
+  "dark_moguzo": {
+   "glb": "cinematic/v14/dark_moguzo/dark_moguzo_v14.glb",
+   "glb_sha256": "5eba74bafe8eca621d974a12fbe617191d43829b80d5a737cf55088a5f8cb3b7",
+   "glb_bytes": 6407828,
+   "motions": "cinematic/v14/dark_moguzo/dark_moguzo_v14_motions.json",
+   "base_glb": "chars/dark_moguzo/dark_moguzo.glb",
+   "base_glb_sha256": "57c1ba36f5c7175d9c496a7bda3c329423022ad220ca7cd52b90688168f6e7ab",
+   "editable_blend": null,
+   "added_clips": {
+    "s1_v14": {
+     "frames": 31,
+     "seconds": 0.5167,
+     "group": "special"
+    },
+    "s2_v14": {
+     "frames": 44,
+     "seconds": 0.7333,
+     "group": "special"
+    },
+    "s3_v14": {
+     "frames": 40,
+     "seconds": 0.6667,
+     "group": "special"
+    },
+    "ult_v14": {
+     "frames": 50,
+     "seconds": 0.8333,
+     "group": "ultimate_ingame"
+    },
+    "cin_dark_moguzo_atk": {
+     "frames": 600,
+     "seconds": 10,
+     "group": "cinematic"
+    },
+    "cinv_moguzo": {
+     "frames": 600,
+     "seconds": 10,
+     "group": "cinematic"
+    },
+    "cinv_godan": {
+     "frames": 612,
+     "seconds": 10.2,
+     "group": "cinematic"
+    },
+    "cinv_chirka": {
+     "frames": 600,
+     "seconds": 10,
+     "group": "cinematic"
+    },
+    "cinv_pisuke": {
+     "frames": 600,
+     "seconds": 10,
+     "group": "cinematic"
+    },
+    "cinv_hakuma": {
+     "frames": 612,
+     "seconds": 10.2,
+     "group": "cinematic"
+    },
+    "cinv_takimaru": {
+     "frames": 624,
+     "seconds": 10.4,
+     "group": "cinematic"
+    },
+    "cinv_yomikage": {
+     "frames": 600,
+     "seconds": 10,
+     "group": "cinematic"
+    },
+    "cinv_bullet": {
+     "frames": 612,
+     "seconds": 10.2,
+     "group": "cinematic"
+    },
+    "cinv_dark_moguzo": {
+     "frames": 600,
+     "seconds": 10,
+     "group": "cinematic"
+    }
+   },
+   "command_map_v14": {
+    "214": "s3_v14",
+    "236": "s1_v14",
+    "623": "s2_v14",
+    "236236": "ult_v14"
+   },
+   "command_map_base": {
+    "214": "sp_dark_rush",
+    "236": "cmd_236",
+    "623": "cmd_623",
+    "236236": "super"
+   }
+  }
+ },
+ "authoring": {
+  "motion_source": "tools/mamo3d/motions_v14.py",
+  "build": "python3 tools/build_v14.py [--only id] [--save-blend]",
+  "storyboard_to_manifest": "node cinematic/v14/tools/build_manifest.mjs",
+  "reference_player": "cinematic/v14/player/index.html?movie=<id>&target=<id>",
+  "spec": "cinematic/v14/MANIFEST_SPEC.md"
+ },
+ "evidence": {
+  "audit_before": [
+   {
+    "path": "cinematic/v14/evidence/audit_before/bullet.jpg",
+    "bytes": 260514,
+    "sha256": "083b28302d051a8dcaa89551f2f0f8530000524d644782394b84542c825a8d20"
+   },
+   {
+    "path": "cinematic/v14/evidence/audit_before/capture_log.json",
+    "bytes": 9861,
+    "sha256": "8b552fbd5c3da07e060b917f0ef489505cd809807cde5973004627e9dc3150b7"
+   },
+   {
+    "path": "cinematic/v14/evidence/audit_before/chirka.jpg",
+    "bytes": 259245,
+    "sha256": "355ee4e6d0db600e85cd57e203f5fdc0e5b71eccb321d8b8fbddbec80ce056a6"
+   },
+   {
+    "path": "cinematic/v14/evidence/audit_before/dark_moguzo.jpg",
+    "bytes": 255976,
+    "sha256": "ea788a9937df40d6ff21544af340291617256b7036eba1d79b8a80408c1bd268"
+   },
+   {
+    "path": "cinematic/v14/evidence/audit_before/godan.jpg",
+    "bytes": 257220,
+    "sha256": "fd62f7c3c20b447ccfb227cdd9d86eca00b5c59ad8be8f18775e44b23bac679c"
+   },
+   {
+    "path": "cinematic/v14/evidence/audit_before/hakuma.jpg",
+    "bytes": 260064,
+    "sha256": "3ad793676078f638b86525a4552bc6f39924d1a39856e15890d48981f73883ff"
+   },
+   {
+    "path": "cinematic/v14/evidence/audit_before/moguzo.jpg",
+    "bytes": 257804,
+    "sha256": "e5e6fcbad8939f0db6f440b56b9de82d3d09c559c9471b26bebebf762082a1a3"
+   },
+   {
+    "path": "cinematic/v14/evidence/audit_before/pisuke.jpg",
+    "bytes": 262004,
+    "sha256": "f4610da467e735b3dd164c8b856d0cd942936483d38d3470931f6f2cd8e980a4"
+   },
+   {
+    "path": "cinematic/v14/evidence/audit_before/takimaru.jpg",
+    "bytes": 264784,
+    "sha256": "e3b22f39b0c1c39ccaaad5b361b4f231d4888e841bc63fed7a1ea79bb51f5d5f"
+   },
+   {
+    "path": "cinematic/v14/evidence/audit_before/yomikage.jpg",
+    "bytes": 256743,
+    "sha256": "0d4d98b7dce08080c2600c5427864956c5335c8c0c6302fc8e3dd403a4f3cda9"
+   }
+  ],
+  "audit_after": [
+   {
+    "path": "cinematic/v14/evidence/audit_after/bullet.jpg",
+    "bytes": 259240,
+    "sha256": "5ac752603c6c02c7f181bdc9d7ff919fbe2b8ef9f69572b4ab6e66fc7173675b"
+   },
+   {
+    "path": "cinematic/v14/evidence/audit_after/capture_log.json",
+    "bytes": 9809,
+    "sha256": "3ac988a6957125bd812378f95cdec9885e57e5dd2c615bb25328b4f30a63698c"
+   },
+   {
+    "path": "cinematic/v14/evidence/audit_after/chirka.jpg",
+    "bytes": 258312,
+    "sha256": "3159fa01c59a90fd8e5213e0040953704bd0b6ef7fde11906acb9f64eb26fb1e"
+   },
+   {
+    "path": "cinematic/v14/evidence/audit_after/dark_moguzo.jpg",
+    "bytes": 255272,
+    "sha256": "3511981d1ba27a516be0f0af18a4662d68152acafeb86b2c5aaca567c7a4dacb"
+   },
+   {
+    "path": "cinematic/v14/evidence/audit_after/godan.jpg",
+    "bytes": 255004,
+    "sha256": "e013d566acc89b7a2075ae92033b98e00016fd303a36d728c57df880b422e5ae"
+   },
+   {
+    "path": "cinematic/v14/evidence/audit_after/hakuma.jpg",
+    "bytes": 259557,
+    "sha256": "437df1d69637b0a5e5689f8c0bc78a0ae84e24e6d6150ca22f6857b472490edd"
+   },
+   {
+    "path": "cinematic/v14/evidence/audit_after/moguzo.jpg",
+    "bytes": 257691,
+    "sha256": "2f150648bc51923b617abd8057f4ffa11d1323f5205ce737acdaf66dcaaa3362"
+   },
+   {
+    "path": "cinematic/v14/evidence/audit_after/pisuke.jpg",
+    "bytes": 263096,
+    "sha256": "be3eed4c43cec09dcd8fc1f9f2a4d74163b4e24450a7db509c83f0c91b3e4934"
+   },
+   {
+    "path": "cinematic/v14/evidence/audit_after/takimaru.jpg",
+    "bytes": 264109,
+    "sha256": "abdf3fc4e212004faa44415066c56435ac47c693615adc48430bb895ad300173"
+   },
+   {
+    "path": "cinematic/v14/evidence/audit_after/yomikage.jpg",
+    "bytes": 255205,
+    "sha256": "e63503f9e1112bd7ecf31450b9d321d86055b16ef5a27447039cc5b98ae4f0ee"
+   }
+  ],
+  "specials": [
+   {
+    "path": "cinematic/v14/evidence/specials/bullet_specials_before_after.mp4",
+    "bytes": 235408,
+    "sha256": "fc341ac79b8399eb1d7b455e62e41f501fb065cc6a2ffcf234a8381f3792e692"
+   },
+   {
+    "path": "cinematic/v14/evidence/specials/chirka_specials_before_after.mp4",
+    "bytes": 186628,
+    "sha256": "60b2ef621632095afc1a1a25dae03c1783c6d1cc096090b5c92f700217a202ff"
+   },
+   {
+    "path": "cinematic/v14/evidence/specials/dark_moguzo_specials_before_after.mp4",
+    "bytes": 187891,
+    "sha256": "a46809106d806998cb9413e58a58e4b655e21678c3c11d049e6b99cb24fd0888"
+   },
+   {
+    "path": "cinematic/v14/evidence/specials/godan_specials_before_after.mp4",
+    "bytes": 254797,
+    "sha256": "ae72069f1039a91e2eb8b77464f77300aef0ab3250e38d884a3b4caa568d9319"
+   },
+   {
+    "path": "cinematic/v14/evidence/specials/hakuma_specials_before_after.mp4",
+    "bytes": 193526,
+    "sha256": "a203d037c481ccbbf0a4b5cf083d012192a936f9d04a8f1cbb895e2d20bd4aad"
+   },
+   {
+    "path": "cinematic/v14/evidence/specials/moguzo_specials_before_after.mp4",
+    "bytes": 206186,
+    "sha256": "71f90221dcfc387c044d113f1a74b5ae563b9e99d56450b032c6e3bba58fe208"
+   },
+   {
+    "path": "cinematic/v14/evidence/specials/pisuke_specials_before_after.mp4",
+    "bytes": 190922,
+    "sha256": "c099b1de53fcd29b67184929f8206e60d9dae4d8d9fc7717cbc0e8d66666350f"
+   },
+   {
+    "path": "cinematic/v14/evidence/specials/takimaru_specials_before_after.mp4",
+    "bytes": 269896,
+    "sha256": "ee6dc70fa910d1c68bd8bac694a42adbd2aaae23307ed370fc3aba23bb91cfa4"
+   },
+   {
+    "path": "cinematic/v14/evidence/specials/yomikage_specials_before_after.mp4",
+    "bytes": 181327,
+    "sha256": "99bf5dca6c897e0f2c166d52bc4ff7fd490f398bd47f9e79a9798e3cb088240d"
+   }
+  ],
+  "movies": [
+   {
+    "path": "cinematic/v14/evidence/movies/bullet_ultimate_10s_sheet.jpg",
+    "bytes": 196677,
+    "sha256": "b7ec37f8166d4eacca6487485e6ede212be92eb2ab4b601ef96ea466deba4f64"
+   },
+   {
+    "path": "cinematic/v14/evidence/movies/bullet_ultimate_10s_vs_dark_moguzo.mp4",
+    "bytes": 658101,
+    "sha256": "f30a1fd32ddcca807ad1b8aa7461e9cc139996e078a331b765dfee49e7e58128"
+   },
+   {
+    "path": "cinematic/v14/evidence/movies/bullet_ultimate_before_after.mp4",
+    "bytes": 729885,
+    "sha256": "5e7648c31c4adbe26c99d5784cdf52e1885f4c7a0a42b1e8ec389ad87be10002"
+   },
+   {
+    "path": "cinematic/v14/evidence/movies/chirka_ultimate_10s_sheet.jpg",
+    "bytes": 227552,
+    "sha256": "5aaf0529dbc05a003c604556de08a57ac88334d3fe9e0607cd1284aefeac5910"
+   },
+   {
+    "path": "cinematic/v14/evidence/movies/chirka_ultimate_10s_vs_godan.mp4",
+    "bytes": 966275,
+    "sha256": "b5565be2a2d16fb4101062575aaf4c14592aab5db9d56f2359ad9a5687dc1b17"
+   },
+   {
+    "path": "cinematic/v14/evidence/movies/chirka_ultimate_10s_vs_pisuke.mp4",
+    "bytes": 1092966,
+    "sha256": "8d0a5de79cdbf14bc85f9c4a9c05cf431a2017a1aeaf06004093975d626c842e"
+   },
+   {
+    "path": "cinematic/v14/evidence/movies/chirka_ultimate_before_after.mp4",
+    "bytes": 1042325,
+    "sha256": "328548c9ca3eb48a11c32e79a9448e092300db309a5dba829406205b5e4d5739"
+   },
+   {
+    "path": "cinematic/v14/evidence/movies/dark_moguzo_ultimate_10s_sheet.jpg",
+    "bytes": 192612,
+    "sha256": "255e1dd21a73b1e35d8f34f40be1974aeae77bb2e4e61bdd58eda1ed400a71a6"
+   },
+   {
+    "path": "cinematic/v14/evidence/movies/dark_moguzo_ultimate_10s_vs_hakuma.mp4",
+    "bytes": 737198,
+    "sha256": "318c254e7fc7acd139b875f7c48431ec34e92d9e8c85254fd28d6161af8c7d50"
+   },
+   {
+    "path": "cinematic/v14/evidence/movies/dark_moguzo_ultimate_before_after.mp4",
+    "bytes": 811685,
+    "sha256": "37a63f44c043fbc9d9c59b35454417a0a845a9d9e13dcc5f3251b008315f476b"
+   },
+   {
+    "path": "cinematic/v14/evidence/movies/godan_ultimate_10s_sheet.jpg",
+    "bytes": 201775,
+    "sha256": "b2903991bd63b973618bc90826df212b3bf624c24e37233d0a4da427123d310a"
+   },
+   {
+    "path": "cinematic/v14/evidence/movies/godan_ultimate_10s_vs_chirka_mirrored.mp4",
+    "bytes": 730034,
+    "sha256": "50fa20b056b4c04556791a79a99a449988645afe488f510377f42a87237e8cd8"
+   },
+   {
+    "path": "cinematic/v14/evidence/movies/godan_ultimate_10s_vs_pisuke.mp4",
+    "bytes": 843480,
+    "sha256": "8bc83ce4caf4b33e2764562567192c6ee6b0e3e2d945483322f7514bb8cf8d05"
+   },
+   {
+    "path": "cinematic/v14/evidence/movies/godan_ultimate_before_after.mp4",
+    "bytes": 814164,
+    "sha256": "6557fcace35f4c02dc52ac4df3f48849f86135f2a889b41f4437a828615c1480"
+   },
+   {
+    "path": "cinematic/v14/evidence/movies/hakuma_ultimate_10s_sheet.jpg",
+    "bytes": 226028,
+    "sha256": "2d73b104b092034bac0e0b64a387997515a893d7fedb2798f601a009da3aaeb2"
+   },
+   {
+    "path": "cinematic/v14/evidence/movies/hakuma_ultimate_10s_vs_chirka.mp4",
+    "bytes": 750212,
+    "sha256": "90b7c09e0ec2b753f89fca058674242fe7b51d9197f2ddeb35b3670439b36c8b"
+   },
+   {
+    "path": "cinematic/v14/evidence/movies/hakuma_ultimate_before_after.mp4",
+    "bytes": 832991,
+    "sha256": "7762a3fa92c2d11895c934be463d415983a9aa0692b552c238eb84f392bde1a8"
+   },
+   {
+    "path": "cinematic/v14/evidence/movies/moguzo_ultimate_10s_sheet.jpg",
+    "bytes": 185722,
+    "sha256": "0990132d88717ece534c99280c0ac99195fbf3826f7c70c879ba5ce1887369f9"
+   },
+   {
+    "path": "cinematic/v14/evidence/movies/moguzo_ultimate_10s_vs_pisuke.mp4",
+    "bytes": 716724,
+    "sha256": "f9fdf801b70a86ccd093f3e737d282ffe595142d2afcfd0c2a02bb7039c1ed9b"
+   },
+   {
+    "path": "cinematic/v14/evidence/movies/moguzo_ultimate_10s_vs_takimaru.mp4",
+    "bytes": 665411,
+    "sha256": "a161b282a7255cd9ea4c5f4ab932f9015df0df11a6c4c5c133cc1939c2657f1f"
+   },
+   {
+    "path": "cinematic/v14/evidence/movies/moguzo_ultimate_before_after.mp4",
+    "bytes": 721584,
+    "sha256": "b78f2099311ca59b6fd23eac3f24a5ea662615617af4fc754d5fc06d247d5e37"
+   },
+   {
+    "path": "cinematic/v14/evidence/movies/pisuke_ultimate_10s_sheet.jpg",
+    "bytes": 180545,
+    "sha256": "21d04d58d71fd050c8e816e9fa1aa6c6e9d7666c47785c284a434f06b1e6784a"
+   },
+   {
+    "path": "cinematic/v14/evidence/movies/pisuke_ultimate_10s_vs_godan.mp4",
+    "bytes": 569585,
+    "sha256": "8567223804e751f426fb568b4657aa1dc5e2e7139d280e7d59ef6d9fcfb55327"
+   },
+   {
+    "path": "cinematic/v14/evidence/movies/pisuke_ultimate_10s_vs_pisuke.mp4",
+    "bytes": 515781,
+    "sha256": "b21a63c084a4b8d856227a5d370c1e05e4baf7ba5ac751854a5fc99325b1980c"
+   },
+   {
+    "path": "cinematic/v14/evidence/movies/pisuke_ultimate_before_after.mp4",
+    "bytes": 646983,
+    "sha256": "e392292018d874c029cdde8bdf47df772af683fb3541b0c140758d727a0c8f3e"
+   },
+   {
+    "path": "cinematic/v14/evidence/movies/takimaru_ultimate_10s_sheet.jpg",
+    "bytes": 193620,
+    "sha256": "4d9d13cebdea3aab10121ac2338fb3bd27520c0a6d0a5b8f07ab741b4329e830"
+   },
+   {
+    "path": "cinematic/v14/evidence/movies/takimaru_ultimate_10s_vs_pisuke.mp4",
+    "bytes": 683919,
+    "sha256": "660fcd33a5bbfaf1f7510aca2c5bdc6180d740e990a98d56c3457873c710006a"
+   },
+   {
+    "path": "cinematic/v14/evidence/movies/takimaru_ultimate_before_after.mp4",
+    "bytes": 767285,
+    "sha256": "4361a758d432cf3aa2ee5cc766443a5ae74e577c3d976e5bbc9a8a993a3fadd0"
+   },
+   {
+    "path": "cinematic/v14/evidence/movies/yomikage_ultimate_10s_sheet.jpg",
+    "bytes": 159999,
+    "sha256": "f112bdbe92b78ac1f329eb747b3f607fb02cfb56c0218f5c2676ebde56e89d49"
+   },
+   {
+    "path": "cinematic/v14/evidence/movies/yomikage_ultimate_10s_vs_moguzo.mp4",
+    "bytes": 402628,
+    "sha256": "7e8cf3f36637e8600d9c611ccece0faedd69c19d75eedc7b93c2a11fe8b60cc8"
+   },
+   {
+    "path": "cinematic/v14/evidence/movies/yomikage_ultimate_before_after.mp4",
+    "bytes": 501961,
+    "sha256": "c3a8e9018acc0c1a9ad8d399c2d0a29cdef9a9102e62de06bdcaa396ba1e054b"
+   }
+  ]
+ },
+ "validation": {
+  "summary": "cinematic/v14/validation/summary.json",
+  "all_pass": true,
+  "passed": 148,
+  "total": 148
+ }
+}

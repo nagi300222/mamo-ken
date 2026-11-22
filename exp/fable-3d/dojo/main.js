@@ -11,6 +11,8 @@ import { createCombatAudio } from './combat-audio.js';
 import { createArenaMusic } from './arena-music.js';
 import { hudTheme, isSuperReady, chargePips } from './hud-themes.js';
 import { createMovieDirector, movieScript } from './ultimate-cinematic.js';
+import { createShowtimeLoader } from './showtime-assets.js';
+import { createAuthoredCinematic } from './authored-cinematic.js';
 
 const $=id=>document.getElementById(id), canvas=$('stage');
 const scene=new THREE.Scene();scene.background=new THREE.Color(0x758993);
@@ -39,6 +41,7 @@ const cloudMat=new THREE.MeshBasicMaterial({color:0xe2e1d8,transparent:true,opac
 for(let i=0;i<5;i++){const cloud=new THREE.Mesh(new THREE.SphereGeometry(.32+i*.05,9,5),cloudMat);
   cloud.position.set(-3+i*1.5,.95+(i%2)*.24,-3.9);cloud.scale.y=.28;environment.add(cloud);}
 const loader=new GLTFLoader();
+const loadShowtime=createShowtimeLoader(new URL('../cinematic/v14/',import.meta.url));
 const actors=[null,null], bullets=new Map(), flashes=[];
 const audioFX=createCombatAudio();
 const music=createArenaMusic(()=>audioFX.context);
@@ -65,10 +68,41 @@ const MOVIE_BACKGROUND=Object.freeze({
  chirka:0x2c1745,takimaru:0x362b24,yomikage:0x142c3c,
  bullet:0x362416,dark_moguzo:0x1d1738
 });
-let canvasHome=null,canvasFollowingNode=null,movieLastPhase='';
+let canvasHome=null,canvasFollowingNode=null,movieLastPhase='',authoredMovie=null;
+const movieFlashes=[];
+const movieSounds=new Set();
+function playMovieSound(kind,id){
+  return audioFX.play(kind,id,{voices:movieSounds});
+}
+function clearMovieEffects(){
+  for(const flash of movieFlashes){flash.mesh.removeFromParent();flash.mesh.material.dispose();}
+  movieFlashes.length=0;
+  for(const stop of movieSounds)stop();
+  movieSounds.clear();
+}
 function beginUltimateMovie(event){
   const attacker=battle?.fighters[event.slot];
   if(!attacker||!movie.start(event,attacker.id))return false;
+  const entry=actors[event.slot]?.showtime.ultimate;
+  if(!entry){
+    movie.cancel();
+    note('奥義の演出データを読み込めません');
+    return false;
+  }
+  try{
+    authoredMovie=createAuthoredCinematic({
+      entry,attacker:actors[event.slot],target:actors[event.target],mirror:attacker.facing<0,
+      background:MOVIE_BACKGROUND[attacker.id],lights:scene.children.filter(node=>node.isLight),
+      reducedMotion:!effectsAllowed(),
+      visualCue:(destination,kind,point)=>impactFX(kind,showtimeFor(attacker.id).color,
+        point.x,point.y,1,14,destination,movieFlashes,point.z),
+      audioCue:kind=>playMovieSound(kind,attacker.id)
+    });
+  }catch(error){
+    movie.cancel();
+    console.warn('奥義ムービーの再生準備に失敗',error);
+    return false;
+  }
   clearInput();
   movieLastPhase='';
   $('showtime-banner').classList.remove('active');
@@ -81,18 +115,23 @@ function beginUltimateMovie(event){
   $('cinematic-portrait').src=MODEL_ASSETS[attacker.id].portrait;
   $('cinematic-name').textContent=ROSTER[attacker.id].name;
   $('cinematic-move').textContent=event.move||ROSTER[attacker.id].ultimate.name;
-  $('cinematic-subtitle').textContent=movieScript(attacker.id)[0];
+  $('cinematic-subtitle').textContent=authoredMovie?'':movieScript(attacker.id)[0];
   canvasHome=canvas.parentNode;canvasFollowingNode=canvas.nextSibling;
   movieViewport.appendChild(canvas);
   renderer.setSize(Math.max(1,canvas.clientWidth),Math.max(1,canvas.clientHeight),false);
-  if(effectsAllowed())actors[event.slot]?.illusions?.start(attacker);
-  audioFX.play('counter',attacker.id);
+  if(!authoredMovie){
+    if(effectsAllowed())actors[event.slot]?.illusions?.start(attacker);
+    playMovieSound('counter',attacker.id);
+  }
   music.update(false);
   return true;
 }
 function finishUltimateMovie(){
   if(!movie.active)return;
   movie.cancel();
+  authoredMovie?.dispose();
+  authoredMovie=null;
+  clearMovieEffects();
   movieLayer.hidden=true;
   environment.visible=true;scene.background.setHex(0x758993);
   movieLayer.dataset.phase='';
@@ -109,6 +148,21 @@ function finishUltimateMovie(){
 }
 function renderUltimateMovie(delta){
   if(!movie.active)return;
+  if(authoredMovie){
+    const aspect=Math.max(.3,canvas.clientWidth/Math.max(1,canvas.clientHeight));
+    const frame=authoredMovie.update(delta,aspect);
+    if(frame.ended){finishUltimateMovie();return;}
+    if(movieLastPhase!==frame.shot){
+      movieLastPhase=frame.shot;
+      movieLayer.dataset.phase=frame.shot;
+    }
+    if($('cinematic-subtitle').textContent!==frame.caption){
+      $('cinematic-subtitle').textContent=frame.caption;
+    }
+    animateFX(movieFlashes,delta*FPS);
+    renderer.render(frame.scene,frame.camera);
+    return true;
+  }
   const shot=movie.update(delta);
   if(shot.ended){finishUltimateMovie();return;}
   const attacker=battle.fighters[shot.data.slot],target=battle.fighters[shot.data.target];
@@ -119,9 +173,8 @@ function renderUltimateMovie(delta){
     $('cinematic-subtitle').textContent=shot.phase==='anticipation'?script[0]:
       shot.phase==='hero'?script[1]:script[2];
     if(shot.phase==='impact'){
-      impactFX('ultimate',showtimeFor(attacker.id).color,target.x,target.y+.30,2.2,26);
-      audioFX.play('ultimate',attacker.id);
-      shake(.02,9);
+      impactFX('ultimate',showtimeFor(attacker.id).color,target.x,target.y+.30,2.2,26,scene,movieFlashes);
+      playMovieSound('ultimate',attacker.id);
     }
   }
   // The same real 3D scene and the same WebGL canvas move into a full-screen movie layer.
@@ -141,7 +194,7 @@ function renderUltimateMovie(delta){
     actor.mixer.update(Math.min(delta,.045));
     actor.illusions?.step(battle.fighters[actor.slot]);
   }
-  animateFX();
+  animateFX(movieFlashes,delta*FPS);
 }
 function shake(strength,frames=7){
   if(!effectsAllowed())return;
@@ -162,15 +215,15 @@ function showBanner(slot,id,move){
   banner.append(portrait,copy);banner.classList.add('active');
   bannerUntil=(battle?.frame??0)+68;
 }
-function impactFX(kind,color,x,y,scale=1,life=14){
+function impactFX(kind,color,x,y,scale=1,life=14,destination=scene,queue=flashes,z=.23){
   if(!effectsAllowed())return;
-  while(flashes.length>24){
-    const old=flashes.shift();scene.remove(old.mesh);old.mesh.material.dispose();
+  if(queue.length>=24){
+    const old=queue.shift();old.mesh.removeFromParent();old.mesh.material.dispose();
   }
   const mat=new THREE.MeshBasicMaterial({color,transparent:true,opacity:.85,depthWrite:false,side:THREE.DoubleSide,blending:THREE.AdditiveBlending});
   const mesh=new THREE.Mesh(fxGeometry[kind]||fxGeometry.hit,mat);
-  mesh.position.set(x,y,.23);mesh.scale.setScalar(scale);
-  scene.add(mesh);flashes.push({mesh,life,maxLife:life,scale});
+  mesh.position.set(x,y,z);mesh.scale.setScalar(scale);
+  destination.add(mesh);queue.push({mesh,life,maxLife:life,scale});
   return mesh;
 }
 function updateActionTrail(a,p){
@@ -247,10 +300,9 @@ function actionShowtime(e){
   }else if(/^s[123]$/.test(e.action)){
     // Specials now own the older super-level flourish during ordinary gameplay.
     showBanner(e.slot,p.id,e.name);
-    audioFX.play('ultimate',p.id);
+    if(!actors[e.slot]?.showtime[e.action])audioFX.play('ultimate',p.id);
     $('note').style.setProperty('--special-accent',showtimeHex(p.id));
-    superSignature(p);
-    shake(.014,8);
+    if(!actors[e.slot]?.showtime[e.action]){superSignature(p);shake(.014,8);}
   }else if(e.action==='roar'){audioFX.play('roar',p.id);impactFX('roar',0xf6d17b,p.x,p.y+.31,1.3,12);}
   else if(e.action==='gyuiin'){audioFX.play('clinch',p.id);}
 }
@@ -321,6 +373,7 @@ function disposable(o){o.traverse(node=>{if(node.geometry)node.geometry.dispose(
   if(node.material)for(const m of (Array.isArray(node.material)?node.material:[node.material])){m.map?.dispose();m.dispose();}});
 }
 function clearActors(){for(let i=0;i<2;i++){const a=actors[i];if(!a)continue;
+    a.shadow.geometry.dispose();a.shadow.material.dispose();
     if(a.trail){scene.remove(a.trail.mesh);a.trail.mesh.geometry.dispose();a.trail.mesh.material.dispose();}
     a.illusions?.dispose();
     a.mixer.stopAllAction();scene.remove(a.holder);disposable(a.gltf.scene);actors[i]=null;}
@@ -334,6 +387,31 @@ async function createActor(id,slot) {
     fetch(new URL(asset.motion,import.meta.url)).then(r=>{if(!r.ok)throw Error('motion JSON HTTP '+r.status);return r.json();})
   ]);
   const mixer=new THREE.AnimationMixer(gltf.scene),actions=Object.fromEntries(gltf.animations.map(c=>[c.name,mixer.clipAction(c)]));
+  let showtime={};
+  try{
+    const animationFiles=new Map();
+    showtime=await loadShowtime(id,async(source,manifestUrl)=>{
+      const url=source.glb&&new URL(source.glb,manifestUrl).href;
+      if(url&&!animationFiles.has(url)){
+        animationFiles.set(url,loader.loadAsync(url).then(result=>{
+          disposable(result.scene);
+          return result.animations;
+        }));
+      }
+      const clips=url?await animationFiles.get(url):gltf.animations;
+      const clip=clips.find(item=>item.name===source.clip);
+      if(!clip)throw new Error('Missing showtime clip: '+source.clip);
+      return clip;
+    });
+  }catch(error){
+    mixer.stopAllAction();mixer.uncacheRoot(gltf.scene);
+    disposable(gltf.scene);
+    throw new Error(id+' の専用技素材を読み込めません: '+error.message);
+  }
+  for(const [moveId,entry] of Object.entries(showtime)){
+    if(entry.start)entry.action=mixer.clipAction(entry.start);
+    else if(moveId!=='ultimate'&&entry.attacker)entry.action=mixer.clipAction(entry.attacker);
+  }
   if(!actions.idle||!actions.stand_light||!actions.stand_heavy){
     disposable(gltf.scene);throw Error(id+' のGLBに必須動作がない');
   }
@@ -342,22 +420,23 @@ async function createActor(id,slot) {
   const sh=new THREE.Mesh(new THREE.CircleGeometry(.18,24),new THREE.MeshBasicMaterial({color:0x142128,transparent:true,opacity:.24,depthWrite:false}));
   sh.rotation.x=-Math.PI/2;sh.position.y=.003;holder.add(sh);
   const illusions=id==='chirka'?createChirkaIllusions({THREE,cloneSkeleton,gltf,scene,reducedMotion}):null;
-  return {id,slot,gltf,meta,holder,turn,shadow:sh,mixer,actions,illusions,current:null,previous:null,key:'',actionAge:0};
+  return {id,slot,gltf,meta,holder,turn,shadow:sh,mixer,actions,showtime,illusions,current:null,key:'',specialCueIndex:0};
 }
 function clipChange(a,p){
-  const name=chooseClip(p,Object.keys(a.actions),a.meta.command_map||{});
+  const special=a.showtime[p.action?.id];
+  const name=special?.action?special.action.getClip().name:chooseClip(p,Object.keys(a.actions),a.meta.command_map||{});
   const key=name+':'+(p.action?.serial||0)+':'+(p.state==='clinch'?p.state:p.state==='clinch_recoil'?p.state:'');
   if(key===a.key)return;
-  const next=a.actions[name]||a.actions.idle,prev=a.current;
-  const info=a.meta.clips[name]||{},isLoop=!!info.loop;
+  const next=special?.action??a.actions[name]??a.actions.idle,prev=a.current;
+  const info=a.meta.clips[name]||{},isLoop=!special?.action&&!!info.loop;
   next.reset();next.enabled=true;next.clampWhenFinished=true;
   next.setLoop(isLoop?THREE.LoopRepeat:THREE.LoopOnce,isLoop?Infinity:1);
   // Claudeのモーションの頭から末尾までを、既存の対戦フレームに合わせて再生。
   const total=p.action?p.action.startup+p.action.active+p.action.recovery:0;
   const rate=total&&info.frames&&!isLoop?Math.max(.55,Math.min(2.5,info.frames/total)):1;
-  next.setEffectiveTimeScale(rate);next.setEffectiveWeight(1);next.play();
+  next.setEffectiveTimeScale(special?.action?0:rate);next.setEffectiveWeight(1);next.play();
   if(prev&&prev!==next)next.crossFadeFrom(prev,.055,false);
-  a.current=next;a.currentName=name;a.key=key;a.actionAge=0;
+  a.current=next;a.currentName=name;a.key=key;a.specialCueIndex=0;
 }
 function syncActor(a,p){
   if(!a)return;clipChange(a,p);a.holder.position.set(p.x,p.y,0);
@@ -366,7 +445,8 @@ function syncActor(a,p){
   a.turn.position.z=0;
   // 新クリップに踏み込み・被弾・押し合いが入っているので、
   // 旧版用のモデル全体の拡大/傾きを重ねない。
-  const authored=!!a.meta.clips[a.currentName]?.v2;
+  const special=a.showtime[p.action?.id];
+  const authored=!!special?.action||!!a.meta.clips[a.currentName]?.v2;
   if(!authored){
     if(p.action?.kind==='roar'){
       const phase=p.frame/(p.action.startup+p.action.active);
@@ -383,9 +463,32 @@ function syncActor(a,p){
   }
   a.shadow.scale.setScalar(Math.max(.6,1-p.y*.65));
   a.shadow.material.opacity=Math.max(.11,.3-p.y*.13);
-  if(!p.stop)a.mixer.update(1/FPS);
+  if(special?.action){
+    playSpecialFrame(a,p,special);
+  }else if(!p.stop)a.mixer.update(1/FPS);
   updateActionTrail(a,p);
   a.illusions?.step(p);
+}
+function playSpecialFrame(actor,fighter,entry){
+  const { startup, active, recovery }=fighter.action;
+  const { duration }=entry.action.getClip();
+  const contact=entry.spec.contactSeconds??duration*startup/(startup+active+recovery);
+  const frame=fighter.frame;
+  const tail=active+recovery;
+  const seconds=frame<=startup?contact*frame/Math.max(1,startup):
+    contact+(duration-contact)*Math.min(1,(frame-startup)/tail);
+  entry.action.time=Math.max(0,seconds);
+  actor.mixer.update(fighter.stop?0:1/FPS);
+  actor.holder.updateMatrixWorld(true);
+  const cues=entry.spec.cueTrack??[];
+  while(actor.specialCueIndex<cues.length&&cues[actor.specialCueIndex].at<=seconds){
+    const cue=cues[actor.specialCueIndex++];
+    if(cue.type==='sfx')audioFX.play(cue.key,actor.id);
+    if(cue.type==='vfx'){
+      const position=cue.bone&&actor.gltf.scene.getObjectByName(cue.bone)?.getWorldPosition(new THREE.Vector3());
+      impactFX(cue.key,showtimeFor(actor.id).color,position?.x??fighter.x,position?.y??fighter.y+.35,1,14,scene,flashes,position?.z??.23);
+    }
+  }
 }
 const projectileMat={
  earth:0xb1a579,wind:0x9de4c9,violet:0xb68ce9,amber:0xf6ca72,blue:0x83c4ed
@@ -449,13 +552,13 @@ function vfx(){
   if(battle.frame>=cueUntil && $('note').textContent)note('');
   if(battle.frame>=bannerUntil)$('showtime-banner').classList.remove('active');
 }
-function animateFX(){
-  for(let i=flashes.length-1;i>=0;i--){
-    const f=flashes[i];f.life--;
+function animateFX(queue=flashes,frames=1){
+  for(let i=queue.length-1;i>=0;i--){
+    const f=queue[i];f.life=Math.max(0,f.life-frames);
     const progress=(f.maxLife-f.life)/f.maxLife;
     f.mesh.scale.setScalar(f.scale*(1+progress*1.5));
     f.mesh.material.opacity=f.life/f.maxLife*.8;
-    if(f.life<=0){scene.remove(f.mesh);f.mesh.material.dispose();flashes.splice(i,1);}
+    if(f.life<=0){f.mesh.removeFromParent();f.mesh.material.dispose();queue.splice(i,1);}
   }
 }
 function abilityLabel(p){
@@ -630,7 +733,7 @@ function resetAnalog(){
   stick.classList.remove('held');
 }
 stick.addEventListener('pointerdown',e=>{
-  if(analog.pointer!==null)return;
+  if(movie.active||analog.pointer!==null)return;
   e.preventDefault();analog.pointer=e.pointerId;stick.setPointerCapture(e.pointerId);
   stick.classList.add('held');analogMove(e);
 });
@@ -655,7 +758,7 @@ function clearInput(){
 }
 document.addEventListener('keydown',e=>{
   const k=keyMap[e.code];if(!k)return;
-  if(document.activeElement?.tagName==='SELECT')return;
+  if(movie.active||document.activeElement?.tagName==='SELECT')return;
   e.preventDefault();
   if(e.repeat)return;
   if((k==='left'||k==='right')&&!pressedKeys.has(k)&&!pressedKeys.has('up')&&!pressedKeys.has('down'))directionTap(k);
@@ -670,7 +773,11 @@ window.addEventListener('blur',()=>{
   if(movie.active)finishUltimateMovie();
   clearInput();paused=true;$('pause').textContent='再開';music.update(false);
 });
-document.addEventListener('visibilitychange',()=>{if(document.hidden)music.update(false);});
+document.addEventListener('visibilitychange',()=>{
+  if(!document.hidden)return;
+  if(movie.active)finishUltimateMovie();
+  music.update(false);
+});
 $('fx-toggle').onclick=()=>{
   visualFXEnabled=!visualFXEnabled;
   const enabled=effectsAllowed();
@@ -705,6 +812,7 @@ if(!audioFX.supported){
 document.querySelectorAll('[data-control]').forEach(button=>{
   const k=button.dataset.control;
   button.addEventListener('pointerdown',e=>{
+    if(movie.active)return;
     e.preventDefault();button.setPointerCapture(e.pointerId);
     pressedTouch.set(e.pointerId,k);queuedActions.add(k);button.classList.add('held');
   });
@@ -740,7 +848,8 @@ const FIXED=1/FPS;
 function render(now){
   requestAnimationFrame(render);
   music.update(!!(battle&&playing&&!paused&&battle.phase==='fight'&&!movie.active&&!document.hidden));
-  const delta=Math.min(.05,lastFrame?(now-lastFrame)/1000:FIXED);lastFrame=now;
+  const elapsed=lastFrame?Math.max(0,(now-lastFrame)/1000):FIXED;
+  const delta=Math.min(.05,elapsed);lastFrame=now;
   if(battle&&playing&&!paused&&battle.phase==='fight'&&!movie.active) {
     acc=Math.min(.10,acc+delta);let steps=0;
     while(acc>=FIXED&&steps<5){
@@ -751,7 +860,12 @@ function render(now){
     if(steps)hud();
   }
   if(movie.active&&!document.hidden){
-    renderUltimateMovie(delta);
+    try{
+      if(renderUltimateMovie(elapsed))return;
+    }catch(error){
+      console.warn('奥義ムービーを終了しました',error);
+      finishUltimateMovie();
+    }
   }
   // Preserve KO presentation but defer it until after the cutscene.
   if(battle?.phase==='ko'&&!movie.active)for(const actor of actors)actor?.illusions?.stop();
@@ -765,5 +879,5 @@ makeChooser();
 $('drive-costs').textContent=`咆哮：ドライブ${DRIVE.roarCost}消費　ギュイーン：${DRIVE.gyuiinCost}消費`;
 resize();requestAnimationFrame(render);
 window.mamoken3d={get battle(){return battle;},get actors(){return actors;},
-  get cinematic(){return {active:movie.active,data:movie.data,elapsed:movie.elapsed};},
+  get cinematic(){return {active:movie.active,data:movie.data,elapsed:authoredMovie?.elapsed??movie.elapsed};},
   startMatch,showSelection,ROSTER,MODEL_ASSETS};
