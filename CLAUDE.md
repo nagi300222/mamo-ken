@@ -15,3 +15,8 @@ Start with [GitHub Issue #177](https://github.com/nagi300222/mamo-ken/issues/177
 - Report what you actually created and verified. Never say “all 9 are finished” unless source assets, movie footage, and integration evidence are present.
 
 This file prepares Claude's workspace. **Its presence does not mean Claude has run**; the agent must be launched in Claude/Claude Code or a supported orchestration workflow.
+
+
+## 2026-11-22 v15 separate animation task
+
+The user reports that the full v14 playable game feels very good, but weak/strong and character-specific move animations are too similar. See [docs/mamoken-v15/COMBAT_REDESIGN.md](docs/mamoken-v15/COMBAT_REDESIGN.md) and [Issue #188](https://github.com/nagi300222/mamo-ken/issues/188). Create actual unique GLB action/pose differences across the nine fighters and provide contact timings, editable source and short before/after footage. Coordinate with Codex's normal-attack chain-cancel rules. Do not change the user-approved nine ~10s ultimate movies by accident. P0 landscape lock [PR #187](https://github.com/nagi300222/mamo-ken/pull/187) must be preserved.
