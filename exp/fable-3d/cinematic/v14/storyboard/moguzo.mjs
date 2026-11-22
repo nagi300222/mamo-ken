@@ -35,8 +35,8 @@ export default {
     { id: '02-upper-one', title: '一段目', start: 1.1, end: 2.3, intent: '拳と一緒に上がるカメラ。あごが跳ね上がり、首と上体が反る瞬間で長く止める',
       actorPose: { attacker: '足を地に付けたまま、全身を伸ばす右の突き上げ→止め', target: 'あごを跳ね上げられ、つま先が浮く→止め' },
       camera: { rig: 'fist-ride-to-chin', move: '拳に乗って上昇→あごの高さで止まり、止めの間じわりと寄る', keys: [
-        k(1.10, ['attacker.pawR', -0.10, -0.04, 1.00], ['attacker.pawR', 0.10, 0.06, 0], 36, 8), k(1.50, ['target.head', -0.50, -0.16, 1.05], ['target.head', -0.14, -0.10, 0], 31, -10, 'inExpo'),
-        k(2.00, ['target.head', -0.44, -0.14, 0.90], ['target.head', -0.14, -0.10, 0], 28, -13, 'linear'), k(2.30, ['target.head', -0.60, -0.05, 1.30], ['target.chest', -0.12, 0, 0], 36, -6, 'outCubic')] },
+        k(1.10, ['attacker.pawR', -0.10, -0.04, 1.00], ['attacker.pawR', 0.10, 0.06, 0], 36, 8), k(1.50, ['target.head', -0.55, -0.16, 1.10], ['target.head', -0.20, -0.12, 0], 36, -10, 'inExpo'),
+        k(2.00, ['target.head', -0.50, -0.14, 0.98], ['target.head', -0.20, -0.12, 0], 33, -13, 'linear'), k(2.30, ['target.head', -0.60, -0.05, 1.30], ['target.chest', -0.12, 0, 0], 36, -6, 'outCubic')] },
       cues: [{ at: 1.50, type: 'hitstop', dur: 0.5, strength: 'heavy' }, { at: 1.50, type: 'vfx', key: 'flash', dur: 0.12, opacity: 0.5 }, { at: 1.50, type: 'vfx', key: 'dim', dur: 0.5, opacity: 0.32 },
         { at: 1.50, type: 'vfx', key: 'impact_burst', anchor: 'target.head', offset: [-0.04, -0.06, 0.05], size: 0.6, rays: 14, color: 0xffe2a8 }, { at: 1.50, type: 'vfx', key: 'sparks', anchor: 'target.head', offset: [0, -0.05, 0], count: 20, power: 1.2 },
         { at: 1.50, type: 'shake', dur: 0.5, amp: 0.05 }, { at: 1.50, type: 'sfx', key: 'ult_hit_upper1' }, { at: 1.50, type: 'vfx', key: 'shock_ring', anchor: 'attacker.root', radius: 1.3, dur: 0.5, color: 0xffd9a0 },
@@ -64,7 +64,7 @@ export default {
     { id: '06-apex', title: '頂点', start: 5.8, end: 7.2, intent: '遠景。地面から空へ抜ける光の柱の先に二人。いちばん長い止めのあと、落ちていくモグゾーを追って下を向く',
       actorPose: { attacker: '拳を突き上げきって体が反る→止め→落下', target: 'さらに上で大の字→止め→落下開始' },
       camera: { rig: 'distant-pillar-silhouette', move: '遠景固定→止めの後、落下を追ってティルトダウン', keys: [
-        k(5.80, ['stage', -1.5, 4.6, 3.9], ['stage', 0.32, 5.85, 0], 40, -6), k(6.60, ['stage', -1.3, 4.7, 3.5], ['stage', 0.32, 5.95, 0], 37, -3, 'linear'), k(7.20, ['stage', -1.2, 2.2, 3.4], ['attacker.chest', 0, 0, 0], 42, 0, 'inOutCubic')] },
+        k(5.80, ['stage', -0.9, 5.0, 2.5], ['stage', 0.32, 5.95, 0], 42, -6), k(6.60, ['stage', -0.8, 5.1, 2.3], ['stage', 0.32, 6.0, 0], 40, -3, 'linear'), k(7.20, ['stage', -1.2, 2.2, 3.4], ['attacker.chest', 0, 0, 0], 42, 0, 'inOutCubic')] },
       cues: [{ at: 5.90, type: 'hitstop', dur: 0.7, strength: 'max' }, { at: 5.90, type: 'vfx', key: 'energy_pillar', offset: [0.3, 0, 0], height: 8.5, radius: 0.5, dur: 1.2, color: 0xffb648 }, { at: 5.90, type: 'vfx', key: 'flash', dur: 0.16, opacity: 0.55 },
         { at: 5.90, type: 'vfx', key: 'shock_ring', anchor: 'attacker.pawR', plane: 'camera', radius: 3.4, dur: 0.8, color: 0xffe2a8 }, { at: 6.05, type: 'vfx', key: 'shock_ring', anchor: 'target.pelvis', plane: 'camera', radius: 2.2, dur: 0.7, color: 0xffffff },
         { at: 5.90, type: 'vfx', key: 'sparks', anchor: 'attacker.pawR', count: 40, power: 3.2, dur: 1.0 }, { at: 5.90, type: 'shake', dur: 0.7, amp: 0.07 }, { at: 5.90, type: 'sfx', key: 'ult_apex_blast' }, { at: 5.92, type: 'vfx', key: 'shock_ring', offset: [0.3, 0, 0], radius: 3.0, dur: 0.8 }, { at: 6.60, type: 'sfx', key: 'hitstop_release' }] },

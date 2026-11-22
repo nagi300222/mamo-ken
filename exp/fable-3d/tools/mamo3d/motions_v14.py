@@ -503,8 +503,9 @@ def _lead(clip):
         return f
     return dict(clip, fn=lambda f: fn(warp(f)), info=dict(I, contact_pose_frame=c, ingame_lead_frames=INGAME_LEAD))
 def make(cid, name):
+    if cid in _B.POLISH.get(name, {}): return _B.POLISH[name][cid](cid)          # 仕上げ用クリップ（時間の詰めは掛けない）
     f = CLIPS[name]; clip = (f[cid] if isinstance(f, dict) else f)(cid)
-    return _lead(clip) if name in SPECIALS else clip
+    return _lead(clip) if name in SPECIALS and (cid, name) not in _B.NO_LEAD else clip
 def command_map(cid):
     """v14 の見た目差し替え案。models.js の chooseClip は command_map を最優先で引くので、この対応だけで新クリップが再生される"""
     m = {'236': 's1_v14', '623': 's2_v14', '214': 's3_v14', '236236': 'ult_v14'} if cid in SPECIALS['s1_v14'] else {}

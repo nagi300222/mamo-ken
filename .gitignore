@@ -2,3 +2,7 @@
 .DS_Store
 Thumbs.db
 .wrangler/
+
+exp/fable-3d/cinematic/v14/*/*_animations.glb
+exp/fable-3d/cinematic/v14/*/*_polish_anim.glb
+!exp/fable-3d/cinematic/v14/anim/*_polish_anim.glb

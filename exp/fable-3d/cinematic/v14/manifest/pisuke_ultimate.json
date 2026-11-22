@@ -1527,7 +1527,7 @@
     },
     "fov": 26,
     "rollDeg": 4,
-    "easing": "inOutCubic",
+    "easing": "inOutQuad",
     "move": "顔の寄り→ゆっくり上を向く",
     "keys": [
      {
@@ -1575,26 +1575,48 @@
       "ease": "outQuad"
      },
      {
+      "t": 5.36,
+      "pos": {
+       "anchor": "stage",
+       "offset": [
+        -0.55,
+        0.1,
+        1.25
+       ]
+      },
+      "look": {
+       "anchor": "attacker.head",
+       "offset": [
+        0.1,
+        0.1,
+        0
+       ]
+      },
+      "fov": 36,
+      "roll": -3,
+      "ease": "inOutQuad"
+     },
+     {
       "t": 5.6,
       "pos": {
        "anchor": "stage",
        "offset": [
-        -0.7,
+        -0.75,
         0.1,
-        1.2
+        1.3
        ]
       },
       "look": {
-       "anchor": "target.pelvis",
+       "anchor": "stage",
        "offset": [
-        -0.1,
-        -0.1,
+        0.06,
+        0.42,
         0
        ]
       },
-      "fov": 40,
+      "fov": 44,
       "roll": -6,
-      "ease": "inOutCubic"
+      "ease": "inOutQuad"
      }
     ]
    },
@@ -1851,7 +1873,7 @@
    "title": "宙",
    "start": 7.4,
    "end": 8.6,
-   "intent": "引き。高く上がった相手と、軽く着地するピスケを1枚に。落ちてくる相手を追って下を向く",
+   "intent": "落ちてくる相手に付いて下がる引き。相手が画面の中で小さくなりすぎない距離を保ち、着地でピスケも入る",
    "actorPose": {
     "attacker": "片足で軽く着地",
     "target": "頂点から回りながら落ちる"
@@ -1860,18 +1882,18 @@
     "rig": "wide-fall-follow",
     "projection": "perspective",
     "position": {
-     "anchor": "stage",
+     "anchor": "target.pelvis",
      "offset": [
-      -1.9,
-      1.3,
-      3.4
+      -1.1,
+      -0.7,
+      2
      ]
     },
     "lookAt": {
      "anchor": "target.pelvis",
      "offset": [
-      -0.3,
-      -0.9,
+      -0.25,
+      -0.45,
       0
      ]
     },
@@ -1883,18 +1905,18 @@
      {
       "t": 7.4,
       "pos": {
-       "anchor": "stage",
+       "anchor": "target.pelvis",
        "offset": [
-        -1.9,
-        1.3,
-        3.4
+        -1.1,
+        -0.7,
+        2
        ]
       },
       "look": {
        "anchor": "target.pelvis",
        "offset": [
-        -0.3,
-        -0.9,
+        -0.25,
+        -0.45,
         0
        ]
       },
@@ -1903,20 +1925,42 @@
       "ease": "inOutCubic"
      },
      {
-      "t": 8.5,
+      "t": 8.2,
       "pos": {
-       "anchor": "stage",
+       "anchor": "target.pelvis",
        "offset": [
-        -1.5,
-        0.5,
-        2.8
+        -1.1,
+        -0.2,
+        2
        ]
       },
       "look": {
        "anchor": "target.pelvis",
        "offset": [
-        -0.5,
-        0,
+        -0.4,
+        -0.1,
+        0
+       ]
+      },
+      "fov": 44,
+      "roll": 2,
+      "ease": "linear"
+     },
+     {
+      "t": 8.5,
+      "pos": {
+       "anchor": "stage",
+       "offset": [
+        -0.3,
+        0.4,
+        2.3
+       ]
+      },
+      "look": {
+       "anchor": "target.pelvis",
+       "offset": [
+        -0.6,
+        0.05,
         0
        ]
       },
@@ -1929,16 +1973,16 @@
       "pos": {
        "anchor": "stage",
        "offset": [
-        -1.5,
-        0.5,
-        2.8
+        -0.3,
+        0.4,
+        2.3
        ]
       },
       "look": {
        "anchor": "target.pelvis",
        "offset": [
-        -0.5,
-        0,
+        -0.6,
+        0.05,
         0
        ]
       },
@@ -2011,7 +2055,7 @@
      "offset": [
       -0.2,
       0.16,
-      1.95
+      1.6
      ]
     },
     "lookAt": {
@@ -2034,7 +2078,7 @@
        "offset": [
         -0.2,
         0.16,
-        1.95
+        1.6
        ]
       },
       "look": {
@@ -2056,7 +2100,7 @@
        "offset": [
         -0.28,
         0.2,
-        1.65
+        1.38
        ]
       },
       "look": {

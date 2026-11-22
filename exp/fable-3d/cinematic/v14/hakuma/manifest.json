@@ -7,7 +7,7 @@
       "contactSeconds": 0.15,
       "animationSources": {
         "attacker": {
-          "glb": "hakuma_v14.glb",
+          "glb": "hakuma_animations.glb",
           "clip": "s1_v14"
         }
       },
@@ -26,7 +26,7 @@
       "contactSeconds": 0.1,
       "animationSources": {
         "attacker": {
-          "glb": "hakuma_v14.glb",
+          "glb": "hakuma_animations.glb",
           "clip": "s2_v14"
         }
       },
@@ -45,7 +45,7 @@
       "contactSeconds": 0.16666666666666666,
       "animationSources": {
         "attacker": {
-          "glb": "hakuma_v14.glb",
+          "glb": "hakuma_animations.glb",
           "clip": "s3_v14"
         }
       },
@@ -99,7 +99,7 @@
       },
       "animationSources": {
         "attacker": {
-          "glb": "hakuma_v14.glb",
+          "glb": "hakuma_animations.glb",
           "motions": "hakuma/hakuma_v14_motions.json",
           "clip": "cin_hakuma_atk"
         },
@@ -1051,20 +1051,20 @@
             "position": {
               "anchor": "attacker.head",
               "offset": [
-                -0.5,
-                0.14,
-                0.46
+                -0.66,
+                0.22,
+                0.8
               ]
             },
             "lookAt": {
               "anchor": "target.chest",
               "offset": [
-                0,
+                -0.1,
                 0,
                 0
               ]
             },
-            "fov": 42,
+            "fov": 44,
             "rollDeg": -5,
             "easing": "outQuad",
             "move": "肩越しで当たりを受け、遠ざかる相手を見送る",
@@ -1074,20 +1074,20 @@
                 "pos": {
                   "anchor": "attacker.head",
                   "offset": [
-                    -0.5,
-                    0.14,
-                    0.46
+                    -0.66,
+                    0.22,
+                    0.8
                   ]
                 },
                 "look": {
                   "anchor": "target.chest",
                   "offset": [
-                    0,
+                    -0.1,
                     0,
                     0
                   ]
                 },
-                "fov": 42,
+                "fov": 44,
                 "roll": -5,
                 "ease": "inOutCubic"
               },
@@ -1096,20 +1096,20 @@
                 "pos": {
                   "anchor": "attacker.head",
                   "offset": [
-                    -0.4,
-                    0.12,
-                    0.42
+                    -0.56,
+                    0.2,
+                    0.74
                   ]
                 },
                 "look": {
                   "anchor": "target.chest",
                   "offset": [
-                    0,
+                    -0.1,
                     0,
                     0
                   ]
                 },
-                "fov": 34,
+                "fov": 38,
                 "roll": -7,
                 "ease": "inExpo"
               },
@@ -1118,20 +1118,20 @@
                 "pos": {
                   "anchor": "attacker.head",
                   "offset": [
-                    -0.38,
-                    0.12,
-                    0.4
+                    -0.54,
+                    0.2,
+                    0.72
                   ]
                 },
                 "look": {
                   "anchor": "target.chest",
                   "offset": [
-                    0,
+                    -0.1,
                     0,
                     0
                   ]
                 },
-                "fov": 32,
+                "fov": 36,
                 "roll": -8,
                 "ease": "linear"
               },
@@ -1140,20 +1140,20 @@
                 "pos": {
                   "anchor": "attacker.head",
                   "offset": [
-                    -0.5,
-                    0.14,
-                    0.46
+                    -0.66,
+                    0.22,
+                    0.8
                   ]
                 },
                 "look": {
                   "anchor": "target.chest",
                   "offset": [
-                    0,
+                    -0.1,
                     0,
                     0
                   ]
                 },
-                "fov": 40,
+                "fov": 42,
                 "roll": -4,
                 "ease": "outQuad"
               }
@@ -1480,19 +1480,19 @@
                   "anchor": "stage",
                   "offset": [
                     2.1,
-                    1,
-                    1.9
+                    0.9,
+                    1.6
                   ]
                 },
                 "look": {
                   "anchor": "target.pelvis",
                   "offset": [
                     0,
-                    -0.1,
+                    -0.2,
                     0
                   ]
                 },
-                "fov": 44,
+                "fov": 46,
                 "roll": 6,
                 "ease": "inOutQuad"
               },
@@ -1501,20 +1501,20 @@
                 "pos": {
                   "anchor": "stage",
                   "offset": [
-                    1.2,
-                    1.1,
-                    2.4
+                    1.3,
+                    0.95,
+                    1.8
                   ]
                 },
                 "look": {
                   "anchor": "target.pelvis",
                   "offset": [
-                    0,
-                    0,
+                    0.15,
+                    -0.2,
                     0
                   ]
                 },
-                "fov": 46,
+                "fov": 48,
                 "roll": 10,
                 "ease": "linear"
               },
@@ -1523,16 +1523,16 @@
                 "pos": {
                   "anchor": "stage",
                   "offset": [
-                    -0.4,
-                    0.6,
-                    2.6
+                    -0.5,
+                    0.55,
+                    1.9
                   ]
                 },
                 "look": {
                   "anchor": "target.pelvis",
                   "offset": [
                     0,
-                    0,
+                    -0.05,
                     0
                   ]
                 },
@@ -1752,7 +1752,7 @@
               "offset": [
                 1.95,
                 0.16,
-                1.8
+                1.5
               ]
             },
             "lookAt": {
@@ -1775,7 +1775,7 @@
                   "offset": [
                     1.95,
                     0.16,
-                    1.8
+                    1.5
                   ]
                 },
                 "look": {
@@ -1797,7 +1797,7 @@
                   "offset": [
                     2,
                     0.18,
-                    2.05
+                    1.7
                   ]
                 },
                 "look": {
@@ -2424,39 +2424,39 @@
   ],
   "reactions": [
     {
-      "glb": "hakuma_v14.glb",
+      "glb": "hakuma_animations.glb",
       "clip": "cinv_moguzo"
     },
     {
-      "glb": "hakuma_v14.glb",
+      "glb": "hakuma_animations.glb",
       "clip": "cinv_godan"
     },
     {
-      "glb": "hakuma_v14.glb",
+      "glb": "hakuma_animations.glb",
       "clip": "cinv_chirka"
     },
     {
-      "glb": "hakuma_v14.glb",
+      "glb": "hakuma_animations.glb",
       "clip": "cinv_pisuke"
     },
     {
-      "glb": "hakuma_v14.glb",
+      "glb": "hakuma_animations.glb",
       "clip": "cinv_hakuma"
     },
     {
-      "glb": "hakuma_v14.glb",
+      "glb": "hakuma_animations.glb",
       "clip": "cinv_takimaru"
     },
     {
-      "glb": "hakuma_v14.glb",
+      "glb": "hakuma_animations.glb",
       "clip": "cinv_yomikage"
     },
     {
-      "glb": "hakuma_v14.glb",
+      "glb": "hakuma_animations.glb",
       "clip": "cinv_bullet"
     },
     {
-      "glb": "hakuma_v14.glb",
+      "glb": "hakuma_animations.glb",
       "clip": "cinv_dark_moguzo"
     }
   ]

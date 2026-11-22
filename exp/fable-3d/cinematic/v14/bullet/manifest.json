@@ -7,7 +7,7 @@
       "contactSeconds": 0.25,
       "animationSources": {
         "attacker": {
-          "glb": "bullet_v14.glb",
+          "glb": "bullet_animations.glb",
           "clip": "s1_v14"
         }
       },
@@ -26,7 +26,7 @@
       "contactSeconds": 0.11666666666666667,
       "animationSources": {
         "attacker": {
-          "glb": "bullet_v14.glb",
+          "glb": "bullet_animations.glb",
           "clip": "s2_v14"
         }
       },
@@ -45,8 +45,8 @@
       "contactSeconds": 0.31666666666666665,
       "animationSources": {
         "attacker": {
-          "glb": "bullet_v14.glb",
-          "clip": "sp_tail_whip"
+          "glb": "bullet_polish_anim.glb",
+          "clip": "s3_v14"
         }
       },
       "cueTrack": [
@@ -63,7 +63,12 @@
       "directionSource": "docs/mamoken-showtime-v14/ULTIMATE_10S_DIRECTION.md",
       "characterId": "bullet",
       "moveId": "ultimate",
-      "displayName": "超圧縮・弾丸頭突き",
+      "displayName": "尾連・爆ぜ木の実",
+      "nameNote": {
+        "reviewName": "尾連・爆ぜ木の実",
+        "gameName": "超圧縮・弾丸頭突き",
+        "note": "今回の確認版の表示名。balance.js の技名と性能値は変えていない。本採用するかはナギの判断"
+      },
       "trigger": "confirmed_unblocked_ultimate_hit",
       "runtime": "threejs",
       "durationSeconds": 10.2,
@@ -98,7 +103,7 @@
       },
       "animationSources": {
         "attacker": {
-          "glb": "bullet_v14.glb",
+          "glb": "bullet_animations.glb",
           "motions": "bullet/bullet_v14_motions.json",
           "clip": "cin_bullet_atk"
         },
@@ -1330,20 +1335,20 @@
                 "pos": {
                   "anchor": "stage",
                   "offset": [
-                    1.26,
-                    0.5,
-                    0.3
+                    1.12,
+                    0.56,
+                    0.8
                   ]
                 },
                 "look": {
                   "anchor": "target.pelvis",
                   "offset": [
                     -0.04,
-                    0.1,
+                    0.12,
                     0
                   ]
                 },
-                "fov": 34,
+                "fov": 36,
                 "roll": 0,
                 "ease": "linear"
               },
@@ -1352,20 +1357,20 @@
                 "pos": {
                   "anchor": "stage",
                   "offset": [
-                    1.28,
-                    0.46,
-                    0.32
+                    1.14,
+                    0.52,
+                    0.82
                   ]
                 },
                 "look": {
                   "anchor": "target.pelvis",
                   "offset": [
                     -0.04,
-                    0.1,
+                    0.12,
                     0
                   ]
                 },
-                "fov": 32,
+                "fov": 34,
                 "roll": 0,
                 "ease": "outQuad"
               }
@@ -2122,7 +2127,7 @@
           "at": 9.3,
           "type": "caption",
           "dur": 0.75,
-          "text": "超圧縮・弾丸頭突き",
+          "text": "尾連・爆ぜ木の実",
           "sub": "バレット",
           "shot": "08-calm"
         },
@@ -2156,39 +2161,39 @@
   ],
   "reactions": [
     {
-      "glb": "bullet_v14.glb",
+      "glb": "bullet_animations.glb",
       "clip": "cinv_moguzo"
     },
     {
-      "glb": "bullet_v14.glb",
+      "glb": "bullet_animations.glb",
       "clip": "cinv_godan"
     },
     {
-      "glb": "bullet_v14.glb",
+      "glb": "bullet_animations.glb",
       "clip": "cinv_chirka"
     },
     {
-      "glb": "bullet_v14.glb",
+      "glb": "bullet_animations.glb",
       "clip": "cinv_pisuke"
     },
     {
-      "glb": "bullet_v14.glb",
+      "glb": "bullet_animations.glb",
       "clip": "cinv_hakuma"
     },
     {
-      "glb": "bullet_v14.glb",
+      "glb": "bullet_animations.glb",
       "clip": "cinv_takimaru"
     },
     {
-      "glb": "bullet_v14.glb",
+      "glb": "bullet_animations.glb",
       "clip": "cinv_yomikage"
     },
     {
-      "glb": "bullet_v14.glb",
+      "glb": "bullet_animations.glb",
       "clip": "cinv_bullet"
     },
     {
-      "glb": "bullet_v14.glb",
+      "glb": "bullet_animations.glb",
       "clip": "cinv_dark_moguzo"
     }
   ]

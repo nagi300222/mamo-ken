@@ -2,6 +2,7 @@ import { cp, copyFile, mkdir, readdir, rm, stat, writeFile, access } from 'node:
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { validateShowtimeBuild } from './validate-showtime-build.mjs';
+await import('./pack-showtime.mjs');
 const ROOT = path.resolve(fileURLToPath(new URL('..',import.meta.url)));
 const PROJECT = path.resolve(ROOT,'../..'); // repo root: exp/fable-3d -> ../.. 
 const OUTPUT = path.join(ROOT,'_pages');
@@ -9,7 +10,7 @@ const IDS=['moguzo','pisuke','godan','hakuma','chirka','takimaru','yomikage','bu
 async function copyOne(source,target){await mkdir(path.dirname(target),{recursive:true});await copyFile(source,target);}
 await rm(OUTPUT,{recursive:true,force:true});await mkdir(OUTPUT,{recursive:true});
 const dojo=path.join(ROOT,'dojo');
-for(const name of ['index.html','style.css','models.js','balance.js','battle.js','commands.js','cpu.js','camera-frame.js','main.js','showtime-profiles.js','combat-audio.js','showtime-illusions.js','arena-music.js','hud-themes.js','ultimate-cinematic.js','showtime-assets.js','authored-cinematic.js','choreographed-cinematic.js','cinematic-stage.js'])
+for(const name of ['index.html','style.css','models.js','balance.js','battle.js','commands.js','cpu.js','camera-frame.js','main.js','showtime-profiles.js','combat-audio.js','showtime-illusions.js','arena-music.js','hud-themes.js','ultimate-cinematic.js','showtime-assets.js','authored-cinematic.js','choreographed-cinematic.js','cinematic-stage.js','morph-binding.js'])
   await copyOne(path.join(dojo,name),path.join(OUTPUT,'dojo',name));
 await cp(path.join(ROOT,'preview','vendor'),path.join(OUTPUT,'preview','vendor'),{recursive:true});
 for(const file of ['player/cine-player.js','player/fx.js']){

@@ -68,8 +68,10 @@ export async function validateShowtimeBuild(base) {
       if (moveId === 'ultimate') {
         for (const target of IDS) {
           const targetSource = spec.animationSources.target;
+          const targetCharacter=await readJSON(new URL(index[target],base));
+          const reaction=targetCharacter.reactions?.find(r=>r.clip===targetSource.clip);
           const targetModel = spec.actorTracks ?
-            await readModel(new URL(target + '/' + target + '_v14.glb', base)) :
+            await readModel(new URL(reaction.glb,new URL(index[target],base))) :
             await sourceModel(targetSource, target);
           const targetRig = await rosterModel(target);
           getAnimation(targetModel, targetSource.clip, targetRig);

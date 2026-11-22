@@ -35,6 +35,9 @@ try {
     await page.waitForFunction(({attacker,target}) => mamoken3d.battle?.frame > 0 &&
       mamoken3d.actors[0]?.id === attacker && mamoken3d.actors[1]?.id === target,
     {attacker,target}, {timeout:40000});
+    assert.equal(await page.evaluate(()=>mamoken3d.actors.every(actor=>
+      actor.showtime.ultimate.attacker.tracks.some(track=>track.name.endsWith('.morphTargetInfluences'))&&
+      Object.values(actor.showtime.reactions).every(clip=>clip.tracks.some(track=>track.name.endsWith('.morphTargetInfluences'))))),true,'facial animation tracks were dropped');
     const mirror = index % 2 === 1;
     await page.evaluate(mirror => {
       const [a,t] = mamoken3d.battle.fighters;

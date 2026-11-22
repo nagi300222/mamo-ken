@@ -429,3 +429,7 @@ button.primary:active{transform:translateY(1px)}
   .cinematic-skip{padding:4px 7px;font-size:10px}
 }
 @media(prefers-reduced-motion:reduce){.cinematic-caption{transition:none}.cinematic-impact{display:none}}
+
+#check-mode-label{font-size:.8rem;color:#f4d799;max-width:11rem} #check-mode-label input{accent-color:#f4d799} #device-stats{color:#f4d799}
+.selection-footer:has(#check-mode-label:not([hidden])){flex-wrap:wrap}
+#check-mode-label{order:5;flex-basis:100%;max-width:none}

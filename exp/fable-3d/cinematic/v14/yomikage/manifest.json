@@ -7,7 +7,7 @@
       "contactSeconds": 0.18333333333333332,
       "animationSources": {
         "attacker": {
-          "glb": "yomikage_v14.glb",
+          "glb": "yomikage_animations.glb",
           "clip": "s1_v14"
         }
       },
@@ -26,7 +26,7 @@
       "contactSeconds": 0.1,
       "animationSources": {
         "attacker": {
-          "glb": "yomikage_v14.glb",
+          "glb": "yomikage_animations.glb",
           "clip": "s2_v14"
         }
       },
@@ -45,7 +45,7 @@
       "contactSeconds": 0.08333333333333333,
       "animationSources": {
         "attacker": {
-          "glb": "yomikage_v14.glb",
+          "glb": "yomikage_animations.glb",
           "clip": "s3_v14"
         }
       },
@@ -109,7 +109,7 @@
       },
       "animationSources": {
         "attacker": {
-          "glb": "yomikage_v14.glb",
+          "glb": "yomikage_animations.glb",
           "motions": "yomikage/yomikage_v14_motions.json",
           "clip": "cin_yomikage_atk"
         },
@@ -703,7 +703,7 @@
           "title": "背後",
           "start": 2.8,
           "end": 3.8,
-          "intent": "相手の正面・肩の高さで固定。前を探す相手の後ろ、月を背に、目を閉じた影が浮かぶ",
+          "intent": "相手の斜め前・肩の高さで固定。前を探す相手の後ろに、目を閉じた影が浮かぶ（大柄な相手でも影が隠れないよう、真正面ではなく斜めから）",
           "actorPose": {
             "attacker": "相手の背後に目を閉じて立つ→目を開く",
             "target": "前を探し続け、気づかない"
@@ -714,20 +714,20 @@
             "position": {
               "anchor": "stage",
               "offset": [
-                -0.71,
-                0.36,
-                0.3
+                -0.6099999999999999,
+                0.44,
+                1.05
               ]
             },
             "lookAt": {
               "anchor": "stage",
               "offset": [
-                0.64,
+                0.68,
                 0.34,
                 0
               ]
             },
-            "fov": 34,
+            "fov": 36,
             "rollDeg": 0,
             "easing": "linear",
             "move": "固定。背後の影にごくわずか寄る",
@@ -737,20 +737,20 @@
                 "pos": {
                   "anchor": "stage",
                   "offset": [
-                    -0.71,
-                    0.36,
-                    0.3
+                    -0.6099999999999999,
+                    0.44,
+                    1.05
                   ]
                 },
                 "look": {
                   "anchor": "stage",
                   "offset": [
-                    0.64,
+                    0.68,
                     0.34,
                     0
                   ]
                 },
-                "fov": 34,
+                "fov": 36,
                 "roll": 0,
                 "ease": "inOutCubic"
               },
@@ -759,20 +759,20 @@
                 "pos": {
                   "anchor": "stage",
                   "offset": [
-                    -0.6599999999999999,
-                    0.36,
-                    0.28
+                    -0.56,
+                    0.44,
+                    1
                   ]
                 },
                 "look": {
                   "anchor": "stage",
                   "offset": [
-                    0.7,
+                    0.74,
                     0.34,
                     0
                   ]
                 },
-                "fov": 31,
+                "fov": 33,
                 "roll": 0,
                 "ease": "linear"
               }
@@ -960,20 +960,20 @@
             "position": {
               "anchor": "target.head",
               "offset": [
-                0.3,
-                0.04,
-                1.1
+                0.36,
+                0.06,
+                1.6
               ]
             },
             "lookAt": {
               "anchor": "target.head",
               "offset": [
-                -0.06,
+                -0.1,
                 -0.02,
                 0
               ]
             },
-            "fov": 28,
+            "fov": 30,
             "rollDeg": 3,
             "easing": "inOutCubic",
             "move": "横顔の寄りから、奥の目へ寄せる",
@@ -983,20 +983,20 @@
                 "pos": {
                   "anchor": "target.head",
                   "offset": [
-                    0.3,
-                    0.04,
-                    1.1
+                    0.36,
+                    0.06,
+                    1.6
                   ]
                 },
                 "look": {
                   "anchor": "target.head",
                   "offset": [
-                    -0.06,
+                    -0.1,
                     -0.02,
                     0
                   ]
                 },
-                "fov": 28,
+                "fov": 30,
                 "roll": 3,
                 "ease": "inOutCubic"
               },
@@ -1005,20 +1005,20 @@
                 "pos": {
                   "anchor": "target.head",
                   "offset": [
-                    0.26,
-                    0.05,
-                    1.04
+                    0.3,
+                    0.07,
+                    1.5
                   ]
                 },
                 "look": {
                   "anchor": "target.head",
                   "offset": [
-                    -0.14,
+                    -0.2,
                     0,
                     0
                   ]
                 },
-                "fov": 27,
+                "fov": 29,
                 "roll": 2,
                 "ease": "linear"
               },
@@ -1027,9 +1027,9 @@
                 "pos": {
                   "anchor": "attacker.head",
                   "offset": [
-                    0.2,
+                    0.22,
                     0.03,
-                    0.95
+                    1.05
                   ]
                 },
                 "look": {
@@ -1743,40 +1743,44 @@
   ],
   "reactions": [
     {
-      "glb": "yomikage_v14.glb",
+      "glb": "yomikage_animations.glb",
       "clip": "cinv_moguzo"
     },
     {
-      "glb": "yomikage_v14.glb",
+      "glb": "yomikage_animations.glb",
       "clip": "cinv_godan"
     },
     {
-      "glb": "yomikage_v14.glb",
+      "glb": "yomikage_animations.glb",
       "clip": "cinv_chirka"
     },
     {
-      "glb": "yomikage_v14.glb",
+      "glb": "yomikage_animations.glb",
       "clip": "cinv_pisuke"
     },
     {
-      "glb": "yomikage_v14.glb",
+      "glb": "yomikage_animations.glb",
       "clip": "cinv_hakuma"
     },
     {
-      "glb": "yomikage_v14.glb",
+      "glb": "yomikage_animations.glb",
       "clip": "cinv_takimaru"
     },
     {
-      "glb": "yomikage_v14.glb",
+      "glb": "yomikage_animations.glb",
       "clip": "cinv_yomikage"
     },
     {
-      "glb": "yomikage_v14.glb",
+      "glb": "yomikage_animations.glb",
       "clip": "cinv_bullet"
     },
     {
-      "glb": "yomikage_v14.glb",
+      "glb": "yomikage_animations.glb",
       "clip": "cinv_dark_moguzo"
+    },
+    {
+      "glb": "yomikage_polish_anim.glb",
+      "clip": "counter_success_v14"
     }
   ]
 }
