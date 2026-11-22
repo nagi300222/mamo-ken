@@ -9,6 +9,9 @@ on:
       - feat/mamoken-step-buttons-v06
       - feat/mamoken-direction-special-v07
       - feat/mamoken-showtime-v08
+      - feat/mamoken-y-illusion-v09
+      - feat/mamoken-codex-audio-v10
+      - feat/mamoken-astra-hud-v11
   pull_request:
     branches:
       - feat/mamoken-3d-mobile-fight
