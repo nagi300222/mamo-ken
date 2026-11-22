@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#25251e">
+<meta name="description" content="マモ拳3D v15.1 の全9キャラ・54通常技・27必殺・9奥義のフレーム、威力、実測リーチ、キャンセルと実演比較動画を確認できる開発用攻略Wiki。">
+<title>マモ拳 3D v15.1｜全9キャラ技性能 Wiki</title>
+<style>
+:root{color-scheme:light;--bg:#efeee8;--paper:#fffdfa;--ink:#272924;--sub:#5f625b;--line:#d5d0c3;--accent:#795026;--accent2:#d6ab56;--shade:#f7f4ed}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.7 -apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Yu Gothic",sans-serif}a{color:#75401a;text-decoration:underline;text-underline-offset:2px}
+a:focus-visible,button:focus-visible{outline:3px solid #346daa;outline-offset:2px}
+button,select,textarea{font:inherit}button{cursor:pointer}small,.small{font-size:12px;color:var(--sub)}
+header{background:#272722;color:#fff;border-bottom:4px solid var(--accent2);padding:22px max(15px,calc((100vw - 1040px)/2))}
+header .eyebrow{color:#f2d59f;letter-spacing:.14em;font-size:11px;font-weight:900}
+header h1{font-size:clamp(23px,3.8vw,37px);line-height:1.35;margin:5px 0}header p{color:#e6e2d9;margin:5px 0 13px;font-size:14px}
+header a{color:#f9e0aa}header nav{display:flex;gap:15px;flex-wrap:wrap;font-size:13px}
+main{max-width:1040px;margin:24px auto 70px;padding:0 15px}
+section{background:var(--paper);border:1px solid var(--line);padding:20px 25px;margin:16px 0;box-shadow:0 3px 10px #35231309;scroll-margin-top:12px}
+h2{font-size:21px;margin:0 0 12px;padding-bottom:6px;border-bottom:2px solid var(--line)}h3{font-size:16px;margin:16px 0 7px}
+p{margin:9px 0}ul{margin:9px 0;padding-left:1.3em}li{margin:4px 0}
+.notice{padding:13px 17px;border-left:5px solid #a67536;background:#fff2d6}.fact-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px}
+.fact{border:1px solid var(--line);padding:10px 12px;background:var(--shade)}.fact strong{display:block;font-size:19px;line-height:1.35}.fact span{font-size:12px;color:var(--sub)}
+#fighter-nav{display:grid;grid-template-columns:repeat(9,minmax(0,1fr));gap:5px;margin:15px 0}
+.fighter-button{display:grid;justify-items:center;align-content:center;gap:4px;padding:7px 3px;background:#f8f4eb;border:1px solid var(--line);border-radius:6px;color:#433a2c;font-weight:700;font-size:11px;min-width:0}
+.fighter-button img{width:min(70px,100%);height:57px;object-fit:contain}
+.fighter-button[aria-current="true"]{background:#fbedd0;border:2px solid #a27627;padding:6px 2px}
+.fighter-header{display:flex;align-items:center;gap:17px}.fighter-header img{width:110px;height:108px;object-fit:contain;background:#f3eee4;border:1px solid var(--line)}
+.fighter-header h2{border:0;margin:0;padding:0}.fighter-header p{margin:4px 0}
+.pill{display:inline-block;border:1px solid #ac9569;border-radius:99px;font-size:11px;padding:1px 8px;background:#f8efd9;color:#584025}
+.table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}table{border-collapse:collapse;width:100%;font-size:12px;white-space:nowrap}
+th,td{padding:9px 7px;border:1px solid var(--line);text-align:right;font-variant-numeric:tabular-nums}
+th:first-child,td:first-child{text-align:left;position:sticky;left:0;background:#fbf8f1;z-index:1}
+th{background:#e9e1d3!important;color:#40382c;white-space:nowrap}tbody tr:nth-child(even) td{background:#f9f6ee}tbody tr:hover td{background:#f6e9cc}
+td .big{font-weight:800}td .sub{display:block;color:var(--sub);font-size:10px;max-width:120px;white-space:normal}
+.inline-btn{font-size:11px;padding:4px 7px;border:1px solid #a59a86;border-radius:4px;background:#f1ede3;color:#553d23}
+details{border:1px solid var(--line);background:#fbf9f4;margin:8px 0}details>summary{padding:8px 13px;cursor:pointer;font-weight:800}details .details-body{padding:2px 13px 13px;border-top:1px solid var(--line)}
+.mini-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}.mini-grid>div{padding:7px;background:#f3ede1;border:1px solid #e1d7c7;min-width:0;overflow-wrap:anywhere}.mini-grid strong{display:block;font-size:12px;color:#66482a}.mini-grid span{font-size:13px}
+.code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:12px;overflow-wrap:anywhere}
+.video-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}
+.video-item{background:#161c20;color:#f1f0ea;padding:11px;min-width:0}.video-item h3{font-size:14px;margin:0 0 6px}.video-item p{font-size:12px;color:#c6d4de}.video-item video{display:block;width:100%;max-height:215px;background:#0a1014;object-fit:contain}
+.video-item a{font-size:12px;color:#fae0ab}.video-item.wide{grid-column:1/-1}
+#editor{display:grid;grid-template-columns:1fr;gap:7px;padding:14px;background:#eee9dc;border:1px solid var(--line)}
+#editor textarea{width:100%;min-height:140px;resize:vertical;padding:10px;border:1px solid #aaa28f;background:#fff}
+#editor button{justify-self:start;border:0;border-radius:5px;background:#74502c;color:#fff;font-weight:800;padding:8px 14px}
+.legend{padding:10px 13px;background:#f1efe7;border:1px solid var(--line);font-size:13px}
+.sources a{display:inline-block;margin:2px 6px 2px 0}
+footer{text-align:center;font-size:12px;padding:20px;color:#666356}
+@media(max-width:850px){#fighter-nav{grid-template-columns:repeat(5,minmax(0,1fr))}.fact-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:540px){section{padding:15px 12px}header{padding:16px}#fighter-nav{grid-template-columns:repeat(3,minmax(0,1fr))}.mini-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.video-grid{grid-template-columns:1fr}.video-item.wide{grid-column:auto}.fighter-header img{width:75px;height:82px}.fact strong{font-size:16px}table{font-size:11px}th,td{padding:6px 5px}}
+</style>
+</head>
+<body>
+<header>
+<div class="eyebrow">MAMO KEN / THREE.JS / DEVELOPMENT WIKI</div>
+<h1>マモ拳 <span style="color:#f5d494">3D v15.1</span> 技性能図鑑</h1>
+<p>9キャラ×6通常技の実測リーチとフレーム、27必殺・9奥義、実演比較動画。技の改修指示を出すための開発用資料。</p>
+<nav aria-label="版別Wiki"><a href="index.html">旧2D版</a><a href="v14-development.html">3D v14資料</a><a href="#fighter-selector">キャラを選ぶ</a><a href="#values">技の数値</a><a href="#videos">動画</a><a href="#suggestions">調整案</a></nav>
+</header>
+<main>
+<div class="notice" role="note"><strong>これはv15.1未マージの開発版データ。</strong> 旧2D版Wikiや本番キャラ性能とは別。数値は統合PR #199のコードと実測データを固定したもので、今後変更可能。旧Wikiを上書きしません。</div>
+<section>
+<h2>データの範囲・見方</h2>
+<div class="fact-grid">
+<div class="fact"><strong>9キャラ</strong><span>プレイアブル3D</span></div>
+<div class="fact"><strong>54通常技</strong><span>立／屈／空の弱・強</span></div>
+<div class="fact"><strong>27必殺＋9奥義</strong><span>各キャラ3＋1</span></div>
+<div class="fact"><strong>60Hz</strong><span>原則1F＝約16.7ms</span></div>
+</div>
+<p class="small">技の発生・持続・硬直、威力、リーチ、ヒット差・ガード差、接触部位・打点、キャンセル可能先と入力受付範囲を確認できる。通常技のリーチは攻撃側の足元から実スキン表面までの距離で、対象の被弾半径0.16mは別加算。</p>
+<div class="legend"><strong>ヒット差／ガード差</strong>＝攻撃側が相手より先に入力可能になる実測フレーム。<strong>＋なら先に動ける／−なら不利。</strong>距離0.35m・相手ゴダン・最速初段接触の測定で、壁・距離・キャラ・空中着地によって変わる。「whiff」はその測定で技が当たらなかったことを示し、有利不利の値ではない。</div>
+</section>
+<section id="fighter-selector">
+<h2>キャラクターを選択</h2>
+<div id="fighter-nav" role="navigation" aria-label="キャラクター切り替え"></div>
+<div id="fighter-heading" aria-live="polite"></div>
+</section>
+<section id="values">
+<h2>通常技 6種｜フレームと実測リーチ</h2>
+<p class="small">F＝フレーム。威力は基本ダメージ。特殊能力・コンボ補正による増減は含まない。横スクロールで細部を確認できる。</p>
+<div id="normal-table" class="table-wrap"></div>
+<div id="normal-details"></div>
+</section>
+<section id="specials">
+<h2>必殺技3本・奥義1本</h2>
+<p class="small">必殺の威力はキャラ固有のpower係数を反映した通常値。技の条件付き強化・多段ヒット・コンボ補正・特殊能力の効果は別。飛び道具の「設定リーチ」は弾の飛距離を意味しない。奥義はゲージ100で使用、映画は非ガード命中時のみ。</p>
+<div id="special-table" class="table-wrap"></div>
+<p id="special-note" class="small"></p>
+<h3>共通操作</h3>
+<div id="shared-table" class="table-wrap"></div>
+</section>
+<section id="videos">
+<h2>実演・動作比較動画</h2>
+<p class="notice"><strong>動画の種類に注意：</strong>通常技の比較は9fps・13時刻の姿勢サンプル（旧→新）。<strong>実戦の60fpsや入力の速さを実時間で録画した動画ではない。</strong>必殺・奥義は以前の制作比較映像で、v15.1のゲーム数値検証そのものではない。正確な技性能は上の表が基準。</p>
+<div id="video-grid" class="video-grid"></div>
+</section>
+<section id="suggestions">
+<h2>ミオの分析・バランス調整候補</h2>
+<div id="analysis-note"></div>
+<p class="small">CPUの勝率は1458試合の特定行動・難度を含むシミュレーション。<strong>対人戦の強さや実機での勝率ではない。</strong>調整案は本人採用前の提案で、アプリへ反映していない。</p>
+<h3>技を指定して変更依頼を作る</h3>
+<p>各技の「変更指示に入れる」を押すと、現在値と技ID入りの依頼文が下に入る。希望の動作・リーチ・フレームを書き換えてコピーして使ってね。</p>
+<div id="editor">
+<label for="change-request"><strong>変更依頼メモ</strong></label>
+<textarea id="change-request" placeholder="表の技を選ぶか、ここに希望を書く。例：ピスケの立ち強、蹴りが短いから踏み込みを少し増やしたい。"></textarea>
+<button type="button" id="copy-request">変更依頼をコピー</button>
+<span id="copy-status" class="small" role="status" aria-live="polite"></span>
+</div>
+</section>
+<section id="sources" class="sources">
+<h2>実装・計測の出典</h2>
+<p><a href="https://github.com/nagi300222/mamo-ken/pull/199">PR #199：v15.1統合</a> ／ <a href="https://github.com/nagi300222/mamo-ken/pull/197">PR #197：性能</a> ／ <a href="https://github.com/nagi300222/mamo-ken/pull/198">PR #198：演技</a></p>
+<p id="source-links"></p>
+<p class="small">技データはPR #199のHEAD <code>78dd0c685d78af617896c01bd95a277928e01368</code>に固定。Wikiは開発向けのスナップショットで、アプリの更新を自動反映しない。</p>
+<p>ゲーム本体の実機確認：<a href="https://feat-mamoken-v151-reviewed-i.mamoken-3d.pages.dev/dojo/">v15.1試遊版</a>。Wiki制作ではゲームコードとmainを変更しない。</p>
+</section>
+</main>
+<footer>マモ拳 3D v15.1 技性能Wiki／Draft／2026-11-23｜<a href="index.html">旧2D Wiki</a></footer>
+<script>
+"use strict";
+const $=id=>document.getElementById(id);
+const esc=t=>String(t??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const num=(n,d=3)=>Number.isFinite(n)?Number(n).toFixed(d).replace(/\.?0+$/,""):String(n??"—");
+const signed=n=>typeof n==="number"?(n>0?"+":"")+n:String(n??"—");
+const inputName={s1:"必殺／後ろ＋必殺",s2:"↑＋必殺",s3:"相手方向＋必殺",ultimate:"奥義ボタン"};
+const statusName={hit:"ヒット",block:"ガード"};
+const targetNames={weak:"弱",heavy:"強",s1:"必殺1",s2:"必殺2",s3:"必殺3"};
+const targetText=list=>(list?.length?list.map(v=>targetNames[v]||v).join("・"):"なし");
+let db=null,active=null;
+function hashId(){const p=new URLSearchParams(location.hash.slice(1));return db?.characters?.[p.get("fighter")]?p.get("fighter"):db?.order?.[0]}
+function fighter(id){
+ if(!db?.characters[id])return;
+ active=id;
+ const c=db.characters[id];
+ $("fighter-nav").querySelectorAll("button").forEach(b=>b.setAttribute("aria-current",String(b.dataset.id===id)));
+ $("fighter-heading").innerHTML='<div class="fighter-header"><img loading="lazy" alt="" src="../assets/roster3d/'+esc(id)+'.webp"><div><h2>'+esc(c.name)+'</h2><p><span class="pill">'+esc(c.role)+'</span>　HP '+c.hp+' / 歩行 '+num(c.walk,4)+'m/F / ステップ '+num(c.dash)+'m</p><p class="small">ジャンプ初速 '+num(c.jump)+' / 固有能力 '+esc(c.ability)+' / CPU勝率（測定条件内） '+c.cpu.v151+'%</p></div></div>';
+ normalTable(c);
+ specialTable(c);
+ videos(c);
+ $("analysis-note").innerHTML='<p><strong>'+esc(c.name)+'：</strong>'+esc(c.proposal)+'</p><p class="small">CPU全試合の値は <strong>'+c.cpu.v151+'%</strong>（参考v15：'+c.cpu.v15+'%）。テストAI・組合せ・条件が異なるため数値の単純な前後比較は注意。</p>';
+}
+function makeTable(headers,rows){
+ return '<table><thead><tr>'+headers.map(h=>'<th scope="col">'+esc(h)+'</th>').join("")+'</tr></thead><tbody>'+rows.join("")+'</tbody></table>';
+}
+function normalTable(c){
+ const rows=c.normals.map(m=>'<tr><td><strong>'+esc(m.label)+'</strong><span class="sub">'+esc(m.attackPartLabel)+'</span></td><td>'+m.startup+'</td><td>'+m.active+'</td><td>'+m.recovery+'</td><td><strong>'+m.damage+'</strong></td><td>'+num(m.reach)+'m</td><td>'+num(m.strikeHeight)+'m</td><td>'+signed(m.hitAdv)+'</td><td>'+signed(m.blockAdv)+'</td><td><button type="button" class="inline-btn" data-edit="'+esc(m.id)+'">指示文</button></td></tr>');
+ $("normal-table").innerHTML=makeTable(["技","発生F","持続F","硬直F","威力","実測reach","打点高さ","H差F","G差F","修正"],rows);
+ $("normal-details").innerHTML=c.normals.map(m=>{
+  const details='<div class="mini-grid">'+[
+    ["攻撃部位",m.attackPartLabel],["モーション",m.description],["実測接触時刻",num(m.contactTime)+'～'+num(m.contactEnd)],
+    ["総動作",m.total+"F"],["ヒット硬直",m.hitstun+"F"],["ガード硬直",m.blockstun+"F"],
+    ["ヒット押し出し",num(m.knockback)+"m"],["ガード押し出し",num(m.blockPushback)+"m"],
+    ["ヒット時キャンセル",targetText(m.cancelOnHit)],["ガード時キャンセル",targetText(m.cancelOnBlock)],
+    ["命中後受付窓",m.cancelWindow.hit?m.cancelWindow.hit.join("～")+"F":"なし"],
+    ["ガード後受付窓",m.cancelWindow.block?m.cancelWindow.block.join("～")+"F":"なし"]
+  ].map(([k,v])=>'<div><strong>'+esc(k)+'</strong><span>'+esc(v)+'</span></div>').join("")+'</div>';
+  const curve=m.activeReach.map(x=>num(x.phase,1)+'：'+num(x.reach)+'m／高さ'+num(x.height)+'m').join(" ｜ ");
+  return '<details id="'+esc(c.id)+'-'+esc(m.id)+'"><summary>'+esc(m.label)+'｜'+esc(m.description)+'（'+m.startup+'/'+m.active+'/'+m.recovery+'F）</summary><div class="details-body"><p>'+esc(m.attackPartLabel)+'で攻撃。実測リーチ'+num(m.reach)+'m、打点高さ'+num(m.strikeHeight)+'m。</p>'+details+'<p class="small">持続内の実測 reach／height：'+esc(curve)+'</p><p class="small">注意：キャンセル可能でも必ず繋がるとは限らない。空中高度・押し出し・反撃・相手の硬直で変動。</p><button type="button" class="inline-btn" data-edit="'+esc(m.id)+'">この技を変更指示に入れる</button></div></details>';
+ }).join("");
+ document.querySelectorAll("[data-edit]").forEach(btn=>btn.onclick=()=>prepareRequest(active,btn.dataset.edit));
+}
+function specialTable(c){
+ const all=[...c.specials,c.ultimate];
+ const rows=all.map(m=>{
+  const extra=[];
+  if(m.kind==="projectile")extra.push("飛び道具：表示リーチは弾の飛距離ではない");
+  if(m.kind==="counter")extra.push("当て身：成立条件に依存");
+  if(m.kind==="tail")extra.push("尻尾：先端軌道が変動"+(m.optional.minReach?"／近距離死角 "+num(m.optional.minReach)+"m":""));
+  if(m.optional.armor)extra.push("装甲");
+  if(m.optional.feintable)extra.push("フェイント可");
+  if(m.optional.chargeRelease)extra.push("チャージ消費");
+  return '<tr><td>'+esc(inputName[m.id])+'</td><td><strong>'+esc(m.name)+'</strong><span class="sub">'+esc(extra.join("／"))+'</span></td><td>'+m.startup+'</td><td>'+m.active+'</td><td>'+m.recovery+'</td><td><strong>'+m.damage+'</strong></td><td>'+num(m.reach)+'m</td><td>'+esc(m.kind)+'</td></tr>';
+ });
+ $("special-table").innerHTML=makeTable(["入力","技名・特徴","発生F","持続F","硬直F","基本威力","設定reach","種別"],rows);
+ $("special-note").textContent=c.ultimate.displayNote||"奥義の基本ダメージと映像内のヒット数・演出上の連撃回数は別。特殊能力で変わる数値は基本表に含めない。";
+ const u=Object.values(db.shared);
+ $("shared-table").innerHTML=makeTable(["共通行動","入力","発生","持続","硬直","威力","設定reach","Drive"],u.map(m=>'<tr><td>'+esc(m.name)+'</td><td>'+esc(m.input)+'</td><td>'+m.startup+'</td><td>'+m.active+'</td><td>'+m.recovery+'</td><td>'+m.damage+'</td><td>'+num(m.reach)+'m</td><td>'+m.driveCost+'</td></tr>'));
+}
+function videos(c){
+ const videoList=[["通常弱強（v15→v15.1 比較）","normals","9fps・13時刻の姿勢比較。実時間のコンボ動画ではない。"],["3必殺（v14制作比較）","specials","通常技ではなく過去の3必殺の見た目を比較。"],["奥義（v14制作比較）","ultimate","命中時の約10秒ムービー。性能表のダメージとは別。"]];
+ $("video-grid").innerHTML=videoList.map(([title,key,note])=>{
+  const o=c.videos[key];
+  return '<div class="video-item"><h3>'+esc(title)+'</h3><video playsinline controls preload="none" aria-label="'+esc(c.name+'の'+title)+'"><source src="'+esc(o.src)+'" type="video/mp4">動画対応ブラウザで開いてください。</video><p>'+esc(note)+'</p><a href="'+esc(o.page)+'" target="_blank" rel="noopener noreferrer">GitHubで動画を開く（再生できない場合はこちら）</a></div>';
+ }).join("");
+}
+function prepareRequest(id,slot){
+ const c=db.characters[id],m=c?.normals.find(m=>m.id===slot);if(!m)return;
+ const raw='【マモ拳 v15.1 技の変更希望】\n対象：'+c.name+'／'+m.label+'（'+id+'/'+slot+'）\n現状：発生'+m.startup+'F・持続'+m.active+'F・硬直'+m.recovery+'F、基本威力'+m.damage+'、実測reach '+num(m.reach)+'m、打点 '+num(m.strikeHeight)+'m、ヒット'+signed(m.hitAdv)+'F／ガード'+signed(m.blockAdv)+'F\n現状モーション：'+m.description+'（'+m.attackPartLabel+'）\n変更したい動作：\n変更したい性能：\n意図・困っていること：\n保ちたい良さ：\n備考：v15.1 PR #199 の性能を基準。奥義とプラクティスは維持。';
+ $("change-request").value=raw;
+ $("change-request").focus({preventScroll:true});
+ $("editor").scrollIntoView({behavior:"smooth",block:"center"});
+}
+$("copy-request").onclick=async()=>{
+ const txt=$("change-request").value;
+ if(!txt.trim()){$("copy-status").textContent="依頼メモを入力してね。";return}
+ try{await navigator.clipboard.writeText(txt);$("copy-status").textContent="コピーできたよ。"}catch{
+  $("change-request").select();$("copy-status").textContent="自動コピーできなかったので文字を選択したよ。手動でコピーしてね。";
+ }
+};
+function selectFighter(id,updateHash=true){
+ fighter(id);if(updateHash)history.replaceState(null,"","#fighter="+encodeURIComponent(id));
+}
+window.addEventListener("hashchange",()=>{if(db)selectFighter(hashId(),false)});
+async function init(){
+ try{
+  const response=await fetch("v151-data.json",{cache:"no-store"});
+  if(!response.ok)throw Error("HTTP "+response.status);
+  db=await response.json();
+  if(db.schema!=="mamo-ken-v151-wiki-v1"||db.order.length!==9)throw Error("data schema");
+  $("fighter-nav").innerHTML=db.order.map(id=>{
+   const c=db.characters[id];return '<button type="button" class="fighter-button" data-id="'+esc(id)+'" aria-current="false"><img loading="lazy" src="../assets/roster3d/'+esc(id)+'.webp" alt=""><span>'+esc(c.name)+'</span></button>';
+  }).join("");
+  $("fighter-nav").querySelectorAll("button").forEach(b=>b.onclick=()=>selectFighter(b.dataset.id));
+  $("source-links").innerHTML=Object.entries(db.sources).map(([k,url])=>'<a href="'+esc(url)+'" target="_blank" rel="noopener noreferrer">'+esc({normalTable:"54通常技一覧",normalPerformance:"54技の性能コード",normalContact:"実測打点データ",baseline:"必殺/奥義と基本HP",cpu:"CPU相性分析",cpuCsv:"CPU1458試合CSV",contactCsv:"距離3240条件CSV",visualAudit:"モーション接触比較表"}[k]||k)+'</a>').join(" ・ ");
+  selectFighter(hashId(),false);
+ }catch(e){
+  $("fighter-heading").textContent="Wiki技データを読めませんでした。v151-data.jsonが同じフォルダにあるか確認してください。エラー："+e.message;
+ }
+}
+init();
+</script>
+</body>
+</html>
