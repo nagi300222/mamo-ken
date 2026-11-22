@@ -386,6 +386,12 @@ export class Battle {
         a.ability.dark=18;
       }
       this.events.push({type:m.kind==='clinch'?'gyuiin_hit':'hit',slot:t.slot,x:t.x,y:t.y+.32,damage:dmg});
+      // Presentation-only signal: emitted ONLY after a real unguarded, non-countered super hit.
+      // The cinematic consumes this event; Battle's HP, frames, damage and KO logic remain the truth.
+      if(m.isSuper && dmg>0)this.events.push({
+        type:'ultimate_hit',slot:a.slot,target:t.slot,
+        x:t.x,y:t.y+.32,damage:dmg,move:m.name
+      });
       if(m.kind==='clinch'){a.stop=Math.max(a.stop,15);t.stop=Math.max(t.stop,15);}
       if(m.kind==='roar'){t.stun=Math.max(t.stun,23);t.reaction='roar_hit';this.events.push({type:'roar_hit',slot:a.slot,x:t.x,y:t.y+.35});}
     }

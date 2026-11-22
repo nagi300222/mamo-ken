@@ -10,6 +10,7 @@ import { showtimeFor, showtimeHex, superCaption, isShowtimeMove } from './showti
 import { createCombatAudio } from './combat-audio.js';
 import { createArenaMusic } from './arena-music.js';
 import { hudTheme, isSuperReady, chargePips } from './hud-themes.js';
+import { createMovieDirector, movieScript } from './ultimate-cinematic.js';
 
 const $=id=>document.getElementById(id), canvas=$('stage');
 const scene=new THREE.Scene();scene.background=new THREE.Color(0x758993);
@@ -56,6 +57,82 @@ const fxGeometry=Object.freeze({
   reticle:new THREE.RingGeometry(.17,.21,4)
 });
 let cameraShake=0, cameraShakeStrength=0, bannerUntil=0;
+const movie=createMovieDirector({reducedMotion});
+const movieLayer=$('cinematic-layer'),movieViewport=$('cinematic-viewport');
+let canvasHome=null,canvasFollowingNode=null,movieLastPhase='';
+function beginUltimateMovie(event){
+  const attacker=battle?.fighters[event.slot];
+  if(!attacker||!movie.start(event,attacker.id))return false;
+  clearInput();
+  movieLastPhase='';
+  $('showtime-banner').classList.remove('active');
+  movieLayer.hidden=false;
+  movieLayer.dataset.character=attacker.id;
+  movieLayer.style.setProperty('--cinematic-accent',showtimeHex(attacker.id));
+  $('cinematic-portrait').src=MODEL_ASSETS[attacker.id].portrait;
+  $('cinematic-name').textContent=ROSTER[attacker.id].name;
+  $('cinematic-move').textContent=event.move||ROSTER[attacker.id].ultimate.name;
+  $('cinematic-subtitle').textContent=movieScript(attacker.id)[0];
+  canvasHome=canvas.parentNode;canvasFollowingNode=canvas.nextSibling;
+  movieViewport.appendChild(canvas);
+  renderer.setSize(Math.max(1,canvas.clientWidth),Math.max(1,canvas.clientHeight),false);
+  if(effectsAllowed())actors[event.slot]?.illusions?.start(attacker);
+  audioFX.play('counter',attacker.id);
+  music.update(false);
+  return true;
+}
+function finishUltimateMovie(){
+  if(!movie.active)return;
+  movie.cancel();
+  movieLayer.hidden=true;
+  movieLayer.dataset.phase='';
+  movieLastPhase='';
+  if(canvasHome){
+    canvasHome.insertBefore(canvas,canvasFollowingNode);
+    canvasHome=null;canvasFollowingNode=null;
+  }
+  for(const actor of actors)actor?.illusions?.stop();
+  // Re-establish the approved v0.3 match camera and pixel dimensions.
+  resize();acc=0;lastFrame=0;
+  clearInput();
+  if(battle)hud(); // KO result waits until the movie ends.
+}
+function renderUltimateMovie(delta){
+  if(!movie.active)return;
+  const shot=movie.update(delta);
+  if(shot.ended){finishUltimateMovie();return;}
+  const attacker=battle.fighters[shot.data.slot],target=battle.fighters[shot.data.target];
+  if(!attacker||!target){finishUltimateMovie();return;}
+  if(movieLastPhase!==shot.phase){
+    movieLastPhase=shot.phase;movieLayer.dataset.phase=shot.phase;
+    const script=movieScript(shot.data.id);
+    $('cinematic-subtitle').textContent=shot.phase==='anticipation'?script[0]:
+      shot.phase==='hero'?script[1]:script[2];
+    if(shot.phase==='impact'){
+      impactFX('ultimate',showtimeFor(attacker.id).color,target.x,target.y+.30,2.2,26);
+      audioFX.play('ultimate',attacker.id);
+      shake(.02,9);
+    }
+  }
+  // The same real 3D scene and the same WebGL canvas move into a full-screen movie layer.
+  const phase=shot.phase;
+  const focal=phase==='impact'?target.x:phase==='aftermath'?(attacker.x+target.x)/2:attacker.x;
+  const focusY=phase==='impact'?target.y+.40:attacker.y+.47;
+  const width=phase==='aftermath'?Math.max(1.25,Math.abs(target.x-attacker.x)*.65+.48):
+    phase==='hero'?.72:phase==='impact'?.84:.93;
+  const ratio=Math.max(.3,canvas.clientWidth/Math.max(1,canvas.clientHeight));
+  camera.position.set(focal+(phase==='hero'?attacker.facing*.12:0),focusY+.19,
+    phase==='hero'?2.25:phase==='impact'?2.75:3.15);
+  camera.lookAt(focal,focusY,0);
+  camera.left=-width;camera.right=width;
+  camera.top=width/ratio;camera.bottom=-width/ratio;camera.updateProjectionMatrix();
+  for(const actor of actors){
+    if(!actor)continue;
+    actor.mixer.update(Math.min(delta,.045));
+    actor.illusions?.step(battle.fighters[actor.slot]);
+  }
+  animateFX();
+}
 function shake(strength,frames=7){
   if(!effectsAllowed())return;
   cameraShake=Math.max(cameraShake,frames);
@@ -154,15 +231,16 @@ function superSignature(p){
 function actionShowtime(e){
   const p=battle?.fighters[e.slot];if(!p)return;
   if(e.action==='ultimate'){
+    // A small tell, NOT the full cinematic. Whiff/guard never enter movie mode.
+    audioFX.play('special',p.id);
+    impactFX('special',showtimeFor(p.id).color,p.x,p.y+.36,1,10);
+  }else if(/^s[123]$/.test(e.action)){
+    // Specials now own the older super-level flourish during ordinary gameplay.
     showBanner(e.slot,p.id,e.name);
     audioFX.play('ultimate',p.id);
-    superSignature(p); // character-specific shape pattern, visual only
-    if(effectsAllowed())actors[e.slot]?.illusions?.start(p);
-    shake(.014,10);
-  }else if(/^s[123]$/.test(e.action)){
-    audioFX.play('special',p.id);
     $('note').style.setProperty('--special-accent',showtimeHex(p.id));
-    impactFX('special',showtimeFor(p.id).color,p.x+p.facing*.22,p.y+.32,.8,13);
+    superSignature(p);
+    shake(.014,8);
   }else if(e.action==='roar'){audioFX.play('roar',p.id);impactFX('roar',0xf6d17b,p.x,p.y+.31,1.3,12);}
   else if(e.action==='gyuiin'){audioFX.play('clinch',p.id);}
 }
@@ -226,7 +304,7 @@ function resize(){
   const w=canvas.clientWidth,h=canvas.clientHeight;
   if(w<1||h<1)return;
   renderer.setSize(w,h,false);renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,1.5));
-  updateCamera(true);
+  if(!movie.active)updateCamera(true);
 }
 const observer=new ResizeObserver(resize);observer.observe(canvas);window.addEventListener('resize',resize);
 function disposable(o){o.traverse(node=>{if(node.geometry)node.geometry.dispose();
@@ -325,6 +403,10 @@ const cues={
 const cueColors={hit:0xffb77a,block:0x9fe0ff,roar:0xffcc65,clinch:0xd8a1fa};
 function vfx(){
   for(const e of battle.events){
+    if(e.type==='ultimate_hit'){
+      beginUltimateMovie(e); // Only a confirmed strike can open full-screen movie mode.
+      continue;
+    }
     if(e.type==='move'){
       actionShowtime(e);
       if(e.slot===0 || e.action==='roar' || e.action==='gyuiin'){
@@ -450,7 +532,7 @@ function hud(){
   showUltimateStatus();
   $('timer').textContent=String(Math.ceil(battle.time/FPS));
   $('round-message').textContent=battle.phase==='fight'?'ROUND 1':'FINISH';
-  if(battle.phase==='ko'&&!finishShown) {
+  if(battle.phase==='ko'&&!finishShown&&!movie.active) {
     finishShown=true;playing=false;$('game-over').classList.remove('hidden');
     const w=battle.winner;
     const timedOut=battle.events.some(e=>e.type==='timeout');
@@ -464,6 +546,7 @@ function hud(){
 function setLoading(s){$('loading-status').textContent=s;}
 async function startMatch(){
   if(loading)return;
+  if(movie.active)finishUltimateMovie();
   audioFX.unlock(); // Only during explicit user-initiated start/click.
   loading=true;clearInput();
   playing=false;paused=false;finishShown=false;$('pause').textContent='一時停止';$('start').disabled=true;setLoading('GLBを読み込み中…');
@@ -491,6 +574,7 @@ async function startMatch(){
 }
 function showSelection(){
   if(loading)return;
+  if(movie.active)finishUltimateMovie();
   playing=false;paused=false;$('selection').classList.remove('hidden');$('game-over').classList.add('hidden');
   note('キャラクターを選んで対戦開始');setLoading('キャラ選択中');clearInput();
 }
@@ -572,7 +656,10 @@ document.addEventListener('keydown',e=>{
 document.addEventListener('keyup',e=>{
   const k=keyMap[e.code];if(k){e.preventDefault();pressedKeys.delete(k);if(directions.includes(k))recordDirection();}
 });
-window.addEventListener('blur',()=>{clearInput();paused=true;$('pause').textContent='再開';music.update(false);});
+window.addEventListener('blur',()=>{
+  if(movie.active)finishUltimateMovie();
+  clearInput();paused=true;$('pause').textContent='再開';music.update(false);
+});
 document.addEventListener('visibilitychange',()=>{if(document.hidden)music.update(false);});
 $('fx-toggle').onclick=()=>{
   visualFXEnabled=!visualFXEnabled;
@@ -630,33 +717,43 @@ function input(){
   if(dashPulse>0){o.dash=true;dashPulse--;}
   return o;
 }
+$('cinematic-skip').onclick=finishUltimateMovie;
+document.addEventListener('keydown',event=>{
+  if(movie.active&&(event.code==='Escape'||event.code==='Space')){
+    event.preventDefault();finishUltimateMovie();
+  }
+});
 $('start').onclick=startMatch;$('select-back').onclick=showSelection;$('result-select').onclick=showSelection;$('rematch').onclick=startMatch;
 $('pause').onclick=()=>{if(!battle||battle.phase!=='fight')return;clearInput();paused=!paused;$('pause').textContent=paused?'再開':'一時停止';note(paused?'一時停止':'対戦再開');};
 
 const FIXED=1/FPS;
 function render(now){
   requestAnimationFrame(render);
-  music.update(!!(battle&&playing&&!paused&&battle.phase==='fight'&&!document.hidden));
+  music.update(!!(battle&&playing&&!paused&&battle.phase==='fight'&&!movie.active&&!document.hidden));
   const delta=Math.min(.05,lastFrame?(now-lastFrame)/1000:FIXED);lastFrame=now;
-  if(battle&&playing&&!paused&&battle.phase==='fight') {
+  if(battle&&playing&&!paused&&battle.phase==='fight'&&!movie.active) {
     acc=Math.min(.10,acc+delta);let steps=0;
     while(acc>=FIXED&&steps<5){
       battle.tick(input());for(let i=0;i<2;i++)syncActor(actors[i],battle.fighters[i]);
       syncProjectiles();vfx();animateFX();acc-=FIXED;steps++;
-      if(battle.phase!=='fight')break;
+      if(movie.active||battle.phase!=='fight')break;
     }
     if(steps)hud();
   }
-  // Do not leave a visual ghost visible after a KO, regardless of which side won.
-  if(battle?.phase==='ko')for(const actor of actors)actor?.illusions?.stop();
-  // ラウンド終了後もKOアニメーションは最後まで再生する。
-  if(battle?.phase==='ko'&&!paused){
+  if(movie.active&&!document.hidden){
+    renderUltimateMovie(delta);
+  }
+  // Preserve KO presentation but defer it until after the cutscene.
+  if(battle?.phase==='ko'&&!movie.active)for(const actor of actors)actor?.illusions?.stop();
+  if(battle?.phase==='ko'&&!paused&&!movie.active){
     for(const actor of actors)if(actor)actor.mixer.update(delta);
   }
-  updateCamera();
+  if(!movie.active)updateCamera();
   renderer.render(scene,camera);
 }
 makeChooser();
 $('drive-costs').textContent=`咆哮：ドライブ${DRIVE.roarCost}消費　ギュイーン：${DRIVE.gyuiinCost}消費`;
 resize();requestAnimationFrame(render);
-window.mamoken3d={get battle(){return battle;},get actors(){return actors;},startMatch,showSelection,ROSTER,MODEL_ASSETS};
+window.mamoken3d={get battle(){return battle;},get actors(){return actors;},
+  get cinematic(){return {active:movie.active,data:movie.data,elapsed:movie.elapsed};},
+  startMatch,showSelection,ROSTER,MODEL_ASSETS};

@@ -388,3 +388,44 @@ button.primary:active{transform:translateY(1px)}
   #arena .showtime-banner .showtime-portrait{width:29px;height:29px}
   #arena .showtime-banner .showtime-copy strong{font-size:11px}
 }
+
+
+/* v0.13: the same WebGL canvas temporarily moves to a full-screen in-engine cutscene.
+   Normal match camera, 6-buttons and side-rail widths remain untouched. */
+#cinematic-layer[hidden]{display:none!important}
+#cinematic-layer{--cinematic-accent:#f5cb8f;position:fixed;inset:0;z-index:60;
+  overflow:hidden;background:#07111b;color:#fff8ea;isolation:isolate}
+#cinematic-viewport{position:absolute;inset:0;overflow:hidden}
+#cinematic-viewport #stage{width:100%;height:100%;display:block;touch-action:none}
+.cinematic-bar{position:absolute;left:0;right:0;height:clamp(13px,8vh,52px);background:#050a12;z-index:2;pointer-events:none}
+.cinematic-bar-top{top:0;border-bottom:2px solid var(--cinematic-accent)}
+.cinematic-bar-bottom{bottom:0;border-top:2px solid var(--cinematic-accent)}
+.cinematic-caption{position:absolute;left:clamp(12px,7vw,120px);bottom:clamp(35px,13vh,95px);
+  max-width:min(70%,520px);z-index:4;display:flex;gap:11px;align-items:center;
+  padding:8px 15px 9px 9px;background:linear-gradient(110deg,#0b1720ed,#101d2aaa,#0e152100);
+  border-left:4px solid var(--cinematic-accent);text-shadow:0 2px 5px #050a12;pointer-events:none;
+  transition:opacity .12s}
+.cinematic-caption img{width:clamp(46px,10vw,88px);height:clamp(46px,10vw,88px);
+  border:2px solid var(--cinematic-accent);border-radius:6px;object-fit:cover}
+.cinematic-copy{display:grid;gap:2px;min-width:0}
+#cinematic-name{font-size:clamp(10px,1.6vw,14px);color:var(--cinematic-accent);font-weight:800}
+#cinematic-move{font-size:clamp(16px,4vw,33px);font-weight:1000;line-height:1.15}
+#cinematic-subtitle{font-size:clamp(10px,1.5vw,15px);color:#e5f0fb}
+#cinematic-layer[data-phase="impact"] .cinematic-caption{opacity:.65}
+#cinematic-layer[data-phase="aftermath"] .cinematic-caption{opacity:1}
+.cinematic-impact{position:absolute;inset:8vh 0;z-index:2;pointer-events:none;opacity:0;
+  background:radial-gradient(ellipse 35% 42% at 55% 45%,var(--cinematic-accent),transparent 80%);
+  mix-blend-mode:screen}
+#cinematic-layer[data-phase="impact"] .cinematic-impact{opacity:.24}
+.cinematic-skip{position:absolute;right:max(14px,env(safe-area-inset-right));
+  top:max(clamp(17px,9vh,60px),env(safe-area-inset-top));z-index:5;
+  color:#fff;background:#0b1b2cd9;border:1px solid #a5b6c3;
+  border-radius:6px;padding:7px 13px;font-size:12px;touch-action:manipulation}
+.cinematic-skip:focus-visible{outline:2px solid #fff9be}
+@media(max-height:440px) and (orientation:landscape){
+  .cinematic-caption{bottom:clamp(32px,12vh,60px);padding:4px 8px;gap:7px}
+  .cinematic-caption img{width:43px;height:43px}
+  #cinematic-move{font-size:17px}
+  .cinematic-skip{padding:4px 7px;font-size:10px}
+}
+@media(prefers-reduced-motion:reduce){.cinematic-caption{transition:none}.cinematic-impact{display:none}}
