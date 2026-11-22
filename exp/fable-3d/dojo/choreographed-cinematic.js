@@ -60,7 +60,10 @@ export function createChoreographedCinematic({ entry, attacker, target, reducedM
   const actors = {};
   let fx;
   try {
+    const moveClips = Object.values(attacker.showtime)
+      .flatMap(move => [move.attacker, move.start].filter(Boolean));
     const attackClips = {
+      ...Object.fromEntries(moveClips.map(clip => [clip.name, clip])),
       ...Object.fromEntries(attacker.gltf.animations.map(clip => [clip.name, clip])),
       ...attacker.showtime.reactions, [entry.attacker.name]: entry.attacker
     };
