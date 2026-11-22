@@ -53,7 +53,8 @@ test('戦闘ロジックの数値ファイルに手を入れず、キャラ別VF
   assert.match(main,/function actionShowtime/);
   assert.match(main,/function superSignature/);
   for(const id of Object.keys(ROSTER))assert.ok(main.includes("p.id==='"+id+"'"),id+' super signature');
-  assert.match(main,/if\(reducedMotion\)return/);
+  assert.match(main,/const effectsAllowed=\(\)=>visualFXEnabled&&!reducedMotion/);
+  assert.match(main,/if\(!effectsAllowed\(\)\)return/);
   assert.match(main,/createCombatAudio/);
   assert.match(main,/impactFX\(kind,color,e\.x/);
   assert.match(main,/updateCamera\(\);\s*renderer\.render\(scene,camera\)/);

@@ -28,8 +28,16 @@
         <div class="ability-guide"><strong>選択キャラの固有能力</strong><p id="ability-guide"></p></div>
         <button class="ghost" popovertarget="commands-help" popovertargetaction="hide">閉じる</button>
       </div>
-      <button id="sound-toggle" class="ghost sound-toggle" type="button" aria-pressed="true" aria-label="効果音のON／OFF">音 ON</button>
-      <button id="music-toggle" class="ghost music-toggle" type="button" aria-pressed="false" aria-label="BGMのON／OFF">BGM OFF</button>
+      <button class="ghost av-settings-toggle" popovertarget="av-settings" type="button">音・演出</button>
+      <div id="av-settings" popover>
+        <strong>音・演出設定</strong>
+        <div class="av-settings-buttons">
+          <button id="sound-toggle" class="ghost sound-toggle" type="button" aria-pressed="true" aria-label="効果音のON／OFF">音 ON</button>
+          <button id="music-toggle" class="ghost music-toggle" type="button" aria-pressed="false" aria-label="BGMのON／OFF">BGM OFF</button>
+          <button id="fx-toggle" class="ghost fx-toggle" type="button" aria-pressed="true" aria-label="視覚エフェクトのON／OFF">演出 ON</button>
+        </div>
+        <small>各設定は独立。OSのモーション軽減設定を優先。</small>
+      </div>
       <button id="pause" class="ghost" title="一時停止">一時停止</button>
       <button id="select-back" class="ghost">キャラ選択</button>
     </div>
@@ -53,18 +61,20 @@
     <section id="arena" aria-label="対戦画面">
     <canvas id="stage"></canvas>
     <div class="hud">
-      <div class="hud-side">
+      <div class="hud-side" id="hud-side-0" data-mark="地" data-element="earth">
         <div class="hud-name"><b>1P</b><span id="name-0">モグゾー</span><small id="ability-0"></small></div>
         <div class="resource health"><span>体力</span><div class="track"><i id="hp-0"></i></div></div>
         <div class="resource drive"><span>ドライブ</span><div class="track"><i id="drive-0"></i></div><b id="drive-value-0">100</b></div>
-        <div class="resource super"><span>奥義</span><div class="track"><i id="meter-0"></i></div><b id="super-value-0">0</b></div>
+        <div class="resource super"><span>奥義</span><div class="track"><i id="meter-0"></i></div><b id="super-value-0">0</b><small id="ultimate-ready-0" class="ultimate-ready" hidden>READY</small></div>
+        <div class="trait-row"><span id="trait-0" class="trait-word"></span><div id="charge-pips-0" class="charge-pips" hidden aria-hidden="true"><i></i><i></i><i></i></div></div>
       </div>
       <div class="round-center"><span id="timer">75</span><small id="round-message">ROUND 1</small></div>
-      <div class="hud-side mirrored">
+      <div class="hud-side mirrored" id="hud-side-1" data-mark="岩" data-element="stone">
         <div class="hud-name"><b>CPU</b><span id="name-1">ゴダン</span><small id="ability-1"></small></div>
         <div class="resource health"><span>体力</span><div class="track"><i id="hp-1"></i></div></div>
         <div class="resource drive"><span>ドライブ</span><div class="track"><i id="drive-1"></i></div><b id="drive-value-1">100</b></div>
-        <div class="resource super"><span>奥義</span><div class="track"><i id="meter-1"></i></div><b id="super-value-1">0</b></div>
+        <div class="resource super"><span>奥義</span><div class="track"><i id="meter-1"></i></div><b id="super-value-1">0</b><small id="ultimate-ready-1" class="ultimate-ready" hidden>READY</small></div>
+        <div class="trait-row"><span id="trait-1" class="trait-word"></span><div id="charge-pips-1" class="charge-pips" hidden aria-hidden="true"><i></i><i></i><i></i></div></div>
       </div>
     </div>
     <div id="note" class="note" aria-live="polite">キャラクターを選んで対戦開始</div>
