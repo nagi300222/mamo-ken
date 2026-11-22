@@ -10,5 +10,5 @@ export function localStickAxes(clientDx,clientDy,radius,rotated){
   const r=Math.max(1,Number(radius)||1);
   const x=rotated?clientDy:clientDx;
   const y=rotated?-clientDx:clientDy;
-  return {x:x/r,y:y/r};
+  return {x:x===0?0:x/r,y:y===0?0:y/r};
 }
