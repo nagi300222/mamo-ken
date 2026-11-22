@@ -841,7 +841,8 @@ const FIXED=1/FPS;
 function render(now){
   requestAnimationFrame(render);
   music.update(!!(battle&&playing&&!paused&&battle.phase==='fight'&&!movie.active&&!document.hidden));
-  const delta=Math.min(.05,lastFrame?(now-lastFrame)/1000:FIXED);lastFrame=now;
+  const elapsed=lastFrame?Math.max(0,(now-lastFrame)/1000):FIXED;
+  const delta=Math.min(.05,elapsed);lastFrame=now;
   if(battle&&playing&&!paused&&battle.phase==='fight'&&!movie.active) {
     acc=Math.min(.10,acc+delta);let steps=0;
     while(acc>=FIXED&&steps<5){
@@ -853,7 +854,7 @@ function render(now){
   }
   if(movie.active&&!document.hidden){
     try{
-      if(renderUltimateMovie(delta))return;
+      if(renderUltimateMovie(elapsed))return;
     }catch(error){
       console.warn('奥義ムービーを終了しました',error);
       finishUltimateMovie();
