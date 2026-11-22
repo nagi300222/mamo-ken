@@ -26,7 +26,7 @@ try{
  assert.ok(report.at(-1).stats.geometries<=report[0].stats.geometries+2,'geometry grew after movies');
  assert.ok(requests.every(url=>!url.includes('_v14.glb')),'authoring mesh downloaded');
  await page.locator('#select-back').tap();await page.locator('#check-mode').uncheck();await page.locator('#start').tap();
- await page.waitForFunction(()=>mamoken3d.battle?.frame>5&&!mamoken3d.diagnostics.checking);
+ await page.waitForFunction(()=>mamoken3d.battle?.frame>5&&!mamoken3d.diagnostics.checking&&!mamoken3d.diagnostics.loading);
  assert.equal(await page.evaluate(()=>mamoken3d.battle.fighters[0].super),0);
  await page.screenshot({path:evidence+'/normal-play.png'});
  await page.locator('#select-back').tap();

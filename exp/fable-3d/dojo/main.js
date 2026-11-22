@@ -928,4 +928,4 @@ $('drive-costs').textContent=`咆哮：ドライブ${DRIVE.roarCost}消費　ギ
 resize();requestAnimationFrame(render);
 window.mamoken3d={get battle(){return battle;},get actors(){return actors;},
   get cinematic(){return {active:movie.active,data:movie.data,elapsed:authoredMovie?.elapsed??movie.elapsed};},
-  startMatch,showSelection,ROSTER,MODEL_ASSETS,get diagnostics(){return {...metrics,checking};}};
+  startMatch,showSelection,ROSTER,MODEL_ASSETS,get diagnostics(){return {...metrics,checking,loading};}};
