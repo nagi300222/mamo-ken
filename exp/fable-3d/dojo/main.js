@@ -15,6 +15,7 @@ import { createShowtimeLoader } from './showtime-assets.js';
 import { createAuthoredCinematic } from './authored-cinematic.js';
 import { bindMorphTargets } from './morph-binding.js';
 import { shouldRotateLandscape, localStickAxes } from './landscape-lock.js';
+import { createPracticeController } from './practice-mode.js';
 
 const $=id=>document.getElementById(id), canvas=$('stage');
 let gameRotated=false;
@@ -339,6 +340,17 @@ function readyForCheck(){
   finishShown=false;
 }
 let battle=null,selected='moguzo',cpuChoice='godan',playing=false,paused=false,loading=false,lastFrame=0,acc=0,finishShown=false;
+let practiceEnabled=false;
+const practice=createPracticeController();
+function syncPracticeUI(){
+  $('practice-panel').hidden=!practiceEnabled;
+  if(!practiceEnabled)return;
+  const stats=practice.stats;
+  $('practice-hits').textContent=String(stats.hits);
+  $('practice-damage').textContent=String(stats.damage);
+  $('practice-last').textContent=String(stats.lastDamage);
+}
+
 
 const fwd=(v)=>Math.max(0,Math.min(100,v));
 const ABILITY_GUIDE=Object.freeze({
@@ -365,6 +377,12 @@ function makeChooser(){
   $('cpu-choice').replaceChildren(...IDS.map(id=>{const o=document.createElement('option');o.value=id;o.textContent=ROSTER[id].name;if(id===cpuChoice)o.selected=true;return o;}));
   $('cpu-choice').onchange=e=>cpuChoice=e.target.value;
   $('difficulty').onchange=()=>{};
+  $('match-mode').onchange=()=>{
+    const enabled=$('match-mode').value==='practice';
+    $('difficulty').parentElement.hidden=enabled;
+    if(checkAvailable)$('check-mode-label').hidden=enabled;
+    $('start').firstChild.textContent=enabled?'練習開始 ':'対戦開始 ';
+  };
   updateChoice();
 }
 function updateChoice(){
@@ -693,8 +711,9 @@ function hud(){
   showDriveStatus('gyuiin');
   showUltimateStatus();
   $('timer').textContent=String(Math.ceil(battle.time/FPS));
-  $('round-message').textContent=battle.phase==='fight'?'ROUND 1':'FINISH';
-  if(battle.phase==='ko'&&!finishShown&&!movie.active) {
+  $('round-message').textContent=practiceEnabled?'PRACTICE':battle.phase==='fight'?'ROUND 1':'FINISH';
+  if(practiceEnabled){$('timer').textContent='∞';syncPracticeUI();}
+  if(battle.phase==='ko'&&!finishShown&&!movie.active&&!practiceEnabled) {
     finishShown=true;playing=false;$('game-over').classList.remove('hidden');
     const w=battle.winner;
     const timedOut=battle.events.some(e=>e.type==='timeout');
@@ -711,7 +730,9 @@ async function startMatch(){
   if(movie.active)finishUltimateMovie();
   audioFX.unlock(); // Only during explicit user-initiated start/click.
   const loadStarted=performance.now();
-  checking=checkAvailable&&$('check-mode').checked;
+  practiceEnabled=$('match-mode').value==='practice';
+  checking=!practiceEnabled&&checkAvailable&&$('check-mode').checked;
+  practice.clear();practice.setDummy($('practice-dummy').value);syncPracticeUI();
   loading=true;clearInput();
   playing=false;paused=false;finishShown=false;$('pause').textContent='一時停止';$('start').disabled=true;setLoading('GLBを読み込み中…');
   const ids=[selected,cpuChoice],level=+$('difficulty').value;
@@ -722,6 +743,7 @@ async function startMatch(){
     const failed=loaded.find(result=>result.status==='rejected');
     if(failed)throw failed.reason;
     battle=new Battle(...ids,level);
+    if(practiceEnabled)practice.prepare(battle);
     readyForCheck();
     const bulletActor=actors.find(a=>a?.id==='bullet');
     if(bulletActor){
@@ -735,12 +757,14 @@ async function startMatch(){
     clearInput();
     metrics.loadMs=performance.now()-loadStarted;
     playing=true;lastFrame=0;acc=0;hud();
+    if(practiceEnabled)note('PRACTICE｜相手行動・位置リセット・コンボを確認');
   }catch(e){clearActors();battle=null;console.error(e);note('起動エラー: '+e.message);setLoading('モデルの読込に失敗: '+e.message);$('selection').classList.remove('hidden');}
   finally{loading=false;$('start').disabled=false;}
 }
 function showSelection(){
   if(loading)return;
   if(movie.active)finishUltimateMovie();
+  practiceEnabled=false;syncPracticeUI();
   playing=false;paused=false;$('selection').classList.remove('hidden');$('game-over').classList.add('hidden');
   note('キャラクターを選んで対戦開始');setLoading('キャラ選択中');clearInput();
 }
@@ -888,6 +912,13 @@ function input(){
   if(dashPulse>0){o.dash=true;dashPulse--;}
   return o;
 }
+$('practice-dummy').onchange=()=>practice.setDummy($('practice-dummy').value);
+$('practice-reset').onclick=()=>{
+  if(!practiceEnabled||!battle||movie.active)return;
+  battle=practice.reset(battle);clearInput();
+  for(let i=0;i<2;i++)syncActor(actors[i],battle.fighters[i]);
+  syncProjectiles();hud();resize();note('位置・体力・ゲージ・コンボをリセット');
+};
 $('cinematic-skip').onclick=finishUltimateMovie;
 document.addEventListener('keydown',event=>{
   if(movie.active&&(event.code==='Escape'||event.code==='Space')){
@@ -916,7 +947,13 @@ function render(now){
     acc=Math.min(.10,acc+delta);let steps=0;
     while(acc>=FIXED&&steps<5){
       if(checking){battle.time=75*FPS;if(!battle.fighters[0].action)battle.fighters[0].super=100;}
-      if(checking)battle.tick(input(),{});else battle.tick(input());for(let i=0;i<2;i++)syncActor(actors[i],battle.fighters[i]);
+      if(practiceEnabled){
+        practice.prepare(battle);
+        const other=practice.dummyInput(battle);
+        if(other===null)battle.tick(input());else battle.tick(input(),other);
+        practice.after(battle);
+      }else if(checking)battle.tick(input(),{});else battle.tick(input());
+      for(let i=0;i<2;i++)syncActor(actors[i],battle.fighters[i]);
       syncProjectiles();vfx();animateFX();acc-=FIXED;steps++;
       if(movie.active||battle.phase!=='fight')break;
     }
@@ -948,5 +985,6 @@ updateLandscapeLock();resize();requestAnimationFrame(render);
 window.mamoken3d={get battle(){return battle;},get actors(){return actors;},
   get cinematic(){return {active:movie.active,data:movie.data,elapsed:authoredMovie?.elapsed??movie.elapsed};},
   startMatch,showSelection,ROSTER,MODEL_ASSETS,
+  get practice(){return {enabled:practiceEnabled,dummy:practice.dummy,stats:practice.stats};},
   get landscapeLocked(){return gameRotated;},
   get diagnostics(){return {...metrics,checking,loading};}};

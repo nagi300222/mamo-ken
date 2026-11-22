@@ -492,3 +492,23 @@ button.primary:active{transform:translateY(1px)}
   html.landscape-locked #commands-help:popover-open{width:min(650px,82dvh)}
   /* The fullscreen movie lives inside the transformed #app and follows it automatically. */
 }
+
+/* v15 training UI. The whole panel follows the rotation-locked #app on iOS. */
+#practice-panel[hidden]{display:none!important}
+#practice-panel{position:absolute;left:5px;right:5px;bottom:12px;z-index:6;display:flex;
+ align-items:center;justify-content:center;flex-wrap:wrap;gap:6px;padding:4px 7px;
+ border:1px solid #90b3be99;border-radius:7px;background:#101f2de8;
+ color:#e0eaf0;box-shadow:0 3px 14px #07111b7a;font-size:clamp(8px,1.18vw,11px);pointer-events:auto}
+#practice-panel strong{letter-spacing:.09em;color:#ffdf9c}
+#practice-panel label{display:flex;gap:4px;align-items:center}
+#practice-panel select{max-width:78px;color:#fff;background:#203746;border:1px solid #849caf;border-radius:4px;padding:3px}
+#practice-panel b{font-variant-numeric:tabular-nums;color:#ffd895}
+#practice-panel button{font-size:clamp(8px,1.3vw,10px);padding:4px 6px;touch-action:manipulation}
+#practice-panel small{font-size:inherit}
+@media(max-height:440px) and (orientation:landscape){
+ #practice-panel{bottom:5px;gap:3px;padding:2px 4px}
+ #practice-panel select{padding:1px;max-width:64px}
+ #practice-panel button{padding:3px 4px}
+}
+html.landscape-locked #practice-panel{bottom:5px;gap:3px;padding:2px 4px}
+html.landscape-locked #practice-panel select{padding:1px;max-width:64px}
