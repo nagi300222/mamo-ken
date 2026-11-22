@@ -20,4 +20,6 @@ Codex owns performance and rendering integration; Claude owns motif edits and co
 
 ## Validation at initial submission
 
-130 Node tests pass; static Pages build passes. Nine real weak→strong→special2 routes hit three times against a defender holding guard after hit1, in both directions. Whiffs and expired contact windows do not cancel. These are initial regression results; art measurements, repeated CPU matrix and browser review are still in progress. Do not treat this Draft as completed balance or final integration.
+131 Node tests pass; static Pages build passes. Nine real weak→strong→special2 routes hit three times against a defender holding guard after hit1, in both directions. Whiffs and expired contact windows do not cancel. These are initial regression results; art measurements, repeated CPU matrix and browser review are still in progress. Do not treat this Draft as completed balance or final integration.
+
+Latest performance revision: fast grounded jabs are 4F, Godan jab is 7F with 47 damage and one weak only. Bullet tail normals recover sooner, and Chirka/Yomikage raw jab advantage is below their next startup so perfect corner inputs cannot bypass the chain cap. Standing and crouching weak→heavy→special2 routes are verified in both directions. 54 visual contact measurements remain in the independent Claude lane until reviewed integration.

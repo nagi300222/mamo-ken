@@ -9,16 +9,16 @@ import {fighterStyle} from './fighter-style.js';
 import {cpuInput,CPU_LEVELS} from './cpu.js';
 import {createPracticeController} from './practice-mode.js';
 
-export function route(id,distance=.35,face=1,delay=0){
+export function route(id,distance=.35,face=1,delay=0,crouch=false){
  const g=new Battle(id,'godan');const[p,t]=g.fighters;
  p.x=-face*distance/2;t.x=face*distance/2;p.facing=face;t.facing=-face;
  let stage=0,wait=0;const hits=[],events=[];
  for(let f=0;f<160;f++){
-  let input=f===0?{weak:true}:{};
+  let input=f===0?{weak:true,down:crouch}:{down:crouch};
   if((stage===1||stage===3)&&!p.stop){
-   if(wait++>=delay){input=stage===1?{strong:true}:{special2:true};stage++;wait=0;}
+   if(wait++>=delay){input=stage===1?{strong:true,down:crouch}:{special2:true};stage++;wait=0;}
   }
-  g.tick(input,hits.length?{[face===1?'right':'left']:true}:{});
+  g.tick(input,hits.length?{[face===1?'right':'left']:true,down:crouch}:{});
   events.push(...g.events);
   for(const e of g.events)if(e.type==='hit'&&e.slot===1){hits.push(e);if(stage===0)stage=1;else if(stage===2)stage=3;}
  }
@@ -119,7 +119,9 @@ test('air normals demand standing guard and corner pressure cannot create an end
   let landed=false,maxHits=0,blocked=0;
   for(let f=0;f<600;f++){
    t.hp=99999;t.guard=100;
-   const weak=(!p.action||p.comboContact&&p.stop===0)&&!p.prev.weak;
+   const age=p.frame-p.comboContactFrame;
+   const canChain=p.action?.id==='stand_weak'&&p.comboContact&&p.stop===0&&p.chainWeakCount<fighterStyle(id).weakChainMax&&age<=6;
+   const weak=(!p.action||canChain)&&!p.prev.weak;
    g.tick({weak},landed?{right:true}:{});
    if(g.events.some(e=>e.type==='hit'))landed=true;
    maxHits=Math.max(maxHits,p.comboHits);
@@ -156,5 +158,13 @@ test('uncanceled heavy hits recover first; their large block and whiff risks rem
   }
   assert.ok(readyA<readyT,id+'/'+slot+' punished on hit');
   assert.ok(normalMove(id,slot).blockstun<normalMove(id,slot).recovery,id+' no block risk');
+ }
+});
+
+test('all nine crouch weak → crouch strong → special2 routes also beat continuous low guard after first hit',()=>{
+ for(const id of IDS)for(const face of [1,-1]){
+  const {hits,events}=route(id,.35,face,0,true);
+  assert.deepEqual(hits.map(e=>e.comboHits),[1,2,3],id+' crouch '+face);
+  assert.equal(events.filter(e=>e.type==='block').length,0,id);
  }
 });

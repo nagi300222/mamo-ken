@@ -4,7 +4,7 @@ import {fileURLToPath,pathToFileURL} from 'node:url';
 import {resolve,dirname} from 'node:path';
 const engine=process.env.MAMOKEN_ENGINE_DIR||dirname(fileURLToPath(import.meta.url));
 const {Battle}=await import(pathToFileURL(resolve(engine,'battle.js')));
-const {IDS,normalMove}=await import(pathToFileURL(resolve(engine,'balance.js')));
+const {IDS,normalMove,specialMove}=await import(pathToFileURL(resolve(engine,'balance.js')));
 const {cpuInput}=await import(pathToFileURL(resolve(engine,'cpu.js')));
 const slots=['stand_weak','stand_heavy','crouch_weak','crouch_heavy','air_weak','air_heavy'];
 const out=process.env.MAMOKEN_AUDIT_DIR||resolve(engine,'../../../docs/mamoken-v151');
@@ -42,10 +42,10 @@ let md='# 54通常技の実測表\n\n固定60Hz。硬直差はBattleで入力可
 for(const r of normals)md+='|'+[r.id,r.slot,r.startup,r.active,r.recovery,r.damage,r.reach,r.hit.advantage,r.block.outcome==='block'?r.block.advantage:r.block.outcome].join('|')+'|\n';
 writeFileSync(resolve(out,'NORMAL_TABLE.md'),md);
 if(process.env.MAMOKEN_SKIP_CPU==='1')process.exit(0);
-const patterns=['neutral','confirm','low-pressure','air-footsies'];
+const patterns=['neutral','confirm','low-pressure','air-footsies','grapple-pressure','ranged-control'];
 function policy(g,p,t,level,seed){
  const input=cpuInput({...g,frame:g.frame+1},p,t,level);
- if(seed===1&&p.action&&p.comboContact){
+ if((seed===1||seed===4)&&p.action&&p.comboContact){
   const key=p.action.id.endsWith('_weak')?'strong':'special2';
   if(!p.prev[key])return {[key]:true};
  }
@@ -57,13 +57,27 @@ function policy(g,p,t,level,seed){
   if(!p.action&&!p.stun&&!p.stop&&p.y===0&&g.frame%149===p.slot*23){input.up=true;input[t.x>p.x?'right':'left']=true;}
   if(p.y>.1&&!p.action&&!p.stun&&!p.stop){input.strong=g.frame%3===0;}
  }
+ if(seed===4&&!p.action&&!p.stun&&!p.stop){
+  const grab=specialMove(p.id,2),key=grab.kind==='throw'?'special3':'throw';
+  if(Math.abs(p.x-t.x)<.40&&g.frame%19===p.slot*5)return {[key]:true};
+  if(Math.abs(p.x-t.x)>.39&&!input.weak&&!input.strong)input[t.x>p.x?'right':'left']=true;
+ }
+ if(seed===5&&!p.action&&!p.stun&&!p.stop){
+  const distance=Math.abs(p.x-t.x),projectile=specialMove(p.id,0).kind==='projectile';
+  if(projectile&&distance>.70){
+   if(g.frame%71===p.slot*13)return {special1:true};
+   if(distance<1.2)return {[t.x>p.x?'left':'right']:true};
+  }
+  if(t.y>.20&&distance<.65&&g.frame%13===p.slot*3)return {special2:true};
+  if(!projectile&&distance<.70&&g.frame%71===p.slot*13)return {special1:true};
+ }
  return input;
 }
 const results=[];
-for(const level of [1,2,3])for(const seed of [0,1,2,3]){
+for(const level of [1,2,3])for(const seed of [0,1,2,3,4,5]){
  for(const left of IDS)for(const right of IDS){
   const g=new Battle(left,right,level);g.cpuSeed=seed;
-  const spacing=[.70,1.20,2.40,.36][seed];
+  const spacing=[.70,1.20,2.40,.36,.36,1.40][seed];
   g.fighters[0].x=-spacing/2;g.fighters[1].x=spacing/2;
   while(g.phase==='fight'&&g.frame<4600){
    const [p,t]=g.fighters;g.tick(policy(g,p,t,level,seed),policy(g,t,p,level,seed));
@@ -75,5 +89,5 @@ for(const level of [1,2,3])for(const seed of [0,1,2,3]){
 }
 writeFileSync(resolve(out,'cpu-matrix.json'),JSON.stringify(results)+'\n');
 const summary=IDS.map(id=>{const games=results.filter(r=>r.left!==r.right&&(r.left===id||r.right===id));const wins=games.filter(r=>r.winner===(r.left===id?0:1)).length;const draws=games.filter(r=>r.winner===-1).length;return {id,games:games.length,wins,draws,score:(wins+draws/2)/games.length};});
-writeFileSync(resolve(out,'cpu-summary.json'),JSON.stringify({rounds:results.length,levels:[1,2,3],seeds:[0,1,2,3],patterns,summary},null,2)+'\n');
+writeFileSync(resolve(out,'cpu-summary.json'),JSON.stringify({rounds:results.length,levels:[1,2,3],seeds:[0,1,2,3,4,5],patterns,summary},null,2)+'\n');
 console.log(summary);
