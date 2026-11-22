@@ -58,13 +58,27 @@ export function decodeNormalPack(bytes){
 export function buildNormalPack(originalGlb,id){
  if(!MOTIFS[id])throw Error('unknown normal character '+id);
  const picked=new Set(Object.values(NORMAL_SOURCE));
- const {doc,bin}=decodeNormalPack(animationBundle(originalGlb,picked));
+ const {doc,bin:packedBin}=decodeNormalPack(animationBundle(originalGlb,picked));
+ let bin=packedBin;
+ // Insert authored keyframes on previously stationary bones as well as modifying
+ // existing source tracks. Otherwise an air kick can have only two keyed limbs.
+ function appendFloatAccessor(values,type){
+   const bytes=Buffer.alloc(values.length*4);
+   for(let i=0;i<values.length;i++)bytes.writeFloatLE(values[i],i*4);
+   const offset=bin.length;bin=Buffer.concat([bin,bytes]);
+   const view=doc.bufferViews.push({buffer:0,byteOffset:offset,byteLength:bytes.length})-1;
+   const dim=TYPES[type],itemCount=values.length/dim;
+   const a={bufferView:view,componentType:5126,count:itemCount,type};
+   if(type==='SCALAR'){a.min=[Math.min(...values)];a.max=[Math.max(...values)];}
+   return doc.accessors.push(a)-1;
+ }
  const report=[];
  for(const [slot,source] of Object.entries(NORMAL_SOURCE)){
    const animation=doc.animations.find(a=>a.name===source);
    if(!animation)throw Error('source normal missing '+id+'/'+source);
    const spec=MOTIFS[id][slot];if(!spec)throw Error('missing normal spec '+id+'/'+slot);
    let touched=0,changedSamples=0;
+   const editedBones=new Set();
    for(const channel of animation.channels){
      if(channel.target.path!=='rotation')continue;
      const boneName=doc.nodes[channel.target.node]?.name||'';
@@ -86,13 +100,43 @@ export function buildNormalPack(originalGlb,id){
        for(let k=0;k<4;k++)setNum(quats,i,k,q[k]);
        modified++;
      }
-     if(modified){touched++;changedSamples+=modified;}
+     if(modified){touched++;changedSamples+=modified;editedBones.add(canonical(boneName));}
    }
-   if(touched<3||changedSamples<6)throw Error('not enough authored bones '+id+'/'+slot+' '+touched+'/'+changedSamples);
+   // The source can animate just a couple of bones for a small jab. Author fresh
+   // explicit rotation channels for the other character-specific limb gestures.
+   const sourceSampler=animation.samplers[0];
+   const baseTime=sourceSampler&&accessorView(doc,bin,sourceSampler.input);
+   const duration=baseTime?getNum(baseTime,baseTime.count-1,0):0;
+   if(!(duration>.04))throw Error('normal clip too short '+id+'/'+slot);
+   const keys=[0,.10,spec.contact,Math.min(.92,spec.contact+.18),1];
+   const timeline=keys.map(t=>Number((t*duration).toFixed(5)));
+   const authoredPose=GESTURES[spec.gesture];
+   for(const [name,angles] of Object.entries(authoredPose)){
+     const nodeIndex=doc.nodes.findIndex(node=>{
+       const nodeName=canonical(node.name);
+       return nodeName===name||nodeName.endsWith(name);
+     });
+     if(nodeIndex<0)continue;
+     const node=doc.nodes[nodeIndex];
+     const norm=canonical(node.name);
+     if(node.matrix||editedBones.has(norm))continue; // no duplicate channels, no matrix/TRS mixing
+     const original=Array.isArray(node.rotation)&&node.rotation.length===4?node.rotation:[0,0,0,1];
+     const samples=keys.flatMap(t=>{
+       const amount=spec.power*envelope(t,spec.contact);
+       return quatMul(original,quatAngles(angles[0]*amount,angles[1]*amount,angles[2]*amount));
+     });
+     const inAcc=appendFloatAccessor(timeline,'SCALAR');
+     const outAcc=appendFloatAccessor(samples,'VEC4');
+     const samplerIndex=animation.samplers.push({input:inAcc,output:outAcc,interpolation:'LINEAR'})-1;
+     animation.channels.push({sampler:samplerIndex,target:{node:nodeIndex,path:'rotation'}});
+     touched++;changedSamples+=keys.length;
+   }
+   if(touched<3||changedSamples<12)throw Error('not enough authored bones '+id+'/'+slot+' '+touched+'/'+changedSamples);
    animation.name='v15_'+slot;
    animation.extras={source,gesture:spec.gesture,authoring:'normal-motifs-v15',character:id};
    report.push({slot,clip:animation.name,gesture:spec.gesture,bones:touched,modifiedSamples:changedSamples});
  }
+ doc.buffers[0].byteLength=bin.length;
  const out=wrapGlb(doc,bin);
  if(doc.animations.length!==NORMAL_SLOTS.length)throw Error('wrong normal count '+id);
  return {bytes:out,report};
