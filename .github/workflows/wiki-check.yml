@@ -30,3 +30,28 @@ jobs:
         run: node tools/check_wiki_entry.mjs
       - name: Verify v15.1 move reference snapshot
         run: node --test wiki/check-v151.test.mjs
+      - name: Install Chromium automation
+        run: npm install --prefix "$RUNNER_TEMP/mamoken-wiki-browser" playwright-core@1.65.1
+      - name: Real Chromium desktop and mobile Wiki acceptance
+        env:
+          CHROMIUM_PATH: /usr/bin/google-chrome
+        run: |
+          set -euo pipefail
+          python3 -m http.server 4174 --bind 127.0.0.1 --directory . > "$RUNNER_TEMP/wiki-http.log" 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" || true' EXIT
+          for i in {1..20}; do
+            if curl -fsS http://127.0.0.1:4174/wiki/v151-development.html > /dev/null; then break; fi
+            sleep 1
+          done
+          export NODE_PATH="$RUNNER_TEMP/mamoken-wiki-browser/node_modules"
+          export MAMOKEN_WIKI_EVIDENCE="$RUNNER_TEMP/wiki-v151-evidence"
+          node wiki/acceptance/v151-browser.mjs
+      - name: Upload Wiki acceptance screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mamoken-wiki-v151-browser
+          path: ${{ runner.temp }}/wiki-v151-evidence/
+          retention-days: 14
+
