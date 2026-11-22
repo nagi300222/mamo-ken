@@ -75,7 +75,7 @@
         "y": "上",
         "z": "対戦カメラ側が +Z",
         "unit": "m（GLBの単位）",
-        "mirror": "攻撃側が左向き（-X向き）のときは x・rotY・rotZ・カメラ roll の符号を反転"
+        "mirror": "攻撃側が左向き（-X向き）のときはムービー全体を Y 軸まわりに 180 度回す（x・z の符号反転、rotY+180、rotZ・rotX の符号反転。カメラ roll はそのまま）"
       },
       "stage": {
         "contactDistance": 0.5,
@@ -996,20 +996,20 @@
             "position": {
               "anchor": "target.head",
               "offset": [
-                0.5,
-                0.1,
-                0.52
+                0.6,
+                0.22,
+                1
               ]
             },
             "lookAt": {
               "anchor": "attacker.head",
               "offset": [
-                0,
+                0.1,
                 -0.06,
                 0
               ]
             },
-            "fov": 42,
+            "fov": 44,
             "rollDeg": 6,
             "easing": "outQuad",
             "move": "肩越し→当たりで止まる→飛ぶ相手を追って岩壁へ振る",
@@ -1019,20 +1019,20 @@
                 "pos": {
                   "anchor": "target.head",
                   "offset": [
-                    0.5,
-                    0.1,
-                    0.52
+                    0.6,
+                    0.22,
+                    1
                   ]
                 },
                 "look": {
                   "anchor": "attacker.head",
                   "offset": [
-                    0,
+                    0.1,
                     -0.06,
                     0
                   ]
                 },
-                "fov": 42,
+                "fov": 44,
                 "roll": 6,
                 "ease": "inOutCubic"
               },
@@ -1041,20 +1041,20 @@
                 "pos": {
                   "anchor": "target.head",
                   "offset": [
-                    0.46,
-                    0.08,
-                    0.5
+                    0.56,
+                    0.2,
+                    0.96
                   ]
                 },
                 "look": {
                   "anchor": "attacker.pawL",
                   "offset": [
-                    0,
+                    0.05,
                     0,
                     0
                   ]
                 },
-                "fov": 38,
+                "fov": 40,
                 "roll": 9,
                 "ease": "inQuad"
               },
@@ -1063,20 +1063,20 @@
                 "pos": {
                   "anchor": "target.head",
                   "offset": [
-                    0.44,
-                    0.08,
-                    0.48
+                    0.54,
+                    0.2,
+                    0.94
                   ]
                 },
                 "look": {
                   "anchor": "attacker.pawL",
                   "offset": [
-                    0,
+                    0.05,
                     0,
                     0
                   ]
                 },
-                "fov": 36,
+                "fov": 38,
                 "roll": 10,
                 "ease": "linear"
               },
@@ -1232,7 +1232,7 @@
               "offset": [
                 0.95,
                 0.12,
-                0.34
+                0.36
               ]
             },
             "lookAt": {
@@ -1255,7 +1255,7 @@
                   "offset": [
                     0.95,
                     0.12,
-                    0.34
+                    0.36
                   ]
                 },
                 "look": {
@@ -1275,9 +1275,9 @@
                 "pos": {
                   "anchor": "attacker.root",
                   "offset": [
-                    0.9,
+                    0.62,
                     0.1,
-                    0.3
+                    0.46
                   ]
                 },
                 "look": {
@@ -1288,7 +1288,7 @@
                     0
                   ]
                 },
-                "fov": 40,
+                "fov": 42,
                 "roll": 0,
                 "ease": "linear"
               },
@@ -1297,9 +1297,9 @@
                 "pos": {
                   "anchor": "attacker.root",
                   "offset": [
-                    0.72,
+                    0.5,
                     0.08,
-                    0.26
+                    0.5
                   ]
                 },
                 "look": {
@@ -1310,7 +1310,7 @@
                     0
                   ]
                 },
-                "fov": 44,
+                "fov": 46,
                 "roll": -3,
                 "ease": "inOutQuad"
               }

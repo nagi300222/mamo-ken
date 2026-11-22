@@ -680,7 +680,7 @@
           "title": "連打 3・4",
           "start": 2,
           "end": 2.8,
-          "intent": "反対側（奥側）へ切り替え、傾きも逆。左の鉤突き、右の低い突き。相手が折れる",
+          "intent": "相手の向こう側の斜めへ切り替え、傾きも逆。左の鉤突き、右の低い突き。相手が折れる（真裏は逆光で攻撃側が沈むので、明かりの当たる斜めに置く）",
           "actorPose": {
             "attacker": "左の鉤突き→沈んで右の低い突き",
             "target": "横へ流れる→腹を突かれて折れる"
@@ -691,43 +691,43 @@
             "position": {
               "anchor": "stage",
               "offset": [
-                0.1,
+                0.95,
                 0.3,
-                -0.95
+                0.8
               ]
             },
             "lookAt": {
               "anchor": "target.chest",
               "offset": [
-                -0.12,
+                -0.2,
                 -0.02,
                 0
               ]
             },
-            "fov": 34,
+            "fov": 36,
             "rollDeg": 9,
             "easing": "linear",
-            "move": "奥側から。固定の寄り",
+            "move": "相手越しの斜めから。固定の寄り",
             "keys": [
               {
                 "t": 2,
                 "pos": {
                   "anchor": "stage",
                   "offset": [
-                    0.1,
+                    0.95,
                     0.3,
-                    -0.95
+                    0.8
                   ]
                 },
                 "look": {
                   "anchor": "target.chest",
                   "offset": [
-                    -0.12,
+                    -0.2,
                     -0.02,
                     0
                   ]
                 },
-                "fov": 34,
+                "fov": 36,
                 "roll": 9,
                 "ease": "inOutCubic"
               },
@@ -736,20 +736,20 @@
                 "pos": {
                   "anchor": "stage",
                   "offset": [
-                    0.12,
+                    0.92,
                     0.28,
-                    -0.9
+                    0.76
                   ]
                 },
                 "look": {
                   "anchor": "target.chest",
                   "offset": [
-                    -0.12,
+                    -0.2,
                     -0.04,
                     0
                   ]
                 },
-                "fov": 33,
+                "fov": 35,
                 "roll": 9,
                 "ease": "linear"
               }
@@ -1456,7 +1456,7 @@
               "key": "dim",
               "type": "vfx",
               "dur": 0.7,
-              "opacity": 0.36,
+              "opacity": 0.18,
               "color": 0
             },
             {
@@ -1695,15 +1695,15 @@
             "position": {
               "anchor": "stage",
               "offset": [
-                0.7,
-                0.12,
-                1.25
+                0.62,
+                0.16,
+                0.98
               ]
             },
             "lookAt": {
               "anchor": "attacker.chest",
               "offset": [
-                0,
+                0.05,
                 0.04,
                 0
               ]
@@ -1718,15 +1718,15 @@
                 "pos": {
                   "anchor": "stage",
                   "offset": [
-                    0.7,
-                    0.12,
-                    1.25
+                    0.62,
+                    0.16,
+                    0.98
                   ]
                 },
                 "look": {
                   "anchor": "attacker.chest",
                   "offset": [
-                    0,
+                    0.05,
                     0.04,
                     0
                   ]
@@ -1740,15 +1740,15 @@
                 "pos": {
                   "anchor": "stage",
                   "offset": [
-                    0.72,
-                    0.13,
-                    1.3
+                    0.64,
+                    0.17,
+                    1.02
                   ]
                 },
                 "look": {
                   "anchor": "attacker.chest",
                   "offset": [
-                    0,
+                    0.05,
                     0.06,
                     0
                   ]
@@ -2255,7 +2255,7 @@
           "type": "vfx",
           "key": "dim",
           "dur": 0.7,
-          "opacity": 0.36,
+          "opacity": 0.18,
           "color": 0,
           "shot": "07-heavy"
         },

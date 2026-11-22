@@ -64,6 +64,11 @@
       "characterId": "bullet",
       "moveId": "ultimate",
       "displayName": "尾連・爆ぜ木の実",
+      "nameNote": {
+        "reviewName": "尾連・爆ぜ木の実",
+        "gameName": "超圧縮・弾丸頭突き",
+        "note": "今回の確認版の表示名。balance.js の技名と性能値は変えていない。本採用するかはナギの判断"
+      },
       "trigger": "confirmed_unblocked_ultimate_hit",
       "runtime": "threejs",
       "durationSeconds": 10.2,
@@ -1330,20 +1335,20 @@
                 "pos": {
                   "anchor": "stage",
                   "offset": [
-                    1.26,
-                    0.5,
-                    0.3
+                    1.12,
+                    0.56,
+                    0.8
                   ]
                 },
                 "look": {
                   "anchor": "target.pelvis",
                   "offset": [
                     -0.04,
-                    0.1,
+                    0.12,
                     0
                   ]
                 },
-                "fov": 34,
+                "fov": 36,
                 "roll": 0,
                 "ease": "linear"
               },
@@ -1352,20 +1357,20 @@
                 "pos": {
                   "anchor": "stage",
                   "offset": [
-                    1.28,
-                    0.46,
-                    0.32
+                    1.14,
+                    0.52,
+                    0.82
                   ]
                 },
                 "look": {
                   "anchor": "target.pelvis",
                   "offset": [
                     -0.04,
-                    0.1,
+                    0.12,
                     0
                   ]
                 },
-                "fov": 32,
+                "fov": 34,
                 "roll": 0,
                 "ease": "outQuad"
               }

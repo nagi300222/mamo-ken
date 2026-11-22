@@ -16,7 +16,7 @@
   "y": "上",
   "z": "対戦カメラ側が +Z",
   "unit": "m（GLBの単位）",
-  "mirror": "攻撃側が左向き（-X向き）のときは x・rotY・rotZ・カメラ roll の符号を反転"
+  "mirror": "攻撃側が左向き（-X向き）のときはムービー全体を Y 軸まわりに 180 度回す（x・z の符号反転、rotY+180、rotZ・rotX の符号反転。カメラ roll はそのまま）"
  },
  "stage": {
   "contactDistance": 0.46,
@@ -2688,7 +2688,7 @@
       0,
       0.14
      ],
-     "size": 0.6,
+     "size": 0.45,
      "angle": -40,
      "dur": 0.1,
      "hold": 0.9,
@@ -2699,7 +2699,7 @@
      "key": "slash_arc",
      "type": "vfx",
      "anchor": "target.chest",
-     "size": 0.7,
+     "size": 0.5,
      "angle": 60,
      "sweep": 1.6,
      "color": 14857471
@@ -3391,7 +3391,7 @@
     0,
     0.14
    ],
-   "size": 0.6,
+   "size": 0.45,
    "angle": -40,
    "dur": 0.1,
    "hold": 0.9,
@@ -3403,7 +3403,7 @@
    "type": "vfx",
    "key": "slash_arc",
    "anchor": "target.chest",
-   "size": 0.7,
+   "size": 0.5,
    "angle": 60,
    "sweep": 1.6,
    "color": 14857471,
