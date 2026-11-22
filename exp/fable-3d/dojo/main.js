@@ -13,6 +13,7 @@ import { hudTheme, isSuperReady, chargePips } from './hud-themes.js';
 import { createMovieDirector, movieScript } from './ultimate-cinematic.js';
 import { createShowtimeLoader } from './showtime-assets.js';
 import { createAuthoredCinematic } from './authored-cinematic.js';
+import { bindMorphTargets } from './morph-binding.js';
 
 const $=id=>document.getElementById(id), canvas=$('stage');
 const scene=new THREE.Scene();scene.background=new THREE.Color(0x758993);
@@ -419,7 +420,7 @@ async function createActor(id,slot) {
       const clips=url?await animationFiles.get(url):gltf.animations;
       const clip=clips.find(item=>item.name===source.clip);
       if(!clip)throw new Error('Missing showtime clip: '+source.clip);
-      return clip;
+      return bindMorphTargets(clip,gltf.scene);
     });
   }catch(error){
     mixer.stopAllAction();mixer.uncacheRoot(gltf.scene);

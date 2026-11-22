@@ -13,6 +13,7 @@ test('animation-only bundles retain every sample and morph binding without rende
     assert.ok(packed.length<source.length);
     for(const key of ['images','textures','skins'])assert.equal(b.doc[key],undefined);
     for(const mesh of b.doc.meshes)assert.equal(b.doc.accessors[mesh.primitives[0].attributes.POSITION].count,3);
+    for(const node of b.doc.nodes.filter(n=>n.mesh!==undefined)){const old=a.doc.nodes.find(n=>n.name===node.name);assert.equal(b.doc.meshes[node.mesh].primitives.length,a.doc.meshes[old.mesh].primitives.length);}
     for(const animation of b.doc.animations){
       const old=a.doc.animations.find(c=>c.name===animation.name);
       assert.deepEqual(animation.channels,old.channels);

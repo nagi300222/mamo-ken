@@ -33,7 +33,7 @@ export function animationBundle(bytes, names) {
     for(const index of morphNodes){
       const original=doc.meshes[doc.nodes[index].mesh],count=original.primitives[0].targets.length;
       nodes[index].mesh=meshes.length;
-      meshes.push({name:original.name,extras:original.extras,weights:Array(count).fill(0),primitives:[{attributes:{POSITION:zeroIndex},targets:Array.from({length:count},()=>({POSITION:zeroIndex})),mode:4}]});
+      meshes.push({name:original.name,extras:original.extras,weights:Array(count).fill(0),primitives:original.primitives.map(p=>({attributes:{POSITION:zeroIndex},targets:Array.from({length:p.targets.length},()=>({POSITION:zeroIndex})),mode:4}))});
     }
   }
   const output={asset:doc.asset,scene:doc.scene??0,scenes:doc.scenes,

@@ -1,60 +1,60 @@
 {
   "before": 56426184,
-  "after": 32181888,
-  "reduction": 0.4296639304901426,
+  "after": 32182992,
+  "reduction": 0.4296443651053915,
   "characters": [
     {
       "id": "moguzo",
       "sourceBytes": 6593220,
-      "animationBytes": 3813720,
+      "animationBytes": 3813844,
       "clips": 14
     },
     {
       "id": "pisuke",
       "sourceBytes": 5937764,
-      "animationBytes": 3375460,
+      "animationBytes": 3375584,
       "clips": 14
     },
     {
       "id": "godan",
       "sourceBytes": 6725716,
-      "animationBytes": 3852328,
+      "animationBytes": 3852452,
       "clips": 14
     },
     {
       "id": "hakuma",
       "sourceBytes": 6214148,
-      "animationBytes": 3387564,
+      "animationBytes": 3387684,
       "clips": 14
     },
     {
       "id": "chirka",
       "sourceBytes": 5932456,
-      "animationBytes": 3485928,
+      "animationBytes": 3486052,
       "clips": 17
     },
     {
       "id": "takimaru",
       "sourceBytes": 6260064,
-      "animationBytes": 3412520,
+      "animationBytes": 3412640,
       "clips": 14
     },
     {
       "id": "yomikage",
       "sourceBytes": 5942816,
-      "animationBytes": 3369428,
+      "animationBytes": 3369548,
       "clips": 14
     },
     {
       "id": "bullet",
       "sourceBytes": 6412172,
-      "animationBytes": 3671688,
+      "animationBytes": 3671808,
       "clips": 13
     },
     {
       "id": "dark_moguzo",
       "sourceBytes": 6407828,
-      "animationBytes": 3813252,
+      "animationBytes": 3813380,
       "clips": 14
     }
   ]
