@@ -52,7 +52,7 @@ def restore_base_clips(base_path, out_path):
 def sha(path): return hashlib.sha256(open(path, 'rb').read()).hexdigest()
 
 def build_char(cid, args):
-    t0 = time.time(); src = os.path.join(ROOT, 'chars', cid); out = os.path.join(OUT, cid); os.makedirs(out, exist_ok=True)
+    t0 = time.time(); src = os.path.join(ROOT, 'chars', cid); out = os.path.join(args.out or OUT, cid); os.makedirs(out, exist_ok=True)
     bpy.ops.wm.open_mainfile(filepath=os.path.join(src, cid + '.blend'))
     arm = bpy.data.objects['Rig_' + cid]; ob = bpy.data.objects['Mamo_' + cid]
     old = [t.strips[0].action for t in arm.animation_data.nla_tracks]          # 既存37本（順番を保つ）
@@ -63,6 +63,7 @@ def build_char(cid, args):
     for name in names:
         clip = motions_v14.make(cid, name); act, warn = an.bake(name, clip); acts.append(act)
         meta[name] = dict(frames=clip['frames'], fps=60, duration_sec=round(clip['frames'] / 60, 4), loop=clip['loop'], **clip['info'])
+        if an.measure: meta[name].update(an.measure)
         if warn: meta[name]['warnings'] = warn; print('   warn', name, warn[:6])
     anim.to_nla(arm, ob, old + acts); bpy.context.scene.frame_end = int(max(a.frame_range[1] for a in old + acts)); bpy.context.scene.frame_set(0)
     glb = os.path.join(out, cid + '_v14.glb'); export_glb(glb, arm, ob); restored = restore_base_clips(os.path.join(src, cid + '.glb'), glb); J = glb_json(glb)
@@ -80,6 +81,7 @@ def build_char(cid, args):
 
 if __name__ == '__main__':
     ap = argparse.ArgumentParser(); ap.add_argument('--only', default=','.join(characters.ROSTER)); ap.add_argument('--clips', default='')
+    ap.add_argument('--out', default='', help='出力先（既定は cinematic/v14）。仕上げ用の一時ビルドなどで別の場所へ出すとき');
     ap.add_argument('--save-blend', action='store_true'); ap.add_argument('--scratch', default=os.path.join(ROOT, '_scratch'))
     args = ap.parse_args()
     for cid in args.only.split(','): build_char(cid, args)

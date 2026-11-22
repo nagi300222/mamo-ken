@@ -44,6 +44,7 @@ jobs:
           done
           export NODE_PATH="$RUNNER_TEMP/mamoken-browser/node_modules"
           export MAMOKEN_EVIDENCE="$RUNNER_TEMP/mamoken-evidence"
+          node exp/fable-3d/cinematic/v14/tools/verify_polish.mjs
           node exp/fable-3d/dojo/acceptance/showtime-browser.mjs
           node exp/fable-3d/dojo/acceptance/device-ready.mjs
           MAMOKEN_TEST_AUTHORED=1 MAMOKEN_EVIDENCE="$MAMOKEN_EVIDENCE/authored-fixture" \

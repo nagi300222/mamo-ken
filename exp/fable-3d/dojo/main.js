@@ -410,7 +410,7 @@ async function createActor(id,slot) {
     showtime=await loadShowtime(id,async(source,manifestUrl)=>{
       const url=source.glb&&new URL(source.glb,manifestUrl).href;
       if(url&&!animationFiles.has(url)){
-        if(animationFiles.size>=2)animationFiles.delete(animationFiles.keys().next().value);
+        if(animationFiles.size>=4)animationFiles.delete(animationFiles.keys().next().value);
         animationFiles.set(url,loader.loadAsync(url).then(result=>{
           disposable(result.scene);
           return result.animations;
@@ -457,7 +457,15 @@ function clipChange(a,p){
   a.current=next;a.currentName=name;a.key=key;a.specialCueIndex=0;
 }
 function syncActor(a,p){
-  if(!a)return;clipChange(a,p);a.holder.position.set(p.x,p.y,0);
+  if(!a)return;
+  if(a.counterFrame){
+    if(!p.action&&!p.stun&&!p.ko&&p.state==='idle'&&a.counterFrame<21){
+      if(!p.stop){a.mixer.update(1/FPS);a.counterFrame++;}
+      a.holder.position.set(p.x,p.y,0);a.turn.rotation.set(0,p.facing===1?Math.PI/2:-Math.PI/2,0);return;
+    }
+    a.current?.stop();a.counterFrame=0;a.key='';
+  }
+  clipChange(a,p);a.holder.position.set(p.x,p.y,0);
   a.turn.rotation.set(0,p.facing===1?Math.PI/2:-Math.PI/2,0);
   a.turn.scale.setScalar(1);
   a.turn.position.z=0;
@@ -544,6 +552,14 @@ function vfx(){
         note(e.name,e.action==='gyuiin'?'clinch':e.action);
       }
       continue;
+    }
+    if(e.type==='counter'){
+      const a=actors[e.slot],clip=a?.showtime.reactions?.counter_success_v14;
+      if(clip){
+        const action=a.mixer.clipAction(clip);a.current?.stop();action.reset();
+        action.setLoop(THREE.LoopOnce,1);action.clampWhenFinished=true;action.setEffectiveTimeScale(1);action.setEffectiveWeight(1);action.play();
+        a.current=action;a.currentName=clip.name;a.key='counter:'+battle.frame;a.counterFrame=1;
+      }
     }
     if(e.type==='ko'){audioFX.play('ko',battle.fighters[e.slot]?.id);continue;}
     if(e.type==='charge' && battle.fighters[e.slot]?.id==='bullet'){

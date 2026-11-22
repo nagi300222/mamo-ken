@@ -45,8 +45,8 @@
       "contactSeconds": 0.31666666666666665,
       "animationSources": {
         "attacker": {
-          "glb": "bullet_animations.glb",
-          "clip": "sp_tail_whip"
+          "glb": "bullet_polish_anim.glb",
+          "clip": "s3_v14"
         }
       },
       "cueTrack": [
@@ -63,7 +63,7 @@
       "directionSource": "docs/mamoken-showtime-v14/ULTIMATE_10S_DIRECTION.md",
       "characterId": "bullet",
       "moveId": "ultimate",
-      "displayName": "超圧縮・弾丸頭突き",
+      "displayName": "尾連・爆ぜ木の実",
       "trigger": "confirmed_unblocked_ultimate_hit",
       "runtime": "threejs",
       "durationSeconds": 10.2,
@@ -2122,7 +2122,7 @@
           "at": 9.3,
           "type": "caption",
           "dur": 0.75,
-          "text": "超圧縮・弾丸頭突き",
+          "text": "尾連・爆ぜ木の実",
           "sub": "バレット",
           "shot": "08-calm"
         },

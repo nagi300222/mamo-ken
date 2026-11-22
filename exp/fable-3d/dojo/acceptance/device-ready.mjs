@@ -18,7 +18,7 @@ try{
   await page.waitForFunction(()=>mamoken3d.cinematic.elapsed>2,undefined,{timeout:20000});
   if(i%2)await page.locator('#cinematic-skip').tap();
   await page.waitForFunction(()=>!mamoken3d.cinematic.active,undefined,{timeout:20000});
-  await page.waitForTimeout(150);
+  await page.waitForTimeout(1100);
   report.push(await page.evaluate(()=>({stats:mamoken3d.diagnostics,hp:mamoken3d.battle.fighters.map(f=>f.hp),super:mamoken3d.battle.fighters[0].super})));
   assert.equal(report.at(-1).super,100);assert.equal(report.at(-1).stats.checking,true);
  }
@@ -29,6 +29,22 @@ try{
  await page.waitForFunction(()=>mamoken3d.battle?.frame>5&&!mamoken3d.diagnostics.checking);
  assert.equal(await page.evaluate(()=>mamoken3d.battle.fighters[0].super),0);
  await page.screenshot({path:evidence+'/normal-play.png'});
+ await page.locator('#select-back').tap();
+ await page.locator('.fighter-card').nth(6).tap();await page.locator('#check-mode').check();await page.locator('#start').tap();
+ await page.waitForFunction(()=>mamoken3d.actors[0]?.id==='yomikage'&&mamoken3d.battle?.frame>0);
+ await page.evaluate(async()=>{
+   const {specialMove,normalMove}=await import('./balance.js');
+   const g=mamoken3d.battle,[p,t]=g.fighters;
+   g._begin(p,specialMove('yomikage',2),'s3');p.frame=p.action.startup;
+   g._begin(t,normalMove(t.id,'stand_weak'),'stand_weak');t.frame=t.action.startup-1;
+ });
+ await page.waitForFunction(()=>mamoken3d.actors[0].counterFrame>0,undefined,{timeout:4000});
+ assert.equal(await page.evaluate(()=>mamoken3d.actors[0].currentName),'counter_success_v14');
+ assert.equal(await page.evaluate(()=>mamoken3d.battle.fighters[0].action),null,'presentation added combat recovery');
+ await page.locator('[data-control="weak"]').tap();
+ await page.waitForFunction(()=>mamoken3d.battle.fighters[0].action?.id==='stand_weak');
+ assert.equal(await page.evaluate(()=>!!mamoken3d.actors[0].counterFrame),false,'new input cannot interrupt counter presentation');
+
  assert.deepEqual(errors,[]);await writeFile(evidence+'/report.json',JSON.stringify({report,requests,errors},null,2));
  console.log('Device check mode, repeated natural/skip returns, bounded GPU resources, animation-only downloads PASS');
 }finally{await browser.close();}

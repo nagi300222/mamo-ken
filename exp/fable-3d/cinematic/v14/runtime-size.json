@@ -1,7 +1,7 @@
 {
   "before": 56426184,
-  "after": 32219424,
-  "reduction": 0.428998707408603,
+  "after": 32177788,
+  "reduction": 0.4297365917922077,
   "characters": [
     {
       "id": "moguzo",
@@ -48,8 +48,8 @@
     {
       "id": "bullet",
       "sourceBytes": 6412172,
-      "animationBytes": 3712872,
-      "clips": 14
+      "animationBytes": 3671236,
+      "clips": 13
     },
     {
       "id": "dark_moguzo",

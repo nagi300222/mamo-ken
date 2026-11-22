@@ -1777,6 +1777,10 @@
     {
       "glb": "yomikage_animations.glb",
       "clip": "cinv_dark_moguzo"
+    },
+    {
+      "glb": "yomikage_polish_anim.glb",
+      "clip": "counter_success_v14"
     }
   ]
 }
