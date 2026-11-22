@@ -20,4 +20,4 @@ Codex owns performance and rendering integration; Claude owns motif edits and co
 
 ## Validation at initial submission
 
-128 Node tests pass; static Pages build passes. Nine real weak→strong→special2 routes hit three times against a defender holding guard after hit1, in both directions. Whiffs and expired contact windows do not cancel. These are initial regression results; art measurements, repeated CPU matrix and browser review are still in progress. Do not treat this Draft as completed balance or final integration.
+130 Node tests pass; static Pages build passes. Nine real weak→strong→special2 routes hit three times against a defender holding guard after hit1, in both directions. Whiffs and expired contact windows do not cancel. These are initial regression results; art measurements, repeated CPU matrix and browser review are still in progress. Do not treat this Draft as completed balance or final integration.

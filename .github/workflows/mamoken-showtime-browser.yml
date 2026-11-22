@@ -3,7 +3,6 @@ name: MamoKen Showtime browser acceptance
 on:
   push:
     branches:
-      - feat/mamoken-v151-normal-balance
       - feat/mamoken-v151-reviewed-integration
       - test/mamoken-showtime-browser-v12
       - feat/mamoken-super-hit-cinematic-v13

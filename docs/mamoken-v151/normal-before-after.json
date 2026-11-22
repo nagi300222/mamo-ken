@@ -1170,7 +1170,7 @@
         "outcome": "hit",
         "damage": 80,
         "contactFrame": 12,
-        "advantage": -3
+        "advantage": 2
       },
       "block": {
         "outcome": "block",
@@ -1212,7 +1212,7 @@
         "outcome": "hit",
         "damage": 76,
         "contactFrame": 13,
-        "advantage": -6
+        "advantage": 2
       },
       "block": {
         "outcome": "block",
@@ -1254,7 +1254,7 @@
         "outcome": "hit",
         "damage": 77,
         "contactFrame": 11,
-        "advantage": -2
+        "advantage": 1
       },
       "block": {
         "outcome": "block",
@@ -1296,7 +1296,7 @@
         "outcome": "hit",
         "damage": 68,
         "contactFrame": 10,
-        "advantage": -4
+        "advantage": 2
       },
       "block": {
         "outcome": "block",
@@ -1338,7 +1338,7 @@
         "outcome": "hit",
         "damage": 65,
         "contactFrame": 11,
-        "advantage": -7
+        "advantage": 2
       },
       "block": {
         "outcome": "block",
@@ -1380,7 +1380,7 @@
         "outcome": "hit",
         "damage": 66,
         "contactFrame": 9,
-        "advantage": -3
+        "advantage": 1
       },
       "block": {
         "outcome": "block",
@@ -1422,7 +1422,7 @@
         "outcome": "hit",
         "damage": 96,
         "contactFrame": 18,
-        "advantage": -7
+        "advantage": 2
       },
       "block": {
         "outcome": "block",
@@ -1464,7 +1464,7 @@
         "outcome": "hit",
         "damage": 91,
         "contactFrame": 19,
-        "advantage": -10
+        "advantage": 2
       },
       "block": {
         "outcome": "block",
@@ -1506,7 +1506,7 @@
         "outcome": "hit",
         "damage": 93,
         "contactFrame": 16,
-        "advantage": -5
+        "advantage": 1
       },
       "block": {
         "outcome": "block",
@@ -1548,7 +1548,7 @@
         "outcome": "hit",
         "damage": 82,
         "contactFrame": 14,
-        "advantage": -4
+        "advantage": 3
       },
       "block": {
         "outcome": "block",
@@ -1590,7 +1590,7 @@
         "outcome": "hit",
         "damage": 78,
         "contactFrame": 15,
-        "advantage": -7
+        "advantage": 3
       },
       "block": {
         "outcome": "block",
@@ -1632,7 +1632,7 @@
         "outcome": "hit",
         "damage": 79,
         "contactFrame": 13,
-        "advantage": -2
+        "advantage": 1
       },
       "block": {
         "outcome": "block",
@@ -1674,7 +1674,7 @@
         "outcome": "hit",
         "damage": 68,
         "contactFrame": 11,
-        "advantage": -3
+        "advantage": 2
       },
       "block": {
         "outcome": "block",
@@ -1716,7 +1716,7 @@
         "outcome": "hit",
         "damage": 65,
         "contactFrame": 12,
-        "advantage": -6
+        "advantage": 2
       },
       "block": {
         "outcome": "block",
@@ -1758,7 +1758,7 @@
         "outcome": "hit",
         "damage": 68,
         "contactFrame": 10,
-        "advantage": -2
+        "advantage": 1
       },
       "block": {
         "outcome": "block",
@@ -1800,7 +1800,7 @@
         "outcome": "hit",
         "damage": 85,
         "contactFrame": 14,
-        "advantage": -5
+        "advantage": 3
       },
       "block": {
         "outcome": "block",
@@ -1842,7 +1842,7 @@
         "outcome": "hit",
         "damage": 80,
         "contactFrame": 15,
-        "advantage": -7
+        "advantage": 3
       },
       "block": {
         "outcome": "block",
@@ -1884,7 +1884,7 @@
         "outcome": "hit",
         "damage": 81,
         "contactFrame": 13,
-        "advantage": -5
+        "advantage": 1
       },
       "block": {
         "outcome": "block",
@@ -1926,7 +1926,7 @@
         "outcome": "hit",
         "damage": 74,
         "contactFrame": 12,
-        "advantage": -3
+        "advantage": 3
       },
       "block": {
         "outcome": "block",
@@ -1968,7 +1968,7 @@
         "outcome": "hit",
         "damage": 71,
         "contactFrame": 13,
-        "advantage": -7
+        "advantage": 3
       },
       "block": {
         "outcome": "block",
@@ -2010,7 +2010,7 @@
         "outcome": "hit",
         "damage": 73,
         "contactFrame": 11,
-        "advantage": -3
+        "advantage": 1
       },
       "block": {
         "outcome": "block",
@@ -2052,7 +2052,7 @@
         "outcome": "hit",
         "damage": 75,
         "contactFrame": 15,
-        "advantage": -7
+        "advantage": 2
       },
       "block": {
         "outcome": "block",
@@ -2094,7 +2094,7 @@
         "outcome": "hit",
         "damage": 71,
         "contactFrame": 16,
-        "advantage": -9
+        "advantage": 2
       },
       "block": {
         "outcome": "block",
@@ -2136,7 +2136,7 @@
         "outcome": "hit",
         "damage": 72,
         "contactFrame": 14,
-        "advantage": -6
+        "advantage": 1
       },
       "block": {
         "outcome": "block",
@@ -2178,7 +2178,7 @@
         "outcome": "hit",
         "damage": 65,
         "contactFrame": 10,
-        "advantage": -5
+        "advantage": 2
       },
       "block": {
         "outcome": "block",
@@ -2220,7 +2220,7 @@
         "outcome": "hit",
         "damage": 62,
         "contactFrame": 11,
-        "advantage": -8
+        "advantage": 2
       },
       "block": {
         "outcome": "block",
@@ -2262,7 +2262,7 @@
         "outcome": "hit",
         "damage": 64,
         "contactFrame": 9,
-        "advantage": -4
+        "advantage": 1
       },
       "block": {
         "outcome": "block",

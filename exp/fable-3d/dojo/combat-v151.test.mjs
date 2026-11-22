@@ -4,6 +4,7 @@ import {Battle} from './battle.js';
 import {IDS,normalMove} from './balance.js';
 import {NORMAL_SLOTS,MOTIFS} from './normal-motifs-v15.js';
 import {normalClipTime} from './normal-timing-v151.js';
+import {normalReachAt} from './normal-contact-runtime-v151.js';
 import {fighterStyle} from './fighter-style.js';
 import {cpuInput,CPU_LEVELS} from './cpu.js';
 import {createPracticeController} from './practice-mode.js';
@@ -129,5 +130,31 @@ test('air normals demand standing guard and corner pressure cannot create an end
   const air=normalMove(id,'air_weak');t.action=null;t.stun=0;t.y=0;t.input={right:true,down:true};
   assert.equal(g._guarding(t,air),false,id+' air blocked crouching');
   t.input.down=false;assert.equal(g._guarding(t,air),true,id+' air failed standing guard');
+ }
+});
+
+test('normal reach follows the active limb trajectory and never attacks through the fighter back',()=>{
+ const m={...normalMove('bullet','stand_heavy'),active:5,activeReach:[{phase:0,reach:.3},{phase:.5,reach:.6},{phase:1,reach:.4}]};
+ assert.equal(normalReachAt(m,m.startup),.3);
+ assert.equal(normalReachAt(m,m.startup+2),.6);
+ assert.equal(normalReachAt(m,m.startup+4),.4);
+ const g=new Battle('bullet','godan'),[a,t]=g.fighters;a.x=0;t.x=.7;a.facing=1;
+ a.frame=m.startup;assert.equal(g._contact(a,t,m),false);
+ a.frame=m.startup+2;assert.equal(g._contact(a,t,m),true);
+ t.x=-.35;assert.equal(g._contact(a,t,m),false);
+ a.facing=-1;assert.equal(g._contact(a,t,m),true);
+});
+
+test('uncanceled heavy hits recover first; their large block and whiff risks remain',()=>{
+ for(const id of IDS)for(const slot of ['stand_heavy','crouch_heavy']){
+  const g=new Battle(id,'godan'),[p,t]=g.fighters;p.x=-.175;t.x=.175;
+  g._begin(p,normalMove(id,slot),slot);let hit=false,readyA=null,readyT=null;
+  for(let f=0;f<130;f++){
+   g.tick({},{});if(g.events.some(e=>e.type==='hit'))hit=true;
+   if(hit){if(readyA===null&&!p.action&&!p.stun&&!p.stop)readyA=g.frame;
+    if(readyT===null&&!t.action&&!t.stun&&!t.stop)readyT=g.frame;}
+  }
+  assert.ok(readyA<readyT,id+'/'+slot+' punished on hit');
+  assert.ok(normalMove(id,slot).blockstun<normalMove(id,slot).recovery,id+' no block risk');
  }
 });
