@@ -4,34 +4,58 @@
       "schemaVersion": 1,
       "characterId": "godan",
       "moveId": "s1",
+      "contactSeconds": 0.31666666666666665,
       "animationSources": {
         "attacker": {
           "glb": "godan_v14.glb",
           "clip": "s1_v14"
         }
-      }
+      },
+      "cueTrack": [
+        {
+          "at": 0,
+          "type": "sfx",
+          "key": "special"
+        }
+      ]
     },
     {
       "schemaVersion": 1,
       "characterId": "godan",
       "moveId": "s2",
+      "contactSeconds": 0.15,
       "animationSources": {
         "attacker": {
           "glb": "godan_v14.glb",
           "clip": "s2_v14"
         }
-      }
+      },
+      "cueTrack": [
+        {
+          "at": 0,
+          "type": "sfx",
+          "key": "special"
+        }
+      ]
     },
     {
       "schemaVersion": 1,
       "characterId": "godan",
       "moveId": "s3",
+      "contactSeconds": 0.26666666666666666,
       "animationSources": {
         "attacker": {
           "glb": "godan_v14.glb",
           "clip": "s3_v14"
         }
-      }
+      },
+      "cueTrack": [
+        {
+          "at": 0,
+          "type": "sfx",
+          "key": "special"
+        }
+      ]
     },
     {
       "schemaVersion": 1,
@@ -2443,7 +2467,8 @@
         "allowedFrom": 0.4,
         "landOn": "end",
         "note": "スキップ時は役者を消してからゲームの立ち位置へ戻す。ムービー中の位置を戦闘へ持ち込まない"
-      }
+      },
+      "contactSeconds": 0.13333333333333333
     }
   ],
   "reactions": [

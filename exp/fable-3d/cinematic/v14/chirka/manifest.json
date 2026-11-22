@@ -4,34 +4,58 @@
       "schemaVersion": 1,
       "characterId": "chirka",
       "moveId": "s1",
+      "contactSeconds": 0.18333333333333332,
       "animationSources": {
         "attacker": {
           "glb": "chirka_v14.glb",
           "clip": "s1_v14"
         }
-      }
+      },
+      "cueTrack": [
+        {
+          "at": 0,
+          "type": "sfx",
+          "key": "special"
+        }
+      ]
     },
     {
       "schemaVersion": 1,
       "characterId": "chirka",
       "moveId": "s2",
+      "contactSeconds": 0.1,
       "animationSources": {
         "attacker": {
           "glb": "chirka_v14.glb",
           "clip": "s2_v14"
         }
-      }
+      },
+      "cueTrack": [
+        {
+          "at": 0,
+          "type": "sfx",
+          "key": "special"
+        }
+      ]
     },
     {
       "schemaVersion": 1,
       "characterId": "chirka",
       "moveId": "s3",
+      "contactSeconds": 0.18333333333333332,
       "animationSources": {
         "attacker": {
           "glb": "chirka_v14.glb",
           "clip": "s3_v14"
         }
-      }
+      },
+      "cueTrack": [
+        {
+          "at": 0,
+          "type": "sfx",
+          "key": "special"
+        }
+      ]
     },
     {
       "schemaVersion": 1,
@@ -3525,7 +3549,8 @@
         "allowedFrom": 0.4,
         "landOn": "end",
         "note": "スキップ時は役者を消してからゲームの立ち位置へ戻す。ムービー中の位置を戦闘へ持ち込まない"
-      }
+      },
+      "contactSeconds": 0.11666666666666667
     }
   ],
   "reactions": [
