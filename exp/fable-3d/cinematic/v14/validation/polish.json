@@ -1,0 +1,123 @@
+{
+ "all_pass": true,
+ "passed": 14,
+ "total": 14,
+ "files": {
+  "yomikage_polish_anim.glb": {
+   "bytes": 44940,
+   "sha256": "7f7e318968ef5016798ba20a4a8fabefc82c29d612a706264ac08928c44fde27"
+  },
+  "bullet_polish_anim.glb": {
+   "bytes": 61276,
+   "sha256": "c7234a8cf28436611a628de73c69e132e5bccd9ced5a7c75349d8afa8455f0d3"
+  }
+ },
+ "checks": [
+  {
+   "name": "バレット s3_v14: 骨盤と尻尾 6 本の全 49 フレームの位置が sp_tail_whip と一致（1e-5 m 未満）",
+   "pass": true,
+   "detail": {
+    "bones": [
+     "root_ground",
+     "pelvis",
+     "tail_01",
+     "tail_02",
+     "tail_03",
+     "tail_04",
+     "tail_05",
+     "tail_06"
+    ],
+    "max_m": 0,
+    "where": ""
+   }
+  },
+  {
+   "name": "バレット s3_v14: 尻尾先端の軌道（tail_tip_path 25 点）が同じ",
+   "pass": true,
+   "detail": {
+    "max_abs_diff": 0,
+    "points": 25,
+    "max_forward_m": [
+     0.6506,
+     0.6506
+    ],
+    "at_frame": [
+     24,
+     24
+    ]
+   }
+  },
+  {
+   "name": "バレット s3_v14: 上体は実際に変わっている（胸・頭・手が 3cm 以上動く）",
+   "pass": true,
+   "detail": {
+    "max_m": 0.3528581443374523,
+    "where": "pawL@F21"
+   }
+  },
+  {
+   "name": "バレット s3_v14: 長さ 48F・発生 19・持続 6（現行と同じ）",
+   "pass": true,
+   "detail": "48F 19/6"
+  },
+  {
+   "name": "yomikage counter_success_v14: アニメ専用 GLB を元 GLB に結び付けて再生できる（22 フレーム）",
+   "pass": true,
+   "detail": "36 bones, 44940 bytes"
+  },
+  {
+   "name": "yomikage counter_success_v14: シェイプキー（目・手の開き）も動く",
+   "pass": true,
+   "detail": "[0,0,0,0.699999988079071]"
+  },
+  {
+   "name": "yomikage counter_success_v14: アニメ専用 GLB と完全な GLB で骨の位置が一致",
+   "pass": true,
+   "detail": {
+    "max_m": 0,
+    "where": ""
+   }
+  },
+  {
+   "name": "bullet s3_v14: アニメ専用 GLB を元 GLB に結び付けて再生できる（49 フレーム）",
+   "pass": true,
+   "detail": "39 bones, 61276 bytes"
+  },
+  {
+   "name": "bullet s3_v14: シェイプキー（目・手の開き）も動く",
+   "pass": true,
+   "detail": "[0,0,0,0.699999988079071]"
+  },
+  {
+   "name": "bullet s3_v14: アニメ専用 GLB と完全な GLB で骨の位置が一致",
+   "pass": true,
+   "detail": {
+    "max_m": 0,
+    "where": ""
+   }
+  },
+  {
+   "name": "ヨミカゲ counter_success_v14: 長さ 0.25〜0.4 秒",
+   "pass": true,
+   "detail": "21F = 0.35s"
+  },
+  {
+   "name": "ヨミカゲ counter_success_v14: 腰の移動が小さい（10cm 未満）",
+   "pass": true,
+   "detail": "8.5 cm"
+  },
+  {
+   "name": "ヨミカゲ counter_success_v14: 掌底で手前の手が頭より前・高い位置へ出る",
+   "pass": true,
+   "detail": "pawR y 0.248 → 0.426"
+  },
+  {
+   "name": "ヨミカゲ counter_success_v14: 構え（idle の 0F）で終わる",
+   "pass": true,
+   "detail": {
+    "max_m": 0.005544899641080836,
+    "where": "tail_03@F0"
+   }
+  }
+ ]
+}

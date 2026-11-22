@@ -48,15 +48,15 @@ export default {
     { id: '04-strike-two', title: '第二撃・裏拳', start: 3.6, end: 5.0, intent: '相手の肩越し。逆へ体を巻いたゴダンの裏拳が横から来る。止めのあと、飛ばされた相手を追って岩壁まで振る',
       actorPose: { attacker: '体を逆へ巻く→踏み込んで左の裏拳（横の軌道）→止め', target: '横殴りで体ごと持っていかれる→止め→飛ばされて岩壁に張り付く' },
       camera: { rig: 'over-target-shoulder-whip', move: '肩越し→当たりで止まる→飛ぶ相手を追って岩壁へ振る', keys: [
-        k(3.60, ['target.head', 0.50, 0.10, 0.52], ['attacker.head', 0, -0.06, 0], 42, 6), k(4.00, ['target.head', 0.46, 0.08, 0.50], ['attacker.pawL', 0, 0, 0], 38, 9, 'inQuad'),
-        k(4.45, ['target.head', 0.44, 0.08, 0.48], ['attacker.pawL', 0, 0, 0], 36, 10, 'linear'), k(4.80, ['stage', 1.05, 0.42, 1.75], ['target.chest', 0, 0, 0], 44, -4, 'outExpo'), k(5.00, ['stage', 1.08, 0.40, 1.70], ['target.chest', 0, 0, 0], 42, -2, 'outQuad')] },
+        k(3.60, ['target.head', 0.60, 0.22, 1.00], ['attacker.head', 0.10, -0.06, 0], 44, 6), k(4.00, ['target.head', 0.56, 0.20, 0.96], ['attacker.pawL', 0.05, 0, 0], 40, 9, 'inQuad'),
+        k(4.45, ['target.head', 0.54, 0.20, 0.94], ['attacker.pawL', 0.05, 0, 0], 38, 10, 'linear'), k(4.80, ['stage', 1.05, 0.42, 1.75], ['target.chest', 0, 0, 0], 44, -4, 'outExpo'), k(5.00, ['stage', 1.08, 0.40, 1.70], ['target.chest', 0, 0, 0], 42, -2, 'outQuad')] },
       cues: [{ at: 4.00, type: 'hitstop', dur: 0.45, strength: 'heavy' }, { at: 4.00, type: 'vfx', key: 'flash', dur: 0.1, opacity: 0.45 }, { at: 4.00, type: 'vfx', key: 'impact_burst', anchor: 'target.head', offset: [-0.06, -0.04, 0.04], size: 0.7, rays: 14, color: 0xffd8a8 },
         { at: 4.00, type: 'vfx', key: 'slash_arc', anchor: 'attacker.pawL', size: 0.7, angle: 0, sweep: 1.4, color: 0xffb070 }, { at: 4.00, type: 'shake', dur: 0.45, amp: 0.06 }, { at: 4.00, type: 'sfx', key: 'ult_hit_strike2' },
         { at: 4.46, type: 'vfx', key: 'speed_lines', dur: 0.3, opacity: 0.4 }, { at: 4.80, type: 'shake', dur: 0.4, amp: 0.05 }, { at: 4.80, type: 'vfx', key: 'dust', anchor: 'target.chest', count: 12, spread: 0.5 }, { at: 4.80, type: 'vfx', key: 'debris', anchor: 'target.chest', count: 10, power: 1.2 }, { at: 4.80, type: 'sfx', key: 'wall_slam' }] },
     { id: '05-advance', title: '歩み寄る', start: 5.0, end: 6.6, intent: 'ゴダンの正面・低い位置から、歩みに合わせて後ろへ下がるカメラ。一歩ごとに画面が揺れる',
       actorPose: { attacker: '両拳を腰に引き、重い二歩で詰める', target: '岩壁からずり落ちて座り込む（画面外）' },
       camera: { rig: 'retreating-low-front', move: '被写体と同じ速さで後退', keys: [
-        k(5.00, ['attacker.root', 0.95, 0.12, 0.34], ['attacker.head', 0, -0.10, 0], 38, 3), k(5.98, ['attacker.root', 0.90, 0.10, 0.30], ['attacker.head', 0, -0.10, 0], 40, 0, 'linear'), k(6.60, ['attacker.root', 0.72, 0.08, 0.26], ['attacker.head', 0, -0.12, 0], 44, -3, 'inOutQuad')] },
+        k(5.00, ['attacker.root', 0.95, 0.12, 0.36], ['attacker.head', 0, -0.10, 0], 38, 3), k(5.98, ['attacker.root', 0.62, 0.10, 0.46], ['attacker.head', 0, -0.10, 0], 42, 0, 'linear'), k(6.60, ['attacker.root', 0.50, 0.08, 0.50], ['attacker.head', 0, -0.12, 0], 46, -3, 'inOutQuad')] },
       cues: [{ at: 5.48, type: 'shake', dur: 0.3, amp: 0.04 }, { at: 5.48, type: 'vfx', key: 'dust', anchor: 'attacker.footR', count: 7, spread: 0.3 }, { at: 5.48, type: 'sfx', key: 'heavy_step' },
         { at: 5.98, type: 'shake', dur: 0.3, amp: 0.045 }, { at: 5.98, type: 'vfx', key: 'dust', anchor: 'attacker.footL', count: 7, spread: 0.3 }, { at: 5.98, type: 'sfx', key: 'heavy_step' }, { at: 6.2, type: 'vfx', key: 'aura', anchor: 'attacker.root', dur: 0.9, color: 0xff9050, height: 1.1, opacity: 0.24 }, { at: 6.2, type: 'sfx', key: 'charge_big' }] },
     { id: '06-strike-three', title: '第三撃・双掌', start: 6.6, end: 8.2, intent: '真横の引きでゴダン・相手・岩壁を1枚に入れ、当たりで一気に寄って最長の止め。止めが解けると同時に岩壁が砕け、引く',

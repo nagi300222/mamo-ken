@@ -587,7 +587,7 @@
   {
    "name": "pisuke ムービー: 動くカメラ（2キー以上）のカットが過半",
    "pass": true,
-   "detail": "3/3/3/4/2/3/5/3/2"
+   "detail": "3/3/3/4/2/4/5/4/2"
   },
   {
    "name": "godan ムービー: 9〜11秒・6〜10カット・カメラの型がすべて別",
@@ -732,7 +732,7 @@
   {
    "name": "ムービー動画あり yomikage",
    "pass": true,
-   "detail": "yomikage_ultimate_10s_vs_moguzo.mp4"
+   "detail": "yomikage_ultimate_10s_vs_moguzo.mp4, yomikage_ultimate_10s_vs_takimaru.mp4"
   },
   {
    "name": "ムービー動画あり bullet",

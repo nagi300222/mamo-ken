@@ -1,12 +1,13 @@
 // バレット奥義「超圧縮・弾丸頭突き」命中後ムービー 10.2秒版の絵コンテ（編集用の正本）。座標・単位・hitstop の扱いは moguzo.mjs の冒頭と同じ。
 // 本人指定: 尻尾主体の重い打撃を浴びせ、爆発する木の実を投げる。最後は振り向き、背後で相手が爆発する。
 // カメラの文法: 「尻尾が主役、木の実が脇役」。前半は尻尾の先を追う低いカメラ。中盤は木の実に付いて飛ぶカメラ。最後は爆発に背を向けた正面で動かない。
-// 現行の技名は「頭突き」で、この内容と合わない。改名案は README / PR に書いた（実装名は変えていない）。
+// 確認版の表示名は「尾連・爆ぜ木の実」（ナギ承認の確認版名）。ゲーム側の技名「超圧縮・弾丸頭突き」と性能値は変えていない。
 const D = 0.50, AX = -D / 2, SIT = 1.62;
 const k = (t, pos, look, fov, roll = 0, ease) => ({ t, pos, look, fov, roll, ease });
 const blow = (at, dur, size, where) => [{ at, type: 'hitstop', dur, strength: dur > 0.35 ? 'max' : 'heavy' }, { at, type: 'vfx', key: 'flash', dur: 0.1, opacity: 0.4 }, { at, type: 'vfx', key: 'impact_burst', anchor: where, size, color: 0xffe2a8 }, { at, type: 'shake', dur, amp: 0.055 }, { at, type: 'sfx', key: 'ult_hit_tail' }];
 export default {
-  characterId: 'bullet', displayName: '超圧縮・弾丸頭突き', durationSeconds: 10.2,
+  characterId: 'bullet', displayName: '尾連・爆ぜ木の実', durationSeconds: 10.2,
+  nameNote: { reviewName: '尾連・爆ぜ木の実', gameName: '超圧縮・弾丸頭突き', note: '今回の確認版の表示名。balance.js の技名と性能値は変えていない。本採用するかはナギの判断' },
   concept: '尻尾の横薙ぎ・叩きつけ・すくい上げで座り込ませ、木の実をひざの上へ放り、背を向けたところで爆発させる。',
   stage: { contactDistance: D, backdrop: 0x2a1c10, fog: 0x2a1c10, fogNear: 5, fogFar: 18, sky: 0xffe6c0, ground: 0x4a3420, ambient: 1.35, key: 0xffdca8, keyPower: 2.8, rim: 0xff9a30, rimPower: 2.2,
     floor: 0x5c4630, mountain: 0x3a2a1a, post: 0x6e5030, accent: 0xffb045, accentCss: '#ffb045' },
@@ -45,7 +46,7 @@ export default {
         { at: 5.32, type: 'vfx', key: 'nut', from: [0.42, 0.50, 0.06], toAnchor: 'target.pelvis', to: [-0.06, 0.12, 0], fly: 1.45, stick: 0.85, arc: 0.55, size: 0.04 }, { at: 5.32, type: 'sfx', key: 'nut_lob' }] },
     { id: '06-nut-flight', title: '木の実の飛行', start: 5.8, end: 7.0, intent: '木の実と同じ速さで飛ぶ。ゆっくり回りながら近づく先で、相手が首をかしげ、ひざの上に落ちた実を見下ろす',
       actorPose: { attacker: '投げた手を下ろして見ている（画面外）', target: '首をかしげる→ひざの上の木の実を見下ろす' },
-      camera: { rig: 'nut-chase', move: '木の実の軌道に沿って相手のひざまで進む', keys: [k(5.80, ['stage', 0.62, 0.72, 0.34], ['target.head', 0, -0.04, 0], 42, -6), k(6.40, ['stage', 1.05, 0.70, 0.30], ['target.head', 0, -0.06, 0], 38, -3, 'linear'), k(6.77, ['stage', 1.26, 0.50, 0.30], ['target.pelvis', -0.04, 0.10, 0], 34, 0, 'linear'), k(7.00, ['stage', 1.28, 0.46, 0.32], ['target.pelvis', -0.04, 0.10, 0], 32, 0, 'outQuad')] },
+      camera: { rig: 'nut-chase', move: '木の実の軌道に沿って相手のひざまで進む', keys: [k(5.80, ['stage', 0.62, 0.72, 0.34], ['target.head', 0, -0.04, 0], 42, -6), k(6.40, ['stage', 1.05, 0.70, 0.30], ['target.head', 0, -0.06, 0], 38, -3, 'linear'), k(6.77, ['stage', 1.12, 0.56, 0.80], ['target.pelvis', -0.04, 0.12, 0], 36, 0, 'linear'), k(7.00, ['stage', 1.14, 0.52, 0.82], ['target.pelvis', -0.04, 0.12, 0], 34, 0, 'outQuad')] },
       cues: [{ at: 6.20, type: 'sfx', key: 'huh' }, { at: 6.77, type: 'sfx', key: 'nut_land_tick' }, { at: 6.80, type: 'sfx', key: 'fuse_beep' }] },
     { id: '07-turn-and-boom', title: '背を向ける', start: 7.0, end: 8.6, intent: 'バレットの正面・低い位置で固定。こちらへ向き直って腕を下ろした背後で大爆発。爆炎が輪郭を縁取る。振り返らない',
       actorPose: { attacker: '背を向けて腕を下ろす。尻尾だけがゆっくり揺れ、爆風でも振り返らない', target: '慌てて両手を上げる→爆発で吹き飛ぶ' },
@@ -56,7 +57,7 @@ export default {
     { id: '08-calm', title: '落ち着いた顔', start: 8.6, end: 10.2, intent: '顔の寄りから少し引く。目を閉じた顔と、ゆっくり揺れる尻尾。奥で相手が煙を上げて落ちる',
       actorPose: { attacker: '目を閉じ、尻尾をゆっくり揺らす', target: '奥に落ちて跳ね、止まる' },
       camera: { rig: 'face-to-tail-ease', move: '顔の寄りからゆっくり引く', keys: [k(8.60, ['attacker.head', -0.50, 0.02, 0.52], ['attacker.head', 0, -0.02, 0], 28, 3), k(10.2, ['attacker.head', -0.95, 0.02, 0.80], ['attacker.chest', 0.10, 0.04, 0], 36, 0, 'inOutQuad')] },
-      cues: [{ at: 9.10, type: 'vfx', key: 'dust', anchor: 'target.root', count: 10, spread: 0.5, color: 0x3a3028 }, { at: 9.10, type: 'sfx', key: 'body_land' }, { at: 9.10, type: 'shake', dur: 0.25, amp: 0.03 }, { at: 9.40, type: 'sfx', key: 'finish_pose' }, { at: 9.30, type: 'caption', dur: 0.75, text: '超圧縮・弾丸頭突き', sub: 'バレット' }] },
+      cues: [{ at: 9.10, type: 'vfx', key: 'dust', anchor: 'target.root', count: 10, spread: 0.5, color: 0x3a3028 }, { at: 9.10, type: 'sfx', key: 'body_land' }, { at: 9.10, type: 'shake', dur: 0.25, amp: 0.03 }, { at: 9.40, type: 'sfx', key: 'finish_pose' }, { at: 9.30, type: 'caption', dur: 0.75, text: '尾連・爆ぜ木の実', sub: 'バレット' }] },
   ],
   reducedMotion: { useShots: ['04-scoop', '07-turn-and-boom', '08-calm'], disable: ['shake', 'flash', 'speed_lines'], note: '3 カットを固定カメラ（各ショットの最初のキー）で見せる。爆発は残す。役者とキューの時刻は変えない' },
 };

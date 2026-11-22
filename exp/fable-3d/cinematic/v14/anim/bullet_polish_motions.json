@@ -1,0 +1,215 @@
+{
+ "id": "bullet",
+ "kind": "animation-only pack",
+ "glb": "cinematic/v14/anim/bullet_polish_anim.glb",
+ "bind_to": "chars/bullet/bullet.glb（または bullet_v14.glb）。骨とメッシュのノード名で結び付く",
+ "fps": 60,
+ "authoring": "tools/mamo3d/motions_v14b.py",
+ "build": "tools/build_polish.py",
+ "clips": {
+  "s3_v14": {
+   "frames": 48,
+   "fps": 60,
+   "duration_sec": 0.8,
+   "loop": false,
+   "group": "special",
+   "priority": 3,
+   "start_pose": "idle",
+   "end_pose": "idle",
+   "v2": true,
+   "v14": true,
+   "provisional": true,
+   "character": "bullet",
+   "move_id": "s3",
+   "name_jp": "尾薙ぎ",
+   "startup": 19,
+   "active": 6,
+   "recovery": 23,
+   "contact_frame": 19,
+   "balance_frames_total": 48,
+   "attack_limb": "tail",
+   "fx_anchor": "tail",
+   "reach_part": "tail",
+   "tail_source": "sp_tail_whip",
+   "tail_preserved": true,
+   "silhouette": "胸を後ろへひねり、手前の腕を大きく引く(F8-10)→跳ねて踏み替え(F13)→両腕を左右に開き、頭だけ相手へ残して尻尾が届く(F16-25)→腕を畳んで戻る",
+   "note": "骨盤と尻尾は現行 sp_tail_whip のキーをそのまま使う（先端の軌道は同一。検証は validation/bullet_s3_tail.json）。変えたのは背骨・胸・首・頭・両腕・足の跳ねる高さだけ。対戦用クリップの「当たりを 2F 早める」処理はこのクリップには掛けない",
+   "tail_tip_max_forward_m": 0.6506,
+   "tail_tip_max_forward_frame": 24,
+   "tail_tip_height_at_max_m": 0.248,
+   "tail_tip_side_at_max_m": -0.0602,
+   "tail_tip_min_height_m": 0.1576,
+   "tail_to_body_axis_min_m": 0.2341,
+   "tail_tip_path": [
+    [
+     0,
+     -0.588,
+     -0.061,
+     0.2
+    ],
+    [
+     2,
+     -0.584,
+     -0.018,
+     0.168
+    ],
+    [
+     4,
+     -0.56,
+     0.146,
+     0.163
+    ],
+    [
+     6,
+     -0.48,
+     0.378,
+     0.205
+    ],
+    [
+     8,
+     -0.313,
+     0.55,
+     0.249
+    ],
+    [
+     10,
+     -0.148,
+     0.592,
+     0.266
+    ],
+    [
+     12,
+     -0.116,
+     0.459,
+     0.223
+    ],
+    [
+     14,
+     -0.223,
+     0.055,
+     0.196
+    ],
+    [
+     16,
+     -0.13,
+     -0.255,
+     0.217
+    ],
+    [
+     18,
+     0.168,
+     -0.385,
+     0.236
+    ],
+    [
+     20,
+     0.447,
+     -0.343,
+     0.252
+    ],
+    [
+     22,
+     0.611,
+     -0.2,
+     0.255
+    ],
+    [
+     24,
+     0.651,
+     -0.06,
+     0.248
+    ],
+    [
+     26,
+     0.624,
+     -0.044,
+     0.241
+    ],
+    [
+     28,
+     0.616,
+     -0.117,
+     0.247
+    ],
+    [
+     30,
+     0.562,
+     -0.18,
+     0.234
+    ],
+    [
+     32,
+     0.412,
+     -0.267,
+     0.214
+    ],
+    [
+     34,
+     0.226,
+     -0.407,
+     0.226
+    ],
+    [
+     36,
+     0.028,
+     -0.536,
+     0.265
+    ],
+    [
+     38,
+     -0.133,
+     -0.571,
+     0.294
+    ],
+    [
+     40,
+     -0.199,
+     -0.528,
+     0.29
+    ],
+    [
+     42,
+     -0.26,
+     -0.444,
+     0.261
+    ],
+    [
+     44,
+     -0.415,
+     -0.317,
+     0.234
+    ],
+    [
+     46,
+     -0.562,
+     -0.137,
+     0.21
+    ],
+    [
+     48,
+     -0.588,
+     -0.061,
+     0.2
+    ]
+   ],
+   "tail_tip_path_columns": [
+    "frame",
+    "forward_m",
+    "left_m",
+    "height_m"
+   ],
+   "warnings": [
+    "handL reach 0.192 > 0.185",
+    "handL reach 0.195 > 0.185",
+    "handL reach 0.198 > 0.185"
+   ]
+  }
+ },
+ "integration": {
+  "use": "command_map の '214' を 's3_v14' へ向けると尾薙ぎの見た目が替わる。尻尾の軌道は sp_tail_whip と同じ",
+  "suggested_command_map": {
+   "214": "s3_v14"
+  },
+  "tail_path_source_note": "main.js は meta.clips.sp_tail_whip.tail_tip_path を読む。この値は変えていない（s3_v14 にも同じ値を入れてある）"
+ }
+}

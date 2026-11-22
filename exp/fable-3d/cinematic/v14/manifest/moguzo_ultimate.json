@@ -639,20 +639,20 @@
       "pos": {
        "anchor": "target.head",
        "offset": [
-        -0.5,
+        -0.55,
         -0.16,
-        1.05
+        1.1
        ]
       },
       "look": {
        "anchor": "target.head",
        "offset": [
-        -0.14,
-        -0.1,
+        -0.2,
+        -0.12,
         0
        ]
       },
-      "fov": 31,
+      "fov": 36,
       "roll": -10,
       "ease": "inExpo"
      },
@@ -661,20 +661,20 @@
       "pos": {
        "anchor": "target.head",
        "offset": [
-        -0.44,
+        -0.5,
         -0.14,
-        0.9
+        0.98
        ]
       },
       "look": {
        "anchor": "target.head",
        "offset": [
-        -0.14,
-        -0.1,
+        -0.2,
+        -0.12,
         0
        ]
       },
-      "fov": 28,
+      "fov": 33,
       "roll": -13,
       "ease": "linear"
      },
@@ -1317,20 +1317,20 @@
     "position": {
      "anchor": "stage",
      "offset": [
-      -1.5,
-      4.6,
-      3.9
+      -0.9,
+      5,
+      2.5
      ]
     },
     "lookAt": {
      "anchor": "stage",
      "offset": [
       0.32,
-      5.85,
+      5.95,
       0
      ]
     },
-    "fov": 40,
+    "fov": 42,
     "rollDeg": -6,
     "easing": "inOutCubic",
     "move": "遠景固定→止めの後、落下を追ってティルトダウン",
@@ -1340,31 +1340,9 @@
       "pos": {
        "anchor": "stage",
        "offset": [
-        -1.5,
-        4.6,
-        3.9
-       ]
-      },
-      "look": {
-       "anchor": "stage",
-       "offset": [
-        0.32,
-        5.85,
-        0
-       ]
-      },
-      "fov": 40,
-      "roll": -6,
-      "ease": "inOutCubic"
-     },
-     {
-      "t": 6.6,
-      "pos": {
-       "anchor": "stage",
-       "offset": [
-        -1.3,
-        4.7,
-        3.5
+        -0.9,
+        5,
+        2.5
        ]
       },
       "look": {
@@ -1375,7 +1353,29 @@
         0
        ]
       },
-      "fov": 37,
+      "fov": 42,
+      "roll": -6,
+      "ease": "inOutCubic"
+     },
+     {
+      "t": 6.6,
+      "pos": {
+       "anchor": "stage",
+       "offset": [
+        -0.8,
+        5.1,
+        2.3
+       ]
+      },
+      "look": {
+       "anchor": "stage",
+       "offset": [
+        0.32,
+        6,
+        0
+       ]
+      },
+      "fov": 40,
       "roll": -3,
       "ease": "linear"
      },
