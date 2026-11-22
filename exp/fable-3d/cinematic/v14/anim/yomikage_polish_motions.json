@@ -1,0 +1,45 @@
+{
+ "id": "yomikage",
+ "kind": "animation-only pack",
+ "glb": "cinematic/v14/anim/yomikage_polish_anim.glb",
+ "bind_to": "chars/yomikage/yomikage.glb（または yomikage_v14.glb）。骨とメッシュのノード名で結び付く",
+ "fps": 60,
+ "authoring": "tools/mamo3d/motions_v14b.py",
+ "build": "tools/build_polish.py",
+ "clips": {
+  "counter_success_v14": {
+   "frames": 21,
+   "fps": 60,
+   "duration_sec": 0.35,
+   "loop": false,
+   "group": "reaction_success",
+   "priority": 3,
+   "start_pose": "s3_v14 の待ち（F4-20 のどこからでも近い）",
+   "end_pose": "idle",
+   "v2": true,
+   "v14": true,
+   "provisional": true,
+   "character": "yomikage",
+   "move_id": "s3",
+   "name_jp": "受け返し・返し",
+   "presentation_only": true,
+   "interrupt": "新しい行動・被弾で即中断してよい",
+   "parry_frame": 3,
+   "strike_frame": 7,
+   "strike_hold": [
+    7,
+    12
+   ],
+   "root_shift_leg": 0.14,
+   "attack_limb": "pawR",
+   "fx_anchor": "pawR",
+   "silhouette": "奥の掌が外へ開いて受け流す(F3)→半歩入り、手前の掌底があごの高さへ突き上がる(F7-12)→構えへ(F21)",
+   "note": "Battle は当て身成立時に action=null へ戻るので、このクリップは見た目だけの割り込み。判定・ダメージ・硬直には関与しない。移動は半歩ぶんの腰の前進だけ（root は動かさない）"
+  }
+ },
+ "integration": {
+  "use": "当て身（s3）成立の瞬間に、見た目だけ割り込ませる。Battle の状態・判定・ダメージには関与しない",
+  "start_from": "s3_v14 の待ちの姿勢",
+  "interrupt": "新しい行動・被弾で即中断"
+ }
+}

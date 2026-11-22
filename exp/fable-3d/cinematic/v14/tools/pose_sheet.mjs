@@ -12,7 +12,7 @@ const browser = await pw.chromium.launch({ args: ['--use-angle=swiftshader', '--
 const tmp = fs.mkdtempSync('/tmp/pose-'); const rows = [];
 for (const view of views) {
   const page = await browser.newPage({ viewport: { width: W, height: H } }); page.on('pageerror', e => console.log('JS', e.message));
-  const q = new URLSearchParams({ clip, id, view, bare: 1, hw: arg('hw', '0.62') }); for (const k of ['foe', 'dist', 'base', 'dx', 'dn']) if (arg(k)) q.set(k, arg(k));
+  const q = new URLSearchParams({ clip, id, view, bare: 1, hw: arg('hw', '0.62') }); for (const k of ['foe', 'dist', 'base', 'dx', 'dn', 'anim']) if (arg(k)) q.set(k, arg(k));
   await page.goto(`http://127.0.0.1:${srv.address().port}/exp/fable-3d/cinematic/v14/player/index.html?${q}`); await page.waitForFunction(() => window.cine?.ready || window.cine?.error, null, { timeout: 60000 });
   const err = await page.evaluate(() => window.cine.error); if (err) { console.log(err); process.exit(1); }
   const fl = []; for (const f of frames) { await page.evaluate(([f, c]) => window.cine.frame(f, c), [f, clip]); const p = path.join(tmp, `${view}_${String(f).padStart(4, '0')}.png`); await page.screenshot({ path: p }); fl.push(p); }

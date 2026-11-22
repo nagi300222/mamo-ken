@@ -84,7 +84,9 @@ async function clipMode() {
   const view = Q.get('view') || 'match', H = a.height; let cam = camera;
   if (view === 'match') { const hw = +Q.get('hw') || 1.3, asp = camera.aspect; cam = new THREE.OrthographicCamera(-hw, hw, hw / asp, -hw / asp, .01, 30); cam.position.set(0, .5 + .70, 5.5); cam.lookAt(0, .5, 0); }
   else { const P = { '34': [1.25, .55, 1.45], front: [1.9, .4, 0], top: [.01, 2.4, .3], side: [0, .4, 2.0], back34: [-1.3, .6, 1.3] }[view] || [1.2, .5, 1.4]; camera.position.set(P[0] + a.root.position.x, P[1], P[2]); camera.lookAt(a.root.position.x + .1, H * .55, 0); camera.fov = 30; camera.updateProjectionMatrix(); }
+  if (Q.get('anim')) { const extra = await loader.loadAsync(new URL(Q.get('anim'), V14).href); for (const c of extra.animations) a.clips[c.name] = c; }      // アニメ専用 GLB のクリップを、いま読んだモデルへ名前で結び付けて再生する
   let act = null, name = null;
+  cine.bones = () => { const o = {}; a.scene.traverse(n => { if (n.isBone) { const v = new THREE.Vector3(); n.getWorldPosition(v); o[n.name] = [v.x, v.y, v.z]; } }); let w = null; a.scene.traverse(n => { if (n.isSkinnedMesh && n.morphTargetInfluences) w = [...n.morphTargetInfluences]; }); return { bones: o, weights: w }; };
   cine.clips = Object.keys(a.clips); cine.meta = a.meta;
   cine.frame = (n, clip = Q.get('clip') || 'idle') => { if (clip !== name) { if (act) act.stop(); act = a.mixer.clipAction(a.clips[clip]); act.setLoop(THREE.LoopOnce, 1); act.clampWhenFinished = true; act.play(); name = clip; }
     act.paused = true; act.time = Math.min(a.clips[clip].duration, n / 60); a.mixer.update(0); if (Q.get('dx')) a.root.position.x = (foeId ? -dist / 2 : 0) + (+Q.get('dx')) * Math.min(1, n / (+Q.get('dn') || 1));

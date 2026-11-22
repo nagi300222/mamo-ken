@@ -406,6 +406,50 @@ def bullet_ult(cid):
     return dict(frames=N, loop=False, fn=keyed(keys), **TAILFX, info=minfo(cid, 'ultimate', '超圧縮・弾丸頭突き', st, ac, N, attack_limb='tail', fx_anchor='tail', movie_on_hit='manifest/bullet_ultimate.json',
                 silhouette='体を反対へひねって尻尾を後ろへ引く(F7)→半回転して背を向け、尻尾が横から前へ回り込む(F12-21)', note='旧 super（頭から飛ぶ）を、本人指定（尻尾主体）に合わせて尻尾の横打ちに替えた。技名「頭突き」と合わなくなるので改名を別途提案'))
 
+# ---- 実機前の仕上げ（device polish）----
+def yomikage_counter_success(cid):
+    """受け返し成立時の返し技（見た目だけの割り込み用・約0.35秒）: 待ちの姿勢から、奥の掌で外へ受け流し、半歩入って手前の掌底を鋭く突き上げる。"""
+    n0 = neutral(cid); N = 21; wait = plain(yomikage_s3(cid)['fn'](10))
+    parry = merge(wait, pelvis=pel(n0, (0, -0.12, -0.14), (-2, -34, 0)), chest=add(n0['chest'], (-2, -20, 0)), neck=add(n0['neck'], (0, 20, 0)), head=add(n0['head'], (-4, 40, 0)),
+                  handL=W((0.34, 0.62, 0.10), fwd=(0.5, 0.6, 0.6), back=(-0.6, 0.8, 0), elbow=(0.6, 0.2, -0.7)), handR=P((0.20, -0.25, -0.40), fwd=(0, 0.9, 0.3), back=(0.9, 0, 0.3), elbow=(0.5, -0.8, -0.2)),
+                  tail=(-10, 20), jaw=2.0, keys=K(n0, paw_open_L=1.0, paw_open_R=1.0, brow_angry=1.0, blink=0.0))
+    strike = merge(n0, pelvis=pel(n0, (0, 0.14, -0.20), (8, 40, 0)), spine=add(n0['spine'], (2, 8, 0)), chest=add(n0['chest'], (4, 22, 0)), neck=add(n0['neck'], (0, -24, 0)), head=add(n0['head'], (-8, -40, 0)),
+                   handR=W((-0.14, 0.86, 0.34), fwd=(0, 0.2, 0.98), back=(0, -0.98, 0.2), elbow=(0.8, -0.2, -0.55)), handL=P((0.26, -0.20, -0.30), fwd=(0, 0.9, 0.2), back=(0.9, 0, 0.3), elbow=(0.6, -0.8, 0)),
+                   footL=foot(n0, 'footL', (0, 0.20, 0)), footR=foot(n0, 'footR', (0, 0.0, 0), pitch=26), tail=(-20, -10), jaw=6.0, keys=K(n0, paw_open_L=0.4, paw_open_R=1.0, brow_angry=1.0))
+    settle = merge(n0, pelvis=pel(n0, (0, 0.06, -0.06), (2, 10, 0)), handR=P((0.10, 0.40, 0.10)), keys=K(n0, brow_angry=0.6))
+    keys = [(0, wait), (3, parry, 'out3'), (4, parry, 'lin'), (7, strike, 'in3'), (12, merge(strike, pelvis=pel(n0, (0, 0.16, -0.21), (8, 42, 0))), 'lin'), (17, settle, 'out'), (N, n0, 'io')]
+    return dict(frames=N, loop=False, fn=keyed(keys), info=dict(group='reaction_success', priority=3, start_pose='s3_v14 の待ち（F4-20 のどこからでも近い）', end_pose='idle', v2=True, v14=True, provisional=True, character=cid, move_id='s3',
+                name_jp='受け返し・返し', presentation_only=True, interrupt='新しい行動・被弾で即中断してよい', parry_frame=3, strike_frame=7, strike_hold=[7, 12], root_shift_leg=0.14, attack_limb='pawR', fx_anchor='pawR',
+                silhouette='奥の掌が外へ開いて受け流す(F3)→半歩入り、手前の掌底があごの高さへ突き上がる(F7-12)→構えへ(F21)',
+                note='Battle は当て身成立時に action=null へ戻るので、このクリップは見た目だけの割り込み。判定・ダメージ・硬直には関与しない。移動は半歩ぶんの腰の前進だけ（root は動かさない）'))
+
+_TAIL_KEYS = ((0, None), (8, 'out'), (10, 'lin'), (13, 'in'), (16, 'lin'), (21, 'lin'), (27, 'out'), (34, 'io'), (48, 'io'))        # 現行 sp_tail_whip のキー（フレーム, 緩急）
+def bullet_s3(cid):
+    """尾薙ぎ: 現行 sp_tail_whip の骨盤と尻尾のキーを 1 つも変えず（＝尻尾先端の軌道が同じ）、上体・腕・頭・足の高さだけを作り直す。"""
+    n0 = neutral(cid); base = M.sp_tail_whip(cid); fn0 = base['fn']; N = base['frames']
+    arm = lambda o, f, u, op=0.0: P((o, f, u), fwd=(0.3, 0.3, 0.9), back=(0.8, -0.5, 0), elbow=(0.6, -0.6, -0.4))
+    over = {      # フレーム → 上書き（pelvis・tail・tail_bones は入れない）
+        8: dict(spine=add(n0['spine'], (10, -8, 0)), chest=add(n0['chest'], (14, -30, 0)), neck=add(n0['neck'], (-6, 30, 0)), head=add(n0['head'], (-8, 60, 0)), handL=arm(0.10, 0.50, 0.10), handR=arm(0.55, -0.50, 0.30), jaw=4.0, keys=K(n0, brow_angry=1.0, paw_open_R=1.0)),
+        10: dict(spine=add(n0['spine'], (12, -10, 0)), chest=add(n0['chest'], (16, -34, 0)), neck=add(n0['neck'], (-6, 30, 0)), head=add(n0['head'], (-8, 64, 0)), handL=arm(0.10, 0.50, 0.10), handR=arm(0.60, -0.55, 0.34), jaw=4.0, keys=K(n0, brow_angry=1.0, paw_open_R=1.0)),
+        13: dict(spine=add(n0['spine'], (4, 10, 0)), chest=add(n0['chest'], (4, 10, 0)), handL=arm(0.70, 0.10, 0.40), handR=arm(0.40, 0.30, 0.10), jaw=10.0, keys=K(n0, brow_angry=1.0, paw_open_L=1.0, paw_open_R=1.0)),
+        16: dict(spine=add(n0['spine'], (-4, 14, 0)), chest=add(n0['chest'], (-8, 26, 0)), neck=add(n0['neck'], (0, -60, 0)), head=add(n0['head'], (-4, -84, 0)), handL=arm(0.90, -0.10, 0.50), handR=arm(0.80, 0.20, 0.30), jaw=16.0, keys=K(n0, brow_angry=1.0, paw_open_L=1.0, paw_open_R=1.0)),
+        21: dict(spine=add(n0['spine'], (-6, 16, 0)), chest=add(n0['chest'], (-10, 30, 0)), neck=add(n0['neck'], (0, -64, 0)), head=add(n0['head'], (-6, -90, 0)), handL=arm(0.95, -0.20, 0.56), handR=arm(0.85, 0.20, 0.34), jaw=16.0, keys=K(n0, brow_angry=1.0, paw_open_L=1.0, paw_open_R=1.0)),
+        27: dict(spine=add(n0['spine'], (-2, 10, 0)), chest=add(n0['chest'], (-4, 18, 0)), neck=add(n0['neck'], (0, -56, 0)), head=add(n0['head'], (0, -80, 0)), handL=arm(0.60, 0.0, -0.20), handR=arm(0.30, 0.30, 0.50), jaw=6.0, keys=K(n0, brow_angry=0.8)),
+        34: dict(handL=arm(0.30, 0.20, -0.10), handR=arm(0.30, 0.20, 0.10), keys=K(n0, brow_angry=0.6)),
+    }
+    lift = {13: 0.34, 34: 0.26}          # 跳ねて踏み替えるときの足の高さ（現行 0.20 / 0.18 を大きく）
+    keys = []
+    for f, ease in _TAIL_KEYS:
+        q = plain(fn0(f)); o = over.get(f)
+        if o: q = merge(q, **o)
+        if f in lift:
+            for kf in ('footL', 'footR'): q[kf] = dict(q[kf], pos=(q[kf]['pos'][0], q[kf]['pos'][1], lift[f]))
+        keys.append((f, q) if ease is None else (f, q, ease))
+    return dict(frames=N, loop=False, fn=keyed(keys), tail_stiff=base['tail_stiff'], tail_follow=base['tail_follow'], measure_tail=True,
+                info=minfo(cid, 's3', '尾薙ぎ', 19, 6, N, attack_limb='tail', fx_anchor='tail', reach_part='tail', tail_source='sp_tail_whip', tail_preserved=True,
+                           silhouette='胸を後ろへひねり、手前の腕を大きく引く(F8-10)→跳ねて踏み替え(F13)→両腕を左右に開き、頭だけ相手へ残して尻尾が届く(F16-25)→腕を畳んで戻る',
+                           note='骨盤と尻尾は現行 sp_tail_whip のキーをそのまま使う（先端の軌道は同一。検証は validation/bullet_s3_tail.json）。変えたのは背骨・胸・首・頭・両腕・足の跳ねる高さだけ。対戦用クリップの「当たりを 2F 早める」処理はこのクリップには掛けない'))
+
 # =====================================================================
 # ダークモグゾー（高速連携・低耐久 / 闇）
 # =====================================================================
@@ -588,6 +632,9 @@ SPECIALS_B = dict(s1_v14=dict(pisuke=pisuke_s1, hakuma=hakuma_s1, takimaru=takim
 # バレットの尾薙ぎは、当たりの間合いがクリップの尻尾先端の軌道（tail_tip_path）と結び付いている（balance.js の tailTipAt / battle.js の tailTipSamples）。
 # 見た目を替えると判定の根拠がずれるので、s3 は現行クリップを維持し、command_map の 214 を書き換えない。
 COMMAND_KEEP = dict(bullet=('214',))
+# 実機前の仕上げで足したクリップ。既定のビルド（clips_for）には入れず、tools/build_polish.py がアニメ専用 GLB として出す
+POLISH = dict(counter_success_v14=dict(yomikage=yomikage_counter_success), s3_v14=dict(bullet=bullet_s3))
+NO_LEAD = {('bullet', 's3_v14')}
 CINE_ATK_B = dict(cin_pisuke_atk=dict(pisuke=cin_pisuke_atk), cin_hakuma_atk=dict(hakuma=cin_hakuma_atk), cin_takimaru_atk=dict(takimaru=cin_takimaru_atk),
                   cin_yomikage_atk=dict(yomikage=cin_yomikage_atk), cin_bullet_atk=dict(bullet=cin_bullet_atk), cin_dark_moguzo_atk=dict(dark_moguzo=cin_dark_atk))
 CINE_VICTIM_B = dict(cinv_pisuke=cinv_pisuke, cinv_hakuma=cinv_hakuma, cinv_takimaru=cinv_takimaru, cinv_yomikage=cinv_yomikage, cinv_bullet=cinv_bullet, cinv_dark_moguzo=cinv_dark)
