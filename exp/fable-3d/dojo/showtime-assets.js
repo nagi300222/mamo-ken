@@ -71,10 +71,10 @@ export function validateMoveManifest(manifest, id, moveId) {
   }
   const { durationSeconds, shots, animationSources, cueTrack = [] } = manifest;
   requireValue(manifest.trigger === 'confirmed_unblocked_ultimate_hit' && manifest.runtime === 'threejs' &&
-    Number.isFinite(durationSeconds) && durationSeconds > 0 && durationSeconds <= 8 &&
+    Number.isFinite(durationSeconds) && durationSeconds >= 9 && durationSeconds <= 11 &&
     source(animationSources.target), 'Invalid cinematic playback: ' + label);
-  requireValue(Array.isArray(shots) && shots.length >= 4 && shots.length <= 7,
-    'Expected 4–7 shots: ' + label);
+  requireValue(Array.isArray(shots) && shots.length >= 2,
+    'Expected independent camera shots: ' + label);
   let end = 0;
   const shotIds = new Set();
   for (const shot of shots) {

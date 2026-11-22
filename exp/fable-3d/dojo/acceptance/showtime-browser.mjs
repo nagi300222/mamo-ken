@@ -19,9 +19,9 @@ if(authoredFixture){
   const common={schemaVersion:1,characterId:'chirka'};
   const authored={
     ...common,moveId:'ultimate',trigger:'confirmed_unblocked_ultimate_hit',runtime:'threejs',
-    durationSeconds:4,animationSources:{attacker:{clip:'super'},target:{clip:'throw_hit'}},
+    durationSeconds:10,animationSources:{attacker:{clip:'super'},target:{clip:'throw_hit'}},
     shots:Array.from({length:4},(_,i)=>({
-      id:'fixture-'+i,start:i,end:i+1,
+      id:'fixture-'+i,start:i*2.5,end:(i+1)*2.5,
       camera:{position:{x:-.4+i*.3,y:.9,z:2-i*.14},endPosition:{x:-.16+i*.3,y:1,z:2-i*.14},
         lookAt:i%2?'target.head':'attacker.head',projection:'perspective',fov:45,rollDeg:i*2}
     })),
@@ -94,11 +94,11 @@ try{
     await page.waitForFunction(()=>document.getElementById('cinematic-layer').dataset.phase==='fixture-1',undefined,{timeout:15000});
   }
   const frozen=await page.evaluate(()=>({
-    frame:mamoken3d.battle.frame,time:mamoken3d.battle.time,hp:mamoken3d.battle.fighters.map(p=>p.hp)
+    frame:mamoken3d.battle.frame,time:mamoken3d.battle.time,hp:mamoken3d.battle.fighters.map(p=>[p.hp,p.drive,p.super])
   }));
-  await page.waitForTimeout(165);
+  await page.waitForTimeout(authoredFixture?4200:165);
   const after=await page.evaluate(()=>({
-    frame:mamoken3d.battle.frame,time:mamoken3d.battle.time,hp:mamoken3d.battle.fighters.map(p=>p.hp)
+    frame:mamoken3d.battle.frame,time:mamoken3d.battle.time,hp:mamoken3d.battle.fighters.map(p=>[p.hp,p.drive,p.super])
   }));
   assert.deepEqual(after,frozen,'combat must stay frozen inside the movie');
   await page.screenshot({path:evidence+'/chirka-fullscreen-movie.png'});

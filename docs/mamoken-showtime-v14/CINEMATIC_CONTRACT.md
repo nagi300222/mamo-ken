@@ -19,7 +19,7 @@
   "displayName": "百面本命打ち",
   "trigger": "confirmed_unblocked_ultimate_hit",
   "runtime": "threejs",
-  "durationSeconds": 5.1,
+  "durationSeconds": 10.0,
   "animationSources": {
     "attacker": {"glb": "cin_chirka_v14.glb", "clip": "cin_chirka_finish"},
     "target": {"clip": "cin_hit_followthrough"}
@@ -46,7 +46,7 @@
 }
 ```
 
-**Example only**, not an actual finished storyboard. Production assets need **4–7 individually designed shots** per ultimate, not a shared template with labels changed.
+**Example only**, not an actual finished storyboard. Production assets need **individually designed shots across approximately 10 seconds** per ultimate, not a shared template with labels changed.
 
 The final contract must define timeline semantics (seconds independent from frozen Battle frames), camera coordinate and target-bone lookup/fallback, spatial continuity, safe-area cropping for iPhone landscape, animation state/pose targets of both actors, flash/shake accessibility, cue tracks, and cleanup. A renderer-specific implementation may use orthographic or perspective, but should not cut to a view that clips the head, hides the intended contact, or loses the target. Documentary examples are not enough.
 
@@ -81,3 +81,7 @@ The final contract must define timeline semantics (seconds independent from froz
 - The cinematic uses a separate stage in meters. The attacker starts at `(0,0,0)` facing +X and the target at `(.65,0,0)` facing −X. Camera positions and vector `lookAt` are stage coordinates. A named `lookAt` can be `attacker`, `target`, `midpoint`, or a fighter and exact bone name such as `target.head`.
 - Shots cut at their start. For a move inside a shot, specify optional `endPosition`, `endLookAt`, `endRollDeg` and one of `endFov` or `endOrthoWidth`. Perspective uses `fov` in vertical degrees and orthographic uses `orthoWidth` in meters of visible stage width. Easing values are `linear`, `easeInCubic`, `easeOutCubic` and `easeInOutCubic`.
 - Cinematic `cueTrack` times are absolute movie seconds. A visual cue can have an `actor` (`attacker` or `target`) and a `bone`. Supported effect keys are `hit`, `block`, `roar`, `clinch`, `special`, `ultimate`, `shard`, `slash` and `reticle`. Existing sound keys are `tap`, `hit`, `block`, `special`, `ultimate`, `roar`, `clinch`, `counter` and `ko`. The first special and movie deliveries can propose additional authored effects with the assets that require them.
+
+## Latest duration revision
+
+The character directions in ULTIMATE_10S_DIRECTION.md supersede earlier shot-count and duration guidance. Normal films span 9–11 seconds, with approximately 6–10 shots as an editorial guide. Shot count is flexible. Both fighter performances, camera, contact holds and cues share the movie clock. Accessibility playback remains a shortened mode.
