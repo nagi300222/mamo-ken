@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>マモ拳 Showtime v14 — 奥義ムービー参照プレイヤー</title>
+<style>
+html,body{margin:0;height:100%;background:#05070c;color:#eef;font-family:"Hiragino Kaku Gothic ProN","Noto Sans JP","IPAGothic",system-ui,sans-serif;overflow:hidden}
+#c{position:fixed;inset:0;width:100vw;height:100vh;display:block}
+#bars i{position:fixed;left:0;right:0;height:6.5vh;background:#000;transition:none}#bars i:first-child{top:0}#bars i:last-child{bottom:0}
+#cap{position:fixed;left:0;right:0;bottom:9.5vh;text-align:center;font-weight:800;letter-spacing:.12em;text-shadow:0 2px 0 #000,0 0 18px rgba(0,0,0,.9);pointer-events:none}
+#cap .t{display:inline-block;font-size:min(8.6vh,5.4vw);padding:0 .6em;border-bottom:.09em solid var(--k,#ffc878);color:#fff}
+#cap .s{display:block;font-size:min(3.3vh,2.2vw);letter-spacing:.3em;color:var(--k,#ffc878);margin-bottom:.2em}
+#hud{position:fixed;left:8px;top:8px;font:12px/1.4 ui-monospace,monospace;color:#9fb;opacity:.85;white-space:pre}
+#ui{position:fixed;left:0;right:0;bottom:0;display:flex;gap:8px;align-items:center;padding:6px 10px;background:rgba(0,0,0,.55);font-size:12px}
+#ui input[type=range]{flex:1}body.bare #ui,body.bare #hud{display:none}body.nobars #bars{display:none}
+</style>
+<script type="importmap">{"imports":{"three":"../../../preview/vendor/three.module.min.js","three/addons/":"../../../preview/vendor/addons/"}}</script>
+</head><body>
+<canvas id="c"></canvas><div id="bars"><i></i><i></i></div><div id="cap"></div><div id="hud"></div>
+<div id="ui"><button id="play">▶︎/❚❚</button><input id="seek" type="range" min="0" max="1" step="0.001" value="0"><span id="time"></span>
+<select id="rate"><option>1</option><option>0.5</option><option>0.25</option></select></div>
+<script type="module" src="./main.js"></script>
+</body></html>
