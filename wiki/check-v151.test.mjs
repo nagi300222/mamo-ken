@@ -68,6 +68,7 @@ test('nine video references for both new normal poses and existing specials / ul
   for(const [key,path]of Object.entries({normals:'/normal-art/v15_1/evidence/videos/',specials:'/cinematic/v14/evidence/specials/',ultimate:'/cinematic/v14/evidence/movies/'})){
    assert.ok(clips[key].page.includes(path),id+'/'+key);
    assert.ok(clips[key].src.endsWith('.mp4'));
+   assert.ok(existsSync(new URL('./'+clips[key].src,import.meta.url)),id+'/'+key+' local video missing');
    assert.ok(clips[key].page.includes(doc.snapshot.commit));
   }
  }

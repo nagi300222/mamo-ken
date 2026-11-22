@@ -30,6 +30,11 @@ try{
   assert.equal(await page.locator('#normal-details details').count(),6,id+'/details');
   const hrefs=await page.locator('#video-grid a').evaluateAll(els=>els.map(el=>el.href));
   assert.ok(hrefs.every(h=>h.endsWith('.mp4')&&h.includes('78dd0c685d78af617896c01bd95a277928e01368')),id+'/video links');
+  const localVideo=await page.locator('#video-grid video source').first().getAttribute('src');
+  assert.equal(localVideo,'v151/videos/'+id+'_normals_before_after.mp4');
+  const mp4=await page.request.get(new URL(localVideo,base).href);
+  assert.equal(mp4.status(),200,id+' video fetch');
+  assert.match(mp4.headers()['content-type']||'',/video\/mp4/);
   checked.push(id);
   await page.screenshot({path:evidence+'/'+id+'-wiki.png',fullPage:false});
  }

@@ -30,8 +30,11 @@ jobs:
         run: node tools/check_wiki_entry.mjs
       - name: Verify v15.1 move reference snapshot
         run: node --test wiki/check-v151.test.mjs
-      - name: Install Chromium automation
-        run: npm install --prefix "$RUNNER_TEMP/mamoken-wiki-browser" playwright-core@1.65.1
+      - name: Install Japanese fonts and Chromium automation
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y fonts-noto-cjk
+          npm install --prefix "$RUNNER_TEMP/mamoken-wiki-browser" playwright-core@1.65.1
       - name: Real Chromium desktop and mobile Wiki acceptance
         env:
           CHROMIUM_PATH: /usr/bin/google-chrome

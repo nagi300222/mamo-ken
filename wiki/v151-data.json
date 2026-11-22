@@ -465,15 +465,15 @@
       "videos": {
         "normals": {
           "page": "https://github.com/nagi300222/mamo-ken/blob/78dd0c685d78af617896c01bd95a277928e01368/exp/fable-3d/normal-art/v15_1/evidence/videos/moguzo_normals_before_after.mp4",
-          "src": "https://raw.githubusercontent.com/nagi300222/mamo-ken/78dd0c685d78af617896c01bd95a277928e01368/exp/fable-3d/normal-art/v15_1/evidence/videos/moguzo_normals_before_after.mp4"
+          "src": "v151/videos/moguzo_normals_before_after.mp4"
         },
         "specials": {
           "page": "https://github.com/nagi300222/mamo-ken/blob/78dd0c685d78af617896c01bd95a277928e01368/exp/fable-3d/cinematic/v14/evidence/specials/moguzo_specials_before_after.mp4",
-          "src": "https://raw.githubusercontent.com/nagi300222/mamo-ken/78dd0c685d78af617896c01bd95a277928e01368/exp/fable-3d/cinematic/v14/evidence/specials/moguzo_specials_before_after.mp4"
+          "src": "v151/videos/moguzo_specials_before_after.mp4"
         },
         "ultimate": {
           "page": "https://github.com/nagi300222/mamo-ken/blob/78dd0c685d78af617896c01bd95a277928e01368/exp/fable-3d/cinematic/v14/evidence/movies/moguzo_ultimate_before_after.mp4",
-          "src": "https://raw.githubusercontent.com/nagi300222/mamo-ken/78dd0c685d78af617896c01bd95a277928e01368/exp/fable-3d/cinematic/v14/evidence/movies/moguzo_ultimate_before_after.mp4"
+          "src": "v151/videos/moguzo_ultimate_before_after.mp4"
         }
       }
     },
@@ -895,15 +895,15 @@
       "videos": {
         "normals": {
           "page": "https://github.com/nagi300222/mamo-ken/blob/78dd0c685d78af617896c01bd95a277928e01368/exp/fable-3d/normal-art/v15_1/evidence/videos/pisuke_normals_before_after.mp4",
-          "src": "https://raw.githubusercontent.com/nagi300222/mamo-ken/78dd0c685d78af617896c01bd95a277928e01368/exp/fable-3d/normal-art/v15_1/evidence/videos/pisuke_normals_before_after.mp4"
+          "src": "v151/videos/pisuke_normals_before_after.mp4"
         },
         "specials": {
           "page": "https://github.com/nagi300222/mamo-ken/blob/78dd0c685d78af617896c01bd95a277928e01368/exp/fable-3d/cinematic/v14/evidence/specials/pisuke_specials_before_after.mp4",
-          "src": "https://raw.githubusercontent.com/nagi300222/mamo-ken/78dd0c685d78af617896c01bd95a277928e01368/exp/fable-3d/cinematic/v14/evidence/specials/pisuke_specials_before_after.mp4"
+          "src": "v151/videos/pisuke_specials_before_after.mp4"
         },
         "ultimate": {
           "page": "https://github.com/nagi300222/mamo-ken/blob/78dd0c685d78af617896c01bd95a277928e01368/exp/fable-3d/cinematic/v14/evidence/movies/pisuke_ultimate_before_after.mp4",
-          "src": "https://raw.githubusercontent.com/nagi300222/mamo-ken/78dd0c685d78af617896c01bd95a277928e01368/exp/fable-3d/cinematic/v14/evidence/movies/pisuke_ultimate_before_after.mp4"
+          "src": "v151/videos/pisuke_ultimate_before_after.mp4"
         }
       }
     },
@@ -1326,15 +1326,15 @@
       "videos": {
         "normals": {
           "page": "https://github.com/nagi300222/mamo-ken/blob/78dd0c685d78af617896c01bd95a277928e01368/exp/fable-3d/normal-art/v15_1/evidence/videos/godan_normals_before_after.mp4",
-          "src": "https://raw.githubusercontent.com/nagi300222/mamo-ken/78dd0c685d78af617896c01bd95a277928e01368/exp/fable-3d/normal-art/v15_1/evidence/videos/godan_normals_before_after.mp4"
+          "src": "v151/videos/godan_normals_before_after.mp4"
         },
         "specials": {
           "page": "https://github.com/nagi300222/mamo-ken/blob/78dd0c685d78af617896c01bd95a277928e01368/exp/fable-3d/cinematic/v14/evidence/specials/godan_specials_before_after.mp4",
-          "src": "https://raw.githubusercontent.com/nagi300222/mamo-ken/78dd0c685d78af617896c01bd95a277928e01368/exp/fable-3d/cinematic/v14/evidence/specials/godan_specials_before_after.mp4"
+          "src": "v151/videos/godan_specials_before_after.mp4"
         },
         "ultimate": {
           "page": "https://github.com/nagi300222/mamo-ken/blob/78dd0c685d78af617896c01bd95a277928e01368/exp/fable-3d/cinematic/v14/evidence/movies/godan_ultimate_before_after.mp4",
-          "src": "https://raw.githubusercontent.com/nagi300222/mamo-ken/78dd0c685d78af617896c01bd95a277928e01368/exp/fable-3d/cinematic/v14/evidence/movies/godan_ultimate_before_after.mp4"
+          "src": "v151/videos/godan_ultimate_before_after.mp4"
         }
       }
     },
@@ -1752,15 +1752,15 @@
       "videos": {
         "normals": {
           "page": "https://github.com/nagi300222/mamo-ken/blob/78dd0c685d78af617896c01bd95a277928e01368/exp/fable-3d/normal-art/v15_1/evidence/videos/hakuma_normals_before_after.mp4",
-          "src": "https://raw.githubusercontent.com/nagi300222/mamo-ken/78dd0c685d78af617896c01bd95a277928e01368/exp/fable-3d/normal-art/v15_1/evidence/videos/hakuma_normals_before_after.mp4"
+          "src": "v151/videos/hakuma_normals_before_after.mp4"
         },
         "specials": {
           "page": "https://github.com/nagi300222/mamo-ken/blob/78dd0c685d78af617896c01bd95a277928e01368/exp/fable-3d/cinematic/v14/evidence/specials/hakuma_specials_before_after.mp4",
-          "src": "https://raw.githubusercontent.com/nagi300222/mamo-ken/78dd0c685d78af617896c01bd95a277928e01368/exp/fable-3d/cinematic/v14/evidence/specials/hakuma_specials_before_after.mp4"
+          "src": "v151/videos/hakuma_specials_before_after.mp4"
         },
         "ultimate": {
           "page": "https://github.com/nagi300222/mamo-ken/blob/78dd0c685d78af617896c01bd95a277928e01368/exp/fable-3d/cinematic/v14/evidence/movies/hakuma_ultimate_before_after.mp4",
-          "src": "https://raw.githubusercontent.com/nagi300222/mamo-ken/78dd0c685d78af617896c01bd95a277928e01368/exp/fable-3d/cinematic/v14/evidence/movies/hakuma_ultimate_before_after.mp4"
+          "src": "v151/videos/hakuma_ultimate_before_after.mp4"
         }
       }
     },
@@ -2183,15 +2183,15 @@
       "videos": {
         "normals": {
           "page": "https://github.com/nagi300222/mamo-ken/blob/78dd0c685d78af617896c01bd95a277928e01368/exp/fable-3d/normal-art/v15_1/evidence/videos/chirka_normals_before_after.mp4",
-          "src": "https://raw.githubusercontent.com/nagi300222/mamo-ken/78dd0c685d78af617896c01bd95a277928e01368/exp/fable-3d/normal-art/v15_1/evidence/videos/chirka_normals_before_after.mp4"
+          "src": "v151/videos/chirka_normals_before_after.mp4"
         },
         "specials": {
           "page": "https://github.com/nagi300222/mamo-ken/blob/78dd0c685d78af617896c01bd95a277928e01368/exp/fable-3d/cinematic/v14/evidence/specials/chirka_specials_before_after.mp4",
-          "src": "https://raw.githubusercontent.com/nagi300222/mamo-ken/78dd0c685d78af617896c01bd95a277928e01368/exp/fable-3d/cinematic/v14/evidence/specials/chirka_specials_before_after.mp4"
+          "src": "v151/videos/chirka_specials_before_after.mp4"
         },
         "ultimate": {
           "page": "https://github.com/nagi300222/mamo-ken/blob/78dd0c685d78af617896c01bd95a277928e01368/exp/fable-3d/cinematic/v14/evidence/movies/chirka_ultimate_before_after.mp4",
-          "src": "https://raw.githubusercontent.com/nagi300222/mamo-ken/78dd0c685d78af617896c01bd95a277928e01368/exp/fable-3d/cinematic/v14/evidence/movies/chirka_ultimate_before_after.mp4"
+          "src": "v151/videos/chirka_ultimate_before_after.mp4"
         }
       }
     },
@@ -2611,15 +2611,15 @@
       "videos": {
         "normals": {
           "page": "https://github.com/nagi300222/mamo-ken/blob/78dd0c685d78af617896c01bd95a277928e01368/exp/fable-3d/normal-art/v15_1/evidence/videos/takimaru_normals_before_after.mp4",
-          "src": "https://raw.githubusercontent.com/nagi300222/mamo-ken/78dd0c685d78af617896c01bd95a277928e01368/exp/fable-3d/normal-art/v15_1/evidence/videos/takimaru_normals_before_after.mp4"
+          "src": "v151/videos/takimaru_normals_before_after.mp4"
         },
         "specials": {
           "page": "https://github.com/nagi300222/mamo-ken/blob/78dd0c685d78af617896c01bd95a277928e01368/exp/fable-3d/cinematic/v14/evidence/specials/takimaru_specials_before_after.mp4",
-          "src": "https://raw.githubusercontent.com/nagi300222/mamo-ken/78dd0c685d78af617896c01bd95a277928e01368/exp/fable-3d/cinematic/v14/evidence/specials/takimaru_specials_before_after.mp4"
+          "src": "v151/videos/takimaru_specials_before_after.mp4"
         },
         "ultimate": {
           "page": "https://github.com/nagi300222/mamo-ken/blob/78dd0c685d78af617896c01bd95a277928e01368/exp/fable-3d/cinematic/v14/evidence/movies/takimaru_ultimate_before_after.mp4",
-          "src": "https://raw.githubusercontent.com/nagi300222/mamo-ken/78dd0c685d78af617896c01bd95a277928e01368/exp/fable-3d/cinematic/v14/evidence/movies/takimaru_ultimate_before_after.mp4"
+          "src": "v151/videos/takimaru_ultimate_before_after.mp4"
         }
       }
     },
@@ -3039,15 +3039,15 @@
       "videos": {
         "normals": {
           "page": "https://github.com/nagi300222/mamo-ken/blob/78dd0c685d78af617896c01bd95a277928e01368/exp/fable-3d/normal-art/v15_1/evidence/videos/yomikage_normals_before_after.mp4",
-          "src": "https://raw.githubusercontent.com/nagi300222/mamo-ken/78dd0c685d78af617896c01bd95a277928e01368/exp/fable-3d/normal-art/v15_1/evidence/videos/yomikage_normals_before_after.mp4"
+          "src": "v151/videos/yomikage_normals_before_after.mp4"
         },
         "specials": {
           "page": "https://github.com/nagi300222/mamo-ken/blob/78dd0c685d78af617896c01bd95a277928e01368/exp/fable-3d/cinematic/v14/evidence/specials/yomikage_specials_before_after.mp4",
-          "src": "https://raw.githubusercontent.com/nagi300222/mamo-ken/78dd0c685d78af617896c01bd95a277928e01368/exp/fable-3d/cinematic/v14/evidence/specials/yomikage_specials_before_after.mp4"
+          "src": "v151/videos/yomikage_specials_before_after.mp4"
         },
         "ultimate": {
           "page": "https://github.com/nagi300222/mamo-ken/blob/78dd0c685d78af617896c01bd95a277928e01368/exp/fable-3d/cinematic/v14/evidence/movies/yomikage_ultimate_before_after.mp4",
-          "src": "https://raw.githubusercontent.com/nagi300222/mamo-ken/78dd0c685d78af617896c01bd95a277928e01368/exp/fable-3d/cinematic/v14/evidence/movies/yomikage_ultimate_before_after.mp4"
+          "src": "v151/videos/yomikage_ultimate_before_after.mp4"
         }
       }
     },
@@ -3471,15 +3471,15 @@
       "videos": {
         "normals": {
           "page": "https://github.com/nagi300222/mamo-ken/blob/78dd0c685d78af617896c01bd95a277928e01368/exp/fable-3d/normal-art/v15_1/evidence/videos/bullet_normals_before_after.mp4",
-          "src": "https://raw.githubusercontent.com/nagi300222/mamo-ken/78dd0c685d78af617896c01bd95a277928e01368/exp/fable-3d/normal-art/v15_1/evidence/videos/bullet_normals_before_after.mp4"
+          "src": "v151/videos/bullet_normals_before_after.mp4"
         },
         "specials": {
           "page": "https://github.com/nagi300222/mamo-ken/blob/78dd0c685d78af617896c01bd95a277928e01368/exp/fable-3d/cinematic/v14/evidence/specials/bullet_specials_before_after.mp4",
-          "src": "https://raw.githubusercontent.com/nagi300222/mamo-ken/78dd0c685d78af617896c01bd95a277928e01368/exp/fable-3d/cinematic/v14/evidence/specials/bullet_specials_before_after.mp4"
+          "src": "v151/videos/bullet_specials_before_after.mp4"
         },
         "ultimate": {
           "page": "https://github.com/nagi300222/mamo-ken/blob/78dd0c685d78af617896c01bd95a277928e01368/exp/fable-3d/cinematic/v14/evidence/movies/bullet_ultimate_before_after.mp4",
-          "src": "https://raw.githubusercontent.com/nagi300222/mamo-ken/78dd0c685d78af617896c01bd95a277928e01368/exp/fable-3d/cinematic/v14/evidence/movies/bullet_ultimate_before_after.mp4"
+          "src": "v151/videos/bullet_ultimate_before_after.mp4"
         }
       }
     },
@@ -3901,15 +3901,15 @@
       "videos": {
         "normals": {
           "page": "https://github.com/nagi300222/mamo-ken/blob/78dd0c685d78af617896c01bd95a277928e01368/exp/fable-3d/normal-art/v15_1/evidence/videos/dark_moguzo_normals_before_after.mp4",
-          "src": "https://raw.githubusercontent.com/nagi300222/mamo-ken/78dd0c685d78af617896c01bd95a277928e01368/exp/fable-3d/normal-art/v15_1/evidence/videos/dark_moguzo_normals_before_after.mp4"
+          "src": "v151/videos/dark_moguzo_normals_before_after.mp4"
         },
         "specials": {
           "page": "https://github.com/nagi300222/mamo-ken/blob/78dd0c685d78af617896c01bd95a277928e01368/exp/fable-3d/cinematic/v14/evidence/specials/dark_moguzo_specials_before_after.mp4",
-          "src": "https://raw.githubusercontent.com/nagi300222/mamo-ken/78dd0c685d78af617896c01bd95a277928e01368/exp/fable-3d/cinematic/v14/evidence/specials/dark_moguzo_specials_before_after.mp4"
+          "src": "v151/videos/dark_moguzo_specials_before_after.mp4"
         },
         "ultimate": {
           "page": "https://github.com/nagi300222/mamo-ken/blob/78dd0c685d78af617896c01bd95a277928e01368/exp/fable-3d/cinematic/v14/evidence/movies/dark_moguzo_ultimate_before_after.mp4",
-          "src": "https://raw.githubusercontent.com/nagi300222/mamo-ken/78dd0c685d78af617896c01bd95a277928e01368/exp/fable-3d/cinematic/v14/evidence/movies/dark_moguzo_ultimate_before_after.mp4"
+          "src": "v151/videos/dark_moguzo_ultimate_before_after.mp4"
         }
       }
     }

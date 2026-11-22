@@ -17,7 +17,7 @@
 - v15.1の技データは[統合Draft PR #199](https://github.com/nagi300222/mamo-ken/pull/199)のHEAD `78dd0c685d78af617896c01bd95a277928e01368` をスナップショット。旧版`main`や旧v14の数値を流用しない。
 - 通常技54本は `normal-balance-v151.js` / `normal-contacts-v151.js` / `NORMAL_TABLE.md` を突き合わせて生成。必殺27・奥義9は `balance.js` の基本性能と `ROSTER.power` を基準にする。条件付き強化は別計算。
 - ヒット/ガード差は0.35m、相手ゴダンの測定であり全間合い・全キャラの保証ではない。実測reachは攻撃側rootから打撃面まで（相手hurt半径0.16mは別）。CPU勝率は1,458試合のAI検証で対人戦の勝率ではない。
-- 比較動画9本は9fps/13時刻の姿勢比較。実戦速度の動画や60fps録画と誤認させない。必殺・奥義の映像は旧v14比較資料。
+- 比較動画9本は9fps/13時刻の姿勢比較。実戦速度の動画や60fps録画と誤認させない。必殺・奥義の映像は旧v14比較資料。再生元の27ファイル（各キャラにつき通常・必殺・奥義の3本）は、元PR #199の既存Git blobをWiki専用の `wiki/v151/videos/` に配置し、静的配信でも確実に再生できるようにした。動画の出典リンクは元PR #199に固定。
 - iOSのネイティブ横画面については[横向きアプリ化の選択肢](IOS_LANDSCAPE_OPTIONS.md)参照。**Wikiの更新でゲーム本体・プレビュー・本番アプリは変更しない。**
 - 検証：`node --test wiki/check-v151.test.mjs` で全90技・動画9×3と出典、既存`tools/check_wiki_entry.mjs`で旧2Dのindex改修とmanifestハッシュの一致を確認。
 
