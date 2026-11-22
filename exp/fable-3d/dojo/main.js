@@ -43,7 +43,9 @@ const fxGeometry=Object.freeze({
   roar:new THREE.RingGeometry(.12,.145,32),
   clinch:new THREE.RingGeometry(.105,.14,4),
   special:new THREE.RingGeometry(.19,.235,32),
-  ultimate:new THREE.RingGeometry(.30,.34,40)
+  ultimate:new THREE.RingGeometry(.30,.34,40),
+  shard:new THREE.TetrahedronGeometry(.09),
+  slash:new THREE.PlaneGeometry(.07,.47)
 });
 let cameraShake=0, cameraShakeStrength=0, bannerUntil=0;
 function shake(strength,frames=7){
@@ -70,6 +72,7 @@ function impactFX(kind,color,x,y,scale=1,life=14){
   const mesh=new THREE.Mesh(fxGeometry[kind]||fxGeometry.hit,mat);
   mesh.position.set(x,y,.23);mesh.scale.setScalar(scale);
   scene.add(mesh);flashes.push({mesh,life,maxLife:life,scale});
+  return mesh;
 }
 function updateActionTrail(a,p){
   if(!a)return;
@@ -102,19 +105,48 @@ function updateActionTrail(a,p){
   trail.mesh.geometry.attributes.position.needsUpdate=true;
   trail.mesh.visible=trail.points.length>1;
 }
+// Nine ultra-lightweight super signatures using existing GLB and battle event data.
+function superSignature(p){
+  const color=showtimeFor(p.id).color,x=p.x,y=p.y+.33,d=p.facing;
+  impactFX('ultimate',color,x,y,1,23);
+  if(p.id==='moguzo'){ // warm, low earth ripples
+    for(const offset of [-.32,.32])impactFX('special',0xffc878,x+offset,y-.20,.82,19);
+  }else if(p.id==='pisuke'){ // rapid kicks in a rushing line
+    for(const [i,dy] of [-.22,0,.22].entries())
+      impactFX('special',0x86dcff,x+d*(.22+i*.15),y+dy,.55,14+i*3);
+  }else if(p.id==='godan'){ // heavy angular rock shards
+    for(const [dx,dy] of [[-.23,-.2],[.22,-.13],[-.08,.3],[.25,.23]])
+      impactFX('shard',0xffa369,x+dx,y+dy,1.1,20);
+  }else if(p.id==='hakuma'){ // three bright snow-white bursts
+    for(let i=0;i<3;i++)impactFX('shard',0xe4fff3,x+d*(i*.19),y+.16*i,1.15,19);
+  }else if(p.id==='chirka'){ // visual-only illusion; no 3D copies/hitboxes
+    for(const offset of [-.42,0,.42])impactFX('special',0xdd9aff,x+offset,y+.04,1,18);
+  }else if(p.id==='takimaru'){ // square grab-seal echoes
+    for(const offset of [-.23,.23])impactFX('clinch',0xffd695,x+offset,y,.98,21);
+  }else if(p.id==='yomikage'){ // moonlight crossing slashes
+    for(const dir of [-1,1]){
+      const slash=impactFX('slash',0x9defff,x+d*.28,y+dir*.15,1,19);
+      if(slash)slash.rotation.z=dir*.68;
+    }
+  }else if(p.id==='bullet'){ // three amber rounds, tail-guided
+    for(let i=0;i<3;i++)impactFX('shard',0xffb045,x+d*(.17+i*.17),y+.16*(i%2),.75,16+i*3);
+  }else if(p.id==='dark_moguzo'){ // violet diagonal strike echoes
+    for(let i=0;i<4;i++){
+      const slash=impactFX('slash',0xbe78ff,x+d*(i*.14),y+(i%2?-.14:.16),.85,15+i*2);
+      if(slash)slash.rotation.z=i%2?.6:-.6;
+    }
+  }
+}
 function actionShowtime(e){
   const p=battle?.fighters[e.slot];if(!p)return;
   if(e.action==='ultimate'){
     showBanner(e.slot,p.id,e.name);
     audioFX.play('ultimate',p.id);
-    impactFX('ultimate',showtimeFor(p.id).color,p.x,p.y+.36,1,23);
-    // Chirka's illusion concept: three *purely visual* echoes, no extra hitboxes.
-    if(p.id==='chirka'){
-      for(const offset of [-.45,0,.45])impactFX('special',0xdd9aff,p.x+offset,p.y+.35,1.1,18);
-    }
+    superSignature(p); // character-specific shape pattern, visual only
     shake(.014,10);
   }else if(/^s[123]$/.test(e.action)){
     audioFX.play('special',p.id);
+    $('note').style.setProperty('--special-accent',showtimeHex(p.id));
     impactFX('special',showtimeFor(p.id).color,p.x+p.facing*.22,p.y+.32,.8,13);
   }else if(e.action==='roar'){audioFX.play('roar',p.id);impactFX('roar',0xf6d17b,p.x,p.y+.31,1.3,12);}
   else if(e.action==='gyuiin'){audioFX.play('clinch',p.id);}
