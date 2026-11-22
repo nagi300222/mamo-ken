@@ -488,6 +488,9 @@ SPECIALS = dict(s1_v14=dict(moguzo=moguzo_s1, godan=godan_s1, chirka=chirka_s1),
 HEROES = ('moguzo', 'godan', 'chirka')
 CINE_ATK = dict(cin_moguzo_atk=dict(moguzo=cin_moguzo_atk), cin_godan_atk=dict(godan=cin_godan_atk), cin_chirka_atk=dict(chirka=cin_chirka_atk), cin_chirka_dive=dict(chirka=cin_chirka_dive))
 CINE_VICTIM = dict(cinv_moguzo=cinv_moguzo, cinv_godan=cinv_godan, cinv_chirka=cinv_chirka)        # 9体すべてに入る
+from . import motions_v14b as _B          # 第二弾（残り6体）。道具がすべて定義されたあとで読み込む
+for _k, _v in _B.SPECIALS_B.items(): SPECIALS[_k].update(_v)
+CINE_ATK.update(_B.CINE_ATK_B); CINE_VICTIM.update(_B.CINE_VICTIM_B)
 CLIPS = dict(SPECIALS, **CINE_ATK, **CINE_VICTIM)
 def clips_for(cid): return [c for c in CLIPS if not isinstance(CLIPS[c], dict) or cid in CLIPS[c]]
 INGAME_LEAD = 2      # ゲームは技の出始めに構えから約3F混ぜる（main.js の crossFade）ので、当たりの姿勢を 2F 早めに置く。発生・持続の数値は変えない
@@ -504,4 +507,4 @@ def make(cid, name):
     return _lead(clip) if name in SPECIALS else clip
 def command_map(cid):
     """v14 の見た目差し替え案。models.js の chooseClip は command_map を最優先で引くので、この対応だけで新クリップが再生される"""
-    return {'236': 's1_v14', '623': 's2_v14', '214': 's3_v14', '236236': 'ult_v14'} if cid in HEROES else {}
+    return {'236': 's1_v14', '623': 's2_v14', '214': 's3_v14', '236236': 'ult_v14'} if cid in SPECIALS['s1_v14'] else {}
