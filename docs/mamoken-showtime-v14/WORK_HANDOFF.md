@@ -1,5 +1,7 @@
 # Agent execution handoff — Claude + Codex actual work
 
+**Current work addendum:** The user has supplied exact scenarios for **all nine ~10-second ultimates** (including victim hit reactions and distinctive camera choreography). Read [ULTIMATE_10S_DIRECTION.md](ULTIMATE_10S_DIRECTION.md) and immediately forward it to any already-running Claude Code and Codex sessions. Old 4–6 second guidance is superseded. This file does not constitute a direct message to those sessions.
+
 This file is **ready-to-send task material**, not a claim that Claude/Codex have already started.
 
 ## Claude / Claude Code
@@ -12,7 +14,7 @@ Open `nagi300222/mamo-ken` on `docs/mamoken-v14-claude-codex-production`. Read r
 
 Open the same repository / branch. Read root `AGENTS.md`, [Issue #178](https://github.com/nagi300222/mamo-ken/issues/178), [Issue #177](https://github.com/nagi300222/mamo-ken/issues/177), and [CINEMATIC_CONTRACT.md](CINEMATIC_CONTRACT.md).
 
-**Task:** Implement the data-driven 9-character cinematic engine (4–7 Claude-directed camera shots and scripted attacker/target animation), new special move loading, and robust hit-only trigger/freeze/KO/skip/restoration. Use the actual Claude asset deliverables. Begin with parser/tests while Claude is animating; don't mark movies as completed until content and real browser acceptance pass. Deliver separate Draft PR, not main.
+**Task:** Implement the data-driven 9-character cinematic engine (~10 seconds and individually choreographed Claude-directed multi-shot cameras plus scripted attacker/target animation), new special move loading, and robust hit-only trigger/freeze/KO/skip/restoration. Use the actual Claude asset deliverables. Begin with parser/tests while Claude is animating; don't mark movies as completed until content and real browser acceptance pass. Deliver separate Draft PR, not main.
 
 ## Optional one-message ChatGPT Work orchestration handoff
 
