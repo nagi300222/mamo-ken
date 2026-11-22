@@ -24,19 +24,20 @@ scene.add(new THREE.HemisphereLight(0xe5f7ff,0x8f796a,2.25));
 const sun=new THREE.DirectionalLight(0xffecd0,2.45);sun.position.set(-1.2,2.8,2.9);scene.add(sun);
 const ambient=new THREE.DirectionalLight(0x9cb2cf,.6);ambient.position.set(2,1,-3);scene.add(ambient);
 
+const environment=new THREE.Group();scene.add(environment);
 const floor=new THREE.Mesh(new THREE.PlaneGeometry(7,4),new THREE.MeshStandardMaterial({color:0x6e776a,roughness:.98}));
-floor.rotation.x=-Math.PI/2;floor.position.y=-.018;scene.add(floor);
-const pattern=new THREE.GridHelper(4.2,28,0xaeb2a2,0x5c655d);pattern.position.y=-.013;scene.add(pattern);
+floor.rotation.x=-Math.PI/2;floor.position.y=-.018;environment.add(floor);
+const pattern=new THREE.GridHelper(4.2,28,0xaeb2a2,0x5c655d);pattern.position.y=-.013;environment.add(pattern);
 const ring=new THREE.Mesh(new THREE.RingGeometry(1.58,1.62,64),new THREE.MeshBasicMaterial({color:0xd3ba88,side:THREE.DoubleSide}));
-ring.rotation.x=-Math.PI/2;ring.position.y=.002;scene.add(ring);
+ring.rotation.x=-Math.PI/2;ring.position.y=.002;environment.add(ring);
 for(let k=0;k<9;k++){
   const x=(k-4)*.54, h=(.55+((k*11)%5)*.11);
   const m=new THREE.Mesh(new THREE.ConeGeometry(.6,h,3),new THREE.MeshLambertMaterial({color:k%2?0x576d73:0x61797c,flatShading:true}));
-  m.position.set(x,h*.5-.04,-3.0-(k%3)*.3);m.rotation.y=.2+k*.15;scene.add(m);
+  m.position.set(x,h*.5-.04,-3.0-(k%3)*.3);m.rotation.y=.2+k*.15;environment.add(m);
 }
 const cloudMat=new THREE.MeshBasicMaterial({color:0xe2e1d8,transparent:true,opacity:.32,depthWrite:false});
 for(let i=0;i<5;i++){const cloud=new THREE.Mesh(new THREE.SphereGeometry(.32+i*.05,9,5),cloudMat);
-  cloud.position.set(-3+i*1.5,.95+(i%2)*.24,-3.9);cloud.scale.y=.28;scene.add(cloud);}
+  cloud.position.set(-3+i*1.5,.95+(i%2)*.24,-3.9);cloud.scale.y=.28;environment.add(cloud);}
 const loader=new GLTFLoader();
 const actors=[null,null], bullets=new Map(), flashes=[];
 const audioFX=createCombatAudio();
@@ -59,6 +60,11 @@ const fxGeometry=Object.freeze({
 let cameraShake=0, cameraShakeStrength=0, bannerUntil=0;
 const movie=createMovieDirector({reducedMotion});
 const movieLayer=$('cinematic-layer'),movieViewport=$('cinematic-viewport');
+const MOVIE_BACKGROUND=Object.freeze({
+ moguzo:0x35261b,pisuke:0x142f3f,godan:0x382b22,hakuma:0x1c3540,
+ chirka:0x2c1745,takimaru:0x362b24,yomikage:0x142c3c,
+ bullet:0x362416,dark_moguzo:0x1d1738
+});
 let canvasHome=null,canvasFollowingNode=null,movieLastPhase='';
 function beginUltimateMovie(event){
   const attacker=battle?.fighters[event.slot];
@@ -67,6 +73,9 @@ function beginUltimateMovie(event){
   movieLastPhase='';
   $('showtime-banner').classList.remove('active');
   movieLayer.hidden=false;
+  // A distinct virtual cinematic stage: hide only scenery, never actors or their skeletons.
+  environment.visible=false;
+  scene.background.setHex(MOVIE_BACKGROUND[attacker.id]||0x151a2b);
   movieLayer.dataset.character=attacker.id;
   movieLayer.style.setProperty('--cinematic-accent',showtimeHex(attacker.id));
   $('cinematic-portrait').src=MODEL_ASSETS[attacker.id].portrait;
@@ -85,6 +94,7 @@ function finishUltimateMovie(){
   if(!movie.active)return;
   movie.cancel();
   movieLayer.hidden=true;
+  environment.visible=true;scene.background.setHex(0x758993);
   movieLayer.dataset.phase='';
   movieLastPhase='';
   if(canvasHome){
