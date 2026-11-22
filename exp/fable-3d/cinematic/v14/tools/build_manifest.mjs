@@ -27,7 +27,7 @@ for (const id of ids) {
   for (const [name, tr] of Object.entries(sb.actors)) actorTracks[name] = { ...tr, segments: tr.segments.map(g => ({ ...g, start: r3(g.start) })), root: tr.root.map(k => ({ ...k, t: r3(k.t) })) };
   const M = { schemaVersion: 1, contractRevision: 'v14-wave1-10s', directionSource: 'docs/mamoken-showtime-v14/ULTIMATE_10S_DIRECTION.md', characterId: sb.characterId, moveId: 'ultimate', displayName: sb.displayName, trigger: 'confirmed_unblocked_ultimate_hit', runtime: 'threejs',
     durationSeconds: sb.durationSeconds, fps: 60, concept: sb.concept,
-    coordinateSystem: { origin: '命中時の両者の中点・地面', x: '攻撃側の向いている方向が +X', y: '上', z: '対戦カメラ側が +Z', unit: 'm（GLBの単位）', mirror: '攻撃側が左向き（-X向き）のときは x・rotY・rotZ・カメラ roll の符号を反転' },
+    coordinateSystem: { origin: '命中時の両者の中点・地面', x: '攻撃側の向いている方向が +X', y: '上', z: '対戦カメラ側が +Z', unit: 'm（GLBの単位）', mirror: '攻撃側が左向き（-X向き）のときはムービー全体を Y 軸まわりに 180 度回す（x・z の符号反転、rotY+180、rotZ・rotX の符号反転。カメラ roll はそのまま）' },
     stage: sb.stage,
     animationSources: { attacker: { glb: `${id}/${id}_v14.glb`, motions: `${id}/${id}_v14_motions.json`, clip: sb.actors.attacker.segments[0].clip }, target: { glbPattern: '<targetId>/<targetId>_v14.glb', clip: sb.actors.target.segments[0].clip, availableFor: ROSTER } },
     inGameStartClip: { clip: 'ult_v14', note: '命中前の始動。ここまでは通常の対戦カメラ。命中が確定した次のフレームでムービー t=0 へ' },
