@@ -8,6 +8,7 @@ import { MODEL_ASSETS, MODEL_REVISION, chooseClip } from './models.js';
 import { frameTargets } from './camera-frame.js';
 import { showtimeFor, showtimeHex, superCaption, isShowtimeMove } from './showtime-profiles.js';
 import { createCombatAudio } from './combat-audio.js';
+import { createArenaMusic } from './arena-music.js';
 
 const $=id=>document.getElementById(id), canvas=$('stage');
 const scene=new THREE.Scene();scene.background=new THREE.Color(0x758993);
@@ -37,6 +38,7 @@ for(let i=0;i<5;i++){const cloud=new THREE.Mesh(new THREE.SphereGeometry(.32+i*.
 const loader=new GLTFLoader();
 const actors=[null,null], bullets=new Map(), flashes=[];
 const audioFX=createCombatAudio();
+const music=createArenaMusic(()=>audioFX.context);
 const reducedMotion=window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches??false;
 // Shared buffers and geometry: no new geometry allocations for each hit.
 const fxGeometry=Object.freeze({
@@ -547,7 +549,14 @@ document.addEventListener('keydown',e=>{
 document.addEventListener('keyup',e=>{
   const k=keyMap[e.code];if(k){e.preventDefault();pressedKeys.delete(k);if(directions.includes(k))recordDirection();}
 });
-window.addEventListener('blur',()=>{clearInput();paused=true;$('pause').textContent='再開';});
+window.addEventListener('blur',()=>{clearInput();paused=true;$('pause').textContent='再開';music.update(false);});
+document.addEventListener('visibilitychange',()=>{if(document.hidden)music.update(false);});
+$('music-toggle').onclick=()=>{
+  if(!audioFX.unlock())return;
+  const enabled=music.setEnabled(!music.enabled);
+  $('music-toggle').textContent=enabled?'BGM ON':'BGM OFF';
+  $('music-toggle').setAttribute('aria-pressed',String(enabled));
+};
 $('sound-toggle').onclick=()=>{
   audioFX.unlock();
   const muted=audioFX.setMuted(!audioFX.muted);
@@ -558,6 +567,7 @@ $('sound-toggle').onclick=()=>{
 if(!audioFX.supported){
   $('sound-toggle').textContent='音 非対応';
   $('sound-toggle').disabled=true;
+  $('music-toggle').disabled=true;
 }
 document.querySelectorAll('[data-control]').forEach(button=>{
   const k=button.dataset.control;
@@ -590,6 +600,7 @@ $('pause').onclick=()=>{if(!battle||battle.phase!=='fight')return;clearInput();p
 const FIXED=1/FPS;
 function render(now){
   requestAnimationFrame(render);
+  music.update(!!(battle&&playing&&!paused&&battle.phase==='fight'&&!document.hidden));
   const delta=Math.min(.05,lastFrame?(now-lastFrame)/1000:FIXED);lastFrame=now;
   if(battle&&playing&&!paused&&battle.phase==='fight') {
     acc=Math.min(.10,acc+delta);let steps=0;

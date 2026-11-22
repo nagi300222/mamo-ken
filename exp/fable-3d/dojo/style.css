@@ -270,7 +270,8 @@ button.primary:active{transform:translateY(1px)}
 #arena .hud-side:first-child .hud-name{border-bottom:2px solid var(--p1-accent,#c9d8da);padding-bottom:2px}
 #arena .hud-side.mirrored .hud-name{border-bottom:2px solid var(--p2-accent,#c9d8da);padding-bottom:2px}
 #arena .meter-track .ready, #arena .hud .super .track i.ready{box-shadow:0 0 7px #ffe5a8}
-.sound-toggle{white-space:nowrap;min-width:45px}
+.sound-toggle,.music-toggle{white-space:nowrap;min-width:45px}
+.music-toggle[aria-pressed="true"]{color:#d8eeff;border-color:#7bbce7;box-shadow:inset 0 -2px #7bbce7}
 #arena .showtime-banner{
   --showtime:#f7d38a;
   position:absolute;left:50%;top:clamp(78px,24%,135px);
@@ -289,7 +290,7 @@ button.primary:active{transform:translateY(1px)}
 @media(max-height:420px) and (orientation:landscape){
   #arena .showtime-banner{top:65px;padding:3px 8px}
   .showtime-banner strong{font-size:13px}
-  .sound-toggle{min-width:37px;font-size:9px;padding:3px 5px!important}
+  .sound-toggle,.music-toggle{min-width:37px;font-size:9px;padding:3px 5px!important}
 }
 @media(prefers-reduced-motion:reduce){
   #arena .showtime-banner{transition:none}
