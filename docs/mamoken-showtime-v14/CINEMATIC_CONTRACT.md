@@ -1,5 +1,7 @@
 # MamoKen Showtime v1.0｜Claude ↔ Codex asset / cinematic integration contract
 
+**LATEST USER REQUIREMENT (2026-11-22):** All nine ultimate movies are **approximately 10 seconds**, have actual victim hit-reaction choreography, and highly character-specific cinematic camerawork. The complete user-given sequence for each fighter is in [ULTIMATE_10S_DIRECTION.md](ULTIMATE_10S_DIRECTION.md). This overrides the earlier 4–6s / 4–7 shot planning defaults. Update Codex PR #180 cinematic data accordingly.
+
 **This is a proposed interface to coordinate two genuine producers, not a claim that the movie assets exist.** Claude may improve the interface with a documented migration plan; Codex should not ship fake replacement media.
 
 ## 1. Versioning and identities
@@ -19,7 +21,7 @@
   "displayName": "百面本命打ち",
   "trigger": "confirmed_unblocked_ultimate_hit",
   "runtime": "threejs",
-  "durationSeconds": 5.1,
+  "durationSeconds": 10.0,
   "animationSources": {
     "attacker": {"glb": "cin_chirka_v14.glb", "clip": "cin_chirka_finish"},
     "target": {"clip": "cin_hit_followthrough"}
@@ -46,7 +48,7 @@
 }
 ```
 
-**Example only**, not an actual finished storyboard. Production assets need **4–7 individually designed shots** per ultimate, not a shared template with labels changed.
+**Example only**, not an actual finished storyboard. Production assets need **approximately 10 seconds with ~6–10 individually designed shots as an initial guide** per ultimate, not a shared template with labels changed.
 
 The final contract must define timeline semantics (seconds independent from frozen Battle frames), camera coordinate and target-bone lookup/fallback, spatial continuity, safe-area cropping for iPhone landscape, animation state/pose targets of both actors, flash/shake accessibility, cue tracks, and cleanup. A renderer-specific implementation may use orthographic or perspective, but should not cut to a view that clips the head, hides the intended contact, or loses the target. Documentary examples are not enough.
 
