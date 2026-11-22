@@ -2483,6 +2483,18 @@
     {
       "glb": "godan_v14.glb",
       "clip": "cinv_chirka"
+    },
+    {
+      "glb": "godan_v14.glb",
+      "clip": "cinv_pisuke"
+    },
+    {
+      "glb": "godan_v14.glb",
+      "clip": "cinv_hakuma"
+    },
+    {
+      "glb": "godan_v14.glb",
+      "clip": "cinv_takimaru"
     }
   ]
 }

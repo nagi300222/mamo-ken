@@ -12,6 +12,18 @@
     {
       "glb": "dark_moguzo_v14.glb",
       "clip": "cinv_chirka"
+    },
+    {
+      "glb": "dark_moguzo_v14.glb",
+      "clip": "cinv_pisuke"
+    },
+    {
+      "glb": "dark_moguzo_v14.glb",
+      "clip": "cinv_hakuma"
+    },
+    {
+      "glb": "dark_moguzo_v14.glb",
+      "clip": "cinv_takimaru"
     }
   ]
 }

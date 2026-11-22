@@ -2497,6 +2497,18 @@
     {
       "glb": "moguzo_v14.glb",
       "clip": "cinv_chirka"
+    },
+    {
+      "glb": "moguzo_v14.glb",
+      "clip": "cinv_pisuke"
+    },
+    {
+      "glb": "moguzo_v14.glb",
+      "clip": "cinv_hakuma"
+    },
+    {
+      "glb": "moguzo_v14.glb",
+      "clip": "cinv_takimaru"
     }
   ]
 }

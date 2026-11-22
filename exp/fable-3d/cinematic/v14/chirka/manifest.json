@@ -3565,6 +3565,18 @@
     {
       "glb": "chirka_v14.glb",
       "clip": "cinv_chirka"
+    },
+    {
+      "glb": "chirka_v14.glb",
+      "clip": "cinv_pisuke"
+    },
+    {
+      "glb": "chirka_v14.glb",
+      "clip": "cinv_hakuma"
+    },
+    {
+      "glb": "chirka_v14.glb",
+      "clip": "cinv_takimaru"
     }
   ]
 }

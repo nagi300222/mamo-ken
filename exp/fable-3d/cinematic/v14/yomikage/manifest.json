@@ -12,6 +12,18 @@
     {
       "glb": "yomikage_v14.glb",
       "clip": "cinv_chirka"
+    },
+    {
+      "glb": "yomikage_v14.glb",
+      "clip": "cinv_pisuke"
+    },
+    {
+      "glb": "yomikage_v14.glb",
+      "clip": "cinv_hakuma"
+    },
+    {
+      "glb": "yomikage_v14.glb",
+      "clip": "cinv_takimaru"
     }
   ]
 }

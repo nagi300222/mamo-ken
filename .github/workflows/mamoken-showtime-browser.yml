@@ -60,7 +60,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        attacker: [moguzo, godan, chirka]
+        attacker: [moguzo, godan, chirka, pisuke, hakuma, takimaru]
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4

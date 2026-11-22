@@ -135,6 +135,23 @@ export function createFx(THREE, scene, camera, manifest) {
       const dur = c.dur ?? .7;
       return { objs, life: dur, update(age) { const u = age / dur; for (const m of objs) { m.position.copy(p).addScaledVector(m.userData.v, age).setY(p.y + m.userData.v.y * age - 2.2 * age * age); m.scale.setScalar((c.size ?? 1) * (1 + 1.2 * (1 - u))); m.material.opacity = (1 - u) ** 1.2; } } };
     },
+    // 残像の筋: from→to を結ぶ帯（高速移動の軌跡）。カメラに正対し、dur 秒で細く消える
+    streak(c, ctx) {
+      const a = new V(sx(ctx) * c.from[0], c.from[1], sx(ctx) * c.from[2]), b = new V(sx(ctx) * c.to[0], c.to[1], sx(ctx) * c.to[2]);
+      const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.Float32BufferAttribute(new Float32Array(18), 3));
+      const m = add(g, basic(col(c.color, 0x9fe6ff), { side: THREE.DoubleSide, blending: THREE.AdditiveBlending })), dur = c.dur ?? .5, grow = c.grow ?? .12, W = c.width ?? .05, side = new V(), dir = b.clone().sub(a).normalize(), eye = new V();
+      return { objs: [m], life: dur, update(age) { const head = a.clone().lerp(b, clamp01(age / grow)), w = W * (1 - age / dur) ** .7; camera.getWorldPosition(eye); side.crossVectors(dir, eye.sub(head)).normalize().multiplyScalar(w);
+        const P2 = m.geometry.attributes.position.array, put = (i, v) => { P2[i * 3] = v.x; P2[i * 3 + 1] = v.y; P2[i * 3 + 2] = v.z; };
+        put(0, a); put(1, head.clone().add(side)); put(2, head.clone().sub(side)); put(3, a); put(4, head.clone().sub(side)); put(5, head.clone().add(side)); m.geometry.attributes.position.needsUpdate = true; m.material.opacity = (c.opacity ?? .8) * (1 - age / dur); } };
+    },
+    // 降る雪: カメラのまわりの箱の中を落ち続ける（舞台装置。dur 秒）
+    snowfall(c) {
+      const r = rnd(c.at * 3 + 77), n = c.count ?? 220, pos = new Float32Array(n * 3), seed = []; for (let i = 0; i < n; i++) seed.push([r() * 6 - 3, r() * 3.5, r() * 6 - 3, .25 + r() * .35, r() * 6.28]);
+      const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.BufferAttribute(pos, 3)); const m = new THREE.Points(g, new THREE.PointsMaterial({ color: col(c.color, 0xffffff), size: c.size ?? .022, transparent: true, opacity: .85, depthWrite: false })); m.frustumCulled = false; group.add(m);
+      const dur = c.dur ?? 10, eye = new V();
+      return { objs: [m], life: dur, update(age) { camera.getWorldPosition(eye); for (let i = 0; i < n; i++) { const s2 = seed[i], wrap = (v, c0, span) => c0 + ((((v - c0) % span) + span * 1.5) % span) - span / 2;
+        pos[i * 3] = wrap(s2[0] + Math.sin(age * .7 + s2[4]) * .12 + age * (c.wind ?? .25), eye.x, 6); pos[i * 3 + 1] = (((s2[1] - age * s2[3]) % 3.5) + 3.5) % 3.5; pos[i * 3 + 2] = wrap(s2[2], eye.z, 6); } g.attributes.position.needsUpdate = true; } };
+    },
     // 画面フラッシュ
     flash(c) {
       const m = add(new THREE.PlaneGeometry(40, 40), basic(col(c.color, 0xffffff), { depthTest: false, blending: c.additive ? THREE.AdditiveBlending : THREE.NormalBlending }), overlay); m.position.z = -1; m.renderOrder = 50; const dur = c.dur ?? .16;

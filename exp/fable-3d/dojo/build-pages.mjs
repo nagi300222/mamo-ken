@@ -32,7 +32,7 @@ for(const id of IDS){
   }
 }
 await writeFile(path.join(OUTPUT,'index.html'),'<!doctype html><html lang="ja"><meta charset="utf-8"><meta http-equiv="refresh" content="0;url=./dojo/"><title>マモ拳3D</title><a href="./dojo/">ゲームを開く</a></html>');
-await writeFile(path.join(OUTPUT,'_headers'),'/chars/*\n  Cache-Control: public, max-age=120\n/dojo/*\n  Cache-Control: no-cache\n');
+await writeFile(path.join(OUTPUT,'_headers'),'/chars/*\n  Cache-Control: public, max-age=120\n/dojo/*\n  Cache-Control: no-cache\n/cinematic/*\n  Cache-Control: no-cache\n');
 console.log('Cloudflare Pages static output:',OUTPUT);
 console.log('9 GLB total:',(bytes/1024/1024).toFixed(2)+' MiB');
 console.log('Cloudflare build command: node exp/fable-3d/dojo/build-pages.mjs');

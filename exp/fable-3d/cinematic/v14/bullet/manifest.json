@@ -12,6 +12,18 @@
     {
       "glb": "bullet_v14.glb",
       "clip": "cinv_chirka"
+    },
+    {
+      "glb": "bullet_v14.glb",
+      "clip": "cinv_pisuke"
+    },
+    {
+      "glb": "bullet_v14.glb",
+      "clip": "cinv_hakuma"
+    },
+    {
+      "glb": "bullet_v14.glb",
+      "clip": "cinv_takimaru"
     }
   ]
 }
