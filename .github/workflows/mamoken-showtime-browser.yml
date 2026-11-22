@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - test/mamoken-showtime-browser-v12
+      - feat/mamoken-super-hit-cinematic-v13
   pull_request:
     branches:
       - feat/mamoken-astra-hud-v11
