@@ -177,6 +177,9 @@ try{
       });
     }
     const spec=moves.find(move=>move.moveId==='ultimate');
+    // A fresh match also exercises leaving a paired throw before cinematic validation.
+    await page.locator('#select-back').tap();
+    await choose(id);
     await positions(.36,20);
     await page.locator('[data-control="ultimateButton"]').tap();
     await page.waitForFunction(()=>mamoken3d.cinematic.active,undefined,{timeout:7500});
