@@ -239,7 +239,7 @@
    },
    {
     "id": "bullet",
-    "name": "超圧縮・弾丸頭突き",
+    "name": "尾連・爆ぜ木の実",
     "seconds": 10.2,
     "shots": 8,
     "manifest": "cinematic/v14/manifest/bullet_ultimate.json",
@@ -1122,6 +1122,33 @@
    }
   }
  },
+ "animation_only_packs": [
+  {
+   "path": "cinematic/v14/anim/bullet_polish_anim.glb",
+   "bytes": 61276,
+   "sha256": "c7234a8cf28436611a628de73c69e132e5bccd9ced5a7c75349d8afa8455f0d3"
+  },
+  {
+   "path": "cinematic/v14/anim/bullet_polish_motions.json",
+   "bytes": 3731,
+   "sha256": "636b47afd261a8ed4abcd05caba5e126b58fafc1d471497c0edb4a5f44dc9105"
+  },
+  {
+   "path": "cinematic/v14/anim/yomikage_polish_anim.glb",
+   "bytes": 44940,
+   "sha256": "7f7e318968ef5016798ba20a4a8fabefc82c29d612a706264ac08928c44fde27"
+  },
+  {
+   "path": "cinematic/v14/anim/yomikage_polish_motions.json",
+   "bytes": 1678,
+   "sha256": "259bafb34d020eef035bc03dac93b28cb739b42edeec2a76377deee81abee81a"
+  }
+ ],
+ "polish_validation": {
+  "all_pass": true,
+  "passed": 14,
+  "total": 14
+ },
  "authoring": {
   "motion_source": "tools/mamo3d/motions_v14.py",
   "build": "python3 tools/build_v14.py [--only id] [--save-blend]",
@@ -1130,6 +1157,18 @@
   "spec": "cinematic/v14/MANIFEST_SPEC.md"
  },
  "evidence": {
+  "polish": [
+   {
+    "path": "cinematic/v14/evidence/polish/bullet_s3_tail_before_after.mp4",
+    "bytes": 269016,
+    "sha256": "eaa290261b741f3d503c01be7f535079e47320fd6c4e6add5db02bb18abaa5ce"
+   },
+   {
+    "path": "cinematic/v14/evidence/polish/yomikage_counter_success_v14.mp4",
+    "bytes": 123334,
+    "sha256": "7afcdc8d221c0eee771b4371f16119f3242674c1ab3c42f985e96dea171cf4ef"
+   }
+  ],
   "audit_before": [
    {
     "path": "cinematic/v14/evidence/audit_before/bullet.jpg",
@@ -1284,158 +1323,163 @@
   "movies": [
    {
     "path": "cinematic/v14/evidence/movies/bullet_ultimate_10s_sheet.jpg",
-    "bytes": 196677,
-    "sha256": "b7ec37f8166d4eacca6487485e6ede212be92eb2ab4b601ef96ea466deba4f64"
+    "bytes": 195706,
+    "sha256": "4282f62da8b66a1cf1464409a94f8f17114dbc27c43226f90a57e160857cabc6"
    },
    {
     "path": "cinematic/v14/evidence/movies/bullet_ultimate_10s_vs_dark_moguzo.mp4",
-    "bytes": 658101,
-    "sha256": "f30a1fd32ddcca807ad1b8aa7461e9cc139996e078a331b765dfee49e7e58128"
+    "bytes": 654278,
+    "sha256": "702bd60cd6b11d85bc463cd6a3a448e80fb5dc1eddaa959c37d5b66c3c9334f9"
    },
    {
     "path": "cinematic/v14/evidence/movies/bullet_ultimate_before_after.mp4",
-    "bytes": 729885,
-    "sha256": "5e7648c31c4adbe26c99d5784cdf52e1885f4c7a0a42b1e8ec389ad87be10002"
+    "bytes": 727481,
+    "sha256": "d0be25e7ac048e3eac9cdeb06dff5c480645930618d9f69a98b6f81ca90b2a73"
    },
    {
     "path": "cinematic/v14/evidence/movies/chirka_ultimate_10s_sheet.jpg",
-    "bytes": 227552,
-    "sha256": "5aaf0529dbc05a003c604556de08a57ac88334d3fe9e0607cd1284aefeac5910"
+    "bytes": 225740,
+    "sha256": "bb0411327be6d8eb73a0db9986502159278f3a17e8e1fc65a8564e9301c7e770"
    },
    {
     "path": "cinematic/v14/evidence/movies/chirka_ultimate_10s_vs_godan.mp4",
-    "bytes": 966275,
-    "sha256": "b5565be2a2d16fb4101062575aaf4c14592aab5db9d56f2359ad9a5687dc1b17"
+    "bytes": 862545,
+    "sha256": "63c6b617598f6a4dfb04f19b48d50151872c02378f627bbe4b37b657feb82f9e"
    },
    {
     "path": "cinematic/v14/evidence/movies/chirka_ultimate_10s_vs_pisuke.mp4",
-    "bytes": 1092966,
-    "sha256": "8d0a5de79cdbf14bc85f9c4a9c05cf431a2017a1aeaf06004093975d626c842e"
+    "bytes": 972143,
+    "sha256": "5cbc6591d1e1bc4ec74eb5799835707f011ee21d735f1cdac14b780c0e23f02f"
    },
    {
     "path": "cinematic/v14/evidence/movies/chirka_ultimate_before_after.mp4",
-    "bytes": 1042325,
-    "sha256": "328548c9ca3eb48a11c32e79a9448e092300db309a5dba829406205b5e4d5739"
+    "bytes": 1035520,
+    "sha256": "37239eed31e520f5070b9548da8b427f83ea1ba17e47031a3c697bb8a406906d"
    },
    {
     "path": "cinematic/v14/evidence/movies/dark_moguzo_ultimate_10s_sheet.jpg",
-    "bytes": 192612,
-    "sha256": "255e1dd21a73b1e35d8f34f40be1974aeae77bb2e4e61bdd58eda1ed400a71a6"
+    "bytes": 194420,
+    "sha256": "19c8ffee7b72a6280974cc7b56ae4f39afb901dfef30096042d3cbcc767a6c34"
    },
    {
     "path": "cinematic/v14/evidence/movies/dark_moguzo_ultimate_10s_vs_hakuma.mp4",
-    "bytes": 737198,
-    "sha256": "318c254e7fc7acd139b875f7c48431ec34e92d9e8c85254fd28d6161af8c7d50"
+    "bytes": 740477,
+    "sha256": "e7df9815ca92988e664dfe8041fa6ae19316b078b7c6f22e7f00a6c50244fbd2"
    },
    {
     "path": "cinematic/v14/evidence/movies/dark_moguzo_ultimate_before_after.mp4",
-    "bytes": 811685,
-    "sha256": "37a63f44c043fbc9d9c59b35454417a0a845a9d9e13dcc5f3251b008315f476b"
+    "bytes": 814099,
+    "sha256": "5716f1cb11fcffa2597c310f651d5904f7e32306b74a2e40233d39cc7572e1cc"
    },
    {
     "path": "cinematic/v14/evidence/movies/godan_ultimate_10s_sheet.jpg",
-    "bytes": 201775,
-    "sha256": "b2903991bd63b973618bc90826df212b3bf624c24e37233d0a4da427123d310a"
+    "bytes": 199387,
+    "sha256": "e25aa569c9877bcd197cbf6a30908034791b657f6665869fef0aa36097dbed9e"
    },
    {
     "path": "cinematic/v14/evidence/movies/godan_ultimate_10s_vs_chirka_mirrored.mp4",
-    "bytes": 730034,
-    "sha256": "50fa20b056b4c04556791a79a99a449988645afe488f510377f42a87237e8cd8"
+    "bytes": 630560,
+    "sha256": "25b6780173cc0d9dfc6dba430e555efa1a8c77299ec294ac4383682009cccd57"
    },
    {
     "path": "cinematic/v14/evidence/movies/godan_ultimate_10s_vs_pisuke.mp4",
-    "bytes": 843480,
-    "sha256": "8bc83ce4caf4b33e2764562567192c6ee6b0e3e2d945483322f7514bb8cf8d05"
+    "bytes": 726724,
+    "sha256": "5fc34510f836a9ceacc30b2a322e29d8b5ad80ddacee91d2c911ed23c21fce57"
    },
    {
     "path": "cinematic/v14/evidence/movies/godan_ultimate_before_after.mp4",
-    "bytes": 814164,
-    "sha256": "6557fcace35f4c02dc52ac4df3f48849f86135f2a889b41f4437a828615c1480"
+    "bytes": 783613,
+    "sha256": "121e6bdbb6224224cca9aa0dcfc8640cc3adda6304787a50c09e6039b93cf0c7"
    },
    {
     "path": "cinematic/v14/evidence/movies/hakuma_ultimate_10s_sheet.jpg",
-    "bytes": 226028,
-    "sha256": "2d73b104b092034bac0e0b64a387997515a893d7fedb2798f601a009da3aaeb2"
+    "bytes": 224834,
+    "sha256": "55990b5fc31eeee20af72d5a3227707518b18a9ad9076153774551c7a86df7c6"
    },
    {
     "path": "cinematic/v14/evidence/movies/hakuma_ultimate_10s_vs_chirka.mp4",
-    "bytes": 750212,
-    "sha256": "90b7c09e0ec2b753f89fca058674242fe7b51d9197f2ddeb35b3670439b36c8b"
+    "bytes": 739212,
+    "sha256": "8ae8b3d038e030b53bab4f0883552267d87e8b7cb0e505efccccd6eca8429394"
    },
    {
     "path": "cinematic/v14/evidence/movies/hakuma_ultimate_before_after.mp4",
-    "bytes": 832991,
-    "sha256": "7762a3fa92c2d11895c934be463d415983a9aa0692b552c238eb84f392bde1a8"
+    "bytes": 827116,
+    "sha256": "9c503416eb237e10776e664696447bf1fd8ce79e3f708e020b52ee97712bcf31"
    },
    {
     "path": "cinematic/v14/evidence/movies/moguzo_ultimate_10s_sheet.jpg",
-    "bytes": 185722,
-    "sha256": "0990132d88717ece534c99280c0ac99195fbf3826f7c70c879ba5ce1887369f9"
+    "bytes": 185304,
+    "sha256": "645e4b3d0dbff114dce387fa4bc931c538edd1244289d4497eb4f9e380b1a55a"
    },
    {
     "path": "cinematic/v14/evidence/movies/moguzo_ultimate_10s_vs_pisuke.mp4",
-    "bytes": 716724,
-    "sha256": "f9fdf801b70a86ccd093f3e737d282ffe595142d2afcfd0c2a02bb7039c1ed9b"
+    "bytes": 644851,
+    "sha256": "cfabe58a91677d0eb499790ffef1b2e69f32f18b0df4b7e2026b47a1f3a6b839"
    },
    {
     "path": "cinematic/v14/evidence/movies/moguzo_ultimate_10s_vs_takimaru.mp4",
-    "bytes": 665411,
-    "sha256": "a161b282a7255cd9ea4c5f4ab932f9015df0df11a6c4c5c133cc1939c2657f1f"
+    "bytes": 590220,
+    "sha256": "b6368bd8a67a4271231b20e683b6aa2a1d8fcadb2f4f44ff341d2c41f8eb2095"
    },
    {
     "path": "cinematic/v14/evidence/movies/moguzo_ultimate_before_after.mp4",
-    "bytes": 721584,
-    "sha256": "b78f2099311ca59b6fd23eac3f24a5ea662615617af4fc754d5fc06d247d5e37"
+    "bytes": 715897,
+    "sha256": "a03c45a0cce5ab268aeba6f07135e0ffdd17bc664ea9703be692462b99e7177e"
    },
    {
     "path": "cinematic/v14/evidence/movies/pisuke_ultimate_10s_sheet.jpg",
-    "bytes": 180545,
-    "sha256": "21d04d58d71fd050c8e816e9fa1aa6c6e9d7666c47785c284a434f06b1e6784a"
+    "bytes": 182436,
+    "sha256": "b48210191e626b282672b8ccb474d29dc36555a60dd0a0e68259de5961774665"
    },
    {
     "path": "cinematic/v14/evidence/movies/pisuke_ultimate_10s_vs_godan.mp4",
-    "bytes": 569585,
-    "sha256": "8567223804e751f426fb568b4657aa1dc5e2e7139d280e7d59ef6d9fcfb55327"
+    "bytes": 580583,
+    "sha256": "bb70d2582b5fefa30c4a42dda4d8a7393c3f22e33956f5e66ba2cb341d004786"
    },
    {
     "path": "cinematic/v14/evidence/movies/pisuke_ultimate_10s_vs_pisuke.mp4",
-    "bytes": 515781,
-    "sha256": "b21a63c084a4b8d856227a5d370c1e05e4baf7ba5ac751854a5fc99325b1980c"
+    "bytes": 525919,
+    "sha256": "fedcdb1f7a572cbd13d7636aa2ed5fe4039494ac0a338a32af63a418ad4d6611"
    },
    {
     "path": "cinematic/v14/evidence/movies/pisuke_ultimate_before_after.mp4",
-    "bytes": 646983,
-    "sha256": "e392292018d874c029cdde8bdf47df772af683fb3541b0c140758d727a0c8f3e"
+    "bytes": 664807,
+    "sha256": "527adade3bfaf2c417f9ce635ce30b82f3e5d54f1e22ba254108f91d1afa986a"
    },
    {
     "path": "cinematic/v14/evidence/movies/takimaru_ultimate_10s_sheet.jpg",
-    "bytes": 193620,
-    "sha256": "4d9d13cebdea3aab10121ac2338fb3bd27520c0a6d0a5b8f07ab741b4329e830"
+    "bytes": 194650,
+    "sha256": "dcc1142b4eb5cfad0f0bb422f4f7322205c53bc67d4a5f16bb46190e1106e5b3"
    },
    {
     "path": "cinematic/v14/evidence/movies/takimaru_ultimate_10s_vs_pisuke.mp4",
-    "bytes": 683919,
-    "sha256": "660fcd33a5bbfaf1f7510aca2c5bdc6180d740e990a98d56c3457873c710006a"
+    "bytes": 688023,
+    "sha256": "ef2a8e1c9bac2598e3f0c87d2ac97065e0a6f319e2a729e7dbf39c1deeb6c3b5"
    },
    {
     "path": "cinematic/v14/evidence/movies/takimaru_ultimate_before_after.mp4",
-    "bytes": 767285,
-    "sha256": "4361a758d432cf3aa2ee5cc766443a5ae74e577c3d976e5bbc9a8a993a3fadd0"
+    "bytes": 769336,
+    "sha256": "924a90c8b3c53a44a7da62bf5185cf45c140971cec2c5fcf18dd7c968ce7b000"
    },
    {
     "path": "cinematic/v14/evidence/movies/yomikage_ultimate_10s_sheet.jpg",
-    "bytes": 159999,
-    "sha256": "f112bdbe92b78ac1f329eb747b3f607fb02cfb56c0218f5c2676ebde56e89d49"
+    "bytes": 156494,
+    "sha256": "4fdc11277276adaa34b2fa12fd4e4f794810f34800bf9f86f651ae870bf3ddb1"
    },
    {
     "path": "cinematic/v14/evidence/movies/yomikage_ultimate_10s_vs_moguzo.mp4",
-    "bytes": 402628,
-    "sha256": "7e8cf3f36637e8600d9c611ccece0faedd69c19d75eedc7b93c2a11fe8b60cc8"
+    "bytes": 379530,
+    "sha256": "5855552456413d3154914a18a15555a735cb61a7cf42ba4792687cdb06e9110c"
+   },
+   {
+    "path": "cinematic/v14/evidence/movies/yomikage_ultimate_10s_vs_takimaru.mp4",
+    "bytes": 374032,
+    "sha256": "70b451ce2b950844bc85bed5d521de0732d1c7c4160b6fd8a1a25ca29bb3a5c1"
    },
    {
     "path": "cinematic/v14/evidence/movies/yomikage_ultimate_before_after.mp4",
-    "bytes": 501961,
-    "sha256": "c3a8e9018acc0c1a9ad8d399c2d0a29cdef9a9102e62de06bdcaa396ba1e054b"
+    "bytes": 478671,
+    "sha256": "d946b743d02eed8fa9c1f897e1f80bbc4a78f2f34a2cc02d12fb5ab34de6e8d2"
    }
   ]
  },
