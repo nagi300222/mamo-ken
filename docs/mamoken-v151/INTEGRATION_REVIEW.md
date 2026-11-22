@@ -1,6 +1,6 @@
-# v15.1 integration candidate — reciprocal review in progress
+# v15.1 integration candidate — reciprocal review and vertical-contact follow-up
 
-Base: user-approved PR195 b92717c. Codex lane PR197 33f73a2. Claude art lane PR198 99c6c7d.
+Base: user-approved PR195 b92717c. Codex lane PR197 33f73a2. Claude art lane PR198 b8256ea (motion source unchanged from 99c6c7d; height/bounds and evidence added).
 
 - Codex reviewed all nine before/after contact sheets, editable fix specifications, builder changes and surface measurement code. Original model/movies are preserved. The initial six flagged moves (seven findings) were returned to Claude; the second delivery resolves all 54 contact flags, including head/tail misclassification and low-tail floor penetration.
 - Thirty motions receive local pose/weight edits; the other 24 keep the v15 gesture angles (common thigh-fix rig following remains). Art-owned data and sources retain their own Git history and Draft.
@@ -8,4 +8,4 @@ Base: user-approved PR195 b92717c. Codex lane PR197 33f73a2. Claude art lane PR1
 - The game interpolates striking reach during active frames and prohibits normal hits behind the locked facing. Both startup contact pose and hitstop are verified in the real WebGL browser. The extended browser test compares the actual skinned striking surface to the contact metadata within 1.5cm, for all 54 moves.
 - Relative performance: fast grounded jabs4F, Moguzo5F, Godan7F. Godan retains high damage and one weak only; Bullet's tail is actual long-range, with punishable recovery. Raw jab advantage stays below next startup, including perfect corner inputs. Strong hits recover first, while guarded/whiffed strong attacks remain risky.
 
-Pending at candidate publication: Claude's review of the integrated contact-clock code, final before/after animation movies, final six-pattern CPU audit and complete integrated browser/ultimate regression. No main or original Draft has been merged. This candidate does not certify physical iPhone FPS/heat or final tournament balance.
+Claude read the cbd1da1 connection and posted no blocking request on PR197; its independent equivalent-tree measurement covered 53 startup poses with at most 1mm difference, with one missing timing sample. Its concern about vertical collision led to the additional height and measured hurt-bound data in b8256ea. Codex implements this for normals only and adds regression for a floor tail versus raised feet. The candidate has 134 Node tests; height-aware WebGL regression is queued on publication. The six-pattern CPU audit is complete. Final seven before/after movies are still being encoded in the independent art lane. No main or original Draft has been merged. This candidate does not certify physical iPhone FPS/heat or final tournament balance.

@@ -2,6 +2,9 @@ name: MamoKen v15 Practice + Cancel regression
 
 on:
   push:
+    paths-ignore:
+      - docs/**
+      - exp/fable-3d/normal-art/**
     branches:
       - feat/mamoken-v151-normal-balance
       - feat/mamoken-v151-reviewed-integration

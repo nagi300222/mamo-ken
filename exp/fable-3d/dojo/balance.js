@@ -60,7 +60,7 @@ export function normalMove(id, slot) {
   if (!ROSTER[id]) throw Error('unknown normal: '+id+'/'+slot);
   const motion=NORMAL_CONTACTS[id]?.[slot];
   if(!motion)throw Error('missing authored contact: '+id+'/'+slot);
-  return {...normalPerformance(id,slot),reach:motion.reach,activeReach:motion.activeReach.map(p=>({...p})),
+  return {...normalPerformance(id,slot),reach:motion.reach,strikeHeight:motion.height,activeReach:motion.activeReach.map(p=>({...p})),
     name:slot,kind:'strike',normalVersion:'15.1'};
 }
 export function specialMove(id, index) {

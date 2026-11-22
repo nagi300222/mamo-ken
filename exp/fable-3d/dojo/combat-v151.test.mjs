@@ -5,7 +5,8 @@ import {IDS,normalMove} from './balance.js';
 import {NORMAL_SLOTS,MOTIFS} from './normal-motifs-v15.js';
 import {NORMAL_CONTACTS} from './normal-contacts-v151.js';
 import {normalClipTime} from './normal-timing-v151.js';
-import {normalReachAt} from './normal-contact-runtime-v151.js';
+import {normalReachAt,normalHeightAt,normalVerticalContact} from './normal-contact-runtime-v151.js';
+import * as NORMAL_ART from './normal-contacts-v151.js';
 import {fighterStyle} from './fighter-style.js';
 import {cpuInput,CPU_LEVELS} from './cpu.js';
 import {createPracticeController} from './practice-mode.js';
@@ -180,6 +181,27 @@ test('all 54 integrated contacts are resolved and performance never extends the 
   assert.equal(normalReachAt(m,m.startup),c.activeReach[0].reach);
   assert.equal(normalReachAt(m,m.startup+m.active-1),c.activeReach.at(-1).reach);
   if(id==='bullet')assert.equal(c.attackPart,slot==='stand_weak'?'head':'tail',slot);
-  assert.ok(c.activeReach.every((p,i)=>Number.isFinite(p.reach)&&p.reach>0&&p.phase>=0&&p.phase<=1&&(!i||p.phase>c.activeReach[i-1].phase)));
+  assert.ok(c.activeReach.every((p,i)=>Number.isFinite(p.reach)&&Number.isFinite(p.height)&&p.reach>0&&p.phase>=0&&p.phase<=1&&(!i||p.phase>c.activeReach[i-1].phase)));
+ }
+});
+
+test('normal vertical contact samples strike height and uses the measured standing/crouching victim',()=>{
+ const boxes={test:{stand:{bottom:0,top:.65},crouch:{bottom:0,top:.32}}};
+ const a={y:0,frame:5},t={id:'test',y:0,state:'idle',input:{}};
+ const m={startup:5,active:3,reach:.4,strikeHeight:.4,activeReach:[{phase:0,reach:.4,height:.4},{phase:1,reach:.4,height:.2}]};
+ assert.equal(normalHeightAt(m,5),.4);assert.ok(Math.abs(normalHeightAt(m,6)-.3)<1e-12);
+ assert.equal(normalVerticalContact(a,t,m,boxes),true);
+ t.state='crouch';assert.equal(normalVerticalContact(a,t,m,boxes),false);
+ a.frame=7;assert.equal(normalVerticalContact(a,t,m,boxes),true);
+ t.y=.4;t.state='jump';assert.equal(normalVerticalContact(a,t,m,boxes),false);
+});
+test('the real floor-level tail hits grounded fighters and misses their raised feet in all nine matchups',()=>{
+ for(const id of IDS){
+  const g=new Battle('bullet',id),[a,t]=g.fighters,m=normalMove('bullet','crouch_heavy');
+  a.x=0;t.x=.40;a.facing=1;a.frame=m.startup;t.state='idle';
+  assert.equal(g._contact(a,t,m),true,id+' grounded low tail');
+  t.y=.20;t.state='jump';assert.equal(g._contact(a,t,m),false,id+' invisible upward tail');
+  const bounds=NORMAL_ART.NORMAL_HURT_BOUNDS[id];
+  assert.ok(bounds.crouch.top<bounds.stand.top,id+' unmeasured duck');
  }
 });

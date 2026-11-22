@@ -35,16 +35,26 @@ for (const id of Object.keys(MOTIFS)) { const C = JSON.parse(fs.readFileSync(pat
     if (y < -.01) why.push(`打撃部位が床下 ${r3(y)}m`);
     const contact = o.contact ?? pk.i / N; let e = pk.i; while (e < N && at(e + 1, pk.p) >= pk.v - .02) e++;
     const contactEnd = o.contactEnd ?? Math.min(.94, Math.max(contact + .06, Math.min(contact + .12, e / N)));
-    const activeReach = [0, .5, 1].map(ph => ({ phase: ph, reach: r3(lerp(contact + (contactEnd - contact) * ph, pk.p)) }));
-    OUT[id][slot] = { contact: r3(contact), contactEnd: r3(contactEnd), attackPart: pk.p, attackBone: BONE[pk.p], bothHands: want.length > 1 || undefined, reach: r3(lerp(contact, pk.p)), height: r3(y), activeReach,
+    const lerpY = (u, p) => { const x = Math.max(0, Math.min(N, u * N)), i = Math.min(N - 1, Math.floor(x)); return S[i][p][1] + (S[i + 1][p][1] - S[i][p][1]) * (x - i); };
+    const activeReach = [0, .5, 1].map(ph => { const u = contact + (contactEnd - contact) * ph; return { phase: ph, reach: r3(lerp(u, pk.p)), height: r3(Math.max(0, lerpY(u, pk.p))) }; });
+    OUT[id][slot] = { contact: r3(contact), contactEnd: r3(contactEnd), attackPart: pk.p, attackBone: BONE[pk.p], bothHands: want.length > 1 || undefined, reach: r3(lerp(contact, pk.p)), height: r3(Math.max(0, lerpY(contact, pk.p))), activeReach,
       status: why.length ? 'fix' : 'ok', issues: why.length ? why : undefined, gesture: spec.gesture, motifContact: spec.contact };
     if (why.length) notes.push(`${id}/${slot} (${spec.gesture}): ${why.join(' / ')}`); } }
+// 被弾範囲（root 基準の高さ [m]）。sample_clips.mjs の <id>_bounds.json から。
+const HURT = {}; for (const id of Object.keys(MOTIFS)) { const f = path.join(dir, id + '_bounds.json'); if (!fs.existsSync(f)) continue; const b = JSON.parse(fs.readFileSync(f)); const top = k => b[k] ? Math.max(...b[k].samples.map(x => x.p98)) : null;
+  const cr = [top('crouch'), top('guard_crouch')].filter(x => x != null);
+  HURT[id] = { stand: { bottom: 0, top: r3(Math.max(top('stand'), top('guard_stand') ?? 0)) }, crouch: { bottom: 0, top: r3(Math.max(...cr)) }, detail: { idleTop: top('stand'), guardStandTop: top('guard_stand'), crouchTop: top('crouch'), guardCrouchTop: top('guard_crouch'), idleTopMax: Math.max(...b.stand.samples.map(x => x.max)) } }; }
+fs.writeFileSync(path.join(dir, 'normal_hurt_bounds.json'), JSON.stringify(HURT, null, 1) + '\n');
 const json = arg('json', path.join(dir, 'normal_contacts.json')); fs.writeFileSync(json, JSON.stringify(OUT, null, 1) + '\n');
 const js = arg('js', null);
 if (js) fs.writeFileSync(js, `// v15.1 通常技の接触同期データ（Claude 制作・実測）。生成: normal-art/v15_1/tools/build_contacts.mjs — 手で編集しない。
 // contact/contactEnd = クリップ正規化時刻。reach = 攻撃側 root から打撃部位表面までの前方距離 [m]（相手の hurt radius .16 は判定側で加算）。
-// activeReach = contact〜contactEnd を phase 0..1 としたときの実測の伸縮。status 'fix' は見た目の不一致が残る暫定値。
+// activeReach = contact〜contactEnd を phase 0..1 としたときの実測の伸縮。各点の height はその時刻の打撃表面（最前頂点）の高さ [m]（root 基準、地上クリップで測定。空中技は攻撃側の y を足す）。
+// status 'fix' は見た目の不一致が残る暫定値。
+// NORMAL_HURT_BOUNDS = 相手側の被弾範囲の高さ [m]（root 基準）。元GLBのスキン後頂点のうち body+head+leg（腕と尾は除く）の高さ分布から、
+//   top = 98パーセンタイル（耳先など上位2%の突起を除く）、bottom = 0（足裏）。stand は idle（4時刻）と guard_stand の高い方、crouch は crouch と guard_crouch の高い方。detail に内訳。
 export const NORMAL_CONTACTS_VERSION=${JSON.stringify(arg('ver', '15.1-audit'))};
 export const NORMAL_CONTACTS=Object.freeze(${JSON.stringify(OUT, null, 1)});
+export const NORMAL_HURT_BOUNDS=Object.freeze(${JSON.stringify(HURT, null, 1)});
 `);
 console.log('ok', Object.values(OUT).flatMap(Object.values).filter(x => x.status === 'ok').length, '/ fix', notes.length); console.log(notes.join('\n'));

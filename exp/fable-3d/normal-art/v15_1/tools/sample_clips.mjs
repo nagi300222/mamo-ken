@@ -37,6 +37,14 @@ const IN_PAGE = () => {
       const lo = r[g + '_lo']; if (!lo || v.y < lo[1]) r[g + '_lo'] = [f, v.y]; }
     for (const k in r) { r[k][0] = +r[k][0].toFixed(3); r[k][1] = +r[k][1].toFixed(3); if (r[k][3] !== undefined) r[k][3] = +r[k][3].toFixed(3); }
     return { dur: +d.toFixed(4), r }; };
+  // 被弾範囲: クリップ name の u で、体幹（body+head+leg。腕と尾は除く）の頂点高さの分布を返す。root（足元）基準。
+  window.__bounds = (name, u) => { const a = mamoken3d.actors[0], p = mamoken3d.battle.fighters[0], act = a.actions[name]; if (!act) return null;
+    for (const k in a.actions) if (a.actions[k] !== act) a.actions[k].stop();
+    act.reset(); act.enabled = true; act.setEffectiveWeight(1); act.setEffectiveTimeScale(1); act.clampWhenFinished = true; act.play(); act.paused = true; const d = act.getClip().duration; act.time = Math.min(d - 1e-4, u * d); a.mixer.update(0);
+    a.holder.position.set(p.x, 0, 0); a.holder.updateMatrixWorld(true); const v = a.__v, ys = [], fw = [];
+    for (const m of a.__m) for (let i = 0; i < m.n; i++) { if (/^(arm|tail)/.test(m.grp[i])) continue; m.o.getVertexPosition(i, v); v.applyMatrix4(m.o.matrixWorld); ys.push(v.y); fw.push((v.x - p.x) * p.facing); }
+    ys.sort((x, y) => x - y); fw.sort((x, y) => x - y); const q = (A, f) => +A[Math.min(A.length - 1, Math.floor(f * A.length))].toFixed(3);
+    return { n: ys.length, min: q(ys, 0), p01: q(ys, .01), p98: q(ys, .98), p995: q(ys, .995), max: q(ys, .9999), back: q(fw, .01), front: q(fw, .99) }; };
 };
 for (const id of ids) {
   const ctx = await browser.newContext({ viewport: { width: 852, height: 393 }, isMobile: true, hasTouch: true, deviceScaleFactor: 2 });
@@ -53,12 +61,16 @@ for (const id of ids) {
   for (let i = 0; i < 30; i++) await page.clock.runFor(16.7);
   await page.evaluate(IN_PAGE); await page.evaluate(() => { const g = mamoken3d.battle, [p, t] = g.fighters; p.x = -.9; t.x = .9; __prep(); });
   const R = {};
-  for (const slot of SLOTS) for (const pre of ['v15_', '']) {
+  if (!process.argv.includes('--bounds-only')) for (const slot of SLOTS) for (const pre of ['v15_', '']) {
     const name = pre ? 'v15_' + slot : { stand_weak: 'stand_light', stand_heavy: 'stand_heavy', crouch_weak: 'crouch_light', crouch_heavy: 'crouch_heavy', air_weak: 'air_light', air_heavy: 'air_heavy' }[slot];
     const s = []; for (let i = 0; i <= N; i++) s.push(await page.evaluate(([n, u]) => __sample(n, u), [name, i / N]));
     R[(pre ? 'new:' : 'src:') + slot] = { clip: name, dur: s[0]?.dur, samples: s.map(x => x?.r) };
   }
-  fs.writeFileSync(path.join(out, id + '_curves.json'), JSON.stringify(R)); console.log(id, 'ok');
+  const names = await page.evaluate(() => Object.keys(mamoken3d.actors[0].actions)); const Bd = {};
+  for (const [key, clip, us] of [['stand', 'idle', [0, .25, .5, .75]], ['crouch', 'crouch', [1]], ['guard_crouch', 'guard_crouch', [1]], ['guard_stand', 'guard_stand', [1]]]) if (names.includes(clip)) Bd[key] = { clip, samples: await Promise.all(us.map(u => page.evaluate(([n, u]) => __bounds(n, u), [clip, u]))) };
+  fs.writeFileSync(path.join(out, id + '_bounds.json'), JSON.stringify(Bd, null, 1));
+  if (!process.argv.includes('--bounds-only'))   fs.writeFileSync(path.join(out, id + '_curves.json'), JSON.stringify(R)); 
+  console.log(id, 'ok');
   await ctx.close();
 }
 await browser.close(); srv.close();

@@ -76,6 +76,7 @@ try{
      const contact=await page.evaluate(async ({id,slot})=>{
        const {NORMAL_CONTACTS}=await import('./normal-contacts-v151.js');
        const {normalMove}=await import('./balance.js');
+       const {normalHeightAt}=await import('./normal-contact-runtime-v151.js');
        const expected=NORMAL_CONTACTS[id][slot],a=mamoken3d.actors[0],p=mamoken3d.battle.fighters[0];
        a.holder.updateMatrixWorld(true);
        const part=n=>{
@@ -84,21 +85,23 @@ try{
          if(/foot|shin|thigh|knee|ankle|leg|toe/.test(s))return 'leg'+side;
          if(/tail/.test(s))return 'tail';if(/head|jaw|ear|neck|snout|nose|beak/.test(s))return 'head';return 'body';
        };
-       let forward=-Infinity;
+       let forward=-Infinity,height=0;
        a.gltf.scene.traverse(o=>{
          if(!o.isSkinnedMesh)return;
          const g=o.geometry,si=g.attributes.skinIndex,sw=g.attributes.skinWeight,v=o.position.clone();
          for(let i=0;i<g.attributes.position.count;i++){
            let bone=0,weight=-1;for(let k=0;k<4;k++)if(sw.getComponent(i,k)>weight){weight=sw.getComponent(i,k);bone=si.getComponent(i,k);}
            if(part(o.skeleton.bones[bone].name)!==expected.attackPart)continue;
-           o.getVertexPosition(i,v);v.applyMatrix4(o.matrixWorld);forward=Math.max(forward,(v.x-p.x)*p.facing);
+           o.getVertexPosition(i,v);v.applyMatrix4(o.matrixWorld);
+           const fwd=(v.x-p.x)*p.facing;if(fwd>forward){forward=fwd;height=v.y-p.y;}
          }
        });
-       return {forward,expected:expected.reach,configured:normalMove(id,slot).reach,status:expected.status,part:expected.attackPart};
+       return {forward,height,expectedHeight:normalHeightAt(normalMove(id,slot),p.frame),expected:expected.reach,configured:normalMove(id,slot).reach,status:expected.status,part:expected.attackPart};
      },{id,slot});
      assert.equal(contact.status,'ok',id+'/'+slot+' still has unresolved motion audit '+JSON.stringify(contact));
      assert.ok(Math.abs(contact.forward-contact.expected)<.015,id+'/'+slot+' visual limb/metadata reach mismatch '+JSON.stringify(contact));
      assert.equal(contact.configured,contact.expected,id+'/'+slot+' transparent reach extension');
+     assert.ok(Math.abs(contact.height-contact.expectedHeight)<.015,id+'/'+slot+' visual strike height mismatch '+JSON.stringify(contact));
      if(id==='bullet')assert.equal(contact.part,slot==='stand_weak'?'head':'tail',id+'/'+slot+' wrong intended striking part');
      completed.push(id+'/'+slot);
      if(slot==='stand_heavy'||slot==='crouch_heavy'||slot==='air_heavy'){

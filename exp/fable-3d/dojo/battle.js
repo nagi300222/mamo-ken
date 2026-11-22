@@ -2,7 +2,8 @@ import { FPS, ARENA, ROSTER, IDS, normalMove, specialMove, ultimateMove, tailTip
 import { pushDirection, readCommand, specialButtonSlot } from './commands.js';
 import { cpuInput } from './cpu.js';
 import {fighterStyle,isChainNormal,isChainWeak} from './fighter-style.js';
-import {normalReachAt} from './normal-contact-runtime-v151.js';
+import {normalReachAt,normalVerticalContact} from './normal-contact-runtime-v151.js';
+import * as NORMAL_ART from './normal-contacts-v151.js';
 // 設計の正本はバランスデータ。GLB・Three.js・操作DOMには依存しない。
 const KEYS=['left','right','up','down','weak','strong','throw','roar','gyuiin','dash','stepForward','stepBack','special','ultimateButton','special1','special2','special3','super'];
 const cap=(v,a,b)=>Math.max(a,Math.min(b,v));
@@ -486,9 +487,11 @@ export class Battle {
       return dist>=m.minReach&&tip>0&&dist<=tip+.16&&Math.abs(t.y-a.y)<.43;
     }
     if(m.kind==='anti')return dist<(m.reach||.4)+.16&&t.y<1.5;
+    if(m.normalVersion)return dist<=normalReachAt(m,a.frame)+.16&&
+      normalVerticalContact(a,t,m,NORMAL_ART.NORMAL_HURT_BOUNDS);
     if(a.y<.12&&t.y>.50)return false;
     if(a.y>.28&&t.y<.1&&a.y>.7)return false;
-    return dist<=(m.normalVersion?normalReachAt(m,a.frame):(m.reach||.5))+.16&&Math.abs(a.y-t.y)<.58;
+    return dist<=(m.reach||.5)+.16&&Math.abs(a.y-t.y)<.58;
   }
   _act(p,op){
     const m=p.action;if(!m)return;

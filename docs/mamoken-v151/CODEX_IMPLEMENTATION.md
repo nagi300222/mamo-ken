@@ -12,12 +12,14 @@ Base: PR #195, b92717c97a99de8f9518d7ad51dbd8d2397b18a2. User-approved v15 chore
 - CPU reads `fighter.frame`, fixing the nonexistent `action.frame` reference. `cpuSeed` supports repeatable varied cadence/guard simulations.
 - Practice adds standing guard, crouching guard and weak reversal. Hit count uses actual combo contacts, and frame advantage measures when both fighters become ready. A canceled action does not display a fictitious raw advantage.
 
-## Art contract (pending Claude audit)
+## Shared reviewed art contract
 
 Codex owns performance and rendering integration; Claude owns motif edits and contact/reach metadata. Neither modifies the other's sources before mutual review.
 
-`normalClipTime(id, slot, frame, move, clip.duration, contacts)` accepts optional contact data keyed by character/slot, with normalized `contact` and `contactEnd` values. Source +Z is forward before facing rotation. Reach means fighter-root to visible striking surface, with defender hurt radius 0.16m added separately. No transparent extension. Current reach is preserved until the measured art report is received; it is not yet certified as visually aligned.
+`normalClipTime(id, slot, frame, move, clip.duration, contacts)` accepts optional contact data keyed by character/slot, with normalized `contact` and `contactEnd` values. Source +Z is forward before facing rotation. Reach means fighter-root to visible striking surface, with defender hurt radius 0.16m added separately. No transparent extension. The integrated candidate reads reach/activeReach from Claude contact data, and shares contact/contactEnd with rendering. All 54 are checked against the actual skinned surface in WebGL.
 
-## Validation at initial submission
+## Validation
 
-130 Node tests pass; static Pages build passes. Nine real weak→strong→special2 routes hit three times against a defender holding guard after hit1, in both directions. Whiffs and expired contact windows do not cancel. These are initial regression results; art measurements, repeated CPU matrix and browser review are still in progress. Do not treat this Draft as completed balance or final integration.
+134 Node tests pass; static Pages build passes. Nine real weak→strong→special2 routes hit three times against a defender holding guard after hit1, in both directions. Whiffs and expired contact windows do not cancel. The integrated candidate passes the 54 contact-clock/surface browser gate. The 1,458-round six-pattern CPU audit records residual fast/universal-fighter advantage; it does not certify final competitive balance.
+
+Reciprocal-review follow-up: normal contact also samples activeReach.height against measured stand/crouch NORMAL_HURT_BOUNDS, with a vertical strike half-width of 0.06m. Floor tail attacks miss raised feet. This applies only to normals; special/ultimate collision rules are retained. Body bounds use the producer's measured body/head/leg P98 envelope across idle and guard poses.

@@ -1,0 +1,155 @@
+{
+ "moguzo": {
+  "stand": {
+   "bottom": 0,
+   "top": 0.574
+  },
+  "crouch": {
+   "bottom": 0,
+   "top": 0.442
+  },
+  "detail": {
+   "idleTop": 0.574,
+   "guardStandTop": 0.547,
+   "crouchTop": 0.399,
+   "guardCrouchTop": 0.442,
+   "idleTopMax": 0.596
+  }
+ },
+ "pisuke": {
+  "stand": {
+   "bottom": 0,
+   "top": 0.623
+  },
+  "crouch": {
+   "bottom": 0,
+   "top": 0.392
+  },
+  "detail": {
+   "idleTop": 0.623,
+   "guardStandTop": 0.586,
+   "crouchTop": 0.336,
+   "guardCrouchTop": 0.392,
+   "idleTopMax": 0.642
+  }
+ },
+ "godan": {
+  "stand": {
+   "bottom": 0,
+   "top": 0.629
+  },
+  "crouch": {
+   "bottom": 0,
+   "top": 0.52
+  },
+  "detail": {
+   "idleTop": 0.629,
+   "guardStandTop": 0.591,
+   "crouchTop": 0.471,
+   "guardCrouchTop": 0.52,
+   "idleTopMax": 0.649
+  }
+ },
+ "hakuma": {
+  "stand": {
+   "bottom": 0,
+   "top": 0.661
+  },
+  "crouch": {
+   "bottom": 0,
+   "top": 0.563
+  },
+  "detail": {
+   "idleTop": 0.661,
+   "guardStandTop": 0.629,
+   "crouchTop": 0.519,
+   "guardCrouchTop": 0.563,
+   "idleTopMax": 0.685
+  }
+ },
+ "chirka": {
+  "stand": {
+   "bottom": 0,
+   "top": 0.554
+  },
+  "crouch": {
+   "bottom": 0,
+   "top": 0.383
+  },
+  "detail": {
+   "idleTop": 0.554,
+   "guardStandTop": 0.519,
+   "crouchTop": 0.335,
+   "guardCrouchTop": 0.383,
+   "idleTopMax": 0.568
+  }
+ },
+ "takimaru": {
+  "stand": {
+   "bottom": 0,
+   "top": 0.702
+  },
+  "crouch": {
+   "bottom": 0,
+   "top": 0.568
+  },
+  "detail": {
+   "idleTop": 0.702,
+   "guardStandTop": 0.663,
+   "crouchTop": 0.515,
+   "guardCrouchTop": 0.568,
+   "idleTopMax": 0.725
+  }
+ },
+ "yomikage": {
+  "stand": {
+   "bottom": 0,
+   "top": 0.615
+  },
+  "crouch": {
+   "bottom": 0,
+   "top": 0.456
+  },
+  "detail": {
+   "idleTop": 0.615,
+   "guardStandTop": 0.588,
+   "crouchTop": 0.407,
+   "guardCrouchTop": 0.456,
+   "idleTopMax": 0.633
+  }
+ },
+ "bullet": {
+  "stand": {
+   "bottom": 0,
+   "top": 0.593
+  },
+  "crouch": {
+   "bottom": 0,
+   "top": 0.456
+  },
+  "detail": {
+   "idleTop": 0.593,
+   "guardStandTop": 0.564,
+   "crouchTop": 0.411,
+   "guardCrouchTop": 0.456,
+   "idleTopMax": 0.614
+  }
+ },
+ "dark_moguzo": {
+  "stand": {
+   "bottom": 0,
+   "top": 0.565
+  },
+  "crouch": {
+   "bottom": 0,
+   "top": 0.422
+  },
+  "detail": {
+   "idleTop": 0.565,
+   "guardStandTop": 0.534,
+   "crouchTop": 0.376,
+   "guardCrouchTop": 0.422,
+   "idleTopMax": 0.583
+  }
+ }
+}
