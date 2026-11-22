@@ -1,0 +1,3958 @@
+{
+  "schema": "mamo-ken-v151-wiki-v1",
+  "snapshot": {
+    "name": "マモ拳 3D v15.1 統合 Draft",
+    "date": "2026-11-23",
+    "commit": "78dd0c685d78af617896c01bd95a277928e01368",
+    "pr199": "https://github.com/nagi300222/mamo-ken/pull/199",
+    "pr197": "https://github.com/nagi300222/mamo-ken/pull/197",
+    "pr198": "https://github.com/nagi300222/mamo-ken/pull/198",
+    "url": "https://feat-mamoken-v151-reviewed-i.mamoken-3d.pages.dev/dojo/",
+    "nodes": "134/134",
+    "animations": "54/54",
+    "cinematics": "81組",
+    "cpuMatches": 1458,
+    "notes": "開発版。各数値は現行実装スナップショットであり、本人による確定バランスではない。"
+  },
+  "definitions": {
+    "fps": 60,
+    "hurtRadius": 0.16,
+    "hitAdvReference": "接触距離0.35m・相手ゴダン・初段最速接触の実測。空中では着地と高度で変動。",
+    "normalReach": "攻撃側rootから前方の実スキン攻撃部位表面まで。対象のhurt半径0.16mは別加算。",
+    "specialReach": "ゲーム性能データ上のreach。projectileは弾の飛翔距離、counterは成立距離、tailは軌道ごとの先端リーチとは異なる。",
+    "movie": "奥義ムービーは奥義命中かつ非ガード時のみ。約10秒。",
+    "video": "比較動画は9fps・13時刻の姿勢サンプル。60fpsの実戦・入力速度の実演ではない。"
+  },
+  "order": [
+    "moguzo",
+    "pisuke",
+    "godan",
+    "hakuma",
+    "chirka",
+    "takimaru",
+    "yomikage",
+    "bullet",
+    "dark_moguzo"
+  ],
+  "moveOrder": [
+    "stand_weak",
+    "stand_heavy",
+    "crouch_weak",
+    "crouch_heavy",
+    "air_weak",
+    "air_heavy"
+  ],
+  "characters": {
+    "moguzo": {
+      "id": "moguzo",
+      "name": "モグゾー",
+      "role": "万能・根性",
+      "hp": 1000,
+      "walk": 0.016,
+      "dash": 0.27,
+      "jump": 0.095,
+      "power": 1,
+      "ability": "guts",
+      "specials": [
+        {
+          "id": "s1",
+          "name": "大地の波",
+          "kind": "projectile",
+          "startup": 13,
+          "active": 2,
+          "recovery": 20,
+          "total": 35,
+          "damage": 57,
+          "baseDamage": 57,
+          "reach": 0.42,
+          "optional": {
+            "speed": 0.04,
+            "life": 85,
+            "effect": "earth"
+          }
+        },
+        {
+          "id": "s2",
+          "name": "昇り拳",
+          "kind": "anti",
+          "startup": 6,
+          "active": 8,
+          "recovery": 26,
+          "total": 40,
+          "damage": 95,
+          "baseDamage": 95,
+          "reach": 0.4,
+          "optional": {
+            "invul": 4
+          }
+        },
+        {
+          "id": "s3",
+          "name": "地走り",
+          "kind": "dash",
+          "startup": 12,
+          "active": 5,
+          "recovery": 19,
+          "total": 36,
+          "damage": 75,
+          "baseDamage": 75,
+          "reach": 0.51,
+          "optional": {
+            "travel": 0.32
+          }
+        }
+      ],
+      "normals": [
+        {
+          "id": "stand_weak",
+          "label": "立ち弱",
+          "description": "左拳の突き。腰を回す",
+          "gesture": "straightL",
+          "attackPart": "armL",
+          "attackPartLabel": "左腕・左拳",
+          "contactTime": 0.225,
+          "contactEnd": 0.3,
+          "strikeHeight": 0.34,
+          "reach": 0.415,
+          "activeReach": [
+            {
+              "phase": 0,
+              "reach": 0.415,
+              "height": 0.34
+            },
+            {
+              "phase": 0.5,
+              "reach": 0.409,
+              "height": 0.322
+            },
+            {
+              "phase": 1,
+              "reach": 0.396,
+              "height": 0.294
+            }
+          ],
+          "startup": 5,
+          "active": 3,
+          "recovery": 12,
+          "total": 20,
+          "damage": 38,
+          "level": "mid",
+          "hitAdv": 3,
+          "blockAdv": -4,
+          "hitstun": 18,
+          "blockstun": 11,
+          "knockback": 0.045,
+          "blockPushback": 0.045,
+          "cancelWindow": {
+            "hit": [
+              0,
+              6
+            ],
+            "block": [
+              0,
+              2
+            ]
+          },
+          "cancelOnHit": [
+            "weak",
+            "heavy",
+            "s1",
+            "s2",
+            "s3"
+          ],
+          "cancelOnBlock": [
+            "weak",
+            "heavy",
+            "s1"
+          ],
+          "status": "ok"
+        },
+        {
+          "id": "stand_heavy",
+          "label": "立ち強",
+          "description": "右の重いすくい上げ",
+          "gesture": "risingR",
+          "attackPart": "armR",
+          "attackPartLabel": "右腕・右拳",
+          "contactTime": 0.3,
+          "contactEnd": 0.36,
+          "strikeHeight": 0.247,
+          "reach": 0.463,
+          "activeReach": [
+            {
+              "phase": 0,
+              "reach": 0.463,
+              "height": 0.247
+            },
+            {
+              "phase": 0.5,
+              "reach": 0.438,
+              "height": 0.228
+            },
+            {
+              "phase": 1,
+              "reach": 0.403,
+              "height": 0.214
+            }
+          ],
+          "startup": 12,
+          "active": 4,
+          "recovery": 22,
+          "total": 38,
+          "damage": 80,
+          "level": "mid",
+          "hitAdv": 2,
+          "blockAdv": -12,
+          "hitstun": 28,
+          "blockstun": 14,
+          "knockback": 0.1,
+          "blockPushback": 0.09,
+          "cancelWindow": {
+            "hit": [
+              0,
+              5
+            ],
+            "block": [
+              0,
+              2
+            ]
+          },
+          "cancelOnHit": [
+            "s1",
+            "s2",
+            "s3"
+          ],
+          "cancelOnBlock": [],
+          "status": "ok"
+        },
+        {
+          "id": "crouch_weak",
+          "label": "しゃがみ弱",
+          "description": "踏み込む低い掌（右）",
+          "gesture": "lowPalmStep",
+          "attackPart": "armR",
+          "attackPartLabel": "右腕・右拳",
+          "contactTime": 0.375,
+          "contactEnd": 0.495,
+          "strikeHeight": 0.188,
+          "reach": 0.46,
+          "activeReach": [
+            {
+              "phase": 0,
+              "reach": 0.46,
+              "height": 0.188
+            },
+            {
+              "phase": 0.5,
+              "reach": 0.454,
+              "height": 0.19
+            },
+            {
+              "phase": 1,
+              "reach": 0.442,
+              "height": 0.192
+            }
+          ],
+          "startup": 6,
+          "active": 3,
+          "recovery": 13,
+          "total": 22,
+          "damage": 33,
+          "level": "low",
+          "hitAdv": 2,
+          "blockAdv": -5,
+          "hitstun": 18,
+          "blockstun": 11,
+          "knockback": 0.045,
+          "blockPushback": 0.045,
+          "cancelWindow": {
+            "hit": [
+              0,
+              6
+            ],
+            "block": [
+              0,
+              2
+            ]
+          },
+          "cancelOnHit": [
+            "weak",
+            "heavy",
+            "s1",
+            "s2",
+            "s3"
+          ],
+          "cancelOnBlock": [
+            "weak",
+            "heavy",
+            "s1"
+          ],
+          "status": "ok"
+        },
+        {
+          "id": "crouch_heavy",
+          "label": "しゃがみ強",
+          "description": "拳を地面へ叩き込む",
+          "gesture": "groundPound",
+          "attackPart": "armR",
+          "attackPartLabel": "右腕・右拳",
+          "contactTime": 0.5,
+          "contactEnd": 0.575,
+          "strikeHeight": 0.15,
+          "reach": 0.386,
+          "activeReach": [
+            {
+              "phase": 0,
+              "reach": 0.386,
+              "height": 0.15
+            },
+            {
+              "phase": 0.5,
+              "reach": 0.381,
+              "height": 0.151
+            },
+            {
+              "phase": 1,
+              "reach": 0.369,
+              "height": 0.152
+            }
+          ],
+          "startup": 13,
+          "active": 4,
+          "recovery": 24,
+          "total": 41,
+          "damage": 76,
+          "level": "low",
+          "hitAdv": 2,
+          "blockAdv": -15,
+          "hitstun": 30,
+          "blockstun": 13,
+          "knockback": 0.11,
+          "blockPushback": 0.1,
+          "cancelWindow": {
+            "hit": [
+              0,
+              5
+            ],
+            "block": [
+              0,
+              2
+            ]
+          },
+          "cancelOnHit": [
+            "s1",
+            "s2",
+            "s3"
+          ],
+          "cancelOnBlock": [],
+          "status": "ok"
+        },
+        {
+          "id": "air_weak",
+          "label": "空中弱",
+          "description": "飛び込みながら斜め下に左拳",
+          "gesture": "diveFistL",
+          "attackPart": "armL",
+          "attackPartLabel": "左腕・左拳",
+          "contactTime": 0.35,
+          "contactEnd": 0.47,
+          "strikeHeight": 0.324,
+          "reach": 0.427,
+          "activeReach": [
+            {
+              "phase": 0,
+              "reach": 0.427,
+              "height": 0.324
+            },
+            {
+              "phase": 0.5,
+              "reach": 0.424,
+              "height": 0.341
+            },
+            {
+              "phase": 1,
+              "reach": 0.427,
+              "height": 0.326
+            }
+          ],
+          "startup": 6,
+          "active": 5,
+          "recovery": 12,
+          "total": 23,
+          "damage": 39,
+          "level": "air",
+          "hitAdv": -1,
+          "blockAdv": -7,
+          "hitstun": 16,
+          "blockstun": 10,
+          "knockback": 0.07,
+          "blockPushback": 0.06,
+          "cancelWindow": {
+            "hit": null,
+            "block": null
+          },
+          "cancelOnHit": [],
+          "cancelOnBlock": [],
+          "status": "ok"
+        },
+        {
+          "id": "air_heavy",
+          "label": "空中強",
+          "description": "前足の大きな踵落とし",
+          "gesture": "overheadHeel",
+          "attackPart": "legR",
+          "attackPartLabel": "右足・蹴り",
+          "contactTime": 0.475,
+          "contactEnd": 0.535,
+          "strikeHeight": 0.098,
+          "reach": 0.297,
+          "activeReach": [
+            {
+              "phase": 0,
+              "reach": 0.297,
+              "height": 0.098
+            },
+            {
+              "phase": 0.5,
+              "reach": 0.282,
+              "height": 0.107
+            },
+            {
+              "phase": 1,
+              "reach": 0.262,
+              "height": 0.126
+            }
+          ],
+          "startup": 11,
+          "active": 6,
+          "recovery": 18,
+          "total": 35,
+          "damage": 77,
+          "level": "air",
+          "hitAdv": 1,
+          "blockAdv": -11,
+          "hitstun": 25,
+          "blockstun": 13,
+          "knockback": 0.11,
+          "blockPushback": 0.09,
+          "cancelWindow": {
+            "hit": null,
+            "block": null
+          },
+          "cancelOnHit": [],
+          "cancelOnBlock": [],
+          "status": "ok"
+        }
+      ],
+      "ultimate": {
+        "id": "ultimate",
+        "name": "大地烈掌",
+        "kind": "super",
+        "startup": 8,
+        "active": 10,
+        "recovery": 32,
+        "total": 50,
+        "damage": 205,
+        "baseDamage": 205,
+        "reach": 0.79,
+        "optional": {}
+      },
+      "cpu": {
+        "v15": 69.4,
+        "v151": 67.7
+      },
+      "proposal": "全体勝率67.7%。立ち弱からの安定連係が強み。しゃがみ弱0.460mに対ししゃがみ強0.386mなので、屈強は短射程高リターン技として意図を明確化するか、踏み込みポーズを検討。",
+      "videos": {
+        "normals": {
+          "page": "https://github.com/nagi300222/mamo-ken/blob/78dd0c685d78af617896c01bd95a277928e01368/exp/fable-3d/normal-art/v15_1/evidence/videos/moguzo_normals_before_after.mp4",
+          "src": "https://raw.githubusercontent.com/nagi300222/mamo-ken/78dd0c685d78af617896c01bd95a277928e01368/exp/fable-3d/normal-art/v15_1/evidence/videos/moguzo_normals_before_after.mp4"
+        },
+        "specials": {
+          "page": "https://github.com/nagi300222/mamo-ken/blob/78dd0c685d78af617896c01bd95a277928e01368/exp/fable-3d/cinematic/v14/evidence/specials/moguzo_specials_before_after.mp4",
+          "src": "https://raw.githubusercontent.com/nagi300222/mamo-ken/78dd0c685d78af617896c01bd95a277928e01368/exp/fable-3d/cinematic/v14/evidence/specials/moguzo_specials_before_after.mp4"
+        },
+        "ultimate": {
+          "page": "https://github.com/nagi300222/mamo-ken/blob/78dd0c685d78af617896c01bd95a277928e01368/exp/fable-3d/cinematic/v14/evidence/movies/moguzo_ultimate_before_after.mp4",
+          "src": "https://raw.githubusercontent.com/nagi300222/mamo-ken/78dd0c685d78af617896c01bd95a277928e01368/exp/fable-3d/cinematic/v14/evidence/movies/moguzo_ultimate_before_after.mp4"
+        }
+      }
+    },
+    "pisuke": {
+      "id": "pisuke",
+      "name": "ピスケ",
+      "role": "高速・チェイス",
+      "hp": 900,
+      "walk": 0.025,
+      "dash": 0.36,
+      "jump": 0.102,
+      "power": 0.92,
+      "ability": "chase",
+      "specials": [
+        {
+          "id": "s1",
+          "name": "風の気弾",
+          "kind": "projectile",
+          "startup": 11,
+          "active": 1,
+          "recovery": 17,
+          "total": 29,
+          "damage": 35,
+          "baseDamage": 38,
+          "reach": 0.3,
+          "optional": {
+            "speed": 0.035,
+            "life": 28,
+            "effect": "wind"
+          }
+        },
+        {
+          "id": "s2",
+          "name": "空牙蹴り",
+          "kind": "anti",
+          "startup": 6,
+          "active": 8,
+          "recovery": 22,
+          "total": 36,
+          "damage": 64,
+          "baseDamage": 70,
+          "reach": 0.36,
+          "optional": {}
+        },
+        {
+          "id": "s3",
+          "name": "連脚",
+          "kind": "dash",
+          "startup": 7,
+          "active": 9,
+          "recovery": 20,
+          "total": 36,
+          "damage": 69,
+          "baseDamage": 75,
+          "reach": 0.47,
+          "optional": {
+            "travel": 0.38
+          }
+        }
+      ],
+      "normals": [
+        {
+          "id": "stand_weak",
+          "label": "立ち弱",
+          "description": "鋭い一歩の前拳",
+          "gesture": "snapJabL",
+          "attackPart": "armL",
+          "attackPartLabel": "左腕・左拳",
+          "contactTime": 0.2,
+          "contactEnd": 0.26,
+          "strikeHeight": 0.371,
+          "reach": 0.376,
+          "activeReach": [
+            {
+              "phase": 0,
+              "reach": 0.376,
+              "height": 0.371
+            },
+            {
+              "phase": 0.5,
+              "reach": 0.357,
+              "height": 0.347
+            },
+            {
+              "phase": 1,
+              "reach": 0.332,
+              "height": 0.329
+            }
+          ],
+          "startup": 4,
+          "active": 2,
+          "recovery": 12,
+          "total": 18,
+          "damage": 31,
+          "level": "mid",
+          "hitAdv": 2,
+          "blockAdv": -5,
+          "hitstun": 16,
+          "blockstun": 9,
+          "knockback": 0.035,
+          "blockPushback": 0.04,
+          "cancelWindow": {
+            "hit": [
+              0,
+              6
+            ],
+            "block": [
+              0,
+              2
+            ]
+          },
+          "cancelOnHit": [
+            "weak",
+            "heavy",
+            "s1",
+            "s2",
+            "s3"
+          ],
+          "cancelOnBlock": [
+            "weak",
+            "heavy"
+          ],
+          "status": "ok"
+        },
+        {
+          "id": "stand_heavy",
+          "label": "立ち強",
+          "description": "体を反らした回し蹴り",
+          "gesture": "roundKickR",
+          "attackPart": "legR",
+          "attackPartLabel": "右足・蹴り",
+          "contactTime": 0.3,
+          "contactEnd": 0.36,
+          "strikeHeight": 0.252,
+          "reach": 0.335,
+          "activeReach": [
+            {
+              "phase": 0,
+              "reach": 0.335,
+              "height": 0.252
+            },
+            {
+              "phase": 0.5,
+              "reach": 0.305,
+              "height": 0.268
+            },
+            {
+              "phase": 1,
+              "reach": 0.264,
+              "height": 0.289
+            }
+          ],
+          "startup": 11,
+          "active": 3,
+          "recovery": 22,
+          "total": 36,
+          "damage": 68,
+          "level": "mid",
+          "hitAdv": 2,
+          "blockAdv": -13,
+          "hitstun": 27,
+          "blockstun": 12,
+          "knockback": 0.08,
+          "blockPushback": 0.085,
+          "cancelWindow": {
+            "hit": [
+              0,
+              5
+            ],
+            "block": [
+              0,
+              2
+            ]
+          },
+          "cancelOnHit": [
+            "s1",
+            "s2",
+            "s3"
+          ],
+          "cancelOnBlock": [],
+          "status": "ok"
+        },
+        {
+          "id": "crouch_weak",
+          "label": "しゃがみ弱",
+          "description": "低空からの素早い脛蹴り",
+          "gesture": "shinSnapL",
+          "attackPart": "legL",
+          "attackPartLabel": "左足・蹴り",
+          "contactTime": 0.325,
+          "contactEnd": 0.445,
+          "strikeHeight": 0.102,
+          "reach": 0.307,
+          "activeReach": [
+            {
+              "phase": 0,
+              "reach": 0.307,
+              "height": 0.102
+            },
+            {
+              "phase": 0.5,
+              "reach": 0.303,
+              "height": 0.099
+            },
+            {
+              "phase": 1,
+              "reach": 0.293,
+              "height": 0.077
+            }
+          ],
+          "startup": 5,
+          "active": 2,
+          "recovery": 13,
+          "total": 20,
+          "damage": 27,
+          "level": "low",
+          "hitAdv": 1,
+          "blockAdv": -6,
+          "hitstun": 16,
+          "blockstun": 9,
+          "knockback": 0.035,
+          "blockPushback": 0.04,
+          "cancelWindow": {
+            "hit": [
+              0,
+              6
+            ],
+            "block": [
+              0,
+              2
+            ]
+          },
+          "cancelOnHit": [
+            "weak",
+            "heavy",
+            "s1",
+            "s2",
+            "s3"
+          ],
+          "cancelOnBlock": [
+            "weak",
+            "heavy"
+          ],
+          "status": "ok"
+        },
+        {
+          "id": "crouch_heavy",
+          "label": "しゃがみ強",
+          "description": "低姿勢の旋回蹴り",
+          "gesture": "lowSpinKick",
+          "attackPart": "legR",
+          "attackPartLabel": "右足・蹴り",
+          "contactTime": 0.4,
+          "contactEnd": 0.46,
+          "strikeHeight": 0.069,
+          "reach": 0.395,
+          "activeReach": [
+            {
+              "phase": 0,
+              "reach": 0.395,
+              "height": 0.069
+            },
+            {
+              "phase": 0.5,
+              "reach": 0.389,
+              "height": 0.067
+            },
+            {
+              "phase": 1,
+              "reach": 0.372,
+              "height": 0.063
+            }
+          ],
+          "startup": 11,
+          "active": 4,
+          "recovery": 24,
+          "total": 39,
+          "damage": 65,
+          "level": "low",
+          "hitAdv": 2,
+          "blockAdv": -16,
+          "hitstun": 30,
+          "blockstun": 12,
+          "knockback": 0.09,
+          "blockPushback": 0.095,
+          "cancelWindow": {
+            "hit": [
+              0,
+              5
+            ],
+            "block": [
+              0,
+              2
+            ]
+          },
+          "cancelOnHit": [
+            "s1",
+            "s2",
+            "s3"
+          ],
+          "cancelOnBlock": [],
+          "status": "ok"
+        },
+        {
+          "id": "air_weak",
+          "label": "空中弱",
+          "description": "空中から前足で素早く突く",
+          "gesture": "airSnapKick",
+          "attackPart": "legL",
+          "attackPartLabel": "左足・蹴り",
+          "contactTime": 0.45,
+          "contactEnd": 0.57,
+          "strikeHeight": 0.211,
+          "reach": 0.327,
+          "activeReach": [
+            {
+              "phase": 0,
+              "reach": 0.327,
+              "height": 0.211
+            },
+            {
+              "phase": 0.5,
+              "reach": 0.326,
+              "height": 0.198
+            },
+            {
+              "phase": 1,
+              "reach": 0.316,
+              "height": 0.184
+            }
+          ],
+          "startup": 4,
+          "active": 4,
+          "recovery": 11,
+          "total": 19,
+          "damage": 33,
+          "level": "air",
+          "hitAdv": 0,
+          "blockAdv": -6,
+          "hitstun": 15,
+          "blockstun": 9,
+          "knockback": 0.05,
+          "blockPushback": 0.05,
+          "cancelWindow": {
+            "hit": null,
+            "block": null
+          },
+          "cancelOnHit": [],
+          "cancelOnBlock": [],
+          "status": "ok"
+        },
+        {
+          "id": "air_heavy",
+          "label": "空中強",
+          "description": "後足を振り上げて踵を落とす",
+          "gesture": "heelDiveR",
+          "attackPart": "legR",
+          "attackPartLabel": "右足・蹴り",
+          "contactTime": 0.425,
+          "contactEnd": 0.545,
+          "strikeHeight": 0.142,
+          "reach": 0.325,
+          "activeReach": [
+            {
+              "phase": 0,
+              "reach": 0.325,
+              "height": 0.142
+            },
+            {
+              "phase": 0.5,
+              "reach": 0.323,
+              "height": 0.179
+            },
+            {
+              "phase": 1,
+              "reach": 0.321,
+              "height": 0.167
+            }
+          ],
+          "startup": 9,
+          "active": 5,
+          "recovery": 18,
+          "total": 32,
+          "damage": 66,
+          "level": "air",
+          "hitAdv": 1,
+          "blockAdv": -11,
+          "hitstun": 24,
+          "blockstun": 12,
+          "knockback": 0.09,
+          "blockPushback": 0.08,
+          "cancelWindow": {
+            "hit": null,
+            "block": null
+          },
+          "cancelOnHit": [],
+          "cancelOnBlock": [],
+          "status": "ok"
+        }
+      ],
+      "ultimate": {
+        "id": "ultimate",
+        "name": "音速連咆",
+        "kind": "super",
+        "startup": 5,
+        "active": 12,
+        "recovery": 27,
+        "total": 44,
+        "damage": 159,
+        "baseDamage": 173,
+        "reach": 0.72,
+        "optional": {}
+      },
+      "cpu": {
+        "v15": 60.1,
+        "v151": 65.3
+      },
+      "proposal": "全体勝率65.3%。立ち強の蹴りは0.335mで立ち弱0.376mより短い。透明判定で延ばさず、脚が届く踏み込み姿勢か短射程の連係専用技として役割を確定したい。",
+      "videos": {
+        "normals": {
+          "page": "https://github.com/nagi300222/mamo-ken/blob/78dd0c685d78af617896c01bd95a277928e01368/exp/fable-3d/normal-art/v15_1/evidence/videos/pisuke_normals_before_after.mp4",
+          "src": "https://raw.githubusercontent.com/nagi300222/mamo-ken/78dd0c685d78af617896c01bd95a277928e01368/exp/fable-3d/normal-art/v15_1/evidence/videos/pisuke_normals_before_after.mp4"
+        },
+        "specials": {
+          "page": "https://github.com/nagi300222/mamo-ken/blob/78dd0c685d78af617896c01bd95a277928e01368/exp/fable-3d/cinematic/v14/evidence/specials/pisuke_specials_before_after.mp4",
+          "src": "https://raw.githubusercontent.com/nagi300222/mamo-ken/78dd0c685d78af617896c01bd95a277928e01368/exp/fable-3d/cinematic/v14/evidence/specials/pisuke_specials_before_after.mp4"
+        },
+        "ultimate": {
+          "page": "https://github.com/nagi300222/mamo-ken/blob/78dd0c685d78af617896c01bd95a277928e01368/exp/fable-3d/cinematic/v14/evidence/movies/pisuke_ultimate_before_after.mp4",
+          "src": "https://raw.githubusercontent.com/nagi300222/mamo-ken/78dd0c685d78af617896c01bd95a277928e01368/exp/fable-3d/cinematic/v14/evidence/movies/pisuke_ultimate_before_after.mp4"
+        }
+      }
+    },
+    "godan": {
+      "id": "godan",
+      "name": "ゴダン",
+      "role": "重量・装甲",
+      "hp": 1110,
+      "walk": 0.0115,
+      "dash": 0.2,
+      "jump": 0.092,
+      "power": 1.04,
+      "ability": "armor",
+      "specials": [
+        {
+          "id": "s1",
+          "name": "地割り",
+          "kind": "strike",
+          "startup": 21,
+          "active": 5,
+          "recovery": 28,
+          "total": 54,
+          "damage": 94,
+          "baseDamage": 90,
+          "reach": 0.52,
+          "optional": {
+            "level": "low"
+          }
+        },
+        {
+          "id": "s2",
+          "name": "岩砕き",
+          "kind": "anti",
+          "startup": 11,
+          "active": 7,
+          "recovery": 31,
+          "total": 49,
+          "damage": 109,
+          "baseDamage": 105,
+          "reach": 0.41,
+          "optional": {
+            "armor": 1
+          }
+        },
+        {
+          "id": "s3",
+          "name": "肩当て突進",
+          "kind": "dash",
+          "startup": 18,
+          "active": 7,
+          "recovery": 32,
+          "total": 57,
+          "damage": 112,
+          "baseDamage": 108,
+          "reach": 0.56,
+          "optional": {
+            "travel": 0.3,
+            "armor": 1
+          }
+        }
+      ],
+      "normals": [
+        {
+          "id": "stand_weak",
+          "label": "立ち弱",
+          "description": "踏み込み短い重拳",
+          "gesture": "shortBodyR",
+          "attackPart": "armR",
+          "attackPartLabel": "右腕・右拳",
+          "contactTime": 0.425,
+          "contactEnd": 0.485,
+          "strikeHeight": 0.28,
+          "reach": 0.459,
+          "activeReach": [
+            {
+              "phase": 0,
+              "reach": 0.459,
+              "height": 0.28
+            },
+            {
+              "phase": 0.5,
+              "reach": 0.449,
+              "height": 0.281
+            },
+            {
+              "phase": 1,
+              "reach": 0.437,
+              "height": 0.283
+            }
+          ],
+          "startup": 7,
+          "active": 3,
+          "recovery": 14,
+          "total": 24,
+          "damage": 47,
+          "level": "mid",
+          "hitAdv": 6,
+          "blockAdv": -5,
+          "hitstun": 23,
+          "blockstun": 12,
+          "knockback": 0.04,
+          "blockPushback": 0.06,
+          "cancelWindow": {
+            "hit": [
+              0,
+              6
+            ],
+            "block": [
+              0,
+              2
+            ]
+          },
+          "cancelOnHit": [
+            "weak",
+            "heavy",
+            "s1",
+            "s2",
+            "s3"
+          ],
+          "cancelOnBlock": [
+            "weak",
+            "heavy"
+          ],
+          "status": "ok"
+        },
+        {
+          "id": "stand_heavy",
+          "label": "立ち強",
+          "description": "肩を振りかぶり全体重で叩く",
+          "gesture": "doubleHammer",
+          "attackPart": "armR",
+          "attackPartLabel": "右腕・右拳",
+          "contactTime": 0.45,
+          "contactEnd": 0.57,
+          "strikeHeight": 0.18,
+          "reach": 0.557,
+          "activeReach": [
+            {
+              "phase": 0,
+              "reach": 0.557,
+              "height": 0.18
+            },
+            {
+              "phase": 0.5,
+              "reach": 0.554,
+              "height": 0.17
+            },
+            {
+              "phase": 1,
+              "reach": 0.541,
+              "height": 0.158
+            }
+          ],
+          "startup": 16,
+          "active": 5,
+          "recovery": 26,
+          "total": 47,
+          "damage": 96,
+          "level": "mid",
+          "hitAdv": 2,
+          "blockAdv": -16,
+          "hitstun": 33,
+          "blockstun": 15,
+          "knockback": 0.14,
+          "blockPushback": 0.12,
+          "cancelWindow": {
+            "hit": [
+              0,
+              5
+            ],
+            "block": [
+              0,
+              2
+            ]
+          },
+          "cancelOnHit": [
+            "s1",
+            "s2",
+            "s3"
+          ],
+          "cancelOnBlock": [],
+          "status": "ok"
+        },
+        {
+          "id": "crouch_weak",
+          "label": "しゃがみ弱",
+          "description": "低く重心を落とす肘",
+          "gesture": "sideElbowL",
+          "attackPart": "armL",
+          "attackPartLabel": "左腕・左拳",
+          "contactTime": 0.45,
+          "contactEnd": 0.55,
+          "strikeHeight": 0.256,
+          "reach": 0.426,
+          "activeReach": [
+            {
+              "phase": 0,
+              "reach": 0.426,
+              "height": 0.256
+            },
+            {
+              "phase": 0.5,
+              "reach": 0.419,
+              "height": 0.251
+            },
+            {
+              "phase": 1,
+              "reach": 0.408,
+              "height": 0.241
+            }
+          ],
+          "startup": 8,
+          "active": 3,
+          "recovery": 15,
+          "total": 26,
+          "damage": 41,
+          "level": "low",
+          "hitAdv": 5,
+          "blockAdv": -6,
+          "hitstun": 23,
+          "blockstun": 12,
+          "knockback": 0.04,
+          "blockPushback": 0.06,
+          "cancelWindow": {
+            "hit": [
+              0,
+              6
+            ],
+            "block": [
+              0,
+              2
+            ]
+          },
+          "cancelOnHit": [
+            "weak",
+            "heavy",
+            "s1",
+            "s2",
+            "s3"
+          ],
+          "cancelOnBlock": [
+            "weak",
+            "heavy"
+          ],
+          "status": "ok"
+        },
+        {
+          "id": "crouch_heavy",
+          "label": "しゃがみ強",
+          "description": "床を砕く両拳",
+          "gesture": "doubleGroundPound",
+          "attackPart": "armR",
+          "attackPartLabel": "右腕・右拳",
+          "contactTime": 0.5,
+          "contactEnd": 0.575,
+          "strikeHeight": 0.197,
+          "reach": 0.446,
+          "activeReach": [
+            {
+              "phase": 0,
+              "reach": 0.446,
+              "height": 0.197
+            },
+            {
+              "phase": 0.5,
+              "reach": 0.444,
+              "height": 0.146
+            },
+            {
+              "phase": 1,
+              "reach": 0.429,
+              "height": 0.086
+            }
+          ],
+          "startup": 17,
+          "active": 5,
+          "recovery": 28,
+          "total": 50,
+          "damage": 91,
+          "level": "low",
+          "hitAdv": 2,
+          "blockAdv": -19,
+          "hitstun": 35,
+          "blockstun": 14,
+          "knockback": 0.15,
+          "blockPushback": 0.13,
+          "cancelWindow": {
+            "hit": [
+              0,
+              5
+            ],
+            "block": [
+              0,
+              2
+            ]
+          },
+          "cancelOnHit": [
+            "s1",
+            "s2",
+            "s3"
+          ],
+          "cancelOnBlock": [],
+          "status": "ok"
+        },
+        {
+          "id": "air_weak",
+          "label": "空中弱",
+          "description": "腕を地面へ振り下ろす",
+          "gesture": "descendingForearm",
+          "attackPart": "armR",
+          "attackPartLabel": "右腕・右拳",
+          "contactTime": 0.475,
+          "contactEnd": 0.535,
+          "strikeHeight": 0.187,
+          "reach": 0.466,
+          "activeReach": [
+            {
+              "phase": 0,
+              "reach": 0.466,
+              "height": 0.187
+            },
+            {
+              "phase": 0.5,
+              "reach": 0.454,
+              "height": 0.188
+            },
+            {
+              "phase": 1,
+              "reach": 0.442,
+              "height": 0.194
+            }
+          ],
+          "startup": 10,
+          "active": 5,
+          "recovery": 16,
+          "total": 31,
+          "damage": 48,
+          "level": "air",
+          "hitAdv": -1,
+          "blockAdv": -9,
+          "hitstun": 20,
+          "blockstun": 12,
+          "knockback": 0.1,
+          "blockPushback": 0.08,
+          "cancelWindow": {
+            "hit": null,
+            "block": null
+          },
+          "cancelOnHit": [],
+          "cancelOnBlock": [],
+          "status": "ok"
+        },
+        {
+          "id": "air_heavy",
+          "label": "空中強",
+          "description": "全身を落として押し潰す",
+          "gesture": "bodyCrush",
+          "attackPart": "armL",
+          "attackPartLabel": "左腕・左拳",
+          "contactTime": 0.325,
+          "contactEnd": 0.445,
+          "strikeHeight": 0.18,
+          "reach": 0.478,
+          "activeReach": [
+            {
+              "phase": 0,
+              "reach": 0.478,
+              "height": 0.18
+            },
+            {
+              "phase": 0.5,
+              "reach": 0.473,
+              "height": 0.117
+            },
+            {
+              "phase": 1,
+              "reach": 0.459,
+              "height": 0.052
+            }
+          ],
+          "startup": 16,
+          "active": 6,
+          "recovery": 25,
+          "total": 47,
+          "damage": 93,
+          "level": "air",
+          "hitAdv": 1,
+          "blockAdv": -17,
+          "hitstun": 32,
+          "blockstun": 14,
+          "knockback": 0.15,
+          "blockPushback": 0.12,
+          "cancelWindow": {
+            "hit": null,
+            "block": null
+          },
+          "cancelOnHit": [],
+          "cancelOnBlock": [],
+          "status": "ok"
+        }
+      ],
+      "ultimate": {
+        "id": "ultimate",
+        "name": "山崩し",
+        "kind": "super",
+        "startup": 10,
+        "active": 9,
+        "recovery": 38,
+        "total": 57,
+        "damage": 248,
+        "baseDamage": 238,
+        "reach": 0.65,
+        "optional": {}
+      },
+      "cpu": {
+        "v15": 38.9,
+        "v151": 31.2
+      },
+      "proposal": "全体勝率31.2%。立ち弱7F・立ち強16F／96ダメージ。火力を上げる前に接近手段・空振りリスク・装甲中の対処可能性を確認。遠距離CPU条件18.8%が特に弱い。",
+      "videos": {
+        "normals": {
+          "page": "https://github.com/nagi300222/mamo-ken/blob/78dd0c685d78af617896c01bd95a277928e01368/exp/fable-3d/normal-art/v15_1/evidence/videos/godan_normals_before_after.mp4",
+          "src": "https://raw.githubusercontent.com/nagi300222/mamo-ken/78dd0c685d78af617896c01bd95a277928e01368/exp/fable-3d/normal-art/v15_1/evidence/videos/godan_normals_before_after.mp4"
+        },
+        "specials": {
+          "page": "https://github.com/nagi300222/mamo-ken/blob/78dd0c685d78af617896c01bd95a277928e01368/exp/fable-3d/cinematic/v14/evidence/specials/godan_specials_before_after.mp4",
+          "src": "https://raw.githubusercontent.com/nagi300222/mamo-ken/78dd0c685d78af617896c01bd95a277928e01368/exp/fable-3d/cinematic/v14/evidence/specials/godan_specials_before_after.mp4"
+        },
+        "ultimate": {
+          "page": "https://github.com/nagi300222/mamo-ken/blob/78dd0c685d78af617896c01bd95a277928e01368/exp/fable-3d/cinematic/v14/evidence/movies/godan_ultimate_before_after.mp4",
+          "src": "https://raw.githubusercontent.com/nagi300222/mamo-ken/78dd0c685d78af617896c01bd95a277928e01368/exp/fable-3d/cinematic/v14/evidence/movies/godan_ultimate_before_after.mp4"
+        }
+      }
+    },
+    "hakuma": {
+      "id": "hakuma",
+      "name": "ハクマ",
+      "role": "守勢・鉄壁",
+      "hp": 1070,
+      "walk": 0.0125,
+      "dash": 0.19,
+      "jump": 0.092,
+      "power": 1,
+      "ability": "iron_wall",
+      "specials": [
+        {
+          "id": "s1",
+          "name": "雪壁掌",
+          "kind": "strike",
+          "startup": 11,
+          "active": 6,
+          "recovery": 22,
+          "total": 39,
+          "damage": 81,
+          "baseDamage": 81,
+          "reach": 0.56,
+          "optional": {}
+        },
+        {
+          "id": "s2",
+          "name": "白峰対空",
+          "kind": "anti",
+          "startup": 8,
+          "active": 7,
+          "recovery": 24,
+          "total": 39,
+          "damage": 85,
+          "baseDamage": 85,
+          "reach": 0.43,
+          "optional": {}
+        },
+        {
+          "id": "s3",
+          "name": "連続突っ張り",
+          "kind": "dash",
+          "startup": 12,
+          "active": 9,
+          "recovery": 25,
+          "total": 46,
+          "damage": 100,
+          "baseDamage": 100,
+          "reach": 0.55,
+          "optional": {
+            "travel": 0.2
+          }
+        }
+      ],
+      "normals": [
+        {
+          "id": "stand_weak",
+          "label": "立ち弱",
+          "description": "左掌で押し返す",
+          "gesture": "palmPushL",
+          "attackPart": "armL",
+          "attackPartLabel": "左腕・左拳",
+          "contactTime": 0.275,
+          "contactEnd": 0.335,
+          "strikeHeight": 0.336,
+          "reach": 0.487,
+          "activeReach": [
+            {
+              "phase": 0,
+              "reach": 0.487,
+              "height": 0.336
+            },
+            {
+              "phase": 0.5,
+              "reach": 0.468,
+              "height": 0.304
+            },
+            {
+              "phase": 1,
+              "reach": 0.444,
+              "height": 0.277
+            }
+          ],
+          "startup": 7,
+          "active": 4,
+          "recovery": 13,
+          "total": 24,
+          "damage": 39,
+          "level": "mid",
+          "hitAdv": 3,
+          "blockAdv": -5,
+          "hitstun": 20,
+          "blockstun": 12,
+          "knockback": 0.05,
+          "blockPushback": 0.05,
+          "cancelWindow": {
+            "hit": [
+              0,
+              6
+            ],
+            "block": [
+              0,
+              2
+            ]
+          },
+          "cancelOnHit": [
+            "weak",
+            "heavy",
+            "s1",
+            "s2",
+            "s3"
+          ],
+          "cancelOnBlock": [
+            "weak",
+            "heavy"
+          ],
+          "status": "ok"
+        },
+        {
+          "id": "stand_heavy",
+          "label": "立ち強",
+          "description": "肩から大きな両掌張り",
+          "gesture": "doublePalmPush",
+          "attackPart": "armR",
+          "attackPartLabel": "右腕・右拳",
+          "contactTime": 0.3,
+          "contactEnd": 0.36,
+          "strikeHeight": 0.313,
+          "reach": 0.581,
+          "activeReach": [
+            {
+              "phase": 0,
+              "reach": 0.581,
+              "height": 0.313
+            },
+            {
+              "phase": 0.5,
+              "reach": 0.571,
+              "height": 0.287
+            },
+            {
+              "phase": 1,
+              "reach": 0.551,
+              "height": 0.269
+            }
+          ],
+          "startup": 14,
+          "active": 5,
+          "recovery": 24,
+          "total": 43,
+          "damage": 82,
+          "level": "mid",
+          "hitAdv": 3,
+          "blockAdv": -14,
+          "hitstun": 32,
+          "blockstun": 15,
+          "knockback": 0.13,
+          "blockPushback": 0.1,
+          "cancelWindow": {
+            "hit": [
+              0,
+              5
+            ],
+            "block": [
+              0,
+              2
+            ]
+          },
+          "cancelOnHit": [
+            "s1",
+            "s2",
+            "s3"
+          ],
+          "cancelOnBlock": [],
+          "status": "ok"
+        },
+        {
+          "id": "crouch_weak",
+          "label": "しゃがみ弱",
+          "description": "腰を落とす低い張り手",
+          "gesture": "lowPalmR",
+          "attackPart": "armR",
+          "attackPartLabel": "右腕・右拳",
+          "contactTime": 0.275,
+          "contactEnd": 0.335,
+          "strikeHeight": 0.258,
+          "reach": 0.467,
+          "activeReach": [
+            {
+              "phase": 0,
+              "reach": 0.467,
+              "height": 0.258
+            },
+            {
+              "phase": 0.5,
+              "reach": 0.456,
+              "height": 0.207
+            },
+            {
+              "phase": 1,
+              "reach": 0.432,
+              "height": 0.16
+            }
+          ],
+          "startup": 8,
+          "active": 4,
+          "recovery": 14,
+          "total": 26,
+          "damage": 34,
+          "level": "low",
+          "hitAdv": 2,
+          "blockAdv": -6,
+          "hitstun": 20,
+          "blockstun": 12,
+          "knockback": 0.05,
+          "blockPushback": 0.05,
+          "cancelWindow": {
+            "hit": [
+              0,
+              6
+            ],
+            "block": [
+              0,
+              2
+            ]
+          },
+          "cancelOnHit": [
+            "weak",
+            "heavy",
+            "s1",
+            "s2",
+            "s3"
+          ],
+          "cancelOnBlock": [
+            "weak",
+            "heavy"
+          ],
+          "status": "ok"
+        },
+        {
+          "id": "crouch_heavy",
+          "label": "しゃがみ強",
+          "description": "腰から持ち上げる張り手",
+          "gesture": "risingPalmL",
+          "attackPart": "armL",
+          "attackPartLabel": "左腕・左拳",
+          "contactTime": 0.625,
+          "contactEnd": 0.725,
+          "strikeHeight": 0.38,
+          "reach": 0.532,
+          "activeReach": [
+            {
+              "phase": 0,
+              "reach": 0.532,
+              "height": 0.38
+            },
+            {
+              "phase": 0.5,
+              "reach": 0.528,
+              "height": 0.323
+            },
+            {
+              "phase": 1,
+              "reach": 0.515,
+              "height": 0.265
+            }
+          ],
+          "startup": 15,
+          "active": 5,
+          "recovery": 26,
+          "total": 46,
+          "damage": 78,
+          "level": "low",
+          "hitAdv": 3,
+          "blockAdv": -17,
+          "hitstun": 34,
+          "blockstun": 14,
+          "knockback": 0.13,
+          "blockPushback": 0.11,
+          "cancelWindow": {
+            "hit": [
+              0,
+              5
+            ],
+            "block": [
+              0,
+              2
+            ]
+          },
+          "cancelOnHit": [
+            "s1",
+            "s2",
+            "s3"
+          ],
+          "cancelOnBlock": [],
+          "status": "ok"
+        },
+        {
+          "id": "air_weak",
+          "label": "空中弱",
+          "description": "体の正面を守る短い掌",
+          "gesture": "shortPalmR",
+          "attackPart": "armR",
+          "attackPartLabel": "右腕・右拳",
+          "contactTime": 0.425,
+          "contactEnd": 0.485,
+          "strikeHeight": 0.336,
+          "reach": 0.467,
+          "activeReach": [
+            {
+              "phase": 0,
+              "reach": 0.467,
+              "height": 0.336
+            },
+            {
+              "phase": 0.5,
+              "reach": 0.46,
+              "height": 0.334
+            },
+            {
+              "phase": 1,
+              "reach": 0.445,
+              "height": 0.332
+            }
+          ],
+          "startup": 8,
+          "active": 5,
+          "recovery": 13,
+          "total": 26,
+          "damage": 40,
+          "level": "air",
+          "hitAdv": 0,
+          "blockAdv": -7,
+          "hitstun": 18,
+          "blockstun": 11,
+          "knockback": 0.08,
+          "blockPushback": 0.06,
+          "cancelWindow": {
+            "hit": null,
+            "block": null
+          },
+          "cancelOnHit": [],
+          "cancelOnBlock": [],
+          "status": "ok"
+        },
+        {
+          "id": "air_heavy",
+          "label": "空中強",
+          "description": "両掌の落下圧力",
+          "gesture": "hammerPalmPair",
+          "attackPart": "armL",
+          "attackPartLabel": "左腕・左拳",
+          "contactTime": 0.5,
+          "contactEnd": 0.575,
+          "strikeHeight": 0.235,
+          "reach": 0.526,
+          "activeReach": [
+            {
+              "phase": 0,
+              "reach": 0.526,
+              "height": 0.235
+            },
+            {
+              "phase": 0.5,
+              "reach": 0.52,
+              "height": 0.239
+            },
+            {
+              "phase": 1,
+              "reach": 0.511,
+              "height": 0.237
+            }
+          ],
+          "startup": 13,
+          "active": 6,
+          "recovery": 20,
+          "total": 39,
+          "damage": 79,
+          "level": "air",
+          "hitAdv": 1,
+          "blockAdv": -12,
+          "hitstun": 27,
+          "blockstun": 14,
+          "knockback": 0.12,
+          "blockPushback": 0.1,
+          "cancelWindow": {
+            "hit": null,
+            "block": null
+          },
+          "cancelOnHit": [],
+          "cancelOnBlock": [],
+          "status": "ok"
+        }
+      ],
+      "ultimate": {
+        "id": "ultimate",
+        "name": "白峰不動掌",
+        "kind": "super",
+        "startup": 11,
+        "active": 10,
+        "recovery": 34,
+        "total": 55,
+        "damage": 210,
+        "baseDamage": 210,
+        "reach": 0.72,
+        "optional": {}
+      },
+      "cpu": {
+        "v15": 47.9,
+        "v151": 31.4
+      },
+      "proposal": "全体勝率31.4%。強い張り手のリーチ（立強0.581m）を活かしきれるよう、ガード後の押し出し距離と反撃・接近し直す性能を検証。空中差し合いCPU20.8%。",
+      "videos": {
+        "normals": {
+          "page": "https://github.com/nagi300222/mamo-ken/blob/78dd0c685d78af617896c01bd95a277928e01368/exp/fable-3d/normal-art/v15_1/evidence/videos/hakuma_normals_before_after.mp4",
+          "src": "https://raw.githubusercontent.com/nagi300222/mamo-ken/78dd0c685d78af617896c01bd95a277928e01368/exp/fable-3d/normal-art/v15_1/evidence/videos/hakuma_normals_before_after.mp4"
+        },
+        "specials": {
+          "page": "https://github.com/nagi300222/mamo-ken/blob/78dd0c685d78af617896c01bd95a277928e01368/exp/fable-3d/cinematic/v14/evidence/specials/hakuma_specials_before_after.mp4",
+          "src": "https://raw.githubusercontent.com/nagi300222/mamo-ken/78dd0c685d78af617896c01bd95a277928e01368/exp/fable-3d/cinematic/v14/evidence/specials/hakuma_specials_before_after.mp4"
+        },
+        "ultimate": {
+          "page": "https://github.com/nagi300222/mamo-ken/blob/78dd0c685d78af617896c01bd95a277928e01368/exp/fable-3d/cinematic/v14/evidence/movies/hakuma_ultimate_before_after.mp4",
+          "src": "https://raw.githubusercontent.com/nagi300222/mamo-ken/78dd0c685d78af617896c01bd95a277928e01368/exp/fable-3d/cinematic/v14/evidence/movies/hakuma_ultimate_before_after.mp4"
+        }
+      }
+    },
+    "chirka": {
+      "id": "chirka",
+      "name": "チルカ",
+      "role": "奇襲・フェイント",
+      "hp": 920,
+      "walk": 0.022,
+      "dash": 0.31,
+      "jump": 0.102,
+      "power": 0.92,
+      "ability": "feint_delay",
+      "specials": [
+        {
+          "id": "s1",
+          "name": "だまし突き",
+          "kind": "strike",
+          "startup": 13,
+          "active": 4,
+          "recovery": 19,
+          "total": 36,
+          "damage": 63,
+          "baseDamage": 69,
+          "reach": 0.49,
+          "optional": {
+            "feintable": true,
+            "delayable": true
+          }
+        },
+        {
+          "id": "s2",
+          "name": "跳ね爪",
+          "kind": "anti",
+          "startup": 8,
+          "active": 7,
+          "recovery": 25,
+          "total": 40,
+          "damage": 68,
+          "baseDamage": 74,
+          "reach": 0.42,
+          "optional": {}
+        },
+        {
+          "id": "s3",
+          "name": "影引き爪",
+          "kind": "dash",
+          "startup": 13,
+          "active": 5,
+          "recovery": 22,
+          "total": 40,
+          "damage": 66,
+          "baseDamage": 72,
+          "reach": 0.5,
+          "optional": {
+            "travel": 0.21,
+            "feintable": true,
+            "delayable": true
+          }
+        }
+      ],
+      "normals": [
+        {
+          "id": "stand_weak",
+          "label": "立ち弱",
+          "description": "視線を逸らした鋭い左爪",
+          "gesture": "feintClawL",
+          "attackPart": "armL",
+          "attackPartLabel": "左腕・左拳",
+          "contactTime": 0.225,
+          "contactEnd": 0.325,
+          "strikeHeight": 0.321,
+          "reach": 0.388,
+          "activeReach": [
+            {
+              "phase": 0,
+              "reach": 0.388,
+              "height": 0.321
+            },
+            {
+              "phase": 0.5,
+              "reach": 0.384,
+              "height": 0.304
+            },
+            {
+              "phase": 1,
+              "reach": 0.373,
+              "height": 0.283
+            }
+          ],
+          "startup": 4,
+          "active": 2,
+          "recovery": 11,
+          "total": 17,
+          "damage": 32,
+          "level": "mid",
+          "hitAdv": 3,
+          "blockAdv": -4,
+          "hitstun": 16,
+          "blockstun": 9,
+          "knockback": 0.035,
+          "blockPushback": 0.04,
+          "cancelWindow": {
+            "hit": [
+              0,
+              6
+            ],
+            "block": [
+              0,
+              2
+            ]
+          },
+          "cancelOnHit": [
+            "weak",
+            "heavy",
+            "s1",
+            "s2",
+            "s3"
+          ],
+          "cancelOnBlock": [
+            "weak",
+            "heavy"
+          ],
+          "status": "ok"
+        },
+        {
+          "id": "stand_heavy",
+          "label": "立ち強",
+          "description": "体を反らし右爪を斜めに振る",
+          "gesture": "diagonalClawR",
+          "attackPart": "armR",
+          "attackPartLabel": "右腕・右拳",
+          "contactTime": 0.45,
+          "contactEnd": 0.51,
+          "strikeHeight": 0.352,
+          "reach": 0.4,
+          "activeReach": [
+            {
+              "phase": 0,
+              "reach": 0.4,
+              "height": 0.352
+            },
+            {
+              "phase": 0.5,
+              "reach": 0.391,
+              "height": 0.344
+            },
+            {
+              "phase": 1,
+              "reach": 0.374,
+              "height": 0.342
+            }
+          ],
+          "startup": 11,
+          "active": 3,
+          "recovery": 22,
+          "total": 36,
+          "damage": 68,
+          "level": "mid",
+          "hitAdv": 2,
+          "blockAdv": -13,
+          "hitstun": 27,
+          "blockstun": 12,
+          "knockback": 0.08,
+          "blockPushback": 0.08,
+          "cancelWindow": {
+            "hit": [
+              0,
+              5
+            ],
+            "block": [
+              0,
+              2
+            ]
+          },
+          "cancelOnHit": [
+            "s1",
+            "s2",
+            "s3"
+          ],
+          "cancelOnBlock": [],
+          "status": "ok"
+        },
+        {
+          "id": "crouch_weak",
+          "label": "しゃがみ弱",
+          "description": "低く滑り込む爪",
+          "gesture": "lowClawSlide",
+          "attackPart": "armR",
+          "attackPartLabel": "右腕・右拳",
+          "contactTime": 0.375,
+          "contactEnd": 0.495,
+          "strikeHeight": 0.146,
+          "reach": 0.398,
+          "activeReach": [
+            {
+              "phase": 0,
+              "reach": 0.398,
+              "height": 0.146
+            },
+            {
+              "phase": 0.5,
+              "reach": 0.395,
+              "height": 0.146
+            },
+            {
+              "phase": 1,
+              "reach": 0.385,
+              "height": 0.148
+            }
+          ],
+          "startup": 5,
+          "active": 2,
+          "recovery": 12,
+          "total": 19,
+          "damage": 28,
+          "level": "low",
+          "hitAdv": 4,
+          "blockAdv": -5,
+          "hitstun": 18,
+          "blockstun": 9,
+          "knockback": 0.035,
+          "blockPushback": 0.04,
+          "cancelWindow": {
+            "hit": [
+              0,
+              6
+            ],
+            "block": [
+              0,
+              2
+            ]
+          },
+          "cancelOnHit": [
+            "weak",
+            "heavy",
+            "s1",
+            "s2",
+            "s3"
+          ],
+          "cancelOnBlock": [
+            "weak",
+            "heavy"
+          ],
+          "status": "ok"
+        },
+        {
+          "id": "crouch_heavy",
+          "label": "しゃがみ強",
+          "description": "交差させる紫の両爪",
+          "gesture": "crossClawPair",
+          "attackPart": "armL",
+          "attackPartLabel": "左腕・左拳",
+          "contactTime": 0.5,
+          "contactEnd": 0.575,
+          "strikeHeight": 0.226,
+          "reach": 0.451,
+          "activeReach": [
+            {
+              "phase": 0,
+              "reach": 0.451,
+              "height": 0.226
+            },
+            {
+              "phase": 0.5,
+              "reach": 0.445,
+              "height": 0.182
+            },
+            {
+              "phase": 1,
+              "reach": 0.431,
+              "height": 0.123
+            }
+          ],
+          "startup": 12,
+          "active": 4,
+          "recovery": 24,
+          "total": 40,
+          "damage": 65,
+          "level": "low",
+          "hitAdv": 2,
+          "blockAdv": -16,
+          "hitstun": 30,
+          "blockstun": 12,
+          "knockback": 0.09,
+          "blockPushback": 0.09,
+          "cancelWindow": {
+            "hit": [
+              0,
+              5
+            ],
+            "block": [
+              0,
+              2
+            ]
+          },
+          "cancelOnHit": [
+            "s1",
+            "s2",
+            "s3"
+          ],
+          "cancelOnBlock": [],
+          "status": "ok"
+        },
+        {
+          "id": "air_weak",
+          "label": "空中弱",
+          "description": "上体を捻って振り向き爪",
+          "gesture": "airFeintClaw",
+          "attackPart": "armL",
+          "attackPartLabel": "左腕・左拳",
+          "contactTime": 0.4,
+          "contactEnd": 0.52,
+          "strikeHeight": 0.323,
+          "reach": 0.357,
+          "activeReach": [
+            {
+              "phase": 0,
+              "reach": 0.357,
+              "height": 0.323
+            },
+            {
+              "phase": 0.5,
+              "reach": 0.349,
+              "height": 0.323
+            },
+            {
+              "phase": 1,
+              "reach": 0.34,
+              "height": 0.322
+            }
+          ],
+          "startup": 5,
+          "active": 4,
+          "recovery": 11,
+          "total": 20,
+          "damage": 34,
+          "level": "air",
+          "hitAdv": 1,
+          "blockAdv": -6,
+          "hitstun": 16,
+          "blockstun": 9,
+          "knockback": 0.06,
+          "blockPushback": 0.05,
+          "cancelWindow": {
+            "hit": null,
+            "block": null
+          },
+          "cancelOnHit": [],
+          "cancelOnBlock": [],
+          "status": "ok"
+        },
+        {
+          "id": "air_heavy",
+          "label": "空中強",
+          "description": "爪を構えて跳びかかる",
+          "gesture": "pounceClawPair",
+          "attackPart": "armR",
+          "attackPartLabel": "右腕・右拳",
+          "contactTime": 0.525,
+          "contactEnd": 0.6,
+          "strikeHeight": 0.261,
+          "reach": 0.368,
+          "activeReach": [
+            {
+              "phase": 0,
+              "reach": 0.368,
+              "height": 0.261
+            },
+            {
+              "phase": 0.5,
+              "reach": 0.362,
+              "height": 0.263
+            },
+            {
+              "phase": 1,
+              "reach": 0.35,
+              "height": 0.27
+            }
+          ],
+          "startup": 10,
+          "active": 5,
+          "recovery": 18,
+          "total": 33,
+          "damage": 68,
+          "level": "air",
+          "hitAdv": 1,
+          "blockAdv": -11,
+          "hitstun": 24,
+          "blockstun": 12,
+          "knockback": 0.1,
+          "blockPushback": 0.08,
+          "cancelWindow": {
+            "hit": null,
+            "block": null
+          },
+          "cancelOnHit": [],
+          "cancelOnBlock": [],
+          "status": "ok"
+        }
+      ],
+      "ultimate": {
+        "id": "ultimate",
+        "name": "百面本命打ち",
+        "kind": "super",
+        "startup": 9,
+        "active": 11,
+        "recovery": 30,
+        "total": 50,
+        "damage": 171,
+        "baseDamage": 186,
+        "reach": 0.72,
+        "optional": {}
+      },
+      "cpu": {
+        "v15": 36.1,
+        "v151": 60.8
+      },
+      "proposal": "全体勝率60.8%。立弱4Fとフェイントを維持。爪の低い打点と強の斜め振りを見やすくし、ガード時のノーリスクキャンセルを増やしすぎない。",
+      "videos": {
+        "normals": {
+          "page": "https://github.com/nagi300222/mamo-ken/blob/78dd0c685d78af617896c01bd95a277928e01368/exp/fable-3d/normal-art/v15_1/evidence/videos/chirka_normals_before_after.mp4",
+          "src": "https://raw.githubusercontent.com/nagi300222/mamo-ken/78dd0c685d78af617896c01bd95a277928e01368/exp/fable-3d/normal-art/v15_1/evidence/videos/chirka_normals_before_after.mp4"
+        },
+        "specials": {
+          "page": "https://github.com/nagi300222/mamo-ken/blob/78dd0c685d78af617896c01bd95a277928e01368/exp/fable-3d/cinematic/v14/evidence/specials/chirka_specials_before_after.mp4",
+          "src": "https://raw.githubusercontent.com/nagi300222/mamo-ken/78dd0c685d78af617896c01bd95a277928e01368/exp/fable-3d/cinematic/v14/evidence/specials/chirka_specials_before_after.mp4"
+        },
+        "ultimate": {
+          "page": "https://github.com/nagi300222/mamo-ken/blob/78dd0c685d78af617896c01bd95a277928e01368/exp/fable-3d/cinematic/v14/evidence/movies/chirka_ultimate_before_after.mp4",
+          "src": "https://raw.githubusercontent.com/nagi300222/mamo-ken/78dd0c685d78af617896c01bd95a277928e01368/exp/fable-3d/cinematic/v14/evidence/movies/chirka_ultimate_before_after.mp4"
+        }
+      }
+    },
+    "takimaru": {
+      "id": "takimaru",
+      "name": "タキマル",
+      "role": "投げ・接近",
+      "hp": 1080,
+      "walk": 0.014,
+      "dash": 0.22,
+      "jump": 0.093,
+      "power": 1.03,
+      "ability": "pressure",
+      "specials": [
+        {
+          "id": "s1",
+          "name": "大地走り",
+          "kind": "projectile",
+          "startup": 20,
+          "active": 1,
+          "recovery": 30,
+          "total": 51,
+          "damage": 39,
+          "baseDamage": 38,
+          "reach": 0.34,
+          "optional": {
+            "speed": 0.026,
+            "life": 32,
+            "effect": "earth"
+          }
+        },
+        {
+          "id": "s2",
+          "name": "抱え上げ",
+          "kind": "anti",
+          "startup": 10,
+          "active": 7,
+          "recovery": 27,
+          "total": 44,
+          "damage": 82,
+          "baseDamage": 80,
+          "reach": 0.43,
+          "optional": {}
+        },
+        {
+          "id": "s3",
+          "name": "抱え込み",
+          "kind": "throw",
+          "startup": 9,
+          "active": 3,
+          "recovery": 37,
+          "total": 49,
+          "damage": 111,
+          "baseDamage": 108,
+          "reach": 0.33,
+          "optional": {}
+        }
+      ],
+      "normals": [
+        {
+          "id": "stand_weak",
+          "label": "立ち弱",
+          "description": "荒っぽい手首のフック",
+          "gesture": "bearHookL",
+          "attackPart": "armL",
+          "attackPartLabel": "左腕・左拳",
+          "contactTime": 0.275,
+          "contactEnd": 0.335,
+          "strikeHeight": 0.418,
+          "reach": 0.591,
+          "activeReach": [
+            {
+              "phase": 0,
+              "reach": 0.591,
+              "height": 0.418
+            },
+            {
+              "phase": 0.5,
+              "reach": 0.579,
+              "height": 0.376
+            },
+            {
+              "phase": 1,
+              "reach": 0.559,
+              "height": 0.342
+            }
+          ],
+          "startup": 7,
+          "active": 3,
+          "recovery": 14,
+          "total": 24,
+          "damage": 41,
+          "level": "mid",
+          "hitAdv": 4,
+          "blockAdv": -6,
+          "hitstun": 21,
+          "blockstun": 11,
+          "knockback": 0.025,
+          "blockPushback": 0.035,
+          "cancelWindow": {
+            "hit": [
+              0,
+              6
+            ],
+            "block": [
+              0,
+              2
+            ]
+          },
+          "cancelOnHit": [
+            "weak",
+            "heavy",
+            "s1",
+            "s2",
+            "s3"
+          ],
+          "cancelOnBlock": [
+            "weak",
+            "heavy"
+          ],
+          "status": "ok"
+        },
+        {
+          "id": "stand_heavy",
+          "label": "立ち強",
+          "description": "掴み込むような重い鉤拳",
+          "gesture": "grapplerHammerR",
+          "attackPart": "armR",
+          "attackPartLabel": "右腕・右拳",
+          "contactTime": 0.35,
+          "contactEnd": 0.41,
+          "strikeHeight": 0.163,
+          "reach": 0.544,
+          "activeReach": [
+            {
+              "phase": 0,
+              "reach": 0.544,
+              "height": 0.163
+            },
+            {
+              "phase": 0.5,
+              "reach": 0.483,
+              "height": 0.104
+            },
+            {
+              "phase": 1,
+              "reach": 0.405,
+              "height": 0.16
+            }
+          ],
+          "startup": 14,
+          "active": 4,
+          "recovery": 26,
+          "total": 44,
+          "damage": 85,
+          "level": "mid",
+          "hitAdv": 3,
+          "blockAdv": -17,
+          "hitstun": 33,
+          "blockstun": 13,
+          "knockback": 0.055,
+          "blockPushback": 0.06,
+          "cancelWindow": {
+            "hit": [
+              0,
+              5
+            ],
+            "block": [
+              0,
+              2
+            ]
+          },
+          "cancelOnHit": [
+            "s1",
+            "s2",
+            "s3"
+          ],
+          "cancelOnBlock": [],
+          "status": "ok"
+        },
+        {
+          "id": "crouch_weak",
+          "label": "しゃがみ弱",
+          "description": "足首近くへの手伸ばし",
+          "gesture": "lowReachAnkle",
+          "attackPart": "armR",
+          "attackPartLabel": "右腕・右拳",
+          "contactTime": 0.375,
+          "contactEnd": 0.495,
+          "strikeHeight": 0.09,
+          "reach": 0.621,
+          "activeReach": [
+            {
+              "phase": 0,
+              "reach": 0.621,
+              "height": 0.09
+            },
+            {
+              "phase": 0.5,
+              "reach": 0.619,
+              "height": 0.105
+            },
+            {
+              "phase": 1,
+              "reach": 0.608,
+              "height": 0.127
+            }
+          ],
+          "startup": 8,
+          "active": 3,
+          "recovery": 15,
+          "total": 26,
+          "damage": 35,
+          "level": "low",
+          "hitAdv": 3,
+          "blockAdv": -7,
+          "hitstun": 21,
+          "blockstun": 11,
+          "knockback": 0.025,
+          "blockPushback": 0.035,
+          "cancelWindow": {
+            "hit": [
+              0,
+              6
+            ],
+            "block": [
+              0,
+              2
+            ]
+          },
+          "cancelOnHit": [
+            "weak",
+            "heavy",
+            "s1",
+            "s2",
+            "s3"
+          ],
+          "cancelOnBlock": [
+            "weak",
+            "heavy"
+          ],
+          "status": "ok"
+        },
+        {
+          "id": "crouch_heavy",
+          "label": "しゃがみ強",
+          "description": "しゃがみから両手で引き起こす",
+          "gesture": "risingGrabPair",
+          "attackPart": "armL",
+          "attackPartLabel": "左腕・左拳",
+          "contactTime": 0.575,
+          "contactEnd": 0.65,
+          "strikeHeight": 0.386,
+          "reach": 0.607,
+          "activeReach": [
+            {
+              "phase": 0,
+              "reach": 0.607,
+              "height": 0.386
+            },
+            {
+              "phase": 0.5,
+              "reach": 0.598,
+              "height": 0.337
+            },
+            {
+              "phase": 1,
+              "reach": 0.588,
+              "height": 0.297
+            }
+          ],
+          "startup": 15,
+          "active": 4,
+          "recovery": 28,
+          "total": 47,
+          "damage": 80,
+          "level": "low",
+          "hitAdv": 3,
+          "blockAdv": -19,
+          "hitstun": 35,
+          "blockstun": 13,
+          "knockback": 0.06,
+          "blockPushback": 0.07,
+          "cancelWindow": {
+            "hit": [
+              0,
+              5
+            ],
+            "block": [
+              0,
+              2
+            ]
+          },
+          "cancelOnHit": [
+            "s1",
+            "s2",
+            "s3"
+          ],
+          "cancelOnBlock": [],
+          "status": "ok"
+        },
+        {
+          "id": "air_weak",
+          "label": "空中弱",
+          "description": "大きく横に薙ぐ手",
+          "gesture": "airBearSwipe",
+          "attackPart": "armL",
+          "attackPartLabel": "左腕・左拳",
+          "contactTime": 0.25,
+          "contactEnd": 0.31,
+          "strikeHeight": 0.265,
+          "reach": 0.542,
+          "activeReach": [
+            {
+              "phase": 0,
+              "reach": 0.542,
+              "height": 0.265
+            },
+            {
+              "phase": 0.5,
+              "reach": 0.532,
+              "height": 0.245
+            },
+            {
+              "phase": 1,
+              "reach": 0.493,
+              "height": 0.257
+            }
+          ],
+          "startup": 8,
+          "active": 5,
+          "recovery": 14,
+          "total": 27,
+          "damage": 42,
+          "level": "air",
+          "hitAdv": -1,
+          "blockAdv": -8,
+          "hitstun": 18,
+          "blockstun": 11,
+          "knockback": 0.07,
+          "blockPushback": 0.06,
+          "cancelWindow": {
+            "hit": null,
+            "block": null
+          },
+          "cancelOnHit": [],
+          "cancelOnBlock": [],
+          "status": "ok"
+        },
+        {
+          "id": "air_heavy",
+          "label": "空中強",
+          "description": "両腕で叩き落とす",
+          "gesture": "airBearHammer",
+          "attackPart": "armL",
+          "attackPartLabel": "左腕・左拳",
+          "contactTime": 0.525,
+          "contactEnd": 0.625,
+          "strikeHeight": 0.224,
+          "reach": 0.615,
+          "activeReach": [
+            {
+              "phase": 0,
+              "reach": 0.615,
+              "height": 0.224
+            },
+            {
+              "phase": 0.5,
+              "reach": 0.608,
+              "height": 0.256
+            },
+            {
+              "phase": 1,
+              "reach": 0.596,
+              "height": 0.263
+            }
+          ],
+          "startup": 13,
+          "active": 6,
+          "recovery": 23,
+          "total": 42,
+          "damage": 81,
+          "level": "air",
+          "hitAdv": 1,
+          "blockAdv": -16,
+          "hitstun": 30,
+          "blockstun": 13,
+          "knockback": 0.1,
+          "blockPushback": 0.09,
+          "cancelWindow": {
+            "hit": null,
+            "block": null
+          },
+          "cancelOnHit": [],
+          "cancelOnBlock": [],
+          "status": "ok"
+        }
+      ],
+      "ultimate": {
+        "id": "ultimate",
+        "name": "天地落とし",
+        "kind": "super",
+        "startup": 13,
+        "active": 8,
+        "recovery": 35,
+        "total": 56,
+        "damage": 235,
+        "baseDamage": 228,
+        "reach": 0.43,
+        "optional": {}
+      },
+      "cpu": {
+        "v15": 39.2,
+        "v151": 36.3
+      },
+      "proposal": "全体勝率36.3%だが投げ圧力条件では70.8%。投げそのものを強化せず、立弱0.591m／屈弱0.621mの手伸ばしから接近・投げ間合いへ移る安全性を検証。空中差し合い18.8%。",
+      "videos": {
+        "normals": {
+          "page": "https://github.com/nagi300222/mamo-ken/blob/78dd0c685d78af617896c01bd95a277928e01368/exp/fable-3d/normal-art/v15_1/evidence/videos/takimaru_normals_before_after.mp4",
+          "src": "https://raw.githubusercontent.com/nagi300222/mamo-ken/78dd0c685d78af617896c01bd95a277928e01368/exp/fable-3d/normal-art/v15_1/evidence/videos/takimaru_normals_before_after.mp4"
+        },
+        "specials": {
+          "page": "https://github.com/nagi300222/mamo-ken/blob/78dd0c685d78af617896c01bd95a277928e01368/exp/fable-3d/cinematic/v14/evidence/specials/takimaru_specials_before_after.mp4",
+          "src": "https://raw.githubusercontent.com/nagi300222/mamo-ken/78dd0c685d78af617896c01bd95a277928e01368/exp/fable-3d/cinematic/v14/evidence/specials/takimaru_specials_before_after.mp4"
+        },
+        "ultimate": {
+          "page": "https://github.com/nagi300222/mamo-ken/blob/78dd0c685d78af617896c01bd95a277928e01368/exp/fable-3d/cinematic/v14/evidence/movies/takimaru_ultimate_before_after.mp4",
+          "src": "https://raw.githubusercontent.com/nagi300222/mamo-ken/78dd0c685d78af617896c01bd95a277928e01368/exp/fable-3d/cinematic/v14/evidence/movies/takimaru_ultimate_before_after.mp4"
+        }
+      }
+    },
+    "yomikage": {
+      "id": "yomikage",
+      "name": "ヨミカゲ",
+      "role": "反撃・見切り",
+      "hp": 960,
+      "walk": 0.019,
+      "dash": 0.3,
+      "jump": 0.098,
+      "power": 0.96,
+      "ability": "just",
+      "specials": [
+        {
+          "id": "s1",
+          "name": "残月の波",
+          "kind": "projectile",
+          "startup": 13,
+          "active": 1,
+          "recovery": 23,
+          "total": 37,
+          "damage": 45,
+          "baseDamage": 47,
+          "reach": 0.38,
+          "optional": {
+            "speed": 0.047,
+            "life": 58,
+            "effect": "blue"
+          }
+        },
+        {
+          "id": "s2",
+          "name": "昇り肘",
+          "kind": "anti",
+          "startup": 8,
+          "active": 7,
+          "recovery": 25,
+          "total": 40,
+          "damage": 79,
+          "baseDamage": 82,
+          "reach": 0.43,
+          "optional": {}
+        },
+        {
+          "id": "s3",
+          "name": "受け返し",
+          "kind": "counter",
+          "startup": 7,
+          "active": 13,
+          "recovery": 31,
+          "total": 51,
+          "damage": 80,
+          "baseDamage": 83,
+          "reach": 0.47,
+          "optional": {}
+        }
+      ],
+      "normals": [
+        {
+          "id": "stand_weak",
+          "label": "立ち弱",
+          "description": "短く鋭い左手刀",
+          "gesture": "knifeHandL",
+          "attackPart": "armL",
+          "attackPartLabel": "左腕・左拳",
+          "contactTime": 0.25,
+          "contactEnd": 0.37,
+          "strikeHeight": 0.355,
+          "reach": 0.388,
+          "activeReach": [
+            {
+              "phase": 0,
+              "reach": 0.388,
+              "height": 0.355
+            },
+            {
+              "phase": 0.5,
+              "reach": 0.368,
+              "height": 0.325
+            },
+            {
+              "phase": 1,
+              "reach": 0.372,
+              "height": 0.328
+            }
+          ],
+          "startup": 5,
+          "active": 2,
+          "recovery": 12,
+          "total": 19,
+          "damage": 35,
+          "level": "mid",
+          "hitAdv": 4,
+          "blockAdv": -4,
+          "hitstun": 18,
+          "blockstun": 10,
+          "knockback": 0.04,
+          "blockPushback": 0.04,
+          "cancelWindow": {
+            "hit": [
+              0,
+              6
+            ],
+            "block": [
+              0,
+              2
+            ]
+          },
+          "cancelOnHit": [
+            "weak",
+            "heavy",
+            "s1",
+            "s2",
+            "s3"
+          ],
+          "cancelOnBlock": [
+            "weak",
+            "heavy"
+          ],
+          "status": "ok"
+        },
+        {
+          "id": "stand_heavy",
+          "label": "立ち強",
+          "description": "横から入る右手の月斬り",
+          "gesture": "crescentSlashR",
+          "attackPart": "armR",
+          "attackPartLabel": "右腕・右拳",
+          "contactTime": 0.3,
+          "contactEnd": 0.36,
+          "strikeHeight": 0.27,
+          "reach": 0.45,
+          "activeReach": [
+            {
+              "phase": 0,
+              "reach": 0.45,
+              "height": 0.27
+            },
+            {
+              "phase": 0.5,
+              "reach": 0.413,
+              "height": 0.242
+            },
+            {
+              "phase": 1,
+              "reach": 0.355,
+              "height": 0.247
+            }
+          ],
+          "startup": 12,
+          "active": 3,
+          "recovery": 24,
+          "total": 39,
+          "damage": 74,
+          "level": "mid",
+          "hitAdv": 3,
+          "blockAdv": -14,
+          "hitstun": 30,
+          "blockstun": 13,
+          "knockback": 0.09,
+          "blockPushback": 0.09,
+          "cancelWindow": {
+            "hit": [
+              0,
+              5
+            ],
+            "block": [
+              0,
+              2
+            ]
+          },
+          "cancelOnHit": [
+            "s1",
+            "s2",
+            "s3"
+          ],
+          "cancelOnBlock": [],
+          "status": "ok"
+        },
+        {
+          "id": "crouch_weak",
+          "label": "しゃがみ弱",
+          "description": "相手の足元を狙う低い斬り",
+          "gesture": "shadowSliceLow",
+          "attackPart": "armR",
+          "attackPartLabel": "右腕・右拳",
+          "contactTime": 0.35,
+          "contactEnd": 0.47,
+          "strikeHeight": 0.154,
+          "reach": 0.417,
+          "activeReach": [
+            {
+              "phase": 0,
+              "reach": 0.417,
+              "height": 0.154
+            },
+            {
+              "phase": 0.5,
+              "reach": 0.415,
+              "height": 0.153
+            },
+            {
+              "phase": 1,
+              "reach": 0.409,
+              "height": 0.154
+            }
+          ],
+          "startup": 6,
+          "active": 2,
+          "recovery": 13,
+          "total": 21,
+          "damage": 30,
+          "level": "low",
+          "hitAdv": 4,
+          "blockAdv": -5,
+          "hitstun": 19,
+          "blockstun": 10,
+          "knockback": 0.04,
+          "blockPushback": 0.04,
+          "cancelWindow": {
+            "hit": [
+              0,
+              6
+            ],
+            "block": [
+              0,
+              2
+            ]
+          },
+          "cancelOnHit": [
+            "weak",
+            "heavy",
+            "s1",
+            "s2",
+            "s3"
+          ],
+          "cancelOnBlock": [
+            "weak",
+            "heavy"
+          ],
+          "status": "ok"
+        },
+        {
+          "id": "crouch_heavy",
+          "label": "しゃがみ強",
+          "description": "地面すれすれの逆刃",
+          "gesture": "sweepingBladeR",
+          "attackPart": "armR",
+          "attackPartLabel": "右腕・右拳",
+          "contactTime": 0.475,
+          "contactEnd": 0.535,
+          "strikeHeight": 0.124,
+          "reach": 0.437,
+          "activeReach": [
+            {
+              "phase": 0,
+              "reach": 0.437,
+              "height": 0.124
+            },
+            {
+              "phase": 0.5,
+              "reach": 0.429,
+              "height": 0.124
+            },
+            {
+              "phase": 1,
+              "reach": 0.415,
+              "height": 0.125
+            }
+          ],
+          "startup": 13,
+          "active": 4,
+          "recovery": 26,
+          "total": 43,
+          "damage": 71,
+          "level": "low",
+          "hitAdv": 3,
+          "blockAdv": -17,
+          "hitstun": 33,
+          "blockstun": 13,
+          "knockback": 0.1,
+          "blockPushback": 0.1,
+          "cancelWindow": {
+            "hit": [
+              0,
+              5
+            ],
+            "block": [
+              0,
+              2
+            ]
+          },
+          "cancelOnHit": [
+            "s1",
+            "s2",
+            "s3"
+          ],
+          "cancelOnBlock": [],
+          "status": "ok"
+        },
+        {
+          "id": "air_weak",
+          "label": "空中弱",
+          "description": "反り返りながら手刀を抜く",
+          "gesture": "risingKnifeL",
+          "attackPart": "armL",
+          "attackPartLabel": "左腕・左拳",
+          "contactTime": 0.25,
+          "contactEnd": 0.31,
+          "strikeHeight": 0.254,
+          "reach": 0.342,
+          "activeReach": [
+            {
+              "phase": 0,
+              "reach": 0.342,
+              "height": 0.254
+            },
+            {
+              "phase": 0.5,
+              "reach": 0.314,
+              "height": 0.227
+            },
+            {
+              "phase": 1,
+              "reach": 0.27,
+              "height": 0.201
+            }
+          ],
+          "startup": 6,
+          "active": 4,
+          "recovery": 12,
+          "total": 22,
+          "damage": 36,
+          "level": "air",
+          "hitAdv": 1,
+          "blockAdv": -6,
+          "hitstun": 17,
+          "blockstun": 10,
+          "knockback": 0.07,
+          "blockPushback": 0.06,
+          "cancelWindow": {
+            "hit": null,
+            "block": null
+          },
+          "cancelOnHit": [],
+          "cancelOnBlock": [],
+          "status": "ok"
+        },
+        {
+          "id": "air_heavy",
+          "label": "空中強",
+          "description": "背面から斜め下へ手刀",
+          "gesture": "descendingBladeR",
+          "attackPart": "armR",
+          "attackPartLabel": "右腕・右拳",
+          "contactTime": 0.45,
+          "contactEnd": 0.525,
+          "strikeHeight": 0.19,
+          "reach": 0.408,
+          "activeReach": [
+            {
+              "phase": 0,
+              "reach": 0.408,
+              "height": 0.19
+            },
+            {
+              "phase": 0.5,
+              "reach": 0.402,
+              "height": 0.18
+            },
+            {
+              "phase": 1,
+              "reach": 0.389,
+              "height": 0.167
+            }
+          ],
+          "startup": 11,
+          "active": 5,
+          "recovery": 20,
+          "total": 36,
+          "damage": 73,
+          "level": "air",
+          "hitAdv": 1,
+          "blockAdv": -12,
+          "hitstun": 26,
+          "blockstun": 13,
+          "knockback": 0.11,
+          "blockPushback": 0.09,
+          "cancelWindow": {
+            "hit": null,
+            "block": null
+          },
+          "cancelOnHit": [],
+          "cancelOnBlock": [],
+          "status": "ok"
+        }
+      ],
+      "ultimate": {
+        "id": "ultimate",
+        "name": "後の先・月断",
+        "kind": "super",
+        "startup": 7,
+        "active": 10,
+        "recovery": 33,
+        "total": 50,
+        "damage": 199,
+        "baseDamage": 207,
+        "reach": 0.65,
+        "optional": {}
+      },
+      "cpu": {
+        "v15": 59,
+        "v151": 59.7
+      },
+      "proposal": "全体勝率59.7%。立弱5F・短い手刀と後の先を個性にする。強の空振り・ガード時リスクを保ち、通常弱→受け返しを確定コンボと誤認させない。",
+      "videos": {
+        "normals": {
+          "page": "https://github.com/nagi300222/mamo-ken/blob/78dd0c685d78af617896c01bd95a277928e01368/exp/fable-3d/normal-art/v15_1/evidence/videos/yomikage_normals_before_after.mp4",
+          "src": "https://raw.githubusercontent.com/nagi300222/mamo-ken/78dd0c685d78af617896c01bd95a277928e01368/exp/fable-3d/normal-art/v15_1/evidence/videos/yomikage_normals_before_after.mp4"
+        },
+        "specials": {
+          "page": "https://github.com/nagi300222/mamo-ken/blob/78dd0c685d78af617896c01bd95a277928e01368/exp/fable-3d/cinematic/v14/evidence/specials/yomikage_specials_before_after.mp4",
+          "src": "https://raw.githubusercontent.com/nagi300222/mamo-ken/78dd0c685d78af617896c01bd95a277928e01368/exp/fable-3d/cinematic/v14/evidence/specials/yomikage_specials_before_after.mp4"
+        },
+        "ultimate": {
+          "page": "https://github.com/nagi300222/mamo-ken/blob/78dd0c685d78af617896c01bd95a277928e01368/exp/fable-3d/cinematic/v14/evidence/movies/yomikage_ultimate_before_after.mp4",
+          "src": "https://raw.githubusercontent.com/nagi300222/mamo-ken/78dd0c685d78af617896c01bd95a277928e01368/exp/fable-3d/cinematic/v14/evidence/movies/yomikage_ultimate_before_after.mp4"
+        }
+      }
+    },
+    "bullet": {
+      "id": "bullet",
+      "name": "バレット",
+      "role": "長射程・長尾",
+      "hp": 930,
+      "walk": 0.014,
+      "dash": 0.23,
+      "jump": 0.096,
+      "power": 0.91,
+      "ability": "charge",
+      "specials": [
+        {
+          "id": "s1",
+          "name": "木の実弾",
+          "kind": "projectile",
+          "startup": 17,
+          "active": 1,
+          "recovery": 28,
+          "total": 46,
+          "damage": 42,
+          "baseDamage": 46,
+          "reach": 0.39,
+          "optional": {
+            "speed": 0.043,
+            "life": 72,
+            "effect": "amber"
+          }
+        },
+        {
+          "id": "s2",
+          "name": "尾跳ね",
+          "kind": "anti",
+          "startup": 9,
+          "active": 7,
+          "recovery": 27,
+          "total": 43,
+          "damage": 72,
+          "baseDamage": 79,
+          "reach": 0.46,
+          "optional": {}
+        },
+        {
+          "id": "s3",
+          "name": "尾薙ぎ",
+          "kind": "tail",
+          "startup": 19,
+          "active": 6,
+          "recovery": 23,
+          "total": 48,
+          "damage": 91,
+          "baseDamage": 100,
+          "reach": 0.651,
+          "optional": {
+            "minReach": 0.27,
+            "chargeRelease": true
+          }
+        }
+      ],
+      "normals": [
+        {
+          "id": "stand_weak",
+          "label": "立ち弱",
+          "description": "顔と肩で小さく突く",
+          "gesture": "headFlick",
+          "attackPart": "head",
+          "attackPartLabel": "頭部",
+          "contactTime": 0.4,
+          "contactEnd": 0.46,
+          "strikeHeight": 0.407,
+          "reach": 0.417,
+          "activeReach": [
+            {
+              "phase": 0,
+              "reach": 0.417,
+              "height": 0.407
+            },
+            {
+              "phase": 0.5,
+              "reach": 0.409,
+              "height": 0.412
+            },
+            {
+              "phase": 1,
+              "reach": 0.4,
+              "height": 0.416
+            }
+          ],
+          "startup": 6,
+          "active": 3,
+          "recovery": 14,
+          "total": 23,
+          "damage": 34,
+          "level": "mid",
+          "hitAdv": 3,
+          "blockAdv": -7,
+          "hitstun": 20,
+          "blockstun": 10,
+          "knockback": 0.04,
+          "blockPushback": 0.045,
+          "cancelWindow": {
+            "hit": [
+              0,
+              6
+            ],
+            "block": [
+              0,
+              2
+            ]
+          },
+          "cancelOnHit": [
+            "weak",
+            "heavy",
+            "s1",
+            "s2",
+            "s3"
+          ],
+          "cancelOnBlock": [
+            "weak",
+            "heavy"
+          ],
+          "status": "ok"
+        },
+        {
+          "id": "stand_heavy",
+          "label": "立ち強",
+          "description": "重い尾を大きく横薙ぎ",
+          "gesture": "tailWideRight",
+          "attackPart": "tail",
+          "attackPartLabel": "尻尾",
+          "contactTime": 0.45,
+          "contactEnd": 0.51,
+          "strikeHeight": 0.191,
+          "reach": 0.656,
+          "activeReach": [
+            {
+              "phase": 0,
+              "reach": 0.656,
+              "height": 0.191
+            },
+            {
+              "phase": 0.5,
+              "reach": 0.643,
+              "height": 0.247
+            },
+            {
+              "phase": 1,
+              "reach": 0.612,
+              "height": 0.25
+            }
+          ],
+          "startup": 13,
+          "active": 4,
+          "recovery": 26,
+          "total": 43,
+          "damage": 79,
+          "level": "mid",
+          "hitAdv": 2,
+          "blockAdv": -17,
+          "hitstun": 32,
+          "blockstun": 13,
+          "knockback": 0.12,
+          "blockPushback": 0.11,
+          "cancelWindow": {
+            "hit": [
+              0,
+              5
+            ],
+            "block": [
+              0,
+              2
+            ]
+          },
+          "cancelOnHit": [
+            "s1",
+            "s2",
+            "s3"
+          ],
+          "cancelOnBlock": [],
+          "status": "ok"
+        },
+        {
+          "id": "crouch_weak",
+          "label": "しゃがみ弱",
+          "description": "低姿勢の尾先の一閃",
+          "gesture": "tailTipSnap",
+          "attackPart": "tail",
+          "attackPartLabel": "尻尾",
+          "contactTime": 0.375,
+          "contactEnd": 0.435,
+          "strikeHeight": 0.069,
+          "reach": 0.548,
+          "activeReach": [
+            {
+              "phase": 0,
+              "reach": 0.548,
+              "height": 0.069
+            },
+            {
+              "phase": 0.5,
+              "reach": 0.532,
+              "height": 0.023
+            },
+            {
+              "phase": 1,
+              "reach": 0.5,
+              "height": 0
+            }
+          ],
+          "startup": 6,
+          "active": 3,
+          "recovery": 15,
+          "total": 24,
+          "damage": 29,
+          "level": "low",
+          "hitAdv": 2,
+          "blockAdv": -8,
+          "hitstun": 20,
+          "blockstun": 10,
+          "knockback": 0.04,
+          "blockPushback": 0.045,
+          "cancelWindow": {
+            "hit": [
+              0,
+              6
+            ],
+            "block": [
+              0,
+              2
+            ]
+          },
+          "cancelOnHit": [
+            "weak",
+            "heavy",
+            "s1",
+            "s2",
+            "s3"
+          ],
+          "cancelOnBlock": [
+            "weak",
+            "heavy"
+          ],
+          "status": "ok"
+        },
+        {
+          "id": "crouch_heavy",
+          "label": "しゃがみ強",
+          "description": "しっぽを床に叩き付ける",
+          "gesture": "tailGroundSmash",
+          "attackPart": "tail",
+          "attackPartLabel": "尻尾",
+          "contactTime": 0.5,
+          "contactEnd": 0.56,
+          "strikeHeight": 0.007,
+          "reach": 0.641,
+          "activeReach": [
+            {
+              "phase": 0,
+              "reach": 0.641,
+              "height": 0.007
+            },
+            {
+              "phase": 0.5,
+              "reach": 0.621,
+              "height": 0
+            },
+            {
+              "phase": 1,
+              "reach": 0.586,
+              "height": 0
+            }
+          ],
+          "startup": 14,
+          "active": 4,
+          "recovery": 28,
+          "total": 46,
+          "damage": 76,
+          "level": "low",
+          "hitAdv": 2,
+          "blockAdv": -19,
+          "hitstun": 34,
+          "blockstun": 13,
+          "knockback": 0.13,
+          "blockPushback": 0.12,
+          "cancelWindow": {
+            "hit": [
+              0,
+              5
+            ],
+            "block": [
+              0,
+              2
+            ]
+          },
+          "cancelOnHit": [
+            "s1",
+            "s2",
+            "s3"
+          ],
+          "cancelOnBlock": [],
+          "status": "ok"
+        },
+        {
+          "id": "air_weak",
+          "label": "空中弱",
+          "description": "空中で尾を短く振る",
+          "gesture": "airTailFlick",
+          "attackPart": "tail",
+          "attackPartLabel": "尻尾",
+          "contactTime": 0.35,
+          "contactEnd": 0.41,
+          "strikeHeight": 0.304,
+          "reach": 0.551,
+          "activeReach": [
+            {
+              "phase": 0,
+              "reach": 0.551,
+              "height": 0.304
+            },
+            {
+              "phase": 0.5,
+              "reach": 0.531,
+              "height": 0.303
+            },
+            {
+              "phase": 1,
+              "reach": 0.497,
+              "height": 0.308
+            }
+          ],
+          "startup": 6,
+          "active": 5,
+          "recovery": 14,
+          "total": 25,
+          "damage": 35,
+          "level": "air",
+          "hitAdv": -1,
+          "blockAdv": -9,
+          "hitstun": 18,
+          "blockstun": 10,
+          "knockback": 0.08,
+          "blockPushback": 0.06,
+          "cancelWindow": {
+            "hit": null,
+            "block": null
+          },
+          "cancelOnHit": [],
+          "cancelOnBlock": [],
+          "status": "ok"
+        },
+        {
+          "id": "air_heavy",
+          "label": "空中強",
+          "description": "前転して尾全体を叩き下ろす",
+          "gesture": "airTailLash",
+          "attackPart": "tail",
+          "attackPartLabel": "尻尾",
+          "contactTime": 0.475,
+          "contactEnd": 0.55,
+          "strikeHeight": 0.097,
+          "reach": 0.552,
+          "activeReach": [
+            {
+              "phase": 0,
+              "reach": 0.552,
+              "height": 0.097
+            },
+            {
+              "phase": 0.5,
+              "reach": 0.546,
+              "height": 0.137
+            },
+            {
+              "phase": 1,
+              "reach": 0.543,
+              "height": 0.194
+            }
+          ],
+          "startup": 14,
+          "active": 6,
+          "recovery": 24,
+          "total": 44,
+          "damage": 72,
+          "level": "air",
+          "hitAdv": 1,
+          "blockAdv": -17,
+          "hitstun": 31,
+          "blockstun": 13,
+          "knockback": 0.12,
+          "blockPushback": 0.1,
+          "cancelWindow": {
+            "hit": null,
+            "block": null
+          },
+          "cancelOnHit": [],
+          "cancelOnBlock": [],
+          "status": "ok"
+        }
+      ],
+      "ultimate": {
+        "id": "ultimate",
+        "name": "超圧縮・弾丸頭突き",
+        "kind": "super",
+        "startup": 12,
+        "active": 9,
+        "recovery": 34,
+        "total": 55,
+        "damage": 200,
+        "baseDamage": 220,
+        "reach": 0.9,
+        "optional": {},
+        "displayNote": "奥義ムービー確認版の表示名は『尾連・爆ぜ木の実』。内部性能定義名は上記。"
+      },
+      "cpu": {
+        "v15": 39.1,
+        "v151": 32.6
+      },
+      "proposal": "全体勝率32.6%。立強0.656m・屈強0.641mの長尾を武器にしつつ、近距離の死角を残す。空中差し合い13.5%なので対空行動や空中移動の不足がないか優先検証。",
+      "videos": {
+        "normals": {
+          "page": "https://github.com/nagi300222/mamo-ken/blob/78dd0c685d78af617896c01bd95a277928e01368/exp/fable-3d/normal-art/v15_1/evidence/videos/bullet_normals_before_after.mp4",
+          "src": "https://raw.githubusercontent.com/nagi300222/mamo-ken/78dd0c685d78af617896c01bd95a277928e01368/exp/fable-3d/normal-art/v15_1/evidence/videos/bullet_normals_before_after.mp4"
+        },
+        "specials": {
+          "page": "https://github.com/nagi300222/mamo-ken/blob/78dd0c685d78af617896c01bd95a277928e01368/exp/fable-3d/cinematic/v14/evidence/specials/bullet_specials_before_after.mp4",
+          "src": "https://raw.githubusercontent.com/nagi300222/mamo-ken/78dd0c685d78af617896c01bd95a277928e01368/exp/fable-3d/cinematic/v14/evidence/specials/bullet_specials_before_after.mp4"
+        },
+        "ultimate": {
+          "page": "https://github.com/nagi300222/mamo-ken/blob/78dd0c685d78af617896c01bd95a277928e01368/exp/fable-3d/cinematic/v14/evidence/movies/bullet_ultimate_before_after.mp4",
+          "src": "https://raw.githubusercontent.com/nagi300222/mamo-ken/78dd0c685d78af617896c01bd95a277928e01368/exp/fable-3d/cinematic/v14/evidence/movies/bullet_ultimate_before_after.mp4"
+        }
+      }
+    },
+    "dark_moguzo": {
+      "id": "dark_moguzo",
+      "name": "ダークモグゾー",
+      "role": "高速連携・低耐久",
+      "hp": 820,
+      "walk": 0.024,
+      "dash": 0.34,
+      "jump": 0.102,
+      "power": 0.92,
+      "ability": "dark_chain",
+      "specials": [
+        {
+          "id": "s1",
+          "name": "黒い地走波",
+          "kind": "projectile",
+          "startup": 11,
+          "active": 1,
+          "recovery": 19,
+          "total": 31,
+          "damage": 51,
+          "baseDamage": 55,
+          "reach": 0.42,
+          "optional": {
+            "speed": 0.049,
+            "life": 80,
+            "effect": "violet"
+          }
+        },
+        {
+          "id": "s2",
+          "name": "逆昇撃",
+          "kind": "anti",
+          "startup": 5,
+          "active": 8,
+          "recovery": 31,
+          "total": 44,
+          "damage": 94,
+          "baseDamage": 102,
+          "reach": 0.45,
+          "optional": {}
+        },
+        {
+          "id": "s3",
+          "name": "暗連",
+          "kind": "dash",
+          "startup": 7,
+          "active": 9,
+          "recovery": 24,
+          "total": 40,
+          "damage": 81,
+          "baseDamage": 88,
+          "reach": 0.52,
+          "optional": {
+            "travel": 0.39
+          }
+        }
+      ],
+      "normals": [
+        {
+          "id": "stand_weak",
+          "label": "立ち弱",
+          "description": "闇に紛れた右拳",
+          "gesture": "reverseJabR",
+          "attackPart": "armR",
+          "attackPartLabel": "右腕・右拳",
+          "contactTime": 0.325,
+          "contactEnd": 0.385,
+          "strikeHeight": 0.333,
+          "reach": 0.395,
+          "activeReach": [
+            {
+              "phase": 0,
+              "reach": 0.395,
+              "height": 0.333
+            },
+            {
+              "phase": 0.5,
+              "reach": 0.386,
+              "height": 0.336
+            },
+            {
+              "phase": 1,
+              "reach": 0.376,
+              "height": 0.34
+            }
+          ],
+          "startup": 4,
+          "active": 2,
+          "recovery": 13,
+          "total": 19,
+          "damage": 29,
+          "level": "mid",
+          "hitAdv": 2,
+          "blockAdv": -7,
+          "hitstun": 17,
+          "blockstun": 8,
+          "knockback": 0.025,
+          "blockPushback": 0.035,
+          "cancelWindow": {
+            "hit": [
+              0,
+              6
+            ],
+            "block": [
+              0,
+              2
+            ]
+          },
+          "cancelOnHit": [
+            "weak",
+            "heavy",
+            "s1",
+            "s2",
+            "s3"
+          ],
+          "cancelOnBlock": [
+            "weak",
+            "heavy"
+          ],
+          "status": "ok"
+        },
+        {
+          "id": "stand_heavy",
+          "label": "立ち強",
+          "description": "両拳を捻って放つ高速強攻撃",
+          "gesture": "blackDoubleHook",
+          "attackPart": "armR",
+          "attackPartLabel": "右腕・右拳",
+          "contactTime": 0.3,
+          "contactEnd": 0.36,
+          "strikeHeight": 0.18,
+          "reach": 0.44,
+          "activeReach": [
+            {
+              "phase": 0,
+              "reach": 0.44,
+              "height": 0.18
+            },
+            {
+              "phase": 0.5,
+              "reach": 0.392,
+              "height": 0.152
+            },
+            {
+              "phase": 1,
+              "reach": 0.342,
+              "height": 0.16
+            }
+          ],
+          "startup": 11,
+          "active": 3,
+          "recovery": 24,
+          "total": 38,
+          "damage": 65,
+          "level": "mid",
+          "hitAdv": 2,
+          "blockAdv": -16,
+          "hitstun": 29,
+          "blockstun": 11,
+          "knockback": 0.07,
+          "blockPushback": 0.08,
+          "cancelWindow": {
+            "hit": [
+              0,
+              5
+            ],
+            "block": [
+              0,
+              2
+            ]
+          },
+          "cancelOnHit": [
+            "s1",
+            "s2",
+            "s3"
+          ],
+          "cancelOnBlock": [],
+          "status": "ok"
+        },
+        {
+          "id": "crouch_weak",
+          "label": "しゃがみ弱",
+          "description": "返す拳で低く打つ",
+          "gesture": "lowBackfist",
+          "attackPart": "armR",
+          "attackPartLabel": "右腕・右拳",
+          "contactTime": 0.325,
+          "contactEnd": 0.445,
+          "strikeHeight": 0.174,
+          "reach": 0.437,
+          "activeReach": [
+            {
+              "phase": 0,
+              "reach": 0.437,
+              "height": 0.174
+            },
+            {
+              "phase": 0.5,
+              "reach": 0.435,
+              "height": 0.174
+            },
+            {
+              "phase": 1,
+              "reach": 0.431,
+              "height": 0.18
+            }
+          ],
+          "startup": 5,
+          "active": 2,
+          "recovery": 14,
+          "total": 21,
+          "damage": 25,
+          "level": "low",
+          "hitAdv": 1,
+          "blockAdv": -8,
+          "hitstun": 17,
+          "blockstun": 8,
+          "knockback": 0.025,
+          "blockPushback": 0.035,
+          "cancelWindow": {
+            "hit": [
+              0,
+              6
+            ],
+            "block": [
+              0,
+              2
+            ]
+          },
+          "cancelOnHit": [
+            "weak",
+            "heavy",
+            "s1",
+            "s2",
+            "s3"
+          ],
+          "cancelOnBlock": [
+            "weak",
+            "heavy"
+          ],
+          "status": "ok"
+        },
+        {
+          "id": "crouch_heavy",
+          "label": "しゃがみ強",
+          "description": "低い姿勢から鋭い重拳",
+          "gesture": "shadowRushPunch",
+          "attackPart": "armR",
+          "attackPartLabel": "右腕・右拳",
+          "contactTime": 0.425,
+          "contactEnd": 0.5,
+          "strikeHeight": 0.254,
+          "reach": 0.509,
+          "activeReach": [
+            {
+              "phase": 0,
+              "reach": 0.509,
+              "height": 0.254
+            },
+            {
+              "phase": 0.5,
+              "reach": 0.504,
+              "height": 0.252
+            },
+            {
+              "phase": 1,
+              "reach": 0.489,
+              "height": 0.243
+            }
+          ],
+          "startup": 11,
+          "active": 4,
+          "recovery": 26,
+          "total": 41,
+          "damage": 62,
+          "level": "low",
+          "hitAdv": 2,
+          "blockAdv": -19,
+          "hitstun": 32,
+          "blockstun": 11,
+          "knockback": 0.08,
+          "blockPushback": 0.09,
+          "cancelWindow": {
+            "hit": [
+              0,
+              5
+            ],
+            "block": [
+              0,
+              2
+            ]
+          },
+          "cancelOnHit": [
+            "s1",
+            "s2",
+            "s3"
+          ],
+          "cancelOnBlock": [],
+          "status": "ok"
+        },
+        {
+          "id": "air_weak",
+          "label": "空中弱",
+          "description": "闇の拳を斜め下へ",
+          "gesture": "airSpikeFistR",
+          "attackPart": "armR",
+          "attackPartLabel": "右腕・右拳",
+          "contactTime": 0.35,
+          "contactEnd": 0.41,
+          "strikeHeight": 0.113,
+          "reach": 0.336,
+          "activeReach": [
+            {
+              "phase": 0,
+              "reach": 0.336,
+              "height": 0.113
+            },
+            {
+              "phase": 0.5,
+              "reach": 0.321,
+              "height": 0.11
+            },
+            {
+              "phase": 1,
+              "reach": 0.305,
+              "height": 0.111
+            }
+          ],
+          "startup": 4,
+          "active": 4,
+          "recovery": 12,
+          "total": 20,
+          "damage": 31,
+          "level": "air",
+          "hitAdv": 0,
+          "blockAdv": -7,
+          "hitstun": 16,
+          "blockstun": 9,
+          "knockback": 0.05,
+          "blockPushback": 0.05,
+          "cancelWindow": {
+            "hit": null,
+            "block": null
+          },
+          "cancelOnHit": [],
+          "cancelOnBlock": [],
+          "status": "ok"
+        },
+        {
+          "id": "air_heavy",
+          "label": "空中強",
+          "description": "空中で体ごと回る高速蹴り",
+          "gesture": "darkSpinKick",
+          "attackPart": "legR",
+          "attackPartLabel": "右足・蹴り",
+          "contactTime": 0.475,
+          "contactEnd": 0.595,
+          "strikeHeight": 0.165,
+          "reach": 0.262,
+          "activeReach": [
+            {
+              "phase": 0,
+              "reach": 0.262,
+              "height": 0.165
+            },
+            {
+              "phase": 0.5,
+              "reach": 0.255,
+              "height": 0.19
+            },
+            {
+              "phase": 1,
+              "reach": 0.247,
+              "height": 0.219
+            }
+          ],
+          "startup": 9,
+          "active": 5,
+          "recovery": 20,
+          "total": 34,
+          "damage": 64,
+          "level": "air",
+          "hitAdv": 1,
+          "blockAdv": "whiff",
+          "hitstun": 26,
+          "blockstun": 12,
+          "knockback": 0.09,
+          "blockPushback": 0.08,
+          "cancelWindow": {
+            "hit": null,
+            "block": null
+          },
+          "cancelOnHit": [],
+          "cancelOnBlock": [],
+          "status": "ok"
+        }
+      ],
+      "ultimate": {
+        "id": "ultimate",
+        "name": "暗連・黒天烈掌",
+        "kind": "super",
+        "startup": 5,
+        "active": 13,
+        "recovery": 32,
+        "total": 50,
+        "damage": 205,
+        "baseDamage": 223,
+        "reach": 0.76,
+        "optional": {}
+      },
+      "cpu": {
+        "v15": 60.2,
+        "v151": 64.9
+      },
+      "proposal": "全体勝率64.9%。立弱4F・弱3回と暗連の強みは維持。空中強0.262mは対ゴダン0.35m条件でwhiff。足の演技を出しつつ、低耐久を補いすぎないバランスを検討。",
+      "videos": {
+        "normals": {
+          "page": "https://github.com/nagi300222/mamo-ken/blob/78dd0c685d78af617896c01bd95a277928e01368/exp/fable-3d/normal-art/v15_1/evidence/videos/dark_moguzo_normals_before_after.mp4",
+          "src": "https://raw.githubusercontent.com/nagi300222/mamo-ken/78dd0c685d78af617896c01bd95a277928e01368/exp/fable-3d/normal-art/v15_1/evidence/videos/dark_moguzo_normals_before_after.mp4"
+        },
+        "specials": {
+          "page": "https://github.com/nagi300222/mamo-ken/blob/78dd0c685d78af617896c01bd95a277928e01368/exp/fable-3d/cinematic/v14/evidence/specials/dark_moguzo_specials_before_after.mp4",
+          "src": "https://raw.githubusercontent.com/nagi300222/mamo-ken/78dd0c685d78af617896c01bd95a277928e01368/exp/fable-3d/cinematic/v14/evidence/specials/dark_moguzo_specials_before_after.mp4"
+        },
+        "ultimate": {
+          "page": "https://github.com/nagi300222/mamo-ken/blob/78dd0c685d78af617896c01bd95a277928e01368/exp/fable-3d/cinematic/v14/evidence/movies/dark_moguzo_ultimate_before_after.mp4",
+          "src": "https://raw.githubusercontent.com/nagi300222/mamo-ken/78dd0c685d78af617896c01bd95a277928e01368/exp/fable-3d/cinematic/v14/evidence/movies/dark_moguzo_ultimate_before_after.mp4"
+        }
+      }
+    }
+  },
+  "shared": {
+    "roar": {
+      "name": "咆哮",
+      "input": "↓＋必殺",
+      "startup": 16,
+      "active": 7,
+      "recovery": 27,
+      "damage": 105,
+      "reach": 0.66,
+      "driveCost": 35
+    },
+    "gyuiin": {
+      "name": "ギュイーン",
+      "input": "専用ボタン",
+      "startup": 8,
+      "active": 14,
+      "recovery": 24,
+      "damage": 0,
+      "reach": 0.4,
+      "driveCost": 60
+    },
+    "grab": {
+      "name": "掴み",
+      "input": "掴みボタン",
+      "startup": 6,
+      "active": 3,
+      "recovery": 25,
+      "damage": 78,
+      "reach": 0.31
+    }
+  },
+  "sources": {
+    "normalTable": "https://github.com/nagi300222/mamo-ken/blob/78dd0c685d78af617896c01bd95a277928e01368/docs/mamoken-v151/NORMAL_TABLE.md",
+    "normalPerformance": "https://github.com/nagi300222/mamo-ken/blob/78dd0c685d78af617896c01bd95a277928e01368/exp/fable-3d/dojo/normal-balance-v151.js",
+    "normalContact": "https://github.com/nagi300222/mamo-ken/blob/78dd0c685d78af617896c01bd95a277928e01368/exp/fable-3d/dojo/normal-contacts-v151.js",
+    "baseline": "https://github.com/nagi300222/mamo-ken/blob/78dd0c685d78af617896c01bd95a277928e01368/exp/fable-3d/dojo/balance.js",
+    "cpu": "https://github.com/nagi300222/mamo-ken/blob/78dd0c685d78af617896c01bd95a277928e01368/docs/mamoken-v151/CPU_AUDIT.md",
+    "cpuCsv": "https://github.com/nagi300222/mamo-ken/blob/78dd0c685d78af617896c01bd95a277928e01368/docs/mamoken-v151/cpu-rounds.csv",
+    "contactCsv": "https://github.com/nagi300222/mamo-ken/blob/78dd0c685d78af617896c01bd95a277928e01368/docs/mamoken-v151/normal-range-results.csv",
+    "visualAudit": "https://github.com/nagi300222/mamo-ken/blob/78dd0c685d78af617896c01bd95a277928e01368/exp/fable-3d/normal-art/v15_1/evidence/CONTACT_TABLE.md"
+  }
+}
