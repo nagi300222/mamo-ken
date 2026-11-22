@@ -13,7 +13,7 @@ test('分身はskinning cloneを使用しゲーム用hitboxを追加しない',(
  const main=readFileSync(new URL('./main.js',import.meta.url),'utf8');
  const code=readFileSync(new URL('./showtime-illusions.js',import.meta.url),'utf8');
  assert.match(main,/SkeletonUtils\.js/);
- assert.match(main,/illusions\?\.start\(p\)/);
+ assert.match(main,/illusions\?\.start\(attacker\)/);
  assert.match(main,/illusions\?\.step\(p\)/);
  assert.match(main,/illusions\?\.dispose\(\)/);
  assert.match(code,/cloneSkeleton\(gltf\.scene\)/);
