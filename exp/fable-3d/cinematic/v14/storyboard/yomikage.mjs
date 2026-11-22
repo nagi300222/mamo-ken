@@ -1,0 +1,61 @@
+// ヨミカゲ奥義「後の先・月断」命中後ムービー 10.0秒版の絵コンテ（編集用の正本）。座標・単位・hitstop の扱いは moguzo.mjs の冒頭と同じ。
+// 本人指定: 闇夜に紛れて相手が見失う。背後からの一閃、うずくまる相手へ追撃の一閃でダウン。黒い閃光、必殺の鋭さ。
+// カメラの文法: 「静」。動かないカメラと長い間。動くのは、相手のまわりを探るゆっくりした周回と、二閃目の直前の一度きりの回り込みだけ。
+// 暗いが見える: 画面を落とすのは dim 0.3 前後まで。月を逆光に置いて輪郭を残す。月と闇夜はムービー内だけの舞台装置。
+const D = 0.46, AX = -D / 2, TX = 0.34;
+const k = (t, pos, look, fov, roll = 0, ease) => ({ t, pos, look, fov, roll, ease });
+export default {
+  characterId: 'yomikage', displayName: '後の先・月断', durationSeconds: 10.0,
+  concept: '闇に消えて相手に探させ、背後から横一文字の一閃で崩し、うずくまった相手に縦の一閃を落とす。',
+  stage: { contactDistance: D, backdrop: 0x070a14, fog: 0x070a14, fogNear: 4, fogFar: 14, sky: 0x9fb4e0, ground: 0x0c1020, ambient: 0.8, key: 0xbfd0ff, keyPower: 1.5, rim: 0xdfe8ff, rimPower: 3.0,
+    floor: 0x1a2032, mountain: 0x0c101c, post: 0x1c2234, posts: 6, accent: 0x9defff, accentCss: '#9defff', moon: { pos: [0.4, 1.9, -9], r: 1.1, color: 0xe6eeff } },
+  actors: {
+    attacker: { segments: [{ start: 0, clip: 'cin_yomikage_atk' }], pivotHeight: 0.45, visible: [[0, 1.42], [2.9, 10.01]], opacity: [{ t: 0.7, v: 1 }, { t: 1.4, v: 0 }, { t: 2.9, v: 0 }, { t: 3.5, v: 1 }],
+      root: [{ t: 0, pos: [AX, 0, 0], rotY: 90 }, { t: 0.30, pos: [AX, 0, 0], rotY: 90, ease: 'hold' }, { t: 1.40, pos: [AX - 0.50, 0, 0], rotY: 90, ease: 'inOutQuad' }, { t: 2.90, pos: [TX + 0.62, 0, 0], rotY: -90, ease: 'hold' },
+        { t: 4.08, pos: [TX + 0.62, 0, 0], rotY: -90, ease: 'hold' }, { t: 4.20, pos: [TX - 0.10, 0, 0.06], rotY: -90, ease: 'inQuad' }, { t: 4.55, pos: [TX - 0.62, 0, 0.06], rotY: -90, ease: 'outCubic' },
+        { t: 5.20, pos: [TX - 0.62, 0, 0.06], rotY: -90, ease: 'hold' }, { t: 5.90, pos: [TX - 0.62, 0, 0.06], rotY: 90, ease: 'inOutCubic' }, { t: 6.80, pos: [TX - 0.46, 0, 0.04], rotY: 90, ease: 'inOutQuad' }, { t: 8.60, pos: [TX - 0.46, 0, 0.04], rotY: 90, ease: 'hold' },
+        { t: 9.30, pos: [TX - 0.46, 0, 0.04], rotY: 200, ease: 'inOutCubic' }, { t: 10.0, pos: [TX - 0.46, 0, 0.04], rotY: 200 }] },
+    target: { segments: [{ start: 0, clip: 'cinv_yomikage' }], pivotHeight: 0.45, root: [
+      { t: 0, pos: [D / 2, 0, 0], rotY: -90 }, { t: 0.40, pos: [TX, 0, 0], rotY: -90, ease: 'outCubic' }, { t: 1.40, pos: [TX, 0, 0], rotY: -90, ease: 'hold' }, { t: 1.90, pos: [TX, 0, 0], rotY: -30, ease: 'inOutQuad' }, { t: 2.40, pos: [TX, 0, 0], rotY: -150, ease: 'inOutQuad' },
+      { t: 2.90, pos: [TX, 0, 0], rotY: -90, ease: 'inOutQuad' }, { t: 4.20, pos: [TX, 0, 0], rotY: -90, ease: 'hold' }, { t: 4.55, pos: [TX - 0.04, 0, 0], rotY: -90, ease: 'linear' }, { t: 7.00, pos: [TX - 0.04, 0, 0], rotY: -90, ease: 'hold' },
+      { t: 8.50, pos: [TX + 0.10, 0, 0], rotY: -90, ease: 'inOutQuad' }, { t: 10.0, pos: [TX + 0.10, 0, 0], rotY: -90 }] },
+  },
+  shots: [
+    { id: '01-lights-fall', title: '闇が降りる', start: 0, end: 1.4, intent: '相手の顔の寄り。まわりが暗くなり、奥のヨミカゲが闇に溶ける。相手の目が泳ぎ始める',
+      actorPose: { attacker: '振り抜いた姿勢から立ち、下がりながら消える', target: 'よろめき、構え直して目で探す' },
+      camera: { rig: 'victim-face-close', move: '相手の顔へゆっくり寄る', keys: [k(0, ['target.chest', -0.34, 0.04, 1.25], ['target.chest', -0.14, 0, 0], 34, -5), k(0.40, ['target.head', -0.55, 0.02, 0.85], ['target.head', -0.06, -0.02, 0], 30, 3, 'outExpo'), k(1.40, ['target.head', -0.42, 0.02, 0.70], ['target.head', -0.02, -0.02, 0], 26, 0, 'linear')] },
+      cues: [{ at: 0, type: 'vfx', key: 'flash', dur: 0.1, opacity: 0.4 }, { at: 0, type: 'vfx', key: 'ink_slash', anchor: 'target.chest', size: 0.6, angle: 8, hold: 0.3 }, { at: 0, type: 'sfx', key: 'ult_hit_slash' }, { at: 0, type: 'shake', dur: 0.2, amp: 0.03 },
+        { at: 0.5, type: 'vfx', key: 'dim', dur: 3.9, opacity: 0.3, color: 0x02030a }, { at: 0.5, type: 'sfx', key: 'lights_out' }, { at: 1.3, type: 'vfx', key: 'puff', anchor: 'attacker.chest', count: 8, color: 0x3a4a7a }] },
+    { id: '02-searching', title: '見失う', start: 1.4, end: 2.8, intent: '相手のまわりを顔の高さでゆっくり回る。相手だけが動き、探し、振り返る。どこにもいない',
+      actorPose: { attacker: '姿が無い', target: '左を見て、右を見て、振り返る' },
+      camera: { rig: 'slow-search-orbit', move: '相手を軸にゆっくり 120 度', keys: [k(1.40, ['target.root', -0.70, 0.40, 1.10], ['target.head', 0, -0.04, 0], 36, 2), k(2.10, ['target.root', 0.30, 0.42, 1.30], ['target.head', 0, -0.04, 0], 36, 0, 'linear'), k(2.80, ['target.root', 1.10, 0.44, 0.70], ['target.head', 0, -0.04, 0], 36, -2, 'linear')] },
+      cues: [{ at: 1.5, type: 'sfx', key: 'breath_tense' }, { at: 2.2, type: 'vfx', key: 'streak', from: [TX - 0.9, 0.3, -0.8], to: [TX + 0.9, 0.3, -0.9], dur: 0.5, width: 0.03, color: 0x4a5a9a, opacity: 0.4 }, { at: 2.2, type: 'sfx', key: 'presence_pass' }] },
+    { id: '03-behind', title: '背後', start: 2.8, end: 3.8, intent: '相手の正面・肩の高さで固定。前を探す相手の後ろ、月を背に、目を閉じた影が浮かぶ',
+      actorPose: { attacker: '相手の背後に目を閉じて立つ→目を開く', target: '前を探し続け、気づかない' },
+      camera: { rig: 'front-locked-reveal', move: '固定。背後の影にごくわずか寄る', keys: [k(2.80, ['stage', TX - 1.05, 0.36, 0.30], ['stage', TX + 0.30, 0.34, 0], 34, 0), k(3.80, ['stage', TX - 1.00, 0.36, 0.28], ['stage', TX + 0.36, 0.34, 0], 31, 0, 'linear')] },
+      cues: [{ at: 3.0, type: 'sfx', key: 'appear_silent' }, { at: 3.70, type: 'sfx', key: 'eyes_open' }, { at: 3.70, type: 'vfx', key: 'sparks', anchor: 'attacker.head', count: 4, power: 0.2, dur: 0.3, size: 0.4, color: 0xdfe8ff }] },
+    { id: '04-first-flash', title: '一閃', start: 3.8, end: 5.0, intent: '真横の引き・月を背にした影絵。背後から前へ一歩で抜ける。黒い横一文字が残り、止めのあと相手が折れて沈む',
+      actorPose: { attacker: '手刀を引く→一歩で相手の脇を抜けて振り抜く→止め', target: '背後からの一閃で体が折れる→止め→腹を抱えてうずくまる' },
+      camera: { rig: 'side-silhouette-still', move: '固定。動かない', keys: [k(3.80, ['stage', TX, 0.30, 2.30], ['stage', TX, 0.34, 0], 36, 0), k(5.00, ['stage', TX, 0.30, 2.24], ['stage', TX, 0.32, 0], 35, 0, 'linear')] },
+      cues: [{ at: 4.20, type: 'hitstop', dur: 0.35, strength: 'heavy' }, { at: 4.20, type: 'vfx', key: 'ink_slash', offset: [TX - 0.05, 0.36, 0.10], size: 1.25, angle: 4, bow: 0.06, grow: 0.05, hold: 0.9 }, { at: 4.20, type: 'vfx', key: 'flash', dur: 0.06, opacity: 0.5 },
+        { at: 4.20, type: 'sfx', key: 'ult_hit_flash1' }, { at: 4.20, type: 'shake', dur: 0.15, amp: 0.025 }, { at: 4.55, type: 'sfx', key: 'hitstop_release' }, { at: 4.9, type: 'sfx', key: 'knees_drop' }, { at: 4.9, type: 'vfx', key: 'dust', anchor: 'target.root', count: 5, spread: 0.25, color: 0x5a6a9a }] },
+    { id: '05-faces', title: '横顔と目', start: 5.0, end: 6.4, intent: 'うずくまる相手の横顔の寄り。その奥に背を向けて立つヨミカゲが振り返り、目を開く',
+      actorPose: { attacker: '背を向けて静かに立つ→向き直り、目を開く', target: 'うずくまって息をつく' },
+      camera: { rig: 'profile-rack-two', move: '横顔の寄りから、奥の目へ寄せる', keys: [k(5.00, ['target.head', 0.30, 0.04, 1.10], ['target.head', -0.06, -0.02, 0], 28, 3), k(5.70, ['target.head', 0.26, 0.05, 1.04], ['target.head', -0.14, 0, 0], 27, 2, 'linear'), k(6.40, ['attacker.head', 0.20, 0.03, 0.95], ['attacker.head', 0.02, -0.01, 0], 22, 0, 'inOutCubic')] },
+      cues: [{ at: 5.1, type: 'vfx', key: 'dim', dur: 1.8, opacity: 0.22, color: 0x02030a }, { at: 5.6, type: 'sfx', key: 'breath_pain' }, { at: 5.95, type: 'sfx', key: 'eyes_open' }] },
+    { id: '06-second-flash', title: '月断', start: 6.4, end: 7.6, intent: 'ここだけカメラが動く。二人のまわりを半周して月を正面に入れ、止まった瞬間に縦の一閃。いちばん長い止め',
+      actorPose: { attacker: '手刀を真上に掲げる→足元まで振り下ろす→止め', target: 'うずくまったまま、頭が跳ね上がる→止め' },
+      camera: { rig: 'half-orbit-then-freeze', move: '半周して止まる→止めの間は動かない', keys: [k(6.40, ['stage', TX - 0.30, 0.30, 1.80], ['stage', TX - 0.20, 0.36, 0], 36, 0), k(6.94, ['stage', TX - 1.55, 0.26, 0.20], ['stage', TX - 0.10, 0.40, 0], 38, -6, 'inOutCubic'), k(7.60, ['stage', TX - 1.52, 0.26, 0.20], ['stage', TX - 0.10, 0.40, 0], 36, -6, 'linear')] },
+      cues: [{ at: 7.00, type: 'hitstop', dur: 0.6, strength: 'max' }, { at: 7.00, type: 'vfx', key: 'dim', dur: 0.6, opacity: 0.4, color: 0x000000 }, { at: 7.00, type: 'vfx', key: 'ink_slash', anchor: 'target.head', offset: [0, 0.10, 0.10], size: 1.5, angle: 82, bow: 0.22, grow: 0.05, hold: 1.5, core: 0xffffff },
+        { at: 7.00, type: 'vfx', key: 'flash', dur: 0.06, opacity: 0.6 }, { at: 7.00, type: 'sfx', key: 'ult_hit_flash2' }, { at: 7.00, type: 'shake', dur: 0.2, amp: 0.03 }, { at: 7.60, type: 'sfx', key: 'hitstop_release' }] },
+    { id: '07-collapse', title: '崩れる', start: 7.6, end: 8.8, intent: '低い引き。相手がゆっくり後ろへ崩れて倒れる。黒い閃きだけが空中に残り、薄れていく',
+      actorPose: { attacker: '振り下ろしたまま動かない', target: 'ゆっくり後ろへ崩れ、倒れる' },
+      camera: { rig: 'low-wide-afterimage', move: '低い位置で固定', keys: [k(7.60, ['stage', TX + 0.20, 0.10, 1.90], ['stage', TX - 0.10, 0.32, 0], 40, 3), k(8.80, ['stage', TX + 0.24, 0.10, 1.84], ['stage', TX - 0.08, 0.30, 0], 39, 2, 'linear')] },
+      cues: [{ at: 8.50, type: 'vfx', key: 'dust', anchor: 'target.root', count: 7, spread: 0.4, color: 0x5a6a9a }, { at: 8.50, type: 'sfx', key: 'body_land_soft' }, { at: 8.50, type: 'shake', dur: 0.2, amp: 0.02 }] },
+    { id: '08-zanshin', title: '残心', start: 8.8, end: 10.0, intent: '月を背にした後ろ姿。背を向け、手を下ろし、目を閉じる',
+      actorPose: { attacker: '相手に背を向け、手を下ろして目を閉じる', target: '足元で仰向け' },
+      camera: { rig: 'moonlit-back', move: 'ごくゆっくり引く', keys: [k(8.80, ['stage', TX - 0.50, 0.20, 1.50], ['attacker.chest', 0.10, 0.04, 0], 36, 0), k(10.0, ['stage', TX - 0.52, 0.22, 1.72], ['attacker.chest', 0.10, 0.06, 0], 34, 0, 'outQuad')] },
+      cues: [{ at: 9.30, type: 'sfx', key: 'finish_pose_quiet' }, { at: 9.10, type: 'caption', dur: 0.75, text: '後の先・月断', sub: 'ヨミカゲ' }] },
+  ],
+  reducedMotion: { useShots: ['04-first-flash', '06-second-flash', '08-zanshin'], disable: ['shake', 'flash', 'speed_lines'], note: '3 カットを固定カメラ（各ショットの最初のキー）で見せる。暗転（dim）は弱めて残す。役者とキューの時刻は変えない' },
+};

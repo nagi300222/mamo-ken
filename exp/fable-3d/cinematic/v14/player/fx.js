@@ -152,6 +152,31 @@ export function createFx(THREE, scene, camera, manifest) {
       return { objs: [m], life: dur, update(age) { camera.getWorldPosition(eye); for (let i = 0; i < n; i++) { const s2 = seed[i], wrap = (v, c0, span) => c0 + ((((v - c0) % span) + span * 1.5) % span) - span / 2;
         pos[i * 3] = wrap(s2[0] + Math.sin(age * .7 + s2[4]) * .12 + age * (c.wind ?? .25), eye.x, 6); pos[i * 3 + 1] = (((s2[1] - age * s2[3]) % 3.5) + 3.5) % 3.5; pos[i * 3 + 2] = wrap(s2[2], eye.z, 6); } g.attributes.position.needsUpdate = true; } };
     },
+    // 黒い一閃: 黒い三日月の帯と白い芯。grow 秒で走り、hold 秒残る（カメラ正対）
+    ink_slash(c, ctx) {
+      const p = P(ctx, c), S = c.size ?? 1.2, n = 20, mk = (w) => { const pts = []; for (let i = 0; i <= n; i++) { const u = i / n, x = (u - .5) * S * 2, y = Math.sin(Math.PI * u) * (c.bow ?? .18) * S, t = Math.sin(Math.PI * u) ** .7 * w * S; pts.push(x, y + t, 0, x, y - t, 0); }
+        const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.Float32BufferAttribute(pts, 3)); const idx = []; for (let i = 0; i < n; i++) idx.push(i * 2, i * 2 + 1, i * 2 + 2, i * 2 + 1, i * 2 + 3, i * 2 + 2); g.setIndex(idx); return g; };
+      const dark = add(mk(.085), basic(col(c.color, 0x05030a), { side: THREE.DoubleSide, depthTest: false })), core = add(mk(.012), basic(col(c.core, 0xffffff), { side: THREE.DoubleSide, depthTest: false })); dark.renderOrder = 30; core.renderOrder = 31;
+      const grow = c.grow ?? .06, hold = c.hold ?? .6, life = grow + hold;
+      return { objs: [dark, core], life, update(age) { const g = clamp01(age / grow), f = clamp01((life - age) / .25); for (const m of [dark, core]) { m.position.copy(p); m.quaternion.copy(camera.quaternion); m.rotateZ(THREE.MathUtils.degToRad(c.angle ?? 0)); m.geometry.setDrawRange(0, Math.floor(g * n) * 6); }
+        dark.material.opacity = .95 * f; core.material.opacity = f; dark.scale.set(1, 1 + .6 * (1 - f), 1); } };
+    },
+    // 木の実: from から to へ放物線で飛び、stick 秒そこに残って点滅する（爆発は別キュー）
+    nut(c, ctx) {
+      const a = new V(sx(ctx) * c.from[0], c.from[1], sx(ctx) * c.from[2]), m = add(new THREE.SphereGeometry(c.size ?? .035, 12, 10), lit(col(c.color, 0x8a5a2a))), glow = add(new THREE.SphereGeometry((c.size ?? .035) * 1.5, 10, 8), basic(0xff7a20, { blending: THREE.AdditiveBlending }));
+      const fly = c.fly ?? 1, stick = c.stick ?? 1, b = new V();
+      return { objs: [m, glow], life: fly + stick, update(age, ctx2) { ctx2.anchorPos({ anchor: c.toAnchor || 'stage', offset: c.to || [0, 0, 0] }, b); const u = clamp01(age / fly); m.position.lerpVectors(a, b, u); m.position.y += Math.sin(Math.PI * u) * (c.arc ?? .5); m.rotation.set(age * 9, age * 7, 0); glow.position.copy(m.position);
+        const blink = age > fly ? (Math.sin((age - fly) ** 1.6 * 40) > 0 ? 1 : .15) : .25; glow.material.opacity = .7 * blink; glow.scale.setScalar(1 + (age > fly ? .6 * blink : 0)); } };
+    },
+    // 爆発: 火の玉・煙・破片
+    explosion(c, ctx) {
+      const p = P(ctx, c), r = rnd(c.at * 29 + 17), S = c.size ?? 1, objs = [], n = c.count ?? 16;
+      for (let i = 0; i < n; i++) { const fire = i < n * .6, m = add(new THREE.IcosahedronGeometry(.10 + r() * .10, 1), basic(fire ? [0xffe08a, 0xffa030, 0xff5a18][i % 3] : 0x2a2420, fire ? { blending: THREE.AdditiveBlending } : { opacity: .7 }));
+        const a = r() * 6.283, e = r() * 1.2 - .1; m.userData = { v: new V(Math.cos(a) * Math.cos(e), Math.abs(Math.sin(e)) + .2, Math.sin(a) * Math.cos(e)).multiplyScalar((.5 + r()) * S * (fire ? 1 : 1.4)), fire, d: fire ? 0 : .08 + r() * .15 }; objs.push(m); }
+      const core = add(new THREE.SphereGeometry(.3 * S, 16, 12), basic(0xffffff, { blending: THREE.AdditiveBlending })); objs.push(core); const dur = c.dur ?? 1.3;
+      return { objs, life: dur, update(age) { const u = age / dur; core.position.copy(p); core.scale.setScalar(.3 + 3.2 * out3(clamp01(age / .25))); core.material.opacity = Math.max(0, 1 - age / .3);
+        for (const m of objs) { if (m === core) continue; const d = m.userData, a = age - d.d; m.visible = a > 0; if (a <= 0) continue; const e = out3(clamp01(a / (d.fire ? .5 : 1.1))); m.position.copy(p).addScaledVector(d.v, e); m.position.y += d.fire ? 0 : a * .35; m.scale.setScalar(S * (d.fire ? 1 + 2.4 * e : 1.2 + 3.2 * e)); m.material.opacity = d.fire ? Math.max(0, 1 - a / .6) : .65 * Math.max(0, 1 - u) ** 1.2; } } };
+    },
     // 画面フラッシュ
     flash(c) {
       const m = add(new THREE.PlaneGeometry(40, 40), basic(col(c.color, 0xffffff), { depthTest: false, blending: c.additive ? THREE.AdditiveBlending : THREE.NormalBlending }), overlay); m.position.z = -1; m.renderOrder = 50; const dur = c.dur ?? .16;
