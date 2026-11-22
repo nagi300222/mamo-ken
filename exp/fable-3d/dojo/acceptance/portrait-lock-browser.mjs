@@ -44,7 +44,7 @@ try{
  assert.equal(await page.locator('#rotate').isVisible(),false);
  await page.screenshot({path:shots+'/portrait-393-game.png'});
  // Top-layer popovers need their own transform; controls are not allowed to disappear.
- for(const [trigger,panel] of [['.av-settings-toggle','#av-settings'],['button[popovertarget="commands-help"]','#commands-help']]){
+ for(const [trigger,panel] of [['.av-settings-toggle','#av-settings'],['button[popovertarget="commands-help"]:not([popovertargetaction])','#commands-help']]){
    await page.locator(trigger).tap();
    assert.equal(await page.locator(panel).evaluate(el=>el.matches(':popover-open')),true);
    const rect=await page.locator(panel).boundingBox();
