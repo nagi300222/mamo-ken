@@ -14,7 +14,8 @@ ck('元GLBと一致（造形・骨格・テクスチャ・既存37クリップ�
 ck('manifest 3本の形式・クリップ・骨・相手役9体ぶん', run('build_manifest.mjs'), 'manifest/*.json');
 // 対戦用クリップの長さと発生・持続が balance.js の現行値と同じか
 for (const id of HEROES) { const m = J(path.join(V14, id, id + '_v14_motions.json'));
-  for (const [slot, clip, mv] of [['s1', 's1_v14', B.specialMove(id, 0)], ['s2', 's2_v14', B.specialMove(id, 1)], ['s3', 's3_v14', B.specialMove(id, 2)], ['ultimate', 'ult_v14', B.ultimateMove(id)]]) {
+  for (const [slot, note, mv] of [['s1', '236', B.specialMove(id, 0)], ['s2', '623', B.specialMove(id, 1)], ['s3', '214', B.specialMove(id, 2)], ['ultimate', '236236', B.ultimateMove(id)]]) {
+    const clip = m.command_map[note]; if (!m.v14_clips.includes(clip)) { ck(`${id} ${slot}: 現行クリップを維持（意図どおり）`, m.v14.base_command_map[note] === clip, clip); continue; }
     const c = m.clips[clip], tot = mv.startup + mv.active + mv.recovery;
     ck(`${id} ${slot}: クリップ長=総フレーム、発生・持続が balance.js と同じ`, c && c.frames === tot && c.startup === mv.startup && c.active === mv.active, `${clip} ${c?.frames}F / balance ${mv.startup}+${mv.active}+${mv.recovery}=${tot}F`);
     const got = chooseClip({ action: { id: slot, kind: mv.kind, anim: mv.anim } }, Object.keys(m.clips), m.command_map);
@@ -22,8 +23,8 @@ for (const id of HEROES) { const m = J(path.join(V14, id, id + '_v14_motions.jso
 // 実ゲーム撮影: 新クリップで当たり、相手の残り体力が旧と同じ
 const oldLog = path.join(V14, 'evidence/audit_before/capture_log.json'), newLog = path.join(V14, 'evidence/audit_after/capture_log.json');
 if (fs.existsSync(oldLog) && fs.existsSync(newLog)) { const o = J(oldLog).log, n = J(newLog).log;
-  for (const e of n) { const p = o.find(x => x.id === e.id && x.mv === e.mv); const want = e.mv === 'ultimate' ? 'ult_v14' : e.mv + '_v14';
-    ck(`実ゲーム ${e.id} ${e.mv}: ${want} が再生され、相手の残り体力が旧と同じ`, e.clip === want && p && p.hpAfter === e.hpAfter, `clip=${e.clip} hp 旧${p?.hpAfter} 新${e.hpAfter}`); }
+  for (const e of n) { const p = o.find(x => x.id === e.id && x.mv === e.mv); const cm = J(path.join(V14, e.id, e.id + '_v14_motions.json')).command_map; const want = cm[{ s1: '236', s2: '623', s3: '214', ultimate: '236236' }[e.mv]];
+    ck(`実ゲーム ${e.id} ${e.mv}: ${want} が再生され、相手の残り体力が旧と同じ`, (e.clip === want || (p && p.clip === e.clip && e.kind === 'throw')) && p && p.hpAfter === e.hpAfter, `clip=${e.clip} hp 旧${p?.hpAfter} 新${e.hpAfter}`); }
   ck('実ゲームで 36 技を撮影済み', o.length === 36, o.length + ' 技'); ck('新クリップの実ゲーム撮影が制作済みキャラすべてにある', HEROES.every(id => ['s1', 's2', 's3', 'ultimate'].every(mv => n.some(e => e.id === id && e.mv === mv))), HEROES.length + ' 体'); } else ck('実ゲーム撮影ログ', false, 'evidence/audit_*/capture_log.json が無い');
 // ムービーの中身
 for (const id of HEROES) { const M = J(path.join(V14, 'manifest', id + '_ultimate.json')); const rigs = M.shots.map(s => s.camera.rig);

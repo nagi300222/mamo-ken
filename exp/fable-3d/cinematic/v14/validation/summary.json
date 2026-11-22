@@ -1,8 +1,8 @@
 {
  "generated": "2026-11-22",
  "all_pass": true,
- "passed": 52,
- "total": 52,
+ "passed": 148,
+ "total": 148,
  "checks": [
   {
    "name": "元GLBと一致（造形・骨格・テクスチャ・既存37クリップ）9体",
@@ -55,6 +55,46 @@
    "detail": "ult_v14"
   },
   {
+   "name": "pisuke s1: クリップ長=総フレーム、発生・持続が balance.js と同じ",
+   "pass": true,
+   "detail": "s1_v14 29F / balance 11+1+17=29F"
+  },
+  {
+   "name": "pisuke s1: 現行の models.js chooseClip が新クリップを選ぶ",
+   "pass": true,
+   "detail": "s1_v14"
+  },
+  {
+   "name": "pisuke s2: クリップ長=総フレーム、発生・持続が balance.js と同じ",
+   "pass": true,
+   "detail": "s2_v14 36F / balance 6+8+22=36F"
+  },
+  {
+   "name": "pisuke s2: 現行の models.js chooseClip が新クリップを選ぶ",
+   "pass": true,
+   "detail": "s2_v14"
+  },
+  {
+   "name": "pisuke s3: クリップ長=総フレーム、発生・持続が balance.js と同じ",
+   "pass": true,
+   "detail": "s3_v14 36F / balance 7+9+20=36F"
+  },
+  {
+   "name": "pisuke s3: 現行の models.js chooseClip が新クリップを選ぶ",
+   "pass": true,
+   "detail": "s3_v14"
+  },
+  {
+   "name": "pisuke ultimate: クリップ長=総フレーム、発生・持続が balance.js と同じ",
+   "pass": true,
+   "detail": "ult_v14 44F / balance 5+12+27=44F"
+  },
+  {
+   "name": "pisuke ultimate: 現行の models.js chooseClip が新クリップを選ぶ",
+   "pass": true,
+   "detail": "ult_v14"
+  },
+  {
    "name": "godan s1: クリップ長=総フレーム、発生・持続が balance.js と同じ",
    "pass": true,
    "detail": "s1_v14 54F / balance 21+5+28=54F"
@@ -95,6 +135,46 @@
    "detail": "ult_v14"
   },
   {
+   "name": "hakuma s1: クリップ長=総フレーム、発生・持続が balance.js と同じ",
+   "pass": true,
+   "detail": "s1_v14 39F / balance 11+6+22=39F"
+  },
+  {
+   "name": "hakuma s1: 現行の models.js chooseClip が新クリップを選ぶ",
+   "pass": true,
+   "detail": "s1_v14"
+  },
+  {
+   "name": "hakuma s2: クリップ長=総フレーム、発生・持続が balance.js と同じ",
+   "pass": true,
+   "detail": "s2_v14 39F / balance 8+7+24=39F"
+  },
+  {
+   "name": "hakuma s2: 現行の models.js chooseClip が新クリップを選ぶ",
+   "pass": true,
+   "detail": "s2_v14"
+  },
+  {
+   "name": "hakuma s3: クリップ長=総フレーム、発生・持続が balance.js と同じ",
+   "pass": true,
+   "detail": "s3_v14 46F / balance 12+9+25=46F"
+  },
+  {
+   "name": "hakuma s3: 現行の models.js chooseClip が新クリップを選ぶ",
+   "pass": true,
+   "detail": "s3_v14"
+  },
+  {
+   "name": "hakuma ultimate: クリップ長=総フレーム、発生・持続が balance.js と同じ",
+   "pass": true,
+   "detail": "ult_v14 55F / balance 11+10+34=55F"
+  },
+  {
+   "name": "hakuma ultimate: 現行の models.js chooseClip が新クリップを選ぶ",
+   "pass": true,
+   "detail": "ult_v14"
+  },
+  {
    "name": "chirka s1: クリップ長=総フレーム、発生・持続が balance.js と同じ",
    "pass": true,
    "detail": "s1_v14 36F / balance 13+4+19=36F"
@@ -131,6 +211,161 @@
   },
   {
    "name": "chirka ultimate: 現行の models.js chooseClip が新クリップを選ぶ",
+   "pass": true,
+   "detail": "ult_v14"
+  },
+  {
+   "name": "takimaru s1: クリップ長=総フレーム、発生・持続が balance.js と同じ",
+   "pass": true,
+   "detail": "s1_v14 51F / balance 20+1+30=51F"
+  },
+  {
+   "name": "takimaru s1: 現行の models.js chooseClip が新クリップを選ぶ",
+   "pass": true,
+   "detail": "s1_v14"
+  },
+  {
+   "name": "takimaru s2: クリップ長=総フレーム、発生・持続が balance.js と同じ",
+   "pass": true,
+   "detail": "s2_v14 44F / balance 10+7+27=44F"
+  },
+  {
+   "name": "takimaru s2: 現行の models.js chooseClip が新クリップを選ぶ",
+   "pass": true,
+   "detail": "s2_v14"
+  },
+  {
+   "name": "takimaru s3: クリップ長=総フレーム、発生・持続が balance.js と同じ",
+   "pass": true,
+   "detail": "s3_v14 49F / balance 9+3+37=49F"
+  },
+  {
+   "name": "takimaru s3: 現行の models.js chooseClip が新クリップを選ぶ",
+   "pass": true,
+   "detail": "s3_v14"
+  },
+  {
+   "name": "takimaru ultimate: クリップ長=総フレーム、発生・持続が balance.js と同じ",
+   "pass": true,
+   "detail": "ult_v14 56F / balance 13+8+35=56F"
+  },
+  {
+   "name": "takimaru ultimate: 現行の models.js chooseClip が新クリップを選ぶ",
+   "pass": true,
+   "detail": "ult_v14"
+  },
+  {
+   "name": "yomikage s1: クリップ長=総フレーム、発生・持続が balance.js と同じ",
+   "pass": true,
+   "detail": "s1_v14 37F / balance 13+1+23=37F"
+  },
+  {
+   "name": "yomikage s1: 現行の models.js chooseClip が新クリップを選ぶ",
+   "pass": true,
+   "detail": "s1_v14"
+  },
+  {
+   "name": "yomikage s2: クリップ長=総フレーム、発生・持続が balance.js と同じ",
+   "pass": true,
+   "detail": "s2_v14 40F / balance 8+7+25=40F"
+  },
+  {
+   "name": "yomikage s2: 現行の models.js chooseClip が新クリップを選ぶ",
+   "pass": true,
+   "detail": "s2_v14"
+  },
+  {
+   "name": "yomikage s3: クリップ長=総フレーム、発生・持続が balance.js と同じ",
+   "pass": true,
+   "detail": "s3_v14 51F / balance 7+13+31=51F"
+  },
+  {
+   "name": "yomikage s3: 現行の models.js chooseClip が新クリップを選ぶ",
+   "pass": true,
+   "detail": "s3_v14"
+  },
+  {
+   "name": "yomikage ultimate: クリップ長=総フレーム、発生・持続が balance.js と同じ",
+   "pass": true,
+   "detail": "ult_v14 50F / balance 7+10+33=50F"
+  },
+  {
+   "name": "yomikage ultimate: 現行の models.js chooseClip が新クリップを選ぶ",
+   "pass": true,
+   "detail": "ult_v14"
+  },
+  {
+   "name": "bullet s1: クリップ長=総フレーム、発生・持続が balance.js と同じ",
+   "pass": true,
+   "detail": "s1_v14 46F / balance 17+1+28=46F"
+  },
+  {
+   "name": "bullet s1: 現行の models.js chooseClip が新クリップを選ぶ",
+   "pass": true,
+   "detail": "s1_v14"
+  },
+  {
+   "name": "bullet s2: クリップ長=総フレーム、発生・持続が balance.js と同じ",
+   "pass": true,
+   "detail": "s2_v14 43F / balance 9+7+27=43F"
+  },
+  {
+   "name": "bullet s2: 現行の models.js chooseClip が新クリップを選ぶ",
+   "pass": true,
+   "detail": "s2_v14"
+  },
+  {
+   "name": "bullet s3: 現行クリップを維持（意図どおり）",
+   "pass": true,
+   "detail": "sp_tail_whip"
+  },
+  {
+   "name": "bullet ultimate: クリップ長=総フレーム、発生・持続が balance.js と同じ",
+   "pass": true,
+   "detail": "ult_v14 55F / balance 12+9+34=55F"
+  },
+  {
+   "name": "bullet ultimate: 現行の models.js chooseClip が新クリップを選ぶ",
+   "pass": true,
+   "detail": "ult_v14"
+  },
+  {
+   "name": "dark_moguzo s1: クリップ長=総フレーム、発生・持続が balance.js と同じ",
+   "pass": true,
+   "detail": "s1_v14 31F / balance 11+1+19=31F"
+  },
+  {
+   "name": "dark_moguzo s1: 現行の models.js chooseClip が新クリップを選ぶ",
+   "pass": true,
+   "detail": "s1_v14"
+  },
+  {
+   "name": "dark_moguzo s2: クリップ長=総フレーム、発生・持続が balance.js と同じ",
+   "pass": true,
+   "detail": "s2_v14 44F / balance 5+8+31=44F"
+  },
+  {
+   "name": "dark_moguzo s2: 現行の models.js chooseClip が新クリップを選ぶ",
+   "pass": true,
+   "detail": "s2_v14"
+  },
+  {
+   "name": "dark_moguzo s3: クリップ長=総フレーム、発生・持続が balance.js と同じ",
+   "pass": true,
+   "detail": "s3_v14 40F / balance 7+9+24=40F"
+  },
+  {
+   "name": "dark_moguzo s3: 現行の models.js chooseClip が新クリップを選ぶ",
+   "pass": true,
+   "detail": "s3_v14"
+  },
+  {
+   "name": "dark_moguzo ultimate: クリップ長=総フレーム、発生・持続が balance.js と同じ",
+   "pass": true,
+   "detail": "ult_v14 50F / balance 5+13+32=50F"
+  },
+  {
+   "name": "dark_moguzo ultimate: 現行の models.js chooseClip が新クリップを選ぶ",
    "pass": true,
    "detail": "ult_v14"
   },
@@ -195,9 +430,134 @@
    "detail": "clip=ult_v14 hp 旧729 新729"
   },
   {
+   "name": "実ゲーム pisuke s1: s1_v14 が再生され、相手の残り体力が旧と同じ",
+   "pass": true,
+   "detail": "clip=s1_v14 hp 旧865 新865"
+  },
+  {
+   "name": "実ゲーム pisuke s2: s2_v14 が再生され、相手の残り体力が旧と同じ",
+   "pass": true,
+   "detail": "clip=s2_v14 hp 旧836 新836"
+  },
+  {
+   "name": "実ゲーム pisuke s3: s3_v14 が再生され、相手の残り体力が旧と同じ",
+   "pass": true,
+   "detail": "clip=s3_v14 hp 旧831 新831"
+  },
+  {
+   "name": "実ゲーム pisuke ultimate: ult_v14 が再生され、相手の残り体力が旧と同じ",
+   "pass": true,
+   "detail": "clip=ult_v14 hp 旧741 新741"
+  },
+  {
+   "name": "実ゲーム hakuma s1: s1_v14 が再生され、相手の残り体力が旧と同じ",
+   "pass": true,
+   "detail": "clip=s1_v14 hp 旧819 新819"
+  },
+  {
+   "name": "実ゲーム hakuma s2: s2_v14 が再生され、相手の残り体力が旧と同じ",
+   "pass": true,
+   "detail": "clip=s2_v14 hp 旧815 新815"
+  },
+  {
+   "name": "実ゲーム hakuma s3: s3_v14 が再生され、相手の残り体力が旧と同じ",
+   "pass": true,
+   "detail": "clip=s3_v14 hp 旧800 新800"
+  },
+  {
+   "name": "実ゲーム hakuma ultimate: ult_v14 が再生され、相手の残り体力が旧と同じ",
+   "pass": true,
+   "detail": "clip=ult_v14 hp 旧690 新690"
+  },
+  {
+   "name": "実ゲーム takimaru s1: s1_v14 が再生され、相手の残り体力が旧と同じ",
+   "pass": true,
+   "detail": "clip=s1_v14 hp 旧861 新861"
+  },
+  {
+   "name": "実ゲーム takimaru s2: s2_v14 が再生され、相手の残り体力が旧と同じ",
+   "pass": true,
+   "detail": "clip=s2_v14 hp 旧818 新818"
+  },
+  {
+   "name": "実ゲーム takimaru s3: s3_v14 が再生され、相手の残り体力が旧と同じ",
+   "pass": true,
+   "detail": "clip=throw_hit hp 旧789 新789"
+  },
+  {
+   "name": "実ゲーム takimaru ultimate: ult_v14 が再生され、相手の残り体力が旧と同じ",
+   "pass": true,
+   "detail": "clip=throw_hit hp 旧665 新665"
+  },
+  {
+   "name": "実ゲーム yomikage s1: s1_v14 が再生され、相手の残り体力が旧と同じ",
+   "pass": true,
+   "detail": "clip=s1_v14 hp 旧855 新855"
+  },
+  {
+   "name": "実ゲーム yomikage s2: s2_v14 が再生され、相手の残り体力が旧と同じ",
+   "pass": true,
+   "detail": "clip=s2_v14 hp 旧821 新821"
+  },
+  {
+   "name": "実ゲーム yomikage s3: s3_v14 が再生され、相手の残り体力が旧と同じ",
+   "pass": true,
+   "detail": "clip=s3_v14 hp 旧900 新900"
+  },
+  {
+   "name": "実ゲーム yomikage ultimate: ult_v14 が再生され、相手の残り体力が旧と同じ",
+   "pass": true,
+   "detail": "clip=ult_v14 hp 旧701 新701"
+  },
+  {
+   "name": "実ゲーム bullet s1: s1_v14 が再生され、相手の残り体力が旧と同じ",
+   "pass": true,
+   "detail": "clip=s1_v14 hp 旧858 新858"
+  },
+  {
+   "name": "実ゲーム bullet s2: s2_v14 が再生され、相手の残り体力が旧と同じ",
+   "pass": true,
+   "detail": "clip=s2_v14 hp 旧828 新828"
+  },
+  {
+   "name": "実ゲーム bullet s3: sp_tail_whip が再生され、相手の残り体力が旧と同じ",
+   "pass": true,
+   "detail": "clip=sp_tail_whip hp 旧809 新809"
+  },
+  {
+   "name": "実ゲーム bullet ultimate: ult_v14 が再生され、相手の残り体力が旧と同じ",
+   "pass": true,
+   "detail": "clip=ult_v14 hp 旧700 新700"
+  },
+  {
+   "name": "実ゲーム dark_moguzo s1: s1_v14 が再生され、相手の残り体力が旧と同じ",
+   "pass": true,
+   "detail": "clip=s1_v14 hp 旧849 新849"
+  },
+  {
+   "name": "実ゲーム dark_moguzo s2: s2_v14 が再生され、相手の残り体力が旧と同じ",
+   "pass": true,
+   "detail": "clip=s2_v14 hp 旧806 新806"
+  },
+  {
+   "name": "実ゲーム dark_moguzo s3: s3_v14 が再生され、相手の残り体力が旧と同じ",
+   "pass": true,
+   "detail": "clip=s3_v14 hp 旧819 新819"
+  },
+  {
+   "name": "実ゲーム dark_moguzo ultimate: ult_v14 が再生され、相手の残り体力が旧と同じ",
+   "pass": true,
+   "detail": "clip=ult_v14 hp 旧695 新695"
+  },
+  {
    "name": "実ゲームで 36 技を撮影済み",
    "pass": true,
    "detail": "36 技"
+  },
+  {
+   "name": "新クリップの実ゲーム撮影が制作済みキャラすべてにある",
+   "pass": true,
+   "detail": "9 体"
   },
   {
    "name": "moguzo ムービー: 9〜11秒・6〜10カット・カメラの型がすべて別",
@@ -215,6 +575,21 @@
    "detail": "4/4/2/4/3/3/3/3"
   },
   {
+   "name": "pisuke ムービー: 9〜11秒・6〜10カット・カメラの型がすべて別",
+   "pass": true,
+   "detail": "10s / 9 カット"
+  },
+  {
+   "name": "pisuke ムービー: 相手役の移動キーが 8 以上（棒立ちでない）",
+   "pass": true,
+   "detail": "19 キー"
+  },
+  {
+   "name": "pisuke ムービー: 動くカメラ（2キー以上）のカットが過半",
+   "pass": true,
+   "detail": "3/3/3/4/2/3/5/3/2"
+  },
+  {
    "name": "godan ムービー: 9〜11秒・6〜10カット・カメラの型がすべて別",
    "pass": true,
    "detail": "10.2s / 8 カット"
@@ -228,6 +603,21 @@
    "name": "godan ムービー: 動くカメラ（2キー以上）のカットが過半",
    "pass": true,
    "detail": "4/2/4/5/3/5/2/2"
+  },
+  {
+   "name": "hakuma ムービー: 9〜11秒・6〜10カット・カメラの型がすべて別",
+   "pass": true,
+   "detail": "10.2s / 8 カット"
+  },
+  {
+   "name": "hakuma ムービー: 相手役の移動キーが 8 以上（棒立ちでない）",
+   "pass": true,
+   "detail": "20 キー"
+  },
+  {
+   "name": "hakuma ムービー: 動くカメラ（2キー以上）のカットが過半",
+   "pass": true,
+   "detail": "3/4/3/4/3/4/2/2"
   },
   {
    "name": "chirka ムービー: 9〜11秒・6〜10カット・カメラの型がすべて別",
@@ -245,21 +635,114 @@
    "detail": "3/2/4/4/3/5/3/5/2"
   },
   {
+   "name": "takimaru ムービー: 9〜11秒・6〜10カット・カメラの型がすべて別",
+   "pass": true,
+   "detail": "10.4s / 10 カット"
+  },
+  {
+   "name": "takimaru ムービー: 相手役の移動キーが 8 以上（棒立ちでない）",
+   "pass": true,
+   "detail": "39 キー"
+  },
+  {
+   "name": "takimaru ムービー: 動くカメラ（2キー以上）のカットが過半",
+   "pass": true,
+   "detail": "4/2/2/2/3/2/2/2/4/2"
+  },
+  {
+   "name": "yomikage ムービー: 9〜11秒・6〜10カット・カメラの型がすべて別",
+   "pass": true,
+   "detail": "10s / 8 カット"
+  },
+  {
+   "name": "yomikage ムービー: 相手役の移動キーが 8 以上（棒立ちでない）",
+   "pass": true,
+   "detail": "11 キー"
+  },
+  {
+   "name": "yomikage ムービー: 動くカメラ（2キー以上）のカットが過半",
+   "pass": true,
+   "detail": "3/3/2/2/3/3/2/2"
+  },
+  {
+   "name": "bullet ムービー: 9〜11秒・6〜10カット・カメラの型がすべて別",
+   "pass": true,
+   "detail": "10.2s / 8 カット"
+  },
+  {
+   "name": "bullet ムービー: 相手役の移動キーが 8 以上（棒立ちでない）",
+   "pass": true,
+   "detail": "15 キー"
+  },
+  {
+   "name": "bullet ムービー: 動くカメラ（2キー以上）のカットが過半",
+   "pass": true,
+   "detail": "3/4/3/4/4/4/2/2"
+  },
+  {
+   "name": "dark_moguzo ムービー: 9〜11秒・6〜10カット・カメラの型がすべて別",
+   "pass": true,
+   "detail": "10s / 9 カット"
+  },
+  {
+   "name": "dark_moguzo ムービー: 相手役の移動キーが 8 以上（棒立ちでない）",
+   "pass": true,
+   "detail": "13 キー"
+  },
+  {
+   "name": "dark_moguzo ムービー: 動くカメラ（2キー以上）のカットが過半",
+   "pass": true,
+   "detail": "3/2/2/2/2/2/5/2/2"
+  },
+  {
    "name": "3本のムービーで同じカメラの型を共有しない",
    "pass": true,
-   "detail": "25 型"
+   "detail": "77 型"
   },
   {
-   "name": "動画あり moguzo_ultimate_10s_vs_pisuke.mp4",
-   "pass": true
+   "name": "ムービー動画あり moguzo",
+   "pass": true,
+   "detail": "moguzo_ultimate_10s_vs_pisuke.mp4, moguzo_ultimate_10s_vs_takimaru.mp4"
   },
   {
-   "name": "動画あり godan_ultimate_10s_vs_pisuke.mp4",
-   "pass": true
+   "name": "ムービー動画あり pisuke",
+   "pass": true,
+   "detail": "pisuke_ultimate_10s_vs_godan.mp4, pisuke_ultimate_10s_vs_pisuke.mp4"
   },
   {
-   "name": "動画あり chirka_ultimate_10s_vs_pisuke.mp4",
-   "pass": true
+   "name": "ムービー動画あり godan",
+   "pass": true,
+   "detail": "godan_ultimate_10s_vs_chirka_mirrored.mp4, godan_ultimate_10s_vs_pisuke.mp4"
+  },
+  {
+   "name": "ムービー動画あり hakuma",
+   "pass": true,
+   "detail": "hakuma_ultimate_10s_vs_chirka.mp4"
+  },
+  {
+   "name": "ムービー動画あり chirka",
+   "pass": true,
+   "detail": "chirka_ultimate_10s_vs_godan.mp4, chirka_ultimate_10s_vs_pisuke.mp4"
+  },
+  {
+   "name": "ムービー動画あり takimaru",
+   "pass": true,
+   "detail": "takimaru_ultimate_10s_vs_pisuke.mp4"
+  },
+  {
+   "name": "ムービー動画あり yomikage",
+   "pass": true,
+   "detail": "yomikage_ultimate_10s_vs_moguzo.mp4"
+  },
+  {
+   "name": "ムービー動画あり bullet",
+   "pass": true,
+   "detail": "bullet_ultimate_10s_vs_dark_moguzo.mp4"
+  },
+  {
+   "name": "ムービー動画あり dark_moguzo",
+   "pass": true,
+   "detail": "dark_moguzo_ultimate_10s_vs_hakuma.mp4"
   }
  ]
 }

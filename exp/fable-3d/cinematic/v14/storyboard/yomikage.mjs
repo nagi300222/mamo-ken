@@ -8,7 +8,7 @@ export default {
   characterId: 'yomikage', displayName: '後の先・月断', durationSeconds: 10.0,
   concept: '闇に消えて相手に探させ、背後から横一文字の一閃で崩し、うずくまった相手に縦の一閃を落とす。',
   stage: { contactDistance: D, backdrop: 0x070a14, fog: 0x070a14, fogNear: 4, fogFar: 14, sky: 0x9fb4e0, ground: 0x0c1020, ambient: 0.8, key: 0xbfd0ff, keyPower: 1.5, rim: 0xdfe8ff, rimPower: 3.0,
-    floor: 0x1a2032, mountain: 0x0c101c, post: 0x1c2234, posts: 6, accent: 0x9defff, accentCss: '#9defff', moon: { pos: [0.4, 1.9, -9], r: 1.1, color: 0xe6eeff } },
+    floor: 0x1a2032, mountain: 0x0c101c, post: 0x1c2234, posts: 6, mountains: false, accent: 0x9defff, accentCss: '#9defff', moon: { pos: [0.4, 2.1, -10], r: 1.25, color: 0xe6eeff } },
   actors: {
     attacker: { segments: [{ start: 0, clip: 'cin_yomikage_atk' }], pivotHeight: 0.45, visible: [[0, 1.42], [2.9, 10.01]], opacity: [{ t: 0.7, v: 1 }, { t: 1.4, v: 0 }, { t: 2.9, v: 0 }, { t: 3.5, v: 1 }],
       root: [{ t: 0, pos: [AX, 0, 0], rotY: 90 }, { t: 0.30, pos: [AX, 0, 0], rotY: 90, ease: 'hold' }, { t: 1.40, pos: [AX - 0.50, 0, 0], rotY: 90, ease: 'inOutQuad' }, { t: 2.90, pos: [TX + 0.62, 0, 0], rotY: -90, ease: 'hold' },
