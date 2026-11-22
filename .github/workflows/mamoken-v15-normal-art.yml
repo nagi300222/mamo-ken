@@ -1,0 +1,52 @@
+name: MamoKen v15 54 authored normal attack rigs
+
+on:
+  push:
+    branches:
+      - feat/mamoken-v15-54-distinct-normal-clips
+  pull_request:
+    branches:
+      - feat/mamoken-v15-combat-cancels
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  normal-art-webgl:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Node full tests, including 54 generated clips and combat rules
+        run: npm --prefix exp/fable-3d/dojo test
+      - name: Generate 9 independent motion GLBs and build actual Pages game
+        run: npm --prefix exp/fable-3d/dojo run build:pages
+      - name: Install real Chromium driver
+        run: npm install --prefix "$RUNNER_TEMP/mamoken-browser" playwright-core@1.65.1
+      - name: Load all nine real models, play 54 animation clips and inspect pose bindings
+        env:
+          CHROMIUM_PATH: /usr/bin/google-chrome
+        run: |
+          set -euo pipefail
+          node exp/fable-3d/dojo/server.mjs > "$RUNNER_TEMP/server.log" 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" || true' EXIT
+          for i in {1..25}; do
+            if curl -fsS http://127.0.0.1:4173/exp/fable-3d/dojo/ > /dev/null; then break; fi
+            sleep 1
+          done
+          export NODE_PATH="$RUNNER_TEMP/mamoken-browser/node_modules"
+          export MAMOKEN_EVIDENCE="$RUNNER_TEMP/mamoken-normal-evidence"
+          node exp/fable-3d/dojo/acceptance/v15-normal-art-browser.mjs
+          node exp/fable-3d/dojo/acceptance/v15-practice-browser.mjs
+      - name: Archive actual rendered character screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mamoken-v15-normal-54-art
+          path: ${{ runner.temp }}/mamoken-normal-evidence/
+          retention-days: 14

@@ -20,3 +20,13 @@ This file prepares Claude's workspace. **Its presence does not mean Claude has r
 ## 2026-11-22 v15 separate animation task
 
 The user reports that the full v14 playable game feels very good, but weak/strong and character-specific move animations are too similar. See [docs/mamoken-v15/COMBAT_REDESIGN.md](docs/mamoken-v15/COMBAT_REDESIGN.md) and [Issue #188](https://github.com/nagi300222/mamo-ken/issues/188). Create actual unique GLB action/pose differences across the nine fighters and provide contact timings, editable source and short before/after footage. Coordinate with Codex's normal-attack chain-cancel rules. Do not change the user-approved nine ~10s ultimate movies by accident. P0 landscape lock [PR #187](https://github.com/nagi300222/mamo-ken/pull/187) must be preserved.
+
+
+## 2026-11-22 — v15 54 normal animation assets, actual implementation
+
+The user requested **implementation including the Claude-assigned 9×6 normal move animation portion**, not another handoff-only document.
+
+- The current branch `feat/mamoken-v15-54-distinct-normal-clips` includes reproducible new **animation-only .glb** assets built from the original nine GLB rigs, each with six individual expressive normal moves, at `normal/v15/<id>_normals.glb` in the deployed Pages artifact.
+- Authoring source: `exp/fable-3d/dojo/normal-motifs-v15.js`, packer `normal-clip-builder-v15.mjs`. `models.js` selects v15 clips by priority and `main.js` binds them to the existing actual character skeleton, preserving all nine previously created ultimates.
+- **Mio's implementation, not a direct Claude Code session**: Claude can now review and improve the actual generated animation assets via the same motif source or replace them with hand-crafted Blender clips. Do not erase these working assets; propose edit-ready improvements with rendered footage and submit a distinct Draft PR.
+- Important art review targets: silhouette difference on tiny phone stage, joint clipping, true foot contact and tail tip trajectory, left/right paw direction, stiffness and character personality. Preserve actual `Battle` timings and hitboxes unless a separate combat change is reviewed.
