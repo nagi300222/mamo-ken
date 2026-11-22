@@ -21,8 +21,23 @@ export function animationBundle(bytes, names) {
     return {...a,bufferView:copyView(a.bufferView).index};
   });
   const remap=new Map(indices.map((old,i)=>[old,i]));
+  const nodes=doc.nodes.map(n=>{const out={...n};delete out.mesh;delete out.skin;delete out.camera;delete out.extensions;return out;});
+  // GLTFLoader only creates weights tracks when their node has morph targets.
+  // An invisible zero-area triangle preserves track names without the model.
+  const meshes=[],morphNodes=new Set(animations.flatMap(a=>a.channels.filter(c=>c.target.path==='weights').map(c=>c.target.node)));
+  if(morphNodes.size){
+    const zeroIndex=accessors.length;
+    accessors.push({bufferView:views.size,componentType:5126,count:3,type:'VEC3',min:[0,0,0],max:[0,0,0]});
+    views.set('morph-stub',{index:views.size,view:{buffer:0,byteOffset:length,byteLength:36}});
+    chunks.push(Buffer.alloc(36));length+=36;
+    for(const index of morphNodes){
+      const original=doc.meshes[doc.nodes[index].mesh],count=original.primitives[0].targets.length;
+      nodes[index].mesh=meshes.length;
+      meshes.push({name:original.name,extras:original.extras,weights:Array(count).fill(0),primitives:[{attributes:{POSITION:zeroIndex},targets:Array.from({length:count},()=>({POSITION:zeroIndex})),mode:4}]});
+    }
+  }
   const output={asset:doc.asset,scene:doc.scene??0,scenes:doc.scenes,
-    nodes:doc.nodes.map(n=>{const out={...n};delete out.mesh;delete out.skin;delete out.camera;delete out.extensions;return out;}),
+    nodes,meshes,
     animations:animations.map(a=>({...a,samplers:a.samplers.map(s=>({...s,input:remap.get(s.input),output:remap.get(s.output)}))})),
     accessors,bufferViews:[...views.values()].map(x=>x.view),buffers:[{byteLength:length}]};
   const j=Buffer.from(JSON.stringify(output));const padded=Buffer.concat([j,Buffer.alloc((4-j.length%4)%4,32)]);
