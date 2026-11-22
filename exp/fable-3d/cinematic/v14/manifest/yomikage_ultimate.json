@@ -1,0 +1,1694 @@
+{
+ "schemaVersion": 1,
+ "contractRevision": "v14-wave1-10s",
+ "directionSource": "docs/mamoken-showtime-v14/ULTIMATE_10S_DIRECTION.md",
+ "characterId": "yomikage",
+ "moveId": "ultimate",
+ "displayName": "後の先・月断",
+ "trigger": "confirmed_unblocked_ultimate_hit",
+ "runtime": "threejs",
+ "durationSeconds": 10,
+ "fps": 60,
+ "concept": "闇に消えて相手に探させ、背後から横一文字の一閃で崩し、うずくまった相手に縦の一閃を落とす。",
+ "coordinateSystem": {
+  "origin": "命中時の両者の中点・地面",
+  "x": "攻撃側の向いている方向が +X",
+  "y": "上",
+  "z": "対戦カメラ側が +Z",
+  "unit": "m（GLBの単位）",
+  "mirror": "攻撃側が左向き（-X向き）のときはムービー全体を Y 軸まわりに 180 度回す（x・z の符号反転、rotY+180、rotZ・rotX の符号反転。カメラ roll はそのまま）"
+ },
+ "stage": {
+  "contactDistance": 0.46,
+  "backdrop": 461332,
+  "fog": 461332,
+  "fogNear": 4,
+  "fogFar": 14,
+  "sky": 10466528,
+  "ground": 790560,
+  "ambient": 0.8,
+  "key": 12570879,
+  "keyPower": 1.5,
+  "rim": 14674175,
+  "rimPower": 3,
+  "floor": 1712178,
+  "mountain": 790556,
+  "post": 1843764,
+  "posts": 6,
+  "mountains": false,
+  "accent": 10350591,
+  "accentCss": "#9defff",
+  "moon": {
+   "pos": [
+    0.4,
+    2.1,
+    -10
+   ],
+   "r": 1.25,
+   "color": 15134463
+  }
+ },
+ "animationSources": {
+  "attacker": {
+   "glb": "yomikage/yomikage_v14.glb",
+   "motions": "yomikage/yomikage_v14_motions.json",
+   "clip": "cin_yomikage_atk"
+  },
+  "target": {
+   "glbPattern": "<targetId>/<targetId>_v14.glb",
+   "clip": "cinv_yomikage",
+   "availableFor": [
+    "moguzo",
+    "pisuke",
+    "godan",
+    "hakuma",
+    "chirka",
+    "takimaru",
+    "yomikage",
+    "bullet",
+    "dark_moguzo"
+   ]
+  }
+ },
+ "inGameStartClip": {
+  "clip": "ult_v14",
+  "note": "命中前の始動。ここまでは通常の対戦カメラ。命中が確定した次のフレームでムービー t=0 へ"
+ },
+ "actorTracks": {
+  "attacker": {
+   "segments": [
+    {
+     "start": 0,
+     "clip": "cin_yomikage_atk"
+    }
+   ],
+   "pivotHeight": 0.45,
+   "visible": [
+    [
+     0,
+     1.42
+    ],
+    [
+     2.9,
+     10.01
+    ]
+   ],
+   "opacity": [
+    {
+     "t": 0.7,
+     "v": 1
+    },
+    {
+     "t": 1.4,
+     "v": 0
+    },
+    {
+     "t": 2.9,
+     "v": 0
+    },
+    {
+     "t": 3.5,
+     "v": 1
+    }
+   ],
+   "root": [
+    {
+     "t": 0,
+     "pos": [
+      -0.23,
+      0,
+      0
+     ],
+     "rotY": 90
+    },
+    {
+     "t": 0.3,
+     "pos": [
+      -0.23,
+      0,
+      0
+     ],
+     "rotY": 90,
+     "ease": "hold"
+    },
+    {
+     "t": 1.4,
+     "pos": [
+      -0.73,
+      0,
+      0
+     ],
+     "rotY": 90,
+     "ease": "inOutQuad"
+    },
+    {
+     "t": 2.9,
+     "pos": [
+      0.96,
+      0,
+      0
+     ],
+     "rotY": -90,
+     "ease": "hold"
+    },
+    {
+     "t": 4.08,
+     "pos": [
+      0.96,
+      0,
+      0
+     ],
+     "rotY": -90,
+     "ease": "hold"
+    },
+    {
+     "t": 4.2,
+     "pos": [
+      0.24000000000000002,
+      0,
+      0.06
+     ],
+     "rotY": -90,
+     "ease": "inQuad"
+    },
+    {
+     "t": 4.55,
+     "pos": [
+      -0.27999999999999997,
+      0,
+      0.06
+     ],
+     "rotY": -90,
+     "ease": "outCubic"
+    },
+    {
+     "t": 5.2,
+     "pos": [
+      -0.27999999999999997,
+      0,
+      0.06
+     ],
+     "rotY": -90,
+     "ease": "hold"
+    },
+    {
+     "t": 5.9,
+     "pos": [
+      -0.27999999999999997,
+      0,
+      0.06
+     ],
+     "rotY": 90,
+     "ease": "inOutCubic"
+    },
+    {
+     "t": 6.8,
+     "pos": [
+      -0.12,
+      0,
+      0.04
+     ],
+     "rotY": 90,
+     "ease": "inOutQuad"
+    },
+    {
+     "t": 8.6,
+     "pos": [
+      -0.12,
+      0,
+      0.04
+     ],
+     "rotY": 90,
+     "ease": "hold"
+    },
+    {
+     "t": 9.3,
+     "pos": [
+      -0.12,
+      0,
+      0.04
+     ],
+     "rotY": 200,
+     "ease": "inOutCubic"
+    },
+    {
+     "t": 10,
+     "pos": [
+      -0.12,
+      0,
+      0.04
+     ],
+     "rotY": 200
+    }
+   ]
+  },
+  "target": {
+   "segments": [
+    {
+     "start": 0,
+     "clip": "cinv_yomikage"
+    }
+   ],
+   "pivotHeight": 0.45,
+   "root": [
+    {
+     "t": 0,
+     "pos": [
+      0.23,
+      0,
+      0
+     ],
+     "rotY": -90
+    },
+    {
+     "t": 0.4,
+     "pos": [
+      0.34,
+      0,
+      0
+     ],
+     "rotY": -90,
+     "ease": "outCubic"
+    },
+    {
+     "t": 1.4,
+     "pos": [
+      0.34,
+      0,
+      0
+     ],
+     "rotY": -90,
+     "ease": "hold"
+    },
+    {
+     "t": 1.9,
+     "pos": [
+      0.34,
+      0,
+      0
+     ],
+     "rotY": -30,
+     "ease": "inOutQuad"
+    },
+    {
+     "t": 2.4,
+     "pos": [
+      0.34,
+      0,
+      0
+     ],
+     "rotY": -150,
+     "ease": "inOutQuad"
+    },
+    {
+     "t": 2.9,
+     "pos": [
+      0.34,
+      0,
+      0
+     ],
+     "rotY": -90,
+     "ease": "inOutQuad"
+    },
+    {
+     "t": 4.2,
+     "pos": [
+      0.34,
+      0,
+      0
+     ],
+     "rotY": -90,
+     "ease": "hold"
+    },
+    {
+     "t": 4.55,
+     "pos": [
+      0.30000000000000004,
+      0,
+      0
+     ],
+     "rotY": -90,
+     "ease": "linear"
+    },
+    {
+     "t": 7,
+     "pos": [
+      0.30000000000000004,
+      0,
+      0
+     ],
+     "rotY": -90,
+     "ease": "hold"
+    },
+    {
+     "t": 8.5,
+     "pos": [
+      0.44000000000000006,
+      0,
+      0
+     ],
+     "rotY": -90,
+     "ease": "inOutQuad"
+    },
+    {
+     "t": 10,
+     "pos": [
+      0.44000000000000006,
+      0,
+      0
+     ],
+     "rotY": -90
+    }
+   ]
+  }
+ },
+ "shots": [
+  {
+   "id": "01-lights-fall",
+   "title": "闇が降りる",
+   "start": 0,
+   "end": 1.4,
+   "intent": "相手の顔の寄り。まわりが暗くなり、奥のヨミカゲが闇に溶ける。相手の目が泳ぎ始める",
+   "actorPose": {
+    "attacker": "振り抜いた姿勢から立ち、下がりながら消える",
+    "target": "よろめき、構え直して目で探す"
+   },
+   "camera": {
+    "rig": "victim-face-close",
+    "projection": "perspective",
+    "position": {
+     "anchor": "target.chest",
+     "offset": [
+      -0.34,
+      0.04,
+      1.25
+     ]
+    },
+    "lookAt": {
+     "anchor": "target.chest",
+     "offset": [
+      -0.14,
+      0,
+      0
+     ]
+    },
+    "fov": 34,
+    "rollDeg": -5,
+    "easing": "linear",
+    "move": "相手の顔へゆっくり寄る",
+    "keys": [
+     {
+      "t": 0,
+      "pos": {
+       "anchor": "target.chest",
+       "offset": [
+        -0.34,
+        0.04,
+        1.25
+       ]
+      },
+      "look": {
+       "anchor": "target.chest",
+       "offset": [
+        -0.14,
+        0,
+        0
+       ]
+      },
+      "fov": 34,
+      "roll": -5,
+      "ease": "inOutCubic"
+     },
+     {
+      "t": 0.4,
+      "pos": {
+       "anchor": "target.head",
+       "offset": [
+        -0.55,
+        0.02,
+        0.85
+       ]
+      },
+      "look": {
+       "anchor": "target.head",
+       "offset": [
+        -0.06,
+        -0.02,
+        0
+       ]
+      },
+      "fov": 30,
+      "roll": 3,
+      "ease": "outExpo"
+     },
+     {
+      "t": 1.4,
+      "pos": {
+       "anchor": "target.head",
+       "offset": [
+        -0.42,
+        0.02,
+        0.7
+       ]
+      },
+      "look": {
+       "anchor": "target.head",
+       "offset": [
+        -0.02,
+        -0.02,
+        0
+       ]
+      },
+      "fov": 26,
+      "roll": 0,
+      "ease": "linear"
+     }
+    ]
+   },
+   "fxCues": [
+    {
+     "at": 0,
+     "key": "flash",
+     "type": "vfx",
+     "dur": 0.1,
+     "opacity": 0.4
+    },
+    {
+     "at": 0,
+     "key": "ink_slash",
+     "type": "vfx",
+     "anchor": "target.chest",
+     "size": 0.6,
+     "angle": 8,
+     "hold": 0.3
+    },
+    {
+     "at": 0,
+     "key": "shake",
+     "type": "shake",
+     "dur": 0.2,
+     "amp": 0.03
+    },
+    {
+     "at": 0.5,
+     "key": "dim",
+     "type": "vfx",
+     "dur": 3.9,
+     "opacity": 0.3,
+     "color": 131850
+    },
+    {
+     "at": 1.3,
+     "key": "puff",
+     "type": "vfx",
+     "anchor": "attacker.chest",
+     "count": 8,
+     "color": 3820154
+    }
+   ],
+   "sfxCues": [
+    {
+     "at": 0,
+     "key": "ult_hit_slash"
+    },
+    {
+     "at": 0.5,
+     "key": "lights_out"
+    }
+   ]
+  },
+  {
+   "id": "02-searching",
+   "title": "見失う",
+   "start": 1.4,
+   "end": 2.8,
+   "intent": "相手のまわりを顔の高さでゆっくり回る。相手だけが動き、探し、振り返る。どこにもいない",
+   "actorPose": {
+    "attacker": "姿が無い",
+    "target": "左を見て、右を見て、振り返る"
+   },
+   "camera": {
+    "rig": "slow-search-orbit",
+    "projection": "perspective",
+    "position": {
+     "anchor": "target.root",
+     "offset": [
+      -0.7,
+      0.4,
+      1.1
+     ]
+    },
+    "lookAt": {
+     "anchor": "target.head",
+     "offset": [
+      0,
+      -0.04,
+      0
+     ]
+    },
+    "fov": 36,
+    "rollDeg": 2,
+    "easing": "linear",
+    "move": "相手を軸にゆっくり 120 度",
+    "keys": [
+     {
+      "t": 1.4,
+      "pos": {
+       "anchor": "target.root",
+       "offset": [
+        -0.7,
+        0.4,
+        1.1
+       ]
+      },
+      "look": {
+       "anchor": "target.head",
+       "offset": [
+        0,
+        -0.04,
+        0
+       ]
+      },
+      "fov": 36,
+      "roll": 2,
+      "ease": "inOutCubic"
+     },
+     {
+      "t": 2.1,
+      "pos": {
+       "anchor": "target.root",
+       "offset": [
+        0.3,
+        0.42,
+        1.3
+       ]
+      },
+      "look": {
+       "anchor": "target.head",
+       "offset": [
+        0,
+        -0.04,
+        0
+       ]
+      },
+      "fov": 36,
+      "roll": 0,
+      "ease": "linear"
+     },
+     {
+      "t": 2.8,
+      "pos": {
+       "anchor": "target.root",
+       "offset": [
+        1.1,
+        0.44,
+        0.7
+       ]
+      },
+      "look": {
+       "anchor": "target.head",
+       "offset": [
+        0,
+        -0.04,
+        0
+       ]
+      },
+      "fov": 36,
+      "roll": -2,
+      "ease": "linear"
+     }
+    ]
+   },
+   "fxCues": [
+    {
+     "at": 2.2,
+     "key": "streak",
+     "type": "vfx",
+     "from": [
+      -0.56,
+      0.3,
+      -0.8
+     ],
+     "to": [
+      1.24,
+      0.3,
+      -0.9
+     ],
+     "dur": 0.5,
+     "width": 0.03,
+     "color": 4872858,
+     "opacity": 0.4
+    }
+   ],
+   "sfxCues": [
+    {
+     "at": 1.5,
+     "key": "breath_tense"
+    },
+    {
+     "at": 2.2,
+     "key": "presence_pass"
+    }
+   ]
+  },
+  {
+   "id": "03-behind",
+   "title": "背後",
+   "start": 2.8,
+   "end": 3.8,
+   "intent": "相手の正面・肩の高さで固定。前を探す相手の後ろ、月を背に、目を閉じた影が浮かぶ",
+   "actorPose": {
+    "attacker": "相手の背後に目を閉じて立つ→目を開く",
+    "target": "前を探し続け、気づかない"
+   },
+   "camera": {
+    "rig": "front-locked-reveal",
+    "projection": "perspective",
+    "position": {
+     "anchor": "stage",
+     "offset": [
+      -0.71,
+      0.36,
+      0.3
+     ]
+    },
+    "lookAt": {
+     "anchor": "stage",
+     "offset": [
+      0.64,
+      0.34,
+      0
+     ]
+    },
+    "fov": 34,
+    "rollDeg": 0,
+    "easing": "linear",
+    "move": "固定。背後の影にごくわずか寄る",
+    "keys": [
+     {
+      "t": 2.8,
+      "pos": {
+       "anchor": "stage",
+       "offset": [
+        -0.71,
+        0.36,
+        0.3
+       ]
+      },
+      "look": {
+       "anchor": "stage",
+       "offset": [
+        0.64,
+        0.34,
+        0
+       ]
+      },
+      "fov": 34,
+      "roll": 0,
+      "ease": "inOutCubic"
+     },
+     {
+      "t": 3.8,
+      "pos": {
+       "anchor": "stage",
+       "offset": [
+        -0.6599999999999999,
+        0.36,
+        0.28
+       ]
+      },
+      "look": {
+       "anchor": "stage",
+       "offset": [
+        0.7,
+        0.34,
+        0
+       ]
+      },
+      "fov": 31,
+      "roll": 0,
+      "ease": "linear"
+     }
+    ]
+   },
+   "fxCues": [
+    {
+     "at": 3.7,
+     "key": "sparks",
+     "type": "vfx",
+     "anchor": "attacker.head",
+     "count": 4,
+     "power": 0.2,
+     "dur": 0.3,
+     "size": 0.4,
+     "color": 14674175
+    }
+   ],
+   "sfxCues": [
+    {
+     "at": 3,
+     "key": "appear_silent"
+    },
+    {
+     "at": 3.7,
+     "key": "eyes_open"
+    }
+   ]
+  },
+  {
+   "id": "04-first-flash",
+   "title": "一閃",
+   "start": 3.8,
+   "end": 5,
+   "intent": "真横の引き・月を背にした影絵。背後から前へ一歩で抜ける。黒い横一文字が残り、止めのあと相手が折れて沈む",
+   "actorPose": {
+    "attacker": "手刀を引く→一歩で相手の脇を抜けて振り抜く→止め",
+    "target": "背後からの一閃で体が折れる→止め→腹を抱えてうずくまる"
+   },
+   "camera": {
+    "rig": "side-silhouette-still",
+    "projection": "perspective",
+    "position": {
+     "anchor": "stage",
+     "offset": [
+      0.34,
+      0.3,
+      2.3
+     ]
+    },
+    "lookAt": {
+     "anchor": "stage",
+     "offset": [
+      0.34,
+      0.34,
+      0
+     ]
+    },
+    "fov": 36,
+    "rollDeg": 0,
+    "easing": "linear",
+    "move": "固定。動かない",
+    "keys": [
+     {
+      "t": 3.8,
+      "pos": {
+       "anchor": "stage",
+       "offset": [
+        0.34,
+        0.3,
+        2.3
+       ]
+      },
+      "look": {
+       "anchor": "stage",
+       "offset": [
+        0.34,
+        0.34,
+        0
+       ]
+      },
+      "fov": 36,
+      "roll": 0,
+      "ease": "inOutCubic"
+     },
+     {
+      "t": 5,
+      "pos": {
+       "anchor": "stage",
+       "offset": [
+        0.34,
+        0.3,
+        2.24
+       ]
+      },
+      "look": {
+       "anchor": "stage",
+       "offset": [
+        0.34,
+        0.32,
+        0
+       ]
+      },
+      "fov": 35,
+      "roll": 0,
+      "ease": "linear"
+     }
+    ]
+   },
+   "fxCues": [
+    {
+     "at": 4.2,
+     "key": "hitstop",
+     "type": "hitstop",
+     "dur": 0.35,
+     "strength": "heavy"
+    },
+    {
+     "at": 4.2,
+     "key": "ink_slash",
+     "type": "vfx",
+     "offset": [
+      0.29000000000000004,
+      0.36,
+      0.1
+     ],
+     "size": 1.25,
+     "angle": 4,
+     "bow": 0.06,
+     "grow": 0.05,
+     "hold": 0.9
+    },
+    {
+     "at": 4.2,
+     "key": "flash",
+     "type": "vfx",
+     "dur": 0.06,
+     "opacity": 0.5
+    },
+    {
+     "at": 4.2,
+     "key": "shake",
+     "type": "shake",
+     "dur": 0.15,
+     "amp": 0.025
+    },
+    {
+     "at": 4.9,
+     "key": "dust",
+     "type": "vfx",
+     "anchor": "target.root",
+     "count": 5,
+     "spread": 0.25,
+     "color": 5925530
+    }
+   ],
+   "sfxCues": [
+    {
+     "at": 4.2,
+     "key": "ult_hit_flash1"
+    },
+    {
+     "at": 4.55,
+     "key": "hitstop_release"
+    },
+    {
+     "at": 4.9,
+     "key": "knees_drop"
+    }
+   ]
+  },
+  {
+   "id": "05-faces",
+   "title": "横顔と目",
+   "start": 5,
+   "end": 6.4,
+   "intent": "うずくまる相手の横顔の寄り。その奥に背を向けて立つヨミカゲが振り返り、目を開く",
+   "actorPose": {
+    "attacker": "背を向けて静かに立つ→向き直り、目を開く",
+    "target": "うずくまって息をつく"
+   },
+   "camera": {
+    "rig": "profile-rack-two",
+    "projection": "perspective",
+    "position": {
+     "anchor": "target.head",
+     "offset": [
+      0.3,
+      0.04,
+      1.1
+     ]
+    },
+    "lookAt": {
+     "anchor": "target.head",
+     "offset": [
+      -0.06,
+      -0.02,
+      0
+     ]
+    },
+    "fov": 28,
+    "rollDeg": 3,
+    "easing": "inOutCubic",
+    "move": "横顔の寄りから、奥の目へ寄せる",
+    "keys": [
+     {
+      "t": 5,
+      "pos": {
+       "anchor": "target.head",
+       "offset": [
+        0.3,
+        0.04,
+        1.1
+       ]
+      },
+      "look": {
+       "anchor": "target.head",
+       "offset": [
+        -0.06,
+        -0.02,
+        0
+       ]
+      },
+      "fov": 28,
+      "roll": 3,
+      "ease": "inOutCubic"
+     },
+     {
+      "t": 5.7,
+      "pos": {
+       "anchor": "target.head",
+       "offset": [
+        0.26,
+        0.05,
+        1.04
+       ]
+      },
+      "look": {
+       "anchor": "target.head",
+       "offset": [
+        -0.14,
+        0,
+        0
+       ]
+      },
+      "fov": 27,
+      "roll": 2,
+      "ease": "linear"
+     },
+     {
+      "t": 6.4,
+      "pos": {
+       "anchor": "attacker.head",
+       "offset": [
+        0.2,
+        0.03,
+        0.95
+       ]
+      },
+      "look": {
+       "anchor": "attacker.head",
+       "offset": [
+        0.02,
+        -0.01,
+        0
+       ]
+      },
+      "fov": 22,
+      "roll": 0,
+      "ease": "inOutCubic"
+     }
+    ]
+   },
+   "fxCues": [
+    {
+     "at": 5.1,
+     "key": "dim",
+     "type": "vfx",
+     "dur": 1.8,
+     "opacity": 0.22,
+     "color": 131850
+    }
+   ],
+   "sfxCues": [
+    {
+     "at": 5.6,
+     "key": "breath_pain"
+    },
+    {
+     "at": 5.95,
+     "key": "eyes_open"
+    }
+   ]
+  },
+  {
+   "id": "06-second-flash",
+   "title": "月断",
+   "start": 6.4,
+   "end": 7.6,
+   "intent": "ここだけカメラが動く。二人のまわりを半周して月を正面に入れ、止まった瞬間に縦の一閃。いちばん長い止め",
+   "actorPose": {
+    "attacker": "手刀を真上に掲げる→足元まで振り下ろす→止め",
+    "target": "うずくまったまま、頭が跳ね上がる→止め"
+   },
+   "camera": {
+    "rig": "half-orbit-then-freeze",
+    "projection": "perspective",
+    "position": {
+     "anchor": "stage",
+     "offset": [
+      0.040000000000000036,
+      0.3,
+      1.8
+     ]
+    },
+    "lookAt": {
+     "anchor": "stage",
+     "offset": [
+      0.14,
+      0.36,
+      0
+     ]
+    },
+    "fov": 36,
+    "rollDeg": 0,
+    "easing": "linear",
+    "move": "半周して止まる→止めの間は動かない",
+    "keys": [
+     {
+      "t": 6.4,
+      "pos": {
+       "anchor": "stage",
+       "offset": [
+        0.040000000000000036,
+        0.3,
+        1.8
+       ]
+      },
+      "look": {
+       "anchor": "stage",
+       "offset": [
+        0.14,
+        0.36,
+        0
+       ]
+      },
+      "fov": 36,
+      "roll": 0,
+      "ease": "inOutCubic"
+     },
+     {
+      "t": 6.94,
+      "pos": {
+       "anchor": "stage",
+       "offset": [
+        -1.21,
+        0.26,
+        0.2
+       ]
+      },
+      "look": {
+       "anchor": "stage",
+       "offset": [
+        0.24000000000000002,
+        0.4,
+        0
+       ]
+      },
+      "fov": 38,
+      "roll": -6,
+      "ease": "inOutCubic"
+     },
+     {
+      "t": 7.6,
+      "pos": {
+       "anchor": "stage",
+       "offset": [
+        -1.18,
+        0.26,
+        0.2
+       ]
+      },
+      "look": {
+       "anchor": "stage",
+       "offset": [
+        0.24000000000000002,
+        0.4,
+        0
+       ]
+      },
+      "fov": 36,
+      "roll": -6,
+      "ease": "linear"
+     }
+    ]
+   },
+   "fxCues": [
+    {
+     "at": 7,
+     "key": "hitstop",
+     "type": "hitstop",
+     "dur": 0.6,
+     "strength": "max"
+    },
+    {
+     "at": 7,
+     "key": "dim",
+     "type": "vfx",
+     "dur": 0.6,
+     "opacity": 0.4,
+     "color": 0
+    },
+    {
+     "at": 7,
+     "key": "ink_slash",
+     "type": "vfx",
+     "anchor": "target.head",
+     "offset": [
+      0,
+      0.1,
+      0.1
+     ],
+     "size": 1.5,
+     "angle": 82,
+     "bow": 0.22,
+     "grow": 0.05,
+     "hold": 1.5,
+     "core": 16777215
+    },
+    {
+     "at": 7,
+     "key": "flash",
+     "type": "vfx",
+     "dur": 0.06,
+     "opacity": 0.6
+    },
+    {
+     "at": 7,
+     "key": "shake",
+     "type": "shake",
+     "dur": 0.2,
+     "amp": 0.03
+    }
+   ],
+   "sfxCues": [
+    {
+     "at": 7,
+     "key": "ult_hit_flash2"
+    },
+    {
+     "at": 7.6,
+     "key": "hitstop_release"
+    }
+   ]
+  },
+  {
+   "id": "07-collapse",
+   "title": "崩れる",
+   "start": 7.6,
+   "end": 8.8,
+   "intent": "低い引き。相手がゆっくり後ろへ崩れて倒れる。黒い閃きだけが空中に残り、薄れていく",
+   "actorPose": {
+    "attacker": "振り下ろしたまま動かない",
+    "target": "ゆっくり後ろへ崩れ、倒れる"
+   },
+   "camera": {
+    "rig": "low-wide-afterimage",
+    "projection": "perspective",
+    "position": {
+     "anchor": "stage",
+     "offset": [
+      0.54,
+      0.1,
+      1.9
+     ]
+    },
+    "lookAt": {
+     "anchor": "stage",
+     "offset": [
+      0.24000000000000002,
+      0.32,
+      0
+     ]
+    },
+    "fov": 40,
+    "rollDeg": 3,
+    "easing": "linear",
+    "move": "低い位置で固定",
+    "keys": [
+     {
+      "t": 7.6,
+      "pos": {
+       "anchor": "stage",
+       "offset": [
+        0.54,
+        0.1,
+        1.9
+       ]
+      },
+      "look": {
+       "anchor": "stage",
+       "offset": [
+        0.24000000000000002,
+        0.32,
+        0
+       ]
+      },
+      "fov": 40,
+      "roll": 3,
+      "ease": "inOutCubic"
+     },
+     {
+      "t": 8.8,
+      "pos": {
+       "anchor": "stage",
+       "offset": [
+        0.5800000000000001,
+        0.1,
+        1.84
+       ]
+      },
+      "look": {
+       "anchor": "stage",
+       "offset": [
+        0.26,
+        0.3,
+        0
+       ]
+      },
+      "fov": 39,
+      "roll": 2,
+      "ease": "linear"
+     }
+    ]
+   },
+   "fxCues": [
+    {
+     "at": 8.5,
+     "key": "dust",
+     "type": "vfx",
+     "anchor": "target.root",
+     "count": 7,
+     "spread": 0.4,
+     "color": 5925530
+    },
+    {
+     "at": 8.5,
+     "key": "shake",
+     "type": "shake",
+     "dur": 0.2,
+     "amp": 0.02
+    }
+   ],
+   "sfxCues": [
+    {
+     "at": 8.5,
+     "key": "body_land_soft"
+    }
+   ]
+  },
+  {
+   "id": "08-zanshin",
+   "title": "残心",
+   "start": 8.8,
+   "end": 10,
+   "intent": "月を背にした後ろ姿。背を向け、手を下ろし、目を閉じる",
+   "actorPose": {
+    "attacker": "相手に背を向け、手を下ろして目を閉じる",
+    "target": "足元で仰向け"
+   },
+   "camera": {
+    "rig": "moonlit-back",
+    "projection": "perspective",
+    "position": {
+     "anchor": "stage",
+     "offset": [
+      -0.15999999999999998,
+      0.2,
+      1.5
+     ]
+    },
+    "lookAt": {
+     "anchor": "attacker.chest",
+     "offset": [
+      0.1,
+      0.04,
+      0
+     ]
+    },
+    "fov": 36,
+    "rollDeg": 0,
+    "easing": "outQuad",
+    "move": "ごくゆっくり引く",
+    "keys": [
+     {
+      "t": 8.8,
+      "pos": {
+       "anchor": "stage",
+       "offset": [
+        -0.15999999999999998,
+        0.2,
+        1.5
+       ]
+      },
+      "look": {
+       "anchor": "attacker.chest",
+       "offset": [
+        0.1,
+        0.04,
+        0
+       ]
+      },
+      "fov": 36,
+      "roll": 0,
+      "ease": "inOutCubic"
+     },
+     {
+      "t": 10,
+      "pos": {
+       "anchor": "stage",
+       "offset": [
+        -0.18,
+        0.22,
+        1.72
+       ]
+      },
+      "look": {
+       "anchor": "attacker.chest",
+       "offset": [
+        0.1,
+        0.06,
+        0
+       ]
+      },
+      "fov": 34,
+      "roll": 0,
+      "ease": "outQuad"
+     }
+    ]
+   },
+   "fxCues": [],
+   "sfxCues": [
+    {
+     "at": 9.3,
+     "key": "finish_pose_quiet"
+    }
+   ]
+  }
+ ],
+ "cues": [
+  {
+   "at": 0,
+   "type": "vfx",
+   "key": "flash",
+   "dur": 0.1,
+   "opacity": 0.4,
+   "shot": "01-lights-fall"
+  },
+  {
+   "at": 0,
+   "type": "vfx",
+   "key": "ink_slash",
+   "anchor": "target.chest",
+   "size": 0.6,
+   "angle": 8,
+   "hold": 0.3,
+   "shot": "01-lights-fall"
+  },
+  {
+   "at": 0,
+   "type": "sfx",
+   "key": "ult_hit_slash",
+   "shot": "01-lights-fall"
+  },
+  {
+   "at": 0,
+   "type": "shake",
+   "dur": 0.2,
+   "amp": 0.03,
+   "shot": "01-lights-fall"
+  },
+  {
+   "at": 0.5,
+   "type": "vfx",
+   "key": "dim",
+   "dur": 3.9,
+   "opacity": 0.3,
+   "color": 131850,
+   "shot": "01-lights-fall"
+  },
+  {
+   "at": 0.5,
+   "type": "sfx",
+   "key": "lights_out",
+   "shot": "01-lights-fall"
+  },
+  {
+   "at": 1.3,
+   "type": "vfx",
+   "key": "puff",
+   "anchor": "attacker.chest",
+   "count": 8,
+   "color": 3820154,
+   "shot": "01-lights-fall"
+  },
+  {
+   "at": 1.5,
+   "type": "sfx",
+   "key": "breath_tense",
+   "shot": "02-searching"
+  },
+  {
+   "at": 2.2,
+   "type": "vfx",
+   "key": "streak",
+   "from": [
+    -0.56,
+    0.3,
+    -0.8
+   ],
+   "to": [
+    1.24,
+    0.3,
+    -0.9
+   ],
+   "dur": 0.5,
+   "width": 0.03,
+   "color": 4872858,
+   "opacity": 0.4,
+   "shot": "02-searching"
+  },
+  {
+   "at": 2.2,
+   "type": "sfx",
+   "key": "presence_pass",
+   "shot": "02-searching"
+  },
+  {
+   "at": 3,
+   "type": "sfx",
+   "key": "appear_silent",
+   "shot": "03-behind"
+  },
+  {
+   "at": 3.7,
+   "type": "sfx",
+   "key": "eyes_open",
+   "shot": "03-behind"
+  },
+  {
+   "at": 3.7,
+   "type": "vfx",
+   "key": "sparks",
+   "anchor": "attacker.head",
+   "count": 4,
+   "power": 0.2,
+   "dur": 0.3,
+   "size": 0.4,
+   "color": 14674175,
+   "shot": "03-behind"
+  },
+  {
+   "at": 4.2,
+   "type": "hitstop",
+   "dur": 0.35,
+   "strength": "heavy",
+   "shot": "04-first-flash"
+  },
+  {
+   "at": 4.2,
+   "type": "vfx",
+   "key": "ink_slash",
+   "offset": [
+    0.29000000000000004,
+    0.36,
+    0.1
+   ],
+   "size": 1.25,
+   "angle": 4,
+   "bow": 0.06,
+   "grow": 0.05,
+   "hold": 0.9,
+   "shot": "04-first-flash"
+  },
+  {
+   "at": 4.2,
+   "type": "vfx",
+   "key": "flash",
+   "dur": 0.06,
+   "opacity": 0.5,
+   "shot": "04-first-flash"
+  },
+  {
+   "at": 4.2,
+   "type": "sfx",
+   "key": "ult_hit_flash1",
+   "shot": "04-first-flash"
+  },
+  {
+   "at": 4.2,
+   "type": "shake",
+   "dur": 0.15,
+   "amp": 0.025,
+   "shot": "04-first-flash"
+  },
+  {
+   "at": 4.55,
+   "type": "sfx",
+   "key": "hitstop_release",
+   "shot": "04-first-flash"
+  },
+  {
+   "at": 4.9,
+   "type": "sfx",
+   "key": "knees_drop",
+   "shot": "04-first-flash"
+  },
+  {
+   "at": 4.9,
+   "type": "vfx",
+   "key": "dust",
+   "anchor": "target.root",
+   "count": 5,
+   "spread": 0.25,
+   "color": 5925530,
+   "shot": "04-first-flash"
+  },
+  {
+   "at": 5.1,
+   "type": "vfx",
+   "key": "dim",
+   "dur": 1.8,
+   "opacity": 0.22,
+   "color": 131850,
+   "shot": "05-faces"
+  },
+  {
+   "at": 5.6,
+   "type": "sfx",
+   "key": "breath_pain",
+   "shot": "05-faces"
+  },
+  {
+   "at": 5.95,
+   "type": "sfx",
+   "key": "eyes_open",
+   "shot": "05-faces"
+  },
+  {
+   "at": 7,
+   "type": "hitstop",
+   "dur": 0.6,
+   "strength": "max",
+   "shot": "06-second-flash"
+  },
+  {
+   "at": 7,
+   "type": "vfx",
+   "key": "dim",
+   "dur": 0.6,
+   "opacity": 0.4,
+   "color": 0,
+   "shot": "06-second-flash"
+  },
+  {
+   "at": 7,
+   "type": "vfx",
+   "key": "ink_slash",
+   "anchor": "target.head",
+   "offset": [
+    0,
+    0.1,
+    0.1
+   ],
+   "size": 1.5,
+   "angle": 82,
+   "bow": 0.22,
+   "grow": 0.05,
+   "hold": 1.5,
+   "core": 16777215,
+   "shot": "06-second-flash"
+  },
+  {
+   "at": 7,
+   "type": "vfx",
+   "key": "flash",
+   "dur": 0.06,
+   "opacity": 0.6,
+   "shot": "06-second-flash"
+  },
+  {
+   "at": 7,
+   "type": "sfx",
+   "key": "ult_hit_flash2",
+   "shot": "06-second-flash"
+  },
+  {
+   "at": 7,
+   "type": "shake",
+   "dur": 0.2,
+   "amp": 0.03,
+   "shot": "06-second-flash"
+  },
+  {
+   "at": 7.6,
+   "type": "sfx",
+   "key": "hitstop_release",
+   "shot": "06-second-flash"
+  },
+  {
+   "at": 8.5,
+   "type": "vfx",
+   "key": "dust",
+   "anchor": "target.root",
+   "count": 7,
+   "spread": 0.4,
+   "color": 5925530,
+   "shot": "07-collapse"
+  },
+  {
+   "at": 8.5,
+   "type": "sfx",
+   "key": "body_land_soft",
+   "shot": "07-collapse"
+  },
+  {
+   "at": 8.5,
+   "type": "shake",
+   "dur": 0.2,
+   "amp": 0.02,
+   "shot": "07-collapse"
+  },
+  {
+   "at": 9.1,
+   "type": "caption",
+   "dur": 0.75,
+   "text": "後の先・月断",
+   "sub": "ヨミカゲ",
+   "shot": "08-zanshin"
+  },
+  {
+   "at": 9.3,
+   "type": "sfx",
+   "key": "finish_pose_quiet",
+   "shot": "08-zanshin"
+  }
+ ],
+ "reducedMotion": {
+  "useShots": [
+   "04-first-flash",
+   "06-second-flash",
+   "08-zanshin"
+  ],
+  "disable": [
+   "shake",
+   "flash",
+   "speed_lines"
+  ],
+  "note": "3 カットを固定カメラ（各ショットの最初のキー）で見せる。暗転（dim）は弱めて残す。役者とキューの時刻は変えない"
+ },
+ "skip": {
+  "allowedFrom": 0.4,
+  "landOn": "end",
+  "note": "スキップ時は役者を消してからゲームの立ち位置へ戻す。ムービー中の位置を戦闘へ持ち込まない"
+ }
+}
