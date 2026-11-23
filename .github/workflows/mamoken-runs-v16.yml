@@ -62,6 +62,7 @@ jobs:
             avatar) node exp/fable-3d/custom/v16/tools/verify-avatar-browser.mjs ;;
             custom) node exp/fable-3d/custom/v16/custom-combat-browser.mjs ;;
             story)
+              node exp/fable-3d/story/p0-browser.mjs
               node exp/fable-3d/story/story-browser.mjs
               if test -f exp/fable-3d/story/story-motion-browser.mjs; then node exp/fable-3d/story/story-motion-browser.mjs; fi ;;
           esac

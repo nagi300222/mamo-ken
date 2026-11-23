@@ -253,7 +253,7 @@ $('avatar-form').addEventListener('change',event=>{
  if(event.target.tagName==='SELECT'){updatePartCompatibility();updateMoveOptions();clearTimeout(previewTimer);previewTimer=setTimeout(refreshPreview,60);}
 });
 $('avatar-form').addEventListener('submit',event=>{event.preventDefault();audio.unlock();enterVillage();});$('preview-turn').onclick=()=>spinning=!spinning;
-$('edit').onclick=editAvatar;$('save').onclick=save;$('talk').onclick=openDialogue;$('talk-close').onclick=closeDialogue;$('challenge').onclick=startBattle;$('return').onclick=returnToVillage;$('movie-skip').onclick=finishMovie;
+$('edit').onclick=editAvatar;$('save').onclick=save;$('talk').onclick=openDialogue;$('talk').addEventListener('pointerdown',event=>{if(mode!=='explore'||paused)return;event.preventDefault();openDialogue();});$('talk-close').onclick=closeDialogue;$('challenge').onclick=startBattle;$('return').onclick=returnToVillage;$('movie-skip').onclick=finishMovie;
 $('sound').onclick=()=>{audio.unlock();const muted=audio.setMuted(!audio.muted);$('sound').textContent=muted?'音 OFF':'音 ON';};
 $('pause').onclick=()=>{if(!['explore','battle'].includes(mode))return;paused=!paused;clearInput();$('pause').textContent=paused?'再開':'一時停止';setStatus(paused?'一時停止':'');};
 const keys=new Set(),held=new Map(),queued=new Set(),stick={pointer:null,x:0,y:0};
@@ -282,8 +282,8 @@ for(const node of [orbitPad,joystick])node.addEventListener('contextmenu',event=
 for(const button of document.querySelectorAll('[data-control]')){button.addEventListener('pointerdown',event=>{if(mode!=='battle'||paused)return;event.preventDefault();button.setPointerCapture(event.pointerId);held.set(event.pointerId,button.dataset.control);combatInput.hold(event.pointerId,button.dataset.control);button.classList.add('held');});for(const type of ['pointerup','pointercancel','lostpointercapture'])button.addEventListener(type,event=>{held.delete(event.pointerId);combatInput.release(event.pointerId);button.classList.remove('held');});button.addEventListener('contextmenu',event=>event.preventDefault());}
 function controls(){return combatInput.consume();}
 function syncCameraTools(){const value=exploration.view.follow;$('camera-follow').setAttribute('aria-pressed',String(value));$('camera-follow').textContent='後方追従 '+(value?'ON':'OFF');}
-$('camera-reset').onclick=()=>{if(mode!=='explore')return;exploration.resetView(progress.heading);updateExplorationCamera(0,true);};
-$('camera-follow').onclick=()=>{exploration.setFollow(!exploration.view.follow);syncCameraTools();};
+$('camera-reset').onclick=()=>{if(mode!=='explore'||paused)return;exploration.resetView(progress.heading);updateExplorationCamera(0,true);};
+$('camera-follow').onclick=()=>{if(mode!=='explore'||paused)return;exploration.setFollow(!exploration.view.follow);syncCameraTools();};
 function updateExplorationCamera(delta,snap=false){const view=exploration.view,distance=EXPLORATION_CAMERA.distance,flat=distance*Math.cos(view.pitch);
  const position=new THREE.Vector3(progress.position.x+Math.sin(view.yaw)*flat,.35+Math.sin(view.pitch)*distance,progress.position.z+Math.cos(view.yaw)*flat);
  camera.position.lerp(position,snap||reducedMotion?1:Math.min(1,delta*10));camera.lookAt(progress.position.x,.35,progress.position.z);
@@ -300,7 +300,7 @@ function render(now){requestAnimationFrame(render);const elapsed=last?Math.max(0
    nearby=nearestNpc(progress.position,npcs,1.05);$('talk').hidden=!nearby;$('npc-tag').hidden=!nearby;if(nearby){$('npc-name').textContent=nearby.name;const e=progress.encounters[nearby.id];$('npc-record').textContent=e?`${e.battles}戦 ${e.wins}勝`:'話しかけられる';}
   }
   for(const actor of npcActors.values()){actor.holder.visible=true;playIdle(actor,false,paused?0:delta);}
-  updateExplorationCamera(delta);
+  if(!paused)updateExplorationCamera(delta);
  }
  if(mode==='battle'&&battle&&!paused){acc=Math.min(.1,acc+delta);let ticks=0;while(acc>=1/FPS&&ticks<5&&mode==='battle'&&battle.phase==='fight'){
   battle.tick(controls());for(let i=0;i<2;i++)syncCombatActor(combatActors[i],battle.fighters[i]);updateProjectiles();battleEvents();acc-=1/FPS;ticks++;
