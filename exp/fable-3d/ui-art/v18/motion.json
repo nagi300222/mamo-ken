@@ -1,0 +1,17 @@
+{
+ "version": "v18-p4-ui-polish-r1",
+ "note": "操作を遮らない短い動きだけ。入力は動きの終わりを待たずに受け付ける（動きは見た目だけで、判定や遷移の完了条件にしない）。prefers-reduced-motion: reduce のときは transform と位置の動きを外し、色・枠・記号の切り替えだけを残す。",
+ "easing": {"out": "cubic-bezier(.2,.8,.2,1)", "inOut": "cubic-bezier(.4,0,.2,1)", "press": "cubic-bezier(.3,0,.6,1)"},
+ "motions": {
+  "focus": {"use": "フォーカスが移った項目", "durationMs": 120, "easing": "out", "from": {"scale": 1, "outlineOpacity": 0}, "to": {"scale": 1.03, "outlineOpacity": 1}, "decoration": "svg/state-focus.svg", "sound": "audio/ui-select.wav", "reducedMotion": "scale を外し、枠と前足カーソルだけ即時に出す"},
+  "press": {"use": "押している間", "durationMs": 80, "easing": "press", "to": {"scale": 0.97, "translateYPx": 1}, "decoration": "svg/state-pressed.svg", "sound": null, "reducedMotion": "scale と移動を外し、内影だけ即時に出す"},
+  "release": {"use": "指を離して元に戻る", "durationMs": 110, "easing": "out", "to": {"scale": 1, "translateYPx": 0}, "reducedMotion": "即時"},
+  "confirm": {"use": "決定した項目", "durationMs": 160, "easing": "out", "keyframes": [{"at": 0, "scale": 0.97}, {"at": 0.55, "scale": 1.05}, {"at": 1, "scale": 1}], "decoration": "svg/state-selected.svg（判が 0→1 に拡大して付く。判だけ 140ms）", "sound": "audio/ui-confirm.wav", "reducedMotion": "拡大を外し、判と二重線を即時に出す"},
+  "back": {"use": "戻る", "durationMs": 140, "easing": "inOut", "to": {"translateXPx": -10, "opacity": 0}, "sound": "audio/ui-back.wav", "reducedMotion": "移動を外し、不透明度だけ 80ms"},
+  "screenEnter": {"use": "画面・パネルが入る", "durationMs": 180, "easing": "out", "from": {"translateYPx": 10, "opacity": 0}, "to": {"translateYPx": 0, "opacity": 1}, "staggerMs": 30, "staggerMax": 5, "reducedMotion": "移動とずらしを外し、不透明度だけ 80ms"},
+  "screenExit": {"use": "画面・パネルが出る", "durationMs": 120, "easing": "inOut", "to": {"opacity": 0}, "reducedMotion": "即時"},
+  "disabledShake": {"use": "使えない項目を押した", "durationMs": 160, "easing": "inOut", "keyframes": [{"at": 0, "translateXPx": 0}, {"at": 0.3, "translateXPx": -3}, {"at": 0.65, "translateXPx": 3}, {"at": 1, "translateXPx": 0}], "decoration": "svg/state-disabled.svg", "sound": null, "reducedMotion": "揺れを外し、理由の文字を出すだけ"},
+  "saved": {"use": "保存できた", "durationMs": 180, "easing": "out", "from": {"opacity": 0, "translateYPx": 4}, "to": {"opacity": 1, "translateYPx": 0}, "decoration": "svg/state-saved.svg", "sound": "audio/ui-save.wav", "holdMs": 1200, "reducedMotion": "移動を外す"}
+ },
+ "rules": ["1 回の操作で鳴らす音は 1 つ", "同じ音を 60ms 以内に重ねて鳴らさない", "音は設定の音量・消音に従う", "動きは 80〜180ms の範囲。画面の出入り以外で 160ms を超えない", "拡大は 1.05 倍まで（隣の項目に重ならない）"]
+}

@@ -1,0 +1,3 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 64" width="96" height="64" role="img" aria-label="state decoration: disabled" fill="none">
+<rect x="3" y="3" width="90" height="58" rx="10" stroke="var(--mk-line,#69877C)" stroke-width="2.5" stroke-dasharray="6 6"/><circle cx="80" cy="16" r="11" fill="var(--mk-panel,#1C332C)" stroke="var(--mk-line,#69877C)" stroke-width="2.5"/><path d="M74.5 16h11" stroke="var(--mk-line,#69877C)" stroke-width="3" stroke-linecap="round"/>
+</svg>
