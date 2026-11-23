@@ -22,6 +22,8 @@ const browser=await chromium.launch({executablePath:process.env.CHROMIUM_PATH??'
 const context=await browser.newContext({viewport:{width:852,height:393},isMobile:true,hasTouch:true,deviceScaleFactor:1});
 const page=await context.newPage(),errors=[],remoteRequests=[],report=[];
 const safeAreaGeometry=[];
+const nativeEnvGeometry=[];
+const cdp=await context.newCDPSession(page);
 async function safeInsets(left,right,bottom=21){
  await page.evaluate(({left,right,bottom})=>{
   for(const [edge,value]of Object.entries({left,right,top:0,bottom}))document.documentElement.style.setProperty('--native-safe-'+edge,value+'px');
@@ -85,10 +87,35 @@ try{
  // The skip control shares the same safe parent; this is a layout-only probe,
  // not a claim that an actual native movie was played by this browser fixture.
  await page.locator('#movie-ui').evaluate(el=>el.hidden=false);await safeBounds('#movie-skip',62,62);await page.locator('#movie-ui').evaluate(el=>el.hidden=true);
+ // Exercise actual CSS env() consumers as well as the outer native rectangle.
+ // CDP emulates these env values; this is still not UIKit/iPhone certification.
+ await page.keyboard.down('w');await page.waitForFunction(()=>mamokenStory.nearby?.id==='moguzo',undefined,{timeout:30000});await page.keyboard.up('w');
+ await page.locator('#talk').tap();await page.waitForFunction(()=>mamokenStory.mode==='dialogue');await page.locator('#challenge').tap();
+ await page.waitForFunction(()=>mamokenStory.mode==='battle',undefined,{timeout:90000});await page.locator('#pause').tap();
+ for(const side of [59,62]){
+  await page.evaluate(()=>{for(const edge of ['left','right','top','bottom'])document.documentElement.style.removeProperty('--native-safe-'+edge);});
+  await cdp.send('Emulation.setSafeAreaInsetsOverride',{insets:{left:side,right:side,top:0,bottom:21}});
+  await page.evaluate(()=>dispatchEvent(new Event('resize')));await page.waitForTimeout(100);
+  const geometry=await page.evaluate(()=>{
+   const box=selector=>{const el=document.querySelector(selector),r=el.getBoundingClientRect();return {x:r.x,y:r.y,width:r.width,height:r.height,right:r.right,bottom:r.bottom};};
+   const probe=document.createElement('div');probe.style.cssText='position:absolute;width:env(safe-area-inset-left);height:env(safe-area-inset-right)';document.body.append(probe);const env=box('body>div:last-child');probe.remove();
+   return {env,app:box('#story-app'),world:box('#world'),hud:box('#battle-hud'),buttons:box('#battle-buttons'),camera:box('#camera-tools'),header:box('header'),touches:[...document.querySelectorAll('#battle-buttons [data-control],#battle-steps [data-control]')].map(el=>{const r=el.getBoundingClientRect();return {control:el.dataset.control,x:r.x,y:r.y,width:r.width,height:r.height,right:r.right,bottom:r.bottom};})};
+  });
+  nativeEnvGeometry.push({side,bottom:21,...geometry});
+  await writeFile(output+'/native-env-geometry.json',JSON.stringify({uiKitTested:false,cssEnvOverriddenViaCDP:true,nativeEnvGeometry},null,2));
+  assert.equal(geometry.env.width,side,'CDP did not override actual CSS env(left)');assert.equal(geometry.env.height,side,'CDP did not override actual CSS env(right)');
+  assert.ok(Math.abs(geometry.app.x-side)<.5&&Math.abs(geometry.app.width-(852-side*2))<.5,'Native outer safe rectangle did not follow env values');
+  assert.ok(geometry.world.right<=geometry.buttons.x+.5,'Native attack rail overlaps the real world canvas: '+JSON.stringify(geometry));
+  assert.ok(Math.abs(geometry.hud.x-geometry.world.x)<.5&&Math.abs(geometry.hud.right-geometry.world.right)<.5,'HUD does not align with central world canvas');
+  assert.equal(geometry.touches.length,8,'Expected six attacks and two step touch controls');
+  for(const touch of geometry.touches){assert.ok(touch.width>=44&&touch.height>=44,'Native touch target below 44px '+JSON.stringify(touch));assert.ok(touch.x>=side-.5&&touch.right<=852-side+.5&&touch.y>=-.5&&touch.bottom<=393-21+.5,'Native touch escaped the safe rectangle '+JSON.stringify(touch));}
+ }
+ await page.screenshot({path:output+'/04-native-env-story-battle.png'});
+ await cdp.send('Emulation.setSafeAreaInsetsOverride',{insets:{left:0,right:0,top:0,bottom:0}});
  await page.reload();await page.waitForFunction(()=>mamokenStory.mode==='editor'&&mamokenStory.player,undefined,{timeout:90000});assert.equal(await page.locator('#avatar-name').inputValue(),'端末内の旅人');
  await page.screenshot({path:output+'/03-bundled-story-save.png'});
  assert.deepEqual(remoteRequests,[]);assert.deepEqual(errors,[]);
- await writeFile(output+'/report.json',JSON.stringify({webglRendered:true,nativeAdapterSimulated:true,uiKitTested:false,safeAreaInsetsSimulated:true,safeAreaGeometry,remoteRequests,errors,report},null,2));
+ await writeFile(output+'/report.json',JSON.stringify({webglRendered:true,nativeAdapterSimulated:true,uiKitTested:false,safeAreaInsetsSimulated:true,safeAreaGeometry,nativeEnvGeometry,remoteRequests,errors,report},null,2));
  console.log('P1 BUNDLED WEBGL PASS: five modes, real GLBs/practice, simulated native background/foreground/input reset, no CSS double rotation, Story save reload, no external asset requests');
 }catch(error){await page.screenshot({path:output+'/failure.png'}).catch(()=>{});console.error({errors,remoteRequests});throw error;}
 finally{await browser.close();await new Promise(resolve=>server.close(resolve));}
