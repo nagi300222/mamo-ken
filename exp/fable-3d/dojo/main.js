@@ -1343,6 +1343,11 @@ function render(now){
 }
 makeChooser();
 const runUI=createRunUI({onNext:continueRun});
+const entryMode=new URLSearchParams(location.search).get('mode');
+if(['battle','practice','arcade','survival'].includes(entryMode)){
+  $('match-mode').value=entryMode;
+  $('match-mode').dispatchEvent(new Event('change'));
+}
 $('drive-costs').textContent=`咆哮：ドライブ${DRIVE.roarCost}消費　ギュイーン：${DRIVE.gyuiinCost}消費`;
 window.addEventListener('resize',updateLandscapeLock);
 window.addEventListener('orientationchange',updateLandscapeLock);

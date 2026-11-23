@@ -13,6 +13,10 @@ jobs:
   integration:
     runs-on: ubuntu-latest
     timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        suite: [core, avatar, custom, story]
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -44,18 +48,21 @@ jobs:
           done
           export NODE_PATH="$RUNNER_TEMP/mamoken-browser/node_modules"
           export MAMOKEN_EVIDENCE="$RUNNER_TEMP/mamoken-integration-evidence"
-          node exp/fable-3d/dojo/acceptance/v151-presentation-browser.mjs
-          node exp/fable-3d/dojo/acceptance/run-modes-browser.mjs
-          node exp/fable-3d/dojo/acceptance/v15-normal-art-browser.mjs
-          node exp/fable-3d/dojo/acceptance/v15-practice-browser.mjs
-          if test -d exp/fable-3d/story; then
-            node exp/fable-3d/custom/v16/tools/verify-avatar-browser.mjs
-            node exp/fable-3d/custom/v16/custom-combat-browser.mjs
-            node exp/fable-3d/story/story-browser.mjs
-          fi
+          case '${{ matrix.suite }}' in
+            core)
+              node exp/fable-3d/dojo/acceptance/v151-presentation-browser.mjs
+              node exp/fable-3d/dojo/acceptance/run-modes-browser.mjs
+              node exp/fable-3d/dojo/acceptance/v15-normal-art-browser.mjs
+              node exp/fable-3d/dojo/acceptance/v15-practice-browser.mjs ;;
+            avatar) node exp/fable-3d/custom/v16/tools/verify-avatar-browser.mjs ;;
+            custom) node exp/fable-3d/custom/v16/custom-combat-browser.mjs ;;
+            story)
+              node exp/fable-3d/story/story-browser.mjs
+              if test -f exp/fable-3d/story/story-motion-browser.mjs; then node exp/fable-3d/story/story-motion-browser.mjs; fi ;;
+          esac
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: mamoken-runs-custom-story
+          name: mamoken-runs-custom-story-${{ matrix.suite }}
           path: ${{ runner.temp }}/mamoken-integration-evidence/
           retention-days: 14

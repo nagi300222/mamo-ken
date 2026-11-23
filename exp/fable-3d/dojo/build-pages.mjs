@@ -14,6 +14,11 @@ const dojo=path.join(ROOT,'dojo');
 for(const name of ['index.html','style.css','models.js','balance.js','battle.js','commands.js','cpu.js','camera-frame.js','main.js','showtime-profiles.js','combat-audio.js','showtime-illusions.js','arena-music.js','hud-themes.js','ultimate-cinematic.js','showtime-assets.js','authored-cinematic.js','run-controller.js','run-cpu.js','run-stages.js','run-ui.js','run-dialogue.js','presentation-flow.js','presentation-data.js','choreographed-cinematic.js','cinematic-stage.js','morph-binding.js','landscape-lock.js','practice-mode.js','fighter-style.js','normal-balance-v151.js','normal-contact-runtime-v151.js','normal-contacts-v151.js','normal-timing-v151.js','normal-motifs-v15.js'])
   await copyOne(path.join(dojo,name),path.join(OUTPUT,'dojo',name));
 await cp(path.join(ROOT,'preview','vendor'),path.join(OUTPUT,'preview','vendor'),{recursive:true});
+// v16 is a separate lazy entry point; normal matches do not download custom rigs.
+await cp(path.join(ROOT,'story'),path.join(OUTPUT,'story'),{recursive:true,
+  filter:file=>!file.endsWith('.mjs')});
+await cp(path.join(ROOT,'custom','v16'),path.join(OUTPUT,'custom','v16'),{recursive:true,
+  filter:file=>!file.includes('/tools')&&!file.includes('/evidence')&&!file.endsWith('.mjs')&&!file.endsWith('.md')});
 for(const file of ['player/cine-player.js','player/fx.js']){
   await copyOne(path.join(ROOT,'cinematic','v14',file),path.join(OUTPUT,'cinematic','v14',file));
 }
@@ -36,7 +41,8 @@ for(const id of IDS){
     await copyOne(path.join(PROJECT,'assets',folder,name),path.join(OUTPUT,'assets',folder,name));
   }
 }
-await writeFile(path.join(OUTPUT,'index.html'),'<!doctype html><html lang="ja"><meta charset="utf-8"><meta http-equiv="refresh" content="0;url=./dojo/"><title>マモ拳3D</title><a href="./dojo/">ゲームを開く</a></html>');
+await copyOne(path.join(ROOT,'lobby','index.html'),path.join(OUTPUT,'index.html'));
+await copyOne(path.join(ROOT,'lobby','style.css'),path.join(OUTPUT,'lobby','style.css'));
 await writeFile(path.join(OUTPUT,'_headers'),'/chars/*\n  Cache-Control: public, max-age=120\n/normal/*\n  Cache-Control: public, max-age=120\n/presentation/*\n  Cache-Control: public, max-age=120\n/dojo/*\n  Cache-Control: no-cache\n/cinematic/*\n  Cache-Control: no-cache\n');
 console.log('Cloudflare Pages static output:',OUTPUT);
 console.log('9 GLB total:',(bytes/1024/1024).toFixed(2)+' MiB');

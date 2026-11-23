@@ -51,13 +51,21 @@ function tickPoison(p){
   if(p.poisonTick>=30){p.poisonTick=0;p.hp=Math.max(0,p.hp-4);}
 }
 export class Battle {
-  constructor(left='moguzo',right='godan',level=2){
+  constructor(left='moguzo',right='godan',level=2,options={}){
     this.frame=0;this.time=FPS*ARENA.roundSeconds;this.level=cap(Number(level)||2,1,3);
     this.fighters=[fighter(left,0),fighter(right,1)];
     this.projectiles=[];this.events=[];this.pending=[];this.winner=null;this.phase='fight';this.seq=0;this.clinch=null;this.throwSequence=null;
     this.tailTipSamples=null;
+    // Optional v16 adapters select authored moves and measured avatar surfaces.
+    // With no adapter the original nine-fighter Battle path is unchanged.
+    this.moveResolver=options.moveResolver??null;
+    this.hurtBoundsResolver=options.hurtBoundsResolver??null;
+    this.projectileOrigin=options.projectileOrigin??null;
+    this.projectileContact=options.projectileContact??null;
+    this.customAgain=options.customAgain??null;
   }
   again(){
+    if(this.customAgain)return this.customAgain(this);
     const n=new Battle(this.fighters[0].id,this.fighters[1].id,this.level);
     n.tailTipSamples=this.tailTipSamples;return n;
   }
@@ -142,6 +150,7 @@ export class Battle {
     }
   }
   _begin(p,m,id,allowCancel=false){
+    if(this.moveResolver){m=this.moveResolver(p,m,id);if(!m)return false;}
     if(m.kind==='clinch')return this._startGyuiin(p);
     if(p.ko||p.stun||p.stop||(p.y>.06&&['throw','roar','projectile'].includes(m.kind)))return false;
     if(m.isSuper&&p.super<100)return false;
@@ -488,7 +497,7 @@ export class Battle {
     }
     if(m.kind==='anti')return dist<(m.reach||.4)+.16&&t.y<1.5;
     if(m.normalVersion)return dist<=normalReachAt(m,a.frame)+.16&&
-      normalVerticalContact(a,t,m,NORMAL_ART.NORMAL_HURT_BOUNDS);
+      normalVerticalContact(a,t,m,this.hurtBoundsResolver?.(t)??NORMAL_ART.NORMAL_HURT_BOUNDS);
     if(a.y<.12&&t.y>.50)return false;
     if(a.y>.28&&t.y<.1&&a.y>.7)return false;
     return dist<=(m.reach||.5)+.16&&Math.abs(a.y-t.y)<.58;
@@ -503,9 +512,10 @@ export class Battle {
       return;
     }
     if(m.kind==='projectile'&&!p.spawned&&p.frame===m.startup){
-      p.spawned=true;this.projectiles.push({id:++this.seq,owner:p.slot,x:p.x+p.facing*.30,y:p.y+.30,
+      const origin=this.projectileOrigin?.(p,m)??{forward:.30,height:.30};
+      p.spawned=true;this.projectiles.push({id:++this.seq,owner:p.slot,x:p.x+p.facing*origin.forward,y:p.y+origin.height,
         face:p.facing,speed:m.speed||.045,life:m.life||75,damage:m.damage,poison:m.poison||0,
-        effect:m.effect||'earth',level:m.level||'mid'});
+        effect:m.effect||'earth',level:m.level||'mid',...(m.customRef?{customRef:m.customRef}:{} )});
       this.events.push({type:'projectile',slot:p.slot});
     }
     if(active(p)&&!p.used&&!['projectile','feint','counter'].includes(m.kind)&&this._contact(p,op,m)){
@@ -530,7 +540,8 @@ export class Battle {
       }
       if(b.life<=0)continue;
       const t=this.fighters[1-b.owner],a=this.fighters[b.owner];
-      if(!t.ko&&Math.abs(b.x-t.x)<.23&&Math.abs(t.y-(b.y-.3))<.50){
+      const verticalContact=this.projectileContact?.(b,t)??Math.abs(t.y-(b.y-.3))<.50;
+      if(!t.ko&&Math.abs(b.x-t.x)<.23&&verticalContact){
         b.life=0;this._damage(a,t,{name:'飛び道具',id:'projectile',kind:'projectile',damage:b.damage,level:b.level,poison:b.poison},Math.abs(b.x-t.x),'projectile');
       }
     }

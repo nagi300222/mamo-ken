@@ -1,0 +1,580 @@
+{
+  "schemaVersion": 1,
+  "passed": true,
+  "scope": "Actual Three.js CPU original-rig/clip/manifest construction and timeline playback matching Story canonicalCinemaActor; no GPU rendering",
+  "imageDecodingStubbed": true,
+  "webglRendered": false,
+  "actorCount": 9,
+  "caseCount": 81,
+  "warnings": [],
+  "errors": [],
+  "cases": [
+    {
+      "attacker": "moguzo",
+      "target": "moguzo",
+      "mirror": false,
+      "samples": 29,
+      "ended": true
+    },
+    {
+      "attacker": "moguzo",
+      "target": "pisuke",
+      "mirror": true,
+      "samples": 29,
+      "ended": true
+    },
+    {
+      "attacker": "moguzo",
+      "target": "godan",
+      "mirror": false,
+      "samples": 29,
+      "ended": true
+    },
+    {
+      "attacker": "moguzo",
+      "target": "hakuma",
+      "mirror": true,
+      "samples": 29,
+      "ended": true
+    },
+    {
+      "attacker": "moguzo",
+      "target": "chirka",
+      "mirror": false,
+      "samples": 29,
+      "ended": true
+    },
+    {
+      "attacker": "moguzo",
+      "target": "takimaru",
+      "mirror": true,
+      "samples": 29,
+      "ended": true
+    },
+    {
+      "attacker": "moguzo",
+      "target": "yomikage",
+      "mirror": false,
+      "samples": 29,
+      "ended": true
+    },
+    {
+      "attacker": "moguzo",
+      "target": "bullet",
+      "mirror": true,
+      "samples": 29,
+      "ended": true
+    },
+    {
+      "attacker": "moguzo",
+      "target": "dark_moguzo",
+      "mirror": false,
+      "samples": 29,
+      "ended": true
+    },
+    {
+      "attacker": "pisuke",
+      "target": "moguzo",
+      "mirror": true,
+      "samples": 30,
+      "ended": true
+    },
+    {
+      "attacker": "pisuke",
+      "target": "pisuke",
+      "mirror": false,
+      "samples": 30,
+      "ended": true
+    },
+    {
+      "attacker": "pisuke",
+      "target": "godan",
+      "mirror": true,
+      "samples": 30,
+      "ended": true
+    },
+    {
+      "attacker": "pisuke",
+      "target": "hakuma",
+      "mirror": false,
+      "samples": 30,
+      "ended": true
+    },
+    {
+      "attacker": "pisuke",
+      "target": "chirka",
+      "mirror": true,
+      "samples": 30,
+      "ended": true
+    },
+    {
+      "attacker": "pisuke",
+      "target": "takimaru",
+      "mirror": false,
+      "samples": 30,
+      "ended": true
+    },
+    {
+      "attacker": "pisuke",
+      "target": "yomikage",
+      "mirror": true,
+      "samples": 30,
+      "ended": true
+    },
+    {
+      "attacker": "pisuke",
+      "target": "bullet",
+      "mirror": false,
+      "samples": 30,
+      "ended": true
+    },
+    {
+      "attacker": "pisuke",
+      "target": "dark_moguzo",
+      "mirror": true,
+      "samples": 30,
+      "ended": true
+    },
+    {
+      "attacker": "godan",
+      "target": "moguzo",
+      "mirror": false,
+      "samples": 30,
+      "ended": true
+    },
+    {
+      "attacker": "godan",
+      "target": "pisuke",
+      "mirror": true,
+      "samples": 30,
+      "ended": true
+    },
+    {
+      "attacker": "godan",
+      "target": "godan",
+      "mirror": false,
+      "samples": 30,
+      "ended": true
+    },
+    {
+      "attacker": "godan",
+      "target": "hakuma",
+      "mirror": true,
+      "samples": 30,
+      "ended": true
+    },
+    {
+      "attacker": "godan",
+      "target": "chirka",
+      "mirror": false,
+      "samples": 30,
+      "ended": true
+    },
+    {
+      "attacker": "godan",
+      "target": "takimaru",
+      "mirror": true,
+      "samples": 30,
+      "ended": true
+    },
+    {
+      "attacker": "godan",
+      "target": "yomikage",
+      "mirror": false,
+      "samples": 30,
+      "ended": true
+    },
+    {
+      "attacker": "godan",
+      "target": "bullet",
+      "mirror": true,
+      "samples": 30,
+      "ended": true
+    },
+    {
+      "attacker": "godan",
+      "target": "dark_moguzo",
+      "mirror": false,
+      "samples": 30,
+      "ended": true
+    },
+    {
+      "attacker": "hakuma",
+      "target": "moguzo",
+      "mirror": true,
+      "samples": 30,
+      "ended": true
+    },
+    {
+      "attacker": "hakuma",
+      "target": "pisuke",
+      "mirror": false,
+      "samples": 30,
+      "ended": true
+    },
+    {
+      "attacker": "hakuma",
+      "target": "godan",
+      "mirror": true,
+      "samples": 30,
+      "ended": true
+    },
+    {
+      "attacker": "hakuma",
+      "target": "hakuma",
+      "mirror": false,
+      "samples": 30,
+      "ended": true
+    },
+    {
+      "attacker": "hakuma",
+      "target": "chirka",
+      "mirror": true,
+      "samples": 30,
+      "ended": true
+    },
+    {
+      "attacker": "hakuma",
+      "target": "takimaru",
+      "mirror": false,
+      "samples": 30,
+      "ended": true
+    },
+    {
+      "attacker": "hakuma",
+      "target": "yomikage",
+      "mirror": true,
+      "samples": 30,
+      "ended": true
+    },
+    {
+      "attacker": "hakuma",
+      "target": "bullet",
+      "mirror": false,
+      "samples": 30,
+      "ended": true
+    },
+    {
+      "attacker": "hakuma",
+      "target": "dark_moguzo",
+      "mirror": true,
+      "samples": 30,
+      "ended": true
+    },
+    {
+      "attacker": "chirka",
+      "target": "moguzo",
+      "mirror": false,
+      "samples": 37,
+      "ended": true
+    },
+    {
+      "attacker": "chirka",
+      "target": "pisuke",
+      "mirror": true,
+      "samples": 37,
+      "ended": true
+    },
+    {
+      "attacker": "chirka",
+      "target": "godan",
+      "mirror": false,
+      "samples": 37,
+      "ended": true
+    },
+    {
+      "attacker": "chirka",
+      "target": "hakuma",
+      "mirror": true,
+      "samples": 37,
+      "ended": true
+    },
+    {
+      "attacker": "chirka",
+      "target": "chirka",
+      "mirror": false,
+      "samples": 37,
+      "ended": true
+    },
+    {
+      "attacker": "chirka",
+      "target": "takimaru",
+      "mirror": true,
+      "samples": 37,
+      "ended": true
+    },
+    {
+      "attacker": "chirka",
+      "target": "yomikage",
+      "mirror": false,
+      "samples": 37,
+      "ended": true
+    },
+    {
+      "attacker": "chirka",
+      "target": "bullet",
+      "mirror": true,
+      "samples": 37,
+      "ended": true
+    },
+    {
+      "attacker": "chirka",
+      "target": "dark_moguzo",
+      "mirror": false,
+      "samples": 37,
+      "ended": true
+    },
+    {
+      "attacker": "takimaru",
+      "target": "moguzo",
+      "mirror": true,
+      "samples": 32,
+      "ended": true
+    },
+    {
+      "attacker": "takimaru",
+      "target": "pisuke",
+      "mirror": false,
+      "samples": 32,
+      "ended": true
+    },
+    {
+      "attacker": "takimaru",
+      "target": "godan",
+      "mirror": true,
+      "samples": 32,
+      "ended": true
+    },
+    {
+      "attacker": "takimaru",
+      "target": "hakuma",
+      "mirror": false,
+      "samples": 32,
+      "ended": true
+    },
+    {
+      "attacker": "takimaru",
+      "target": "chirka",
+      "mirror": true,
+      "samples": 32,
+      "ended": true
+    },
+    {
+      "attacker": "takimaru",
+      "target": "takimaru",
+      "mirror": false,
+      "samples": 32,
+      "ended": true
+    },
+    {
+      "attacker": "takimaru",
+      "target": "yomikage",
+      "mirror": true,
+      "samples": 32,
+      "ended": true
+    },
+    {
+      "attacker": "takimaru",
+      "target": "bullet",
+      "mirror": false,
+      "samples": 32,
+      "ended": true
+    },
+    {
+      "attacker": "takimaru",
+      "target": "dark_moguzo",
+      "mirror": true,
+      "samples": 32,
+      "ended": true
+    },
+    {
+      "attacker": "yomikage",
+      "target": "moguzo",
+      "mirror": false,
+      "samples": 29,
+      "ended": true
+    },
+    {
+      "attacker": "yomikage",
+      "target": "pisuke",
+      "mirror": true,
+      "samples": 29,
+      "ended": true
+    },
+    {
+      "attacker": "yomikage",
+      "target": "godan",
+      "mirror": false,
+      "samples": 29,
+      "ended": true
+    },
+    {
+      "attacker": "yomikage",
+      "target": "hakuma",
+      "mirror": true,
+      "samples": 29,
+      "ended": true
+    },
+    {
+      "attacker": "yomikage",
+      "target": "chirka",
+      "mirror": false,
+      "samples": 29,
+      "ended": true
+    },
+    {
+      "attacker": "yomikage",
+      "target": "takimaru",
+      "mirror": true,
+      "samples": 29,
+      "ended": true
+    },
+    {
+      "attacker": "yomikage",
+      "target": "yomikage",
+      "mirror": false,
+      "samples": 29,
+      "ended": true
+    },
+    {
+      "attacker": "yomikage",
+      "target": "bullet",
+      "mirror": true,
+      "samples": 29,
+      "ended": true
+    },
+    {
+      "attacker": "yomikage",
+      "target": "dark_moguzo",
+      "mirror": false,
+      "samples": 29,
+      "ended": true
+    },
+    {
+      "attacker": "bullet",
+      "target": "moguzo",
+      "mirror": true,
+      "samples": 30,
+      "ended": true
+    },
+    {
+      "attacker": "bullet",
+      "target": "pisuke",
+      "mirror": false,
+      "samples": 30,
+      "ended": true
+    },
+    {
+      "attacker": "bullet",
+      "target": "godan",
+      "mirror": true,
+      "samples": 30,
+      "ended": true
+    },
+    {
+      "attacker": "bullet",
+      "target": "hakuma",
+      "mirror": false,
+      "samples": 30,
+      "ended": true
+    },
+    {
+      "attacker": "bullet",
+      "target": "chirka",
+      "mirror": true,
+      "samples": 30,
+      "ended": true
+    },
+    {
+      "attacker": "bullet",
+      "target": "takimaru",
+      "mirror": false,
+      "samples": 30,
+      "ended": true
+    },
+    {
+      "attacker": "bullet",
+      "target": "yomikage",
+      "mirror": true,
+      "samples": 30,
+      "ended": true
+    },
+    {
+      "attacker": "bullet",
+      "target": "bullet",
+      "mirror": false,
+      "samples": 30,
+      "ended": true
+    },
+    {
+      "attacker": "bullet",
+      "target": "dark_moguzo",
+      "mirror": true,
+      "samples": 30,
+      "ended": true
+    },
+    {
+      "attacker": "dark_moguzo",
+      "target": "moguzo",
+      "mirror": false,
+      "samples": 30,
+      "ended": true
+    },
+    {
+      "attacker": "dark_moguzo",
+      "target": "pisuke",
+      "mirror": true,
+      "samples": 30,
+      "ended": true
+    },
+    {
+      "attacker": "dark_moguzo",
+      "target": "godan",
+      "mirror": false,
+      "samples": 30,
+      "ended": true
+    },
+    {
+      "attacker": "dark_moguzo",
+      "target": "hakuma",
+      "mirror": true,
+      "samples": 30,
+      "ended": true
+    },
+    {
+      "attacker": "dark_moguzo",
+      "target": "chirka",
+      "mirror": false,
+      "samples": 30,
+      "ended": true
+    },
+    {
+      "attacker": "dark_moguzo",
+      "target": "takimaru",
+      "mirror": true,
+      "samples": 30,
+      "ended": true
+    },
+    {
+      "attacker": "dark_moguzo",
+      "target": "yomikage",
+      "mirror": false,
+      "samples": 30,
+      "ended": true
+    },
+    {
+      "attacker": "dark_moguzo",
+      "target": "bullet",
+      "mirror": true,
+      "samples": 30,
+      "ended": true
+    },
+    {
+      "attacker": "dark_moguzo",
+      "target": "dark_moguzo",
+      "mirror": false,
+      "samples": 30,
+      "ended": true
+    }
+  ]
+}

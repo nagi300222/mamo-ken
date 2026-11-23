@@ -1,0 +1,823 @@
+{
+  "passed": true,
+  "note": "Actual Three CPU skin sampling, image decoding stubbed; GPU rendering not tested",
+  "results": [
+    {
+      "id": "moguzo",
+      "measurementMs": 135.23155199999997,
+      "errors": [
+        {
+          "slot": "stand_weak",
+          "reach": 0.4154,
+          "reference": 0.415,
+          "error": 0.00040000000000001146
+        },
+        {
+          "slot": "stand_heavy",
+          "reach": 0.4633,
+          "reference": 0.463,
+          "error": 0.00029999999999996696
+        },
+        {
+          "slot": "crouch_weak",
+          "reach": 0.4603,
+          "reference": 0.46,
+          "error": 0.00029999999999996696
+        },
+        {
+          "slot": "crouch_heavy",
+          "reach": 0.3863,
+          "reference": 0.386,
+          "error": 0.00029999999999996696
+        },
+        {
+          "slot": "air_weak",
+          "reach": 0.4269,
+          "reference": 0.427,
+          "error": 0.00009999999999998899
+        },
+        {
+          "slot": "air_heavy",
+          "reach": 0.297,
+          "reference": 0.297,
+          "error": 0
+        }
+      ],
+      "hurtBounds": {
+        "stand": {
+          "bottom": 0,
+          "top": 0.5733
+        },
+        "crouch": {
+          "bottom": 0,
+          "top": 0.442
+        }
+      },
+      "grafts": {
+        "parts": [
+          "head",
+          "ears",
+          "hands",
+          "feet"
+        ],
+        "shapeDifferences": {
+          "body": {
+            "maxDisplacement": 0.014311311915539481,
+            "changedVertices": 72
+          },
+          "head": {
+            "maxDisplacement": 0.004290224315504037,
+            "changedVertices": 2318
+          },
+          "ears": {
+            "maxDisplacement": 0.0036207659499103125,
+            "changedVertices": 199
+          },
+          "hands": {
+            "maxDisplacement": 0.015372908516157548,
+            "changedVertices": 1478
+          },
+          "feet": {
+            "maxDisplacement": 0.025713983041161455,
+            "changedVertices": 2038
+          },
+          "tail": {
+            "maxDisplacement": 0,
+            "changedVertices": 0
+          },
+          "accessory": {
+            "maxDisplacement": 0,
+            "changedVertices": 0
+          }
+        },
+        "maxRestSeamGap": 0
+      }
+    },
+    {
+      "id": "godan",
+      "measurementMs": 166.21345999999994,
+      "errors": [
+        {
+          "slot": "stand_weak",
+          "reach": 0.4589,
+          "reference": 0.459,
+          "error": 0.0001000000000000445
+        },
+        {
+          "slot": "stand_heavy",
+          "reach": 0.5574,
+          "reference": 0.557,
+          "error": 0.00039999999999995595
+        },
+        {
+          "slot": "crouch_weak",
+          "reach": 0.4264,
+          "reference": 0.426,
+          "error": 0.00040000000000001146
+        },
+        {
+          "slot": "crouch_heavy",
+          "reach": 0.4463,
+          "reference": 0.446,
+          "error": 0.00029999999999996696
+        },
+        {
+          "slot": "air_weak",
+          "reach": 0.4661,
+          "reference": 0.466,
+          "error": 0.00009999999999998899
+        },
+        {
+          "slot": "air_heavy",
+          "reach": 0.4777,
+          "reference": 0.478,
+          "error": 0.00029999999999996696
+        }
+      ],
+      "hurtBounds": {
+        "stand": {
+          "bottom": 0,
+          "top": 0.6283
+        },
+        "crouch": {
+          "bottom": 0,
+          "top": 0.52
+        }
+      },
+      "grafts": {
+        "parts": [
+          "head",
+          "ears",
+          "hands",
+          "feet"
+        ],
+        "shapeDifferences": {
+          "body": {
+            "maxDisplacement": 0.026593684876930777,
+            "changedVertices": 63
+          },
+          "head": {
+            "maxDisplacement": 0.027398451026919516,
+            "changedVertices": 2122
+          },
+          "ears": {
+            "maxDisplacement": 0.023685100322432436,
+            "changedVertices": 187
+          },
+          "hands": {
+            "maxDisplacement": 0.03049205731286633,
+            "changedVertices": 1545
+          },
+          "feet": {
+            "maxDisplacement": 0.034181137786752504,
+            "changedVertices": 2054
+          },
+          "tail": {
+            "maxDisplacement": 0,
+            "changedVertices": 0
+          },
+          "accessory": {
+            "maxDisplacement": 0,
+            "changedVertices": 0
+          }
+        },
+        "maxRestSeamGap": 0
+      }
+    },
+    {
+      "id": "bullet",
+      "measurementMs": 95.16568499999994,
+      "errors": [
+        {
+          "slot": "stand_weak",
+          "reach": 0.4174,
+          "reference": 0.417,
+          "error": 0.00040000000000001146
+        },
+        {
+          "slot": "stand_heavy",
+          "reach": 0.6556,
+          "reference": 0.656,
+          "error": 0.00040000000000006697
+        },
+        {
+          "slot": "crouch_weak",
+          "reach": 0.5483,
+          "reference": 0.548,
+          "error": 0.00029999999999996696
+        },
+        {
+          "slot": "crouch_heavy",
+          "reach": 0.6412,
+          "reference": 0.641,
+          "error": 0.00019999999999997797
+        },
+        {
+          "slot": "air_weak",
+          "reach": 0.5505,
+          "reference": 0.551,
+          "error": 0.000500000000000056
+        },
+        {
+          "slot": "air_heavy",
+          "reach": 0.5524,
+          "reference": 0.552,
+          "error": 0.00039999999999995595
+        }
+      ],
+      "hurtBounds": {
+        "stand": {
+          "bottom": 0,
+          "top": 0.5924
+        },
+        "crouch": {
+          "bottom": 0,
+          "top": 0.4562
+        }
+      },
+      "grafts": {
+        "parts": [
+          "head",
+          "ears",
+          "hands",
+          "feet"
+        ],
+        "shapeDifferences": {
+          "body": {
+            "maxDisplacement": 0.014189069155664353,
+            "changedVertices": 61
+          },
+          "head": {
+            "maxDisplacement": 0.007168944869209783,
+            "changedVertices": 1941
+          },
+          "ears": {
+            "maxDisplacement": 0.005838411785448135,
+            "changedVertices": 162
+          },
+          "hands": {
+            "maxDisplacement": 0.015378588100995499,
+            "changedVertices": 1207
+          },
+          "feet": {
+            "maxDisplacement": 0.02551722404358527,
+            "changedVertices": 1739
+          },
+          "tail": {
+            "maxDisplacement": 0,
+            "changedVertices": 0
+          },
+          "accessory": {
+            "maxDisplacement": 0,
+            "changedVertices": 0
+          }
+        },
+        "maxRestSeamGap": 0
+      }
+    },
+    {
+      "id": "pisuke",
+      "measurementMs": 100.03645199999983,
+      "errors": [
+        {
+          "slot": "stand_weak",
+          "reach": 0.3757,
+          "reference": 0.376,
+          "error": 0.00030000000000002247
+        },
+        {
+          "slot": "stand_heavy",
+          "reach": 0.3355,
+          "reference": 0.335,
+          "error": 0.0005000000000000004
+        },
+        {
+          "slot": "crouch_weak",
+          "reach": 0.3066,
+          "reference": 0.307,
+          "error": 0.00040000000000001146
+        },
+        {
+          "slot": "crouch_heavy",
+          "reach": 0.3954,
+          "reference": 0.395,
+          "error": 0.00039999999999995595
+        },
+        {
+          "slot": "air_weak",
+          "reach": 0.3265,
+          "reference": 0.327,
+          "error": 0.0005000000000000004
+        },
+        {
+          "slot": "air_heavy",
+          "reach": 0.3248,
+          "reference": 0.325,
+          "error": 0.00020000000000003348
+        }
+      ],
+      "hurtBounds": {
+        "stand": {
+          "bottom": 0,
+          "top": 0.6234
+        },
+        "crouch": {
+          "bottom": 0,
+          "top": 0.3931
+        }
+      },
+      "grafts": {
+        "parts": [
+          "head",
+          "ears",
+          "hands"
+        ],
+        "shapeDifferences": {
+          "body": {
+            "maxDisplacement": 0.014460486139685584,
+            "changedVertices": 38
+          },
+          "head": {
+            "maxDisplacement": 0.024844686544151277,
+            "changedVertices": 2261
+          },
+          "ears": {
+            "maxDisplacement": 0.02271286641322894,
+            "changedVertices": 187
+          },
+          "hands": {
+            "maxDisplacement": 0.023767660061477347,
+            "changedVertices": 981
+          },
+          "feet": {
+            "maxDisplacement": 0,
+            "changedVertices": 0
+          },
+          "tail": {
+            "maxDisplacement": 0,
+            "changedVertices": 0
+          },
+          "accessory": {
+            "maxDisplacement": 0,
+            "changedVertices": 0
+          }
+        },
+        "maxRestSeamGap": 0
+      }
+    },
+    {
+      "id": "hakuma",
+      "measurementMs": 122.2596010000002,
+      "errors": [
+        {
+          "slot": "stand_weak",
+          "reach": 0.487,
+          "reference": 0.487,
+          "error": 0
+        },
+        {
+          "slot": "stand_heavy",
+          "reach": 0.5813,
+          "reference": 0.581,
+          "error": 0.000300000000000078
+        },
+        {
+          "slot": "crouch_weak",
+          "reach": 0.4669,
+          "reference": 0.467,
+          "error": 0.0001000000000000445
+        },
+        {
+          "slot": "crouch_heavy",
+          "reach": 0.5322,
+          "reference": 0.532,
+          "error": 0.00019999999999997797
+        },
+        {
+          "slot": "air_weak",
+          "reach": 0.4674,
+          "reference": 0.467,
+          "error": 0.00039999999999995595
+        },
+        {
+          "slot": "air_heavy",
+          "reach": 0.5259,
+          "reference": 0.526,
+          "error": 0.00009999999999998899
+        }
+      ],
+      "hurtBounds": {
+        "stand": {
+          "bottom": 0,
+          "top": 0.6612
+        },
+        "crouch": {
+          "bottom": 0,
+          "top": 0.5633
+        }
+      },
+      "grafts": {
+        "parts": [
+          "head",
+          "hands",
+          "feet"
+        ],
+        "shapeDifferences": {
+          "body": {
+            "maxDisplacement": 0.016813049366822565,
+            "changedVertices": 82
+          },
+          "head": {
+            "maxDisplacement": 0.006431551449871615,
+            "changedVertices": 2355
+          },
+          "ears": {
+            "maxDisplacement": 0.005838890847877241,
+            "changedVertices": 33
+          },
+          "hands": {
+            "maxDisplacement": 0.010104573043169668,
+            "changedVertices": 1505
+          },
+          "feet": {
+            "maxDisplacement": 0.03404764287614326,
+            "changedVertices": 2120
+          },
+          "tail": {
+            "maxDisplacement": 0,
+            "changedVertices": 0
+          },
+          "accessory": {
+            "maxDisplacement": 0,
+            "changedVertices": 0
+          }
+        },
+        "maxRestSeamGap": 0
+      }
+    },
+    {
+      "id": "chirka",
+      "measurementMs": 112.92696100000012,
+      "errors": [
+        {
+          "slot": "stand_weak",
+          "reach": 0.3879,
+          "reference": 0.388,
+          "error": 0.00009999999999998899
+        },
+        {
+          "slot": "stand_heavy",
+          "reach": 0.4002,
+          "reference": 0.4,
+          "error": 0.00019999999999997797
+        },
+        {
+          "slot": "crouch_weak",
+          "reach": 0.3977,
+          "reference": 0.398,
+          "error": 0.00030000000000002247
+        },
+        {
+          "slot": "crouch_heavy",
+          "reach": 0.4509,
+          "reference": 0.451,
+          "error": 0.00009999999999998899
+        },
+        {
+          "slot": "air_weak",
+          "reach": 0.3573,
+          "reference": 0.357,
+          "error": 0.00030000000000002247
+        },
+        {
+          "slot": "air_heavy",
+          "reach": 0.3683,
+          "reference": 0.368,
+          "error": 0.00030000000000002247
+        }
+      ],
+      "hurtBounds": {
+        "stand": {
+          "bottom": 0,
+          "top": 0.5534
+        },
+        "crouch": {
+          "bottom": 0,
+          "top": 0.3832
+        }
+      },
+      "grafts": {
+        "parts": [
+          "head",
+          "ears",
+          "hands",
+          "feet"
+        ],
+        "shapeDifferences": {
+          "body": {
+            "maxDisplacement": 0.011359030449400443,
+            "changedVertices": 62
+          },
+          "head": {
+            "maxDisplacement": 0.016471732289541463,
+            "changedVertices": 2275
+          },
+          "ears": {
+            "maxDisplacement": 0.013958652036522527,
+            "changedVertices": 309
+          },
+          "hands": {
+            "maxDisplacement": 0.027203366070439095,
+            "changedVertices": 1019
+          },
+          "feet": {
+            "maxDisplacement": 0.010832816362380981,
+            "changedVertices": 1641
+          },
+          "tail": {
+            "maxDisplacement": 0,
+            "changedVertices": 0
+          },
+          "accessory": {
+            "maxDisplacement": 0,
+            "changedVertices": 0
+          }
+        },
+        "maxRestSeamGap": 0
+      }
+    },
+    {
+      "id": "takimaru",
+      "measurementMs": 140.40177300000005,
+      "errors": [
+        {
+          "slot": "stand_weak",
+          "reach": 0.5911,
+          "reference": 0.591,
+          "error": 0.00009999999999998899
+        },
+        {
+          "slot": "stand_heavy",
+          "reach": 0.5441,
+          "reference": 0.544,
+          "error": 0.00009999999999998899
+        },
+        {
+          "slot": "crouch_weak",
+          "reach": 0.621,
+          "reference": 0.621,
+          "error": 0
+        },
+        {
+          "slot": "crouch_heavy",
+          "reach": 0.6072,
+          "reference": 0.607,
+          "error": 0.00019999999999997797
+        },
+        {
+          "slot": "air_weak",
+          "reach": 0.5422,
+          "reference": 0.542,
+          "error": 0.00019999999999997797
+        },
+        {
+          "slot": "air_heavy",
+          "reach": 0.6149,
+          "reference": 0.615,
+          "error": 0.00009999999999998899
+        }
+      ],
+      "hurtBounds": {
+        "stand": {
+          "bottom": 0,
+          "top": 0.7023
+        },
+        "crouch": {
+          "bottom": 0,
+          "top": 0.5685
+        }
+      },
+      "grafts": {
+        "parts": [
+          "head",
+          "ears",
+          "hands",
+          "feet"
+        ],
+        "shapeDifferences": {
+          "body": {
+            "maxDisplacement": 0.0065213646583164005,
+            "changedVertices": 57
+          },
+          "head": {
+            "maxDisplacement": 0.004879590393938433,
+            "changedVertices": 2146
+          },
+          "ears": {
+            "maxDisplacement": 0.003909677597222805,
+            "changedVertices": 202
+          },
+          "hands": {
+            "maxDisplacement": 0.005461306675712469,
+            "changedVertices": 1526
+          },
+          "feet": {
+            "maxDisplacement": 0.03688686808049658,
+            "changedVertices": 2078
+          },
+          "tail": {
+            "maxDisplacement": 0,
+            "changedVertices": 0
+          },
+          "accessory": {
+            "maxDisplacement": 0,
+            "changedVertices": 0
+          }
+        },
+        "maxRestSeamGap": 0
+      }
+    },
+    {
+      "id": "yomikage",
+      "measurementMs": 89.01803100000006,
+      "errors": [
+        {
+          "slot": "stand_weak",
+          "reach": 0.3877,
+          "reference": 0.388,
+          "error": 0.00030000000000002247
+        },
+        {
+          "slot": "stand_heavy",
+          "reach": 0.4496,
+          "reference": 0.45,
+          "error": 0.00040000000000001146
+        },
+        {
+          "slot": "crouch_weak",
+          "reach": 0.4166,
+          "reference": 0.417,
+          "error": 0.00039999999999995595
+        },
+        {
+          "slot": "crouch_heavy",
+          "reach": 0.4374,
+          "reference": 0.437,
+          "error": 0.00040000000000001146
+        },
+        {
+          "slot": "air_weak",
+          "reach": 0.3425,
+          "reference": 0.342,
+          "error": 0.0005000000000000004
+        },
+        {
+          "slot": "air_heavy",
+          "reach": 0.4083,
+          "reference": 0.408,
+          "error": 0.00030000000000002247
+        }
+      ],
+      "hurtBounds": {
+        "stand": {
+          "bottom": 0,
+          "top": 0.6145
+        },
+        "crouch": {
+          "bottom": 0,
+          "top": 0.4566
+        }
+      },
+      "grafts": {
+        "parts": [
+          "head",
+          "ears",
+          "hands",
+          "feet"
+        ],
+        "shapeDifferences": {
+          "body": {
+            "maxDisplacement": 0.0094014542549391,
+            "changedVertices": 58
+          },
+          "head": {
+            "maxDisplacement": 0.013729580586736082,
+            "changedVertices": 2251
+          },
+          "ears": {
+            "maxDisplacement": 0.011748170513195176,
+            "changedVertices": 193
+          },
+          "hands": {
+            "maxDisplacement": 0.02809651892114271,
+            "changedVertices": 1118
+          },
+          "feet": {
+            "maxDisplacement": 0.018454507984802623,
+            "changedVertices": 1805
+          },
+          "tail": {
+            "maxDisplacement": 0,
+            "changedVertices": 0
+          },
+          "accessory": {
+            "maxDisplacement": 0,
+            "changedVertices": 0
+          }
+        },
+        "maxRestSeamGap": 0
+      }
+    },
+    {
+      "id": "dark_moguzo",
+      "measurementMs": 98.77414899999985,
+      "errors": [
+        {
+          "slot": "stand_weak",
+          "reach": 0.3946,
+          "reference": 0.395,
+          "error": 0.00040000000000001146
+        },
+        {
+          "slot": "stand_heavy",
+          "reach": 0.4401,
+          "reference": 0.44,
+          "error": 0.00009999999999998899
+        },
+        {
+          "slot": "crouch_weak",
+          "reach": 0.4366,
+          "reference": 0.437,
+          "error": 0.00040000000000001146
+        },
+        {
+          "slot": "crouch_heavy",
+          "reach": 0.5094,
+          "reference": 0.509,
+          "error": 0.00039999999999995595
+        },
+        {
+          "slot": "air_weak",
+          "reach": 0.336,
+          "reference": 0.336,
+          "error": 0
+        },
+        {
+          "slot": "air_heavy",
+          "reach": 0.2616,
+          "reference": 0.262,
+          "error": 0.00040000000000001146
+        }
+      ],
+      "hurtBounds": {
+        "stand": {
+          "bottom": 0,
+          "top": 0.5648
+        },
+        "crouch": {
+          "bottom": 0,
+          "top": 0.4223
+        }
+      },
+      "grafts": {
+        "parts": [
+          "head",
+          "ears",
+          "hands",
+          "feet"
+        ],
+        "shapeDifferences": {
+          "body": {
+            "maxDisplacement": 0.014230740037202849,
+            "changedVertices": 72
+          },
+          "head": {
+            "maxDisplacement": 0.0043050703559945665,
+            "changedVertices": 2324
+          },
+          "ears": {
+            "maxDisplacement": 0.0036467728880277273,
+            "changedVertices": 193
+          },
+          "hands": {
+            "maxDisplacement": 0.015373221443277033,
+            "changedVertices": 1340
+          },
+          "feet": {
+            "maxDisplacement": 0.025728321522637338,
+            "changedVertices": 1971
+          },
+          "tail": {
+            "maxDisplacement": 0,
+            "changedVertices": 0
+          },
+          "accessory": {
+            "maxDisplacement": 0,
+            "changedVertices": 0
+          }
+        },
+        "maxRestSeamGap": 0
+      }
+    }
+  ]
+}
