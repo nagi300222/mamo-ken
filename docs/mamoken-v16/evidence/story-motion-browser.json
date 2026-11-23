@@ -1,0 +1,281 @@
+{
+  "report": [
+    {
+      "slot": "stand_heavy",
+      "facing": 1,
+      "frame": 11,
+      "startup": 11,
+      "clip": "v15_stand_heavy",
+      "time": 0.225,
+      "attackPart": "armR",
+      "vertices": 1438,
+      "reach": 0.4002122599651686,
+      "height": 0.3520819460538011,
+      "expectedReach": 0.4002,
+      "expectedHeight": 0.3521,
+      "meshTargets": [
+        "chirka_mesh",
+        "chirka_mesh_1",
+        "chirka_mesh_2",
+        "chirka_mesh_3",
+        "chirka_mesh_4",
+        "chirka_mesh_5",
+        "chirka_mesh_6",
+        "chirka_mesh_7"
+      ],
+      "boundTargets": [
+        "chirka_mesh",
+        "chirka_mesh_1",
+        "chirka_mesh_2",
+        "chirka_mesh_3",
+        "chirka_mesh_4",
+        "chirka_mesh_5",
+        "chirka_mesh_6",
+        "chirka_mesh_7"
+      ],
+      "maxMorphError": 0,
+      "morphCounts": [
+        {
+          "name": "chirka_mesh",
+          "count": 4
+        },
+        {
+          "name": "chirka_mesh_1",
+          "count": 4
+        },
+        {
+          "name": "chirka_mesh_2",
+          "count": 4
+        },
+        {
+          "name": "chirka_mesh_3",
+          "count": 4
+        },
+        {
+          "name": "chirka_mesh_4",
+          "count": 4
+        },
+        {
+          "name": "chirka_mesh_5",
+          "count": 4
+        },
+        {
+          "name": "chirka_mesh_6",
+          "count": 4
+        },
+        {
+          "name": "chirka_mesh_7",
+          "count": 4
+        }
+      ]
+    },
+    {
+      "slot": "stand_heavy",
+      "facing": -1,
+      "frame": 11,
+      "startup": 11,
+      "clip": "v15_stand_heavy",
+      "time": 0.225,
+      "attackPart": "armR",
+      "vertices": 1438,
+      "reach": 0.40021225996516857,
+      "height": 0.3520819460538011,
+      "expectedReach": 0.4002,
+      "expectedHeight": 0.3521,
+      "meshTargets": [
+        "chirka_mesh",
+        "chirka_mesh_1",
+        "chirka_mesh_2",
+        "chirka_mesh_3",
+        "chirka_mesh_4",
+        "chirka_mesh_5",
+        "chirka_mesh_6",
+        "chirka_mesh_7"
+      ],
+      "boundTargets": [
+        "chirka_mesh",
+        "chirka_mesh_1",
+        "chirka_mesh_2",
+        "chirka_mesh_3",
+        "chirka_mesh_4",
+        "chirka_mesh_5",
+        "chirka_mesh_6",
+        "chirka_mesh_7"
+      ],
+      "maxMorphError": 0,
+      "morphCounts": [
+        {
+          "name": "chirka_mesh",
+          "count": 4
+        },
+        {
+          "name": "chirka_mesh_1",
+          "count": 4
+        },
+        {
+          "name": "chirka_mesh_2",
+          "count": 4
+        },
+        {
+          "name": "chirka_mesh_3",
+          "count": 4
+        },
+        {
+          "name": "chirka_mesh_4",
+          "count": 4
+        },
+        {
+          "name": "chirka_mesh_5",
+          "count": 4
+        },
+        {
+          "name": "chirka_mesh_6",
+          "count": 4
+        },
+        {
+          "name": "chirka_mesh_7",
+          "count": 4
+        }
+      ]
+    },
+    {
+      "slot": "crouch_heavy",
+      "facing": 1,
+      "frame": 12,
+      "startup": 12,
+      "clip": "v15_crouch_heavy",
+      "time": 0.2916666567325592,
+      "attackPart": "armL",
+      "vertices": 1435,
+      "reach": 0.45090330068781215,
+      "height": 0.22578881320517843,
+      "expectedReach": 0.4509,
+      "expectedHeight": 0.2258,
+      "meshTargets": [
+        "chirka_mesh",
+        "chirka_mesh_1",
+        "chirka_mesh_2",
+        "chirka_mesh_3",
+        "chirka_mesh_4",
+        "chirka_mesh_5",
+        "chirka_mesh_6",
+        "chirka_mesh_7"
+      ],
+      "boundTargets": [
+        "chirka_mesh",
+        "chirka_mesh_1",
+        "chirka_mesh_2",
+        "chirka_mesh_3",
+        "chirka_mesh_4",
+        "chirka_mesh_5",
+        "chirka_mesh_6",
+        "chirka_mesh_7"
+      ],
+      "maxMorphError": 0,
+      "morphCounts": [
+        {
+          "name": "chirka_mesh",
+          "count": 4
+        },
+        {
+          "name": "chirka_mesh_1",
+          "count": 4
+        },
+        {
+          "name": "chirka_mesh_2",
+          "count": 4
+        },
+        {
+          "name": "chirka_mesh_3",
+          "count": 4
+        },
+        {
+          "name": "chirka_mesh_4",
+          "count": 4
+        },
+        {
+          "name": "chirka_mesh_5",
+          "count": 4
+        },
+        {
+          "name": "chirka_mesh_6",
+          "count": 4
+        },
+        {
+          "name": "chirka_mesh_7",
+          "count": 4
+        }
+      ]
+    },
+    {
+      "slot": "crouch_heavy",
+      "facing": -1,
+      "frame": 12,
+      "startup": 12,
+      "clip": "v15_crouch_heavy",
+      "time": 0.2916666567325592,
+      "attackPart": "armL",
+      "vertices": 1435,
+      "reach": 0.45090330068781215,
+      "height": 0.22578881320517843,
+      "expectedReach": 0.4509,
+      "expectedHeight": 0.2258,
+      "meshTargets": [
+        "chirka_mesh",
+        "chirka_mesh_1",
+        "chirka_mesh_2",
+        "chirka_mesh_3",
+        "chirka_mesh_4",
+        "chirka_mesh_5",
+        "chirka_mesh_6",
+        "chirka_mesh_7"
+      ],
+      "boundTargets": [
+        "chirka_mesh",
+        "chirka_mesh_1",
+        "chirka_mesh_2",
+        "chirka_mesh_3",
+        "chirka_mesh_4",
+        "chirka_mesh_5",
+        "chirka_mesh_6",
+        "chirka_mesh_7"
+      ],
+      "maxMorphError": 0,
+      "morphCounts": [
+        {
+          "name": "chirka_mesh",
+          "count": 4
+        },
+        {
+          "name": "chirka_mesh_1",
+          "count": 4
+        },
+        {
+          "name": "chirka_mesh_2",
+          "count": 4
+        },
+        {
+          "name": "chirka_mesh_3",
+          "count": 4
+        },
+        {
+          "name": "chirka_mesh_4",
+          "count": 4
+        },
+        {
+          "name": "chirka_mesh_5",
+          "count": 4
+        },
+        {
+          "name": "chirka_mesh_6",
+          "count": 4
+        },
+        {
+          "name": "chirka_mesh_7",
+          "count": 4
+        }
+      ]
+    }
+  ],
+  "errors": []
+}

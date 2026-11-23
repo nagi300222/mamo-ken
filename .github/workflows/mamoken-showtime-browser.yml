@@ -6,6 +6,7 @@ on:
       - docs/**
       - exp/fable-3d/normal-art/**
     branches:
+      - feat/mamoken-v16-story-integration
       - feat/mamoken-v151-reviewed-integration
       - test/mamoken-showtime-browser-v12
       - feat/mamoken-super-hit-cinematic-v13

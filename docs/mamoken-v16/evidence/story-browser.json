@@ -1,0 +1,73 @@
+{
+  "report": [
+    {
+      "mode": "battle",
+      "custom": {
+        "schemaVersion": 1,
+        "name": "山風のナギ",
+        "appearance": {
+          "baseId": "moguzo",
+          "parts": {
+            "head": "pisuke",
+            "ears": "base",
+            "tail": "base",
+            "hands": "base",
+            "feet": "base",
+            "accessory": "base"
+          },
+          "palette": {
+            "fur": "#69967d",
+            "belly": "#ebcc94",
+            "muzzle": "#edd4a3",
+            "accent": "#cc140f",
+            "pattern": "#554235",
+            "paw": "#422e21",
+            "foot": "#383636",
+            "ear": "#734c33",
+            "tail": "#bd915c"
+          },
+          "pattern": "stripes"
+        },
+        "combat": {
+          "styleId": "moguzo",
+          "specials": [
+            "pisuke.s1",
+            "moguzo.s2",
+            "moguzo.s3"
+          ]
+        }
+      },
+      "metrics": {
+        "fps": 6,
+        "loadMs": 571.2000000000116,
+        "geometries": 80,
+        "textures": 99,
+        "drawCalls": 18,
+        "npcModels": 3
+      }
+    }
+  ],
+  "returnPosition": {
+    "x": 0,
+    "z": -1.4023350000000003
+  },
+  "after": {
+    "version": 1,
+    "seed": 2401123,
+    "position": {
+      "x": 0,
+      "z": -1.4023350000000003
+    },
+    "heading": 3.141592653589793,
+    "encounters": {
+      "moguzo": {
+        "battles": 1,
+        "wins": 1
+      }
+    },
+    "battles": 1,
+    "wins": 1,
+    "lastResult": "勝利"
+  },
+  "errors": []
+}
