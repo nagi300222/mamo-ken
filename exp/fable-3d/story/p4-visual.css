@@ -152,5 +152,13 @@ body[data-ui=mountain] .shared-step-pad .step-button{min-height:44px;background:
  #story-app #editor[data-editor-step="3"] .p4-editor-scroll>.form-row,
  #story-app #editor[data-editor-step="3"] .p4-save-title,
  #story-app #editor[data-editor-step="3"] .p4-save-copy{display:none}
- #story-app #editor[data-editor-step="3"] .p4-save-summary{padding:8px;gap:5px}
+ #story-app #editor[data-editor-step="3"] .p4-editor-scroll{padding-block:0}
+ #story-app #editor[data-editor-step="3"] .p4-save-summary{padding:4px;gap:2px}
+ #story-app #editor[data-editor-step="3"] .p4-save-summary div{grid-template-columns:4em minmax(0,1fr)}
+ #story-app #editor[data-editor-step="3"] .p4-save-summary dt{white-space:nowrap}
+ #story-app #editor[data-editor-step="3"] .p4-editor-footer{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:5px 8px;align-items:start}
+ #story-app #editor[data-editor-step="3"] .p4-editor-footer .p4-save-state,
+ #story-app #editor[data-editor-step="3"] .p4-editor-footer #preview-state{margin:0}
+ #story-app #editor[data-editor-step="3"] .p4-editor-footer #editor-error,
+ #story-app #editor[data-editor-step="3"] .p4-editor-footer .editor-actions{grid-column:1/-1}
 }

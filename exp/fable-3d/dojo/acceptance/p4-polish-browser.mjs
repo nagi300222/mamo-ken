@@ -148,6 +148,9 @@ async function editor(){
      }
     }
     if(tab===3){
+     await pane.evaluate(node=>{node.scrollTop=0;});await settle();
+     const initialSummary=await page.locator('.p4-save-summary').boundingBox(),initialPane=await pane.boundingBox();
+     check(initialSummary&&initialPane&&inside({...initialSummary,right:initialSummary.x+initialSummary.width,bottom:initialSummary.y+initialSummary.height},{left:initialPane.x,top:initialPane.y,right:initialPane.x+initialPane.width,bottom:initialPane.y+initialPane.height}),'confirmation initially shows every summary row together',{case:c.id,initialSummary,initialPane});
      const entries=pane.locator('.p4-save-summary > div');check(await entries.count()===4,'save summary retains four explicit entries',c.id);
      for(let index=0;index<await entries.count();index++){
       const entry=entries.nth(index);await entry.scrollIntoViewIfNeeded();await settle();

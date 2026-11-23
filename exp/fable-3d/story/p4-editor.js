@@ -35,7 +35,7 @@ if(form){
   for(const node of [...form.children])if(node!==actions&&node!==preview&&node!==error&&node!==nav)scroll.appendChild(node);
   const saveState=document.createElement('p');saveState.className='p4-save-state';saveState.id='editor-save-state';saveState.setAttribute('role','status');saveState.textContent='保存してから、集落へ進みます。';
   footer.append(saveState);if(preview)footer.append(preview);if(error)footer.append(error);footer.append(actions);form.append(nav,scroll,footer);
-  const markEdited=()=>{saveState.textContent='変更あり · 保存すると旅に反映されます。';};form.addEventListener('input',markEdited);form.addEventListener('change',markEdited);
+  const markEdited=()=>{saveState.textContent='変更あり · 未保存';delete saveState.dataset.saved;};form.addEventListener('input',markEdited);form.addEventListener('change',markEdited);
   const app=document.getElementById('story-app');if(app)new MutationObserver(()=>{if(app.dataset.mode==='editor')saveState.textContent='編集内容を確認して、保存して出発。';}).observe(app,{attributes:true,attributeFilter:['data-mode']});
   nav.addEventListener('keydown',event=>{const step={ArrowRight:1,ArrowLeft:-1}[event.key];if(step){event.preventDefault();choose(active+step,true);}else if(event.key==='Home'||event.key==='End'){event.preventDefault();choose(event.key==='Home'?0:panels.length-1,true);}});
   const summary=()=>{
