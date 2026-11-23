@@ -37,7 +37,8 @@ export async function openGame(browser, base, { viewport = { width: 852, height:
     if (kind === 'timeout_draw') { g.time = 2; return; }
     a.x = winner === 0 ? -.2 : .2; t.x = winner === 0 ? .2 : -.2; a.facing = winner === 0 ? 1 : -1; t.facing = -a.facing;
     for (const f of [a, t]) { f.y = 0; f.vy = 0; f.action = null; f.stun = 0; f.stop = 0; f.dashF = 0; }
-    t.hp = 1; if (kind === 'double') a.hp = 1;
+    t.hp = 1; if (kind === 'double') a.hp = 1; else { t.state = 'idle'; t.input = {}; t.action = null; t.stop = 0; t.stun = 600; }
+    for (const f of [a, t]) if (f.ability && 'grit' in f.ability) f.ability.grit = false;   // モグゾーの踏ん張り（HP1 で耐える）は使用済みにして、この一撃で決着させる
     if (kind === 'ultimate') { a.super = 100; g._begin(a, { ...B.ultimateMove(a.id) }, 'ultimate'); return; }
     g._begin(a, { ...B.normalMove(a.id, 'stand_heavy') }, 'stand_heavy'); if (kind === 'double') g._begin(t, { ...B.normalMove(t.id, 'stand_heavy') }, 'stand_heavy');
   }, [kind, winner]);

@@ -6,7 +6,7 @@
 //   cut:true のキーはそこで切り替える（前のキーから補間しない）。ease は行き先のキーに付ける。
 // 勝利クリップは presentation/v151/<id>_victory.glb の victory_v151（4.0 秒、末尾で保持）。編集正本は tools/mamo3d/motions_v151.py。
 export const VICTORY_CLIP = 'victory_v151';
-export const VICTORY_CAMERA_DISTANCE = 1.32;   // 全カメラ共通の引き（注視点からの距離の倍率）。寄りすぎて頭が切れないための安全側
+export const VICTORY_CAMERA_DISTANCE = 1.6;   // 全カメラ共通の引き（注視点からの距離の倍率）。寄りすぎて頭が切れないための安全側
 export const VICTORY_PACK = id => `../presentation/v151/${id}_victory.glb`;
 const K = (t, pa, po, la, lo, fov, extra = {}) => Object.freeze({ t, pos: Object.freeze({ a: pa, o: Object.freeze(po) }), look: Object.freeze({ a: la, o: Object.freeze(lo) }), fov, ...extra });
 const C = (t, type, key, extra = {}) => Object.freeze({ t, type, key, ...extra });
@@ -31,7 +31,7 @@ export const VICTORY = Object.freeze({
     shortFrom: 76 / 60
   }),
   godan: Object.freeze({
-    title: '四股・押忍', line: '押忍。……稽古は続く。', sub: '岩の構え',
+    distance: 1.45, title: '四股・押忍', line: '押忍。……稽古は続く。', sub: '岩の構え',
     light: { bg: 0x4a3526, sun: 0xffc48a, sunPower: 3.4, hemi: 1.7 },
     // 正面・低い位置の固定気味。踏み下ろしで揺らす
     camera: [K(0, 'root', [.05, .22, 1.75], 'chest', [0, 0, 0], 34), K(1.2, 'root', [.02, .18, 1.60], 'chest', [0, .02, 0], 34, { ease: 'inOut' }),
@@ -59,7 +59,7 @@ export const VICTORY = Object.freeze({
     shortFrom: 100 / 60
   }),
   takimaru: Object.freeze({
-    title: '力こぶ・胸叩き', line: 'もう一丁、来るか？', sub: '剛腕の圧',
+    distance: 1.45, title: '力こぶ・胸叩き', line: 'もう一丁、来るか？', sub: '剛腕の圧',
     light: { bg: 0x5a3e2a, sun: 0xffd08a, sunPower: 3.3, hemi: 1.9 },
     // 正面の煽り。胸を叩くたびに一段寄り、最後は肩越しに相手を入れる
     camera: [K(0, 'root', [.10, .16, 1.60], 'chest', [0, .04, 0], 36), K(1.4, 'root', [.06, .14, 1.38], 'chest', [0, .05, 0], 36, { ease: 'inOut' }),
@@ -69,7 +69,7 @@ export const VICTORY = Object.freeze({
     shortFrom: 86 / 60
   }),
   yomikage: Object.freeze({
-    title: '血振り・納め', line: '……終わりだ。', sub: '月影の一閃',
+    distance: 1.0, title: '血振り・納め', line: '……終わりだ。', sub: '月影の一閃',
     light: { bg: 0x10283c, sun: 0xa8dcff, sunPower: 2.3, hemi: 1.25 },
     // 真横の長い引き。ほとんど動かない。最後だけ背中へ静かに寄る
     camera: [K(0, 'root', [-.05, .34, 2.10], 'chest', [0, 0, 0], 30), K(1.2, 'root', [-.02, .34, 2.02], 'chest', [0, 0, 0], 30, { ease: 'inOut' }),
@@ -78,7 +78,7 @@ export const VICTORY = Object.freeze({
     shortFrom: 64 / 60
   }),
   bullet: Object.freeze({
-    title: '尾鳴らし・尾の腰掛け', line: '一発で十分さ。', sub: '尾と木の実',
+    distance: 1.4, title: '尾鳴らし・尾の腰掛け', line: '一発で十分さ。', sub: '尾と木の実',
     light: { bg: 0x6a4420, sun: 0xffc070, sunPower: 3.2, hemi: 2.0 },
     // 後ろの尾から入り、正面へ切り替え、最後は低い位置から
     camera: [K(0, 'root', [-1.05, .26, .85], 'root', [-.35, .16, 0], 40), K(1.0, 'root', [-.95, .22, .95], 'root', [-.30, .14, 0], 40, { ease: 'inOut' }),
@@ -87,7 +87,7 @@ export const VICTORY = Object.freeze({
     shortFrom: 70 / 60
   }),
   dark_moguzo: Object.freeze({
-    title: '背を向ける', line: '…………。', sub: '暗連・無言',
+    distance: 1.15, title: '背を向ける', line: '…………。', sub: '暗連・無言',
     light: { bg: 0x140f24, sun: 0xb48cff, sunPower: 2.0, hemi: .95 },
     // 握る拳へ寄ったあと、背を向ける間ゆっくり引いていく
     camera: [K(0, 'root', [.45, .30, 1.30], 'chest', [0, 0, 0], 34), K(1.15, 'root', [.30, .28, .92], 'chest', [.02, -.04, .04], 32, { ease: 'inOut' }), K(1.6, 'root', [.28, .27, .88], 'chest', [.02, -.04, .04], 32, { ease: 'inOut' }),

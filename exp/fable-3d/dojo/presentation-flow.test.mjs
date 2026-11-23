@@ -92,5 +92,8 @@ test('ゲーム本体への接続: 決着は Presentation へ 1 回渡し、Batt
   assert.match(main, /battle\.phase==='fight'&&!movie\.active&&flow\.battleRunning/); assert.match(main, /if\(reportRoundEnd\(\)\)finishShown=true/);
   assert.ok(!/finishShown=true;playing=false;\$\('game-over'\)/.test(main)); assert.match(main, /if\(movie\.active\|\|!flow\.inputEnabled\)return/);
   for (const id of ['vs-screen', 'intro-plate', 'round-call', 'ko-banner', 'victory-banner', 'presentation-skip']) assert.equal((html.match(new RegExp('id="' + id + '"', 'g')) || []).length, 1, id);
+  // 表示は実経過時間（elapsed）で進め、勝利クリップは表示時計へ同期。Battle 用の delta 上限とは別
+  assert.match(main, /const present=Math\.min\(\.25,elapsed\)/); assert.match(main, /flow\.update\(present\)/); assert.ok(!/flow\.update\(delta\)/.test(main));
+  assert.match(main, /actor\.victory\.action\.time=Math\.min\(actor\.victory\.duration-1e-4,time\)/); assert.match(main, /if\(!document\.hidden\)\{lastFrame=0;return;\}/);
   assert.match(build, /presentation-flow\.js/); assert.match(build, /_victory\.glb/);
 });

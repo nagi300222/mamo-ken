@@ -843,7 +843,9 @@ function updateVictory(delta){
   if(!actor||!plan)return false;
   // 結果画面では勝利ムービーの最後の画で止める（ボタンは結果パネルで押せる）
   const data=VICTORY[actor.id],time=plan.from+(flow.state==='victory'?flow.time:plan.length),facing=battle.fighters[actor.slot].facing;
-  for(const each of actors)each?.mixer.update(delta);
+  // 勝利クリップは表示時計へ直接同期する（ミキサーの積算に任せない＝コマ落ちしても尺がずれない）
+  actor.victory.action.time=Math.min(actor.victory.duration-1e-4,time);
+  for(const each of actors)each?.mixer.update(each===actor?0:delta);
   actor.holder.updateMatrixWorld(true);
   while(presentState.cue<data.cues.length&&data.cues[presentState.cue].t<=time){
     const cue=data.cues[presentState.cue++];
@@ -860,7 +862,7 @@ function updateVictory(delta){
   anchorWorld(actor,facing,segment.a.pos,camFrom);anchorWorld(actor,facing,segment.b.pos,camTo);
   anchorWorld(actor,facing,segment.a.look,lookFrom);anchorWorld(actor,facing,segment.b.look,lookTo);
   presentCam.position.lerpVectors(camFrom,camTo,segment.u);lookFrom.lerp(lookTo,segment.u);
-  presentCam.position.sub(lookFrom).multiplyScalar(VICTORY_CAMERA_DISTANCE).add(lookFrom);
+  presentCam.position.sub(lookFrom).multiplyScalar(data.distance??VICTORY_CAMERA_DISTANCE).add(lookFrom);
   if(presentState.shake>0){
     const k=presentState.shake/.32*presentState.shakePower;
     presentCam.position.x+=Math.sin(presentState.shake*71)*k;presentCam.position.y+=Math.cos(presentState.shake*93)*k*.7;
@@ -919,6 +921,13 @@ function updateKo(delta){
     actors[1-context.winner]?.mixer.update(delta*slow);
   }else for(const actor of actors)actor?.mixer.update(delta*slow);
   animateFX(flashes,delta*FPS*Math.max(.25,slow));
+}
+function faceFrame(){
+  const phase=flow.introPhase;if(phase?.phase!=='face'||!actors[phase.slot])return null;
+  const actor=actors[phase.slot],facing=battle.fighters[phase.slot].facing;
+  boneWorld(actor,'head',headPoint);
+  const project=(dx,dy)=>{const p=anchorPoint.set(headPoint.x+facing*dx,headPoint.y+dy,headPoint.z).project(presentCam);return [+p.x.toFixed(3),+p.y.toFixed(3)];};
+  return {slot:phase.slot,head:project(0,0),top:project(0,.15),nose:project(.13,.0),back:project(-.12,.04)};
 }
 function showResult(){
   $('ko-banner').hidden=true;$('round-call').hidden=true;
@@ -1112,13 +1121,15 @@ function clearInput(){
   lastDirectionTap=null;dashPulse=0;resetAnalog();
 }
 document.addEventListener('keydown',e=>{
-  const k=keyMap[e.code];if(!k)return;
-  if(movie.active||document.activeElement?.tagName==='SELECT')return;
-  if(!flow.inputEnabled){
-    // 導入・KO・勝利ムービー中は対戦入力を受けない。決定キーはスキップ。
-    if(['Space','Enter','Escape'].includes(e.code)&&flow.state!=='select'&&flow.state!=='result'&&flow.state!=='loading'){e.preventDefault();if(!e.repeat)skipPresentation();}
+  // Presentation（VS・顔アップ・KO・勝利ムービー）中の決定キーはスキップ。対戦キーの割当（keyMap）より先に見る。
+  if(!movie.active&&['vs','intro','ko','victory'].includes(flow.state)&&['Space','Enter','Escape'].includes(e.code)&&
+     !['SELECT','BUTTON','INPUT'].includes(document.activeElement?.tagName)){
+    e.preventDefault();if(!e.repeat)skipPresentation();
     return;
   }
+  const k=keyMap[e.code];if(!k)return;
+  if(movie.active||document.activeElement?.tagName==='SELECT')return;
+  if(!flow.inputEnabled)return;                 // 導入・KO・勝利ムービー中は対戦入力を受けない
   e.preventDefault();
   if(e.repeat)return;
   if((k==='left'||k==='right')&&!pressedKeys.has(k)&&!pressedKeys.has('up')&&!pressedKeys.has('down'))directionTap(k);
@@ -1129,12 +1140,13 @@ document.addEventListener('keydown',e=>{
 document.addEventListener('keyup',e=>{
   const k=keyMap[e.code];if(k){e.preventDefault();pressedKeys.delete(k);if(directions.includes(k))recordDirection();}
 });
+window.addEventListener('focus',()=>{lastFrame=0;});
 window.addEventListener('blur',()=>{
   if(movie.active)finishUltimateMovie();
   clearInput();paused=true;$('pause').textContent='再開';music.update(false);
 });
 document.addEventListener('visibilitychange',()=>{
-  if(!document.hidden)return;
+  if(!document.hidden){lastFrame=0;return;}       // 復帰の 1 フレーム目に、隠れていた時間を経過として渡さない
   if(movie.active)finishUltimateMovie();
   music.update(false);
 });
@@ -1217,7 +1229,7 @@ $('pause').onclick=()=>{if(!battle||battle.phase!=='fight'||!flow.battleRunning)
 const FIXED=1/FPS;
 function render(now){
   requestAnimationFrame(render);
-  music.update(!!(battle&&playing&&!paused&&battle.phase==='fight'&&!movie.active&&!document.hidden));
+  music.update(!!(battle&&playing&&!paused&&battle.phase==='fight'&&!movie.active&&!document.hidden&&flow.battleRunning));
   const elapsed=lastFrame?Math.max(0,(now-lastFrame)/1000):FIXED;
   const delta=Math.min(.05,elapsed);lastFrame=now;
   if(checkAvailable){
@@ -1230,14 +1242,17 @@ function render(now){
     }
   }
   // Presentation の表示クロック。Battle は進めない。タブ非表示中は rAF が止まるので自然に保留される。
+  // 表示は実経過時間で進める（奥義ムービーと同じ）。描画が遅い端末でも尺・音・カメラが壁時計と一致する。
+  // Battle の固定 60Hz と delta 上限（下の acc）は別で、こちらは変えない。復帰直後の巨大な経過は lastFrame=0 と上限で除く。
+  const present=Math.min(.25,elapsed);
   let presentCamera=false;
   if(battle&&playing&&!movie.active&&!document.hidden){
-    if(flow.state==='vs')flow.update(delta);
-    else if(flow.state==='intro'){flow.update(delta);if(flow.state==='intro')presentCamera=updateIntro(delta);}
-    else if(flow.state==='ko'){updateKo(delta);flow.update(delta);}
-    else if(flow.state==='victory'){flow.update(delta);if(flow.state==='victory')presentCamera=updateVictory(delta);}
-    else if(flow.state==='fight'){flow.update(delta);if(presentState.callUntil&&now>presentState.callUntil){presentState.callUntil=0;$('round-call').hidden=true;}}
-    else if(flow.state==='result'&&presentState.winner>=0)presentCamera=updateVictory(delta);
+    if(flow.state==='vs')flow.update(present);
+    else if(flow.state==='intro'){flow.update(present);if(flow.state==='intro')presentCamera=updateIntro(present);}
+    else if(flow.state==='ko'){updateKo(present);flow.update(present);}
+    else if(flow.state==='victory'){flow.update(present);if(flow.state==='victory')presentCamera=updateVictory(present);}
+    else if(flow.state==='fight'){flow.update(present);if(presentState.callUntil&&now>presentState.callUntil){presentState.callUntil=0;$('round-call').hidden=true;}}
+    else if(flow.state==='result'&&presentState.winner>=0)presentCamera=updateVictory(present);
     else if(flow.state==='result'||flow.state==='await_round'){for(const actor of actors)actor?.mixer.update(delta);animateFX(flashes,delta*FPS);}
   }
   if(battle&&playing&&!paused&&battle.phase==='fight'&&!movie.active&&flow.battleRunning) {
@@ -1288,7 +1303,9 @@ window.mamoken3d={get battle(){return battle;},get actors(){return actors;},
   // Presentation の状態と操作（テスト・連戦コントローラ用）。roundHook は ({winner,reason,round,viaUltimate}) → 'nextRound'|'victory'|'result'
   get presentation(){return {state:flow.state,time:flow.time,context:flow.context,log:flow.log,loaded:flow.loaded,
     inputEnabled:flow.inputEnabled,koSlow:flow.koSlow,camera:flow.state==='victory'||flow.introPhase?.phase==='face'?'presentation':'match',
-    victoryClip:actors[presentState.winner]?.currentName??null,victoryTime:actors[presentState.winner]?.victory?.action.time??null};},
+    victoryClip:actors[presentState.winner]?.currentName??null,victoryTime:actors[presentState.winner]?.victory?.action.time??null,
+    // 受入テスト用の実測: 専用カメラの位置と、顔アップで頭（鼻先〜耳の上）が画面のどこに写っているか（NDC。±1 が画面端）
+    cameraPosition:presentCam.position.toArray().map(v=>+v.toFixed(4)),faceFrame:faceFrame()};},
   skipPresentation,setRoundHook(fn){presentState.roundHook=fn;},
   get practice(){return {enabled:practiceEnabled,dummy:practice.dummy,stats:practice.stats};},
   get landscapeLocked(){return gameRotated;},
