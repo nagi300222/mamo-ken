@@ -9,3 +9,18 @@ Hakuma.s3 and Dark Moguzo.s3 additionally measure the leading surface across bot
 Local callback dry-run with the actual GLTFLoader and image decoding stubbed: selected normals `v17`, specials `v17r2`; 54 normal rows, 422 both-facing active-frame boundary samples, 54 mixed projectile hits, nine rigs, and the two nine-frame special probes passed. Hakuma changes from armL to armR; Dark Moguzo changes armL→armR→armL. This dry-run bypassed WebGLRenderer only in a disposable local copy. The committed browser fixture requires actual WebGL rendering; its live rerun remains pending.
 
 No production source, factory, compatibility, assets, move performance, or approval selector changes are included in this fixture commit. It depends on the separately reviewed factory correction `f953f3b`.
+
+## Integrated WebGL receipt
+
+Source HEAD: `2dc707fbee841fef29c712f05c519404d22b242e`. [Actions run 45142345050](https://github.com/nagi300222/mamo-ken/actions/runs/45142345050) completed both watched jobs successfully:
+
+| Job | Artifact | Confirmed result |
+| --- | --- | --- |
+| Custom `137583158536` | `14802581896` | Selected v17 normals / v17r2 specials; 54 normal rows, 422 both-facing active-frame boundary samples, 54 single-hit mixed projectiles, `errors: []` |
+| Avatar `137583158450` | `14803165458` | Six visible original/grafted/patterned avatars; 45 draw calls, 93 textures; no page/shader errors |
+
+Hakuma.s3 and Dark Moguzo.s3 each rendered all nine active frames: **18 actual GPU frames** in total, with **six saved first/middle/last PNGs** manually reviewed. Visible-model pixel counts ranged from 11,575–13,451 for Hakuma and 7,520–9,428 for Dark Moguzo. The independently sampled leading hands changed L→R and L→R→L respectively; both-facing inner/outer Battle boundaries passed at every phase.
+
+The avatar inspection's older single centre `readPixels` sample returned stale zero after presentation. It is not visibility evidence; the actual screenshot was reviewed and shows all six textured models. The custom special renderer uses a preserved framebuffer and checks visible pixels on every frame.
+
+The source reports and PNGs remain in the GitHub Actions artifacts, whose configured retention is **14 days**. No raw PNG copies are added here. These results use desktop Chromium/SwiftShader; physical iPhone/Android operation and performance remain untested.

@@ -14,6 +14,7 @@ const total=m=>m.startup+m.active+m.recovery;
 const active=p=>!!p.action&&p.frame>=p.action.startup&&p.frame<p.action.startup+p.action.active;
 const facingBack=p=>p.facing===1?'left':'right';
 const moveX=(p,dx)=>p.x=cap(p.x+dx,ARENA.minX,ARENA.maxX);
+const authoredImpactOrigins=new WeakMap();
 const ROAR=Object.freeze({name:'咆哮',kind:'roar',startup:16,active:7,recovery:27,damage:105,reach:.66,level:'mid',anim:'roar'});
 const GYUIIN=Object.freeze({name:'ギュイーン',kind:'clinch',startup:8,active:14,recovery:24,damage:0,reach:.40,travel:.32,level:'grab',anim:'gyuiin'});
 export const DRIVE=Object.freeze({max:100,initial:100,roarCost:35,gyuiinCost:60,regenPerFrame:.11,regenDelay:90,clinchFrames:34,resetSpacing:1.35});
@@ -434,6 +435,8 @@ export class Battle {
       x:a.x+a.facing*normalReachAt(m,a.frame),y:a.y+normalHeightAt(m,a.frame),space:'authored-strike-surface'
     }:{x:t.x,y:t.y+.32,space:'target-center-fallback'});
     const feedback=feedbackForMove(a,m,guard?'guard':'hit',point);
+    if(feedback&&['authored-strike-surface','authored-special-surface'].includes(point?.space))
+      authoredImpactOrigins.set(feedback,{attacker:a,x:a.x});
     let dmg=m.damage;
     const links=!guard&&a.comboHits>0&&t.comboOwner===a.slot&&t.state==='hit'&&t.stun>0;
     if(links)dmg=Math.max(1,Math.round(dmg*Math.max(.60,1-.10*a.comboHits)));
@@ -623,6 +626,12 @@ export class Battle {
       if(p.y===0){p.vy=0;p.airVX=0;p.landF=12;if(!p.action&&!p.stun)p.state='idle';}
     }
   }
+  _alignAuthoredImpactPoints(){
+    for(const event of this.events){
+      const origin=event.feedback&&authoredImpactOrigins.get(event.feedback);
+      if(origin){event.feedback.point.x+=origin.attacker.x-origin.x;authoredImpactOrigins.delete(event.feedback);}
+    }
+  }
   tick(raw1={},raw2=null){
     if(this.phase!=='fight')return this;
     this.frame++;this.pending=[];this.events=[];
@@ -636,6 +645,7 @@ export class Battle {
     }
     this.time--;
     const [a,b]=this.fighters;
+    const bothBeganInHitstop=a.stop>0&&b.stop>0;
     if(this.time<=0){
       this.phase='ko';const q=a.hp/ROSTER[a.id].hp-b.hp/ROSTER[b.id].hp;
       this.winner=Math.abs(q)<1e-9?-1:q>0?0:1;this.events.push({type:'timeout'});return this;
@@ -679,15 +689,18 @@ export class Battle {
       this._damage(e.p,e.op,e.m,e.d,'strike',true);
     }
     if(a.hp<=0&&b.hp<=0){this.phase='ko';this.winner=-1;}
-    if(this.throwSequence)return this;
+    if(this.throwSequence){this._alignAuthoredImpactPoints();return this;}
     if(this.phase==='fight'){
       // 高く跳んだ相手の上を横切るときは横方向の押し合いを解除。
       const sep=b.x-a.x,overlap=2*ARENA.pushRadius-Math.abs(sep);
-      if(overlap>0&&Math.abs(a.y-b.y)<.38){
+      if(!bothBeganInHitstop&&overlap>0&&Math.abs(a.y-b.y)<.38){
         const d=sep>=0?1:-1;moveX(a,-d*overlap/2);moveX(b,d*overlap/2);
       }
       this._projectiles();
     }
+    // A later trade, body separation or projectile can move a previous hitter.
+    // Only authored actor-space impacts follow that final rendered root.
+    this._alignAuthoredImpactPoints();
     if(a.hp<=0||b.hp<=0){this.phase='ko';this.winner=a.hp>0?0:b.hp>0?1:-1;}
     return this;
   }

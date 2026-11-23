@@ -123,7 +123,7 @@ try{
    },{id,slot,facing,outcome,delivery,requireProduction});
    await page.waitForFunction(()=>window.__p3SpecialEvent||window.__p3SpecialFailure,undefined,{timeout:12000});
    const failure=await page.evaluate(()=>window.__p3SpecialFailure);assert.equal(failure,null,JSON.stringify(failure));
-   const record=await page.evaluate(()=>{const a=mamoken3d.actors[0],p=mamoken3d.battle.fighters[0],entry=a.showtime[p.action?.id];return {...window.__p3SpecialEvent,clip:a.currentName,time:a.current?.time,poseWeight:a.current?.getEffectiveWeight(),expectedTime:entry?.spec.contactSeconds,surface:__p3SpecialSurface(),renderedFrame:p.frame};});
+   const record=await page.evaluate(()=>{const a=mamoken3d.actors[0],p=mamoken3d.battle.fighters[0],entry=a.showtime[p.action?.id];return {...window.__p3SpecialEvent,currentRootX:p.x,currentRootY:p.y,currentStop:p.stop,clip:a.currentName,time:a.current?.time,poseWeight:a.current?.getEffectiveWeight(),expectedTime:entry?.spec.contactSeconds,surface:__p3SpecialSurface(),renderedFrame:p.frame};});
    assert.equal(record.clip,slot+'_v17',id+' actual renderer did not consume v17 special');assert.ok(record.poseWeight>.99,id+' incomplete contact pose blending');
    if(outcome==='release'){
     assert.ok(record.projectile);const socket=delivery.characters[id][slot].projectileSocket;
@@ -134,8 +134,11 @@ try{
    else{
     assert.equal(record.event.feedback.point.space,'authored-special-surface');
     const part=delivery.characters[id][slot].attackPart,actual=record.surface[part],event=record.event.feedback.point;
+    assert.equal(record.renderedFrame,record.frame,id+' contact pose advanced during its capture hold');
+    assert.equal(record.currentRootX,record.rootX,id+' root moved while its contact pose was stopped');
     assert.ok(Math.abs(event.x-(record.rootX+facing*actual.reach))<.005,id+' actual visible striking surface disagrees with hit point');
-    assert.ok(Math.abs(event.y-actual.height)<.005,id+' actual strike height disagrees with hit point');
+    assert.ok(Math.abs(event.x-(record.currentRootX+facing*actual.reach))<.005,id+' current rendered surface moved away from the impact');
+    assert.ok(Math.abs(event.y-(record.currentRootY+actual.height))<.005,id+' actual strike height disagrees with hit point');
    }
    const attempt=await page.evaluate(()=>window.__p3SpecialAttempt);
    await page.screenshot({path:dir+'/'+id+'-'+slot+'-'+(facing===1?'right':'left')+'-'+outcome+'.png'});report.cases.push({id,slot,facing,outcome,attempt,...record});report.pendingCase=null;
@@ -170,5 +173,5 @@ try{
   assert.equal(report.normalCases.length,6);
  }
  assert.equal(report.rows.length,27);assert.equal(report.cases.length,sourceVersion==='v17r2'?50:14);assert.deepEqual(report.errors,[]);report.passed=true;
-}catch(error){report.error=error.stack;report.failureState=await page.evaluate(()=>({info:mamoken3d?.battle?.info(),attempt:window.__p3SpecialAttempt,failure:window.__p3SpecialFailure,lowEvent:window.__p3LowEvent,actors:mamoken3d?.actors?.map(a=>({id:a.id,clip:a.currentName,time:a.current?.time,weight:a.current?.getEffectiveWeight(),source:a.showtime?.[mamoken3d.battle.fighters[a.slot]?.action?.id]?.spec?.sourceFile}))})).catch(()=>null);await page.screenshot({path:dir+'/failure.png'}).catch(()=>{});throw error;}
+}catch(error){report.error=error.stack;report.failureState=await page.evaluate(()=>({info:mamoken3d?.battle?.info(),attempt:window.__p3SpecialAttempt,event:window.__p3SpecialEvent,surface:window.__p3SpecialSurface?.(),failure:window.__p3SpecialFailure,lowEvent:window.__p3LowEvent,actors:mamoken3d?.actors?.map(a=>({id:a.id,clip:a.currentName,time:a.current?.time,weight:a.current?.getEffectiveWeight(),source:a.showtime?.[mamoken3d.battle.fighters[a.slot]?.action?.id]?.spec?.sourceFile}))})).catch(()=>null);await page.screenshot({path:dir+'/failure.png'}).catch(()=>{});throw error;}
 finally{await writeFile(dir+'/report.json',JSON.stringify(report,null,2));await browser.close();}

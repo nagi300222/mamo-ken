@@ -59,3 +59,24 @@ heavyはlightより長い一方、PCM RMSやpeakは低い。音色・帯域・�
 追加fixtureではChirka s3を両向きで実`_begin`から接触・表示へ進め、実シーンに加わった3本の曲線ShapeGeometry、有限頂点・bounds・接触位置・生存数と原PNGを検査する。fake eventやmesh/clip差し替えは使わない。追加fixtureの実CI完了までは、曲線FXの実表示成功と扱わない。
 
 この文書だけでは、同runで失敗した別fixture、27必殺の全実接触、後続counter16ケース、カスタムリグAPI互換、実iPhoneのFPS/発熱、本人の完成度判断は検証済みにしない。元mainのマージ・P2着手・本人確認ゲート解除は行っていない。
+
+## 追補：Chirka曲線FXの実表示を確認
+
+[Actions 45142345050](https://github.com/nagi300222/mamo-ken/actions/runs/45142345050)、ソース`2dc707fbee841fef29c712f05c519404d22b242e`の**p3 feedback job `137583158447`が成功**した。[原artifact 14802472603](https://github.com/nagi300222/mamo-ken/actions/runs/45142345050/artifacts/14802472603)を独立取得し、`chirka-s3-right-curved-hit.png`と`chirka-s3-left-curved-hit.png`を加工せず目視した。両向きで実相手の接触位置に紫色の曲線3本が表示され、初回artifactに無かった表示証拠を確認できた。
+
+`chirka-curve-evidence.json`には実`_begin`→hit→feedback→scene追加で観測した次の結果がある。生成イベント、mesh、clipの差し替えは行わず、本物のpause handlerで短命FXを撮影用に保持した。
+
+| 項目 | 左右両ケースの実測 |
+| --- | --- |
+| 使用clip / move | `s3_v17` / `chirka.s3` |
+| 実接触 / 両者停止 | `authored-special-surface` / 各7frames |
+| 実シーンへの接続 | `attached:true` |
+| 曲線 | ShapeGeometry、3shapes、各QuadraticBezierCurve 2本、segments8 |
+| メッシュ | 48頂点、126index、全頂点finite |
+| ローカルbounds | x約−0.1300〜0.10969、y約−0.1700〜0.1700 |
+| 実配置 | x=±1.937430485、y=0.2222、z=0.23。各hitの実接触点と一致 |
+| 色・scale / 生存数 | `dd9aff` / 1.05 / 各撮影時1instance |
+
+このjobでは9弱/強/ガードケース、Chirka曲線2ケース、8ブラウザ音声バッファが全て通過し、`errors:[]`。接触FXの24instance上限に対して今回の生存数は1だったため、上限を超える連続発生の負荷試験まで合格したとは扱わない。停止させた原PNGは通常再生中のテンポや全軌道の動画評価とは別である。実iPhone出力・聴感・FPSは引き続き未検証。
+
+原ZIPのSHA256は`7739104564a3cd7115eff4ea05ccffc4bf9ce4a5485238ecebd856536f30177b`。この追補はp3 feedback jobだけを対象とし、同runの他ジョブの成否を保証しない。
