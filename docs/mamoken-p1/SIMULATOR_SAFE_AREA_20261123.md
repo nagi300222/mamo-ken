@@ -48,3 +48,20 @@
 Storyはアプリ全体を4辺のsafe-areaから作る共通矩形へ収めた。別のChromium fixtureでは、左右片側・両側62pxと下21pxを明示的に入力し、入口・editor・stick・movie-skipの実DOM境界とWeb表示への非干渉を検証した。これは模擬insetによるブラウザ検証で、UIKitの`env()`値そのものの実測とは区別する。
 
 未検証：物理iPhoneへのインストール、実機タッチの快適性、実機の回転・背景復帰・音・永続保存、実機WebGL対戦、発熱・メモリ圧迫・FPS。後続のP3/P4や別デザインの画面は、このソースSHAの原PNGだけで合格とは扱わない。mainのマージとP2着手は行っていない。
+
+## 追補：Story BattleのCSS env二重加算を実DOMで検査
+
+後続ソース`12c31d4c5190f70c7dbe0d6532d72fcc9465af46`に対し、[WebGL run 45135863151](https://github.com/nagi300222/mamo-ken/actions/runs/45135863151)のnative job `137561850438`が成功した。今回は単なるcustom propertyの模擬に加え、Chrome CDPの`Emulation.setSafeAreaInsetsOverride`で**CSSの`env(safe-area-inset-*)`自体**を設定した。検査用DOMの幅・高さでも59/62pxが適用されたことを確認した。
+
+実際の探索・NPC会話から既存Battleへ入り、一時停止した実WebGL画面の境界を測定した。viewportは852 × 393、下safe insetは21pxで共通。
+
+| 左右env inset | Story app 左端・幅 | canvas / HUD 左端→右端 | attack rail 左端→右端 | canvasとrailの隙間 |
+| --- | --- | --- | --- | --- |
+| 59px | x59 / 幅734 | 177→600 | 609→783 | 9px |
+| 62px | x62 / 幅728 | 180→597 | 606→780 | 9px |
+
+両条件でHUD両端とcanvas両端が一致し、攻撃側railとの重なりは再現しなかった。6攻撃ボタンは各54 × 48px、2ステップボタンは各50.5 × 44pxで、全8操作がsafe rectangle内に収まった。原スクリーンショットにも中央の2体の3Dキャラと左右の操作railが表示された。**この懸念に対する追加CSS修正は行わない。**
+
+証拠は[artifact 14799862158](https://github.com/nagi300222/mamo-ken/actions/runs/45135863151/artifacts/14799862158)の`native-env-geometry.json`、`04-native-env-story-battle.png`、`report.json`にある。ZIPのSHA256は`024054282a586f9fd122357af2f61aeba5020686b50f6159f3a6bab7e7d2c4a1`。
+
+これは実ChromiumのWebGL・DOM計測と模擬native adapter/CSS envによる検証。UIKit、物理iPhone、実機FPSの検証とは区別する。`camera-tools`はBattle時に非表示で0矩形だったため、その探索中の配置は今回の測定では証明していない。前項の実Simulator入口検証の範囲も変わらない。
