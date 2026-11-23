@@ -1,0 +1,4 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" width="160" height="160" role="img" aria-label="ゴダン の識別紋: 八角の岩枠・割れ目の入った岩塊（重量・装甲）">
+<g><polygon points="44,10 116,10 152,50 152,110 116,150 44,150 8,110 8,50" fill="var(--mk-panel,#1C332C)" stroke="var(--mk-char,#C8763F)" stroke-width="8"/></g>
+<g fill="none" stroke="var(--mk-text,#F5EFDB)" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"><path d="M40,112 L52,58 L92,46 L122,70 L116,112 Z" fill="var(--mk-char,#C8763F)" stroke="var(--mk-text,#F5EFDB)"/><path d="M52,58 L78,78 L92,46 M78,78 L116,112 M78,78 L40,112"/></g>
+</svg>

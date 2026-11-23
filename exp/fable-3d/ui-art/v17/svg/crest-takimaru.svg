@@ -1,0 +1,4 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" width="160" height="160" role="img" aria-label="タキマル の識別紋: 二重の輪枠・抱え込む両腕（掴み・圧）">
+<g><circle cx="80" cy="80" r="70" fill="var(--mk-panel,#1C332C)" stroke="var(--mk-char,#E0B25A)" stroke-width="8"/><circle cx="80" cy="80" r="46" fill="var(--mk-bg,#101F1B)" stroke="var(--mk-char,#E0B25A)" stroke-width="5"/></g>
+<g fill="none" stroke="var(--mk-text,#F5EFDB)" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"><path d="M36,60 C40,104 68,122 80,122 C92,122 120,104 124,60" stroke="var(--mk-char,#E0B25A)" stroke-width="10"/><path d="M36,60 L28,46 M124,60 L132,46" stroke="var(--mk-text,#F5EFDB)"/><circle cx="80" cy="76" r="10" fill="var(--mk-char,#E0B25A)" stroke="var(--mk-text,#F5EFDB)"/></g>
+</svg>

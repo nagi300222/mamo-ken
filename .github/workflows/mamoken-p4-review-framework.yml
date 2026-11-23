@@ -1,0 +1,28 @@
+name: MamoKen P4 review framework self-test
+
+on:
+  pull_request:
+    paths:
+      - 'tools/qa/validate-p4-review.*'
+      - 'docs/mamoken-next/P4_INDEPENDENT_REVIEW_PROTOCOL.md'
+      - 'docs/mamoken-next/P4_REVIEW_SCORECARD_TEMPLATE.md'
+      - 'docs/mamoken-next/p4-review.example.json'
+      - '.github/workflows/mamoken-p4-review-framework.yml'
+  workflow_dispatch:
+
+jobs:
+  review-validator-self-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check quality gate logic (not actual P4 approval)
+        run: node --test tools/qa/validate-p4-review.test.mjs
+      - name: Ensure untested example cannot falsely pass
+        run: |
+          if node tools/qa/validate-p4-review.mjs docs/mamoken-next/p4-review.example.json; then
+            echo "::error::Untested example produced a passing review"
+            exit 1
+          fi

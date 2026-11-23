@@ -1,0 +1,123 @@
+/* P4 visual layer; shared HUD/input layout and Battle simulation stay upstream. */
+body[data-ui=mountain]{--bg:var(--ui-shadow);--ink:var(--ui-paper);--muted:var(--ui-muted);--gold:var(--ui-gold);--brass:var(--ui-gold);--topbar-height:48px;--action-size:clamp(44px,10.7vh,66px)}
+html.landscape-locked:has(body[data-ui=mountain]){--topbar-height:48px;--action-size:44px}
+body[data-ui=mountain] .topbar{background:linear-gradient(90deg,#10231d,#243c30);border-bottom:1px solid var(--ui-line);min-height:48px;padding-inline:12px}
+body[data-ui=mountain] .brand-mark{background:var(--ui-gold);color:var(--ui-shadow);border-radius:1px;transform:rotate(-5deg);outline:1px solid #f1c66c77;outline-offset:3px;width:32px;height:32px}
+body[data-ui=mountain] .brand strong{font-size:17px;letter-spacing:.1em}
+body[data-ui=mountain] .brand small{font-size:10px;color:var(--ui-muted)}
+body[data-ui=mountain] .header-actions{gap:6px}
+body[data-ui=mountain] button.ghost,body[data-ui=mountain] a.ghost{display:inline-flex;align-items:center;justify-content:center;border-radius:var(--ui-radius);border:1px solid var(--ui-line);background:#19382bd9;color:var(--ui-paper);font-size:12px;padding:7px 12px;min-width:44px;text-decoration:none}
+body[data-ui=mountain] button.primary{background:var(--ui-gold);color:var(--ui-shadow);border:1px solid var(--ui-gold);border-radius:var(--ui-radius);font-size:13px;padding:9px 16px;box-shadow:0 3px 0 #091e15}
+body[data-ui=mountain] button.primary:hover{background:#ffe1a0}
+body[data-ui=mountain] #commands-help,body[data-ui=mountain] #av-settings{background:#122b23f7;border-color:var(--ui-line);border-radius:4px;color:var(--ui-paper);box-shadow:0 12px 30px #0008}
+body[data-ui=mountain] #av-settings .av-settings-buttons button{min-height:44px;padding:7px}
+body[data-ui=mountain] .control-rail{background:linear-gradient(160deg,#294134,#10271f);border-color:#526c59}
+body[data-ui=mountain] #combat-layout{background:#10271f}
+body[data-ui=mountain] .rail-caption{color:#d5ddc6;font-size:10px;letter-spacing:.1em}
+body[data-ui=mountain] .rail-sub{color:#b8c9b9}
+body[data-ui=mountain] .joystick{border-color:#b6c5a878;background:#0f241de0;box-shadow:inset 0 0 0 7px #5a746b26,0 3px 0 #0b1913}
+body[data-ui=mountain] #stick-thumb{background:#d4d7bd;border-color:#f9ebbc;box-shadow:0 2px 7px #0008}
+body[data-ui=mountain] #stick-rail .step-button{min-height:44px;height:44px;border:1px solid var(--ui-line);border-radius:4px;background:#244638;color:var(--ui-paper);font-size:11px;letter-spacing:0}
+body[data-ui=mountain] #buttons-rail .attack,body[data-ui=mountain] .battle-ui-controls .attack{min-width:44px;min-height:44px;color:#f5efdb;border:1px solid #9ba990;background:#29483a;box-shadow:0 3px 0 #07180e}
+body[data-ui=mountain] #buttons-rail .attack.weak{background:#365d49}
+body[data-ui=mountain] #buttons-rail .attack.heavy{background:#744d36;border-color:#d7b18c}
+body[data-ui=mountain] #buttons-rail .attack.throw{background:#3c5961;border-color:#9dbdc0}
+body[data-ui=mountain] #buttons-rail .attack.gyuiin{background:#445d3a}
+body[data-ui=mountain] #buttons-rail .attack.special{background:#4e4670;border-color:#baacd5}
+body[data-ui=mountain] #buttons-rail .attack.ultimateButton{background:#604e2a;border:2px solid var(--ui-gold);color:#fff0b6}
+body[data-ui=mountain] #buttons-rail .attack small{font-size:8px;color:#e1e7d7}
+body[data-ui=mountain] .attack.held,body[data-ui=mountain] .step-button.held{outline:2px solid #fff0b5;outline-offset:1px;filter:brightness(1.2)}
+body[data-ui=mountain] .hud{background:linear-gradient(#0a2019ec,#17332ad9);border:1px solid #71927e88;border-radius:2px;box-shadow:0 3px 0 #07180e55}
+body[data-ui=mountain] .hud .hud-name{color:var(--ui-paper);text-shadow:0 1px 2px #000}
+body[data-ui=mountain] .hud .hud-name b{font-size:10px;background:var(--ui-paper);color:var(--ui-shadow);padding:1px 3px;min-width:21px;text-align:center;letter-spacing:0}
+body[data-ui=mountain] .hud .mirrored .hud-name b{background:#d8bba4}
+body[data-ui=mountain] .hud .health .track{background:#542e27;border-color:#deead6}
+body[data-ui=mountain] .hud .health .track i{background:linear-gradient(90deg,#499a70,var(--ui-hp))}
+body[data-ui=mountain] .hud .health .track i.low{background:repeating-linear-gradient(120deg,#fa8976 0 8px,#963d32 8px 11px)}
+body[data-ui=mountain] .hud .drive .track i{background:var(--ui-drive)}
+body[data-ui=mountain] .hud .super .track i{background:var(--ui-gold)}
+body[data-ui=mountain] .hud .resource>span{color:#d3dfd2;font-size:9px}
+body[data-ui=mountain] .hud .resource>b{color:#fff5d6;font-variant-numeric:tabular-nums}
+body[data-ui=mountain] .hud .round-center{background:#142c22;border:1px solid #c8bd8b;border-radius:2px}
+body[data-ui=mountain] .hud .round-center>span{color:#fff1c2;font-size:26px;font-weight:950;font-variant-numeric:tabular-nums}
+body[data-ui=mountain] .hud .round-center>small{color:#d3dbbc}
+body[data-ui=mountain] .note{border-radius:2px;background:#122a23e6;color:#fff1bc;border:1px solid #8a91686e}
+body[data-ui=mountain] #run-status{background:#153022e6;border-block:1px solid #83957877;border-radius:0;color:var(--ui-paper);font-size:10px}
+body[data-ui=mountain] #practice-panel{border:1px solid #8e9d80;background:#1a3429e8;color:var(--ui-paper);border-radius:3px;gap:8px;flex-wrap:wrap;box-shadow:0 2px 0 #092015;pointer-events:auto}
+body[data-ui=mountain] #practice-panel strong{color:var(--ui-gold);font-size:10px}
+body[data-ui=mountain] #practice-panel select{min-height:44px;font-size:11px;max-width:115px;padding:6px;background:#10261e;border-color:var(--ui-line);border-radius:3px}
+body[data-ui=mountain] #practice-panel button{min-height:44px;min-width:44px;font-size:11px;padding:6px 9px}
+body[data-ui=mountain] #practice-panel b{color:#ffe9a9}
+body[data-ui=mountain] .selection{background:linear-gradient(160deg,#3e5d3a29 16%,transparent 16.2%),linear-gradient(15deg,#44644226 20%,transparent 20.2%),linear-gradient(140deg,#233e30,#10261e 78%);padding:16px 18px;scrollbar-color:var(--ui-line) var(--ui-shadow)}
+body[data-ui=mountain] .selection-inner{max-width:1180px}
+body[data-ui=mountain] .selection-top{align-items:center;border-bottom:1px solid #69877c66;padding-bottom:10px;gap:12px;margin-bottom:12px}
+body[data-ui=mountain] .selection-top .eyebrow{color:var(--ui-gold);font-size:10px;letter-spacing:.14em}
+body[data-ui=mountain] .selection h1{font-weight:900;font-size:clamp(19px,2.5vw,30px);letter-spacing:.03em}
+body[data-ui=mountain] .select-info{font-size:11px;color:var(--ui-muted)}
+body[data-ui=mountain] .roster{grid-template-columns:repeat(9,minmax(0,1fr));gap:7px}
+body[data-ui=mountain] .fighter-card{position:relative;border:1px solid #77937b;border-radius:2px;background:linear-gradient(180deg,#294b3b,#18352a);color:var(--ui-paper);padding:8px 3px;gap:4px;overflow:hidden;font-size:12px;min-height:90px;transition:background var(--ui-fast),border-color var(--ui-fast)}
+body[data-ui=mountain] .fighter-card img{height:clamp(60px,12vh,110px);width:100%;max-width:120px;object-fit:contain;filter:drop-shadow(0 4px 4px #071b12);transition:translate var(--ui-fast)}
+body[data-ui=mountain] .fighter-card small{font-size:10px;color:#cbdbc9}
+body[data-ui=mountain] .fighter-card.chosen{border:2px solid var(--ui-gold);padding:7px 2px;background:linear-gradient(160deg,#56774b,#244d38);box-shadow:0 0 0 2px #101f1b,0 5px 0 #081a11}
+body[data-ui=mountain] .fighter-card.chosen:after{content:"選択";position:absolute;top:3px;left:3px;font-size:9px;color:#153125;background:var(--ui-gold);font-weight:900;line-height:1.3;padding:1px 4px}
+body[data-ui=mountain] .fighter-card.chosen img{translate:0 -3px}
+body[data-ui=mountain] .p4-profile{display:flex;align-items:baseline;flex-wrap:wrap;column-gap:20px;row-gap:4px;padding:10px 1px 6px;font-size:12px;color:var(--ui-muted)}
+body[data-ui=mountain] .p4-profile span{display:inline-block}
+body[data-ui=mountain] .p4-profile b{display:inline-block;margin-right:7px;color:var(--ui-paper);font-size:10px;padding:2px 5px;border:1px solid #688a73}
+body[data-ui=mountain] .p4-profile [data-strength] b{border-color:#79c79a;color:#b9e6c8}
+body[data-ui=mountain] .p4-profile [data-weakness] b{border-color:#d5a18d;color:#f3cdb9}
+/* Keep the selected character's role in the same scroll flow as the controls.
+   A sticky footer covers this text when the 44px controls wrap on short screens. */
+body[data-ui=mountain] .selection-footer{position:static;display:flex;gap:10px;flex-wrap:wrap;padding:12px;border:1px solid var(--ui-line);border-top:3px solid #b79e61;border-radius:3px;background:#1d392cfa;margin-top:10px;box-shadow:0 4px 15px #081c0f}
+body[data-ui=mountain] .selection-footer .chosen{flex:1 1 110px;min-width:100px}
+body[data-ui=mountain] .selection-footer .chosen strong{font-size:17px;color:var(--ui-paper)}
+body[data-ui=mountain] .selection-footer .chosen span{font-size:11px;color:var(--ui-muted)}
+body[data-ui=mountain] .selection-footer .opponent{font-size:10px;min-width:80px;max-width:145px;flex:0 1 auto;color:var(--ui-muted)}
+body[data-ui=mountain] .selection-footer .opponent select{min-height:44px;max-width:135px;font-size:12px;padding:6px 9px;background:#10261e;color:var(--ui-paper);border:1px solid var(--ui-line);border-radius:3px}
+body[data-ui=mountain] .selection-footer #start{min-height:44px;white-space:nowrap;font-size:13px;padding:9px 15px}
+body[data-ui=mountain] .selection-footer a[href="../story/"]{display:none}
+body[data-ui=mountain] .selection-footer #run-rule-note{color:#d7dfca;font-size:10px}
+body[data-ui=mountain] #game-over .result-panel{padding:20px 24px;border:1px solid var(--ui-line);border-top:4px solid var(--ui-gold);border-radius:3px;background:#173426f5;max-width:94%;gap:7px 20px}
+body[data-ui=mountain] #game-over .result-panel .eyebrow{color:var(--ui-gold);font-size:11px}
+body[data-ui=mountain] #game-over .result-panel h2{font-size:30px;font-weight:950;margin:0;line-height:1.2}
+body[data-ui=mountain] #game-over .result-panel p{font-size:12px;color:var(--ui-muted);line-height:1.6}
+body[data-ui=mountain] #game-over .result-actions{gap:8px}
+body[data-ui=mountain] #game-over .result-actions button{font-size:12px;min-height:44px;padding:8px 14px;white-space:nowrap}
+body[data-ui=mountain] .vs-side{background:linear-gradient(145deg,#34513c,#0a2218)}
+body[data-ui=mountain] .vs-p2{background:linear-gradient(210deg,#4e4231,#142c21)}
+body[data-ui=mountain] .vs-side figcaption{background:#11251ce0;border-top:1px solid #b9c6a566}
+body[data-ui=mountain] .vs-mark span{color:var(--ui-paper);text-shadow:4px 5px 0 #13291a,-1px -1px 0 #9eae91}
+body[data-ui=mountain] .intro-plate{border-radius:2px;background:linear-gradient(90deg,#10251ff2,#10251f70);border-color:#839777}
+body[data-ui=mountain] .victory-banner{background:linear-gradient(90deg,#153224ee,#12271b22);border-color:#e9d08d;border-radius:1px}
+body[data-ui=mountain] .presentation-skip,body[data-ui=mountain] .cinematic-skip{min-height:44px;border-radius:3px;padding:8px 14px;font-size:12px;background:#10291ee8;color:var(--ui-paper);border:1px solid var(--ui-line)}
+body[data-ui=mountain] .run-dialogue{background:linear-gradient(125deg,#10281df9,#294430f5);color:var(--ui-paper)}
+body[data-ui=mountain] .run-dialogue strong{font-size:16px;color:var(--ui-gold)}
+body[data-ui=mountain] .run-dialogue p{max-width:90%;line-height:1.65}
+body[data-ui=mountain] .run-dialogue button{min-height:44px;min-width:100px;font-size:13px}
+body[data-ui=mountain] .footnote{background:#0c2118;border-top:1px solid #64826a55;color:#b8c9bb}
+@media(max-height:500px),(orientation:portrait){
+ body[data-ui=mountain] .selection{padding:10px 12px}
+ body[data-ui=mountain] .selection-top{padding-bottom:6px;margin-bottom:8px}
+ body[data-ui=mountain] .selection h1{font-size:18px}
+ body[data-ui=mountain] .fighter-card{padding:5px 2px;font-size:11px;gap:2px;min-height:84px}
+ body[data-ui=mountain] .fighter-card.chosen{padding:4px 1px}
+ body[data-ui=mountain] .fighter-card img{height:58px}
+ body[data-ui=mountain] .fighter-card small{display:none}
+ body[data-ui=mountain] .p4-profile{font-size:11px;padding:8px 0 4px;column-gap:14px}
+ body[data-ui=mountain] .selection-footer{gap:7px;margin-top:7px;padding:7px;align-items:flex-end}
+ body[data-ui=mountain] .selection-footer .chosen strong{font-size:14px}
+ body[data-ui=mountain] .selection-footer .chosen span{font-size:10px}
+ body[data-ui=mountain] .selection-footer .opponent{max-width:115px;font-size:10px;min-width:65px}
+ body[data-ui=mountain] .selection-footer .opponent select{max-width:115px;font-size:11px;padding:5px 6px}
+ body[data-ui=mountain] .selection-footer a.ghost{font-size:10px;padding:6px 8px}
+ body[data-ui=mountain] .hud .round-center>span{font-size:21px}
+ body[data-ui=mountain] #practice-panel{font-size:10px;gap:5px;padding:4px 6px}
+ body[data-ui=mountain] #practice-panel select{max-width:96px}
+ body[data-ui=mountain] #practice-panel strong{display:none}
+ body[data-ui=mountain] #run-status{font-size:9px}
+ body[data-ui=mountain] #game-over .result-panel{padding:14px 16px}
+ body[data-ui=mountain] #game-over .result-panel h2{font-size:24px}
+ body[data-ui=mountain] .brand small{font-size:9px}
+ body[data-ui=mountain] .header-actions button.ghost{padding:5px 9px;font-size:11px}
+}
+@media(prefers-reduced-motion:reduce){body[data-ui=mountain] .fighter-card,body[data-ui=mountain] .fighter-card img{transition:none}body[data-ui=mountain] .fighter-card.chosen img{translate:none}}

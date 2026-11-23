@@ -14,6 +14,7 @@ await rm(OUTPUT,{recursive:true,force:true});await mkdir(OUTPUT,{recursive:true}
 const dojo=path.join(ROOT,'dojo');
 for(const name of ['index.html','style.css','models.js','balance.js','battle.js','commands.js','cpu.js','camera-frame.js','main.js','showtime-profiles.js','combat-audio.js','showtime-illusions.js','arena-music.js','hud-themes.js','ultimate-cinematic.js','showtime-assets.js','authored-cinematic.js','run-controller.js','run-cpu.js','run-stages.js','run-ui.js','run-dialogue.js','presentation-flow.js','presentation-data.js','choreographed-cinematic.js','cinematic-stage.js','morph-binding.js','landscape-lock.js','practice-mode.js','fighter-style.js','normal-balance-v151.js','normal-contact-runtime-v151.js','normal-contacts-v151.js','normal-timing-v151.js','normal-motifs-v15.js','fight-feel.js','special-balance-p3.js','p3-contact-adapter.js','normal-contact-overrides-p3.js','normal-contact-source.js','normal-motion-source.js','p3-normal-candidate.js'])
   await copyOne(path.join(dojo,name),path.join(OUTPUT,'dojo',name));
+await copyOne(path.join(dojo,'p4-visual.js'),path.join(OUTPUT,'dojo','p4-visual.js'));
 for(const name of ['special-motion-source.js','special-motion-overrides-p3.js','special-motion-contract-p3.js','special-cues.js','special-contact-runtime-p3.js','special-contact-overrides-p3.js','special-contact-reviewed-v17r2.js','normal-contact-reviewed-v17.js','combat-geometry.js'])
   await copyOne(path.join(dojo,name),path.join(OUTPUT,'dojo',name));
 await cp(path.join(ROOT,'preview','vendor'),path.join(OUTPUT,'preview','vendor'),{recursive:true});
@@ -87,6 +88,10 @@ if(await access(path.join(r2Directory,'normal_contacts_v17r2.json')).then(()=>tr
  }
 }
 await copyOne(path.join(ROOT,'lobby','index.html'),path.join(OUTPUT,'index.html'));
+await copyOne(path.join(ROOT,'lobby','main.js'),path.join(OUTPUT,'lobby','main.js'));
+const p2Directory=path.join(ROOT,'custom','p2');
+if(await access(p2Directory).then(()=>true).catch(error=>{if(error.code==='ENOENT')return false;throw error;}))
+ await cp(p2Directory,path.join(OUTPUT,'custom','p2'),{recursive:true,filter:file=>!file.includes('/tools')&&!file.includes('/evidence')&&!file.endsWith('.mjs')&&!file.endsWith('.md')});
 await copyOne(path.join(ROOT,'lobby','style.css'),path.join(OUTPUT,'lobby','style.css'));
 await writeFile(path.join(OUTPUT,'_headers'),'/chars/*\n  Cache-Control: public, max-age=120\n/normal/*\n  Cache-Control: public, max-age=120\n/motion/*\n  Cache-Control: no-cache\n/presentation/*\n  Cache-Control: public, max-age=120\n/dojo/*\n  Cache-Control: no-cache\n/cinematic/*\n  Cache-Control: no-cache\n');
 console.log('Cloudflare Pages static output:',OUTPUT);

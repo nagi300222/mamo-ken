@@ -1,0 +1,117 @@
+{
+  "schemaVersion": "1.0.0",
+  "target": {
+    "integratedPr": "",
+    "sha": "",
+    "previewUrl": ""
+  },
+  "p1Confirmed": false,
+  "p2Permission": "UNTESTED",
+  "reviewers": {
+    "independent": "",
+    "implementer": ""
+  },
+  "humanTesters": {
+    "novice": 0,
+    "experienced": 0
+  },
+  "physicalIphone": {
+    "model": "",
+    "os": "",
+    "tested": false
+  },
+  "ownerDecision": "UNTESTED",
+  "axes": {
+    "A": {
+      "score": null,
+      "rationale": "",
+      "evidence": []
+    },
+    "B": {
+      "score": null,
+      "rationale": "",
+      "evidence": []
+    },
+    "C": {
+      "score": null,
+      "rationale": "",
+      "evidence": []
+    },
+    "D": {
+      "score": null,
+      "rationale": "",
+      "evidence": []
+    },
+    "E": {
+      "score": null,
+      "rationale": "",
+      "evidence": []
+    },
+    "F": {
+      "score": null,
+      "rationale": "",
+      "evidence": []
+    }
+  },
+  "gates": {
+    "G0": {
+      "status": "UNTESTED",
+      "evidence": []
+    },
+    "G1": {
+      "status": "UNTESTED",
+      "evidence": []
+    },
+    "G2": {
+      "status": "UNTESTED",
+      "evidence": []
+    },
+    "G3": {
+      "status": "UNTESTED",
+      "evidence": []
+    },
+    "G4": {
+      "status": "UNTESTED",
+      "evidence": []
+    },
+    "G5": {
+      "status": "UNTESTED",
+      "evidence": []
+    }
+  },
+  "tasks": {
+    "T01": {
+      "status": "UNTESTED",
+      "evidence": []
+    },
+    "T02": {
+      "status": "UNTESTED",
+      "evidence": []
+    },
+    "T03": {
+      "status": "UNTESTED",
+      "evidence": []
+    },
+    "T04": {
+      "status": "UNTESTED",
+      "evidence": []
+    },
+    "T05": {
+      "status": "UNTESTED",
+      "evidence": []
+    },
+    "T06": {
+      "status": "UNTESTED",
+      "evidence": []
+    },
+    "T07": {
+      "status": "UNTESTED",
+      "evidence": []
+    },
+    "T08": {
+      "status": "UNTESTED",
+      "evidence": []
+    }
+  },
+  "issues": []
+}

@@ -1,0 +1,25 @@
+import { test } from "node:test";
+import { strict as assert } from "node:assert";
+import { readFileSync } from "node:fs";
+import { evaluateReview } from "./validate-p4-review.mjs";
+const base = JSON.parse(readFileSync(new URL("../../docs/mamoken-next/p4-review.example.json", import.meta.url), "utf8"));
+const full = () => {
+  const x = structuredClone(base);
+  x.target.integratedPr = "https://github.com/example/repo/pull/1";
+  x.target.sha = "a".repeat(40);
+  x.p1Confirmed = true; x.p2Permission = "CONFIRMED";
+  x.reviewers = {independent:"design-reviewer",implementer:"coder"};
+  x.humanTesters = {novice:1,experienced:1};
+  x.physicalIphone = {model:"iPhone",os:"iOS tested",tested:true};
+  x.ownerDecision = "ACCEPTED";
+  for(const k of Object.keys(x.axes)) x.axes[k] = {score:4,rationale:"観察した根拠",evidence:["https://example.com/proof"]};
+  for(const k of Object.keys(x.gates)) x.gates[k] = {status:"PASS",evidence:["https://example.com/proof"]};
+  for(const k of Object.keys(x.tasks)) x.tasks[k] = {status:"PASS",evidence:["https://example.com/proof"]};
+  return x;
+};
+test("未評価テンプレートはPASSにならない",()=>{const r=evaluateReview(base);assert.equal(r.verdict,"HOLD");assert.equal(r.score,null)});
+test("すべて記録された正常例はPASS",()=>{const r=evaluateReview(full());assert.equal(r.verdict,"PASS");assert.equal(r.score,100)});
+test("高優先の未解決問題は失格",()=>{const x=full();x.issues=[{severity:"HIGH",title:"文字が読めない",resolved:false}];assert.equal(evaluateReview(x).verdict,"FAIL")});
+test("G4の証拠がなければ保留",()=>{const x=full();x.gates.G4.evidence=[];assert.equal(evaluateReview(x).verdict,"HOLD")});
+test("自己評価だけなら保留",()=>{const x=full();x.reviewers.independent="coder";assert.equal(evaluateReview(x).verdict,"HOLD")});
+test("低いスコアを数だけで誤魔化せない",()=>{const x=full();x.axes.A.score=2;assert.equal(evaluateReview(x).verdict,"FAIL")});
