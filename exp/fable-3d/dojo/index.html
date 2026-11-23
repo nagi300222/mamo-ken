@@ -8,9 +8,12 @@
 <title>マモ拳 3D｜山岳道場 v15.1</title>
 <link rel="stylesheet" href="./style.css">
 <link rel="stylesheet" href="../shared-ui/battle-ui.css">
+<link rel="stylesheet" href="../shared-ui/design-tokens.css">
+<link rel="stylesheet" href="../shared-ui/mountain-ui.css">
+<link rel="stylesheet" href="../shared-ui/p4-art.css">
 <script type="importmap">{"imports":{"three":"../preview/vendor/three.module.min.js","three/addons/":"../preview/vendor/addons/"}}</script>
 </head>
-<body>
+<body data-ui="mountain">
 <main id="app">
   <header class="topbar">
     <div class="brand"><span class="brand-mark">拳</span><div><strong>マモ拳 <span>3D</span></strong><small>山岳道場 · v15.1</small></div></div>
@@ -45,7 +48,7 @@
     </div>
   </header>
   <div id="combat-layout">
-    <aside id="stick-rail" class="control-rail">
+    <aside id="stick-rail" class="control-rail shared-step-pad">
       <span class="rail-caption">8方向 · MOVE</span>
       <div class="stick-area">
         <div id="joystick" class="joystick" role="group" aria-label="8方向スティック">
@@ -62,7 +65,7 @@
     </aside>
     <section id="arena" aria-label="対戦画面">
     <canvas id="stage"></canvas>
-    <div class="hud">
+    <div class="hud shared-battle-hud">
       <div class="hud-side" id="hud-side-0" data-mark="地" data-element="earth">
         <div class="hud-name"><b>1P</b><span id="name-0">モグゾー</span><small id="ability-0"></small></div>
         <div class="resource health"><span>体力</span><div class="track"><i id="hp-0"></i></div></div>
@@ -124,8 +127,8 @@
     </div>
     <div id="rotate" class="rotate-hint">スマホを横向きにすると遊びやすくなるよ</div>
     </section>
-    <aside id="buttons-rail" class="control-rail">
-      <span class="rail-caption">ARCADE · ATTACK</span>
+    <aside id="buttons-rail" class="control-rail shared-attack-pad">
+      <span class="rail-caption">攻撃 · ATTACK</span>
       <div id="controls" class="overlay-controls">
       <div class="attack-pad">
           <button data-control="weak" class="attack weak" aria-label="弱攻撃">弱</button>
@@ -158,5 +161,6 @@
   </footer>
 </main>
 <script type="module" src="./main.js"></script>
+<script type="module" src="./p4-visual.js"></script>
 </body>
 </html>

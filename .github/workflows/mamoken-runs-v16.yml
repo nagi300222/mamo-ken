@@ -8,6 +8,7 @@ on:
       - feat/mamoken-p3-combat-feel
       - feat/mamoken-p4-ui
       - feat/mamoken-p0-p4-reviewed-integration
+      - feat/mamoken-p0-p4-integration
     paths-ignore:
       - docs/**
   workflow_dispatch:
@@ -20,24 +21,40 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        suite: [core, avatar, custom, story, native, p3, motion, special]
+        suite: [core, avatar, custom, story, native, p3, motion, special, p4, p2]
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
+      - name: Stamp the exact tested source (not human or iPhone approval)
+        env:
+          MAMOKEN_SUITE: ${{ matrix.suite }}
+        run: |
+          mkdir -p "$RUNNER_TEMP/mamoken-integration-evidence"
+          node --input-type=module <<'JS'
+          import assert from 'node:assert/strict';
+          import {execFileSync} from 'node:child_process';
+          import {writeFileSync} from 'node:fs';
+          const sha=execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim();
+          assert.equal(sha,process.env.GITHUB_SHA,'Checkout differs from the workflow target');
+          writeFileSync(process.env.RUNNER_TEMP+'/mamoken-integration-evidence/ci-provenance.json',JSON.stringify({schemaVersion:1,sha,suite:process.env.MAMOKEN_SUITE,runId:process.env.GITHUB_RUN_ID,runAttempt:process.env.GITHUB_RUN_ATTEMPT,node:process.version,platform:process.platform,scope:'Automated regression only; actual test results are in the companion evidence',physicalIphoneTested:false,humanTesters:0,ownerP4Decision:'UNTESTED'},null,2)+'\n');
+          JS
       - name: Unit and original combat regression
         run: |
           node tools/verify-protected-assets.mjs
           npm --prefix exp/fable-3d/dojo test
           if test -d exp/fable-3d/story; then
-            node --test exp/fable-3d/custom/v16/*.test.mjs exp/fable-3d/story/*.test.mjs exp/fable-3d/shared-ui/*.test.mjs
+            node --test exp/fable-3d/custom/p2/*.test.mjs exp/fable-3d/custom/v16/*.test.mjs exp/fable-3d/story/*.test.mjs exp/fable-3d/shared-ui/*.test.mjs
           fi
       - name: Build actual game and assets
         run: npm --prefix exp/fable-3d/dojo run build:pages
       - name: Install browser driver and Japanese fonts
         run: |
           npm install --prefix "$RUNNER_TEMP/mamoken-browser" playwright-core@1.65.1
+          if test "${{ matrix.suite }}" = p4; then
+            node "$RUNNER_TEMP/mamoken-browser/node_modules/playwright-core/cli.js" install ffmpeg
+          fi
           sudo apt-get update -qq
           sudo apt-get install -y fonts-noto-cjk
       - name: Render real models and operate games
@@ -64,7 +81,12 @@ jobs:
               npm --prefix native run build
               npm --prefix native test
               node native/test/browser.mjs ;;
+            p2)
+              MAMOKEN_REQUIRE_P2_FULL=1 node --test exp/fable-3d/custom/p2/part-runtime.test.mjs
+              MAMOKEN_EVIDENCE="$RUNNER_TEMP/mamoken-integration-evidence/melee-cpu" node --loader ./exp/fable-3d/custom/v16/tools/three-loader.mjs exp/fable-3d/custom/v16/tools/verify-p2-melee.mjs
+              node exp/fable-3d/dojo/acceptance/p2-integration-browser.mjs ;;
             p3) node exp/fable-3d/dojo/acceptance/p3-feedback-browser.mjs ;;
+            p4) MAMOKEN_UI_VIDEO=1 node exp/fable-3d/dojo/acceptance/p4-ui-browser.mjs ;;
             special)
               MAMOKEN_REQUIRE_PRODUCTION=1 MAMOKEN_SPECIAL_SOURCE_VERSION=v17r2 node exp/fable-3d/dojo/acceptance/p3-special-contact-browser.mjs
               node exp/fable-3d/dojo/acceptance/p3-special-response-browser.mjs ;;
@@ -83,4 +105,36 @@ jobs:
         with:
           name: mamoken-runs-custom-story-${{ matrix.suite }}
           path: ${{ runner.temp }}/mamoken-integration-evidence/
+          retention-days: 14
+  review-framework:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check the review validator, never award G2 or human gates
+        run: |
+          set -euo pipefail
+          node --test tools/qa/validate-p4-review.test.mjs
+          mkdir -p "$RUNNER_TEMP/mamoken-review-framework"
+          set +e
+          node tools/qa/validate-p4-review.mjs docs/mamoken-next/p4-review.example.json > "$RUNNER_TEMP/mamoken-review-framework/untested-template.json"
+          status=$?
+          set -e
+          test "$status" -eq 1
+          node --input-type=module <<'JS'
+          import assert from 'node:assert/strict';
+          import {readFileSync,writeFileSync} from 'node:fs';
+          const root=process.env.RUNNER_TEMP+'/mamoken-review-framework/';
+          const result=JSON.parse(readFileSync(root+'untested-template.json','utf8'));
+          assert.equal(result.verdict,'HOLD');assert.equal(result.score,null);assert.deepEqual(result.errors,[]);
+          writeFileSync(root+'scope.json',JSON.stringify({sha:process.env.GITHUB_SHA,validatorSelfTestPassed:true,actualGameReviewPerformed:false,G2:'UNTESTED',G3:'UNTESTED',G4:'UNTESTED',G5:'UNTESTED'},null,2)+'\n');
+          JS
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: mamoken-review-framework
+          path: ${{ runner.temp }}/mamoken-review-framework/
           retention-days: 14

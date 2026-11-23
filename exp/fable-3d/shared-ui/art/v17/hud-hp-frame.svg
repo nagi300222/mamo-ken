@@ -1,0 +1,6 @@
+<svg preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 56" width="480" height="56" role="img" aria-label="体力ゲージの枠（1P 用。2P は左右反転。内側 12,12〜458,44 に中身を描く）">
+<path d="M4,6 H446 L476,50 H34 Z" fill="#101F1B"/>
+<path d="M4,6 H446 L476,50 H34 Z" fill="none" stroke="#F5EFDB" stroke-width="4"/>
+<path d="M12,12 H438 L458,44 H40 Z" fill="#1C332C" opacity=".9"/>
+<path d="M4,6 L34,50" stroke="#F1C66C" stroke-width="4"/>
+</svg>

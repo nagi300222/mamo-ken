@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120" role="img" aria-label="攻撃ボタンの台（丸。--mk-button で縁の色。文字は DOM。下に小さな稜線）">
+<circle cx="60" cy="60" r="54" fill="var(--mk-panel,#1C332C)"/>
+<circle cx="60" cy="60" r="54" fill="none" stroke="var(--mk-button,#F1C66C)" stroke-width="5"/>
+<path d="M22,44 A42,42 0 0 1 98,44" fill="none" stroke="var(--mk-text,#F5EFDB)" stroke-width="4" opacity=".7"/>
+<path d="M30,84 L48,70 L60,80 L74,64 L92,84" fill="none" stroke="var(--mk-line,#69877C)" stroke-width="3" opacity=".6"/>
+</svg>

@@ -1,0 +1,28 @@
+/* Mountain tournament / travelling practice notebook. P4 trial direction.
+   No externally hosted fonts or interface art is required for readability. */
+:root{
+ --ui-shadow:#101f1b;--ui-surface:#1c332c;--ui-surface-raised:#29463a;
+ --ui-paper:#f5efdb;--ui-muted:#bed1c7;--ui-gold:#f1c66c;--ui-hp:#6fd0a0;
+ --ui-drive:#58c7d2;--ui-danger:#fa8976;--ui-line:#69877c;--ui-focus:#fff0b5;
+ --ui-space-1:4px;--ui-space-2:8px;--ui-space-3:12px;--ui-space-4:16px;--ui-space-6:24px;
+ --ui-tap:44px;--ui-radius:4px;--ui-border:1px;--ui-heading-weight:900;
+ --ui-font:system-ui,-apple-system,"Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif;
+ --ui-fast:100ms;--ui-enter:180ms;--ui-emphasis:280ms;
+ --ui-ease:cubic-bezier(.18,.72,.2,1);
+ --ui-safe-top:env(safe-area-inset-top,0px);--ui-safe-right:env(safe-area-inset-right,0px);
+ --ui-safe-bottom:env(safe-area-inset-bottom,0px);--ui-safe-left:env(safe-area-inset-left,0px);
+}
+/* A browser may rotate the landscape UI inside a portrait viewport. Map the
+   physical insets into that local coordinate system; native is OS-landscape. */
+html:is(.portrait,.landscape-locked):not(.native-runtime){
+ --ui-safe-top:env(safe-area-inset-right,0px);--ui-safe-right:env(safe-area-inset-bottom,0px);
+ --ui-safe-bottom:env(safe-area-inset-left,0px);--ui-safe-left:env(safe-area-inset-top,0px);
+}
+.ui-seal{display:grid;place-items:center;flex:none;width:44px;height:44px;border:2px solid var(--ui-gold);outline:1px solid #f1c66c55;outline-offset:3px;background:#10221e;color:var(--ui-gold);font-weight:950;font-size:26px;line-height:1;transform:rotate(-5deg)}
+.ui-eyebrow{font-size:11px;font-weight:800;letter-spacing:.15em;color:var(--ui-gold)}
+body[data-ui=mountain]{font-family:var(--ui-font);color:var(--ui-paper);background:var(--ui-shadow);-webkit-tap-highlight-color:transparent}
+body[data-ui=mountain] :is(button,select,input:not([type=checkbox]),summary,a[href]){min-height:var(--ui-tap)}
+body[data-ui=mountain] :is(button,a[href],select,input,summary):focus-visible{outline:3px solid var(--ui-focus);outline-offset:3px}
+body[data-ui=mountain] button:disabled{cursor:not-allowed;opacity:.6}
+@media(prefers-reduced-motion:reduce){:root{--ui-fast:0ms;--ui-enter:0ms;--ui-emphasis:0ms}}
+@media(forced-colors:active){.ui-seal{border:2px solid ButtonText;outline:none}body[data-ui=mountain] :is(button,a[href],select,input){border:1px solid ButtonText}}

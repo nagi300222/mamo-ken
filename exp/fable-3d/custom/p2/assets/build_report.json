@@ -1,0 +1,970 @@
+{
+ "version": "p2-exchange-1",
+ "tools": {
+  "p2lib.py": "7d10f016443e9a229017ff43cc8c6484a602c83fe512c7a8c660693ee76d58e5",
+  "glbio.py": "8f679a9d55413891db64ad8dca8f17a1771418c58f14775d456b881c0c4f4e4b",
+  "build_modules.py": "a7fc457654452629d7784d820484b508eb13cb99bd6ce7435fd26fa4024d10eb"
+ },
+ "inputs": {
+  "bullet": {
+   "file": "../../v16/assets/bullet_parts.glb",
+   "sha256": "ffcf7dfe25077c867d4366a4e5e238fd44ccc63d2abcad0b3e565c00f0f377af"
+  },
+  "godan": {
+   "file": "../../v16/assets/godan_parts.glb",
+   "sha256": "4956c9b4a887ea6254782035f1afcb1610a25c3cee24930f50be649b07f5d768"
+  },
+  "moguzo": {
+   "file": "../../v16/assets/moguzo_parts.glb",
+   "sha256": "b30a934c5176bf788756bf9ba06360b2600b8c3f75186ef6976575fe207253c9"
+  }
+ },
+ "modules": [
+  {
+   "id": "moguzo-head-godan",
+   "file": "modules/moguzo/head_godan.glb",
+   "host": "moguzo",
+   "donor": "godan",
+   "slot": "head",
+   "scale": 0.9941,
+   "seam_max_shift_m": 0.05071,
+   "falloff_radius_m": 0.09,
+   "moved_vertices": 1290,
+   "donor_vertices": 1904,
+   "donor_triangles": 3062,
+   "bridge_triangles": 384,
+   "caps": [],
+   "host_seam_vertices": 578,
+   "seam_loops": [
+    {
+     "hostVertices": 130,
+     "donorVertices": 138,
+     "bandWidth_m": 0.00537
+    },
+    {
+     "hostVertices": 32,
+     "donorVertices": 26,
+     "bandWidth_m": 0.00381
+    },
+    {
+     "hostVertices": 32,
+     "donorVertices": 26,
+     "bandWidth_m": 0.00377
+    }
+   ],
+   "host_original_open_boundaries": [],
+   "donor_original_open_boundaries": [],
+   "module_open_boundary": "host seam loops only"
+  },
+  {
+   "id": "moguzo-head-bullet",
+   "file": "modules/moguzo/head_bullet.glb",
+   "host": "moguzo",
+   "donor": "bullet",
+   "slot": "head",
+   "scale": 1.0405,
+   "seam_max_shift_m": 0.04634,
+   "falloff_radius_m": 0.09,
+   "moved_vertices": 1166,
+   "donor_vertices": 1709,
+   "donor_triangles": 2776,
+   "bridge_triangles": 368,
+   "caps": [],
+   "host_seam_vertices": 562,
+   "seam_loops": [
+    {
+     "hostVertices": 130,
+     "donorVertices": 122,
+     "bandWidth_m": 0.00537
+    },
+    {
+     "hostVertices": 32,
+     "donorVertices": 26,
+     "bandWidth_m": 0.00381
+    },
+    {
+     "hostVertices": 32,
+     "donorVertices": 26,
+     "bandWidth_m": 0.00377
+    }
+   ],
+   "host_original_open_boundaries": [],
+   "donor_original_open_boundaries": [],
+   "module_open_boundary": "host seam loops only"
+  },
+  {
+   "id": "moguzo-ears-godan",
+   "file": "modules/moguzo/ears_godan.glb",
+   "host": "moguzo",
+   "donor": "godan",
+   "slot": "ears",
+   "scale": 1.0839,
+   "rigid_shift_m": [
+    0.02221,
+    0.02608
+   ],
+   "seam_max_shift_m": 0.03321,
+   "falloff_radius_m": 0.0188,
+   "moved_vertices": 133,
+   "donor_vertices": 187,
+   "donor_triangles": 210,
+   "bridge_triangles": 116,
+   "caps": [],
+   "host_seam_vertices": 180,
+   "seam_loops": [
+    {
+     "hostVertices": 32,
+     "donorVertices": 26,
+     "bandWidth_m": 0.00381
+    },
+    {
+     "hostVertices": 32,
+     "donorVertices": 26,
+     "bandWidth_m": 0.00377
+    }
+   ],
+   "host_original_open_boundaries": [],
+   "donor_original_open_boundaries": [],
+   "module_open_boundary": "host seam loops only"
+  },
+  {
+   "id": "moguzo-ears-bullet",
+   "file": "modules/moguzo/ears_bullet.glb",
+   "host": "moguzo",
+   "donor": "bullet",
+   "slot": "ears",
+   "scale": 1.1495,
+   "rigid_shift_m": [
+    0.02106,
+    0.0221
+   ],
+   "seam_max_shift_m": 0.02944,
+   "falloff_radius_m": 0.019,
+   "moved_vertices": 126,
+   "donor_vertices": 162,
+   "donor_triangles": 196,
+   "bridge_triangles": 116,
+   "caps": [],
+   "host_seam_vertices": 180,
+   "seam_loops": [
+    {
+     "hostVertices": 32,
+     "donorVertices": 26,
+     "bandWidth_m": 0.00381
+    },
+    {
+     "hostVertices": 32,
+     "donorVertices": 26,
+     "bandWidth_m": 0.00377
+    }
+   ],
+   "host_original_open_boundaries": [],
+   "donor_original_open_boundaries": [],
+   "module_open_boundary": "host seam loops only"
+  },
+  {
+   "id": "moguzo-hands-godan",
+   "file": "modules/moguzo/hands_godan.glb",
+   "host": "moguzo",
+   "donor": "godan",
+   "slot": "hands",
+   "scale": 0.8,
+   "seam_max_shift_m": 0.04401,
+   "falloff_radius_m": 0.09,
+   "moved_vertices": 1678,
+   "donor_vertices": 4246,
+   "donor_triangles": 7260,
+   "bridge_triangles": 356,
+   "caps": [],
+   "host_seam_vertices": 518,
+   "seam_loops": [
+    {
+     "hostVertices": 80,
+     "donorVertices": 96,
+     "bandWidth_m": 0.00565
+    },
+    {
+     "hostVertices": 82,
+     "donorVertices": 98,
+     "bandWidth_m": 0.00521
+    }
+   ],
+   "host_original_open_boundaries": [],
+   "donor_original_open_boundaries": [],
+   "module_open_boundary": "host seam loops only"
+  },
+  {
+   "id": "moguzo-hands-bullet",
+   "file": "modules/moguzo/hands_bullet.glb",
+   "host": "moguzo",
+   "donor": "bullet",
+   "slot": "hands",
+   "scale": 0.9476,
+   "seam_max_shift_m": 0.02452,
+   "falloff_radius_m": 0.0813,
+   "moved_vertices": 846,
+   "donor_vertices": 2772,
+   "donor_triangles": 4548,
+   "bridge_triangles": 318,
+   "caps": [],
+   "host_seam_vertices": 480,
+   "seam_loops": [
+    {
+     "hostVertices": 80,
+     "donorVertices": 80,
+     "bandWidth_m": 0.00565
+    },
+    {
+     "hostVertices": 82,
+     "donorVertices": 76,
+     "bandWidth_m": 0.00521
+    }
+   ],
+   "host_original_open_boundaries": [],
+   "donor_original_open_boundaries": [],
+   "module_open_boundary": "host seam loops only"
+  },
+  {
+   "id": "moguzo-feet-godan",
+   "file": "modules/moguzo/feet_godan.glb",
+   "host": "moguzo",
+   "donor": "godan",
+   "slot": "feet",
+   "scale": 0.9458,
+   "seam_max_shift_m": 0.08919,
+   "falloff_radius_m": 0.09,
+   "moved_vertices": 1762,
+   "donor_vertices": 3604,
+   "donor_triangles": 5514,
+   "bridge_triangles": 538,
+   "caps": [],
+   "host_seam_vertices": 816,
+   "seam_loops": [
+    {
+     "hostVertices": 148,
+     "donorVertices": 128,
+     "bandWidth_m": 0.00524
+    },
+    {
+     "hostVertices": 130,
+     "donorVertices": 132,
+     "bandWidth_m": 0.00615
+    }
+   ],
+   "host_original_open_boundaries": [
+    4,
+    4,
+    4,
+    4
+   ],
+   "donor_original_open_boundaries": [],
+   "module_open_boundary": "host seam loops only"
+  },
+  {
+   "id": "moguzo-feet-bullet",
+   "file": "modules/moguzo/feet_bullet.glb",
+   "host": "moguzo",
+   "donor": "bullet",
+   "slot": "feet",
+   "scale": 0.9688,
+   "seam_max_shift_m": 0.08323,
+   "falloff_radius_m": 0.09,
+   "moved_vertices": 1635,
+   "donor_vertices": 2863,
+   "donor_triangles": 4230,
+   "bridge_triangles": 522,
+   "caps": [
+    {
+     "edges": 4,
+     "centerVertex": 4429,
+     "triangles": 4
+    },
+    {
+     "edges": 4,
+     "centerVertex": 4430,
+     "triangles": 4
+    }
+   ],
+   "host_seam_vertices": 800,
+   "seam_loops": [
+    {
+     "hostVertices": 148,
+     "donorVertices": 120,
+     "bandWidth_m": 0.00524
+    },
+    {
+     "hostVertices": 130,
+     "donorVertices": 124,
+     "bandWidth_m": 0.00615
+    }
+   ],
+   "host_original_open_boundaries": [
+    4,
+    4,
+    4,
+    4
+   ],
+   "donor_original_open_boundaries": [
+    4,
+    4
+   ],
+   "module_open_boundary": "host seam loops only (donor の元の穴はふたをした)"
+  },
+  {
+   "id": "godan-head-moguzo",
+   "file": "modules/godan/head_moguzo.glb",
+   "host": "godan",
+   "donor": "moguzo",
+   "slot": "head",
+   "scale": 1.0059,
+   "seam_max_shift_m": 0.05846,
+   "falloff_radius_m": 0.09,
+   "moved_vertices": 1426,
+   "donor_vertices": 2094,
+   "donor_triangles": 3418,
+   "bridge_triangles": 384,
+   "caps": [],
+   "host_seam_vertices": 574,
+   "seam_loops": [
+    {
+     "hostVertices": 138,
+     "donorVertices": 130,
+     "bandWidth_m": 0.00515
+    },
+    {
+     "hostVertices": 26,
+     "donorVertices": 32,
+     "bandWidth_m": 0.00441
+    },
+    {
+     "hostVertices": 26,
+     "donorVertices": 32,
+     "bandWidth_m": 0.0045
+    }
+   ],
+   "host_original_open_boundaries": [],
+   "donor_original_open_boundaries": [],
+   "module_open_boundary": "host seam loops only"
+  },
+  {
+   "id": "godan-head-bullet",
+   "file": "modules/godan/head_bullet.glb",
+   "host": "godan",
+   "donor": "bullet",
+   "slot": "head",
+   "scale": 1.0467,
+   "seam_max_shift_m": 0.06224,
+   "falloff_radius_m": 0.09,
+   "moved_vertices": 1145,
+   "donor_vertices": 1709,
+   "donor_triangles": 2776,
+   "bridge_triangles": 364,
+   "caps": [],
+   "host_seam_vertices": 554,
+   "seam_loops": [
+    {
+     "hostVertices": 138,
+     "donorVertices": 122,
+     "bandWidth_m": 0.00515
+    },
+    {
+     "hostVertices": 26,
+     "donorVertices": 26,
+     "bandWidth_m": 0.00441
+    },
+    {
+     "hostVertices": 26,
+     "donorVertices": 26,
+     "bandWidth_m": 0.0045
+    }
+   ],
+   "host_original_open_boundaries": [],
+   "donor_original_open_boundaries": [],
+   "module_open_boundary": "host seam loops only"
+  },
+  {
+   "id": "godan-ears-moguzo",
+   "file": "modules/godan/ears_moguzo.glb",
+   "host": "godan",
+   "donor": "moguzo",
+   "slot": "ears",
+   "scale": 0.9226,
+   "rigid_shift_m": [
+    0.02429,
+    0.02649
+   ],
+   "seam_max_shift_m": 0.03711,
+   "falloff_radius_m": 0.0155,
+   "moved_vertices": 150,
+   "donor_vertices": 199,
+   "donor_triangles": 232,
+   "bridge_triangles": 116,
+   "caps": [],
+   "host_seam_vertices": 168,
+   "seam_loops": [
+    {
+     "hostVertices": 26,
+     "donorVertices": 32,
+     "bandWidth_m": 0.00441
+    },
+    {
+     "hostVertices": 26,
+     "donorVertices": 32,
+     "bandWidth_m": 0.0045
+    }
+   ],
+   "host_original_open_boundaries": [],
+   "donor_original_open_boundaries": [],
+   "module_open_boundary": "host seam loops only"
+  },
+  {
+   "id": "godan-ears-bullet",
+   "file": "modules/godan/ears_bullet.glb",
+   "host": "godan",
+   "donor": "bullet",
+   "slot": "ears",
+   "scale": 1.0605,
+   "rigid_shift_m": [
+    0.00619,
+    0.01054
+   ],
+   "seam_max_shift_m": 0.01779,
+   "falloff_radius_m": 0.0176,
+   "moved_vertices": 126,
+   "donor_vertices": 162,
+   "donor_triangles": 196,
+   "bridge_triangles": 104,
+   "caps": [],
+   "host_seam_vertices": 156,
+   "seam_loops": [
+    {
+     "hostVertices": 26,
+     "donorVertices": 26,
+     "bandWidth_m": 0.00441
+    },
+    {
+     "hostVertices": 26,
+     "donorVertices": 26,
+     "bandWidth_m": 0.0045
+    }
+   ],
+   "host_original_open_boundaries": [],
+   "donor_original_open_boundaries": [],
+   "module_open_boundary": "host seam loops only"
+  },
+  {
+   "id": "godan-hands-moguzo",
+   "file": "modules/godan/hands_moguzo.glb",
+   "host": "godan",
+   "donor": "moguzo",
+   "slot": "hands",
+   "scale": 1.25,
+   "seam_max_shift_m": 0.05178,
+   "falloff_radius_m": 0.09,
+   "moved_vertices": 869,
+   "donor_vertices": 3443,
+   "donor_triangles": 5564,
+   "bridge_triangles": 356,
+   "caps": [],
+   "host_seam_vertices": 550,
+   "seam_loops": [
+    {
+     "hostVertices": 96,
+     "donorVertices": 80,
+     "bandWidth_m": 0.00677
+    },
+    {
+     "hostVertices": 98,
+     "donorVertices": 82,
+     "bandWidth_m": 0.00656
+    }
+   ],
+   "host_original_open_boundaries": [],
+   "donor_original_open_boundaries": [],
+   "module_open_boundary": "host seam loops only"
+  },
+  {
+   "id": "godan-hands-bullet",
+   "file": "modules/godan/hands_bullet.glb",
+   "host": "godan",
+   "donor": "bullet",
+   "slot": "hands",
+   "scale": 1.25,
+   "seam_max_shift_m": 0.0565,
+   "falloff_radius_m": 0.09,
+   "moved_vertices": 734,
+   "donor_vertices": 2772,
+   "donor_triangles": 4548,
+   "bridge_triangles": 350,
+   "caps": [],
+   "host_seam_vertices": 544,
+   "seam_loops": [
+    {
+     "hostVertices": 96,
+     "donorVertices": 80,
+     "bandWidth_m": 0.00677
+    },
+    {
+     "hostVertices": 98,
+     "donorVertices": 76,
+     "bandWidth_m": 0.00656
+    }
+   ],
+   "host_original_open_boundaries": [],
+   "donor_original_open_boundaries": [],
+   "module_open_boundary": "host seam loops only"
+  },
+  {
+   "id": "godan-feet-moguzo",
+   "file": "modules/godan/feet_moguzo.glb",
+   "host": "godan",
+   "donor": "moguzo",
+   "slot": "feet",
+   "scale": 1.0573,
+   "seam_max_shift_m": 0.0861,
+   "falloff_radius_m": 0.09,
+   "moved_vertices": 1741,
+   "donor_vertices": 3337,
+   "donor_triangles": 5176,
+   "bridge_triangles": 538,
+   "caps": [
+    {
+     "edges": 4,
+     "centerVertex": 4951,
+     "triangles": 4
+    },
+    {
+     "edges": 4,
+     "centerVertex": 4952,
+     "triangles": 4
+    },
+    {
+     "edges": 4,
+     "centerVertex": 4953,
+     "triangles": 4
+    },
+    {
+     "edges": 4,
+     "centerVertex": 4954,
+     "triangles": 4
+    }
+   ],
+   "host_seam_vertices": 798,
+   "seam_loops": [
+    {
+     "hostVertices": 128,
+     "donorVertices": 148,
+     "bandWidth_m": 0.00588
+    },
+    {
+     "hostVertices": 132,
+     "donorVertices": 130,
+     "bandWidth_m": 0.00605
+    }
+   ],
+   "host_original_open_boundaries": [],
+   "donor_original_open_boundaries": [
+    4,
+    4,
+    4,
+    4
+   ],
+   "module_open_boundary": "host seam loops only (donor の元の穴はふたをした)"
+  },
+  {
+   "id": "godan-feet-bullet",
+   "file": "modules/godan/feet_bullet.glb",
+   "host": "godan",
+   "donor": "bullet",
+   "slot": "feet",
+   "scale": 1.0243,
+   "seam_max_shift_m": 0.08742,
+   "falloff_radius_m": 0.09,
+   "moved_vertices": 1420,
+   "donor_vertices": 2863,
+   "donor_triangles": 4230,
+   "bridge_triangles": 504,
+   "caps": [
+    {
+     "edges": 4,
+     "centerVertex": 4375,
+     "triangles": 4
+    },
+    {
+     "edges": 4,
+     "centerVertex": 4376,
+     "triangles": 4
+    }
+   ],
+   "host_seam_vertices": 764,
+   "seam_loops": [
+    {
+     "hostVertices": 128,
+     "donorVertices": 120,
+     "bandWidth_m": 0.00588
+    },
+    {
+     "hostVertices": 132,
+     "donorVertices": 124,
+     "bandWidth_m": 0.00605
+    }
+   ],
+   "host_original_open_boundaries": [],
+   "donor_original_open_boundaries": [
+    4,
+    4
+   ],
+   "module_open_boundary": "host seam loops only (donor の元の穴はふたをした)"
+  },
+  {
+   "id": "bullet-head-moguzo",
+   "file": "modules/bullet/head_moguzo.glb",
+   "host": "bullet",
+   "donor": "moguzo",
+   "slot": "head",
+   "scale": 0.9611,
+   "seam_max_shift_m": 0.04428,
+   "falloff_radius_m": 0.09,
+   "moved_vertices": 1485,
+   "donor_vertices": 2094,
+   "donor_triangles": 3418,
+   "bridge_triangles": 368,
+   "caps": [],
+   "host_seam_vertices": 542,
+   "seam_loops": [
+    {
+     "hostVertices": 122,
+     "donorVertices": 130,
+     "bandWidth_m": 0.00571
+    },
+    {
+     "hostVertices": 26,
+     "donorVertices": 32,
+     "bandWidth_m": 0.00398
+    },
+    {
+     "hostVertices": 26,
+     "donorVertices": 32,
+     "bandWidth_m": 0.0043
+    }
+   ],
+   "host_original_open_boundaries": [],
+   "donor_original_open_boundaries": [],
+   "module_open_boundary": "host seam loops only"
+  },
+  {
+   "id": "bullet-head-godan",
+   "file": "modules/bullet/head_godan.glb",
+   "host": "bullet",
+   "donor": "godan",
+   "slot": "head",
+   "scale": 0.9554,
+   "seam_max_shift_m": 0.03936,
+   "falloff_radius_m": 0.09,
+   "moved_vertices": 1314,
+   "donor_vertices": 1904,
+   "donor_triangles": 3062,
+   "bridge_triangles": 364,
+   "caps": [],
+   "host_seam_vertices": 538,
+   "seam_loops": [
+    {
+     "hostVertices": 122,
+     "donorVertices": 138,
+     "bandWidth_m": 0.00571
+    },
+    {
+     "hostVertices": 26,
+     "donorVertices": 26,
+     "bandWidth_m": 0.00398
+    },
+    {
+     "hostVertices": 26,
+     "donorVertices": 26,
+     "bandWidth_m": 0.0043
+    }
+   ],
+   "host_original_open_boundaries": [],
+   "donor_original_open_boundaries": [],
+   "module_open_boundary": "host seam loops only"
+  },
+  {
+   "id": "bullet-ears-moguzo",
+   "file": "modules/bullet/ears_moguzo.glb",
+   "host": "bullet",
+   "donor": "moguzo",
+   "slot": "ears",
+   "scale": 0.87,
+   "rigid_shift_m": [
+    0.02294,
+    0.02331
+   ],
+   "seam_max_shift_m": 0.03144,
+   "falloff_radius_m": 0.0146,
+   "moved_vertices": 150,
+   "donor_vertices": 199,
+   "donor_triangles": 232,
+   "bridge_triangles": 116,
+   "caps": [],
+   "host_seam_vertices": 168,
+   "seam_loops": [
+    {
+     "hostVertices": 26,
+     "donorVertices": 32,
+     "bandWidth_m": 0.00398
+    },
+    {
+     "hostVertices": 26,
+     "donorVertices": 32,
+     "bandWidth_m": 0.0043
+    }
+   ],
+   "host_original_open_boundaries": [],
+   "donor_original_open_boundaries": [],
+   "module_open_boundary": "host seam loops only"
+  },
+  {
+   "id": "bullet-ears-godan",
+   "file": "modules/bullet/ears_godan.glb",
+   "host": "bullet",
+   "donor": "godan",
+   "slot": "ears",
+   "scale": 0.943,
+   "rigid_shift_m": [
+    0.00863,
+    0.01232
+   ],
+   "seam_max_shift_m": 0.01845,
+   "falloff_radius_m": 0.0164,
+   "moved_vertices": 133,
+   "donor_vertices": 187,
+   "donor_triangles": 210,
+   "bridge_triangles": 104,
+   "caps": [],
+   "host_seam_vertices": 156,
+   "seam_loops": [
+    {
+     "hostVertices": 26,
+     "donorVertices": 26,
+     "bandWidth_m": 0.00398
+    },
+    {
+     "hostVertices": 26,
+     "donorVertices": 26,
+     "bandWidth_m": 0.0043
+    }
+   ],
+   "host_original_open_boundaries": [],
+   "donor_original_open_boundaries": [],
+   "module_open_boundary": "host seam loops only"
+  },
+  {
+   "id": "bullet-hands-moguzo",
+   "file": "modules/bullet/hands_moguzo.glb",
+   "host": "bullet",
+   "donor": "moguzo",
+   "slot": "hands",
+   "scale": 1.0553,
+   "seam_max_shift_m": 0.02643,
+   "falloff_radius_m": 0.0861,
+   "moved_vertices": 1059,
+   "donor_vertices": 3443,
+   "donor_triangles": 5564,
+   "bridge_triangles": 318,
+   "caps": [],
+   "host_seam_vertices": 474,
+   "seam_loops": [
+    {
+     "hostVertices": 80,
+     "donorVertices": 80,
+     "bandWidth_m": 0.00617
+    },
+    {
+     "hostVertices": 76,
+     "donorVertices": 82,
+     "bandWidth_m": 0.00559
+    }
+   ],
+   "host_original_open_boundaries": [],
+   "donor_original_open_boundaries": [],
+   "module_open_boundary": "host seam loops only"
+  },
+  {
+   "id": "bullet-hands-godan",
+   "file": "modules/bullet/hands_godan.glb",
+   "host": "bullet",
+   "donor": "godan",
+   "slot": "hands",
+   "scale": 0.8,
+   "seam_max_shift_m": 0.04649,
+   "falloff_radius_m": 0.09,
+   "moved_vertices": 1662,
+   "donor_vertices": 4246,
+   "donor_triangles": 7260,
+   "bridge_triangles": 350,
+   "caps": [],
+   "host_seam_vertices": 506,
+   "seam_loops": [
+    {
+     "hostVertices": 80,
+     "donorVertices": 96,
+     "bandWidth_m": 0.00617
+    },
+    {
+     "hostVertices": 76,
+     "donorVertices": 98,
+     "bandWidth_m": 0.00559
+    }
+   ],
+   "host_original_open_boundaries": [],
+   "donor_original_open_boundaries": [],
+   "module_open_boundary": "host seam loops only"
+  },
+  {
+   "id": "bullet-feet-moguzo",
+   "file": "modules/bullet/feet_moguzo.glb",
+   "host": "bullet",
+   "donor": "moguzo",
+   "slot": "feet",
+   "scale": 1.0322,
+   "seam_max_shift_m": 0.09306,
+   "falloff_radius_m": 0.09,
+   "moved_vertices": 1952,
+   "donor_vertices": 3337,
+   "donor_triangles": 5176,
+   "bridge_triangles": 522,
+   "caps": [
+    {
+     "edges": 4,
+     "centerVertex": 4903,
+     "triangles": 4
+    },
+    {
+     "edges": 4,
+     "centerVertex": 4904,
+     "triangles": 4
+    },
+    {
+     "edges": 4,
+     "centerVertex": 4905,
+     "triangles": 4
+    },
+    {
+     "edges": 4,
+     "centerVertex": 4906,
+     "triangles": 4
+    }
+   ],
+   "host_seam_vertices": 766,
+   "seam_loops": [
+    {
+     "hostVertices": 120,
+     "donorVertices": 148,
+     "bandWidth_m": 0.00609
+    },
+    {
+     "hostVertices": 124,
+     "donorVertices": 130,
+     "bandWidth_m": 0.00616
+    }
+   ],
+   "host_original_open_boundaries": [
+    4,
+    4
+   ],
+   "donor_original_open_boundaries": [
+    4,
+    4,
+    4,
+    4
+   ],
+   "module_open_boundary": "host seam loops only (donor の元の穴はふたをした)"
+  },
+  {
+   "id": "bullet-feet-godan",
+   "file": "modules/bullet/feet_godan.glb",
+   "host": "bullet",
+   "donor": "godan",
+   "slot": "feet",
+   "scale": 0.9763,
+   "seam_max_shift_m": 0.08759,
+   "falloff_radius_m": 0.09,
+   "moved_vertices": 1738,
+   "donor_vertices": 3604,
+   "donor_triangles": 5514,
+   "bridge_triangles": 504,
+   "caps": [],
+   "host_seam_vertices": 748,
+   "seam_loops": [
+    {
+     "hostVertices": 120,
+     "donorVertices": 128,
+     "bandWidth_m": 0.00609
+    },
+    {
+     "hostVertices": 124,
+     "donorVertices": 132,
+     "bandWidth_m": 0.00616
+    }
+   ],
+   "host_original_open_boundaries": [
+    4,
+    4
+   ],
+   "donor_original_open_boundaries": [],
+   "module_open_boundary": "host seam loops only"
+  },
+  {
+   "id": "moguzo-tail-godan",
+   "file": "modules/moguzo/tail_godan.glb",
+   "host": "moguzo",
+   "donor": "godan",
+   "slot": "tail",
+   "scale": 0.8,
+   "seam_max_shift_m": 0.04157,
+   "falloff_radius_m": 0.09,
+   "moved_vertices": 533,
+   "donor_vertices": 943,
+   "donor_triangles": 1498,
+   "bridge_triangles": 122,
+   "caps": [],
+   "host_seam_vertices": 178,
+   "seam_loops": [
+    {
+     "hostVertices": 56,
+     "donorVertices": 66,
+     "bandWidth_m": 0.00477
+    }
+   ],
+   "host_original_open_boundaries": [],
+   "donor_original_open_boundaries": [],
+   "module_open_boundary": "host seam loops only"
+  },
+  {
+   "id": "godan-tail-moguzo",
+   "file": "modules/godan/tail_moguzo.glb",
+   "host": "godan",
+   "donor": "moguzo",
+   "slot": "tail",
+   "scale": 1.25,
+   "seam_max_shift_m": 0.0369,
+   "falloff_radius_m": 0.09,
+   "moved_vertices": 416,
+   "donor_vertices": 655,
+   "donor_triangles": 1050,
+   "bridge_triangles": 122,
+   "caps": [],
+   "host_seam_vertices": 188,
+   "seam_loops": [
+    {
+     "hostVertices": 66,
+     "donorVertices": 56,
+     "bandWidth_m": 0.00502
+    }
+   ],
+   "host_original_open_boundaries": [],
+   "donor_original_open_boundaries": [],
+   "module_open_boundary": "host seam loops only"
+  }
+ ]
+}

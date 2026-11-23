@@ -11,7 +11,9 @@ async function open(mode,id){
  page.on('console',m=>{if(/PropertyBinding.*(not found|failed)/.test(m.text()))report.errors.push(m.text());});
  await page.goto(mode==='story'?new URL('../story/',base).href:base);await page.waitForFunction(()=>window.mamokenStory?.previewReady||window.mamoken3d,undefined,{timeout:90000});
  if(mode==='story'){
-  await page.locator('#avatar-base').selectOption(id);await page.locator('#avatar-style').selectOption(id);for(let i=0;i<3;i++)await page.locator('#move-'+i).selectOption(id+'.s'+(i+1));
+  await page.locator('#avatar-base').selectOption(id);
+  if(await page.locator('#p4-editor-tab-2').count())await page.locator('#p4-editor-tab-2').click();
+  await page.locator('#avatar-style').selectOption(id);for(let i=0;i<3;i++)await page.locator('#move-'+i).selectOption(id+'.s'+(i+1));
   await page.locator('#enter').click();await page.waitForFunction(()=>mamokenStory.mode==='explore',undefined,{timeout:90000});
   await page.keyboard.down('w');try{await page.waitForFunction(()=>mamokenStory.nearby?.id==='moguzo',undefined,{timeout:20000});}finally{await page.keyboard.up('w');}
   await page.locator('#talk').tap();await page.locator('#challenge').click();await page.waitForFunction(()=>mamokenStory.mode==='battle'&&mamokenStory.battle?.frame>2,undefined,{timeout:120000});

@@ -21,6 +21,17 @@ html.native-runtime body>main:not([id]){
  html.native-runtime body>main:not([id]){--native-lobby-y:14px;--native-lobby-x:25px}
 }
 
+/* P4 intentionally scrolls: clip the scrollport itself inside the native safe
+   rectangle, rather than demanding that all five cards fit on one screen. */
+html.native-runtime body>main.mode-hall{
+ position:fixed;
+ inset:var(--native-safe-top) var(--native-safe-right) var(--native-safe-bottom) var(--native-safe-left);
+ width:auto;height:auto;min-height:0;max-width:none;margin:0;
+ padding:var(--native-lobby-y) var(--native-lobby-x);
+ overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;
+ scroll-padding:var(--native-lobby-y) var(--native-lobby-x);
+}
+
 /* All editor, exploration, Battle and movie children share one safe rectangle. */
 html.native-runtime #story-app{
  width:calc(100vw - var(--native-safe-left) - var(--native-safe-right));

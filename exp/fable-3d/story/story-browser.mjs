@@ -8,16 +8,26 @@ const root=process.env.MAMOKEN_URL??'http://127.0.0.1:4173/exp/fable-3d/story/';
 const dir=process.env.MAMOKEN_EVIDENCE??'/tmp/mamoken-story';await mkdir(dir,{recursive:true});
 const browser=await chromium.launch({executablePath:process.env.CHROMIUM_PATH??'/usr/bin/google-chrome',args:['--no-sandbox','--use-angle=swiftshader','--enable-unsafe-swiftshader']});
 const page=await browser.newPage({viewport:{width:852,height:393},hasTouch:true,isMobile:true});
-const errors=[],report=[];page.on('pageerror',e=>errors.push(e.message));page.on('response',r=>{if(r.status()>=400&&!r.url().endsWith('favicon.ico'))errors.push(r.status()+' '+r.url());});
+const errors=[],report=[],focusReport=[];page.on('pageerror',e=>errors.push(e.message));page.on('response',r=>{if(r.status()>=400&&!r.url().endsWith('favicon.ico'))errors.push(r.status()+' '+r.url());});
 page.on('console',m=>{if(['warning','error'].includes(m.type()))console.log('STORY BROWSER',m.type(),m.text());});
+async function expectFocus(id,step=id){
+ const actual=await page.evaluate(()=>({activeId:document.activeElement?.id,modalId:document.activeElement?.closest('[role="dialog"]')?.parentElement.id??null,mode:mamokenStory.mode,paused:mamokenStory.controls.paused}));
+ focusReport.push({step,expectedId:id,...actual});assert.equal(actual.activeId,id,'unexpected keyboard focus: '+step);
+}
+async function modalCycle(first,last,label){
+ await expectFocus(first,label+' initial');await page.keyboard.press('Shift+Tab');await expectFocus(last,label+' ShiftTab wraps');
+ await page.keyboard.press('Tab');await expectFocus(first,label+' Tab wraps');await page.keyboard.press('Tab');await expectFocus(last,label+' Tab advances');
+ await page.keyboard.press('Shift+Tab');await expectFocus(first,label+' ShiftTab returns');
+}
 try{
  await page.goto(root);await page.waitForFunction(()=>mamokenStory.previewReady,undefined,{timeout:90000});
  await page.locator('#avatar-name').fill('山風のナギ');
  assert.equal(await page.locator('#avatar-style option').count(),9);
  await page.locator('#part-head').selectOption('pisuke');
- await page.locator('details').nth(1).locator('summary').click();
+ if(await page.locator('#p4-editor-tab-1').count())await page.locator('#p4-editor-tab-1').click();else await page.locator('details').nth(1).locator('summary').click();
  await page.locator('#avatar-pattern').selectOption('stripes');
  await page.locator('#color-fields').locator('input').first().evaluate(e=>{e.value='#69967d';e.dispatchEvent(new Event('input',{bubbles:true}));});
+ if(await page.locator('#p4-editor-tab-2').count())await page.locator('#p4-editor-tab-2').click();
  await page.locator('#move-0').selectOption('pisuke.s1');
  await page.screenshot({path:dir+'/01-editor.png'});
  // Submit in the same event turn as a colour edit: an outstanding preview timer
@@ -28,9 +38,27 @@ try{
  const returnPosition=await page.evaluate(()=>mamokenStory.progress.position);
  await page.locator('#talk').tap();await page.waitForFunction(()=>mamokenStory.mode==='dialogue');
  assert.match(await page.locator('#dialogue-name').textContent(),/モグゾー/);
- await page.locator('#talk-close').click();await page.waitForFunction(()=>mamokenStory.mode==='explore');
+ await modalCycle('talk-close','challenge','dialogue opened by talk');
+ assert.equal(await page.locator('header').evaluate(node=>node.inert),true,'background menu remains keyboard-active behind aria-modal');
+ const dialoguePosition=await page.evaluate(()=>mamokenStory.progress.position);
+ await page.keyboard.down('w');await page.keyboard.down('ArrowLeft');await page.waitForTimeout(160);await page.keyboard.up('w');await page.keyboard.up('ArrowLeft');
+ const afterDialogueKeys=await page.evaluate(()=>mamokenStory.progress.position);focusReport.push({step:'W and ArrowLeft remain inside dialogue',before:dialoguePosition,after:afterDialogueKeys});assert.deepEqual(afterDialogueKeys,dialoguePosition,'dialogue keys leaked into exploration');
+ await page.keyboard.press('Escape');await page.waitForFunction(()=>mamokenStory.mode==='explore');await expectFocus('talk','visible talk trigger restored');
+ assert.equal(await page.locator('header').evaluate(node=>node.inert),false,'modal left the exploration menu inert');
+ await page.keyboard.press('e');await page.waitForFunction(()=>mamokenStory.mode==='dialogue');await expectFocus('talk-close','E or foreground focuses dialogue');
+ await page.locator('#talk-close').click();await page.waitForFunction(()=>mamokenStory.mode==='explore');await expectFocus('talk','visible talk trigger restored');
+ // Simulated native lifecycle, not a physical phone measurement: backgrounding
+ // releases focus, foregrounding re-enters the visible modal without resuming play.
+ await page.keyboard.press('e');await page.waitForFunction(()=>mamokenStory.mode==='dialogue');
+ await page.evaluate(()=>dispatchEvent(new CustomEvent('mamoken:native-state',{detail:{active:false}})));
+ const backgroundFocus=await page.evaluate(()=>({activeId:document.activeElement?.id,inside:document.querySelector('#dialogue').contains(document.activeElement)}));focusReport.push({step:'simulated native background releases modal focus',...backgroundFocus});assert.equal(backgroundFocus.inside,false);
+ await page.evaluate(()=>dispatchEvent(new CustomEvent('mamoken:native-state',{detail:{active:true}})));await expectFocus('talk-close','E or foreground focuses dialogue');
+ await page.keyboard.press('Escape');await page.waitForFunction(()=>mamokenStory.mode==='explore');await expectFocus('pause','Escape after background restores explicit resume control');
+ assert.equal(await page.evaluate(()=>mamokenStory.controls.paused),true,'modal foreground implicitly resumed exploration');
+ await page.locator('#pause').click();assert.equal(await page.evaluate(()=>mamokenStory.controls.paused),false);
  await page.locator('#talk').tap();await page.locator('#challenge').click();
  await page.waitForFunction(()=>mamokenStory.mode==='battle'&&mamokenStory.battle.frame>5,undefined,{timeout:120000});
+ assert.equal(await page.evaluate(()=>document.querySelector('#dialogue').contains(document.activeElement)),false,'hidden dialogue retained focus through loading');
  assert.equal(await page.evaluate(()=>{const a=mamokenStory.actors[0],source=a.normalMotionSource,pack=source.pack(a.baseId??a.id);
   return pack.clipNames.length===6&&pack.clipNames.every(name=>{
    const clip=a.actions[name]?.getClip();
@@ -55,13 +83,15 @@ try{
  // Explicitly force a terminal condition only; no replacement Battle or fake result.
  await page.evaluate(()=>{const g=mamokenStory.battle;g.fighters[0].hp=500;g.fighters[1].hp=0;});
  await page.waitForFunction(()=>mamokenStory.mode==='result',undefined,{timeout:10000});assert.equal(await page.evaluate(()=>mamokenStory.progress.battles),1);
- await page.locator('#return').click();await page.waitForFunction(()=>mamokenStory.mode==='explore');
+ await modalCycle('return','return','actual Battle result');await page.keyboard.press('Enter');await page.waitForFunction(()=>mamokenStory.mode==='explore');await expectFocus('talk','visible talk trigger restored');
+ assert.equal(await page.locator('header').evaluate(node=>node.inert),false,'result left the background inert');
  const after=await page.evaluate(()=>mamokenStory.progress);assert.deepEqual(after.position,returnPosition);assert.equal(after.wins,1);
  await page.screenshot({path:dir+'/03-return.png'});
  await page.reload();await page.waitForFunction(()=>mamokenStory.previewReady,undefined,{timeout:90000});
  assert.equal(await page.locator('#avatar-name').inputValue(),'山風のナギ');assert.equal(await page.evaluate(()=>mamokenStory.progress.wins),1);assert.equal(await page.locator('#move-0').inputValue(),'pisuke.s1');assert.equal(await page.locator('#part-head').inputValue(),'pisuke');assert.equal(await page.locator('#avatar-pattern').inputValue(),'stripes');
  // Re-edit style independently from the visual base, then end a second actual
  // Battle by timeout draw. The existing win count and location must survive.
+ if(await page.locator('#p4-editor-tab-2').count())await page.locator('#p4-editor-tab-2').click();
  await page.locator('#avatar-style').selectOption('pisuke');await page.locator('#move-0').selectOption('yomikage.s1');await page.locator('#enter').click();
  await page.waitForFunction(()=>mamokenStory.mode==='explore'&&mamokenStory.nearby?.id==='moguzo',undefined,{timeout:90000});
  await page.locator('#talk').tap();await page.locator('#challenge').click();await page.waitForFunction(()=>mamokenStory.mode==='battle'&&mamokenStory.battle.frame>0,undefined,{timeout:120000});
@@ -81,7 +111,7 @@ try{
  await page.reload();await page.waitForFunction(()=>mamokenStory.previewReady,undefined,{timeout:90000});
  await page.evaluate(()=>{Object.defineProperty(document,'hidden',{configurable:true,get:()=>true});document.dispatchEvent(new Event('visibilitychange'));});
  assert.equal(await page.evaluate(()=>localStorage.getItem('mamoken.story.v16.1')),'{invalid-preserve-me');
- assert.deepEqual(errors,[]);await writeFile(dir+'/report.json',JSON.stringify({report,returnPosition,after,errors},null,2));
- console.log('Story actual WebGL PASS: avatar editor/save, cross-style skill, free movement, dialogue/cancel, Battle/KO, same-position return, reload, portrait lock.');
-} catch(error){await page.screenshot({path:dir+'/error.png'}).catch(()=>{});console.error('story state',await page.evaluate(()=>({mode:window.mamokenStory?.mode,status:document.querySelector('#status')?.textContent,editorError:document.querySelector('#editor-error')?.textContent,loading:document.querySelector('#loading-copy')?.textContent,position:window.mamokenStory?.progress?.position})).catch(()=>null));console.error('page errors',errors);throw error;}
+ assert.deepEqual(errors,[]);await writeFile(dir+'/report.json',JSON.stringify({report,focusReport,returnPosition,after,errors},null,2));
+ console.log('Story actual WebGL PASS: real dialogue/result modal focus, contained Tab/ShiftTab, keyboard/pointer cancel and focus return, simulated background focus,  avatar editor/save, cross-style skill, free movement, dialogue/cancel, Battle/KO, same-position return, reload, portrait lock.');
+} catch(error){await page.screenshot({path:dir+'/error.png'}).catch(()=>{});await writeFile(dir+'/failure-focus.json',JSON.stringify({error:error.message,focusReport,errors},null,2)).catch(()=>{});console.error('story state',await page.evaluate(()=>({mode:window.mamokenStory?.mode,status:document.querySelector('#status')?.textContent,editorError:document.querySelector('#editor-error')?.textContent,loading:document.querySelector('#loading-copy')?.textContent,position:window.mamokenStory?.progress?.position})).catch(()=>null));console.error('page errors',errors);throw error;}
 finally{await browser.close();}

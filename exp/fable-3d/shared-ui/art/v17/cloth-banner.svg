@@ -1,0 +1,10 @@
+<svg preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 480" width="160" height="480" role="img" aria-label="布ののぼり（キャラ選択の縦帯・大会の旗。下端は剣先）">
+<path d="M14,22 H146 V430 L80,470 L14,430 Z" fill="#2F5247"/>
+<defs><pattern id="w" width="8" height="8" patternUnits="userSpaceOnUse"><path d="M0,4 H8 M4,0 V8" stroke="#3F6B5C" stroke-width="1" opacity=".28"/></pattern><clipPath id="k"><path d="M14,22 H146 V430 L80,470 L14,430 Z"/></clipPath></defs>
+<rect x="14" y="22" width="132" height="450" fill="url(#w)" clip-path="url(#k)"/>
+<path d="M14,22 H146 V58 H14 Z" fill="#3F6B5C" opacity=".6"/>
+<rect x="26" y="4" width="16" height="26" rx="3" fill="#3F6B5C"/><rect x="72" y="4" width="16" height="26" rx="3" fill="#3F6B5C"/><rect x="118" y="4" width="16" height="26" rx="3" fill="#3F6B5C"/>
+<path d="M6,10 H154" stroke="#5C4630" stroke-width="7" stroke-linecap="round"/>
+<path d="M14,22 H146 V430 L80,470 L14,430 Z" fill="none" stroke="#101F1B" stroke-width="3"/>
+<path d="M26,400 L80,434 L134,400" fill="none" stroke="#F1C66C" stroke-width="3"/>
+</svg>

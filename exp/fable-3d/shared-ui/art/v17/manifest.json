@@ -1,0 +1,435 @@
+{
+  "version": "v17-p4-ui-art-1",
+  "sourcePR": "https://github.com/nagi300222/mamo-ken/pull/218",
+  "sourceCommit": "0ce87219762134d4d9adb8f3785aa4894e777343",
+  "generator": "shared-ui/build-p4-art.mjs",
+  "note": "Palette-resolved derivatives of Claude original art. Sources retained in ui-art/v17. No gameplay/model changes.",
+  "assets": {
+    "ridge-far": {
+      "file": "ridge-far.svg",
+      "sourceId": "ridge-far",
+      "sourceFile": "svg/ridge-far.svg",
+      "sourceSHA256": "8866e55633ad34c4de6ad0875641e3b71f062a95fed455f9d332a7967126661a",
+      "sha256": "a911e9e5878cadf83c0ffa562f287d92e8b1be30e52efedc0951fda12b7cc9da",
+      "palette": "fixed external SVG",
+      "aspect": "preserve icon",
+      "overrides": {}
+    },
+    "ridge-near": {
+      "file": "ridge-near.svg",
+      "sourceId": "ridge-near",
+      "sourceFile": "svg/ridge-near.svg",
+      "sourceSHA256": "2bbc3ce3c75eef112cba0ab874bc9428e394a22caa0cef2ab9d42576a8907097",
+      "sha256": "78ce746dc33db4c31b1b6c83302b8442fed966414784f1c5fd5a7fc4f33f8286",
+      "palette": "fixed external SVG",
+      "aspect": "preserve icon",
+      "overrides": {}
+    },
+    "ridge-line": {
+      "file": "ridge-line.svg",
+      "sourceId": "ridge-line",
+      "sourceFile": "svg/ridge-line.svg",
+      "sourceSHA256": "6bf1cd5fb50113f8c3ea1853e3f20d2a7b678ec076eb19ddd3ef5cc4c4e52b16",
+      "sha256": "93d3cfd115fa20f4e2f4dfc5a13647bb2d771fa9efe83be1ceb7e36bce0e358e",
+      "palette": "fixed external SVG",
+      "aspect": "preserve icon",
+      "overrides": {}
+    },
+    "fist-seal": {
+      "file": "fist-seal.svg",
+      "sourceId": "fist-seal",
+      "sourceFile": "svg/fist-seal.svg",
+      "sourceSHA256": "d29c87ee9ebc3efaf0f5dbdc9967b44287cd5de949769bfdfb3bcdce609c3e34",
+      "sha256": "0bb61dc4e01c1cabe420121eac8dd0f2d57a443499da683c49ff317c9cad00ce",
+      "palette": "fixed external SVG",
+      "aspect": "preserve icon",
+      "overrides": {}
+    },
+    "fist-mark": {
+      "file": "fist-mark.svg",
+      "sourceId": "fist-mark",
+      "sourceFile": "svg/fist-mark.svg",
+      "sourceSHA256": "3acdea48896c8e034c47533e484a12d6a42a9c28e22fcdfd06ab2f05ef399af2",
+      "sha256": "395f9e2de27b7c506c443b569dd180ff7ac6ea2e0e5fd6058871d5d12918fb62",
+      "palette": "fixed external SVG",
+      "aspect": "preserve icon",
+      "overrides": {}
+    },
+    "wood-tag": {
+      "file": "wood-tag.svg",
+      "sourceId": "wood-tag",
+      "sourceFile": "svg/wood-tag.svg",
+      "sourceSHA256": "aae295d8740c77d31f4da6400106f120c014257c77404a52b20919fe4baf3d74",
+      "sha256": "175c510bb10cd2b33ac6e560b45e0bc8a1efaacb4aa4a4dab8f8fd7cd5b63067",
+      "palette": "fixed external SVG",
+      "aspect": "stretch surface",
+      "overrides": {}
+    },
+    "paper-strip": {
+      "file": "paper-strip.svg",
+      "sourceId": "paper-strip",
+      "sourceFile": "svg/paper-strip.svg",
+      "sourceSHA256": "a46c4f04aa173b6ef0451663473ecb8562cc9392ba910b7d2c2b135c8af59b19",
+      "sha256": "fe3e67da0bcf46833fb7737eeb384794c6f86059c8e6715cd7b976bd09e19c91",
+      "palette": "fixed external SVG",
+      "aspect": "stretch surface",
+      "overrides": {}
+    },
+    "cloth-banner": {
+      "file": "cloth-banner.svg",
+      "sourceId": "cloth-banner",
+      "sourceFile": "svg/cloth-banner.svg",
+      "sourceSHA256": "c6c9092f3cb6eb97847be395ce6fd6bec8b31cd66f44703596f71d0d8acbc391",
+      "sha256": "9da21d9162aa6f701c8bb4e9c80c6bea8029d63dc35eb3f40d9885a4812fadd2",
+      "palette": "fixed external SVG",
+      "aspect": "stretch surface",
+      "overrides": {}
+    },
+    "cut-panel": {
+      "file": "cut-panel.svg",
+      "sourceId": "cut-panel",
+      "sourceFile": "svg/cut-panel.svg",
+      "sourceSHA256": "0921bc07626dfe0c076a7f4999069cb93233cef20cf2d0811682a9d1f7c1e5ae",
+      "sha256": "3380fb163fb7a8c5f4ecb35efba1f857e3913970e2ad0d7df403c72593802a36",
+      "palette": "fixed external SVG",
+      "aspect": "stretch surface",
+      "overrides": {}
+    },
+    "mode-versus": {
+      "file": "mode-versus.svg",
+      "sourceId": "mode-versus",
+      "sourceFile": "svg/mode-versus.svg",
+      "sourceSHA256": "e68563e72663213b8bd630bd3b3e4675ff57607a139f29e4c6623beae94c6d96",
+      "sha256": "bfee2e5b44aa7c50cd8394e0eccade625c359adbf9e568aae6f7d85a292ebb7d",
+      "palette": "fixed external SVG",
+      "aspect": "preserve icon",
+      "overrides": {},
+      "mode": "versus"
+    },
+    "mode-practice": {
+      "file": "mode-practice.svg",
+      "sourceId": "mode-practice",
+      "sourceFile": "svg/mode-practice.svg",
+      "sourceSHA256": "c8d7958a2e6d4b944b0affdf68a544904296eca85e271b472246e3bdea3a9236",
+      "sha256": "a42c483a2904e1a7bdbed6258aac9c5eb7fbdcf7010e5be842616e0e301856a6",
+      "palette": "fixed external SVG",
+      "aspect": "preserve icon",
+      "overrides": {},
+      "mode": "practice"
+    },
+    "mode-arcade": {
+      "file": "mode-arcade.svg",
+      "sourceId": "mode-arcade",
+      "sourceFile": "svg/mode-arcade.svg",
+      "sourceSHA256": "1604d09c5b6f4f8a6834966d29872c45e61347347d9c988f88de5841767379ef",
+      "sha256": "6687cef00b36087ea895f4e8e0ee9d7d9e97aa7c78f97b6742e21d6bbe48b5c1",
+      "palette": "fixed external SVG",
+      "aspect": "preserve icon",
+      "overrides": {},
+      "mode": "arcade"
+    },
+    "mode-survival": {
+      "file": "mode-survival.svg",
+      "sourceId": "mode-survival",
+      "sourceFile": "svg/mode-survival.svg",
+      "sourceSHA256": "4b735322f43fc8d1c2a165fdc28b8120ee524dbc63f749f92c3c7ac4916b745d",
+      "sha256": "21b383720961d924941b283fd2321e2e4cb813f002cf8f5392ed075d2cfff806",
+      "palette": "fixed external SVG",
+      "aspect": "preserve icon",
+      "overrides": {},
+      "mode": "survival"
+    },
+    "mode-journey": {
+      "file": "mode-journey.svg",
+      "sourceId": "mode-journey",
+      "sourceFile": "svg/mode-journey.svg",
+      "sourceSHA256": "fc58887d7e06c8306529e1acdfe92bed620623f77c31d4fc342bc77c50758464",
+      "sha256": "f53bd1776d9e0962fcb856bda0cdf5b003ccbebaff41cfb70e9614a0d982ec13",
+      "palette": "fixed external SVG",
+      "aspect": "preserve icon",
+      "overrides": {},
+      "mode": "journey"
+    },
+    "crest-moguzo": {
+      "file": "crest-moguzo.svg",
+      "sourceId": "crest-moguzo",
+      "sourceFile": "svg/crest-moguzo.svg",
+      "sourceSHA256": "830b7518f12a57f7d9fdc311eefba367e468210b99744e6e313cf6548c6ac3ab",
+      "sha256": "5bbb1b3b6020b2250f74940942dde379fe50500c91ee11923c9eac1bf37fb030",
+      "palette": "fixed external SVG",
+      "aspect": "preserve icon",
+      "overrides": {},
+      "character": "moguzo",
+      "displayName": "モグゾー"
+    },
+    "crest-pisuke": {
+      "file": "crest-pisuke.svg",
+      "sourceId": "crest-pisuke",
+      "sourceFile": "svg/crest-pisuke.svg",
+      "sourceSHA256": "1990d46b9f06d75bbf401919f554df4d907d1633eaa3456f48fc575a5d016b44",
+      "sha256": "7c797a180448d7f77d1637b0f7382abb32a3e33e1e35e250a32e38960ea8e7e0",
+      "palette": "fixed external SVG",
+      "aspect": "preserve icon",
+      "overrides": {},
+      "character": "pisuke",
+      "displayName": "ピスケ"
+    },
+    "crest-godan": {
+      "file": "crest-godan.svg",
+      "sourceId": "crest-godan",
+      "sourceFile": "svg/crest-godan.svg",
+      "sourceSHA256": "e9a221cde9d5aee1baa948329f3790a93a90d6a34c313c404f5570de5ae89c42",
+      "sha256": "7b1e1144337b9a765acb41de16dc0f4d84768931fa18dda492c171520e4a0707",
+      "palette": "fixed external SVG",
+      "aspect": "preserve icon",
+      "overrides": {},
+      "character": "godan",
+      "displayName": "ゴダン"
+    },
+    "crest-hakuma": {
+      "file": "crest-hakuma.svg",
+      "sourceId": "crest-hakuma",
+      "sourceFile": "svg/crest-hakuma.svg",
+      "sourceSHA256": "24dfd62a4091a80eb66c2450028c866f4b2f91e6688944848b17f82b793d51e4",
+      "sha256": "58ab3fbde3c1498adf6805fed113ac189ac2129a4ac2257773bd75205bce6ddf",
+      "palette": "fixed external SVG",
+      "aspect": "preserve icon",
+      "overrides": {},
+      "character": "hakuma",
+      "displayName": "ハクマ"
+    },
+    "crest-chirka": {
+      "file": "crest-chirka.svg",
+      "sourceId": "crest-chirka",
+      "sourceFile": "svg/crest-chirka.svg",
+      "sourceSHA256": "d0d4e2f9588f4be4265dc546f45b723a2bfcf7f930d5addd2bc3aaef6ef92094",
+      "sha256": "06066633464234b0495abcadabe5f34d41432fcae2d39cc3d3e139ab0dfb7c2a",
+      "palette": "fixed external SVG",
+      "aspect": "preserve icon",
+      "overrides": {},
+      "character": "chirka",
+      "displayName": "チルカ"
+    },
+    "crest-takimaru": {
+      "file": "crest-takimaru.svg",
+      "sourceId": "crest-takimaru",
+      "sourceFile": "svg/crest-takimaru.svg",
+      "sourceSHA256": "91a92d94cfe918178cac513974da79e46d380e3ab75ee84b141634c06895c79b",
+      "sha256": "d3291d6448e55d7048606696ed7f14dad1a723a53461623ed4f33e6975cb69b1",
+      "palette": "fixed external SVG",
+      "aspect": "preserve icon",
+      "overrides": {},
+      "character": "takimaru",
+      "displayName": "タキマル"
+    },
+    "crest-yomikage": {
+      "file": "crest-yomikage.svg",
+      "sourceId": "crest-yomikage",
+      "sourceFile": "svg/crest-yomikage.svg",
+      "sourceSHA256": "71293c313d26e37e0b94ddbf9b60e245547dd6e93ad369ddf647352064ef0ee7",
+      "sha256": "793373af913b87c375acfc4f981ee96a85c85d50bf4457e688e2563cf50fb38b",
+      "palette": "fixed external SVG",
+      "aspect": "preserve icon",
+      "overrides": {},
+      "character": "yomikage",
+      "displayName": "ヨミカゲ"
+    },
+    "crest-bullet": {
+      "file": "crest-bullet.svg",
+      "sourceId": "crest-bullet",
+      "sourceFile": "svg/crest-bullet.svg",
+      "sourceSHA256": "a28436252b996fe031c203864f99a62556d73c20f199fe479e2b98eae4e1ba2c",
+      "sha256": "19a452a88e0e10a61b60b5551cbc36111a3631ea8f615843c412a2a695a63cd0",
+      "palette": "fixed external SVG",
+      "aspect": "preserve icon",
+      "overrides": {},
+      "character": "bullet",
+      "displayName": "バレット"
+    },
+    "crest-dark_moguzo": {
+      "file": "crest-dark_moguzo.svg",
+      "sourceId": "crest-dark_moguzo",
+      "sourceFile": "svg/crest-dark_moguzo.svg",
+      "sourceSHA256": "32526582a2b3b32c0f34a09fd7216150acdcb17f8af92c21747558cdd1b2a119",
+      "sha256": "544931fb50c31b28c7f2fa4975eb04c2497e985ee3680b9e54699a7da3aa1129",
+      "palette": "fixed external SVG",
+      "aspect": "preserve icon",
+      "overrides": {},
+      "character": "dark_moguzo",
+      "displayName": "ダークモグゾー"
+    },
+    "hud-hp-frame": {
+      "file": "hud-hp-frame.svg",
+      "sourceId": "hud-hp-frame",
+      "sourceFile": "svg/hud-hp-frame.svg",
+      "sourceSHA256": "5fb2492d65feff1e415595c309a812f7ddd9ee858e787d340e6658a0d60cf3ff",
+      "sha256": "5ca18dc0525497abec4498363424d2367f5162682786a382af1d11f26c1dac88",
+      "palette": "fixed external SVG",
+      "aspect": "stretch surface",
+      "overrides": {}
+    },
+    "hud-sub-frame": {
+      "file": "hud-sub-frame.svg",
+      "sourceId": "hud-sub-frame",
+      "sourceFile": "svg/hud-sub-frame.svg",
+      "sourceSHA256": "9d586076e251e87c30aaec4792cf9e747081eb143c98f6be358ca6fbd98c2971",
+      "sha256": "0c6ee795afe9bdeab51adfb786918c27ec35de745fc0f43e2dcd90683a41a1f7",
+      "palette": "fixed external SVG",
+      "aspect": "stretch surface",
+      "overrides": {}
+    },
+    "hud-timer": {
+      "file": "hud-timer.svg",
+      "sourceId": "hud-timer",
+      "sourceFile": "svg/hud-timer.svg",
+      "sourceSHA256": "7c4cbf2472e9e8460d7584d7aa94e035149112fc605ffc33698bffd2d3b2a25c",
+      "sha256": "f9dcba42952811ee24248034bc827329e783579a257c2d66b65b4307d10f5bff",
+      "palette": "fixed external SVG",
+      "aspect": "stretch surface",
+      "overrides": {}
+    },
+    "button-plate": {
+      "file": "button-plate.svg",
+      "sourceId": "button-plate",
+      "sourceFile": "svg/button-plate.svg",
+      "sourceSHA256": "eb731a45231dfff2248f9d6399473bbeb84abc79b3f0cad02acfae1ebeab7603",
+      "sha256": "5e278e109ebf7f0595f502855d6a868a4d23ba749c8b83cbbb7cfe0554d246d6",
+      "palette": "fixed external SVG",
+      "aspect": "preserve icon",
+      "overrides": {}
+    },
+    "mode-journey-paper": {
+      "file": "mode-journey-paper.svg",
+      "sourceId": "mode-journey",
+      "sourceFile": "svg/mode-journey.svg",
+      "sourceSHA256": "fc58887d7e06c8306529e1acdfe92bed620623f77c31d4fc342bc77c50758464",
+      "sha256": "f8dfc27ed23a5f0bac188033efa4890dd21d87fb99ec4ad24ec3919d89a94257",
+      "palette": "fixed external SVG",
+      "aspect": "preserve icon",
+      "overrides": {
+        "--mk-text": "#101F1B",
+        "--mk-action": "#5C4630",
+        "--mk-panel": "#EFE6CC",
+        "--mk-bg": "#EFE6CC"
+      },
+      "mode": "journey"
+    },
+    "fist-mark-ink": {
+      "file": "fist-mark-ink.svg",
+      "sourceId": "fist-mark",
+      "sourceFile": "svg/fist-mark.svg",
+      "sourceSHA256": "3acdea48896c8e034c47533e484a12d6a42a9c28e22fcdfd06ab2f05ef399af2",
+      "sha256": "f1f8fb58b0fbb0f45564ba39c127c58dea157e1913a9b8e296cf8f02b7a46ab0",
+      "palette": "fixed external SVG",
+      "aspect": "preserve icon",
+      "overrides": {
+        "currentColor": "#101F1B"
+      }
+    },
+    "hud-timer-dark": {
+      "file": "hud-timer-dark.svg",
+      "sourceId": "hud-timer",
+      "sourceFile": "svg/hud-timer.svg",
+      "sourceSHA256": "7c4cbf2472e9e8460d7584d7aa94e035149112fc605ffc33698bffd2d3b2a25c",
+      "sha256": "bd4a6cca1477e7ae5fc29730642fca0b772aacffdd8f1a9c20fadab8d416a302",
+      "palette": "fixed external SVG",
+      "aspect": "stretch surface",
+      "overrides": {
+        "--mk-wood": "#294235",
+        "--mk-wood-dark": "#142B20"
+      }
+    },
+    "wood-tag-dark": {
+      "file": "wood-tag-dark.svg",
+      "sourceId": "wood-tag",
+      "sourceFile": "svg/wood-tag.svg",
+      "sourceSHA256": "aae295d8740c77d31f4da6400106f120c014257c77404a52b20919fe4baf3d74",
+      "sha256": "74d5d07c283e8b97bd0b767b2ab5c6087785a7240e038866687e6ff70eb99411",
+      "palette": "fixed external SVG",
+      "aspect": "stretch surface",
+      "overrides": {
+        "--mk-wood": "#294235",
+        "--mk-wood-dark": "#10251C",
+        "--mk-wood-light": "#3E5A45"
+      }
+    },
+    "button-weak": {
+      "file": "button-weak.svg",
+      "sourceId": "button-plate",
+      "sourceFile": "svg/button-plate.svg",
+      "sourceSHA256": "eb731a45231dfff2248f9d6399473bbeb84abc79b3f0cad02acfae1ebeab7603",
+      "sha256": "a872cea6b8b9c85c6647ef32e1cd3fb3d98cb93ba21474e9b5427b27c0206009",
+      "palette": "fixed external SVG",
+      "aspect": "preserve icon",
+      "overrides": {
+        "--mk-button": "#6FD0A0",
+        "--mk-panel": "#284B38"
+      }
+    },
+    "button-heavy": {
+      "file": "button-heavy.svg",
+      "sourceId": "button-plate",
+      "sourceFile": "svg/button-plate.svg",
+      "sourceSHA256": "eb731a45231dfff2248f9d6399473bbeb84abc79b3f0cad02acfae1ebeab7603",
+      "sha256": "e166b9baeb936a95d8757c6db56c3b152ee348bc970773f25f91f42a9a480879",
+      "palette": "fixed external SVG",
+      "aspect": "preserve icon",
+      "overrides": {
+        "--mk-button": "#D7B18C",
+        "--mk-panel": "#6A452E"
+      }
+    },
+    "button-throw": {
+      "file": "button-throw.svg",
+      "sourceId": "button-plate",
+      "sourceFile": "svg/button-plate.svg",
+      "sourceSHA256": "eb731a45231dfff2248f9d6399473bbeb84abc79b3f0cad02acfae1ebeab7603",
+      "sha256": "b2486a144c0e356c251f2a0ca1ad14723b4c33ebe7de3f4a8e6818cf07d3da7e",
+      "palette": "fixed external SVG",
+      "aspect": "preserve icon",
+      "overrides": {
+        "--mk-button": "#9DBDC0",
+        "--mk-panel": "#314D56"
+      }
+    },
+    "button-gyuiin": {
+      "file": "button-gyuiin.svg",
+      "sourceId": "button-plate",
+      "sourceFile": "svg/button-plate.svg",
+      "sourceSHA256": "eb731a45231dfff2248f9d6399473bbeb84abc79b3f0cad02acfae1ebeab7603",
+      "sha256": "d89fb80a1c8e1e2fa843bdb884c71a42fdc311891d1290852b12687c8f035938",
+      "palette": "fixed external SVG",
+      "aspect": "preserve icon",
+      "overrides": {
+        "--mk-button": "#B5CC89",
+        "--mk-panel": "#3D5532"
+      }
+    },
+    "button-special": {
+      "file": "button-special.svg",
+      "sourceId": "button-plate",
+      "sourceFile": "svg/button-plate.svg",
+      "sourceSHA256": "eb731a45231dfff2248f9d6399473bbeb84abc79b3f0cad02acfae1ebeab7603",
+      "sha256": "db8de343036478404d220046550cbd577f57271f7719ea9cc2687f0e5263f1e5",
+      "palette": "fixed external SVG",
+      "aspect": "preserve icon",
+      "overrides": {
+        "--mk-button": "#BAACD5",
+        "--mk-panel": "#433A63"
+      }
+    },
+    "button-ultimate": {
+      "file": "button-ultimate.svg",
+      "sourceId": "button-plate",
+      "sourceFile": "svg/button-plate.svg",
+      "sourceSHA256": "eb731a45231dfff2248f9d6399473bbeb84abc79b3f0cad02acfae1ebeab7603",
+      "sha256": "bae3cb8e9464edf887bbadb37f31c243b9181d82700e5f7506474dd8a0352f96",
+      "palette": "fixed external SVG",
+      "aspect": "preserve icon",
+      "overrides": {
+        "--mk-button": "#F1C66C",
+        "--mk-panel": "#594622"
+      }
+    }
+  }
+}

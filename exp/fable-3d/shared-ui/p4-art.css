@@ -1,0 +1,64 @@
+@import url('./art/v17/assets.css');
+/* Claude's original v17 P4 assets in the real UI. All external SVG palettes are
+   resolved at build time, rather than relying on non-inherited SVG variables. */
+body[data-ui=mountain] .mode-hall:before{background-image:var(--p4-art-ridge-far),var(--p4-art-ridge-near),radial-gradient(ellipse at 76% 2%,#395240,transparent 57%);background-repeat:repeat-x,repeat-x,no-repeat;background-size:auto 220px,auto 160px,cover;background-position:center 4%,center bottom,center;opacity:.7}
+body[data-ui=mountain] .ui-seal,body[data-ui=mountain] .brand-mark{background:var(--p4-art-fist-seal) center/contain no-repeat;border:0;outline:0;color:transparent;box-shadow:none}
+body[data-ui=mountain] .mode{--p4-mode-icon:var(--p4-art-mode-versus)}
+body[data-ui=mountain] .mode[data-mode=arcade]{--p4-mode-icon:var(--p4-art-mode-arcade)}
+body[data-ui=mountain] .mode[data-mode=practice]{--p4-mode-icon:var(--p4-art-mode-practice)}
+body[data-ui=mountain] .mode[data-mode=survival]{--p4-mode-icon:var(--p4-art-mode-survival)}
+body[data-ui=mountain] .mode[data-mode=story]{--p4-mode-icon:var(--p4-art-mode-journey-paper)}
+body[data-ui=mountain] .mode-kicker{position:relative;padding-inline-start:25px}
+body[data-ui=mountain] .mode-kicker:before{content:"";position:absolute;left:0;top:50%;transform:translateY(-50%);width:20px;height:20px;background:var(--p4-mode-icon) center/contain no-repeat;pointer-events:none}
+body[data-ui=mountain] .mode-versus{background-image:linear-gradient(110deg,#304b3a44,#10261e55),var(--p4-art-cut-panel);background-size:100% 100%;background-repeat:no-repeat}
+body[data-ui=mountain] .mode-versus .mode-action:before{content:"";display:inline-block;flex:none;width:20px;height:20px;background:var(--p4-art-fist-mark-ink) center/contain no-repeat}
+body[data-ui=mountain] .mode-arcade .mode-rule{background-image:linear-gradient(#10251cb3,#10251cb3),var(--p4-art-wood-tag);background-size:100% 100%;padding:8px 12px;margin-inline:-5px;min-height:32px}
+body[data-ui=mountain] .mode-story{background-image:var(--p4-art-paper-strip);background-size:100% 100%;background-repeat:no-repeat}
+body[data-ui=mountain] .mode-story .journey-tag{border-left-color:#b5402e}
+body[data-ui=mountain] .hall-footer{border-top:1px solid #69877c66;padding-top:7px;background:var(--p4-art-ridge-line) left top/auto 7px repeat-x}
+body[data-ui=mountain] .selection-top{background-image:var(--p4-art-ridge-line);background-size:auto 7px;background-position:left bottom;background-repeat:repeat-x;border-bottom:0}
+body[data-ui=mountain] .fighter-card{background-image:linear-gradient(#18352a44,#18352a44),var(--p4-art-cloth-banner);background-position:center;background-size:100% 100%;background-repeat:no-repeat}
+body[data-ui=mountain] .fighter-card.chosen{background-image:linear-gradient(#56774b44,#244d3866),var(--p4-art-cloth-banner)}
+body[data-ui=mountain] .fighter-card .p4-crest{position:absolute;top:3px;right:3px;width:23px;height:23px;max-width:23px;filter:none;translate:none;pointer-events:none;object-fit:contain}
+body[data-ui=mountain] .selection-footer .chosen{padding-inline-start:9px;border-left:3px solid #b5402e}
+body[data-ui=mountain] .hud-side[data-element=earth]{--p4-crest:var(--p4-art-crest-moguzo)}
+body[data-ui=mountain] .hud-side[data-element=wind]{--p4-crest:var(--p4-art-crest-pisuke)}
+body[data-ui=mountain] .hud-side[data-element=stone]{--p4-crest:var(--p4-art-crest-godan)}
+body[data-ui=mountain] .hud-side[data-element=snow]{--p4-crest:var(--p4-art-crest-hakuma)}
+body[data-ui=mountain] .hud-side[data-element=illusion]{--p4-crest:var(--p4-art-crest-chirka)}
+body[data-ui=mountain] .hud-side[data-element=grapple]{--p4-crest:var(--p4-art-crest-takimaru)}
+body[data-ui=mountain] .hud-side[data-element=moon]{--p4-crest:var(--p4-art-crest-yomikage)}
+body[data-ui=mountain] .hud-side[data-element=amber]{--p4-crest:var(--p4-art-crest-bullet)}
+body[data-ui=mountain] .hud-side[data-element=dark]{--p4-crest:var(--p4-art-crest-dark_moguzo)}
+body[data-ui=mountain] :is(#arena,#story-app) .hud-side[data-element] .hud-name{position:relative;padding-inline-start:21px}
+body[data-ui=mountain] :is(#arena,#story-app) .hud-side.mirrored[data-element] .hud-name{padding-inline-start:0;padding-inline-end:21px}
+body[data-ui=mountain] :is(#arena,#story-app) .hud-side[data-element] .hud-name:before{content:"";display:block;position:absolute;top:-2px;left:0;width:18px;height:18px;border:0;clip-path:none;border-radius:0;background:var(--p4-crest) center/contain no-repeat}
+body[data-ui=mountain] :is(#arena,#story-app) .hud-side.mirrored[data-element] .hud-name:before{left:auto;right:0;background:var(--p4-crest) center/contain no-repeat}
+body[data-ui=mountain] :is(#arena,#story-app) .hud .health .track{background:var(--p4-art-hud-hp-frame) center/100% 100% no-repeat;border:0;padding:2px 6px}
+body[data-ui=mountain] :is(#arena,#story-app) .hud .drive .track,body[data-ui=mountain] :is(#arena,#story-app) .hud .super .track{background:var(--p4-art-hud-sub-frame) center/100% 100% no-repeat;border:0;padding-inline:4px}
+body[data-ui=mountain] :is(#arena,#story-app) .hud .round-center{background:var(--p4-art-hud-timer-dark) center/100% 100% no-repeat;border:0;border-radius:0;padding:4px 1px 9px}
+body[data-ui=mountain] .shared-attack-pad .attack{--p4-button:var(--p4-art-button-weak)}
+body[data-ui=mountain] .shared-attack-pad .attack.heavy{--p4-button:var(--p4-art-button-heavy)}
+body[data-ui=mountain] .shared-attack-pad .attack.throw{--p4-button:var(--p4-art-button-throw)}
+body[data-ui=mountain] .shared-attack-pad .attack.gyuiin{--p4-button:var(--p4-art-button-gyuiin)}
+body[data-ui=mountain] .shared-attack-pad .attack.special{--p4-button:var(--p4-art-button-special)}
+body[data-ui=mountain] .shared-attack-pad .attack.ultimateButton{--p4-button:var(--p4-art-button-ultimate)}
+body[data-ui=mountain] #buttons-rail .attack[data-control],body[data-ui=mountain] #battle-buttons .attack[data-control]{background-image:var(--p4-button);background-size:100% 100%;background-repeat:no-repeat;border-color:transparent;box-shadow:none;background-color:transparent}
+body[data-ui=mountain] #buttons-rail .attack.ultimateButton,body[data-ui=mountain] #battle-buttons .attack.ultimateButton{border-color:transparent}
+body[data-ui=mountain] .intro-plate{background-image:linear-gradient(90deg,#10251fd0,#10251f50),var(--p4-art-cut-panel);background-size:100% 100%}
+body[data-ui=mountain] .victory-banner{background-image:linear-gradient(90deg,#153224cc,#15322433),var(--p4-art-cut-panel);background-size:100% 100%}
+body[data-ui=mountain] #game-over .result-panel{position:relative;background-image:linear-gradient(90deg,#173426f5,#173426dc),var(--p4-art-fist-seal);background-size:auto,90px 90px;background-position:center,right 12px bottom 6px;background-repeat:no-repeat}
+body[data-ui=mountain] #story-app header .brand:before{content:"";background:var(--p4-art-fist-seal) center/contain no-repeat;border:0}
+body[data-ui=mountain] #story-app #editor{border-top:0;background-image:linear-gradient(#163426e8,#163426f5),var(--p4-art-cut-panel);background-size:100% 100%}
+body[data-ui=mountain] #story-app .p4-editor-tabs button[aria-selected=true]{background-image:var(--p4-art-paper-strip);background-size:100% 100%;background-color:#efe6cc;color:#172e22}
+body[data-ui=mountain] #story-app .p4-save-summary{background:var(--p4-art-paper-strip) center/100% 100% no-repeat;border:0;padding:14px 18px 18px;color:#172e22}
+body[data-ui=mountain] #story-app .p4-save-summary dt{color:#3b5546}
+body[data-ui=mountain] #story-app .p4-save-summary dd{color:#172e22}
+body[data-ui=mountain] #story-app .p4-save-title:before{content:"";display:inline-block;vertical-align:middle;margin-right:7px;width:28px;height:28px;background:var(--p4-art-fist-seal) center/contain no-repeat}
+body[data-ui=mountain] #story-app .journey{background-image:var(--p4-art-wood-tag-dark);background-size:100% 100%;border:0;padding:13px 18px}
+body[data-ui=mountain] #story-app .npc-tag{background:var(--p4-art-paper-strip) center/100% 100% no-repeat;border:0;padding:10px 20px}
+body[data-ui=mountain] #story-app .npc-tag b,body[data-ui=mountain] #story-app .npc-tag span{color:#193b2b}
+body[data-ui=mountain] #story-app .dialogue{background-image:linear-gradient(#173426ee,#173426f5),var(--p4-art-cut-panel);background-size:100% 100%}
+body[data-ui=mountain] #story-app .dialogue .eyebrow{display:inline-block;background:var(--p4-art-wood-tag-dark) center/100% 100% no-repeat;padding:5px 13px;color:#f5efdb}
+@media(max-height:500px),(orientation:portrait){body[data-ui=mountain] .fighter-card .p4-crest{width:18px;height:18px;max-width:18px}body[data-ui=mountain] .mode-hall:before{background-size:auto 140px,auto 100px,cover}body[data-ui=mountain] .mode-arcade .mode-rule{padding:4px 9px;min-height:26px}body[data-ui=mountain] #story-app .journey{padding:10px 15px}}
+@media(forced-colors:active){body[data-ui=mountain] .ui-seal,body[data-ui=mountain] .brand-mark{color:ButtonText;border:1px solid ButtonText}body[data-ui=mountain] .mode-kicker:before,body[data-ui=mountain] .hud-name:before{display:none}body[data-ui=mountain] .shared-attack-pad .attack{border:2px solid ButtonText!important;color:ButtonText!important}body[data-ui=mountain] .hud .track{border:1px solid ButtonText!important;padding:0!important}}

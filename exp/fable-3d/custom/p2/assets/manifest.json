@@ -1,0 +1,2293 @@
+{
+ "schemaVersion": 1,
+ "version": "p2-exchange-1",
+ "coordinateSystem": "gltf-y-up-metres-host-bind-local",
+ "modules": [
+  {
+   "id": "moguzo-head-godan",
+   "targetBaseId": "moguzo",
+   "donorId": "godan",
+   "slot": "head",
+   "file": "modules/moguzo/head_godan.glb",
+   "meshNames": [
+    "p2_head_godan_for_moguzo",
+    "p2_head_godan_for_moguzo_eyes"
+   ],
+   "bytes": 622044,
+   "sha256": "83a97c89c79e605d8f26c6b7dd7091f87e4f29509cda21be4e61fec4aec80bf0",
+   "lod": 0,
+   "morphTargets": [
+    "paw_open.L",
+    "paw_open.R",
+    "blink",
+    "brow_angry"
+   ],
+   "jointNames": [
+    "root_ground",
+    "pelvis",
+    "spine",
+    "chest",
+    "neck",
+    "head",
+    "band_a_01",
+    "band_a_02",
+    "band_b_01",
+    "band_b_02",
+    "jaw",
+    "shoulder.L",
+    "shoulder_fix.L",
+    "upper_arm.L",
+    "forearm.L",
+    "forearm_twist.L",
+    "wrist.L",
+    "paw.L",
+    "shoulder.R",
+    "shoulder_fix.R",
+    "upper_arm.R",
+    "forearm.R",
+    "forearm_twist.R",
+    "wrist.R",
+    "paw.R",
+    "tail_01",
+    "tail_02",
+    "tail_03",
+    "thigh.L",
+    "shin.L",
+    "ankle.L",
+    "foot.L",
+    "toe.L",
+    "thigh.R",
+    "shin.R",
+    "ankle.R",
+    "foot.R",
+    "toe.R",
+    "thigh_fix.L",
+    "thigh_fix.R"
+   ],
+   "palette": {
+    "fur": "#664224",
+    "belly": "#b28547",
+    "muzzle": "#bd9457",
+    "paw": "#33241a",
+    "foot": "#30241c",
+    "ear": "#40291a",
+    "tail": "#664224",
+    "accent": "#0f0f12"
+   },
+   "seams": {
+    "kind": "matched-host-boundary",
+    "tolerance": 2e-05
+   },
+   "socket": {
+    "bone": "head",
+    "position": [
+     0,
+     0,
+     0
+    ],
+    "space": "host-bind-local"
+   },
+   "source": {
+    "path": "../tools/p2lib.py",
+    "sha256": "7d10f016443e9a229017ff43cc8c6484a602c83fe512c7a8c660693ee76d58e5"
+   }
+  },
+  {
+   "id": "moguzo-head-bullet",
+   "targetBaseId": "moguzo",
+   "donorId": "bullet",
+   "slot": "head",
+   "file": "modules/moguzo/head_bullet.glb",
+   "meshNames": [
+    "p2_head_bullet_for_moguzo",
+    "p2_head_bullet_for_moguzo_eyes"
+   ],
+   "bytes": 732748,
+   "sha256": "5c5f9f0b37e4524a88cc3e09ae95d3e7ca3c6631d6e02701397d729465cbfefe",
+   "lod": 0,
+   "morphTargets": [
+    "paw_open.L",
+    "paw_open.R",
+    "blink",
+    "brow_angry"
+   ],
+   "jointNames": [
+    "root_ground",
+    "pelvis",
+    "spine",
+    "chest",
+    "neck",
+    "head",
+    "band_a_01",
+    "band_a_02",
+    "band_b_01",
+    "band_b_02",
+    "jaw",
+    "shoulder.L",
+    "shoulder_fix.L",
+    "upper_arm.L",
+    "forearm.L",
+    "forearm_twist.L",
+    "wrist.L",
+    "paw.L",
+    "shoulder.R",
+    "shoulder_fix.R",
+    "upper_arm.R",
+    "forearm.R",
+    "forearm_twist.R",
+    "wrist.R",
+    "paw.R",
+    "tail_01",
+    "tail_02",
+    "tail_03",
+    "thigh.L",
+    "shin.L",
+    "ankle.L",
+    "foot.L",
+    "toe.L",
+    "thigh.R",
+    "shin.R",
+    "ankle.R",
+    "foot.R",
+    "toe.R",
+    "thigh_fix.L",
+    "thigh_fix.R"
+   ],
+   "palette": {
+    "fur": "#cc6b24",
+    "belly": "#e68f3d",
+    "muzzle": "#e6994c",
+    "paw": "#5c3d29",
+    "foot": "#c79461",
+    "ear": "#73381a",
+    "tail": "#703012",
+    "accent": "#9e7042"
+   },
+   "seams": {
+    "kind": "matched-host-boundary",
+    "tolerance": 2e-05
+   },
+   "socket": {
+    "bone": "head",
+    "position": [
+     0,
+     0,
+     0
+    ],
+    "space": "host-bind-local"
+   },
+   "source": {
+    "path": "../tools/p2lib.py",
+    "sha256": "7d10f016443e9a229017ff43cc8c6484a602c83fe512c7a8c660693ee76d58e5"
+   }
+  },
+  {
+   "id": "moguzo-ears-godan",
+   "targetBaseId": "moguzo",
+   "donorId": "godan",
+   "slot": "ears",
+   "file": "modules/moguzo/ears_godan.glb",
+   "meshNames": [
+    "p2_ears_godan_for_moguzo"
+   ],
+   "bytes": 276148,
+   "sha256": "ed6e7a1f8ba523a8ab60f5a6c131a448399860eef704254c333c191d1ecaaef4",
+   "lod": 0,
+   "morphTargets": [
+    "paw_open.L",
+    "paw_open.R",
+    "blink",
+    "brow_angry"
+   ],
+   "jointNames": [
+    "root_ground",
+    "pelvis",
+    "spine",
+    "chest",
+    "neck",
+    "head",
+    "band_a_01",
+    "band_a_02",
+    "band_b_01",
+    "band_b_02",
+    "jaw",
+    "shoulder.L",
+    "shoulder_fix.L",
+    "upper_arm.L",
+    "forearm.L",
+    "forearm_twist.L",
+    "wrist.L",
+    "paw.L",
+    "shoulder.R",
+    "shoulder_fix.R",
+    "upper_arm.R",
+    "forearm.R",
+    "forearm_twist.R",
+    "wrist.R",
+    "paw.R",
+    "tail_01",
+    "tail_02",
+    "tail_03",
+    "thigh.L",
+    "shin.L",
+    "ankle.L",
+    "foot.L",
+    "toe.L",
+    "thigh.R",
+    "shin.R",
+    "ankle.R",
+    "foot.R",
+    "toe.R",
+    "thigh_fix.L",
+    "thigh_fix.R"
+   ],
+   "palette": {
+    "fur": "#664224",
+    "belly": "#b28547",
+    "muzzle": "#bd9457",
+    "paw": "#33241a",
+    "foot": "#30241c",
+    "ear": "#40291a",
+    "tail": "#664224",
+    "accent": "#0f0f12"
+   },
+   "seams": {
+    "kind": "matched-host-boundary",
+    "tolerance": 2e-05
+   },
+   "socket": {
+    "bone": "head",
+    "position": [
+     0,
+     0,
+     0
+    ],
+    "space": "host-bind-local"
+   },
+   "source": {
+    "path": "../tools/p2lib.py",
+    "sha256": "7d10f016443e9a229017ff43cc8c6484a602c83fe512c7a8c660693ee76d58e5"
+   }
+  },
+  {
+   "id": "moguzo-ears-bullet",
+   "targetBaseId": "moguzo",
+   "donorId": "bullet",
+   "slot": "ears",
+   "file": "modules/moguzo/ears_bullet.glb",
+   "meshNames": [
+    "p2_ears_bullet_for_moguzo"
+   ],
+   "bytes": 412272,
+   "sha256": "5677ad68e80cf75935ac3517501cd6da0096b5f8f7f8fd8637cd26bbf6f419af",
+   "lod": 0,
+   "morphTargets": [
+    "paw_open.L",
+    "paw_open.R",
+    "blink",
+    "brow_angry"
+   ],
+   "jointNames": [
+    "root_ground",
+    "pelvis",
+    "spine",
+    "chest",
+    "neck",
+    "head",
+    "band_a_01",
+    "band_a_02",
+    "band_b_01",
+    "band_b_02",
+    "jaw",
+    "shoulder.L",
+    "shoulder_fix.L",
+    "upper_arm.L",
+    "forearm.L",
+    "forearm_twist.L",
+    "wrist.L",
+    "paw.L",
+    "shoulder.R",
+    "shoulder_fix.R",
+    "upper_arm.R",
+    "forearm.R",
+    "forearm_twist.R",
+    "wrist.R",
+    "paw.R",
+    "tail_01",
+    "tail_02",
+    "tail_03",
+    "thigh.L",
+    "shin.L",
+    "ankle.L",
+    "foot.L",
+    "toe.L",
+    "thigh.R",
+    "shin.R",
+    "ankle.R",
+    "foot.R",
+    "toe.R",
+    "thigh_fix.L",
+    "thigh_fix.R"
+   ],
+   "palette": {
+    "fur": "#cc6b24",
+    "belly": "#e68f3d",
+    "muzzle": "#e6994c",
+    "paw": "#5c3d29",
+    "foot": "#c79461",
+    "ear": "#73381a",
+    "tail": "#703012",
+    "accent": "#9e7042"
+   },
+   "seams": {
+    "kind": "matched-host-boundary",
+    "tolerance": 2e-05
+   },
+   "socket": {
+    "bone": "head",
+    "position": [
+     0,
+     0,
+     0
+    ],
+    "space": "host-bind-local"
+   },
+   "source": {
+    "path": "../tools/p2lib.py",
+    "sha256": "7d10f016443e9a229017ff43cc8c6484a602c83fe512c7a8c660693ee76d58e5"
+   }
+  },
+  {
+   "id": "moguzo-hands-godan",
+   "targetBaseId": "moguzo",
+   "donorId": "godan",
+   "slot": "hands",
+   "file": "modules/moguzo/hands_godan.glb",
+   "meshNames": [
+    "p2_hands_godan_for_moguzo"
+   ],
+   "bytes": 865656,
+   "sha256": "4b61a109742ab22539c97596e91961335df7730cb48f05fb27c9157dd358b6a5",
+   "lod": 0,
+   "morphTargets": [
+    "paw_open.L",
+    "paw_open.R",
+    "blink",
+    "brow_angry"
+   ],
+   "jointNames": [
+    "root_ground",
+    "pelvis",
+    "spine",
+    "chest",
+    "neck",
+    "head",
+    "band_a_01",
+    "band_a_02",
+    "band_b_01",
+    "band_b_02",
+    "jaw",
+    "shoulder.L",
+    "shoulder_fix.L",
+    "upper_arm.L",
+    "forearm.L",
+    "forearm_twist.L",
+    "wrist.L",
+    "paw.L",
+    "shoulder.R",
+    "shoulder_fix.R",
+    "upper_arm.R",
+    "forearm.R",
+    "forearm_twist.R",
+    "wrist.R",
+    "paw.R",
+    "tail_01",
+    "tail_02",
+    "tail_03",
+    "thigh.L",
+    "shin.L",
+    "ankle.L",
+    "foot.L",
+    "toe.L",
+    "thigh.R",
+    "shin.R",
+    "ankle.R",
+    "foot.R",
+    "toe.R",
+    "thigh_fix.L",
+    "thigh_fix.R"
+   ],
+   "palette": {
+    "fur": "#664224",
+    "belly": "#b28547",
+    "muzzle": "#bd9457",
+    "paw": "#33241a",
+    "foot": "#30241c",
+    "ear": "#40291a",
+    "tail": "#664224",
+    "accent": "#0f0f12"
+   },
+   "seams": {
+    "kind": "matched-host-boundary",
+    "tolerance": 2e-05
+   },
+   "socket": {
+    "bone": "chest",
+    "position": [
+     0,
+     0,
+     0
+    ],
+    "space": "host-bind-local"
+   },
+   "source": {
+    "path": "../tools/p2lib.py",
+    "sha256": "7d10f016443e9a229017ff43cc8c6484a602c83fe512c7a8c660693ee76d58e5"
+   }
+  },
+  {
+   "id": "moguzo-hands-bullet",
+   "targetBaseId": "moguzo",
+   "donorId": "bullet",
+   "slot": "hands",
+   "file": "modules/moguzo/hands_bullet.glb",
+   "meshNames": [
+    "p2_hands_bullet_for_moguzo"
+   ],
+   "bytes": 804828,
+   "sha256": "e5e5e8f285a4bd96a2146e29fe28a86c5924b1e29677fa9b8c7865f44f1a6dab",
+   "lod": 0,
+   "morphTargets": [
+    "paw_open.L",
+    "paw_open.R",
+    "blink",
+    "brow_angry"
+   ],
+   "jointNames": [
+    "root_ground",
+    "pelvis",
+    "spine",
+    "chest",
+    "neck",
+    "head",
+    "band_a_01",
+    "band_a_02",
+    "band_b_01",
+    "band_b_02",
+    "jaw",
+    "shoulder.L",
+    "shoulder_fix.L",
+    "upper_arm.L",
+    "forearm.L",
+    "forearm_twist.L",
+    "wrist.L",
+    "paw.L",
+    "shoulder.R",
+    "shoulder_fix.R",
+    "upper_arm.R",
+    "forearm.R",
+    "forearm_twist.R",
+    "wrist.R",
+    "paw.R",
+    "tail_01",
+    "tail_02",
+    "tail_03",
+    "thigh.L",
+    "shin.L",
+    "ankle.L",
+    "foot.L",
+    "toe.L",
+    "thigh.R",
+    "shin.R",
+    "ankle.R",
+    "foot.R",
+    "toe.R",
+    "thigh_fix.L",
+    "thigh_fix.R"
+   ],
+   "palette": {
+    "fur": "#cc6b24",
+    "belly": "#e68f3d",
+    "muzzle": "#e6994c",
+    "paw": "#5c3d29",
+    "foot": "#c79461",
+    "ear": "#73381a",
+    "tail": "#703012",
+    "accent": "#9e7042"
+   },
+   "seams": {
+    "kind": "matched-host-boundary",
+    "tolerance": 2e-05
+   },
+   "socket": {
+    "bone": "chest",
+    "position": [
+     0,
+     0,
+     0
+    ],
+    "space": "host-bind-local"
+   },
+   "source": {
+    "path": "../tools/p2lib.py",
+    "sha256": "7d10f016443e9a229017ff43cc8c6484a602c83fe512c7a8c660693ee76d58e5"
+   }
+  },
+  {
+   "id": "moguzo-feet-godan",
+   "targetBaseId": "moguzo",
+   "donorId": "godan",
+   "slot": "feet",
+   "file": "modules/moguzo/feet_godan.glb",
+   "meshNames": [
+    "p2_feet_godan_for_moguzo"
+   ],
+   "bytes": 836600,
+   "sha256": "3aabd1b2e19959d6a86fb7d3c751dc36b2f2cf53ce54f6394b88d4e65c9287cc",
+   "lod": 0,
+   "morphTargets": [
+    "paw_open.L",
+    "paw_open.R",
+    "blink",
+    "brow_angry"
+   ],
+   "jointNames": [
+    "root_ground",
+    "pelvis",
+    "spine",
+    "chest",
+    "neck",
+    "head",
+    "band_a_01",
+    "band_a_02",
+    "band_b_01",
+    "band_b_02",
+    "jaw",
+    "shoulder.L",
+    "shoulder_fix.L",
+    "upper_arm.L",
+    "forearm.L",
+    "forearm_twist.L",
+    "wrist.L",
+    "paw.L",
+    "shoulder.R",
+    "shoulder_fix.R",
+    "upper_arm.R",
+    "forearm.R",
+    "forearm_twist.R",
+    "wrist.R",
+    "paw.R",
+    "tail_01",
+    "tail_02",
+    "tail_03",
+    "thigh.L",
+    "shin.L",
+    "ankle.L",
+    "foot.L",
+    "toe.L",
+    "thigh.R",
+    "shin.R",
+    "ankle.R",
+    "foot.R",
+    "toe.R",
+    "thigh_fix.L",
+    "thigh_fix.R"
+   ],
+   "palette": {
+    "fur": "#664224",
+    "belly": "#b28547",
+    "muzzle": "#bd9457",
+    "paw": "#33241a",
+    "foot": "#30241c",
+    "ear": "#40291a",
+    "tail": "#664224",
+    "accent": "#0f0f12"
+   },
+   "seams": {
+    "kind": "matched-host-boundary",
+    "tolerance": 2e-05
+   },
+   "socket": {
+    "bone": "pelvis",
+    "position": [
+     0,
+     0,
+     0
+    ],
+    "space": "host-bind-local"
+   },
+   "source": {
+    "path": "../tools/p2lib.py",
+    "sha256": "7d10f016443e9a229017ff43cc8c6484a602c83fe512c7a8c660693ee76d58e5"
+   }
+  },
+  {
+   "id": "moguzo-feet-bullet",
+   "targetBaseId": "moguzo",
+   "donorId": "bullet",
+   "slot": "feet",
+   "file": "modules/moguzo/feet_bullet.glb",
+   "meshNames": [
+    "p2_feet_bullet_for_moguzo"
+   ],
+   "bytes": 877380,
+   "sha256": "0ea7c6d0f6fccfbd760741cc1bd23e7b7da95f8d76c31031c7cc5b9bdd090063",
+   "lod": 0,
+   "morphTargets": [
+    "paw_open.L",
+    "paw_open.R",
+    "blink",
+    "brow_angry"
+   ],
+   "jointNames": [
+    "root_ground",
+    "pelvis",
+    "spine",
+    "chest",
+    "neck",
+    "head",
+    "band_a_01",
+    "band_a_02",
+    "band_b_01",
+    "band_b_02",
+    "jaw",
+    "shoulder.L",
+    "shoulder_fix.L",
+    "upper_arm.L",
+    "forearm.L",
+    "forearm_twist.L",
+    "wrist.L",
+    "paw.L",
+    "shoulder.R",
+    "shoulder_fix.R",
+    "upper_arm.R",
+    "forearm.R",
+    "forearm_twist.R",
+    "wrist.R",
+    "paw.R",
+    "tail_01",
+    "tail_02",
+    "tail_03",
+    "thigh.L",
+    "shin.L",
+    "ankle.L",
+    "foot.L",
+    "toe.L",
+    "thigh.R",
+    "shin.R",
+    "ankle.R",
+    "foot.R",
+    "toe.R",
+    "thigh_fix.L",
+    "thigh_fix.R"
+   ],
+   "palette": {
+    "fur": "#cc6b24",
+    "belly": "#e68f3d",
+    "muzzle": "#e6994c",
+    "paw": "#5c3d29",
+    "foot": "#c79461",
+    "ear": "#73381a",
+    "tail": "#703012",
+    "accent": "#9e7042"
+   },
+   "seams": {
+    "kind": "matched-host-boundary",
+    "tolerance": 2e-05
+   },
+   "socket": {
+    "bone": "pelvis",
+    "position": [
+     0,
+     0,
+     0
+    ],
+    "space": "host-bind-local"
+   },
+   "source": {
+    "path": "../tools/p2lib.py",
+    "sha256": "7d10f016443e9a229017ff43cc8c6484a602c83fe512c7a8c660693ee76d58e5"
+   }
+  },
+  {
+   "id": "godan-head-moguzo",
+   "targetBaseId": "godan",
+   "donorId": "moguzo",
+   "slot": "head",
+   "file": "modules/godan/head_moguzo.glb",
+   "meshNames": [
+    "p2_head_moguzo_for_godan",
+    "p2_head_moguzo_for_godan_eyes"
+   ],
+   "bytes": 765700,
+   "sha256": "34b46ea6e32296e37b9904c0e089a7a917101334a2951b10fcfe67f2f55a1c23",
+   "lod": 0,
+   "morphTargets": [
+    "paw_open.L",
+    "paw_open.R",
+    "blink",
+    "brow_angry"
+   ],
+   "jointNames": [
+    "root_ground",
+    "pelvis",
+    "spine",
+    "belt_a_01",
+    "belt_a_02",
+    "belt_b_01",
+    "belt_b_02",
+    "chest",
+    "neck",
+    "head",
+    "jaw",
+    "shoulder.L",
+    "shoulder_fix.L",
+    "upper_arm.L",
+    "forearm.L",
+    "forearm_twist.L",
+    "wrist.L",
+    "paw.L",
+    "shoulder.R",
+    "shoulder_fix.R",
+    "upper_arm.R",
+    "forearm.R",
+    "forearm_twist.R",
+    "wrist.R",
+    "paw.R",
+    "tail_01",
+    "tail_02",
+    "tail_03",
+    "thigh.L",
+    "shin.L",
+    "ankle.L",
+    "foot.L",
+    "toe.L",
+    "thigh.R",
+    "shin.R",
+    "ankle.R",
+    "foot.R",
+    "toe.R",
+    "thigh_fix.L",
+    "thigh_fix.R"
+   ],
+   "palette": {
+    "fur": "#bd915c",
+    "belly": "#ebcc94",
+    "muzzle": "#edd4a3",
+    "paw": "#422e21",
+    "foot": "#383636",
+    "ear": "#734c33",
+    "tail": "#bd915c",
+    "accent": "#cc140f"
+   },
+   "seams": {
+    "kind": "matched-host-boundary",
+    "tolerance": 2e-05
+   },
+   "socket": {
+    "bone": "head",
+    "position": [
+     0,
+     0,
+     0
+    ],
+    "space": "host-bind-local"
+   },
+   "source": {
+    "path": "../tools/p2lib.py",
+    "sha256": "7d10f016443e9a229017ff43cc8c6484a602c83fe512c7a8c660693ee76d58e5"
+   }
+  },
+  {
+   "id": "godan-head-bullet",
+   "targetBaseId": "godan",
+   "donorId": "bullet",
+   "slot": "head",
+   "file": "modules/godan/head_bullet.glb",
+   "meshNames": [
+    "p2_head_bullet_for_godan",
+    "p2_head_bullet_for_godan_eyes"
+   ],
+   "bytes": 731280,
+   "sha256": "2668ea6355abef15ba9760f3986fe7df214c9d55b946d2b5c21779e70a4bfecf",
+   "lod": 0,
+   "morphTargets": [
+    "paw_open.L",
+    "paw_open.R",
+    "blink",
+    "brow_angry"
+   ],
+   "jointNames": [
+    "root_ground",
+    "pelvis",
+    "spine",
+    "belt_a_01",
+    "belt_a_02",
+    "belt_b_01",
+    "belt_b_02",
+    "chest",
+    "neck",
+    "head",
+    "jaw",
+    "shoulder.L",
+    "shoulder_fix.L",
+    "upper_arm.L",
+    "forearm.L",
+    "forearm_twist.L",
+    "wrist.L",
+    "paw.L",
+    "shoulder.R",
+    "shoulder_fix.R",
+    "upper_arm.R",
+    "forearm.R",
+    "forearm_twist.R",
+    "wrist.R",
+    "paw.R",
+    "tail_01",
+    "tail_02",
+    "tail_03",
+    "thigh.L",
+    "shin.L",
+    "ankle.L",
+    "foot.L",
+    "toe.L",
+    "thigh.R",
+    "shin.R",
+    "ankle.R",
+    "foot.R",
+    "toe.R",
+    "thigh_fix.L",
+    "thigh_fix.R"
+   ],
+   "palette": {
+    "fur": "#cc6b24",
+    "belly": "#e68f3d",
+    "muzzle": "#e6994c",
+    "paw": "#5c3d29",
+    "foot": "#c79461",
+    "ear": "#73381a",
+    "tail": "#703012",
+    "accent": "#9e7042"
+   },
+   "seams": {
+    "kind": "matched-host-boundary",
+    "tolerance": 2e-05
+   },
+   "socket": {
+    "bone": "head",
+    "position": [
+     0,
+     0,
+     0
+    ],
+    "space": "host-bind-local"
+   },
+   "source": {
+    "path": "../tools/p2lib.py",
+    "sha256": "7d10f016443e9a229017ff43cc8c6484a602c83fe512c7a8c660693ee76d58e5"
+   }
+  },
+  {
+   "id": "godan-ears-moguzo",
+   "targetBaseId": "godan",
+   "donorId": "moguzo",
+   "slot": "ears",
+   "file": "modules/godan/ears_moguzo.glb",
+   "meshNames": [
+    "p2_ears_moguzo_for_godan"
+   ],
+   "bytes": 397548,
+   "sha256": "3f8f189991c2bab6baef388fcddad471b843264f9facfe9a6d5c076470d05118",
+   "lod": 0,
+   "morphTargets": [
+    "paw_open.L",
+    "paw_open.R",
+    "blink",
+    "brow_angry"
+   ],
+   "jointNames": [
+    "root_ground",
+    "pelvis",
+    "spine",
+    "belt_a_01",
+    "belt_a_02",
+    "belt_b_01",
+    "belt_b_02",
+    "chest",
+    "neck",
+    "head",
+    "jaw",
+    "shoulder.L",
+    "shoulder_fix.L",
+    "upper_arm.L",
+    "forearm.L",
+    "forearm_twist.L",
+    "wrist.L",
+    "paw.L",
+    "shoulder.R",
+    "shoulder_fix.R",
+    "upper_arm.R",
+    "forearm.R",
+    "forearm_twist.R",
+    "wrist.R",
+    "paw.R",
+    "tail_01",
+    "tail_02",
+    "tail_03",
+    "thigh.L",
+    "shin.L",
+    "ankle.L",
+    "foot.L",
+    "toe.L",
+    "thigh.R",
+    "shin.R",
+    "ankle.R",
+    "foot.R",
+    "toe.R",
+    "thigh_fix.L",
+    "thigh_fix.R"
+   ],
+   "palette": {
+    "fur": "#bd915c",
+    "belly": "#ebcc94",
+    "muzzle": "#edd4a3",
+    "paw": "#422e21",
+    "foot": "#383636",
+    "ear": "#734c33",
+    "tail": "#bd915c",
+    "accent": "#cc140f"
+   },
+   "seams": {
+    "kind": "matched-host-boundary",
+    "tolerance": 2e-05
+   },
+   "socket": {
+    "bone": "head",
+    "position": [
+     0,
+     0,
+     0
+    ],
+    "space": "host-bind-local"
+   },
+   "source": {
+    "path": "../tools/p2lib.py",
+    "sha256": "7d10f016443e9a229017ff43cc8c6484a602c83fe512c7a8c660693ee76d58e5"
+   }
+  },
+  {
+   "id": "godan-ears-bullet",
+   "targetBaseId": "godan",
+   "donorId": "bullet",
+   "slot": "ears",
+   "file": "modules/godan/ears_bullet.glb",
+   "meshNames": [
+    "p2_ears_bullet_for_godan"
+   ],
+   "bytes": 408184,
+   "sha256": "5f8a0d35a4ffd47efc4761344e1fdab3824bc96628e5fabc40f54d3e6bdadb18",
+   "lod": 0,
+   "morphTargets": [
+    "paw_open.L",
+    "paw_open.R",
+    "blink",
+    "brow_angry"
+   ],
+   "jointNames": [
+    "root_ground",
+    "pelvis",
+    "spine",
+    "belt_a_01",
+    "belt_a_02",
+    "belt_b_01",
+    "belt_b_02",
+    "chest",
+    "neck",
+    "head",
+    "jaw",
+    "shoulder.L",
+    "shoulder_fix.L",
+    "upper_arm.L",
+    "forearm.L",
+    "forearm_twist.L",
+    "wrist.L",
+    "paw.L",
+    "shoulder.R",
+    "shoulder_fix.R",
+    "upper_arm.R",
+    "forearm.R",
+    "forearm_twist.R",
+    "wrist.R",
+    "paw.R",
+    "tail_01",
+    "tail_02",
+    "tail_03",
+    "thigh.L",
+    "shin.L",
+    "ankle.L",
+    "foot.L",
+    "toe.L",
+    "thigh.R",
+    "shin.R",
+    "ankle.R",
+    "foot.R",
+    "toe.R",
+    "thigh_fix.L",
+    "thigh_fix.R"
+   ],
+   "palette": {
+    "fur": "#cc6b24",
+    "belly": "#e68f3d",
+    "muzzle": "#e6994c",
+    "paw": "#5c3d29",
+    "foot": "#c79461",
+    "ear": "#73381a",
+    "tail": "#703012",
+    "accent": "#9e7042"
+   },
+   "seams": {
+    "kind": "matched-host-boundary",
+    "tolerance": 2e-05
+   },
+   "socket": {
+    "bone": "head",
+    "position": [
+     0,
+     0,
+     0
+    ],
+    "space": "host-bind-local"
+   },
+   "source": {
+    "path": "../tools/p2lib.py",
+    "sha256": "7d10f016443e9a229017ff43cc8c6484a602c83fe512c7a8c660693ee76d58e5"
+   }
+  },
+  {
+   "id": "godan-hands-moguzo",
+   "targetBaseId": "godan",
+   "donorId": "moguzo",
+   "slot": "hands",
+   "file": "modules/godan/hands_moguzo.glb",
+   "meshNames": [
+    "p2_hands_moguzo_for_godan"
+   ],
+   "bytes": 880864,
+   "sha256": "7d3142c8c1fa68189d858261fe2d38acb6db0867ba653e747fca195c8f45e688",
+   "lod": 0,
+   "morphTargets": [
+    "paw_open.L",
+    "paw_open.R",
+    "blink",
+    "brow_angry"
+   ],
+   "jointNames": [
+    "root_ground",
+    "pelvis",
+    "spine",
+    "belt_a_01",
+    "belt_a_02",
+    "belt_b_01",
+    "belt_b_02",
+    "chest",
+    "neck",
+    "head",
+    "jaw",
+    "shoulder.L",
+    "shoulder_fix.L",
+    "upper_arm.L",
+    "forearm.L",
+    "forearm_twist.L",
+    "wrist.L",
+    "paw.L",
+    "shoulder.R",
+    "shoulder_fix.R",
+    "upper_arm.R",
+    "forearm.R",
+    "forearm_twist.R",
+    "wrist.R",
+    "paw.R",
+    "tail_01",
+    "tail_02",
+    "tail_03",
+    "thigh.L",
+    "shin.L",
+    "ankle.L",
+    "foot.L",
+    "toe.L",
+    "thigh.R",
+    "shin.R",
+    "ankle.R",
+    "foot.R",
+    "toe.R",
+    "thigh_fix.L",
+    "thigh_fix.R"
+   ],
+   "palette": {
+    "fur": "#bd915c",
+    "belly": "#ebcc94",
+    "muzzle": "#edd4a3",
+    "paw": "#422e21",
+    "foot": "#383636",
+    "ear": "#734c33",
+    "tail": "#bd915c",
+    "accent": "#cc140f"
+   },
+   "seams": {
+    "kind": "matched-host-boundary",
+    "tolerance": 2e-05
+   },
+   "socket": {
+    "bone": "chest",
+    "position": [
+     0,
+     0,
+     0
+    ],
+    "space": "host-bind-local"
+   },
+   "source": {
+    "path": "../tools/p2lib.py",
+    "sha256": "7d10f016443e9a229017ff43cc8c6484a602c83fe512c7a8c660693ee76d58e5"
+   }
+  },
+  {
+   "id": "godan-hands-bullet",
+   "targetBaseId": "godan",
+   "donorId": "bullet",
+   "slot": "hands",
+   "file": "modules/godan/hands_bullet.glb",
+   "meshNames": [
+    "p2_hands_bullet_for_godan"
+   ],
+   "bytes": 815136,
+   "sha256": "a3dd03ea33c56d6d534bfa9005aad5179e144f78d2e0d614de0bfebdca80e56d",
+   "lod": 0,
+   "morphTargets": [
+    "paw_open.L",
+    "paw_open.R",
+    "blink",
+    "brow_angry"
+   ],
+   "jointNames": [
+    "root_ground",
+    "pelvis",
+    "spine",
+    "belt_a_01",
+    "belt_a_02",
+    "belt_b_01",
+    "belt_b_02",
+    "chest",
+    "neck",
+    "head",
+    "jaw",
+    "shoulder.L",
+    "shoulder_fix.L",
+    "upper_arm.L",
+    "forearm.L",
+    "forearm_twist.L",
+    "wrist.L",
+    "paw.L",
+    "shoulder.R",
+    "shoulder_fix.R",
+    "upper_arm.R",
+    "forearm.R",
+    "forearm_twist.R",
+    "wrist.R",
+    "paw.R",
+    "tail_01",
+    "tail_02",
+    "tail_03",
+    "thigh.L",
+    "shin.L",
+    "ankle.L",
+    "foot.L",
+    "toe.L",
+    "thigh.R",
+    "shin.R",
+    "ankle.R",
+    "foot.R",
+    "toe.R",
+    "thigh_fix.L",
+    "thigh_fix.R"
+   ],
+   "palette": {
+    "fur": "#cc6b24",
+    "belly": "#e68f3d",
+    "muzzle": "#e6994c",
+    "paw": "#5c3d29",
+    "foot": "#c79461",
+    "ear": "#73381a",
+    "tail": "#703012",
+    "accent": "#9e7042"
+   },
+   "seams": {
+    "kind": "matched-host-boundary",
+    "tolerance": 2e-05
+   },
+   "socket": {
+    "bone": "chest",
+    "position": [
+     0,
+     0,
+     0
+    ],
+    "space": "host-bind-local"
+   },
+   "source": {
+    "path": "../tools/p2lib.py",
+    "sha256": "7d10f016443e9a229017ff43cc8c6484a602c83fe512c7a8c660693ee76d58e5"
+   }
+  },
+  {
+   "id": "godan-feet-moguzo",
+   "targetBaseId": "godan",
+   "donorId": "moguzo",
+   "slot": "feet",
+   "file": "modules/godan/feet_moguzo.glb",
+   "meshNames": [
+    "p2_feet_moguzo_for_godan"
+   ],
+   "bytes": 924996,
+   "sha256": "6867ad5ea89c212740c1340c923af9652cad639234422a8cfea84c42cd952c84",
+   "lod": 0,
+   "morphTargets": [
+    "paw_open.L",
+    "paw_open.R",
+    "blink",
+    "brow_angry"
+   ],
+   "jointNames": [
+    "root_ground",
+    "pelvis",
+    "spine",
+    "belt_a_01",
+    "belt_a_02",
+    "belt_b_01",
+    "belt_b_02",
+    "chest",
+    "neck",
+    "head",
+    "jaw",
+    "shoulder.L",
+    "shoulder_fix.L",
+    "upper_arm.L",
+    "forearm.L",
+    "forearm_twist.L",
+    "wrist.L",
+    "paw.L",
+    "shoulder.R",
+    "shoulder_fix.R",
+    "upper_arm.R",
+    "forearm.R",
+    "forearm_twist.R",
+    "wrist.R",
+    "paw.R",
+    "tail_01",
+    "tail_02",
+    "tail_03",
+    "thigh.L",
+    "shin.L",
+    "ankle.L",
+    "foot.L",
+    "toe.L",
+    "thigh.R",
+    "shin.R",
+    "ankle.R",
+    "foot.R",
+    "toe.R",
+    "thigh_fix.L",
+    "thigh_fix.R"
+   ],
+   "palette": {
+    "fur": "#bd915c",
+    "belly": "#ebcc94",
+    "muzzle": "#edd4a3",
+    "paw": "#422e21",
+    "foot": "#383636",
+    "ear": "#734c33",
+    "tail": "#bd915c",
+    "accent": "#cc140f"
+   },
+   "seams": {
+    "kind": "matched-host-boundary",
+    "tolerance": 2e-05
+   },
+   "socket": {
+    "bone": "pelvis",
+    "position": [
+     0,
+     0,
+     0
+    ],
+    "space": "host-bind-local"
+   },
+   "source": {
+    "path": "../tools/p2lib.py",
+    "sha256": "7d10f016443e9a229017ff43cc8c6484a602c83fe512c7a8c660693ee76d58e5"
+   }
+  },
+  {
+   "id": "godan-feet-bullet",
+   "targetBaseId": "godan",
+   "donorId": "bullet",
+   "slot": "feet",
+   "file": "modules/godan/feet_bullet.glb",
+   "meshNames": [
+    "p2_feet_bullet_for_godan"
+   ],
+   "bytes": 871336,
+   "sha256": "5a96e9f95cb8affb001a606bcf10f139e9192aaf8ed974b79fa72952ebf41056",
+   "lod": 0,
+   "morphTargets": [
+    "paw_open.L",
+    "paw_open.R",
+    "blink",
+    "brow_angry"
+   ],
+   "jointNames": [
+    "root_ground",
+    "pelvis",
+    "spine",
+    "belt_a_01",
+    "belt_a_02",
+    "belt_b_01",
+    "belt_b_02",
+    "chest",
+    "neck",
+    "head",
+    "jaw",
+    "shoulder.L",
+    "shoulder_fix.L",
+    "upper_arm.L",
+    "forearm.L",
+    "forearm_twist.L",
+    "wrist.L",
+    "paw.L",
+    "shoulder.R",
+    "shoulder_fix.R",
+    "upper_arm.R",
+    "forearm.R",
+    "forearm_twist.R",
+    "wrist.R",
+    "paw.R",
+    "tail_01",
+    "tail_02",
+    "tail_03",
+    "thigh.L",
+    "shin.L",
+    "ankle.L",
+    "foot.L",
+    "toe.L",
+    "thigh.R",
+    "shin.R",
+    "ankle.R",
+    "foot.R",
+    "toe.R",
+    "thigh_fix.L",
+    "thigh_fix.R"
+   ],
+   "palette": {
+    "fur": "#cc6b24",
+    "belly": "#e68f3d",
+    "muzzle": "#e6994c",
+    "paw": "#5c3d29",
+    "foot": "#c79461",
+    "ear": "#73381a",
+    "tail": "#703012",
+    "accent": "#9e7042"
+   },
+   "seams": {
+    "kind": "matched-host-boundary",
+    "tolerance": 2e-05
+   },
+   "socket": {
+    "bone": "pelvis",
+    "position": [
+     0,
+     0,
+     0
+    ],
+    "space": "host-bind-local"
+   },
+   "source": {
+    "path": "../tools/p2lib.py",
+    "sha256": "7d10f016443e9a229017ff43cc8c6484a602c83fe512c7a8c660693ee76d58e5"
+   }
+  },
+  {
+   "id": "bullet-head-moguzo",
+   "targetBaseId": "bullet",
+   "donorId": "moguzo",
+   "slot": "head",
+   "file": "modules/bullet/head_moguzo.glb",
+   "meshNames": [
+    "p2_head_moguzo_for_bullet",
+    "p2_head_moguzo_for_bullet_eyes"
+   ],
+   "bytes": 759584,
+   "sha256": "a33040ebc08240e8ca8f2f21c340a76f6f270d36d2b20fa43568e90d2b137138",
+   "lod": 0,
+   "morphTargets": [
+    "paw_open.L",
+    "paw_open.R",
+    "blink",
+    "brow_angry"
+   ],
+   "jointNames": [
+    "root_ground",
+    "pelvis",
+    "spine",
+    "chest",
+    "neck",
+    "head",
+    "jaw",
+    "shoulder.L",
+    "shoulder_fix.L",
+    "upper_arm.L",
+    "forearm.L",
+    "forearm_twist.L",
+    "wrist.L",
+    "paw.L",
+    "shoulder.R",
+    "shoulder_fix.R",
+    "upper_arm.R",
+    "forearm.R",
+    "forearm_twist.R",
+    "wrist.R",
+    "paw.R",
+    "tail_01",
+    "tail_02",
+    "tail_03",
+    "tail_04",
+    "tail_05",
+    "tail_06",
+    "thigh.L",
+    "shin.L",
+    "ankle.L",
+    "foot.L",
+    "toe.L",
+    "thigh.R",
+    "shin.R",
+    "ankle.R",
+    "foot.R",
+    "toe.R",
+    "thigh_fix.L",
+    "thigh_fix.R"
+   ],
+   "palette": {
+    "fur": "#bd915c",
+    "belly": "#ebcc94",
+    "muzzle": "#edd4a3",
+    "paw": "#422e21",
+    "foot": "#383636",
+    "ear": "#734c33",
+    "tail": "#bd915c",
+    "accent": "#cc140f"
+   },
+   "seams": {
+    "kind": "matched-host-boundary",
+    "tolerance": 2e-05
+   },
+   "socket": {
+    "bone": "head",
+    "position": [
+     0,
+     0,
+     0
+    ],
+    "space": "host-bind-local"
+   },
+   "source": {
+    "path": "../tools/p2lib.py",
+    "sha256": "7d10f016443e9a229017ff43cc8c6484a602c83fe512c7a8c660693ee76d58e5"
+   }
+  },
+  {
+   "id": "bullet-head-godan",
+   "targetBaseId": "bullet",
+   "donorId": "godan",
+   "slot": "head",
+   "file": "modules/bullet/head_godan.glb",
+   "meshNames": [
+    "p2_head_godan_for_bullet",
+    "p2_head_godan_for_bullet_eyes"
+   ],
+   "bytes": 614436,
+   "sha256": "adfec86c48fc56ae2f9fea361792a7dc99cb68625f3cfd1b4a8a36a20bd6136d",
+   "lod": 0,
+   "morphTargets": [
+    "paw_open.L",
+    "paw_open.R",
+    "blink",
+    "brow_angry"
+   ],
+   "jointNames": [
+    "root_ground",
+    "pelvis",
+    "spine",
+    "chest",
+    "neck",
+    "head",
+    "jaw",
+    "shoulder.L",
+    "shoulder_fix.L",
+    "upper_arm.L",
+    "forearm.L",
+    "forearm_twist.L",
+    "wrist.L",
+    "paw.L",
+    "shoulder.R",
+    "shoulder_fix.R",
+    "upper_arm.R",
+    "forearm.R",
+    "forearm_twist.R",
+    "wrist.R",
+    "paw.R",
+    "tail_01",
+    "tail_02",
+    "tail_03",
+    "tail_04",
+    "tail_05",
+    "tail_06",
+    "thigh.L",
+    "shin.L",
+    "ankle.L",
+    "foot.L",
+    "toe.L",
+    "thigh.R",
+    "shin.R",
+    "ankle.R",
+    "foot.R",
+    "toe.R",
+    "thigh_fix.L",
+    "thigh_fix.R"
+   ],
+   "palette": {
+    "fur": "#664224",
+    "belly": "#b28547",
+    "muzzle": "#bd9457",
+    "paw": "#33241a",
+    "foot": "#30241c",
+    "ear": "#40291a",
+    "tail": "#664224",
+    "accent": "#0f0f12"
+   },
+   "seams": {
+    "kind": "matched-host-boundary",
+    "tolerance": 2e-05
+   },
+   "socket": {
+    "bone": "head",
+    "position": [
+     0,
+     0,
+     0
+    ],
+    "space": "host-bind-local"
+   },
+   "source": {
+    "path": "../tools/p2lib.py",
+    "sha256": "7d10f016443e9a229017ff43cc8c6484a602c83fe512c7a8c660693ee76d58e5"
+   }
+  },
+  {
+   "id": "bullet-ears-moguzo",
+   "targetBaseId": "bullet",
+   "donorId": "moguzo",
+   "slot": "ears",
+   "file": "modules/bullet/ears_moguzo.glb",
+   "meshNames": [
+    "p2_ears_moguzo_for_bullet"
+   ],
+   "bytes": 396632,
+   "sha256": "32a5160241f6b0ebc6f8984420512040782a6b01a2d7e0907228eb5d625a6914",
+   "lod": 0,
+   "morphTargets": [
+    "paw_open.L",
+    "paw_open.R",
+    "blink",
+    "brow_angry"
+   ],
+   "jointNames": [
+    "root_ground",
+    "pelvis",
+    "spine",
+    "chest",
+    "neck",
+    "head",
+    "jaw",
+    "shoulder.L",
+    "shoulder_fix.L",
+    "upper_arm.L",
+    "forearm.L",
+    "forearm_twist.L",
+    "wrist.L",
+    "paw.L",
+    "shoulder.R",
+    "shoulder_fix.R",
+    "upper_arm.R",
+    "forearm.R",
+    "forearm_twist.R",
+    "wrist.R",
+    "paw.R",
+    "tail_01",
+    "tail_02",
+    "tail_03",
+    "tail_04",
+    "tail_05",
+    "tail_06",
+    "thigh.L",
+    "shin.L",
+    "ankle.L",
+    "foot.L",
+    "toe.L",
+    "thigh.R",
+    "shin.R",
+    "ankle.R",
+    "foot.R",
+    "toe.R",
+    "thigh_fix.L",
+    "thigh_fix.R"
+   ],
+   "palette": {
+    "fur": "#bd915c",
+    "belly": "#ebcc94",
+    "muzzle": "#edd4a3",
+    "paw": "#422e21",
+    "foot": "#383636",
+    "ear": "#734c33",
+    "tail": "#bd915c",
+    "accent": "#cc140f"
+   },
+   "seams": {
+    "kind": "matched-host-boundary",
+    "tolerance": 2e-05
+   },
+   "socket": {
+    "bone": "head",
+    "position": [
+     0,
+     0,
+     0
+    ],
+    "space": "host-bind-local"
+   },
+   "source": {
+    "path": "../tools/p2lib.py",
+    "sha256": "7d10f016443e9a229017ff43cc8c6484a602c83fe512c7a8c660693ee76d58e5"
+   }
+  },
+  {
+   "id": "bullet-ears-godan",
+   "targetBaseId": "bullet",
+   "donorId": "godan",
+   "slot": "ears",
+   "file": "modules/bullet/ears_godan.glb",
+   "meshNames": [
+    "p2_ears_godan_for_bullet"
+   ],
+   "bytes": 271152,
+   "sha256": "3460e994a3687486834964ac46c07af53777c70eb5424c0ab38f0c5a576304ea",
+   "lod": 0,
+   "morphTargets": [
+    "paw_open.L",
+    "paw_open.R",
+    "blink",
+    "brow_angry"
+   ],
+   "jointNames": [
+    "root_ground",
+    "pelvis",
+    "spine",
+    "chest",
+    "neck",
+    "head",
+    "jaw",
+    "shoulder.L",
+    "shoulder_fix.L",
+    "upper_arm.L",
+    "forearm.L",
+    "forearm_twist.L",
+    "wrist.L",
+    "paw.L",
+    "shoulder.R",
+    "shoulder_fix.R",
+    "upper_arm.R",
+    "forearm.R",
+    "forearm_twist.R",
+    "wrist.R",
+    "paw.R",
+    "tail_01",
+    "tail_02",
+    "tail_03",
+    "tail_04",
+    "tail_05",
+    "tail_06",
+    "thigh.L",
+    "shin.L",
+    "ankle.L",
+    "foot.L",
+    "toe.L",
+    "thigh.R",
+    "shin.R",
+    "ankle.R",
+    "foot.R",
+    "toe.R",
+    "thigh_fix.L",
+    "thigh_fix.R"
+   ],
+   "palette": {
+    "fur": "#664224",
+    "belly": "#b28547",
+    "muzzle": "#bd9457",
+    "paw": "#33241a",
+    "foot": "#30241c",
+    "ear": "#40291a",
+    "tail": "#664224",
+    "accent": "#0f0f12"
+   },
+   "seams": {
+    "kind": "matched-host-boundary",
+    "tolerance": 2e-05
+   },
+   "socket": {
+    "bone": "head",
+    "position": [
+     0,
+     0,
+     0
+    ],
+    "space": "host-bind-local"
+   },
+   "source": {
+    "path": "../tools/p2lib.py",
+    "sha256": "7d10f016443e9a229017ff43cc8c6484a602c83fe512c7a8c660693ee76d58e5"
+   }
+  },
+  {
+   "id": "bullet-hands-moguzo",
+   "targetBaseId": "bullet",
+   "donorId": "moguzo",
+   "slot": "hands",
+   "file": "modules/bullet/hands_moguzo.glb",
+   "meshNames": [
+    "p2_hands_moguzo_for_bullet"
+   ],
+   "bytes": 867528,
+   "sha256": "499ad2c0f74922d483020ec53b34c0c8e9d6cc9ffe42f8335ed0b32cde610cb6",
+   "lod": 0,
+   "morphTargets": [
+    "paw_open.L",
+    "paw_open.R",
+    "blink",
+    "brow_angry"
+   ],
+   "jointNames": [
+    "root_ground",
+    "pelvis",
+    "spine",
+    "chest",
+    "neck",
+    "head",
+    "jaw",
+    "shoulder.L",
+    "shoulder_fix.L",
+    "upper_arm.L",
+    "forearm.L",
+    "forearm_twist.L",
+    "wrist.L",
+    "paw.L",
+    "shoulder.R",
+    "shoulder_fix.R",
+    "upper_arm.R",
+    "forearm.R",
+    "forearm_twist.R",
+    "wrist.R",
+    "paw.R",
+    "tail_01",
+    "tail_02",
+    "tail_03",
+    "tail_04",
+    "tail_05",
+    "tail_06",
+    "thigh.L",
+    "shin.L",
+    "ankle.L",
+    "foot.L",
+    "toe.L",
+    "thigh.R",
+    "shin.R",
+    "ankle.R",
+    "foot.R",
+    "toe.R",
+    "thigh_fix.L",
+    "thigh_fix.R"
+   ],
+   "palette": {
+    "fur": "#bd915c",
+    "belly": "#ebcc94",
+    "muzzle": "#edd4a3",
+    "paw": "#422e21",
+    "foot": "#383636",
+    "ear": "#734c33",
+    "tail": "#bd915c",
+    "accent": "#cc140f"
+   },
+   "seams": {
+    "kind": "matched-host-boundary",
+    "tolerance": 2e-05
+   },
+   "socket": {
+    "bone": "chest",
+    "position": [
+     0,
+     0,
+     0
+    ],
+    "space": "host-bind-local"
+   },
+   "source": {
+    "path": "../tools/p2lib.py",
+    "sha256": "7d10f016443e9a229017ff43cc8c6484a602c83fe512c7a8c660693ee76d58e5"
+   }
+  },
+  {
+   "id": "bullet-hands-godan",
+   "targetBaseId": "bullet",
+   "donorId": "godan",
+   "slot": "hands",
+   "file": "modules/bullet/hands_godan.glb",
+   "meshNames": [
+    "p2_hands_godan_for_bullet"
+   ],
+   "bytes": 862620,
+   "sha256": "c6842f37899b0cf941329c262c6a24fad59e9b92093540a98e1ac3ae9c37633f",
+   "lod": 0,
+   "morphTargets": [
+    "paw_open.L",
+    "paw_open.R",
+    "blink",
+    "brow_angry"
+   ],
+   "jointNames": [
+    "root_ground",
+    "pelvis",
+    "spine",
+    "chest",
+    "neck",
+    "head",
+    "jaw",
+    "shoulder.L",
+    "shoulder_fix.L",
+    "upper_arm.L",
+    "forearm.L",
+    "forearm_twist.L",
+    "wrist.L",
+    "paw.L",
+    "shoulder.R",
+    "shoulder_fix.R",
+    "upper_arm.R",
+    "forearm.R",
+    "forearm_twist.R",
+    "wrist.R",
+    "paw.R",
+    "tail_01",
+    "tail_02",
+    "tail_03",
+    "tail_04",
+    "tail_05",
+    "tail_06",
+    "thigh.L",
+    "shin.L",
+    "ankle.L",
+    "foot.L",
+    "toe.L",
+    "thigh.R",
+    "shin.R",
+    "ankle.R",
+    "foot.R",
+    "toe.R",
+    "thigh_fix.L",
+    "thigh_fix.R"
+   ],
+   "palette": {
+    "fur": "#664224",
+    "belly": "#b28547",
+    "muzzle": "#bd9457",
+    "paw": "#33241a",
+    "foot": "#30241c",
+    "ear": "#40291a",
+    "tail": "#664224",
+    "accent": "#0f0f12"
+   },
+   "seams": {
+    "kind": "matched-host-boundary",
+    "tolerance": 2e-05
+   },
+   "socket": {
+    "bone": "chest",
+    "position": [
+     0,
+     0,
+     0
+    ],
+    "space": "host-bind-local"
+   },
+   "source": {
+    "path": "../tools/p2lib.py",
+    "sha256": "7d10f016443e9a229017ff43cc8c6484a602c83fe512c7a8c660693ee76d58e5"
+   }
+  },
+  {
+   "id": "bullet-feet-moguzo",
+   "targetBaseId": "bullet",
+   "donorId": "moguzo",
+   "slot": "feet",
+   "file": "modules/bullet/feet_moguzo.glb",
+   "meshNames": [
+    "p2_feet_moguzo_for_bullet"
+   ],
+   "bytes": 918852,
+   "sha256": "16c288d510290ec3fa8d2b7f172d9edbb0a933d8367067388d3848e91f537038",
+   "lod": 0,
+   "morphTargets": [
+    "paw_open.L",
+    "paw_open.R",
+    "blink",
+    "brow_angry"
+   ],
+   "jointNames": [
+    "root_ground",
+    "pelvis",
+    "spine",
+    "chest",
+    "neck",
+    "head",
+    "jaw",
+    "shoulder.L",
+    "shoulder_fix.L",
+    "upper_arm.L",
+    "forearm.L",
+    "forearm_twist.L",
+    "wrist.L",
+    "paw.L",
+    "shoulder.R",
+    "shoulder_fix.R",
+    "upper_arm.R",
+    "forearm.R",
+    "forearm_twist.R",
+    "wrist.R",
+    "paw.R",
+    "tail_01",
+    "tail_02",
+    "tail_03",
+    "tail_04",
+    "tail_05",
+    "tail_06",
+    "thigh.L",
+    "shin.L",
+    "ankle.L",
+    "foot.L",
+    "toe.L",
+    "thigh.R",
+    "shin.R",
+    "ankle.R",
+    "foot.R",
+    "toe.R",
+    "thigh_fix.L",
+    "thigh_fix.R"
+   ],
+   "palette": {
+    "fur": "#bd915c",
+    "belly": "#ebcc94",
+    "muzzle": "#edd4a3",
+    "paw": "#422e21",
+    "foot": "#383636",
+    "ear": "#734c33",
+    "tail": "#bd915c",
+    "accent": "#cc140f"
+   },
+   "seams": {
+    "kind": "matched-host-boundary",
+    "tolerance": 2e-05
+   },
+   "socket": {
+    "bone": "pelvis",
+    "position": [
+     0,
+     0,
+     0
+    ],
+    "space": "host-bind-local"
+   },
+   "source": {
+    "path": "../tools/p2lib.py",
+    "sha256": "7d10f016443e9a229017ff43cc8c6484a602c83fe512c7a8c660693ee76d58e5"
+   }
+  },
+  {
+   "id": "bullet-feet-godan",
+   "targetBaseId": "bullet",
+   "donorId": "godan",
+   "slot": "feet",
+   "file": "modules/bullet/feet_godan.glb",
+   "meshNames": [
+    "p2_feet_godan_for_bullet"
+   ],
+   "bytes": 824408,
+   "sha256": "c372c0fc37c8c19cec3523cfedfd06bd7367ce2d930e73065bb57d89f2896be9",
+   "lod": 0,
+   "morphTargets": [
+    "paw_open.L",
+    "paw_open.R",
+    "blink",
+    "brow_angry"
+   ],
+   "jointNames": [
+    "root_ground",
+    "pelvis",
+    "spine",
+    "chest",
+    "neck",
+    "head",
+    "jaw",
+    "shoulder.L",
+    "shoulder_fix.L",
+    "upper_arm.L",
+    "forearm.L",
+    "forearm_twist.L",
+    "wrist.L",
+    "paw.L",
+    "shoulder.R",
+    "shoulder_fix.R",
+    "upper_arm.R",
+    "forearm.R",
+    "forearm_twist.R",
+    "wrist.R",
+    "paw.R",
+    "tail_01",
+    "tail_02",
+    "tail_03",
+    "tail_04",
+    "tail_05",
+    "tail_06",
+    "thigh.L",
+    "shin.L",
+    "ankle.L",
+    "foot.L",
+    "toe.L",
+    "thigh.R",
+    "shin.R",
+    "ankle.R",
+    "foot.R",
+    "toe.R",
+    "thigh_fix.L",
+    "thigh_fix.R"
+   ],
+   "palette": {
+    "fur": "#664224",
+    "belly": "#b28547",
+    "muzzle": "#bd9457",
+    "paw": "#33241a",
+    "foot": "#30241c",
+    "ear": "#40291a",
+    "tail": "#664224",
+    "accent": "#0f0f12"
+   },
+   "seams": {
+    "kind": "matched-host-boundary",
+    "tolerance": 2e-05
+   },
+   "socket": {
+    "bone": "pelvis",
+    "position": [
+     0,
+     0,
+     0
+    ],
+    "space": "host-bind-local"
+   },
+   "source": {
+    "path": "../tools/p2lib.py",
+    "sha256": "7d10f016443e9a229017ff43cc8c6484a602c83fe512c7a8c660693ee76d58e5"
+   }
+  },
+  {
+   "id": "moguzo-tail-godan",
+   "targetBaseId": "moguzo",
+   "donorId": "godan",
+   "slot": "tail",
+   "file": "modules/moguzo/tail_godan.glb",
+   "meshNames": [
+    "p2_tail_godan_for_moguzo"
+   ],
+   "bytes": 372972,
+   "sha256": "a585643279de23ce4429eac9ba11976c8cb34b2f1bfbb335b2f0f92b1b15eb80",
+   "lod": 0,
+   "morphTargets": [
+    "paw_open.L",
+    "paw_open.R",
+    "blink",
+    "brow_angry"
+   ],
+   "jointNames": [
+    "root_ground",
+    "pelvis",
+    "spine",
+    "chest",
+    "neck",
+    "head",
+    "band_a_01",
+    "band_a_02",
+    "band_b_01",
+    "band_b_02",
+    "jaw",
+    "shoulder.L",
+    "shoulder_fix.L",
+    "upper_arm.L",
+    "forearm.L",
+    "forearm_twist.L",
+    "wrist.L",
+    "paw.L",
+    "shoulder.R",
+    "shoulder_fix.R",
+    "upper_arm.R",
+    "forearm.R",
+    "forearm_twist.R",
+    "wrist.R",
+    "paw.R",
+    "tail_01",
+    "tail_02",
+    "tail_03",
+    "thigh.L",
+    "shin.L",
+    "ankle.L",
+    "foot.L",
+    "toe.L",
+    "thigh.R",
+    "shin.R",
+    "ankle.R",
+    "foot.R",
+    "toe.R",
+    "thigh_fix.L",
+    "thigh_fix.R"
+   ],
+   "palette": {
+    "fur": "#664224",
+    "belly": "#b28547",
+    "muzzle": "#bd9457",
+    "paw": "#33241a",
+    "foot": "#30241c",
+    "ear": "#40291a",
+    "tail": "#664224",
+    "accent": "#0f0f12"
+   },
+   "seams": {
+    "kind": "matched-host-boundary",
+    "tolerance": 2e-05
+   },
+   "socket": {
+    "bone": "pelvis",
+    "position": [
+     0,
+     0,
+     0
+    ],
+    "space": "host-bind-local"
+   },
+   "source": {
+    "path": "../tools/p2lib.py",
+    "sha256": "7d10f016443e9a229017ff43cc8c6484a602c83fe512c7a8c660693ee76d58e5"
+   }
+  },
+  {
+   "id": "godan-tail-moguzo",
+   "targetBaseId": "godan",
+   "donorId": "moguzo",
+   "slot": "tail",
+   "file": "modules/godan/tail_moguzo.glb",
+   "meshNames": [
+    "p2_tail_moguzo_for_godan"
+   ],
+   "bytes": 457228,
+   "sha256": "a872578dc9f144899e155c35e37acfaeabc225c086418485d9ae233f4cfdc30d",
+   "lod": 0,
+   "morphTargets": [
+    "paw_open.L",
+    "paw_open.R",
+    "blink",
+    "brow_angry"
+   ],
+   "jointNames": [
+    "root_ground",
+    "pelvis",
+    "spine",
+    "belt_a_01",
+    "belt_a_02",
+    "belt_b_01",
+    "belt_b_02",
+    "chest",
+    "neck",
+    "head",
+    "jaw",
+    "shoulder.L",
+    "shoulder_fix.L",
+    "upper_arm.L",
+    "forearm.L",
+    "forearm_twist.L",
+    "wrist.L",
+    "paw.L",
+    "shoulder.R",
+    "shoulder_fix.R",
+    "upper_arm.R",
+    "forearm.R",
+    "forearm_twist.R",
+    "wrist.R",
+    "paw.R",
+    "tail_01",
+    "tail_02",
+    "tail_03",
+    "thigh.L",
+    "shin.L",
+    "ankle.L",
+    "foot.L",
+    "toe.L",
+    "thigh.R",
+    "shin.R",
+    "ankle.R",
+    "foot.R",
+    "toe.R",
+    "thigh_fix.L",
+    "thigh_fix.R"
+   ],
+   "palette": {
+    "fur": "#bd915c",
+    "belly": "#ebcc94",
+    "muzzle": "#edd4a3",
+    "paw": "#422e21",
+    "foot": "#383636",
+    "ear": "#734c33",
+    "tail": "#bd915c",
+    "accent": "#cc140f"
+   },
+   "seams": {
+    "kind": "matched-host-boundary",
+    "tolerance": 2e-05
+   },
+   "socket": {
+    "bone": "pelvis",
+    "position": [
+     0,
+     0,
+     0
+    ],
+    "space": "host-bind-local"
+   },
+   "source": {
+    "path": "../tools/p2lib.py",
+    "sha256": "7d10f016443e9a229017ff43cc8c6484a602c83fe512c7a8c660693ee76d58e5"
+   }
+  }
+ ]
+}
