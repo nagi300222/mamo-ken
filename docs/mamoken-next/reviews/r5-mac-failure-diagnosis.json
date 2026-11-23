@@ -1,0 +1,51 @@
+{
+  "sha": "e6ae86062f287ae351cfed9e5fbc59ebf23f0c92",
+  "runId": 45190961017,
+  "attempt": 1,
+  "jobId": 137748853793,
+  "artifactId": 14825912458,
+  "build": "SUCCEEDED",
+  "smoke": "FAIL",
+  "failedBeforeAppInstall": true,
+  "failedCommand": [
+    "xcrun",
+    "simctl",
+    "bootstatus",
+    "8EBAA496-5654-45BF-897F-3C4FD73935F1",
+    "-b"
+  ],
+  "timeoutMs": 180000,
+  "coldBootProgress": {
+    "plugins": [
+      "com.apple.locationd.migrator (CoreLocationMigrator.migrator)"
+    ],
+    "statuses": [
+      2
+    ],
+    "advanced": false
+  },
+  "classification": "Runner iOS Simulator initial data-migration stall before app installation; not an observed application crash. Transient recovery is not proven by one failed run.",
+  "evidence": {
+    "report": "mac-r5-evidence/evidence/simulator/report.json",
+    "commandLog": "mac-r5-evidence/evidence/simulator/commands.log",
+    "xcodeBuildLog": "mac-r5-evidence/evidence/xcodebuild.log",
+    "hashes": {
+      "report.json": "b232ce429ac6e93942782aae3e26afadc39bd64c9184e8059a9bfc5b29703097",
+      "commands.log": "3dcfb77e55db7092ef497e3a0f4e2a4c94fe224c8b56ae93d210e7aab5b9c6b4",
+      "failure-devices.json": "5498fcf9ae88e293dbae50d0ce2990ca972d178e75fd8816d371fb24b4b7108a"
+    }
+  },
+  "observed": {
+    "dataMigrationPlugin": "com.apple.locationd.migrator (CoreLocationMigrator.migrator)",
+    "lastMigrationElapsed": "03:41",
+    "status": 2,
+    "appInstalled": false,
+    "appLaunched": false,
+    "screenshots": 0,
+    "physicalDeviceTested": false,
+    "deviceBeforeCleanup": "Booted",
+    "reportDeviceStateMeaning": "Shutdown is the initial selected inventory state, not a failed application result"
+  },
+  "unchangedBootCodeSinceR3": true,
+  "recommendedNextAction": "Retry exact same failed job/source once; retain failed attempt and unchanged success guards. Do not extend timeout or mark launch successful without real install/PID/framebuffer evidence."
+}
