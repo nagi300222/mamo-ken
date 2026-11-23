@@ -887,6 +887,7 @@ function updateIntro(delta){
     const aspect=Math.max(.3,canvas.clientWidth/Math.max(1,canvas.clientHeight));
     const shot=faceCamera([headPoint.x,headPoint.y,headPoint.z],fighter.facing,headPoint.y+.13,effectsAllowed()?phase.u:1,aspect);
     presentCam.position.set(...shot.pos);presentCam.fov=shot.fov;presentCam.aspect=aspect;presentCam.updateProjectionMatrix();presentCam.lookAt(...shot.look);
+    presentState.faceReady=phase.slot;
     const plate=$('intro-plate');
     if(plate.dataset.slot!==String(phase.slot)){
       plate.dataset.slot=String(phase.slot);plate.style.setProperty('--plate-accent',showtimeHex(actor.id));
@@ -896,7 +897,7 @@ function updateIntro(delta){
     plate.hidden=false;call.hidden=true;
     return true;
   }
-  $('intro-plate').hidden=true;$('intro-plate').dataset.slot='';
+  $('intro-plate').hidden=true;$('intro-plate').dataset.slot='';presentState.faceReady=-1;
   const label=phase.phase==='call'?'FIGHT!':flow.roundCall;
   if(call.hidden||$('round-call-text').textContent!==label){
     $('round-call-text').textContent=label;call.dataset.kind=phase.phase;call.hidden=false;
@@ -923,8 +924,10 @@ function updateKo(delta){
   animateFX(flashes,delta*FPS*Math.max(.25,slow));
 }
 function faceFrame(){
-  const phase=flow.introPhase;if(phase?.phase!=='face'||!actors[phase.slot])return null;
+  // 専用カメラをその役者へ置いた後のフレームだけ答える（導入に入った直後の、まだ置いていないカメラでは測らない）
+  const phase=flow.introPhase;if(phase?.phase!=='face'||!actors[phase.slot]||presentState.faceReady!==phase.slot)return null;
   const actor=actors[phase.slot],facing=battle.fighters[phase.slot].facing;
+  presentCam.updateMatrixWorld(true);
   boneWorld(actor,'head',headPoint);
   const project=(dx,dy)=>{const p=anchorPoint.set(headPoint.x+facing*dx,headPoint.y+dy,headPoint.z).project(presentCam);return [+p.x.toFixed(3),+p.y.toFixed(3)];};
   return {slot:phase.slot,head:project(0,0),top:project(0,.15),nose:project(.13,.0),back:project(-.12,.04)};
@@ -944,7 +947,7 @@ function onFlowChange(next,from){
   if(next==='select'){endVictoryPose();$('ko-banner').hidden=true;$('round-call').hidden=true;$('intro-plate').hidden=true;}
   if(next==='intro'){
     endVictoryPose();$('ko-banner').hidden=true;$('game-over').classList.add('hidden');
-    idleActors();updateCamera(true);clearInput();$('intro-plate').dataset.slot='';
+    idleActors();updateCamera(true);clearInput();$('intro-plate').dataset.slot='';presentState.faceReady=-1;
     note('');
   }
   if(next==='fight'){
