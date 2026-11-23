@@ -4,6 +4,8 @@ import {clone as cloneSkeleton} from 'three/addons/utils/SkeletonUtils.js';
 import {ACTIVE_NORMAL_MOTION_SOURCE,getNormalMotionPack} from '../../dojo/normal-motion-source.js';
 import {specialClipTime,resolveSpecialBone} from '../../dojo/special-motion-source.js';
 import {normalMove} from '../../dojo/balance.js';
+import {resolveMeshParts} from '../p2/part-contract.js';
+import {loadMeshPartManifest,loadMeshPartModules,assembleMeshParts} from '../p2/part-loader.js';
 
 export const AVATAR_BASE_IDS=Object.freeze(['moguzo','pisuke','godan','hakuma','chirka','takimaru','yomikage','bullet','dark_moguzo']);
 const NAMES=['モグゾー','ピスケ','ゴダン','ハクマ','チルカ','タキマル','ヨミカゲ','バレット','ダークモグゾー'];
@@ -145,6 +147,8 @@ export async function createAvatar(definition,options={}){
  const baseId=appearance.baseId??'moguzo',base=manifest.bases[baseId];
  if(!base)throw Error('未対応の骨格です: '+baseId);
  const parts=appearance.parts??{},donors={};
+ const meshPartManifest=appearance.meshParts&&Object.keys(appearance.meshParts).length?(options.meshPartManifest??await loadMeshPartManifest()):null;
+ const meshPartEntries=meshPartManifest?resolveMeshParts(meshPartManifest,baseId,appearance.meshParts,parts):[];
  for(const slot of ['head','ears','hands','feet','tail']){
   const id=parts[slot]??'base';if(id==='base'||id===baseId)continue;
   if(!manifest.bases[id])throw Error('未対応の部品です: '+slot+'/'+id);
@@ -153,6 +157,7 @@ export async function createAvatar(definition,options={}){
  }
  if(!['base','none',undefined].includes(parts.accessory))throw Error('この装飾の交換は骨格互換を確認中です');
  const loader=options.loader??new GLTFLoader();
+ const loadedMeshParts=await loadMeshPartModules(meshPartEntries,{loader,baseURL:options.meshPartBaseURL});
  const normalMotionSource=options.normalMotionSource??ACTIVE_NORMAL_MOTION_SOURCE;
  const normalPack=getNormalMotionPack(baseId,{source:normalMotionSource});
  const gltf=await load(new URL(base.file,options.baseURL??ASSETS),loader);
@@ -169,10 +174,19 @@ export async function createAvatar(definition,options={}){
   object.frustumCulled=false;skeletons.add(object.skeleton);meshes.push(object);
  });
  scene.updateMatrixWorld(true);
- const animations=[...gltf.animations,...normal.animations.map(clip=>bindAvatarClip(clip,{meshes}))];let disposed=false;
+ let partAssembly=null;
+ try{
+  if(loadedMeshParts.length){
+   const assembly=assembleMeshParts({scene,bones,meshes,baseId},loadedMeshParts,{materialFactory:(source,entry)=>appearanceMaterial(source,{...base,palette:entry.palette},appearance.palette??{},appearance.pattern??'solid')});
+   for(const mesh of assembly.created){geometries.add(mesh.geometry);materials.add(mesh.material);}
+   meshes.splice(0,meshes.length,...assembly.meshes);partAssembly=assembly.assembly;
+  }
+ }catch(error){for(const geometry of geometries)geometry.dispose();for(const material of materials)material.dispose();for(const skeleton of skeletons)skeleton.dispose();throw error;}
+ // P2 modules must receive all four original facial/paw streams as well as normals.
+ const animations=[...gltf.animations.map(clip=>bindAvatarClip(clip,{meshes})),...normal.animations.map(clip=>bindAvatarClip(clip,{meshes}))];let disposed=false;
  return {scene,animations,bones,meshes,baseId,appearance:structuredClone(appearance),parameters:base.parameters,
   normalMotionSource,normalMotionVersion:normalMotionSource.version,normalContacts:normalPack.contacts,combatStyleId:definition.combat?.styleId??baseId,
-  grafts:Object.keys(donors),gltf:{scene,animations},
+  grafts:[...new Set([...Object.keys(donors),...meshPartEntries.map(entry=>entry.slot)])],meshParts:structuredClone(appearance.meshParts??{}),partAssembly,gltf:{scene,animations},
   dispose(){if(disposed)return;disposed=true;scene.removeFromParent();for(const g of geometries)g.dispose();for(const m of materials)m.dispose();for(const s of skeletons)s.dispose();}
  };
 }
