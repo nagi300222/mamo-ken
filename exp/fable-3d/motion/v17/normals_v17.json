@@ -994,7 +994,7 @@
     "warnings": [
      "handL reach 0.205 > 0.198",
      "handL reach 0.209 > 0.198",
-     "handL reach 0.218 > 0.198",
+     "handL reach 0.219 > 0.198",
      "handL reach 0.220 > 0.198",
      "handL reach 0.230 > 0.198",
      "handL reach 0.235 > 0.198",
@@ -1089,11 +1089,11 @@
     "name_jp": "長尾の横払い",
     "attack_limb": "tail",
     "windup_frame": 7,
-    "contact_frame": 20,
+    "contact_frame": 25,
     "contact_hold_frames": 4,
-    "follow_frame": 32,
-    "contact": 0.4167,
-    "contact_end": 0.5,
+    "follow_frame": 35,
+    "contact": 0.5208,
+    "contact_end": 0.6042,
     "silhouette": "逆へひねって尾を巻く→体を半回転させ、伸び切った尾の先端が胸の高さを横切る→そのまま一回転して構えへ"
    },
    "crouch_weak": {
@@ -1244,6 +1244,7 @@
     "follow_frame": 30,
     "contact": 0.3696,
     "contact_end": 0.4565,
+    "foot_slide": "intended",
     "silhouette": "左拳を体の外へ引く→両足を滑らせて前へ出ながら、左拳を横に振り抜く（後ろ足もついて来る）→腕は体の反対側まで振り切る"
    },
    "crouch_weak": {

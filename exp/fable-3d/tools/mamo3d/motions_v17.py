@@ -122,7 +122,7 @@ def godan(cid):
     wind = merge(n0, pelvis=pel(n0, (0, -0.16, -0.10), (-4, -30, 0)), chest=add(n0['chest'], (-8, -26, 0)), head=add(n0['head'], (0, 40, 0)), handR=P((0.36, -0.36, 0.62), fwd=(0, 0.3, 0.95), back=(0.5, -0.8, 0), elbow=(0.9, -0.2, 0.3)),
                  handL=hand(n0, 'handL', (0.06, 0.10, 0.06)), footL=foot(n0, 'footL', (0, 0.10, 0.14), pitch=-12), tail=(-12, -16), keys=B)
     hit = merge(n0, pelvis=pel(n0, (0, 0.40, -0.20), (10, 44, 0)), spine=add(n0['spine'], (3, 12, 0)), chest=add(n0['chest'], (5, 26, 0)), neck=add(n0['neck'], (-4, -28, 0)), head=add(n0['head'], (-8, -46, 0)),
-                handR=W((-0.20, 0.96, -0.18), fwd=(0, 0.95, -0.3), back=(0.2, 0.3, 0.95), elbow=(0.9, -0.1, 0.2)), handL=P((0.10, -0.10, -0.06)), footL=foot(n0, 'footL', (0.02, 0.62, 0), yaw=6), footR=foot(n0, 'footR', (0, 0.10, 0), pitch=40, yaw=-10),
+                handR=W((-0.20, 0.96, -0.18), fwd=(0, 0.95, -0.3), back=(0.2, 0.3, 0.95), elbow=(0.9, -0.1, 0.2)), handL=P((0.10, -0.10, -0.06)), footL=foot(n0, 'footL', (0.02, 0.62, 0), yaw=6), footR=foot(n0, 'footR', (0, 0.0, 0), pitch=40, yaw=-10),
                 tail=(14, 22), jaw=14.0, keys=B)
     fol = merge(hit, pelvis=pel(n0, (0, 0.36, -0.24), (14, 40, 0)), handR=W((-0.20, 0.80, -0.40), fwd=(0, 0.8, -0.6), back=(0.2, 0.6, 0.8), elbow=(0.9, -0.1, 0.2)), jaw=6.0)
     out['stand_heavy'] = mk(cid, 'stand_heavy', '踏み込み重拳', n0, wind, hit, fol, 'pawR', t=(11, 21, 5, 36, 54), silhouette='右拳を頭の後ろまで振りかぶる→腰を回して深く一歩、拳が肩の高さから相手の胸へ落ちる→体重が前足に乗ったまま止まる')
@@ -228,7 +228,7 @@ def takimaru(cid):
     out['stand_weak'] = mk(cid, 'stand_weak', '探る掌', n0, wind, hit, fol, 'pawL', silhouette='指を開いた前の掌を相手の胸へ伸ばして間合いを測る。後ろの手も開いたまま')
     wind = merge(n0, pelvis=pel(n0, (0, -0.10, -0.08), (2, 0, 0)), handL=P((0.90, 0.10, 0.30)), handR=P((0.90, 0.10, 0.30)), chest=add(n0['chest'], (-8, 0, 0)), tail=(-10, 0), keys=B)
     hit = merge(n0, pelvis=pel(n0, (0, 0.40, -0.14), (16, 50, 0)), spine=add(n0['spine'], (6, 10, 0)), chest=add(n0['chest'], (10, 20, 0)), neck=add(n0['neck'], (0, -30, 0)), head=add(n0['head'], (-6, -40, 0)),
-                handL=P((0.70, 0.30, 0.10)), handR=P((0.30, 0.40, -0.10), fwd=(-0.6, 0.6, 0), back=(0, 0, 1), elbow=(0.5, 0.6, -0.5)), footL=foot(n0, 'footL', (0.02, 0.60, 0)), footR=foot(n0, 'footR', (0, 0.14, 0), pitch=34), tail=(12, 20), jaw=12.0, keys=B)
+                handL=P((0.70, 0.30, 0.10)), handR=P((0.30, 0.40, -0.10), fwd=(-0.6, 0.6, 0), back=(0, 0, 1), elbow=(0.5, 0.6, -0.5)), footL=foot(n0, 'footL', (0.02, 0.60, 0)), footR=foot(n0, 'footR', (0, 0.0, 0), pitch=34), tail=(12, 20), jaw=12.0, keys=B)
     fol = merge(hit, pelvis=pel(n0, (0, 0.36, -0.12), (12, 40, 0)), jaw=4.0)
     out['stand_heavy'] = mk(cid, 'stand_heavy', '寄せる肩打ち', n0, wind, hit, fol, 'shoulderR', silhouette='両腕を大きく開く→体ごと一歩寄せ、右肩を相手の胸へぶつける。腕は抱え込む形のまま')
     wind = merge(c0, handR=hmove(c0, 'handR', (0.16, -0.08, -0.06)), keys=K(c0, paw_open_R=1.0))
@@ -242,7 +242,7 @@ def takimaru(cid):
     out['crouch_heavy'] = mk(cid, 'crouch_heavy', 'すくい上げ', c0, wind, hit, fol, 'pawL+pawR', silhouette='両手を床の近くへ差し入れる→密着の一歩と一緒に、下から両腕ですくい上げる→腕が頭上まで上がる')
     wind = merge(a0, handR=P((0.40, -0.10, 0.36), fwd=(0, 0.3, 0.95), back=(0.8, 0, 0.5), elbow=(0.9, -0.3, 0.3)), keys=K(a0, brow_angry=0.6))
     hit = merge(a0, pelvis=off(a0, (0, 0.04, 0), (-4, 20, 0)), chest=add(a0['chest'], (-8, 22, 0)), head=add(a0['head'], (6, -20, 0)), handR=P((0.04, 0.54, -0.06), fwd=(-0.9, 0.2, 0.2), back=(0, 1, 0), elbow=(0.2, 0.9, -0.4)), handL=hmove(a0, 'handL', (0.20, -0.40, 0.0)), tail=(22, 0), keys=K(a0, brow_angry=0.6))
-    fol = merge(a0, handR=hmove(a0, 'handR', (0, 0.04, -0.04)), keys=K(a0, brow_angry=0.6))
+    fol = merge(hit, handR=P((0.06, 0.40, -0.14), fwd=(-0.9, 0.2, 0.2), back=(0, 1, 0), elbow=(0.2, 0.9, -0.4)), keys=K(a0, brow_angry=0.6))
     out['air_weak'] = mk(cid, 'air_weak', '落とし肘', a0, wind, hit, fol, 'elbowR', silhouette='右ひじを高く上げてから、畳んだまま真下へ落とす')
     wind = merge(a0, pelvis=off(a0, (0, 0, 0.06), (-10, 0, 0)), handL=P((0.60, 0.10, 0.40)), handR=P((0.60, 0.10, 0.40)), footL=foot(a0, 'footL', (0.06, 0, -0.10)), footR=foot(a0, 'footR', (0.06, 0, -0.10)), tail=(-10, 0), keys=B)
     hit = merge(a0, pelvis=off(a0, (0, 0.04, -0.10), (28, 0, 0)), spine=add(a0['spine'], (14, 0, 0)), chest=add(a0['chest'], (16, 0, 0)), head=add(a0['head'], (-10, 0, 0)), handL=P((0.30, 0.34, -0.30)), handR=P((0.30, 0.34, -0.30)),
@@ -269,7 +269,7 @@ def yomikage(cid):
     fol = merge(c0, handR=hmove(c0, 'handR', (0, 0.06, 0)), keys=K(c0, paw_open_R=1.0))
     out['crouch_weak'] = mk(cid, 'crouch_weak', '足首の払い', c0, wind, hit, fol, 'pawR', t=(3, 7, 3, 15, 24), silhouette='しゃがんだ体を動かさず、右の手刀だけが足首の高さを払う')
     wind = merge(c0, pelvis=off(c0, (0, -0.06, 0.0), (0, -30, 0)), chest=add(c0['chest'], (0, -20, 0)), head=add(c0['head'], (0, 40, 0)), tail=(-6, -10), keys=K(c0, brow_angry=0.6))
-    hit = merge(c0, pelvis=off(c0, (0, 0.24, 0.34), (-26, 10, 0)), chest=add(c0['chest'], (-18, 10, 0)), head=add(c0['head'], (14, -10, 0)), footL=KICK(0.02, 0.80, 0.90, pitch=40, knee=0.95), footR=foot(c0, 'footR', (0, 0.10, 0)),
+    hit = merge(c0, pelvis=off(c0, (0, 0.22, 0.34), (-36, 10, 0)), chest=add(c0['chest'], (-24, 10, 0)), head=add(c0['head'], (22, -10, 0)), footL=KICK(0.02, 1.00, 0.86, pitch=40, knee=0.9), footR=foot(c0, 'footR', (0, 0.10, 0)),
                 handR=P((0.10, 0.36, 0.44), fwd=(0, 0.2, 1), back=(0, 1, 0), elbow=(0.3, 0.9, 0.3)), handL=P((0.30, 0.0, -0.20)), tail=(16, 0), jaw=8.0, keys=K(c0, brow_angry=0.6))
     fol = merge(hit, pelvis=off(c0, (0, 0.16, 0.26), (-8, 6, 0)), footL=KICK(0.02, 0.44, 0.60, pitch=30, knee=0.9), jaw=3.0)
     out['crouch_heavy'] = mk(cid, 'crouch_heavy', '迎えの膝と肘', c0, wind, hit, fol, 'kneeL+elbowR', silhouette='半身に引いて迎える→立ち上がりながら前ひざと右ひじを同時に突き上げる（上へ向かう形）')
@@ -278,9 +278,9 @@ def yomikage(cid):
     fol = merge(a0, handL=hmove(a0, 'handL', (0, 0.06, -0.06)), keys=K(a0, paw_open_L=1.0))
     out['air_weak'] = mk(cid, 'air_weak', '空中の短い掌', a0, wind, hit, fol, 'pawL', t=(3, 7, 3, 15, 24), silhouette='空中の軸を崩さず、前の掌だけを下へ短く出す')
     wind = merge(a0, pelvis=off(a0, (0, -0.06, 0.04), (-6, 0, 0)), footR=foot(a0, 'footR', (0, -0.20, 0.10), knee=0.9), handR=P((0.20, -0.10, 0.50), fwd=(0, 0.3, 0.95), back=(1, 0, 0), elbow=(0.9, -0.3, 0.3)), tail=(-8, 0), keys=K(a0, paw_open_R=1.0, brow_angry=0.6))
-    hit = merge(a0, pelvis=off(a0, (0, 0.04, 0), (20, 10, 0)), chest=add(a0['chest'], (12, 10, 0)), head=add(a0['head'], (-12, -10, 0)), handR=W((-0.12, 0.70, -0.74), fwd=(0, 0.5, -0.85), back=(0.3, 0.8, 0.5), elbow=(0.9, -0.2, 0.2)),
+    hit = merge(a0, pelvis=off(a0, (0, 0.04, 0), (4, 10, 0)), chest=add(a0['chest'], (0, 10, 0)), head=add(a0['head'], (-2, -10, 0)), handR=W((-0.12, 0.86, -0.56), fwd=(0, 0.5, -0.85), back=(0.3, 0.8, 0.5), elbow=(0.9, -0.2, 0.2)),
                 footR=foot(a0, 'footR', (0, -0.30, 0.16), pitch=30), handL=hmove(a0, 'handL', (0.16, -0.40, 0.10)), tail=(26, 0), jaw=6.0, keys=K(a0, paw_open_R=1.0, brow_angry=0.6))
-    fol = merge(hit, handR=W((-0.10, 0.60, -0.60), fwd=(0, 0.5, -0.85), back=(0.3, 0.8, 0.5), elbow=(0.9, -0.2, 0.2)), jaw=2.0)
+    fol = merge(hit, handR=W((-0.10, 0.70, -0.52), fwd=(0, 0.5, -0.85), back=(0.3, 0.8, 0.5), elbow=(0.9, -0.2, 0.2)), jaw=2.0)
     out['air_heavy'] = mk(cid, 'air_heavy', '下突き', a0, wind, hit, fol, 'pawR', silhouette='軸足を後ろへ引いて構える→右の手刀を真下に近い角度で突き下ろす')
     return out
 
@@ -296,7 +296,7 @@ def bullet(cid):
     hit = merge(n0, pelvis=pel(n0, (0, 0.10, -0.06), (-10, 0, 0)), chest=add(n0['chest'], (-4, -30, 0)), neck=add(n0['neck'], (0, -40, 0)), head=add(n0['head'], (0, -60, 0)), handL=P((0.50, -0.10, 0.10)), handR=P((0.50, 0.10, 0.10)),
                 tail=(0, 0), tail_bones=flat(26, 10), jaw=10.0, keys=K(n0, brow_angry=1.0))
     fol = merge(hit, tail_bones=flat(20, 60), jaw=3.0)
-    out['stand_heavy'] = mk(cid, 'stand_heavy', '長尾の横払い', n0, wind, hit, fol, 'tail', tail_follow=0.9, t=(7, 20, 4, 32, 48), spin=[(0, 0), (7, -30, 'out'), (14, 172, 'in3'), (20, 182, 'out'), (24, 188, 'lin'), (33, 250, 'out'), (48, 360, 'io')], silhouette='逆へひねって尾を巻く→体を半回転させ、伸び切った尾の先端が胸の高さを横切る→そのまま一回転して構えへ')
+    out['stand_heavy'] = mk(cid, 'stand_heavy', '長尾の横払い', n0, wind, hit, fol, 'tail', tail_follow=0.9, t=(7, 25, 4, 35, 48), spin=[(0, 0), (7, -30, 'out'), (14, 172, 'in3'), (20, 182, 'out'), (24, 188, 'lin'), (33, 250, 'out'), (48, 360, 'io')], silhouette='逆へひねって尾を巻く→体を半回転させ、伸び切った尾の先端が胸の高さを横切る→そのまま一回転して構えへ')
     wind = merge(c0, handR=hmove(c0, 'handR', (0.04, -0.12, -0.02)), tail=(0, 0), tail_bones=flat(0, -20))
     hit = merge(c0, pelvis=off(c0, (0, 0.06, 0), (2, -10, 0)), chest=add(c0['chest'], (0, -12, 0)), handR=W((-0.12, 0.96, -0.20), fwd=(0, 1, -0.1), back=(0.2, 0.1, 1), elbow=(0.9, -0.2, -0.3)), tail=(0, 0), tail_bones=flat(0, 20), keys=K(c0, brow_angry=0.7))
     fol = merge(c0, handR=hmove(c0, 'handR', (0, 0.08, 0)), tail=(0, 0), tail_bones=flat(0, 0), keys=K(c0, brow_angry=0.7))
@@ -326,7 +326,7 @@ def dark_moguzo(cid):
     hit = merge(n0, pelvis=pel(n0, (0, 0.50, -0.18), (14, -40, 0)), spine=add(n0['spine'], (4, -10, 0)), chest=add(n0['chest'], (6, -24, 0)), neck=add(n0['neck'], (0, 24, 0)), head=add(n0['head'], (-6, 40, 0)),
                 handL=W((-0.36, 0.90, -0.02), fwd=(-0.7, 0.7, 0), back=(0, 0, 1), elbow=(0.6, -0.6, 0.4)), handR=P((0.20, -0.10, -0.10)), footL=foot(n0, 'footL', (0.02, 0.80, 0), yaw=10), footR=foot(n0, 'footR', (0, 0.44, 0), pitch=10), tail=(10, -24), jaw=10.0, keys=B)
     fol = merge(hit, pelvis=pel(n0, (0, 0.52, -0.16), (12, -66, 0)), handL=W((-0.80, 0.40, -0.10), fwd=(-0.95, 0.1, 0), back=(0, 0, 1), elbow=(0.5, -0.7, 0.4)), head=add(n0['head'], (-4, 60, 0)), jaw=3.0)
-    out['stand_heavy'] = mk(cid, 'stand_heavy', '滑り込みの振り抜き', n0, wind, hit, fol, 'pawL', silhouette='左拳を体の外へ引く→両足を滑らせて前へ出ながら、左拳を横に振り抜く（後ろ足もついて来る）→腕は体の反対側まで振り切る')
+    out['stand_heavy'] = mk(cid, 'stand_heavy', '滑り込みの振り抜き', n0, wind, hit, fol, 'pawL', foot_slide='intended', silhouette='左拳を体の外へ引く→両足を滑らせて前へ出ながら、左拳を横に振り抜く（後ろ足もついて来る）→腕は体の反対側まで振り切る')
     wind = merge(c0, pelvis=off(c0, (0, 0, -0.06), (8, 0, 0)), handR=hmove(c0, 'handR', (0.04, -0.12, -0.06)), keys=K(c0, brow_angry=1.0))
     hit = merge(c0, pelvis=off(c0, (0, 0.16, -0.10), (14, 14, 0)), chest=add(c0['chest'], (6, 12, 0)), head=add(c0['head'], (-12, -14, 0)), handR=W((-0.14, 0.98, -0.34), fwd=(0, 1, 0), back=(0.2, 0, 1), elbow=(0.9, -0.2, -0.2)), tail=(-4, 8), keys=K(c0, brow_angry=1.0))
     fol = merge(c0, pelvis=off(c0, (0, 0.08, -0.06), (8, 6, 0)), handR=hmove(c0, 'handR', (0, 0.10, 0)), keys=K(c0, brow_angry=1.0))

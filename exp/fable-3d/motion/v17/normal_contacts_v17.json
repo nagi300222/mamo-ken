@@ -986,14 +986,11 @@
     },
     {
      "phase": 1,
-     "reach": 0.287,
-     "height": 0.446
+     "reach": 0.284,
+     "height": 0.437
     }
    ],
-   "status": "fix",
-   "issues": [
-    "前へ出切るのは u=0.5（接触 u=0.3214 より 0.04m 先）"
-   ],
+   "status": "ok",
    "name": "落とし肘"
   },
   "air_heavy": {
@@ -1116,29 +1113,26 @@
    "contactEnd": 0.4565,
    "attackPart": "legL",
    "attackLimb": "kneeL+elbowR",
-   "reach": 0.284,
-   "height": 0.159,
+   "reach": 0.328,
+   "height": 0.15,
    "activeReach": [
     {
      "phase": 0,
-     "reach": 0.284,
-     "height": 0.159
+     "reach": 0.328,
+     "height": 0.15
     },
     {
      "phase": 0.5,
-     "reach": 0.29,
-     "height": 0.17
+     "reach": 0.337,
+     "height": 0.161
     },
     {
      "phase": 1,
-     "reach": 0.286,
-     "height": 0.167
+     "reach": 0.331,
+     "height": 0.159
     }
    ],
-   "status": "fix",
-   "issues": [
-    "head が 0.036m 先に出ている"
-   ],
+   "status": "ok",
    "name": "迎えの膝と肘"
   },
   "air_weak": {
@@ -1175,29 +1169,26 @@
    "contactEnd": 0.4565,
    "attackPart": "armR",
    "attackLimb": "pawR",
-   "reach": 0.279,
-   "height": 0.178,
+   "reach": 0.261,
+   "height": 0.251,
    "activeReach": [
     {
      "phase": 0,
-     "reach": 0.279,
-     "height": 0.178
+     "reach": 0.261,
+     "height": 0.251
     },
     {
      "phase": 0.5,
-     "reach": 0.287,
-     "height": 0.147
+     "reach": 0.269,
+     "height": 0.222
     },
     {
      "phase": 1,
-     "reach": 0.286,
-     "height": 0.148
+     "reach": 0.267,
+     "height": 0.222
     }
    ],
-   "status": "fix",
-   "issues": [
-    "head が 0.049m 先に出ている"
-   ],
+   "status": "ok",
    "name": "下突き"
   }
  },
@@ -1232,33 +1223,30 @@
   },
   "stand_heavy": {
    "clip": "v17_stand_heavy",
-   "contact": 0.4167,
-   "contactEnd": 0.5,
+   "contact": 0.5208,
+   "contactEnd": 0.6042,
    "attackPart": "tail",
    "attackLimb": "tail",
-   "reach": 0.609,
-   "height": 0.199,
+   "reach": 0.641,
+   "height": 0.192,
    "activeReach": [
     {
      "phase": 0,
-     "reach": 0.609,
-     "height": 0.199
+     "reach": 0.641,
+     "height": 0.192
     },
     {
      "phase": 0.5,
-     "reach": 0.645,
-     "height": 0.172
+     "reach": 0.64,
+     "height": 0.171
     },
     {
      "phase": 1,
-     "reach": 0.654,
-     "height": 0.166
+     "reach": 0.564,
+     "height": 0.164
     }
    ],
-   "status": "fix",
-   "issues": [
-    "前へ出切るのは u=0.525（接触 u=0.4167 より 0.056m 先）"
-   ],
+   "status": "ok",
    "name": "長尾の横払い"
   },
   "crouch_weak": {
