@@ -29,7 +29,7 @@ test('known tail/counter incompatibility is rejected rather than becoming invisi
   assert.equal(compatibilityForMove(bullet,'bullet.s3').supported,false);
   assert.equal(compatibilityForMove(bullet,'bullet.s2').supported,false);
   assert.equal(compatibilityForMove(definition,'yomikage.s3').supported,false);
-  assert.equal(compatibilityForMove(definition,'godan.s3').supported,false);
+  assert.equal(compatibilityForMove(definition,'godan.s2').supported,false);
   // Selecting a supported fallback is an explicit editor action.
   const before=JSON.stringify(definition);assert.equal(compatibleSpecialSuggestion(definition).length,3);assert.equal(JSON.stringify(definition),before);
 });

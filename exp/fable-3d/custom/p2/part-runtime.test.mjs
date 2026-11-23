@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import {spawnSync} from 'node:child_process';
 import {fileURLToPath} from 'node:url';
 import {validateMeshPartManifest,meshPartOptions,resolveMeshParts} from './part-contract.js';
+import {verifyMeshPartDelivery,mixedMeshPartProfiles} from './part-delivery.js';
 const empty={schemaVersion:1,version:'p2-exchange-1',modules:[]};
 test('unproduced mesh choices never claim availability or silently replace saved donor selections',()=>{
  assert.equal(validateMeshPartManifest(empty),empty);
@@ -11,6 +12,10 @@ test('unproduced mesh choices never claim availability or silently replace saved
  assert.throws(()=>resolveMeshParts(empty,'moguzo',{head:'godan'},{}),/置換しません/);
  assert.throws(()=>resolveMeshParts(empty,'moguzo',{head:'moguzo'},{head:'godan'}),/同時指定/);
  assert.deepEqual(resolveMeshParts(empty,'moguzo',{head:'moguzo'},{head:'moguzo'}),[]);
+});
+test('the full delivery gate rejects missing parts and partial profiles never become complete assemblies',()=>{
+ assert.throws(()=>verifyMeshPartDelivery(empty,{requireFull:true}),/26部品/);
+ assert.equal(verifyMeshPartDelivery(empty).full,false);assert.deepEqual(mixedMeshPartProfiles(empty),[]);
 });
 test('real GLB CPU modules preserve shared skin, morph seams and measured surfaces on all 3 representative hosts',()=>{
  const result=spawnSync(process.execPath,['--loader',fileURLToPath(new URL('../v16/tools/three-loader.mjs',import.meta.url)),fileURLToPath(new URL('./tools/verify-part-runtime.mjs',import.meta.url))],{encoding:'utf8',timeout:120000});
