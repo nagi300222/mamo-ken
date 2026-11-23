@@ -1,0 +1,96 @@
+{
+ "note": "モジュールの host 境界頂点の写しと、host の隣の slot の同じ場所の頂点の距離 [m]。スキニング後（three.js の SkinnedMesh.getVertexPosition = 描画と同じ計算）。各クリップを等間隔 9 時刻で測った最大",
+ "tolerance_m": 0.00002,
+ "modules": {
+  "moguzo-head-godan": {
+   "clips": {
+    "idle": {
+     "maxGap_m": 0,
+     "seamVertices": 194
+    },
+    "walk_f": {
+     "maxGap_m": 0,
+     "seamVertices": 194
+    },
+    "guard_stand": {
+     "maxGap_m": 0,
+     "seamVertices": 194
+    },
+    "stand_heavy": {
+     "maxGap_m": 0,
+     "seamVertices": 194
+    },
+    "crouch_heavy": {
+     "maxGap_m": 0,
+     "seamVertices": 194
+    },
+    "hurt_heavy": {
+     "maxGap_m": 0,
+     "seamVertices": 194
+    }
+   },
+   "maxGap_m": 0,
+   "pass": true
+  },
+  "godan-hands-bullet": {
+   "clips": {
+    "idle": {
+     "maxGap_m": 0,
+     "seamVertices": 194
+    },
+    "walk_f": {
+     "maxGap_m": 0,
+     "seamVertices": 194
+    },
+    "guard_stand": {
+     "maxGap_m": 0,
+     "seamVertices": 194
+    },
+    "stand_heavy": {
+     "maxGap_m": 0,
+     "seamVertices": 194
+    },
+    "crouch_heavy": {
+     "maxGap_m": 0,
+     "seamVertices": 194
+    },
+    "hurt_heavy": {
+     "maxGap_m": 0,
+     "seamVertices": 194
+    }
+   },
+   "maxGap_m": 0,
+   "pass": true
+  },
+  "bullet-feet-moguzo": {
+   "clips": {
+    "idle": {
+     "maxGap_m": 0,
+     "seamVertices": 244
+    },
+    "walk_f": {
+     "maxGap_m": 0,
+     "seamVertices": 244
+    },
+    "guard_stand": {
+     "maxGap_m": 0,
+     "seamVertices": 244
+    },
+    "stand_heavy": {
+     "maxGap_m": 0,
+     "seamVertices": 244
+    },
+    "crouch_heavy": {
+     "maxGap_m": 0,
+     "seamVertices": 244
+    },
+    "hurt_heavy": {
+     "maxGap_m": 0,
+     "seamVertices": 244
+    }
+   },
+   "maxGap_m": 0,
+   "pass": true
+  }
+ }
+}

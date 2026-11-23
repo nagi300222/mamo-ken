@@ -1,0 +1,46 @@
+<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>P2 exchange module preview</title><link rel="icon" href="data:,">
+<script type="importmap">{"imports":{"three":"../../../preview/vendor/three.module.min.js","three/addons/":"../../../preview/vendor/addons/"}}</script>
+<style>html,body{margin:0;height:100%;background:#1b222b;overflow:hidden}canvas{display:block}</style></head><body>
+<script type="module">
+// P2 交換モジュールの確認ページ（制作側の検査用。ゲームの実行時コードではない）。
+// host の <host>_parts.glb を読み、モジュールの slot の元プリミティブを隠して、モジュール GLB のメッシュを host の Skeleton へ bind し直して描く。
+//   ?host=moguzo&modules=modules/moguzo/head_godan.glb[,..]&assets=../assets/&clip=idle&t=0.2&view=front|side|back|34|<bone>&mat=tex|clay&wire=1&dist=1.5
+import * as THREE from 'three'; import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
+const q = new URLSearchParams(location.search), host = q.get('host') || 'moguzo', assets = q.get('assets') || '../assets/', mods = (q.get('modules') || '').split(',').filter(Boolean), mat = q.get('mat') || 'tex';
+const renderer = new THREE.WebGLRenderer({antialias: true, preserveDrawingBuffer: true}); renderer.setPixelRatio(+q.get('dpr') || 1); renderer.setSize(innerWidth, innerHeight); document.body.appendChild(renderer.domElement);
+const scene = new THREE.Scene(); scene.background = new THREE.Color(mat === 'clay' ? 0x2a323d : 0x6f8496); const cam = new THREE.PerspectiveCamera(28, innerWidth / innerHeight, .05, 20);
+scene.add(new THREE.HemisphereLight(0xffffff, 0x556070, 1.5)); const sun = new THREE.DirectionalLight(0xffffff, 2.2); sun.position.set(1.2, 2.2, 2.4); scene.add(sun); const rim = new THREE.DirectionalLight(0xbfd4ff, .8); rim.position.set(-2, 1.2, -2); scene.add(rim);
+const grid = new THREE.GridHelper(4, 40, 0x44505c, 0x3a444f); scene.add(grid);
+const loader = new GLTFLoader(), load = u => new Promise((res, rej) => loader.load(u, res, undefined, rej));
+const P2 = window.p2 = {ready: false, error: null};
+try {
+  const g = await load(`../../v16/assets/${host}_parts.glb`); scene.add(g.scene); const hostMeshes = []; g.scene.traverse(o => { if (o.isSkinnedMesh) hostMeshes.push(o); }); const skeleton = hostMeshes[0].skeleton, parent = hostMeshes[0].parent;
+  const added = [], hidden = new Set();
+  for (const m of mods) { const mg = await load(new URL(m, new URL(assets, location.href)).href); const info = mg.parser.json.extras.p2Module; hidden.add(info.slot); const ms = []; mg.scene.traverse(o => { if (o.isSkinnedMesh) ms.push(o); });
+    const names = mg.parser.json.skins[0].joints.map(i => mg.parser.json.nodes[i].name); if (names.length !== skeleton.bones.length || names.some((n, i) => THREE.PropertyBinding.sanitizeNodeName(n) !== skeleton.bones[i].name)) throw Error('joint order differs from host: ' + m);
+    for (const o of ms) { parent.add(o); o.bind(skeleton, hostMeshes[0].bindMatrix); o.frustumCulled = false; o.userData.p2 = info; added.push(o); } }
+  for (const o of hostMeshes) { o.frustumCulled = false; if (hidden.has(o.material.userData?.avatarPart)) o.visible = false; }
+  const all = [...hostMeshes, ...added];
+  if (mat === 'clay') for (const o of all) { const isMod = added.includes(o); o.material = new THREE.MeshStandardMaterial({color: isMod ? 0xe2b98a : 0x9fb2c4, roughness: .85, metalness: 0}); }
+  if (q.get('wire')) for (const o of added) { const w = new THREE.SkinnedMesh(o.geometry, new THREE.MeshBasicMaterial({color: 0x10151c, wireframe: true, transparent: true, opacity: .55})); w.morphTargetInfluences = o.morphTargetInfluences; w.morphTargetDictionary = o.morphTargetDictionary; parent.add(w); w.bind(skeleton, hostMeshes[0].bindMatrix); w.frustumCulled = false; }
+  // host の既定のモーフ値（brow_angry など）をモジュールにもそろえる
+  const base = hostMeshes[0]; for (const o of added) if (o.morphTargetInfluences && base.morphTargetInfluences) for (const k in o.morphTargetDictionary) { const hi = base.morphTargetDictionary?.[k]; if (hi !== undefined) o.morphTargetInfluences[o.morphTargetDictionary[k]] = base.morphTargetInfluences[hi]; }
+  const mixer = new THREE.AnimationMixer(g.scene), clips = Object.fromEntries(g.animations.map(c => [c.name, c])); let action = null;
+  P2.clips = Object.fromEntries(g.animations.map(c => [c.name, +c.duration.toFixed(4)])); P2.meshes = added.map(o => o.name); P2.hostMeshes = hostMeshes.map(o => o.material.userData?.avatarPart);
+  const bone = n => skeleton.bones.find(b => b.name === THREE.PropertyBinding.sanitizeNodeName(n));
+  P2.view = (v, dist) => { const t = new THREE.Vector3(0, .3, 0); let d = dist || 1.75, dir = new THREE.Vector3(0, .12, 1);
+    if (v === 'side') dir.set(1, .1, 0); else if (v === 'back') dir.set(0, .12, -1); else if (v === '34') dir.set(.75, .2, 1); else if (v === '34b') dir.set(-.75, .25, -1); else if (v && v !== 'front') { const [bn, dn] = v.split(':'); const b = bone(bn); if (b) { g.scene.updateMatrixWorld(true); b.getWorldPosition(t); d = dist || .62; ({front: () => dir.set(.25, .15, 1), side: () => dir.set(1, .15, .2), back: () => dir.set(-.25, .2, -1), top: () => dir.set(.1, 1, .5), low: () => dir.set(.6, -.25, 1)})[dn || 'front'](); } }
+    cam.position.copy(t).addScaledVector(dir.normalize(), d); cam.lookAt(t); };
+  P2.pose = (name, t) => { if (action) action.stop(); if (name && clips[name]) { action = mixer.clipAction(clips[name]); action.reset().play(); action.paused = true; action.time = Math.min(clips[name].duration - 1e-4, Math.max(0, t || 0)); } else action = null; mixer.update(0); g.scene.updateMatrixWorld(true); };
+  P2.morph = (name, v) => { for (const o of all) { const i = o.morphTargetDictionary?.[name]; if (i !== undefined) o.morphTargetInfluences[i] = v; } };
+  P2.render = () => renderer.render(scene, cam);
+  // 継ぎ目の実測: モジュールの host 境界頂点の写しと、host の隣の slot の同じ位置の頂点が、いまの姿勢でどれだけ離れているか（スキニング後・WebGL と同じ計算）
+  P2.seamGap = () => { const v = new THREE.Vector3(), out = {}; g.scene.updateMatrixWorld(true); const key = p => p.map(x => x.toFixed(5)).join(',');
+    const rest = new Map(); for (const o of hostMeshes) { if (!o.visible) continue; const a = o.geometry.attributes.position; for (let i = 0; i < a.count; i++) { const k = key([a.getX(i), a.getY(i), a.getZ(i)]); if (!rest.has(k)) rest.set(k, [o, i]); } }
+    for (const o of added) { const a = o.geometry.attributes.position; let n = 0, mx = 0; const w = new THREE.Vector3();
+      for (let i = 0; i < a.count; i++) { const h = rest.get(key([a.getX(i), a.getY(i), a.getZ(i)])); if (!h) continue; o.getVertexPosition(i, v); v.applyMatrix4(o.matrixWorld); h[0].getVertexPosition(h[1], w); w.applyMatrix4(h[0].matrixWorld); n++; mx = Math.max(mx, v.distanceTo(w)); }
+      out[o.name] = {matchedVertices: n, maxGap: +mx.toExponential(3)}; }
+    return out; };
+  P2.view(q.get('view') || '34', +q.get('dist') || 0); P2.pose(q.get('clip') || 'idle', +q.get('t') || 0); P2.render(); P2.ready = true;
+} catch (e) { P2.error = String(e && e.stack || e); document.body.insertAdjacentHTML('beforeend', `<pre style="position:fixed;top:0;left:0;color:#fff;padding:8px;white-space:pre-wrap">${P2.error}</pre>`); }
+</script></body></html>
