@@ -9,6 +9,7 @@ on:
       - feat/mamoken-p4-ui
       - feat/mamoken-p0-p4-reviewed-integration
       - feat/mamoken-p0-p4-integration
+      - feat/mamoken-p4-ui-polish
     paths-ignore:
       - docs/**
   workflow_dispatch:
@@ -86,7 +87,9 @@ jobs:
               MAMOKEN_EVIDENCE="$RUNNER_TEMP/mamoken-integration-evidence/melee-cpu" node --loader ./exp/fable-3d/custom/v16/tools/three-loader.mjs exp/fable-3d/custom/v16/tools/verify-p2-melee.mjs
               node exp/fable-3d/dojo/acceptance/p2-integration-browser.mjs ;;
             p3) node exp/fable-3d/dojo/acceptance/p3-feedback-browser.mjs ;;
-            p4) MAMOKEN_UI_VIDEO=1 node exp/fable-3d/dojo/acceptance/p4-ui-browser.mjs ;;
+            p4)
+              MAMOKEN_UI_VIDEO=1 node exp/fable-3d/dojo/acceptance/p4-ui-browser.mjs
+              MAMOKEN_UI_VIDEO=1 node exp/fable-3d/dojo/acceptance/p4-polish-browser.mjs ;;
             special)
               MAMOKEN_REQUIRE_PRODUCTION=1 MAMOKEN_SPECIAL_SOURCE_VERSION=v17r2 node exp/fable-3d/dojo/acceptance/p3-special-contact-browser.mjs
               node exp/fable-3d/dojo/acceptance/p3-special-response-browser.mjs ;;

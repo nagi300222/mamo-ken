@@ -1,0 +1,274 @@
+{
+  "schemaVersion": "1.0.0",
+  "target": {
+    "integratedPr": "https://github.com/nagi300222/mamo-ken/pull/222",
+    "sha": "1391c49493eca193c3a49a22140e5b1c3d2c6417",
+    "previewUrl": "https://12d27e73.mamoken-3d.pages.dev"
+  },
+  "p1Confirmed": true,
+  "p2Permission": "CONFIRMED",
+  "reviewers": {
+    "independent": "Independent UI reviewer agent /root/independent_ui_review; did not author or modify P4 implementation or assets",
+    "implementer": "Original P0-P4 Codex producers and Claude art producers; coordinator /root assigns improvements"
+  },
+  "humanTesters": {
+    "novice": 0,
+    "experienced": 0
+  },
+  "physicalIphone": {
+    "model": "",
+    "os": "",
+    "tested": false
+  },
+  "ownerDecision": "UNTESTED",
+  "axes": {
+    "A": {
+      "score": 2,
+      "rationale": "対戦主カードと5モードの意味は伝わるが720×320の初期表示で下段行動が切れ、スクロール手掛かりが弱い。キャラ選択も開始/設定が下段へ離れる。全選択肢と次の行動を初期表示で発見できる構成へ。人間の発見時間は未測定。",
+      "evidence": [
+        "https://github.com/nagi300222/mamo-ken/actions/runs/45164225654/artifacts/14814236255",
+        "https://github.com/nagi300222/mamo-ken/actions/runs/45164225654/artifacts/14813556375"
+      ]
+    },
+    "B": {
+      "score": 2,
+      "rationale": "主対象44pxと開始/戻り経路は実レポートで成立。しかし円内のギュイーン/必殺/奥義に主名・固有技名・発動/不足理由が密集して重なる。操作名を大きく一つにし状態/技名は適切な別領域へ。親指誤押しや音による反応感は未測定。",
+      "evidence": [
+        "https://github.com/nagi300222/mamo-ken/actions/runs/45164225654/artifacts/14814236255",
+        "https://github.com/nagi300222/mamo-ken/actions/runs/45164225654/artifacts/14813556375",
+        "https://github.com/nagi300222/mamo-ken/actions/runs/45164225654/artifacts/14812534066"
+      ]
+    },
+    "C": {
+      "score": 3,
+      "rationale": "深緑・紙札・山稜・前足の拳印・9固有紋は全モードを関連づける。直接模倣は観察されない。Claude原画の簡潔なBattleに実装で小文字が追加され、情報整理と動きの磨き込みは商用品質まで未達。",
+      "evidence": [
+        "https://github.com/nagi300222/mamo-ken/actions/runs/45164225654/artifacts/14814236255",
+        "https://github.com/nagi300222/mamo-ken/actions/runs/45164225654/artifacts/14813556375",
+        "https://github.com/nagi300222/mamo-ken/tree/0ce87219762134d4d9adb8f3785aa4894e777343/exp/fable-3d/ui-art/v17/evidence"
+      ]
+    },
+    "D": {
+      "score": 2,
+      "rationale": "左右操作railで中央の接触位置を保つ。一方資源/能力/ルール/補助ラベルに7〜10px級の指定が多く、HUDに細線と小文字が積み重なる。HP/時間を主、二次資源を次、説明を必要時へ整理し、Practiceの操作列と計測も区分する。",
+      "evidence": [
+        "https://github.com/nagi300222/mamo-ken/actions/runs/45164225654/artifacts/14814236255",
+        "https://github.com/nagi300222/mamo-ken/actions/runs/45164225654/artifacts/14813556375",
+        "https://github.com/nagi300222/mamo-ken/actions/runs/45164225654/artifacts/14812534066"
+      ]
+    },
+    "E": {
+      "score": 2,
+      "rationale": "選択枠/ラベル・フォーカス・モーション軽減・模擬safe areaの証拠はある。小さい漢字とボタン内多段文字、探索床上の薄い案内文字は原画像で判読負担。拡大/VoiceOver/物理ノッチ/親指は未試験。",
+      "evidence": [
+        "https://github.com/nagi300222/mamo-ken/actions/runs/45164225654/artifacts/14814236255",
+        "https://github.com/nagi300222/mamo-ken/actions/runs/45164225654/artifacts/14813556375",
+        "https://github.com/nagi300222/mamo-ken/actions/runs/45164225654/artifacts/14814346806"
+      ]
+    },
+    "F": {
+      "score": 3,
+      "rationale": "保存/再読込/同座標帰還と会話/結果のfocus復元は実記録で成立。動画でVS/練習/探索への遷移も確認。ただし確認札の保存CTAがほぼ画面外で、次の行動の発見にスクロールを要求する。内容を覆わない常設CTAを確保する。",
+      "evidence": [
+        "https://github.com/nagi300222/mamo-ken/actions/runs/45164225654/artifacts/14814236255",
+        "https://github.com/nagi300222/mamo-ken/actions/runs/45164225654/artifacts/14812983459",
+        "https://github.com/nagi300222/mamo-ken/actions/runs/45164225654/artifacts/14814346806"
+      ]
+    }
+  },
+  "gates": {
+    "G0": {
+      "status": "PASS",
+      "evidence": [
+        "https://github.com/nagi300222/mamo-ken/pull/222",
+        "https://github.com/nagi300222/mamo-ken/blob/1391c49493eca193c3a49a22140e5b1c3d2c6417/docs/mamoken-next/PRODUCTION_GATE.json",
+        "https://github.com/nagi300222/mamo-ken/actions/runs/45164225654"
+      ],
+      "note": "Separate independent evidence verifier checked fixed SHA and 77 preserved assets; this UI reviewer did not run integration tests."
+    },
+    "G1": {
+      "status": "PASS",
+      "evidence": [
+        "https://github.com/nagi300222/mamo-ken/actions/runs/45164225654",
+        "https://github.com/nagi300222/mamo-ken/actions/runs/45164225785"
+      ],
+      "note": "Separate independent evidence verifier reported local Node216+53/native14/framework6, Pages/native build, existing same-SHA CI11 jobs and iOS success. Evidence29 files hash match. Local browser recapture failed before app launch due environment; existing CI evidence reused, not claimed as new browser run."
+    },
+    "G2": {
+      "status": "FAIL",
+      "evidence": [
+        "https://github.com/nagi300222/mamo-ken/actions/runs/45164225654/artifacts/14814236255",
+        "https://github.com/nagi300222/mamo-ken/actions/runs/45164225654/artifacts/14813556375",
+        "https://github.com/nagi300222/mamo-ken/actions/runs/45164225654/artifacts/14812534066",
+        "https://github.com/nagi300222/mamo-ken/actions/runs/45164225654/artifacts/14812983459"
+      ],
+      "note": "56.25/100 with A/B/D/E below3 and three unresolved HIGH issues; audio subjective review lacks audio-stream evidence."
+    },
+    "G3": {
+      "status": "UNTESTED",
+      "evidence": []
+    },
+    "G4": {
+      "status": "UNTESTED",
+      "evidence": []
+    },
+    "G5": {
+      "status": "UNTESTED",
+      "evidence": []
+    }
+  },
+  "tasks": {
+    "T01": {
+      "status": "UNTESTED",
+      "evidence": [],
+      "note": "Real no-explanation human task not performed; automated routes and AI image observation do not count as a human participant."
+    },
+    "T02": {
+      "status": "UNTESTED",
+      "evidence": [],
+      "note": "Real no-explanation human task not performed; automated routes and AI image observation do not count as a human participant."
+    },
+    "T03": {
+      "status": "UNTESTED",
+      "evidence": [],
+      "note": "Real no-explanation human task not performed; automated routes and AI image observation do not count as a human participant."
+    },
+    "T04": {
+      "status": "UNTESTED",
+      "evidence": [],
+      "note": "Real no-explanation human task not performed; automated routes and AI image observation do not count as a human participant."
+    },
+    "T05": {
+      "status": "UNTESTED",
+      "evidence": [],
+      "note": "Real no-explanation human task not performed; automated routes and AI image observation do not count as a human participant."
+    },
+    "T06": {
+      "status": "UNTESTED",
+      "evidence": [],
+      "note": "Real no-explanation human task not performed; automated routes and AI image observation do not count as a human participant."
+    },
+    "T07": {
+      "status": "UNTESTED",
+      "evidence": [],
+      "note": "Real no-explanation human task not performed; automated routes and AI image observation do not count as a human participant."
+    },
+    "T08": {
+      "status": "UNTESTED",
+      "evidence": [],
+      "note": "Real no-explanation human task not performed; automated routes and AI image observation do not count as a human participant."
+    }
+  },
+  "issues": [
+    {
+      "id": "UI-01",
+      "title": "短画面の初期表示で下段モードの存在と行動が伝わりにくい",
+      "severity": "HIGH",
+      "resolved": false,
+      "evidence": [
+        "https://github.com/nagi300222/mamo-ken/actions/runs/45164225654/artifacts/14814236255",
+        "https://github.com/nagi300222/mamo-ken/actions/runs/45164225654/artifacts/14813556375"
+      ]
+    },
+    {
+      "id": "UI-02",
+      "title": "ギュイーン/必殺/奥義の円内で主名と副文が重なり判読困難",
+      "severity": "HIGH",
+      "resolved": false,
+      "evidence": [
+        "https://github.com/nagi300222/mamo-ken/actions/runs/45164225654/artifacts/14814236255",
+        "https://github.com/nagi300222/mamo-ken/actions/runs/45164225654/artifacts/14813556375",
+        "https://github.com/nagi300222/mamo-ken/actions/runs/45164225654/artifacts/14812534066"
+      ]
+    },
+    {
+      "id": "UI-03",
+      "title": "キャラクリ確認札の保存CTAが画面下に隠れる",
+      "severity": "HIGH",
+      "resolved": false,
+      "evidence": [
+        "https://github.com/nagi300222/mamo-ken/actions/runs/45164225654/artifacts/14814236255",
+        "https://github.com/nagi300222/mamo-ken/actions/runs/45164225654/artifacts/14812983459"
+      ]
+    },
+    {
+      "id": "UI-04",
+      "title": "キャラ比較と開始/戻るの判断単位が縦に分かれる",
+      "severity": "MEDIUM",
+      "resolved": false,
+      "evidence": [
+        "https://github.com/nagi300222/mamo-ken/actions/runs/45164225654/artifacts/14814236255"
+      ]
+    },
+    {
+      "id": "UI-05",
+      "title": "HUDとPracticeで小文字の補助情報が積み重なる",
+      "severity": "MEDIUM",
+      "resolved": false,
+      "evidence": [
+        "https://github.com/nagi300222/mamo-ken/actions/runs/45164225654/artifacts/14814236255",
+        "https://github.com/nagi300222/mamo-ken/actions/runs/45164225654/artifacts/14813556375"
+      ]
+    },
+    {
+      "id": "UI-06",
+      "title": "探索の床上の薄い操作案内の判読負担",
+      "severity": "MEDIUM",
+      "resolved": false,
+      "evidence": [
+        "https://github.com/nagi300222/mamo-ken/actions/runs/45164225654/artifacts/14814236255",
+        "https://github.com/nagi300222/mamo-ken/actions/runs/45164225654/artifacts/14814346806"
+      ]
+    },
+    {
+      "id": "UI-07",
+      "title": "音声付き操作動画がなくUI効果音の主観評価未実施",
+      "severity": "MEDIUM",
+      "resolved": false,
+      "evidence": [
+        "https://github.com/nagi300222/mamo-ken/actions/runs/45164225654/artifacts/14814236255"
+      ],
+      "scope": "Evidence gap, not a claim that game audio is defective."
+    }
+  ],
+  "permissionEvidence": [
+    "https://github.com/nagi300222/mamo-ken/blob/1391c49493eca193c3a49a22140e5b1c3d2c6417/docs/mamoken-next/PRODUCTION_GATE.json"
+  ],
+  "reviewConditions": {
+    "date": "2026-11-23",
+    "timezone": "Asia/Tokyo",
+    "browser": "Linux Chromium / SwiftShader existing CI capture",
+    "viewports": [
+      "720x320",
+      "852x393",
+      "393x852 CSS-rotated",
+      "simulated native safe area"
+    ],
+    "video": {
+      "durationSeconds": 36.92,
+      "encodedWidth": 852,
+      "encodedHeight": 392,
+      "encodedFPS": 25,
+      "observedAs": "chronological frame sequence every3 seconds; not continuous playback",
+      "hasAudioStream": false,
+      "isGameplayFPS": false
+    },
+    "physicalIphoneTested": false,
+    "humanTesters": 0,
+    "audioSubjectiveReviewPerformed": false,
+    "scope": "Independent visual/information/recorded-flow judgement; no production changes and no human or physical-device pass substitution."
+  },
+  "evidenceVerification": {
+    "report": "baseline-verification.json",
+    "performedBy": "separate independent evidence verification agent",
+    "thisReviewerCheckedManifestFiles": 29,
+    "thisReviewerManifestHashMismatches": 0,
+    "localBrowserRecapture": "BLOCKED_ENVIRONMENT as independently reported",
+    "notPersonallyRunByThisReviewer": [
+      "Node216+53/native14/framework6",
+      "Pages/native build",
+      "CI11 jobs",
+      "iOS Simulator install/launch"
+    ]
+  }
+}

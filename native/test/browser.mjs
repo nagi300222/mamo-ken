@@ -67,13 +67,13 @@ async function inspectLobby(condition){
  const {left,right,bottom}=condition;await lobbyInsets(condition);
  await safeBounds('.mode-hall',left,right,bottom);
  const scroll=await page.locator('.mode-hall').evaluate(el=>({position:getComputedStyle(el).position,overflow:getComputedStyle(el).overflowY,clientHeight:el.clientHeight,scrollHeight:el.scrollHeight,scrollTop:el.scrollTop}));
- assert.equal(scroll.position,'fixed');assert.equal(scroll.overflow,'auto');assert.ok(scroll.scrollHeight>scroll.clientHeight,'P4 scrollable menu was compressed into one screen');
+ assert.equal(scroll.position,'fixed');assert.equal(scroll.overflow,'auto');assert.ok(scroll.scrollHeight<=scroll.clientHeight+1,'P4 five-mode overview requires scrolling at the supported native size');
  await page.locator('.hall-header').scrollIntoViewIfNeeded();await safeBounds('.hall-header',left,right,bottom);await safeBounds('.hall-title h1',left,right,bottom);
  assert.equal((await page.locator('.hall-title h1').textContent()).trim(),'マモ拳');
  const cards=[];
  for(const mode of ['battle','practice','arcade','survival','story']){
   const selector='.modes a[data-mode="'+mode+'"]',card=page.locator(selector);
-  await card.scrollIntoViewIfNeeded();await safeBounds(selector,left,right,bottom);
+  await safeBounds(selector,left,right,bottom);
   const action=card.locator('.mode-action,.mode-rule').first();await action.click({trial:true});
   await safeBounds(selector+' h2',left,right,bottom);await safeBounds(selector+' '+(mode==='battle'?'.mode-action':'.mode-rule'),left,right,bottom);
   const record=await card.evaluate(el=>{
@@ -88,7 +88,7 @@ async function inspectLobby(condition){
   }
  }
  await page.locator('.hall-footer').scrollIntoViewIfNeeded();await safeBounds('.hall-footer',left,right,bottom);
- const maxScroll=await page.locator('.mode-hall').evaluate(el=>el.scrollTop);assert.ok(maxScroll>0,'Five modes were not reached by scrolling');
+ const maxScroll=await page.locator('.mode-hall').evaluate(el=>el.scrollTop);assert.equal(maxScroll,0,'The five-mode overview must start and remain visible before scrolling');
  await page.screenshot({path:output+'/lobby-safe-lower-'+condition.width+'-'+left+'-'+right+'.png'});
  await page.locator('.hall-header').scrollIntoViewIfNeeded();await safeBounds('.hall-header',left,right,bottom);
  nativeLobbyScroll.push({condition,scroll,maxScroll,cards});

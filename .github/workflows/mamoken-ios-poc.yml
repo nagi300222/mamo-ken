@@ -1,7 +1,7 @@
 name: MamoKen P1 unsigned iOS source build
 on:
   push:
-    branches: [feat/mamoken-p1-ios-landscape, feat/mamoken-p0-p1-integration, feat/mamoken-p0-p4-integration]
+    branches: [feat/mamoken-p1-ios-landscape, feat/mamoken-p0-p1-integration, feat/mamoken-p0-p4-integration, feat/mamoken-p4-ui-polish]
     paths: [native/**, exp/fable-3d/**, .github/workflows/mamoken-ios-poc.yml]
   workflow_dispatch:
 permissions:

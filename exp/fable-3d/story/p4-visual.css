@@ -102,3 +102,43 @@ body[data-ui=mountain] .shared-step-pad .step-button{min-height:44px;background:
 #story-app .unavailable-list ul,#story-app .compatibility-problems{padding-left:18px;font-size:11px;line-height:1.65;color:#f5cfb5}
 #story-app .unavailable-list li{margin-bottom:7px}
 #story-app #preview-state{min-height:1.5em}
+
+/* P4 review UI-03: fields scroll in their own viewport. Navigation, validation
+   and the primary action reserve space instead of covering or leaving it. */
+#story-app #editor{display:flex;flex-direction:column;overflow:hidden;padding:14px 16px;gap:0}
+#story-app #editor>.eyebrow,#story-app #editor>h1,#story-app #editor>.lead{flex:none}
+#story-app #editor>h1{font-size:22px;line-height:1.25;margin:3px 0 5px}
+#story-app #editor>.lead{margin:0 0 9px;font-size:12px;line-height:1.35}
+#story-app #editor>small.hint{flex:none;margin-top:5px;font-size:10px;line-height:1.4}
+#story-app #avatar-form{flex:1;display:flex;flex-direction:column;min-height:0;overflow:hidden;margin:0}
+#story-app #avatar-form>.p4-editor-tabs{position:relative;top:auto;flex:none;margin:0;padding:0 0 7px;gap:3px;border-bottom:1px solid #8aa18a88;background:#173628;z-index:1}
+#story-app #avatar-form>.p4-editor-tabs button{min-height:44px;font-size:12px;line-height:1.15;padding:5px 2px;white-space:normal}
+#story-app .p4-editor-scroll{flex:1;min-height:0;overflow-y:auto;overflow-x:hidden;padding:12px 5px 16px 0;scrollbar-color:var(--ui-line) var(--ui-shadow);scroll-padding-block:9px 16px;overscroll-behavior:contain}
+#story-app .p4-editor-scroll .p4-tab-panel{scroll-margin-block-start:9px}
+#story-app .p4-editor-scroll .form-row{margin-bottom:12px}
+#story-app .p4-editor-scroll .hint{font-size:12px;line-height:1.5}
+#story-app .p4-editor-scroll label{font-size:12px;line-height:1.4}
+#story-app .p4-editor-scroll select,#story-app .p4-editor-scroll input:not([type=color]){font-size:13px;min-height:44px}
+#story-app .p4-editor-footer{flex:none;padding-top:8px;border-top:1px solid #8aa18a88;background:#153326;box-shadow:0 -6px 12px #10271f45;z-index:2}
+#story-app .p4-editor-footer .p4-save-state{margin:0 0 5px;color:#f4d998;font-size:11px;line-height:1.35}
+#story-app .p4-editor-footer #preview-state{margin:0 0 5px;min-height:0;color:#d2e0d1;font-size:11px;line-height:1.35}
+#story-app .p4-editor-footer #preview-state:empty{display:none}
+#story-app .p4-editor-footer #editor-error{font-size:12px;line-height:1.4;margin:0 0 5px;max-height:3em;overflow:auto}
+#story-app .p4-editor-footer .editor-actions{position:static;display:grid;grid-template-columns:minmax(44px,.8fr) minmax(44px,1.6fr);gap:8px;padding:0;margin:0;background:none}
+#story-app .p4-editor-footer .editor-actions button{min-height:44px;font-size:13px;line-height:1.2;padding:7px 5px;white-space:normal}
+#story-app .p4-editor-scroll .p4-save-title{font-size:17px;line-height:1.4;margin:0 0 7px}
+#story-app .p4-editor-scroll .p4-save-copy{font-size:12px;line-height:1.5;margin:0 0 10px}
+#story-app .p4-editor-scroll .p4-save-summary{font-size:12px;padding:12px;margin:0}
+#story-app .p4-editor-scroll .p4-save-summary div{grid-template-columns:3.5em minmax(0,1fr);gap:8px;font-size:12px}
+@media(max-height:500px),(orientation:portrait){
+ #story-app #editor{padding:10px 12px}
+ #story-app #editor>.eyebrow,#story-app #editor>.lead,#story-app #editor>small.hint{display:none}
+ #story-app #editor>h1{font-size:18px;line-height:1.2;margin:0 0 7px}
+ #story-app #avatar-form>.p4-editor-tabs{padding-bottom:5px}
+ #story-app #avatar-form>.p4-editor-tabs button{font-size:11px}
+ #story-app .p4-editor-scroll{padding-top:9px;padding-bottom:12px}
+ #story-app .p4-editor-footer{padding-top:6px}
+ #story-app .p4-editor-footer .p4-save-state{font-size:10px;margin-bottom:4px}
+ #story-app .p4-editor-footer #preview-state{font-size:10px;margin-bottom:4px}
+ #story-app .p4-editor-footer .editor-actions button{font-size:12px}
+}
