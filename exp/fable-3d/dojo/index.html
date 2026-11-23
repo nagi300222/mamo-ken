@@ -87,6 +87,17 @@
       <small>直近 <b id="practice-last">0</b> / 硬直差 <b id="practice-advantage">—</b>F</small>
       <button id="practice-reset" class="ghost" type="button">位置リセット</button>
     </div>
+    <!-- v15.1 Presentation（Issue #201）: VS → 顔アップ → FIGHT → K.O. → 勝利ムービー。3D は同じ canvas、文字だけ DOM。 -->
+    <div id="vs-screen" class="vs-screen hidden" role="dialog" aria-label="対戦カード" data-ready="false">
+      <figure id="vs-side-0" class="vs-side vs-p1"><img id="vs-img-0" alt=""><figcaption><b>1P</b><strong id="vs-name-0"></strong><small id="vs-role-0"></small></figcaption></figure>
+      <div class="vs-mark"><span>VS</span><em id="vs-omen" hidden></em><small id="vs-status">LOADING…</small></div>
+      <figure id="vs-side-1" class="vs-side vs-p2"><img id="vs-img-1" alt=""><figcaption><b>CPU</b><strong id="vs-name-1"></strong><small id="vs-role-1"></small></figcaption></figure>
+    </div>
+    <div id="intro-plate" class="intro-plate" hidden><b id="intro-side"></b><strong id="intro-name"></strong><small id="intro-role"></small></div>
+    <div id="round-call" class="round-call" hidden aria-live="off"><strong id="round-call-text"></strong></div>
+    <div id="ko-banner" class="ko-banner" hidden aria-live="assertive"><strong id="ko-title"></strong><small id="ko-sub"></small></div>
+    <div id="victory-banner" class="victory-banner" hidden data-shown="false"><small id="victory-side"></small><strong id="victory-name"></strong><p id="victory-line"></p></div>
+    <button id="presentation-skip" class="presentation-skip" type="button" hidden>スキップ</button>
     <div id="game-over" class="modal hidden">
       <div class="result-panel">
         <small class="eyebrow" id="result-reason">決着</small><h2 id="result-title">決着！</h2>
