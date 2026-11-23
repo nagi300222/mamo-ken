@@ -35,14 +35,21 @@
 
 CPU自対戦ではゴダン突出を再現せず、勝率合わせの弱体化は行わない。これは本人が感じたCPU/ゴダンの理不尽さを否定するデータではない。高速/万能型優位が残る。人間の対戦バランスと同一視しない。
 
-`proposal/` は19必殺hitstunも含む最新候補。チェックポイント時点の81技カタログを保存し、最速/最遅接触・ガード/空振り・距離/空中・キャンセルとCPU再計測を引き続き追加する。未完の比較を成功済みと記載しない。
+`proposal/` は19必殺hitstunも含む最新候補。1458 CPU試合、3240通常距離条件、基準/候補それぞれ2709必殺プローブ、19技×左右×初/終接触の76条件×2000F壁際圧力を保存した。最大4実連続hitで、正しいガードは全条件で復帰。19近接必殺の最速Hit差は-1〜+2F、Guard差は-15〜-31F。中央/壁際の接触前後・回復時距離も記録し、押し出しと間合いを区別。詳細は [COMPARISON.md](COMPARISON.md) と `proposal/SPECIAL_TABLE.md`。
 
-新規Node試験: 実停止、両者の技時計、10F停止中の初入力、遅延入力拒否、1回だけの実空振り、弾の出身/実ヒット、81性能差分のallowlist、音声のunlock/mute/volume、未計測v17データ拒否・54行契約。既存のコンボ・守備/永久・奥義・モードを回帰する。
+最新候補ではゴダン35.8%へ改善した一方、ダークモグゾー70.8%へ上昇し、バレット29.0%/タキマル30.6%へ低下した。全キャラの対人バランス完成は主張せず、P4のまとまった試遊で確認する課題として残す。
 
-`acceptance/p3-feedback-browser.mjs` は実WebGLの3代表×弱/強/ガードの接触と停止姿勢、実ゲームでP3レシピが再生されたこと、8つの実Web Audioバッファ（音量・ミュート・空振り無音含む）を検査する。**このチェックポイントではブラウザ試験はまだ実行前。** iPhoneのスピーカー/熱/フレームレートは未測定。
+道場Node **168/168** 合格。新規試験: 実停止、両者の技時計、10F停止中の初入力、遅延入力拒否、1回だけの実空振り、弾の出身/実ヒット、81性能差分のallowlist、音声のunlock/mute/volume、未計測v17データ拒否・54行契約。既存のコンボ・守備/永久・奥義・モードを回帰する。
+
+`acceptance/p3-feedback-browser.mjs` は実WebGLの3代表×弱/強/ガードの接触と停止姿勢、実ゲームでP3レシピが再生されたこと、8つの実Web Audioバッファ（音量・ミュート・空振り無音含む）を検査する。**この担当環境ではブラウザ試験は未実行。rootの統合CIで実行・確認する。** iPhoneのスピーカー/熱/フレームレートは未測定。
 
 ## root統合フック
 
 道場/Storyの各イベントで `presentCombatFeedback(event,{audio,impact,shake,effectsEnabled})` を呼ぶ。`true` の場合は既存の汎用接触音/粒子だけを省き、HUD・KO・当て身アニメの意味処理は継続する。`impact` は `{effect,point,characterId,scale,lifeFrames}` を受け取り、既存の共有ジオメトリへ渡す。音を二重再生しないこと。
 
+既存の `invul` フラグはBattleで参照されていないことも監査で確認したが、今回のhitstun列だけの調整からは分けて未変更とした。未測定の特殊打点や新しい無敵ルールを、完成したものとして追加しない。
+
 共有version APIは `ACTIVE_NORMAL_MOTION_VERSION`（現在`v15`）、`NORMAL_CONTACTS`、`NORMAL_HURT_BOUNDS`、`NORMAL_CONTACTS_VERSION`。Claudeのv17素材が承認された場合、道場の読み込みだけでなくAvatarFactoryも同じパックを選び、Storyと道場の時計を一致させる。原GLB/骨格を再生成せずP3モーションだけを変える。
+
+
+再計測CLI: `p3-audit.mjs`（81catalog/54通常/1458CPU）、`p3-special-audit.mjs`（2709特殊/76キャンセル圧力）、`p3-compare-audits.mjs`（基準/停止のみ/全候補の比較）。環境変数 `MAMOKEN_ENGINE_DIR` でPR209の凍結Battle、`MAMOKEN_AUDIT_DIR` で保存先を指定する。`MAMOKEN_CATALOG_ONLY=1` はCPUを再実行せずメタデータ表だけ更新する。

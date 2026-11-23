@@ -58,6 +58,6 @@ test('Pages generation and actor loader include all 9 normal packs without alter
  assert.match(build,/pack-normals-v15\.mjs/);
  assert.match(build,/normal','v15',id\+'_normals\.glb'/);
  assert.match(main,/normalGLB\.animations/);
- assert.match(main,/v15_stand_weak/);
+ assert.match(main,/normalMotionSource\.validatePack\(id,normalGLB\)/);
  assert.match(main,/bindMorphTargets\(clip,gltf\.scene\)/);
 });

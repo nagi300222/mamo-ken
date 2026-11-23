@@ -76,11 +76,12 @@
         "contact": 0.225,
         "contactEnd": 0.3,
         "attackPart": "armL",
-        "measurement": "v15.1 actual skinned surface"
+        "measurement": "v15 actual skinned surface"
       },
       "baseline": {
         "hitstopFrames": 6,
-        "guardstopFrames": 3
+        "guardstopFrames": 3,
+        "hitstunFrames": 18
       },
       "proposal": {
         "hitstopFrames": 5,
@@ -162,11 +163,12 @@
         "contact": 0.3,
         "contactEnd": 0.36,
         "attackPart": "armR",
-        "measurement": "v15.1 actual skinned surface"
+        "measurement": "v15 actual skinned surface"
       },
       "baseline": {
         "hitstopFrames": 6,
-        "guardstopFrames": 3
+        "guardstopFrames": 3,
+        "hitstunFrames": 28
       },
       "proposal": {
         "hitstopFrames": 8,
@@ -254,11 +256,12 @@
         "contact": 0.375,
         "contactEnd": 0.495,
         "attackPart": "armR",
-        "measurement": "v15.1 actual skinned surface"
+        "measurement": "v15 actual skinned surface"
       },
       "baseline": {
         "hitstopFrames": 6,
-        "guardstopFrames": 3
+        "guardstopFrames": 3,
+        "hitstunFrames": 18
       },
       "proposal": {
         "hitstopFrames": 5,
@@ -340,11 +343,12 @@
         "contact": 0.5,
         "contactEnd": 0.575,
         "attackPart": "armR",
-        "measurement": "v15.1 actual skinned surface"
+        "measurement": "v15 actual skinned surface"
       },
       "baseline": {
         "hitstopFrames": 6,
-        "guardstopFrames": 3
+        "guardstopFrames": 3,
+        "hitstunFrames": 30
       },
       "proposal": {
         "hitstopFrames": 8,
@@ -416,11 +420,12 @@
         "contact": 0.35,
         "contactEnd": 0.47,
         "attackPart": "armL",
-        "measurement": "v15.1 actual skinned surface"
+        "measurement": "v15 actual skinned surface"
       },
       "baseline": {
         "hitstopFrames": 6,
-        "guardstopFrames": 3
+        "guardstopFrames": 3,
+        "hitstunFrames": 16
       },
       "proposal": {
         "hitstopFrames": 5,
@@ -492,11 +497,12 @@
         "contact": 0.475,
         "contactEnd": 0.535,
         "attackPart": "legR",
-        "measurement": "v15.1 actual skinned surface"
+        "measurement": "v15 actual skinned surface"
       },
       "baseline": {
         "hitstopFrames": 6,
-        "guardstopFrames": 3
+        "guardstopFrames": 3,
+        "hitstunFrames": 25
       },
       "proposal": {
         "hitstopFrames": 8,
@@ -544,11 +550,13 @@
       },
       "baseline": {
         "hitstopFrames": 6,
-        "guardstopFrames": 3
+        "guardstopFrames": 3,
+        "hitstunFrames": 12
       },
       "proposal": {
         "hitstopFrames": 5,
         "guardstopFrames": 3,
+        "hitstunFrames": 12,
         "sound": {
           "hit": "contact_projectile",
           "guard": "guard_light",
@@ -591,7 +599,8 @@
       },
       "baseline": {
         "hitstopFrames": 6,
-        "guardstopFrames": 3
+        "guardstopFrames": 3,
+        "hitstunFrames": 15
       },
       "proposal": {
         "hitstopFrames": 8,
@@ -638,7 +647,8 @@
       },
       "baseline": {
         "hitstopFrames": 6,
-        "guardstopFrames": 3
+        "guardstopFrames": 3,
+        "hitstunFrames": 12
       },
       "proposal": {
         "hitstopFrames": 7,
@@ -725,11 +735,12 @@
         "contact": 0.2,
         "contactEnd": 0.26,
         "attackPart": "armL",
-        "measurement": "v15.1 actual skinned surface"
+        "measurement": "v15 actual skinned surface"
       },
       "baseline": {
         "hitstopFrames": 6,
-        "guardstopFrames": 3
+        "guardstopFrames": 3,
+        "hitstunFrames": 16
       },
       "proposal": {
         "hitstopFrames": 4,
@@ -811,11 +822,12 @@
         "contact": 0.3,
         "contactEnd": 0.36,
         "attackPart": "legR",
-        "measurement": "v15.1 actual skinned surface"
+        "measurement": "v15 actual skinned surface"
       },
       "baseline": {
         "hitstopFrames": 6,
-        "guardstopFrames": 3
+        "guardstopFrames": 3,
+        "hitstunFrames": 27
       },
       "proposal": {
         "hitstopFrames": 7,
@@ -902,11 +914,12 @@
         "contact": 0.325,
         "contactEnd": 0.445,
         "attackPart": "legL",
-        "measurement": "v15.1 actual skinned surface"
+        "measurement": "v15 actual skinned surface"
       },
       "baseline": {
         "hitstopFrames": 6,
-        "guardstopFrames": 3
+        "guardstopFrames": 3,
+        "hitstunFrames": 16
       },
       "proposal": {
         "hitstopFrames": 4,
@@ -988,11 +1001,12 @@
         "contact": 0.4,
         "contactEnd": 0.46,
         "attackPart": "legR",
-        "measurement": "v15.1 actual skinned surface"
+        "measurement": "v15 actual skinned surface"
       },
       "baseline": {
         "hitstopFrames": 6,
-        "guardstopFrames": 3
+        "guardstopFrames": 3,
+        "hitstunFrames": 30
       },
       "proposal": {
         "hitstopFrames": 7,
@@ -1064,11 +1078,12 @@
         "contact": 0.45,
         "contactEnd": 0.57,
         "attackPart": "legL",
-        "measurement": "v15.1 actual skinned surface"
+        "measurement": "v15 actual skinned surface"
       },
       "baseline": {
         "hitstopFrames": 6,
-        "guardstopFrames": 3
+        "guardstopFrames": 3,
+        "hitstunFrames": 15
       },
       "proposal": {
         "hitstopFrames": 4,
@@ -1140,11 +1155,12 @@
         "contact": 0.425,
         "contactEnd": 0.545,
         "attackPart": "legR",
-        "measurement": "v15.1 actual skinned surface"
+        "measurement": "v15 actual skinned surface"
       },
       "baseline": {
         "hitstopFrames": 6,
-        "guardstopFrames": 3
+        "guardstopFrames": 3,
+        "hitstunFrames": 24
       },
       "proposal": {
         "hitstopFrames": 7,
@@ -1192,11 +1208,13 @@
       },
       "baseline": {
         "hitstopFrames": 6,
-        "guardstopFrames": 3
+        "guardstopFrames": 3,
+        "hitstunFrames": 12
       },
       "proposal": {
         "hitstopFrames": 4,
         "guardstopFrames": 3,
+        "hitstunFrames": 12,
         "sound": {
           "hit": "contact_projectile",
           "guard": "guard_light",
@@ -1238,7 +1256,8 @@
       },
       "baseline": {
         "hitstopFrames": 6,
-        "guardstopFrames": 3
+        "guardstopFrames": 3,
+        "hitstunFrames": 12
       },
       "proposal": {
         "hitstopFrames": 6,
@@ -1286,7 +1305,8 @@
       },
       "baseline": {
         "hitstopFrames": 6,
-        "guardstopFrames": 3
+        "guardstopFrames": 3,
+        "hitstunFrames": 12
       },
       "proposal": {
         "hitstopFrames": 6,
@@ -1373,11 +1393,12 @@
         "contact": 0.425,
         "contactEnd": 0.485,
         "attackPart": "armR",
-        "measurement": "v15.1 actual skinned surface"
+        "measurement": "v15 actual skinned surface"
       },
       "baseline": {
         "hitstopFrames": 6,
-        "guardstopFrames": 3
+        "guardstopFrames": 3,
+        "hitstunFrames": 23
       },
       "proposal": {
         "hitstopFrames": 6,
@@ -1459,11 +1480,12 @@
         "contact": 0.45,
         "contactEnd": 0.57,
         "attackPart": "armR",
-        "measurement": "v15.1 actual skinned surface"
+        "measurement": "v15 actual skinned surface"
       },
       "baseline": {
         "hitstopFrames": 6,
-        "guardstopFrames": 3
+        "guardstopFrames": 3,
+        "hitstunFrames": 33
       },
       "proposal": {
         "hitstopFrames": 10,
@@ -1550,11 +1572,12 @@
         "contact": 0.45,
         "contactEnd": 0.55,
         "attackPart": "armL",
-        "measurement": "v15.1 actual skinned surface"
+        "measurement": "v15 actual skinned surface"
       },
       "baseline": {
         "hitstopFrames": 6,
-        "guardstopFrames": 3
+        "guardstopFrames": 3,
+        "hitstunFrames": 23
       },
       "proposal": {
         "hitstopFrames": 6,
@@ -1636,11 +1659,12 @@
         "contact": 0.5,
         "contactEnd": 0.575,
         "attackPart": "armR",
-        "measurement": "v15.1 actual skinned surface"
+        "measurement": "v15 actual skinned surface"
       },
       "baseline": {
         "hitstopFrames": 6,
-        "guardstopFrames": 3
+        "guardstopFrames": 3,
+        "hitstunFrames": 35
       },
       "proposal": {
         "hitstopFrames": 10,
@@ -1712,11 +1736,12 @@
         "contact": 0.475,
         "contactEnd": 0.535,
         "attackPart": "armR",
-        "measurement": "v15.1 actual skinned surface"
+        "measurement": "v15 actual skinned surface"
       },
       "baseline": {
         "hitstopFrames": 6,
-        "guardstopFrames": 3
+        "guardstopFrames": 3,
+        "hitstunFrames": 20
       },
       "proposal": {
         "hitstopFrames": 6,
@@ -1788,11 +1813,12 @@
         "contact": 0.325,
         "contactEnd": 0.445,
         "attackPart": "armL",
-        "measurement": "v15.1 actual skinned surface"
+        "measurement": "v15 actual skinned surface"
       },
       "baseline": {
         "hitstopFrames": 6,
-        "guardstopFrames": 3
+        "guardstopFrames": 3,
+        "hitstunFrames": 32
       },
       "proposal": {
         "hitstopFrames": 10,
@@ -1838,7 +1864,8 @@
       },
       "baseline": {
         "hitstopFrames": 6,
-        "guardstopFrames": 3
+        "guardstopFrames": 3,
+        "hitstunFrames": 15
       },
       "proposal": {
         "hitstopFrames": 10,
@@ -1885,7 +1912,8 @@
       },
       "baseline": {
         "hitstopFrames": 6,
-        "guardstopFrames": 3
+        "guardstopFrames": 3,
+        "hitstunFrames": 17
       },
       "proposal": {
         "hitstopFrames": 9,
@@ -1934,7 +1962,8 @@
       },
       "baseline": {
         "hitstopFrames": 6,
-        "guardstopFrames": 3
+        "guardstopFrames": 3,
+        "hitstunFrames": 18
       },
       "proposal": {
         "hitstopFrames": 10,
@@ -2021,11 +2050,12 @@
         "contact": 0.275,
         "contactEnd": 0.335,
         "attackPart": "armL",
-        "measurement": "v15.1 actual skinned surface"
+        "measurement": "v15 actual skinned surface"
       },
       "baseline": {
         "hitstopFrames": 6,
-        "guardstopFrames": 3
+        "guardstopFrames": 3,
+        "hitstunFrames": 20
       },
       "proposal": {
         "hitstopFrames": 6,
@@ -2107,11 +2137,12 @@
         "contact": 0.3,
         "contactEnd": 0.36,
         "attackPart": "armR",
-        "measurement": "v15.1 actual skinned surface"
+        "measurement": "v15 actual skinned surface"
       },
       "baseline": {
         "hitstopFrames": 6,
-        "guardstopFrames": 3
+        "guardstopFrames": 3,
+        "hitstunFrames": 32
       },
       "proposal": {
         "hitstopFrames": 9,
@@ -2198,11 +2229,12 @@
         "contact": 0.275,
         "contactEnd": 0.335,
         "attackPart": "armR",
-        "measurement": "v15.1 actual skinned surface"
+        "measurement": "v15 actual skinned surface"
       },
       "baseline": {
         "hitstopFrames": 6,
-        "guardstopFrames": 3
+        "guardstopFrames": 3,
+        "hitstunFrames": 20
       },
       "proposal": {
         "hitstopFrames": 6,
@@ -2284,11 +2316,12 @@
         "contact": 0.625,
         "contactEnd": 0.725,
         "attackPart": "armL",
-        "measurement": "v15.1 actual skinned surface"
+        "measurement": "v15 actual skinned surface"
       },
       "baseline": {
         "hitstopFrames": 6,
-        "guardstopFrames": 3
+        "guardstopFrames": 3,
+        "hitstunFrames": 34
       },
       "proposal": {
         "hitstopFrames": 9,
@@ -2360,11 +2393,12 @@
         "contact": 0.425,
         "contactEnd": 0.485,
         "attackPart": "armR",
-        "measurement": "v15.1 actual skinned surface"
+        "measurement": "v15 actual skinned surface"
       },
       "baseline": {
         "hitstopFrames": 6,
-        "guardstopFrames": 3
+        "guardstopFrames": 3,
+        "hitstunFrames": 18
       },
       "proposal": {
         "hitstopFrames": 6,
@@ -2436,11 +2470,12 @@
         "contact": 0.5,
         "contactEnd": 0.575,
         "attackPart": "armL",
-        "measurement": "v15.1 actual skinned surface"
+        "measurement": "v15 actual skinned surface"
       },
       "baseline": {
         "hitstopFrames": 6,
-        "guardstopFrames": 3
+        "guardstopFrames": 3,
+        "hitstunFrames": 27
       },
       "proposal": {
         "hitstopFrames": 9,
@@ -2487,7 +2522,8 @@
       },
       "baseline": {
         "hitstopFrames": 6,
-        "guardstopFrames": 3
+        "guardstopFrames": 3,
+        "hitstunFrames": 13
       },
       "proposal": {
         "hitstopFrames": 8,
@@ -2534,7 +2570,8 @@
       },
       "baseline": {
         "hitstopFrames": 6,
-        "guardstopFrames": 3
+        "guardstopFrames": 3,
+        "hitstunFrames": 14
       },
       "proposal": {
         "hitstopFrames": 8,
@@ -2582,7 +2619,8 @@
       },
       "baseline": {
         "hitstopFrames": 6,
-        "guardstopFrames": 3
+        "guardstopFrames": 3,
+        "hitstunFrames": 16
       },
       "proposal": {
         "hitstopFrames": 9,
@@ -2669,11 +2707,12 @@
         "contact": 0.225,
         "contactEnd": 0.325,
         "attackPart": "armL",
-        "measurement": "v15.1 actual skinned surface"
+        "measurement": "v15 actual skinned surface"
       },
       "baseline": {
         "hitstopFrames": 6,
-        "guardstopFrames": 3
+        "guardstopFrames": 3,
+        "hitstunFrames": 16
       },
       "proposal": {
         "hitstopFrames": 4,
@@ -2755,11 +2794,12 @@
         "contact": 0.45,
         "contactEnd": 0.51,
         "attackPart": "armR",
-        "measurement": "v15.1 actual skinned surface"
+        "measurement": "v15 actual skinned surface"
       },
       "baseline": {
         "hitstopFrames": 6,
-        "guardstopFrames": 3
+        "guardstopFrames": 3,
+        "hitstunFrames": 27
       },
       "proposal": {
         "hitstopFrames": 7,
@@ -2846,11 +2886,12 @@
         "contact": 0.375,
         "contactEnd": 0.495,
         "attackPart": "armR",
-        "measurement": "v15.1 actual skinned surface"
+        "measurement": "v15 actual skinned surface"
       },
       "baseline": {
         "hitstopFrames": 6,
-        "guardstopFrames": 3
+        "guardstopFrames": 3,
+        "hitstunFrames": 18
       },
       "proposal": {
         "hitstopFrames": 4,
@@ -2932,11 +2973,12 @@
         "contact": 0.5,
         "contactEnd": 0.575,
         "attackPart": "armL",
-        "measurement": "v15.1 actual skinned surface"
+        "measurement": "v15 actual skinned surface"
       },
       "baseline": {
         "hitstopFrames": 6,
-        "guardstopFrames": 3
+        "guardstopFrames": 3,
+        "hitstunFrames": 30
       },
       "proposal": {
         "hitstopFrames": 7,
@@ -3008,11 +3050,12 @@
         "contact": 0.4,
         "contactEnd": 0.52,
         "attackPart": "armL",
-        "measurement": "v15.1 actual skinned surface"
+        "measurement": "v15 actual skinned surface"
       },
       "baseline": {
         "hitstopFrames": 6,
-        "guardstopFrames": 3
+        "guardstopFrames": 3,
+        "hitstunFrames": 16
       },
       "proposal": {
         "hitstopFrames": 4,
@@ -3084,11 +3127,12 @@
         "contact": 0.525,
         "contactEnd": 0.6,
         "attackPart": "armR",
-        "measurement": "v15.1 actual skinned surface"
+        "measurement": "v15 actual skinned surface"
       },
       "baseline": {
         "hitstopFrames": 6,
-        "guardstopFrames": 3
+        "guardstopFrames": 3,
+        "hitstunFrames": 24
       },
       "proposal": {
         "hitstopFrames": 7,
@@ -3136,7 +3180,8 @@
       },
       "baseline": {
         "hitstopFrames": 6,
-        "guardstopFrames": 3
+        "guardstopFrames": 3,
+        "hitstunFrames": 12
       },
       "proposal": {
         "hitstopFrames": 6,
@@ -3182,7 +3227,8 @@
       },
       "baseline": {
         "hitstopFrames": 6,
-        "guardstopFrames": 3
+        "guardstopFrames": 3,
+        "hitstunFrames": 12
       },
       "proposal": {
         "hitstopFrames": 6,
@@ -3232,7 +3278,8 @@
       },
       "baseline": {
         "hitstopFrames": 6,
-        "guardstopFrames": 3
+        "guardstopFrames": 3,
+        "hitstunFrames": 12
       },
       "proposal": {
         "hitstopFrames": 7,
@@ -3319,11 +3366,12 @@
         "contact": 0.275,
         "contactEnd": 0.335,
         "attackPart": "armL",
-        "measurement": "v15.1 actual skinned surface"
+        "measurement": "v15 actual skinned surface"
       },
       "baseline": {
         "hitstopFrames": 6,
-        "guardstopFrames": 3
+        "guardstopFrames": 3,
+        "hitstunFrames": 21
       },
       "proposal": {
         "hitstopFrames": 6,
@@ -3405,11 +3453,12 @@
         "contact": 0.35,
         "contactEnd": 0.41,
         "attackPart": "armR",
-        "measurement": "v15.1 actual skinned surface"
+        "measurement": "v15 actual skinned surface"
       },
       "baseline": {
         "hitstopFrames": 6,
-        "guardstopFrames": 3
+        "guardstopFrames": 3,
+        "hitstunFrames": 33
       },
       "proposal": {
         "hitstopFrames": 10,
@@ -3496,11 +3545,12 @@
         "contact": 0.375,
         "contactEnd": 0.495,
         "attackPart": "armR",
-        "measurement": "v15.1 actual skinned surface"
+        "measurement": "v15 actual skinned surface"
       },
       "baseline": {
         "hitstopFrames": 6,
-        "guardstopFrames": 3
+        "guardstopFrames": 3,
+        "hitstunFrames": 21
       },
       "proposal": {
         "hitstopFrames": 6,
@@ -3582,11 +3632,12 @@
         "contact": 0.575,
         "contactEnd": 0.65,
         "attackPart": "armL",
-        "measurement": "v15.1 actual skinned surface"
+        "measurement": "v15 actual skinned surface"
       },
       "baseline": {
         "hitstopFrames": 6,
-        "guardstopFrames": 3
+        "guardstopFrames": 3,
+        "hitstunFrames": 35
       },
       "proposal": {
         "hitstopFrames": 10,
@@ -3658,11 +3709,12 @@
         "contact": 0.25,
         "contactEnd": 0.31,
         "attackPart": "armL",
-        "measurement": "v15.1 actual skinned surface"
+        "measurement": "v15 actual skinned surface"
       },
       "baseline": {
         "hitstopFrames": 6,
-        "guardstopFrames": 3
+        "guardstopFrames": 3,
+        "hitstunFrames": 18
       },
       "proposal": {
         "hitstopFrames": 6,
@@ -3734,11 +3786,12 @@
         "contact": 0.525,
         "contactEnd": 0.625,
         "attackPart": "armL",
-        "measurement": "v15.1 actual skinned surface"
+        "measurement": "v15 actual skinned surface"
       },
       "baseline": {
         "hitstopFrames": 6,
-        "guardstopFrames": 3
+        "guardstopFrames": 3,
+        "hitstunFrames": 30
       },
       "proposal": {
         "hitstopFrames": 10,
@@ -3786,11 +3839,13 @@
       },
       "baseline": {
         "hitstopFrames": 6,
-        "guardstopFrames": 3
+        "guardstopFrames": 3,
+        "hitstunFrames": 12
       },
       "proposal": {
         "hitstopFrames": 5,
         "guardstopFrames": 3,
+        "hitstunFrames": 12,
         "sound": {
           "hit": "contact_projectile",
           "guard": "guard_light",
@@ -3831,7 +3886,8 @@
       },
       "baseline": {
         "hitstopFrames": 6,
-        "guardstopFrames": 3
+        "guardstopFrames": 3,
+        "hitstunFrames": 13
       },
       "proposal": {
         "hitstopFrames": 8,
@@ -3877,11 +3933,13 @@
       },
       "baseline": {
         "hitstopFrames": 0,
-        "guardstopFrames": null
+        "guardstopFrames": null,
+        "hitstunFrames": "paired40"
       },
       "proposal": {
         "hitstopFrames": 0,
         "guardstopFrames": null,
+        "hitstunFrames": "paired40",
         "sound": {
           "hit": "contact_palm",
           "guard": "guard_heavy",
@@ -3963,11 +4021,12 @@
         "contact": 0.25,
         "contactEnd": 0.37,
         "attackPart": "armL",
-        "measurement": "v15.1 actual skinned surface"
+        "measurement": "v15 actual skinned surface"
       },
       "baseline": {
         "hitstopFrames": 6,
-        "guardstopFrames": 3
+        "guardstopFrames": 3,
+        "hitstunFrames": 18
       },
       "proposal": {
         "hitstopFrames": 4,
@@ -4049,11 +4108,12 @@
         "contact": 0.3,
         "contactEnd": 0.36,
         "attackPart": "armR",
-        "measurement": "v15.1 actual skinned surface"
+        "measurement": "v15 actual skinned surface"
       },
       "baseline": {
         "hitstopFrames": 6,
-        "guardstopFrames": 3
+        "guardstopFrames": 3,
+        "hitstunFrames": 30
       },
       "proposal": {
         "hitstopFrames": 8,
@@ -4140,11 +4200,12 @@
         "contact": 0.35,
         "contactEnd": 0.47,
         "attackPart": "armR",
-        "measurement": "v15.1 actual skinned surface"
+        "measurement": "v15 actual skinned surface"
       },
       "baseline": {
         "hitstopFrames": 6,
-        "guardstopFrames": 3
+        "guardstopFrames": 3,
+        "hitstunFrames": 19
       },
       "proposal": {
         "hitstopFrames": 4,
@@ -4226,11 +4287,12 @@
         "contact": 0.475,
         "contactEnd": 0.535,
         "attackPart": "armR",
-        "measurement": "v15.1 actual skinned surface"
+        "measurement": "v15 actual skinned surface"
       },
       "baseline": {
         "hitstopFrames": 6,
-        "guardstopFrames": 3
+        "guardstopFrames": 3,
+        "hitstunFrames": 33
       },
       "proposal": {
         "hitstopFrames": 8,
@@ -4302,11 +4364,12 @@
         "contact": 0.25,
         "contactEnd": 0.31,
         "attackPart": "armL",
-        "measurement": "v15.1 actual skinned surface"
+        "measurement": "v15 actual skinned surface"
       },
       "baseline": {
         "hitstopFrames": 6,
-        "guardstopFrames": 3
+        "guardstopFrames": 3,
+        "hitstunFrames": 17
       },
       "proposal": {
         "hitstopFrames": 4,
@@ -4378,11 +4441,12 @@
         "contact": 0.45,
         "contactEnd": 0.525,
         "attackPart": "armR",
-        "measurement": "v15.1 actual skinned surface"
+        "measurement": "v15 actual skinned surface"
       },
       "baseline": {
         "hitstopFrames": 6,
-        "guardstopFrames": 3
+        "guardstopFrames": 3,
+        "hitstunFrames": 26
       },
       "proposal": {
         "hitstopFrames": 8,
@@ -4430,11 +4494,13 @@
       },
       "baseline": {
         "hitstopFrames": 6,
-        "guardstopFrames": 3
+        "guardstopFrames": 3,
+        "hitstunFrames": 12
       },
       "proposal": {
         "hitstopFrames": 5,
         "guardstopFrames": 3,
+        "hitstunFrames": 12,
         "sound": {
           "hit": "contact_projectile",
           "guard": "guard_light",
@@ -4475,7 +4541,8 @@
       },
       "baseline": {
         "hitstopFrames": 6,
-        "guardstopFrames": 3
+        "guardstopFrames": 3,
+        "hitstunFrames": 13
       },
       "proposal": {
         "hitstopFrames": 7,
@@ -4521,11 +4588,13 @@
       },
       "baseline": {
         "hitstopFrames": 0,
-        "guardstopFrames": null
+        "guardstopFrames": null,
+        "hitstunFrames": "response16/24"
       },
       "proposal": {
         "hitstopFrames": 0,
         "guardstopFrames": null,
+        "hitstunFrames": "response16/24",
         "sound": {
           "hit": "contact_elbow",
           "guard": "guard_heavy",
@@ -4607,11 +4676,12 @@
         "contact": 0.4,
         "contactEnd": 0.46,
         "attackPart": "head",
-        "measurement": "v15.1 actual skinned surface"
+        "measurement": "v15 actual skinned surface"
       },
       "baseline": {
         "hitstopFrames": 6,
-        "guardstopFrames": 3
+        "guardstopFrames": 3,
+        "hitstunFrames": 20
       },
       "proposal": {
         "hitstopFrames": 5,
@@ -4693,11 +4763,12 @@
         "contact": 0.45,
         "contactEnd": 0.51,
         "attackPart": "tail",
-        "measurement": "v15.1 actual skinned surface"
+        "measurement": "v15 actual skinned surface"
       },
       "baseline": {
         "hitstopFrames": 6,
-        "guardstopFrames": 3
+        "guardstopFrames": 3,
+        "hitstunFrames": 32
       },
       "proposal": {
         "hitstopFrames": 9,
@@ -4784,11 +4855,12 @@
         "contact": 0.375,
         "contactEnd": 0.435,
         "attackPart": "tail",
-        "measurement": "v15.1 actual skinned surface"
+        "measurement": "v15 actual skinned surface"
       },
       "baseline": {
         "hitstopFrames": 6,
-        "guardstopFrames": 3
+        "guardstopFrames": 3,
+        "hitstunFrames": 20
       },
       "proposal": {
         "hitstopFrames": 5,
@@ -4870,11 +4942,12 @@
         "contact": 0.5,
         "contactEnd": 0.56,
         "attackPart": "tail",
-        "measurement": "v15.1 actual skinned surface"
+        "measurement": "v15 actual skinned surface"
       },
       "baseline": {
         "hitstopFrames": 6,
-        "guardstopFrames": 3
+        "guardstopFrames": 3,
+        "hitstunFrames": 34
       },
       "proposal": {
         "hitstopFrames": 9,
@@ -4946,11 +5019,12 @@
         "contact": 0.35,
         "contactEnd": 0.41,
         "attackPart": "tail",
-        "measurement": "v15.1 actual skinned surface"
+        "measurement": "v15 actual skinned surface"
       },
       "baseline": {
         "hitstopFrames": 6,
-        "guardstopFrames": 3
+        "guardstopFrames": 3,
+        "hitstunFrames": 18
       },
       "proposal": {
         "hitstopFrames": 5,
@@ -5022,11 +5096,12 @@
         "contact": 0.475,
         "contactEnd": 0.55,
         "attackPart": "tail",
-        "measurement": "v15.1 actual skinned surface"
+        "measurement": "v15 actual skinned surface"
       },
       "baseline": {
         "hitstopFrames": 6,
-        "guardstopFrames": 3
+        "guardstopFrames": 3,
+        "hitstunFrames": 31
       },
       "proposal": {
         "hitstopFrames": 9,
@@ -5074,11 +5149,13 @@
       },
       "baseline": {
         "hitstopFrames": 6,
-        "guardstopFrames": 3
+        "guardstopFrames": 3,
+        "hitstunFrames": 12
       },
       "proposal": {
         "hitstopFrames": 6,
         "guardstopFrames": 3,
+        "hitstunFrames": 12,
         "sound": {
           "hit": "contact_projectile",
           "guard": "guard_light",
@@ -5119,7 +5196,8 @@
       },
       "baseline": {
         "hitstopFrames": 6,
-        "guardstopFrames": 3
+        "guardstopFrames": 3,
+        "hitstunFrames": 12
       },
       "proposal": {
         "hitstopFrames": 8,
@@ -5169,7 +5247,8 @@
       },
       "baseline": {
         "hitstopFrames": 6,
-        "guardstopFrames": 3
+        "guardstopFrames": 3,
+        "hitstunFrames": 15
       },
       "proposal": {
         "hitstopFrames": 9,
@@ -5256,11 +5335,12 @@
         "contact": 0.325,
         "contactEnd": 0.385,
         "attackPart": "armR",
-        "measurement": "v15.1 actual skinned surface"
+        "measurement": "v15 actual skinned surface"
       },
       "baseline": {
         "hitstopFrames": 6,
-        "guardstopFrames": 3
+        "guardstopFrames": 3,
+        "hitstunFrames": 17
       },
       "proposal": {
         "hitstopFrames": 4,
@@ -5342,11 +5422,12 @@
         "contact": 0.3,
         "contactEnd": 0.36,
         "attackPart": "armR",
-        "measurement": "v15.1 actual skinned surface"
+        "measurement": "v15 actual skinned surface"
       },
       "baseline": {
         "hitstopFrames": 6,
-        "guardstopFrames": 3
+        "guardstopFrames": 3,
+        "hitstunFrames": 29
       },
       "proposal": {
         "hitstopFrames": 8,
@@ -5433,11 +5514,12 @@
         "contact": 0.325,
         "contactEnd": 0.445,
         "attackPart": "armR",
-        "measurement": "v15.1 actual skinned surface"
+        "measurement": "v15 actual skinned surface"
       },
       "baseline": {
         "hitstopFrames": 6,
-        "guardstopFrames": 3
+        "guardstopFrames": 3,
+        "hitstunFrames": 17
       },
       "proposal": {
         "hitstopFrames": 4,
@@ -5519,11 +5601,12 @@
         "contact": 0.425,
         "contactEnd": 0.5,
         "attackPart": "armR",
-        "measurement": "v15.1 actual skinned surface"
+        "measurement": "v15 actual skinned surface"
       },
       "baseline": {
         "hitstopFrames": 6,
-        "guardstopFrames": 3
+        "guardstopFrames": 3,
+        "hitstunFrames": 32
       },
       "proposal": {
         "hitstopFrames": 8,
@@ -5595,11 +5678,12 @@
         "contact": 0.35,
         "contactEnd": 0.41,
         "attackPart": "armR",
-        "measurement": "v15.1 actual skinned surface"
+        "measurement": "v15 actual skinned surface"
       },
       "baseline": {
         "hitstopFrames": 6,
-        "guardstopFrames": 3
+        "guardstopFrames": 3,
+        "hitstunFrames": 16
       },
       "proposal": {
         "hitstopFrames": 4,
@@ -5671,11 +5755,12 @@
         "contact": 0.475,
         "contactEnd": 0.595,
         "attackPart": "legR",
-        "measurement": "v15.1 actual skinned surface"
+        "measurement": "v15 actual skinned surface"
       },
       "baseline": {
         "hitstopFrames": 6,
-        "guardstopFrames": 3
+        "guardstopFrames": 3,
+        "hitstunFrames": 26
       },
       "proposal": {
         "hitstopFrames": 8,
@@ -5723,11 +5808,13 @@
       },
       "baseline": {
         "hitstopFrames": 6,
-        "guardstopFrames": 3
+        "guardstopFrames": 3,
+        "hitstunFrames": 12
       },
       "proposal": {
         "hitstopFrames": 5,
         "guardstopFrames": 3,
+        "hitstunFrames": 12,
         "sound": {
           "hit": "contact_projectile",
           "guard": "guard_light",
@@ -5769,7 +5856,8 @@
       },
       "baseline": {
         "hitstopFrames": 6,
-        "guardstopFrames": 3
+        "guardstopFrames": 3,
+        "hitstunFrames": 15
       },
       "proposal": {
         "hitstopFrames": 8,
@@ -5817,7 +5905,8 @@
       },
       "baseline": {
         "hitstopFrames": 6,
-        "guardstopFrames": 3
+        "guardstopFrames": 3,
+        "hitstunFrames": 13
       },
       "proposal": {
         "hitstopFrames": 7,

@@ -1,0 +1,2551 @@
+{
+ "moguzo": {
+  "s1": {
+   "clip": "s1_v17",
+   "name": "大地の波",
+   "origin": "v14 re-export",
+   "kind": "projectile",
+   "weight": "mid",
+   "role": "中距離の牽制",
+   "frames": 35,
+   "contactSeconds": 0.2167,
+   "contact": 0.3714,
+   "contactEnd": 0.4,
+   "attackPart": "armR",
+   "attackLimb": "pawR",
+   "reach": 0.486,
+   "reachPeak": 0.524,
+   "reachPeakPhase": 0.125,
+   "height": 0.189,
+   "reachMeans": "release point (not projectile range)",
+   "activeReach": [
+    {
+     "phase": 0,
+     "reach": 0.486,
+     "height": 0.186
+    },
+    {
+     "phase": 0.5,
+     "reach": 0.503,
+     "height": 0.235
+    },
+    {
+     "phase": 1,
+     "reach": 0.475,
+     "height": 0.296
+    }
+   ],
+   "referenceFrames": {
+    "startup": 13,
+    "active": 2,
+    "recovery": 20
+   },
+   "heightPeak": 0.296,
+   "strikeAxis": "forward",
+   "projectileSpawnFrame": 13,
+   "cueTrack": [
+    {
+     "at": 0.2167,
+     "type": "sfx",
+     "key": "special",
+     "trigger": "movement",
+     "on": "always"
+    },
+    {
+     "at": 0.2167,
+     "type": "vfx",
+     "key": "special",
+     "trigger": "movement",
+     "on": "always",
+     "bone": "pawR"
+    }
+   ],
+   "hitstopSuggest": {
+    "hit": 6,
+    "guard": 3
+   },
+   "status": "ok"
+  },
+  "s2": {
+   "clip": "s2_v17",
+   "name": "昇り拳",
+   "origin": "v14 re-export",
+   "kind": "antiair",
+   "weight": "mid",
+   "role": "切り返し対空",
+   "frames": 40,
+   "contactSeconds": 0.1,
+   "contact": 0.15,
+   "contactEnd": 0.325,
+   "attackPart": "armR",
+   "attackLimb": "pawR",
+   "reach": 0.222,
+   "reachPeak": 0.222,
+   "reachPeakPhase": 0,
+   "height": 0.8,
+   "reachMeans": "striking surface",
+   "activeReach": [
+    {
+     "phase": 0,
+     "reach": 0.222,
+     "height": 0.8
+    },
+    {
+     "phase": 0.5,
+     "reach": 0.124,
+     "height": 0.832
+    },
+    {
+     "phase": 1,
+     "reach": 0.039,
+     "height": 0.833
+    }
+   ],
+   "referenceFrames": {
+    "startup": 6,
+    "active": 8,
+    "recovery": 26
+   },
+   "heightPeak": 0.833,
+   "strikeAxis": "upward",
+   "airborneFrames": [
+    5,
+    26
+   ],
+   "cueTrack": [
+    {
+     "at": 0.05,
+     "type": "sfx",
+     "key": "wind",
+     "trigger": "movement",
+     "on": "always"
+    },
+    {
+     "at": 0.0833,
+     "type": "sfx",
+     "key": "wind",
+     "trigger": "movement",
+     "on": "always"
+    },
+    {
+     "at": 0.1,
+     "type": "sfx",
+     "key": "hit",
+     "trigger": "contact",
+     "on": "hit"
+    },
+    {
+     "at": 0.1,
+     "type": "vfx",
+     "key": "hit",
+     "trigger": "contact",
+     "on": "hit",
+     "bone": "pawR"
+    },
+    {
+     "at": 0.1,
+     "type": "shake",
+     "key": 0.008,
+     "trigger": "contact",
+     "on": "hit"
+    },
+    {
+     "at": 0.1,
+     "type": "sfx",
+     "key": "block",
+     "trigger": "contact",
+     "on": "guard"
+    },
+    {
+     "at": 0.1,
+     "type": "vfx",
+     "key": "block",
+     "trigger": "contact",
+     "on": "guard",
+     "bone": "pawR"
+    },
+    {
+     "at": 0.4333,
+     "type": "sfx",
+     "key": "clinch",
+     "trigger": "movement",
+     "on": "always"
+    },
+    {
+     "at": 0.4333,
+     "type": "vfx",
+     "key": "roar",
+     "trigger": "movement",
+     "on": "always",
+     "bone": "root_ground"
+    }
+   ],
+   "hitstopSuggest": {
+    "hit": 6,
+    "guard": 3
+   },
+   "status": "ok"
+  },
+  "s3": {
+   "clip": "s3_v17",
+   "name": "地走り",
+   "origin": "v14 re-export",
+   "kind": "rush",
+   "weight": "mid",
+   "role": "前進圧力",
+   "frames": 36,
+   "contactSeconds": 0.2,
+   "contact": 0.3333,
+   "contactEnd": 0.4444,
+   "attackPart": "armL",
+   "attackLimb": "pawL+pawR",
+   "reach": 0.469,
+   "reachPeak": 0.49,
+   "reachPeakPhase": 0.25,
+   "height": 0.372,
+   "reachMeans": "striking surface",
+   "activeReach": [
+    {
+     "phase": 0,
+     "reach": 0.469,
+     "height": 0.296
+    },
+    {
+     "phase": 0.5,
+     "reach": 0.489,
+     "height": 0.376
+    },
+    {
+     "phase": 1,
+     "reach": 0.489,
+     "height": 0.383
+    }
+   ],
+   "referenceFrames": {
+    "startup": 12,
+    "active": 5,
+    "recovery": 19
+   },
+   "heightPeak": 0.387,
+   "strikeAxis": "forward",
+   "cueTrack": [
+    {
+     "at": 0.15,
+     "type": "sfx",
+     "key": "wind",
+     "trigger": "movement",
+     "on": "always"
+    },
+    {
+     "at": 0.2,
+     "type": "sfx",
+     "key": "hit",
+     "trigger": "contact",
+     "on": "hit"
+    },
+    {
+     "at": 0.2,
+     "type": "vfx",
+     "key": "hit",
+     "trigger": "contact",
+     "on": "hit",
+     "bone": "pawR"
+    },
+    {
+     "at": 0.2,
+     "type": "shake",
+     "key": 0.008,
+     "trigger": "contact",
+     "on": "hit"
+    },
+    {
+     "at": 0.2,
+     "type": "sfx",
+     "key": "block",
+     "trigger": "contact",
+     "on": "guard"
+    },
+    {
+     "at": 0.2,
+     "type": "vfx",
+     "key": "block",
+     "trigger": "contact",
+     "on": "guard",
+     "bone": "pawR"
+    }
+   ],
+   "hitstopSuggest": {
+    "hit": 6,
+    "guard": 3
+   },
+   "status": "ok"
+  }
+ },
+ "pisuke": {
+  "s1": {
+   "clip": "s1_v17",
+   "name": "風の気弾",
+   "origin": "v14 re-export",
+   "kind": "projectile",
+   "weight": "light",
+   "role": "軽い飛び道具",
+   "frames": 29,
+   "contactSeconds": 0.1833,
+   "contact": 0.3793,
+   "contactEnd": 0.3793,
+   "attackPart": "legR",
+   "attackLimb": "footR",
+   "reach": 0.346,
+   "reachPeak": 0.346,
+   "reachPeakPhase": 0,
+   "height": 0.236,
+   "reachMeans": "release point (not projectile range)",
+   "activeReach": [
+    {
+     "phase": 0,
+     "reach": 0.346,
+     "height": 0.236
+    },
+    {
+     "phase": 0.5,
+     "reach": 0.346,
+     "height": 0.236
+    },
+    {
+     "phase": 1,
+     "reach": 0.346,
+     "height": 0.236
+    }
+   ],
+   "referenceFrames": {
+    "startup": 11,
+    "active": 1,
+    "recovery": 17
+   },
+   "heightPeak": 0.236,
+   "strikeAxis": "forward",
+   "projectileSpawnFrame": 11,
+   "cueTrack": [
+    {
+     "at": 0.1833,
+     "type": "sfx",
+     "key": "special",
+     "trigger": "movement",
+     "on": "always"
+    },
+    {
+     "at": 0.1833,
+     "type": "vfx",
+     "key": "special",
+     "trigger": "movement",
+     "on": "always",
+     "bone": "footR"
+    }
+   ],
+   "hitstopSuggest": {
+    "hit": 4,
+    "guard": 2
+   },
+   "status": "ok"
+  },
+  "s2": {
+   "clip": "s2_v17",
+   "name": "空牙蹴り",
+   "origin": "v14 re-export",
+   "kind": "antiair",
+   "weight": "light",
+   "role": "上方向への迎撃",
+   "frames": 36,
+   "contactSeconds": 0.1,
+   "contact": 0.1667,
+   "contactEnd": 0.3611,
+   "attackPart": "legR",
+   "attackLimb": "footR",
+   "reach": 0.18,
+   "reachPeak": 0.186,
+   "reachPeakPhase": 0.125,
+   "height": 0.446,
+   "reachMeans": "striking surface",
+   "activeReach": [
+    {
+     "phase": 0,
+     "reach": 0.18,
+     "height": 0.413
+    },
+    {
+     "phase": 0.5,
+     "reach": 0.184,
+     "height": 0.448
+    },
+    {
+     "phase": 1,
+     "reach": 0.183,
+     "height": 0.448
+    }
+   ],
+   "referenceFrames": {
+    "startup": 6,
+    "active": 8,
+    "recovery": 22
+   },
+   "heightPeak": 0.45,
+   "strikeAxis": "upward",
+   "airborneFrames": [
+    5,
+    27
+   ],
+   "cueTrack": [
+    {
+     "at": 0.05,
+     "type": "sfx",
+     "key": "wind",
+     "trigger": "movement",
+     "on": "always"
+    },
+    {
+     "at": 0.0833,
+     "type": "sfx",
+     "key": "wind",
+     "trigger": "movement",
+     "on": "always"
+    },
+    {
+     "at": 0.1,
+     "type": "sfx",
+     "key": "hit",
+     "trigger": "contact",
+     "on": "hit"
+    },
+    {
+     "at": 0.1,
+     "type": "vfx",
+     "key": "hit",
+     "trigger": "contact",
+     "on": "hit",
+     "bone": "footR"
+    },
+    {
+     "at": 0.1,
+     "type": "sfx",
+     "key": "block",
+     "trigger": "contact",
+     "on": "guard"
+    },
+    {
+     "at": 0.1,
+     "type": "vfx",
+     "key": "block",
+     "trigger": "contact",
+     "on": "guard",
+     "bone": "footR"
+    },
+    {
+     "at": 0.45,
+     "type": "sfx",
+     "key": "clinch",
+     "trigger": "movement",
+     "on": "always"
+    }
+   ],
+   "hitstopSuggest": {
+    "hit": 4,
+    "guard": 2
+   },
+   "status": "ok"
+  },
+  "s3": {
+   "clip": "s3_v17",
+   "name": "連脚",
+   "origin": "v14 re-export",
+   "kind": "rush",
+   "weight": "light",
+   "role": "前進連撃",
+   "frames": 36,
+   "contactSeconds": 0.1167,
+   "contact": 0.1944,
+   "contactEnd": 0.4167,
+   "attackPart": "legR",
+   "attackLimb": "footR",
+   "reach": 0.387,
+   "reachPeak": 0.4,
+   "reachPeakPhase": 0.125,
+   "height": 0.129,
+   "reachMeans": "striking surface",
+   "activeReach": [
+    {
+     "phase": 0,
+     "reach": 0.387,
+     "height": 0.128
+    },
+    {
+     "phase": 0.5,
+     "reach": 0.242,
+     "height": 0.131
+    },
+    {
+     "phase": 1,
+     "reach": 0.352,
+     "height": 0.321
+    }
+   ],
+   "referenceFrames": {
+    "startup": 7,
+    "active": 9,
+    "recovery": 20
+   },
+   "heightPeak": 0.336,
+   "strikeAxis": "forward",
+   "cueTrack": [
+    {
+     "at": 0.0667,
+     "type": "sfx",
+     "key": "wind",
+     "trigger": "movement",
+     "on": "always"
+    },
+    {
+     "at": 0.1167,
+     "type": "sfx",
+     "key": "hit",
+     "trigger": "contact",
+     "on": "hit"
+    },
+    {
+     "at": 0.1167,
+     "type": "vfx",
+     "key": "hit",
+     "trigger": "contact",
+     "on": "hit",
+     "bone": "footR"
+    },
+    {
+     "at": 0.1167,
+     "type": "sfx",
+     "key": "block",
+     "trigger": "contact",
+     "on": "guard"
+    },
+    {
+     "at": 0.1167,
+     "type": "vfx",
+     "key": "block",
+     "trigger": "contact",
+     "on": "guard",
+     "bone": "footR"
+    }
+   ],
+   "hitstopSuggest": {
+    "hit": 4,
+    "guard": 2
+   },
+   "status": "ok"
+  }
+ },
+ "godan": {
+  "s1": {
+   "clip": "s1_v17",
+   "name": "地割り",
+   "origin": "v14 re-export",
+   "kind": "strike",
+   "weight": "heavy",
+   "role": "遅い下段大技",
+   "frames": 54,
+   "contactSeconds": 0.35,
+   "contact": 0.3889,
+   "contactEnd": 0.463,
+   "attackPart": "legR",
+   "attackLimb": "footR",
+   "reach": 0.288,
+   "reachPeak": 0.297,
+   "reachPeakPhase": 0.25,
+   "height": 0.008,
+   "reachMeans": "striking surface",
+   "activeReach": [
+    {
+     "phase": 0,
+     "reach": 0.288,
+     "height": 0.074
+    },
+    {
+     "phase": 0.5,
+     "reach": 0.297,
+     "height": 0.008
+    },
+    {
+     "phase": 1,
+     "reach": 0.297,
+     "height": 0.008
+    }
+   ],
+   "referenceFrames": {
+    "startup": 21,
+    "active": 5,
+    "recovery": 28
+   },
+   "heightPeak": 0.074,
+   "strikeAxis": "upward",
+   "cueTrack": [
+    {
+     "at": 0,
+     "type": "sfx",
+     "key": "grunt",
+     "trigger": "movement",
+     "on": "always"
+    },
+    {
+     "at": 0.3,
+     "type": "sfx",
+     "key": "wind",
+     "trigger": "movement",
+     "on": "always"
+    },
+    {
+     "at": 0.35,
+     "type": "sfx",
+     "key": "crash",
+     "trigger": "contact",
+     "on": "hit"
+    },
+    {
+     "at": 0.35,
+     "type": "vfx",
+     "key": "hit",
+     "trigger": "contact",
+     "on": "hit",
+     "bone": "footR"
+    },
+    {
+     "at": 0.35,
+     "type": "shake",
+     "key": 0.016,
+     "trigger": "contact",
+     "on": "hit"
+    },
+    {
+     "at": 0.35,
+     "type": "sfx",
+     "key": "block",
+     "trigger": "contact",
+     "on": "guard"
+    },
+    {
+     "at": 0.35,
+     "type": "vfx",
+     "key": "block",
+     "trigger": "contact",
+     "on": "guard",
+     "bone": "footR"
+    }
+   ],
+   "hitstopSuggest": {
+    "hit": 9,
+    "guard": 5
+   },
+   "status": "ok"
+  },
+  "s2": {
+   "clip": "s2_v17",
+   "name": "岩砕き",
+   "origin": "v14 re-export",
+   "kind": "antiair",
+   "weight": "heavy",
+   "role": "装甲つき対空",
+   "frames": 49,
+   "contactSeconds": 0.1833,
+   "contact": 0.2245,
+   "contactEnd": 0.3469,
+   "attackPart": "armL",
+   "attackLimb": "pawL+pawR",
+   "reach": 0.175,
+   "reachPeak": 0.175,
+   "reachPeakPhase": 0,
+   "height": 0.575,
+   "reachMeans": "striking surface",
+   "activeReach": [
+    {
+     "phase": 0,
+     "reach": 0.175,
+     "height": 0.575
+    },
+    {
+     "phase": 0.5,
+     "reach": 0.171,
+     "height": 0.585
+    },
+    {
+     "phase": 1,
+     "reach": 0.169,
+     "height": 0.588
+    }
+   ],
+   "referenceFrames": {
+    "startup": 11,
+    "active": 7,
+    "recovery": 31
+   },
+   "heightPeak": 0.714,
+   "strikeAxis": "upward",
+   "cueTrack": [
+    {
+     "at": 0,
+     "type": "sfx",
+     "key": "grunt",
+     "trigger": "movement",
+     "on": "always"
+    },
+    {
+     "at": 0.1333,
+     "type": "sfx",
+     "key": "wind",
+     "trigger": "movement",
+     "on": "always"
+    },
+    {
+     "at": 0.1833,
+     "type": "sfx",
+     "key": "crash",
+     "trigger": "contact",
+     "on": "hit"
+    },
+    {
+     "at": 0.1833,
+     "type": "vfx",
+     "key": "hit",
+     "trigger": "contact",
+     "on": "hit",
+     "bone": "pawR"
+    },
+    {
+     "at": 0.1833,
+     "type": "shake",
+     "key": 0.016,
+     "trigger": "contact",
+     "on": "hit"
+    },
+    {
+     "at": 0.1833,
+     "type": "sfx",
+     "key": "block",
+     "trigger": "contact",
+     "on": "guard"
+    },
+    {
+     "at": 0.1833,
+     "type": "vfx",
+     "key": "block",
+     "trigger": "contact",
+     "on": "guard",
+     "bone": "pawR"
+    }
+   ],
+   "hitstopSuggest": {
+    "hit": 9,
+    "guard": 5
+   },
+   "status": "ok"
+  },
+  "s3": {
+   "clip": "s3_v17",
+   "name": "肩当て突進",
+   "origin": "v17 revised",
+   "kind": "rush",
+   "weight": "heavy",
+   "role": "高リスク突進",
+   "frames": 57,
+   "contactSeconds": 0.3,
+   "contact": 0.3158,
+   "contactEnd": 0.4211,
+   "attackPart": "body",
+   "attackLimb": "shoulderL",
+   "reach": 0.365,
+   "reachPeak": 0.389,
+   "reachPeakPhase": 0.125,
+   "height": 0.264,
+   "reachMeans": "striking surface",
+   "activeReach": [
+    {
+     "phase": 0,
+     "reach": 0.365,
+     "height": 0.257
+    },
+    {
+     "phase": 0.5,
+     "reach": 0.389,
+     "height": 0.264
+    },
+    {
+     "phase": 1,
+     "reach": 0.389,
+     "height": 0.264
+    }
+   ],
+   "referenceFrames": {
+    "startup": 18,
+    "active": 7,
+    "recovery": 32
+   },
+   "heightPeak": 0.361,
+   "strikeAxis": "forward",
+   "cueTrack": [
+    {
+     "at": 0,
+     "type": "sfx",
+     "key": "grunt",
+     "trigger": "movement",
+     "on": "always"
+    },
+    {
+     "at": 0.25,
+     "type": "sfx",
+     "key": "wind",
+     "trigger": "movement",
+     "on": "always"
+    },
+    {
+     "at": 0.3,
+     "type": "sfx",
+     "key": "crash",
+     "trigger": "contact",
+     "on": "hit"
+    },
+    {
+     "at": 0.3,
+     "type": "vfx",
+     "key": "hit",
+     "trigger": "contact",
+     "on": "hit",
+     "bone": "shoulderL"
+    },
+    {
+     "at": 0.3,
+     "type": "shake",
+     "key": 0.016,
+     "trigger": "contact",
+     "on": "hit"
+    },
+    {
+     "at": 0.3,
+     "type": "sfx",
+     "key": "block",
+     "trigger": "contact",
+     "on": "guard"
+    },
+    {
+     "at": 0.3,
+     "type": "vfx",
+     "key": "block",
+     "trigger": "contact",
+     "on": "guard",
+     "bone": "shoulderL"
+    }
+   ],
+   "hitstopSuggest": {
+    "hit": 9,
+    "guard": 5
+   },
+   "status": "ok"
+  }
+ },
+ "hakuma": {
+  "s1": {
+   "clip": "s1_v17",
+   "name": "雪壁掌",
+   "origin": "v14 re-export",
+   "kind": "strike",
+   "weight": "mid",
+   "role": "近中距離の押し返し",
+   "frames": 39,
+   "contactSeconds": 0.1833,
+   "contact": 0.2821,
+   "contactEnd": 0.4103,
+   "attackPart": "armR",
+   "attackLimb": "pawR",
+   "reach": 0.365,
+   "reachPeak": 0.501,
+   "reachPeakPhase": 1,
+   "height": 0.416,
+   "reachMeans": "striking surface",
+   "activeReach": [
+    {
+     "phase": 0,
+     "reach": 0.365,
+     "height": 0.423
+    },
+    {
+     "phase": 0.5,
+     "reach": 0.495,
+     "height": 0.418
+    },
+    {
+     "phase": 1,
+     "reach": 0.501,
+     "height": 0.416
+    }
+   ],
+   "referenceFrames": {
+    "startup": 11,
+    "active": 6,
+    "recovery": 22
+   },
+   "heightPeak": 0.423,
+   "strikeAxis": "forward",
+   "cueTrack": [
+    {
+     "at": 0.1333,
+     "type": "sfx",
+     "key": "wind",
+     "trigger": "movement",
+     "on": "always"
+    },
+    {
+     "at": 0.1833,
+     "type": "sfx",
+     "key": "hit",
+     "trigger": "contact",
+     "on": "hit"
+    },
+    {
+     "at": 0.1833,
+     "type": "vfx",
+     "key": "hit",
+     "trigger": "contact",
+     "on": "hit",
+     "bone": "pawR"
+    },
+    {
+     "at": 0.1833,
+     "type": "shake",
+     "key": 0.008,
+     "trigger": "contact",
+     "on": "hit"
+    },
+    {
+     "at": 0.1833,
+     "type": "sfx",
+     "key": "block",
+     "trigger": "contact",
+     "on": "guard"
+    },
+    {
+     "at": 0.1833,
+     "type": "vfx",
+     "key": "block",
+     "trigger": "contact",
+     "on": "guard",
+     "bone": "pawR"
+    }
+   ],
+   "hitstopSuggest": {
+    "hit": 6,
+    "guard": 3
+   },
+   "status": "ok"
+  },
+  "s2": {
+   "clip": "s2_v17",
+   "name": "白峰対空",
+   "origin": "v14 re-export",
+   "kind": "antiair",
+   "weight": "mid",
+   "role": "受ける対空",
+   "frames": 39,
+   "contactSeconds": 0.1333,
+   "contact": 0.2051,
+   "contactEnd": 0.359,
+   "attackPart": "armR",
+   "attackLimb": "pawR",
+   "reach": 0.226,
+   "reachPeak": 0.226,
+   "reachPeakPhase": 0,
+   "height": 0.563,
+   "reachMeans": "striking surface",
+   "activeReach": [
+    {
+     "phase": 0,
+     "reach": 0.226,
+     "height": 0.563
+    },
+    {
+     "phase": 0.5,
+     "reach": 0.222,
+     "height": 0.625
+    },
+    {
+     "phase": 1,
+     "reach": 0.223,
+     "height": 0.628
+    }
+   ],
+   "referenceFrames": {
+    "startup": 8,
+    "active": 7,
+    "recovery": 24
+   },
+   "heightPeak": 0.628,
+   "strikeAxis": "upward",
+   "cueTrack": [
+    {
+     "at": 0.0833,
+     "type": "sfx",
+     "key": "wind",
+     "trigger": "movement",
+     "on": "always"
+    },
+    {
+     "at": 0.1333,
+     "type": "sfx",
+     "key": "hit",
+     "trigger": "contact",
+     "on": "hit"
+    },
+    {
+     "at": 0.1333,
+     "type": "vfx",
+     "key": "hit",
+     "trigger": "contact",
+     "on": "hit",
+     "bone": "pawR"
+    },
+    {
+     "at": 0.1333,
+     "type": "shake",
+     "key": 0.008,
+     "trigger": "contact",
+     "on": "hit"
+    },
+    {
+     "at": 0.1333,
+     "type": "sfx",
+     "key": "block",
+     "trigger": "contact",
+     "on": "guard"
+    },
+    {
+     "at": 0.1333,
+     "type": "vfx",
+     "key": "block",
+     "trigger": "contact",
+     "on": "guard",
+     "bone": "pawR"
+    }
+   ],
+   "hitstopSuggest": {
+    "hit": 6,
+    "guard": 3
+   },
+   "status": "ok"
+  },
+  "s3": {
+   "clip": "s3_v17",
+   "name": "連続突っ張り",
+   "origin": "v14 re-export",
+   "kind": "rush",
+   "weight": "mid",
+   "role": "ライン回復",
+   "frames": 46,
+   "contactSeconds": 0.2,
+   "contact": 0.2609,
+   "contactEnd": 0.4348,
+   "attackPart": "armR",
+   "attackLimb": "pawL+pawR",
+   "reach": 0.45,
+   "reachPeak": 0.495,
+   "reachPeakPhase": 0.75,
+   "height": 0.451,
+   "reachMeans": "striking surface",
+   "activeReach": [
+    {
+     "phase": 0,
+     "reach": 0.45,
+     "height": 0.422
+    },
+    {
+     "phase": 0.5,
+     "reach": 0.366,
+     "height": 0.445
+    },
+    {
+     "phase": 1,
+     "reach": 0.462,
+     "height": 0.411
+    }
+   ],
+   "referenceFrames": {
+    "startup": 12,
+    "active": 9,
+    "recovery": 25
+   },
+   "heightPeak": 0.464,
+   "strikeAxis": "forward",
+   "cueTrack": [
+    {
+     "at": 0.15,
+     "type": "sfx",
+     "key": "wind",
+     "trigger": "movement",
+     "on": "always"
+    },
+    {
+     "at": 0.2,
+     "type": "sfx",
+     "key": "hit",
+     "trigger": "contact",
+     "on": "hit"
+    },
+    {
+     "at": 0.2,
+     "type": "vfx",
+     "key": "hit",
+     "trigger": "contact",
+     "on": "hit",
+     "bone": "pawR"
+    },
+    {
+     "at": 0.2,
+     "type": "shake",
+     "key": 0.008,
+     "trigger": "contact",
+     "on": "hit"
+    },
+    {
+     "at": 0.2,
+     "type": "sfx",
+     "key": "block",
+     "trigger": "contact",
+     "on": "guard"
+    },
+    {
+     "at": 0.2,
+     "type": "vfx",
+     "key": "block",
+     "trigger": "contact",
+     "on": "guard",
+     "bone": "pawR"
+    }
+   ],
+   "hitstopSuggest": {
+    "hit": 6,
+    "guard": 3
+   },
+   "status": "ok"
+  }
+ },
+ "chirka": {
+  "s1": {
+   "clip": "s1_v17",
+   "name": "だまし突き",
+   "origin": "v14 re-export",
+   "kind": "strike",
+   "weight": "light",
+   "role": "可変タイミング",
+   "frames": 36,
+   "contactSeconds": 0.2167,
+   "contact": 0.3611,
+   "contactEnd": 0.4444,
+   "attackPart": "armL",
+   "attackLimb": "pawL",
+   "reach": 0.419,
+   "reachPeak": 0.453,
+   "reachPeakPhase": 1,
+   "height": 0.203,
+   "reachMeans": "striking surface",
+   "activeReach": [
+    {
+     "phase": 0,
+     "reach": 0.419,
+     "height": 0.248
+    },
+    {
+     "phase": 0.5,
+     "reach": 0.451,
+     "height": 0.207
+    },
+    {
+     "phase": 1,
+     "reach": 0.453,
+     "height": 0.203
+    }
+   ],
+   "referenceFrames": {
+    "startup": 13,
+    "active": 4,
+    "recovery": 19
+   },
+   "heightPeak": 0.248,
+   "strikeAxis": "forward",
+   "cueTrack": [
+    {
+     "at": 0.1667,
+     "type": "sfx",
+     "key": "wind",
+     "trigger": "movement",
+     "on": "always"
+    },
+    {
+     "at": 0.2167,
+     "type": "sfx",
+     "key": "hit",
+     "trigger": "contact",
+     "on": "hit"
+    },
+    {
+     "at": 0.2167,
+     "type": "vfx",
+     "key": "hit",
+     "trigger": "contact",
+     "on": "hit",
+     "bone": "pawL"
+    },
+    {
+     "at": 0.2167,
+     "type": "sfx",
+     "key": "block",
+     "trigger": "contact",
+     "on": "guard"
+    },
+    {
+     "at": 0.2167,
+     "type": "vfx",
+     "key": "block",
+     "trigger": "contact",
+     "on": "guard",
+     "bone": "pawL"
+    }
+   ],
+   "hitstopSuggest": {
+    "hit": 4,
+    "guard": 2
+   },
+   "status": "ok"
+  },
+  "s2": {
+   "clip": "s2_v17",
+   "name": "跳ね爪",
+   "origin": "v14 re-export",
+   "kind": "antiair",
+   "weight": "light",
+   "role": "対空",
+   "frames": 40,
+   "contactSeconds": 0.1333,
+   "contact": 0.2,
+   "contactEnd": 0.35,
+   "attackPart": "armR",
+   "attackLimb": "pawR",
+   "reach": 0.215,
+   "reachPeak": 0.223,
+   "reachPeakPhase": 0.125,
+   "height": 0.674,
+   "reachMeans": "striking surface",
+   "activeReach": [
+    {
+     "phase": 0,
+     "reach": 0.215,
+     "height": 0.668
+    },
+    {
+     "phase": 0.5,
+     "reach": 0.161,
+     "height": 0.721
+    },
+    {
+     "phase": 1,
+     "reach": 0.018,
+     "height": 0.633
+    }
+   ],
+   "referenceFrames": {
+    "startup": 8,
+    "active": 7,
+    "recovery": 25
+   },
+   "heightPeak": 0.721,
+   "strikeAxis": "upward",
+   "airborneFrames": [
+    6,
+    26
+   ],
+   "cueTrack": [
+    {
+     "at": 0.0833,
+     "type": "sfx",
+     "key": "wind",
+     "trigger": "movement",
+     "on": "always"
+    },
+    {
+     "at": 0.1,
+     "type": "sfx",
+     "key": "wind",
+     "trigger": "movement",
+     "on": "always"
+    },
+    {
+     "at": 0.1333,
+     "type": "sfx",
+     "key": "hit",
+     "trigger": "contact",
+     "on": "hit"
+    },
+    {
+     "at": 0.1333,
+     "type": "vfx",
+     "key": "hit",
+     "trigger": "contact",
+     "on": "hit",
+     "bone": "pawR"
+    },
+    {
+     "at": 0.1333,
+     "type": "sfx",
+     "key": "block",
+     "trigger": "contact",
+     "on": "guard"
+    },
+    {
+     "at": 0.1333,
+     "type": "vfx",
+     "key": "block",
+     "trigger": "contact",
+     "on": "guard",
+     "bone": "pawR"
+    },
+    {
+     "at": 0.4333,
+     "type": "sfx",
+     "key": "clinch",
+     "trigger": "movement",
+     "on": "always"
+    }
+   ],
+   "hitstopSuggest": {
+    "hit": 4,
+    "guard": 2
+   },
+   "status": "ok"
+  },
+  "s3": {
+   "clip": "s3_v17",
+   "name": "影引き爪",
+   "origin": "v17 revised",
+   "kind": "rush",
+   "weight": "mid",
+   "role": "裏をかく前進",
+   "frames": 40,
+   "contactSeconds": 0.2167,
+   "contact": 0.325,
+   "contactEnd": 0.425,
+   "attackPart": "armR",
+   "attackLimb": "pawR",
+   "reach": 0.494,
+   "reachPeak": 0.494,
+   "reachPeakPhase": 0,
+   "height": 0.222,
+   "reachMeans": "striking surface",
+   "activeReach": [
+    {
+     "phase": 0,
+     "reach": 0.494,
+     "height": 0.222
+    },
+    {
+     "phase": 0.5,
+     "reach": 0.494,
+     "height": 0.222
+    },
+    {
+     "phase": 1,
+     "reach": 0.494,
+     "height": 0.222
+    }
+   ],
+   "referenceFrames": {
+    "startup": 13,
+    "active": 5,
+    "recovery": 22
+   },
+   "heightPeak": 0.222,
+   "strikeAxis": "forward",
+   "cueTrack": [
+    {
+     "at": 0.1667,
+     "type": "sfx",
+     "key": "wind",
+     "trigger": "movement",
+     "on": "always"
+    },
+    {
+     "at": 0.2167,
+     "type": "sfx",
+     "key": "hit",
+     "trigger": "contact",
+     "on": "hit"
+    },
+    {
+     "at": 0.2167,
+     "type": "vfx",
+     "key": "hit",
+     "trigger": "contact",
+     "on": "hit",
+     "bone": "pawR"
+    },
+    {
+     "at": 0.2167,
+     "type": "shake",
+     "key": 0.008,
+     "trigger": "contact",
+     "on": "hit"
+    },
+    {
+     "at": 0.2167,
+     "type": "sfx",
+     "key": "block",
+     "trigger": "contact",
+     "on": "guard"
+    },
+    {
+     "at": 0.2167,
+     "type": "vfx",
+     "key": "block",
+     "trigger": "contact",
+     "on": "guard",
+     "bone": "pawR"
+    }
+   ],
+   "hitstopSuggest": {
+    "hit": 6,
+    "guard": 3
+   },
+   "status": "ok"
+  }
+ },
+ "takimaru": {
+  "s1": {
+   "clip": "s1_v17",
+   "name": "大地走り",
+   "origin": "v14 re-export",
+   "kind": "projectile",
+   "weight": "mid",
+   "role": "掴み接近の布石",
+   "frames": 51,
+   "contactSeconds": 0.3333,
+   "contact": 0.3922,
+   "contactEnd": 0.3922,
+   "attackPart": "armL",
+   "attackLimb": "pawL+pawR",
+   "reach": 0.485,
+   "reachPeak": 0.485,
+   "reachPeakPhase": 0,
+   "height": 0.19,
+   "reachMeans": "release point (not projectile range)",
+   "activeReach": [
+    {
+     "phase": 0,
+     "reach": 0.485,
+     "height": 0.19
+    },
+    {
+     "phase": 0.5,
+     "reach": 0.485,
+     "height": 0.19
+    },
+    {
+     "phase": 1,
+     "reach": 0.485,
+     "height": 0.19
+    }
+   ],
+   "referenceFrames": {
+    "startup": 20,
+    "active": 1,
+    "recovery": 30
+   },
+   "heightPeak": 0.19,
+   "strikeAxis": "forward",
+   "airborneFrames": [
+    9,
+    19
+   ],
+   "projectileSpawnFrame": 20,
+   "cueTrack": [
+    {
+     "at": 0.15,
+     "type": "sfx",
+     "key": "wind",
+     "trigger": "movement",
+     "on": "always"
+    },
+    {
+     "at": 0.3167,
+     "type": "sfx",
+     "key": "clinch",
+     "trigger": "movement",
+     "on": "always"
+    },
+    {
+     "at": 0.3167,
+     "type": "vfx",
+     "key": "roar",
+     "trigger": "movement",
+     "on": "always",
+     "bone": "root_ground"
+    },
+    {
+     "at": 0.3333,
+     "type": "sfx",
+     "key": "special",
+     "trigger": "movement",
+     "on": "always"
+    },
+    {
+     "at": 0.3333,
+     "type": "vfx",
+     "key": "special",
+     "trigger": "movement",
+     "on": "always",
+     "bone": "pawR"
+    }
+   ],
+   "hitstopSuggest": {
+    "hit": 6,
+    "guard": 3
+   },
+   "status": "ok"
+  },
+  "s2": {
+   "clip": "s2_v17",
+   "name": "抱え上げ",
+   "origin": "v14 re-export",
+   "kind": "antiair",
+   "weight": "heavy",
+   "role": "迎撃／掴み距離",
+   "frames": 44,
+   "contactSeconds": 0.1667,
+   "contact": 0.2273,
+   "contactEnd": 0.3636,
+   "attackPart": "armL",
+   "attackLimb": "pawL+pawR",
+   "reach": 0.043,
+   "reachPeak": 0.043,
+   "reachPeakPhase": 0,
+   "height": 0.603,
+   "reachMeans": "striking surface",
+   "activeReach": [
+    {
+     "phase": 0,
+     "reach": 0.043,
+     "height": 0.603
+    },
+    {
+     "phase": 0.5,
+     "reach": 0.01,
+     "height": 0.514
+    },
+    {
+     "phase": 1,
+     "reach": 0.006,
+     "height": 0.515
+    }
+   ],
+   "referenceFrames": {
+    "startup": 10,
+    "active": 7,
+    "recovery": 27
+   },
+   "heightPeak": 0.603,
+   "strikeAxis": "upward",
+   "cueTrack": [
+    {
+     "at": 0,
+     "type": "sfx",
+     "key": "grunt",
+     "trigger": "movement",
+     "on": "always"
+    },
+    {
+     "at": 0.1167,
+     "type": "sfx",
+     "key": "wind",
+     "trigger": "movement",
+     "on": "always"
+    },
+    {
+     "at": 0.1667,
+     "type": "sfx",
+     "key": "crash",
+     "trigger": "contact",
+     "on": "hit"
+    },
+    {
+     "at": 0.1667,
+     "type": "vfx",
+     "key": "hit",
+     "trigger": "contact",
+     "on": "hit",
+     "bone": "pawR"
+    },
+    {
+     "at": 0.1667,
+     "type": "shake",
+     "key": 0.016,
+     "trigger": "contact",
+     "on": "hit"
+    },
+    {
+     "at": 0.1667,
+     "type": "sfx",
+     "key": "block",
+     "trigger": "contact",
+     "on": "guard"
+    },
+    {
+     "at": 0.1667,
+     "type": "vfx",
+     "key": "block",
+     "trigger": "contact",
+     "on": "guard",
+     "bone": "pawR"
+    }
+   ],
+   "hitstopSuggest": {
+    "hit": 9,
+    "guard": 5
+   },
+   "status": "ok"
+  },
+  "s3": {
+   "clip": "s3_v17",
+   "name": "抱え込み",
+   "origin": "v14 re-export",
+   "kind": "grab",
+   "weight": "heavy",
+   "role": "近距離の拘束",
+   "frames": 49,
+   "contactSeconds": 0.15,
+   "contact": 0.1837,
+   "contactEnd": 0.2245,
+   "attackPart": "armL",
+   "attackLimb": "pawL+pawR",
+   "reach": 0.623,
+   "reachPeak": 0.649,
+   "reachPeakPhase": 0.5,
+   "height": 0.323,
+   "reachMeans": "striking surface",
+   "activeReach": [
+    {
+     "phase": 0,
+     "reach": 0.623,
+     "height": 0.377
+    },
+    {
+     "phase": 0.5,
+     "reach": 0.649,
+     "height": 0.323
+    },
+    {
+     "phase": 1,
+     "reach": 0.649,
+     "height": 0.323
+    }
+   ],
+   "referenceFrames": {
+    "startup": 9,
+    "active": 3,
+    "recovery": 37
+   },
+   "heightPeak": 0.388,
+   "strikeAxis": "forward",
+   "cueTrack": [
+    {
+     "at": 0,
+     "type": "sfx",
+     "key": "grunt",
+     "trigger": "movement",
+     "on": "always"
+    },
+    {
+     "at": 0.1,
+     "type": "sfx",
+     "key": "wind",
+     "trigger": "movement",
+     "on": "always"
+    },
+    {
+     "at": 0.15,
+     "type": "sfx",
+     "key": "clinch",
+     "trigger": "contact",
+     "on": "hit"
+    },
+    {
+     "at": 0.15,
+     "type": "vfx",
+     "key": "clinch",
+     "trigger": "contact",
+     "on": "hit",
+     "bone": "chest"
+    },
+    {
+     "at": 0.15,
+     "type": "shake",
+     "key": 0.016,
+     "trigger": "contact",
+     "on": "hit"
+    },
+    {
+     "at": 0.15,
+     "type": "sfx",
+     "key": "block",
+     "trigger": "contact",
+     "on": "guard"
+    },
+    {
+     "at": 0.15,
+     "type": "vfx",
+     "key": "block",
+     "trigger": "contact",
+     "on": "guard",
+     "bone": "chest"
+    }
+   ],
+   "hitstopSuggest": {
+    "hit": 9,
+    "guard": 5
+   },
+   "status": "ok"
+  }
+ },
+ "yomikage": {
+  "s1": {
+   "clip": "s1_v17",
+   "name": "残月の波",
+   "origin": "v14 re-export",
+   "kind": "projectile",
+   "weight": "light",
+   "role": "距離を整える弾",
+   "frames": 37,
+   "contactSeconds": 0.2167,
+   "contact": 0.3514,
+   "contactEnd": 0.3514,
+   "attackPart": "armR",
+   "attackLimb": "pawR",
+   "reach": 0.293,
+   "reachPeak": 0.293,
+   "reachPeakPhase": 0,
+   "height": 0.414,
+   "reachMeans": "release point (not projectile range)",
+   "activeReach": [
+    {
+     "phase": 0,
+     "reach": 0.293,
+     "height": 0.414
+    },
+    {
+     "phase": 0.5,
+     "reach": 0.293,
+     "height": 0.414
+    },
+    {
+     "phase": 1,
+     "reach": 0.293,
+     "height": 0.414
+    }
+   ],
+   "referenceFrames": {
+    "startup": 13,
+    "active": 1,
+    "recovery": 23
+   },
+   "heightPeak": 0.414,
+   "strikeAxis": "forward",
+   "projectileSpawnFrame": 13,
+   "cueTrack": [
+    {
+     "at": 0.2167,
+     "type": "sfx",
+     "key": "special",
+     "trigger": "movement",
+     "on": "always"
+    },
+    {
+     "at": 0.2167,
+     "type": "vfx",
+     "key": "special",
+     "trigger": "movement",
+     "on": "always",
+     "bone": "pawR"
+    }
+   ],
+   "hitstopSuggest": {
+    "hit": 4,
+    "guard": 2
+   },
+   "status": "ok"
+  },
+  "s2": {
+   "clip": "s2_v17",
+   "name": "昇り肘",
+   "origin": "v14 re-export",
+   "kind": "antiair",
+   "weight": "mid",
+   "role": "対空",
+   "frames": 40,
+   "contactSeconds": 0.1333,
+   "contact": 0.2,
+   "contactEnd": 0.35,
+   "attackPart": "armR",
+   "attackLimb": "elbowR",
+   "reach": 0.143,
+   "reachPeak": 0.143,
+   "reachPeakPhase": 0,
+   "height": 0.531,
+   "reachMeans": "striking surface",
+   "activeReach": [
+    {
+     "phase": 0,
+     "reach": 0.143,
+     "height": 0.531
+    },
+    {
+     "phase": 0.5,
+     "reach": 0.143,
+     "height": 0.536
+    },
+    {
+     "phase": 1,
+     "reach": 0.142,
+     "height": 0.541
+    }
+   ],
+   "referenceFrames": {
+    "startup": 8,
+    "active": 7,
+    "recovery": 25
+   },
+   "heightPeak": 0.541,
+   "strikeAxis": "upward",
+   "cueTrack": [
+    {
+     "at": 0.0833,
+     "type": "sfx",
+     "key": "wind",
+     "trigger": "movement",
+     "on": "always"
+    },
+    {
+     "at": 0.1333,
+     "type": "sfx",
+     "key": "hit",
+     "trigger": "contact",
+     "on": "hit"
+    },
+    {
+     "at": 0.1333,
+     "type": "vfx",
+     "key": "hit",
+     "trigger": "contact",
+     "on": "hit",
+     "bone": "pawR"
+    },
+    {
+     "at": 0.1333,
+     "type": "shake",
+     "key": 0.008,
+     "trigger": "contact",
+     "on": "hit"
+    },
+    {
+     "at": 0.1333,
+     "type": "sfx",
+     "key": "block",
+     "trigger": "contact",
+     "on": "guard"
+    },
+    {
+     "at": 0.1333,
+     "type": "vfx",
+     "key": "block",
+     "trigger": "contact",
+     "on": "guard",
+     "bone": "pawR"
+    }
+   ],
+   "hitstopSuggest": {
+    "hit": 6,
+    "guard": 3
+   },
+   "status": "ok"
+  },
+  "s3": {
+   "clip": "s3_v17",
+   "name": "受け返し",
+   "origin": "v14 re-export",
+   "kind": "counter",
+   "weight": "mid",
+   "role": "読み勝つ当て身",
+   "frames": 51,
+   "contactSeconds": 0.1167,
+   "contact": 0.1373,
+   "contactEnd": 0.3725,
+   "attackPart": "armL",
+   "attackLimb": "pawL",
+   "reach": 0.164,
+   "reachPeak": 0.164,
+   "reachPeakPhase": 0,
+   "height": 0.438,
+   "reachMeans": "striking surface",
+   "activeReach": [
+    {
+     "phase": 0,
+     "reach": 0.164,
+     "height": 0.438
+    },
+    {
+     "phase": 0.5,
+     "reach": 0.164,
+     "height": 0.438
+    },
+    {
+     "phase": 1,
+     "reach": 0.164,
+     "height": 0.436
+    }
+   ],
+   "referenceFrames": {
+    "startup": 7,
+    "active": 13,
+    "recovery": 31
+   },
+   "heightPeak": 0.438,
+   "strikeAxis": "forward",
+   "cueTrack": [
+    {
+     "at": 0,
+     "type": "sfx",
+     "key": "chime",
+     "trigger": "movement",
+     "on": "always"
+    },
+    {
+     "at": 0.0667,
+     "type": "sfx",
+     "key": "wind",
+     "trigger": "movement",
+     "on": "always"
+    },
+    {
+     "at": 0.1167,
+     "type": "sfx",
+     "key": "hit",
+     "trigger": "contact",
+     "on": "hit"
+    },
+    {
+     "at": 0.1167,
+     "type": "vfx",
+     "key": "hit",
+     "trigger": "contact",
+     "on": "hit",
+     "bone": "pawL"
+    },
+    {
+     "at": 0.1167,
+     "type": "shake",
+     "key": 0.008,
+     "trigger": "contact",
+     "on": "hit"
+    },
+    {
+     "at": 0.1167,
+     "type": "sfx",
+     "key": "block",
+     "trigger": "contact",
+     "on": "guard"
+    },
+    {
+     "at": 0.1167,
+     "type": "vfx",
+     "key": "block",
+     "trigger": "contact",
+     "on": "guard",
+     "bone": "pawL"
+    },
+    {
+     "at": 0.1167,
+     "type": "sfx",
+     "key": "counter",
+     "trigger": "contact",
+     "on": "hit"
+    }
+   ],
+   "hitstopSuggest": {
+    "hit": 6,
+    "guard": 3
+   },
+   "status": "ok"
+  }
+ },
+ "bullet": {
+  "s1": {
+   "clip": "s1_v17",
+   "name": "木の実弾",
+   "origin": "v14 re-export",
+   "kind": "projectile",
+   "weight": "mid",
+   "role": "長距離牽制",
+   "frames": 46,
+   "contactSeconds": 0.2833,
+   "contact": 0.3696,
+   "contactEnd": 0.3696,
+   "attackPart": "tail",
+   "attackLimb": "tail",
+   "reach": -0.09,
+   "reachPeak": -0.09,
+   "reachPeakPhase": 0,
+   "height": 0.224,
+   "reachMeans": "release point (not projectile range)",
+   "activeReach": [
+    {
+     "phase": 0,
+     "reach": -0.09,
+     "height": 0.224
+    },
+    {
+     "phase": 0.5,
+     "reach": -0.09,
+     "height": 0.224
+    },
+    {
+     "phase": 1,
+     "reach": -0.09,
+     "height": 0.224
+    }
+   ],
+   "referenceFrames": {
+    "startup": 17,
+    "active": 1,
+    "recovery": 28
+   },
+   "heightPeak": 0.224,
+   "strikeAxis": "forward",
+   "projectileSpawnFrame": 17,
+   "cueTrack": [
+    {
+     "at": 0.2833,
+     "type": "sfx",
+     "key": "special",
+     "trigger": "movement",
+     "on": "always"
+    },
+    {
+     "at": 0.2833,
+     "type": "vfx",
+     "key": "special",
+     "trigger": "movement",
+     "on": "always",
+     "bone": "tail_03"
+    }
+   ],
+   "hitstopSuggest": {
+    "hit": 6,
+    "guard": 3
+   },
+   "status": "ok"
+  },
+  "s2": {
+   "clip": "s2_v17",
+   "name": "尾跳ね",
+   "origin": "v14 re-export",
+   "kind": "antiair",
+   "weight": "mid",
+   "role": "長尾対空",
+   "frames": 43,
+   "contactSeconds": 0.15,
+   "contact": 0.2093,
+   "contactEnd": 0.3488,
+   "attackPart": "tail",
+   "attackLimb": "tail",
+   "reach": -0.109,
+   "reachPeak": 0.039,
+   "reachPeakPhase": 1,
+   "height": 0.782,
+   "reachMeans": "striking surface",
+   "activeReach": [
+    {
+     "phase": 0,
+     "reach": -0.109,
+     "height": 0.346
+    },
+    {
+     "phase": 0.5,
+     "reach": -0.08,
+     "height": 0.431
+    },
+    {
+     "phase": 1,
+     "reach": 0.039,
+     "height": 0.782
+    }
+   ],
+   "referenceFrames": {
+    "startup": 9,
+    "active": 7,
+    "recovery": 27
+   },
+   "heightPeak": 0.782,
+   "strikeAxis": "upward",
+   "airborneFrames": [
+    7,
+    28
+   ],
+   "cueTrack": [
+    {
+     "at": 0.1,
+     "type": "sfx",
+     "key": "wind",
+     "trigger": "movement",
+     "on": "always"
+    },
+    {
+     "at": 0.1167,
+     "type": "sfx",
+     "key": "wind",
+     "trigger": "movement",
+     "on": "always"
+    },
+    {
+     "at": 0.15,
+     "type": "sfx",
+     "key": "hit",
+     "trigger": "contact",
+     "on": "hit"
+    },
+    {
+     "at": 0.15,
+     "type": "vfx",
+     "key": "hit",
+     "trigger": "contact",
+     "on": "hit",
+     "bone": "tail_03"
+    },
+    {
+     "at": 0.15,
+     "type": "shake",
+     "key": 0.008,
+     "trigger": "contact",
+     "on": "hit"
+    },
+    {
+     "at": 0.15,
+     "type": "sfx",
+     "key": "block",
+     "trigger": "contact",
+     "on": "guard"
+    },
+    {
+     "at": 0.15,
+     "type": "vfx",
+     "key": "block",
+     "trigger": "contact",
+     "on": "guard",
+     "bone": "tail_03"
+    },
+    {
+     "at": 0.4667,
+     "type": "sfx",
+     "key": "clinch",
+     "trigger": "movement",
+     "on": "always"
+    },
+    {
+     "at": 0.4667,
+     "type": "vfx",
+     "key": "roar",
+     "trigger": "movement",
+     "on": "always",
+     "bone": "root_ground"
+    }
+   ],
+   "hitstopSuggest": {
+    "hit": 6,
+    "guard": 3
+   },
+   "status": "ok"
+  },
+  "s3": {
+   "clip": "s3_v17",
+   "name": "尾薙ぎ",
+   "origin": "v14 re-export",
+   "kind": "strike",
+   "weight": "heavy",
+   "role": "長距離決定打",
+   "frames": 48,
+   "contactSeconds": 0.3167,
+   "contact": 0.3958,
+   "contactEnd": 0.5,
+   "attackPart": "tail",
+   "attackLimb": "tail",
+   "reach": 0.473,
+   "reachPeak": 0.682,
+   "reachPeakPhase": 1,
+   "height": 0.253,
+   "reachMeans": "striking surface",
+   "activeReach": [
+    {
+     "phase": 0,
+     "reach": 0.473,
+     "height": 0.207
+    },
+    {
+     "phase": 0.5,
+     "reach": 0.615,
+     "height": 0.253
+    },
+    {
+     "phase": 1,
+     "reach": 0.682,
+     "height": 0.253
+    }
+   ],
+   "referenceFrames": {
+    "startup": 19,
+    "active": 6,
+    "recovery": 23
+   },
+   "heightPeak": 0.253,
+   "strikeAxis": "forward",
+   "cueTrack": [
+    {
+     "at": 0,
+     "type": "sfx",
+     "key": "grunt",
+     "trigger": "movement",
+     "on": "always"
+    },
+    {
+     "at": 0.2667,
+     "type": "sfx",
+     "key": "wind",
+     "trigger": "movement",
+     "on": "always"
+    },
+    {
+     "at": 0.3167,
+     "type": "sfx",
+     "key": "crash",
+     "trigger": "contact",
+     "on": "hit"
+    },
+    {
+     "at": 0.3167,
+     "type": "vfx",
+     "key": "hit",
+     "trigger": "contact",
+     "on": "hit",
+     "bone": "tail_03"
+    },
+    {
+     "at": 0.3167,
+     "type": "shake",
+     "key": 0.016,
+     "trigger": "contact",
+     "on": "hit"
+    },
+    {
+     "at": 0.3167,
+     "type": "sfx",
+     "key": "block",
+     "trigger": "contact",
+     "on": "guard"
+    },
+    {
+     "at": 0.3167,
+     "type": "vfx",
+     "key": "block",
+     "trigger": "contact",
+     "on": "guard",
+     "bone": "tail_03"
+    }
+   ],
+   "hitstopSuggest": {
+    "hit": 9,
+    "guard": 5
+   },
+   "status": "ok"
+  }
+ },
+ "dark_moguzo": {
+  "s1": {
+   "clip": "s1_v17",
+   "name": "黒い地走波",
+   "origin": "v17 revised",
+   "kind": "projectile",
+   "weight": "light",
+   "role": "高速牽制",
+   "frames": 31,
+   "contactSeconds": 0.1833,
+   "contact": 0.3548,
+   "contactEnd": 0.3548,
+   "attackPart": "armR",
+   "attackLimb": "pawR",
+   "reach": 0.39,
+   "reachPeak": 0.39,
+   "reachPeakPhase": 0,
+   "height": 0.218,
+   "reachMeans": "release point (not projectile range)",
+   "activeReach": [
+    {
+     "phase": 0,
+     "reach": 0.39,
+     "height": 0.218
+    },
+    {
+     "phase": 0.5,
+     "reach": 0.39,
+     "height": 0.218
+    },
+    {
+     "phase": 1,
+     "reach": 0.39,
+     "height": 0.218
+    }
+   ],
+   "referenceFrames": {
+    "startup": 11,
+    "active": 1,
+    "recovery": 19
+   },
+   "heightPeak": 0.218,
+   "strikeAxis": "forward",
+   "projectileSpawnFrame": 11,
+   "cueTrack": [
+    {
+     "at": 0.1833,
+     "type": "sfx",
+     "key": "special",
+     "trigger": "movement",
+     "on": "always"
+    },
+    {
+     "at": 0.1833,
+     "type": "vfx",
+     "key": "special",
+     "trigger": "movement",
+     "on": "always",
+     "bone": "pawR"
+    }
+   ],
+   "hitstopSuggest": {
+    "hit": 4,
+    "guard": 2
+   },
+   "status": "ok"
+  },
+  "s2": {
+   "clip": "s2_v17",
+   "name": "逆昇撃",
+   "origin": "v14 re-export",
+   "kind": "antiair",
+   "weight": "mid",
+   "role": "連携後の切返し",
+   "frames": 44,
+   "contactSeconds": 0.0833,
+   "contact": 0.1136,
+   "contactEnd": 0.2727,
+   "attackPart": "armL",
+   "attackLimb": "pawL",
+   "reach": 0.259,
+   "reachPeak": 0.264,
+   "reachPeakPhase": 0.125,
+   "height": 0.553,
+   "reachMeans": "striking surface",
+   "activeReach": [
+    {
+     "phase": 0,
+     "reach": 0.259,
+     "height": 0.471
+    },
+    {
+     "phase": 0.5,
+     "reach": 0.264,
+     "height": 0.562
+    },
+    {
+     "phase": 1,
+     "reach": 0.264,
+     "height": 0.569
+    }
+   ],
+   "referenceFrames": {
+    "startup": 5,
+    "active": 8,
+    "recovery": 31
+   },
+   "heightPeak": 0.569,
+   "strikeAxis": "upward",
+   "airborneFrames": [
+    4,
+    26
+   ],
+   "cueTrack": [
+    {
+     "at": 0.0333,
+     "type": "sfx",
+     "key": "wind",
+     "trigger": "movement",
+     "on": "always"
+    },
+    {
+     "at": 0.0667,
+     "type": "sfx",
+     "key": "wind",
+     "trigger": "movement",
+     "on": "always"
+    },
+    {
+     "at": 0.0833,
+     "type": "sfx",
+     "key": "hit",
+     "trigger": "contact",
+     "on": "hit"
+    },
+    {
+     "at": 0.0833,
+     "type": "vfx",
+     "key": "hit",
+     "trigger": "contact",
+     "on": "hit",
+     "bone": "pawL"
+    },
+    {
+     "at": 0.0833,
+     "type": "shake",
+     "key": 0.008,
+     "trigger": "contact",
+     "on": "hit"
+    },
+    {
+     "at": 0.0833,
+     "type": "sfx",
+     "key": "block",
+     "trigger": "contact",
+     "on": "guard"
+    },
+    {
+     "at": 0.0833,
+     "type": "vfx",
+     "key": "block",
+     "trigger": "contact",
+     "on": "guard",
+     "bone": "pawL"
+    },
+    {
+     "at": 0.4333,
+     "type": "sfx",
+     "key": "clinch",
+     "trigger": "movement",
+     "on": "always"
+    },
+    {
+     "at": 0.4333,
+     "type": "vfx",
+     "key": "roar",
+     "trigger": "movement",
+     "on": "always",
+     "bone": "root_ground"
+    }
+   ],
+   "hitstopSuggest": {
+    "hit": 6,
+    "guard": 3
+   },
+   "status": "ok"
+  },
+  "s3": {
+   "clip": "s3_v17",
+   "name": "暗連",
+   "origin": "v14 re-export",
+   "kind": "rush",
+   "weight": "light",
+   "role": "高速連携の起点",
+   "frames": 40,
+   "contactSeconds": 0.1167,
+   "contact": 0.175,
+   "contactEnd": 0.375,
+   "attackPart": "armL",
+   "attackLimb": "pawL+pawR",
+   "reach": 0.461,
+   "reachPeak": 0.531,
+   "reachPeakPhase": 0.875,
+   "height": 0.345,
+   "reachMeans": "striking surface",
+   "activeReach": [
+    {
+     "phase": 0,
+     "reach": 0.461,
+     "height": 0.146
+    },
+    {
+     "phase": 0.5,
+     "reach": 0.49,
+     "height": 0.293
+    },
+    {
+     "phase": 1,
+     "reach": 0.531,
+     "height": 0.345
+    }
+   ],
+   "referenceFrames": {
+    "startup": 7,
+    "active": 9,
+    "recovery": 24
+   },
+   "heightPeak": 0.438,
+   "strikeAxis": "forward",
+   "cueTrack": [
+    {
+     "at": 0.0667,
+     "type": "sfx",
+     "key": "wind",
+     "trigger": "movement",
+     "on": "always"
+    },
+    {
+     "at": 0.1167,
+     "type": "sfx",
+     "key": "hit",
+     "trigger": "contact",
+     "on": "hit"
+    },
+    {
+     "at": 0.1167,
+     "type": "vfx",
+     "key": "hit",
+     "trigger": "contact",
+     "on": "hit",
+     "bone": "pawR"
+    },
+    {
+     "at": 0.1167,
+     "type": "sfx",
+     "key": "block",
+     "trigger": "contact",
+     "on": "guard"
+    },
+    {
+     "at": 0.1167,
+     "type": "vfx",
+     "key": "block",
+     "trigger": "contact",
+     "on": "guard",
+     "bone": "pawR"
+    }
+   ],
+   "hitstopSuggest": {
+    "hit": 4,
+    "guard": 2
+   },
+   "status": "ok"
+  }
+ }
+}

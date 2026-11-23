@@ -122,3 +122,16 @@ test('special pose clock aligns source contact to Battle startup and finishes on
   assert.equal(customSpecialTime(move.startup,move,spec,.9),.28);
   assert.equal(customSpecialTime(999,move,spec,.9),.9);
 });
+test('custom measured air strikes retain signed height while ground/nonfinite data is rejected',()=>{
+  const definition=createDefaultAvatar('bullet');
+  const measurement={source:'runtime-skinned-mesh',normals:structuredClone(NORMAL_CONTACTS.bullet),hurtBounds:structuredClone(NORMAL_HURT_BOUNDS.bullet),projectileSocket:{forward:.22,height:.32}};
+  measurement.normals.air_heavy.height=-.17;measurement.normals.air_heavy.activeReach.forEach(point=>point.height=-.17);
+  const g=createCustomBattle(definition,'chirka',1,{measurements:[measurement]}),p=g.fighters[0];
+  assert.ok(g._begin(p,{},'air_heavy'));assert.equal(p.action.strikeHeight,-.17);assert.equal(p.action.customContact.height,-.17);
+  const invalid=structuredClone(measurement);invalid.normals.stand_heavy.height=-.17;
+  assert.throws(()=>createCustomBattle(definition,'chirka',1,{measurements:[invalid]}),/通常技計測/);
+  const invalidActive=structuredClone(measurement);invalidActive.normals.stand_heavy.activeReach[1].height=-.17;
+  assert.throws(()=>createCustomBattle(definition,'chirka',1,{measurements:[invalidActive]}),/通常技計測/);
+  const infinite=structuredClone(measurement);infinite.normals.air_heavy.height=NaN;
+  assert.throws(()=>createCustomBattle(definition,'chirka',1,{measurements:[infinite]}),/通常技計測/);
+});

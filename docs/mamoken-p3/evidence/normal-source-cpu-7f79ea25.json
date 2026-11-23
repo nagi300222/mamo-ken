@@ -1,0 +1,2614 @@
+{
+  "passed": false,
+  "failures": [
+    {
+      "id": "moguzo",
+      "slot": "stand_heavy",
+      "errors": [
+        {
+          "phase": 0,
+          "reach": 0.030299999999999994,
+          "height": 0.0040000000000000036
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.00030000000000002247,
+          "height": 0
+        },
+        {
+          "phase": 1,
+          "reach": 0.005300000000000027,
+          "height": 0.0010000000000000009
+        }
+      ],
+      "actual": [
+        {
+          "phase": 0,
+          "reach": 0.4953,
+          "height": 0.296
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.4953,
+          "height": 0.296
+        },
+        {
+          "phase": 1,
+          "reach": 0.4953,
+          "height": 0.296
+        }
+      ],
+      "reference": [
+        {
+          "phase": 0,
+          "reach": 0.465,
+          "height": 0.3
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.495,
+          "height": 0.296
+        },
+        {
+          "phase": 1,
+          "reach": 0.49,
+          "height": 0.297
+        }
+      ]
+    },
+    {
+      "id": "moguzo",
+      "slot": "crouch_heavy",
+      "errors": [
+        {
+          "phase": 0,
+          "reach": 0.01789999999999997,
+          "height": 0.004500000000000004
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.00009999999999998899,
+          "height": 0.0005000000000000004
+        },
+        {
+          "phase": 1,
+          "reach": 0.002899999999999958,
+          "height": 0.0005000000000000004
+        }
+      ],
+      "actual": [
+        {
+          "phase": 0,
+          "reach": 0.4689,
+          "height": 0.1655
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.4689,
+          "height": 0.1655
+        },
+        {
+          "phase": 1,
+          "reach": 0.4689,
+          "height": 0.1655
+        }
+      ],
+      "reference": [
+        {
+          "phase": 0,
+          "reach": 0.451,
+          "height": 0.17
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.469,
+          "height": 0.166
+        },
+        {
+          "phase": 1,
+          "reach": 0.466,
+          "height": 0.166
+        }
+      ]
+    },
+    {
+      "id": "pisuke",
+      "slot": "stand_heavy",
+      "errors": [
+        {
+          "phase": 0,
+          "reach": 0.016699999999999993,
+          "height": 0.016000000000000014
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.00030000000000002247,
+          "height": 0
+        },
+        {
+          "phase": 1,
+          "reach": 0.008699999999999986,
+          "height": 0.0050000000000000044
+        }
+      ],
+      "actual": [
+        {
+          "phase": 0,
+          "reach": 0.3917,
+          "height": 0.262
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.3917,
+          "height": 0.262
+        },
+        {
+          "phase": 1,
+          "reach": 0.3917,
+          "height": 0.262
+        }
+      ],
+      "reference": [
+        {
+          "phase": 0,
+          "reach": 0.375,
+          "height": 0.246
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.392,
+          "height": 0.262
+        },
+        {
+          "phase": 1,
+          "reach": 0.383,
+          "height": 0.257
+        }
+      ]
+    },
+    {
+      "id": "pisuke",
+      "slot": "crouch_heavy",
+      "errors": [
+        {
+          "phase": 0,
+          "reach": 0.019399999999999973,
+          "height": 0.003600000000000006
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.00040000000000001146,
+          "height": 0.0003999999999999976
+        },
+        {
+          "phase": 1,
+          "reach": 0.004400000000000015,
+          "height": 0.002600000000000005
+        }
+      ],
+      "actual": [
+        {
+          "phase": 0,
+          "reach": 0.4114,
+          "height": 0.0476
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.4114,
+          "height": 0.0476
+        },
+        {
+          "phase": 1,
+          "reach": 0.4114,
+          "height": 0.0476
+        }
+      ],
+      "reference": [
+        {
+          "phase": 0,
+          "reach": 0.392,
+          "height": 0.044
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.411,
+          "height": 0.048
+        },
+        {
+          "phase": 1,
+          "reach": 0.407,
+          "height": 0.045
+        }
+      ]
+    },
+    {
+      "id": "godan",
+      "slot": "stand_heavy",
+      "errors": [
+        {
+          "phase": 0,
+          "reach": 0.045399999999999996,
+          "height": 0.03669999999999998
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.00040000000000006697,
+          "height": 0.0002999999999999947
+        },
+        {
+          "phase": 1,
+          "reach": 0.0024000000000000687,
+          "height": 0.005299999999999999
+        }
+      ],
+      "actual": [
+        {
+          "phase": 0,
+          "reach": 0.6064,
+          "height": 0.2463
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.6064,
+          "height": 0.2463
+        },
+        {
+          "phase": 1,
+          "reach": 0.6064,
+          "height": 0.2463
+        }
+      ],
+      "reference": [
+        {
+          "phase": 0,
+          "reach": 0.561,
+          "height": 0.283
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.606,
+          "height": 0.246
+        },
+        {
+          "phase": 1,
+          "reach": 0.604,
+          "height": 0.241
+        }
+      ]
+    },
+    {
+      "id": "godan",
+      "slot": "crouch_heavy",
+      "errors": [
+        {
+          "phase": 0,
+          "reach": 0.01639999999999997,
+          "height": 0.004500000000000004
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.00040000000000006697,
+          "height": 0.0005000000000000004
+        },
+        {
+          "phase": 1,
+          "reach": 0.0024000000000000687,
+          "height": 0.0015000000000000013
+        }
+      ],
+      "actual": [
+        {
+          "phase": 0,
+          "reach": 0.5684,
+          "height": 0.3415
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.5684,
+          "height": 0.3415
+        },
+        {
+          "phase": 1,
+          "reach": 0.5684,
+          "height": 0.3415
+        }
+      ],
+      "reference": [
+        {
+          "phase": 0,
+          "reach": 0.552,
+          "height": 0.337
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.568,
+          "height": 0.342
+        },
+        {
+          "phase": 1,
+          "reach": 0.566,
+          "height": 0.343
+        }
+      ]
+    },
+    {
+      "id": "godan",
+      "slot": "air_weak",
+      "errors": [
+        {
+          "phase": 0,
+          "reach": 0.005799999999999972,
+          "height": 0.020100000000000007
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.00019999999999997797,
+          "height": 0.00009999999999998899
+        },
+        {
+          "phase": 1,
+          "reach": 0.002799999999999969,
+          "height": 0.008099999999999996
+        }
+      ],
+      "actual": [
+        {
+          "phase": 0,
+          "reach": 0.2838,
+          "height": 0.3659
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.2838,
+          "height": 0.3659
+        },
+        {
+          "phase": 1,
+          "reach": 0.2838,
+          "height": 0.3659
+        }
+      ],
+      "reference": [
+        {
+          "phase": 0,
+          "reach": 0.278,
+          "height": 0.386
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.284,
+          "height": 0.366
+        },
+        {
+          "phase": 1,
+          "reach": 0.281,
+          "height": 0.374
+        }
+      ]
+    },
+    {
+      "id": "godan",
+      "slot": "air_heavy",
+      "errors": [
+        {
+          "phase": 0,
+          "reach": 0.010399999999999965,
+          "height": 0.0242
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.00040000000000001146,
+          "height": 0.00019999999999997797
+        },
+        {
+          "phase": 1,
+          "reach": 0.00040000000000001146,
+          "height": 0.00019999999999997797
+        }
+      ],
+      "actual": [
+        {
+          "phase": 0,
+          "reach": 0.4704,
+          "height": 0.2388
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.4704,
+          "height": 0.2388
+        },
+        {
+          "phase": 1,
+          "reach": 0.4704,
+          "height": 0.2388
+        }
+      ],
+      "reference": [
+        {
+          "phase": 0,
+          "reach": 0.46,
+          "height": 0.263
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.47,
+          "height": 0.239
+        },
+        {
+          "phase": 1,
+          "reach": 0.47,
+          "height": 0.239
+        }
+      ]
+    },
+    {
+      "id": "hakuma",
+      "slot": "crouch_heavy",
+      "errors": [
+        {
+          "phase": 0,
+          "reach": 0.008799999999999975,
+          "height": 0.017699999999999994
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.00019999999999997797,
+          "height": 0.00030000000000002247
+        },
+        {
+          "phase": 1,
+          "reach": 0.0008000000000000229,
+          "height": 0.0006999999999999784
+        }
+      ],
+      "actual": [
+        {
+          "phase": 0,
+          "reach": 0.4148,
+          "height": 0.2513
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.4148,
+          "height": 0.2513
+        },
+        {
+          "phase": 1,
+          "reach": 0.4148,
+          "height": 0.2513
+        }
+      ],
+      "reference": [
+        {
+          "phase": 0,
+          "reach": 0.406,
+          "height": 0.269
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.415,
+          "height": 0.251
+        },
+        {
+          "phase": 1,
+          "reach": 0.414,
+          "height": 0.252
+        }
+      ]
+    },
+    {
+      "id": "hakuma",
+      "slot": "air_heavy",
+      "errors": [
+        {
+          "phase": 0,
+          "reach": 0.007399999999999962,
+          "height": 0.020600000000000007
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.00039999999999995595,
+          "height": 0.00040000000000001146
+        },
+        {
+          "phase": 1,
+          "reach": 0.0006000000000000449,
+          "height": 0.0014000000000000123
+        }
+      ],
+      "actual": [
+        {
+          "phase": 0,
+          "reach": 0.4604,
+          "height": 0.3704
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.4604,
+          "height": 0.3704
+        },
+        {
+          "phase": 1,
+          "reach": 0.4604,
+          "height": 0.3704
+        }
+      ],
+      "reference": [
+        {
+          "phase": 0,
+          "reach": 0.453,
+          "height": 0.391
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.46,
+          "height": 0.37
+        },
+        {
+          "phase": 1,
+          "reach": 0.461,
+          "height": 0.369
+        }
+      ]
+    },
+    {
+      "id": "chirka",
+      "slot": "stand_heavy",
+      "errors": [
+        {
+          "phase": 0,
+          "reach": 0.015400000000000025,
+          "height": 0.005799999999999972
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.00040000000000001146,
+          "height": 0.00020000000000003348
+        },
+        {
+          "phase": 1,
+          "reach": 0.003400000000000014,
+          "height": 0.0012000000000000344
+        }
+      ],
+      "actual": [
+        {
+          "phase": 0,
+          "reach": 0.4494,
+          "height": 0.3052
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.4494,
+          "height": 0.3052
+        },
+        {
+          "phase": 1,
+          "reach": 0.4494,
+          "height": 0.3052
+        }
+      ],
+      "reference": [
+        {
+          "phase": 0,
+          "reach": 0.434,
+          "height": 0.311
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.449,
+          "height": 0.305
+        },
+        {
+          "phase": 1,
+          "reach": 0.446,
+          "height": 0.304
+        }
+      ]
+    },
+    {
+      "id": "chirka",
+      "slot": "air_heavy",
+      "errors": [
+        {
+          "phase": 0,
+          "reach": 0.04350000000000004,
+          "height": 0.0721
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.0005000000000000004,
+          "height": 0.00009999999999998899
+        },
+        {
+          "phase": 1,
+          "reach": 0.0025000000000000022,
+          "height": 0.0009000000000000119
+        }
+      ],
+      "actual": [
+        {
+          "phase": 0,
+          "reach": 0.3935,
+          "height": 0.1499
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.3935,
+          "height": 0.1499
+        },
+        {
+          "phase": 1,
+          "reach": 0.3935,
+          "height": 0.1499
+        }
+      ],
+      "reference": [
+        {
+          "phase": 0,
+          "reach": 0.35,
+          "height": 0.222
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.394,
+          "height": 0.15
+        },
+        {
+          "phase": 1,
+          "reach": 0.391,
+          "height": 0.149
+        }
+      ]
+    },
+    {
+      "id": "takimaru",
+      "slot": "stand_heavy",
+      "errors": [
+        {
+          "phase": 0,
+          "reach": 0.005299999999999971,
+          "height": 0.019000000000000017
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.00029999999999996696,
+          "height": 0
+        },
+        {
+          "phase": 1,
+          "reach": 0.00029999999999996696,
+          "height": 0.0010000000000000009
+        }
+      ],
+      "actual": [
+        {
+          "phase": 0,
+          "reach": 0.4443,
+          "height": 0.259
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.4443,
+          "height": 0.259
+        },
+        {
+          "phase": 1,
+          "reach": 0.4443,
+          "height": 0.259
+        }
+      ],
+      "reference": [
+        {
+          "phase": 0,
+          "reach": 0.439,
+          "height": 0.278
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.444,
+          "height": 0.259
+        },
+        {
+          "phase": 1,
+          "reach": 0.444,
+          "height": 0.26
+        }
+      ]
+    },
+    {
+      "id": "takimaru",
+      "slot": "crouch_heavy",
+      "errors": [
+        {
+          "phase": 0,
+          "reach": 0.00770000000000004,
+          "height": 0.044299999999999895
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.00029999999999996696,
+          "height": 0.00029999999999996696
+        },
+        {
+          "phase": 1,
+          "reach": 0.0037000000000000366,
+          "height": 0.0047000000000000375
+        }
+      ],
+      "actual": [
+        {
+          "phase": 0,
+          "reach": 0.5227,
+          "height": 0.6063
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.5227,
+          "height": 0.6063
+        },
+        {
+          "phase": 1,
+          "reach": 0.5227,
+          "height": 0.6063
+        }
+      ],
+      "reference": [
+        {
+          "phase": 0,
+          "reach": 0.515,
+          "height": 0.562
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.523,
+          "height": 0.606
+        },
+        {
+          "phase": 1,
+          "reach": 0.519,
+          "height": 0.611
+        }
+      ]
+    },
+    {
+      "id": "takimaru",
+      "slot": "air_heavy",
+      "errors": [
+        {
+          "phase": 0,
+          "reach": 0.008699999999999986,
+          "height": 0.023099999999999954
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.00030000000000002247,
+          "height": 0.00009999999999998899
+        },
+        {
+          "phase": 1,
+          "reach": 0.00030000000000002247,
+          "height": 0.0019000000000000128
+        }
+      ],
+      "actual": [
+        {
+          "phase": 0,
+          "reach": 0.4657,
+          "height": 0.3309
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.4657,
+          "height": 0.3309
+        },
+        {
+          "phase": 1,
+          "reach": 0.4657,
+          "height": 0.3309
+        }
+      ],
+      "reference": [
+        {
+          "phase": 0,
+          "reach": 0.457,
+          "height": 0.354
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.466,
+          "height": 0.331
+        },
+        {
+          "phase": 1,
+          "reach": 0.466,
+          "height": 0.329
+        }
+      ]
+    },
+    {
+      "id": "yomikage",
+      "slot": "stand_heavy",
+      "errors": [
+        {
+          "phase": 0,
+          "reach": 0.042700000000000016,
+          "height": 0.018500000000000016
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.00030000000000002247,
+          "height": 0.0005000000000000004
+        },
+        {
+          "phase": 1,
+          "reach": 0.00269999999999998,
+          "height": 0.0005000000000000004
+        }
+      ],
+      "actual": [
+        {
+          "phase": 0,
+          "reach": 0.4677,
+          "height": 0.3775
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.4677,
+          "height": 0.3775
+        },
+        {
+          "phase": 1,
+          "reach": 0.4677,
+          "height": 0.3775
+        }
+      ],
+      "reference": [
+        {
+          "phase": 0,
+          "reach": 0.425,
+          "height": 0.396
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.468,
+          "height": 0.378
+        },
+        {
+          "phase": 1,
+          "reach": 0.465,
+          "height": 0.377
+        }
+      ]
+    },
+    {
+      "id": "yomikage",
+      "slot": "air_heavy",
+      "errors": [
+        {
+          "phase": 0,
+          "reach": 0.007500000000000007,
+          "height": 0.0295
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.0005000000000000004,
+          "height": 0.0005000000000000004
+        },
+        {
+          "phase": 1,
+          "reach": 0.0015000000000000013,
+          "height": 0.0005000000000000004
+        }
+      ],
+      "actual": [
+        {
+          "phase": 0,
+          "reach": 0.2685,
+          "height": 0.2215
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.2685,
+          "height": 0.2215
+        },
+        {
+          "phase": 1,
+          "reach": 0.2685,
+          "height": 0.2215
+        }
+      ],
+      "reference": [
+        {
+          "phase": 0,
+          "reach": 0.261,
+          "height": 0.251
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.269,
+          "height": 0.222
+        },
+        {
+          "phase": 1,
+          "reach": 0.267,
+          "height": 0.222
+        }
+      ]
+    },
+    {
+      "id": "bullet",
+      "slot": "air_heavy",
+      "errors": [
+        {
+          "phase": 0,
+          "reach": 0.0017000000000000348,
+          "height": 0.0724
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.0035000000000000586,
+          "height": 0.1621
+        },
+        {
+          "phase": 1,
+          "reach": 0.00009999999999998899,
+          "height": 0.1697
+        }
+      ],
+      "actual": [
+        {
+          "phase": 0,
+          "reach": 0.5827,
+          "height": -0.0724
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.5485,
+          "height": -0.1621
+        },
+        {
+          "phase": 1,
+          "reach": 0.5491,
+          "height": -0.1697
+        }
+      ],
+      "reference": [
+        {
+          "phase": 0,
+          "reach": 0.581,
+          "height": 0
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.552,
+          "height": 0
+        },
+        {
+          "phase": 1,
+          "reach": 0.549,
+          "height": 0
+        }
+      ]
+    },
+    {
+      "id": "dark_moguzo",
+      "slot": "crouch_heavy",
+      "errors": [
+        {
+          "phase": 0,
+          "reach": 0.01799999999999996,
+          "height": 0.009599999999999997
+        },
+        {
+          "phase": 0.5,
+          "reach": 0,
+          "height": 0.0003999999999999976
+        },
+        {
+          "phase": 1,
+          "reach": 0.007000000000000006,
+          "height": 0.0006000000000000033
+        }
+      ],
+      "actual": [
+        {
+          "phase": 0,
+          "reach": 0.48,
+          "height": 0.0726
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.48,
+          "height": 0.0726
+        },
+        {
+          "phase": 1,
+          "reach": 0.48,
+          "height": 0.0726
+        }
+      ],
+      "reference": [
+        {
+          "phase": 0,
+          "reach": 0.462,
+          "height": 0.063
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.48,
+          "height": 0.073
+        },
+        {
+          "phase": 1,
+          "reach": 0.473,
+          "height": 0.072
+        }
+      ]
+    },
+    {
+      "id": "dark_moguzo",
+      "slot": "air_weak",
+      "errors": [
+        {
+          "phase": 0,
+          "reach": 0.016100000000000003,
+          "height": 0.0063
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.00009999999999998899,
+          "height": 0.0002999999999999947
+        },
+        {
+          "phase": 1,
+          "reach": 0.006099999999999994,
+          "height": 0.0032999999999999974
+        }
+      ],
+      "actual": [
+        {
+          "phase": 0,
+          "reach": 0.3111,
+          "height": 0.2157
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.3111,
+          "height": 0.2157
+        },
+        {
+          "phase": 1,
+          "reach": 0.3111,
+          "height": 0.2157
+        }
+      ],
+      "reference": [
+        {
+          "phase": 0,
+          "reach": 0.295,
+          "height": 0.222
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.311,
+          "height": 0.216
+        },
+        {
+          "phase": 1,
+          "reach": 0.305,
+          "height": 0.219
+        }
+      ]
+    }
+  ],
+  "revision": "7f79ea25",
+  "activeVersion": "v15",
+  "candidateVersion": "v17",
+  "note": "Actual GLTFLoader, 54 clips on original modular skins, CPU skin/morph/contact clocks. Image decoding stubbed. No actual GPU/iPhone performance claim.",
+  "results": [
+    {
+      "id": "moguzo",
+      "moves": [
+        {
+          "slot": "stand_weak",
+          "clip": "v17_stand_weak",
+          "tracks": 128,
+          "morphTargets": 8,
+          "errors": [
+            {
+              "phase": 0,
+              "reach": 0.004799999999999971,
+              "height": 0.0009000000000000119
+            },
+            {
+              "phase": 0.5,
+              "reach": 0.00020000000000003348,
+              "height": 0.00009999999999998899
+            },
+            {
+              "phase": 1,
+              "reach": 0.00379999999999997,
+              "height": 0.0009000000000000119
+            }
+          ],
+          "contactSeconds": 0.1500000006386212,
+          "surfaceOK": true
+        },
+        {
+          "slot": "stand_heavy",
+          "clip": "v17_stand_heavy",
+          "tracks": 128,
+          "morphTargets": 8,
+          "errors": [
+            {
+              "phase": 0,
+              "reach": 0.030299999999999994,
+              "height": 0.0040000000000000036
+            },
+            {
+              "phase": 0.5,
+              "reach": 0.00030000000000002247,
+              "height": 0
+            },
+            {
+              "phase": 1,
+              "reach": 0.005300000000000027,
+              "height": 0.0010000000000000009
+            }
+          ],
+          "contactSeconds": 0.28333332745925244,
+          "surfaceOK": false
+        },
+        {
+          "slot": "crouch_weak",
+          "clip": "v17_crouch_weak",
+          "tracks": 128,
+          "morphTargets": 8,
+          "errors": [
+            {
+              "phase": 0,
+              "reach": 0.008199999999999985,
+              "height": 0.00739999999999999
+            },
+            {
+              "phase": 0.5,
+              "reach": 0.00019999999999997797,
+              "height": 0.0003999999999999837
+            },
+            {
+              "phase": 1,
+              "reach": 0.0021999999999999797,
+              "height": 0.0006000000000000172
+            }
+          ],
+          "contactSeconds": 0.1500000006386212,
+          "surfaceOK": true
+        },
+        {
+          "slot": "crouch_heavy",
+          "clip": "v17_crouch_heavy",
+          "tracks": 128,
+          "morphTargets": 8,
+          "errors": [
+            {
+              "phase": 0,
+              "reach": 0.01789999999999997,
+              "height": 0.004500000000000004
+            },
+            {
+              "phase": 0.5,
+              "reach": 0.00009999999999998899,
+              "height": 0.0005000000000000004
+            },
+            {
+              "phase": 1,
+              "reach": 0.002899999999999958,
+              "height": 0.0005000000000000004
+            }
+          ],
+          "contactSeconds": 0.2833333274592524,
+          "surfaceOK": false
+        },
+        {
+          "slot": "air_weak",
+          "clip": "v17_air_weak",
+          "tracks": 128,
+          "morphTargets": 8,
+          "errors": [
+            {
+              "phase": 0,
+              "reach": 0.0040000000000000036,
+              "height": 0.003799999999999998
+            },
+            {
+              "phase": 0.5,
+              "reach": 0,
+              "height": 0.00020000000000000573
+            },
+            {
+              "phase": 1,
+              "reach": 0.0040000000000000036,
+              "height": 0.0007999999999999952
+            }
+          ],
+          "contactSeconds": 0.1500000006386212,
+          "surfaceOK": true
+        },
+        {
+          "slot": "air_heavy",
+          "clip": "v17_air_heavy",
+          "tracks": 128,
+          "morphTargets": 8,
+          "errors": [
+            {
+              "phase": 0,
+              "reach": 0.0030000000000000027,
+              "height": 0.00020000000000000573
+            },
+            {
+              "phase": 0.5,
+              "reach": 0,
+              "height": 0.00020000000000000573
+            },
+            {
+              "phase": 1,
+              "reach": 0.0010000000000000009,
+              "height": 0.002799999999999997
+            }
+          ],
+          "contactSeconds": 0.2833333274592524,
+          "surfaceOK": true
+        }
+      ],
+      "hurtBounds": {
+        "stand": {
+          "bottom": 0,
+          "top": 0.5733
+        },
+        "crouch": {
+          "bottom": 0,
+          "top": 0.442
+        }
+      },
+      "originalSHA256": "8f25428c14e9cc58fe229367a1a2324cb9d6bdd716c2306b26c5061e82e44fdd",
+      "partsSHA256": "b30a934c5176bf788756bf9ba06360b2600b8c3f75186ef6976575fe207253c9"
+    },
+    {
+      "id": "pisuke",
+      "moves": [
+        {
+          "slot": "stand_weak",
+          "clip": "v17_stand_weak",
+          "tracks": 116,
+          "morphTargets": 8,
+          "errors": [
+            {
+              "phase": 0,
+              "reach": 0.0032999999999999696,
+              "height": 0.0016000000000000458
+            },
+            {
+              "phase": 0.5,
+              "reach": 0.00029999999999996696,
+              "height": 0.00039999999999995595
+            },
+            {
+              "phase": 1,
+              "reach": 0.0042999999999999705,
+              "height": 0.0013999999999999568
+            }
+          ],
+          "contactSeconds": 0.1500000006386212,
+          "surfaceOK": true
+        },
+        {
+          "slot": "stand_heavy",
+          "clip": "v17_stand_heavy",
+          "tracks": 116,
+          "morphTargets": 8,
+          "errors": [
+            {
+              "phase": 0,
+              "reach": 0.016699999999999993,
+              "height": 0.016000000000000014
+            },
+            {
+              "phase": 0.5,
+              "reach": 0.00030000000000002247,
+              "height": 0
+            },
+            {
+              "phase": 1,
+              "reach": 0.008699999999999986,
+              "height": 0.0050000000000000044
+            }
+          ],
+          "contactSeconds": 0.2833333274592524,
+          "surfaceOK": false
+        },
+        {
+          "slot": "crouch_weak",
+          "clip": "v17_crouch_weak",
+          "tracks": 116,
+          "morphTargets": 8,
+          "errors": [
+            {
+              "phase": 0,
+              "reach": 0.005699999999999983,
+              "height": 0.0016999999999999932
+            },
+            {
+              "phase": 0.5,
+              "reach": 0.00030000000000002247,
+              "height": 0.0003000000000000086
+            },
+            {
+              "phase": 1,
+              "reach": 0.0016999999999999793,
+              "height": 0.0006999999999999923
+            }
+          ],
+          "contactSeconds": 0.1500000006386212,
+          "surfaceOK": true
+        },
+        {
+          "slot": "crouch_heavy",
+          "clip": "v17_crouch_heavy",
+          "tracks": 116,
+          "morphTargets": 8,
+          "errors": [
+            {
+              "phase": 0,
+              "reach": 0.019399999999999973,
+              "height": 0.003600000000000006
+            },
+            {
+              "phase": 0.5,
+              "reach": 0.00040000000000001146,
+              "height": 0.0003999999999999976
+            },
+            {
+              "phase": 1,
+              "reach": 0.004400000000000015,
+              "height": 0.002600000000000005
+            }
+          ],
+          "contactSeconds": 0.2833333274592524,
+          "surfaceOK": false
+        },
+        {
+          "slot": "air_weak",
+          "clip": "v17_air_weak",
+          "tracks": 116,
+          "morphTargets": 8,
+          "errors": [
+            {
+              "phase": 0,
+              "reach": 0.0038000000000000256,
+              "height": 0.005899999999999989
+            },
+            {
+              "phase": 0.5,
+              "reach": 0.00019999999999997797,
+              "height": 0.00010000000000001674
+            },
+            {
+              "phase": 1,
+              "reach": 0.0038000000000000256,
+              "height": 0.003899999999999987
+            }
+          ],
+          "contactSeconds": 0.1500000006386212,
+          "surfaceOK": true
+        },
+        {
+          "slot": "air_heavy",
+          "clip": "v17_air_heavy",
+          "tracks": 116,
+          "morphTargets": 8,
+          "errors": [
+            {
+              "phase": 0,
+              "reach": 0.005800000000000027,
+              "height": 0.005199999999999996
+            },
+            {
+              "phase": 0.5,
+              "reach": 0.00019999999999997797,
+              "height": 0.00019999999999999185
+            },
+            {
+              "phase": 1,
+              "reach": 0.0011999999999999789,
+              "height": 0.0038000000000000117
+            }
+          ],
+          "contactSeconds": 0.2833333274592524,
+          "surfaceOK": true
+        }
+      ],
+      "hurtBounds": {
+        "stand": {
+          "bottom": 0,
+          "top": 0.6234
+        },
+        "crouch": {
+          "bottom": 0,
+          "top": 0.3931
+        }
+      },
+      "originalSHA256": "0636f1e1e30fbc4806acef3f5a0402225a83a50227799e96d17421adc92884f6",
+      "partsSHA256": "2a6be1179e857e3abdf6df43f2d1b8edc336d48d119bc23f0e4c8d9534666d01"
+    },
+    {
+      "id": "godan",
+      "moves": [
+        {
+          "slot": "stand_weak",
+          "clip": "v17_stand_weak",
+          "tracks": 128,
+          "morphTargets": 8,
+          "errors": [
+            {
+              "phase": 0,
+              "reach": 0.009199999999999986,
+              "height": 0.0029000000000000137
+            },
+            {
+              "phase": 0.5,
+              "reach": 0.00020000000000003348,
+              "height": 0.00009999999999998899
+            },
+            {
+              "phase": 1,
+              "reach": 0.005199999999999982,
+              "height": 0.007900000000000018
+            }
+          ],
+          "contactSeconds": 0.18333334289491177,
+          "surfaceOK": true
+        },
+        {
+          "slot": "stand_heavy",
+          "clip": "v17_stand_heavy",
+          "tracks": 128,
+          "morphTargets": 8,
+          "errors": [
+            {
+              "phase": 0,
+              "reach": 0.045399999999999996,
+              "height": 0.03669999999999998
+            },
+            {
+              "phase": 0.5,
+              "reach": 0.00040000000000006697,
+              "height": 0.0002999999999999947
+            },
+            {
+              "phase": 1,
+              "reach": 0.0024000000000000687,
+              "height": 0.005299999999999999
+            }
+          ],
+          "contactSeconds": 0.3499999907281664,
+          "surfaceOK": false
+        },
+        {
+          "slot": "crouch_weak",
+          "clip": "v17_crouch_weak",
+          "tracks": 128,
+          "morphTargets": 8,
+          "errors": [
+            {
+              "phase": 0,
+              "reach": 0.011299999999999977,
+              "height": 0.0011000000000000176
+            },
+            {
+              "phase": 0.5,
+              "reach": 0.00029999999999996696,
+              "height": 0.00010000000000001674
+            },
+            {
+              "phase": 1,
+              "reach": 0.005299999999999971,
+              "height": 0.0021000000000000185
+            }
+          ],
+          "contactSeconds": 0.18333334289491177,
+          "surfaceOK": true
+        },
+        {
+          "slot": "crouch_heavy",
+          "clip": "v17_crouch_heavy",
+          "tracks": 128,
+          "morphTargets": 8,
+          "errors": [
+            {
+              "phase": 0,
+              "reach": 0.01639999999999997,
+              "height": 0.004500000000000004
+            },
+            {
+              "phase": 0.5,
+              "reach": 0.00040000000000006697,
+              "height": 0.0005000000000000004
+            },
+            {
+              "phase": 1,
+              "reach": 0.0024000000000000687,
+              "height": 0.0015000000000000013
+            }
+          ],
+          "contactSeconds": 0.3499999907281664,
+          "surfaceOK": false
+        },
+        {
+          "slot": "air_weak",
+          "clip": "v17_air_weak",
+          "tracks": 128,
+          "morphTargets": 8,
+          "errors": [
+            {
+              "phase": 0,
+              "reach": 0.005799999999999972,
+              "height": 0.020100000000000007
+            },
+            {
+              "phase": 0.5,
+              "reach": 0.00019999999999997797,
+              "height": 0.00009999999999998899
+            },
+            {
+              "phase": 1,
+              "reach": 0.002799999999999969,
+              "height": 0.008099999999999996
+            }
+          ],
+          "contactSeconds": 0.18333334289491177,
+          "surfaceOK": false
+        },
+        {
+          "slot": "air_heavy",
+          "clip": "v17_air_heavy",
+          "tracks": 128,
+          "morphTargets": 8,
+          "errors": [
+            {
+              "phase": 0,
+              "reach": 0.010399999999999965,
+              "height": 0.0242
+            },
+            {
+              "phase": 0.5,
+              "reach": 0.00040000000000001146,
+              "height": 0.00019999999999997797
+            },
+            {
+              "phase": 1,
+              "reach": 0.00040000000000001146,
+              "height": 0.00019999999999997797
+            }
+          ],
+          "contactSeconds": 0.3499999907281664,
+          "surfaceOK": false
+        }
+      ],
+      "hurtBounds": {
+        "stand": {
+          "bottom": 0,
+          "top": 0.6283
+        },
+        "crouch": {
+          "bottom": 0,
+          "top": 0.52
+        }
+      },
+      "originalSHA256": "90711ae7d323cc01a1892979ea28d2358b329c19f04dce95c51ec74535b17f65",
+      "partsSHA256": "4956c9b4a887ea6254782035f1afcb1610a25c3cee24930f50be649b07f5d768"
+    },
+    {
+      "id": "hakuma",
+      "moves": [
+        {
+          "slot": "stand_weak",
+          "clip": "v17_stand_weak",
+          "tracks": 116,
+          "morphTargets": 8,
+          "errors": [
+            {
+              "phase": 0,
+              "reach": 0.0025000000000000022,
+              "height": 0.0021999999999999797
+            },
+            {
+              "phase": 0.5,
+              "reach": 0.0005000000000000004,
+              "height": 0.00019999999999997797
+            },
+            {
+              "phase": 1,
+              "reach": 0.0015000000000000013,
+              "height": 0.0021999999999999797
+            }
+          ],
+          "contactSeconds": 0.1500000006386212,
+          "surfaceOK": true
+        },
+        {
+          "slot": "stand_heavy",
+          "clip": "v17_stand_heavy",
+          "tracks": 116,
+          "morphTargets": 8,
+          "errors": [
+            {
+              "phase": 0,
+              "reach": 0.012400000000000022,
+              "height": 0.008900000000000019
+            },
+            {
+              "phase": 0.5,
+              "reach": 0.00040000000000001146,
+              "height": 0.00009999999999998899
+            },
+            {
+              "phase": 1,
+              "reach": 0.003400000000000014,
+              "height": 0.0009000000000000119
+            }
+          ],
+          "contactSeconds": 0.2833333274592524,
+          "surfaceOK": true
+        },
+        {
+          "slot": "crouch_weak",
+          "clip": "v17_crouch_weak",
+          "tracks": 116,
+          "morphTargets": 8,
+          "errors": [
+            {
+              "phase": 0,
+              "reach": 0.00539999999999996,
+              "height": 0.00040000000000001146
+            },
+            {
+              "phase": 0.5,
+              "reach": 0.00039999999999995595,
+              "height": 0.00040000000000001146
+            },
+            {
+              "phase": 1,
+              "reach": 0.0043999999999999595,
+              "height": 0.00040000000000001146
+            }
+          ],
+          "contactSeconds": 0.1500000006386212,
+          "surfaceOK": true
+        },
+        {
+          "slot": "crouch_heavy",
+          "clip": "v17_crouch_heavy",
+          "tracks": 116,
+          "morphTargets": 8,
+          "errors": [
+            {
+              "phase": 0,
+              "reach": 0.008799999999999975,
+              "height": 0.017699999999999994
+            },
+            {
+              "phase": 0.5,
+              "reach": 0.00019999999999997797,
+              "height": 0.00030000000000002247
+            },
+            {
+              "phase": 1,
+              "reach": 0.0008000000000000229,
+              "height": 0.0006999999999999784
+            }
+          ],
+          "contactSeconds": 0.2833333274592524,
+          "surfaceOK": false
+        },
+        {
+          "slot": "air_weak",
+          "clip": "v17_air_weak",
+          "tracks": 116,
+          "morphTargets": 8,
+          "errors": [
+            {
+              "phase": 0,
+              "reach": 0.0007000000000000339,
+              "height": 0.0022000000000000353
+            },
+            {
+              "phase": 0.5,
+              "reach": 0.00029999999999996696,
+              "height": 0.00020000000000003348
+            },
+            {
+              "phase": 1,
+              "reach": 0.0007000000000000339,
+              "height": 0.0022000000000000353
+            }
+          ],
+          "contactSeconds": 0.1500000006386212,
+          "surfaceOK": true
+        },
+        {
+          "slot": "air_heavy",
+          "clip": "v17_air_heavy",
+          "tracks": 116,
+          "morphTargets": 8,
+          "errors": [
+            {
+              "phase": 0,
+              "reach": 0.007399999999999962,
+              "height": 0.020600000000000007
+            },
+            {
+              "phase": 0.5,
+              "reach": 0.00039999999999995595,
+              "height": 0.00040000000000001146
+            },
+            {
+              "phase": 1,
+              "reach": 0.0006000000000000449,
+              "height": 0.0014000000000000123
+            }
+          ],
+          "contactSeconds": 0.2833333274592524,
+          "surfaceOK": false
+        }
+      ],
+      "hurtBounds": {
+        "stand": {
+          "bottom": 0,
+          "top": 0.6612
+        },
+        "crouch": {
+          "bottom": 0,
+          "top": 0.5633
+        }
+      },
+      "originalSHA256": "bf00b34eb0930751ddcdf548c4866c4c72d1db28bbf6fcf1f78db4c0146d8bed",
+      "partsSHA256": "29a4cb16cb48d8593403e57661ffba94fee55e9a3aea66b85b30f2a82172ddce"
+    },
+    {
+      "id": "chirka",
+      "moves": [
+        {
+          "slot": "stand_weak",
+          "clip": "v17_stand_weak",
+          "tracks": 116,
+          "morphTargets": 8,
+          "errors": [
+            {
+              "phase": 0,
+              "reach": 0.004599999999999993,
+              "height": 0.0009000000000000119
+            },
+            {
+              "phase": 0.5,
+              "reach": 0.00040000000000001146,
+              "height": 0.00009999999999998899
+            },
+            {
+              "phase": 1,
+              "reach": 0.004599999999999993,
+              "height": 0.0019000000000000128
+            }
+          ],
+          "contactSeconds": 0.1500000006386212,
+          "surfaceOK": true
+        },
+        {
+          "slot": "stand_heavy",
+          "clip": "v17_stand_heavy",
+          "tracks": 116,
+          "morphTargets": 8,
+          "errors": [
+            {
+              "phase": 0,
+              "reach": 0.015400000000000025,
+              "height": 0.005799999999999972
+            },
+            {
+              "phase": 0.5,
+              "reach": 0.00040000000000001146,
+              "height": 0.00020000000000003348
+            },
+            {
+              "phase": 1,
+              "reach": 0.003400000000000014,
+              "height": 0.0012000000000000344
+            }
+          ],
+          "contactSeconds": 0.2833333274592524,
+          "surfaceOK": false
+        },
+        {
+          "slot": "crouch_weak",
+          "clip": "v17_crouch_weak",
+          "tracks": 116,
+          "morphTargets": 8,
+          "errors": [
+            {
+              "phase": 0,
+              "reach": 0.007800000000000029,
+              "height": 0.0013999999999999985
+            },
+            {
+              "phase": 0.5,
+              "reach": 0.00019999999999997797,
+              "height": 0.0003999999999999976
+            },
+            {
+              "phase": 1,
+              "reach": 0.005800000000000027,
+              "height": 0.0023999999999999994
+            }
+          ],
+          "contactSeconds": 0.1500000006386212,
+          "surfaceOK": true
+        },
+        {
+          "slot": "crouch_heavy",
+          "clip": "v17_crouch_heavy",
+          "tracks": 116,
+          "morphTargets": 8,
+          "errors": [
+            {
+              "phase": 0,
+              "reach": 0.011199999999999988,
+              "height": 0.0006999999999999992
+            },
+            {
+              "phase": 0.5,
+              "reach": 0.00020000000000003348,
+              "height": 0.00030000000000000165
+            },
+            {
+              "phase": 1,
+              "reach": 0.005200000000000038,
+              "height": 0.0006999999999999992
+            }
+          ],
+          "contactSeconds": 0.28333332745925244,
+          "surfaceOK": true
+        },
+        {
+          "slot": "air_weak",
+          "clip": "v17_air_weak",
+          "tracks": 116,
+          "morphTargets": 8,
+          "errors": [
+            {
+              "phase": 0,
+              "reach": 0.005400000000000016,
+              "height": 0.004599999999999993
+            },
+            {
+              "phase": 0.5,
+              "reach": 0.00040000000000001146,
+              "height": 0.00040000000000001146
+            },
+            {
+              "phase": 1,
+              "reach": 0.004400000000000015,
+              "height": 0.003599999999999992
+            }
+          ],
+          "contactSeconds": 0.1500000006386212,
+          "surfaceOK": true
+        },
+        {
+          "slot": "air_heavy",
+          "clip": "v17_air_heavy",
+          "tracks": 116,
+          "morphTargets": 8,
+          "errors": [
+            {
+              "phase": 0,
+              "reach": 0.04350000000000004,
+              "height": 0.0721
+            },
+            {
+              "phase": 0.5,
+              "reach": 0.0005000000000000004,
+              "height": 0.00009999999999998899
+            },
+            {
+              "phase": 1,
+              "reach": 0.0025000000000000022,
+              "height": 0.0009000000000000119
+            }
+          ],
+          "contactSeconds": 0.2999999937803849,
+          "surfaceOK": false
+        }
+      ],
+      "hurtBounds": {
+        "stand": {
+          "bottom": 0,
+          "top": 0.5534
+        },
+        "crouch": {
+          "bottom": 0,
+          "top": 0.3832
+        }
+      },
+      "originalSHA256": "1badcc2c8e7315b5acc08c25358d338cb71991cabc4b3ec9e616b9cbb6d432ae",
+      "partsSHA256": "6664130e5300a00cb236e77b2910a4a9b8ecc9c480f8610b2d2ebb60dda83d85"
+    },
+    {
+      "id": "takimaru",
+      "moves": [
+        {
+          "slot": "stand_weak",
+          "clip": "v17_stand_weak",
+          "tracks": 116,
+          "morphTargets": 8,
+          "errors": [
+            {
+              "phase": 0,
+              "reach": 0.0024000000000000132,
+              "height": 0.0025000000000000577
+            },
+            {
+              "phase": 0.5,
+              "reach": 0.00040000000000001146,
+              "height": 0.0004999999999999449
+            },
+            {
+              "phase": 1,
+              "reach": 0.00040000000000001146,
+              "height": 0.0025000000000000577
+            }
+          ],
+          "contactSeconds": 0.1500000006386212,
+          "surfaceOK": true
+        },
+        {
+          "slot": "stand_heavy",
+          "clip": "v17_stand_heavy",
+          "tracks": 116,
+          "morphTargets": 8,
+          "errors": [
+            {
+              "phase": 0,
+              "reach": 0.005299999999999971,
+              "height": 0.019000000000000017
+            },
+            {
+              "phase": 0.5,
+              "reach": 0.00029999999999996696,
+              "height": 0
+            },
+            {
+              "phase": 1,
+              "reach": 0.00029999999999996696,
+              "height": 0.0010000000000000009
+            }
+          ],
+          "contactSeconds": 0.2833333274592524,
+          "surfaceOK": false
+        },
+        {
+          "slot": "crouch_weak",
+          "clip": "v17_crouch_weak",
+          "tracks": 116,
+          "morphTargets": 8,
+          "errors": [
+            {
+              "phase": 0,
+              "reach": 0.0046000000000000485,
+              "height": 0.0009000000000000119
+            },
+            {
+              "phase": 0.5,
+              "reach": 0.00039999999999995595,
+              "height": 0.00009999999999998899
+            },
+            {
+              "phase": 1,
+              "reach": 0.0036000000000000476,
+              "height": 0.00009999999999998899
+            }
+          ],
+          "contactSeconds": 0.1500000006386212,
+          "surfaceOK": true
+        },
+        {
+          "slot": "crouch_heavy",
+          "clip": "v17_crouch_heavy",
+          "tracks": 116,
+          "morphTargets": 8,
+          "errors": [
+            {
+              "phase": 0,
+              "reach": 0.00770000000000004,
+              "height": 0.044299999999999895
+            },
+            {
+              "phase": 0.5,
+              "reach": 0.00029999999999996696,
+              "height": 0.00029999999999996696
+            },
+            {
+              "phase": 1,
+              "reach": 0.0037000000000000366,
+              "height": 0.0047000000000000375
+            }
+          ],
+          "contactSeconds": 0.2833333274592524,
+          "surfaceOK": false
+        },
+        {
+          "slot": "air_weak",
+          "clip": "v17_air_weak",
+          "tracks": 116,
+          "morphTargets": 8,
+          "errors": [
+            {
+              "phase": 0,
+              "reach": 0,
+              "height": 0.0116
+            },
+            {
+              "phase": 0.5,
+              "reach": 0,
+              "height": 0.00040000000000001146
+            },
+            {
+              "phase": 1,
+              "reach": 0.0010000000000000009,
+              "height": 0.00040000000000001146
+            }
+          ],
+          "contactSeconds": 0.1500000006386212,
+          "surfaceOK": true
+        },
+        {
+          "slot": "air_heavy",
+          "clip": "v17_air_heavy",
+          "tracks": 116,
+          "morphTargets": 8,
+          "errors": [
+            {
+              "phase": 0,
+              "reach": 0.008699999999999986,
+              "height": 0.023099999999999954
+            },
+            {
+              "phase": 0.5,
+              "reach": 0.00030000000000002247,
+              "height": 0.00009999999999998899
+            },
+            {
+              "phase": 1,
+              "reach": 0.00030000000000002247,
+              "height": 0.0019000000000000128
+            }
+          ],
+          "contactSeconds": 0.2833333274592524,
+          "surfaceOK": false
+        }
+      ],
+      "hurtBounds": {
+        "stand": {
+          "bottom": 0,
+          "top": 0.7023
+        },
+        "crouch": {
+          "bottom": 0,
+          "top": 0.5685
+        }
+      },
+      "originalSHA256": "d449bb56f5eda962763eefc9ab4e0291fb4ef4e553379c3f5adcc72ddd7427f1",
+      "partsSHA256": "068954e932f66e153c776e11e1c5cb2832e9e4f223f7485aca91dd676b43ecf2"
+    },
+    {
+      "id": "yomikage",
+      "moves": [
+        {
+          "slot": "stand_weak",
+          "clip": "v17_stand_weak",
+          "tracks": 116,
+          "morphTargets": 8,
+          "errors": [
+            {
+              "phase": 0,
+              "reach": 0.007599999999999996,
+              "height": 0.004400000000000015
+            },
+            {
+              "phase": 0.5,
+              "reach": 0.00039999999999995595,
+              "height": 0.00040000000000001146
+            },
+            {
+              "phase": 1,
+              "reach": 0.0046000000000000485,
+              "height": 0.003400000000000014
+            }
+          ],
+          "contactSeconds": 0.11666666840513548,
+          "surfaceOK": true
+        },
+        {
+          "slot": "stand_heavy",
+          "clip": "v17_stand_heavy",
+          "tracks": 116,
+          "morphTargets": 8,
+          "errors": [
+            {
+              "phase": 0,
+              "reach": 0.042700000000000016,
+              "height": 0.018500000000000016
+            },
+            {
+              "phase": 0.5,
+              "reach": 0.00030000000000002247,
+              "height": 0.0005000000000000004
+            },
+            {
+              "phase": 1,
+              "reach": 0.00269999999999998,
+              "height": 0.0005000000000000004
+            }
+          ],
+          "contactSeconds": 0.2999999937803849,
+          "surfaceOK": false
+        },
+        {
+          "slot": "crouch_weak",
+          "clip": "v17_crouch_weak",
+          "tracks": 116,
+          "morphTargets": 8,
+          "errors": [
+            {
+              "phase": 0,
+              "reach": 0.011099999999999999,
+              "height": 0.005700000000000011
+            },
+            {
+              "phase": 0.5,
+              "reach": 0.00009999999999998899,
+              "height": 0.0002999999999999947
+            },
+            {
+              "phase": 1,
+              "reach": 0.007099999999999995,
+              "height": 0.0067000000000000115
+            }
+          ],
+          "contactSeconds": 0.11666666840513548,
+          "surfaceOK": true
+        },
+        {
+          "slot": "crouch_heavy",
+          "clip": "v17_crouch_heavy",
+          "tracks": 116,
+          "morphTargets": 8,
+          "errors": [
+            {
+              "phase": 0,
+              "reach": 0.009299999999999975,
+              "height": 0.010899999999999993
+            },
+            {
+              "phase": 0.5,
+              "reach": 0.00029999999999996696,
+              "height": 0.00010000000000001674
+            },
+            {
+              "phase": 1,
+              "reach": 0.006299999999999972,
+              "height": 0.001899999999999985
+            }
+          ],
+          "contactSeconds": 0.2833333274592524,
+          "surfaceOK": true
+        },
+        {
+          "slot": "air_weak",
+          "clip": "v17_air_weak",
+          "tracks": 116,
+          "morphTargets": 8,
+          "errors": [
+            {
+              "phase": 0,
+              "reach": 0.0032999999999999696,
+              "height": 0.00030000000000002247
+            },
+            {
+              "phase": 0.5,
+              "reach": 0.00029999999999996696,
+              "height": 0.00030000000000002247
+            },
+            {
+              "phase": 1,
+              "reach": 0.0042999999999999705,
+              "height": 0.0012999999999999678
+            }
+          ],
+          "contactSeconds": 0.11666666840513548,
+          "surfaceOK": true
+        },
+        {
+          "slot": "air_heavy",
+          "clip": "v17_air_heavy",
+          "tracks": 116,
+          "morphTargets": 8,
+          "errors": [
+            {
+              "phase": 0,
+              "reach": 0.007500000000000007,
+              "height": 0.0295
+            },
+            {
+              "phase": 0.5,
+              "reach": 0.0005000000000000004,
+              "height": 0.0005000000000000004
+            },
+            {
+              "phase": 1,
+              "reach": 0.0015000000000000013,
+              "height": 0.0005000000000000004
+            }
+          ],
+          "contactSeconds": 0.2833333274592524,
+          "surfaceOK": false
+        }
+      ],
+      "hurtBounds": {
+        "stand": {
+          "bottom": 0,
+          "top": 0.6145
+        },
+        "crouch": {
+          "bottom": 0,
+          "top": 0.4566
+        }
+      },
+      "originalSHA256": "171a84e010037455dfaaf9c7b6d4a9dc8efe70775a772912c353057e08c01586",
+      "partsSHA256": "535522320762df7c9d7e2cf1869416ba15b483f092be4f1544f22799d7f0f322"
+    },
+    {
+      "id": "bullet",
+      "moves": [
+        {
+          "slot": "stand_weak",
+          "clip": "v17_stand_weak",
+          "tracks": 125,
+          "morphTargets": 8,
+          "errors": [
+            {
+              "phase": 0,
+              "reach": 0.005500000000000005,
+              "height": 0.0011999999999999789
+            },
+            {
+              "phase": 0.5,
+              "reach": 0.0005000000000000004,
+              "height": 0.00019999999999997797
+            },
+            {
+              "phase": 1,
+              "reach": 0.004500000000000004,
+              "height": 0.0021999999999999797
+            }
+          ],
+          "contactSeconds": 0.1500000006386212,
+          "surfaceOK": true
+        },
+        {
+          "slot": "stand_heavy",
+          "clip": "v17_stand_heavy",
+          "tracks": 125,
+          "morphTargets": 8,
+          "errors": [
+            {
+              "phase": 0,
+              "reach": 0.0014999999999999458,
+              "height": 0.0007000000000000062
+            },
+            {
+              "phase": 0.5,
+              "reach": 0.0028000000000000247,
+              "height": 0.0011000000000000176
+            },
+            {
+              "phase": 1,
+              "reach": 0.0040000000000000036,
+              "height": 0.00020000000000000573
+            }
+          ],
+          "contactSeconds": 0.41666667287548387,
+          "surfaceOK": true
+        },
+        {
+          "slot": "crouch_weak",
+          "clip": "v17_crouch_weak",
+          "tracks": 125,
+          "morphTargets": 8,
+          "errors": [
+            {
+              "phase": 0,
+              "reach": 0.0040999999999999925,
+              "height": 0.0002999999999999947
+            },
+            {
+              "phase": 0.5,
+              "reach": 0.00009999999999998899,
+              "height": 0.0002999999999999947
+            },
+            {
+              "phase": 1,
+              "reach": 0.0030999999999999917,
+              "height": 0.0007000000000000062
+            }
+          ],
+          "contactSeconds": 0.1500000006386212,
+          "surfaceOK": true
+        },
+        {
+          "slot": "crouch_heavy",
+          "clip": "v17_crouch_heavy",
+          "tracks": 125,
+          "morphTargets": 8,
+          "errors": [
+            {
+              "phase": 0,
+              "reach": 0.008199999999999985,
+              "height": 0.009000000000000008
+            },
+            {
+              "phase": 0.5,
+              "reach": 0,
+              "height": 0.0030000000000000027
+            },
+            {
+              "phase": 1,
+              "reach": 0.00019999999999997797,
+              "height": 0.0005000000000000004
+            }
+          ],
+          "contactSeconds": 0.3333333383003871,
+          "surfaceOK": true
+        },
+        {
+          "slot": "air_weak",
+          "clip": "v17_air_weak",
+          "tracks": 125,
+          "morphTargets": 8,
+          "errors": [
+            {
+              "phase": 0,
+              "reach": 0.004500000000000004,
+              "height": 0.0031999999999999806
+            },
+            {
+              "phase": 0.5,
+              "reach": 0.0005000000000000004,
+              "height": 0.00019999999999997797
+            },
+            {
+              "phase": 1,
+              "reach": 0.003500000000000003,
+              "height": 0.0011999999999999789
+            }
+          ],
+          "contactSeconds": 0.1500000006386212,
+          "surfaceOK": true
+        },
+        {
+          "slot": "air_heavy",
+          "clip": "v17_air_heavy",
+          "tracks": 125,
+          "morphTargets": 8,
+          "errors": [
+            {
+              "phase": 0,
+              "reach": 0.0017000000000000348,
+              "height": 0.0724
+            },
+            {
+              "phase": 0.5,
+              "reach": 0.0035000000000000586,
+              "height": 0.1621
+            },
+            {
+              "phase": 1,
+              "reach": 0.00009999999999998899,
+              "height": 0.1697
+            }
+          ],
+          "contactSeconds": 0.3333333383003871,
+          "surfaceOK": false
+        }
+      ],
+      "hurtBounds": {
+        "stand": {
+          "bottom": 0,
+          "top": 0.5924
+        },
+        "crouch": {
+          "bottom": 0,
+          "top": 0.4562
+        }
+      },
+      "originalSHA256": "abb2765bcf1f7d8fd696b55c992c84b9e52c00b6ba933ec792228f490bed03f4",
+      "partsSHA256": "ffcf7dfe25077c867d4366a4e5e238fd44ccc63d2abcad0b3e565c00f0f377af"
+    },
+    {
+      "id": "dark_moguzo",
+      "moves": [
+        {
+          "slot": "stand_weak",
+          "clip": "v17_stand_weak",
+          "tracks": 128,
+          "morphTargets": 8,
+          "errors": [
+            {
+              "phase": 0,
+              "reach": 0.012900000000000023,
+              "height": 0.004100000000000048
+            },
+            {
+              "phase": 0.5,
+              "reach": 0.00009999999999998899,
+              "height": 0.0001000000000000445
+            },
+            {
+              "phase": 1,
+              "reach": 0.008900000000000019,
+              "height": 0.0011000000000000454
+            }
+          ],
+          "contactSeconds": 0.11666666840513548,
+          "surfaceOK": true
+        },
+        {
+          "slot": "stand_heavy",
+          "clip": "v17_stand_heavy",
+          "tracks": 128,
+          "morphTargets": 8,
+          "errors": [
+            {
+              "phase": 0,
+              "reach": 0.00269999999999998,
+              "height": 0.00030000000000002247
+            },
+            {
+              "phase": 0.5,
+              "reach": 0.00030000000000002247,
+              "height": 0.00030000000000002247
+            },
+            {
+              "phase": 1,
+              "reach": 0.007699999999999985,
+              "height": 0.00030000000000002247
+            }
+          ],
+          "contactSeconds": 0.2833333274592524,
+          "surfaceOK": true
+        },
+        {
+          "slot": "crouch_weak",
+          "clip": "v17_crouch_weak",
+          "tracks": 128,
+          "morphTargets": 8,
+          "errors": [
+            {
+              "phase": 0,
+              "reach": 0.013299999999999979,
+              "height": 0.0022999999999999965
+            },
+            {
+              "phase": 0.5,
+              "reach": 0.00029999999999996696,
+              "height": 0.0002999999999999947
+            },
+            {
+              "phase": 1,
+              "reach": 0.009299999999999975,
+              "height": 0.0007000000000000062
+            }
+          ],
+          "contactSeconds": 0.11666666840513548,
+          "surfaceOK": true
+        },
+        {
+          "slot": "crouch_heavy",
+          "clip": "v17_crouch_heavy",
+          "tracks": 128,
+          "morphTargets": 8,
+          "errors": [
+            {
+              "phase": 0,
+              "reach": 0.01799999999999996,
+              "height": 0.009599999999999997
+            },
+            {
+              "phase": 0.5,
+              "reach": 0,
+              "height": 0.0003999999999999976
+            },
+            {
+              "phase": 1,
+              "reach": 0.007000000000000006,
+              "height": 0.0006000000000000033
+            }
+          ],
+          "contactSeconds": 0.2833333274592524,
+          "surfaceOK": false
+        },
+        {
+          "slot": "air_weak",
+          "clip": "v17_air_weak",
+          "tracks": 128,
+          "morphTargets": 8,
+          "errors": [
+            {
+              "phase": 0,
+              "reach": 0.016100000000000003,
+              "height": 0.0063
+            },
+            {
+              "phase": 0.5,
+              "reach": 0.00009999999999998899,
+              "height": 0.0002999999999999947
+            },
+            {
+              "phase": 1,
+              "reach": 0.006099999999999994,
+              "height": 0.0032999999999999974
+            }
+          ],
+          "contactSeconds": 0.11666666840513548,
+          "surfaceOK": false
+        },
+        {
+          "slot": "air_heavy",
+          "clip": "v17_air_heavy",
+          "tracks": 128,
+          "morphTargets": 8,
+          "errors": [
+            {
+              "phase": 0,
+              "reach": 0.0017000000000000348,
+              "height": 0.0059000000000000025
+            },
+            {
+              "phase": 0.5,
+              "reach": 0.00029999999999996696,
+              "height": 0.00010000000000000286
+            },
+            {
+              "phase": 1,
+              "reach": 0.0007000000000000339,
+              "height": 0.001899999999999999
+            }
+          ],
+          "contactSeconds": 0.2833333274592524,
+          "surfaceOK": true
+        }
+      ],
+      "hurtBounds": {
+        "stand": {
+          "bottom": 0,
+          "top": 0.5648
+        },
+        "crouch": {
+          "bottom": 0,
+          "top": 0.4223
+        }
+      },
+      "originalSHA256": "57c1ba36f5c7175d9c496a7bda3c329423022ad220ca7cd52b90688168f6e7ab",
+      "partsSHA256": "3b2125663185d972f28ca71502e74973e1576ea886b75c73656133acc7d7d919"
+    }
+  ]
+}

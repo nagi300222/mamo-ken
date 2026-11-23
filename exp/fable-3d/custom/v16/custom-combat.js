@@ -1,6 +1,7 @@
 import { Battle } from '../../dojo/battle.js';
 import { IDS, ROSTER, normalMove, specialMove } from '../../dojo/balance.js';
-import { NORMAL_CONTACTS, NORMAL_HURT_BOUNDS } from '../../dojo/normal-contacts-v151.js';
+import {NORMAL_CONTACTS,NORMAL_HURT_BOUNDS,ACTIVE_NORMAL_MOTION_VERSION} from '../../dojo/normal-contact-source.js';
+import {validNormalStrikeHeight} from '../../dojo/normal-contact-runtime-v151.js';
 import { normalizeAvatar, createDefaultAvatar, parseMoveRef, isUnmodifiedCombatShape } from './avatar-schema.js';
 
 const NORMAL=/^(stand|crouch|air)_(weak|heavy)$/;
@@ -45,10 +46,10 @@ function validateMeasurement(value,label) {
   check(value&&value.source==='runtime-skinned-mesh',label+'のスキン後接触計測が必要です');
   for(const slot of Object.keys(NORMAL_CONTACTS.moguzo)){
     const m=value.normals?.[slot];
-    check(m&&Number.isFinite(m.reach)&&m.reach>=0&&Number.isFinite(m.height)&&m.height>=-.02&&
+    check(m&&Number.isFinite(m.reach)&&m.reach>=0&&validNormalStrikeHeight(slot,m.height,.02)&&
       Number.isFinite(m.contact)&&Number.isFinite(m.contactEnd)&&m.contact>0&&m.contactEnd>m.contact&&m.contactEnd<1&&
       Array.isArray(m.activeReach)&&m.activeReach.length>=2&&m.activeReach.every(p=>
-        Number.isFinite(p.phase)&&p.phase>=0&&p.phase<=1&&Number.isFinite(p.reach)&&p.reach>=0&&Number.isFinite(p.height)),label+'の通常技計測が不正: '+slot);
+        Number.isFinite(p.phase)&&p.phase>=0&&p.phase<=1&&Number.isFinite(p.reach)&&p.reach>=0&&validNormalStrikeHeight(slot,p.height,.02)),label+'の通常技計測が不正: '+slot);
   }
   for(const stance of ['stand','crouch']){
     const b=value.hurtBounds?.[stance];
@@ -60,7 +61,8 @@ function validateMeasurement(value,label) {
 }
 function baseMeasurement(definition) {
   const id=definition.appearance.baseId;
-  return {normals:NORMAL_CONTACTS[id],hurtBounds:NORMAL_HURT_BOUNDS[id],projectileSocket:{forward:.30,height:.30},source:'v151-original-base-surface'};
+  return {normals:NORMAL_CONTACTS[id],hurtBounds:NORMAL_HURT_BOUNDS[id],projectileSocket:{forward:.30,height:.30},
+    normalMotionVersion:ACTIVE_NORMAL_MOTION_VERSION,source:ACTIVE_NORMAL_MOTION_VERSION==='v17'?'v17-approved-base-surface':'v151-original-base-surface'};
 }
 export function customMoveFor(fighter,id,original) {
   const definition=fighter.definition;
@@ -98,6 +100,7 @@ export function createCustomBattle(player,opponent='godan',level=1,options={}) {
   });
   const ids=definitions.map((definition,i)=>definition?.combat.styleId??raws[i]);
   const battle=new Battle(...ids,level,{
+    specialContactDelivery:options.specialContactDelivery,
     moveResolver:(fighter,move,id)=>customMoveFor(fighter,id,move),
     hurtBoundsResolver:target=>target.customMeasurement?{[target.id]:target.customMeasurement.hurtBounds}:NORMAL_HURT_BOUNDS,
     projectileOrigin:(fighter,move)=>fighter.customMeasurement?.projectileSockets?.[move.customRef]??fighter.customMeasurement?.projectileSocket??{forward:.30,height:.30},

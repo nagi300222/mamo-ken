@@ -1,0 +1,3181 @@
+{
+  "source": "independent-glTF-CPU-linear-blend-skin",
+  "revision": "7f79ea252d6f5c08de892bd11c0e85845a91af14",
+  "claims": {
+    "webgl": false,
+    "iphone": false,
+    "generatorExecuted": false
+  },
+  "normals": [
+    {
+      "id": "moguzo",
+      "slot": "stand_weak",
+      "clip": "v17_stand_weak",
+      "attackLimb": "pawL",
+      "attackPart": "armL",
+      "clock": {
+        "frames": 28,
+        "contactFrame": 9
+      },
+      "surface": [
+        {
+          "phase": 0,
+          "reach": 0.40177,
+          "height": 0.36388,
+          "expectedReach": 0.397,
+          "expectedHeight": 0.363,
+          "frontPart": "armL",
+          "frontGap": 0.0,
+          "reachError": 0.00477,
+          "heightError": 0.00088
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.40178,
+          "height": 0.36388,
+          "expectedReach": 0.402,
+          "expectedHeight": 0.364,
+          "frontPart": "armL",
+          "frontGap": 0.0,
+          "reachError": -0.00022,
+          "heightError": -0.00012
+        },
+        {
+          "phase": 1,
+          "reach": 0.40173,
+          "height": 0.36388,
+          "expectedReach": 0.398,
+          "expectedHeight": 0.363,
+          "frontPart": "armL",
+          "frontGap": 0.0,
+          "reachError": 0.00373,
+          "heightError": 0.00088
+        }
+      ],
+      "footSurface": {
+        "initialMin": -0.00033,
+        "absoluteMin": -0.00106,
+        "relativeSink": -0.00073,
+        "maxBothFeetAbove": -0.00033,
+        "minimumAtFrame": 11
+      }
+    },
+    {
+      "id": "moguzo",
+      "slot": "stand_heavy",
+      "clip": "v17_stand_heavy",
+      "attackLimb": "pawR",
+      "attackPart": "armR",
+      "clock": {
+        "frames": 46,
+        "contactFrame": 17
+      },
+      "surface": [
+        {
+          "phase": 0,
+          "reach": 0.49527,
+          "height": 0.29603,
+          "expectedReach": 0.465,
+          "expectedHeight": 0.3,
+          "frontPart": "armR",
+          "frontGap": 0.0,
+          "reachError": 0.03027,
+          "heightError": -0.00397
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.49527,
+          "height": 0.29603,
+          "expectedReach": 0.495,
+          "expectedHeight": 0.296,
+          "frontPart": "armR",
+          "frontGap": 0.0,
+          "reachError": 0.00027,
+          "heightError": 3e-05
+        },
+        {
+          "phase": 1,
+          "reach": 0.49527,
+          "height": 0.29603,
+          "expectedReach": 0.49,
+          "expectedHeight": 0.297,
+          "frontPart": "armR",
+          "frontGap": 0.0,
+          "reachError": 0.00527,
+          "heightError": -0.00097
+        }
+      ],
+      "footSurface": {
+        "initialMin": -0.00033,
+        "absoluteMin": -0.00673,
+        "relativeSink": -0.00639,
+        "maxBothFeetAbove": -0.00027,
+        "minimumAtFrame": 36
+      }
+    },
+    {
+      "id": "moguzo",
+      "slot": "crouch_weak",
+      "clip": "v17_crouch_weak",
+      "attackLimb": "pawL",
+      "attackPart": "armL",
+      "clock": {
+        "frames": 28,
+        "contactFrame": 9
+      },
+      "surface": [
+        {
+          "phase": 0,
+          "reach": 0.50221,
+          "height": 0.20038,
+          "expectedReach": 0.494,
+          "expectedHeight": 0.193,
+          "frontPart": "armL",
+          "frontGap": 0.0,
+          "reachError": 0.00821,
+          "heightError": 0.00738
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.50222,
+          "height": 0.20039,
+          "expectedReach": 0.502,
+          "expectedHeight": 0.2,
+          "frontPart": "armL",
+          "frontGap": 0.0,
+          "reachError": 0.00022,
+          "heightError": 0.00039
+        },
+        {
+          "phase": 1,
+          "reach": 0.50218,
+          "height": 0.20043,
+          "expectedReach": 0.5,
+          "expectedHeight": 0.201,
+          "frontPart": "armL",
+          "frontGap": 0.0,
+          "reachError": 0.00218,
+          "heightError": -0.00057
+        }
+      ],
+      "footSurface": {
+        "initialMin": -0.00081,
+        "absoluteMin": -0.00132,
+        "relativeSink": -0.00051,
+        "maxBothFeetAbove": -0.00081,
+        "minimumAtFrame": 11
+      }
+    },
+    {
+      "id": "moguzo",
+      "slot": "crouch_heavy",
+      "clip": "v17_crouch_heavy",
+      "attackLimb": "pawR",
+      "attackPart": "armR",
+      "clock": {
+        "frames": 46,
+        "contactFrame": 17
+      },
+      "surface": [
+        {
+          "phase": 0,
+          "reach": 0.46888,
+          "height": 0.16554,
+          "expectedReach": 0.451,
+          "expectedHeight": 0.17,
+          "frontPart": "armR",
+          "frontGap": 0.0,
+          "reachError": 0.01788,
+          "heightError": -0.00446
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.46888,
+          "height": 0.16554,
+          "expectedReach": 0.469,
+          "expectedHeight": 0.166,
+          "frontPart": "armR",
+          "frontGap": 0.0,
+          "reachError": -0.00012,
+          "heightError": -0.00046
+        },
+        {
+          "phase": 1,
+          "reach": 0.46888,
+          "height": 0.16554,
+          "expectedReach": 0.466,
+          "expectedHeight": 0.166,
+          "frontPart": "armR",
+          "frontGap": 0.0,
+          "reachError": 0.00288,
+          "heightError": -0.00046
+        }
+      ],
+      "footSurface": {
+        "initialMin": -0.00081,
+        "absoluteMin": -0.00102,
+        "relativeSink": -0.0002,
+        "maxBothFeetAbove": 3e-05,
+        "minimumAtFrame": 3
+      }
+    },
+    {
+      "id": "moguzo",
+      "slot": "air_weak",
+      "clip": "v17_air_weak",
+      "attackLimb": "pawL",
+      "attackPart": "armL",
+      "clock": {
+        "frames": 28,
+        "contactFrame": 9
+      },
+      "surface": [
+        {
+          "phase": 0,
+          "reach": 0.394,
+          "height": 0.21525,
+          "expectedReach": 0.39,
+          "expectedHeight": 0.219,
+          "frontPart": "armL",
+          "frontGap": 0.0,
+          "reachError": 0.004,
+          "heightError": -0.00375
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.394,
+          "height": 0.21525,
+          "expectedReach": 0.394,
+          "expectedHeight": 0.215,
+          "frontPart": "armL",
+          "frontGap": 0.0,
+          "reachError": 0.0,
+          "heightError": 0.00025
+        },
+        {
+          "phase": 1,
+          "reach": 0.39394,
+          "height": 0.21524,
+          "expectedReach": 0.39,
+          "expectedHeight": 0.216,
+          "frontPart": "armL",
+          "frontGap": 0.0,
+          "reachError": 0.00394,
+          "heightError": -0.00076
+        }
+      ]
+    },
+    {
+      "id": "moguzo",
+      "slot": "air_heavy",
+      "clip": "v17_air_heavy",
+      "attackLimb": "footR",
+      "attackPart": "legR",
+      "clock": {
+        "frames": 46,
+        "contactFrame": 17
+      },
+      "surface": [
+        {
+          "phase": 0,
+          "reach": 0.29099,
+          "height": 0.08482,
+          "expectedReach": 0.294,
+          "expectedHeight": 0.085,
+          "frontPart": "legR",
+          "frontGap": 0.0,
+          "reachError": -0.00301,
+          "heightError": -0.00018
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.29099,
+          "height": 0.08482,
+          "expectedReach": 0.291,
+          "expectedHeight": 0.085,
+          "frontPart": "legR",
+          "frontGap": 0.0,
+          "reachError": -1e-05,
+          "heightError": -0.00018
+        },
+        {
+          "phase": 1,
+          "reach": 0.29099,
+          "height": 0.08482,
+          "expectedReach": 0.29,
+          "expectedHeight": 0.082,
+          "frontPart": "legR",
+          "frontGap": 0.0,
+          "reachError": 0.00099,
+          "heightError": 0.00282
+        }
+      ]
+    },
+    {
+      "id": "pisuke",
+      "slot": "stand_weak",
+      "clip": "v17_stand_weak",
+      "attackLimb": "pawL",
+      "attackPart": "armL",
+      "clock": {
+        "frames": 28,
+        "contactFrame": 9
+      },
+      "surface": [
+        {
+          "phase": 0,
+          "reach": 0.38226,
+          "height": 0.39842,
+          "expectedReach": 0.379,
+          "expectedHeight": 0.4,
+          "frontPart": "armL",
+          "frontGap": 0.0,
+          "reachError": 0.00326,
+          "heightError": -0.00158
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.38227,
+          "height": 0.39842,
+          "expectedReach": 0.382,
+          "expectedHeight": 0.398,
+          "frontPart": "armL",
+          "frontGap": 0.0,
+          "reachError": 0.00027,
+          "heightError": 0.00042
+        },
+        {
+          "phase": 1,
+          "reach": 0.38221,
+          "height": 0.39845,
+          "expectedReach": 0.378,
+          "expectedHeight": 0.397,
+          "frontPart": "armL",
+          "frontGap": 0.0,
+          "reachError": 0.00421,
+          "heightError": 0.00145
+        }
+      ],
+      "footSurface": {
+        "initialMin": -1e-05,
+        "absoluteMin": -2e-05,
+        "relativeSink": -2e-05,
+        "maxBothFeetAbove": 8e-05,
+        "minimumAtFrame": 10
+      }
+    },
+    {
+      "id": "pisuke",
+      "slot": "stand_heavy",
+      "clip": "v17_stand_heavy",
+      "attackLimb": "footR",
+      "attackPart": "legR",
+      "clock": {
+        "frames": 46,
+        "contactFrame": 17
+      },
+      "surface": [
+        {
+          "phase": 0,
+          "reach": 0.39174,
+          "height": 0.26197,
+          "expectedReach": 0.375,
+          "expectedHeight": 0.246,
+          "frontPart": "legR",
+          "frontGap": 0.0,
+          "reachError": 0.01674,
+          "heightError": 0.01597
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.39174,
+          "height": 0.26197,
+          "expectedReach": 0.392,
+          "expectedHeight": 0.262,
+          "frontPart": "legR",
+          "frontGap": 0.0,
+          "reachError": -0.00026,
+          "heightError": -3e-05
+        },
+        {
+          "phase": 1,
+          "reach": 0.39174,
+          "height": 0.26197,
+          "expectedReach": 0.383,
+          "expectedHeight": 0.257,
+          "frontPart": "legR",
+          "frontGap": 0.0,
+          "reachError": 0.00874,
+          "heightError": 0.00497
+        }
+      ],
+      "footSurface": {
+        "initialMin": -1e-05,
+        "absoluteMin": -0.00036,
+        "relativeSink": -0.00035,
+        "maxBothFeetAbove": 0.00023,
+        "minimumAtFrame": 15
+      }
+    },
+    {
+      "id": "pisuke",
+      "slot": "crouch_weak",
+      "clip": "v17_crouch_weak",
+      "attackLimb": "pawR",
+      "attackPart": "armR",
+      "clock": {
+        "frames": 28,
+        "contactFrame": 9
+      },
+      "surface": [
+        {
+          "phase": 0,
+          "reach": 0.43965,
+          "height": 0.07531,
+          "expectedReach": 0.434,
+          "expectedHeight": 0.077,
+          "frontPart": "head",
+          "frontGap": 0.01622,
+          "reachError": 0.00565,
+          "heightError": -0.00169
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.43966,
+          "height": 0.07531,
+          "expectedReach": 0.44,
+          "expectedHeight": 0.075,
+          "frontPart": "head",
+          "frontGap": 0.01621,
+          "reachError": -0.00034,
+          "heightError": 0.00031
+        },
+        {
+          "phase": 1,
+          "reach": 0.43961,
+          "height": 0.07533,
+          "expectedReach": 0.438,
+          "expectedHeight": 0.076,
+          "frontPart": "head",
+          "frontGap": 0.01624,
+          "reachError": 0.00161,
+          "heightError": -0.00067
+        }
+      ],
+      "footSurface": {
+        "initialMin": 8e-05,
+        "absoluteMin": -7e-05,
+        "relativeSink": -0.00015,
+        "maxBothFeetAbove": 8e-05,
+        "minimumAtFrame": 9
+      }
+    },
+    {
+      "id": "pisuke",
+      "slot": "crouch_heavy",
+      "clip": "v17_crouch_heavy",
+      "attackLimb": "footR",
+      "attackPart": "legR",
+      "clock": {
+        "frames": 46,
+        "contactFrame": 17
+      },
+      "surface": [
+        {
+          "phase": 0,
+          "reach": 0.41143,
+          "height": 0.04764,
+          "expectedReach": 0.392,
+          "expectedHeight": 0.044,
+          "frontPart": "legR",
+          "frontGap": 0.0,
+          "reachError": 0.01943,
+          "heightError": 0.00364
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.41143,
+          "height": 0.04764,
+          "expectedReach": 0.411,
+          "expectedHeight": 0.048,
+          "frontPart": "legR",
+          "frontGap": 0.0,
+          "reachError": 0.00043,
+          "heightError": -0.00036
+        },
+        {
+          "phase": 1,
+          "reach": 0.41143,
+          "height": 0.04764,
+          "expectedReach": 0.407,
+          "expectedHeight": 0.045,
+          "frontPart": "legR",
+          "frontGap": 0.0,
+          "reachError": 0.00443,
+          "heightError": 0.00264
+        }
+      ],
+      "footSurface": {
+        "initialMin": 8e-05,
+        "absoluteMin": -6e-05,
+        "relativeSink": -0.00014,
+        "maxBothFeetAbove": 0.00015,
+        "minimumAtFrame": 15
+      }
+    },
+    {
+      "id": "pisuke",
+      "slot": "air_weak",
+      "clip": "v17_air_weak",
+      "attackLimb": "pawL",
+      "attackPart": "armL",
+      "clock": {
+        "frames": 28,
+        "contactFrame": 9
+      },
+      "surface": [
+        {
+          "phase": 0,
+          "reach": 0.3568,
+          "height": 0.24312,
+          "expectedReach": 0.353,
+          "expectedHeight": 0.249,
+          "frontPart": "armL",
+          "frontGap": 0.0,
+          "reachError": 0.0038,
+          "heightError": -0.00588
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.35681,
+          "height": 0.24312,
+          "expectedReach": 0.357,
+          "expectedHeight": 0.243,
+          "frontPart": "armL",
+          "frontGap": 0.0,
+          "reachError": -0.00019,
+          "heightError": 0.00012
+        },
+        {
+          "phase": 1,
+          "reach": 0.35674,
+          "height": 0.24309,
+          "expectedReach": 0.353,
+          "expectedHeight": 0.247,
+          "frontPart": "armL",
+          "frontGap": 0.0,
+          "reachError": 0.00374,
+          "heightError": -0.00391
+        }
+      ]
+    },
+    {
+      "id": "pisuke",
+      "slot": "air_heavy",
+      "clip": "v17_air_heavy",
+      "attackLimb": "footR",
+      "attackPart": "legR",
+      "clock": {
+        "frames": 46,
+        "contactFrame": 17
+      },
+      "surface": [
+        {
+          "phase": 0,
+          "reach": 0.31721,
+          "height": 0.10681,
+          "expectedReach": 0.323,
+          "expectedHeight": 0.112,
+          "frontPart": "legR",
+          "frontGap": 0.0,
+          "reachError": -0.00579,
+          "heightError": -0.00519
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.31721,
+          "height": 0.10681,
+          "expectedReach": 0.317,
+          "expectedHeight": 0.107,
+          "frontPart": "legR",
+          "frontGap": 0.0,
+          "reachError": 0.00021,
+          "heightError": -0.00019
+        },
+        {
+          "phase": 1,
+          "reach": 0.31721,
+          "height": 0.10681,
+          "expectedReach": 0.316,
+          "expectedHeight": 0.103,
+          "frontPart": "legR",
+          "frontGap": 0.0,
+          "reachError": 0.00121,
+          "heightError": 0.00381
+        }
+      ]
+    },
+    {
+      "id": "godan",
+      "slot": "stand_weak",
+      "clip": "v17_stand_weak",
+      "attackLimb": "pawL",
+      "attackPart": "armL",
+      "clock": {
+        "frames": 32,
+        "contactFrame": 11
+      },
+      "surface": [
+        {
+          "phase": 0,
+          "reach": 0.47222,
+          "height": 0.38187,
+          "expectedReach": 0.463,
+          "expectedHeight": 0.379,
+          "frontPart": "armL",
+          "frontGap": 0.0,
+          "reachError": 0.00922,
+          "heightError": 0.00287
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.47222,
+          "height": 0.38187,
+          "expectedReach": 0.472,
+          "expectedHeight": 0.382,
+          "frontPart": "armL",
+          "frontGap": 0.0,
+          "reachError": 0.00022,
+          "heightError": -0.00013
+        },
+        {
+          "phase": 1,
+          "reach": 0.47219,
+          "height": 0.38185,
+          "expectedReach": 0.467,
+          "expectedHeight": 0.374,
+          "frontPart": "armL",
+          "frontGap": 0.0,
+          "reachError": 0.00519,
+          "heightError": 0.00785
+        }
+      ],
+      "footSurface": {
+        "initialMin": -1e-05,
+        "absoluteMin": -1e-05,
+        "relativeSink": -0.0,
+        "maxBothFeetAbove": -1e-05,
+        "minimumAtFrame": 30
+      }
+    },
+    {
+      "id": "godan",
+      "slot": "stand_heavy",
+      "clip": "v17_stand_heavy",
+      "attackLimb": "pawR",
+      "attackPart": "armR",
+      "clock": {
+        "frames": 54,
+        "contactFrame": 21
+      },
+      "surface": [
+        {
+          "phase": 0,
+          "reach": 0.60635,
+          "height": 0.24625,
+          "expectedReach": 0.561,
+          "expectedHeight": 0.283,
+          "frontPart": "armR",
+          "frontGap": 0.0,
+          "reachError": 0.04535,
+          "heightError": -0.03675
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.60635,
+          "height": 0.24625,
+          "expectedReach": 0.606,
+          "expectedHeight": 0.246,
+          "frontPart": "armR",
+          "frontGap": 0.0,
+          "reachError": 0.00035,
+          "heightError": 0.00025
+        },
+        {
+          "phase": 1,
+          "reach": 0.60634,
+          "height": 0.24623,
+          "expectedReach": 0.604,
+          "expectedHeight": 0.241,
+          "frontPart": "armR",
+          "frontGap": 0.0,
+          "reachError": 0.00234,
+          "heightError": 0.00523
+        }
+      ],
+      "footSurface": {
+        "initialMin": -1e-05,
+        "absoluteMin": -0.00625,
+        "relativeSink": -0.00624,
+        "maxBothFeetAbove": -1e-05,
+        "minimumAtFrame": 44
+      }
+    },
+    {
+      "id": "godan",
+      "slot": "crouch_weak",
+      "clip": "v17_crouch_weak",
+      "attackLimb": "pawR",
+      "attackPart": "armR",
+      "clock": {
+        "frames": 32,
+        "contactFrame": 11
+      },
+      "surface": [
+        {
+          "phase": 0,
+          "reach": 0.5323,
+          "height": 0.19393,
+          "expectedReach": 0.521,
+          "expectedHeight": 0.195,
+          "frontPart": "armR",
+          "frontGap": 0.0,
+          "reachError": 0.0113,
+          "heightError": -0.00107
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.5323,
+          "height": 0.19393,
+          "expectedReach": 0.532,
+          "expectedHeight": 0.194,
+          "frontPart": "armR",
+          "frontGap": 0.0,
+          "reachError": 0.0003,
+          "heightError": -7e-05
+        },
+        {
+          "phase": 1,
+          "reach": 0.53228,
+          "height": 0.19394,
+          "expectedReach": 0.527,
+          "expectedHeight": 0.196,
+          "frontPart": "armR",
+          "frontGap": 0.0,
+          "reachError": 0.00528,
+          "heightError": -0.00206
+        }
+      ],
+      "footSurface": {
+        "initialMin": -0.00044,
+        "absoluteMin": -0.00044,
+        "relativeSink": -0.0,
+        "maxBothFeetAbove": -0.00044,
+        "minimumAtFrame": 9
+      }
+    },
+    {
+      "id": "godan",
+      "slot": "crouch_heavy",
+      "clip": "v17_crouch_heavy",
+      "attackLimb": "pawR",
+      "attackPart": "armR",
+      "clock": {
+        "frames": 54,
+        "contactFrame": 21
+      },
+      "surface": [
+        {
+          "phase": 0,
+          "reach": 0.56838,
+          "height": 0.34152,
+          "expectedReach": 0.552,
+          "expectedHeight": 0.337,
+          "frontPart": "armR",
+          "frontGap": 0.0,
+          "reachError": 0.01638,
+          "heightError": 0.00452
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.56838,
+          "height": 0.34152,
+          "expectedReach": 0.568,
+          "expectedHeight": 0.342,
+          "frontPart": "armR",
+          "frontGap": 0.0,
+          "reachError": 0.00038,
+          "heightError": -0.00048
+        },
+        {
+          "phase": 1,
+          "reach": 0.56838,
+          "height": 0.34152,
+          "expectedReach": 0.566,
+          "expectedHeight": 0.343,
+          "frontPart": "armR",
+          "frontGap": 0.0,
+          "reachError": 0.00238,
+          "heightError": -0.00148
+        }
+      ],
+      "footSurface": {
+        "initialMin": -0.00044,
+        "absoluteMin": -0.00044,
+        "relativeSink": -0.0,
+        "maxBothFeetAbove": -0.00044,
+        "minimumAtFrame": 36
+      }
+    },
+    {
+      "id": "godan",
+      "slot": "air_weak",
+      "clip": "v17_air_weak",
+      "attackLimb": "elbowR",
+      "attackPart": "armR",
+      "clock": {
+        "frames": 32,
+        "contactFrame": 11
+      },
+      "surface": [
+        {
+          "phase": 0,
+          "reach": 0.28381,
+          "height": 0.36595,
+          "expectedReach": 0.278,
+          "expectedHeight": 0.386,
+          "frontPart": "armR",
+          "frontGap": 0.0,
+          "reachError": 0.00581,
+          "heightError": -0.02005
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.28381,
+          "height": 0.36595,
+          "expectedReach": 0.284,
+          "expectedHeight": 0.366,
+          "frontPart": "armR",
+          "frontGap": 0.0,
+          "reachError": -0.00019,
+          "heightError": -5e-05
+        },
+        {
+          "phase": 1,
+          "reach": 0.28379,
+          "height": 0.36595,
+          "expectedReach": 0.281,
+          "expectedHeight": 0.374,
+          "frontPart": "armR",
+          "frontGap": 0.0,
+          "reachError": 0.00279,
+          "heightError": -0.00805
+        }
+      ]
+    },
+    {
+      "id": "godan",
+      "slot": "air_heavy",
+      "clip": "v17_air_heavy",
+      "attackLimb": "body",
+      "attackPart": "head",
+      "clock": {
+        "frames": 54,
+        "contactFrame": 21
+      },
+      "surface": [
+        {
+          "phase": 0,
+          "reach": 0.47043,
+          "height": 0.23876,
+          "expectedReach": 0.46,
+          "expectedHeight": 0.263,
+          "frontPart": "head",
+          "frontGap": 0.0,
+          "reachError": 0.01043,
+          "heightError": -0.02424
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.47043,
+          "height": 0.23876,
+          "expectedReach": 0.47,
+          "expectedHeight": 0.239,
+          "frontPart": "head",
+          "frontGap": 0.0,
+          "reachError": 0.00043,
+          "heightError": -0.00024
+        },
+        {
+          "phase": 1,
+          "reach": 0.47043,
+          "height": 0.23876,
+          "expectedReach": 0.47,
+          "expectedHeight": 0.239,
+          "frontPart": "head",
+          "frontGap": 0.0,
+          "reachError": 0.00043,
+          "heightError": -0.00024
+        }
+      ]
+    },
+    {
+      "id": "hakuma",
+      "slot": "stand_weak",
+      "clip": "v17_stand_weak",
+      "attackLimb": "pawL",
+      "attackPart": "armL",
+      "clock": {
+        "frames": 28,
+        "contactFrame": 9
+      },
+      "surface": [
+        {
+          "phase": 0,
+          "reach": 0.36746,
+          "height": 0.48278,
+          "expectedReach": 0.365,
+          "expectedHeight": 0.485,
+          "frontPart": "armL",
+          "frontGap": 0.0,
+          "reachError": 0.00246,
+          "heightError": -0.00222
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.36747,
+          "height": 0.48279,
+          "expectedReach": 0.367,
+          "expectedHeight": 0.483,
+          "frontPart": "armL",
+          "frontGap": 0.0,
+          "reachError": 0.00047,
+          "heightError": -0.00021
+        },
+        {
+          "phase": 1,
+          "reach": 0.36743,
+          "height": 0.48275,
+          "expectedReach": 0.366,
+          "expectedHeight": 0.485,
+          "frontPart": "armL",
+          "frontGap": 0.0,
+          "reachError": 0.00143,
+          "heightError": -0.00225
+        }
+      ],
+      "footSurface": {
+        "initialMin": -2e-05,
+        "absoluteMin": -7e-05,
+        "relativeSink": -5e-05,
+        "maxBothFeetAbove": -2e-05,
+        "minimumAtFrame": 9
+      }
+    },
+    {
+      "id": "hakuma",
+      "slot": "stand_heavy",
+      "clip": "v17_stand_heavy",
+      "attackLimb": "pawL+pawR",
+      "attackPart": "armL",
+      "clock": {
+        "frames": 46,
+        "contactFrame": 17
+      },
+      "surface": [
+        {
+          "phase": 0,
+          "reach": 0.43541,
+          "height": 0.44309,
+          "expectedReach": 0.423,
+          "expectedHeight": 0.452,
+          "frontPart": "armL",
+          "frontGap": 0.0,
+          "reachError": 0.01241,
+          "heightError": -0.00891
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.43541,
+          "height": 0.44309,
+          "expectedReach": 0.435,
+          "expectedHeight": 0.443,
+          "frontPart": "armL",
+          "frontGap": 0.0,
+          "reachError": 0.00041,
+          "heightError": 9e-05
+        },
+        {
+          "phase": 1,
+          "reach": 0.43541,
+          "height": 0.44309,
+          "expectedReach": 0.432,
+          "expectedHeight": 0.444,
+          "frontPart": "armL",
+          "frontGap": 0.0,
+          "reachError": 0.00341,
+          "heightError": -0.00091
+        }
+      ],
+      "footSurface": {
+        "initialMin": -2e-05,
+        "absoluteMin": -0.00193,
+        "relativeSink": -0.00191,
+        "maxBothFeetAbove": 8e-05,
+        "minimumAtFrame": 34
+      }
+    },
+    {
+      "id": "hakuma",
+      "slot": "crouch_weak",
+      "clip": "v17_crouch_weak",
+      "attackLimb": "pawR",
+      "attackPart": "armR",
+      "clock": {
+        "frames": 28,
+        "contactFrame": 9
+      },
+      "surface": [
+        {
+          "phase": 0,
+          "reach": 0.50441,
+          "height": 0.25241,
+          "expectedReach": 0.499,
+          "expectedHeight": 0.252,
+          "frontPart": "armR",
+          "frontGap": 0.0,
+          "reachError": 0.00541,
+          "heightError": 0.00041
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.50442,
+          "height": 0.25241,
+          "expectedReach": 0.504,
+          "expectedHeight": 0.252,
+          "frontPart": "armR",
+          "frontGap": 0.0,
+          "reachError": 0.00042,
+          "heightError": 0.00041
+        },
+        {
+          "phase": 1,
+          "reach": 0.50435,
+          "height": 0.25239,
+          "expectedReach": 0.5,
+          "expectedHeight": 0.252,
+          "frontPart": "armR",
+          "frontGap": 0.0,
+          "reachError": 0.00435,
+          "heightError": 0.00039
+        }
+      ],
+      "footSurface": {
+        "initialMin": -0.00035,
+        "absoluteMin": -0.00035,
+        "relativeSink": -0.0,
+        "maxBothFeetAbove": -0.00035,
+        "minimumAtFrame": 16
+      }
+    },
+    {
+      "id": "hakuma",
+      "slot": "crouch_heavy",
+      "clip": "v17_crouch_heavy",
+      "attackLimb": "elbowR",
+      "attackPart": "armR",
+      "clock": {
+        "frames": 46,
+        "contactFrame": 17
+      },
+      "surface": [
+        {
+          "phase": 0,
+          "reach": 0.41477,
+          "height": 0.25129,
+          "expectedReach": 0.406,
+          "expectedHeight": 0.269,
+          "frontPart": "armR",
+          "frontGap": 0.0,
+          "reachError": 0.00877,
+          "heightError": -0.01771
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.41477,
+          "height": 0.25129,
+          "expectedReach": 0.415,
+          "expectedHeight": 0.251,
+          "frontPart": "armR",
+          "frontGap": 0.0,
+          "reachError": -0.00023,
+          "heightError": 0.00029
+        },
+        {
+          "phase": 1,
+          "reach": 0.41477,
+          "height": 0.25129,
+          "expectedReach": 0.414,
+          "expectedHeight": 0.252,
+          "frontPart": "armR",
+          "frontGap": 0.0,
+          "reachError": 0.00077,
+          "heightError": -0.00071
+        }
+      ],
+      "footSurface": {
+        "initialMin": -0.00035,
+        "absoluteMin": -0.00035,
+        "relativeSink": -0.0,
+        "maxBothFeetAbove": -0.00035,
+        "minimumAtFrame": 4
+      }
+    },
+    {
+      "id": "hakuma",
+      "slot": "air_weak",
+      "clip": "v17_air_weak",
+      "attackLimb": "pawL",
+      "attackPart": "armL",
+      "clock": {
+        "frames": 28,
+        "contactFrame": 9
+      },
+      "surface": [
+        {
+          "phase": 0,
+          "reach": 0.40766,
+          "height": 0.47116,
+          "expectedReach": 0.407,
+          "expectedHeight": 0.469,
+          "frontPart": "armL",
+          "frontGap": 0.0,
+          "reachError": 0.00066,
+          "heightError": 0.00216
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.40766,
+          "height": 0.47116,
+          "expectedReach": 0.408,
+          "expectedHeight": 0.471,
+          "frontPart": "armL",
+          "frontGap": 0.0,
+          "reachError": -0.00034,
+          "heightError": 0.00016
+        },
+        {
+          "phase": 1,
+          "reach": 0.40763,
+          "height": 0.47114,
+          "expectedReach": 0.407,
+          "expectedHeight": 0.469,
+          "frontPart": "armL",
+          "frontGap": 0.0,
+          "reachError": 0.00063,
+          "heightError": 0.00214
+        }
+      ]
+    },
+    {
+      "id": "hakuma",
+      "slot": "air_heavy",
+      "clip": "v17_air_heavy",
+      "attackLimb": "pawL+pawR",
+      "attackPart": "armL",
+      "clock": {
+        "frames": 46,
+        "contactFrame": 17
+      },
+      "surface": [
+        {
+          "phase": 0,
+          "reach": 0.46036,
+          "height": 0.37037,
+          "expectedReach": 0.453,
+          "expectedHeight": 0.391,
+          "frontPart": "armL",
+          "frontGap": 0.0,
+          "reachError": 0.00736,
+          "heightError": -0.02063
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.46036,
+          "height": 0.37037,
+          "expectedReach": 0.46,
+          "expectedHeight": 0.37,
+          "frontPart": "armL",
+          "frontGap": 0.0,
+          "reachError": 0.00036,
+          "heightError": 0.00037
+        },
+        {
+          "phase": 1,
+          "reach": 0.46036,
+          "height": 0.37037,
+          "expectedReach": 0.461,
+          "expectedHeight": 0.369,
+          "frontPart": "armL",
+          "frontGap": 0.0,
+          "reachError": -0.00064,
+          "heightError": 0.00137
+        }
+      ]
+    },
+    {
+      "id": "chirka",
+      "slot": "stand_weak",
+      "clip": "v17_stand_weak",
+      "attackLimb": "pawL",
+      "attackPart": "armL",
+      "clock": {
+        "frames": 28,
+        "contactFrame": 9
+      },
+      "surface": [
+        {
+          "phase": 0,
+          "reach": 0.38456,
+          "height": 0.28691,
+          "expectedReach": 0.38,
+          "expectedHeight": 0.286,
+          "frontPart": "armL",
+          "frontGap": 0.0,
+          "reachError": 0.00456,
+          "heightError": 0.00091
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.38457,
+          "height": 0.28691,
+          "expectedReach": 0.385,
+          "expectedHeight": 0.287,
+          "frontPart": "armL",
+          "frontGap": 0.0,
+          "reachError": -0.00043,
+          "heightError": -9e-05
+        },
+        {
+          "phase": 1,
+          "reach": 0.38451,
+          "height": 0.2869,
+          "expectedReach": 0.38,
+          "expectedHeight": 0.285,
+          "frontPart": "armL",
+          "frontGap": 0.0,
+          "reachError": 0.00451,
+          "heightError": 0.0019
+        }
+      ],
+      "footSurface": {
+        "initialMin": -7e-05,
+        "absoluteMin": -0.00057,
+        "relativeSink": -0.0005,
+        "maxBothFeetAbove": -7e-05,
+        "minimumAtFrame": 9
+      }
+    },
+    {
+      "id": "chirka",
+      "slot": "stand_heavy",
+      "clip": "v17_stand_heavy",
+      "attackLimb": "pawR",
+      "attackPart": "armR",
+      "clock": {
+        "frames": 46,
+        "contactFrame": 17
+      },
+      "surface": [
+        {
+          "phase": 0,
+          "reach": 0.44935,
+          "height": 0.30525,
+          "expectedReach": 0.434,
+          "expectedHeight": 0.311,
+          "frontPart": "armR",
+          "frontGap": 0.0,
+          "reachError": 0.01535,
+          "heightError": -0.00575
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.44935,
+          "height": 0.30525,
+          "expectedReach": 0.449,
+          "expectedHeight": 0.305,
+          "frontPart": "armR",
+          "frontGap": 0.0,
+          "reachError": 0.00035,
+          "heightError": 0.00025
+        },
+        {
+          "phase": 1,
+          "reach": 0.44935,
+          "height": 0.30525,
+          "expectedReach": 0.446,
+          "expectedHeight": 0.304,
+          "frontPart": "armR",
+          "frontGap": 0.0,
+          "reachError": 0.00335,
+          "heightError": 0.00125
+        }
+      ],
+      "footSurface": {
+        "initialMin": -7e-05,
+        "absoluteMin": -0.00237,
+        "relativeSink": -0.0023,
+        "maxBothFeetAbove": 8e-05,
+        "minimumAtFrame": 36
+      }
+    },
+    {
+      "id": "chirka",
+      "slot": "crouch_weak",
+      "clip": "v17_crouch_weak",
+      "attackLimb": "pawL",
+      "attackPart": "armL",
+      "clock": {
+        "frames": 28,
+        "contactFrame": 9
+      },
+      "surface": [
+        {
+          "phase": 0,
+          "reach": 0.48983,
+          "height": 0.04236,
+          "expectedReach": 0.482,
+          "expectedHeight": 0.041,
+          "frontPart": "armL",
+          "frontGap": 0.0,
+          "reachError": 0.00783,
+          "heightError": 0.00136
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.48984,
+          "height": 0.04236,
+          "expectedReach": 0.49,
+          "expectedHeight": 0.042,
+          "frontPart": "armL",
+          "frontGap": 0.0,
+          "reachError": -0.00016,
+          "heightError": 0.00036
+        },
+        {
+          "phase": 1,
+          "reach": 0.48976,
+          "height": 0.04234,
+          "expectedReach": 0.484,
+          "expectedHeight": 0.04,
+          "frontPart": "armL",
+          "frontGap": 0.0,
+          "reachError": 0.00576,
+          "heightError": 0.00234
+        }
+      ],
+      "footSurface": {
+        "initialMin": 0.0002,
+        "absoluteMin": -0.00029,
+        "relativeSink": -0.00049,
+        "maxBothFeetAbove": 0.0002,
+        "minimumAtFrame": 12
+      }
+    },
+    {
+      "id": "chirka",
+      "slot": "crouch_heavy",
+      "clip": "v17_crouch_heavy",
+      "attackLimb": "footL",
+      "attackPart": "legL",
+      "clock": {
+        "frames": 46,
+        "contactFrame": 17
+      },
+      "surface": [
+        {
+          "phase": 0,
+          "reach": 0.34923,
+          "height": 0.04572,
+          "expectedReach": 0.338,
+          "expectedHeight": 0.045,
+          "frontPart": "legL",
+          "frontGap": 0.0,
+          "reachError": 0.01123,
+          "heightError": 0.00072
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.34923,
+          "height": 0.04572,
+          "expectedReach": 0.349,
+          "expectedHeight": 0.046,
+          "frontPart": "legL",
+          "frontGap": 0.0,
+          "reachError": 0.00023,
+          "heightError": -0.00028
+        },
+        {
+          "phase": 1,
+          "reach": 0.34923,
+          "height": 0.04572,
+          "expectedReach": 0.344,
+          "expectedHeight": 0.045,
+          "frontPart": "legL",
+          "frontGap": 0.0,
+          "reachError": 0.00523,
+          "heightError": 0.00072
+        }
+      ],
+      "footSurface": {
+        "initialMin": 0.0002,
+        "absoluteMin": 0.0002,
+        "relativeSink": -0.0,
+        "maxBothFeetAbove": 0.0002,
+        "minimumAtFrame": 46
+      }
+    },
+    {
+      "id": "chirka",
+      "slot": "air_weak",
+      "clip": "v17_air_weak",
+      "attackLimb": "pawL",
+      "attackPart": "armL",
+      "clock": {
+        "frames": 28,
+        "contactFrame": 9
+      },
+      "surface": [
+        {
+          "phase": 0,
+          "reach": 0.35935,
+          "height": 0.18639,
+          "expectedReach": 0.354,
+          "expectedHeight": 0.191,
+          "frontPart": "armL",
+          "frontGap": 0.0,
+          "reachError": 0.00535,
+          "heightError": -0.00461
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.35936,
+          "height": 0.1864,
+          "expectedReach": 0.359,
+          "expectedHeight": 0.186,
+          "frontPart": "armL",
+          "frontGap": 0.0,
+          "reachError": 0.00036,
+          "heightError": 0.0004
+        },
+        {
+          "phase": 1,
+          "reach": 0.35928,
+          "height": 0.18635,
+          "expectedReach": 0.355,
+          "expectedHeight": 0.19,
+          "frontPart": "armL",
+          "frontGap": 0.0,
+          "reachError": 0.00428,
+          "heightError": -0.00365
+        }
+      ]
+    },
+    {
+      "id": "chirka",
+      "slot": "air_heavy",
+      "clip": "v17_air_heavy",
+      "attackLimb": "pawR",
+      "attackPart": "armR",
+      "clock": {
+        "frames": 46,
+        "contactFrame": 18
+      },
+      "surface": [
+        {
+          "phase": 0,
+          "reach": 0.39353,
+          "height": 0.14988,
+          "expectedReach": 0.35,
+          "expectedHeight": 0.222,
+          "frontPart": "armR",
+          "frontGap": 0.0,
+          "reachError": 0.04353,
+          "heightError": -0.07212
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.39353,
+          "height": 0.14988,
+          "expectedReach": 0.394,
+          "expectedHeight": 0.15,
+          "frontPart": "armR",
+          "frontGap": 0.0,
+          "reachError": -0.00047,
+          "heightError": -0.00012
+        },
+        {
+          "phase": 1,
+          "reach": 0.39348,
+          "height": 0.14986,
+          "expectedReach": 0.391,
+          "expectedHeight": 0.149,
+          "frontPart": "armR",
+          "frontGap": 0.0,
+          "reachError": 0.00248,
+          "heightError": 0.00086
+        }
+      ]
+    },
+    {
+      "id": "takimaru",
+      "slot": "stand_weak",
+      "clip": "v17_stand_weak",
+      "attackLimb": "pawL",
+      "attackPart": "armL",
+      "clock": {
+        "frames": 28,
+        "contactFrame": 9
+      },
+      "surface": [
+        {
+          "phase": 0,
+          "reach": 0.49441,
+          "height": 0.59254,
+          "expectedReach": 0.492,
+          "expectedHeight": 0.59,
+          "frontPart": "armL",
+          "frontGap": 0.0,
+          "reachError": 0.00241,
+          "heightError": 0.00254
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.49441,
+          "height": 0.59254,
+          "expectedReach": 0.494,
+          "expectedHeight": 0.593,
+          "frontPart": "armL",
+          "frontGap": 0.0,
+          "reachError": 0.00041,
+          "heightError": -0.00046
+        },
+        {
+          "phase": 1,
+          "reach": 0.49439,
+          "height": 0.5925,
+          "expectedReach": 0.494,
+          "expectedHeight": 0.59,
+          "frontPart": "armL",
+          "frontGap": 0.0,
+          "reachError": 0.00039,
+          "heightError": 0.0025
+        }
+      ],
+      "footSurface": {
+        "initialMin": -0.00047,
+        "absoluteMin": -0.00047,
+        "relativeSink": -0.0,
+        "maxBothFeetAbove": -0.00047,
+        "minimumAtFrame": 13
+      }
+    },
+    {
+      "id": "takimaru",
+      "slot": "stand_heavy",
+      "clip": "v17_stand_heavy",
+      "attackLimb": "shoulderR",
+      "attackPart": "armR",
+      "clock": {
+        "frames": 46,
+        "contactFrame": 17
+      },
+      "surface": [
+        {
+          "phase": 0,
+          "reach": 0.44432,
+          "height": 0.25903,
+          "expectedReach": 0.439,
+          "expectedHeight": 0.278,
+          "frontPart": "armR",
+          "frontGap": 0.0,
+          "reachError": 0.00532,
+          "heightError": -0.01897
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.44432,
+          "height": 0.25903,
+          "expectedReach": 0.444,
+          "expectedHeight": 0.259,
+          "frontPart": "armR",
+          "frontGap": 0.0,
+          "reachError": 0.00032,
+          "heightError": 3e-05
+        },
+        {
+          "phase": 1,
+          "reach": 0.44432,
+          "height": 0.25903,
+          "expectedReach": 0.444,
+          "expectedHeight": 0.26,
+          "frontPart": "armR",
+          "frontGap": 0.0,
+          "reachError": 0.00032,
+          "heightError": -0.00097
+        }
+      ],
+      "footSurface": {
+        "initialMin": -0.00047,
+        "absoluteMin": -0.00511,
+        "relativeSink": -0.00463,
+        "maxBothFeetAbove": -0.00047,
+        "minimumAtFrame": 35
+      }
+    },
+    {
+      "id": "takimaru",
+      "slot": "crouch_weak",
+      "clip": "v17_crouch_weak",
+      "attackLimb": "pawR",
+      "attackPart": "armR",
+      "clock": {
+        "frames": 28,
+        "contactFrame": 9
+      },
+      "surface": [
+        {
+          "phase": 0,
+          "reach": 0.60659,
+          "height": 0.22914,
+          "expectedReach": 0.602,
+          "expectedHeight": 0.23,
+          "frontPart": "armR",
+          "frontGap": 0.0,
+          "reachError": 0.00459,
+          "heightError": -0.00086
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.6066,
+          "height": 0.22914,
+          "expectedReach": 0.607,
+          "expectedHeight": 0.229,
+          "frontPart": "armR",
+          "frontGap": 0.0,
+          "reachError": -0.0004,
+          "heightError": 0.00014
+        },
+        {
+          "phase": 1,
+          "reach": 0.60653,
+          "height": 0.22914,
+          "expectedReach": 0.603,
+          "expectedHeight": 0.229,
+          "frontPart": "armR",
+          "frontGap": 0.0,
+          "reachError": 0.00353,
+          "heightError": 0.00014
+        }
+      ],
+      "footSurface": {
+        "initialMin": -0.0006,
+        "absoluteMin": -0.0006,
+        "relativeSink": -0.0,
+        "maxBothFeetAbove": -0.0006,
+        "minimumAtFrame": 8
+      }
+    },
+    {
+      "id": "takimaru",
+      "slot": "crouch_heavy",
+      "clip": "v17_crouch_heavy",
+      "attackLimb": "pawL+pawR",
+      "attackPart": "armL",
+      "clock": {
+        "frames": 46,
+        "contactFrame": 17
+      },
+      "surface": [
+        {
+          "phase": 0,
+          "reach": 0.52273,
+          "height": 0.60629,
+          "expectedReach": 0.515,
+          "expectedHeight": 0.562,
+          "frontPart": "armL",
+          "frontGap": 0.0,
+          "reachError": 0.00773,
+          "heightError": 0.04429
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.52273,
+          "height": 0.60629,
+          "expectedReach": 0.523,
+          "expectedHeight": 0.606,
+          "frontPart": "armL",
+          "frontGap": 0.0,
+          "reachError": -0.00027,
+          "heightError": 0.00029
+        },
+        {
+          "phase": 1,
+          "reach": 0.52273,
+          "height": 0.60629,
+          "expectedReach": 0.519,
+          "expectedHeight": 0.611,
+          "frontPart": "armL",
+          "frontGap": 0.0,
+          "reachError": 0.00373,
+          "heightError": -0.00471
+        }
+      ],
+      "footSurface": {
+        "initialMin": -0.0006,
+        "absoluteMin": -0.0006,
+        "relativeSink": -0.0,
+        "maxBothFeetAbove": -0.0006,
+        "minimumAtFrame": 12
+      }
+    },
+    {
+      "id": "takimaru",
+      "slot": "air_weak",
+      "clip": "v17_air_weak",
+      "attackLimb": "elbowR",
+      "attackPart": "armR",
+      "clock": {
+        "frames": 28,
+        "contactFrame": 9
+      },
+      "surface": [
+        {
+          "phase": 0,
+          "reach": 0.28505,
+          "height": 0.43746,
+          "expectedReach": 0.285,
+          "expectedHeight": 0.449,
+          "frontPart": "armR",
+          "frontGap": 0.0,
+          "reachError": 5e-05,
+          "heightError": -0.01154
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.28505,
+          "height": 0.43745,
+          "expectedReach": 0.285,
+          "expectedHeight": 0.437,
+          "frontPart": "armR",
+          "frontGap": 0.0,
+          "reachError": 5e-05,
+          "heightError": 0.00045
+        },
+        {
+          "phase": 1,
+          "reach": 0.28503,
+          "height": 0.43744,
+          "expectedReach": 0.284,
+          "expectedHeight": 0.437,
+          "frontPart": "armR",
+          "frontGap": 0.0,
+          "reachError": 0.00103,
+          "heightError": 0.00044
+        }
+      ]
+    },
+    {
+      "id": "takimaru",
+      "slot": "air_heavy",
+      "clip": "v17_air_heavy",
+      "attackLimb": "body",
+      "attackPart": "head",
+      "clock": {
+        "frames": 46,
+        "contactFrame": 17
+      },
+      "surface": [
+        {
+          "phase": 0,
+          "reach": 0.46567,
+          "height": 0.33093,
+          "expectedReach": 0.457,
+          "expectedHeight": 0.354,
+          "frontPart": "head",
+          "frontGap": 0.0,
+          "reachError": 0.00867,
+          "heightError": -0.02307
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.46567,
+          "height": 0.33093,
+          "expectedReach": 0.466,
+          "expectedHeight": 0.331,
+          "frontPart": "head",
+          "frontGap": 0.0,
+          "reachError": -0.00033,
+          "heightError": -7e-05
+        },
+        {
+          "phase": 1,
+          "reach": 0.46567,
+          "height": 0.33093,
+          "expectedReach": 0.466,
+          "expectedHeight": 0.329,
+          "frontPart": "head",
+          "frontGap": 0.0,
+          "reachError": -0.00033,
+          "heightError": 0.00193
+        }
+      ]
+    },
+    {
+      "id": "yomikage",
+      "slot": "stand_weak",
+      "clip": "v17_stand_weak",
+      "attackLimb": "pawL",
+      "attackPart": "armL",
+      "clock": {
+        "frames": 24,
+        "contactFrame": 7
+      },
+      "surface": [
+        {
+          "phase": 0,
+          "reach": 0.34864,
+          "height": 0.41961,
+          "expectedReach": 0.341,
+          "expectedHeight": 0.424,
+          "frontPart": "armL",
+          "frontGap": 0.0,
+          "reachError": 0.00764,
+          "heightError": -0.00439
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.34864,
+          "height": 0.41961,
+          "expectedReach": 0.349,
+          "expectedHeight": 0.42,
+          "frontPart": "armL",
+          "frontGap": 0.0,
+          "reachError": -0.00036,
+          "heightError": -0.00039
+        },
+        {
+          "phase": 1,
+          "reach": 0.34861,
+          "height": 0.41963,
+          "expectedReach": 0.344,
+          "expectedHeight": 0.423,
+          "frontPart": "armL",
+          "frontGap": 0.0,
+          "reachError": 0.00461,
+          "heightError": -0.00337
+        }
+      ],
+      "footSurface": {
+        "initialMin": -0.00015,
+        "absoluteMin": -0.00015,
+        "relativeSink": 0.0,
+        "maxBothFeetAbove": -0.00015,
+        "minimumAtFrame": 0
+      }
+    },
+    {
+      "id": "yomikage",
+      "slot": "stand_heavy",
+      "clip": "v17_stand_heavy",
+      "attackLimb": "pawR",
+      "attackPart": "armR",
+      "clock": {
+        "frames": 46,
+        "contactFrame": 18
+      },
+      "surface": [
+        {
+          "phase": 0,
+          "reach": 0.46767,
+          "height": 0.37754,
+          "expectedReach": 0.425,
+          "expectedHeight": 0.396,
+          "frontPart": "armR",
+          "frontGap": 0.0,
+          "reachError": 0.04267,
+          "heightError": -0.01846
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.46767,
+          "height": 0.37754,
+          "expectedReach": 0.468,
+          "expectedHeight": 0.378,
+          "frontPart": "armR",
+          "frontGap": 0.0,
+          "reachError": -0.00033,
+          "heightError": -0.00046
+        },
+        {
+          "phase": 1,
+          "reach": 0.46762,
+          "height": 0.37753,
+          "expectedReach": 0.465,
+          "expectedHeight": 0.377,
+          "frontPart": "armR",
+          "frontGap": 0.0,
+          "reachError": 0.00262,
+          "heightError": 0.00053
+        }
+      ],
+      "footSurface": {
+        "initialMin": -0.00015,
+        "absoluteMin": -0.00289,
+        "relativeSink": -0.00273,
+        "maxBothFeetAbove": -0.00011,
+        "minimumAtFrame": 36
+      }
+    },
+    {
+      "id": "yomikage",
+      "slot": "crouch_weak",
+      "clip": "v17_crouch_weak",
+      "attackLimb": "pawR",
+      "attackPart": "armR",
+      "clock": {
+        "frames": 24,
+        "contactFrame": 7
+      },
+      "surface": [
+        {
+          "phase": 0,
+          "reach": 0.36006,
+          "height": 0.15073,
+          "expectedReach": 0.349,
+          "expectedHeight": 0.145,
+          "frontPart": "head",
+          "frontGap": 0.01234,
+          "reachError": 0.01106,
+          "heightError": 0.00573
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.36006,
+          "height": 0.15073,
+          "expectedReach": 0.36,
+          "expectedHeight": 0.151,
+          "frontPart": "head",
+          "frontGap": 0.01234,
+          "reachError": 6e-05,
+          "heightError": -0.00027
+        },
+        {
+          "phase": 1,
+          "reach": 0.36002,
+          "height": 0.15068,
+          "expectedReach": 0.353,
+          "expectedHeight": 0.144,
+          "frontPart": "head",
+          "frontGap": 0.01237,
+          "reachError": 0.00702,
+          "heightError": 0.00668
+        }
+      ],
+      "footSurface": {
+        "initialMin": -0.00024,
+        "absoluteMin": -0.00024,
+        "relativeSink": 0.0,
+        "maxBothFeetAbove": -0.00024,
+        "minimumAtFrame": 0
+      }
+    },
+    {
+      "id": "yomikage",
+      "slot": "crouch_heavy",
+      "clip": "v17_crouch_heavy",
+      "attackLimb": "kneeL+elbowR",
+      "attackPart": "legL",
+      "clock": {
+        "frames": 46,
+        "contactFrame": 17
+      },
+      "surface": [
+        {
+          "phase": 0,
+          "reach": 0.3373,
+          "height": 0.16089,
+          "expectedReach": 0.328,
+          "expectedHeight": 0.15,
+          "frontPart": "legL",
+          "frontGap": 0.0,
+          "reachError": 0.0093,
+          "heightError": 0.01089
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.3373,
+          "height": 0.16089,
+          "expectedReach": 0.337,
+          "expectedHeight": 0.161,
+          "frontPart": "legL",
+          "frontGap": 0.0,
+          "reachError": 0.0003,
+          "heightError": -0.00011
+        },
+        {
+          "phase": 1,
+          "reach": 0.3373,
+          "height": 0.16089,
+          "expectedReach": 0.331,
+          "expectedHeight": 0.159,
+          "frontPart": "legL",
+          "frontGap": 0.0,
+          "reachError": 0.0063,
+          "heightError": 0.00189
+        }
+      ],
+      "footSurface": {
+        "initialMin": -0.00024,
+        "absoluteMin": -0.00024,
+        "relativeSink": -0.0,
+        "maxBothFeetAbove": -6e-05,
+        "minimumAtFrame": 46
+      }
+    },
+    {
+      "id": "yomikage",
+      "slot": "air_weak",
+      "clip": "v17_air_weak",
+      "attackLimb": "pawL",
+      "attackPart": "armL",
+      "clock": {
+        "frames": 24,
+        "contactFrame": 7
+      },
+      "surface": [
+        {
+          "phase": 0,
+          "reach": 0.33234,
+          "height": 0.34275,
+          "expectedReach": 0.329,
+          "expectedHeight": 0.343,
+          "frontPart": "armL",
+          "frontGap": 0.0,
+          "reachError": 0.00334,
+          "heightError": -0.00025
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.33234,
+          "height": 0.34275,
+          "expectedReach": 0.332,
+          "expectedHeight": 0.343,
+          "frontPart": "armL",
+          "frontGap": 0.0,
+          "reachError": 0.00034,
+          "heightError": -0.00025
+        },
+        {
+          "phase": 1,
+          "reach": 0.33232,
+          "height": 0.34273,
+          "expectedReach": 0.328,
+          "expectedHeight": 0.344,
+          "frontPart": "armL",
+          "frontGap": 0.0,
+          "reachError": 0.00432,
+          "heightError": -0.00127
+        }
+      ]
+    },
+    {
+      "id": "yomikage",
+      "slot": "air_heavy",
+      "clip": "v17_air_heavy",
+      "attackLimb": "pawR",
+      "attackPart": "armR",
+      "clock": {
+        "frames": 46,
+        "contactFrame": 17
+      },
+      "surface": [
+        {
+          "phase": 0,
+          "reach": 0.26852,
+          "height": 0.22152,
+          "expectedReach": 0.261,
+          "expectedHeight": 0.251,
+          "frontPart": "armR",
+          "frontGap": 0.0,
+          "reachError": 0.00752,
+          "heightError": -0.02948
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.26852,
+          "height": 0.22152,
+          "expectedReach": 0.269,
+          "expectedHeight": 0.222,
+          "frontPart": "armR",
+          "frontGap": 0.0,
+          "reachError": -0.00048,
+          "heightError": -0.00048
+        },
+        {
+          "phase": 1,
+          "reach": 0.26852,
+          "height": 0.22152,
+          "expectedReach": 0.267,
+          "expectedHeight": 0.222,
+          "frontPart": "armR",
+          "frontGap": 0.0,
+          "reachError": 0.00152,
+          "heightError": -0.00048
+        }
+      ]
+    },
+    {
+      "id": "bullet",
+      "slot": "stand_weak",
+      "clip": "v17_stand_weak",
+      "attackLimb": "pawL",
+      "attackPart": "armL",
+      "clock": {
+        "frames": 28,
+        "contactFrame": 9
+      },
+      "surface": [
+        {
+          "phase": 0,
+          "reach": 0.40548,
+          "height": 0.3802,
+          "expectedReach": 0.4,
+          "expectedHeight": 0.379,
+          "frontPart": "armL",
+          "frontGap": 0.0,
+          "reachError": 0.00548,
+          "heightError": 0.0012
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.40549,
+          "height": 0.3802,
+          "expectedReach": 0.405,
+          "expectedHeight": 0.38,
+          "frontPart": "armL",
+          "frontGap": 0.0,
+          "reachError": 0.00049,
+          "heightError": 0.0002
+        },
+        {
+          "phase": 1,
+          "reach": 0.40543,
+          "height": 0.3802,
+          "expectedReach": 0.401,
+          "expectedHeight": 0.378,
+          "frontPart": "armL",
+          "frontGap": 0.0,
+          "reachError": 0.00443,
+          "heightError": 0.0022
+        }
+      ],
+      "footSurface": {
+        "initialMin": -0.00041,
+        "absoluteMin": -0.00084,
+        "relativeSink": -0.00043,
+        "maxBothFeetAbove": -0.00041,
+        "minimumAtFrame": 9
+      }
+    },
+    {
+      "id": "bullet",
+      "slot": "stand_heavy",
+      "clip": "v17_stand_heavy",
+      "attackLimb": "tail",
+      "attackPart": "tail",
+      "clock": {
+        "frames": 48,
+        "contactFrame": 25
+      },
+      "surface": [
+        {
+          "phase": 0,
+          "reach": 0.64243,
+          "height": 0.19134,
+          "expectedReach": 0.641,
+          "expectedHeight": 0.192,
+          "frontPart": "tail",
+          "frontGap": 0.0,
+          "reachError": 0.00143,
+          "heightError": -0.00066
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.64281,
+          "height": 0.16991,
+          "expectedReach": 0.64,
+          "expectedHeight": 0.171,
+          "frontPart": "tail",
+          "frontGap": 0.0,
+          "reachError": 0.00281,
+          "heightError": -0.00109
+        },
+        {
+          "phase": 1,
+          "reach": 0.56792,
+          "height": 0.1638,
+          "expectedReach": 0.564,
+          "expectedHeight": 0.164,
+          "frontPart": "tail",
+          "frontGap": 0.0,
+          "reachError": 0.00392,
+          "heightError": -0.0002
+        }
+      ],
+      "footSurface": {
+        "initialMin": -0.00041,
+        "absoluteMin": -0.00126,
+        "relativeSink": -0.00085,
+        "maxBothFeetAbove": -0.00041,
+        "minimumAtFrame": 14
+      }
+    },
+    {
+      "id": "bullet",
+      "slot": "crouch_weak",
+      "clip": "v17_crouch_weak",
+      "attackLimb": "pawR",
+      "attackPart": "armR",
+      "clock": {
+        "frames": 28,
+        "contactFrame": 9
+      },
+      "surface": [
+        {
+          "phase": 0,
+          "reach": 0.4031,
+          "height": 0.22575,
+          "expectedReach": 0.399,
+          "expectedHeight": 0.226,
+          "frontPart": "armR",
+          "frontGap": 0.0,
+          "reachError": 0.0041,
+          "heightError": -0.00025
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.40311,
+          "height": 0.22575,
+          "expectedReach": 0.403,
+          "expectedHeight": 0.226,
+          "frontPart": "armR",
+          "frontGap": 0.0,
+          "reachError": 0.00011,
+          "heightError": -0.00025
+        },
+        {
+          "phase": 1,
+          "reach": 0.40306,
+          "height": 0.22572,
+          "expectedReach": 0.4,
+          "expectedHeight": 0.225,
+          "frontPart": "armR",
+          "frontGap": 0.0,
+          "reachError": 0.00306,
+          "heightError": 0.00072
+        }
+      ],
+      "footSurface": {
+        "initialMin": -0.00041,
+        "absoluteMin": -0.00093,
+        "relativeSink": -0.00052,
+        "maxBothFeetAbove": -0.00041,
+        "minimumAtFrame": 9
+      }
+    },
+    {
+      "id": "bullet",
+      "slot": "crouch_heavy",
+      "clip": "v17_crouch_heavy",
+      "attackLimb": "tail",
+      "attackPart": "tail",
+      "clock": {
+        "frames": 48,
+        "contactFrame": 20
+      },
+      "surface": [
+        {
+          "phase": 0,
+          "reach": 0.68021,
+          "height": 0.10696,
+          "expectedReach": 0.672,
+          "expectedHeight": 0.116,
+          "frontPart": "tail",
+          "frontGap": 0.0,
+          "reachError": 0.00821,
+          "heightError": -0.00904
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.68501,
+          "height": 0.06005,
+          "expectedReach": 0.685,
+          "expectedHeight": 0.063,
+          "frontPart": "tail",
+          "frontGap": 0.0,
+          "reachError": 1e-05,
+          "heightError": -0.00295
+        },
+        {
+          "phase": 1,
+          "reach": 0.68623,
+          "height": 0.05554,
+          "expectedReach": 0.686,
+          "expectedHeight": 0.056,
+          "frontPart": "tail",
+          "frontGap": 0.0,
+          "reachError": 0.00023,
+          "heightError": -0.00046
+        }
+      ],
+      "footSurface": {
+        "initialMin": -0.00041,
+        "absoluteMin": -0.00236,
+        "relativeSink": -0.00195,
+        "maxBothFeetAbove": -0.00041,
+        "minimumAtFrame": 14
+      }
+    },
+    {
+      "id": "bullet",
+      "slot": "air_weak",
+      "clip": "v17_air_weak",
+      "attackLimb": "pawL",
+      "attackPart": "armL",
+      "clock": {
+        "frames": 28,
+        "contactFrame": 9
+      },
+      "surface": [
+        {
+          "phase": 0,
+          "reach": 0.39649,
+          "height": 0.23778,
+          "expectedReach": 0.392,
+          "expectedHeight": 0.241,
+          "frontPart": "armL",
+          "frontGap": 0.0,
+          "reachError": 0.00449,
+          "heightError": -0.00322
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.39649,
+          "height": 0.23778,
+          "expectedReach": 0.396,
+          "expectedHeight": 0.238,
+          "frontPart": "armL",
+          "frontGap": 0.0,
+          "reachError": 0.00049,
+          "heightError": -0.00022
+        },
+        {
+          "phase": 1,
+          "reach": 0.39643,
+          "height": 0.23778,
+          "expectedReach": 0.393,
+          "expectedHeight": 0.239,
+          "frontPart": "armL",
+          "frontGap": 0.0,
+          "reachError": 0.00343,
+          "heightError": -0.00122
+        }
+      ]
+    },
+    {
+      "id": "bullet",
+      "slot": "air_heavy",
+      "clip": "v17_air_heavy",
+      "attackLimb": "tail",
+      "attackPart": "tail",
+      "clock": {
+        "frames": 48,
+        "contactFrame": 20
+      },
+      "surface": [
+        {
+          "phase": 0,
+          "reach": 0.58266,
+          "height": -0.0725,
+          "expectedReach": 0.581,
+          "expectedHeight": 0,
+          "frontPart": "tail",
+          "frontGap": 0.0,
+          "reachError": 0.00166,
+          "heightError": -0.0725
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.54854,
+          "height": -0.1621,
+          "expectedReach": 0.552,
+          "expectedHeight": 0,
+          "frontPart": "tail",
+          "frontGap": 0.0,
+          "reachError": -0.00346,
+          "heightError": -0.1621
+        },
+        {
+          "phase": 1,
+          "reach": 0.54909,
+          "height": -0.16974,
+          "expectedReach": 0.549,
+          "expectedHeight": 0,
+          "frontPart": "tail",
+          "frontGap": 0.0,
+          "reachError": 9e-05,
+          "heightError": -0.16974
+        }
+      ]
+    },
+    {
+      "id": "dark_moguzo",
+      "slot": "stand_weak",
+      "clip": "v17_stand_weak",
+      "attackLimb": "pawR",
+      "attackPart": "armR",
+      "clock": {
+        "frames": 24,
+        "contactFrame": 7
+      },
+      "surface": [
+        {
+          "phase": 0,
+          "reach": 0.38093,
+          "height": 0.27487,
+          "expectedReach": 0.368,
+          "expectedHeight": 0.279,
+          "frontPart": "armR",
+          "frontGap": 0.0,
+          "reachError": 0.01293,
+          "heightError": -0.00413
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.38093,
+          "height": 0.27487,
+          "expectedReach": 0.381,
+          "expectedHeight": 0.275,
+          "frontPart": "armR",
+          "frontGap": 0.0,
+          "reachError": -7e-05,
+          "heightError": -0.00013
+        },
+        {
+          "phase": 1,
+          "reach": 0.38088,
+          "height": 0.27487,
+          "expectedReach": 0.372,
+          "expectedHeight": 0.276,
+          "frontPart": "armR",
+          "frontGap": 0.0,
+          "reachError": 0.00888,
+          "heightError": -0.00113
+        }
+      ],
+      "footSurface": {
+        "initialMin": -0.00026,
+        "absoluteMin": -0.00082,
+        "relativeSink": -0.00056,
+        "maxBothFeetAbove": -0.00021,
+        "minimumAtFrame": 10
+      }
+    },
+    {
+      "id": "dark_moguzo",
+      "slot": "stand_heavy",
+      "clip": "v17_stand_heavy",
+      "attackLimb": "pawL",
+      "attackPart": "armL",
+      "clock": {
+        "frames": 46,
+        "contactFrame": 17
+      },
+      "surface": [
+        {
+          "phase": 0,
+          "reach": 0.45275,
+          "height": 0.25574,
+          "expectedReach": 0.45,
+          "expectedHeight": 0.256,
+          "frontPart": "armL",
+          "frontGap": 0.0,
+          "reachError": 0.00275,
+          "heightError": -0.00026
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.45275,
+          "height": 0.25574,
+          "expectedReach": 0.453,
+          "expectedHeight": 0.256,
+          "frontPart": "armL",
+          "frontGap": 0.0,
+          "reachError": -0.00025,
+          "heightError": -0.00026
+        },
+        {
+          "phase": 1,
+          "reach": 0.45275,
+          "height": 0.25574,
+          "expectedReach": 0.445,
+          "expectedHeight": 0.256,
+          "frontPart": "armL",
+          "frontGap": 0.0,
+          "reachError": 0.00775,
+          "heightError": -0.00026
+        }
+      ],
+      "footSurface": {
+        "initialMin": -0.00026,
+        "absoluteMin": -0.00035,
+        "relativeSink": -9e-05,
+        "maxBothFeetAbove": 0.0,
+        "minimumAtFrame": 9
+      }
+    },
+    {
+      "id": "dark_moguzo",
+      "slot": "crouch_weak",
+      "clip": "v17_crouch_weak",
+      "attackLimb": "pawR",
+      "attackPart": "armR",
+      "clock": {
+        "frames": 24,
+        "contactFrame": 7
+      },
+      "surface": [
+        {
+          "phase": 0,
+          "reach": 0.50226,
+          "height": 0.07771,
+          "expectedReach": 0.489,
+          "expectedHeight": 0.08,
+          "frontPart": "armR",
+          "frontGap": 0.0,
+          "reachError": 0.01326,
+          "heightError": -0.00229
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.50226,
+          "height": 0.07771,
+          "expectedReach": 0.502,
+          "expectedHeight": 0.078,
+          "frontPart": "armR",
+          "frontGap": 0.0,
+          "reachError": 0.00026,
+          "heightError": -0.00029
+        },
+        {
+          "phase": 1,
+          "reach": 0.50221,
+          "height": 0.0777,
+          "expectedReach": 0.493,
+          "expectedHeight": 0.077,
+          "frontPart": "armR",
+          "frontGap": 0.0,
+          "reachError": 0.00921,
+          "heightError": 0.0007
+        }
+      ],
+      "footSurface": {
+        "initialMin": -0.00085,
+        "absoluteMin": -0.00126,
+        "relativeSink": -0.0004,
+        "maxBothFeetAbove": -0.00075,
+        "minimumAtFrame": 11
+      }
+    },
+    {
+      "id": "dark_moguzo",
+      "slot": "crouch_heavy",
+      "clip": "v17_crouch_heavy",
+      "attackLimb": "pawL",
+      "attackPart": "armL",
+      "clock": {
+        "frames": 46,
+        "contactFrame": 17
+      },
+      "surface": [
+        {
+          "phase": 0,
+          "reach": 0.48001,
+          "height": 0.07257,
+          "expectedReach": 0.462,
+          "expectedHeight": 0.063,
+          "frontPart": "armL",
+          "frontGap": 0.0,
+          "reachError": 0.01801,
+          "heightError": 0.00957
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.48001,
+          "height": 0.07257,
+          "expectedReach": 0.48,
+          "expectedHeight": 0.073,
+          "frontPart": "armL",
+          "frontGap": 0.0,
+          "reachError": 1e-05,
+          "heightError": -0.00043
+        },
+        {
+          "phase": 1,
+          "reach": 0.48001,
+          "height": 0.07257,
+          "expectedReach": 0.473,
+          "expectedHeight": 0.072,
+          "frontPart": "armL",
+          "frontGap": 0.0,
+          "reachError": 0.00701,
+          "heightError": 0.00057
+        }
+      ],
+      "footSurface": {
+        "initialMin": -0.00085,
+        "absoluteMin": -0.00128,
+        "relativeSink": -0.00042,
+        "maxBothFeetAbove": 2e-05,
+        "minimumAtFrame": 16
+      }
+    },
+    {
+      "id": "dark_moguzo",
+      "slot": "air_weak",
+      "clip": "v17_air_weak",
+      "attackLimb": "pawR",
+      "attackPart": "armR",
+      "clock": {
+        "frames": 24,
+        "contactFrame": 7
+      },
+      "surface": [
+        {
+          "phase": 0,
+          "reach": 0.31108,
+          "height": 0.21566,
+          "expectedReach": 0.295,
+          "expectedHeight": 0.222,
+          "frontPart": "head",
+          "frontGap": 0.00336,
+          "reachError": 0.01608,
+          "heightError": -0.00634
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.31108,
+          "height": 0.21566,
+          "expectedReach": 0.311,
+          "expectedHeight": 0.216,
+          "frontPart": "head",
+          "frontGap": 0.00336,
+          "reachError": 8e-05,
+          "heightError": -0.00034
+        },
+        {
+          "phase": 1,
+          "reach": 0.31104,
+          "height": 0.21567,
+          "expectedReach": 0.305,
+          "expectedHeight": 0.219,
+          "frontPart": "head",
+          "frontGap": 0.00337,
+          "reachError": 0.00604,
+          "heightError": -0.00333
+        }
+      ]
+    },
+    {
+      "id": "dark_moguzo",
+      "slot": "air_heavy",
+      "clip": "v17_air_heavy",
+      "attackLimb": "footL",
+      "attackPart": "legL",
+      "clock": {
+        "frames": 46,
+        "contactFrame": 17
+      },
+      "surface": [
+        {
+          "phase": 0,
+          "reach": 0.30174,
+          "height": 0.06892,
+          "expectedReach": 0.3,
+          "expectedHeight": 0.063,
+          "frontPart": "legL",
+          "frontGap": 0.0,
+          "reachError": 0.00174,
+          "heightError": 0.00592
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.30174,
+          "height": 0.06892,
+          "expectedReach": 0.302,
+          "expectedHeight": 0.069,
+          "frontPart": "legL",
+          "frontGap": 0.0,
+          "reachError": -0.00026,
+          "heightError": -8e-05
+        },
+        {
+          "phase": 1,
+          "reach": 0.30174,
+          "height": 0.06892,
+          "expectedReach": 0.301,
+          "expectedHeight": 0.067,
+          "frontPart": "legL",
+          "frontGap": 0.0,
+          "reachError": 0.00074,
+          "heightError": 0.00192
+        }
+      ]
+    }
+  ],
+  "redesignedSpecials": [
+    {
+      "id": "godan",
+      "slot": "s3",
+      "clip": "s3_v17",
+      "kind": "rush",
+      "origin": "v17 revised",
+      "attackLimb": "shoulderL",
+      "surface": [
+        {
+          "phase": 0,
+          "seconds": 0.3,
+          "attackPart": "body",
+          "reach": 0.38925,
+          "height": 0.26444,
+          "expected": {
+            "phase": 0,
+            "reach": 0.365,
+            "height": 0.257
+          },
+          "leading": "body",
+          "groups": {
+            "tail": {
+              "reach": 0.31271,
+              "height": 0.11741
+            },
+            "legL": {
+              "reach": 0.38611,
+              "height": 0.25316
+            },
+            "body": {
+              "reach": 0.38925,
+              "height": 0.26444
+            },
+            "armR": {
+              "reach": 0.11813,
+              "height": 0.11295
+            },
+            "legR": {
+              "reach": 0.17953,
+              "height": 0.02722
+            },
+            "head": {
+              "reach": 0.15117,
+              "height": 0.42678
+            },
+            "armL": {
+              "reach": 0.30297,
+              "height": 0.33698
+            }
+          }
+        },
+        {
+          "phase": 0.5,
+          "seconds": 0.3500225,
+          "attackPart": "body",
+          "reach": 0.38925,
+          "height": 0.26444,
+          "expected": {
+            "phase": 0.5,
+            "reach": 0.389,
+            "height": 0.264
+          },
+          "leading": "body",
+          "groups": {
+            "tail": {
+              "reach": 0.33183,
+              "height": 0.10752
+            },
+            "legL": {
+              "reach": 0.38611,
+              "height": 0.25316
+            },
+            "body": {
+              "reach": 0.38925,
+              "height": 0.26444
+            },
+            "armR": {
+              "reach": 0.11813,
+              "height": 0.11295
+            },
+            "legR": {
+              "reach": 0.17953,
+              "height": 0.02722
+            },
+            "head": {
+              "reach": 0.15117,
+              "height": 0.42678
+            },
+            "armL": {
+              "reach": 0.30297,
+              "height": 0.33698
+            }
+          }
+        },
+        {
+          "phase": 1,
+          "seconds": 0.400045,
+          "attackPart": "body",
+          "reach": 0.38925,
+          "height": 0.26444,
+          "expected": {
+            "phase": 1,
+            "reach": 0.389,
+            "height": 0.264
+          },
+          "leading": "body",
+          "groups": {
+            "tail": {
+              "reach": 0.33595,
+              "height": 0.10727
+            },
+            "legL": {
+              "reach": 0.38611,
+              "height": 0.25316
+            },
+            "body": {
+              "reach": 0.38925,
+              "height": 0.26444
+            },
+            "armR": {
+              "reach": 0.11813,
+              "height": 0.11295
+            },
+            "legR": {
+              "reach": 0.17953,
+              "height": 0.02722
+            },
+            "head": {
+              "reach": 0.15117,
+              "height": 0.42678
+            },
+            "armL": {
+              "reach": 0.30297,
+              "height": 0.33698
+            }
+          }
+        }
+      ],
+      "footSurface": {
+        "initialMin": -1e-05,
+        "absoluteMin": -0.01155,
+        "relativeSink": -0.01154
+      }
+    },
+    {
+      "id": "chirka",
+      "slot": "s3",
+      "clip": "s3_v17",
+      "kind": "rush",
+      "origin": "v17 revised",
+      "attackLimb": "pawR",
+      "surface": [
+        {
+          "phase": 0,
+          "seconds": 0.2167,
+          "attackPart": "armR",
+          "reach": 0.49413,
+          "height": 0.22218,
+          "expected": {
+            "phase": 0,
+            "reach": 0.494,
+            "height": 0.222
+          },
+          "leading": "armR",
+          "groups": {
+            "tail": {
+              "reach": -0.01195,
+              "height": 0.10795
+            },
+            "legL": {
+              "reach": 0.34544,
+              "height": 0.00346
+            },
+            "body": {
+              "reach": 0.31789,
+              "height": 0.22614
+            },
+            "armR": {
+              "reach": 0.49413,
+              "height": 0.22218
+            },
+            "legR": {
+              "reach": 0.16294,
+              "height": 0.11824
+            },
+            "head": {
+              "reach": 0.43892,
+              "height": 0.29361
+            },
+            "armL": {
+              "reach": 0.27788,
+              "height": 0.26148
+            }
+          }
+        },
+        {
+          "phase": 0.5,
+          "seconds": 0.25002375,
+          "attackPart": "armR",
+          "reach": 0.49413,
+          "height": 0.22218,
+          "expected": {
+            "phase": 0.5,
+            "reach": 0.494,
+            "height": 0.222
+          },
+          "leading": "armR",
+          "groups": {
+            "tail": {
+              "reach": -0.01415,
+              "height": 0.10964
+            },
+            "legL": {
+              "reach": 0.34544,
+              "height": 0.00346
+            },
+            "body": {
+              "reach": 0.31789,
+              "height": 0.22614
+            },
+            "armR": {
+              "reach": 0.49413,
+              "height": 0.22218
+            },
+            "legR": {
+              "reach": 0.16294,
+              "height": 0.11824
+            },
+            "head": {
+              "reach": 0.43892,
+              "height": 0.29361
+            },
+            "armL": {
+              "reach": 0.27788,
+              "height": 0.26148
+            }
+          }
+        },
+        {
+          "phase": 1,
+          "seconds": 0.2833475,
+          "attackPart": "armR",
+          "reach": 0.49413,
+          "height": 0.22218,
+          "expected": {
+            "phase": 1,
+            "reach": 0.494,
+            "height": 0.222
+          },
+          "leading": "armR",
+          "groups": {
+            "tail": {
+              "reach": -0.01577,
+              "height": 0.15857
+            },
+            "legL": {
+              "reach": 0.34544,
+              "height": 0.00346
+            },
+            "body": {
+              "reach": 0.31789,
+              "height": 0.22614
+            },
+            "armR": {
+              "reach": 0.49413,
+              "height": 0.22218
+            },
+            "legR": {
+              "reach": 0.16294,
+              "height": 0.11824
+            },
+            "head": {
+              "reach": 0.43892,
+              "height": 0.29361
+            },
+            "armL": {
+              "reach": 0.27788,
+              "height": 0.26148
+            }
+          }
+        }
+      ],
+      "footSurface": {
+        "initialMin": -7e-05,
+        "absoluteMin": -0.00358,
+        "relativeSink": -0.00352
+      }
+    },
+    {
+      "id": "dark_moguzo",
+      "slot": "s1",
+      "clip": "s1_v17",
+      "kind": "projectile",
+      "origin": "v17 revised",
+      "attackLimb": "pawR",
+      "surface": [
+        {
+          "phase": 0,
+          "seconds": 0.1833,
+          "attackPart": "armR",
+          "reach": 0.41442,
+          "height": 0.23406,
+          "expected": {
+            "phase": 0,
+            "reach": 0.39,
+            "height": 0.218
+          },
+          "leading": "armR",
+          "groups": {
+            "tail": {
+              "reach": -0.11717,
+              "height": 0.08897
+            },
+            "legL": {
+              "reach": 0.19375,
+              "height": 0.00352
+            },
+            "body": {
+              "reach": 0.23198,
+              "height": 0.25134
+            },
+            "armR": {
+              "reach": 0.41442,
+              "height": 0.23406
+            },
+            "legR": {
+              "reach": 0.09399,
+              "height": 0.06948
+            },
+            "head": {
+              "reach": 0.32068,
+              "height": 0.34155
+            },
+            "armL": {
+              "reach": 0.20999,
+              "height": 0.2527
+            }
+          }
+        },
+        {
+          "phase": 0.5,
+          "seconds": 0.18331258,
+          "attackPart": "armR",
+          "reach": 0.41454,
+          "height": 0.23421,
+          "expected": {
+            "phase": 0.5,
+            "reach": 0.39,
+            "height": 0.218
+          },
+          "leading": "armR",
+          "groups": {
+            "tail": {
+              "reach": -0.11714,
+              "height": 0.08897
+            },
+            "legL": {
+              "reach": 0.19375,
+              "height": 0.00353
+            },
+            "body": {
+              "reach": 0.23201,
+              "height": 0.25133
+            },
+            "armR": {
+              "reach": 0.41454,
+              "height": 0.23421
+            },
+            "legR": {
+              "reach": 0.094,
+              "height": 0.06946
+            },
+            "head": {
+              "reach": 0.32071,
+              "height": 0.34154
+            },
+            "armL": {
+              "reach": 0.20999,
+              "height": 0.2527
+            }
+          }
+        },
+        {
+          "phase": 1,
+          "seconds": 0.18332516000000001,
+          "attackPart": "armR",
+          "reach": 0.41465,
+          "height": 0.23437,
+          "expected": {
+            "phase": 1,
+            "reach": 0.39,
+            "height": 0.218
+          },
+          "leading": "armR",
+          "groups": {
+            "tail": {
+              "reach": -0.11712,
+              "height": 0.08897
+            },
+            "legL": {
+              "reach": 0.19375,
+              "height": 0.00353
+            },
+            "body": {
+              "reach": 0.23203,
+              "height": 0.25132
+            },
+            "armR": {
+              "reach": 0.41465,
+              "height": 0.23437
+            },
+            "legR": {
+              "reach": 0.09401,
+              "height": 0.06944
+            },
+            "head": {
+              "reach": 0.32074,
+              "height": 0.34153
+            },
+            "armL": {
+              "reach": 0.20999,
+              "height": 0.2527
+            }
+          }
+        }
+      ],
+      "footSurface": {
+        "initialMin": -0.00026,
+        "absoluteMin": -0.00109,
+        "relativeSink": -0.00083
+      }
+    }
+  ]
+}

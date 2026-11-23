@@ -1,6 +1,6 @@
 // Offline, reproducible P3 comparison. Never modifies the gameplay policy or
 // claims CPU win rate is human competitive balance.
-import {readFileSync,writeFileSync,mkdirSync} from 'node:fs';
+import {readFileSync,writeFileSync,mkdirSync,existsSync} from 'node:fs';
 import {createHash} from 'node:crypto';
 import {fileURLToPath,pathToFileURL} from 'node:url';
 import {dirname,resolve} from 'node:path';
@@ -13,7 +13,8 @@ const baseSha=process.env.MAMOKEN_AUDIT_BASE_SHA??'8ab8972295d059426b858d9b8edab
 mkdirSync(out,{recursive:true});
 const {Battle}=await import(pathToFileURL(resolve(engine,'battle.js')));
 const {IDS,normalMove,specialMove,ROSTER}=await import(pathToFileURL(resolve(engine,'balance.js')));
-const {NORMAL_CONTACTS}=await import(pathToFileURL(resolve(engine,'normal-contacts-v151.js')));
+const contactSource=await import(pathToFileURL(resolve(engine,existsSync(resolve(engine,'normal-contact-source.js'))?'normal-contact-source.js':'normal-contacts-v151.js')));
+const {NORMAL_CONTACTS}=contactSource,normalVersion=contactSource.ACTIVE_NORMAL_MOTION_VERSION??'v15';
 const slots=['stand_weak','stand_heavy','crouch_weak','crouch_heavy','air_weak','air_heavy'];
 const roles={
  moguzo:['万能/根性','突出した距離と高速連打は持たない'],pisuke:['機動/蹴り/差し返し','低い体力とガード耐久'],
@@ -31,24 +32,25 @@ for(const id of IDS){
   const normal=slots.includes(moveId),move=normal?normalMove(id,moveId):specialMove(id,Number(moveId[1])-1);
   const authored=normal?NORMAL_CONTACTS[id][moveId]:manifest.moves.find(row=>row.moveId===moveId);
   const feel=fightFeelFor(id,moveId,move),paired=move.kind==='throw'||move.kind==='counter';
+  const oldHitstun=normal?move.hitstun:move.kind==='throw'?'paired40':move.kind==='counter'?'response16/24':Math.max(12,Math.round(move.damage*.16));
   catalog.push({key:id+'.'+moveId,characterId:id,name:normal?moveId:move.name,moveId,kind:normal?'normal':'special',
    characterRole:roles[id][0],weakness:roles[id][1],role:normal?(moveId.startsWith('air_')?'空中差し合い':moveId.startsWith('crouch_')?'低姿勢/下段':moveId.endsWith('_weak')?'近距離牽制/連係開始':'中距離/大打撃'):specialRoles[move.kind],
    performance:move,animation:{model:`chars/${id}/${id}.glb`,modelSha256:hash,
-    file:normal?`normal/v15/${id}_normals.glb`:`cinematic/v14/${id}/${authored.animationSources.attacker.glb??id+'.glb'}`,
-    clip:normal?'v15_'+moveId:authored.animationSources.attacker.clip,
+    file:normal?(normalVersion==='v17'?`motion/v17/${id}_normals_v17.glb`:`normal/v15/${id}_normals.glb`):`cinematic/v14/${id}/${authored.animationSources.attacker.glb??id+'.glb'}`,
+    clip:normal?normalVersion+'_'+moveId:authored.animationSources.attacker.clip,
     contact:normal?authored.contact:authored.contactSeconds,contactEnd:normal?authored.contactEnd:undefined,
-    attackPart:normal?authored.attackPart:undefined,measurement:normal?'v15.1 actual skinned surface':'current authored spec, new P3 measurement pending'},
-   baseline:{hitstopFrames:paired?0:6,guardstopFrames:paired?null:3},
+    attackPart:normal?authored.attackPart:undefined,measurement:normal?normalVersion+' actual skinned surface':'current authored spec, new P3 measurement pending'},
+   baseline:{hitstopFrames:paired?0:6,guardstopFrames:paired?null:3,hitstunFrames:oldHitstun},
    proposal:{hitstopFrames:paired?0:feel.hitstop,guardstopFrames:paired?null:feel.guardstop,
-    hitstunFrames:normal?move.hitstun:specialHitstunP3(id,Number(moveId[1])-1),
+    hitstunFrames:normal?move.hitstun:(specialHitstunP3(id,Number(moveId[1])-1)??oldHitstun),
     sound:{hit:feel.hitSound,guard:feel.guardSound,swing:feel.swingSound},gameplayValuesChanged:!normal&&specialHitstunP3(id,Number(moveId[1])-1)!==undefined},
    rationale:'Keep measured reach, startup/active/recovery/damage/cancel. Propose symmetric contact holds and distinct hit/guard/swing audio; no claim of new Claude animation integration.'});
  }
 }
 if(catalog.length!==81)throw Error('P3 requires 81 moves');
 writeFileSync(resolve(out,'MOVE_CATALOG.json'),JSON.stringify({schemaVersion:1,baselineSha:baseSha,performanceSource:engine,catalog},null,2)+'\n');
-let markdown='# P3 81技の凍結値と提案差分\n\n基準PR209 `'+baseSha+'`。S/A/R・威力・到達距離は現在の実データ。変更する性能列は19近接必殺のhitstunだけ。停止Fとhitstun候補を凍結値と分離。必殺の新P3打点はClaude素材の受領・再計測待ち。CPU使用率は同フォルダの `cpu-move-usage.json`。\n\n|キャラ|技|役割|発生/持続/硬直|威力|到達m|旧→候補HitStop|旧→候補GuardStop|\n|---|---|---|---|---|---|---|---|\n';
-for(const row of catalog){const m=row.performance;markdown+='|'+[row.characterId,row.moveId,row.role,[m.startup,m.active,m.recovery].join('/'),m.damage,m.reach,row.baseline.hitstopFrames+'→'+row.proposal.hitstopFrames,row.baseline.guardstopFrames+'→'+row.proposal.guardstopFrames].join('|')+'|\n';}
+let markdown='# P3 81技の凍結値と提案差分\n\n基準PR209 `'+baseSha+'`。S/A/R・威力・到達距離は現在の実データ。変更する性能列は19近接必殺のhitstunだけ。停止Fとhitstun候補を凍結値と分離。必殺の新P3打点はClaude素材の受領・再計測待ち。CPU使用率は同フォルダの `cpu-move-usage.json`。\n\n|キャラ|技|役割|発生/持続/硬直|威力|到達m|旧→候補HitStop|旧→候補GuardStop|旧→候補HitStun|\n|---|---|---|---|---|---|---|---|---|\n';
+for(const row of catalog){const m=row.performance;markdown+='|'+[row.characterId,row.moveId,row.role,[m.startup,m.active,m.recovery].join('/'),m.damage,m.reach,row.baseline.hitstopFrames+'→'+row.proposal.hitstopFrames,row.baseline.guardstopFrames+'→'+row.proposal.guardstopFrames,row.baseline.hitstunFrames+'→'+row.proposal.hitstunFrames].join('|')+'|\n';}
 writeFileSync(resolve(out,'MOVE_CATALOG.md'),markdown);
 if(process.env.MAMOKEN_CATALOG_ONLY==='1')process.exit(0);
 const usage=Object.fromEntries(catalog.map(row=>[row.key,{starts:0,hits:0,blocks:0,whiffs:0}]));

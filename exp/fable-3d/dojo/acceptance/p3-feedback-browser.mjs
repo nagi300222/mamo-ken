@@ -44,9 +44,11 @@ try{
     return {...r,clip:actor.currentName,time:actor.current.time,expected:fightFeelFor(p.id,p.action.id,p.action),recipe:IMPACT_SOUND_RECIPES[r.event.feedback.sound],played:window.__p3audio};
    });
    assert.equal(record.attackerStop,guard?record.expected.guardstop:record.expected.hitstop);assert.equal(record.targetStop,record.attackerStop);
-   assert.equal(record.event.feedback.point.space,'authored-strike-surface');assert.ok(record.clip.startsWith('v15_'));
+   assert.equal(record.event.feedback.point.space,'authored-strike-surface');assert.match(record.clip,/^v1[57]_/);
    const expectedDuration=record.recipe.duration+(record.recipe.noise?0:.016),expectedKind=record.recipe.noise?'noise':'oscillator';
-   assert.ok(record.played.some(sound=>sound.kind===expectedKind&&Math.abs(sound.duration-expectedDuration)<.004),id+'/'+slot+' actual in-game audio did not consume its P3 feedback');
+   assert.equal(record.played.filter(sound=>sound.kind===expectedKind&&Math.abs(sound.duration-expectedDuration)<.004).length,1,id+'/'+slot+' actual in-game audio did not consume its P3 feedback exactly once');
+   assert.ok(!record.played.some(sound=>sound.kind==='oscillator'&&(
+    !guard&&sound.wave==='sawtooth'&&Math.abs(sound.duration-.116)<.003||guard&&sound.wave==='triangle'&&Math.abs(sound.duration-.106)<.003)),id+'/'+slot+' old generic impact was double-played');
    await page.screenshot({path:directory+'/'+id+'-'+slot+'-'+(guard?'guard':'hit')+'.png'});
    const frozen=await page.evaluate(()=>({frame:mamoken3d.battle.fighters[0].frame,time:mamoken3d.actors[0].current.time,stop:mamoken3d.battle.fighters[0].stop}));
    await page.waitForFunction(stop=>mamoken3d.battle.fighters[0].stop<stop-1,frozen.stop,{timeout:8000});

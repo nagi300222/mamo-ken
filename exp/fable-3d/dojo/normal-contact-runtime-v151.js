@@ -13,6 +13,11 @@ function sample(move,frame,field,fallback){
 }
 export const normalReachAt=(move,frame)=>Math.max(0,sample(move,frame,'reach',move.reach));
 export const normalHeightAt=(move,frame)=>sample(move,frame,'height',move.strikeHeight);
+// Air attacks may reach below the fighter's foot/root plane. Keep that signed
+// local coordinate; normalVerticalContact adds the actual airborne world Y.
+export function validNormalStrikeHeight(slot,height,groundTolerance=.01){
+ return Number.isFinite(height)&&(String(slot).startsWith('air_')||height>=-groundTolerance);
+}
 export function normalVerticalContact(attacker,target,move,hurtBounds){
  const crouching=target.y===0&&(target.state==='crouch'||
    target.state==='block'&&target.input.down||target.action?.id?.startsWith('crouch_'));

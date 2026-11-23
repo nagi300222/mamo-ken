@@ -7,6 +7,8 @@ import {createP3ContactDelivery,validateP3ContactDelivery} from './p3-contact-ad
 import {ACTIVE_NORMAL_MOTION_VERSION,NORMAL_CONTACTS} from './normal-contact-source.js';
 import {APPROVED_P3_CONTACT_DELIVERY} from './normal-contact-overrides-p3.js';
 import {normalClipTime} from './normal-timing-v151.js';
+import {Battle} from './battle.js';
+import {normalHeightAt} from './normal-contact-runtime-v151.js';
 
 // Validation fixture only. These synthetic authored clocks are not a Claude
 // asset or an assertion that v17 meshes have been measured or approved.
@@ -36,6 +38,8 @@ test('v17 handoff requires 54 aligned measured active trajectories and identity'
  assert.throws(()=>createP3ContactDelivery(metadata,wrongPart),/intended limb/);
  const badSurface=structuredClone(measurements);badSurface.characters.bullet.stand_heavy.activeReach[1].reach=NaN;
  assert.throws(()=>createP3ContactDelivery(metadata,badSurface),/active surface/);
+  const unresolved=structuredClone(measurements);unresolved.characters.bullet.stand_heavy.status='fix';
+  assert.throws(()=>createP3ContactDelivery(metadata,unresolved),/unresolved art/);
  const incomplete=structuredClone(delivery);delete incomplete.characters.dark_moguzo.air_heavy;
  assert.throws(()=>validateP3ContactDelivery(incomplete),/missing reviewed row/);
 });
@@ -45,4 +49,19 @@ test('only a measured approved override selects v17; custom pose clocks remain a
  const move={...normalMove('moguzo','stand_weak'),customContact:{contact:.61,contactEnd:.73}};
  assert.equal(normalClipTime('moguzo','stand_weak',move.startup,move,2),1.22);
  assert.equal(normalClipTime('moguzo','stand_weak',move.startup+move.active-1,move,2),1.46);
+});
+test('only air slots accept signed local heights and real contact adds airborne world Y',()=>{
+ const {metadata,measurements}=fixture(),air=measurements.characters.bullet.air_heavy;
+ air.height=-.17;air.activeReach.forEach(point=>point.height=-.17);
+ const delivery=createP3ContactDelivery(metadata,measurements);assert.equal(validateP3ContactDelivery(delivery),delivery);
+ const ground=structuredClone(measurements);ground.characters.bullet.stand_heavy.height=-.17;ground.characters.bullet.stand_heavy.activeReach.forEach(point=>point.height=-.17);
+ assert.throws(()=>createP3ContactDelivery(metadata,ground),/missing measured surface/);
+ const nonfinite=structuredClone(measurements);nonfinite.characters.bullet.air_heavy.height=-Infinity;
+ assert.throws(()=>createP3ContactDelivery(metadata,nonfinite),/missing measured surface/);
+ const g=new Battle('bullet','chirka'),[a,t]=g.fighters,move={...normalMove('bullet','air_heavy'),strikeHeight:-.17,activeReach:[{phase:0,reach:.5,height:-.17},{phase:1,reach:.5,height:-.17}]};
+ a.x=0;a.y=.5;a.facing=1;a.frame=move.startup;t.x=.3;t.y=0;t.state='crouch';t.input={down:true};
+ assert.equal(normalHeightAt(move,a.frame),-.17);assert.equal(g._contact(a,t,move),true,'visible low tail at world .33 should reach the crouching body');
+ const clamped={...move,strikeHeight:0,activeReach:move.activeReach.map(point=>({...point,height:0}))};
+ assert.equal(g._contact(a,t,clamped),false,'clamping local height to zero would incorrectly move this hit above the target');
+ a.y=.05;assert.equal(g._contact(a,t,move),false,'a fully underground strike must not create a phantom ground hit');
 });

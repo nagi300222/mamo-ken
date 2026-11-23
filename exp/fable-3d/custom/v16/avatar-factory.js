@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
 import {clone as cloneSkeleton} from 'three/addons/utils/SkeletonUtils.js';
-import {NORMAL_CONTACTS} from '../../dojo/normal-contacts-v151.js';
+import {ACTIVE_NORMAL_MOTION_SOURCE,getNormalMotionPack} from '../../dojo/normal-motion-source.js';
 
 export const AVATAR_BASE_IDS=Object.freeze(['moguzo','pisuke','godan','hakuma','chirka','takimaru','yomikage','bullet','dark_moguzo']);
 const NAMES=['モグゾー','ピスケ','ゴダン','ハクマ','チルカ','タキマル','ヨミカゲ','バレット','ダークモグゾー'];
@@ -151,8 +151,10 @@ export async function createAvatar(definition,options={}){
  }
  if(!['base','none',undefined].includes(parts.accessory))throw Error('この装飾の交換は骨格互換を確認中です');
  const loader=options.loader??new GLTFLoader();
+ const normalMotionSource=options.normalMotionSource??ACTIVE_NORMAL_MOTION_SOURCE;
+ const normalPack=getNormalMotionPack(baseId,{source:normalMotionSource});
  const gltf=await load(new URL(base.file,options.baseURL??ASSETS),loader);
- const normal=await load(new URL(`../../normal/v15/${baseId}_normals.glb`,import.meta.url),loader);
+ const normal=await load(normalPack.url,loader);normalMotionSource.validatePack(baseId,normal);
  const scene=cloneSkeleton(gltf.scene),meshes=[],geometries=new Set(),materials=new Set(),skeletons=new Set(),bones=new Map();
  scene.traverse(object=>{
   if(object.isBone)bones.set(object.name,object);
@@ -167,6 +169,7 @@ export async function createAvatar(definition,options={}){
  scene.updateMatrixWorld(true);
  const animations=[...gltf.animations,...normal.animations.map(clip=>bindAvatarClip(clip,{meshes}))];let disposed=false;
  return {scene,animations,bones,meshes,baseId,appearance:structuredClone(appearance),parameters:base.parameters,
+  normalMotionSource,normalMotionVersion:normalMotionSource.version,normalContacts:normalPack.contacts,
   grafts:Object.keys(donors),gltf:{scene,animations},
   dispose(){if(disposed)return;disposed=true;scene.removeFromParent();for(const g of geometries)g.dispose();for(const m of materials)m.dispose();for(const s of skeletons)s.dispose();}
  };
@@ -208,8 +211,9 @@ export function measureContacts(avatar){
  };
  try{
   const normals={};
-  for(const [slot,reference] of Object.entries(NORMAL_CONTACTS[avatar.baseId])){
-   const clip=avatar.animations.find(a=>a.name==='v15_'+slot);if(!clip)throw Error('通常技がありません: '+slot);
+  const normalSource=avatar.normalMotionSource??ACTIVE_NORMAL_MOTION_SOURCE;
+  for(const [slot,reference] of Object.entries(avatar.normalContacts??normalSource.contacts[avatar.baseId])){
+   const clip=avatar.animations.find(a=>a.name===normalSource.clipName(slot));if(!clip)throw Error('通常技がありません: '+slot);
    const activeReach=[0,.5,1].map(phase=>{at(clip.name,(reference.contact+(reference.contactEnd-reference.contact)*phase)*clip.duration);return {phase,...surface(reference.attackPart)};});
    normals[slot]={...reference,...activeReach[0],activeReach};delete normals[slot].phase;
   }
@@ -217,7 +221,7 @@ export function measureContacts(avatar){
   const hurtBounds={stand:bounds(['idle','guard_stand']),crouch:bounds(['crouch','guard_crouch'],[.65,.8,.98])};
   at('idle',0);const paw=[...avatar.bones.values()].find(b=>b.name.replace(/[^a-z0-9]/gi,'').toLowerCase()==='pawl');
   const socket=paw?paw.getWorldPosition(v):v.set(0,.35,.17);
-  return {normals,hurtBounds,projectileSocket:{forward:+socket.z.toFixed(4),height:+socket.y.toFixed(4)},source:'runtime-skinned-mesh',baseId:avatar.baseId,grafts:[...avatar.grafts]};
+  return {normals,hurtBounds,projectileSocket:{forward:+socket.z.toFixed(4),height:+socket.y.toFixed(4)},source:'runtime-skinned-mesh',baseId:avatar.baseId,normalMotionVersion:normalSource.version,grafts:[...avatar.grafts]};
  }finally{
   mixer.stopAllAction();mixer.uncacheRoot(root);root.position.copy(old.p);root.quaternion.copy(old.q);root.scale.copy(old.s);root.updateMatrixWorld(true);
  }

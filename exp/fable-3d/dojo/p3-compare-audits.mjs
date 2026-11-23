@@ -1,0 +1,33 @@
+import {readFileSync,writeFileSync} from 'node:fs';
+import {resolve,dirname} from 'node:path';
+import {fileURLToPath} from 'node:url';
+const root=process.env.MAMOKEN_P3_AUDITS??resolve(dirname(fileURLToPath(import.meta.url)),'../../../docs/mamoken-p3');
+const read=(phase,file)=>JSON.parse(readFileSync(resolve(root,phase,file)));
+const b=read('baseline','cpu-summary.json'),f=read('feedback-only','cpu-summary.json'),p=read('proposal','cpu-summary.json');
+const score=b.summary.map((row,i)=>({id:row.id,baseline:row.score,feedbackOnly:f.summary[i].score,proposal:p.summary[i].score,games:row.games}));
+const baseRounds=read('baseline','cpu-matrix.json'),proposalRounds=read('proposal','cpu-matrix.json');
+const winnerChanges=baseRounds.filter((row,i)=>row.winner!==proposalRounds[i].winner).length;
+const bn=read('baseline','normal-metrics.json'),pn=read('proposal','normal-metrics.json');
+const normalChanges=[];
+for(let i=0;i<bn.length;i++)for(const outcome of ['hit','block'])if(JSON.stringify(bn[i][outcome])!==JSON.stringify(pn[i][outcome]))normalChanges.push({id:bn[i].id,slot:bn[i].slot,outcome,before:bn[i][outcome],after:pn[i][outcome]});
+const probes=read('proposal','SPECIAL_PROBES.json').rows,baseProbes=read('baseline','SPECIAL_PROBES.json').rows;
+const key=row=>[row.id,row.index,row.face,row.distance,row.height,row.timing,row.wall,row.guardRequested,row.whiffFixture].join(':');
+const lookup=new Map(baseProbes.map(row=>[key(row),row]));
+const specialChanges=[];
+for(const row of probes){const old=lookup.get(key(row));if(!old)throw Error('missing baseline scenario '+key(row));
+ if(row.outcome!==old.outcome||row.damage!==old.damage||row.advantage!==old.advantage)specialChanges.push({id:row.id,moveId:row.moveId,face:row.face,timing:row.timing,height:row.height,distance:row.distance,wall:row.wall,guardRequested:row.guardRequested,
+  before:{outcome:old.outcome,damage:old.damage,advantage:old.advantage},after:{outcome:row.outcome,damage:row.damage,advantage:row.advantage}});
+}
+const cancel=read('proposal','CANCEL_STRESS.json').cases;
+if(cancel.some(row=>row.blocks<=0||row.maxHits>4||row.contacts>4))throw Error('corner pressure regression');
+const report={baselineSha:'8ab8972295d059426b858d9b8edabfda6068a7a3',cpu:{rounds:p.rounds,winnerChanges,score},normal:{moves:bn.length,rangeCases:bn.reduce((n,row)=>n+row.ranges.length,0),outcomeChanges:normalChanges},special:{scenarioCount:probes.length,changes:specialChanges},cancel:{cases:cancel.length,framesEach:2000,maxCombo:Math.max(...cancel.map(row=>row.maxHits)),guardReturnedEveryCase:true},limitations:['CPU self-play is not human balance','New Claude v17 animations have not been enabled at this checkpoint','Physical iPhone speaker, heat, frame rate and battery are unmeasured']};
+writeFileSync(resolve(root,'COMPARISON.json'),JSON.stringify(report,null,1)+'\n');
+let md='# P3候補の基準比較\n\n基準PR209 `'+report.baselineSha+'`。19近接必殺hitstun以外の性能値を保持。CPU自対戦の得点は勝ち＋引分半分。対人バランスの認証ではない。\n\n|キャラ|基準|停止候補のみ|19必殺hitstunも含む候補|\n|---|---|---|---|\n';
+for(const row of score)md+='|'+[row.id,...[row.baseline,row.feedbackOnly,row.proposal].map(v=>(v*100).toFixed(1)+'%')].join('|')+'|\n';
+md+='\n- 最新候補1458 CPU試合を完走。基準から勝敗が変わったのは'+winnerChanges+'試合。高速型優位は残り、ダークモグゾーは上昇、バレット/タキマルは低下。バランス完成とは扱わない。\n';
+md+='- 54通常技の最速Hit/Guard接触・硬直差の変化'+normalChanges.length+'件、3240距離/向き/姿勢条件を保存。\n';
+md+='- 基準/候補それぞれ'+probes.length+'必殺プローブ。壁際/中央、左右、0.34/0.55/0.90m、地上/空中0.35/0.8m、初/終active、ガード/空振り。最遅や空振りは制御fixtureであり中立対戦の自然発生率ではない。\n';
+md+='- 19近接必殺×左右×初/終接触＝'+cancel.length+'条件、各2000Fの壁際圧力。最大'+report.cancel.maxCombo+'実連続hitで正しいガードが全条件で復帰。通常キャンセル/遅延入力/連打上限の既存試験も保持。\n';
+md+='- 最速命中後の不利を-1〜+2Fへ改善する一方、ガード後は-15〜-31F。飛び道具6種の近距離不利、投げの40F起き上がり差、当て身の実応答、元9奥義の命中限定映画は維持。\n';
+md+='\n実スキンの新P3打点はClaudeの54行/27技素材の受領・レビュー後に別途切替する。現候補では元GLB/既存クリップを保持し、承認テーブルはnull。実WebGL/音声の最終結果とiPhone実機評価はこのNode比較とは分けて報告する。\n';
+writeFileSync(resolve(root,'COMPARISON.md'),md);console.log(JSON.stringify({rounds:p.rounds,winnerChanges,normalChanges:normalChanges.length,specialProbes:probes.length,cancelCases:cancel.length,maxCombo:report.cancel.maxCombo}));
