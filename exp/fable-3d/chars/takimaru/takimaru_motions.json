@@ -1,0 +1,156 @@
+{
+ "id": "takimaru",
+ "height": 0.74,
+ "unit": "Blender単位（メートル扱い）。全高は耳を除く頭頂まで",
+ "fps": 60,
+ "forward": "glTF/Three.js では +Z が正面、+Y が上、+X が本人の左",
+ "metrics": {
+  "leg": 0.2623,
+  "arm": 0.243,
+  "note": "移動量の *_leg は脚の長さ(leg)を1とした値。実距離 = 値 × leg"
+ },
+ "common_clips": [
+  "idle",
+  "walk_f",
+  "walk_b",
+  "dash_f",
+  "crouch",
+  "jump_n",
+  "stand_light",
+  "stand_heavy",
+  "guard_stand",
+  "hurt_light"
+ ],
+ "unique_clips": [
+  "sp_bear_grab"
+ ],
+ "tail_bones": [
+  "tail_01",
+  "tail_02",
+  "tail_03"
+ ],
+ "rig_checks": {
+  "shoulder_fix.L_ratio": 0.5,
+  "thigh_fix.L_ratio": 0.5,
+  "shoulder_fix.R_ratio": 0.5,
+  "thigh_fix.R_ratio": 0.5
+ },
+ "clips": {
+  "idle": {
+   "frames": 88,
+   "fps": 60,
+   "duration_sec": 1.4667,
+   "loop": true,
+   "note": "待機。呼吸で上下する"
+  },
+  "walk_f": {
+   "frames": 50,
+   "fps": 60,
+   "duration_sec": 0.8333,
+   "loop": true,
+   "move_per_loop_leg": 0.5806,
+   "note": "足の接地中は一定速で後ろへ流れる。ゲーム側でこの速度で前進させれば滑らない"
+  },
+  "walk_b": {
+   "frames": 57,
+   "fps": 60,
+   "duration_sec": 0.95,
+   "loop": true,
+   "move_per_loop_leg": -0.4645,
+   "note": "足の接地中は一定速で後ろへ流れる。ゲーム側でこの速度で前進させれば滑らない"
+  },
+  "dash_f": {
+   "frames": 28,
+   "fps": 60,
+   "duration_sec": 0.4667,
+   "loop": false,
+   "move_total_leg": 1.7,
+   "move_frames": [
+    5,
+    22
+   ],
+   "note": "F4で踏み切り、F17で着地。移動はこの区間に配分する"
+  },
+  "crouch": {
+   "frames": 48,
+   "fps": 60,
+   "duration_sec": 0.8,
+   "loop": false,
+   "enter_frames": 12,
+   "loop_from": 12,
+   "note": "F12まででしゃがみ切り、F12〜F48は呼吸の保持ループ。リード手（左）を地面につく"
+  },
+  "jump_n": {
+   "frames": 48,
+   "fps": 60,
+   "duration_sec": 0.8,
+   "loop": false,
+   "prejump": 6,
+   "airborne": [
+    6,
+    40
+   ],
+   "land_recovery": 8,
+   "jump_height_leg": 2.0,
+   "note": "上下移動は含まない（ルートは地面のまま）。airborne の区間にゲーム側で放物線の高さを与える"
+  },
+  "stand_light": {
+   "frames": 22,
+   "fps": 60,
+   "duration_sec": 0.3667,
+   "loop": false,
+   "startup": 6,
+   "active": 3,
+   "recovery": 13,
+   "hand": "L",
+   "note": "前手（左）のジャブ"
+  },
+  "stand_heavy": {
+   "frames": 52,
+   "fps": 60,
+   "duration_sec": 0.8667,
+   "loop": false,
+   "startup": 18,
+   "active": 5,
+   "recovery": 29,
+   "hand": "R",
+   "note": "右拳を頭上へ振りかぶり、体重を乗せて振り下ろす"
+  },
+  "guard_stand": {
+   "frames": 29,
+   "fps": 60,
+   "duration_sec": 0.4833,
+   "loop": false,
+   "enter_frames": 5,
+   "loop_from": 5,
+   "note": "F5でガード姿勢。F5〜F29は保持ループ"
+  },
+  "hurt_light": {
+   "frames": 20,
+   "fps": 60,
+   "duration_sec": 0.3333,
+   "loop": false,
+   "hitstun": 20,
+   "note": "のけぞり。足は接地したまま、体は縮めない"
+  },
+  "sp_bear_grab": {
+   "frames": 52,
+   "fps": 60,
+   "duration_sec": 0.8667,
+   "loop": false,
+   "name_jp": "抱え込み（仮称）",
+   "startup": 18,
+   "active": 4,
+   "recovery": 30,
+   "throw": true,
+   "move_total_leg": 0.6,
+   "move_frames": [
+    13,
+    20
+   ],
+   "note": "両腕を大きく広げてから前で閉じる。つかんだ後の投げ動作は未制作",
+   "unique": true,
+   "provisional": true
+  }
+ }
+}

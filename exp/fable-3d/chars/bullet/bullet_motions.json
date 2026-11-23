@@ -1,0 +1,319 @@
+{
+ "id": "bullet",
+ "height": 0.62,
+ "unit": "Blender単位（メートル扱い）。全高は耳を除く頭頂まで",
+ "fps": 60,
+ "forward": "glTF/Three.js では +Z が正面、+Y が上、+X が本人の左",
+ "metrics": {
+  "leg": 0.2175,
+  "arm": 0.185,
+  "note": "移動量の *_leg は脚の長さ(leg)を1とした値。実距離 = 値 × leg"
+ },
+ "common_clips": [
+  "idle",
+  "walk_f",
+  "walk_b",
+  "dash_f",
+  "crouch",
+  "jump_n",
+  "stand_light",
+  "stand_heavy",
+  "guard_stand",
+  "hurt_light"
+ ],
+ "unique_clips": [
+  "sp_tail_whip"
+ ],
+ "tail_bones": [
+  "tail_01",
+  "tail_02",
+  "tail_03",
+  "tail_04",
+  "tail_05",
+  "tail_06"
+ ],
+ "rig_checks": {
+  "shoulder_fix.L_ratio": 0.5,
+  "thigh_fix.L_ratio": 0.5,
+  "shoulder_fix.R_ratio": 0.5,
+  "thigh_fix.R_ratio": 0.5
+ },
+ "clips": {
+  "idle": {
+   "frames": 64,
+   "fps": 60,
+   "duration_sec": 1.0667,
+   "loop": true,
+   "note": "待機。呼吸で上下する"
+  },
+  "walk_f": {
+   "frames": 38,
+   "fps": 60,
+   "duration_sec": 0.6333,
+   "loop": true,
+   "move_per_loop_leg": 0.7097,
+   "note": "足の接地中は一定速で後ろへ流れる。ゲーム側でこの速度で前進させれば滑らない"
+  },
+  "walk_b": {
+   "frames": 43,
+   "fps": 60,
+   "duration_sec": 0.7167,
+   "loop": true,
+   "move_per_loop_leg": -0.5677,
+   "note": "足の接地中は一定速で後ろへ流れる。ゲーム側でこの速度で前進させれば滑らない"
+  },
+  "dash_f": {
+   "frames": 22,
+   "fps": 60,
+   "duration_sec": 0.3667,
+   "loop": false,
+   "move_total_leg": 2.2,
+   "move_frames": [
+    4,
+    17
+   ],
+   "note": "F4で踏み切り、F17で着地。移動はこの区間に配分する"
+  },
+  "crouch": {
+   "frames": 48,
+   "fps": 60,
+   "duration_sec": 0.8,
+   "loop": false,
+   "enter_frames": 12,
+   "loop_from": 12,
+   "note": "F12まででしゃがみ切り、F12〜F48は呼吸の保持ループ。リード手（左）を地面につく"
+  },
+  "jump_n": {
+   "frames": 48,
+   "fps": 60,
+   "duration_sec": 0.8,
+   "loop": false,
+   "prejump": 4,
+   "airborne": [
+    4,
+    40
+   ],
+   "land_recovery": 8,
+   "jump_height_leg": 2.6,
+   "note": "上下移動は含まない（ルートは地面のまま）。airborne の区間にゲーム側で放物線の高さを与える"
+  },
+  "stand_light": {
+   "frames": 18,
+   "fps": 60,
+   "duration_sec": 0.3,
+   "loop": false,
+   "startup": 4,
+   "active": 3,
+   "recovery": 11,
+   "hand": "L",
+   "note": "前手（左）のジャブ"
+  },
+  "stand_heavy": {
+   "frames": 40,
+   "fps": 60,
+   "duration_sec": 0.6667,
+   "loop": false,
+   "startup": 12,
+   "active": 4,
+   "recovery": 24,
+   "hand": "R",
+   "note": "左足で踏み込み、腰の回転で後ろ手（右）のストレート"
+  },
+  "guard_stand": {
+   "frames": 29,
+   "fps": 60,
+   "duration_sec": 0.4833,
+   "loop": false,
+   "enter_frames": 5,
+   "loop_from": 5,
+   "note": "F5でガード姿勢。F5〜F29は保持ループ"
+  },
+  "hurt_light": {
+   "frames": 20,
+   "fps": 60,
+   "duration_sec": 0.3333,
+   "loop": false,
+   "hitstun": 20,
+   "note": "のけぞり。足は接地したまま、体は縮めない"
+  },
+  "sp_tail_whip": {
+   "frames": 48,
+   "fps": 60,
+   "duration_sec": 0.8,
+   "loop": false,
+   "name_jp": "尾薙ぎ（仮称）",
+   "startup": 19,
+   "active": 6,
+   "recovery": 23,
+   "reach_part": "tail",
+   "proposal": "AIの仮案: 発生19F・全体48Fと遅く、振る間は相手に背を向ける。尻尾の付け根側は当たらない想定にして、近距離の弱点にする",
+   "note": "尻尾を反対側へ巻いて溜め、体を約170度回して尻尾を水平に振り抜く。足は小さく跳んで踏み替える",
+   "unique": true,
+   "provisional": true,
+   "tail_tip_max_forward_m": 0.6506,
+   "tail_tip_max_forward_frame": 24,
+   "tail_tip_height_at_max_m": 0.248,
+   "tail_tip_side_at_max_m": -0.0602,
+   "tail_tip_min_height_m": 0.1576,
+   "tail_to_body_axis_min_m": 0.2341,
+   "tail_tip_path": [
+    [
+     0,
+     -0.588,
+     -0.061,
+     0.2
+    ],
+    [
+     2,
+     -0.584,
+     -0.018,
+     0.168
+    ],
+    [
+     4,
+     -0.56,
+     0.146,
+     0.163
+    ],
+    [
+     6,
+     -0.48,
+     0.378,
+     0.205
+    ],
+    [
+     8,
+     -0.313,
+     0.55,
+     0.249
+    ],
+    [
+     10,
+     -0.148,
+     0.592,
+     0.266
+    ],
+    [
+     12,
+     -0.116,
+     0.459,
+     0.223
+    ],
+    [
+     14,
+     -0.223,
+     0.055,
+     0.196
+    ],
+    [
+     16,
+     -0.13,
+     -0.255,
+     0.217
+    ],
+    [
+     18,
+     0.168,
+     -0.385,
+     0.236
+    ],
+    [
+     20,
+     0.447,
+     -0.343,
+     0.252
+    ],
+    [
+     22,
+     0.611,
+     -0.2,
+     0.255
+    ],
+    [
+     24,
+     0.651,
+     -0.06,
+     0.248
+    ],
+    [
+     26,
+     0.624,
+     -0.044,
+     0.241
+    ],
+    [
+     28,
+     0.616,
+     -0.117,
+     0.247
+    ],
+    [
+     30,
+     0.562,
+     -0.18,
+     0.234
+    ],
+    [
+     32,
+     0.412,
+     -0.267,
+     0.214
+    ],
+    [
+     34,
+     0.226,
+     -0.407,
+     0.226
+    ],
+    [
+     36,
+     0.028,
+     -0.536,
+     0.265
+    ],
+    [
+     38,
+     -0.133,
+     -0.571,
+     0.294
+    ],
+    [
+     40,
+     -0.199,
+     -0.528,
+     0.29
+    ],
+    [
+     42,
+     -0.26,
+     -0.444,
+     0.261
+    ],
+    [
+     44,
+     -0.415,
+     -0.317,
+     0.234
+    ],
+    [
+     46,
+     -0.562,
+     -0.137,
+     0.21
+    ],
+    [
+     48,
+     -0.588,
+     -0.061,
+     0.2
+    ]
+   ],
+   "tail_tip_path_columns": [
+    "frame",
+    "forward_m",
+    "left_m",
+    "height_m"
+   ]
+  }
+ }
+}

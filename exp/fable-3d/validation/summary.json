@@ -1,0 +1,134 @@
+{
+ "generated_by": "tools/validate.mjs",
+ "common_clips_checked": [
+  "idle",
+  "walk_f",
+  "walk_b",
+  "dash_f",
+  "crouch",
+  "jump_n",
+  "stand_light",
+  "stand_heavy",
+  "guard_stand",
+  "hurt_light"
+ ],
+ "characters": {
+  "moguzo": {
+   "all_pass": true,
+   "failed": [],
+   "triangles": 24884,
+   "joints": 40,
+   "clips": 11,
+   "unique_clips": [
+    "sp_rising_upper"
+   ],
+   "textures": 1,
+   "file_size_mb": 1.77,
+   "draw_calls": 2
+  },
+  "pisuke": {
+   "all_pass": true,
+   "failed": [],
+   "triangles": 24440,
+   "joints": 36,
+   "clips": 11,
+   "unique_clips": [
+    "sp_double_kick"
+   ],
+   "textures": 1,
+   "file_size_mb": 1.68,
+   "draw_calls": 2
+  },
+  "godan": {
+   "all_pass": true,
+   "failed": [],
+   "triangles": 28940,
+   "joints": 40,
+   "clips": 11,
+   "unique_clips": [
+    "sp_shoulder_charge"
+   ],
+   "textures": 1,
+   "file_size_mb": 1.83,
+   "draw_calls": 2
+  },
+  "hakuma": {
+   "all_pass": true,
+   "failed": [],
+   "triangles": 29464,
+   "joints": 36,
+   "clips": 11,
+   "unique_clips": [
+    "sp_harite"
+   ],
+   "textures": 1,
+   "file_size_mb": 1.91,
+   "draw_calls": 2
+  },
+  "chirka": {
+   "all_pass": true,
+   "failed": [],
+   "triangles": 24200,
+   "joints": 36,
+   "clips": 11,
+   "unique_clips": [
+    "sp_feint_claw"
+   ],
+   "textures": 1,
+   "file_size_mb": 1.64,
+   "draw_calls": 2
+  },
+  "takimaru": {
+   "all_pass": true,
+   "failed": [],
+   "triangles": 29312,
+   "joints": 36,
+   "clips": 11,
+   "unique_clips": [
+    "sp_bear_grab"
+   ],
+   "textures": 1,
+   "file_size_mb": 1.93,
+   "draw_calls": 2
+  },
+  "yomikage": {
+   "all_pass": true,
+   "failed": [],
+   "triangles": 23992,
+   "joints": 36,
+   "clips": 11,
+   "unique_clips": [
+    "sp_counter"
+   ],
+   "textures": 1,
+   "file_size_mb": 1.68,
+   "draw_calls": 2
+  },
+  "bullet": {
+   "all_pass": true,
+   "failed": [],
+   "triangles": 24472,
+   "joints": 39,
+   "clips": 11,
+   "unique_clips": [
+    "sp_tail_whip"
+   ],
+   "textures": 1,
+   "file_size_mb": 1.77,
+   "draw_calls": 2
+  },
+  "dark_moguzo": {
+   "all_pass": true,
+   "failed": [],
+   "triangles": 24884,
+   "joints": 40,
+   "clips": 11,
+   "unique_clips": [
+    "sp_dark_rush"
+   ],
+   "textures": 1,
+   "file_size_mb": 1.6,
+   "draw_calls": 2
+  }
+ }
+}
