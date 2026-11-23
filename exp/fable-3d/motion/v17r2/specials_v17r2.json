@@ -1,0 +1,1644 @@
+{
+ "authoring": "tools/mamo3d/motions_v17s_r2.py",
+ "build": "tools/build_specials_v17r2.py",
+ "characters": {
+  "bullet": {
+   "s1": {
+    "clip": "s1_v17",
+    "frames": 46,
+    "fps": 60,
+    "duration_sec": 0.7667,
+    "contactSeconds": 0.2833,
+    "start_pose": "idle",
+    "end_pose": "idle",
+    "character": "bullet",
+    "move_id": "s1",
+    "name_jp": "木の実弾",
+    "startup": 17,
+    "active": 1,
+    "recovery": 28,
+    "contact_frame": 17,
+    "balance_frames_total": 46,
+    "attack_limb": "tail",
+    "fx_anchor": "tail",
+    "projectile_spawn_frame": 17,
+    "silhouette": "尻尾を体の下へ巻き込んで沈む(F10-13)→前へ折れながら尻尾が背中越しに頭の前まで弧を描く(F17)",
+    "note": "区分は維持。現行 cmd_236 の巻きと振りを大きくした",
+    "v17": true,
+    "origin": "v14 re-export",
+    "role": "長距離牽制",
+    "kind": "projectile",
+    "weight": "mid",
+    "contact": 0.3696,
+    "contact_end": 0.3696,
+    "cue_track": [
+     {
+      "at": 0.2833,
+      "type": "sfx",
+      "key": "special",
+      "trigger": "movement",
+      "on": "always"
+     },
+     {
+      "at": 0.2833,
+      "type": "vfx",
+      "key": "special",
+      "trigger": "movement",
+      "on": "always",
+      "bone": "tail_03"
+     }
+    ],
+    "hitstop_suggest": {
+     "hit": 6,
+     "guard": 3
+    }
+   },
+   "s2": {
+    "clip": "s2_v17r2",
+    "frames": 43,
+    "fps": 60,
+    "duration_sec": 0.7167,
+    "contactSeconds": 0.15,
+    "start_pose": "idle",
+    "end_pose": "idle",
+    "character": "bullet",
+    "move_id": "s2",
+    "name_jp": "尾跳ね",
+    "startup": 9,
+    "active": 7,
+    "recovery": 27,
+    "contact_frame": 9,
+    "balance_frames_total": 43,
+    "attack_limb": "tail",
+    "fx_anchor": "tail",
+    "anti_air": true,
+    "visual_airborne_frames": [
+     7,
+     28
+    ],
+    "silhouette": "沈んで尾を巻く(F4)→前へ折れて小さく跳ね、尾が背中越しに前上へ出る(F9-19)。先端は頭より前で頭より高い",
+    "note": "r2: v17 は尾が真上（接触時は体の後ろ −0.10m、ばねの遅れで持続の最後に 0.04m）。体を前へ深く折り、尾を前上へ。尾は接触フレームに間に合うよう早めに振り出す",
+    "v17": true,
+    "origin": "v17 r2 revised",
+    "role": "長尾対空",
+    "kind": "antiair",
+    "weight": "mid",
+    "contact": 0.2093,
+    "contact_end": 0.3488,
+    "cue_track": [
+     {
+      "at": 0.1,
+      "type": "sfx",
+      "key": "wind",
+      "trigger": "movement",
+      "on": "always"
+     },
+     {
+      "at": 0.1167,
+      "type": "sfx",
+      "key": "wind",
+      "trigger": "movement",
+      "on": "always"
+     },
+     {
+      "at": 0.15,
+      "type": "sfx",
+      "key": "hit",
+      "trigger": "contact",
+      "on": "hit"
+     },
+     {
+      "at": 0.15,
+      "type": "vfx",
+      "key": "hit",
+      "trigger": "contact",
+      "on": "hit",
+      "bone": "tail_03"
+     },
+     {
+      "at": 0.15,
+      "type": "shake",
+      "key": 0.008,
+      "trigger": "contact",
+      "on": "hit"
+     },
+     {
+      "at": 0.15,
+      "type": "sfx",
+      "key": "block",
+      "trigger": "contact",
+      "on": "guard"
+     },
+     {
+      "at": 0.15,
+      "type": "vfx",
+      "key": "block",
+      "trigger": "contact",
+      "on": "guard",
+      "bone": "tail_03"
+     },
+     {
+      "at": 0.4667,
+      "type": "sfx",
+      "key": "clinch",
+      "trigger": "movement",
+      "on": "always"
+     },
+     {
+      "at": 0.4667,
+      "type": "vfx",
+      "key": "roar",
+      "trigger": "movement",
+      "on": "always",
+      "bone": "root_ground"
+     }
+    ],
+    "hitstop_suggest": {
+     "hit": 6,
+     "guard": 3
+    }
+   },
+   "s3": {
+    "clip": "s3_v17",
+    "frames": 48,
+    "fps": 60,
+    "duration_sec": 0.8,
+    "contactSeconds": 0.3167,
+    "start_pose": "idle",
+    "end_pose": "idle",
+    "character": "bullet",
+    "move_id": "s3",
+    "name_jp": "尾薙ぎ",
+    "startup": 19,
+    "active": 6,
+    "recovery": 23,
+    "contact_frame": 19,
+    "balance_frames_total": 48,
+    "attack_limb": "tail",
+    "fx_anchor": "tail",
+    "reach_part": "tail",
+    "tail_source": "sp_tail_whip",
+    "tail_preserved": true,
+    "silhouette": "胸を後ろへひねり、手前の腕を大きく引く(F8-10)→跳ねて踏み替え(F13)→両腕を左右に開き、頭だけ相手へ残して尻尾が届く(F16-25)→腕を畳んで戻る",
+    "note": "骨盤と尻尾は現行 sp_tail_whip のキーをそのまま使う（先端の軌道は同一。検証は validation/bullet_s3_tail.json）。変えたのは背骨・胸・首・頭・両腕・足の跳ねる高さだけ。対戦用クリップの「当たりを 2F 早める」処理はこのクリップには掛けない",
+    "v17": true,
+    "origin": "v14 re-export",
+    "role": "長距離決定打",
+    "kind": "strike",
+    "weight": "heavy",
+    "contact": 0.3958,
+    "contact_end": 0.5,
+    "cue_track": [
+     {
+      "at": 0.0,
+      "type": "sfx",
+      "key": "grunt",
+      "trigger": "movement",
+      "on": "always"
+     },
+     {
+      "at": 0.2667,
+      "type": "sfx",
+      "key": "wind",
+      "trigger": "movement",
+      "on": "always"
+     },
+     {
+      "at": 0.3167,
+      "type": "sfx",
+      "key": "crash",
+      "trigger": "contact",
+      "on": "hit"
+     },
+     {
+      "at": 0.3167,
+      "type": "vfx",
+      "key": "hit",
+      "trigger": "contact",
+      "on": "hit",
+      "bone": "tail_03"
+     },
+     {
+      "at": 0.3167,
+      "type": "shake",
+      "key": 0.016,
+      "trigger": "contact",
+      "on": "hit"
+     },
+     {
+      "at": 0.3167,
+      "type": "sfx",
+      "key": "block",
+      "trigger": "contact",
+      "on": "guard"
+     },
+     {
+      "at": 0.3167,
+      "type": "vfx",
+      "key": "block",
+      "trigger": "contact",
+      "on": "guard",
+      "bone": "tail_03"
+     }
+    ],
+    "hitstop_suggest": {
+     "hit": 9,
+     "guard": 5
+    },
+    "measure": {
+     "tail_tip_max_forward_m": 0.6506,
+     "tail_tip_max_forward_frame": 24,
+     "tail_tip_height_at_max_m": 0.248,
+     "tail_tip_side_at_max_m": -0.0602,
+     "tail_tip_min_height_m": 0.1576,
+     "tail_to_body_axis_min_m": 0.2341,
+     "tail_tip_path": [
+      [
+       0,
+       -0.588,
+       -0.061,
+       0.2
+      ],
+      [
+       2,
+       -0.584,
+       -0.018,
+       0.168
+      ],
+      [
+       4,
+       -0.56,
+       0.146,
+       0.163
+      ],
+      [
+       6,
+       -0.48,
+       0.378,
+       0.205
+      ],
+      [
+       8,
+       -0.313,
+       0.55,
+       0.249
+      ],
+      [
+       10,
+       -0.148,
+       0.592,
+       0.266
+      ],
+      [
+       12,
+       -0.116,
+       0.459,
+       0.223
+      ],
+      [
+       14,
+       -0.223,
+       0.055,
+       0.196
+      ],
+      [
+       16,
+       -0.13,
+       -0.255,
+       0.217
+      ],
+      [
+       18,
+       0.168,
+       -0.385,
+       0.236
+      ],
+      [
+       20,
+       0.447,
+       -0.343,
+       0.252
+      ],
+      [
+       22,
+       0.611,
+       -0.2,
+       0.255
+      ],
+      [
+       24,
+       0.651,
+       -0.06,
+       0.248
+      ],
+      [
+       26,
+       0.624,
+       -0.044,
+       0.241
+      ],
+      [
+       28,
+       0.616,
+       -0.117,
+       0.247
+      ],
+      [
+       30,
+       0.562,
+       -0.18,
+       0.234
+      ],
+      [
+       32,
+       0.412,
+       -0.267,
+       0.214
+      ],
+      [
+       34,
+       0.226,
+       -0.407,
+       0.226
+      ],
+      [
+       36,
+       0.028,
+       -0.536,
+       0.265
+      ],
+      [
+       38,
+       -0.133,
+       -0.571,
+       0.294
+      ],
+      [
+       40,
+       -0.199,
+       -0.528,
+       0.29
+      ],
+      [
+       42,
+       -0.26,
+       -0.444,
+       0.261
+      ],
+      [
+       44,
+       -0.415,
+       -0.317,
+       0.234
+      ],
+      [
+       46,
+       -0.562,
+       -0.137,
+       0.21
+      ],
+      [
+       48,
+       -0.588,
+       -0.061,
+       0.2
+      ]
+     ],
+     "tail_tip_path_columns": [
+      "frame",
+      "forward_m",
+      "left_m",
+      "height_m"
+     ]
+    }
+   }
+  },
+  "takimaru": {
+   "s1": {
+    "clip": "s1_v17",
+    "frames": 51,
+    "fps": 60,
+    "duration_sec": 0.85,
+    "contactSeconds": 0.3333,
+    "start_pose": "idle",
+    "end_pose": "idle",
+    "character": "takimaru",
+    "move_id": "s1",
+    "name_jp": "大地走り",
+    "startup": 20,
+    "active": 1,
+    "recovery": 30,
+    "contact_frame": 20,
+    "balance_frames_total": 51,
+    "attack_limb": "pawL+pawR",
+    "fx_anchor": "pawR",
+    "projectile_spawn_frame": 20,
+    "visual_airborne_frames": [
+     9,
+     19
+    ],
+    "silhouette": "沈む(F6)→小さく跳んで両腕を頭上へ(F12-16)→着地と同時に両拳を床へ叩きつける(F20)",
+    "note": "区分は維持。現行 cmd_236 の「腕を上げてから床を打つ」を、跳躍と両拳で一段大きくした",
+    "v17": true,
+    "origin": "v14 re-export",
+    "role": "掴み接近の布石",
+    "kind": "projectile",
+    "weight": "mid",
+    "contact": 0.3922,
+    "contact_end": 0.3922,
+    "cue_track": [
+     {
+      "at": 0.15,
+      "type": "sfx",
+      "key": "wind",
+      "trigger": "movement",
+      "on": "always"
+     },
+     {
+      "at": 0.3167,
+      "type": "sfx",
+      "key": "clinch",
+      "trigger": "movement",
+      "on": "always"
+     },
+     {
+      "at": 0.3167,
+      "type": "vfx",
+      "key": "roar",
+      "trigger": "movement",
+      "on": "always",
+      "bone": "root_ground"
+     },
+     {
+      "at": 0.3333,
+      "type": "sfx",
+      "key": "special",
+      "trigger": "movement",
+      "on": "always"
+     },
+     {
+      "at": 0.3333,
+      "type": "vfx",
+      "key": "special",
+      "trigger": "movement",
+      "on": "always",
+      "bone": "pawR"
+     }
+    ],
+    "hitstop_suggest": {
+     "hit": 6,
+     "guard": 3
+    }
+   },
+   "s2": {
+    "clip": "s2_v17r2",
+    "frames": 44,
+    "fps": 60,
+    "duration_sec": 0.7333,
+    "contactSeconds": 0.1667,
+    "start_pose": "idle",
+    "end_pose": "idle",
+    "character": "takimaru",
+    "move_id": "s2",
+    "name_jp": "抱え上げ",
+    "startup": 10,
+    "active": 7,
+    "recovery": 27,
+    "contact_frame": 10,
+    "balance_frames_total": 44,
+    "attack_limb": "pawL+pawR",
+    "fx_anchor": "pawR",
+    "anti_air": true,
+    "grounded": true,
+    "silhouette": "深く潜って両手が膝の下(F6)→一歩踏み込み、両腕を前上へ突き上げる(F10)→そのまま頭上へ持ち上げ(F16)、のけぞって止める(F21-26)",
+    "note": "r2: v17 は両手が頭の真上（前方 0.015m）で、地上の相手に届かなかった。踏み込みを深くし、接触は前上、止めの絵は元のまま",
+    "v17": true,
+    "origin": "v17 r2 revised",
+    "role": "迎撃／掴み距離",
+    "kind": "antiair",
+    "weight": "heavy",
+    "contact": 0.2273,
+    "contact_end": 0.3636,
+    "cue_track": [
+     {
+      "at": 0.0,
+      "type": "sfx",
+      "key": "grunt",
+      "trigger": "movement",
+      "on": "always"
+     },
+     {
+      "at": 0.1167,
+      "type": "sfx",
+      "key": "wind",
+      "trigger": "movement",
+      "on": "always"
+     },
+     {
+      "at": 0.1667,
+      "type": "sfx",
+      "key": "crash",
+      "trigger": "contact",
+      "on": "hit"
+     },
+     {
+      "at": 0.1667,
+      "type": "vfx",
+      "key": "hit",
+      "trigger": "contact",
+      "on": "hit",
+      "bone": "pawR"
+     },
+     {
+      "at": 0.1667,
+      "type": "shake",
+      "key": 0.016,
+      "trigger": "contact",
+      "on": "hit"
+     },
+     {
+      "at": 0.1667,
+      "type": "sfx",
+      "key": "block",
+      "trigger": "contact",
+      "on": "guard"
+     },
+     {
+      "at": 0.1667,
+      "type": "vfx",
+      "key": "block",
+      "trigger": "contact",
+      "on": "guard",
+      "bone": "pawR"
+     }
+    ],
+    "hitstop_suggest": {
+     "hit": 9,
+     "guard": 5
+    }
+   },
+   "s3": {
+    "clip": "s3_v17",
+    "frames": 49,
+    "fps": 60,
+    "duration_sec": 0.8167,
+    "contactSeconds": 0.15,
+    "start_pose": "idle",
+    "end_pose": "idle",
+    "character": "takimaru",
+    "move_id": "s3",
+    "name_jp": "抱え込み",
+    "startup": 9,
+    "active": 3,
+    "recovery": 37,
+    "contact_frame": 9,
+    "balance_frames_total": 49,
+    "attack_limb": "pawL+pawR",
+    "fx_anchor": "chest",
+    "on_hit_clips": [
+     "throw_hit",
+     "thrown"
+    ],
+    "silhouette": "両腕を左右いっぱいに広げる(F5)→踏み込んで胸の前で閉じる(F9-12)→空振りなら片手を床についてつんのめる(F24)",
+    "note": "区分は維持。つかんだ後の投げ（既存 throw_hit / thrown）は変えていない。つかみにいく動きと空振りだけを作り直した",
+    "v17": true,
+    "origin": "v14 re-export",
+    "role": "近距離の拘束",
+    "kind": "grab",
+    "weight": "heavy",
+    "contact": 0.1837,
+    "contact_end": 0.2245,
+    "cue_track": [
+     {
+      "at": 0.0,
+      "type": "sfx",
+      "key": "grunt",
+      "trigger": "movement",
+      "on": "always"
+     },
+     {
+      "at": 0.1,
+      "type": "sfx",
+      "key": "wind",
+      "trigger": "movement",
+      "on": "always"
+     },
+     {
+      "at": 0.15,
+      "type": "sfx",
+      "key": "clinch",
+      "trigger": "contact",
+      "on": "hit"
+     },
+     {
+      "at": 0.15,
+      "type": "vfx",
+      "key": "clinch",
+      "trigger": "contact",
+      "on": "hit",
+      "bone": "chest"
+     },
+     {
+      "at": 0.15,
+      "type": "shake",
+      "key": 0.016,
+      "trigger": "contact",
+      "on": "hit"
+     },
+     {
+      "at": 0.15,
+      "type": "sfx",
+      "key": "block",
+      "trigger": "contact",
+      "on": "guard"
+     },
+     {
+      "at": 0.15,
+      "type": "vfx",
+      "key": "block",
+      "trigger": "contact",
+      "on": "guard",
+      "bone": "chest"
+     }
+    ],
+    "hitstop_suggest": {
+     "hit": 9,
+     "guard": 5
+    }
+   }
+  },
+  "yomikage": {
+   "s1": {
+    "clip": "s1_v17",
+    "frames": 37,
+    "fps": 60,
+    "duration_sec": 0.6167,
+    "contactSeconds": 0.2167,
+    "start_pose": "idle",
+    "end_pose": "idle",
+    "character": "yomikage",
+    "move_id": "s1",
+    "name_jp": "残月の波",
+    "startup": 13,
+    "active": 1,
+    "recovery": 23,
+    "contact_frame": 13,
+    "balance_frames_total": 37,
+    "attack_limb": "pawR",
+    "fx_anchor": "pawR",
+    "projectile_spawn_frame": 13,
+    "silhouette": "目を閉じて手刀を真上に掲げる(F7-10)→振り下ろしの途中、腕が水平のとき波が出る(F13)→足元まで振り切って止まる(F16-24)",
+    "note": "旧 cmd_236（腕を前へ出す）を、頭上から足元までの縦の半月に替えた",
+    "v17": true,
+    "origin": "v14 re-export",
+    "role": "距離を整える弾",
+    "kind": "projectile",
+    "weight": "light",
+    "contact": 0.3514,
+    "contact_end": 0.3514,
+    "cue_track": [
+     {
+      "at": 0.2167,
+      "type": "sfx",
+      "key": "special",
+      "trigger": "movement",
+      "on": "always"
+     },
+     {
+      "at": 0.2167,
+      "type": "vfx",
+      "key": "special",
+      "trigger": "movement",
+      "on": "always",
+      "bone": "pawR"
+     }
+    ],
+    "hitstop_suggest": {
+     "hit": 4,
+     "guard": 2
+    }
+   },
+   "s2": {
+    "clip": "s2_v17r2",
+    "frames": 40,
+    "fps": 60,
+    "duration_sec": 0.6667,
+    "contactSeconds": 0.1333,
+    "start_pose": "idle",
+    "end_pose": "idle",
+    "character": "yomikage",
+    "move_id": "s2",
+    "name_jp": "昇り肘",
+    "startup": 8,
+    "active": 7,
+    "recovery": 25,
+    "contact_frame": 8,
+    "balance_frames_total": 40,
+    "attack_limb": "elbowR",
+    "fx_anchor": "pawR",
+    "anti_air": true,
+    "grounded": true,
+    "silhouette": "奥の手で払い下げる(F4)→深く一歩入り、腰ごと前へ寄せて手前の肘を前上へ突き上げる。拳は耳の横(F8-15)。払った手は下に残る",
+    "note": "r2: v17 は肘が体の真上寄り（前方 0.143m）。踏み込みを深くして腰を前足へ乗せ、肘の向きを前上にした",
+    "v17": true,
+    "origin": "v17 r2 revised",
+    "role": "対空",
+    "kind": "antiair",
+    "weight": "mid",
+    "contact": 0.2,
+    "contact_end": 0.35,
+    "cue_track": [
+     {
+      "at": 0.0833,
+      "type": "sfx",
+      "key": "wind",
+      "trigger": "movement",
+      "on": "always"
+     },
+     {
+      "at": 0.1333,
+      "type": "sfx",
+      "key": "hit",
+      "trigger": "contact",
+      "on": "hit"
+     },
+     {
+      "at": 0.1333,
+      "type": "vfx",
+      "key": "hit",
+      "trigger": "contact",
+      "on": "hit",
+      "bone": "pawR"
+     },
+     {
+      "at": 0.1333,
+      "type": "shake",
+      "key": 0.008,
+      "trigger": "contact",
+      "on": "hit"
+     },
+     {
+      "at": 0.1333,
+      "type": "sfx",
+      "key": "block",
+      "trigger": "contact",
+      "on": "guard"
+     },
+     {
+      "at": 0.1333,
+      "type": "vfx",
+      "key": "block",
+      "trigger": "contact",
+      "on": "guard",
+      "bone": "pawR"
+     }
+    ],
+    "hitstop_suggest": {
+     "hit": 6,
+     "guard": 3
+    }
+   },
+   "s3": {
+    "clip": "s3_v17",
+    "frames": 51,
+    "fps": 60,
+    "duration_sec": 0.85,
+    "contactSeconds": 0.1167,
+    "start_pose": "idle",
+    "end_pose": "idle",
+    "character": "yomikage",
+    "move_id": "s3",
+    "name_jp": "受け返し",
+    "startup": 7,
+    "active": 13,
+    "recovery": 31,
+    "contact_frame": 7,
+    "balance_frames_total": 51,
+    "attack_limb": "pawL",
+    "fx_anchor": "pawL",
+    "counter_window_frames": [
+     7,
+     20
+    ],
+    "silhouette": "後ろ足に体重を移し、手前の手をだらりと下げて目を閉じる(F4-20)。奥の掌だけを顔の前に立てる→受付が終わると目を開ける",
+    "note": "旧 sp_counter は構えがほとんど変わらず、空振り時に何も見えなかった。「無防備に見える待ち」を見せる。反撃が成立したときの動きはゲーム側の扱いに従う（未確認）",
+    "v17": true,
+    "origin": "v14 re-export",
+    "role": "読み勝つ当て身",
+    "kind": "counter",
+    "weight": "mid",
+    "contact": 0.1373,
+    "contact_end": 0.3725,
+    "cue_track": [
+     {
+      "at": 0.0,
+      "type": "sfx",
+      "key": "chime",
+      "trigger": "movement",
+      "on": "always"
+     },
+     {
+      "at": 0.0667,
+      "type": "sfx",
+      "key": "wind",
+      "trigger": "movement",
+      "on": "always"
+     },
+     {
+      "at": 0.1167,
+      "type": "sfx",
+      "key": "hit",
+      "trigger": "contact",
+      "on": "hit"
+     },
+     {
+      "at": 0.1167,
+      "type": "vfx",
+      "key": "hit",
+      "trigger": "contact",
+      "on": "hit",
+      "bone": "pawL"
+     },
+     {
+      "at": 0.1167,
+      "type": "shake",
+      "key": 0.008,
+      "trigger": "contact",
+      "on": "hit"
+     },
+     {
+      "at": 0.1167,
+      "type": "sfx",
+      "key": "block",
+      "trigger": "contact",
+      "on": "guard"
+     },
+     {
+      "at": 0.1167,
+      "type": "vfx",
+      "key": "block",
+      "trigger": "contact",
+      "on": "guard",
+      "bone": "pawL"
+     },
+     {
+      "at": 0.1167,
+      "type": "sfx",
+      "key": "counter",
+      "trigger": "contact",
+      "on": "hit"
+     }
+    ],
+    "hitstop_suggest": {
+     "hit": 6,
+     "guard": 3
+    }
+   }
+  },
+  "moguzo": {
+   "s1": {
+    "clip": "s1_v17",
+    "frames": 35,
+    "fps": 60,
+    "duration_sec": 0.5833,
+    "contactSeconds": 0.2167,
+    "start_pose": "idle",
+    "end_pose": "idle",
+    "character": "moguzo",
+    "move_id": "s1",
+    "name_jp": "大地の波",
+    "startup": 13,
+    "active": 2,
+    "recovery": 20,
+    "contact_frame": 13,
+    "balance_frames_total": 35,
+    "attack_limb": "pawR",
+    "projectile_spawn_frame": 13,
+    "fx_anchor": "pawR",
+    "silhouette": "後ろ手を背中側へ高く振りかぶる(F6-8)→深い踏み込みで地面すれすれの下手すくい(F13)→手が胸の高さへ抜ける(F15)",
+    "note": "旧 cmd_236（両手を前へ突き出す波動型）を置き換える。弾の発生フレーム・性能は現行のまま",
+    "v17": true,
+    "origin": "v14 re-export",
+    "role": "中距離の牽制",
+    "kind": "projectile",
+    "weight": "mid",
+    "contact": 0.3714,
+    "contact_end": 0.4,
+    "cue_track": [
+     {
+      "at": 0.2167,
+      "type": "sfx",
+      "key": "special",
+      "trigger": "movement",
+      "on": "always"
+     },
+     {
+      "at": 0.2167,
+      "type": "vfx",
+      "key": "special",
+      "trigger": "movement",
+      "on": "always",
+      "bone": "pawR"
+     }
+    ],
+    "hitstop_suggest": {
+     "hit": 6,
+     "guard": 3
+    }
+   },
+   "s2": {
+    "clip": "s2_v17r2",
+    "frames": 40,
+    "fps": 60,
+    "duration_sec": 0.6667,
+    "contactSeconds": 0.1,
+    "start_pose": "idle",
+    "end_pose": "idle",
+    "character": "moguzo",
+    "move_id": "s2",
+    "name_jp": "昇り拳",
+    "startup": 6,
+    "active": 8,
+    "recovery": 26,
+    "contact_frame": 6,
+    "balance_frames_total": 40,
+    "attack_limb": "pawR",
+    "anti_air": true,
+    "fx_anchor": "pawR",
+    "visual_airborne_frames": [
+     7,
+     27
+    ],
+    "visual_peak_height_leg": 1.1,
+    "silhouette": "右へ巻いて沈む(F3)→前足で踏み切りながら低い右アッパーを前へ(F6)→左回りに回って跳び、右拳は真上・前ひざは腹まで(F11-17)→着地で深く沈む(F28)",
+    "note": "r2: v17 は接触の瞬間にもう跳んで回っていて、拳が高さ 0.80m にあり地上の相手に当たらなかった。接触を「低いアッパー」の姿勢にし、回転と上昇はその後へ送った。発生・持続・全体は同じ",
+    "v17": true,
+    "origin": "v17 r2 revised",
+    "role": "切り返し対空",
+    "kind": "antiair",
+    "weight": "mid",
+    "contact": 0.15,
+    "contact_end": 0.325,
+    "cue_track": [
+     {
+      "at": 0.05,
+      "type": "sfx",
+      "key": "wind",
+      "trigger": "movement",
+      "on": "always"
+     },
+     {
+      "at": 0.1,
+      "type": "sfx",
+      "key": "hit",
+      "trigger": "contact",
+      "on": "hit"
+     },
+     {
+      "at": 0.1,
+      "type": "vfx",
+      "key": "hit",
+      "trigger": "contact",
+      "on": "hit",
+      "bone": "pawR"
+     },
+     {
+      "at": 0.1,
+      "type": "shake",
+      "key": 0.008,
+      "trigger": "contact",
+      "on": "hit"
+     },
+     {
+      "at": 0.1,
+      "type": "sfx",
+      "key": "block",
+      "trigger": "contact",
+      "on": "guard"
+     },
+     {
+      "at": 0.1,
+      "type": "vfx",
+      "key": "block",
+      "trigger": "contact",
+      "on": "guard",
+      "bone": "pawR"
+     },
+     {
+      "at": 0.1167,
+      "type": "sfx",
+      "key": "wind",
+      "trigger": "movement",
+      "on": "always"
+     },
+     {
+      "at": 0.45,
+      "type": "sfx",
+      "key": "clinch",
+      "trigger": "movement",
+      "on": "always"
+     },
+     {
+      "at": 0.45,
+      "type": "vfx",
+      "key": "roar",
+      "trigger": "movement",
+      "on": "always",
+      "bone": "root_ground"
+     }
+    ],
+    "hitstop_suggest": {
+     "hit": 6,
+     "guard": 3
+    }
+   },
+   "s3": {
+    "clip": "s3_v17",
+    "frames": 36,
+    "fps": 60,
+    "duration_sec": 0.6,
+    "contactSeconds": 0.2,
+    "start_pose": "idle",
+    "end_pose": "idle",
+    "character": "moguzo",
+    "move_id": "s3",
+    "name_jp": "地走り",
+    "startup": 12,
+    "active": 5,
+    "recovery": 19,
+    "contact_frame": 12,
+    "balance_frames_total": 36,
+    "attack_limb": "pawL+pawR",
+    "fx_anchor": "pawR",
+    "travel_frames": [
+     0,
+     17
+    ],
+    "silhouette": "体が地面と平行になるまで倒れ、左右の手で交互に土をかく(F2-8)→下から伸び上がって両の掌(F12)",
+    "note": "旧 cmd_214（フック→裏拳。技名「地走り」と動きが合っていなかった）を置き換える。前進量はゲーム側の travel のまま",
+    "v17": true,
+    "origin": "v14 re-export",
+    "role": "前進圧力",
+    "kind": "rush",
+    "weight": "mid",
+    "contact": 0.3333,
+    "contact_end": 0.4444,
+    "cue_track": [
+     {
+      "at": 0.15,
+      "type": "sfx",
+      "key": "wind",
+      "trigger": "movement",
+      "on": "always"
+     },
+     {
+      "at": 0.2,
+      "type": "sfx",
+      "key": "hit",
+      "trigger": "contact",
+      "on": "hit"
+     },
+     {
+      "at": 0.2,
+      "type": "vfx",
+      "key": "hit",
+      "trigger": "contact",
+      "on": "hit",
+      "bone": "pawR"
+     },
+     {
+      "at": 0.2,
+      "type": "shake",
+      "key": 0.008,
+      "trigger": "contact",
+      "on": "hit"
+     },
+     {
+      "at": 0.2,
+      "type": "sfx",
+      "key": "block",
+      "trigger": "contact",
+      "on": "guard"
+     },
+     {
+      "at": 0.2,
+      "type": "vfx",
+      "key": "block",
+      "trigger": "contact",
+      "on": "guard",
+      "bone": "pawR"
+     }
+    ],
+    "hitstop_suggest": {
+     "hit": 6,
+     "guard": 3
+    }
+   }
+  },
+  "godan": {
+   "s1": {
+    "clip": "s1_v17",
+    "frames": 54,
+    "fps": 60,
+    "duration_sec": 0.9,
+    "contactSeconds": 0.35,
+    "start_pose": "idle",
+    "end_pose": "idle",
+    "character": "godan",
+    "move_id": "s1",
+    "name_jp": "地割り",
+    "startup": 21,
+    "active": 5,
+    "recovery": 28,
+    "contact_frame": 21,
+    "balance_frames_total": 54,
+    "attack_limb": "footR",
+    "fx_anchor": "footR",
+    "low_attack": true,
+    "silhouette": "両拳を腰に引き、のけぞって立ち上がりながら手前の脚を前へ高く上げる(F12-18)→一歩前へ踏み下ろし、腰が落ちて両拳も下へ(F21)",
+    "note": "旧 cmd_236（拳を床へ）を置き換える。下段・発生21Fは現行のまま。脚を上げる長い予備動作が発生の遅さと一致する",
+    "v17": true,
+    "origin": "v14 re-export",
+    "role": "遅い下段大技",
+    "kind": "strike",
+    "weight": "heavy",
+    "contact": 0.3889,
+    "contact_end": 0.463,
+    "cue_track": [
+     {
+      "at": 0.0,
+      "type": "sfx",
+      "key": "grunt",
+      "trigger": "movement",
+      "on": "always"
+     },
+     {
+      "at": 0.3,
+      "type": "sfx",
+      "key": "wind",
+      "trigger": "movement",
+      "on": "always"
+     },
+     {
+      "at": 0.35,
+      "type": "sfx",
+      "key": "crash",
+      "trigger": "contact",
+      "on": "hit"
+     },
+     {
+      "at": 0.35,
+      "type": "vfx",
+      "key": "hit",
+      "trigger": "contact",
+      "on": "hit",
+      "bone": "footR"
+     },
+     {
+      "at": 0.35,
+      "type": "shake",
+      "key": 0.016,
+      "trigger": "contact",
+      "on": "hit"
+     },
+     {
+      "at": 0.35,
+      "type": "sfx",
+      "key": "block",
+      "trigger": "contact",
+      "on": "guard"
+     },
+     {
+      "at": 0.35,
+      "type": "vfx",
+      "key": "block",
+      "trigger": "contact",
+      "on": "guard",
+      "bone": "footR"
+     }
+    ],
+    "hitstop_suggest": {
+     "hit": 9,
+     "guard": 5
+    }
+   },
+   "s2": {
+    "clip": "s2_v17r2",
+    "frames": 49,
+    "fps": 60,
+    "duration_sec": 0.8167,
+    "contactSeconds": 0.1833,
+    "start_pose": "idle",
+    "end_pose": "idle",
+    "character": "godan",
+    "move_id": "s2",
+    "name_jp": "岩砕き",
+    "startup": 11,
+    "active": 7,
+    "recovery": 31,
+    "contact_frame": 11,
+    "balance_frames_total": 49,
+    "attack_limb": "pawL+pawR",
+    "fx_anchor": "pawR",
+    "anti_air": true,
+    "grounded": true,
+    "silhouette": "股の間へ両拳を落として深くしゃがむ(F6-8)→半歩出て、両拳を前上へ振り上げる(F11)→背を反らせて頭上へ(F18)。足は地面から離れない",
+    "note": "r2: v17 は両拳の前方が 0.172m で、最小の押し合い距離にわずかに届かなかった。半歩の踏み込みと、前上への振り上げにした",
+    "v17": true,
+    "origin": "v17 r2 revised",
+    "role": "装甲つき対空",
+    "kind": "antiair",
+    "weight": "heavy",
+    "contact": 0.2245,
+    "contact_end": 0.3469,
+    "cue_track": [
+     {
+      "at": 0.0,
+      "type": "sfx",
+      "key": "grunt",
+      "trigger": "movement",
+      "on": "always"
+     },
+     {
+      "at": 0.1333,
+      "type": "sfx",
+      "key": "wind",
+      "trigger": "movement",
+      "on": "always"
+     },
+     {
+      "at": 0.1833,
+      "type": "sfx",
+      "key": "crash",
+      "trigger": "contact",
+      "on": "hit"
+     },
+     {
+      "at": 0.1833,
+      "type": "vfx",
+      "key": "hit",
+      "trigger": "contact",
+      "on": "hit",
+      "bone": "pawR"
+     },
+     {
+      "at": 0.1833,
+      "type": "shake",
+      "key": 0.016,
+      "trigger": "contact",
+      "on": "hit"
+     },
+     {
+      "at": 0.1833,
+      "type": "sfx",
+      "key": "block",
+      "trigger": "contact",
+      "on": "guard"
+     },
+     {
+      "at": 0.1833,
+      "type": "vfx",
+      "key": "block",
+      "trigger": "contact",
+      "on": "guard",
+      "bone": "pawR"
+     }
+    ],
+    "hitstop_suggest": {
+     "hit": 9,
+     "guard": 5
+    }
+   },
+   "s3": {
+    "clip": "s3_v17",
+    "frames": 57,
+    "fps": 60,
+    "duration_sec": 0.95,
+    "contactSeconds": 0.3,
+    "start_pose": "idle",
+    "end_pose": "idle",
+    "character": "godan",
+    "move_id": "s3",
+    "name_jp": "肩当て突進",
+    "startup": 18,
+    "active": 7,
+    "recovery": 32,
+    "contact_frame": 18,
+    "balance_frames_total": 57,
+    "attack_limb": "shoulderL",
+    "fx_anchor": "shoulderL",
+    "silhouette": "左肩を相手へ向けて深く沈む(F9)→体を斜め前へ預け、畳んだ左肩が体のいちばん前でぶつかる(F18)→前のめりのまま止まる(F37)",
+    "note": "v14 は腕を振り上げた姿が目立ち、肩で当たって見えなかった。前進距離は現行どおりゲーム側",
+    "v17": true,
+    "origin": "v17 revised",
+    "role": "高リスク突進",
+    "kind": "rush",
+    "weight": "heavy",
+    "contact": 0.3158,
+    "contact_end": 0.4211,
+    "cue_track": [
+     {
+      "at": 0.0,
+      "type": "sfx",
+      "key": "grunt",
+      "trigger": "movement",
+      "on": "always"
+     },
+     {
+      "at": 0.25,
+      "type": "sfx",
+      "key": "wind",
+      "trigger": "movement",
+      "on": "always"
+     },
+     {
+      "at": 0.3,
+      "type": "sfx",
+      "key": "crash",
+      "trigger": "contact",
+      "on": "hit"
+     },
+     {
+      "at": 0.3,
+      "type": "vfx",
+      "key": "hit",
+      "trigger": "contact",
+      "on": "hit",
+      "bone": "shoulderL"
+     },
+     {
+      "at": 0.3,
+      "type": "shake",
+      "key": 0.016,
+      "trigger": "contact",
+      "on": "hit"
+     },
+     {
+      "at": 0.3,
+      "type": "sfx",
+      "key": "block",
+      "trigger": "contact",
+      "on": "guard"
+     },
+     {
+      "at": 0.3,
+      "type": "vfx",
+      "key": "block",
+      "trigger": "contact",
+      "on": "guard",
+      "bone": "shoulderL"
+     }
+    ],
+    "hitstop_suggest": {
+     "hit": 9,
+     "guard": 5
+    }
+   }
+  },
+  "hakuma": {
+   "s1": {
+    "clip": "s1_v17",
+    "frames": 39,
+    "fps": 60,
+    "duration_sec": 0.65,
+    "contactSeconds": 0.1833,
+    "start_pose": "idle",
+    "end_pose": "idle",
+    "character": "hakuma",
+    "move_id": "s1",
+    "name_jp": "雪壁掌",
+    "startup": 11,
+    "active": 6,
+    "recovery": 22,
+    "contact_frame": 11,
+    "balance_frames_total": 39,
+    "attack_limb": "pawR",
+    "fx_anchor": "pawR",
+    "silhouette": "半身になり前の掌を顔の高さに立てる(F5)→前足を上げ(F8)→踏み下ろしと同時に後ろの掌が前の掌の下へ重なる(F11)。二枚の掌が縦に並ぶ",
+    "note": "旧 cmd_236（両手の押し出し。奥義と同形だった）を「受けてから押す」二段に替えた",
+    "v17": true,
+    "origin": "v14 re-export",
+    "role": "近中距離の押し返し",
+    "kind": "strike",
+    "weight": "mid",
+    "contact": 0.2821,
+    "contact_end": 0.4103,
+    "cue_track": [
+     {
+      "at": 0.1333,
+      "type": "sfx",
+      "key": "wind",
+      "trigger": "movement",
+      "on": "always"
+     },
+     {
+      "at": 0.1833,
+      "type": "sfx",
+      "key": "hit",
+      "trigger": "contact",
+      "on": "hit"
+     },
+     {
+      "at": 0.1833,
+      "type": "vfx",
+      "key": "hit",
+      "trigger": "contact",
+      "on": "hit",
+      "bone": "pawR"
+     },
+     {
+      "at": 0.1833,
+      "type": "shake",
+      "key": 0.008,
+      "trigger": "contact",
+      "on": "hit"
+     },
+     {
+      "at": 0.1833,
+      "type": "sfx",
+      "key": "block",
+      "trigger": "contact",
+      "on": "guard"
+     },
+     {
+      "at": 0.1833,
+      "type": "vfx",
+      "key": "block",
+      "trigger": "contact",
+      "on": "guard",
+      "bone": "pawR"
+     }
+    ],
+    "hitstop_suggest": {
+     "hit": 6,
+     "guard": 3
+    }
+   },
+   "s2": {
+    "clip": "s2_v17",
+    "frames": 39,
+    "fps": 60,
+    "duration_sec": 0.65,
+    "contactSeconds": 0.1333,
+    "start_pose": "idle",
+    "end_pose": "idle",
+    "character": "hakuma",
+    "move_id": "s2",
+    "name_jp": "白峰対空",
+    "startup": 8,
+    "active": 7,
+    "recovery": 24,
+    "contact_frame": 8,
+    "balance_frames_total": 39,
+    "attack_limb": "pawR",
+    "fx_anchor": "pawR",
+    "anti_air": true,
+    "grounded": true,
+    "silhouette": "沈んで掌を腰に引く(F4)→腹を突き出してのけぞり、片手の開いた掌を斜め上へ(F8-15)。足は地面のまま",
+    "note": "旧 cmd_623 の強化。ゴダンの岩砕き（両拳・真上）と分けるため、片手・開いた掌・斜め上・のけぞり",
+    "v17": true,
+    "origin": "v14 re-export",
+    "role": "受ける対空",
+    "kind": "antiair",
+    "weight": "mid",
+    "contact": 0.2051,
+    "contact_end": 0.359,
+    "cue_track": [
+     {
+      "at": 0.0833,
+      "type": "sfx",
+      "key": "wind",
+      "trigger": "movement",
+      "on": "always"
+     },
+     {
+      "at": 0.1333,
+      "type": "sfx",
+      "key": "hit",
+      "trigger": "contact",
+      "on": "hit"
+     },
+     {
+      "at": 0.1333,
+      "type": "vfx",
+      "key": "hit",
+      "trigger": "contact",
+      "on": "hit",
+      "bone": "pawR"
+     },
+     {
+      "at": 0.1333,
+      "type": "shake",
+      "key": 0.008,
+      "trigger": "contact",
+      "on": "hit"
+     },
+     {
+      "at": 0.1333,
+      "type": "sfx",
+      "key": "block",
+      "trigger": "contact",
+      "on": "guard"
+     },
+     {
+      "at": 0.1333,
+      "type": "vfx",
+      "key": "block",
+      "trigger": "contact",
+      "on": "guard",
+      "bone": "pawR"
+     }
+    ],
+    "hitstop_suggest": {
+     "hit": 6,
+     "guard": 3
+    }
+   },
+   "s3": {
+    "clip": "s3_v17r2",
+    "frames": 46,
+    "fps": 60,
+    "duration_sec": 0.7667,
+    "contactSeconds": 0.2,
+    "start_pose": "idle",
+    "end_pose": "idle",
+    "character": "hakuma",
+    "move_id": "s3",
+    "name_jp": "連続突っ張り",
+    "startup": 12,
+    "active": 9,
+    "recovery": 25,
+    "contact_frame": 12,
+    "balance_frames_total": 46,
+    "attack_limb": "pawL+pawR",
+    "fx_anchor": "pawR",
+    "travel_frames": [
+     0,
+     21
+    ],
+    "silhouette": "左(F4)・右(F8)と出て、3 発目の左(F12)でいちばん深く踏み込み肩ごと伸びる→右(F17)→最後に両手(F21)。そのたび足が一歩進む",
+    "note": "r2: v17 は接触 F12 の掌の前方が 0.493m。3 発目の踏み込みを深くして、接触時刻に実際に前へ出た姿勢を置いた。発生・持続・全体は同じ",
+    "v17": true,
+    "origin": "v17 r2 revised",
+    "role": "ライン回復",
+    "kind": "rush",
+    "weight": "mid",
+    "contact": 0.2609,
+    "contact_end": 0.4348,
+    "cue_track": [
+     {
+      "at": 0.15,
+      "type": "sfx",
+      "key": "wind",
+      "trigger": "movement",
+      "on": "always"
+     },
+     {
+      "at": 0.2,
+      "type": "sfx",
+      "key": "hit",
+      "trigger": "contact",
+      "on": "hit"
+     },
+     {
+      "at": 0.2,
+      "type": "vfx",
+      "key": "hit",
+      "trigger": "contact",
+      "on": "hit",
+      "bone": "pawR"
+     },
+     {
+      "at": 0.2,
+      "type": "shake",
+      "key": 0.008,
+      "trigger": "contact",
+      "on": "hit"
+     },
+     {
+      "at": 0.2,
+      "type": "sfx",
+      "key": "block",
+      "trigger": "contact",
+      "on": "guard"
+     },
+     {
+      "at": 0.2,
+      "type": "vfx",
+      "key": "block",
+      "trigger": "contact",
+      "on": "guard",
+      "bone": "pawR"
+     }
+    ],
+    "hitstop_suggest": {
+     "hit": 6,
+     "guard": 3
+    }
+   }
+  }
+ },
+ "version": "v17-p3-specials-r2",
+ "blender": "5.3.0",
+ "cue_contract": "cue_track[] = {at: クリップ秒, type: sfx|vfx|shake, key, trigger: movement|contact, on: always|hit|guard, bone?}。movement は時刻で必ず鳴らす動作音（溜め・風切り・着地・弾を放つ瞬間）。contact は時刻では鳴らさず、Battle が実際に出したヒット／ガードのイベントで Battle 側のフィードバックが使う（空振りでは鳴らない）。key は combat-audio.js / main.js の既存の種類。hitstop_suggest は提案値（採否は戦闘側）"
+}
