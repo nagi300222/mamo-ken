@@ -50,6 +50,8 @@ XcodeのApp schemeでiPhone Simulatorを選びRunする。物理iPhoneへ入れ�
 
 これは独立UIレーンの検証。最新P1 native safe-rect・P2部品・P3実測の全積み版は、P1確認→P2実装/承認の後に統合する。Story main、AvatarFactory、共通HUDではP3の実測/反応とP4のタブ/旅札/入力表示を両方維持し、安全領域を再検査する。
 
+追加の品質正本 [Issue220](https://github.com/nagi300222/mamo-ken/issues/220) / [Draft221](https://github.com/nagi300222/mamo-ken/pull/221) も確認した。分岐のCI/画像レビューと、統合後G0〜G5の正式受入を分ける。P2を含む同一HEADの統合、6軸の独立採点、人間の無説明タスク、物理iPhone、本人のまとまった試遊は未実施。現時点のP4を正式品質合格とは扱わず、P1/P2ゲート後にこの手順で進める。
+
 `PRODUCTION_GATE.json` はP1本人確認pending、P2/P5/main merge falseのまま。本人の「P1確認OK」または具体的FBを受けてP2へ進む。P4全体の本人試遊後にP5へ。mainも既存Draftもマージしていない。
 
 GHA画像/バイナリの保持は原則14日。GLB・比較動画・編集ソース・検証器・テキスト記録は各GitHub Draftに保存し、原成果物の実行SHA/ハッシュを残している。
