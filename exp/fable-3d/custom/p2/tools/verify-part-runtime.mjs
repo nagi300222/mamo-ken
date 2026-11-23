@@ -17,7 +17,10 @@ globalThis.fetch=async(url,options)=>{
  }
 };
 const [{GLTFLoader},{clone:cloneSkeleton},factory,parts,contract]=await Promise.all([import('three/addons/loaders/GLTFLoader.js'),import('three/addons/utils/SkeletonUtils.js'),import('../../v16/avatar-factory.js'),import('../part-loader.js'),import('../part-contract.js')]);
+const {measureMeshPartSeamMotion}=await import('../part-verification.js');
+const {verifyMeshPartDelivery,mixedMeshPartProfiles}=await import('../part-delivery.js');
 const loader=new GLTFLoader(),manifest=JSON.parse(await readFile(new URL('../assets/manifest.json',import.meta.url))),legacy=JSON.parse(await readFile(new URL('../../v16/assets/manifest.json',import.meta.url))),report=[];
+const requireFull=process.env.MAMOKEN_REQUIRE_P2_FULL==='1',delivery=verifyMeshPartDelivery(manifest,{requireFull});
 const hash=bytes=>createHash('sha256').update(bytes).digest('hex');
 const names=(scene,slot)=>{const found=[];scene.traverse(mesh=>{if(mesh.isSkinnedMesh&&mesh.material.name==='avatar_part_'+slot)found.push(mesh.name);});return found;};
 for(const baseId of ['moguzo','godan','bullet']){
@@ -57,8 +60,27 @@ for(const entry of contract.validateMeshPartManifest(manifest).modules){
  try{
   const measured=factory.measureContacts(avatar);assert.ok(Object.values(measured.normals).every(row=>row.activeReach.every(p=>Number.isFinite(p.reach)&&Number.isFinite(p.height))));
   assert.equal(avatar.partAssembly.modules[0].sha256,entry.sha256);assert.ok(avatar.grafts.includes(entry.slot));
-  report.push({moduleId:entry.id,type:'authored-foreign-donor',assembly:avatar.partAssembly,measured});
+  const seamMotion=measureMeshPartSeamMotion(avatar);assert.ok(seamMotion.every(row=>row.maxGap<=entry.seams.tolerance),entry.id+' opened during actual skin/morph animation');
+  const native=await factory.createAvatar({appearance:{baseId:entry.targetBaseId,parts:{},palette:{},pattern:'solid'}});
+  let comparison;
+  try{
+   const originalTriangles=native.meshes.filter(mesh=>mesh.userData.avatarPart===entry.slot).reduce((sum,mesh)=>sum+mesh.geometry.index.count/3,0),newTriangles=avatar.partAssembly.modules[0].triangles;
+   const baseline=factory.measureContacts(native);comparison={originalTriangles,newTriangles,surfaceDeltas:Object.fromEntries(Object.keys(measured.normals).map(slot=>[slot,{reach:measured.normals[slot].reach-baseline.normals[slot].reach,height:measured.normals[slot].height-baseline.normals[slot].height}]))};
+   assert.notEqual(newTriangles,originalTriangles,entry.id+' did not replace host topology');
+  }finally{native.dispose();}
+  report.push({moduleId:entry.id,type:'authored-foreign-donor',assembly:avatar.partAssembly,measured,seamMotion,comparison});
  }finally{avatar.dispose();}
 }
-const out=process.env.MAMOKEN_EVIDENCE??'/tmp/mamoken-p2-parts';await mkdir(out,{recursive:true});await writeFile(out+'/parts-cpu.json',JSON.stringify({note:'Actual GLB CPU skin sampling; images stubbed, WebGL and physical iPhone untested',authoredModules:manifest.modules.length,results:report},null,2));
-console.log('P2 PART RUNTIME CPU PASS: 3 actual host rigs, 15 same-host control swaps, shared skeleton, seams/morphs/skin, 18 normals; authored modules='+manifest.modules.length);
+for(const profile of mixedMeshPartProfiles(manifest,{requireFull})){
+ const avatar=await factory.createAvatar({appearance:{baseId:profile.baseId,parts:{},meshParts:profile.meshParts,palette:{},pattern:'stripes'}});
+ try{
+  assert.deepEqual(avatar.partAssembly.modules.map(m=>m.id).sort(),[...profile.moduleIds].sort());
+  if(requireFull){assert.ok(profile.exchangedSlots>=4);assert.equal(profile.mixedDonors,2);assert.equal(profile.partial,false);}
+  const measured=factory.measureContacts(avatar),seamMotion=measureMeshPartSeamMotion(avatar);
+  assert.ok(seamMotion.every(row=>row.maxGap<=.00002),profile.baseId+' mixed donor seams opened');
+  assert.equal(Object.keys(measured.normals).length,6);assert.ok(Object.values(measured.normals).every(row=>row.activeReach.every(p=>Number.isFinite(p.reach)&&Number.isFinite(p.height))));
+  report.push({type:'available-mixed-profile',...profile,assembly:avatar.partAssembly,seamMotion,measured});
+ }finally{avatar.dispose();}
+}
+const out=process.env.MAMOKEN_EVIDENCE??'/tmp/mamoken-p2-parts';await mkdir(out,{recursive:true});await writeFile(out+'/parts-cpu.json',JSON.stringify({note:'Actual GLB CPU skin sampling; images stubbed, WebGL and physical iPhone untested',requireFull,delivery,authoredModules:manifest.modules.length,results:report},null,2));
+console.log('P2 PART RUNTIME CPU PASS: 3 actual host rigs, 15 same-host control swaps, shared skeleton, seams/morphs/skin, 18 control normals; authored modules='+manifest.modules.length+'; complete catalog='+delivery.full);

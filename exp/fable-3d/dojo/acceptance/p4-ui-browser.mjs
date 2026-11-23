@@ -25,8 +25,23 @@ if(!root){
 }
 const dir=(process.env.MAMOKEN_EVIDENCE??'/tmp/mamoken-p4')+'/ui';await mkdir(dir,{recursive:true});
 let browser;try{browser=await chromium.launch({executablePath:process.env.CHROMIUM_PATH??'/usr/bin/google-chrome',args:['--no-sandbox','--use-angle=swiftshader','--enable-unsafe-swiftshader']});}catch(error){server?.close();throw error;}
-const context=await browser.newContext({viewport:{width:852,height:393},isMobile:true,hasTouch:true,deviceScaleFactor:1});
-const page=await context.newPage(),errors=[],report=[];
+const recording=process.env.MAMOKEN_UI_VIDEO==='1';
+if(recording)await mkdir(dir+'/video',{recursive:true});
+let context,page;
+try{
+ context=await browser.newContext({viewport:{width:852,height:393},isMobile:true,hasTouch:true,deviceScaleFactor:1,...(recording?{recordVideo:{dir:dir+'/video',size:{width:852,height:393}}}:{})});
+ page=await context.newPage();
+}catch(error){await browser.close();server?.close();throw error;}
+const videoHandle=page.video(),errors=[],report=[];
+let contextClosed=false,videoReceipt=null;
+async function flushVideo(){
+ if(!contextClosed){contextClosed=true;await context.close();}
+ if(videoHandle&&!videoReceipt){
+  const file=await videoHandle.path(),info=await stat(file);assert.ok(info.size>0,'recorded UI video is empty');
+  videoReceipt={path:file,artifactPath:path.relative(dir,file),bytes:info.size,size:{width:852,height:393},environment:'Desktop Chromium / SwiftShader; not a physical phone'};
+ }
+ return videoReceipt;
+}
 page.on('pageerror',e=>errors.push(e.message));page.on('response',r=>{if(r.status()>=400&&!r.url().endsWith('favicon.ico'))errors.push(r.status()+' '+r.url());});
 async function tapTargets(selector){
  const rows=await page.locator(selector).evaluateAll(nodes=>nodes.filter(n=>!n.hidden&&n.getClientRects().length).map(n=>{const r=n.getBoundingClientRect();return {name:n.textContent.trim().slice(0,40),width:r.width,height:r.height};}));
@@ -82,6 +97,9 @@ try{
   await page.waitForFunction(()=>document.querySelectorAll('.fighter-card .p4-crest').length===9&&[...document.querySelectorAll('.p4-crest')].every(image=>image.complete&&image.naturalWidth>0));
   await page.locator('.fighter-card').nth(2).tap();assert.equal(await page.locator('#chosen-name').textContent(),'ゴダン');
   assert.match(await page.locator('.p4-profile').textContent(),/得意.*苦手/);
+  await page.waitForFunction(()=>{const image=document.querySelector('.p4-selected-portrait'),selected=document.querySelector('.fighter-card.chosen img:not(.p4-crest)');return image&&!image.hidden&&image.complete&&image.naturalWidth>0&&image.currentSrc===selected?.currentSrc;});
+  assert.ok(await page.locator('.p4-selected-portrait').evaluate(n=>n.getBoundingClientRect().height>=80),'selected face should be larger than roster thumbnails');
+  const names=await page.locator('.fighter-card span').evaluateAll(nodes=>nodes.map(n=>({name:n.textContent,clipped:n.scrollWidth>n.clientWidth+1||n.scrollHeight>n.clientHeight+1})));assert.ok(names.every(n=>!n.clipped),'full roster names must remain readable: '+JSON.stringify(names));
   await page.locator('.p4-profile').scrollIntoViewIfNeeded();
   const profile=await visibleTargets('.p4-profile');
   const separation=await page.locator('.selection-footer').evaluate(footer=>({profileBottom:document.querySelector('.p4-profile').getBoundingClientRect().bottom,footerTop:footer.getBoundingClientRect().top,position:getComputedStyle(footer).position}));
@@ -90,7 +108,9 @@ try{
   await page.locator('#start').scrollIntoViewIfNeeded();const start=await visibleTargets('#start');
   await page.screenshot({path:dir+`/select-actions-${mode}.png`});report.push({screen:'selection',mode,profile,separation,start});
   await page.locator('#start').tap();
-  if(mode==='arcade'||mode==='survival'){
+  // Existing RunUI shows dialogue only on Arcade round one. Survival goes
+  // directly to VS/face intro and must not wait for an absent dialogue.
+  if(mode==='arcade'){
    await page.locator('#run-dialogue').waitFor({state:'visible',timeout:15000});
    const dialogue=[];
    for(let line=0;line<3&&await page.locator('#run-dialogue').isVisible();line++){
@@ -104,6 +124,7 @@ try{
    report.push({screen:'actual-run-dialogue',mode,dialogue});
   }
   await page.waitForFunction(()=>!mamoken3d.diagnostics.loading&&mamoken3d.presentation.loaded&&mamoken3d.presentation.state==='fight'&&mamoken3d.presentation.inputEnabled&&mamoken3d.battle?.frame>2,undefined,{timeout:90000});
+  if(mode==='survival')assert.equal(await page.locator('#run-dialogue').isVisible(),false,'Survival must retain its direct VS/intro flow');
   if(mode==='practice')assert.equal(await page.locator('#timer').textContent(),'∞');
   else assert.notEqual(await page.locator('#timer').textContent(),'∞');
   const controls=await page.locator('#buttons-rail .attack').evaluateAll(nodes=>nodes.map(n=>({key:n.dataset.control,art:getComputedStyle(n).backgroundImage})));
@@ -145,7 +166,11 @@ try{
  for(const card of safeCards)assert.ok(card.x>=61&&card.x+card.width<=700&&card.y+card.height<=300,'simulated safe area covered: '+JSON.stringify(card));
  report.push({screen:'lobby-simulated-insets',insets:{left:62,right:21,top:0,bottom:21},safeCards});
  await page.screenshot({path:dir+'/lobby-simulated-insets-720x320.png'});
- assert.deepEqual(errors,[]);await writeFile(dir+'/report.json',JSON.stringify({report,errors},null,2));
+ assert.deepEqual(errors,[]);const video=await flushVideo();await writeFile(dir+'/report.json',JSON.stringify({report,errors,video,environment:'Desktop Chromium / SwiftShader; physical iPhone not tested'},null,2));
+ if(video)console.log('P4 actual interaction video:',video.path,'(Chromium/SwiftShader, not physical iPhone)');
  console.log('P4 UI WEBGL PASS: five mode routes, native & rotated 720/852 layouts, 44px targets, paired character roles, four live shared Battle HUDs, four-tab editor save and unchanged journey record');
-}catch(error){await page.screenshot({path:dir+'/error.png'}).catch(()=>{});await writeFile(dir+'/failure-layout.json',JSON.stringify({error:error.message,report,errors,layout:await layoutEvidence()},null,2)).catch(()=>{});console.error(errors);throw error;}
-finally{await browser.close();if(server)await new Promise(resolve=>server.close(resolve));}
+}catch(error){
+ await page.screenshot({path:dir+'/error.png'}).catch(()=>{});const layout=await layoutEvidence().catch(()=>null);
+ const video=await flushVideo().catch(failure=>({error:failure.message}));
+ await writeFile(dir+'/failure-layout.json',JSON.stringify({error:error.message,report,errors,layout,video},null,2)).catch(()=>{});console.error(errors);throw error;
+}finally{if(!contextClosed)await context.close().catch(()=>{});await browser.close();if(server)await new Promise(resolve=>server.close(resolve));}

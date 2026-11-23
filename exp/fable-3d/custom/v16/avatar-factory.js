@@ -6,6 +6,7 @@ import {specialClipTime,resolveSpecialBone} from '../../dojo/special-motion-sour
 import {normalMove} from '../../dojo/balance.js';
 import {resolveMeshParts} from '../p2/part-contract.js';
 import {loadMeshPartManifest,loadMeshPartModules,assembleMeshParts} from '../p2/part-loader.js';
+import {p2MeleeCompatibility,p2AppearanceKey,P2_MELEE_COMPATIBILITY_VERSION} from './melee-compatibility-p2.js';
 
 export const AVATAR_BASE_IDS=Object.freeze(['moguzo','pisuke','godan','hakuma','chirka','takimaru','yomikage','bullet','dark_moguzo']);
 const NAMES=['モグゾー','ピスケ','ゴダン','ハクマ','チルカ','タキマル','ヨミカゲ','バレット','ダークモグゾー'];
@@ -273,7 +274,19 @@ export function measureSpecialContact(avatar,clip,spec,move,{ref,sourceVersion=s
  const parsed=/^(moguzo|pisuke|godan|hakuma|chirka|takimaru|yomikage|bullet|dark_moguzo)\.(s[123])$/.exec(ref??'');
  if(!parsed||!(clip instanceof THREE.AnimationClip)||spec?.motionVersion!=='v17'||typeof sourceVersion!=='string')fail('確定した参照技・v17モーション・制作版が必要です');
  const [,sourceCharacterId,sourceMoveId]=parsed,reference=spec.authoredContact;
- if(sourceCharacterId!==avatar.baseId&&move.kind!=='projectile')fail('別骨格の打撃・投げ・当身は未対応です');
+ let foreignRetarget;
+ if(sourceCharacterId!==avatar.baseId&&move.kind!=='projectile'){
+  const compatible=p2MeleeCompatibility(avatar.appearance,ref,{sourceVersion}),token=clip.userData?.customRetarget,identity=compatible.identity;
+  if(!compatible.supported||token?.compatibilityVersion!==P2_MELEE_COMPATIBILITY_VERSION||token.moveRef!==ref||token.targetRigId!==avatar.baseId||token.targetAppearanceKey!==p2AppearanceKey(avatar.appearance)||
+   token.sourceVersion!==sourceVersion||token.sourceFile!==identity?.sourceFile||token.actualSourceClip!==identity?.sourceClip||spec.sourceFile!==identity?.sourceFile||spec.actualSourceClip!==identity?.sourceClip||spec.runtimeClip!==identity?.runtimeClip)
+   fail('異骨格近接の明示した制作版・実パーツ・移植クリップを確認できません: '+(compatible.reason||ref));
+  const grounding=token.grounding;
+  if(grounding?.method!=='source-support-host-idle-up-v1'||!Number.isFinite(grounding.maxOffset)||grounding.maxOffset<0||grounding.maxOffset>.05||
+   !Array.isArray(grounding.samples)||!grounding.samples.length||!Array.isArray(grounding.probes)||grounding.probes.length!==move.startup+move.active+move.recovery+1||
+   grounding.samples.some(row=>!Number.isFinite(row.offset)||row.offset<0||row.offset>.05)||grounding.probes.some(row=>!Number.isFinite(row.sourceFloor)||!Number.isFinite(row.correctedFloor))||
+   !clip.tracks.some(track=>track.name==='pelvis.position'))fail('異骨格近接の実支持足と上向き接地補正を確認できません');
+  foreignRetarget=token;
+ }
  if(!Number.isInteger(move?.active)||move.active<1||!Number.isFinite(spec.contactSeconds)||spec.contactSeconds<0||spec.contactSeconds>=clip.duration)fail('技または接触時計が不正です');
  const sourceClip=clip.userData?.customRetarget?.sourceClip??clip.name;
  if(sourceClip!==sourceMoveId+'_v17'||!reference?.attackPart||reference.clip!==sourceMoveId+'_v17')fail('元クリップ・実測打撃部位が一致しません');
@@ -314,7 +327,8 @@ export function measureSpecialContact(avatar,clip,spec,move,{ref,sourceVersion=s
    sourceClip:spec.actualSourceClip??sourceMoveId+'_v17',...(spec.sourceFile?{sourceFile:spec.sourceFile}:{}),
    source:'runtime-skinned-mesh',sampling:'exact-clip-clock',status:'ok',sampledContactSeconds:spec.contactSeconds,contactSeconds:spec.contactSeconds,
    activeFrameCount:move.active,attackPart:contact.part,attackParts,attackLimb:spec.attackLimb,kind:spec.kind,...contact,activeReach,
-   ...(socket?{contactSocket:socket,...(move.kind==='projectile'?{projectileSocket:socket}:{})}:{}),visualRigId:avatar.baseId,grafts:[...avatar.grafts]};
+   ...(socket?{contactSocket:socket,...(move.kind==='projectile'?{projectileSocket:socket}:{})}:{}),visualRigId:avatar.baseId,grafts:[...avatar.grafts],
+   ...(foreignRetarget?{targetAppearanceKey:foreignRetarget.targetAppearanceKey,retargetCompatibilityVersion:foreignRetarget.compatibilityVersion}:{})};
  }finally{
   mixer.stopAllAction();mixer.uncacheRoot(root);root.position.copy(old.position);root.quaternion.copy(old.rotation);root.scale.copy(old.scale);root.updateMatrixWorld(true);
  }

@@ -1,0 +1,1740 @@
+{
+ "version": "p2-exchange-1",
+ "ok": true,
+ "modules": 26,
+ "passed": 26,
+ "results": [
+  {
+   "id": "moguzo-head-godan",
+   "file": "modules/moguzo/head_godan.glb",
+   "checks": {
+    "manifest_bytes": true,
+    "manifest_sha256": true,
+    "joint_names_equal_host": true,
+    "inverse_bind_equal_host": true,
+    "bone_rest_equal_host": true,
+    "no_animations": true,
+    "compact_no_unused_data": true,
+    "mesh_names": true,
+    "meshes_skinned_to_host_skin": true,
+    "attributes": true,
+    "morph_targets": true,
+    "weights_normalized": true,
+    "joint_index_in_range": true,
+    "avatar_part_is_slot": true,
+    "finite": true,
+    "normals_unit": true,
+    "donor_triangles_preserved": true,
+    "not_host_topology": true,
+    "donor_eye_triangles_preserved": true,
+    "eyes_closed": true,
+    "manifold": true,
+    "open_boundary_equals_host_seam": true,
+    "seam_position": true,
+    "seam_normal": true,
+    "seam_weights": true,
+    "seam_morph": true
+   },
+   "joints": 40,
+   "bytes": {
+    "total": 622044,
+    "donorTexture": 200999,
+    "geometryAndSkin": 421045
+   },
+   "vertices": [
+    3056,
+    337
+   ],
+   "triangles": [
+    3446,
+    448
+   ],
+   "donorTriangles": 3062,
+   "addedTriangles": 384,
+   "hostBaseTriangles": 3418,
+   "openEdges": 194,
+   "hostSeamEdges": 194,
+   "strayOpenEdges": 0,
+   "hostOriginalOpenEdges": 0,
+   "donorOriginalOpenEdges": 0,
+   "openBoundaryPolicy": "host の継ぎ目ループだけ",
+   "seam": {
+    "comparisons": 700,
+    "boundaryVertices": 194,
+    "adjacentHostSlots": [
+     "body",
+     "ears",
+     "hands"
+    ],
+    "maxPositionDiff_m": 0.0,
+    "maxNormalDiff": 0.0,
+    "maxWeightDiff": 0.0,
+    "maxMorphDiff_m": 0.0,
+    "tolerance_m": 2e-05,
+    "hardLimit_m": 0.0001
+   },
+   "ok": true
+  },
+  {
+   "id": "moguzo-head-bullet",
+   "file": "modules/moguzo/head_bullet.glb",
+   "checks": {
+    "manifest_bytes": true,
+    "manifest_sha256": true,
+    "joint_names_equal_host": true,
+    "inverse_bind_equal_host": true,
+    "bone_rest_equal_host": true,
+    "no_animations": true,
+    "compact_no_unused_data": true,
+    "mesh_names": true,
+    "meshes_skinned_to_host_skin": true,
+    "attributes": true,
+    "morph_targets": true,
+    "weights_normalized": true,
+    "joint_index_in_range": true,
+    "avatar_part_is_slot": true,
+    "finite": true,
+    "normals_unit": true,
+    "donor_triangles_preserved": true,
+    "not_host_topology": true,
+    "donor_eye_triangles_preserved": true,
+    "eyes_closed": true,
+    "manifold": true,
+    "open_boundary_equals_host_seam": true,
+    "seam_position": true,
+    "seam_normal": true,
+    "seam_weights": true,
+    "seam_morph": true
+   },
+   "joints": 40,
+   "bytes": {
+    "total": 732748,
+    "donorTexture": 339906,
+    "geometryAndSkin": 392842
+   },
+   "vertices": [
+    2813,
+    346
+   ],
+   "triangles": [
+    3144,
+    448
+   ],
+   "donorTriangles": 2776,
+   "addedTriangles": 368,
+   "hostBaseTriangles": 3418,
+   "openEdges": 194,
+   "hostSeamEdges": 194,
+   "strayOpenEdges": 0,
+   "hostOriginalOpenEdges": 0,
+   "donorOriginalOpenEdges": 0,
+   "openBoundaryPolicy": "host の継ぎ目ループだけ",
+   "seam": {
+    "comparisons": 689,
+    "boundaryVertices": 194,
+    "adjacentHostSlots": [
+     "body",
+     "ears",
+     "hands"
+    ],
+    "maxPositionDiff_m": 0.0,
+    "maxNormalDiff": 0.0,
+    "maxWeightDiff": 0.0,
+    "maxMorphDiff_m": 0.0,
+    "tolerance_m": 2e-05,
+    "hardLimit_m": 0.0001
+   },
+   "ok": true
+  },
+  {
+   "id": "moguzo-ears-godan",
+   "file": "modules/moguzo/ears_godan.glb",
+   "checks": {
+    "manifest_bytes": true,
+    "manifest_sha256": true,
+    "joint_names_equal_host": true,
+    "inverse_bind_equal_host": true,
+    "bone_rest_equal_host": true,
+    "no_animations": true,
+    "compact_no_unused_data": true,
+    "mesh_names": true,
+    "meshes_skinned_to_host_skin": true,
+    "attributes": true,
+    "morph_targets": true,
+    "weights_normalized": true,
+    "joint_index_in_range": true,
+    "avatar_part_is_slot": true,
+    "finite": true,
+    "normals_unit": true,
+    "donor_triangles_preserved": true,
+    "not_host_topology": true,
+    "manifold": true,
+    "open_boundary_equals_host_seam": true,
+    "seam_position": true,
+    "seam_normal": true,
+    "seam_weights": true,
+    "seam_morph": true
+   },
+   "joints": 40,
+   "bytes": {
+    "total": 276148,
+    "donorTexture": 200999,
+    "geometryAndSkin": 75149
+   },
+   "vertices": [
+    535
+   ],
+   "triangles": [
+    326
+   ],
+   "donorTriangles": 210,
+   "addedTriangles": 116,
+   "hostBaseTriangles": 232,
+   "openEdges": 64,
+   "hostSeamEdges": 64,
+   "strayOpenEdges": 0,
+   "hostOriginalOpenEdges": 0,
+   "donorOriginalOpenEdges": 0,
+   "openBoundaryPolicy": "host の継ぎ目ループだけ",
+   "seam": {
+    "comparisons": 218,
+    "boundaryVertices": 64,
+    "adjacentHostSlots": [
+     "head"
+    ],
+    "maxPositionDiff_m": 0.0,
+    "maxNormalDiff": 0.0,
+    "maxWeightDiff": 0.0,
+    "maxMorphDiff_m": 0.0,
+    "tolerance_m": 2e-05,
+    "hardLimit_m": 0.0001
+   },
+   "ok": true
+  },
+  {
+   "id": "moguzo-ears-bullet",
+   "file": "modules/moguzo/ears_bullet.glb",
+   "checks": {
+    "manifest_bytes": true,
+    "manifest_sha256": true,
+    "joint_names_equal_host": true,
+    "inverse_bind_equal_host": true,
+    "bone_rest_equal_host": true,
+    "no_animations": true,
+    "compact_no_unused_data": true,
+    "mesh_names": true,
+    "meshes_skinned_to_host_skin": true,
+    "attributes": true,
+    "morph_targets": true,
+    "weights_normalized": true,
+    "joint_index_in_range": true,
+    "avatar_part_is_slot": true,
+    "finite": true,
+    "normals_unit": true,
+    "donor_triangles_preserved": true,
+    "not_host_topology": true,
+    "manifold": true,
+    "open_boundary_equals_host_seam": true,
+    "seam_position": true,
+    "seam_normal": true,
+    "seam_weights": true,
+    "seam_morph": true
+   },
+   "joints": 40,
+   "bytes": {
+    "total": 412272,
+    "donorTexture": 339906,
+    "geometryAndSkin": 72366
+   },
+   "vertices": [
+    510
+   ],
+   "triangles": [
+    312
+   ],
+   "donorTriangles": 196,
+   "addedTriangles": 116,
+   "hostBaseTriangles": 232,
+   "openEdges": 64,
+   "hostSeamEdges": 64,
+   "strayOpenEdges": 0,
+   "hostOriginalOpenEdges": 0,
+   "donorOriginalOpenEdges": 0,
+   "openBoundaryPolicy": "host の継ぎ目ループだけ",
+   "seam": {
+    "comparisons": 216,
+    "boundaryVertices": 64,
+    "adjacentHostSlots": [
+     "head"
+    ],
+    "maxPositionDiff_m": 0.0,
+    "maxNormalDiff": 0.0,
+    "maxWeightDiff": 0.0,
+    "maxMorphDiff_m": 0.0,
+    "tolerance_m": 2e-05,
+    "hardLimit_m": 0.0001
+   },
+   "ok": true
+  },
+  {
+   "id": "moguzo-hands-godan",
+   "file": "modules/moguzo/hands_godan.glb",
+   "checks": {
+    "manifest_bytes": true,
+    "manifest_sha256": true,
+    "joint_names_equal_host": true,
+    "inverse_bind_equal_host": true,
+    "bone_rest_equal_host": true,
+    "no_animations": true,
+    "compact_no_unused_data": true,
+    "mesh_names": true,
+    "meshes_skinned_to_host_skin": true,
+    "attributes": true,
+    "morph_targets": true,
+    "weights_normalized": true,
+    "joint_index_in_range": true,
+    "avatar_part_is_slot": true,
+    "finite": true,
+    "normals_unit": true,
+    "donor_triangles_preserved": true,
+    "not_host_topology": true,
+    "manifold": true,
+    "open_boundary_equals_host_seam": true,
+    "seam_position": true,
+    "seam_normal": true,
+    "seam_weights": true,
+    "seam_morph": true
+   },
+   "joints": 40,
+   "bytes": {
+    "total": 865656,
+    "donorTexture": 200999,
+    "geometryAndSkin": 664657
+   },
+   "vertices": [
+    5314
+   ],
+   "triangles": [
+    7616
+   ],
+   "donorTriangles": 7260,
+   "addedTriangles": 356,
+   "hostBaseTriangles": 5564,
+   "openEdges": 162,
+   "hostSeamEdges": 162,
+   "strayOpenEdges": 0,
+   "hostOriginalOpenEdges": 0,
+   "donorOriginalOpenEdges": 0,
+   "openBoundaryPolicy": "host の継ぎ目ループだけ",
+   "seam": {
+    "comparisons": 612,
+    "boundaryVertices": 162,
+    "adjacentHostSlots": [
+     "body",
+     "head"
+    ],
+    "maxPositionDiff_m": 0.0,
+    "maxNormalDiff": 0.0,
+    "maxWeightDiff": 0.0,
+    "maxMorphDiff_m": 0.0,
+    "tolerance_m": 2e-05,
+    "hardLimit_m": 0.0001
+   },
+   "ok": true
+  },
+  {
+   "id": "moguzo-hands-bullet",
+   "file": "modules/moguzo/hands_bullet.glb",
+   "checks": {
+    "manifest_bytes": true,
+    "manifest_sha256": true,
+    "joint_names_equal_host": true,
+    "inverse_bind_equal_host": true,
+    "bone_rest_equal_host": true,
+    "no_animations": true,
+    "compact_no_unused_data": true,
+    "mesh_names": true,
+    "meshes_skinned_to_host_skin": true,
+    "attributes": true,
+    "morph_targets": true,
+    "weights_normalized": true,
+    "joint_index_in_range": true,
+    "avatar_part_is_slot": true,
+    "finite": true,
+    "normals_unit": true,
+    "donor_triangles_preserved": true,
+    "not_host_topology": true,
+    "manifold": true,
+    "open_boundary_equals_host_seam": true,
+    "seam_position": true,
+    "seam_normal": true,
+    "seam_weights": true,
+    "seam_morph": true
+   },
+   "joints": 40,
+   "bytes": {
+    "total": 804828,
+    "donorTexture": 339906,
+    "geometryAndSkin": 464922
+   },
+   "vertices": [
+    3726
+   ],
+   "triangles": [
+    4866
+   ],
+   "donorTriangles": 4548,
+   "addedTriangles": 318,
+   "hostBaseTriangles": 5564,
+   "openEdges": 162,
+   "hostSeamEdges": 162,
+   "strayOpenEdges": 0,
+   "hostOriginalOpenEdges": 0,
+   "donorOriginalOpenEdges": 0,
+   "openBoundaryPolicy": "host の継ぎ目ループだけ",
+   "seam": {
+    "comparisons": 566,
+    "boundaryVertices": 162,
+    "adjacentHostSlots": [
+     "body",
+     "head"
+    ],
+    "maxPositionDiff_m": 0.0,
+    "maxNormalDiff": 0.0,
+    "maxWeightDiff": 0.0,
+    "maxMorphDiff_m": 0.0,
+    "tolerance_m": 2e-05,
+    "hardLimit_m": 0.0001
+   },
+   "ok": true
+  },
+  {
+   "id": "moguzo-feet-godan",
+   "file": "modules/moguzo/feet_godan.glb",
+   "checks": {
+    "manifest_bytes": true,
+    "manifest_sha256": true,
+    "joint_names_equal_host": true,
+    "inverse_bind_equal_host": true,
+    "bone_rest_equal_host": true,
+    "no_animations": true,
+    "compact_no_unused_data": true,
+    "mesh_names": true,
+    "meshes_skinned_to_host_skin": true,
+    "attributes": true,
+    "morph_targets": true,
+    "weights_normalized": true,
+    "joint_index_in_range": true,
+    "avatar_part_is_slot": true,
+    "finite": true,
+    "normals_unit": true,
+    "donor_triangles_preserved": true,
+    "not_host_topology": true,
+    "manifold": true,
+    "open_boundary_equals_host_seam": true,
+    "seam_position": true,
+    "seam_normal": true,
+    "seam_weights": true,
+    "seam_morph": true
+   },
+   "joints": 40,
+   "bytes": {
+    "total": 836600,
+    "donorTexture": 200999,
+    "geometryAndSkin": 635601
+   },
+   "vertices": [
+    5218
+   ],
+   "triangles": [
+    6052
+   ],
+   "donorTriangles": 5514,
+   "addedTriangles": 538,
+   "hostBaseTriangles": 5176,
+   "openEdges": 278,
+   "hostSeamEdges": 278,
+   "strayOpenEdges": 0,
+   "hostOriginalOpenEdges": 16,
+   "donorOriginalOpenEdges": 0,
+   "openBoundaryPolicy": "host の継ぎ目ループだけ。donor の元の穴はモジュール内でふたをした。host の元の穴は持ち込んでいない",
+   "seam": {
+    "comparisons": 907,
+    "boundaryVertices": 278,
+    "adjacentHostSlots": [
+     "body"
+    ],
+    "maxPositionDiff_m": 0.0,
+    "maxNormalDiff": 0.0,
+    "maxWeightDiff": 0.0,
+    "maxMorphDiff_m": 0.0,
+    "tolerance_m": 2e-05,
+    "hardLimit_m": 0.0001
+   },
+   "ok": true
+  },
+  {
+   "id": "moguzo-feet-bullet",
+   "file": "modules/moguzo/feet_bullet.glb",
+   "checks": {
+    "manifest_bytes": true,
+    "manifest_sha256": true,
+    "joint_names_equal_host": true,
+    "inverse_bind_equal_host": true,
+    "bone_rest_equal_host": true,
+    "no_animations": true,
+    "compact_no_unused_data": true,
+    "mesh_names": true,
+    "meshes_skinned_to_host_skin": true,
+    "attributes": true,
+    "morph_targets": true,
+    "weights_normalized": true,
+    "joint_index_in_range": true,
+    "avatar_part_is_slot": true,
+    "finite": true,
+    "normals_unit": true,
+    "donor_triangles_preserved": true,
+    "not_host_topology": true,
+    "manifold": true,
+    "open_boundary_equals_host_seam": true,
+    "seam_position": true,
+    "seam_normal": true,
+    "seam_weights": true,
+    "seam_morph": true
+   },
+   "joints": 40,
+   "bytes": {
+    "total": 877380,
+    "donorTexture": 339906,
+    "geometryAndSkin": 537474
+   },
+   "vertices": [
+    4431
+   ],
+   "triangles": [
+    4760
+   ],
+   "donorTriangles": 4230,
+   "addedTriangles": 530,
+   "hostBaseTriangles": 5176,
+   "openEdges": 278,
+   "hostSeamEdges": 278,
+   "strayOpenEdges": 0,
+   "hostOriginalOpenEdges": 16,
+   "donorOriginalOpenEdges": 8,
+   "openBoundaryPolicy": "host の継ぎ目ループだけ。donor の元の穴はモジュール内でふたをした。host の元の穴は持ち込んでいない",
+   "seam": {
+    "comparisons": 895,
+    "boundaryVertices": 278,
+    "adjacentHostSlots": [
+     "body"
+    ],
+    "maxPositionDiff_m": 0.0,
+    "maxNormalDiff": 0.0,
+    "maxWeightDiff": 0.0,
+    "maxMorphDiff_m": 0.0,
+    "tolerance_m": 2e-05,
+    "hardLimit_m": 0.0001
+   },
+   "ok": true
+  },
+  {
+   "id": "godan-head-moguzo",
+   "file": "modules/godan/head_moguzo.glb",
+   "checks": {
+    "manifest_bytes": true,
+    "manifest_sha256": true,
+    "joint_names_equal_host": true,
+    "inverse_bind_equal_host": true,
+    "bone_rest_equal_host": true,
+    "no_animations": true,
+    "compact_no_unused_data": true,
+    "mesh_names": true,
+    "meshes_skinned_to_host_skin": true,
+    "attributes": true,
+    "morph_targets": true,
+    "weights_normalized": true,
+    "joint_index_in_range": true,
+    "avatar_part_is_slot": true,
+    "finite": true,
+    "normals_unit": true,
+    "donor_triangles_preserved": true,
+    "not_host_topology": true,
+    "donor_eye_triangles_preserved": true,
+    "eyes_closed": true,
+    "manifold": true,
+    "open_boundary_equals_host_seam": true,
+    "seam_position": true,
+    "seam_normal": true,
+    "seam_weights": true,
+    "seam_morph": true
+   },
+   "joints": 40,
+   "bytes": {
+    "total": 765700,
+    "donorTexture": 321023,
+    "geometryAndSkin": 444677
+   },
+   "vertices": [
+    3246,
+    333
+   ],
+   "triangles": [
+    3802,
+    448
+   ],
+   "donorTriangles": 3418,
+   "addedTriangles": 384,
+   "hostBaseTriangles": 3062,
+   "openEdges": 190,
+   "hostSeamEdges": 190,
+   "strayOpenEdges": 0,
+   "hostOriginalOpenEdges": 0,
+   "donorOriginalOpenEdges": 0,
+   "openBoundaryPolicy": "host の継ぎ目ループだけ",
+   "seam": {
+    "comparisons": 704,
+    "boundaryVertices": 190,
+    "adjacentHostSlots": [
+     "body",
+     "ears",
+     "hands"
+    ],
+    "maxPositionDiff_m": 0.0,
+    "maxNormalDiff": 0.0,
+    "maxWeightDiff": 0.0,
+    "maxMorphDiff_m": 0.0,
+    "tolerance_m": 2e-05,
+    "hardLimit_m": 0.0001
+   },
+   "ok": true
+  },
+  {
+   "id": "godan-head-bullet",
+   "file": "modules/godan/head_bullet.glb",
+   "checks": {
+    "manifest_bytes": true,
+    "manifest_sha256": true,
+    "joint_names_equal_host": true,
+    "inverse_bind_equal_host": true,
+    "bone_rest_equal_host": true,
+    "no_animations": true,
+    "compact_no_unused_data": true,
+    "mesh_names": true,
+    "meshes_skinned_to_host_skin": true,
+    "attributes": true,
+    "morph_targets": true,
+    "weights_normalized": true,
+    "joint_index_in_range": true,
+    "avatar_part_is_slot": true,
+    "finite": true,
+    "normals_unit": true,
+    "donor_triangles_preserved": true,
+    "not_host_topology": true,
+    "donor_eye_triangles_preserved": true,
+    "eyes_closed": true,
+    "manifold": true,
+    "open_boundary_equals_host_seam": true,
+    "seam_position": true,
+    "seam_normal": true,
+    "seam_weights": true,
+    "seam_morph": true
+   },
+   "joints": 40,
+   "bytes": {
+    "total": 731280,
+    "donorTexture": 339906,
+    "geometryAndSkin": 391374
+   },
+   "vertices": [
+    2801,
+    346
+   ],
+   "triangles": [
+    3140,
+    448
+   ],
+   "donorTriangles": 2776,
+   "addedTriangles": 364,
+   "hostBaseTriangles": 3062,
+   "openEdges": 190,
+   "hostSeamEdges": 190,
+   "strayOpenEdges": 0,
+   "hostOriginalOpenEdges": 0,
+   "donorOriginalOpenEdges": 0,
+   "openBoundaryPolicy": "host の継ぎ目ループだけ",
+   "seam": {
+    "comparisons": 680,
+    "boundaryVertices": 190,
+    "adjacentHostSlots": [
+     "body",
+     "ears",
+     "hands"
+    ],
+    "maxPositionDiff_m": 0.0,
+    "maxNormalDiff": 0.0,
+    "maxWeightDiff": 0.0,
+    "maxMorphDiff_m": 0.0,
+    "tolerance_m": 2e-05,
+    "hardLimit_m": 0.0001
+   },
+   "ok": true
+  },
+  {
+   "id": "godan-ears-moguzo",
+   "file": "modules/godan/ears_moguzo.glb",
+   "checks": {
+    "manifest_bytes": true,
+    "manifest_sha256": true,
+    "joint_names_equal_host": true,
+    "inverse_bind_equal_host": true,
+    "bone_rest_equal_host": true,
+    "no_animations": true,
+    "compact_no_unused_data": true,
+    "mesh_names": true,
+    "meshes_skinned_to_host_skin": true,
+    "attributes": true,
+    "morph_targets": true,
+    "weights_normalized": true,
+    "joint_index_in_range": true,
+    "avatar_part_is_slot": true,
+    "finite": true,
+    "normals_unit": true,
+    "donor_triangles_preserved": true,
+    "not_host_topology": true,
+    "manifold": true,
+    "open_boundary_equals_host_seam": true,
+    "seam_position": true,
+    "seam_normal": true,
+    "seam_weights": true,
+    "seam_morph": true
+   },
+   "joints": 40,
+   "bytes": {
+    "total": 397548,
+    "donorTexture": 321023,
+    "geometryAndSkin": 76525
+   },
+   "vertices": [
+    547
+   ],
+   "triangles": [
+    348
+   ],
+   "donorTriangles": 232,
+   "addedTriangles": 116,
+   "hostBaseTriangles": 210,
+   "openEdges": 52,
+   "hostSeamEdges": 52,
+   "strayOpenEdges": 0,
+   "hostOriginalOpenEdges": 0,
+   "donorOriginalOpenEdges": 0,
+   "openBoundaryPolicy": "host の継ぎ目ループだけ",
+   "seam": {
+    "comparisons": 214,
+    "boundaryVertices": 52,
+    "adjacentHostSlots": [
+     "head"
+    ],
+    "maxPositionDiff_m": 0.0,
+    "maxNormalDiff": 0.0,
+    "maxWeightDiff": 0.0,
+    "maxMorphDiff_m": 0.0,
+    "tolerance_m": 2e-05,
+    "hardLimit_m": 0.0001
+   },
+   "ok": true
+  },
+  {
+   "id": "godan-ears-bullet",
+   "file": "modules/godan/ears_bullet.glb",
+   "checks": {
+    "manifest_bytes": true,
+    "manifest_sha256": true,
+    "joint_names_equal_host": true,
+    "inverse_bind_equal_host": true,
+    "bone_rest_equal_host": true,
+    "no_animations": true,
+    "compact_no_unused_data": true,
+    "mesh_names": true,
+    "meshes_skinned_to_host_skin": true,
+    "attributes": true,
+    "morph_targets": true,
+    "weights_normalized": true,
+    "joint_index_in_range": true,
+    "avatar_part_is_slot": true,
+    "finite": true,
+    "normals_unit": true,
+    "donor_triangles_preserved": true,
+    "not_host_topology": true,
+    "manifold": true,
+    "open_boundary_equals_host_seam": true,
+    "seam_position": true,
+    "seam_normal": true,
+    "seam_weights": true,
+    "seam_morph": true
+   },
+   "joints": 40,
+   "bytes": {
+    "total": 408184,
+    "donorTexture": 339906,
+    "geometryAndSkin": 68278
+   },
+   "vertices": [
+    474
+   ],
+   "triangles": [
+    300
+   ],
+   "donorTriangles": 196,
+   "addedTriangles": 104,
+   "hostBaseTriangles": 210,
+   "openEdges": 52,
+   "hostSeamEdges": 52,
+   "strayOpenEdges": 0,
+   "hostOriginalOpenEdges": 0,
+   "donorOriginalOpenEdges": 0,
+   "openBoundaryPolicy": "host の継ぎ目ループだけ",
+   "seam": {
+    "comparisons": 197,
+    "boundaryVertices": 52,
+    "adjacentHostSlots": [
+     "head"
+    ],
+    "maxPositionDiff_m": 0.0,
+    "maxNormalDiff": 0.0,
+    "maxWeightDiff": 0.0,
+    "maxMorphDiff_m": 0.0,
+    "tolerance_m": 2e-05,
+    "hardLimit_m": 0.0001
+   },
+   "ok": true
+  },
+  {
+   "id": "godan-hands-moguzo",
+   "file": "modules/godan/hands_moguzo.glb",
+   "checks": {
+    "manifest_bytes": true,
+    "manifest_sha256": true,
+    "joint_names_equal_host": true,
+    "inverse_bind_equal_host": true,
+    "bone_rest_equal_host": true,
+    "no_animations": true,
+    "compact_no_unused_data": true,
+    "mesh_names": true,
+    "meshes_skinned_to_host_skin": true,
+    "attributes": true,
+    "morph_targets": true,
+    "weights_normalized": true,
+    "joint_index_in_range": true,
+    "avatar_part_is_slot": true,
+    "finite": true,
+    "normals_unit": true,
+    "donor_triangles_preserved": true,
+    "not_host_topology": true,
+    "manifold": true,
+    "open_boundary_equals_host_seam": true,
+    "seam_position": true,
+    "seam_normal": true,
+    "seam_weights": true,
+    "seam_morph": true
+   },
+   "joints": 40,
+   "bytes": {
+    "total": 880864,
+    "donorTexture": 321023,
+    "geometryAndSkin": 559841
+   },
+   "vertices": [
+    4511
+   ],
+   "triangles": [
+    5920
+   ],
+   "donorTriangles": 5564,
+   "addedTriangles": 356,
+   "hostBaseTriangles": 7260,
+   "openEdges": 194,
+   "hostSeamEdges": 194,
+   "strayOpenEdges": 0,
+   "hostOriginalOpenEdges": 0,
+   "donorOriginalOpenEdges": 0,
+   "openBoundaryPolicy": "host の継ぎ目ループだけ",
+   "seam": {
+    "comparisons": 626,
+    "boundaryVertices": 194,
+    "adjacentHostSlots": [
+     "body",
+     "head"
+    ],
+    "maxPositionDiff_m": 0.0,
+    "maxNormalDiff": 0.0,
+    "maxWeightDiff": 0.0,
+    "maxMorphDiff_m": 0.0,
+    "tolerance_m": 2e-05,
+    "hardLimit_m": 0.0001
+   },
+   "ok": true
+  },
+  {
+   "id": "godan-hands-bullet",
+   "file": "modules/godan/hands_bullet.glb",
+   "checks": {
+    "manifest_bytes": true,
+    "manifest_sha256": true,
+    "joint_names_equal_host": true,
+    "inverse_bind_equal_host": true,
+    "bone_rest_equal_host": true,
+    "no_animations": true,
+    "compact_no_unused_data": true,
+    "mesh_names": true,
+    "meshes_skinned_to_host_skin": true,
+    "attributes": true,
+    "morph_targets": true,
+    "weights_normalized": true,
+    "joint_index_in_range": true,
+    "avatar_part_is_slot": true,
+    "finite": true,
+    "normals_unit": true,
+    "donor_triangles_preserved": true,
+    "not_host_topology": true,
+    "manifold": true,
+    "open_boundary_equals_host_seam": true,
+    "seam_position": true,
+    "seam_normal": true,
+    "seam_weights": true,
+    "seam_morph": true
+   },
+   "joints": 40,
+   "bytes": {
+    "total": 815136,
+    "donorTexture": 339906,
+    "geometryAndSkin": 475230
+   },
+   "vertices": [
+    3822
+   ],
+   "triangles": [
+    4898
+   ],
+   "donorTriangles": 4548,
+   "addedTriangles": 350,
+   "hostBaseTriangles": 7260,
+   "openEdges": 194,
+   "hostSeamEdges": 194,
+   "strayOpenEdges": 0,
+   "hostOriginalOpenEdges": 0,
+   "donorOriginalOpenEdges": 0,
+   "openBoundaryPolicy": "host の継ぎ目ループだけ",
+   "seam": {
+    "comparisons": 620,
+    "boundaryVertices": 194,
+    "adjacentHostSlots": [
+     "body",
+     "head"
+    ],
+    "maxPositionDiff_m": 0.0,
+    "maxNormalDiff": 0.0,
+    "maxWeightDiff": 0.0,
+    "maxMorphDiff_m": 0.0,
+    "tolerance_m": 2e-05,
+    "hardLimit_m": 0.0001
+   },
+   "ok": true
+  },
+  {
+   "id": "godan-feet-moguzo",
+   "file": "modules/godan/feet_moguzo.glb",
+   "checks": {
+    "manifest_bytes": true,
+    "manifest_sha256": true,
+    "joint_names_equal_host": true,
+    "inverse_bind_equal_host": true,
+    "bone_rest_equal_host": true,
+    "no_animations": true,
+    "compact_no_unused_data": true,
+    "mesh_names": true,
+    "meshes_skinned_to_host_skin": true,
+    "attributes": true,
+    "morph_targets": true,
+    "weights_normalized": true,
+    "joint_index_in_range": true,
+    "avatar_part_is_slot": true,
+    "finite": true,
+    "normals_unit": true,
+    "donor_triangles_preserved": true,
+    "not_host_topology": true,
+    "manifold": true,
+    "open_boundary_equals_host_seam": true,
+    "seam_position": true,
+    "seam_normal": true,
+    "seam_weights": true,
+    "seam_morph": true
+   },
+   "joints": 40,
+   "bytes": {
+    "total": 924996,
+    "donorTexture": 321023,
+    "geometryAndSkin": 603973
+   },
+   "vertices": [
+    4955
+   ],
+   "triangles": [
+    5730
+   ],
+   "donorTriangles": 5176,
+   "addedTriangles": 554,
+   "hostBaseTriangles": 5514,
+   "openEdges": 260,
+   "hostSeamEdges": 260,
+   "strayOpenEdges": 0,
+   "hostOriginalOpenEdges": 0,
+   "donorOriginalOpenEdges": 16,
+   "openBoundaryPolicy": "host の継ぎ目ループだけ。donor の元の穴はモジュール内でふたをした。host の元の穴は持ち込んでいない",
+   "seam": {
+    "comparisons": 875,
+    "boundaryVertices": 260,
+    "adjacentHostSlots": [
+     "body"
+    ],
+    "maxPositionDiff_m": 0.0,
+    "maxNormalDiff": 0.0,
+    "maxWeightDiff": 0.0,
+    "maxMorphDiff_m": 0.0,
+    "tolerance_m": 2e-05,
+    "hardLimit_m": 0.0001
+   },
+   "ok": true
+  },
+  {
+   "id": "godan-feet-bullet",
+   "file": "modules/godan/feet_bullet.glb",
+   "checks": {
+    "manifest_bytes": true,
+    "manifest_sha256": true,
+    "joint_names_equal_host": true,
+    "inverse_bind_equal_host": true,
+    "bone_rest_equal_host": true,
+    "no_animations": true,
+    "compact_no_unused_data": true,
+    "mesh_names": true,
+    "meshes_skinned_to_host_skin": true,
+    "attributes": true,
+    "morph_targets": true,
+    "weights_normalized": true,
+    "joint_index_in_range": true,
+    "avatar_part_is_slot": true,
+    "finite": true,
+    "normals_unit": true,
+    "donor_triangles_preserved": true,
+    "not_host_topology": true,
+    "manifold": true,
+    "open_boundary_equals_host_seam": true,
+    "seam_position": true,
+    "seam_normal": true,
+    "seam_weights": true,
+    "seam_morph": true
+   },
+   "joints": 40,
+   "bytes": {
+    "total": 871336,
+    "donorTexture": 339906,
+    "geometryAndSkin": 531430
+   },
+   "vertices": [
+    4377
+   ],
+   "triangles": [
+    4742
+   ],
+   "donorTriangles": 4230,
+   "addedTriangles": 512,
+   "hostBaseTriangles": 5514,
+   "openEdges": 260,
+   "hostSeamEdges": 260,
+   "strayOpenEdges": 0,
+   "hostOriginalOpenEdges": 0,
+   "donorOriginalOpenEdges": 8,
+   "openBoundaryPolicy": "host の継ぎ目ループだけ。donor の元の穴はモジュール内でふたをした。host の元の穴は持ち込んでいない",
+   "seam": {
+    "comparisons": 841,
+    "boundaryVertices": 260,
+    "adjacentHostSlots": [
+     "body"
+    ],
+    "maxPositionDiff_m": 0.0,
+    "maxNormalDiff": 0.0,
+    "maxWeightDiff": 0.0,
+    "maxMorphDiff_m": 0.0,
+    "tolerance_m": 2e-05,
+    "hardLimit_m": 0.0001
+   },
+   "ok": true
+  },
+  {
+   "id": "bullet-head-moguzo",
+   "file": "modules/bullet/head_moguzo.glb",
+   "checks": {
+    "manifest_bytes": true,
+    "manifest_sha256": true,
+    "joint_names_equal_host": true,
+    "inverse_bind_equal_host": true,
+    "bone_rest_equal_host": true,
+    "no_animations": true,
+    "compact_no_unused_data": true,
+    "mesh_names": true,
+    "meshes_skinned_to_host_skin": true,
+    "attributes": true,
+    "morph_targets": true,
+    "weights_normalized": true,
+    "joint_index_in_range": true,
+    "avatar_part_is_slot": true,
+    "finite": true,
+    "normals_unit": true,
+    "donor_triangles_preserved": true,
+    "not_host_topology": true,
+    "donor_eye_triangles_preserved": true,
+    "eyes_closed": true,
+    "manifold": true,
+    "open_boundary_equals_host_seam": true,
+    "seam_position": true,
+    "seam_normal": true,
+    "seam_weights": true,
+    "seam_morph": true
+   },
+   "joints": 39,
+   "bytes": {
+    "total": 759584,
+    "donorTexture": 321023,
+    "geometryAndSkin": 438561
+   },
+   "vertices": [
+    3198,
+    333
+   ],
+   "triangles": [
+    3786,
+    448
+   ],
+   "donorTriangles": 3418,
+   "addedTriangles": 368,
+   "hostBaseTriangles": 2776,
+   "openEdges": 174,
+   "hostSeamEdges": 174,
+   "strayOpenEdges": 0,
+   "hostOriginalOpenEdges": 0,
+   "donorOriginalOpenEdges": 0,
+   "openBoundaryPolicy": "host の継ぎ目ループだけ",
+   "seam": {
+    "comparisons": 649,
+    "boundaryVertices": 174,
+    "adjacentHostSlots": [
+     "body",
+     "ears",
+     "hands"
+    ],
+    "maxPositionDiff_m": 0.0,
+    "maxNormalDiff": 0.0,
+    "maxWeightDiff": 0.0,
+    "maxMorphDiff_m": 0.0,
+    "tolerance_m": 2e-05,
+    "hardLimit_m": 0.0001
+   },
+   "ok": true
+  },
+  {
+   "id": "bullet-head-godan",
+   "file": "modules/bullet/head_godan.glb",
+   "checks": {
+    "manifest_bytes": true,
+    "manifest_sha256": true,
+    "joint_names_equal_host": true,
+    "inverse_bind_equal_host": true,
+    "bone_rest_equal_host": true,
+    "no_animations": true,
+    "compact_no_unused_data": true,
+    "mesh_names": true,
+    "meshes_skinned_to_host_skin": true,
+    "attributes": true,
+    "morph_targets": true,
+    "weights_normalized": true,
+    "joint_index_in_range": true,
+    "avatar_part_is_slot": true,
+    "finite": true,
+    "normals_unit": true,
+    "donor_triangles_preserved": true,
+    "not_host_topology": true,
+    "donor_eye_triangles_preserved": true,
+    "eyes_closed": true,
+    "manifold": true,
+    "open_boundary_equals_host_seam": true,
+    "seam_position": true,
+    "seam_normal": true,
+    "seam_weights": true,
+    "seam_morph": true
+   },
+   "joints": 39,
+   "bytes": {
+    "total": 614436,
+    "donorTexture": 200999,
+    "geometryAndSkin": 413437
+   },
+   "vertices": [
+    2996,
+    337
+   ],
+   "triangles": [
+    3426,
+    448
+   ],
+   "donorTriangles": 3062,
+   "addedTriangles": 364,
+   "hostBaseTriangles": 2776,
+   "openEdges": 174,
+   "hostSeamEdges": 174,
+   "strayOpenEdges": 0,
+   "hostOriginalOpenEdges": 0,
+   "donorOriginalOpenEdges": 0,
+   "openBoundaryPolicy": "host の継ぎ目ループだけ",
+   "seam": {
+    "comparisons": 646,
+    "boundaryVertices": 174,
+    "adjacentHostSlots": [
+     "body",
+     "ears",
+     "hands"
+    ],
+    "maxPositionDiff_m": 0.0,
+    "maxNormalDiff": 0.0,
+    "maxWeightDiff": 0.0,
+    "maxMorphDiff_m": 0.0,
+    "tolerance_m": 2e-05,
+    "hardLimit_m": 0.0001
+   },
+   "ok": true
+  },
+  {
+   "id": "bullet-ears-moguzo",
+   "file": "modules/bullet/ears_moguzo.glb",
+   "checks": {
+    "manifest_bytes": true,
+    "manifest_sha256": true,
+    "joint_names_equal_host": true,
+    "inverse_bind_equal_host": true,
+    "bone_rest_equal_host": true,
+    "no_animations": true,
+    "compact_no_unused_data": true,
+    "mesh_names": true,
+    "meshes_skinned_to_host_skin": true,
+    "attributes": true,
+    "morph_targets": true,
+    "weights_normalized": true,
+    "joint_index_in_range": true,
+    "avatar_part_is_slot": true,
+    "finite": true,
+    "normals_unit": true,
+    "donor_triangles_preserved": true,
+    "not_host_topology": true,
+    "manifold": true,
+    "open_boundary_equals_host_seam": true,
+    "seam_position": true,
+    "seam_normal": true,
+    "seam_weights": true,
+    "seam_morph": true
+   },
+   "joints": 39,
+   "bytes": {
+    "total": 396632,
+    "donorTexture": 321023,
+    "geometryAndSkin": 75609
+   },
+   "vertices": [
+    547
+   ],
+   "triangles": [
+    348
+   ],
+   "donorTriangles": 232,
+   "addedTriangles": 116,
+   "hostBaseTriangles": 196,
+   "openEdges": 52,
+   "hostSeamEdges": 52,
+   "strayOpenEdges": 0,
+   "hostOriginalOpenEdges": 0,
+   "donorOriginalOpenEdges": 0,
+   "openBoundaryPolicy": "host の継ぎ目ループだけ",
+   "seam": {
+    "comparisons": 201,
+    "boundaryVertices": 52,
+    "adjacentHostSlots": [
+     "head"
+    ],
+    "maxPositionDiff_m": 0.0,
+    "maxNormalDiff": 0.0,
+    "maxWeightDiff": 0.0,
+    "maxMorphDiff_m": 0.0,
+    "tolerance_m": 2e-05,
+    "hardLimit_m": 0.0001
+   },
+   "ok": true
+  },
+  {
+   "id": "bullet-ears-godan",
+   "file": "modules/bullet/ears_godan.glb",
+   "checks": {
+    "manifest_bytes": true,
+    "manifest_sha256": true,
+    "joint_names_equal_host": true,
+    "inverse_bind_equal_host": true,
+    "bone_rest_equal_host": true,
+    "no_animations": true,
+    "compact_no_unused_data": true,
+    "mesh_names": true,
+    "meshes_skinned_to_host_skin": true,
+    "attributes": true,
+    "morph_targets": true,
+    "weights_normalized": true,
+    "joint_index_in_range": true,
+    "avatar_part_is_slot": true,
+    "finite": true,
+    "normals_unit": true,
+    "donor_triangles_preserved": true,
+    "not_host_topology": true,
+    "manifold": true,
+    "open_boundary_equals_host_seam": true,
+    "seam_position": true,
+    "seam_normal": true,
+    "seam_weights": true,
+    "seam_morph": true
+   },
+   "joints": 39,
+   "bytes": {
+    "total": 271152,
+    "donorTexture": 200999,
+    "geometryAndSkin": 70153
+   },
+   "vertices": [
+    499
+   ],
+   "triangles": [
+    314
+   ],
+   "donorTriangles": 210,
+   "addedTriangles": 104,
+   "hostBaseTriangles": 196,
+   "openEdges": 52,
+   "hostSeamEdges": 52,
+   "strayOpenEdges": 0,
+   "hostOriginalOpenEdges": 0,
+   "donorOriginalOpenEdges": 0,
+   "openBoundaryPolicy": "host の継ぎ目ループだけ",
+   "seam": {
+    "comparisons": 182,
+    "boundaryVertices": 52,
+    "adjacentHostSlots": [
+     "head"
+    ],
+    "maxPositionDiff_m": 0.0,
+    "maxNormalDiff": 0.0,
+    "maxWeightDiff": 0.0,
+    "maxMorphDiff_m": 0.0,
+    "tolerance_m": 2e-05,
+    "hardLimit_m": 0.0001
+   },
+   "ok": true
+  },
+  {
+   "id": "bullet-hands-moguzo",
+   "file": "modules/bullet/hands_moguzo.glb",
+   "checks": {
+    "manifest_bytes": true,
+    "manifest_sha256": true,
+    "joint_names_equal_host": true,
+    "inverse_bind_equal_host": true,
+    "bone_rest_equal_host": true,
+    "no_animations": true,
+    "compact_no_unused_data": true,
+    "mesh_names": true,
+    "meshes_skinned_to_host_skin": true,
+    "attributes": true,
+    "morph_targets": true,
+    "weights_normalized": true,
+    "joint_index_in_range": true,
+    "avatar_part_is_slot": true,
+    "finite": true,
+    "normals_unit": true,
+    "donor_triangles_preserved": true,
+    "not_host_topology": true,
+    "manifold": true,
+    "open_boundary_equals_host_seam": true,
+    "seam_position": true,
+    "seam_normal": true,
+    "seam_weights": true,
+    "seam_morph": true
+   },
+   "joints": 39,
+   "bytes": {
+    "total": 867528,
+    "donorTexture": 321023,
+    "geometryAndSkin": 546505
+   },
+   "vertices": [
+    4397
+   ],
+   "triangles": [
+    5882
+   ],
+   "donorTriangles": 5564,
+   "addedTriangles": 318,
+   "hostBaseTriangles": 4548,
+   "openEdges": 156,
+   "hostSeamEdges": 156,
+   "strayOpenEdges": 0,
+   "hostOriginalOpenEdges": 0,
+   "donorOriginalOpenEdges": 0,
+   "openBoundaryPolicy": "host の継ぎ目ループだけ",
+   "seam": {
+    "comparisons": 537,
+    "boundaryVertices": 156,
+    "adjacentHostSlots": [
+     "body",
+     "head"
+    ],
+    "maxPositionDiff_m": 0.0,
+    "maxNormalDiff": 0.0,
+    "maxWeightDiff": 0.0,
+    "maxMorphDiff_m": 0.0,
+    "tolerance_m": 2e-05,
+    "hardLimit_m": 0.0001
+   },
+   "ok": true
+  },
+  {
+   "id": "bullet-hands-godan",
+   "file": "modules/bullet/hands_godan.glb",
+   "checks": {
+    "manifest_bytes": true,
+    "manifest_sha256": true,
+    "joint_names_equal_host": true,
+    "inverse_bind_equal_host": true,
+    "bone_rest_equal_host": true,
+    "no_animations": true,
+    "compact_no_unused_data": true,
+    "mesh_names": true,
+    "meshes_skinned_to_host_skin": true,
+    "attributes": true,
+    "morph_targets": true,
+    "weights_normalized": true,
+    "joint_index_in_range": true,
+    "avatar_part_is_slot": true,
+    "finite": true,
+    "normals_unit": true,
+    "donor_triangles_preserved": true,
+    "not_host_topology": true,
+    "manifold": true,
+    "open_boundary_equals_host_seam": true,
+    "seam_position": true,
+    "seam_normal": true,
+    "seam_weights": true,
+    "seam_morph": true
+   },
+   "joints": 39,
+   "bytes": {
+    "total": 862620,
+    "donorTexture": 200999,
+    "geometryAndSkin": 661621
+   },
+   "vertices": [
+    5296
+   ],
+   "triangles": [
+    7610
+   ],
+   "donorTriangles": 7260,
+   "addedTriangles": 350,
+   "hostBaseTriangles": 4548,
+   "openEdges": 156,
+   "hostSeamEdges": 156,
+   "strayOpenEdges": 0,
+   "hostOriginalOpenEdges": 0,
+   "donorOriginalOpenEdges": 0,
+   "openBoundaryPolicy": "host の継ぎ目ループだけ",
+   "seam": {
+    "comparisons": 570,
+    "boundaryVertices": 156,
+    "adjacentHostSlots": [
+     "body",
+     "head"
+    ],
+    "maxPositionDiff_m": 0.0,
+    "maxNormalDiff": 0.0,
+    "maxWeightDiff": 0.0,
+    "maxMorphDiff_m": 0.0,
+    "tolerance_m": 2e-05,
+    "hardLimit_m": 0.0001
+   },
+   "ok": true
+  },
+  {
+   "id": "bullet-feet-moguzo",
+   "file": "modules/bullet/feet_moguzo.glb",
+   "checks": {
+    "manifest_bytes": true,
+    "manifest_sha256": true,
+    "joint_names_equal_host": true,
+    "inverse_bind_equal_host": true,
+    "bone_rest_equal_host": true,
+    "no_animations": true,
+    "compact_no_unused_data": true,
+    "mesh_names": true,
+    "meshes_skinned_to_host_skin": true,
+    "attributes": true,
+    "morph_targets": true,
+    "weights_normalized": true,
+    "joint_index_in_range": true,
+    "avatar_part_is_slot": true,
+    "finite": true,
+    "normals_unit": true,
+    "donor_triangles_preserved": true,
+    "not_host_topology": true,
+    "manifold": true,
+    "open_boundary_equals_host_seam": true,
+    "seam_position": true,
+    "seam_normal": true,
+    "seam_weights": true,
+    "seam_morph": true
+   },
+   "joints": 39,
+   "bytes": {
+    "total": 918852,
+    "donorTexture": 321023,
+    "geometryAndSkin": 597829
+   },
+   "vertices": [
+    4907
+   ],
+   "triangles": [
+    5714
+   ],
+   "donorTriangles": 5176,
+   "addedTriangles": 538,
+   "hostBaseTriangles": 4230,
+   "openEdges": 244,
+   "hostSeamEdges": 244,
+   "strayOpenEdges": 0,
+   "hostOriginalOpenEdges": 8,
+   "donorOriginalOpenEdges": 16,
+   "openBoundaryPolicy": "host の継ぎ目ループだけ。donor の元の穴はモジュール内でふたをした。host の元の穴は持ち込んでいない",
+   "seam": {
+    "comparisons": 885,
+    "boundaryVertices": 244,
+    "adjacentHostSlots": [
+     "body"
+    ],
+    "maxPositionDiff_m": 0.0,
+    "maxNormalDiff": 0.0,
+    "maxWeightDiff": 0.0,
+    "maxMorphDiff_m": 0.0,
+    "tolerance_m": 2e-05,
+    "hardLimit_m": 0.0001
+   },
+   "ok": true
+  },
+  {
+   "id": "bullet-feet-godan",
+   "file": "modules/bullet/feet_godan.glb",
+   "checks": {
+    "manifest_bytes": true,
+    "manifest_sha256": true,
+    "joint_names_equal_host": true,
+    "inverse_bind_equal_host": true,
+    "bone_rest_equal_host": true,
+    "no_animations": true,
+    "compact_no_unused_data": true,
+    "mesh_names": true,
+    "meshes_skinned_to_host_skin": true,
+    "attributes": true,
+    "morph_targets": true,
+    "weights_normalized": true,
+    "joint_index_in_range": true,
+    "avatar_part_is_slot": true,
+    "finite": true,
+    "normals_unit": true,
+    "donor_triangles_preserved": true,
+    "not_host_topology": true,
+    "manifold": true,
+    "open_boundary_equals_host_seam": true,
+    "seam_position": true,
+    "seam_normal": true,
+    "seam_weights": true,
+    "seam_morph": true
+   },
+   "joints": 39,
+   "bytes": {
+    "total": 824408,
+    "donorTexture": 200999,
+    "geometryAndSkin": 623409
+   },
+   "vertices": [
+    5116
+   ],
+   "triangles": [
+    6018
+   ],
+   "donorTriangles": 5514,
+   "addedTriangles": 504,
+   "hostBaseTriangles": 4230,
+   "openEdges": 244,
+   "hostSeamEdges": 244,
+   "strayOpenEdges": 0,
+   "hostOriginalOpenEdges": 8,
+   "donorOriginalOpenEdges": 0,
+   "openBoundaryPolicy": "host の継ぎ目ループだけ。donor の元の穴はモジュール内でふたをした。host の元の穴は持ち込んでいない",
+   "seam": {
+    "comparisons": 866,
+    "boundaryVertices": 244,
+    "adjacentHostSlots": [
+     "body"
+    ],
+    "maxPositionDiff_m": 0.0,
+    "maxNormalDiff": 0.0,
+    "maxWeightDiff": 0.0,
+    "maxMorphDiff_m": 0.0,
+    "tolerance_m": 2e-05,
+    "hardLimit_m": 0.0001
+   },
+   "ok": true
+  },
+  {
+   "id": "moguzo-tail-godan",
+   "file": "modules/moguzo/tail_godan.glb",
+   "checks": {
+    "manifest_bytes": true,
+    "manifest_sha256": true,
+    "joint_names_equal_host": true,
+    "inverse_bind_equal_host": true,
+    "bone_rest_equal_host": true,
+    "no_animations": true,
+    "compact_no_unused_data": true,
+    "mesh_names": true,
+    "meshes_skinned_to_host_skin": true,
+    "attributes": true,
+    "morph_targets": true,
+    "weights_normalized": true,
+    "joint_index_in_range": true,
+    "avatar_part_is_slot": true,
+    "finite": true,
+    "normals_unit": true,
+    "donor_triangles_preserved": true,
+    "not_host_topology": true,
+    "manifold": true,
+    "open_boundary_equals_host_seam": true,
+    "seam_position": true,
+    "seam_normal": true,
+    "seam_weights": true,
+    "seam_morph": true
+   },
+   "joints": 40,
+   "bytes": {
+    "total": 372972,
+    "donorTexture": 200999,
+    "geometryAndSkin": 171973
+   },
+   "vertices": [
+    1309
+   ],
+   "triangles": [
+    1620
+   ],
+   "donorTriangles": 1498,
+   "addedTriangles": 122,
+   "hostBaseTriangles": 1050,
+   "openEdges": 56,
+   "hostSeamEdges": 56,
+   "strayOpenEdges": 0,
+   "hostOriginalOpenEdges": 0,
+   "donorOriginalOpenEdges": 0,
+   "openBoundaryPolicy": "host の継ぎ目ループだけ",
+   "seam": {
+    "comparisons": 213,
+    "boundaryVertices": 56,
+    "adjacentHostSlots": [
+     "body"
+    ],
+    "maxPositionDiff_m": 0.0,
+    "maxNormalDiff": 0.0,
+    "maxWeightDiff": 0.0,
+    "maxMorphDiff_m": 0.0,
+    "tolerance_m": 2e-05,
+    "hardLimit_m": 0.0001
+   },
+   "ok": true
+  },
+  {
+   "id": "godan-tail-moguzo",
+   "file": "modules/godan/tail_moguzo.glb",
+   "checks": {
+    "manifest_bytes": true,
+    "manifest_sha256": true,
+    "joint_names_equal_host": true,
+    "inverse_bind_equal_host": true,
+    "bone_rest_equal_host": true,
+    "no_animations": true,
+    "compact_no_unused_data": true,
+    "mesh_names": true,
+    "meshes_skinned_to_host_skin": true,
+    "attributes": true,
+    "morph_targets": true,
+    "weights_normalized": true,
+    "joint_index_in_range": true,
+    "avatar_part_is_slot": true,
+    "finite": true,
+    "normals_unit": true,
+    "donor_triangles_preserved": true,
+    "not_host_topology": true,
+    "manifold": true,
+    "open_boundary_equals_host_seam": true,
+    "seam_position": true,
+    "seam_normal": true,
+    "seam_weights": true,
+    "seam_morph": true
+   },
+   "joints": 40,
+   "bytes": {
+    "total": 457228,
+    "donorTexture": 321023,
+    "geometryAndSkin": 136205
+   },
+   "vertices": [
+    1021
+   ],
+   "triangles": [
+    1172
+   ],
+   "donorTriangles": 1050,
+   "addedTriangles": 122,
+   "hostBaseTriangles": 1498,
+   "openEdges": 66,
+   "hostSeamEdges": 66,
+   "strayOpenEdges": 0,
+   "hostOriginalOpenEdges": 0,
+   "donorOriginalOpenEdges": 0,
+   "openBoundaryPolicy": "host の継ぎ目ループだけ",
+   "seam": {
+    "comparisons": 220,
+    "boundaryVertices": 66,
+    "adjacentHostSlots": [
+     "body"
+    ],
+    "maxPositionDiff_m": 0.0,
+    "maxNormalDiff": 0.0,
+    "maxWeightDiff": 0.0,
+    "maxMorphDiff_m": 0.0,
+    "tolerance_m": 2e-05,
+    "hardLimit_m": 0.0001
+   },
+   "ok": true
+  }
+ ]
+}

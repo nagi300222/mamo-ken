@@ -8,7 +8,7 @@ import {chooseClip} from '../dojo/models.js';
 import {normalClipTime} from '../dojo/normal-timing-v151.js';
 import {ACTIVE_NORMAL_MOTION_SOURCE} from '../dojo/normal-motion-source.js';
 import {specialClipTime,resolveSpecialBone} from '../dojo/special-motion-source.js';
-import {consumeSpecialMovementCues} from '../dojo/special-cues.js';
+import {specialPlaybackKey,presentEquippedSpecial} from './equipped-special.js';
 import {createClawSweepGeometry} from '../dojo/combat-geometry.js';
 import {bindMorphTargets} from '../dojo/morph-binding.js';
 import {createCombatAudio} from '../dojo/combat-audio.js';
@@ -21,6 +21,7 @@ import {createCustomBattle,moveCatalog,validateCombatLoadout} from '../custom/v1
 import {retargetCustomClip} from '../custom/v16/custom-animation.js';
 import {validateMeshPartManifest} from '../custom/p2/part-contract.js';
 import {applyEditorValues,editorMeshOptions,selectedMoveProblems} from './editor-model.js';
+import {createModalFocus} from './modal-focus.js';
 import {freshProgress,NPCS,mobPlacements,moveInVillage,nearestNpc,readSave,writeSave,recordEncounter} from './story-state.js';
 import {createVillage,createBattleStage} from './village-scene.js';
 import {createExplorationControls,EXPLORATION_CAMERA} from './exploration-controls.js';
@@ -28,6 +29,7 @@ import {BATTLE_INPUT_PROFILE,createCombatInput,battleHUDMarkup,battleControlsMar
 
 const storage={getItem:key=>localStorage.getItem(key),setItem:(key,value)=>localStorage.setItem(key,value)};
 const $=id=>document.getElementById(id),app=$('story-app'),canvas=$('world');
+const modalFocus=createModalFocus(app);
 $('battle-hud').innerHTML=battleHUDMarkup();$('battle-buttons').innerHTML=battleControlsMarkup();$('battle-steps').innerHTML=battleStepsMarkup();
 const exploration=createExplorationControls(),combatInput=createCombatInput();
 const loader=new GLTFLoader(),audio=createCombatAudio(),showtimeLoader=createShowtimeLoader(new URL('../cinematic/v14/',import.meta.url));
@@ -48,12 +50,14 @@ function clearInput(){
  for(const node of [document.getElementById('story-stick'),document.getElementById('camera-orbit'),...document.querySelectorAll('[data-control]')])if(node){for(const pointer of [stick.pointer,exploration.snapshot.leftPointer,exploration.snapshot.rightPointer,...held.keys()])if(pointer!==null&&node.hasPointerCapture(pointer))node.releasePointerCapture(pointer);}
  keys.clear();held.clear();queued.clear();combatInput.clear();exploration.clearPointers();stick.x=stick.y=0;stick.pointer=null;$('story-thumb').style.transform='';$('camera-orbit').classList.remove('dragging');document.querySelectorAll('[data-control]').forEach(b=>b.classList.remove('held'));
 }
-function setMode(next){mode=next;app.dataset.mode=next;clearInput();
+function setMode(next){modalFocus.close();mode=next;app.dataset.mode=next;clearInput();
  $('editor').hidden=next!=='editor';$('journey').hidden=next!=='explore';$('dialogue').hidden=next!=='dialogue';$('result').hidden=next!=='result';$('loading').hidden=next!=='loading';
  $('input-controls').hidden=!['explore','battle'].includes(next);$('battle-buttons').hidden=next!=='battle';$('battle-hud').hidden=!['battle','movie','result'].includes(next);
  $('movie-ui').hidden=next!=='movie';$('edit').hidden=next!=='explore';$('save').hidden=next!=='explore';$('pause').hidden=!['explore','battle'].includes(next);
  $('npc-tag').hidden=true;$('talk').hidden=true;$('camera-orbit').hidden=next!=='explore';$('camera-tools').hidden=next!=='explore';$('help').textContent=next==='battle'?'方向＋必殺／↓咆哮 · F前/R後ステップ · M奥義':'左で移動 · 右ドラッグで視点 · Eで会話';
  paused=backgroundPaused||document.hidden||window.mamokenNative?.active===false;$('pause').textContent=paused?'再開':'一時停止';resize();
+ if(next==='dialogue')modalFocus.open($('dialogue'),$('talk-close'));else if(next==='result')modalFocus.open($('result'),$('return'));
+ else if(['loading','movie'].includes(next)&&app.contains(document.activeElement))document.activeElement.blur();
 }
 function resize(){
  const coarse=matchMedia('(pointer:coarse)').matches||navigator.maxTouchPoints>0;
@@ -102,9 +106,10 @@ async function createActor(definition,{combat=false}={}){
    for(let slot=0;slot<3;slot++){
     const ref=definition.combat.specials[slot],split=ref.split('.'),entries=await showtime(split[0]);let entry=entries[split[1]];
     if(!entry)throw Error('技素材が不足: '+ref);
-    if(split[0]!==baseId){const donor=await original(split[0]);const convert=clip=>clip&&bindMorphTargets(retargetCustomClip(clip,donor.gltf.scene,model,{moveKind:entry.spec.kind??'projectile',moveRef:ref,targetDefinition:definition}),model);
+    if(split[0]!==baseId){const donor=await original(split[0]);const convert=clip=>clip&&bindMorphTargets(retargetCustomClip(clip,donor.gltf.scene,model,{moveKind:entry.spec.kind??'projectile',moveRef:ref,targetDefinition:definition,motionSpec:entry.spec,sourceIdleClip:donor.gltf.animations.find(clip=>clip.name==='idle'),targetIdleClip:actions.idle.getClip()}),model);
      entry={...entry,attacker:convert(entry.attacker),start:convert(entry.start)};
     }else entry={...entry};
+    entry.sourceRef=ref;entry.sourceCharacterId=split[0];
     const clip=Avatar.bindAvatarClip(entry.start??entry.attacker,av);entry.action=mixer.clipAction(clip);actor.showtime['s'+(slot+1)]=entry;
    }
    // The original nine authored movies remain intact. For a different selected style,
@@ -148,9 +153,14 @@ async function enterVillage(){
   village.visible=true;arena.visible=false;for(const actor of combatActors)disposeActor(actor);combatActors=[];battle=null;setNpcList();updateJourney();setMode('explore');setStatus(storageWarning);save();
  }catch(error){setMode('editor');$('editor-error').textContent='キャラを準備できません: '+error.message;}
 }
-function openDialogue(){if(mode!=='explore'||paused||!nearby)return;dialogueNpc=nearby;setMode('dialogue');$('dialogue-name').textContent=nearby.name;
- const old=progress.encounters[nearby.id];$('dialogue-line').textContent=old?.battles?`また来たね。これまで${old.battles}戦、君の${old.wins}勝だ。もう一度、勝負しよう。`:nearby.line;}
-function closeDialogue(){dialogueNpc=null;setMode('explore');setStatus('');}
+function focusVillageControl(){
+ if(mode!=='explore')return;nearby=nearestNpc(progress.position,npcs,1.05);$('talk').hidden=!nearby||paused;
+ (paused?$('pause'):nearby?$('talk'):$('camera-reset')).focus({preventScroll:true});
+}
+function restoreModalFocus(){if(!document.hidden&&window.mamokenNative?.active!==false)modalFocus.resume();}
+function openDialogue(){if(mode!=='explore'||paused||!nearby)return;dialogueNpc=nearby;$('dialogue-name').textContent=nearby.name;
+ const old=progress.encounters[nearby.id];$('dialogue-line').textContent=old?.battles?`また来たね。これまで${old.battles}戦、君の${old.wins}勝だ。もう一度、勝負しよう。`:nearby.line;setMode('dialogue');}
+function closeDialogue(){dialogueNpc=null;setMode('explore');setStatus('');focusVillageControl();}
 function clearProjectiles(){for(const mesh of projectiles.values())mesh.removeFromParent();projectiles.clear();for(const p of impacts){p.mesh.removeFromParent();if(p.ownedMaterial)p.mesh.material.dispose();}feedbackShake=0;feedbackShakeTime=0;impacts.length=0;}
 async function startBattle(){
  if(mode!=='dialogue'||!dialogueNpc||document.hidden||window.mamokenNative?.active===false)return;if(!document.hidden&&window.mamokenNative?.active!==false)backgroundPaused=false;audio.unlock();returnPoint={position:{...progress.position},heading:progress.heading,camera:exploration.view};const token=++loadGeneration;setMode('loading');$('loading-copy').textContent='稽古の準備と技の互換性を確認中…';const started=performance.now();
@@ -191,7 +201,7 @@ function syncCombatActor(actor,fighter){
   actor.current?.stop();actor.counterFrame=0;actor.key='';
  }
  const entry=actor.showtime[fighter.action?.id];let name=entry?.action?entry.action.getClip().name:chooseClip(fighter,Object.keys(actor.actions),actor.meta.command_map??{},{normalMotionSource:actor.normalMotionSource,rigId:actor.baseId});
- const key=name+':'+(fighter.action?.serial??0)+':'+fighter.state;
+ const key=specialPlaybackKey(actor,fighter,entry,name);
  if(actor.key!==key){actor.current?.stop();const next=entry?.action??actor.actions[name]??actor.actions.idle;
   next.reset().setLoop(['idle','walk_f','walk_b','crouch','guard_stand','guard_crouch'].includes(name)?THREE.LoopRepeat:THREE.LoopOnce,Infinity);next.clampWhenFinished=true;next.play();actor.current=next;actor.currentName=name;actor.key=key;actor.specialCueIndex=0;
  }
@@ -202,9 +212,9 @@ function syncCombatActor(actor,fighter){
   const duration=entry.action.getClip().duration,seconds=specialClipTime(entry.spec,fighter.action,fighter.frame,duration);
   entry.action.setEffectiveTimeScale(0);entry.action.time=Math.min(duration,seconds);actor.mixer.update(0);
   actor.holder.updateMatrixWorld(true);
-  actor.specialCueIndex=consumeSpecialMovementCues(entry.spec,seconds,actor.specialCueIndex,{audio,characterId:actor.id,visual:cue=>{
-   if(reducedMotion)return;const point=cue.bone&&resolveSpecialBone(actor.model,cue.bone)?.getWorldPosition(new THREE.Vector3());
-   showCombatImpact({characterId:actor.id,effect:cue.key==='roar'?'block':'shard',point:{x:point?.x??fighter.x,y:point?.y??fighter.y+.35},scale:.8,lifeFrames:10});
+  presentEquippedSpecial(actor,fighter,entry,seconds,{audio,visual:(cue,characterId)=>{
+   if(reducedMotion)return null;const point=cue.bone&&resolveSpecialBone(actor.model,cue.bone)?.getWorldPosition(new THREE.Vector3());
+   return showCombatImpact({characterId,effect:cue.key==='roar'?'block':'shard',point:{x:point?.x??fighter.x,y:point?.y??fighter.y+.35},scale:.8,lifeFrames:10});
   }});
  }else if(!fighter.stop)actor.mixer.update(1/FPS);
 }
@@ -217,7 +227,7 @@ function showCombatImpact(fb){
  if(impacts.length>=24){const old=impacts.shift();old.mesh.removeFromParent();if(old.ownedMaterial)old.mesh.material.dispose();}
  const material=impactMat.clone();material.color.setHex(fb.outcome==='guard'?0x9fe0ff:showtimeFor(fb.characterId).color);
  const mesh=new THREE.Mesh(feedbackGeometry[fb.effect]??impactGeo,material);mesh.position.set(fb.point.x,fb.point.y,.2);mesh.scale.setScalar(fb.scale);if(fb.effect==='slash')mesh.rotation.z=-.65;
- scene.add(mesh);impacts.push({mesh,life:fb.lifeFrames/FPS,ownedMaterial:true});
+ scene.add(mesh);impacts.push({mesh,life:fb.lifeFrames/FPS,ownedMaterial:true});return mesh;
 }
 function battleEvents(){for(const e of battle.events){
  const feedbackPresented=presentCombatFeedback(e,{audio,effectsEnabled:!reducedMotion,impact:showCombatImpact,shake:(amount,frames)=>{feedbackShake=Math.max(feedbackShake,amount);feedbackShakeTime=Math.max(feedbackShakeTime,frames/FPS);}});state.events.push({...e,frame:battle.frame});if(state.events.length>100)state.events.shift();
@@ -239,7 +249,7 @@ function finishRound(){if(finished||movie)return;finished=true;progress=recordEn
  save();setMode('result');setStatus('');
 }
 function returnToVillage(){if(mode!=='result')return;for(const actor of combatActors)disposeActor(actor);combatActors=[];battle=null;clearProjectiles();arena.visible=false;village.visible=true;
- progress.position={...returnPoint.position};progress.heading=returnPoint.heading;exploration.restore(returnPoint.camera);progress.camera=exploration.view;player.holder.position.set(progress.position.x,0,progress.position.z);player.turn.rotation.y=progress.heading;dialogueNpc=null;setMode('explore');syncCameraTools();updateExplorationCamera(0,true);updateJourney();save();}
+ progress.position={...returnPoint.position};progress.heading=returnPoint.heading;exploration.restore(returnPoint.camera);progress.camera=exploration.view;player.holder.position.set(progress.position.x,0,progress.position.z);player.turn.rotation.y=progress.heading;dialogueNpc=null;setMode('explore');syncCameraTools();updateExplorationCamera(0,true);updateJourney();save();focusVillageControl();}
 async function canonicalCinemaActor(styleId){
  // Preserve the original two-primitive film actor exactly. The editor's modular
  // avatar is restored after the movie; it must not silently replace film faces.
@@ -375,9 +385,9 @@ function updateExplorationCamera(delta,snap=false){const view=exploration.view,d
  const position=new THREE.Vector3(progress.position.x+Math.sin(view.yaw)*flat,.35+Math.sin(view.pitch)*distance,progress.position.z+Math.cos(view.yaw)*flat);
  camera.position.lerp(position,snap||reducedMotion?1:Math.min(1,delta*10));camera.lookAt(progress.position.x,.35,progress.position.z);
 }
-function pauseForBackground(){backgroundPaused=true;if(mode==='movie')finishMovie();clearInput();last=0;acc=0;if(['battle','explore'].includes(mode)){paused=true;$('pause').textContent='再開';setStatus('一時停止');}if(avatar&&saveReady){progress.camera=exploration.view;writeSave(storage,avatar,progress);}}
-addEventListener('mamoken:native-state',event=>{if(event.detail?.active===false)pauseForBackground();else last=0;});
-addEventListener('blur',pauseForBackground);document.addEventListener('visibilitychange',()=>{if(document.hidden)pauseForBackground();else last=0;});
+function pauseForBackground(){modalFocus.suspend();backgroundPaused=true;if(mode==='movie')finishMovie();clearInput();last=0;acc=0;if(['battle','explore'].includes(mode)){paused=true;$('pause').textContent='再開';setStatus('一時停止');}if(avatar&&saveReady){progress.camera=exploration.view;writeSave(storage,avatar,progress);}}
+addEventListener('mamoken:native-state',event=>{if(event.detail?.active===false)pauseForBackground();else{last=0;restoreModalFocus();}});
+addEventListener('blur',pauseForBackground);addEventListener('focus',restoreModalFocus);document.addEventListener('visibilitychange',()=>{if(document.hidden)pauseForBackground();else{last=0;restoreModalFocus();}});
 function render(now){requestAnimationFrame(render);const elapsed=last?Math.max(0,(now-last)/1000):1/FPS,delta=Math.min(.05,elapsed);last=now;
  if(mode==='editor'&&player){if(spinning)previewAngle+=delta*.6;player.turn.rotation.y=previewAngle;playIdle(player,false,delta);camera.position.set(.15,.60,1.65);camera.lookAt(.15,.34,0);}
  if(['explore','dialogue'].includes(mode)&&player){

@@ -9,7 +9,7 @@ import {createRequire} from 'node:module';
 const {chromium}=createRequire(import.meta.url)('playwright-core');
 const base=path.resolve(fileURLToPath(new URL('../www/',import.meta.url))),output=process.env.MAMOKEN_EVIDENCE??fileURLToPath(new URL('../evidence/browser/',import.meta.url));
 await mkdir(output,{recursive:true});
-const mime={'.html':'text/html; charset=utf-8','.js':'text/javascript','.json':'application/json','.css':'text/css','.glb':'model/gltf-binary','.png':'image/png','.webp':'image/webp'};
+const mime={'.html':'text/html; charset=utf-8','.js':'text/javascript','.json':'application/json','.css':'text/css','.glb':'model/gltf-binary','.png':'image/png','.webp':'image/webp','.svg':'image/svg+xml'};
 const server=http.createServer(async(req,res)=>{
  try{const url=new URL(req.url,'http://127.0.0.1');let route=decodeURIComponent(url.pathname);if(route.endsWith('/'))route+='index.html';const file=path.resolve(base,'.'+route);
   if(!file.startsWith(base+path.sep)&&file!==path.join(base,'index.html')){res.writeHead(403);res.end();return;}
@@ -24,7 +24,24 @@ const page=await context.newPage(),errors=[],remoteRequests=[],report=[];
 const safeAreaGeometry=[];
 const nativeEnvGeometry=[];
 const nativeLobbyScroll=[];
+const svgDecoding=[];
 const cdp=await context.newCDPSession(page);
+async function assertDecodedArt(screen,expectations){
+ const checks=await page.evaluate(async expectations=>Promise.all(expectations.map(async([selector,pseudo,filename])=>{
+  const element=document.querySelector(selector);if(!element)return {selector,pseudo,filename,error:'Required art target missing'};
+  const background=getComputedStyle(element,pseudo||null).backgroundImage;
+  const urls=[...background.matchAll(/url\(["']?([^"')]+)["']?\)/g)].map(match=>match[1]);
+  const src=urls.find(value=>new URL(value,location.href).pathname.endsWith('/'+filename));
+  if(!src)return {selector,pseudo,filename,background,error:'Expected SVG is not applied to the real UI'};
+  try{
+   const response=await fetch(src),image=new Image();image.src=src;await image.decode();
+   return {selector,pseudo,filename,src,status:response.status,mime:response.headers.get('content-type'),width:image.naturalWidth,height:image.naturalHeight,decoded:true};
+  }catch(error){return {selector,pseudo,filename,src,error:error.message};}
+ })),expectations);
+ svgDecoding.push({screen,checks});await writeFile(output+'/native-svg-decoding.json',JSON.stringify({uiKitTested:false,svgDecoding},null,2));
+ for(const check of checks){assert.equal(check.error,undefined,screen+' '+JSON.stringify(check));assert.equal(check.status,200);assert.match(check.mime??'',/^image\/svg\+xml\b/);assert.ok(check.decoded&&check.width>0&&check.height>0,'SVG did not decode: '+JSON.stringify(check));}
+}
+const buttonArt=parent=>[['weak','weak'],['strong','heavy'],['throw','throw'],['gyuiin','gyuiin'],['special','special'],['ultimateButton','ultimate']].map(([control,asset])=>[parent+' [data-control="'+control+'"]','','button-'+asset+'.svg']);
 async function safeInsets(left,right,bottom=21){
  await page.evaluate(({left,right,bottom})=>{
   for(const [edge,value]of Object.entries({left,right,top:0,bottom}))document.documentElement.style.setProperty('--native-safe-'+edge,value+'px');
@@ -87,6 +104,12 @@ await context.addInitScript(()=>{
 });
 try{
  await page.goto(url+'/');assert.equal(await page.locator('.modes a').count(),5);
+ await page.waitForFunction(()=>document.documentElement.dataset.uiArt==='v17-p4-ui-art-1');
+ await assertDecodedArt('five-mode-entry',[
+  ['.ui-seal','','fist-seal.svg'],['.mode-hall','::before','ridge-far.svg'],['.mode-hall','::before','ridge-near.svg'],
+  ...[['battle','versus'],['practice','practice'],['arcade','arcade'],['survival','survival'],['story','journey-paper']].map(([mode,asset])=>['.mode[data-mode="'+mode+'"] .mode-kicker','::before','mode-'+asset+'.svg']),
+  ['.mode-story','','paper-strip.svg']
+ ]);
  // Preserve a valid long saved name, prove every card and its action can be
  // scrolled into the native safe scrollport, then take all five real routes.
  const previousSave=await page.evaluate(()=>localStorage.getItem('mamoken.story.v16.1'));
@@ -117,6 +140,10 @@ try{
  await page.locator('a[href="./dojo/?mode=practice"]').click();
  await page.waitForFunction(()=>window.mamoken3d,undefined,{timeout:15000});
  await page.locator('#start').tap();await page.waitForFunction(()=>mamoken3d.practice.enabled&&mamoken3d.battle?.frame>3,undefined,{timeout:90000});
+ await assertDecodedArt('dojo-hud-and-controls',[
+  ['.brand-mark','','fist-seal.svg'],['#arena .health .track','','hud-hp-frame.svg'],['#arena .drive .track','','hud-sub-frame.svg'],['#arena .round-center','','hud-timer-dark.svg'],
+  ['#arena .hud-name','::before','crest-moguzo.svg'],...buttonArt('#buttons-rail')
+ ]);
  assert.equal(await page.locator('[data-control]').count(),8); // six attacks + two step buttons
  assert.equal(await page.evaluate(()=>mamoken3d.landscapeLocked),false);
  // A transient portrait viewport must be left to UIKit, not rotated again by CSS.
@@ -134,6 +161,7 @@ try{
  report.push(await page.evaluate(()=>({frame:mamoken3d.battle.frame,practice:mamoken3d.practice,diagnostics:mamoken3d.diagnostics,nativeSimulated:true})));
  await page.screenshot({path:output+'/02-native-state-practice.png'});
  await page.goto(url+'/story/');await page.waitForFunction(()=>window.mamokenStory?.mode==='editor'&&mamokenStory.player,undefined,{timeout:90000});
+ await assertDecodedArt('story-editor', [['#story-app header .brand','::before','fist-seal.svg'],['#editor','','cut-panel.svg']]);
  for(const [left,right]of [[62,0],[0,62],[62,62]]){
   await safeInsets(left,right);await safeBounds('#story-app',left,right);await safeBounds('#editor',left,right);
  }
@@ -150,6 +178,10 @@ try{
  await page.keyboard.down('w');await page.waitForFunction(()=>mamokenStory.nearby?.id==='moguzo',undefined,{timeout:30000});await page.keyboard.up('w');
  await page.locator('#talk').tap();await page.waitForFunction(()=>mamokenStory.mode==='dialogue');await page.locator('#challenge').tap();
  await page.waitForFunction(()=>mamokenStory.mode==='battle',undefined,{timeout:90000});await page.locator('#pause').tap();
+ await assertDecodedArt('story-hud-and-controls',[
+  ['#battle-hud .health .track','','hud-hp-frame.svg'],['#battle-hud .drive .track','','hud-sub-frame.svg'],['#battle-hud .round-center','','hud-timer-dark.svg'],
+  ['#battle-hud .hud-name','::before','crest-moguzo.svg'],...buttonArt('#battle-buttons')
+ ]);
  for(const side of [59,62]){
   await page.evaluate(()=>{for(const edge of ['left','right','top','bottom'])document.documentElement.style.removeProperty('--native-safe-'+edge);});
   await cdp.send('Emulation.setSafeAreaInsetsOverride',{insets:{left:side,right:side,top:0,bottom:21}});
@@ -173,7 +205,7 @@ try{
  await page.reload();await page.waitForFunction(()=>mamokenStory.mode==='editor'&&mamokenStory.player,undefined,{timeout:90000});assert.equal(await page.locator('#avatar-name').inputValue(),'端末内の旅人');
  await page.screenshot({path:output+'/03-bundled-story-save.png'});
  assert.deepEqual(remoteRequests,[]);assert.deepEqual(errors,[]);
- await writeFile(output+'/report.json',JSON.stringify({webglRendered:true,nativeAdapterSimulated:true,uiKitTested:false,safeAreaInsetsSimulated:true,safeAreaGeometry,nativeEnvGeometry,nativeLobbyScroll,remoteRequests,errors,report},null,2));
+ await writeFile(output+'/report.json',JSON.stringify({webglRendered:true,nativeAdapterSimulated:true,uiKitTested:false,safeAreaInsetsSimulated:true,safeAreaGeometry,nativeEnvGeometry,nativeLobbyScroll,svgDecoding,remoteRequests,errors,report},null,2));
  console.log('P1 BUNDLED WEBGL PASS: five modes, real GLBs/practice, simulated native background/foreground/input reset, no CSS double rotation, Story save reload, no external asset requests');
 }catch(error){await page.screenshot({path:output+'/failure.png'}).catch(()=>{});console.error({errors,remoteRequests});throw error;}
 finally{await browser.close();await new Promise(resolve=>server.close(resolve));}

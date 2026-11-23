@@ -23,6 +23,9 @@ export async function loadMeshPartModules(entries,{loader=new GLTFLoader(),baseU
  }));
 }
 const matrixError=(a,b)=>Math.max(...a.elements.map((value,index)=>Math.abs(value-b.elements[index])));
+// GLTFLoader sanitizes exported node names for PropertyBinding (paw.L -> pawL).
+// Manifest joint names remain the actual GLB names, in exported skin order.
+const runtimeBoneName=name=>THREE.PropertyBinding.sanitizeNodeName(name);
 const pointKey=(attribute,index)=>[attribute.getX(index),attribute.getY(index),attribute.getZ(index)].map(v=>Math.round(v*1e6)).join(',');
 // Weld UV duplicates only for edge counting; no vertices or source topology are changed.
 export function boundaryVertices(geometry){
@@ -108,11 +111,12 @@ export function assembleMeshParts(avatar,loaded,{materialFactory}={}){
    for(const [index,source] of sourceMeshes(gltf,entry).entries()){
     validateGeometry(source,entry);
     const sourceNames=source.skeleton.bones.map(b=>b.name);
-    if(JSON.stringify(sourceNames)!==JSON.stringify(entry.jointNames)||sourceNames.length!==hostNames.length||sourceNames.some(name=>!hostNames.includes(name)))fail('対象の共有骨格ではありません: '+entry.id);
+    const declaredNames=entry.jointNames.map(runtimeBoneName);
+    if(new Set(declaredNames).size!==declaredNames.length||JSON.stringify(sourceNames)!==JSON.stringify(declaredNames)||sourceNames.length!==hostNames.length||sourceNames.some(name=>!hostNames.includes(name)))fail('対象の共有骨格ではありません: '+entry.id+' '+JSON.stringify({sourceNames,declaredNames,hostNames}));
     const remap=sourceNames.map(name=>hostNames.indexOf(name));
     for(let i=0;i<remap.length;i++)if(matrixError(source.skeleton.boneInverses[i],shared.boneInverses[remap[i]])>.00001)fail('対象の逆バインド行列が異なります: '+entry.id+'/'+sourceNames[i]);
     if(matrixError(source.matrixWorld,first.matrixWorld)>.00001||matrixError(source.bindMatrix,first.bindMatrix)>.00001)fail('対象のローカル座標系と一致しません: '+entry.id);
-    if(!avatar.bones.has(entry.socket.bone))fail('ソケット骨がありません: '+entry.id);
+    if(!avatar.bones.has(runtimeBoneName(entry.socket.bone)))fail('ソケット骨がありません: '+entry.id);
     const geometry=source.geometry.clone(),skinIndex=geometry.attributes.skinIndex;
     for(let i=0;i<skinIndex.count;i++)for(let j=0;j<4;j++)skinIndex.setComponent(i,j,remap[skinIndex.getComponent(i,j)]);
     const original=Array.isArray(source.material)?source.material[0]:source.material;
@@ -137,7 +141,7 @@ export function assembleMeshParts(avatar,loaded,{materialFactory}={}){
 export function measureMeshPartSockets(avatar){
  avatar.scene.updateMatrixWorld(true);
  return (avatar.partAssembly?.modules??[]).map(module=>{
-  const bone=avatar.bones.get(module.socket.bone);if(!bone?.isBone)fail('交換部品のソケット骨がありません: '+module.id);
+  const bone=avatar.bones.get(runtimeBoneName(module.socket.bone));if(!bone?.isBone)fail('交換部品のソケット骨がありません: '+module.id);
   const world=bone.localToWorld(new THREE.Vector3(...module.socket.position)),local=avatar.scene.worldToLocal(world);
   return {moduleId:module.id,slot:module.slot,bone:bone.name,position:local.toArray(),space:'avatar-local-animated',source:'actual-host-bone'};
  });
