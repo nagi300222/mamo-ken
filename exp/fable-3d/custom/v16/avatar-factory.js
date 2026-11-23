@@ -123,6 +123,21 @@ function appearanceMaterial(original,base,palette,pattern){
  material.color.copy(originalColor);return material;
 }
 
+// Original animation-only packs target two render primitives. A modular avatar
+// has seven or more. Expand the unchanged weights stream to every real module;
+// otherwise paw-open normals would animate only the body primitive.
+export function bindAvatarClip(clip,avatar){
+ const weights=clip.tracks.find(t=>t.name.endsWith('.morphTargetInfluences'));
+ if(!weights)return clip;
+ const bound=clip.clone();bound.tracks=clip.tracks.filter(t=>!t.name.endsWith('.morphTargetInfluences'));
+ for(const mesh of avatar.meshes){
+  if(!mesh.morphTargetInfluences)continue;
+  if(mesh.morphTargetInfluences.length!==weights.getValueSize())throw Error('部品の表情数が一致しません: '+mesh.name);
+  const track=weights.clone();track.name=mesh.name+'.morphTargetInfluences';bound.tracks.push(track);
+ }
+ return bound;
+}
+
 export async function createAvatar(definition,options={}){
  const manifest=await loadAvatarManifest(),appearance=definition.appearance??definition;
  const baseId=appearance.baseId??'moguzo',base=manifest.bases[baseId];
@@ -150,7 +165,7 @@ export async function createAvatar(definition,options={}){
   object.frustumCulled=false;skeletons.add(object.skeleton);meshes.push(object);
  });
  scene.updateMatrixWorld(true);
- const animations=[...gltf.animations,...normal.animations];let disposed=false;
+ const animations=[...gltf.animations,...normal.animations.map(clip=>bindAvatarClip(clip,{meshes}))];let disposed=false;
  return {scene,animations,bones,meshes,baseId,appearance:structuredClone(appearance),parameters:base.parameters,
   grafts:Object.keys(donors),gltf:{scene,animations},
   dispose(){if(disposed)return;disposed=true;scene.removeFromParent();for(const g of geometries)g.dispose();for(const m of materials)m.dispose();for(const s of skeletons)s.dispose();}
@@ -168,7 +183,7 @@ export function measureContacts(avatar){
  root.position.set(0,0,0);root.quaternion.identity();root.scale.set(1,1,1);
  const mixer=new THREE.AnimationMixer(root),v=new THREE.Vector3(),meshData=[];
  for(const mesh of avatar.meshes){
-  if(!mesh.visible||mesh.userData.avatarPart==='accessory')continue;
+  if(!mesh.visible)continue;
   const {skinIndex,skinWeight,position}=mesh.geometry.attributes,groups=[];
   for(let i=0;i<position.count;i++){
    let best=0;for(let k=1;k<4;k++)if(skinWeight.getComponent(i,k)>skinWeight.getComponent(i,best))best=k;

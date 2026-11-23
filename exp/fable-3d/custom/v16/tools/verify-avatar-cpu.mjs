@@ -43,6 +43,22 @@ for(const id of ['moguzo','godan','bullet','pisuke','hakuma','chirka','takimaru'
  assert.ok(modified.grafts.includes('head'));assert.ok(modified.meshes.filter(x=>x.userData.avatarPart==='accessory').every(x=>!x.visible));
  assert.ok(Object.keys(changed.normals).length===6);assert.ok(Object.values(changed.normals).every(x=>x.reach>.05&&x.height>=-.01));
  assert.ok(changed.normals.stand_weak.reach!==m.normals.stand_weak.reach,'hand graft did not change actual surface');
+ const shapeDifferences={},seams=new Map();let maxSeamGap=0;
+ for(let mi=0;mi<a.meshes.length;mi++){
+  const before=a.meshes[mi],after=modified.meshes[mi],p=before.geometry.attributes.position,q=after.geometry.attributes.position;
+  let max=0,changedVertices=0;
+  for(let i=0;i<p.count;i++){
+   const source=[p.getX(i),p.getY(i),p.getZ(i)],dest=[q.getX(i),q.getY(i),q.getZ(i)];
+   const delta=Math.hypot(...dest.map((x,k)=>x-source[k]));max=Math.max(max,delta);if(delta>.00001)changedVertices++;
+   const key=source.map(x=>x.toFixed(6)).join(',');const prior=seams.get(key);
+   if(prior)maxSeamGap=Math.max(maxSeamGap,Math.hypot(...dest.map((x,k)=>x-prior[k])));else seams.set(key,dest);
+  }
+  const part=before.userData.avatarPart;shapeDifferences[part]={maxDisplacement:Math.max(max,shapeDifferences[part]?.maxDisplacement??0),changedVertices:changedVertices+(shapeDifferences[part]?.changedVertices??0)};
+ }
+ assert.ok(maxSeamGap<.00001,'partition seam opened: '+id+' '+maxSeamGap);
+ assert.ok(shapeDifferences.head.maxDisplacement>.001,'head shape did not change');
+ assert.ok(shapeDifferences.hands.maxDisplacement>.001,'hand shape did not change');
+ results.at(-1).grafts={parts:modified.grafts,shapeDifferences,maxRestSeamGap:maxSeamGap};
  a.dispose();modified.dispose();
 }
 await assert.rejects(createAvatar({appearance:{baseId:'moguzo',parts:{tail:'bullet'}}}),/尾骨/);
