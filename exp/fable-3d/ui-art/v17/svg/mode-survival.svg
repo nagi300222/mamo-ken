@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96" width="96" height="96" role="img" aria-label="生き残る（SURVIVAL）: 消えない焚き火">
+<g fill="none" stroke="var(--mk-text,#F5EFDB)" stroke-width="5" stroke-linecap="round" stroke-linejoin="round">
+<path d="M48,10 C60,26 72,34 70,54 C69,72 58,84 48,84 C38,84 27,72 26,54 C25,42 32,36 36,28 C40,36 44,38 44,30 C44,22 46,16 48,10 Z" fill="var(--mk-panel,#1C332C)"/><path d="M48,48 C54,56 58,60 57,68 C56,76 52,80 48,80 C44,80 40,76 39,68 C38,60 44,56 48,48 Z" fill="var(--mk-action,#F1C66C)" stroke="none"/><path d="M12,88 H84" stroke="var(--mk-line,#69877C)"/>
+</g>
+</svg>

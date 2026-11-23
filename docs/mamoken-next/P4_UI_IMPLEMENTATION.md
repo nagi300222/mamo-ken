@@ -11,14 +11,22 @@ Issue #213, direction PR #214. This is a trial interpretation of direction A for
 - Story uses the same HUD/control classes as P0/dojo and a notebook visual layer for editing, dialogue, exploration and results. P0 owns camera, controls, movement, save and return behavior.
 - Lobby personalization reads only the saved name. It never writes, clears, migrates or overwrites a save. Storage denial/malformed JSON cannot block the menu.
 
-The mountain/ridge geometry currently uses light CSS shapes, the existing original portraits and typography. Claude-authored original P4 art is being made in a separate production lane; once delivered, it should be integrated with its source/manifest/proof rather than attributed to this implementation. This code alone does not satisfy the Claude-art acceptance gate.
+Claude-authored original P4 artwork from Draft #218 `0ce87219762134d4d9adb8f3785aa4894e777343` is integrated into the real screens: three ridge layers, fist seal/mark, wood/paper/cloth/cut surfaces, five mode symbols, nine character crests, HP/sub/timer frames and attack button plates. All 27 authored SVGs, tokens, manifest and editable Python generator remain unchanged in `ui-art/v17`. Existing marmot portraits remain the source of the character images; no new portrait/model is claimed.
 
 ## Verification
 
 `npm --prefix exp/fable-3d/dojo test` checks original behavior and P4 readable color contrasts/routes/save isolation. Built Pages must include `shared-ui/`, lobby JS, dojo profile JS and the Story tab module.
 
-`node exp/fable-3d/dojo/acceptance/p4-ui-browser.mjs` targets the built site (default `/exp/fable-3d/_pages/`, override `MAMOKEN_UI_URL`). It captures five-mode layouts at 720×320, 852×393 and portrait-locked 393×852; measures 44px targets; opens all four dojo modes; starts real WebGL Practice; tests paired profiles and the four-tab editor through saving and entering the actual village; verifies menu entry preserves the save. Evidence is written beneath `MAMOKEN_EVIDENCE/ui`.
+`node exp/fable-3d/dojo/acceptance/p4-ui-browser.mjs` serves the built `_pages` artifact at its own temporary HTTP origin root (or targets `MAMOKEN_UI_URL` when provided), matching Cloudflare/native resource resolution. It captures five-mode layouts at 720×320, 852×393 and portrait-locked 393×852; measures 44px targets; opens all four dojo modes; starts real WebGL Practice; tests paired profiles and the four-tab editor through saving and entering the actual village; verifies menu entry preserves the save. Evidence is written beneath `MAMOKEN_EVIDENCE/ui`.
 
 Original Story acceptance scripts have optional P4 tab navigation so that the same real gameplay regression can run before and after the visual enhancement. No collision/result test has been weakened.
 
-Actual WebGL screenshot inspection, the full integrated regression and Claude art review are required before marking P4 complete. No physical iPhone touch, heat, battery or hardware-FPS measurement has been performed by this implementation lane. P1 remains a separate native-device gate; P2 remains blocked until that user confirmation.
+Actual WebGL screenshot inspection and the full integrated regression are still required before marking P4 complete. The source preview composites in #218 are not used as proof of this runtime integration. No physical iPhone touch, heat, battery or hardware-FPS measurement has been performed by this implementation lane. P1 remains a separate native-device gate; P2 remains blocked until that user confirmation.
+
+CI correction: readiness checks now wait until the new match has finished loading, rather than accepting a previous run’s Battle frame while Practice resources are still loading. The 75→∞ expectation is unchanged. The custom combat browser also explicitly opens the selected editor tab.
+
+## External SVG palette and runtime mapping
+
+`shared-ui/build-p4-art.mjs` generates 37 external-image SVGs (27 base images plus explicit light-paper, dark-wood and six button variants), a source/hash manifest, CSS image variables and a JS manifest map. CSS custom properties/currentColor from a parent document do not enter an external SVG, so the adapter resolves all colors before publishing. Icons/crests preserve their own aspect ratios; background surfaces/HUD frames explicitly stretch to their existing slots to prevent letterboxing over readable text. The original SVGs are retained unchanged.
+
+The lobby, dojo and Story include the same art stylesheet. Character cards bind the corresponding crest to the real roster, and HUD crests follow the existing semantic element attributes (including custom Story combat styles). Native viewport and saved data are untouched. Browser acceptance now checks computed art backgrounds, decoded nine-crest images and each of six real attack-button plates, in addition to the gameplay/UI flow.

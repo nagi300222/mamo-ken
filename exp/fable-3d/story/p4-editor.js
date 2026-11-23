@@ -1,3 +1,5 @@
+import {markUIArt} from '../shared-ui/p4-art-map.js';
+markUIArt();
 // Visual editor enhancement only. Existing input IDs, form events, validation,
 // preview, save and Story progress remain owned by the original editor.
 const form=document.getElementById('avatar-form');

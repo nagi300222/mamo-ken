@@ -1,0 +1,416 @@
+{
+ "version": "v17-p4-ui-art-1",
+ "generator": "tools/build_ui_art.py",
+ "license": "original work for マモ拳; no third-party art, fonts or text baked in",
+ "assets": [
+  {
+   "id": "ridge-far",
+   "file": "svg/ridge-far.svg",
+   "viewBox": [
+    0,
+    0,
+    1200,
+    240
+   ],
+   "use": "遠景の山稜（メニュー背景の上段）",
+   "tile": "x",
+   "group": "ridge"
+  },
+  {
+   "id": "ridge-near",
+   "file": "svg/ridge-near.svg",
+   "viewBox": [
+    0,
+    0,
+    1200,
+    240
+   ],
+   "use": "近景の山稜（メニュー背景の下段・パネルの縁）",
+   "tile": "x",
+   "group": "ridge"
+  },
+  {
+   "id": "ridge-line",
+   "file": "svg/ridge-line.svg",
+   "viewBox": [
+    0,
+    0,
+    1200,
+    56
+   ],
+   "use": "稜線の区切り線（見出しの下・HUD の縁）",
+   "tile": "x",
+   "group": "ridge"
+  },
+  {
+   "id": "fist-seal",
+   "file": "svg/fist-seal.svg",
+   "viewBox": [
+    0,
+    0,
+    240,
+    240
+   ],
+   "use": "拳の印章（タイトル・決定・勝利の押印。朱の角印に握り拳と山）",
+   "group": "emblem"
+  },
+  {
+   "id": "fist-mark",
+   "file": "svg/fist-mark.svg",
+   "viewBox": [
+    0,
+    0,
+    200,
+    200
+   ],
+   "use": "拳の紋（単色。currentColor で着色。小さなアイコン・箇条の印）",
+   "group": "emblem",
+   "monochrome": true
+  },
+  {
+   "id": "wood-tag",
+   "file": "svg/wood-tag.svg",
+   "viewBox": [
+    0,
+    0,
+    480,
+    160
+   ],
+   "use": "木札（モード名・キャラ名・タイマーの台。左の穴に紐）",
+   "group": "surface",
+   "slice": {
+    "left": 60,
+    "right": 28,
+    "top": 28,
+    "bottom": 28
+   }
+  },
+  {
+   "id": "paper-strip",
+   "file": "svg/paper-strip.svg",
+   "viewBox": [
+    0,
+    0,
+    480,
+    120
+   ],
+   "use": "紙の札（説明・技名・稽古帖の行。右端を斜めに切る）",
+   "group": "surface",
+   "slice": {
+    "left": 24,
+    "right": 70,
+    "top": 20,
+    "bottom": 20
+   }
+  },
+  {
+   "id": "cloth-banner",
+   "file": "svg/cloth-banner.svg",
+   "viewBox": [
+    0,
+    0,
+    160,
+    480
+   ],
+   "use": "布ののぼり（キャラ選択の縦帯・大会の旗。下端は剣先）",
+   "group": "surface",
+   "slice": {
+    "left": 20,
+    "right": 20,
+    "top": 64,
+    "bottom": 60
+   }
+  },
+  {
+   "id": "cut-panel",
+   "file": "svg/cut-panel.svg",
+   "viewBox": [
+    0,
+    0,
+    480,
+    200
+   ],
+   "use": "斜めに切ったパネル（左右の対比・モード選択の主カード。切り紙の斜め余白）",
+   "group": "surface",
+   "slice": {
+    "left": 10,
+    "right": 80,
+    "top": 10,
+    "bottom": 10
+   }
+  },
+  {
+   "id": "mode-versus",
+   "file": "svg/mode-versus.svg",
+   "viewBox": [
+    0,
+    0,
+    96,
+    96
+   ],
+   "use": "戦う（通常対戦）: 正面からぶつかる 2 つの拳と火花",
+   "group": "mode",
+   "mode": "versus",
+   "label": "戦う"
+  },
+  {
+   "id": "mode-practice",
+   "file": "svg/mode-practice.svg",
+   "viewBox": [
+    0,
+    0,
+    96,
+    96
+   ],
+   "use": "練習（Practice）: 巻き藁の稽古柱と打撃の線",
+   "group": "mode",
+   "mode": "practice",
+   "label": "練習"
+  },
+  {
+   "id": "mode-arcade",
+   "file": "svg/mode-arcade.svg",
+   "viewBox": [
+    0,
+    0,
+    96,
+    96
+   ],
+   "use": "勝ち進む（ARCADE 8 戦）: 山頂の旗へ登る稜線",
+   "group": "mode",
+   "mode": "arcade",
+   "label": "勝ち進む"
+  },
+  {
+   "id": "mode-survival",
+   "file": "svg/mode-survival.svg",
+   "viewBox": [
+    0,
+    0,
+    96,
+    96
+   ],
+   "use": "生き残る（SURVIVAL）: 消えない焚き火",
+   "group": "mode",
+   "mode": "survival",
+   "label": "生き残る"
+  },
+  {
+   "id": "mode-journey",
+   "file": "svg/mode-journey.svg",
+   "viewBox": [
+    0,
+    0,
+    96,
+    96
+   ],
+   "use": "自分を作って旅する（キャラクリ＋探索）: 足あとの道と旗",
+   "group": "mode",
+   "mode": "journey",
+   "label": "旅する"
+  },
+  {
+   "id": "crest-moguzo",
+   "file": "svg/crest-moguzo.svg",
+   "viewBox": [
+    0,
+    0,
+    160,
+    160
+   ],
+   "use": "モグゾー の識別紋: 丸枠・大地から突き上げる拳（万能・根性）",
+   "group": "crest",
+   "character": "moguzo",
+   "accent": "#D9A45B",
+   "displayName": "モグゾー"
+  },
+  {
+   "id": "crest-pisuke",
+   "file": "svg/crest-pisuke.svg",
+   "viewBox": [
+    0,
+    0,
+    160,
+    160
+   ],
+   "use": "ピスケ の識別紋: ひし形枠・風を切る蹴り足の軌跡（高速）",
+   "group": "crest",
+   "character": "pisuke",
+   "accent": "#7FD3F0",
+   "displayName": "ピスケ"
+  },
+  {
+   "id": "crest-godan",
+   "file": "svg/crest-godan.svg",
+   "viewBox": [
+    0,
+    0,
+    160,
+    160
+   ],
+   "use": "ゴダン の識別紋: 八角の岩枠・割れ目の入った岩塊（重量・装甲）",
+   "group": "crest",
+   "character": "godan",
+   "accent": "#C8763F",
+   "displayName": "ゴダン"
+  },
+  {
+   "id": "crest-hakuma",
+   "file": "svg/crest-hakuma.svg",
+   "viewBox": [
+    0,
+    0,
+    160,
+    160
+   ],
+   "use": "ハクマ の識別紋: 雪の結晶枠・開いた掌（守勢・押し返し）",
+   "group": "crest",
+   "character": "hakuma",
+   "accent": "#CFE9F2",
+   "displayName": "ハクマ"
+  },
+  {
+   "id": "crest-chirka",
+   "file": "svg/crest-chirka.svg",
+   "viewBox": [
+    0,
+    0,
+    160,
+    160
+   ],
+   "use": "チルカ の識別紋: 瞳の形の枠・3 本の爪あと（幻惑・フェイント）",
+   "group": "crest",
+   "character": "chirka",
+   "accent": "#B98BE8",
+   "displayName": "チルカ"
+  },
+  {
+   "id": "crest-takimaru",
+   "file": "svg/crest-takimaru.svg",
+   "viewBox": [
+    0,
+    0,
+    160,
+    160
+   ],
+   "use": "タキマル の識別紋: 二重の輪枠・抱え込む両腕（掴み・圧）",
+   "group": "crest",
+   "character": "takimaru",
+   "accent": "#E0B25A",
+   "displayName": "タキマル"
+  },
+  {
+   "id": "crest-yomikage",
+   "file": "svg/crest-yomikage.svg",
+   "viewBox": [
+    0,
+    0,
+    160,
+    160
+   ],
+   "use": "ヨミカゲ の識別紋: 三日月枠・一筋の手刀（見切り・反撃）",
+   "group": "crest",
+   "character": "yomikage",
+   "accent": "#7FC6E8",
+   "displayName": "ヨミカゲ"
+  },
+  {
+   "id": "crest-bullet",
+   "file": "svg/crest-bullet.svg",
+   "viewBox": [
+    0,
+    0,
+    160,
+    160
+   ],
+   "use": "バレット の識別紋: 長円枠・長い尾と木の実（長尾・射程）",
+   "group": "crest",
+   "character": "bullet",
+   "accent": "#F0963C",
+   "displayName": "バレット"
+  },
+  {
+   "id": "crest-dark_moguzo",
+   "file": "svg/crest-dark_moguzo.svg",
+   "viewBox": [
+    0,
+    0,
+    160,
+    160
+   ],
+   "use": "ダークモグゾー の識別紋: 逆三角枠・下へ突く拳と破片（高速連係・モグゾーとは逆向き）",
+   "group": "crest",
+   "character": "dark_moguzo",
+   "accent": "#9B6BE0",
+   "displayName": "ダークモグゾー"
+  },
+  {
+   "id": "hud-hp-frame",
+   "file": "svg/hud-hp-frame.svg",
+   "viewBox": [
+    0,
+    0,
+    480,
+    56
+   ],
+   "use": "体力ゲージの枠（1P 用。2P は左右反転。内側 12,12〜458,44 に中身を描く）",
+   "group": "hud",
+   "inner": [
+    40,
+    12,
+    438,
+    44
+   ],
+   "mirror": "scaleX(-1) で 2P"
+  },
+  {
+   "id": "hud-sub-frame",
+   "file": "svg/hud-sub-frame.svg",
+   "viewBox": [
+    0,
+    0,
+    360,
+    28
+   ],
+   "use": "ドライブ／奥義ゲージの枠（体力の下。細い平行四辺形）",
+   "group": "hud",
+   "inner": [
+    26,
+    7,
+    332,
+    21
+   ]
+  },
+  {
+   "id": "hud-timer",
+   "file": "svg/hud-timer.svg",
+   "viewBox": [
+    0,
+    0,
+    120,
+    96
+   ],
+   "use": "タイマーの木札（中央上。数字は DOM で重ねる）",
+   "group": "hud",
+   "inner": [
+    18,
+    14,
+    102,
+    62
+   ]
+  },
+  {
+   "id": "button-plate",
+   "file": "svg/button-plate.svg",
+   "viewBox": [
+    0,
+    0,
+    120,
+    120
+   ],
+   "use": "攻撃ボタンの台（丸。--mk-button で縁の色。文字は DOM。下に小さな稜線）",
+   "group": "control",
+   "minTap": "44pt 以上で使う"
+  }
+ ]
+}

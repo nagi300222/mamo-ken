@@ -37,6 +37,8 @@ try{
  for(const viewport of [{width:720,height:320},{width:852,height:393},{width:393,height:852}]){
   await page.setViewportSize(viewport);await page.goto(root,{waitUntil:'domcontentloaded'});
   assert.equal(await page.locator('.modes a[data-mode]').count(),5);
+  await page.waitForFunction(()=>document.documentElement.dataset.uiArt==='v17-p4-ui-art-1');
+  assert.match(await page.locator('.mode-versus .mode-kicker').evaluate(n=>getComputedStyle(n,'::before').backgroundImage),/mode-versus\.svg/);
   const targets=await tapTargets('.modes a');assert.equal(targets.length,5);
   const overflow=await page.evaluate(()=>{const r=document.querySelector('.mode-hall').getBoundingClientRect();return {x:r.x,y:r.y,width:r.width,height:r.height,screen:[innerWidth,innerHeight]};});
   await page.screenshot({path:dir+`/lobby-${viewport.width}x${viewport.height}.png`});report.push({screen:'lobby',viewport,targets,overflow});
@@ -47,12 +49,16 @@ try{
   await page.waitForFunction(()=>window.mamoken3d,undefined,{timeout:60000});
   assert.equal(await page.locator('#match-mode').inputValue(),mode);
   await tapTargets('.fighter-card');await tapTargets('#start,.selection-footer select:not([hidden])');
+  await page.waitForFunction(()=>document.querySelectorAll('.fighter-card .p4-crest').length===9&&[...document.querySelectorAll('.p4-crest')].every(image=>image.complete&&image.naturalWidth>0));
   await page.locator('.fighter-card').nth(2).tap();assert.equal(await page.locator('#chosen-name').textContent(),'ゴダン');
   assert.match(await page.locator('.p4-profile').textContent(),/得意.*苦手/);
   await page.screenshot({path:dir+`/select-${mode}.png`});
   if(mode==='practice'){
    await page.locator('#start').tap();await page.waitForFunction(()=>mamoken3d.practice.enabled&&!mamoken3d.diagnostics.loading&&mamoken3d.presentation.loaded&&mamoken3d.battle?.frame>2,undefined,{timeout:60000});
-   assert.equal(await page.locator('#timer').textContent(),'∞');await tapTargets('#buttons-rail button,#stick-rail button,#practice-panel select,#practice-panel button');
+   assert.equal(await page.locator('#timer').textContent(),'∞');
+   const controls=await page.locator('#buttons-rail .attack').evaluateAll(nodes=>nodes.map(n=>({key:n.dataset.control,art:getComputedStyle(n).backgroundImage})));assert.ok(controls.every(n=>/button-(weak|heavy|throw|gyuiin|special|ultimate)\.svg/.test(n.art)),JSON.stringify(controls));
+   assert.match(await page.locator('.hud .health .track').first().evaluate(n=>getComputedStyle(n).backgroundImage),/hud-hp-frame\.svg/);assert.match(await page.locator('.round-center').evaluate(n=>getComputedStyle(n).backgroundImage),/hud-timer-dark\.svg/);
+   await tapTargets('#buttons-rail button,#stick-rail button,#practice-panel select,#practice-panel button');
    await page.screenshot({path:dir+'/practice-common-hud.png'});
   }
  }
@@ -64,6 +70,7 @@ try{
  await page.locator('#avatar-pattern').selectOption('spots');
  await page.locator('#p4-editor-tab-2').click();await page.locator('#avatar-style').selectOption('pisuke');await page.locator('#move-0').selectOption('yomikage.s1');
  await page.locator('#p4-editor-tab-3').click();assert.equal(await page.locator('[data-save-name]').textContent(),'山の旅人');assert.match(await page.locator('[data-save-style]').textContent(),/ピスケ/);
+ assert.match(await page.locator('.p4-save-summary').evaluate(n=>getComputedStyle(n).backgroundImage),/paper-strip\.svg/);
  await page.screenshot({path:dir+'/editor-save-tab.png'});
  await page.locator('#p4-editor-tab-3').focus();await page.keyboard.press('ArrowLeft');assert.equal(await page.locator('#p4-editor-tab-2').getAttribute('aria-selected'),'true');
  await page.locator('#enter').click();await page.waitForFunction(()=>mamokenStory.mode==='explore',undefined,{timeout:90000});

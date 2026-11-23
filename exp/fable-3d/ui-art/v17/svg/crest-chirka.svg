@@ -1,0 +1,4 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" width="160" height="160" role="img" aria-label="チルカ の識別紋: 瞳の形の枠・3 本の爪あと（幻惑・フェイント）">
+<g><path d="M8,80 C40,24 120,24 152,80 C120,136 40,136 8,80 Z" fill="var(--mk-panel,#1C332C)" stroke="var(--mk-char,#B98BE8)" stroke-width="8"/></g>
+<g fill="none" stroke="var(--mk-text,#F5EFDB)" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"><path d="M52,54 C60,74 60,90 50,108" stroke="var(--mk-char,#B98BE8)"/><path d="M76,48 C84,72 84,92 74,114" stroke="var(--mk-char,#B98BE8)"/><path d="M100,54 C108,74 108,90 98,108" stroke="var(--mk-char,#B98BE8)"/><path d="M110,60 L128,52 M112,80 H132"/></g>
+</svg>

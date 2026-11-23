@@ -4,6 +4,7 @@ import { fileURLToPath } from 'node:url';
 import { validateShowtimeBuild } from './validate-showtime-build.mjs';
 await import('./pack-showtime.mjs');
 await import('./pack-normals-v15.mjs');
+await import('../shared-ui/build-p4-art.mjs');
 const ROOT = path.resolve(fileURLToPath(new URL('..',import.meta.url)));
 const PROJECT = path.resolve(ROOT,'../..'); // repo root: exp/fable-3d -> ../.. 
 const OUTPUT = path.join(ROOT,'_pages');
@@ -15,6 +16,7 @@ for(const name of ['index.html','style.css','models.js','balance.js','battle.js'
   await copyOne(path.join(dojo,name),path.join(OUTPUT,'dojo',name));
 await cp(path.join(ROOT,'preview','vendor'),path.join(OUTPUT,'preview','vendor'),{recursive:true});
 await cp(path.join(ROOT,'shared-ui'),path.join(OUTPUT,'shared-ui'),{recursive:true,filter:file=>!file.endsWith('.test.mjs')});
+await cp(path.join(ROOT,'ui-art','v17'),path.join(OUTPUT,'ui-art','v17'),{recursive:true,filter:file=>!file.includes('/tools')&&!file.endsWith('.md')});
 // v16 is a separate lazy entry point; normal matches do not download custom rigs.
 await cp(path.join(ROOT,'story'),path.join(OUTPUT,'story'),{recursive:true,
   filter:file=>!file.endsWith('.mjs')});

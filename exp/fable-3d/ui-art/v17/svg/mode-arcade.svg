@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96" width="96" height="96" role="img" aria-label="勝ち進む（ARCADE 8 戦）: 山頂の旗へ登る稜線">
+<g fill="none" stroke="var(--mk-text,#F5EFDB)" stroke-width="5" stroke-linecap="round" stroke-linejoin="round">
+<path d="M8,84 L26,52 L36,66 L52,30 L64,50 L74,36 L90,84 Z" fill="var(--mk-panel,#1C332C)"/><path d="M52,30 V12 M52,12 L68,18 L52,24" stroke="var(--mk-action,#F1C66C)" fill="var(--mk-action,#F1C66C)"/><path d="M20,84 L30,70 M40,84 L48,70 M60,84 L66,72" stroke="var(--mk-line,#69877C)"/>
+</g>
+</svg>

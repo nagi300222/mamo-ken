@@ -1,3 +1,5 @@
+import {UI_ART,uiArtUrl,markUIArt} from '../shared-ui/p4-art-map.js';
+markUIArt();
 // P4 profile copy is a qualitative navigation aid, not measured win-rate data.
 const PROFILES={
  'モグゾー':['基本の連係と安定した踏み込み','遠くからの差し合い'],
@@ -16,6 +18,6 @@ if(chosen&&roster){
  const strength=document.createElement('span'),weakness=document.createElement('span');strength.dataset.strength='';weakness.dataset.weakness='';
  const sLabel=document.createElement('b'),wLabel=document.createElement('b');sLabel.textContent='得意';wLabel.textContent='苦手';
  const sText=document.createTextNode(''),wText=document.createTextNode('');strength.append(sLabel,sText);weakness.append(wLabel,wText);panel.append(strength,weakness);roster.after(panel);
- const update=()=>{for(const button of roster.querySelectorAll('button'))button.setAttribute('aria-pressed',String(button.classList.contains('chosen')));const [s,w]=PROFILES[chosen.textContent]??['自分の間合いを知る','相手の得意な間合い'];sText.textContent=s;wText.textContent=w;};
+ const update=()=>{for(const button of roster.querySelectorAll('button')){button.setAttribute('aria-pressed',String(button.classList.contains('chosen')));const character=Object.values(UI_ART).find(asset=>asset.character&&asset.displayName===button.querySelector('span')?.textContent);if(character&&!button.querySelector('.p4-crest')){const image=document.createElement('img');image.className='p4-crest';image.alt='';image.setAttribute('aria-hidden','true');image.src=uiArtUrl('crest-'+character.character);image.dataset.uiArt='crest-'+character.character;button.appendChild(image);}}const [s,w]=PROFILES[chosen.textContent]??['自分の間合いを知る','相手の得意な間合い'];sText.textContent=s;wText.textContent=w;};
  new MutationObserver(update).observe(chosen,{childList:true,subtree:true,characterData:true});new MutationObserver(update).observe(roster,{childList:true,subtree:true,attributes:true,attributeFilter:['class']});update();
 }

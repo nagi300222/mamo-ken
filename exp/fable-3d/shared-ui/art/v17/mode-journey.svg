@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96" width="96" height="96" role="img" aria-label="自分を作って旅する（キャラクリ＋探索）: 足あとの道と旗">
+<g fill="none" stroke="#F5EFDB" stroke-width="5" stroke-linecap="round" stroke-linejoin="round">
+<path d="M12,80 C28,62 20,48 40,42 C60,36 54,22 76,16" stroke-dasharray="1 11" stroke="#F1C66C"/><circle cx="76" cy="16" r="6" fill="#F1C66C" stroke="none"/><ellipse cx="22" cy="72" rx="7" ry="9" fill="#1C332C"/><ellipse cx="42" cy="54" rx="6" ry="8" fill="#1C332C"/><path d="M62,84 V58 M62,58 C70,54 76,62 84,58 V72 C76,76 70,68 62,72" fill="#1C332C"/>
+</g>
+</svg>

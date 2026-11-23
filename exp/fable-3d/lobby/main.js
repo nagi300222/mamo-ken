@@ -1,3 +1,5 @@
+import {markUIArt} from '../shared-ui/p4-art-map.js';
+markUIArt();
 // Read-only presentation: never modifies the saved avatar or journey progress.
 function rotate(){const native=globalThis.mamokenNative?.isNative===true||globalThis.Capacitor?.isNativePlatform?.()===true;document.documentElement.classList.toggle('portrait',!native&&innerHeight>innerWidth);}
 addEventListener('resize',rotate);rotate();
