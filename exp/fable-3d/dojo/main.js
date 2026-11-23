@@ -19,6 +19,10 @@ import { createPracticeController } from './practice-mode.js';
 import { normalClipTime } from './normal-timing-v151.js';
 import { createPresentationFlow } from './presentation-flow.js';
 import { VICTORY, VICTORY_CLIP, VICTORY_PACK, VICTORY_CAMERA_DISTANCE, VS_TEXT, cameraSegment, victoryPlan, faceCamera } from './presentation-data.js';
+import { RunController } from './run-controller.js';
+import { runCpuInput } from './run-cpu.js';
+import { createRunStage } from './run-stages.js';
+import { createRunUI } from './run-ui.js';
 
 const $=id=>document.getElementById(id), canvas=$('stage');
 let gameRotated=false;
@@ -47,6 +51,12 @@ const sun=new THREE.DirectionalLight(0xffecd0,2.45);sun.position.set(-1.2,2.8,2.
 const ambient=new THREE.DirectionalLight(0x9cb2cf,.6);ambient.position.set(2,1,-3);scene.add(ambient);
 
 const environment=new THREE.Group();scene.add(environment);
+let activeRun=null,runStage=null,runBusy=false;
+function setRunStage(id){
+  runStage?.dispose();runStage=id?createRunStage(id):null;
+  if(runStage)scene.add(runStage.group);
+  environment.visible=!runStage;scene.background.setHex(runStage?.background??0x758993);
+}
 const floor=new THREE.Mesh(new THREE.PlaneGeometry(7,4),new THREE.MeshStandardMaterial({color:0x6e776a,roughness:.98}));
 floor.rotation.x=-Math.PI/2;floor.position.y=-.018;environment.add(floor);
 const pattern=new THREE.GridHelper(4.2,28,0xaeb2a2,0x5c655d);pattern.position.y=-.013;environment.add(pattern);
@@ -154,7 +164,7 @@ function finishUltimateMovie(){
   authoredMovie=null;
   clearMovieEffects();
   movieLayer.hidden=true;
-  environment.visible=true;scene.background.setHex(0x758993);
+  environment.visible=!runStage;scene.background.setHex(runStage?.background??0x758993);
   movieLayer.dataset.phase='';
   movieLastPhase='';
   if(canvasHome){
@@ -757,6 +767,7 @@ function hud(){
   $('timer').textContent=String(Math.ceil(battle.time/FPS));
   $('round-message').textContent=practiceEnabled?'PRACTICE':battle.phase==='fight'?flow.roundCall:'FINISH';
   if(practiceEnabled){$('timer').textContent='∞';syncPracticeUI();}
+  runUI.hud(activeRun);
   if(battle.phase==='ko'&&!finishShown&&!movie.active&&!practiceEnabled) {
     // 決着は Presentation へ 1 回だけ渡す。奥義 KO は 10 秒ムービーが終わってからここへ来る。
     if(reportRoundEnd())finishShown=true;
@@ -985,7 +996,7 @@ function skipPresentation(){
 function nextRound({round=(flow.context?.round??1)+1,roundLabel=null,carryHp=null,level=null,face=false}={}){
   if(!battle||loading||flow.state!=='await_round'&&flow.state!=='result')return false;
   const ids=battle.fighters.map(fighter=>fighter.id);
-  battle=new Battle(...ids,level??battle.level??+$('difficulty').value);
+  battle=presentState.match?.createBattle?.()??new Battle(...ids,level??battle.level??+$('difficulty').value);
   if(carryHp)carryHp.forEach((hp,i)=>{if(Number.isFinite(hp))battle.fighters[i].hp=Math.max(1,Math.min(ROSTER[ids[i]].hp,hp));});
   const bulletActor=actors.find(actor=>actor?.id==='bullet');
   if(bulletActor)battle.setTailTipPath(bulletActor.meta.clips.sp_tail_whip.tail_tip_path);
@@ -1000,6 +1011,8 @@ function setLoading(s){$('loading-status').textContent=s;}
 async function startMatch(options={}){
   if(loading)return;
   if(options instanceof Event)options={};
+  if(!options.ids&&['arcade','survival'].includes($('match-mode').value))return startRun($('match-mode').value);
+  if(!options.createBattle){activeRun=null;runUI.reset();setRunStage(null);}
   if(movie.active)finishUltimateMovie();
   audioFX.unlock(); // Only during explicit user-initiated start/click.
   const loadStarted=performance.now();
@@ -1024,7 +1037,7 @@ async function startMatch(options={}){
     for(const [i,result] of loaded.entries())if(result.status==='fulfilled')actors[i]=result.value;
     const failed=loaded.find(result=>result.status==='rejected');
     if(failed)throw failed.reason;
-    battle=new Battle(...ids,level);
+    battle=options.createBattle?.()??new Battle(...ids,level);
     if(options.carryHp)options.carryHp.forEach((hp,i)=>{if(Number.isFinite(hp))battle.fighters[i].hp=Math.max(1,Math.min(ROSTER[ids[i]].hp,hp));});
     if(practiceEnabled)practice.prepare(battle);
     readyForCheck();
@@ -1047,7 +1060,7 @@ async function startMatch(options={}){
       $('vs-status').textContent=VS_TEXT.ready;$('vs-screen').dataset.ready='true';
       flow.assetsLoaded();
     }
-  }catch(e){clearActors();battle=null;flow.loadFailed();console.error(e);note('起動エラー: '+e.message);setLoading('モデルの読込に失敗: '+e.message);$('selection').classList.remove('hidden');}
+  }catch(e){clearActors();battle=null;flow.loadFailed();options.onError?.(e);console.error(e);note('起動エラー: '+e.message);setLoading('モデルの読込に失敗: '+e.message);$('selection').classList.remove('hidden');}
   finally{loading=false;$('start').disabled=false;}
 }
 function showSelection(){
@@ -1055,8 +1068,41 @@ function showSelection(){
   if(movie.active)finishUltimateMovie();
   practiceEnabled=false;syncPracticeUI();
   flow.reset();presentState.roundHook=null;presentState.match=null;
+  activeRun=null;runUI.reset();setRunStage(null);
   playing=false;paused=false;$('selection').classList.remove('hidden');$('game-over').classList.add('hidden');
   note('キャラクターを選んで対戦開始');setLoading('キャラ選択中');clearInput();
+}
+async function startRun(mode){
+  if(runBusy||loading)return;
+  let storage;try{storage=window.localStorage;}catch{}
+  activeRun=new RunController({mode,player:selected,level:runUI.level,storage});
+  await startRunEncounter();
+}
+async function startRunEncounter(){
+  if(!activeRun||runBusy)return;
+  const owner=activeRun;runBusy=true;
+  try{
+    playing=false;clearInput();flow.reset();$('game-over').classList.add('hidden');$('selection').classList.add('hidden');
+    const e=owner.encounter;setRunStage(e.stage);runUI.hud(owner);
+    // Original two-line dialogue comes before the #201 VS and tracked face intro.
+    if(!await runUI.dialogue(owner)||owner!==activeRun)return;
+    await startMatch({ids:[owner.player,e.opponent],practice:false,instant:false,
+      round:e.round,roundLabel:owner.mode==='survival'?'SURVIVAL '+e.fight:e.final?'FINAL · ROUND '+e.round:'STAGE '+e.fight+' · ROUND '+e.round,
+      vsVariant:e.short?'short':'full',victoryVariant:e.short?'short':'full',
+      createBattle:()=>owner.createBattle(),cpuInput:g=>runCpuInput(g,owner.encounter.level),
+      onRoundEnd:()=>{const out=owner.finish(battle);runUI.hud(owner);return out.kind==='round'?'nextRound':out.victory?{next:'victory',victoryVariant:e.short?'short':'full'}:'result';},
+      onNextRound:()=>{if(owner!==activeRun)return;owner.advance();nextRound({round:owner.round,roundLabel:'ROUND '+owner.round});},
+      onResult:()=>{if(owner===activeRun)runUI.result(owner,owner.outcome);},
+      onError:()=>{if(owner===activeRun){activeRun=null;runUI.reset();setRunStage(null);}}
+    });
+  }finally{runBusy=false;}
+}
+async function continueRun(){
+  if(runBusy||loading||!activeRun)return;
+  if(activeRun.status==='continue')activeRun.continue();
+  else if(activeRun.status==='between')activeRun.advance();
+  else return;
+  await startRunEncounter();
 }
 // アナログスティックは単独のポインターで制御。右側のボタンは別PointerIdで同時押し。
 const pressedKeys=new Set(),pressedTouch=new Map();
@@ -1267,7 +1313,9 @@ function render(now){
         const other=practice.dummyInput(battle);
         if(other===null)battle.tick(input());else battle.tick(input(),other);
         practice.after(battle);
-      }else if(checking)battle.tick(input(),{});else battle.tick(input());
+      }else if(checking)battle.tick(input(),{});
+      else if(presentState.match?.cpuInput)battle.tick(input(),presentState.match.cpuInput(battle));
+      else battle.tick(input());
       for(let i=0;i<2;i++)syncActor(actors[i],battle.fighters[i]);
       syncProjectiles();vfx();animateFX();acc-=FIXED;steps++;
       if(battle.phase!=='fight'){
@@ -1294,6 +1342,7 @@ function render(now){
   renderer.render(scene,camera);
 }
 makeChooser();
+const runUI=createRunUI({onNext:continueRun});
 $('drive-costs').textContent=`咆哮：ドライブ${DRIVE.roarCost}消費　ギュイーン：${DRIVE.gyuiinCost}消費`;
 window.addEventListener('resize',updateLandscapeLock);
 window.addEventListener('orientationchange',updateLandscapeLock);
@@ -1303,6 +1352,7 @@ updateLandscapeLock();resize();requestAnimationFrame(render);
 window.mamoken3d={get battle(){return battle;},get actors(){return actors;},
   get cinematic(){return {active:movie.active,data:movie.data,elapsed:authoredMovie?.elapsed??movie.elapsed};},
   startMatch,showSelection,nextRound,ROSTER,MODEL_ASSETS,
+  get run(){return activeRun;},
   // Presentation の状態と操作（テスト・連戦コントローラ用）。roundHook は ({winner,reason,round,viaUltimate}) → 'nextRound'|'victory'|'result'
   get presentation(){return {state:flow.state,time:flow.time,context:flow.context,log:flow.log,loaded:flow.loaded,
     inputEnabled:flow.inputEnabled,koSlow:flow.koSlow,camera:flow.state==='victory'||flow.introPhase?.phase==='face'?'presentation':'match',

@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 // 9体の「K.O. スロー → 勝利ムービー → 結果」を実ゲームで撮る。時計を 1/60 秒ずつ進めて毎フレーム撮り、60fps で連結する
 // ＝ 実機と同じ再生速度の映像（コマ送りの比較動画とは別物）。ゲームのソースは変更しない（相手 CPU を無入力にする差し替えのみ）。
+// 仮想時計で決定的に書き出す制作映像。60fpsで符号化するが、実機の描画FPSを測定した録画ではない。
 //   node capture_victory.mjs --out DIR [--ids moguzo,godan] [--foe pisuke] [--every 1] [--from ko|victory] [--variant full|short] [--winner 0|1] [--mp4]
 import fs from 'node:fs'; import path from 'node:path'; import { execFileSync } from 'node:child_process';
 import { serve, launch, openGame, ALL, arg } from './lib.mjs';
@@ -20,6 +21,7 @@ for (const id of ids) {
   if (from === 'ko') await g.until('victory', 400, shot); else await g.until('victory', 400);
   await g.until('result', 700, shot); for (let i = 0; i < 40; i++) { await shot(); await g.step(1); }
   const s = await g.state(); console.log(id, 'frames', n, 'state', s.state, 'clip', s.victoryClip, 'errors', g.errors.length, g.errors[0] || '');
+  if(g.errors.length)throw Error('Movie render errors: '+g.errors.join(' | '));
   if (arg('mp4', false)) execFileSync('ffmpeg', ['-y', '-loglevel', 'error', '-framerate', String(60 / every), '-i', path.join(dir, '%04d.png'), '-c:v', 'libx264', '-pix_fmt', 'yuv420p', '-crf', '23', path.join(out, path.basename(dir) + '_victory.mp4')]);
   await g.ctx.close();
 }
