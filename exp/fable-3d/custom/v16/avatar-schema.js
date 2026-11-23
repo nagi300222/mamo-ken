@@ -1,4 +1,5 @@
 import { IDS, ROSTER } from '../../dojo/balance.js';
+import {MESH_PART_SLOTS,MESH_PART_DONORS} from '../p2/part-contract.js';
 
 export const AVATAR_SCHEMA_VERSION = 1;
 export const AVATAR_PARTS = Object.freeze(['head','ears','tail','hands','feet','accessory']);
@@ -127,6 +128,17 @@ export function validateAvatar(raw) {
     if(typeof value!=='string'||!(value==='base'||key==='accessory'&&value==='none'||key!=='accessory'&&IDS.includes(value)))fail('appearance.parts.'+key,'未対応のパーツです');
     else parts[key]=value;
   }
+  const inputMeshParts=raw.appearance?.meshParts,meshParts={};
+  if(inputMeshParts!==undefined){
+    if(!inputMeshParts||typeof inputMeshParts!=='object'||Array.isArray(inputMeshParts))fail('appearance.meshParts','実パーツの保存指定が不正です');
+    else for(const [slot,donorId] of Object.entries(inputMeshParts)){
+      if(!MESH_PART_SLOTS.includes(slot)||!MESH_PART_DONORS.includes(donorId))fail('appearance.meshParts.'+slot,'未対応の保存部品です: '+slot+'/'+donorId);
+      else{
+        meshParts[slot]=donorId;
+        if(parts[slot]&&!['base',baseId].includes(parts[slot]))fail('appearance.meshParts.'+slot,'同じ部位の形の調整と実パーツ交換は同時に指定できません: '+slot);
+      }
+    }
+  }
   const pattern=raw.appearance?.pattern??'solid';
   if(!AVATAR_PATTERNS.includes(pattern))fail('appearance.pattern','未対応の毛模様です');
   const palette={...COLORS,...DEFAULT_AVATAR_PALETTES[baseId]};
@@ -139,7 +151,7 @@ export function validateAvatar(raw) {
   const specials=raw.combat?.specials;
   if(!Array.isArray(specials)||specials.length!==3||specials.some(ref=>!parseMoveRef(ref)))fail('combat.specials','必殺技を3つ選んでください');
   const definition=errors.length?null:{schemaVersion:AVATAR_SCHEMA_VERSION,name,
-    appearance:{baseId,parts,palette,pattern},combat:{styleId,specials:[...specials]}};
+    appearance:{baseId,parts,palette,pattern,...(inputMeshParts!==undefined?{meshParts}:{})},combat:{styleId,specials:[...specials]}};
   return {ok:!errors.length,errors,definition};
 }
 export function normalizeAvatar(raw) {
@@ -148,7 +160,7 @@ export function normalizeAvatar(raw) {
   return result.definition;
 }
 export function isUnmodifiedCombatShape(definition) {
-  return AVATAR_PARTS.every(key=>definition.appearance.parts[key]==='base');
+  return AVATAR_PARTS.every(key=>definition.appearance.parts[key]==='base')&&Object.values(definition.appearance.meshParts??{}).every(donor=>donor===definition.appearance.baseId);
 }
 export function seededRandom(seed) {
   let state=Number(seed)>>>0;

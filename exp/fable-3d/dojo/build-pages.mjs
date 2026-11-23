@@ -86,6 +86,9 @@ if(await access(path.join(r2Directory,'normal_contacts_v17r2.json')).then(()=>tr
   await copyOne(source,path.join(OUTPUT,'motion','v17r2',name));
  }
 }
+const p2Directory=path.join(ROOT,'custom','p2');
+if(await access(p2Directory).then(()=>true).catch(error=>{if(error.code==='ENOENT')return false;throw error;}))
+ await cp(p2Directory,path.join(OUTPUT,'custom','p2'),{recursive:true,filter:file=>!file.includes('/tools')&&!file.includes('/evidence')&&!file.endsWith('.mjs')&&!file.endsWith('.md')});
 await copyOne(path.join(ROOT,'lobby','index.html'),path.join(OUTPUT,'index.html'));
 await copyOne(path.join(ROOT,'lobby','style.css'),path.join(OUTPUT,'lobby','style.css'));
 await writeFile(path.join(OUTPUT,'_headers'),'/chars/*\n  Cache-Control: public, max-age=120\n/normal/*\n  Cache-Control: public, max-age=120\n/motion/*\n  Cache-Control: no-cache\n/presentation/*\n  Cache-Control: public, max-age=120\n/dojo/*\n  Cache-Control: no-cache\n/cinematic/*\n  Cache-Control: no-cache\n');
