@@ -3,6 +3,9 @@
 body[data-ui=mountain] #app .footnote .note{position:static;transform:none;inset:auto;flex:1;min-width:0;max-width:none;margin:0;padding:0;border:0;background:none;color:#fff1bc;font-size:11px;line-height:1.25;text-align:left;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;visibility:visible}
 body[data-ui=mountain] #app .footnote .note:empty{display:none}
 body[data-ui=mountain] #app .footnote:has(.note:not(:empty)) .keyboard-help{display:none}
+body[data-ui=mountain] #app .footnote #run-status{position:static;inset:auto;order:-1;flex:1;min-width:0;padding:0;margin:0;border:0;border-radius:0;background:none;text-align:left;font-size:10px;line-height:1.25;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+body[data-ui=mountain] #app .footnote:has(#run-status:not([hidden]))>span{display:none}
+body[data-ui=mountain] #app .footnote:has(#run-status:not([hidden])) .note{flex:0 1 auto;max-width:40%}
 body[data-ui=mountain] #arena:has(#selection:not(.hidden))>.hud{visibility:hidden}
 body[data-ui=mountain] #arena:has(#selection:not(.hidden))>.showtime-banner{visibility:hidden}
 html[data-ui-polish] body[data-ui=mountain] .mode-hall .mode{background-image:none;background-color:#19382d;border-radius:8px;border-top-width:2px;border-color:#8ba08080;box-shadow:0 3px 0 #07180eb3}

@@ -165,6 +165,16 @@ async function editor(){
  await page.locator('#p4-editor-tab-3').click();await page.locator('#enter').click();
  await page.waitForFunction(()=>mamokenStory.mode==='explore',undefined,{timeout:120000});
  check(await page.evaluate(()=>mamokenStory.avatar.name)===name,'long custom name survives save');
+ for(const item of cases){const c=await configure(item);
+  await targets('#help',c,'exploration instructions',{text:true});
+  const style=await page.locator('#help').evaluate(node=>{const s=getComputedStyle(node);return {font:parseFloat(s.fontSize),color:s.color,background:s.backgroundColor};});
+  const bg=style.background.match(/[\d.]+/g)?.map(Number)??[];
+  check(style.font>=12&&bg[0]===16&&bg[1]===39&&bg[2]===31&&(bg[3]??1)>=.9,'exploration guide has a readable independent surface',{case:c.id,style});
+  const help=await page.locator('#help').boundingBox(),stick=await page.locator('#stick-rail').boundingBox();
+  check(help&&stick&&!overlaps({...help,right:help.x+help.width,bottom:help.y+help.height},{...stick,right:stick.x+stick.width,bottom:stick.y+stick.height}),'exploration instructions do not cover movement controls',{case:c.id,help,stick});
+  await capture('exploration-'+c.id);
+ }
+ await configure(cases[1]);
  await page.keyboard.down('w');try{await page.waitForFunction(()=>mamokenStory.nearby?.id==='moguzo',undefined,{timeout:30000});}finally{await page.keyboard.up('w');}
  await page.locator('#talk').tap();await page.locator('#challenge').click();
  await page.waitForFunction(()=>mamokenStory.mode==='battle'&&mamokenStory.battle.frame>5,undefined,{timeout:120000});

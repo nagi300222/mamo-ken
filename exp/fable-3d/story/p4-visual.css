@@ -60,6 +60,11 @@ html.native-runtime #story-app{--ui-safe-top:0px;--ui-safe-right:0px;--ui-safe-b
 #story-app .movie-ui p{font-size:clamp(16px,2vw,23px);color:var(--ui-paper);text-shadow:0 2px 4px #000}
 #story-app #movie-skip{right:max(20px,var(--ui-safe-right));top:max(20px,var(--ui-safe-top));min-height:44px;background:#0c281ee8;color:var(--ui-paper);font-size:12px;border-color:var(--ui-line)}
 #story-app footer{left:max(15px,var(--ui-safe-left));right:max(15px,var(--ui-safe-right));bottom:max(5px,var(--ui-safe-bottom));color:#dfebd7;font-size:10px;text-shadow:0 1px 3px #061e15}
+#story-app[data-mode=explore] footer #help{min-width:0;margin-inline-start:148px;padding:2px 6px;border-radius:3px;background:#10271ff2;color:#fff4da;font-size:12px;line-height:1.3;overflow-wrap:anywhere}
+#story-app[data-mode=explore] #camera-orbit>span{display:none}
+/* Movement instructions belong to the field; they are misleading while the
+   editor owns input and must not paint over its persistent save footer. */
+#story-app[data-mode=editor] footer #help{visibility:hidden}
 body[data-ui=mountain] .shared-attack-pad .attack{min-width:44px;min-height:44px;border:1px solid #9ba990;color:var(--ui-paper);background:#29483a;box-shadow:0 3px 0 #07180e}
 body[data-ui=mountain] .shared-attack-pad .attack.heavy{background:#744d36;border-color:#d7b18c}
 body[data-ui=mountain] .shared-attack-pad .attack.throw{background:#3c5961;border-color:#9dbdc0}

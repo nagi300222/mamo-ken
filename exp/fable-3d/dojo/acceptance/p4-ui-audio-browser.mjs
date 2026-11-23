@@ -82,17 +82,24 @@ function installAudioCapture(){
    return start.apply(this,args);
   };
  }
+ let finished=false;const observations=[];
+ function sample(){return {performanceMs:performance.now(),game:window.mamoken3d?{frame:mamoken3d.battle?.frame,presentation:mamoken3d.presentation?.state,fighters:mamoken3d.battle?.fighters.map(f=>({id:f.id,action:f.action?.id??null,frame:f.frame,stun:f.stun,stop:f.stop,x:f.x,y:f.y}))}:null,contexts:contexts.map(row=>{
+   let rms=0,peak=0;if(row.analyser&&row.context.state==='running'){
+    const data=new Float32Array(row.analyser.fftSize);row.analyser.getFloatTimeDomainData(data);let sum=0;
+    for(const value of data){sum+=value*value;peak=Math.max(peak,Math.abs(value));}rms=Math.sqrt(sum/data.length);
+   }
+   return {id:row.id,state:row.context.state,rms,peak,recording:row.recorder?.state??null};
+  })};}
+ // Sampling lives in the page before any gesture. A round-trip after tap can
+ // miss a 70ms sample; this records that real signal without extending it.
+ const sampler=setInterval(()=>{if(!finished)observations.push(sample());},16);
  window.__p4AudioCapture={
   captureStartPerformanceMs:captureStart,timeOrigin:performance.timeOrigin,
   mark(name){const row={name,performanceMs:performance.now(),epochMs:performance.timeOrigin+performance.now()};markers.push(row);return row;},
-  sample(){return {performanceMs:performance.now(),contexts:contexts.map(row=>{
-   let rms=0,peak=0;if(row.analyser&&row.context.state==='running'){
-    const data=new Float32Array(row.analyser.fftSize);row.analyser.getFloatTimeDomainData(data);let sum=0;
-    for(const sample of data){sum+=sample*sample;peak=Math.max(peak,Math.abs(sample));}rms=Math.sqrt(sum/data.length);
-   }
-   return {id:row.id,state:row.context.state,rms,peak,recording:row.recorder?.state??null};
-  })};},
+  sample,
+  between(start,end){return {frames:observations.filter(frame=>frame.performanceMs>=start&&frame.performanceMs<=end),sources:contexts.flatMap(row=>row.sources.filter(source=>source.performanceMs>=start&&source.performanceMs<=end).map(source=>({contextId:row.id,...source})))};},
   async finish(){
+   finished=true;clearInterval(sampler);
    await Promise.all(contexts.map(stopRecorder));
    const result=[];
    for(const row of contexts){
@@ -124,39 +131,50 @@ try{
   if(response.status()>=400&&!response.url().endsWith('favicon.ico'))errors.push(`${response.status()} ${response.url()}`);});
  await page.goto(new URL('dojo/?mode=practice',root).href,{waitUntil:'domcontentloaded'});
  await page.waitForFunction(()=>window.mamoken3d&&document.querySelectorAll('.fighter-card').length===9,undefined,{timeout:60000});
- async function observe(name,milliseconds=650){
-  const start=await page.evaluate(name=>__p4AudioCapture.mark(name+':start'),name);const frames=[];
-  for(let elapsed=0;elapsed<milliseconds;elapsed+=50){await page.waitForTimeout(50);frames.push(await page.evaluate(()=>__p4AudioCapture.sample()));}
+ async function observe(name,milliseconds=650,action){
+  const start=await page.evaluate(name=>__p4AudioCapture.mark(name+':start'),name);
+  if(action)await action();await page.waitForTimeout(milliseconds);
   const end=await page.evaluate(name=>__p4AudioCapture.mark(name+':end'),name);
+  const {frames,sources}=await page.evaluate(({start,end})=>__p4AudioCapture.between(start,end),{start:start.performanceMs,end:end.performanceMs});
+  assert.ok(frames.length>0,'no page-side audio observations in '+name);
   const peakRms=Math.max(0,...frames.flatMap(frame=>frame.contexts.map(context=>context.rms)));
   const peak=Math.max(0,...frames.flatMap(frame=>frame.contexts.map(context=>context.peak)));
-  const row={name,start,end,peakRms,peak,frames};segments.push(row);samples.push(...frames);return row;
+  const row={name,start,end,peakRms,peak,sources,frames};segments.push(row);samples.push(...frames);return row;
+ }
+ async function waitNeutral(){
+  await page.waitForFunction(()=>{const game=window.mamoken3d,f=game?.battle?.fighters[0];return game?.presentation.inputEnabled&&f&&!f.action&&!f.stun&&!f.stop&&f.y<.01;},undefined,{timeout:30000});
  }
  const pre=await observe('before-first-gesture',500);
  assert.equal(pre.peakRms,0,'audio was present before user interaction');
  assert.equal(pre.frames.at(-1).contexts.length,0,'an AudioContext was created before the first gesture');
- await page.locator('.fighter-card').nth(1).tap();const select=await observe('roster-selection');
+ const select=await observe('roster-selection',650,()=>page.locator('.fighter-card').nth(1).tap());
  assert.ok(select.peakRms>1e-5,'roster selection produced no actual destination audio');
  await page.locator('.av-settings-toggle').tap();await page.locator('#sound-toggle').tap();
- await page.waitForTimeout(350);await page.locator('.fighter-card').nth(2).tap();const quietMenu=await observe('muted-roster-selection');
+ await page.waitForTimeout(350);const quietMenu=await observe('muted-roster-selection',650,()=>page.locator('.fighter-card').nth(2).tap());
  assert.ok(quietMenu.peakRms<1e-4,'sound OFF leaked audio during roster selection');
- await page.locator('.av-settings-toggle').tap();await page.locator('#sound-toggle').tap();await observe('sound-restored');
+ await page.locator('.av-settings-toggle').tap();await observe('sound-restored',650,()=>page.locator('#sound-toggle').tap());
  // Dismiss the popover through an actual click on the selected roster entry.
  await page.locator('.fighter-card').nth(2).tap();
  assert.equal(await page.locator('#match-mode').inputValue(),'practice');
- await page.locator('#start').tap();await observe('practice-confirmation');
+ const confirmation=await observe('practice-confirmation',650,()=>page.locator('#start').tap());
+ assert.ok(confirmation.peakRms>1e-5,'practice confirmation produced no actual destination audio');
+ assert.ok(confirmation.sources.some(source=>source.kind==='authored-buffer'&&Math.abs(source.duration-.2)<1/22050),'the authored 0.2s confirmation WAV did not actually start');
  await page.waitForFunction(()=>mamoken3d.practice.enabled&&mamoken3d.presentation.state==='fight'&&mamoken3d.presentation.inputEnabled&&mamoken3d.battle?.frame>2,undefined,{timeout:90000});
  await page.keyboard.down('ArrowRight');await page.waitForTimeout(1100);await page.keyboard.up('ArrowRight');
- await page.locator('[data-control="weak"]').tap();await observe('practice-weak');
- await page.locator('[data-control="strong"]').tap();const attack=await observe('practice-strong');
+ await waitNeutral();await observe('practice-weak',650,()=>page.locator('[data-control="weak"]').tap());
+ // Slow software rendering is not a combat clock. Wait for the real prior
+ // action/recovery to end rather than assuming 650ms of wall time is neutral.
+ await waitNeutral();const attack=await observe('practice-strong',900,()=>page.locator('[data-control="strong"]').tap());
+ assert.ok(attack.frames.some(frame=>frame.game?.fighters?.[0]?.action==='stand_heavy'),'the trusted strong input was never accepted by the real Battle');
  assert.ok(attack.peakRms>1e-5,'practice input produced no actual destination audio');
- await page.locator('#pause').tap();assert.equal(await page.locator('#pause').textContent(),'再開');await observe('practice-pause');
+ await observe('practice-pause',650,()=>page.locator('#pause').tap());assert.equal(await page.locator('#pause').textContent(),'再開');
  await page.locator('.av-settings-toggle').tap();await page.locator('#sound-toggle').tap();
  await page.waitForTimeout(350);await page.locator('#pause').tap();assert.equal(await page.locator('#pause').textContent(),'一時停止');
- await page.locator('[data-control="strong"]').tap();const quietBattle=await observe('muted-practice-resume-and-attack');
+ await waitNeutral();const quietBattle=await observe('muted-practice-resume-and-attack',900,()=>page.locator('[data-control="strong"]').tap());
+ assert.ok(quietBattle.frames.some(frame=>frame.game?.fighters?.[0]?.action==='stand_heavy'),'muted strong input was not accepted; silence alone cannot prove the mute');
  assert.ok(quietBattle.peakRms<1e-4,'sound OFF leaked audio after pause/resume');
  await page.locator('.av-settings-toggle').tap();await page.locator('#sound-toggle').tap();
- await page.locator('#select-back').tap();const back=await observe('back-to-roster');
+ const back=await observe('back-to-roster',650,()=>page.locator('#select-back').tap());
  assert.ok(back.peakRms>1e-5,'back action produced no actual destination audio');
  await page.screenshot({path:path.join(output,'end-state.png')});
  assert.ok(wavResponses.some(response=>/\/ui-art\/v18\//.test(response.url)&&response.status===200),'no real authored v18 WAV loaded');

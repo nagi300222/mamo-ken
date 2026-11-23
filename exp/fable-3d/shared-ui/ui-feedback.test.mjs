@@ -58,3 +58,23 @@ test('a combat context first unlocked while muted has zero gain and synchronizes
  try{assert.equal(audio.muted,true);audio.unlock();assert.equal(gain.gain.value,0);setUIAudioMuted(false,store);assert.equal(audio.muted,false);assert.equal(gain.gain.value,.12);audio.setMuted(true);assert.equal(readUIAudioMuted(store),true);assert.equal(gain.gain.value,0);}
  finally{audio.dispose();setUIAudioMuted(false,store);if(original===undefined)delete globalThis.localStorage;else globalThis.localStorage=original;}
 });
+test('enabled confirmation is captured before its target disables itself for loading',async()=>{
+ const handlers=new Map(),doc={hidden:false,addEventListener(type,callback,options){if(!handlers.has(type))handlers.set(type,[]);handlers.get(type).push({callback,capture:options?.capture===true});},removeEventListener(){}};
+ const store=storage();setUIAudioMuted(false,store);let starts=0;
+ class Context{constructor(){this.state='running';this.destination={};}createGain(){return {gain:{value:1},connect(){}};}decodeAudioData(){return Promise.resolve({duration:.2});}createBufferSource(){return {connect(){},disconnect(){},start(){starts++;},stop(){}};}close(){return Promise.resolve();}}
+ const ui=createUIFeedback({sounds:{confirm:'confirm.wav'},storage:store,document:doc,eventTarget:null,contextFactory:()=>Context,fetcher:async()=>({ok:true,arrayBuffer:async()=>new ArrayBuffer(0)})});
+ const button={disabled:false,dataset:{},closest(){return this;},matches(selector){return selector.split(',').includes('#start');}};
+ const click={target:button,isTrusted:true};
+ for(const {callback} of handlers.get('pointerdown'))callback(click);
+ for(const {callback,capture} of handlers.get('click'))if(capture)callback(click);
+ // This is the normal target-handler transition into its loading state.
+ button.disabled=true;
+ for(const {callback,capture} of handlers.get('click'))if(!capture)callback(click);
+ for(let i=0;i<8;i++)await Promise.resolve();assert.equal(starts,1,'target loading state swallowed the valid confirmation');
+ // An already-disabled target and combat action must still be silent.
+ for(const {callback} of handlers.get('click'))callback(click);
+ for(let i=0;i<8;i++)await Promise.resolve();assert.equal(starts,1);
+ button.disabled=false;button.matches=selector=>selector==='[data-control]';
+ for(const {callback} of handlers.get('click'))callback(click);
+ for(let i=0;i<8;i++)await Promise.resolve();assert.equal(starts,1);ui.dispose();
+});

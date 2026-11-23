@@ -134,6 +134,13 @@ try{
   assert.match(await page.locator('.round-center').evaluate(n=>getComputedStyle(n).backgroundImage),/hud-timer-dark\.svg/);
   await tapTargets('#buttons-rail button,#stick-rail button');
   if(mode==='practice')await tapTargets('#practice-panel select,#practice-panel button');
+  if(['arcade','survival'].includes(mode)){
+   assert.equal(await page.locator('#app .footnote #run-status').count(),1,'run progress must occupy the reserved footer');
+   assert.equal(await page.locator('#run-status').isVisible(),true);
+   const separation=await page.evaluate(()=>{const a=document.querySelector('#run-status').getBoundingClientRect(),b=document.querySelector('#arena > .hud').getBoundingClientRect();return {status:{left:a.left,right:a.right,top:a.top,bottom:a.bottom},hud:{left:b.left,right:b.right,top:b.top,bottom:b.bottom},overlap:Math.min(a.right,b.right)>Math.max(a.left,b.left)&&Math.min(a.bottom,b.bottom)>Math.max(a.top,b.top)};});
+   assert.equal(separation.overlap,false,'run progress covers HP/Drive/ultimate meters: '+JSON.stringify(separation));
+   report.push({screen:'run-progress-outside-resource-hud',mode,separation});
+  }
   await page.screenshot({path:dir+'/'+mode+'-common-hud.png'});
   report.push({screen:'actual-battle-hud',mode,controls});
  }

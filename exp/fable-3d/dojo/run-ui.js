@@ -9,7 +9,7 @@ export function createRunUI({onNext}){
  const level=document.createElement('select');level.id='run-difficulty';level.setAttribute('aria-label','アーケードCPU難度');
  for(let i=1;i<=9;i++){const o=document.createElement('option');o.value=String(i);o.textContent=String(i);level.appendChild(o);}levelLabel.appendChild(level);$('difficulty').parentElement.after(levelLabel);
  const note=document.createElement('small');note.id='run-rule-note';note.hidden=true;note.textContent='旧版ルール／3D景観・CPU防御は近似。サバイバル自己ベストはこの端末に保存';$('selection').querySelector('.selection-footer').appendChild(note);
- const status=document.createElement('output');status.id='run-status';status.hidden=true;status.setAttribute('aria-live','off');$('arena').appendChild(status);
+ const status=document.createElement('output');status.id='run-status';status.hidden=true;status.setAttribute('aria-live','off');($('app').querySelector('.footnote')??$('arena')).appendChild(status);
  const next=document.createElement('button');next.id='run-next';next.className='primary';next.hidden=true;next.onclick=onNext;$('rematch').after(next);
  const dialog=document.createElement('div');dialog.className='run-dialogue';dialog.id='run-dialogue';dialog.hidden=true;dialog.setAttribute('role','dialog');dialog.setAttribute('aria-label','対戦前の掛け合い');
  const speaker=document.createElement('strong'),line=document.createElement('p'),advance=document.createElement('button');advance.className='primary';advance.textContent='次へ';dialog.append(speaker,line,advance);$('arena').appendChild(dialog);

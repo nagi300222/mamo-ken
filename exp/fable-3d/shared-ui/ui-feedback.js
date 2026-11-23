@@ -63,7 +63,9 @@ export function createUIFeedback({sounds={},storage=localStore(),document:doc=gl
  listen(eventTarget,'mamoken:native-state',event=>{if(event.detail?.active===false)suspend();});
  listen(eventTarget,'storage',event=>{if(event.key===UI_AUDIO_KEY){muted=readUIAudioMuted(storage);stop();}});
  // Only menu intent produces a UI cue; the six combat buttons keep their actual
- // hit/guard/whiff audio. Save success is explicit, never inferred from a click.
+ // hit/guard/whiff audio. Capture the enabled intent before a target handler
+ // disables its button for loading. Save success is explicit, never inferred
+ // from a click.
  listen(doc,'click',event=>{
   const button=event.target?.closest?.('button,a[href],[role=tab]');if(!button||button.disabled||button.matches('[data-control]'))return;
   let kind=button.dataset.uiFeedback;
@@ -74,7 +76,7 @@ export function createUIFeedback({sounds={},storage=localStore(),document:doc=gl
    else if(button.matches('.mode,#start,#rematch,#talk,#challenge,[data-ui-confirm]'))kind='confirm';
   }
   if(kind)void play(kind);
- });
+ },{capture:true});
  listen(doc,'mamoken:save-complete',()=>void play('save'));
  return {play,gesture,suspend,stop,setSounds(next){stop();sounds={...next};},setMuted(next){return setUIAudioMuted(next,storage);},get muted(){return muted;},get context(){return context;},get activeCount(){return active.size;},dispose(){if(disposed)return;suspend();disposed=true;unsubscribe();for(const remove of removers)remove();context?.close?.()?.catch?.(()=>{});buffers.clear();}};
 }
