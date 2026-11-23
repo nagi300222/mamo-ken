@@ -33,6 +33,16 @@ async function tapTargets(selector){
  for(const row of rows)assert.ok(row.width>=43.9&&row.height>=43.9,'touch target below44: '+JSON.stringify(row));
  return rows;
 }
+async function visibleTargets(selector){
+ const rows=await page.locator(selector).evaluateAll(nodes=>nodes.map(n=>{
+  const r=n.getBoundingClientRect(),hit=document.elementFromPoint(r.x+r.width/2,r.y+r.height/2);
+  return {name:n.textContent.trim().slice(0,40),x:r.x,y:r.y,width:r.width,height:r.height,
+   inside:r.left>=-1&&r.top>=-1&&r.right<=innerWidth+1&&r.bottom<=innerHeight+1,
+   unobscured:hit===n||n.contains(hit)};
+ }));
+ for(const row of rows)assert.ok(row.inside&&row.unobscured,'unreachable or obscured UI: '+JSON.stringify(row));
+ return rows;
+}
 try{
  for(const viewport of [{width:720,height:320},{width:852,height:393},{width:393,height:852}]){
   await page.setViewportSize(viewport);await page.goto(root,{waitUntil:'domcontentloaded'});
@@ -41,7 +51,19 @@ try{
   assert.match(await page.locator('.mode-versus .mode-kicker').evaluate(n=>getComputedStyle(n,'::before').backgroundImage),/mode-versus\.svg/);
   const targets=await tapTargets('.modes a');assert.equal(targets.length,5);
   const overflow=await page.evaluate(()=>{const r=document.querySelector('.mode-hall').getBoundingClientRect();return {x:r.x,y:r.y,width:r.width,height:r.height,screen:[innerWidth,innerHeight]};});
-  await page.screenshot({path:dir+`/lobby-${viewport.width}x${viewport.height}.png`});report.push({screen:'lobby',viewport,targets,overflow});
+  const upper=await visibleTargets('.mode-versus .mode-action,.mode-arcade .mode-rule,.mode-practice .mode-rule');
+  await page.screenshot({path:dir+`/lobby-${viewport.width}x${viewport.height}.png`});
+  const before=await page.locator('.mode-hall').evaluate(n=>({top:n.scrollTop,height:n.scrollHeight,client:n.clientHeight}));
+  // Exercise actual user scrolling, including the portrait-rotated landscape menu.
+  // A large page element or Playwright's automatic click scrolling is not proof
+  // that the lower two mode actions can be reached in the viewport.
+  await page.mouse.move(viewport.width/2,viewport.height/2);await page.mouse.wheel(0,2000);
+  await page.waitForFunction(()=>{const n=document.querySelector('.mode-hall');return n.scrollTop+n.clientHeight>=n.scrollHeight-1;});
+  const lower=await visibleTargets('.mode-story,.mode-survival,.mode-story .mode-rule,.mode-survival .mode-rule');
+  const after=await page.locator('.mode-hall').evaluate(n=>({top:n.scrollTop,height:n.scrollHeight,client:n.clientHeight}));
+  if(before.height>before.client)assert.ok(after.top>before.top,'wheel did not scroll the menu');
+  await page.screenshot({path:dir+`/lobby-lower-${viewport.width}x${viewport.height}.png`});
+  report.push({screen:'lobby',viewport,targets,overflow,upper,lower,scroll:{before,after}});
  }
  await page.setViewportSize({width:720,height:320});
  for(const mode of ['battle','practice','arcade','survival']){
@@ -52,7 +74,13 @@ try{
   await page.waitForFunction(()=>document.querySelectorAll('.fighter-card .p4-crest').length===9&&[...document.querySelectorAll('.p4-crest')].every(image=>image.complete&&image.naturalWidth>0));
   await page.locator('.fighter-card').nth(2).tap();assert.equal(await page.locator('#chosen-name').textContent(),'ゴダン');
   assert.match(await page.locator('.p4-profile').textContent(),/得意.*苦手/);
+  await page.locator('.p4-profile').scrollIntoViewIfNeeded();
+  const profile=await visibleTargets('.p4-profile');
+  const separation=await page.locator('.selection-footer').evaluate(footer=>({profileBottom:document.querySelector('.p4-profile').getBoundingClientRect().bottom,footerTop:footer.getBoundingClientRect().top,position:getComputedStyle(footer).position}));
+  assert.ok(separation.footerTop>=separation.profileBottom,'selection footer covers strengths/weaknesses');
   await page.screenshot({path:dir+`/select-${mode}.png`});
+  await page.locator('#start').scrollIntoViewIfNeeded();const start=await visibleTargets('#start');
+  await page.screenshot({path:dir+`/select-actions-${mode}.png`});report.push({screen:'selection',mode,profile,separation,start});
   if(mode==='practice'){
    await page.locator('#start').tap();await page.waitForFunction(()=>mamoken3d.practice.enabled&&!mamoken3d.diagnostics.loading&&mamoken3d.presentation.loaded&&mamoken3d.battle?.frame>2,undefined,{timeout:60000});
    assert.equal(await page.locator('#timer').textContent(),'∞');

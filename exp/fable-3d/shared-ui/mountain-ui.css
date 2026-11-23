@@ -66,7 +66,9 @@ body[data-ui=mountain] .p4-profile span{display:inline-block}
 body[data-ui=mountain] .p4-profile b{display:inline-block;margin-right:7px;color:var(--ui-paper);font-size:10px;padding:2px 5px;border:1px solid #688a73}
 body[data-ui=mountain] .p4-profile [data-strength] b{border-color:#79c79a;color:#b9e6c8}
 body[data-ui=mountain] .p4-profile [data-weakness] b{border-color:#d5a18d;color:#f3cdb9}
-body[data-ui=mountain] .selection-footer{display:flex;gap:10px;flex-wrap:wrap;padding:12px;border:1px solid var(--ui-line);border-top:3px solid #b79e61;border-radius:3px;background:#1d392cfa;margin-top:10px;box-shadow:0 4px 15px #081c0f}
+/* Keep the selected character's role in the same scroll flow as the controls.
+   A sticky footer covers this text when the 44px controls wrap on short screens. */
+body[data-ui=mountain] .selection-footer{position:static;display:flex;gap:10px;flex-wrap:wrap;padding:12px;border:1px solid var(--ui-line);border-top:3px solid #b79e61;border-radius:3px;background:#1d392cfa;margin-top:10px;box-shadow:0 4px 15px #081c0f}
 body[data-ui=mountain] .selection-footer .chosen{flex:1 1 110px;min-width:100px}
 body[data-ui=mountain] .selection-footer .chosen strong{font-size:17px;color:var(--ui-paper)}
 body[data-ui=mountain] .selection-footer .chosen span{font-size:11px;color:var(--ui-muted)}
