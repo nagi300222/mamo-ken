@@ -988,7 +988,12 @@ function setLoading(s){$('loading-status').textContent=s;}
 // options は連戦コントローラ用（省略時は従来どおり選択画面の値）:
 //   {ids:[p1,cpu], level, instant, round, roundLabel, victoryVariant:'full'|'short', vsVariant:'full'|'short', carryHp:[p1,cpu], onRoundEnd, onNextRound, onResult}
 async function startMatch(options={}){
+  if(loading)return;
+  // The explicit start is a resume intent. An inactive event while readiness
+  // awaits must stay latched; never clear it after the asynchronous boundary.
+  backgroundPaused=window.mamokenNative?.active===false||document.hidden;
   await window.mamokenNative?.ready;
+  backgroundPaused=backgroundPaused||window.mamokenNative?.active===false||document.hidden;
   if(loading)return;
   if(options instanceof Event)options={};
   if(!options.ids&&['arcade','survival'].includes($('match-mode').value))return startRun($('match-mode').value);
@@ -1000,7 +1005,7 @@ async function startMatch(options={}){
   checking=!practiceEnabled&&checkAvailable&&$('check-mode').checked;
   practice.clear();practice.setDummy($('practice-dummy').value);syncPracticeUI();
   loading=true;clearInput();
-  backgroundPaused=window.mamokenNative?.active===false||document.hidden;playing=false;paused=backgroundPaused;finishShown=false;$('pause').textContent='一時停止';$('start').disabled=true;setLoading('GLBを読み込み中…');
+  playing=false;paused=backgroundPaused;finishShown=false;$('pause').textContent='一時停止';$('start').disabled=true;setLoading('GLBを読み込み中…');
   const ids=options.ids??[selected,cpuChoice],level=options.level??+$('difficulty').value;
   // プラクティスと演出確認は VS／顔アップを通さず、読み込み完了ですぐ操作できる（従来どおり）。
   const instant=options.instant??(practiceEnabled||checking);
