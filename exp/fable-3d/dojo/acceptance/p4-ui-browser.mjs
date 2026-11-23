@@ -43,6 +43,12 @@ async function visibleTargets(selector){
  for(const row of rows)assert.ok(row.inside&&row.unobscured,'unreachable or obscured UI: '+JSON.stringify(row));
  return rows;
 }
+async function layoutEvidence(){
+ return page.evaluate(()=>({viewport:{width:innerWidth,height:innerHeight},nodes:[...document.querySelectorAll('.mode-hall,.modes,.mode-story,.mode-story>div,.journey-tag,#editor,.p4-editor-tabs,.p4-save-summary,.editor-actions')].map(n=>{
+  const s=getComputedStyle(n),r=n.getBoundingClientRect(),range=document.createRange();range.selectNodeContents(n);
+  return {element:n.id||n.className,bounds:r.toJSON(),textBounds:range.getBoundingClientRect().toJSON(),scroll:{top:n.scrollTop,height:n.scrollHeight,client:n.clientHeight},style:Object.fromEntries(['display','height','minHeight','gridTemplateRows','paddingTop','paddingBottom','overflowY','fontSize','lineHeight'].map(k=>[k,s[k]]))};
+ })}));
+}
 try{
  for(const viewport of [{width:720,height:320},{width:852,height:393},{width:393,height:852}]){
   await page.setViewportSize(viewport);await page.goto(root,{waitUntil:'domcontentloaded'});
@@ -60,11 +66,12 @@ try{
   await page.mouse.move(viewport.width/2,viewport.height/2);await page.mouse.wheel(0,2000);
   await page.waitForFunction(()=>{const n=document.querySelector('.mode-hall');return n.scrollTop+n.clientHeight>=n.scrollHeight-1;});
   const lower=await visibleTargets('.mode-story,.mode-survival,.mode-story .mode-rule,.mode-survival .mode-rule,.journey-tag');
-  assert.ok(await page.locator('.journey-tag').evaluate(tag=>tag.getBoundingClientRect().bottom<=tag.closest('.mode-story').getBoundingClientRect().bottom-1),'journey name clipped by its card');
+  const tagContainment=await page.locator('.journey-tag').evaluate(tag=>({tag:tag.getBoundingClientRect().toJSON(),card:tag.closest('.mode-story').getBoundingClientRect().toJSON(),minHeight:getComputedStyle(tag.closest('.mode-story')).minHeight}));
+  await page.screenshot({path:dir+`/lobby-lower-${viewport.width}x${viewport.height}.png`});
+  assert.ok(tagContainment.tag.bottom<=tagContainment.card.bottom-1,'journey name clipped by its card: '+JSON.stringify(tagContainment));
   const after=await page.locator('.mode-hall').evaluate(n=>({top:n.scrollTop,height:n.scrollHeight,client:n.clientHeight}));
   if(before.height>before.client)assert.ok(after.top>before.top,'wheel did not scroll the menu');
-  await page.screenshot({path:dir+`/lobby-lower-${viewport.width}x${viewport.height}.png`});
-  report.push({screen:'lobby',viewport,targets,overflow,upper,lower,scroll:{before,after}});
+  report.push({screen:'lobby',viewport,targets,overflow,upper,lower,tagContainment,scroll:{before,after}});
  }
  await page.setViewportSize({width:720,height:320});
  for(const mode of ['battle','practice','arcade','survival']){
@@ -123,5 +130,5 @@ try{
  await page.screenshot({path:dir+'/lobby-simulated-insets-720x320.png'});
  assert.deepEqual(errors,[]);await writeFile(dir+'/report.json',JSON.stringify({report,errors},null,2));
  console.log('P4 UI WEBGL PASS: five mode routes, native & rotated 720/852 layouts, 44px targets, paired character roles, shared Practice HUD, four-tab editor save and unchanged journey record');
-}catch(error){await page.screenshot({path:dir+'/error.png'}).catch(()=>{});console.error(errors);throw error;}
+}catch(error){await page.screenshot({path:dir+'/error.png'}).catch(()=>{});await writeFile(dir+'/failure-layout.json',JSON.stringify({error:error.message,report,errors,layout:await layoutEvidence()},null,2)).catch(()=>{});console.error(errors);throw error;}
 finally{await browser.close();if(server)await new Promise(resolve=>server.close(resolve));}
