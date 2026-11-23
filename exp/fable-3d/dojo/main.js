@@ -17,6 +17,8 @@ import { bindMorphTargets } from './morph-binding.js';
 import { shouldRotateLandscape, localStickAxes } from './landscape-lock.js';
 import { createPracticeController } from './practice-mode.js';
 import { normalClipTime } from './normal-timing-v151.js';
+import { createPresentationFlow } from './presentation-flow.js';
+import { VICTORY, VICTORY_CLIP, VICTORY_PACK, VICTORY_CAMERA_DISTANCE, VS_TEXT, cameraSegment, victoryPlan, faceCamera } from './presentation-data.js';
 
 const $=id=>document.getElementById(id), canvas=$('stage');
 let gameRotated=false;
@@ -397,6 +399,15 @@ function updateCamera(snap=false){
   const w=canvas.clientWidth,h=canvas.clientHeight;
   if(w<1||h<1)return;
   const t=frameTargets(battle?.fighters||[],w/h);
+  if(flow.state==='ko'&&effectsAllowed()&&battle){
+    // KO の寄り（表示だけ）。倒れた側へ寄せ、時間切れでは寄らない。
+    const context=flow.context,kind=context.kind;
+    if(kind==='ko'||kind==='double_ko'){
+      const k=Math.min(1,flow.time/.5),ease=1-(1-k)**2,loser=kind==='ko'?battle.fighters[1-context.winner]:null;
+      const focus=loser?loser.x*.62+battle.fighters[context.winner].x*.38:t.centerX;
+      t.centerX+=(focus-t.centerX)*ease;t.halfWidth=Math.max(.92,t.halfWidth*(1-.30*ease));t.focusY=t.focusY-.06*ease;
+    }
+  }
   const blend=snap?1:.18;
   cameraPose.x+=(t.centerX-cameraPose.x)*blend;
   cameraPose.y+=(t.focusY-cameraPose.y)*blend;
@@ -435,10 +446,12 @@ function clearActors(){for(let i=0;i<2;i++){const a=actors[i];if(!a)continue;
 async function createActor(id,slot) {
   const asset=MODEL_ASSETS[id];if(!asset)throw Error('3Dアセットが見つからない: '+id);
   // v15: load authored skeleton motion pack without replacing the original character GLB.
-  const [gltf,meta,normalGLB]=await Promise.all([
+  const [gltf,meta,normalGLB,victoryGLB]=await Promise.all([
     loader.loadAsync(new URL(asset.glb,import.meta.url).href+'?v='+MODEL_REVISION),
     fetch(new URL(asset.motion,import.meta.url)).then(r=>{if(!r.ok)throw Error('motion JSON HTTP '+r.status);return r.json();}),
-    loader.loadAsync(new URL('../normal/v15/'+id+'_normals.glb',import.meta.url).href)
+    loader.loadAsync(new URL('../normal/v15/'+id+'_normals.glb',import.meta.url).href),
+    // v15.1 Presentation: winner-only victory clip (animation-only GLB on the untouched rig). Never the loser's `ko`.
+    loader.loadAsync(new URL(VICTORY_PACK(id),import.meta.url).href).catch(error=>{console.warn('勝利モーションを読み込めません',id,error);return null;})
   ]);
   const mixer=new THREE.AnimationMixer(gltf.scene),actions=Object.fromEntries(gltf.animations.map(c=>[c.name,mixer.clipAction(c)]));
   const normalIds=new Set(['stand_weak','stand_heavy','crouch_weak','crouch_heavy','air_weak','air_heavy'].map(s=>'v15_'+s));
@@ -451,6 +464,14 @@ async function createActor(id,slot) {
   if(normalIds.size!==[...normalIds].filter(k=>actions[k]).length)throw Error(id+' の通常技が不足');
   // Keep only the clips; animation pack rendering stubs must never become visible fighters.
   disposable(normalGLB.scene);
+  let victory=null;
+  const victoryClip=victoryGLB?.animations.find(clip=>clip.name===VICTORY_CLIP);
+  if(victoryClip){
+    const action=mixer.clipAction(bindMorphTargets(victoryClip,gltf.scene));
+    action.setLoop(THREE.LoopOnce,1);action.clampWhenFinished=true;
+    victory={action,duration:victoryClip.duration};
+  }
+  if(victoryGLB)disposable(victoryGLB.scene);
   let showtime={};
   try{
     const animationFiles=animationCache;
@@ -485,7 +506,7 @@ async function createActor(id,slot) {
   const sh=new THREE.Mesh(new THREE.CircleGeometry(.18,24),new THREE.MeshBasicMaterial({color:0x142128,transparent:true,opacity:.24,depthWrite:false}));
   sh.rotation.x=-Math.PI/2;sh.position.y=.003;holder.add(sh);
   const illusions=id==='chirka'?createChirkaIllusions({THREE,cloneSkeleton,gltf,scene,reducedMotion}):null;
-  return {id,slot,gltf,meta,holder,turn,shadow:sh,mixer,actions,showtime,illusions,current:null,key:'',specialCueIndex:0};
+  return {id,slot,gltf,meta,holder,turn,shadow:sh,mixer,actions,showtime,illusions,victory,current:null,key:'',specialCueIndex:0};
 }
 function clipChange(a,p){
   const special=a.showtime[p.action?.id];
@@ -734,31 +755,269 @@ function hud(){
   showDriveStatus('gyuiin');
   showUltimateStatus();
   $('timer').textContent=String(Math.ceil(battle.time/FPS));
-  $('round-message').textContent=practiceEnabled?'PRACTICE':battle.phase==='fight'?'ROUND 1':'FINISH';
+  $('round-message').textContent=practiceEnabled?'PRACTICE':battle.phase==='fight'?flow.roundCall:'FINISH';
   if(practiceEnabled){$('timer').textContent='∞';syncPracticeUI();}
   if(battle.phase==='ko'&&!finishShown&&!movie.active&&!practiceEnabled) {
-    finishShown=true;playing=false;$('game-over').classList.remove('hidden');
-    const w=battle.winner;
-    const timedOut=battle.events.some(e=>e.type==='timeout');
-    $('result-reason').textContent=timedOut?'時間切れ':w<0?'ダブルKO':'KO';
-    $('result-title').textContent=w<0?'引き分け':w===0?'勝利':'敗北';
-    $('result-description').textContent=w<0?(timedOut?'残り体力が同率':'両者ダウン'):ROSTER[battle.fighters[w].id].name+'の勝ち';
-    note('');
-
+    // 決着は Presentation へ 1 回だけ渡す。奥義 KO は 10 秒ムービーが終わってからここへ来る。
+    if(reportRoundEnd())finishShown=true;
   }
 }
+// ===================== v15.1 Presentation（Issue #201）=====================
+// VS → 顔アップ → FIGHT → KO スロー → 勝利ムービー → 結果。Battle（60Hz・単一正本）には触れず、
+// 「いつ tick してよいか」と表示クロックだけをここで決める。連戦（ARCADE/SURVIVAL）はラウンドフックで差し込む。
+const presentCam=new THREE.PerspectiveCamera(30,16/9,.02,40);
+const presentState={koApplied:0,koVirtual:0,cue:0,shake:0,shakePower:0,lights:null,winner:-1,plan:null,viaUltimate:false,roundHook:null,match:null};
+const flow=createPresentationFlow({reduced:reducedMotion,
+  onRoundEnd:info=>presentState.roundHook?presentState.roundHook(info):null,
+  onChange:(next,from)=>onFlowChange(next,from)});
+const headPoint=new THREE.Vector3(),anchorPoint=new THREE.Vector3(),camFrom=new THREE.Vector3(),camTo=new THREE.Vector3(),lookFrom=new THREE.Vector3(),lookTo=new THREE.Vector3();
+function boneWorld(actor,name,out){
+  const bone=actor.gltf.scene.getObjectByName(name);
+  if(bone)return bone.getWorldPosition(out);
+  return out.copy(actor.holder.position).setY(actor.holder.position.y+.45);
+}
+function anchorWorld(actor,facing,ref,out){
+  if(ref.a==='root')out.copy(actor.holder.position);else boneWorld(actor,ref.a,out);
+  return out.set(out.x+facing*ref.o[0],out.y+ref.o[1],out.z+ref.o[2]);
+}
+function setFlowUI(){
+  const state=flow.state,arena=$('arena');
+  arena.dataset.flow=state;
+  const intro=flow.introPhase;
+  arena.dataset.introPhase=intro?.phase??'';
+  $('vs-screen').classList.toggle('hidden',state!=='vs');
+  $('presentation-skip').hidden=!(state==='intro'||state==='ko'||state==='victory');
+}
+function fillVsScreen(ids){
+  const dark=ids.includes('dark_moguzo');
+  $('vs-screen').classList.toggle('dark',dark);
+  ids.forEach((id,i)=>{
+    $('vs-img-'+i).src=MODEL_ASSETS[id].hero;
+    $('vs-name-'+i).textContent=ROSTER[id].name;$('vs-role-'+i).textContent=ROSTER[id].role;
+    $('vs-side-'+i).style.setProperty('--vs-accent',dark&&id==='dark_moguzo'?'#a56cff':showtimeHex(id));
+  });
+  $('vs-omen').hidden=!dark;$('vs-omen').textContent=dark?VS_TEXT.dark:'';
+  $('vs-status').textContent=VS_TEXT.loading;$('vs-screen').dataset.ready='false';
+}
+function idleActors(){
+  // 導入中は戦闘を進めない。開始位置の構え（idle）へ合わせるだけ。
+  for(let i=0;i<2;i++)if(actors[i]&&battle){actors[i].key='';syncActor(actors[i],battle.fighters[i]);}
+  syncProjectiles();
+}
+function restoreStageLook(){
+  const saved=presentState.lights;if(!saved)return;
+  scene.background.setHex(saved.bg);sun.color.setHex(saved.sun);sun.intensity=saved.sunPower;saved.hemi.light.intensity=saved.hemi.power;
+  presentState.lights=null;
+}
+function endVictoryPose(){
+  // 勝利クリップを止め、通常のクリップ選択へ戻す（次ラウンド・再戦・キャラ選択の前に必ず通る）
+  for(const actor of actors){
+    if(!actor?.victory)continue;
+    if(actor.current===actor.victory.action){actor.victory.action.stop();actor.current=null;actor.currentName='';actor.key='';}
+  }
+  restoreStageLook();
+  $('victory-banner').hidden=true;presentState.winner=-1;presentState.plan=null;
+}
+function beginVictory(){
+  const slot=flow.context.winner,actor=actors[slot];
+  if(!actor?.victory||!VICTORY[actor.id]){flow.skip();return;}       // 素材が無ければ結果へ（敗者の ko を流用しない）
+  const plan=victoryPlan(actor.id,flow.context.victoryVariant,actor.victory.duration);
+  flow.setVictoryLength(plan.length);
+  presentState.winner=slot;presentState.plan=plan;presentState.cue=0;presentState.shake=0;
+  const data=VICTORY[actor.id],hemi=scene.children.find(node=>node.isHemisphereLight);
+  presentState.lights={bg:scene.background.getHex(),sun:sun.color.getHex(),sunPower:sun.intensity,hemi:{light:hemi,power:hemi.intensity}};
+  scene.background.setHex(data.light.bg);sun.color.setHex(data.light.sun);sun.intensity=data.light.sunPower;hemi.intensity=data.light.hemi;
+  actor.current?.stop();
+  const action=actor.victory.action;action.reset();action.setEffectiveWeight(1);action.setEffectiveTimeScale(1);action.time=plan.from;action.play();
+  actor.current=action;actor.currentName=VICTORY_CLIP;actor.key='victory';
+  if(actor.trail)actor.trail.mesh.visible=false;
+  actor.mixer.update(0);
+  $('victory-side').textContent=(slot===0?'1P':'CPU')+' WIN · '+data.title;
+  $('victory-name').textContent=ROSTER[actor.id].name;$('victory-line').textContent='「'+data.line+'」';
+  $('victory-banner').style.setProperty('--victory-accent',showtimeHex(actor.id));
+  $('victory-banner').dataset.shown='false';$('victory-banner').hidden=false;
+  $('showtime-banner').classList.remove('active');note('');
+}
+function updateVictory(delta){
+  const actor=actors[presentState.winner],plan=presentState.plan;
+  if(!actor||!plan)return false;
+  // 結果画面では勝利ムービーの最後の画で止める（ボタンは結果パネルで押せる）
+  const data=VICTORY[actor.id],time=plan.from+(flow.state==='victory'?flow.time:plan.length),facing=battle.fighters[actor.slot].facing;
+  // 勝利クリップは表示時計へ直接同期する（ミキサーの積算に任せない＝コマ落ちしても尺がずれない）
+  actor.victory.action.time=Math.min(actor.victory.duration-1e-4,time);
+  for(const each of actors)each?.mixer.update(each===actor?0:delta);
+  actor.holder.updateMatrixWorld(true);
+  while(presentState.cue<data.cues.length&&data.cues[presentState.cue].t<=time){
+    const cue=data.cues[presentState.cue++];
+    if(cue.t<plan.from-.02)continue;                                   // 短縮版: 飛ばした前半のキューは鳴らさない
+    if(cue.type==='sfx')audioFX.play(cue.key,actor.id);
+    else if(cue.type==='shake'&&effectsAllowed()){presentState.shake=.32;presentState.shakePower=cue.key;}
+    else if(cue.type==='fx'){
+      anchorWorld(actor,facing,cue,anchorPoint);
+      impactFX(cue.key,showtimeFor(actor.id).color,anchorPoint.x,anchorPoint.y,1,18,scene,flashes,anchorPoint.z);
+    }
+  }
+  animateFX(flashes,delta*FPS);
+  const segment=cameraSegment(data.camera,time);
+  anchorWorld(actor,facing,segment.a.pos,camFrom);anchorWorld(actor,facing,segment.b.pos,camTo);
+  anchorWorld(actor,facing,segment.a.look,lookFrom);anchorWorld(actor,facing,segment.b.look,lookTo);
+  presentCam.position.lerpVectors(camFrom,camTo,segment.u);lookFrom.lerp(lookTo,segment.u);
+  presentCam.position.sub(lookFrom).multiplyScalar(data.distance??VICTORY_CAMERA_DISTANCE).add(lookFrom);
+  if(presentState.shake>0){
+    const k=presentState.shake/.32*presentState.shakePower;
+    presentCam.position.x+=Math.sin(presentState.shake*71)*k;presentCam.position.y+=Math.cos(presentState.shake*93)*k*.7;
+    presentState.shake=Math.max(0,presentState.shake-delta);
+  }
+  presentCam.position.y=Math.max(.05,presentCam.position.y);
+  presentCam.fov=segment.a.fov+(segment.b.fov-segment.a.fov)*segment.u;
+  const aspect=Math.max(.3,canvas.clientWidth/Math.max(1,canvas.clientHeight));
+  if(aspect<1.25)presentCam.fov=Math.min(70,presentCam.fov*1.25/aspect);
+  presentCam.aspect=aspect;presentCam.updateProjectionMatrix();presentCam.lookAt(lookFrom);
+  const shown=flow.state!=='victory'||flow.time>=(flow.context.victoryVariant==='short'?.35:Math.min(2.5,plan.length-2.2));
+  if(String(shown)!==$('victory-banner').dataset.shown)$('victory-banner').dataset.shown=String(shown);
+  return true;
+}
+function updateIntro(delta){
+  for(const actor of actors)actor?.mixer.update(delta);
+  const phase=flow.introPhase;if(!phase)return false;
+  const call=$('round-call');
+  if(phase.phase==='face'){
+    const actor=actors[phase.slot],fighter=battle.fighters[phase.slot];
+    actor.holder.updateMatrixWorld(true);boneWorld(actor,'head',headPoint);
+    const aspect=Math.max(.3,canvas.clientWidth/Math.max(1,canvas.clientHeight));
+    const shot=faceCamera([headPoint.x,headPoint.y,headPoint.z],fighter.facing,headPoint.y+.13,effectsAllowed()?phase.u:1,aspect);
+    presentCam.position.set(...shot.pos);presentCam.fov=shot.fov;presentCam.aspect=aspect;presentCam.updateProjectionMatrix();presentCam.lookAt(...shot.look);
+    presentState.faceReady=phase.slot;
+    const plate=$('intro-plate');
+    if(plate.dataset.slot!==String(phase.slot)){
+      plate.dataset.slot=String(phase.slot);plate.style.setProperty('--plate-accent',showtimeHex(actor.id));
+      $('intro-side').textContent=phase.slot===0?'1P':'CPU';$('intro-name').textContent=ROSTER[actor.id].name;$('intro-role').textContent=ROSTER[actor.id].role;
+      audioFX.play('tap',actor.id);
+    }
+    plate.hidden=false;call.hidden=true;
+    return true;
+  }
+  $('intro-plate').hidden=true;$('intro-plate').dataset.slot='';presentState.faceReady=-1;
+  const label=phase.phase==='call'?'FIGHT!':flow.roundCall;
+  if(call.hidden||$('round-call-text').textContent!==label){
+    $('round-call-text').textContent=label;call.dataset.kind=phase.phase;call.hidden=false;
+    audioFX.play(phase.phase==='call'?'special':'block',actors[0]?.id);
+  }
+  return false;
+}
+function updateKo(delta){
+  const slow=flow.koSlow,context=flow.context;
+  // 表示クロックだけを遅くする。battle.tick は呼ばない（勝敗・HP・フレームは確定済みのまま）。
+  if(context.kind==='ko'&&!context.viaUltimate){
+    const winner=actors[context.winner],fighter=battle.fighters[context.winner];
+    presentState.koVirtual+=delta*FPS*slow;
+    if(winner&&fighter.action){
+      const total=fighter.action.startup+fighter.action.active+fighter.action.recovery;
+      while(presentState.koApplied<Math.floor(presentState.koVirtual)&&fighter.frame+presentState.koApplied<total){
+        presentState.koApplied++;
+        const proxy=Object.create(fighter);proxy.frame=fighter.frame+presentState.koApplied;proxy.stop=0;
+        syncActor(winner,proxy);                                        // 攻撃側は振り抜きをスローで続ける（見た目だけ）
+      }
+    }else winner?.mixer.update(delta*slow);
+    actors[1-context.winner]?.mixer.update(delta*slow);
+  }else for(const actor of actors)actor?.mixer.update(delta*slow);
+  animateFX(flashes,delta*FPS*Math.max(.25,slow));
+}
+function faceFrame(){
+  // 専用カメラをその役者へ置いた後のフレームだけ答える（導入に入った直後の、まだ置いていないカメラでは測らない）
+  const phase=flow.introPhase;if(phase?.phase!=='face'||!actors[phase.slot]||presentState.faceReady!==phase.slot)return null;
+  const actor=actors[phase.slot],facing=battle.fighters[phase.slot].facing;
+  presentCam.updateMatrixWorld(true);
+  boneWorld(actor,'head',headPoint);
+  const project=(dx,dy)=>{const p=anchorPoint.set(headPoint.x+facing*dx,headPoint.y+dy,headPoint.z).project(presentCam);return [+p.x.toFixed(3),+p.y.toFixed(3)];};
+  return {slot:phase.slot,head:project(0,0),top:project(0,.15),nose:project(.13,.0),back:project(-.12,.04)};
+}
+function showResult(){
+  $('ko-banner').hidden=true;$('round-call').hidden=true;
+  if(presentState.winner<0)$('victory-banner').hidden=true;
+  const w=battle.winner,timedOut=!!flow.context?.timedOut;
+  $('result-reason').textContent=timedOut?'時間切れ':w<0?'ダブルKO':'KO';
+  $('result-title').textContent=w<0?'引き分け':w===0?'勝利':'敗北';
+  $('result-description').textContent=w<0?(timedOut?'残り体力が同率':'両者ダウン'):ROSTER[battle.fighters[w].id].name+'の勝ち';
+  presentState.match?.onResult?.({winner:w,timedOut});
+  $('game-over').classList.remove('hidden');note('');
+}
+function onFlowChange(next,from){
+  if(from==='victory'&&next!=='result')endVictoryPose();
+  if(next==='select'){endVictoryPose();$('ko-banner').hidden=true;$('round-call').hidden=true;$('intro-plate').hidden=true;}
+  if(next==='intro'){
+    endVictoryPose();$('ko-banner').hidden=true;$('game-over').classList.add('hidden');
+    idleActors();updateCamera(true);clearInput();$('intro-plate').dataset.slot='';presentState.faceReady=-1;
+    note('');
+  }
+  if(next==='fight'){
+    // 入力解禁。導入中に押されたボタン・スティックは捨てる。
+    clearInput();acc=0;lastFrame=0;$('intro-plate').hidden=true;
+    if(from==='intro'){$('round-call-text').textContent='FIGHT!';$('round-call').dataset.kind='call';$('round-call').hidden=false;presentState.callUntil=performance.now()+420;}
+    else $('round-call').hidden=true;
+    if(document.hasFocus?.()!==false&&paused){paused=false;$('pause').textContent='一時停止';}
+    note(practiceEnabled?'PRACTICE｜相手行動・位置リセット・コンボを確認':'FIGHT！ 必殺は方向＋ボタン／奥義は専用ボタン');
+  }
+  if(next==='ko'){
+    const text=flow.koText,kind=flow.context.kind;
+    presentState.koApplied=0;presentState.koVirtual=0;
+    $('ko-title').textContent=text.title;$('ko-sub').textContent=text.sub;
+    $('ko-banner').dataset.kind=kind;$('ko-banner').dataset.motion=effectsAllowed()?'full':'reduced';$('ko-banner').hidden=false;
+    $('showtime-banner').classList.remove('active');note('');clearInput();
+    if(kind==='ko'||kind==='double_ko'){if(!flow.context.viaUltimate)shake(.03,10);audioFX.play('crash',battle.fighters[Math.max(0,flow.context.winner)]?.id);}
+    else audioFX.play('block',battle.fighters[0]?.id);
+  }
+  if(next==='victory'){$('ko-banner').hidden=true;beginVictory();}
+  if(next==='await_round'){$('ko-banner').hidden=true;presentState.match?.onNextRound?.();}
+  if(next==='result')showResult();
+  setFlowUI();
+}
+function reportRoundEnd(){
+  // hud() から毎フレーム呼ばれても、flow が fight のときに 1 回だけ受理される（奥義ムービー終了後を含む）。
+  const timedOut=battle.events.some(event=>event.type==='timeout')||presentState.timedOut;
+  return flow.roundEnd({winner:battle.winner,timedOut,viaUltimate:presentState.viaUltimate});
+}
+function skipPresentation(){
+  if(!flow.skip())return false;
+  clearInput();return true;
+}
+// 連戦コントローラ用: 同じ 2 体のまま次ラウンドの Battle を作り、短い導入から再開する。HP の持ち越しは carryHp で明示注入。
+function nextRound({round=(flow.context?.round??1)+1,roundLabel=null,carryHp=null,level=null,face=false}={}){
+  if(!battle||loading||flow.state!=='await_round'&&flow.state!=='result')return false;
+  const ids=battle.fighters.map(fighter=>fighter.id);
+  battle=new Battle(...ids,level??battle.level??+$('difficulty').value);
+  if(carryHp)carryHp.forEach((hp,i)=>{if(Number.isFinite(hp))battle.fighters[i].hp=Math.max(1,Math.min(ROSTER[ids[i]].hp,hp));});
+  const bulletActor=actors.find(actor=>actor?.id==='bullet');
+  if(bulletActor)battle.setTailTipPath(bulletActor.meta.clips.sp_tail_whip.tail_tip_path);
+  finishShown=false;presentState.viaUltimate=false;presentState.timedOut=false;playing=true;
+  for(const flash of flashes){scene.remove(flash.mesh);flash.mesh.material.dispose();}flashes.length=0;
+  flow.beginRound({round,roundLabel,face});hud();
+  return true;
+}
 function setLoading(s){$('loading-status').textContent=s;}
-async function startMatch(){
+// options は連戦コントローラ用（省略時は従来どおり選択画面の値）:
+//   {ids:[p1,cpu], level, instant, round, roundLabel, victoryVariant:'full'|'short', vsVariant:'full'|'short', carryHp:[p1,cpu], onRoundEnd, onNextRound, onResult}
+async function startMatch(options={}){
   if(loading)return;
+  if(options instanceof Event)options={};
   if(movie.active)finishUltimateMovie();
   audioFX.unlock(); // Only during explicit user-initiated start/click.
   const loadStarted=performance.now();
-  practiceEnabled=$('match-mode').value==='practice';
+  practiceEnabled=options.practice??($('match-mode').value==='practice');
   checking=!practiceEnabled&&checkAvailable&&$('check-mode').checked;
   practice.clear();practice.setDummy($('practice-dummy').value);syncPracticeUI();
   loading=true;clearInput();
   playing=false;paused=false;finishShown=false;$('pause').textContent='一時停止';$('start').disabled=true;setLoading('GLBを読み込み中…');
-  const ids=[selected,cpuChoice],level=+$('difficulty').value;
+  const ids=options.ids??[selected,cpuChoice],level=options.level??+$('difficulty').value;
+  // プラクティスと演出確認は VS／顔アップを通さず、読み込み完了ですぐ操作できる（従来どおり）。
+  const instant=options.instant??(practiceEnabled||checking);
+  endVictoryPose();
+  presentState.roundHook=options.onRoundEnd??null;presentState.match=options;presentState.viaUltimate=false;presentState.timedOut=false;
+  $('game-over').classList.add('hidden');$('ko-banner').hidden=true;$('round-call').hidden=true;$('intro-plate').hidden=true;
+  if(!instant){fillVsScreen(ids);$('selection').classList.add('hidden');}
+  flow.begin({ids,instant,round:options.round??1,roundLabel:options.roundLabel??null,
+    victoryVariant:options.victoryVariant??'full',vsVariant:options.vsVariant??'full'});
+  const run=flow.serial;
   try{
     clearActors();
     const loaded=await Promise.allSettled(ids.map((id,i)=>createActor(id,i)));
@@ -766,6 +1025,7 @@ async function startMatch(){
     const failed=loaded.find(result=>result.status==='rejected');
     if(failed)throw failed.reason;
     battle=new Battle(...ids,level);
+    if(options.carryHp)options.carryHp.forEach((hp,i)=>{if(Number.isFinite(hp))battle.fighters[i].hp=Math.max(1,Math.min(ROSTER[ids[i]].hp,hp));});
     if(practiceEnabled)practice.prepare(battle);
     readyForCheck();
     const bulletActor=actors.find(a=>a?.id==='bullet');
@@ -776,18 +1036,25 @@ async function startMatch(){
     }
     $('selection').classList.add('hidden');$('game-over').classList.add('hidden');
     const fallback=actors.some(a=>['roar','gyuiin','clinch_hold','clinch_recoil'].some(name=>!a.actions[name]));
-    setLoading(fallback?'咆哮・ギュイーンは仮モーション':'操作：方向＋必殺／奥義専用'); note('FIGHT！ 必殺は方向＋ボタン／奥義は専用ボタン');
+    setLoading(fallback?'咆哮・ギュイーンは仮モーション':'操作：方向＋必殺／奥義専用');
     clearInput();
     metrics.loadMs=performance.now()-loadStarted;
     playing=true;lastFrame=0;acc=0;hud();
-    if(practiceEnabled)note('PRACTICE｜相手行動・位置リセット・コンボを確認');
-  }catch(e){clearActors();battle=null;console.error(e);note('起動エラー: '+e.message);setLoading('モデルの読込に失敗: '+e.message);$('selection').classList.remove('hidden');}
+    for(let i=0;i<2;i++)syncActor(actors[i],battle.fighters[i]);
+    updateCamera(true);
+    if(run===flow.serial){
+      // VS 画面はロード完了を待ってからスキップ可。ここから先の進行は表示クロック（flow.update）が持つ。
+      $('vs-status').textContent=VS_TEXT.ready;$('vs-screen').dataset.ready='true';
+      flow.assetsLoaded();
+    }
+  }catch(e){clearActors();battle=null;flow.loadFailed();console.error(e);note('起動エラー: '+e.message);setLoading('モデルの読込に失敗: '+e.message);$('selection').classList.remove('hidden');}
   finally{loading=false;$('start').disabled=false;}
 }
 function showSelection(){
   if(loading)return;
   if(movie.active)finishUltimateMovie();
   practiceEnabled=false;syncPracticeUI();
+  flow.reset();presentState.roundHook=null;presentState.match=null;
   playing=false;paused=false;$('selection').classList.remove('hidden');$('game-over').classList.add('hidden');
   note('キャラクターを選んで対戦開始');setLoading('キャラ選択中');clearInput();
 }
@@ -833,7 +1100,7 @@ function resetAnalog(){
   stick.classList.remove('held');
 }
 stick.addEventListener('pointerdown',e=>{
-  if(movie.active||analog.pointer!==null)return;
+  if(movie.active||!flow.inputEnabled||analog.pointer!==null)return;
   e.preventDefault();analog.pointer=e.pointerId;stick.setPointerCapture(e.pointerId);
   stick.classList.add('held');analogMove(e);
 });
@@ -857,8 +1124,15 @@ function clearInput(){
   lastDirectionTap=null;dashPulse=0;resetAnalog();
 }
 document.addEventListener('keydown',e=>{
+  // Presentation（VS・顔アップ・KO・勝利ムービー）中の決定キーはスキップ。対戦キーの割当（keyMap）より先に見る。
+  if(!movie.active&&['vs','intro','ko','victory'].includes(flow.state)&&['Space','Enter','Escape'].includes(e.code)&&
+     !['SELECT','BUTTON','INPUT'].includes(document.activeElement?.tagName)){
+    e.preventDefault();if(!e.repeat)skipPresentation();
+    return;
+  }
   const k=keyMap[e.code];if(!k)return;
   if(movie.active||document.activeElement?.tagName==='SELECT')return;
+  if(!flow.inputEnabled)return;                 // 導入・KO・勝利ムービー中は対戦入力を受けない
   e.preventDefault();
   if(e.repeat)return;
   if((k==='left'||k==='right')&&!pressedKeys.has(k)&&!pressedKeys.has('up')&&!pressedKeys.has('down'))directionTap(k);
@@ -869,12 +1143,13 @@ document.addEventListener('keydown',e=>{
 document.addEventListener('keyup',e=>{
   const k=keyMap[e.code];if(k){e.preventDefault();pressedKeys.delete(k);if(directions.includes(k))recordDirection();}
 });
+window.addEventListener('focus',()=>{lastFrame=0;});
 window.addEventListener('blur',()=>{
   if(movie.active)finishUltimateMovie();
   clearInput();paused=true;$('pause').textContent='再開';music.update(false);
 });
 document.addEventListener('visibilitychange',()=>{
-  if(!document.hidden)return;
+  if(!document.hidden){lastFrame=0;return;}       // 復帰の 1 フレーム目に、隠れていた時間を経過として渡さない
   if(movie.active)finishUltimateMovie();
   music.update(false);
 });
@@ -912,7 +1187,7 @@ if(!audioFX.supported){
 document.querySelectorAll('[data-control]').forEach(button=>{
   const k=button.dataset.control;
   button.addEventListener('pointerdown',e=>{
-    if(movie.active)return;
+    if(movie.active||!flow.inputEnabled)return;
     e.preventDefault();button.setPointerCapture(e.pointerId);
     pressedTouch.set(e.pointerId,k);queuedActions.add(k);button.classList.add('held');
   });
@@ -948,13 +1223,16 @@ document.addEventListener('keydown',event=>{
     event.preventDefault();finishUltimateMovie();
   }
 });
-$('start').onclick=startMatch;$('select-back').onclick=showSelection;$('result-select').onclick=showSelection;$('rematch').onclick=startMatch;
-$('pause').onclick=()=>{if(!battle||battle.phase!=='fight')return;clearInput();paused=!paused;$('pause').textContent=paused?'再開':'一時停止';note(paused?'一時停止':'対戦再開');};
+$('start').onclick=()=>startMatch();$('select-back').onclick=showSelection;$('result-select').onclick=showSelection;
+$('rematch').onclick=()=>presentState.match?.onRematch?presentState.match.onRematch():startMatch(presentState.match?.ids?{...presentState.match,carryHp:null}:{});
+$('presentation-skip').onclick=skipPresentation;
+$('vs-screen').addEventListener('pointerdown',event=>{event.preventDefault();skipPresentation();});
+$('pause').onclick=()=>{if(!battle||battle.phase!=='fight'||!flow.battleRunning)return;clearInput();paused=!paused;$('pause').textContent=paused?'再開':'一時停止';note(paused?'一時停止':'対戦再開');};
 
 const FIXED=1/FPS;
 function render(now){
   requestAnimationFrame(render);
-  music.update(!!(battle&&playing&&!paused&&battle.phase==='fight'&&!movie.active&&!document.hidden));
+  music.update(!!(battle&&playing&&!paused&&battle.phase==='fight'&&!movie.active&&!document.hidden&&flow.battleRunning));
   const elapsed=lastFrame?Math.max(0,(now-lastFrame)/1000):FIXED;
   const delta=Math.min(.05,elapsed);lastFrame=now;
   if(checkAvailable){
@@ -966,7 +1244,21 @@ function render(now){
       metricAt=now;metricFrames=0;
     }
   }
-  if(battle&&playing&&!paused&&battle.phase==='fight'&&!movie.active) {
+  // Presentation の表示クロック。Battle は進めない。タブ非表示中は rAF が止まるので自然に保留される。
+  // 表示は実経過時間で進める（奥義ムービーと同じ）。描画が遅い端末でも尺・音・カメラが壁時計と一致する。
+  // Battle の固定 60Hz と delta 上限（下の acc）は別で、こちらは変えない。復帰直後の巨大な経過は lastFrame=0 と上限で除く。
+  const present=Math.min(.25,elapsed);
+  let presentCamera=false;
+  if(battle&&playing&&!movie.active&&!document.hidden){
+    if(flow.state==='vs')flow.update(present);
+    else if(flow.state==='intro'){flow.update(present);if(flow.state==='intro')presentCamera=updateIntro(present);}
+    else if(flow.state==='ko'){updateKo(present);flow.update(present);}
+    else if(flow.state==='victory'){flow.update(present);if(flow.state==='victory')presentCamera=updateVictory(present);}
+    else if(flow.state==='fight'){flow.update(present);if(presentState.callUntil&&now>presentState.callUntil){presentState.callUntil=0;$('round-call').hidden=true;}}
+    else if(flow.state==='result'&&presentState.winner>=0)presentCamera=updateVictory(present);
+    else if(flow.state==='result'||flow.state==='await_round'){for(const actor of actors)actor?.mixer.update(delta);animateFX(flashes,delta*FPS);}
+  }
+  if(battle&&playing&&!paused&&battle.phase==='fight'&&!movie.active&&flow.battleRunning) {
     acc=Math.min(.10,acc+delta);let steps=0;
     while(acc>=FIXED&&steps<5){
       if(checking){battle.time=75*FPS;if(!battle.fighters[0].action)battle.fighters[0].super=100;}
@@ -978,6 +1270,10 @@ function render(now){
       }else if(checking)battle.tick(input(),{});else battle.tick(input());
       for(let i=0;i<2;i++)syncActor(actors[i],battle.fighters[i]);
       syncProjectiles();vfx();animateFX();acc-=FIXED;steps++;
+      if(battle.phase!=='fight'){
+        // 決着の瞬間だけ記録する（判定そのものは Battle が済ませている）
+        presentState.viaUltimate=movie.active;presentState.timedOut=battle.events.some(event=>event.type==='timeout');
+      }
       if(movie.active||battle.phase!=='fight')break;
     }
     if(steps)hud();
@@ -992,9 +1288,8 @@ function render(now){
   }
   // Preserve KO presentation but defer it until after the cutscene.
   if(battle?.phase==='ko'&&!movie.active)for(const actor of actors)actor?.illusions?.stop();
-  if(battle?.phase==='ko'&&!paused&&!movie.active){
-    for(const actor of actors)if(actor)actor.mixer.update(delta);
-  }
+  if(battle?.phase==='ko'&&!movie.active&&flow.state==='fight')hud();   // 奥義ムービー直後など、まだ決着を渡していないとき
+  if(presentCamera){renderer.render(scene,presentCam);return;}   // 顔アップ・勝利ムービーは専用の透視カメラ
   if(!movie.active)updateCamera();
   renderer.render(scene,camera);
 }
@@ -1007,7 +1302,14 @@ window.addEventListener('pageshow',updateLandscapeLock);
 updateLandscapeLock();resize();requestAnimationFrame(render);
 window.mamoken3d={get battle(){return battle;},get actors(){return actors;},
   get cinematic(){return {active:movie.active,data:movie.data,elapsed:authoredMovie?.elapsed??movie.elapsed};},
-  startMatch,showSelection,ROSTER,MODEL_ASSETS,
+  startMatch,showSelection,nextRound,ROSTER,MODEL_ASSETS,
+  // Presentation の状態と操作（テスト・連戦コントローラ用）。roundHook は ({winner,reason,round,viaUltimate}) → 'nextRound'|'victory'|'result'
+  get presentation(){return {state:flow.state,time:flow.time,context:flow.context,log:flow.log,loaded:flow.loaded,
+    inputEnabled:flow.inputEnabled,koSlow:flow.koSlow,camera:flow.state==='victory'||flow.introPhase?.phase==='face'?'presentation':'match',
+    victoryClip:actors[presentState.winner]?.currentName??null,victoryTime:actors[presentState.winner]?.victory?.action.time??null,
+    // 受入テスト用の実測: 専用カメラの位置と、顔アップで頭（鼻先〜耳の上）が画面のどこに写っているか（NDC。±1 が画面端）
+    cameraPosition:presentCam.position.toArray().map(v=>+v.toFixed(4)),faceFrame:faceFrame()};},
+  skipPresentation,setRoundHook(fn){presentState.roundHook=fn;},
   get practice(){return {enabled:practiceEnabled,dummy:practice.dummy,stats:practice.stats};},
   get landscapeLocked(){return gameRotated;},
   get diagnostics(){return {...metrics,checking,loading};}};

@@ -1,0 +1,238 @@
+{
+ "version": "v151-victory-1",
+ "authoring": "tools/mamo3d/motions_v151.py",
+ "build": "tools/build_victory.py",
+ "clips": {
+  "moguzo": {
+   "clip": "victory_v151",
+   "frames": 240,
+   "fps": 60,
+   "duration_sec": 4.0,
+   "group": "victory",
+   "priority": 3,
+   "start_pose": "idle",
+   "end_pose": "victory_hold",
+   "v2": true,
+   "v151": true,
+   "character": "moguzo",
+   "name_jp": "拳を天へ",
+   "beats": {
+    "breath": 34,
+    "coil": 78,
+    "launch": 98,
+    "land": 124,
+    "pose": 150
+   },
+   "short_from_frame": 70,
+   "loop": false,
+   "silhouette": "深く息を吐く→右へ沈む→跳んで右拳を真上へ→着地して拳を掲げたままカメラへ胸を開く"
+  },
+  "pisuke": {
+   "clip": "victory_v151",
+   "frames": 240,
+   "fps": 60,
+   "duration_sec": 4.0,
+   "group": "victory",
+   "priority": 3,
+   "start_pose": "idle",
+   "end_pose": "victory_hold",
+   "v2": true,
+   "v151": true,
+   "character": "pisuke",
+   "name_jp": "風切り一回転",
+   "beats": {
+    "hops": 30,
+    "kick": 52,
+    "jump": 96,
+    "land": 126,
+    "pose": 152
+   },
+   "short_from_frame": 76,
+   "loop": false,
+   "silhouette": "軽く2回跳ねる→前蹴り→沈んで一回転の跳び回し蹴り→着地から片足立ちで両手を広げる"
+  },
+  "godan": {
+   "clip": "victory_v151",
+   "frames": 240,
+   "fps": 60,
+   "duration_sec": 4.0,
+   "group": "victory",
+   "priority": 3,
+   "start_pose": "idle",
+   "end_pose": "victory_hold",
+   "v2": true,
+   "v151": true,
+   "character": "godan",
+   "name_jp": "四股・押忍",
+   "beats": {
+    "stance": 30,
+    "lift": 74,
+    "stomp": 98,
+    "cross": 136,
+    "osu": 160
+   },
+   "short_from_frame": 60,
+   "loop": false,
+   "silhouette": "カメラへ正対して腰を割る→体を傾けて右脚を浮かせる（脚が短く、上がりは小さい）→深く踏み下ろし（地響き）→胸の前で拳を交差→両拳を腰へ引き切って押忍",
+   "impact_frames": [
+    98
+   ]
+  },
+  "hakuma": {
+   "clip": "victory_v151",
+   "frames": 240,
+   "fps": 60,
+   "duration_sec": 4.0,
+   "group": "victory",
+   "priority": 3,
+   "start_pose": "idle",
+   "end_pose": "victory_hold",
+   "v2": true,
+   "v151": true,
+   "character": "hakuma",
+   "name_jp": "柏手・一礼",
+   "beats": {
+    "open": 36,
+    "clap1": 56,
+    "clap2": 74,
+    "bow": 120,
+    "rise": 176
+   },
+   "short_from_frame": 48,
+   "loop": false,
+   "silhouette": "カメラへ正対して両掌を左右へ大きく開く→柏手を2回→合掌のまま深く一礼→顔を上げて静かに微笑む",
+   "impact_frames": [
+    56,
+    74
+   ]
+  },
+  "chirka": {
+   "clip": "victory_v151",
+   "frames": 240,
+   "fps": 60,
+   "duration_sec": 4.0,
+   "group": "victory",
+   "priority": 3,
+   "start_pose": "idle",
+   "end_pose": "victory_hold",
+   "v2": true,
+   "v151": true,
+   "character": "chirka",
+   "name_jp": "くるり・爪先のご挨拶",
+   "beats": {
+    "sway": 48,
+    "twirl": 72,
+    "lean": 140,
+    "wave": 158
+   },
+   "short_from_frame": 100,
+   "loop": false,
+   "silhouette": "左右に体を揺らす→沈んでくるくると2回転→カメラへ身を乗り出し、頬の横で爪をひらひら振る（首をかしげる）"
+  },
+  "takimaru": {
+   "clip": "victory_v151",
+   "frames": 240,
+   "fps": 60,
+   "duration_sec": 4.0,
+   "group": "victory",
+   "priority": 3,
+   "start_pose": "idle",
+   "end_pose": "victory_hold",
+   "v2": true,
+   "v151": true,
+   "character": "takimaru",
+   "name_jp": "力こぶ・胸叩き",
+   "beats": {
+    "flex": 28,
+    "pump": 70,
+    "beat": 96,
+    "point": 166
+   },
+   "short_from_frame": 86,
+   "loop": false,
+   "silhouette": "カメラへ正対して両腕で力こぶ（2回締める）→胸を左右交互に3回叩く→相手の方へ踏み出して指さす（見下ろし）",
+   "impact_frames": [
+    96,
+    112,
+    128
+   ]
+  },
+  "yomikage": {
+   "clip": "victory_v151",
+   "frames": 240,
+   "fps": 60,
+   "duration_sec": 4.0,
+   "group": "victory",
+   "priority": 3,
+   "start_pose": "idle",
+   "end_pose": "victory_hold",
+   "v2": true,
+   "v151": true,
+   "character": "yomikage",
+   "name_jp": "血振り・納め",
+   "beats": {
+    "still": 40,
+    "flick": 72,
+    "turn": 136,
+    "sheath": 166,
+    "glance": 214
+   },
+   "short_from_frame": 64,
+   "loop": false,
+   "silhouette": "手刀を構えたまま静止→鋭く斜め下へ払う（血振り）→相手に背を向け、手刀を腰へ納める→肩越しに一度だけ振り返る"
+  },
+  "bullet": {
+   "clip": "victory_v151",
+   "frames": 240,
+   "fps": 60,
+   "duration_sec": 4.0,
+   "group": "victory",
+   "priority": 3,
+   "start_pose": "idle",
+   "end_pose": "victory_hold",
+   "v2": true,
+   "v151": true,
+   "character": "bullet",
+   "name_jp": "尾鳴らし・尾の腰掛け",
+   "beats": {
+    "slap1": 30,
+    "slap2": 52,
+    "toss": 86,
+    "catch": 116,
+    "sit": 172
+   },
+   "short_from_frame": 70,
+   "loop": false,
+   "silhouette": "太い尾を高く上げて床を2回叩く→木の実を真上へ放り上げて片手で受ける→丸めた尾に腰掛けて腕を組む",
+   "impact_frames": [
+    30,
+    52
+   ]
+  },
+  "dark_moguzo": {
+   "clip": "victory_v151",
+   "frames": 240,
+   "fps": 60,
+   "duration_sec": 4.0,
+   "group": "victory",
+   "priority": 3,
+   "start_pose": "idle",
+   "end_pose": "victory_hold",
+   "v2": true,
+   "v151": true,
+   "character": "dark_moguzo",
+   "name_jp": "背を向ける",
+   "beats": {
+    "lower": 40,
+    "clench": 70,
+    "turn": 156,
+    "glance": 176,
+    "leave": 226
+   },
+   "short_from_frame": 100,
+   "loop": false,
+   "silhouette": "構えを解いて拳を下ろす→右拳を一度だけ握りしめる→相手にもカメラにも背を向ける→肩越しに一瞥→完全に背を向けて立つ（喜ばない）"
+  }
+ },
+ "blender": "5.3.0"
+}

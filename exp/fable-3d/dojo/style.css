@@ -512,3 +512,69 @@ button.primary:active{transform:translateY(1px)}
 }
 html.landscape-locked #practice-panel{bottom:5px;gap:3px;padding:2px 4px}
 html.landscape-locked #practice-panel select{padding:1px;max-width:64px}
+
+/* ===== v15.1 Presentation（Issue #201）: VS / 顔アップ / K.O. / 勝利ムービー ===== */
+.vs-screen{position:absolute;z-index:11;inset:0;display:grid;grid-template-columns:1fr auto 1fr;align-items:stretch;overflow:hidden;
+  background:linear-gradient(105deg,#13283a 0 49.6%,#0a1420 49.6% 50.4%,#2b1a22 50.4%);touch-action:manipulation;cursor:pointer}
+.vs-screen.dark{background:linear-gradient(105deg,#1b1238 0 49.6%,#07040f 49.6% 50.4%,#2a1147 50.4%)}
+.vs-side{position:relative;margin:0;min-width:0;overflow:hidden;display:flex;align-items:flex-end;justify-content:center;
+  background:radial-gradient(ellipse at 50% 62%,color-mix(in srgb,var(--vs-accent,#d7b46a) 46%,transparent) 0,transparent 68%)}
+.vs-side img{position:absolute;inset:4% 2% 12%;width:96%;height:84%;object-fit:contain;filter:drop-shadow(0 10px 18px #000a);animation:vs-in-left .42s cubic-bezier(.2,.9,.3,1) both}
+.vs-p2 img{transform:scaleX(-1);animation-name:vs-in-right}
+.vs-side figcaption{position:relative;z-index:1;width:100%;padding:6px 12px 10px;display:flex;align-items:baseline;gap:8px;
+  background:linear-gradient(0deg,#060b12f2,#060b1200);border-bottom:4px solid var(--vs-accent,#d7b46a);color:#fff}
+.vs-p2 figcaption{flex-direction:row-reverse;text-align:right}
+.vs-side figcaption b{font-size:clamp(9px,1.4vw,13px);padding:1px 6px;border-radius:4px;background:var(--vs-accent,#d7b46a);color:#10151c}
+.vs-side figcaption strong{font-size:clamp(16px,3.6vw,34px);letter-spacing:.04em;white-space:nowrap}
+.vs-side figcaption small{font-size:clamp(8px,1.3vw,13px);color:#d9e3ea;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.vs-mark{position:relative;z-index:2;align-self:center;width:0;display:flex;flex-direction:column;align-items:center;gap:6px;white-space:nowrap}
+.vs-mark span{font-size:clamp(40px,11vw,112px);font-weight:900;font-style:italic;line-height:.9;color:#fff3cf;
+  text-shadow:0 0 18px #ffb347,4px 4px 0 #7a2a12,-2px -2px 0 #10151c;animation:vs-pop .5s .12s cubic-bezier(.2,1.6,.4,1) both}
+.vs-screen.dark .vs-mark span{color:#f0dcff;text-shadow:0 0 22px #a56cff,4px 4px 0 #2c0f57,-2px -2px 0 #07040f}
+.vs-mark em{font-style:normal;font-size:clamp(10px,1.9vw,17px);font-weight:800;color:#e3c8ff;padding:3px 10px;border-radius:6px;background:#12071fd9;border:1px solid #a56cff}
+.vs-mark small{font-size:clamp(8px,1.3vw,12px);color:#c9d6df;padding:2px 9px;border-radius:999px;background:#060b12cc;letter-spacing:.08em}
+.vs-screen[data-ready="false"] .vs-mark small{animation:vs-blink 1s steps(2) infinite}
+@keyframes vs-in-left{from{translate:-34% 0;opacity:0}to{translate:0 0;opacity:1}}
+@keyframes vs-in-right{from{translate:34% 0;opacity:0}to{translate:0 0;opacity:1}}
+@keyframes vs-pop{from{scale:2.6;opacity:0}to{scale:1;opacity:1}}
+@keyframes vs-blink{50%{opacity:.35}}
+/* 顔アップ・勝利ムービー中は HUD と案内を隠す（3D は同じ canvas） */
+#arena[data-intro-phase="face"] .hud,#arena[data-intro-phase="face"] .note,#arena[data-flow="victory"] .hud,#arena[data-flow="victory"] .note,
+#arena[data-flow="vs"] .hud,#arena[data-flow="vs"] .note,#arena[data-flow="victory"] .practice-panel,#arena[data-flow="result"] .hud,#arena[data-flow="ko"] .note{visibility:hidden}
+/* 結果パネルは勝利の決めポーズを隠さないよう上寄せ・半透明の幕なし */
+#arena[data-flow="result"] #game-over{background:linear-gradient(180deg,#0d1929b3,#0d192900 46%);backdrop-filter:none;place-items:start center;padding-top:5%}
+.intro-plate{position:absolute;z-index:6;left:4%;bottom:9%;display:flex;align-items:baseline;gap:9px;padding:6px 16px 7px 10px;color:#fff;pointer-events:none;
+  background:linear-gradient(90deg,#060b12e6 62%,#060b1200);border-left:6px solid var(--plate-accent,#d7b46a);animation:plate-in .28s ease-out both}
+.intro-plate[data-slot="1"]{left:auto;right:4%;flex-direction:row-reverse;padding:6px 10px 7px 16px;border-left:0;border-right:6px solid var(--plate-accent,#d7b46a);
+  background:linear-gradient(270deg,#060b12e6 62%,#060b1200)}
+.intro-plate b{font-size:clamp(9px,1.4vw,13px);color:var(--plate-accent,#d7b46a)}
+.intro-plate strong{font-size:clamp(18px,4.2vw,38px);letter-spacing:.05em}
+.intro-plate small{font-size:clamp(9px,1.5vw,14px);color:#d9e3ea}
+@keyframes plate-in{from{translate:0 12px;opacity:0}to{translate:0 0;opacity:1}}
+.round-call{position:absolute;z-index:6;inset:0;display:grid;place-items:center;pointer-events:none}
+.round-call strong{font-size:clamp(34px,10vw,104px);font-weight:900;font-style:italic;letter-spacing:.06em;color:#fff6dc;
+  text-shadow:0 0 16px #ffb347,3px 4px 0 #7a2a12;animation:call-in .26s cubic-bezier(.2,1.5,.4,1) both}
+.round-call[data-kind="call"] strong{color:#ffe07a;text-shadow:0 0 22px #ff7a2e,3px 4px 0 #6a1408}
+@keyframes call-in{from{scale:1.9;opacity:0}to{scale:1;opacity:1}}
+.ko-banner{position:absolute;z-index:7;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding-top:9%;gap:2px;pointer-events:none;
+  background:radial-gradient(ellipse at 50% 50%,#0000 38%,#0009 100%)}
+.ko-banner strong{font-size:clamp(44px,13vw,140px);font-weight:900;font-style:italic;line-height:.92;letter-spacing:.03em;color:#fff;
+  text-shadow:0 0 26px #ff4a2e,5px 6px 0 #8a130a,-2px -2px 0 #10151c;animation:ko-slam .5s cubic-bezier(.15,1.5,.35,1) both}
+.ko-banner small{font-size:clamp(12px,2.6vw,26px);font-weight:800;letter-spacing:.3em;color:#ffe2b8;text-shadow:0 2px 0 #10151c}
+.ko-banner[data-kind="double_ko"] strong{font-size:clamp(34px,10.5vw,112px);color:#ffe9c2}
+.ko-banner[data-kind^="timeout"]{background:none}
+.ko-banner[data-kind^="timeout"] strong{font-size:clamp(40px,12vw,128px);color:#e9f4ff;text-shadow:0 0 18px #4aa3ff,4px 5px 0 #0f3566;animation-name:call-in}
+.ko-banner[data-motion="reduced"]{background:none}.ko-banner[data-motion="reduced"] strong{animation:none}
+@keyframes ko-slam{0%{scale:3.4;opacity:0;rotate:-7deg}55%{scale:.94;opacity:1;rotate:-3deg}100%{scale:1;rotate:-3deg}}
+.victory-banner{position:absolute;z-index:6;left:0;right:0;bottom:7%;padding:8px 5% 10px;display:grid;grid-template-columns:auto 1fr;grid-template-rows:auto auto;column-gap:14px;align-items:baseline;
+  color:#fff;pointer-events:none;background:linear-gradient(0deg,#060b12e0,#060b1200);border-bottom:5px solid var(--victory-accent,#d7b46a);
+  opacity:0;translate:0 14px;transition:opacity .35s ease,translate .35s ease}
+.victory-banner[data-shown="true"]{opacity:1;translate:0 0}
+.victory-banner small{grid-column:1/3;font-size:clamp(9px,1.5vw,14px);font-weight:800;letter-spacing:.14em;color:var(--victory-accent,#d7b46a)}
+.victory-banner strong{font-size:clamp(20px,5vw,46px);letter-spacing:.05em;white-space:nowrap}
+.victory-banner p{margin:0;font-size:clamp(12px,2.5vw,24px);font-weight:700;color:#f3ecd8;min-width:0}
+.presentation-skip{position:absolute;z-index:9;top:max(8px,env(safe-area-inset-top));right:max(8px,env(safe-area-inset-right));min-width:64px;min-height:36px;padding:6px 12px;
+  border-radius:999px;border:1px solid #9fb3c2;background:#060b12c7;color:#eaf2f7;font-size:12px;font-weight:700;touch-action:manipulation}
+#arena[data-flow="victory"]~* .presentation-skip,#arena .presentation-skip[hidden]{display:none}
+@media (prefers-reduced-motion:reduce){.vs-side img,.vs-mark span,.round-call strong,.ko-banner strong,.intro-plate{animation:none}.victory-banner{transition:none}}
+.intro-plate[hidden],.round-call[hidden],.ko-banner[hidden],.victory-banner[hidden],.presentation-skip[hidden],.vs-mark em[hidden]{display:none}
