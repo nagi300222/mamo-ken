@@ -1,0 +1,449 @@
+{
+  "schemaVersion": 1,
+  "deliveryFile": "/tmp/mamoken-special-r2-authored-delivery.json",
+  "deliverySha256": "c30341647a448f972315da058b6616cbffce229bbcbe30acee43bd995b9b5bb2",
+  "deliveryVersion": "v17-p3-specials-r2",
+  "engineDirectory": "/workspace/scratch/ca539eada1ef/mamoken-p3-r2-special/exp/fable-3d/dojo",
+  "normalContactVersion": "15.1-r3",
+  "normalMotionVersion": "v15",
+  "knownReachPolicy": true,
+  "note": "Reference and candidate use the same current engine, normal source, P3 hitstop/hitstun and six frozen CPU policies. Only special surfaces/release sockets differ. Not human balance or physical-device evidence.",
+  "probes": {
+    "reference": {
+      "count": 2774,
+      "pressureCases": 76,
+      "outcomes": {
+        "hit": 1078,
+        "block": 198,
+        "whiff": 1498
+      },
+      "pressure": {
+        "initialContactCases": 76,
+        "maxHits": 4,
+        "guardReturnedAfterInitialContact": true
+      }
+    },
+    "surface": {
+      "count": 2774,
+      "pressureCases": 76,
+      "outcomes": {
+        "hit": 506,
+        "whiff": 2138,
+        "block": 130
+      },
+      "pressure": {
+        "initialContactCases": 68,
+        "maxHits": 4,
+        "guardReturnedAfterInitialContact": true
+      }
+    }
+  },
+  "cpu": {
+    "reference": {
+      "rounds": 1458,
+      "summary": [
+        {
+          "id": "moguzo",
+          "games": 288,
+          "wins": 190,
+          "draws": 10,
+          "score": 0.6770833333333334
+        },
+        {
+          "id": "pisuke",
+          "games": 288,
+          "wins": 178,
+          "draws": 15,
+          "score": 0.6440972222222222
+        },
+        {
+          "id": "godan",
+          "games": 288,
+          "wins": 103,
+          "draws": 0,
+          "score": 0.3576388888888889
+        },
+        {
+          "id": "hakuma",
+          "games": 288,
+          "wins": 92,
+          "draws": 0,
+          "score": 0.3194444444444444
+        },
+        {
+          "id": "chirka",
+          "games": 288,
+          "wins": 186,
+          "draws": 0,
+          "score": 0.6458333333333334
+        },
+        {
+          "id": "takimaru",
+          "games": 288,
+          "wins": 84,
+          "draws": 8,
+          "score": 0.3055555555555556
+        },
+        {
+          "id": "yomikage",
+          "games": 288,
+          "wins": 151,
+          "draws": 16,
+          "score": 0.5520833333333334
+        },
+        {
+          "id": "bullet",
+          "games": 288,
+          "wins": 79,
+          "draws": 9,
+          "score": 0.2899305555555556
+        },
+        {
+          "id": "dark_moguzo",
+          "games": 288,
+          "wins": 198,
+          "draws": 12,
+          "score": 0.7083333333333334
+        }
+      ]
+    },
+    "surface": {
+      "rounds": 1458,
+      "summary": [
+        {
+          "id": "moguzo",
+          "games": 288,
+          "wins": 195,
+          "draws": 4,
+          "score": 0.6840277777777778
+        },
+        {
+          "id": "pisuke",
+          "games": 288,
+          "wins": 179,
+          "draws": 13,
+          "score": 0.6440972222222222
+        },
+        {
+          "id": "godan",
+          "games": 288,
+          "wins": 101,
+          "draws": 0,
+          "score": 0.3506944444444444
+        },
+        {
+          "id": "hakuma",
+          "games": 288,
+          "wins": 92,
+          "draws": 0,
+          "score": 0.3194444444444444
+        },
+        {
+          "id": "chirka",
+          "games": 288,
+          "wins": 193,
+          "draws": 3,
+          "score": 0.6753472222222222
+        },
+        {
+          "id": "takimaru",
+          "games": 288,
+          "wins": 82,
+          "draws": 10,
+          "score": 0.3020833333333333
+        },
+        {
+          "id": "yomikage",
+          "games": 288,
+          "wins": 145,
+          "draws": 15,
+          "score": 0.5295138888888888
+        },
+        {
+          "id": "bullet",
+          "games": 288,
+          "wins": 82,
+          "draws": 7,
+          "score": 0.296875
+        },
+        {
+          "id": "dark_moguzo",
+          "games": 288,
+          "wins": 198,
+          "draws": 6,
+          "score": 0.6979166666666666
+        }
+      ]
+    }
+  },
+  "probeChanges": 710,
+  "groundFirstContact": [
+    {
+      "id": "moguzo",
+      "moveId": "s2",
+      "reference": {
+        "outcome": "hit",
+        "frame": 6,
+        "advantage": 0
+      },
+      "surface": {
+        "outcome": "hit",
+        "frame": 6,
+        "advantage": 0
+      }
+    },
+    {
+      "id": "moguzo",
+      "moveId": "s3",
+      "reference": {
+        "outcome": "hit",
+        "frame": 12,
+        "advantage": 0
+      },
+      "surface": {
+        "outcome": "hit",
+        "frame": 12,
+        "advantage": 0
+      }
+    },
+    {
+      "id": "pisuke",
+      "moveId": "s2",
+      "reference": {
+        "outcome": "hit",
+        "frame": 6,
+        "advantage": 0
+      },
+      "surface": {
+        "outcome": "hit",
+        "frame": 6,
+        "advantage": 0
+      }
+    },
+    {
+      "id": "pisuke",
+      "moveId": "s3",
+      "reference": {
+        "outcome": "hit",
+        "frame": 7,
+        "advantage": 0
+      },
+      "surface": {
+        "outcome": "hit",
+        "frame": 7,
+        "advantage": 0
+      }
+    },
+    {
+      "id": "godan",
+      "moveId": "s1",
+      "reference": {
+        "outcome": "hit",
+        "frame": 21,
+        "advantage": 1
+      },
+      "surface": {
+        "outcome": "hit",
+        "frame": 21,
+        "advantage": 1
+      }
+    },
+    {
+      "id": "godan",
+      "moveId": "s2",
+      "reference": {
+        "outcome": "hit",
+        "frame": 11,
+        "advantage": 0
+      },
+      "surface": {
+        "outcome": "hit",
+        "frame": 11,
+        "advantage": 0
+      }
+    },
+    {
+      "id": "godan",
+      "moveId": "s3",
+      "reference": {
+        "outcome": "hit",
+        "frame": 18,
+        "advantage": 1
+      },
+      "surface": {
+        "outcome": "hit",
+        "frame": 18,
+        "advantage": 1
+      }
+    },
+    {
+      "id": "hakuma",
+      "moveId": "s1",
+      "reference": {
+        "outcome": "hit",
+        "frame": 11,
+        "advantage": 2
+      },
+      "surface": {
+        "outcome": "hit",
+        "frame": 11,
+        "advantage": 2
+      }
+    },
+    {
+      "id": "hakuma",
+      "moveId": "s2",
+      "reference": {
+        "outcome": "hit",
+        "frame": 8,
+        "advantage": 0
+      },
+      "surface": {
+        "outcome": "hit",
+        "frame": 8,
+        "advantage": 0
+      }
+    },
+    {
+      "id": "hakuma",
+      "moveId": "s3",
+      "reference": {
+        "outcome": "hit",
+        "frame": 12,
+        "advantage": 0
+      },
+      "surface": {
+        "outcome": "hit",
+        "frame": 12,
+        "advantage": 0
+      }
+    },
+    {
+      "id": "chirka",
+      "moveId": "s1",
+      "reference": {
+        "outcome": "hit",
+        "frame": 13,
+        "advantage": 1
+      },
+      "surface": {
+        "outcome": "hit",
+        "frame": 13,
+        "advantage": 1
+      }
+    },
+    {
+      "id": "chirka",
+      "moveId": "s2",
+      "reference": {
+        "outcome": "hit",
+        "frame": 8,
+        "advantage": -1
+      },
+      "surface": {
+        "outcome": "hit",
+        "frame": 8,
+        "advantage": -1
+      }
+    },
+    {
+      "id": "chirka",
+      "moveId": "s3",
+      "reference": {
+        "outcome": "hit",
+        "frame": 13,
+        "advantage": 0
+      },
+      "surface": {
+        "outcome": "hit",
+        "frame": 13,
+        "advantage": 0
+      }
+    },
+    {
+      "id": "takimaru",
+      "moveId": "s2",
+      "reference": {
+        "outcome": "hit",
+        "frame": 10,
+        "advantage": 1
+      },
+      "surface": {
+        "outcome": "hit",
+        "frame": 10,
+        "advantage": 1
+      }
+    },
+    {
+      "id": "yomikage",
+      "moveId": "s2",
+      "reference": {
+        "outcome": "hit",
+        "frame": 8,
+        "advantage": 0
+      },
+      "surface": {
+        "outcome": "hit",
+        "frame": 8,
+        "advantage": 0
+      }
+    },
+    {
+      "id": "bullet",
+      "moveId": "s2",
+      "reference": {
+        "outcome": "hit",
+        "frame": 9,
+        "advantage": -1
+      },
+      "surface": {
+        "outcome": "hit",
+        "frame": 9,
+        "advantage": -1
+      }
+    },
+    {
+      "id": "bullet",
+      "moveId": "s3",
+      "reference": {
+        "outcome": "hit",
+        "frame": 19,
+        "advantage": 1
+      },
+      "surface": {
+        "outcome": "hit",
+        "frame": 19,
+        "advantage": 1
+      }
+    },
+    {
+      "id": "dark_moguzo",
+      "moveId": "s2",
+      "reference": {
+        "outcome": "hit",
+        "frame": 5,
+        "advantage": -1
+      },
+      "surface": {
+        "outcome": "hit",
+        "frame": 5,
+        "advantage": -1
+      }
+    },
+    {
+      "id": "dark_moguzo",
+      "moveId": "s3",
+      "reference": {
+        "outcome": "hit",
+        "frame": 7,
+        "advantage": -1
+      },
+      "surface": {
+        "outcome": "hit",
+        "frame": 7,
+        "advantage": -1
+      }
+    }
+  ],
+  "cpuWinnerChanges": 87
+}

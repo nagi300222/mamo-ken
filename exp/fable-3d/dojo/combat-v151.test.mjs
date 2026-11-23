@@ -3,22 +3,28 @@ import assert from 'node:assert/strict';
 import {Battle} from './battle.js';
 import {IDS,normalMove} from './balance.js';
 import {NORMAL_SLOTS,MOTIFS} from './normal-motifs-v15.js';
-import {NORMAL_CONTACTS} from './normal-contacts-v151.js';
+import {readFileSync} from 'node:fs';
+import {NORMAL_CONTACTS,NORMAL_HURT_BOUNDS} from './normal-contact-source.js';
+import {ACTIVE_NORMAL_MOTION_SOURCE} from './normal-motion-source.js';
 import {normalClipTime} from './normal-timing-v151.js';
 import {normalReachAt,normalHeightAt,normalVerticalContact} from './normal-contact-runtime-v151.js';
-import * as NORMAL_ART from './normal-contacts-v151.js';
 import {fighterStyle} from './fighter-style.js';
 import {cpuInput,CPU_LEVELS} from './cpu.js';
 import {createPracticeController} from './practice-mode.js';
+import {practiceRouteFor,P3_COMBO_FINISHERS} from './combo-routes-p3.mjs';
 
-export function route(id,distance=.35,face=1,delay=0,crouch=false){
+const authoredNormals=ACTIVE_NORMAL_MOTION_SOURCE.version==='v17'?JSON.parse(readFileSync(new URL('../motion/v17/normals_v17.json',import.meta.url),'utf8')).characters:null;
+const authoredParts={pawL:'armL',pawR:'armR',elbowL:'armL',elbowR:'armR',shoulderL:'armL',shoulderR:'armR',footL:'legL',footR:'legR',kneeL:'legL',kneeR:'legR',tail:'tail',head:'head'};
+
+export function route(id,distance=.35,face=1,delay=0,crouch=false,finisher=practiceRouteFor(id).finisher,{corner=false}={}){
  const g=new Battle(id,'godan');const[p,t]=g.fighters;
  p.x=-face*distance/2;t.x=face*distance/2;p.facing=face;t.facing=-face;
+ if(corner){p.x=face*(1.76-distance);t.x=face*1.76;}
  let stage=0,wait=0;const hits=[],events=[];
  for(let f=0;f<160;f++){
   let input=f===0?{weak:true,down:crouch}:{down:crouch};
   if((stage===1||stage===3)&&!p.stop){
-   if(wait++>=delay){input=stage===1?{strong:true,down:crouch}:{special2:true};stage++;wait=0;}
+   if(wait++>=delay){input=stage===1?{strong:true,down:crouch}:{['special'+finisher[1]]:true};stage++;wait=0;}
   }
   g.tick(input,hits.length?{[face===1?'right':'left']:true,down:crouch}:{});
   events.push(...g.events);
@@ -41,7 +47,7 @@ test('54 explicit normal rows are legal, contact timing aligns on the actual sta
  }
  assert.equal(keys.size,54);
 });
-test('all nine weak → strong → special2 routes are three real unguardable hits in both directions',()=>{
+test('all nine measured character-specific midscreen routes are three real unguardable hits in both directions',()=>{
  for(const id of IDS)for(const face of [1,-1]){
   const {hits,events}=route(id,.35,face);
   assert.deepEqual(hits.map(e=>e.comboHits),[1,2,3],id+' '+face);
@@ -163,11 +169,29 @@ test('uncanceled heavy hits recover first; their large block and whiff risks rem
  }
 });
 
-test('all nine crouch weak → crouch strong → special2 routes also beat continuous low guard after first hit',()=>{
+test('all nine measured character-specific crouch routes also beat continuous low guard after first hit',()=>{
  for(const id of IDS)for(const face of [1,-1]){
   const {hits,events}=route(id,.35,face,0,true);
   assert.deepEqual(hits.map(e=>e.comboHits),[1,2,3],id+' crouch '+face);
   assert.equal(events.filter(e=>e.type==='block').length,0,id);
+ }
+});
+test('the original shared special2 conversion remains valid at minimum wall spacing in both directions',()=>{
+ for(const id of IDS)for(const face of [1,-1])for(const crouch of [false,true]){
+  const {hits,events}=route(id,.34,face,0,crouch,'s2',{corner:true});
+  assert.deepEqual(hits.map(e=>e.comboHits),[1,2,3],id+' wall conversion');
+  assert.equal(events.filter(e=>e.type==='cancel').length,2);assert.equal(events.filter(e=>e.type==='block').length,0);
+ }
+});
+test('practice route hints name the actual native finisher and retain finite confirmation windows',()=>{
+ for(const id of IDS){
+  const hint=practiceRouteFor(id),r2=practiceRouteFor(id,{normalVersion:'v17',specialVersion:'v17r2'});
+  assert.equal(r2.finisher,P3_COMBO_FINISHERS[id]);assert.ok(hint.text.includes(hint.name));
+  assert.equal(practiceRouteFor(id,{normalVersion:'v15',specialVersion:null}).finisher,'s2');
+  const guarded=new Battle(id,'godan'),[p,t]=guarded.fighters;p.x=-.175;t.x=.175;
+  let hits=0;for(let f=0;f<140;f++){guarded.tick(f===0?{weak:true}:{},{right:true});hits+=guarded.events.filter(e=>e.type==='hit').length;}
+  assert.equal(hits,0,id+' guide opener must respect existing guard');
+  for(const crouch of [false,true]){const late=route(id,.35,1,8,crouch);assert.equal(late.events.filter(e=>e.type==='cancel').length,0,id+' delayed confirm');}
  }
 });
 test('all 54 integrated contacts are resolved and performance never extends the authored surface',()=>{
@@ -176,11 +200,22 @@ test('all 54 integrated contacts are resolved and performance never extends the 
   assert.equal(c.status,'ok',id+'/'+slot+' unresolved audit');
   assert.ok(c.contact>0&&c.contact<c.contactEnd&&c.contactEnd<1,id+'/'+slot);
   assert.equal(m.reach,c.reach,id+'/'+slot);
-  assert.equal(c.gesture,MOTIFS[id][slot].gesture,id+'/'+slot+' stale contact data');
+  assert.equal(c,ACTIVE_NORMAL_MOTION_SOURCE.contacts[id][slot],id+'/'+slot+' mixed contact source');
+  if(ACTIVE_NORMAL_MOTION_SOURCE.version==='v17'){
+   const authored=authoredNormals[id][slot];
+   const intended=authored.attack_limb.split('+').flatMap(limb=>limb==='body'?['body','head']:[authoredParts[limb]]);
+   assert.equal(c.clip,ACTIVE_NORMAL_MOTION_SOURCE.clipName(slot,{rigId:id}),id+'/'+slot+' stale clip');
+   assert.equal(c.gesture,authored.name_jp,id+'/'+slot+' stale action identity');
+   assert.equal(c.attackLimb,authored.attack_limb,id+'/'+slot+' stale author limb');
+   assert.ok(intended.every(Boolean)&&intended.includes(c.attackPart),id+'/'+slot+' measured surface differs from author limb');
+   assert.ok(c.activeReach.every(point=>intended.includes(point.part)),id+'/'+slot+' active surface differs from author limb');
+  }else{
+   assert.equal(c.gesture,MOTIFS[id][slot].gesture,id+'/'+slot+' stale v15 contact data');
+   if(id==='bullet')assert.equal(c.attackPart,slot==='stand_weak'?'head':'tail',slot);
+  }
   assert.deepEqual(m.activeReach,c.activeReach);
   assert.equal(normalReachAt(m,m.startup),c.activeReach[0].reach);
   assert.equal(normalReachAt(m,m.startup+m.active-1),c.activeReach.at(-1).reach);
-  if(id==='bullet')assert.equal(c.attackPart,slot==='stand_weak'?'head':'tail',slot);
   assert.ok(c.activeReach.every((p,i)=>Number.isFinite(p.reach)&&Number.isFinite(p.height)&&p.reach>0&&p.phase>=0&&p.phase<=1&&(!i||p.phase>c.activeReach[i-1].phase)));
  }
 });
@@ -201,7 +236,7 @@ test('the real floor-level tail hits grounded fighters and misses their raised f
   a.x=0;t.x=.40;a.facing=1;a.frame=m.startup;t.state='idle';
   assert.equal(g._contact(a,t,m),true,id+' grounded low tail');
   t.y=.20;t.state='jump';assert.equal(g._contact(a,t,m),false,id+' invisible upward tail');
-  const bounds=NORMAL_ART.NORMAL_HURT_BOUNDS[id];
+  const bounds=NORMAL_HURT_BOUNDS[id];
   assert.ok(bounds.crouch.top<bounds.stand.top,id+' unmeasured duck');
  }
 });

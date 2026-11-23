@@ -3,22 +3,36 @@ import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {Battle} from './battle.js';
 import {IDS,specialMove,normalMove,ultimateMove} from './balance.js';
+import {NORMAL_HURT_BOUNDS} from './normal-contact-source.js';
+import {ACTIVE_P3_SPECIAL_CONTACT_DELIVERY,withP3SpecialContact,specialSurfaceAt} from './special-contact-runtime-p3.js';
 import {specialHitstunP3} from './special-balance-p3.js';
 import {probeSpecial} from './p3-special-audit.mjs';
 const base=JSON.parse(readFileSync(new URL('../../../docs/mamoken-p3/baseline/MOVE_CATALOG.json',import.meta.url)));
 const candidates=base.catalog.filter(row=>row.kind==='special'&&specialHitstunP3(row.characterId,+row.moveId[1]-1)!==undefined);
+// Grounded first contact stays at the accepted .34m neutral spacing. For a
+// latest-active anti-air probe, place the body where that actual visible limb is
+// now pointing; a fist above the standing head is not a grounded late hit.
+function latestVisiblePlacement(id,index,targetId){
+ const move=withP3SpecialContact({id},specialMove(id,index),'s'+(index+1),ACTIVE_P3_SPECIAL_CONTACT_DELIVERY);
+ if(!move.specialContact)return {distance:.34,height:0};
+ const point=specialSurfaceAt(move,move.startup+move.active-1),box=NORMAL_HURT_BOUNDS[targetId].stand,radius=move.strikeRadius??.06;
+ const groundOverlap=point.height+radius>=box.bottom&&point.height-radius<=box.top;
+ return {distance:Math.min(.34,Math.max(.02,point.reach+.12)),height:groundOverlap?0:Math.max(0,point.height-(box.top+box.bottom)/2)};
+}
 
 test('19 near-range specials reward an actual hit while keeping large guard/whiff risks',()=>{
  assert.equal(candidates.length,19);
  for(const row of candidates){
   const index=+row.moveId[1]-1,move=specialMove(row.characterId,index);
   for(const face of [1,-1])for(const timing of ['first','last']){
-   const hit=probeSpecial(row.characterId,index,{face,timing}),guard=probeSpecial(row.characterId,index,{face,timing,guard:true});
+   const placement=timing==='last'?latestVisiblePlacement(row.characterId,index,'pisuke'):{distance:.34,height:0};
+   const hit=probeSpecial(row.characterId,index,{face,timing,...placement}),guard=probeSpecial(row.characterId,index,{face,timing,...placement,guard:true});
    assert.equal(hit.outcome,'hit',row.key+' '+face+' '+timing);
    assert.equal(hit.contactActionFrame,move.startup+(timing==='last'?move.active-1:0));
    assert.equal(hit.advantage,move.hitstun-move.active-move.recovery+(timing==='last'?move.active-1:0));
    if(timing==='first')assert.ok(hit.advantage>=-1&&hit.advantage<=2,row.key+' over-rewarded');
-   assert.equal(guard.outcome,'block',row.key+' guard');assert.ok(guard.advantage<=-10,row.key+' removed block risk');
+   if(placement.height<=.07){assert.equal(guard.outcome,'block',row.key+' grounded guard');assert.ok(guard.advantage<=-10,row.key+' removed block risk');}
+   else assert.equal(guard.outcome,'hit',row.key+' air fixture must retain the no-air-guard rule');
    assert.equal(hit.damage,move.damage,row.key+' changed damage');
   }
   const miss=probeSpecial(row.characterId,index,{whiff:true});
@@ -37,11 +51,12 @@ test('native projectile, paired throw and successful counter timings retain thei
 test('earliest and latest special contact cannot sustain a corner infinite through normal cancels',()=>{
  for(const row of candidates)for(const face of [1,-1])for(const late of [false,true]){
   const g=new Battle(row.characterId,'godan'),[p,t]=g.fighters,index=+row.moveId[1]-1,move=specialMove(row.characterId,index);
-  p.x=face*1.42;t.x=face*1.76;p.facing=face;t.facing=-face;g._begin(p,move,row.moveId);
-  let landed=false,blocks=0,maxHits=0,contacts=0;
+  const placement=late?latestVisiblePlacement(row.characterId,index,'godan'):{distance:.34,height:0};
+  p.x=face*(1.76-placement.distance);t.x=face*1.76;p.facing=face;t.facing=-face;g._begin(p,move,row.moveId);
+  let landed=false,blocks=0,maxHits=0,contacts=0,firstActionContact=null;
   for(let f=0;f<2000;f++){
    t.hp=999999;t.guard=100;
-   if(!landed&&late){t.y=p.frame+1<move.startup+move.active-1?2:0;t.vy=0;}
+   if(!landed&&late){t.y=p.frame+1<move.startup+move.active-1?2:placement.height;t.vy=0;}
    const input={};
    if(landed&&!p.stop&&!p.stun){
     if(!p.action&&!p.prev.weak)input.weak=true;
@@ -50,9 +65,10 @@ test('earliest and latest special contact cannot sustain a corner infinite throu
    }
    const back=p.x>=t.x?'left':'right';
    g.tick(input,landed?{[back]:true,down:p.action?.level==='low'}:{});
-   for(const event of g.events){if(event.type==='hit'){landed=true;contacts++;maxHits=Math.max(maxHits,event.comboHits??1);}if(event.type==='block')blocks++;}
+   for(const event of g.events){if(event.type==='hit'){firstActionContact??=p.frame;landed=true;contacts++;maxHits=Math.max(maxHits,event.comboHits??1);}if(event.type==='block')blocks++;}
   }
   assert.ok(landed&&blocks>0,row.key+' '+face+' late='+late+' never provided a real guard return');
+  assert.equal(firstActionContact,move.startup+(late?move.active-1:0),row.key+' did not exercise the intended actual active frame');
   assert.ok(maxHits<=4,row.key+' unlimited guaranteed contacts '+maxHits);
   assert.ok(contacts<=4,row.key+' converted correct continuous guard into more hits '+contacts);
  }

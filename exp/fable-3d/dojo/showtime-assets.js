@@ -1,5 +1,5 @@
 import { IDS } from './balance.js';
-import {loadApprovedSpecialMotionSource,specialMotionOverride} from './special-motion-source.js';
+import {loadApprovedSpecialMotionSource,specialMotionOverride,canonicalSpecialClip} from './special-motion-source.js';
 
 export const MOVE_IDS = ['s1', 's2', 's3', 'ultimate'];
 const SFX_KEYS = new Set(['tap','hit','block','special','ultimate','roar','clinch','counter','ko','wind','grunt','chime']);
@@ -168,7 +168,7 @@ export function createShowtimeLoader(base, {specialMotionSource}={}) {
       const original = validateMoveManifest(byId.get(moveId), id, moveId);
       const selected = specialMotionOverride(specialSource,id,original,url);
       const spec=validateMoveManifest(selected.spec,id,moveId),clipURL=selected.url;
-      const attacker = await loadClip(spec.animationSources.attacker, clipURL);
+      const attacker = canonicalSpecialClip(spec,await loadClip(spec.animationSources.attacker, clipURL));
       validateClipTiming(spec, attacker);
       const targetSource = spec.animationSources.target;
       const target = targetSource?.glb ? await loadClip(targetSource, clipURL) : null;

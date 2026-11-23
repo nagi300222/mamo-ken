@@ -29,6 +29,17 @@ try{
  await page.waitForFunction(()=>mamokenStory.mode==='battle'&&mamokenStory.battle?.frame>3,undefined,{timeout:120000});
  assert.equal(await page.evaluate(()=>mamokenStory.actors[0].baseId),'chirka');
  assert.deepEqual(await page.evaluate(()=>mamokenStory.avatar.combat.specials),['chirka.s1','chirka.s2','chirka.s3']);
+ const supplied=await page.evaluate(()=>{
+  const actor=mamokenStory.actors[0],source=actor.normalMotionSource,pack=source.pack(actor.baseId??actor.id);
+  return pack.clipNames.map(name=>{
+   const clip=actor.actions[name]?.getClip();
+   return {name,slot:source.slotForClip(name),rotations:clip?.tracks.filter(t=>t.name.endsWith('.quaternion')).length??0};
+  });
+ });
+ assert.equal(supplied.length,6,'Story is missing the selected normal package');
+ assert.deepEqual(supplied.map(row=>row.slot).sort(),['stand_weak','stand_heavy','crouch_weak','crouch_heavy','air_weak','air_heavy'].sort());
+ for(const row of supplied)assert.ok(row.rotations>=3,'Story normal is missing real bone tracks: '+row.name);
+
  // Suppress CPU decisions only in the acceptance fixture. Latch at the exact
  // real Battle startup boundary, before main.js samples and renders the actor.
  await page.evaluate(()=>{
@@ -57,9 +68,11 @@ try{
   await page.locator('[data-control="strong"]').tap();
   await page.waitForFunction(slot=>{
    const g=mamokenStory.battle,a=mamokenStory.actors[0],p=g.fighters[0];
-   return g.__storyMotionProbe?.frozen&&p.action?.id===slot&&p.frame===p.action.startup&&a.currentName==='v15_'+slot;
+   const source=a.normalMotionSource,name=source.pack(a.baseId??a.id).clipNames.find(name=>source.slotForClip(name)===slot);
+   return !!name&&g.__storyMotionProbe?.frozen&&p.action?.id===slot&&p.frame===p.action.startup&&a.currentName===name;
   },slot,{timeout:10000});
   const row=await page.evaluate(async()=>{
+   const {normalClipTime}=await import('../dojo/normal-timing-v151.js');
    const THREE=await import('three'),g=mamokenStory.battle,p=g.fighters[0],actor=mamokenStory.actors[0];
    const clip=actor.current.getClip(),time=actor.current.time,measurement=p.customMeasurement.normals[p.action.id];
    const tracks=clip.tracks.filter(track=>track.name.endsWith('.morphTargetInfluences'));
@@ -94,10 +107,12 @@ try{
      if(forward>reach){reach=forward;height=point.y-p.y;}
     }
    }
-   return {slot:p.action.id,facing:p.facing,frame:p.frame,startup:p.action.startup,clip:clip.name,time,
+   return {slot:p.action.id,facing:p.facing,frame:p.frame,startup:p.action.startup,clip:clip.name,time,expectedTime:normalClipTime(actor.baseId??actor.id,p.action.id,p.frame,p.action,clip.duration,actor.normalMotionSource.contacts),weight:actor.current.getEffectiveWeight(),
     attackPart:measurement.attackPart,vertices,reach,height,expectedReach:p.action.activeReach[0].reach,expectedHeight:p.action.activeReach[0].height,
     meshTargets,boundTargets,maxMorphError,morphCounts:actor.avatar.meshes.map(mesh=>({name:mesh.name,count:mesh.morphTargetInfluences?.length??0}))};
   });
+  assert.ok(Math.abs(row.time-row.expectedTime)<1e-6,'Story normal clock diverges from Battle startup: '+JSON.stringify(row));
+  assert.ok(row.weight>.99,'Story normal still blends the previous pose at contact: '+JSON.stringify(row));
   assert.equal(row.facing,facing);assert.equal(row.frame,row.startup);assert.ok(row.vertices>0,'missing actual striking surface');
   assert.ok(row.meshTargets.length>=7,'Story actor does not use the modular asset');
   assert.deepEqual([...new Set(row.boundTargets)].sort(),[...new Set(row.meshTargets)].sort(),'Story clip did not bind the morph stream to every avatar module');
@@ -107,7 +122,7 @@ try{
   report.push(row);await page.screenshot({path:dir+'/'+slot+'-'+(facing===1?'right':'left')+'.png'});
  }
  await page.keyboard.up('ArrowDown');assert.deepEqual(errors,[]);
- await writeFile(dir+'/report.json',JSON.stringify({report,errors},null,2));
+ await writeFile(dir+'/report.json',JSON.stringify({supplied,report,errors},null,2));
  console.log('STORY MOTION WEBGL PASS: Chirka standing/crouching heavy in both directions, all module morph tracks applied, actual Story skin reach/height matches Battle contact');
 }catch(error){await page.screenshot({path:dir+'/failure.png'}).catch(()=>{});console.error('page errors',errors);throw error;}
 finally{await browser.close();}

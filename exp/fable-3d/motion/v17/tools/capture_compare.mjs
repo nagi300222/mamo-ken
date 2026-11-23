@@ -10,7 +10,7 @@ const out = path.resolve(String(arg('out'))), pack = String(arg('pack', 'current
 const { srv, url } = await serve(); const browser = await launch();
 for (const id of ids) {
   const g = await openGame(browser, url, { scale: 1 });
-  if (pack !== 'current') await g.page.route(/\/normal\/v15\/(\w+)_normals\.glb/, r => { const c = r.request().url().match(/\/(\w+)_normals\.glb/)[1]; r.fulfill({ contentType: 'model/gltf-binary', body: fs.readFileSync(path.join(path.resolve(pack), c + '_normals.glb')) }); });
+  if (pack !== 'current') await g.page.route(/\/normal\/v15\/(\w+)_normals\.glb/, r => { const c = r.request().url().match(/\/(\w+)_normals\.glb/)[1]; const f = path.join(path.resolve(pack), c + '_normals.glb'); fs.existsSync(f) ? r.fulfill({ contentType: 'model/gltf-binary', body: fs.readFileSync(f) }) : r.continue(); });
   await g.start(id, foe === id ? 'pisuke' : foe); await g.until('fight', 900); await g.step(20);
   await g.page.addStyleTag({ content: '.hud,#note,#round-call,#showtime-banner,#presentation-skip{visibility:hidden!important}' });
   const box = await g.page.locator('#arena').boundingBox(); const clip = { x: Math.round(box.x), y: Math.round(box.y), width: Math.round(box.width) & ~1, height: Math.round(box.height) & ~1 };

@@ -1,3 +1,4 @@
-// No unreviewed Claude art is installed. Work replaces this null only after
-// actual v17 clip + 54 measured surfaces + review/validation are accepted.
-export const APPROVED_P3_CONTACT_DELIVERY=null;
+import {NORMAL_CONTACT_DELIVERY_V17} from './normal-contact-reviewed-v17.js';
+// Selected in this independent P3 Draft after exact-frame CPU and art review.
+// CI rechecks the live selection; P1/P2 owner gates remain pending.
+export const APPROVED_P3_CONTACT_DELIVERY=NORMAL_CONTACT_DELIVERY_V17;

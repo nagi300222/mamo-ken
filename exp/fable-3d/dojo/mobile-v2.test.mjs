@@ -3,8 +3,11 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { Battle, DRIVE, simFight } from './battle.js';
 import { chooseClip } from './models.js';
+import {createNormalMotionSource} from './normal-motion-source.js';
 import { ROSTER } from './balance.js';
 import { directionCode, pushDirection, readCommand } from './commands.js';
+
+const legacyNormals=createNormalMotionSource({version:'v15'});
 
 function scripted(sequence,{left='moguzo',right='godan',reverse=false,superReady=false}={}){
   const g=new Battle(left,right);
@@ -236,8 +239,8 @@ test('追加クリップは旧通常技・掴みの再生先より優先する',
     ['throw','stand_heavy','throw_reach','throw']
   ]){
     const p={action:{id,anim,kind}};
-    assert.equal(chooseClip(p,['idle',anim,added]),added);
-    assert.equal(chooseClip(p,['idle',anim]),anim);
+    assert.equal(chooseClip(p,['idle',anim,added],{},{normalMotionSource:legacyNormals}),added);
+    assert.equal(chooseClip(p,['idle',anim],{},{normalMotionSource:legacyNormals}),anim);
   }
 });
 
@@ -255,7 +258,9 @@ test('全9体が全9対戦相手を左右から飛び越え、着地後は後ろ
     const label=left+'/'+right+'/'+side;
     assert.ok((p.x-o.x)*side>0&&p.y===0&&apex>.62&&apex<.83,label);
     assert.equal(p.facing,-side,label);
-    p.x=o.x+side*.40;
+    // Keep the new back input against the wall: this checks guard direction,
+    // rather than allowing a valid short weak attack to whiff as we walk away.
+    p.x=side*1.76;o.x=side*(1.76-.34);
     const hp=p.hp;
     for(let i=0;i<10;i++)g.tick({[forward]:true},{weak:i===0});
     assert.ok(p.guard<ROSTER[p.id].guardMax,label);

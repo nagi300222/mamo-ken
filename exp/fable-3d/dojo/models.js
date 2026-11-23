@@ -22,7 +22,7 @@ const actionClips={
   crouch_weak:'crouch_light',crouch_heavy:'crouch_heavy',
   air_weak:'air_light',air_heavy:'air_heavy',throw:'throw_reach'
 };
-export function chooseClip(fighter, available=[], commandMap={}, {normalMotionSource=ACTIVE_NORMAL_MOTION_SOURCE}={}) {
+export function chooseClip(fighter, available=[], commandMap={}, {normalMotionSource=ACTIVE_NORMAL_MOTION_SOURCE,rigId=fighter.visualRigId??fighter.id}={}) {
   if (fighter.ko) return select(available,['ko','down','hurt_heavy','hurt_light','idle']);
   if(fighter.state==='throw_hit')return select(available,['throw_hit','throw_reach','stand_heavy','idle']);
   if(fighter.state==='thrown')return select(available,['thrown','hurt_heavy','hurt_light','idle']);
@@ -42,7 +42,7 @@ export function chooseClip(fighter, available=[], commandMap={}, {normalMotionSo
     const notation={s1:'236',s2:'623',s3:'214',ultimate:'236236'}[m.id];
     const mapped=notation?commandMap[notation]:null;
     // One versioned provider serves Dojo, Practice, Arcade, Survival and Story.
-    const authored=/^(stand|crouch|air)_(weak|heavy)$/.test(m.id||'')?normalMotionSource.clipName(m.id):null;
+    const authored=/^(stand|crouch|air)_(weak|heavy)$/.test(m.id||'')?normalMotionSource.clipName(m.id,{rigId}):null;
     if(authored&&normalMotionSource.version==='v17'&&!available.includes(authored))throw Error('Missing selected normal motion '+authored);
     const list=[authored,actionClips[m.id],mapped,exact].filter(Boolean);
     if (m.kind==='roar') list.push('roar','roar_burst','guard_stand');

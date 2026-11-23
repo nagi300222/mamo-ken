@@ -4,6 +4,8 @@ import {readFile} from 'node:fs/promises';
 import {IDS} from './balance.js';
 import {createShowtimeLoader,validateClipTiming} from './showtime-assets.js';
 import {createSpecialMotionSource,loadApprovedSpecialMotionSource,loadV17SpecialMotionSource,specialMotionOverride,specialClipTime} from './special-motion-source.js';
+import {APPROVED_P3_SPECIAL_MOTION_VERSION} from './special-motion-overrides-p3.js';
+import {ACTIVE_P3_SPECIAL_CONTACT_DELIVERY} from './special-contact-runtime-p3.js';
 const root=new URL('../motion/v17/',import.meta.url);
 const json=async url=>JSON.parse(await readFile(url,'utf8'));
 const metadata=await json(new URL('specials_v17.json',root)),contacts=await json(new URL('special_contacts_v17.json',root));
@@ -18,8 +20,16 @@ function glb(data){
  return {doc,accessor,channels};
 }
 
-test('P3 specials remain unapproved until independent delivery review',()=>{
- assert.equal(loadApprovedSpecialMotionSource(()=>{throw Error('Must not fetch while disabled');}),null);
+test('live special motion selection agrees with the approved exact contact family and actual source identities',async()=>{
+ const requests=[],selected=await loadApprovedSpecialMotionSource(async url=>{requests.push(url.href);return json(url);});
+ if(APPROVED_P3_SPECIAL_MOTION_VERSION===null){assert.equal(selected,null);assert.equal(requests.length,0);return;}
+ assert.equal(selected.version,APPROVED_P3_SPECIAL_MOTION_VERSION);assert.equal(selected.sourceVersion,ACTIVE_P3_SPECIAL_CONTACT_DELIVERY.version);
+ assert.equal(requests.length,selected.version==='v17r2'?3:2);
+ for(const id of IDS)for(const slot of ['s1','s2','s3']){
+  const expected=selected.characters[id][slot].identity,contact=ACTIVE_P3_SPECIAL_CONTACT_DELIVERY.characters[id][slot];
+  assert.equal(contact.clip,expected.runtimeClip);assert.equal(contact.sourceClip??contact.clip,expected.sourceClip);
+  assert.equal(contact.sourceFile??expected.sourceFile,expected.sourceFile);
+ }
 });
 test('real P3 delivery has nine complete three-clip packs and exactly three redesigned moves',async()=>{
  const provider=await loadV17SpecialMotionSource(json);let revised=0,retained=0;

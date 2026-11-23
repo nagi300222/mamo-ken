@@ -67,6 +67,37 @@ export class Battle {
     this.customAgain=options.customAgain??null;
     this.specialContactDelivery=options.specialContactDelivery===undefined?ACTIVE_P3_SPECIAL_CONTACT_DELIVERY:
       options.specialContactDelivery&&validateP3SpecialContactDelivery(options.specialContactDelivery);
+    // cpu audit callers copy the visible frame with {...game}; keep these known-
+    // move predicates on that read-only view as well as the actual game object.
+    this.canReachSpecial=this.canReachSpecial.bind(this);
+    this.canReachNormal=this.canReachNormal.bind(this);
+  }
+  canReachSpecial(p,target,index){
+    if(!this.specialContactDelivery)return true; // preserve the accepted old policy until adoption
+    const id='s'+(index+1);let move=specialMove(p.id,index);
+    if(this.moveResolver){move=this.moveResolver(p,move,id);if(!move)return false;}
+    move=withP3SpecialContact(p,move,id,this.specialContactDelivery);
+    if(!move)return false;
+    if(!move.specialContact)return true; // release / paired throw / counter keep their original choices
+    return this._knownMoveReaches(p,target,move);
+  }
+  canReachNormal(p,target,slot='stand_weak'){
+    if(!this.specialContactDelivery)return true;
+    let move=normalMove(p.id,slot);if(this.moveResolver){move=this.moveResolver(p,move,slot);if(!move)return false;}
+    return this._knownMoveReaches(p,target,move);
+  }
+  _knownMoveReaches(p,target,move){
+    // Only own trajectory/travel and the opponent's currently visible position.
+    // This does not read target.input, target.prev, commands or future CPU actions.
+    const facing=target.x>=p.x?1:-1,hurt=this.hurtBoundsResolver?.(target)??NORMAL_ART.NORMAL_HURT_BOUNDS;
+    const crouching=target.state==='crouch'||target.reaction==='guard_crouch_hit'||target.action?.id?.startsWith('crouch_');
+    const visibleTarget={id:target.id,x:target.x,y:target.y,state:crouching?'crouch':target.state,input:{down:crouching}};
+    for(let frame=move.startup;frame<move.startup+move.active;frame++){
+      const attacker={x:cap(p.x+facing*(move.travel??0)*frame/(move.startup+move.active),ARENA.minX,ARENA.maxX),y:p.y,facing,frame};
+      if(move.specialContact){if(specialSurfaceContact(attacker,visibleTarget,move,hurt))return true;}
+      else if((target.x-attacker.x)*facing>=0&&Math.abs(target.x-attacker.x)<=normalReachAt(move,frame)+.16&&normalVerticalContact(attacker,visibleTarget,move,hurt))return true;
+    }
+    return false;
   }
   again(){
     if(this.customAgain)return this.customAgain(this);
@@ -156,6 +187,7 @@ export class Battle {
   _begin(p,m,id,allowCancel=false){
     if(this.moveResolver){m=this.moveResolver(p,m,id);if(!m)return false;}
     m=withP3SpecialContact(p,m,id,this.specialContactDelivery);
+    if(!m)return false;
     if(m.kind==='clinch')return this._startGyuiin(p);
     if(p.ko||p.stun||p.stop||(p.y>.06&&['throw','roar','projectile'].includes(m.kind)))return false;
     if(m.isSuper&&p.super<100)return false;

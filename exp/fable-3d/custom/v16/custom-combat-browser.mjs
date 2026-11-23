@@ -36,9 +36,9 @@ try{
   for(const [targetIndex,baseId]of IDS.entries()){
    const definition=S.createDefaultAvatar(baseId),avatar=await A.createAvatar(definition,{loader});
    try{
-    const measurement=A.measureContacts(avatar);
+    const selectedStyle=IDS[(targetIndex+3)%IDS.length],measurement=A.measureContacts(avatar,{styleId:selectedStyle});
     check(measurement.source==='runtime-skinned-mesh',baseId+' is not skinned-surface measured');
-    definition.combat.styleId=IDS[(targetIndex+3)%IDS.length];definition.combat.specials=['moguzo.s1','pisuke.s1','bullet.s1'];
+    definition.combat.styleId=selectedStyle;definition.combat.specials=['moguzo.s1','pisuke.s1','bullet.s1'];
     let battle=C.createCustomBattle(definition,'pisuke',1,{measurements:[measurement]});
     for(const [slot,contact]of Object.entries(measurement.normals)){
      const original=NORMAL_CONTACTS[baseId][slot];

@@ -6,6 +6,7 @@ import {validNormalActiveTrajectory} from '../../dojo/p3-contact-adapter.js';
 import { normalizeAvatar, createDefaultAvatar, parseMoveRef, isUnmodifiedCombatShape } from './avatar-schema.js';
 
 const NORMAL=/^(stand|crouch|air)_(weak|heavy)$/;
+const CUSTOM_PROJECTILE_RADIUS=.08;
 const check=(value,message)=>{if(!value)throw new Error(message);};
 export function compatibilityForMove(definition,ref) {
   const parsed=parseMoveRef(ref);
@@ -43,7 +44,7 @@ export function compatibleSpecialSuggestion(raw) {
   const others=all.filter(m=>m.supported&&m.kind==='projectile');
   return [0,1,2].map(index=>native.find(m=>m.index===index)?.ref??others[index%others.length].ref);
 }
-function validateMeasurement(value,label,baseId) {
+function validateMeasurement(value,label,baseId,styleId) {
   check(value&&value.source==='runtime-skinned-mesh',label+'のスキン後接触計測が必要です');
   for(const slot of Object.keys(NORMAL_CONTACTS.moguzo)){
     const m=value.normals?.[slot];
@@ -52,7 +53,9 @@ function validateMeasurement(value,label,baseId) {
         // A grounded sweep's centre may finish below root while its existing
         // strike circle still intersects ground (v15 Bullet tail: -0.0259m).
         // Keep the measured sign; reject a circle entirely below that plane.
-      validNormalActiveTrajectory({...m,slot},{expectedActive:normalMove(baseId,slot).active,minLegacySamples:2,groundTolerance:NORMAL_STRIKE_RADIUS}),label+'の通常技計測が不正: '+slot);
+      validNormalActiveTrajectory({...m,slot},{expectedActive:normalMove(baseId,slot).active,
+        requiredActives:value.normalSampling==='exact-style-active-frames'||m.battleActive!==undefined?[normalMove(styleId,slot).active]:[],
+        minLegacySamples:2,groundTolerance:NORMAL_STRIKE_RADIUS}),label+'の通常技計測が不正: '+slot);
   }
   for(const stance of ['stand','crouch']){
     const b=value.hurtBounds?.[stance];
@@ -60,10 +63,26 @@ function validateMeasurement(value,label,baseId) {
   }
   const socket=value.projectileSocket;
   check(socket&&Number.isFinite(socket.forward)&&socket.forward>=0&&socket.forward<1&&Number.isFinite(socket.height)&&socket.height>0&&socket.height<1.5,label+'の発射位置が不正');
+  for(const [ref,socket]of Object.entries(value.projectileSockets??{})){
+    check(parseMoveRef(ref)&&Number.isFinite(socket.forward)&&Math.abs(socket.forward)<2&&Number.isFinite(socket.height)&&socket.height>=-CUSTOM_PROJECTILE_RADIUS&&socket.height<2,label+'の技別発射位置が不正: '+ref);
+  }
+  for(const [ref,row]of Object.entries(value.specialContacts??{})){
+    const parsed=parseMoveRef(ref),move=parsed&&specialMove(parsed.characterId,parsed.index);
+    check(row&&parsed&&row.ref===ref&&row.sourceCharacterId===parsed.characterId&&row.sourceMoveId===parsed.moveId&&
+      row.clip===parsed.moveId+'_v17'&&row.motionVersion==='v17'&&typeof row.sourceVersion==='string'&&
+      row.source==='runtime-skinned-mesh'&&row.sampling==='exact-clip-clock'&&row.status==='ok'&&
+      Number.isFinite(row.contactSeconds)&&row.contactSeconds>0&&Math.abs(row.sampledContactSeconds-row.contactSeconds)<.00002&&
+      Number.isFinite(row.reach)&&Number.isFinite(row.height)&&row.activeFrameCount===move.active&&
+      Array.isArray(row.activeReach)&&row.activeReach.length>=move.active&&row.activeReach.every((p,i,all)=>
+        Number.isFinite(p.phase)&&p.phase>=0&&p.phase<=1&&(!i||p.phase>all[i-1].phase)&&Number.isFinite(p.reach)&&Number.isFinite(p.height))&&
+      Array.from({length:move.active},(_,frame)=>frame/Math.max(1,move.active-1)).every(phase=>row.activeReach.some(p=>Math.abs(p.phase-phase)<1e-6)),
+      label+'の必殺技接触計測が不正: '+ref);
+  }
   return value;
 }
 function baseMeasurement(definition) {
   const id=definition.appearance.baseId;
+  check(ACTIVE_NORMAL_MOTION_VERSION!=='v17'||definition.combat.styleId===id,'別スタイルの自キャラは実持続フレームの接触計測後に対戦できます');
   return {normals:NORMAL_CONTACTS[id],hurtBounds:NORMAL_HURT_BOUNDS[id],projectileSocket:{forward:.30,height:.30},
     normalMotionVersion:ACTIVE_NORMAL_MOTION_VERSION,source:ACTIVE_NORMAL_MOTION_VERSION==='v17'?'v17-approved-base-surface':'v151-original-base-surface'};
 }
@@ -82,8 +101,11 @@ export function customMoveFor(fighter,id,original) {
     if(!compatibility.supported)return null;
     // Source move keeps its own timing, projectile speed, damage and visual. Only
     // the selected style's single ability can subsequently modify it in Battle.
+    const customSpecialContact=fighter.customMeasurement?.specialContacts?.[ref];
+    const projectileSocket=fighter.customMeasurement?.projectileSockets?.[ref]??customSpecialContact?.projectileSocket;
     return {...specialMove(compatibility.characterId,compatibility.index),customRef:ref,
       sourceCharacterId:compatibility.characterId,sourceMoveId:compatibility.moveId,
+      ...(customSpecialContact?{customSpecialContact}:{}),...(projectileSocket?{projectileSocket}:{}),
       customCompatibility:compatibility.compatibility};
   }
   return original;
@@ -97,7 +119,7 @@ export function createCustomBattle(player,opponent='godan',level=1,options={}) {
   const definitions=defs.map(value=>value?.definition??null);
   const measurements=definitions.map((definition,i)=>{
     if(!definition)return null;
-    if(options.measurements?.[i])return validateMeasurement(options.measurements[i],i?'相手':'自キャラ',definition.appearance.baseId);
+    if(options.measurements?.[i])return validateMeasurement(options.measurements[i],i?'相手':'自キャラ',definition.appearance.baseId,definition.combat.styleId);
     check(isUnmodifiedCombatShape(definition),'形を変えた自キャラは接触計測後に対戦できます');
     return baseMeasurement(definition);
   });
@@ -111,7 +133,7 @@ export function createCustomBattle(player,opponent='godan',level=1,options={}) {
       if(!projectile.customRef)return undefined;
       const crouch=target.y===0&&(target.state==='crouch'||target.state==='block'&&target.input?.down||target.action?.id?.startsWith('crouch_'));
       const bounds=(target.customMeasurement?.hurtBounds??NORMAL_HURT_BOUNDS[target.id])[crouch?'crouch':'stand'];
-      return projectile.y+.08>=target.y+bounds.bottom&&projectile.y-.08<=target.y+bounds.top;
+      return projectile.y+CUSTOM_PROJECTILE_RADIUS>=target.y+bounds.bottom&&projectile.y-CUSTOM_PROJECTILE_RADIUS<=target.y+bounds.top;
     },
     customAgain:old=>createCustomBattle(...definitions.map((definition,i)=>definition??raws[i]),old.level,options)
   });

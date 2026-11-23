@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import {IDS,normalMove} from './balance.js';
 import {NORMAL_CONTACTS as BASE} from './normal-contacts-v151.js';
 import {NORMAL_SLOTS} from './normal-motifs-v15.js';
-import {createP3ContactDelivery,validateP3ContactDelivery} from './p3-contact-adapter.js';
+import {createP3ContactDelivery,validateP3ContactDelivery,validNormalActiveTrajectory} from './p3-contact-adapter.js';
 import {ACTIVE_NORMAL_MOTION_VERSION,NORMAL_CONTACTS} from './normal-contact-source.js';
 import {APPROVED_P3_CONTACT_DELIVERY} from './normal-contact-overrides-p3.js';
 import {normalClipTime} from './normal-timing-v151.js';
@@ -18,7 +18,7 @@ function fixture(){
  for(const id of IDS){metadata.characters[id]={};measurements.characters[id]={};for(const slot of NORMAL_SLOTS){
   const base=BASE[id][slot];
   metadata.characters[id][slot]={clip:'v17_'+slot,character:id,game_action:slot,fps:60,frames:100,duration_sec:100/60,
-   contact_frame:30,contact_hold_frames:10,contact:.3,contact_end:.4,attack_limb:names[base.attackPart],name_jp:'test'};
+   contact_frame:30,contact_hold_frames:10,contact:.3,contact_end:.4,attack_limb:base.bothHands?'pawL+pawR':names[base.attackPart],name_jp:'test'};
   measurements.characters[id][slot]={...structuredClone(base),contact:.3,contactEnd:.4};
  }}return {metadata,measurements};
 }
@@ -79,6 +79,15 @@ test('exact rows permit extra diagnostic phases but cannot omit an actual active
  const missing=structuredClone(measurements);missing.characters.moguzo.stand_heavy.activeReach[1].phase=1/3;
  const delivery=createP3ContactDelivery(metadata,missing);delivery.characters.moguzo.stand_heavy.activeReach[1].phase=.2;
  assert.throws(()=>validateP3ContactDelivery(delivery),/actual Battle frame coverage/);
+});
+test('a mixed style must measure its own active grid without changing the source rig clock',()=>{
+ const {metadata,measurements}=fixture(),row=measurements.characters.pisuke.stand_weak;
+ Object.assign(row,{battleActive:2,contactSeconds:.5,activeReach:[row.activeReach[0],row.activeReach.at(-1)]});
+ const exact=createP3ContactDelivery(metadata,measurements).characters.pisuke.stand_weak;
+ assert.equal(validNormalActiveTrajectory({...exact,slot:'stand_weak'},{expectedActive:2,requiredActives:[3]}),false,'the 3F style midpoint was not measured');
+ exact.activeReach.splice(1,0,{...exact.activeReach[0],phase:.5});
+ assert.equal(validNormalActiveTrajectory({...exact,slot:'stand_weak'},{expectedActive:2,requiredActives:[3]}),true);
+ assert.equal(exact.battleActive,2,'the original visual rig contract stays intact');
 });
 test('only air slots accept signed local heights and real contact adds airborne world Y',()=>{
  const {metadata,measurements}=fixture(),air=measurements.characters.bullet.air_heavy;

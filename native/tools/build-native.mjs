@@ -7,12 +7,15 @@ const native=new URL('../',import.meta.url),repo=new URL('../',native),web=new U
 execFileSync(process.execPath,[fileURLToPath(new URL('exp/fable-3d/dojo/build-pages.mjs',repo))],{cwd:fileURLToPath(repo),stdio:'inherit'});
 await rm(web,{recursive:true,force:true});await mkdir(web,{recursive:true});
 await cp(new URL('exp/fable-3d/_pages/',repo),web,{recursive:true});
+await cp(new URL('runtime/native-layout.css',native),new URL('native-layout.css',web));
 await build({entryPoints:[fileURLToPath(new URL('runtime/runtime-entry.js',native))],bundle:true,format:'iife',platform:'browser',target:['safari16'],minify:true,outfile:fileURLToPath(new URL('native-runtime.js',web))});
 for(const path of ['index.html','dojo/index.html','story/index.html']){
  const file=new URL(path,web),html=await readFile(file,'utf8');
- if(!html.includes('<head>'))throw Error('Missing native entry <head>: '+path);
- const entry='<script src="/native-runtime.js"></script><style>html.native-runtime.portrait body{width:100vw;height:100dvh;transform:none;overflow:auto}html.native-runtime.portrait main{min-height:100dvh}</style>';
- await writeFile(file,html.replace('<head>','<head>'+entry));
+ if(!html.includes('<head>')||!html.includes('</head>'))throw Error('Missing native entry head: '+path);
+ // Runtime must precede game boot. Native layout follows every web stylesheet,
+ // including its compact-height media rules, without editing web source files.
+ await writeFile(file,html.replace('<head>','<head><script src="/native-runtime.js"></script>')
+  .replace('</head>','<link rel="stylesheet" href="/native-layout.css"></head>'));
 }
 const files=[];
 async function walk(dir,prefix=''){
@@ -26,5 +29,5 @@ await walk(web);files.sort((a,b)=>a.path.localeCompare(b.path));
 await mkdir(new URL('evidence/',native),{recursive:true});
 const summary={schemaVersion:1,source:'local Pages build + pinned native runtime',assetFiles:files.length,bytes:files.reduce((n,f)=>n+f.bytes,0),remoteServerURL:null,files};
 await writeFile(new URL('evidence/native-assets.json',native),JSON.stringify(summary,null,2)+'\n');
-for(const expected of ['index.html','dojo/index.html','story/index.html','native-runtime.js','chars/moguzo/moguzo.glb','custom/v16/assets/moguzo_parts.glb'])if(!files.some(f=>f.path===expected))throw Error('Missing bundled asset: '+expected);
+for(const expected of ['index.html','dojo/index.html','story/index.html','native-runtime.js','native-layout.css','chars/moguzo/moguzo.glb','custom/v16/assets/moguzo_parts.glb'])if(!files.some(f=>f.path===expected))throw Error('Missing bundled asset: '+expected);
 console.log(JSON.stringify({nativeAssetFiles:summary.assetFiles,nativeBytes:summary.bytes,remoteServerURL:null}));

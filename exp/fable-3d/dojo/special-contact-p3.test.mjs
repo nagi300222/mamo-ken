@@ -3,6 +3,10 @@ import {Battle} from './battle.js';import {IDS,specialMove,normalMove,ultimateMo
 import {NORMAL_HURT_BOUNDS} from './normal-contact-source.js';
 import {ACTIVE_P3_SPECIAL_CONTACT_DELIVERY,createP3SpecialContactDelivery,withP3SpecialContact,specialSurfaceAt} from './special-contact-runtime-p3.js';
 import {resolveSpecialBone,specialReleaseAnchor} from './special-motion-source.js';
+import {cpuInput,CPU_LEVELS} from './cpu.js';
+import {APPROVED_P3_SPECIAL_CONTACT_DELIVERY} from './special-contact-overrides-p3.js';
+import {APPROVED_P3_SPECIAL_MOTION_VERSION} from './special-motion-overrides-p3.js';
+import {specialSourceIdentity} from './special-motion-contract-p3.js';
 const metadata=JSON.parse(await readFile(new URL('../motion/v17/specials_v17.json',import.meta.url)));
 // Deliberately synthetic geometry fixture: validates the adapter and collision
 // boundaries, not Claude's surface quality. Browser acceptance measures real GLBs.
@@ -22,8 +26,12 @@ test('all six release anchors resolve to real original exported bones, including
   }
  }assert.equal(count,6);
 });
-test('special surface gameplay defaults off and rejects sparse/interpolated data as final',()=>{
- assert.equal(ACTIVE_P3_SPECIAL_CONTACT_DELIVERY,null);
+test('live special surfaces match the selected animation family and reject sparse or mismatched clocks',()=>{
+ if(APPROVED_P3_SPECIAL_MOTION_VERSION===null)assert.equal(ACTIVE_P3_SPECIAL_CONTACT_DELIVERY,null);
+ else{
+  assert.equal(ACTIVE_P3_SPECIAL_CONTACT_DELIVERY,APPROVED_P3_SPECIAL_CONTACT_DELIVERY);
+  assert.equal(specialSourceIdentity(ACTIVE_P3_SPECIAL_CONTACT_DELIVERY.version,'moguzo','s1').family,APPROVED_P3_SPECIAL_MOTION_VERSION);
+ }
  assert.throws(()=>createP3SpecialContactDelivery(metadata,{source:'runtime-skinned-mesh',characters:{}}),/exact skinned-mesh clock/);
  const bad=fixture();bad.characters.godan.s3.activeReach=[{phase:0,reach:.35,height:.3},{phase:.5,reach:.4,height:.3},{phase:1,reach:.35,height:.3}];
  assert.throws(()=>createP3SpecialContactDelivery(metadata,bad),/missing exact active frame/);
@@ -81,4 +89,37 @@ test('normal/ultimate moves and the paired throw/counter path are unchanged; rem
  const [a,t]=g.fighters;g._begin(a,specialMove('godan',2),'s3');a.x=0;t.x=.4;a.frame=a.action.startup;
  g._damage(a,t,a.action);const event=g.events.find(e=>e.type==='hit');assert.equal(event.feedback.point.space,'authored-special-surface');
  assert.ok(event.feedback.point.y>=NORMAL_HURT_BOUNDS.moguzo.stand.bottom);
+});
+test('CPU checks its own known special surface, without reading opponent buttons or increasing attack cadence',()=>{
+ const old=new Battle('moguzo','pisuke',2,{specialContactDelivery:null}),g=new Battle('moguzo','pisuke',2,{specialContactDelivery:delivery()});
+ for(const engine of [old,g]){engine.fighters[0].x=0;engine.fighters[1].x=.55;engine.fighters[0].facing=1;engine.fighters[1].facing=-1;}
+ const [p,t]=g.fighters;Object.defineProperty(t,'input',{get(){throw Error('Opponent buttons are not visible pose');}});Object.defineProperty(t,'prev',{get(){throw Error('Opponent prior buttons are not pose');}});
+ assert.equal(g.canReachSpecial(p,t,1),false);assert.equal(old.canReachSpecial(...old.fighters,1),true);
+ assert.equal({...g,frame:12}.canReachSpecial(p,t,1),false,'copied audit frame retains the known-move predicate');
+ let beats=0;
+ for(let frame=0;frame<500;frame++){
+  old.frame=frame;g.frame=frame;const legacy=cpuInput(old,...old.fighters,2),candidate=cpuInput(g,p,t,2);
+  if(legacy.special2){beats++;assert.ok(!candidate.special2);assert.ok(candidate.weak||candidate.right);}
+  else assert.deepEqual(candidate,legacy,'unrelated attack/reaction periods must not change');
+ }
+ assert.ok(beats>0);assert.equal(CPU_LEVELS[2].reactionFrames,17);assert.equal(CPU_LEVELS[2].attackPeriod,86);
+ t.x=.4;assert.equal(g.canReachSpecial(p,t,1),true);t.y=2;assert.equal(g.canReachSpecial(p,t,1),false);
+ for(const state of ['idle','crouch','block','jump','hit']){
+  t.state=state;t.y=state==='jump'?.8:0;t.reaction=state==='block'?'guard_crouch_hit':null;
+  assert.doesNotThrow(()=>g.canReachSpecial(p,t,1),state+' special must not inspect buttons');
+  assert.doesNotThrow(()=>g.canReachNormal(p,t,'stand_weak'),state+' normal must not inspect buttons');
+ }
+});
+test('custom melee requires its own compatible exact surface; existing custom release sockets are authoritative',()=>{
+ const d=delivery(),fighter={id:'godan',visualRigId:'godan',definition:{}},base={...specialMove('godan',2),customRef:'godan.s3',sourceCharacterId:'godan',sourceMoveId:'s3'};
+ assert.equal(withP3SpecialContact(fighter,base,'s3',d),null,'changed meshes cannot reuse canonical melee contacts');
+ const own={...d.characters.godan.s3,ref:'godan.s3',sourceCharacterId:'godan',sourceMoveId:'s3',motionVersion:'v17',reach:.55,height:.4,
+  activeReach:d.characters.godan.s3.activeReach.map(p=>({...p,reach:.55+p.phase*.03,height:.4}))};
+ const measured={...base,customSpecialContact:own},move=withP3SpecialContact(fighter,measured,'s3',d);assert.equal(move.reach,.55);assert.equal(move.specialContact,own);
+ for(const patch of [{ref:'godan.s2'},{sourceVersion:'wrong'},{sampledContactSeconds:own.contactSeconds+.02},{activeFrameCount:999}]){
+  assert.equal(withP3SpecialContact(fighter,{...base,customSpecialContact:{...own,...patch}},'s3',d),null);
+ }
+ const g=new Battle('godan','pisuke',1,{specialContactDelivery:d,moveResolver:()=>base});assert.equal(g._begin(g.fighters[0],specialMove('godan',2),'s3'),false);assert.equal(g.fighters[0].action,null);assert.equal(g.canReachSpecial(...g.fighters,2),false);
+ const projectile={...specialMove('moguzo',0),customRef:'moguzo.s1',sourceCharacterId:'moguzo',sourceMoveId:'s1',projectileSocket:{forward:.12,height:.41}};
+ assert.deepEqual(withP3SpecialContact(fighter,projectile,'s1',d).projectileSocket,projectile.projectileSocket);
 });

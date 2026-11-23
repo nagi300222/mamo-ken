@@ -2,13 +2,13 @@
 // v17 の通常 54 本・必殺 27 本を、**正確なクリップ時刻**（接触 contact・中間・終わり contactEnd）で実測する。
 // 実ゲームのページ（WebGL）で元 GLB のスキンメッシュの全頂点を見て、部位ごとの最前頂点の前方距離と高さを取る。補間はしない。
 // 高さは root（足元）基準の符号付きのまま保存する（空中技で尾や足が root より下へ来る演技は負になる）。
-//   node measure_exact.mjs --kind normals|specials --pack DIR --out DIR [--ids ..]
+//   node measure_exact.mjs --kind normals|specials --pack DIR --out DIR [--ids ..] [--meta FILE]     # --meta: 既定以外のメタ（r2 は ../../v17r2/specials_v17r2.json）
 //   --pack : as_v15_pack.py / specials_as_v15_pack.py が作った「現行ゲームの名前に付け替えた写し」。ゲームのソースと normal/v15 の実ファイルは変えない。
 import fs from 'node:fs'; import path from 'node:path'; import { fileURLToPath } from 'node:url';
 import { serve, launch, openGame, ALL, arg } from '../../../presentation/v151/tools/lib.mjs';
 const HERE = path.dirname(fileURLToPath(import.meta.url)), V17 = path.resolve(HERE, '..');
 const kind = String(arg('kind', 'normals')), pack = path.resolve(String(arg('pack'))), out = path.resolve(String(arg('out'))), ids = String(arg('ids', ALL.join(','))).split(',');
-const META = JSON.parse(fs.readFileSync(path.join(V17, kind === 'normals' ? 'normals_v17.json' : 'specials_v17.json'))).characters;
+const META = JSON.parse(fs.readFileSync(arg('meta') ? path.resolve(String(arg('meta'))) : path.join(V17, kind === 'normals' ? 'normals_v17.json' : 'specials_v17.json'))).characters;
 // Battle の持続フレーム数（通常技は Codex の明示表 normal-balance-v151.js、必殺は現行 balance の写し）。各 active フレーム i の phase=i/(active-1) に対応する正確時刻を測る
 const { NORMAL_BALANCE } = await import(path.join(V17, '../../dojo/normal-balance-v151.js'));
 const ANCHOR = { pawL: 'pawL', pawR: 'pawR', footL: 'footL', footR: 'footR', tail: 'tail_03', chest: 'chest', elbowR: 'forearmR', shoulderL: 'shoulderL' };
@@ -34,7 +34,7 @@ const IN_PAGE = () => {
 const { srv, url } = await serve(); const browser = await launch(); fs.mkdirSync(out, { recursive: true });
 for (const id of ids) {
   const g = await openGame(browser, url, { scale: 1 });
-  await g.page.route(/\/normal\/v15\/(\w+)_normals\.glb/, r => { const c = r.request().url().match(/\/(\w+)_normals\.glb/)[1]; r.fulfill({ contentType: 'model/gltf-binary', body: fs.readFileSync(path.join(pack, c + '_normals.glb')) }); });
+  await g.page.route(/\/normal\/v15\/(\w+)_normals\.glb/, r => { const c = r.request().url().match(/\/(\w+)_normals\.glb/)[1]; const f = path.join(pack, c + '_normals.glb'); fs.existsSync(f) ? r.fulfill({ contentType: 'model/gltf-binary', body: fs.readFileSync(f) }) : r.continue(); });      // 写しに無い体（相手役）は現行のまま
   await g.start(id, id === 'moguzo' ? 'pisuke' : 'moguzo'); await g.until('fight', 900); await g.step(10);
   await g.page.evaluate(() => { const [p, t] = mamoken3d.battle.fighters; p.x = -.9; t.x = .9; p.facing = 1; }); await g.page.evaluate(IN_PAGE);
   const R = {};

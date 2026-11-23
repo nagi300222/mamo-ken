@@ -15,6 +15,8 @@
 
 隔離した検証では`new Battle(id,opponent,level,{specialContactDelivery:candidate})`を使う。通常のrematchはその候補を維持する。Storyの`createCustomBattle`からも同じoptionを渡せる。
 
+既存のカスタム打撃は`move.customSpecialContact`の自分の実スキン計測を優先する。ref・クリップ・版・接触時計・全持続フレームが一致しない、または自分の計測が無い場合は新打撃を開始しない。元キャラの面を流用して見た目一致を装わない。既存`move.projectileSocket`とStoryの発射点コールバックは、canonical socketより優先する。技の新しい混成・部品互換を追加する変更ではない。
+
 ## 検証器
 
 `dojo/acceptance/p3-special-contact-browser.mjs`は実WebGLで次を行う。

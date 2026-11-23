@@ -40,6 +40,24 @@ xcodebuild -project native/ios/App/App.xcodeproj -scheme App -configuration Debu
 
 iPhoneへ入れる場合は本人のMacのXcodeで対象iPhoneを選び、Signing & CapabilitiesのTeamと必要ならBundle Identifierを本人の環境に合わせる。初期ID`jp.nagi.mamoken.poc`は検証用の仮IDで、登録済みの本番IDではない。Developer Modeや初回の開発元信頼が端末から要求された場合も本人の端末で操作する。Apple ID・証明書・Provisioning ProfileをGitHubへ保存しない。Simulator用`.app`は実機用IPAではない。
 
+## Simulatorへ実インストールして画面を保存
+
+unsigned simulatorアプリをビルドしたMacで、次を実行する。
+
+```sh
+npm --prefix native run ios:smoke
+```
+
+`simctl`の実inventoryから利用可能なiPhoneとiOS runtimeを選び、boot完了待ち→App.appの実インストール→起動→8秒待機→PNG撮影→さらに2秒待機→2枚目の撮影を行う。各simctlコマンドにも処理時間がかかるため、撮影時刻が起動の正確に8秒後・10秒後になるとは扱わない。起動PIDが残っていることも確認する。Xcode/SDK、選択したSimulator、実PNGの縦横ピクセル数、実行コマンド、アプリログを`native/evidence/simulator/`へ保存する。既存のSimulatorデータを消去せず、この工程で起動したSimulatorだけ終了する。
+
+Simulatorが無い、bootに失敗する、アプリが終了する、PNGを取得できない場合はCIを失敗にし、成功へ置換しない。`MAMOKEN_SIMULATOR_APP`でビルド済み.appの場所、`MAMOKEN_SIMULATOR_EVIDENCE`で証拠出力先を指定できる。
+
+初回bootでは選択したXcodeのSimulator UIも開く。bootstatusはまず180秒を上限とし、タイムアウトまでに異なる移行プラグインまたはboot段階が実ログで複数確認できた場合だけ、同じbootを一度だけ追加420秒待つ。経過秒だけが増える場合は延長しない。CI45126858881ではアプリinstall前に5種の初回データ移行を経て180秒で停止したため、この条件付き延長を追加した。[実再検証45128527109](verification/SIMULATOR_20261123.md)では追加約55秒でbootを完了し、実install/launch/撮影とUIKit横向きログを確認した。入口カードのDynamic Island重なりは別の未解決レイアウト不具合として記録している。
+
+これは**実iOS Simulatorのインストール・プロセス起動・画面保存**の検査。自動撮影しただけでは、画面内のゲームUIが正しいこと、WebGLで対戦できたこと、タッチ操作やiPhone実機性能が合格したとは扱わない。PNGの縦横は実測値として残し、UIKitのinterface orientationは画像の目視確認と合わせて判断する。P1本人確認ゲートは解除しない。
+
+`runtime/native-layout.css`は端末用bundleだけに最後のスタイルとして追加する。入口は4辺のsafe-area以上の余白、Storyは画面全体から4辺のsafe-areaを引いた共通座標系を使い、編集・探索・対戦rail・movie操作をまとめて保護する。web/PWAの原本CSSは変更しない。browser fixtureのinset入力は明示的な模擬値で、UIKitのenv値そのものの検証とは区別する。
+
 ## 横向き・復帰・音
 
 - Info.plistはiPhone／iPadとも左右のLandscapeのみ。iPadの全画面要件も指定する。

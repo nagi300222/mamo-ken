@@ -3,26 +3,41 @@
 // repository's approval module remains null; this is not adoption or P2 work.
 import assert from 'node:assert/strict';import {mkdir,readFile,writeFile} from 'node:fs/promises';import {createRequire} from 'node:module';import {createHash} from 'node:crypto';import {resolve} from 'node:path';
 import {createP3ContactDelivery} from '../../../dojo/p3-contact-adapter.js';
+import {loadMergedNormalArtMetadata,NORMAL_ART_MANIFEST_FILES} from '../../../dojo/p3-normal-candidate.js';
 import {compareExactReference} from './exact-reference-policy.js';
 const {chromium}=createRequire(import.meta.url)('playwright-core');
-const metadataBytes=await readFile(new URL('../normals_v17.json',import.meta.url)),metadata=JSON.parse(metadataBytes);
-const contactInput=process.env.MAMOKEN_NORMAL_CONTACTS?resolve(process.env.MAMOKEN_NORMAL_CONTACTS):new URL('../normal_contacts_v17.json',import.meta.url),contactBytes=await readFile(contactInput),contactData=JSON.parse(contactBytes),contacts=contactData.characters??contactData;
+const assetRoot=new URL('../../../',import.meta.url),artRevision=process.env.MAMOKEN_NORMAL_ART_REVISION??'r1';
+assert.ok(['r1','r2'].includes(artRevision),'Unknown normal art revision');
+const metadata=artRevision==='r2'?await loadMergedNormalArtMetadata({read:async path=>JSON.parse(await readFile(new URL(path,assetRoot)))}):JSON.parse(await readFile(new URL('../normals_v17.json',import.meta.url)));
+const metadataBytes=Buffer.from(JSON.stringify(metadata));
+const contactInput=process.env.MAMOKEN_NORMAL_CONTACTS?resolve(process.env.MAMOKEN_NORMAL_CONTACTS):artRevision==='r2'?new URL(NORMAL_ART_MANIFEST_FILES.r2Contacts,assetRoot):new URL('../normal_contacts_v17.json',import.meta.url),contactBytes=await readFile(contactInput),contactData=JSON.parse(contactBytes),contacts=contactData.characters??contactData;
 // An explicit table is only an isolated QA candidate. No approval file is written.
 const sha256=bytes=>createHash('sha256').update(bytes).digest('hex');
-const approvalModule=await readFile(new URL('../../../dojo/normal-contact-overrides-p3.js',import.meta.url),'utf8');assert.match(approvalModule,/export\s+const\s+APPROVED_P3_CONTACT_DELIVERY\s*=\s*null\s*;/,'QA must not claim a null production approval when the module is adopted');
+const production=process.env.MAMOKEN_REQUIRE_PRODUCTION==='1';
+const approvalModule=await readFile(new URL('../../../dojo/normal-contact-overrides-p3.js',import.meta.url),'utf8');
+if(!production)assert.match(approvalModule,/export\s+const\s+APPROVED_P3_CONTACT_DELIVERY\s*=\s*null\s*;/,'Candidate QA requires a genuinely unapproved production module');
 const delivery=createP3ContactDelivery(metadata,{source:'runtime-skinned-mesh',characters:contacts});
+const strikeSurface=(groups,reference)=>{
+ const parts=reference.bothHands?['armL','armR']:[...new Set([reference.attackPart,...reference.activeReach.map(p=>p.part).filter(Boolean)])];
+ return parts.map(part=>({part,...groups[part]})).reduce((a,b)=>b.reach>a.reach+1e-6?b:a);
+};
+if(production){
+ assert.equal(process.env.MAMOKEN_NORMAL_CONTACTS,undefined,'Production QA cannot substitute another contact table');
+ const {APPROVED_P3_CONTACT_DELIVERY}=await import('../../../dojo/normal-contact-overrides-p3.js');
+ assert.deepEqual(APPROVED_P3_CONTACT_DELIVERY,JSON.parse(JSON.stringify(delivery)),'Live approved data differs from the independently checked author table');
+}
 const base=process.env.MAMOKEN_URL??'http://127.0.0.1:4173/exp/fable-3d/dojo/',dir=process.env.MAMOKEN_EVIDENCE??'/tmp/mamoken-p3-motion-qa';await mkdir(dir,{recursive:true});
 const ids=(process.env.MAMOKEN_QA_IDS??Object.keys(metadata.characters).join(',')).split(','),slots=['stand_weak','stand_heavy','crouch_weak','crouch_heavy','air_weak','air_heavy'];
 
-const report={revision:process.env.MAMOKEN_ART_REVISION??'7f79ea252d6f5c08de892bd11c0e85845a91af14',source:'real-dojo-original-rig-exact-time-WebGL',candidateOnly:true,productionApproval:'null',contactTableInput:{mode:process.env.MAMOKEN_NORMAL_CONTACTS?'explicit-candidate':'default-author-table',path:String(contactInput),sha256:sha256(contactBytes)},metadataSha256:sha256(metadataBytes),packSha256:{},records:[],failures:[],diagnostics:[],errors:[]};
+const report={revision:process.env.MAMOKEN_ART_REVISION??'7f79ea252d6f5c08de892bd11c0e85845a91af14',source:'real-dojo-original-rig-exact-time-WebGL',candidateOnly:!production,productionApproval:production?delivery.version:'null',contactTableInput:{mode:process.env.MAMOKEN_NORMAL_CONTACTS?'explicit-candidate':'default-author-table',path:String(contactInput),sha256:sha256(contactBytes)},metadataSha256:sha256(metadataBytes),packSha256:{},records:[],failures:[],diagnostics:[],errors:[]};
 const browser=await chromium.launch({executablePath:process.env.CHROMIUM_PATH??'/usr/bin/google-chrome',args:['--no-sandbox','--use-angle=swiftshader','--enable-unsafe-swiftshader']});
 const page=await browser.newPage({viewport:{width:852,height:393},hasTouch:true,isMobile:true,deviceScaleFactor:1});page.on('pageerror',e=>report.errors.push(e.message));page.on('response',r=>{if(r.status()>=400&&!r.url().endsWith('favicon.ico'))report.errors.push(r.status()+' '+r.url());});page.on('console',m=>{if(/PropertyBinding.*(not found|failed)/.test(m.text()))report.errors.push(m.text());});
-await page.route('**/normal-contact-overrides-p3.js',route=>route.fulfill({contentType:'text/javascript',body:'export const APPROVED_P3_CONTACT_DELIVERY='+JSON.stringify(delivery)+';'}));
+if(!production)await page.route('**/normal-contact-overrides-p3.js',route=>route.fulfill({contentType:'text/javascript',body:'export const APPROVED_P3_CONTACT_DELIVERY='+JSON.stringify(delivery)+';'}));
 try{
  await page.goto(base);await page.waitForFunction(()=>window.mamoken3d);
  assert.equal(await page.evaluate(async()=> (await import('./normal-motion-source.js')).ACTIVE_NORMAL_MOTION_SOURCE.version),'v17','isolated candidate provider was not selected');
  for(const id of ids){
-  assert.ok(metadata.characters[id],id);report.packSha256[id]=sha256(await readFile(new URL('../'+id+'_normals_v17.glb',import.meta.url)));await page.evaluate(id=>mamoken3d.startMatch({ids:[id,'moguzo'],practice:true,instant:true}),id);
+  assert.ok(metadata.characters[id],id);report.packSha256[id]=sha256(await readFile(new URL(delivery.characters[id].stand_weak.file??'motion/v17/'+id+'_normals_v17.glb',assetRoot)));await page.evaluate(id=>mamoken3d.startMatch({ids:[id,'moguzo'],practice:true,instant:true}),id);
   await page.waitForFunction(id=>mamoken3d.actors[0]?.id===id&&mamoken3d.battle.frame>1&&mamoken3d.practice.enabled,id,{timeout:90000});
   // Install a probe after the game has loaded actors through its real provider.
   await page.evaluate(()=>{
@@ -56,7 +71,7 @@ try{
     await page.waitForFunction(({slot,clip})=>{const g=mamoken3d.battle,a=mamoken3d.actors[0];return g.__qaProbe?.reached&&g.fighters[0].action?.id===slot&&a.currentName===clip;},{slot,clip:authored.clip},{timeout:10000});
     const observed=await page.evaluate(async()=>{const {normalReachAt,normalHeightAt}=await import('./normal-contact-runtime-v151.js');const p=mamoken3d.battle.fighters[0],a=mamoken3d.actors[0];return {frame:p.frame,time:a.current.time,duration:a.current.getClip().duration,weight:a.current.getEffectiveWeight(),configuredReach:normalReachAt(p.action,p.frame),configuredHeight:normalHeightAt(p.action,p.frame),surface:__p3Surface()};});
     const phase=active>1?offset/(active-1):0,expectedSeconds=(authored.contact_frame+authored.contact_hold_frames*phase)/60;
-    record.clock.push({boundary,phase,...observed,expectedSeconds});const rendered=observed.surface.groups[reference.attackPart];if(Math.abs(rendered.reach-observed.configuredReach)>.015||Math.abs(rendered.height-observed.configuredHeight)>.015)report.failures.push({id,slot,kind:'every-active-frame-hitbox-surface',phase,rendered,configuredReach:observed.configuredReach,configuredHeight:observed.configuredHeight});if(Math.abs(observed.time-expectedSeconds)>.0003||observed.weight<.99)report.failures.push({id,slot,kind:'actual-frame-clock',boundary,time:observed.time,expectedSeconds,weight:observed.weight});
+    record.clock.push({boundary,phase,...observed,expectedSeconds});const rendered=strikeSurface(observed.surface.groups,reference);if(Math.abs(rendered.reach-observed.configuredReach)>.015||Math.abs(rendered.height-observed.configuredHeight)>.015)report.failures.push({id,slot,kind:'every-active-frame-hitbox-surface',phase,rendered,configuredReach:observed.configuredReach,configuredHeight:observed.configuredHeight});if(Math.abs(observed.time-expectedSeconds)>.0003||observed.weight<.99)report.failures.push({id,slot,kind:'actual-frame-clock',boundary,time:observed.time,expectedSeconds,weight:observed.weight});
    }
    await page.locator('#pause').tap();
    // Exact authored contact times, not a sparse N40 curve interpolation. Both
@@ -69,13 +84,13 @@ try{
     window.__p3ExactPose=pose;pose(authored.contact_frame/60,1);return {samples,feet,vertices:a.__qa.rows.reduce((n,r)=>n+r.groups.length,0)};
    },{authored,reference,slot,active});
    const expectedParts=authored.attack_limb.split('+').flatMap(l=>l==='body'?['body','head']:/^paw|^elbow|^shoulder/.test(l)?['arm'+l.at(-1)]:/^foot|^knee/.test(l)?['leg'+l.at(-1)]:[l]);
-   for(const point of exact.samples){const group=reference.attackPart,right=point.right.groups[group],left=point.left.groups[group],comparison=compareExactReference(reference.activeReach,active,point.phase,right),leading=Object.entries(point.right.groups).sort((a,b)=>b[1].reach-a[1].reach)[0];
+   for(const point of exact.samples){const right=strikeSurface(point.right.groups,reference),left=strikeSurface(point.left.groups,reference),group=right.part,comparison=compareExactReference(reference.activeReach,active,point.phase,right),leading=Object.entries(point.right.groups).sort((a,b)=>b[1].reach-a[1].reach)[0];
     const row={phase:point.phase,seconds:point.seconds,attackPart:group,right,left,...comparison,leading:{part:leading[0],...leading[1]}};record.exact.push(row);
     if(row.failed)report.failures.push({id,slot,kind:row.missingBattleReference?'missing-active-reference':'exact-surface-vs-delivery',...row});else if(row.comparisonMode==='diagnostic'&&row.outsideTolerance)report.diagnostics.push({id,slot,kind:'unmeasured-non-battle-phase',...row});
     if(Math.abs(right.reach-left.reach)>1e-5||Math.abs(right.height-left.height)>1e-5)report.failures.push({id,slot,kind:'left-right-mirror',phase:point.phase,right,left});
     if(!expectedParts.includes(leading[0])&&leading[1].reach-right.reach>.03)report.failures.push({id,slot,kind:'wrong-leading-limb',phase:point.phase,seconds:point.seconds,expectedParts,leadingPart:leading[0],gap:leading[1].reach-right.reach});
    }
-   record.mirror={points:exact.samples.length,maxReachDelta:Math.max(...exact.samples.map(p=>Math.abs(p.right.groups[reference.attackPart].reach-p.left.groups[reference.attackPart].reach))),maxHeightDelta:Math.max(...exact.samples.map(p=>Math.abs(p.right.groups[reference.attackPart].height-p.left.groups[reference.attackPart].height)))};record.feet=exact.feet;record.vertices=exact.vertices;if(exact.feet?.relativeSink<-.012)report.failures.push({id,slot,kind:'ground-foot-surface-sink',...exact.feet});
+   record.mirror={points:exact.samples.length,maxReachDelta:Math.max(...record.exact.map(p=>Math.abs(p.right.reach-p.left.reach))),maxHeightDelta:Math.max(...record.exact.map(p=>Math.abs(p.right.height-p.left.height)))};record.feet=exact.feet;record.vertices=exact.vertices;if(exact.feet?.relativeSink<-.012)report.failures.push({id,slot,kind:'ground-foot-surface-sink',...exact.feet});
    report.records.push(record);if(slot==='stand_heavy'||slot==='air_heavy'){await page.screenshot({path:dir+'/'+id+'-'+slot+'-exact.png'});await page.evaluate(seconds=>__p3ExactPose(seconds,-1),authored.contact_frame/60);await page.screenshot({path:dir+'/'+id+'-'+slot+'-left-exact.png'});await page.evaluate(seconds=>__p3ExactPose(seconds,1),authored.contact_frame/60);}
    await page.locator('#pause').tap();
   }
@@ -85,6 +100,6 @@ try{
  const measured={};for(const row of report.records){measured[row.id]??={};const old=contacts[row.id][row.slot];measured[row.id][row.slot]={...old,contact:metadata.characters[row.id][row.slot].contact_frame/metadata.characters[row.id][row.slot].frames,contactEnd:(metadata.characters[row.id][row.slot].contact_frame+metadata.characters[row.id][row.slot].contact_hold_frames)/metadata.characters[row.id][row.slot].frames,reach:row.exact[0].right.reach,height:row.exact[0].right.height,battleActive:row.gameActiveFrames,activeReach:row.exact.map(p=>({phase:p.phase,reach:p.right.reach,height:p.right.height})),source:'independent-exact-time-WebGL',reviewStatus:'candidate-only-not-approved'};}
  await writeFile(dir+'/independent-exact-contacts.json',JSON.stringify(measured,null,2));
  assert.deepEqual(report.errors,[]);if(process.env.MAMOKEN_QA_REPORT_ONLY!=='1')assert.deepEqual(report.failures,[],'Candidate motion delivery failed independent exact-time checks; inspect artifact report');
- console.log('P3 exact WebGL summary',JSON.stringify({clips:report.records.length,failures:report.failures.length,diagnostics:report.diagnostics.length,reportOnly:process.env.MAMOKEN_QA_REPORT_ONLY==='1',productionApproval:'null'}));
+ console.log('P3 exact WebGL summary',JSON.stringify({clips:report.records.length,failures:report.failures.length,diagnostics:report.diagnostics.length,reportOnly:process.env.MAMOKEN_QA_REPORT_ONLY==='1',productionApproval:report.productionApproval}));
 }catch(error){await writeFile(dir+'/independent-exact-report.json',JSON.stringify(report,null,2));await page.screenshot({path:dir+'/failure.png'}).catch(()=>{});throw error;}
 finally{await browser.close();}

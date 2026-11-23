@@ -14,7 +14,7 @@ await rm(OUTPUT,{recursive:true,force:true});await mkdir(OUTPUT,{recursive:true}
 const dojo=path.join(ROOT,'dojo');
 for(const name of ['index.html','style.css','models.js','balance.js','battle.js','commands.js','cpu.js','camera-frame.js','main.js','showtime-profiles.js','combat-audio.js','showtime-illusions.js','arena-music.js','hud-themes.js','ultimate-cinematic.js','showtime-assets.js','authored-cinematic.js','run-controller.js','run-cpu.js','run-stages.js','run-ui.js','run-dialogue.js','presentation-flow.js','presentation-data.js','choreographed-cinematic.js','cinematic-stage.js','morph-binding.js','landscape-lock.js','practice-mode.js','fighter-style.js','normal-balance-v151.js','normal-contact-runtime-v151.js','normal-contacts-v151.js','normal-timing-v151.js','normal-motifs-v15.js','fight-feel.js','special-balance-p3.js','p3-contact-adapter.js','normal-contact-overrides-p3.js','normal-contact-source.js','normal-motion-source.js','p3-normal-candidate.js'])
   await copyOne(path.join(dojo,name),path.join(OUTPUT,'dojo',name));
-for(const name of ['special-motion-source.js','special-motion-overrides-p3.js','special-cues.js','special-contact-runtime-p3.js','special-contact-overrides-p3.js'])
+for(const name of ['special-motion-source.js','special-motion-overrides-p3.js','special-motion-contract-p3.js','special-cues.js','special-contact-runtime-p3.js','special-contact-overrides-p3.js','special-contact-reviewed-v17r2.js','normal-contact-reviewed-v17.js','combat-geometry.js'])
   await copyOne(path.join(dojo,name),path.join(OUTPUT,'dojo',name));
 await cp(path.join(ROOT,'preview','vendor'),path.join(OUTPUT,'preview','vendor'),{recursive:true});
 await cp(path.join(ROOT,'shared-ui'),path.join(OUTPUT,'shared-ui'),{recursive:true,filter:file=>!file.endsWith('.test.mjs')});
@@ -54,7 +54,7 @@ if(hasV17){
   for(const id of IDS){
     const name=id+'_normals_v17.glb',source=path.join(v17Directory,name),bytes=await readFile(source);
     const document=JSON.parse(bytes.toString('utf8',20,20+bytes.readUInt32LE(12)));
-    const expected=ACTIVE_NORMAL_MOTION_SOURCE.version==='v17'?ACTIVE_NORMAL_MOTION_SOURCE.clipNames:['stand_weak','stand_heavy','crouch_weak','crouch_heavy','air_weak','air_heavy'].map(slot=>'v17_'+slot);
+    const expected=['stand_weak','stand_heavy','crouch_weak','crouch_heavy','air_weak','air_heavy'].map(slot=>'v17_'+slot);
     if(document.animations?.length!==6||new Set(document.animations.map(clip=>clip.name)).size!==6||document.animations.some(clip=>!expected.includes(clip.name)))throw Error(id+' v17 normal pack is incomplete');
     await copyOne(source,path.join(OUTPUT,'motion','v17',name));
   }
@@ -66,6 +66,25 @@ if(hasV17){
   }
   for(const name of ['normals_v17.json','normal-contacts-v17.js','normal_contacts_v17.json','specials_v17.json','special_contacts_v17.json'])await copyOne(path.join(v17Directory,name),path.join(OUTPUT,'motion','v17',name));
   console.log('Bundled 54 v17 candidate normals; active selection:',ACTIVE_NORMAL_MOTION_SOURCE.version);
+}
+// r2 is an overlay of seven authored changes. Preserve every r1 pack and copy
+// only runtime files, keeping movies/audit footage outside the phone bundle.
+const r2Directory=path.join(ROOT,'motion','v17r2');
+if(await access(path.join(r2Directory,'normal_contacts_v17r2.json')).then(()=>true).catch(error=>{if(error.code==='ENOENT')return false;throw error;})){
+ const normals=JSON.parse(await readFile(path.join(r2Directory,'normal_contacts_v17r2.json'),'utf8'));
+ const specials=JSON.parse(await readFile(path.join(r2Directory,'special_contacts_v17r2.json'),'utf8'));
+ for(const name of await readdir(r2Directory)){
+  if(!/\.(glb|json|js)$/.test(name))continue;
+  const source=path.join(r2Directory,name);if(!(await stat(source)).isFile())continue;
+  if(name.endsWith('.glb')){
+   const id=IDS.find(id=>name.startsWith(id+'_'));if(!id)throw Error('Unknown revised rig '+name);
+   const rows=name.includes('_normals_')?normals[id]:specials[id],relative='motion/v17r2/'+name;
+   const expected=Object.values(rows).filter(row=>row.file===relative).map(row=>row.clip);
+   const bytes=await readFile(source),document=JSON.parse(bytes.toString('utf8',20,20+bytes.readUInt32LE(12)));
+   if(![3,6].includes(expected.length)||document.animations?.length!==expected.length||new Set(document.animations.map(c=>c.name)).size!==expected.length||document.animations.some(c=>!expected.includes(c.name)))throw Error('Incomplete revised pack '+name);
+  }
+  await copyOne(source,path.join(OUTPUT,'motion','v17r2',name));
+ }
 }
 await copyOne(path.join(ROOT,'lobby','index.html'),path.join(OUTPUT,'index.html'));
 await copyOne(path.join(ROOT,'lobby','style.css'),path.join(OUTPUT,'lobby','style.css'));

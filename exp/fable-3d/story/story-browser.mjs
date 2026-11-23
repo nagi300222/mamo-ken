@@ -31,7 +31,11 @@ try{
  await page.locator('#talk-close').click();await page.waitForFunction(()=>mamokenStory.mode==='explore');
  await page.locator('#talk').tap();await page.locator('#challenge').click();
  await page.waitForFunction(()=>mamokenStory.mode==='battle'&&mamokenStory.battle.frame>5,undefined,{timeout:120000});
- assert.equal(await page.evaluate(()=>{const a=mamokenStory.actors[0],clip=a.actions.v15_stand_weak.getClip();return clip.tracks.filter(t=>t.name.endsWith('.morphTargetInfluences')).length===a.avatar.meshes.filter(m=>m.morphTargetInfluences).length;}),true,'game replay must use the same modular morph binding as skin measurement');
+ assert.equal(await page.evaluate(()=>{const a=mamokenStory.actors[0],source=a.normalMotionSource,pack=source.pack(a.baseId??a.id);
+  return pack.clipNames.length===6&&pack.clipNames.every(name=>{
+   const clip=a.actions[name]?.getClip();
+   return source.slotForClip(name)&&clip?.tracks.filter(t=>t.name.endsWith('.quaternion')).length>=3&&clip.tracks.filter(t=>t.name.endsWith('.morphTargetInfluences')).length===a.avatar.meshes.filter(m=>m.morphTargetInfluences).length;
+  });}),true,'game replay must use the same modular morph binding as skin measurement');
  await page.locator('[data-control="special"]').tap();
  await page.waitForFunction(()=>mamokenStory.events.some(e=>e.type==='move'&&e.slot===0&&e.action==='s1'),undefined,{timeout:10000});
  report.push(await page.evaluate(()=>({mode:mamokenStory.mode,custom:mamokenStory.battle.fighters[0].definition,metrics:mamokenStory.metrics})));

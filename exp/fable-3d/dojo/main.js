@@ -22,6 +22,7 @@ import { normalClipTime } from './normal-timing-v151.js';
 import { ACTIVE_NORMAL_MOTION_SOURCE } from './normal-motion-source.js';
 import { specialClipTime,resolveSpecialBone } from './special-motion-source.js';
 import { consumeSpecialMovementCues } from './special-cues.js';
+import { createClawSweepGeometry } from './combat-geometry.js';
 import { createPresentationFlow } from './presentation-flow.js';
 import { VICTORY, VICTORY_CLIP, VICTORY_PACK, VICTORY_CAMERA_DISTANCE, VS_TEXT, cameraSegment, victoryPlan, faceCamera } from './presentation-data.js';
 import { RunController } from './run-controller.js';
@@ -94,6 +95,7 @@ const fxGeometry=Object.freeze({
   ultimate:new THREE.RingGeometry(.30,.34,40),
   shard:new THREE.TetrahedronGeometry(.09),
   slash:new THREE.PlaneGeometry(.07,.47),
+  'p3-slash':createClawSweepGeometry(THREE),
   reticle:new THREE.RingGeometry(.17,.21,4)
 });
 let cameraShake=0, cameraShakeStrength=0, bannerUntil=0;
@@ -627,7 +629,7 @@ const cueColors={hit:0xffb77a,block:0x9fe0ff,roar:0xffcc65,clinch:0xd8a1fa};
 function vfx(){
   for(const e of battle.events){
     const feedbackPresented=presentCombatFeedback(e,{audio:audioFX,effectsEnabled:effectsAllowed(),
-      impact:fb=>impactFX(fb.effect,showtimeFor(fb.characterId).color,fb.point.x,fb.point.y,fb.scale,fb.lifeFrames),shake});
+      impact:fb=>impactFX(fb.effect==='slash'?'p3-slash':fb.effect,showtimeFor(fb.characterId).color,fb.point.x,fb.point.y,fb.scale,fb.lifeFrames),shake});
     if(e.type==='ultimate_hit'){
       beginUltimateMovie(e); // Only a confirmed strike can open full-screen movie mode.
       continue;

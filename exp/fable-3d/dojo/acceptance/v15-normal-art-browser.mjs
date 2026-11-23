@@ -1,4 +1,4 @@
-// Real GLB and WebGL playback regression of all 54 v15 distinct normal animations.
+// Real GLB and WebGL playback regression of all 54 selected normal animations.
 import assert from 'node:assert/strict';
 import {mkdir} from 'node:fs/promises';
 import {createRequire} from 'node:module';
@@ -26,14 +26,16 @@ try{
    await page.waitForFunction(id=>mamoken3d?.actors?.[0]?.id===id&&
      mamoken3d.battle?.frame>0&&mamoken3d.practice.enabled,id,{timeout:35000});
    const actions=await page.evaluate(()=>{
-     const a=mamoken3d.actors[0];
-     return Object.fromEntries(Object.entries(a.actions).filter(([key])=>key.startsWith('v15_'))
-       .map(([key,action])=>[key,{duration:action.getClip().duration,tracks:action.getClip().tracks.length}]));
+     const a=mamoken3d.actors[0],source=a.normalMotionSource,pack=source.pack(a.baseId??a.id);
+     return Object.fromEntries(pack.clipNames.map(name=>{
+       const clip=a.actions[name]?.getClip();
+       return [source.slotForClip(name),{name,duration:clip?.duration,tracks:clip?.tracks.length??0}];
+     }));
    });
    assert.equal(Object.keys(actions).length,6,'missing normal package '+id);
    for(const slot of moves){
-     const actionName='v15_'+slot;
-     assert.ok(actions[actionName]?.tracks>=4,id+'/'+slot+' missing 3D rig tracks');
+     const actionName=actions[slot]?.name;
+     assert.ok(actionName&&actions[slot].tracks>=4,id+'/'+slot+' missing 3D rig tracks');
      const began=await page.evaluate(async ({id,slot})=>{
        const {normalMove}=await import('./balance.js');
        const g=mamoken3d.battle,p=g.fighters[0],t=g.fighters[1];
@@ -59,12 +61,13 @@ try{
      assert.ok(bound.rotations>=3,id+'/'+slot+' did not bind bone rotations');
      await page.waitForFunction(({id,slot})=>{
        const p=mamoken3d.battle.fighters[0],a=mamoken3d.actors[0];
-       return p.action?.id===slot&&p.frame===p.action.startup&&p.stop>0&&a.currentName==='v15_'+slot;
+       const source=a.normalMotionSource,name=source.pack(a.baseId??a.id).clipNames.find(name=>source.slotForClip(name)===slot);
+       return !!name&&p.action?.id===slot&&p.frame===p.action.startup&&p.stop>0&&a.currentName===name;
      },{id,slot},{timeout:5000});
      const clock=await page.evaluate(async ({id,slot})=>{
        const {normalClipTime}=await import('./normal-timing-v151.js');
        const p=mamoken3d.battle.fighters[0],a=mamoken3d.actors[0],duration=a.current.getClip().duration;
-       return {frame:p.frame,time:a.current.time,expected:normalClipTime(id,slot,p.frame,p.action,duration),weight:a.current.getEffectiveWeight()};
+       return {frame:p.frame,time:a.current.time,expected:normalClipTime(a.baseId??a.id,slot,p.frame,p.action,duration,a.normalMotionSource.contacts),weight:a.current.getEffectiveWeight()};
      },{id,slot});
      assert.ok(Math.abs(clock.time-clock.expected)<1e-6,id+'/'+slot+' contact pose/active mismatch '+JSON.stringify(clock));
      assert.ok(clock.weight>.99,id+'/'+slot+' previous pose still blended at contact '+JSON.stringify(clock));
@@ -74,10 +77,9 @@ try{
      assert.equal(after.frame,frozen.frame,id+'/'+slot+' game advanced through hitstop');
      assert.equal(after.time,frozen.time,id+'/'+slot+' pose advanced through hitstop');
      const contact=await page.evaluate(async ({id,slot})=>{
-       const {NORMAL_CONTACTS}=await import('./normal-contacts-v151.js');
        const {normalMove}=await import('./balance.js');
        const {normalHeightAt}=await import('./normal-contact-runtime-v151.js');
-       const expected=NORMAL_CONTACTS[id][slot],a=mamoken3d.actors[0],p=mamoken3d.battle.fighters[0];
+       const a=mamoken3d.actors[0],p=mamoken3d.battle.fighters[0],expected=a.normalMotionSource.contacts[a.baseId??a.id][slot];
        a.holder.updateMatrixWorld(true);
        const part=n=>{
          const s=n.toLowerCase(),side=/(_l|\.l)$/.test(s)||/[a-z]L$/.test(n)?'L':/(_r|\.r)$/.test(s)||/[a-z]R$/.test(n)?'R':'';
@@ -88,6 +90,7 @@ try{
        let forward=-Infinity,height=0;
        a.gltf.scene.traverse(o=>{
          if(!o.isSkinnedMesh)return;
+         o.skeleton.update();
          const g=o.geometry,si=g.attributes.skinIndex,sw=g.attributes.skinWeight,v=o.position.clone();
          for(let i=0;i<g.attributes.position.count;i++){
            let bone=0,weight=-1;for(let k=0;k<4;k++)if(sw.getComponent(i,k)>weight){weight=sw.getComponent(i,k);bone=si.getComponent(i,k);}
@@ -96,13 +99,17 @@ try{
            const fwd=(v.x-p.x)*p.facing;if(fwd>forward){forward=fwd;height=v.y-p.y;}
          }
        });
-       return {forward,height,expectedHeight:normalHeightAt(normalMove(id,slot),p.frame),expected:expected.reach,configured:normalMove(id,slot).reach,status:expected.status,part:expected.attackPart};
+       return {forward,height,expectedHeight:normalHeightAt(normalMove(id,slot),p.frame),expected:expected.reach,configured:normalMove(id,slot).reach,status:expected.status,part:expected.attackPart,limb:expected.attackLimb,source:a.normalMotionSource.version};
      },{id,slot});
      assert.equal(contact.status,'ok',id+'/'+slot+' still has unresolved motion audit '+JSON.stringify(contact));
      assert.ok(Math.abs(contact.forward-contact.expected)<.015,id+'/'+slot+' visual limb/metadata reach mismatch '+JSON.stringify(contact));
      assert.equal(contact.configured,contact.expected,id+'/'+slot+' transparent reach extension');
      assert.ok(Math.abs(contact.height-contact.expectedHeight)<.015,id+'/'+slot+' visual strike height mismatch '+JSON.stringify(contact));
-     if(id==='bullet')assert.equal(contact.part,slot==='stand_weak'?'head':'tail',id+'/'+slot+' wrong intended striking part');
+     if(contact.source==='v17'){
+       const parts={pawL:'armL',pawR:'armR',elbowL:'armL',elbowR:'armR',shoulderL:'armL',shoulderR:'armR',footL:'legL',footR:'legR',kneeL:'legL',kneeR:'legR',tail:'tail',head:'head'};
+       const intended=contact.limb.split('+').flatMap(limb=>limb==='body'?['body','head']:[parts[limb]]);
+       assert.ok(intended.every(Boolean)&&intended.includes(contact.part),id+'/'+slot+' wrong intended striking limb');
+     }else if(id==='bullet')assert.equal(contact.part,slot==='stand_weak'?'head':'tail',id+'/'+slot+' wrong intended striking part');
      completed.push(id+'/'+slot);
      if(slot==='stand_heavy'||slot==='crouch_heavy'||slot==='air_heavy'){
        await page.screenshot({path:dir+'/'+id+'-'+slot+'.png'});
@@ -112,7 +119,7 @@ try{
  }
  assert.equal(completed.length,54);
  assert.deepEqual(errors,[]);
- console.log('V15 NORMALS WEBGL PASS: 54 character-specific GLB clips played on original 9 rig models',JSON.stringify(completed));
+ console.log('SELECTED NORMALS WEBGL PASS: 54 character-specific GLB clips played on original 9 rig models',JSON.stringify(completed));
 }catch(e){
  await page.screenshot({path:dir+'/failure.png'}).catch(()=>{});
  console.error('WebGL errors:',errors,'completed:',completed);
