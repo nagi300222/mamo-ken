@@ -8,6 +8,9 @@ body[data-ui=mountain] #app .footnote:has(#run-status:not([hidden]))>span{displa
 body[data-ui=mountain] #app .footnote:has(#run-status:not([hidden])) .note{flex:0 1 auto;max-width:40%}
 body[data-ui=mountain] #arena:has(#selection:not(.hidden))>.hud{visibility:hidden}
 body[data-ui=mountain] #arena:has(#selection:not(.hidden))>.showtime-banner{visibility:hidden}
+/* These controls cannot act during presentation. Keep the grid/camera stable,
+   while leaving the independent header and presentation skip accessible. */
+body[data-ui=mountain] #app:has(#arena:is([data-flow="vs"],[data-flow="intro"],[data-flow="ko"],[data-flow="victory"],[data-flow="result"])) :is(#stick-rail,#buttons-rail){visibility:hidden;pointer-events:none}
 html[data-ui-polish] body[data-ui=mountain] .mode-hall .mode{background-image:none;background-color:#19382d;border-radius:8px;border-top-width:2px;border-color:#8ba08080;box-shadow:0 3px 0 #07180eb3}
 html[data-ui-polish] .mode-hall .mode[data-mode=battle]{--mode-scene:var(--p4-polish-mode-vs-large);border-color:#f1c66c;background-color:#314e34}
 html[data-ui-polish] .mode-hall .mode[data-mode=practice]{--mode-scene:var(--p4-polish-mode-practice);--mode-accent:#6fd0a0}
