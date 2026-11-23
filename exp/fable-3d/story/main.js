@@ -19,6 +19,8 @@ import * as Avatar from '../custom/v16/avatar-factory.js';
 import {normalizeAvatar,validateAvatar,createDefaultAvatar,createSeededMob} from '../custom/v16/avatar-schema.js';
 import {createCustomBattle,moveCatalog,validateCombatLoadout} from '../custom/v16/custom-combat.js';
 import {retargetCustomClip} from '../custom/v16/custom-animation.js';
+import {validateMeshPartManifest} from '../custom/p2/part-contract.js';
+import {applyEditorValues,editorMeshOptions,selectedMoveProblems} from './editor-model.js';
 import {freshProgress,NPCS,mobPlacements,moveInVillage,nearestNpc,readSave,writeSave,recordEncounter} from './story-state.js';
 import {createVillage,createBattleStage} from './village-scene.js';
 import {createExplorationControls,EXPLORATION_CAMERA} from './exploration-controls.js';
@@ -49,7 +51,7 @@ function clearInput(){
 function setMode(next){mode=next;app.dataset.mode=next;clearInput();
  $('editor').hidden=next!=='editor';$('journey').hidden=next!=='explore';$('dialogue').hidden=next!=='dialogue';$('result').hidden=next!=='result';$('loading').hidden=next!=='loading';
  $('input-controls').hidden=!['explore','battle'].includes(next);$('battle-buttons').hidden=next!=='battle';$('battle-hud').hidden=!['battle','movie','result'].includes(next);
- $('movie-ui').hidden=next!=='movie';$('edit').hidden=!['explore','editor'].includes(next);$('save').hidden=next!=='explore';$('pause').hidden=!['explore','battle'].includes(next);
+ $('movie-ui').hidden=next!=='movie';$('edit').hidden=next!=='explore';$('save').hidden=next!=='explore';$('pause').hidden=!['explore','battle'].includes(next);
  $('npc-tag').hidden=true;$('talk').hidden=true;$('camera-orbit').hidden=next!=='explore';$('camera-tools').hidden=next!=='explore';$('help').textContent=next==='battle'?'方向＋必殺／↓咆哮 · F前/R後ステップ · M奥義':'左で移動 · 右ドラッグで視点 · Eで会話';
  paused=backgroundPaused||document.hidden||window.mamokenNative?.active===false;$('pause').textContent=paused?'再開':'一時停止';resize();
 }
@@ -100,7 +102,7 @@ async function createActor(definition,{combat=false}={}){
    for(let slot=0;slot<3;slot++){
     const ref=definition.combat.specials[slot],split=ref.split('.'),entries=await showtime(split[0]);let entry=entries[split[1]];
     if(!entry)throw Error('技素材が不足: '+ref);
-    if(split[0]!==baseId){const donor=await original(split[0]);const convert=clip=>clip&&bindMorphTargets(retargetCustomClip(clip,donor.gltf.scene,model,{moveKind:entry.spec.kind??'projectile'}),model);
+    if(split[0]!==baseId){const donor=await original(split[0]);const convert=clip=>clip&&bindMorphTargets(retargetCustomClip(clip,donor.gltf.scene,model,{moveKind:entry.spec.kind??'projectile',moveRef:ref,targetDefinition:definition}),model);
      entry={...entry,attacker:convert(entry.attacker),start:convert(entry.start)};
     }else entry={...entry};
     const clip=Avatar.bindAvatarClip(entry.start??entry.attacker,av);entry.action=mixer.clipAction(clip);actor.showtime['s'+(slot+1)]=entry;
@@ -138,7 +140,8 @@ async function enterVillage(){
  if(document.hidden||window.mamokenNative?.active===false)return;
  if(!document.hidden&&window.mamokenNative?.active!==false)backgroundPaused=false;
  clearTimeout(previewTimer);
- const validation=validateCombatLoadout(readForm());if(!validation.ok){$('editor-error').textContent=validation.errors.map(e=>e.message).join(' / ');return;}
+ const candidate=readForm(),partProblems=meshPartProblems(candidate);if(partProblems.length){$('editor-error').textContent=partProblems.join(' / ');return;}
+ const validation=validateCombatLoadout(candidate);if(!validation.ok){$('editor-error').textContent=validation.errors.map(e=>e.message).join(' / ');return;}
  const next=validation.definition??normalizeAvatar(readForm());const token=++loadGeneration;setMode('loading');$('loading-copy').textContent='旅のキャラを準備しています';
  try{const replacement=await createActor(next);if(token!==loadGeneration){disposeActor(replacement);return;}
   disposeActor(player);player=replacement;avatar=next;village.add(player.holder);player.holder.position.set(progress.position.x,0,progress.position.z);player.turn.rotation.y=progress.heading;playIdle(player);exploration.restore(progress.camera);syncCameraTools();
@@ -267,42 +270,75 @@ async function beginMovie(event){
 function finishMovie(){loadGeneration++;movie?.dispose();movie=null;cinemaActors.forEach(disposeActor);cinemaActors=[];setMode('battle');last=0;acc=0;if(battle?.phase==='ko')finishRound();}
 function formOptions(select,items){select.replaceChildren(...items.map(item=>{const option=document.createElement('option');option.value=item.id;option.textContent=item.label??item.name??item.id;return option;}));}
 const partLabels={head:'頭',ears:'耳',tail:'尻尾',hands:'手・前脚',feet:'足・後脚',accessory:'装飾'};
+let meshPartManifest={schemaVersion:1,version:'p2-exchange-1',modules:[]},meshCatalogError='';
 const colorLabels={fur:'毛',belly:'腹',muzzle:'口元',paw:'手',foot:'足',ear:'耳の内側',tail:'尻尾',accent:'装飾',pattern:'模様'};
 function buildForm(){
  formOptions($('avatar-base'),IDS.map(id=>({id,label:ROSTER[id].name})));formOptions($('avatar-style'),IDS.map(id=>({id,label:ROSTER[id].name+' · '+ROSTER[id].role})));
  const partSpec=Avatar.AVATAR_PARTS??Object.fromEntries(Object.keys(partLabels).map(slot=>[slot,IDS.map(id=>({id,label:ROSTER[id].name}))]));
  for(const [slot,label]of Object.entries(partLabels)){const field=document.createElement('label');field.textContent=label;const select=document.createElement('select');select.id='part-'+slot;field.append(select);formOptions(select,partSpec[slot]??IDS.map(id=>({id,label:ROSTER[id].name})));$('part-fields').append(field);}
+ for(const [slot,label]of Object.entries(partLabels)){const field=document.createElement('label');field.textContent=label;const select=document.createElement('select');select.id='mesh-part-'+slot;select.setAttribute('aria-describedby','mesh-part-reason-'+slot);formOptions(select,[{id:'',label:'実パーツを使わない'}]);const reason=document.createElement('small');reason.id='mesh-part-reason-'+slot;reason.className='mesh-part-reason';field.append(select,reason);$('mesh-part-fields').append(field);}
  for(const [key,label]of Object.entries(colorLabels)){const field=document.createElement('label');field.textContent=label;const input=document.createElement('input');input.type='color';input.id='color-'+key;field.append(input);$('color-fields').append(field);}
  formOptions($('avatar-pattern'),Avatar.AVATAR_PATTERNS);
  for(let i=0;i<3;i++){const field=document.createElement('label');field.textContent=['基本必殺（N）','対空必殺（↑）','攻め必殺（前）'][i];const select=document.createElement('select');select.id='move-'+i;field.append(select);$('move-fields').append(field);}
 }
-function readForm(){const definition=structuredClone(avatar??createDefaultAvatar($('avatar-base').value));definition.name=$('avatar-name').value.trim()||'旅のマーモット';definition.appearance.baseId=$('avatar-base').value;
- definition.appearance.parts=Object.fromEntries(Object.keys(partLabels).map(slot=>[slot,$('part-'+slot).value]));definition.appearance.palette=Object.fromEntries(Object.keys(colorLabels).map(key=>[key,$('color-'+key).value]));definition.appearance.pattern=$('avatar-pattern').value;
- definition.combat.styleId=$('avatar-style').value;definition.combat.specials=[0,1,2].map(i=>$('move-'+i).value);return definition;}
+function readForm(){return applyEditorValues(avatar??createDefaultAvatar($('avatar-base').value),{
+ name:$('avatar-name').value.trim()||'旅のマーモット',baseId:$('avatar-base').value,
+ parts:Object.fromEntries(Object.keys(partLabels).map(slot=>[slot,$('part-'+slot).value])),
+ meshParts:Object.fromEntries(Object.keys(partLabels).map(slot=>[slot,$('mesh-part-'+slot).value])),
+ palette:Object.fromEntries(Object.keys(colorLabels).map(key=>[key,$('color-'+key).value])),pattern:$('avatar-pattern').value,
+ styleId:$('avatar-style').value,specials:[0,1,2].map(i=>$('move-'+i).value)
+});}
+async function reloadMeshCatalog(){
+ try{const response=await fetch(new URL('../custom/p2/assets/manifest.json',import.meta.url));if(!response.ok)throw Error('HTTP '+response.status);meshPartManifest=validateMeshPartManifest(await response.json());meshCatalogError='';}
+ catch(error){meshCatalogError='部品表を読み込めません。保存済みの選択は保持しています（'+error.message+'）';}
+ if($('mesh-part-fields').children.length){updateMeshPartOptions();updateMoveOptions();}
+ $('mesh-catalog-retry').hidden=!meshCatalogError;
+ $('mesh-catalog-state').textContent=meshCatalogError||(meshPartManifest.modules.length?'適合を確認した実パーツだけ選べます。':'交換用アセットの制作・適合確認中です。現在の部品はそのまま使えます。');
+}
+function meshPartProblems(definition){return Object.keys(definition.appearance.meshParts??{}).flatMap(slot=>{
+ const row=editorMeshOptions(meshPartManifest,definition,slot);return row.reason?[partLabels[slot]+': '+row.reason]:[];
+});}
+function updateMeshPartOptions(definition=readForm()){
+ const unavailable=[];
+ for(const [slot,label]of Object.entries(partLabels)){
+  const state=editorMeshOptions(meshPartManifest,definition,slot),select=$('mesh-part-'+slot);
+  select.replaceChildren(...[{id:'',label:'実パーツを使わない',available:true},...state.options].map(item=>{const option=document.createElement('option');option.value=item.id;option.textContent=item.label+(item.available?'':'（未対応）');option.disabled=!item.available;option.title=item.reason??'';return option;}));
+  select.value=state.selected;$('mesh-part-reason-'+slot).textContent=state.reason;
+  for(const option of state.unavailable)unavailable.push(label+' / '+option.label+': '+option.reason);
+ }
+ $('unavailable-mesh-parts').replaceChildren(...unavailable.map(text=>{const item=document.createElement('li');item.textContent=text;return item;}));
+}
 function updatePartCompatibility(){const longTail=$('avatar-base').value==='bullet';for(const option of $('part-tail').options)option.disabled=option.value!=='base'&&((option.value==='bullet')!==longTail);}
 function fillForm(definition){avatar=definition;$('avatar-name').value=definition.name;$('avatar-base').value=definition.appearance.baseId;$('avatar-style').value=definition.combat.styleId;
  for(const slot of Object.keys(partLabels))$('part-'+slot).value=definition.appearance.parts?.[slot]??'base';
- for(const key of Object.keys(colorLabels))$('color-'+key).value=definition.appearance.palette?.[key]??'#a78254';$('avatar-pattern').value=definition.appearance.pattern??'solid';updateMoveOptions(definition.combat.specials);updatePartCompatibility();
+ for(const key of Object.keys(colorLabels))$('color-'+key).value=definition.appearance.palette?.[key]??'#a78254';$('avatar-pattern').value=definition.appearance.pattern??'solid';updateMeshPartOptions(definition);updateMoveOptions(definition.combat.specials);updatePartCompatibility();
 }
 function updateMoveOptions(selected=[0,1,2].map(i=>$('move-'+i).value)){
- const candidate=readForm();candidate.combat.specials=candidate.combat.specials.map((ref,i)=>/^[a-z_]+\.s[123]$/.test(ref)?ref:createDefaultAvatar(candidate.appearance.baseId).combat.specials[i]);const catalog=moveCatalog(candidate);for(let i=0;i<3;i++){const select=$('move-'+i);select.replaceChildren(...catalog.map(move=>{const option=document.createElement('option');option.value=move.ref;option.textContent=move.name+(move.supported?'':'（未対応）');option.disabled=!move.supported;option.title=move.reason??'';return option;}));
-  select.value=selected[i]??'';if(!select.value){const placeholder=document.createElement('option');placeholder.value='';placeholder.textContent='対応する技を選択';placeholder.selected=true;select.prepend(placeholder);}
+ const candidate=readForm();candidate.combat.specials=candidate.combat.specials.map((ref,i)=>/^[a-z_]+\.s[123]$/.test(ref)?ref:createDefaultAvatar(candidate.appearance.baseId).combat.specials[i]);
+ let catalog;try{catalog=moveCatalog(candidate);}catch(error){$('compatibility').textContent=error.message;const item=document.createElement('li');item.textContent=error.message;$('move-problems').replaceChildren(item);$('unavailable-moves').replaceChildren();return;}
+ for(let i=0;i<3;i++){
+  const select=$('move-'+i);select.replaceChildren(...catalog.map(move=>{const option=document.createElement('option');option.value=move.ref;option.textContent=move.name+(move.supported?'':'（未対応）');option.disabled=!move.supported;option.title=move.reason??'';return option;}));
+  select.value=selected[i]??'';
+  if(!select.value){const placeholder=document.createElement('option');placeholder.value=selected[i]??'';placeholder.textContent=selected[i]?'保存された技 '+selected[i]+'（未対応）':'対応する技を選択';placeholder.disabled=!!selected[i];placeholder.selected=true;select.prepend(placeholder);}
  }
- const selectedMoves=selected.map(ref=>catalog.find(m=>m.ref===ref));$('compatibility').textContent=selectedMoves.some(m=>!m?.supported)?'外見・骨格に合わせ、未対応になった技を選び直してください。技は自動で置き換えません。':'別スタイルの対応技を組み合わせられます。奥義は選択スタイルの既存映像を使用（映像中は元の姿）。';
+ const problems=selectedMoveProblems(catalog,selected);
+ $('compatibility').textContent=problems.length?'未対応になった装備は保持しています。理由を確かめて選び直してください。':'別スタイルの対応技を組み合わせられます。奥義は選択スタイルの既存映像を使用（映像中は元の姿）。';
+ $('move-problems').replaceChildren(...problems.map(problem=>{const item=document.createElement('li');item.textContent=(problem.slot+1)+'枠 / '+problem.name+': '+problem.reason;return item;}));
+ $('unavailable-moves').replaceChildren(...catalog.filter(move=>!move.supported).map(move=>{const item=document.createElement('li');item.textContent=move.name+': '+move.reason;return item;}));
 }
 let previewTimer;
 async function refreshPreview(){
  if(mode!=='editor')return;
- const token=++loadGeneration;const candidate=readForm();$('editor-error').textContent='';
- try{const actor=await createActor(candidate);if(token!==loadGeneration||mode!=='editor'){disposeActor(actor);return;}disposeActor(player);player=actor;scene.add(player.holder);player.holder.position.set(.8,0,0);player.turn.rotation.y=previewAngle;playIdle(player);setStatus('');}
- catch(error){if(token===loadGeneration)$('editor-error').textContent='プレビュー: '+error.message;}
+ const token=++loadGeneration;const candidate=readForm();$('editor-error').textContent='';const partProblems=meshPartProblems(candidate);if(partProblems.length){$('editor-error').textContent=partProblems.join(' / ');$('preview-state').textContent=player?'表示中は直前の有効なキャラです。選択は保持しています。':'この選択はまだ表示できません。選択は保持しています。';return;}$('preview-state').textContent='プレビューを更新中…';
+ try{const actor=await createActor(candidate);if(token!==loadGeneration||mode!=='editor'){disposeActor(actor);return;}disposeActor(player);player=actor;scene.add(player.holder);player.holder.position.set(.8,0,0);player.turn.rotation.y=previewAngle;playIdle(player);$('preview-state').textContent='プレビュー更新済み';setStatus('');}
+ catch(error){if(token===loadGeneration){$('editor-error').textContent='プレビュー: '+error.message;$('preview-state').textContent=player?'表示中は直前の有効なキャラです。選択は保持しています。':'この選択はまだ表示できません。選択は保持しています。';}}
 }
 function editAvatar(){if(!['explore','editor'].includes(mode))return;clearTimeout(previewTimer);loadGeneration++;village.visible=false;arena.visible=false;for(const actor of npcActors.values())actor.holder.visible=false;setMode('editor');fillForm(avatar);refreshPreview();}
 $('avatar-form').addEventListener('input',event=>{if(event.target.type==='color'){clearTimeout(previewTimer);previewTimer=setTimeout(refreshPreview,220);}});
 $('avatar-form').addEventListener('change',event=>{
- if(event.target.id==='avatar-base'){for(const slot of Object.keys(partLabels))$('part-'+slot).value='base';}
- if(event.target.tagName==='SELECT'){updatePartCompatibility();updateMoveOptions();clearTimeout(previewTimer);previewTimer=setTimeout(refreshPreview,60);}
+ if(event.target.tagName==='SELECT'){updatePartCompatibility();updateMeshPartOptions();updateMoveOptions();clearTimeout(previewTimer);previewTimer=setTimeout(refreshPreview,60);}
 });
+$('mesh-catalog-retry').onclick=async()=>{await reloadMeshCatalog();await refreshPreview();};
 $('avatar-form').addEventListener('submit',event=>{event.preventDefault();audio.unlock();enterVillage();});$('preview-turn').onclick=()=>spinning=!spinning;
 $('edit').onclick=editAvatar;$('save').onclick=save;$('talk').onclick=openDialogue;$('talk').addEventListener('pointerdown',event=>{if(mode!=='explore'||paused)return;event.preventDefault();openDialogue();});$('talk-close').onclick=closeDialogue;$('challenge').onclick=startBattle;$('return').onclick=returnToVillage;$('movie-skip').onclick=finishMovie;
 $('sound').onclick=()=>{audio.unlock();const muted=audio.setMuted(!audio.muted);$('sound').textContent=muted?'音 OFF':'音 ON';};
@@ -362,6 +398,6 @@ function render(now){requestAnimationFrame(render);const elapsed=last?Math.max(0
  if(mode==='battle'&&!paused&&feedbackShakeTime>0&&!reducedMotion){feedbackShakeTime=Math.max(0,feedbackShakeTime-delta);battleCamera.position.x+=Math.sin(now*.15)*feedbackShake;battleCamera.position.y+=Math.cos(now*.13)*feedbackShake;if(!feedbackShakeTime)feedbackShake=0;}
  renderer.render(scene,battleView?battleCamera:camera);fpsFrames++;if(now-fpsAt>1000){state.metrics.fps=Math.round(fpsFrames*1000/(now-fpsAt));fpsAt=now;fpsFrames=0;Object.assign(state.metrics,renderer.info.memory,{drawCalls:renderer.info.render.calls});$('perf').textContent=`${state.metrics.fps} FPS · ${npcActors.size}人表示`;}
 }
-async function boot(){await window.mamokenNative?.ready;buildForm();const saved=readSave(storage,normalizeAvatar);storageWarning=saved.error??'';saveReady=!!saved.save;avatar=saved.save?.avatar??createDefaultAvatar('moguzo');progress=saved.save?.progress??freshProgress();fillForm(avatar);village.visible=false;setMode('editor');resize();requestAnimationFrame(render);await refreshPreview();setStatus(storageWarning);}
+async function boot(){await window.mamokenNative?.ready;buildForm();await reloadMeshCatalog();const saved=readSave(storage,normalizeAvatar);storageWarning=saved.error??'';saveReady=!!saved.save;avatar=saved.save?.avatar??createDefaultAvatar('moguzo');progress=saved.save?.progress??freshProgress();fillForm(avatar);village.visible=false;setMode('editor');resize();requestAnimationFrame(render);await refreshPreview();setStatus(storageWarning);}
 window.mamokenStory={get mode(){return mode;},get previewReady(){return mode==='editor'&&player?.holder.parent===scene;},get player(){return player;},get avatar(){return avatar;},get progress(){return structuredClone(progress);},get battle(){return battle;},get actors(){return combatActors;},get nearby(){return nearby;},get npcs(){return npcs.map(({definition,...n})=>n);},get metrics(){return {...state.metrics,npcModels:npcActors.size};},get cinematic(){return {active:mode==='movie',elapsed:movie?.elapsed??0};},get landscapeLocked(){return rotated;},get controls(){return {exploration:exploration.snapshot,battle:combatInput.snapshot,paused};},get events(){return [...state.events];},save,openDialogue,returnToVillage};
 boot().catch(error=>{$('loading').hidden=false;$('loading-copy').textContent='起動できません: '+error.message;console.error(error);});

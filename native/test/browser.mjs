@@ -23,6 +23,7 @@ const context=await browser.newContext({viewport:{width:852,height:393},isMobile
 const page=await context.newPage(),errors=[],remoteRequests=[],report=[];
 const safeAreaGeometry=[];
 const nativeEnvGeometry=[];
+const nativeLobbyScroll=[];
 const cdp=await context.newCDPSession(page);
 async function safeInsets(left,right,bottom=21){
  await page.evaluate(({left,right,bottom})=>{
@@ -33,9 +34,48 @@ async function safeInsets(left,right,bottom=21){
 }
 async function safeBounds(selector,left,right,bottom=21){
  const rect=await page.locator(selector).boundingBox();assert.ok(rect,'Missing visible notch geometry target '+selector);
- assert.ok(rect.x>=left-.5&&rect.x+rect.width<=852-right+.5,'Target crosses horizontal safe rectangle: '+selector+' '+JSON.stringify(rect));
- assert.ok(rect.y>=-.5&&rect.y+rect.height<=393-bottom+.5,'Target crosses vertical safe rectangle: '+selector+' '+JSON.stringify(rect));
- safeAreaGeometry.push({selector,simulatedInsets:{left,right,bottom},rect});
+ const viewport=page.viewportSize();
+ safeAreaGeometry.push({selector,viewport,simulatedInsets:{left,right,bottom},rect});
+ await writeFile(output+'/native-safe-bounds.json',JSON.stringify({uiKitTested:false,safeAreaGeometry},null,2));
+ assert.ok(rect.x>=left-.5&&rect.x+rect.width<=viewport.width-right+.5,'Target crosses horizontal safe rectangle: '+selector+' '+JSON.stringify(rect));
+ assert.ok(rect.y>=-.5&&rect.y+rect.height<=viewport.height-bottom+.5,'Target crosses vertical safe rectangle: '+selector+' '+JSON.stringify(rect));
+}
+async function lobbyInsets({width,height,left,right,bottom}){
+ await page.setViewportSize({width,height});
+ await cdp.send('Emulation.setSafeAreaInsetsOverride',{insets:{left,right,top:0,bottom}});
+ await page.evaluate(()=>{for(const edge of ['left','right','top','bottom'])document.documentElement.style.removeProperty('--native-safe-'+edge);dispatchEvent(new Event('resize'));});
+ await page.waitForTimeout(80);
+}
+async function inspectLobby(condition){
+ const {left,right,bottom}=condition;await lobbyInsets(condition);
+ await safeBounds('.mode-hall',left,right,bottom);
+ const scroll=await page.locator('.mode-hall').evaluate(el=>({position:getComputedStyle(el).position,overflow:getComputedStyle(el).overflowY,clientHeight:el.clientHeight,scrollHeight:el.scrollHeight,scrollTop:el.scrollTop}));
+ assert.equal(scroll.position,'fixed');assert.equal(scroll.overflow,'auto');assert.ok(scroll.scrollHeight>scroll.clientHeight,'P4 scrollable menu was compressed into one screen');
+ await page.locator('.hall-header').scrollIntoViewIfNeeded();await safeBounds('.hall-header',left,right,bottom);await safeBounds('.hall-title h1',left,right,bottom);
+ assert.equal((await page.locator('.hall-title h1').textContent()).trim(),'マモ拳');
+ const cards=[];
+ for(const mode of ['battle','practice','arcade','survival','story']){
+  const selector='.modes a[data-mode="'+mode+'"]',card=page.locator(selector);
+  await card.scrollIntoViewIfNeeded();await safeBounds(selector,left,right,bottom);
+  const action=card.locator('.mode-action,.mode-rule').first();await action.click({trial:true});
+  await safeBounds(selector+' h2',left,right,bottom);await safeBounds(selector+' '+(mode==='battle'?'.mode-action':'.mode-rule'),left,right,bottom);
+  const record=await card.evaluate(el=>{
+   const action=el.querySelector('.mode-action,.mode-rule'),r=action.getBoundingClientRect(),card=el.getBoundingClientRect(),hit=document.elementFromPoint(r.x+r.width/2,r.y+r.height/2);
+   return {mode:el.dataset.mode,href:el.getAttribute('href'),card:{x:card.x,y:card.y,width:card.width,height:card.height},action:{x:r.x,y:r.y,width:r.width,height:r.height},hitMatches:hit?.closest('a[data-mode]')===el,scrollTop:document.querySelector('.mode-hall').scrollTop};
+  });
+  assert.equal(record.hitMatches,true,'Native action is clipped or covered: '+mode);cards.push(record);
+  if(mode==='story'){
+   await safeBounds('#saved-journey',left,right,bottom);assert.match(await page.locator('#saved-journey').textContent(),/端末内の長い名前/);
+   const label=await page.locator('#saved-journey').evaluate(el=>{const r=el.getBoundingClientRect(),card=el.closest('a').getBoundingClientRect();return {inside:r.left>=card.left&&r.right<=card.right+.5&&r.top>=card.top&&r.bottom<=card.bottom+.5,wrapped:el.scrollWidth<=el.clientWidth+1};});
+   assert.equal(label.inside,true,'Saved name escapes its native mode card');assert.equal(label.wrapped,true,'Saved journey name is horizontally clipped');
+  }
+ }
+ await page.locator('.hall-footer').scrollIntoViewIfNeeded();await safeBounds('.hall-footer',left,right,bottom);
+ const maxScroll=await page.locator('.mode-hall').evaluate(el=>el.scrollTop);assert.ok(maxScroll>0,'Five modes were not reached by scrolling');
+ await page.screenshot({path:output+'/lobby-safe-lower-'+condition.width+'-'+left+'-'+right+'.png'});
+ await page.locator('.hall-header').scrollIntoViewIfNeeded();await safeBounds('.hall-header',left,right,bottom);
+ nativeLobbyScroll.push({condition,scroll,maxScroll,cards});
+ await writeFile(output+'/native-lobby-scroll.json',JSON.stringify({uiKitTested:false,cssEnvOverriddenViaCDP:true,nativeLobbyScroll},null,2));
 }
 page.on('pageerror',error=>errors.push(error.message));page.on('response',r=>{if(r.status()>=400&&!r.url().endsWith('favicon.ico'))errors.push(r.status()+' '+r.url());});
 await context.route('**/*',route=>{const request=route.request().url();if(request.startsWith(url)||request.startsWith('data:'))return route.continue();remoteRequests.push(request);return route.abort();});
@@ -47,14 +87,32 @@ await context.addInitScript(()=>{
 });
 try{
  await page.goto(url+'/');assert.equal(await page.locator('.modes a').count(),5);
- // Chromium has no iPhone notch: explicit CSS inputs exercise real DOM geometry,
- // not UIKit env() values. Test either side and preserve web layout when disabled.
- for(const [left,right]of [[62,0],[0,62],[62,62]]){
-  await safeInsets(left,right);await safeBounds('.modes',left,right);
+ // Preserve a valid long saved name, prove every card and its action can be
+ // scrolled into the native safe scrollport, then take all five real routes.
+ const previousSave=await page.evaluate(()=>localStorage.getItem('mamoken.story.v16.1'));
+ const seededSave=await page.evaluate(async()=>{const {createDefaultAvatar}=await import('/custom/v16/avatar-schema.js'),{freshProgress,writeSave}=await import('/story/story-state.js');const avatar=createDefaultAvatar('moguzo');avatar.name='端末内の長い名前と仲間たちの山旅を続ける';writeSave(localStorage,avatar,freshProgress());return localStorage.getItem('mamoken.story.v16.1');});
+ await page.reload();await page.waitForFunction(()=>document.querySelector('#saved-journey').textContent.includes('端末内の長い名前'));
+ for(const condition of [{width:852,height:393,left:62,right:0,bottom:21},{width:852,height:393,left:0,right:62,bottom:21},{width:852,height:393,left:62,right:62,bottom:21},{width:720,height:320,left:62,right:21,bottom:21}])await inspectLobby(condition);
+ assert.equal(await page.evaluate(()=>localStorage.getItem('mamoken.story.v16.1')),seededSave,'Mode menu scrolling changed the saved journey');
+ for(const mode of ['battle','practice','arcade','survival','story']){
+  await page.goto(url+'/');await lobbyInsets({width:720,height:320,left:62,right:21,bottom:21});
+  const card=page.locator('.modes a[data-mode="'+mode+'"]');await card.scrollIntoViewIfNeeded();
+  await safeBounds('.modes a[data-mode="'+mode+'"]',62,21);
+  const target=new URL(await card.getAttribute('href'),url+'/');
+  await Promise.all([page.waitForURL(actual=>actual.pathname===target.pathname&&actual.search===target.search),card.locator('.mode-action,.mode-rule').first().tap()]);
+  if(mode==='story')await page.locator('#story-app').waitFor();else{await page.waitForFunction(()=>window.mamoken3d,undefined,{timeout:15000});assert.equal(await page.locator('#match-mode').inputValue(),mode);}
+  nativeLobbyScroll.push({route:mode,actualUrl:page.url(),tapNavigated:true});
  }
- await page.evaluate(()=>document.documentElement.classList.remove('native-runtime'));
- assert.equal(await page.locator('main').evaluate(el=>getComputedStyle(el).paddingLeft),'25px','Native layout leaked into the web launcher');
+ await page.goto(url+'/');
+ await page.evaluate(value=>{if(value===null)localStorage.removeItem('mamoken.story.v16.1');else localStorage.setItem('mamoken.story.v16.1',value);},previousSave);
+ await cdp.send('Emulation.setSafeAreaInsetsOverride',{insets:{left:0,right:0,top:0,bottom:0}});await page.setViewportSize({width:852,height:393});await page.reload();
+ // The native stylesheet must be inert for ordinary web/PWA layout. Compare
+ // the same real web DOM with the stylesheet enabled and disabled.
+ const webLayout=async()=>page.locator('.mode-hall').evaluate(el=>{const r=el.getBoundingClientRect(),s=getComputedStyle(el);return {x:r.x,y:r.y,width:r.width,height:r.height,position:s.position,padding:s.padding,overflow:s.overflowY};});
+ await page.evaluate(()=>{document.documentElement.classList.remove('native-runtime');document.querySelector('link[href="/native-layout.css"]').disabled=true;});const originalWeb=await webLayout();
+ await page.evaluate(()=>{document.querySelector('link[href="/native-layout.css"]').disabled=false;});assert.deepEqual(await webLayout(),originalWeb,'Native stylesheet changed ordinary web/PWA layout');
  await page.evaluate(()=>document.documentElement.classList.add('native-runtime'));
+ await writeFile(output+'/native-lobby-scroll.json',JSON.stringify({uiKitTested:false,cssEnvOverriddenViaCDP:true,nativeLobbyScroll,originalWeb},null,2));
  await page.screenshot({path:output+'/01-bundled-five-modes.png'});
  await page.locator('a[href="./dojo/?mode=practice"]').click();
  await page.waitForFunction(()=>window.mamoken3d,undefined,{timeout:15000});
@@ -115,7 +173,7 @@ try{
  await page.reload();await page.waitForFunction(()=>mamokenStory.mode==='editor'&&mamokenStory.player,undefined,{timeout:90000});assert.equal(await page.locator('#avatar-name').inputValue(),'端末内の旅人');
  await page.screenshot({path:output+'/03-bundled-story-save.png'});
  assert.deepEqual(remoteRequests,[]);assert.deepEqual(errors,[]);
- await writeFile(output+'/report.json',JSON.stringify({webglRendered:true,nativeAdapterSimulated:true,uiKitTested:false,safeAreaInsetsSimulated:true,safeAreaGeometry,nativeEnvGeometry,remoteRequests,errors,report},null,2));
+ await writeFile(output+'/report.json',JSON.stringify({webglRendered:true,nativeAdapterSimulated:true,uiKitTested:false,safeAreaInsetsSimulated:true,safeAreaGeometry,nativeEnvGeometry,nativeLobbyScroll,remoteRequests,errors,report},null,2));
  console.log('P1 BUNDLED WEBGL PASS: five modes, real GLBs/practice, simulated native background/foreground/input reset, no CSS double rotation, Story save reload, no external asset requests');
 }catch(error){await page.screenshot({path:output+'/failure.png'}).catch(()=>{});console.error({errors,remoteRequests});throw error;}
 finally{await browser.close();await new Promise(resolve=>server.close(resolve));}

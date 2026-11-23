@@ -44,7 +44,7 @@ async function visibleTargets(selector){
  return rows;
 }
 async function layoutEvidence(){
- return page.evaluate(()=>({viewport:{width:innerWidth,height:innerHeight},nodes:[...document.querySelectorAll('.mode-hall,.modes,.mode-story,.mode-story>div,.journey-tag,#editor,.p4-editor-tabs,.p4-save-summary,.editor-actions')].map(n=>{
+ return page.evaluate(()=>({viewport:{width:innerWidth,height:innerHeight},game:window.mamoken3d?{mode:document.querySelector('#match-mode')?.value,run:mamoken3d.run?{mode:mamoken3d.run.mode,status:mamoken3d.run.status,round:mamoken3d.run.round}:null,presentation:mamoken3d.presentation,frame:mamoken3d.battle?.frame,phase:mamoken3d.battle?.phase,loading:mamoken3d.diagnostics.loading,loadingCopy:document.querySelector('#loading-status')?.textContent,dialogueVisible:document.querySelector('#run-dialogue')?!document.querySelector('#run-dialogue').hidden:false}:null,nodes:[...document.querySelectorAll('.mode-hall,.modes,.mode-story,.mode-story>div,.journey-tag,#editor,.p4-editor-tabs,.p4-save-summary,.editor-actions')].map(n=>{
   const s=getComputedStyle(n),r=n.getBoundingClientRect(),range=document.createRange();range.selectNodeContents(n);
   return {element:n.id||n.className,bounds:r.toJSON(),textBounds:range.getBoundingClientRect().toJSON(),scroll:{top:n.scrollTop,height:n.scrollHeight,client:n.clientHeight},style:Object.fromEntries(['display','height','minHeight','gridTemplateRows','paddingTop','paddingBottom','overflowY','fontSize','lineHeight'].map(k=>[k,s[k]]))};
  })}));
@@ -90,7 +90,20 @@ try{
   await page.locator('#start').scrollIntoViewIfNeeded();const start=await visibleTargets('#start');
   await page.screenshot({path:dir+`/select-actions-${mode}.png`});report.push({screen:'selection',mode,profile,separation,start});
   await page.locator('#start').tap();
-  await page.waitForFunction(()=>!mamoken3d.diagnostics.loading&&mamoken3d.presentation.loaded&&mamoken3d.battle?.frame>2,undefined,{timeout:90000});
+  if(mode==='arcade'||mode==='survival'){
+   await page.locator('#run-dialogue').waitFor({state:'visible',timeout:15000});
+   const dialogue=[];
+   for(let line=0;line<3&&await page.locator('#run-dialogue').isVisible();line++){
+    const before=await page.locator('#run-dialogue').textContent();dialogue.push(before.trim());
+    await tapTargets('#run-dialogue button');
+    await page.screenshot({path:dir+'/'+mode+'-dialogue-'+line+'.png'});
+    await page.locator('#run-dialogue button').tap();
+    await page.waitForFunction(previous=>{const panel=document.querySelector('#run-dialogue');return panel.hidden||getComputedStyle(panel).display==='none'||panel.textContent!==previous;},before);
+   }
+   assert.equal(await page.locator('#run-dialogue').isVisible(),false,'run dialogue did not finish through its actual actions');
+   report.push({screen:'actual-run-dialogue',mode,dialogue});
+  }
+  await page.waitForFunction(()=>!mamoken3d.diagnostics.loading&&mamoken3d.presentation.loaded&&mamoken3d.presentation.state==='fight'&&mamoken3d.presentation.inputEnabled&&mamoken3d.battle?.frame>2,undefined,{timeout:90000});
   if(mode==='practice')assert.equal(await page.locator('#timer').textContent(),'∞');
   else assert.notEqual(await page.locator('#timer').textContent(),'∞');
   const controls=await page.locator('#buttons-rail .attack').evaluateAll(nodes=>nodes.map(n=>({key:n.dataset.control,art:getComputedStyle(n).backgroundImage})));

@@ -92,3 +92,13 @@ body[data-ui=mountain] .shared-step-pad .step-button{min-height:44px;background:
  #story-app #status{font-size:11px;padding:5px 9px;max-width:70%}
 }
 @media(prefers-reduced-motion:reduce){#story-app .p4-tab-panel{animation:none}}
+/* P2 keeps old shape adjustment distinct from explicitly selected mesh parts. */
+#story-app .editor-subheading,#story-app .mesh-part-editor legend{font-size:14px;font-weight:800;color:var(--ui-gold);margin:6px 0}
+#story-app .mesh-part-editor{margin:18px 0 0;padding:12px 0 0;border:0;border-top:1px solid var(--ui-line)}
+#story-app .mesh-part-reason{color:#ffcfaf;line-height:1.5;font-size:11px;white-space:normal}
+#story-app .mesh-part-reason:empty,#story-app .compatibility-problems:empty{display:none}
+#story-app .unavailable-list{margin:12px 0;padding:0;border:0}
+#story-app .unavailable-list summary{display:flex;align-items:center;min-height:44px;color:var(--ui-muted);font-size:12px;cursor:pointer}
+#story-app .unavailable-list ul,#story-app .compatibility-problems{padding-left:18px;font-size:11px;line-height:1.65;color:#f5cfb5}
+#story-app .unavailable-list li{margin-bottom:7px}
+#story-app #preview-state{min-height:1.5em}

@@ -1,0 +1,13 @@
+# P2 editor / save integration
+
+The current owner's P2 implementation approval supersedes the earlier hold. This is an implementation record, not a formal G2 design score, external human test, physical iPhone test, or owner's final P4 acceptance.
+
+`appearance.parts` retains its original shape-adjustment meaning. The optional `appearance.meshParts` stores explicit physical donor choices separately. Old schema-one saves do not opt into mesh exchange during normalization. Unknown part IDs and conflicting shape/mesh choices fail with visible reasons; the original saved string remains intact. A foreign physical mesh also requires real collision measurements rather than the unchanged-body fallback.
+
+The editor distinguishes shape adjustment and real mesh exchange. Selectable mesh donors come only from the validated runtime manifest. Unmade modules, long-tail incompatibility and same-slot conflicts remain disabled with written reasons. A previously saved unsupported choice remains selected and refuses preview/save; it is never silently replaced. A failed preview identifies whether it is showing the previous valid model or cannot display the current choice yet.
+
+Changing the body no longer resets all part choices. Editing preserves additional saved palette keys and the current three skills. Unsupported skills retain their references and show concrete reasons. Saving still happens only after explicit confirmation and successful actor creation; journey position, camera, battle count and encounters remain in the existing save path. Story's foreign retarget call supplies the new `moveRef` and `targetDefinition` compatibility context while retaining actual normal/special/socket sampling.
+
+The P4 tab and art layer is integrated over the reviewed P3 runtime. Source/read-only UI/art tests passed, along with editor/save unit cases and the existing custom/Story/shared regressions. `story/p2-editor-browser.mjs` is a strict future integrated gate: it requires real foreign head assets on all three representative bodies, checks loaded module ID/hash and real shared-skeleton mesh vertices, saves, enters exploration, lands an actual normal hit, returns to the same position/camera, and reloads. It also checks that an unsupported saved long-tail choice is preserved and visibly rejected.
+
+At creation of this editor change the actual foreign-mesh catalog was still empty. The three-body browser gate has therefore not been run or claimed successful. It must run after the authored modules pass seam, morph, skin and material verification. Desktop WebGL evidence and physical-phone performance remain separate requirements.

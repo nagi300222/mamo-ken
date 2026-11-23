@@ -7,10 +7,12 @@
   <div class="eyebrow">CREATE YOUR MAMO</div><h1 id="editor-title">君だけの拳で、旅に出よう。</h1><p class="lead">山あいの集落で、出会いと稽古を重ねる。</p>
   <form id="avatar-form">
    <div class="form-row"><label>名前<input id="avatar-name" maxlength="24" autocomplete="off" value="旅のマーモット"></label><label>骨格・体格<select id="avatar-base"></select></label></div>
-   <details open><summary>かたち・装飾</summary><div class="part-grid" id="part-fields"></div></details>
+   <details open><summary>かたち・装飾</summary><h3 class="editor-subheading">形の調整</h3><p class="hint">今の体を基準に形を整えます。実パーツの交換とは別の設定です。</p><div class="part-grid" id="part-fields"></div>
+    <fieldset class="mesh-part-editor"><legend>実パーツ交換</legend><p class="hint">制作・適合を確認した部品を交換します。同じ部位の形の調整とは同時に使えません。</p><div id="mesh-part-fields" class="part-grid"></div><p id="mesh-catalog-state" class="hint" role="status"></p><button id="mesh-catalog-retry" type="button" hidden>部品表を再読込</button><details class="unavailable-list"><summary>選べないパーツの理由</summary><ul id="unavailable-mesh-parts"></ul></details></fieldset>
+   </details>
    <details><summary>毛色・模様</summary><div class="color-grid" id="color-fields"></div><div class="form-row"><label>毛模様<select id="avatar-pattern"></select></label></div></details>
-   <details open><summary>戦闘スタイル・技編成</summary><label>基本スタイル（性能・能力）<select id="avatar-style"></select></label><p class="hint">通常技の動きは体格ごと。基本スタイルで速さ・威力・固有能力が変わります。</p><div id="move-fields" class="move-grid"></div><p id="compatibility" class="hint"></p></details>
-   <p id="editor-error" role="alert"></p><div class="editor-actions"><button type="button" id="preview-turn">回して見る</button><button type="submit" class="primary" id="enter">保存して集落へ</button></div>
+   <details open><summary>戦闘スタイル・技編成</summary><label>基本スタイル（性能・能力）<select id="avatar-style"></select></label><p class="hint">通常技の動きは体格ごと。基本スタイルで速さ・威力・固有能力が変わります。</p><div id="move-fields" class="move-grid"></div><p id="compatibility" class="hint"></p><ul id="move-problems" class="compatibility-problems" aria-live="polite"></ul><details class="unavailable-list"><summary>未対応の技と必要な部品</summary><ul id="unavailable-moves"></ul></details></details>
+   <p id="preview-state" class="hint" role="status" aria-live="polite"></p><p id="editor-error" role="alert"></p><div class="editor-actions"><button type="button" id="preview-turn">回して見る</button><button type="submit" class="primary" id="enter">保存して集落へ</button></div>
   </form><small class="hint">9体格を基準にした初期実装。対応を検証した技だけ装備できます。設定・進行はこのブラウザに保存。</small>
  </section>
  <aside id="journey" class="journey" hidden><span class="eyebrow">山あいの集落</span><strong id="player-label"></strong><small id="journey-record"></small><p id="task">道場前のモグゾーに話しかけてみよう。</p></aside>

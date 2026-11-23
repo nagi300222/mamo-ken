@@ -45,7 +45,7 @@ jobs:
           node tools/verify-protected-assets.mjs
           npm --prefix exp/fable-3d/dojo test
           if test -d exp/fable-3d/story; then
-            node --test exp/fable-3d/custom/v16/*.test.mjs exp/fable-3d/story/*.test.mjs exp/fable-3d/shared-ui/*.test.mjs
+            node --test exp/fable-3d/custom/p2/*.test.mjs exp/fable-3d/custom/v16/*.test.mjs exp/fable-3d/story/*.test.mjs exp/fable-3d/shared-ui/*.test.mjs
           fi
       - name: Build actual game and assets
         run: npm --prefix exp/fable-3d/dojo run build:pages
