@@ -1,0 +1,786 @@
+{
+ "note": "モジュールの host 境界頂点の写しと、host の隣の slot の同じ場所の頂点の距離 [m]。スキニング後（three.js の SkinnedMesh.getVertexPosition = 描画と同じ計算）。各クリップを等間隔 9 時刻で測った最大",
+ "tolerance_m": 0.00002,
+ "modules": {
+  "moguzo-head-godan": {
+   "clips": {
+    "idle": {
+     "maxGap_m": 0,
+     "seamVertices": 578
+    },
+    "walk_f": {
+     "maxGap_m": 0,
+     "seamVertices": 578
+    },
+    "guard_stand": {
+     "maxGap_m": 0,
+     "seamVertices": 578
+    },
+    "stand_heavy": {
+     "maxGap_m": 0,
+     "seamVertices": 578
+    },
+    "crouch_heavy": {
+     "maxGap_m": 0,
+     "seamVertices": 578
+    },
+    "hurt_heavy": {
+     "maxGap_m": 0,
+     "seamVertices": 578
+    }
+   },
+   "maxGap_m": 0,
+   "pass": true
+  },
+  "moguzo-head-bullet": {
+   "clips": {
+    "idle": {
+     "maxGap_m": 0,
+     "seamVertices": 562
+    },
+    "walk_f": {
+     "maxGap_m": 0,
+     "seamVertices": 562
+    },
+    "guard_stand": {
+     "maxGap_m": 0,
+     "seamVertices": 562
+    },
+    "stand_heavy": {
+     "maxGap_m": 0,
+     "seamVertices": 562
+    },
+    "crouch_heavy": {
+     "maxGap_m": 0,
+     "seamVertices": 562
+    },
+    "hurt_heavy": {
+     "maxGap_m": 0,
+     "seamVertices": 562
+    }
+   },
+   "maxGap_m": 0,
+   "pass": true
+  },
+  "moguzo-ears-godan": {
+   "clips": {
+    "idle": {
+     "maxGap_m": 0,
+     "seamVertices": 180
+    },
+    "walk_f": {
+     "maxGap_m": 0,
+     "seamVertices": 180
+    },
+    "guard_stand": {
+     "maxGap_m": 0,
+     "seamVertices": 180
+    },
+    "stand_heavy": {
+     "maxGap_m": 0,
+     "seamVertices": 180
+    },
+    "crouch_heavy": {
+     "maxGap_m": 0,
+     "seamVertices": 180
+    },
+    "hurt_heavy": {
+     "maxGap_m": 0,
+     "seamVertices": 180
+    }
+   },
+   "maxGap_m": 0,
+   "pass": true
+  },
+  "moguzo-ears-bullet": {
+   "clips": {
+    "idle": {
+     "maxGap_m": 0,
+     "seamVertices": 180
+    },
+    "walk_f": {
+     "maxGap_m": 0,
+     "seamVertices": 180
+    },
+    "guard_stand": {
+     "maxGap_m": 0,
+     "seamVertices": 180
+    },
+    "stand_heavy": {
+     "maxGap_m": 0,
+     "seamVertices": 180
+    },
+    "crouch_heavy": {
+     "maxGap_m": 0,
+     "seamVertices": 180
+    },
+    "hurt_heavy": {
+     "maxGap_m": 0,
+     "seamVertices": 180
+    }
+   },
+   "maxGap_m": 0,
+   "pass": true
+  },
+  "moguzo-hands-godan": {
+   "clips": {
+    "idle": {
+     "maxGap_m": 0,
+     "seamVertices": 518
+    },
+    "walk_f": {
+     "maxGap_m": 0,
+     "seamVertices": 518
+    },
+    "guard_stand": {
+     "maxGap_m": 0,
+     "seamVertices": 518
+    },
+    "stand_heavy": {
+     "maxGap_m": 0,
+     "seamVertices": 518
+    },
+    "crouch_heavy": {
+     "maxGap_m": 0,
+     "seamVertices": 518
+    },
+    "hurt_heavy": {
+     "maxGap_m": 0,
+     "seamVertices": 518
+    }
+   },
+   "maxGap_m": 0,
+   "pass": true
+  },
+  "moguzo-hands-bullet": {
+   "clips": {
+    "idle": {
+     "maxGap_m": 0,
+     "seamVertices": 480
+    },
+    "walk_f": {
+     "maxGap_m": 0,
+     "seamVertices": 480
+    },
+    "guard_stand": {
+     "maxGap_m": 0,
+     "seamVertices": 480
+    },
+    "stand_heavy": {
+     "maxGap_m": 0,
+     "seamVertices": 480
+    },
+    "crouch_heavy": {
+     "maxGap_m": 0,
+     "seamVertices": 480
+    },
+    "hurt_heavy": {
+     "maxGap_m": 0,
+     "seamVertices": 480
+    }
+   },
+   "maxGap_m": 0,
+   "pass": true
+  },
+  "moguzo-feet-godan": {
+   "clips": {
+    "idle": {
+     "maxGap_m": 0,
+     "seamVertices": 816
+    },
+    "walk_f": {
+     "maxGap_m": 0,
+     "seamVertices": 816
+    },
+    "guard_stand": {
+     "maxGap_m": 0,
+     "seamVertices": 816
+    },
+    "stand_heavy": {
+     "maxGap_m": 0,
+     "seamVertices": 816
+    },
+    "crouch_heavy": {
+     "maxGap_m": 0,
+     "seamVertices": 816
+    },
+    "hurt_heavy": {
+     "maxGap_m": 0,
+     "seamVertices": 816
+    }
+   },
+   "maxGap_m": 0,
+   "pass": true
+  },
+  "moguzo-feet-bullet": {
+   "clips": {
+    "idle": {
+     "maxGap_m": 0,
+     "seamVertices": 800
+    },
+    "walk_f": {
+     "maxGap_m": 0,
+     "seamVertices": 800
+    },
+    "guard_stand": {
+     "maxGap_m": 0,
+     "seamVertices": 800
+    },
+    "stand_heavy": {
+     "maxGap_m": 0,
+     "seamVertices": 800
+    },
+    "crouch_heavy": {
+     "maxGap_m": 0,
+     "seamVertices": 800
+    },
+    "hurt_heavy": {
+     "maxGap_m": 0,
+     "seamVertices": 800
+    }
+   },
+   "maxGap_m": 0,
+   "pass": true
+  },
+  "godan-head-moguzo": {
+   "clips": {
+    "idle": {
+     "maxGap_m": 0,
+     "seamVertices": 574
+    },
+    "walk_f": {
+     "maxGap_m": 0,
+     "seamVertices": 574
+    },
+    "guard_stand": {
+     "maxGap_m": 0,
+     "seamVertices": 574
+    },
+    "stand_heavy": {
+     "maxGap_m": 0,
+     "seamVertices": 574
+    },
+    "crouch_heavy": {
+     "maxGap_m": 0,
+     "seamVertices": 574
+    },
+    "hurt_heavy": {
+     "maxGap_m": 0,
+     "seamVertices": 574
+    }
+   },
+   "maxGap_m": 0,
+   "pass": true
+  },
+  "godan-head-bullet": {
+   "clips": {
+    "idle": {
+     "maxGap_m": 0,
+     "seamVertices": 554
+    },
+    "walk_f": {
+     "maxGap_m": 0,
+     "seamVertices": 554
+    },
+    "guard_stand": {
+     "maxGap_m": 0,
+     "seamVertices": 554
+    },
+    "stand_heavy": {
+     "maxGap_m": 0,
+     "seamVertices": 554
+    },
+    "crouch_heavy": {
+     "maxGap_m": 0,
+     "seamVertices": 554
+    },
+    "hurt_heavy": {
+     "maxGap_m": 0,
+     "seamVertices": 554
+    }
+   },
+   "maxGap_m": 0,
+   "pass": true
+  },
+  "godan-ears-moguzo": {
+   "clips": {
+    "idle": {
+     "maxGap_m": 0,
+     "seamVertices": 168
+    },
+    "walk_f": {
+     "maxGap_m": 0,
+     "seamVertices": 168
+    },
+    "guard_stand": {
+     "maxGap_m": 0,
+     "seamVertices": 168
+    },
+    "stand_heavy": {
+     "maxGap_m": 0,
+     "seamVertices": 168
+    },
+    "crouch_heavy": {
+     "maxGap_m": 0,
+     "seamVertices": 168
+    },
+    "hurt_heavy": {
+     "maxGap_m": 0,
+     "seamVertices": 168
+    }
+   },
+   "maxGap_m": 0,
+   "pass": true
+  },
+  "godan-ears-bullet": {
+   "clips": {
+    "idle": {
+     "maxGap_m": 0,
+     "seamVertices": 156
+    },
+    "walk_f": {
+     "maxGap_m": 0,
+     "seamVertices": 156
+    },
+    "guard_stand": {
+     "maxGap_m": 0,
+     "seamVertices": 156
+    },
+    "stand_heavy": {
+     "maxGap_m": 0,
+     "seamVertices": 156
+    },
+    "crouch_heavy": {
+     "maxGap_m": 0,
+     "seamVertices": 156
+    },
+    "hurt_heavy": {
+     "maxGap_m": 0,
+     "seamVertices": 156
+    }
+   },
+   "maxGap_m": 0,
+   "pass": true
+  },
+  "godan-hands-moguzo": {
+   "clips": {
+    "idle": {
+     "maxGap_m": 0,
+     "seamVertices": 550
+    },
+    "walk_f": {
+     "maxGap_m": 0,
+     "seamVertices": 550
+    },
+    "guard_stand": {
+     "maxGap_m": 0,
+     "seamVertices": 550
+    },
+    "stand_heavy": {
+     "maxGap_m": 0,
+     "seamVertices": 550
+    },
+    "crouch_heavy": {
+     "maxGap_m": 0,
+     "seamVertices": 550
+    },
+    "hurt_heavy": {
+     "maxGap_m": 0,
+     "seamVertices": 550
+    }
+   },
+   "maxGap_m": 0,
+   "pass": true
+  },
+  "godan-hands-bullet": {
+   "clips": {
+    "idle": {
+     "maxGap_m": 0,
+     "seamVertices": 544
+    },
+    "walk_f": {
+     "maxGap_m": 0,
+     "seamVertices": 544
+    },
+    "guard_stand": {
+     "maxGap_m": 0,
+     "seamVertices": 544
+    },
+    "stand_heavy": {
+     "maxGap_m": 0,
+     "seamVertices": 544
+    },
+    "crouch_heavy": {
+     "maxGap_m": 0,
+     "seamVertices": 544
+    },
+    "hurt_heavy": {
+     "maxGap_m": 0,
+     "seamVertices": 544
+    }
+   },
+   "maxGap_m": 0,
+   "pass": true
+  },
+  "godan-feet-moguzo": {
+   "clips": {
+    "idle": {
+     "maxGap_m": 0,
+     "seamVertices": 798
+    },
+    "walk_f": {
+     "maxGap_m": 0,
+     "seamVertices": 798
+    },
+    "guard_stand": {
+     "maxGap_m": 0,
+     "seamVertices": 798
+    },
+    "stand_heavy": {
+     "maxGap_m": 0,
+     "seamVertices": 798
+    },
+    "crouch_heavy": {
+     "maxGap_m": 0,
+     "seamVertices": 798
+    },
+    "hurt_heavy": {
+     "maxGap_m": 0,
+     "seamVertices": 798
+    }
+   },
+   "maxGap_m": 0,
+   "pass": true
+  },
+  "godan-feet-bullet": {
+   "clips": {
+    "idle": {
+     "maxGap_m": 0,
+     "seamVertices": 764
+    },
+    "walk_f": {
+     "maxGap_m": 0,
+     "seamVertices": 764
+    },
+    "guard_stand": {
+     "maxGap_m": 0,
+     "seamVertices": 764
+    },
+    "stand_heavy": {
+     "maxGap_m": 0,
+     "seamVertices": 764
+    },
+    "crouch_heavy": {
+     "maxGap_m": 0,
+     "seamVertices": 764
+    },
+    "hurt_heavy": {
+     "maxGap_m": 0,
+     "seamVertices": 764
+    }
+   },
+   "maxGap_m": 0,
+   "pass": true
+  },
+  "bullet-head-moguzo": {
+   "clips": {
+    "idle": {
+     "maxGap_m": 0,
+     "seamVertices": 542
+    },
+    "walk_f": {
+     "maxGap_m": 0,
+     "seamVertices": 542
+    },
+    "guard_stand": {
+     "maxGap_m": 0,
+     "seamVertices": 542
+    },
+    "stand_heavy": {
+     "maxGap_m": 0,
+     "seamVertices": 542
+    },
+    "crouch_heavy": {
+     "maxGap_m": 0,
+     "seamVertices": 542
+    },
+    "hurt_heavy": {
+     "maxGap_m": 0,
+     "seamVertices": 542
+    }
+   },
+   "maxGap_m": 0,
+   "pass": true
+  },
+  "bullet-head-godan": {
+   "clips": {
+    "idle": {
+     "maxGap_m": 0,
+     "seamVertices": 538
+    },
+    "walk_f": {
+     "maxGap_m": 0,
+     "seamVertices": 538
+    },
+    "guard_stand": {
+     "maxGap_m": 0,
+     "seamVertices": 538
+    },
+    "stand_heavy": {
+     "maxGap_m": 0,
+     "seamVertices": 538
+    },
+    "crouch_heavy": {
+     "maxGap_m": 0,
+     "seamVertices": 538
+    },
+    "hurt_heavy": {
+     "maxGap_m": 0,
+     "seamVertices": 538
+    }
+   },
+   "maxGap_m": 0,
+   "pass": true
+  },
+  "bullet-ears-moguzo": {
+   "clips": {
+    "idle": {
+     "maxGap_m": 0,
+     "seamVertices": 168
+    },
+    "walk_f": {
+     "maxGap_m": 0,
+     "seamVertices": 168
+    },
+    "guard_stand": {
+     "maxGap_m": 0,
+     "seamVertices": 168
+    },
+    "stand_heavy": {
+     "maxGap_m": 0,
+     "seamVertices": 168
+    },
+    "crouch_heavy": {
+     "maxGap_m": 0,
+     "seamVertices": 168
+    },
+    "hurt_heavy": {
+     "maxGap_m": 0,
+     "seamVertices": 168
+    }
+   },
+   "maxGap_m": 0,
+   "pass": true
+  },
+  "bullet-ears-godan": {
+   "clips": {
+    "idle": {
+     "maxGap_m": 0,
+     "seamVertices": 156
+    },
+    "walk_f": {
+     "maxGap_m": 0,
+     "seamVertices": 156
+    },
+    "guard_stand": {
+     "maxGap_m": 0,
+     "seamVertices": 156
+    },
+    "stand_heavy": {
+     "maxGap_m": 0,
+     "seamVertices": 156
+    },
+    "crouch_heavy": {
+     "maxGap_m": 0,
+     "seamVertices": 156
+    },
+    "hurt_heavy": {
+     "maxGap_m": 0,
+     "seamVertices": 156
+    }
+   },
+   "maxGap_m": 0,
+   "pass": true
+  },
+  "bullet-hands-moguzo": {
+   "clips": {
+    "idle": {
+     "maxGap_m": 0,
+     "seamVertices": 474
+    },
+    "walk_f": {
+     "maxGap_m": 0,
+     "seamVertices": 474
+    },
+    "guard_stand": {
+     "maxGap_m": 0,
+     "seamVertices": 474
+    },
+    "stand_heavy": {
+     "maxGap_m": 0,
+     "seamVertices": 474
+    },
+    "crouch_heavy": {
+     "maxGap_m": 0,
+     "seamVertices": 474
+    },
+    "hurt_heavy": {
+     "maxGap_m": 0,
+     "seamVertices": 474
+    }
+   },
+   "maxGap_m": 0,
+   "pass": true
+  },
+  "bullet-hands-godan": {
+   "clips": {
+    "idle": {
+     "maxGap_m": 0,
+     "seamVertices": 506
+    },
+    "walk_f": {
+     "maxGap_m": 0,
+     "seamVertices": 506
+    },
+    "guard_stand": {
+     "maxGap_m": 0,
+     "seamVertices": 506
+    },
+    "stand_heavy": {
+     "maxGap_m": 0,
+     "seamVertices": 506
+    },
+    "crouch_heavy": {
+     "maxGap_m": 0,
+     "seamVertices": 506
+    },
+    "hurt_heavy": {
+     "maxGap_m": 0,
+     "seamVertices": 506
+    }
+   },
+   "maxGap_m": 0,
+   "pass": true
+  },
+  "bullet-feet-moguzo": {
+   "clips": {
+    "idle": {
+     "maxGap_m": 0,
+     "seamVertices": 766
+    },
+    "walk_f": {
+     "maxGap_m": 0,
+     "seamVertices": 766
+    },
+    "guard_stand": {
+     "maxGap_m": 0,
+     "seamVertices": 766
+    },
+    "stand_heavy": {
+     "maxGap_m": 0,
+     "seamVertices": 766
+    },
+    "crouch_heavy": {
+     "maxGap_m": 0,
+     "seamVertices": 766
+    },
+    "hurt_heavy": {
+     "maxGap_m": 0,
+     "seamVertices": 766
+    }
+   },
+   "maxGap_m": 0,
+   "pass": true
+  },
+  "bullet-feet-godan": {
+   "clips": {
+    "idle": {
+     "maxGap_m": 0,
+     "seamVertices": 748
+    },
+    "walk_f": {
+     "maxGap_m": 0,
+     "seamVertices": 748
+    },
+    "guard_stand": {
+     "maxGap_m": 0,
+     "seamVertices": 748
+    },
+    "stand_heavy": {
+     "maxGap_m": 0,
+     "seamVertices": 748
+    },
+    "crouch_heavy": {
+     "maxGap_m": 0,
+     "seamVertices": 748
+    },
+    "hurt_heavy": {
+     "maxGap_m": 0,
+     "seamVertices": 748
+    }
+   },
+   "maxGap_m": 0,
+   "pass": true
+  },
+  "moguzo-tail-godan": {
+   "clips": {
+    "idle": {
+     "maxGap_m": 0,
+     "seamVertices": 178
+    },
+    "walk_f": {
+     "maxGap_m": 0,
+     "seamVertices": 178
+    },
+    "guard_stand": {
+     "maxGap_m": 0,
+     "seamVertices": 178
+    },
+    "stand_heavy": {
+     "maxGap_m": 0,
+     "seamVertices": 178
+    },
+    "crouch_heavy": {
+     "maxGap_m": 0,
+     "seamVertices": 178
+    },
+    "hurt_heavy": {
+     "maxGap_m": 0,
+     "seamVertices": 178
+    }
+   },
+   "maxGap_m": 0,
+   "pass": true
+  },
+  "godan-tail-moguzo": {
+   "clips": {
+    "idle": {
+     "maxGap_m": 0,
+     "seamVertices": 188
+    },
+    "walk_f": {
+     "maxGap_m": 0,
+     "seamVertices": 188
+    },
+    "guard_stand": {
+     "maxGap_m": 0,
+     "seamVertices": 188
+    },
+    "stand_heavy": {
+     "maxGap_m": 0,
+     "seamVertices": 188
+    },
+    "crouch_heavy": {
+     "maxGap_m": 0,
+     "seamVertices": 188
+    },
+    "hurt_heavy": {
+     "maxGap_m": 0,
+     "seamVertices": 188
+    }
+   },
+   "maxGap_m": 0,
+   "pass": true
+  }
+ }
+}
