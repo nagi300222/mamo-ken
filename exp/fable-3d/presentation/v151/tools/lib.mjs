@@ -2,7 +2,7 @@
 // 時計は page.clock で止め、step() で 1/60 秒ずつ進める＝ 60fps・実時間速度のフレームを決定的に得る。
 import http from 'node:http'; import fs from 'node:fs'; import path from 'node:path';
 import { fileURLToPath } from 'node:url'; import { createRequire } from 'node:module';
-const require = createRequire(import.meta.url); const pw = require('playwright');
+const require = createRequire(import.meta.url); let pw; try { pw = require('playwright'); } catch { pw = require('playwright-core'); }
 export const HERE = path.dirname(fileURLToPath(import.meta.url)); export const REPO = path.resolve(HERE, '../../../../..'); export const FABLE = path.resolve(HERE, '../../..');
 export const ALL = ['moguzo', 'pisuke', 'godan', 'hakuma', 'chirka', 'takimaru', 'yomikage', 'bullet', 'dark_moguzo'];
 export const arg = (k, d) => { const i = process.argv.indexOf('--' + k); return i < 0 ? d : (process.argv[i + 1]?.startsWith('--') || process.argv[i + 1] === undefined ? true : process.argv[i + 1]); };
@@ -10,7 +10,7 @@ const MIME = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript', '.
 export async function serve(root = REPO) { const srv = await new Promise(res => { const s = http.createServer((q, r) => { let p = path.join(root, decodeURIComponent(q.url.split('?')[0])); if (fs.existsSync(p) && fs.statSync(p).isDirectory()) p = path.join(p, 'index.html');
   if (!p.startsWith(root) || !fs.existsSync(p)) { r.writeHead(404); r.end(); return; } r.writeHead(200, { 'content-type': MIME[path.extname(p)] || 'application/octet-stream', 'cache-control': 'no-store' }); fs.createReadStream(p).pipe(r); }).listen(0, '127.0.0.1', () => res(s)); });
   return { srv, url: `http://127.0.0.1:${srv.address().port}` }; }
-export const launch = () => pw.chromium.launch({ args: ['--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--ignore-gpu-blocklist', '--no-sandbox'] });
+export const launch = () => pw.chromium.launch({ ...(process.env.CHROMIUM_PATH ? {executablePath:process.env.CHROMIUM_PATH} : {}), args: ['--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--ignore-gpu-blocklist', '--no-sandbox'] });
 // opts: {viewport, scale, stubCpu, reduced, query, base}
 export async function openGame(browser, base, { viewport = { width: 852, height: 393 }, scale = 1, stubCpu = true, reduced = false, query = '', mobile = true } = {}) {
   const ctx = await browser.newContext({ viewport, isMobile: mobile, hasTouch: mobile, deviceScaleFactor: scale, reducedMotion: reduced ? 'reduce' : 'no-preference' });

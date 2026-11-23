@@ -1,0 +1,61 @@
+name: MamoKen runs and custom story WebGL
+on:
+  push:
+    branches:
+      - feat/mamoken-v151-arcade-survival
+      - feat/mamoken-v16-story-integration
+    paths-ignore:
+      - docs/**
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  integration:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Unit and original combat regression
+        run: |
+          npm --prefix exp/fable-3d/dojo test
+          if test -d exp/fable-3d/story; then
+            node --test exp/fable-3d/custom/v16/*.test.mjs exp/fable-3d/story/*.test.mjs
+          fi
+      - name: Build actual game and assets
+        run: npm --prefix exp/fable-3d/dojo run build:pages
+      - name: Install browser driver and Japanese fonts
+        run: |
+          npm install --prefix "$RUNNER_TEMP/mamoken-browser" playwright-core@1.65.1
+          sudo apt-get update -qq
+          sudo apt-get install -y fonts-noto-cjk
+      - name: Render real models and operate games
+        env:
+          CHROMIUM_PATH: /usr/bin/google-chrome
+        run: |
+          set -euo pipefail
+          node exp/fable-3d/dojo/server.mjs > "$RUNNER_TEMP/server.log" 2>&1 &
+          trap 'kill $! || true' EXIT
+          for i in {1..20}; do
+            if curl -fsS http://127.0.0.1:4173/exp/fable-3d/dojo/ > /dev/null; then break; fi
+            sleep 1
+          done
+          export NODE_PATH="$RUNNER_TEMP/mamoken-browser/node_modules"
+          export MAMOKEN_EVIDENCE="$RUNNER_TEMP/mamoken-integration-evidence"
+          node exp/fable-3d/dojo/acceptance/v151-presentation-browser.mjs
+          node exp/fable-3d/dojo/acceptance/run-modes-browser.mjs
+          node exp/fable-3d/dojo/acceptance/v15-normal-art-browser.mjs
+          node exp/fable-3d/dojo/acceptance/v15-practice-browser.mjs
+          if test -d exp/fable-3d/story; then
+            node exp/fable-3d/custom/v16/tools/verify-avatar-browser.mjs
+            node exp/fable-3d/custom/v16/custom-combat-browser.mjs
+            node exp/fable-3d/story/story-browser.mjs
+          fi
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: mamoken-runs-custom-story
+          path: ${{ runner.temp }}/mamoken-integration-evidence/
+          retention-days: 14

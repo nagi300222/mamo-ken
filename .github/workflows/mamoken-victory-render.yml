@@ -1,0 +1,46 @@
+name: MamoKen nine authored victory movie renders
+on:
+  push:
+    branches: [feat/mamoken-v151-arcade-survival]
+    paths:
+      - .github/workflows/mamoken-victory-render.yml
+      - exp/fable-3d/presentation/v151/*_victory.glb
+      - exp/fable-3d/presentation/v151/tools/**
+      - exp/fable-3d/dojo/presentation-data.js
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  movie:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        character: [moguzo, pisuke, godan, hakuma, chirka, takimaru, yomikage, bullet, dark_moguzo]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm --prefix exp/fable-3d/dojo run build:pages
+      - name: Install browser driver and render tools
+        run: |
+          npm install --prefix "$RUNNER_TEMP/mamoken-browser" playwright-core@1.65.1
+          sudo apt-get update -qq
+          sudo apt-get install -y fonts-noto-cjk ffmpeg
+      - name: Render the actual authored game timeline at sixty frames per movie second
+        env:
+          NODE_PATH: ${{ runner.temp }}/mamoken-browser/node_modules
+          CHROMIUM_PATH: /usr/bin/google-chrome
+        run: |
+          node exp/fable-3d/presentation/v151/tools/capture_victory.mjs --ids '${{ matrix.character }}' --out "$RUNNER_TEMP/victory" --mp4
+          ffprobe -v error -show_entries format=duration:stream=width,height,r_frame_rate,nb_frames -of json "$RUNNER_TEMP/victory/${{ matrix.character }}_victory.mp4" > "$RUNNER_TEMP/victory/${{ matrix.character }}_probe.json"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: mamoken-victory-${{ matrix.character }}
+          path: |
+            ${{ runner.temp }}/victory/*_victory.mp4
+            ${{ runner.temp }}/victory/*_probe.json
+          retention-days: 14
