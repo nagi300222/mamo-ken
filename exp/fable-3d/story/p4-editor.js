@@ -10,11 +10,15 @@ if(form){
   const save=document.createElement('section');save.className='p4-tab-panel';save.innerHTML='<h3 class="p4-save-title">旅の札を確かめよう。</h3><p class="p4-save-copy">プレビューと名前を確認したら、下の「保存して集落へ」で旅立とう。あとから、いつでも編集できます。</p><dl class="p4-save-summary"><div><dt>名前</dt><dd data-save-name></dd></div><div><dt>体格</dt><dd data-save-base></dd></div><div><dt>戦い方</dt><dd data-save-style></dd></div></dl>';
   const panels=[...details.slice(0,3),save],labels=['体格・パーツ','色・模様','戦い方','旅の札'];
   const actions=form.querySelector('.editor-actions');actions.before(save);
-  let active=0;
+  let active=0,initialized=false;
   const choose=(index,focus=false)=>{
    active=(index+panels.length)%panels.length;
    [...nav.children].forEach((button,i)=>{const selected=i===active;button.setAttribute('aria-selected',String(selected));button.tabIndex=selected?0:-1;panels[i].hidden=!selected;});
    if(active===3)summary();if(focus)nav.children[active].focus();
+   // Short screens initially show the name/base row and tabs. Reveal the newly
+   // selected content below the sticky tabs instead of leaving it offscreen.
+   if(initialized)panels[active].scrollIntoView({block:'start',behavior:'instant'});
+   initialized=true;
   };
   for(const [index,panel] of panels.entries()){
    panel.classList.add('p4-tab-panel');panel.id='p4-editor-panel-'+index;panel.setAttribute('role','tabpanel');panel.setAttribute('aria-labelledby','p4-editor-tab-'+index);if(panel.tagName==='DETAILS')panel.open=true;

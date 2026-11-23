@@ -59,7 +59,8 @@ try{
   // that the lower two mode actions can be reached in the viewport.
   await page.mouse.move(viewport.width/2,viewport.height/2);await page.mouse.wheel(0,2000);
   await page.waitForFunction(()=>{const n=document.querySelector('.mode-hall');return n.scrollTop+n.clientHeight>=n.scrollHeight-1;});
-  const lower=await visibleTargets('.mode-story,.mode-survival,.mode-story .mode-rule,.mode-survival .mode-rule');
+  const lower=await visibleTargets('.mode-story,.mode-survival,.mode-story .mode-rule,.mode-survival .mode-rule,.journey-tag');
+  assert.ok(await page.locator('.journey-tag').evaluate(tag=>tag.getBoundingClientRect().bottom<=tag.closest('.mode-story').getBoundingClientRect().bottom-1),'journey name clipped by its card');
   const after=await page.locator('.mode-hall').evaluate(n=>({top:n.scrollTop,height:n.scrollHeight,client:n.clientHeight}));
   if(before.height>before.client)assert.ok(after.top>before.top,'wheel did not scroll the menu');
   await page.screenshot({path:dir+`/lobby-lower-${viewport.width}x${viewport.height}.png`});
@@ -99,7 +100,11 @@ try{
  await page.locator('#p4-editor-tab-2').click();await page.locator('#avatar-style').selectOption('pisuke');await page.locator('#move-0').selectOption('yomikage.s1');
  await page.locator('#p4-editor-tab-3').click();assert.equal(await page.locator('[data-save-name]').textContent(),'山の旅人');assert.match(await page.locator('[data-save-style]').textContent(),/ピスケ/);
  assert.match(await page.locator('.p4-save-summary').evaluate(n=>getComputedStyle(n).backgroundImage),/paper-strip\.svg/);
+ await page.locator('.p4-save-summary').scrollIntoViewIfNeeded();const saveSummary=await visibleTargets('.p4-save-summary');
+ const summaryGap=await page.locator('.p4-save-summary').evaluate(n=>n.getBoundingClientRect().top-document.querySelector('.p4-editor-tabs').getBoundingClientRect().bottom);
+ assert.ok(summaryGap>=-1,'sticky tabs cover journey summary');report.push({screen:'editor-save-summary',saveSummary,summaryGap});
  await page.screenshot({path:dir+'/editor-save-tab.png'});
+ await page.locator('#enter').scrollIntoViewIfNeeded();await visibleTargets('#enter');await page.screenshot({path:dir+'/editor-save-actions.png'});
  await page.locator('#p4-editor-tab-3').focus();await page.keyboard.press('ArrowLeft');assert.equal(await page.locator('#p4-editor-tab-2').getAttribute('aria-selected'),'true');
  await page.locator('#enter').click();await page.waitForFunction(()=>mamokenStory.mode==='explore',undefined,{timeout:90000});
  await page.screenshot({path:dir+'/exploration.png'});
@@ -107,6 +112,15 @@ try{
  const saved=await page.evaluate(()=>localStorage.getItem('mamoken.story.v16.1'));
  await page.goto(root);assert.match(await page.locator('#saved-journey').textContent(),/山の旅人/);assert.equal(await page.evaluate(()=>localStorage.getItem('mamoken.story.v16.1')),saved,'menu changed saved journey');
  await page.emulateMedia({reducedMotion:'reduce'});assert.equal(await page.locator('.mode').first().evaluate(n=>getComputedStyle(n).transitionDuration),'0s');
+ // Controlled layout simulation, not an iPhone measurement: ensure the short
+ // lobby keeps both the left notch and bottom home-indicator gutters intact.
+ await page.evaluate(()=>{for(const [side,value] of Object.entries({left:62,right:21,top:0,bottom:21}))document.documentElement.style.setProperty('--ui-safe-'+side,value+'px');});
+ await page.mouse.move(360,160);await page.mouse.wheel(0,2000);
+ await page.waitForFunction(()=>{const n=document.querySelector('.mode-hall');return n.scrollTop+n.clientHeight>=n.scrollHeight-1;});
+ const safeCards=await visibleTargets('.mode-story,.mode-survival,.hall-footer');
+ for(const card of safeCards)assert.ok(card.x>=61&&card.x+card.width<=700&&card.y+card.height<=300,'simulated safe area covered: '+JSON.stringify(card));
+ report.push({screen:'lobby-simulated-insets',insets:{left:62,right:21,top:0,bottom:21},safeCards});
+ await page.screenshot({path:dir+'/lobby-simulated-insets-720x320.png'});
  assert.deepEqual(errors,[]);await writeFile(dir+'/report.json',JSON.stringify({report,errors},null,2));
  console.log('P4 UI WEBGL PASS: five mode routes, native & rotated 720/852 layouts, 44px targets, paired character roles, shared Practice HUD, four-tab editor save and unchanged journey record');
 }catch(error){await page.screenshot({path:dir+'/error.png'}).catch(()=>{});console.error(errors);throw error;}
