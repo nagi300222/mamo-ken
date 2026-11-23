@@ -15,9 +15,13 @@ import {createCustomBattle,moveCatalog,validateCombatLoadout} from '../custom/v1
 import {retargetCustomClip} from '../custom/v16/custom-animation.js';
 import {freshProgress,NPCS,mobPlacements,moveInVillage,nearestNpc,readSave,writeSave,recordEncounter} from './story-state.js';
 import {createVillage,createBattleStage} from './village-scene.js';
+import {createExplorationControls,EXPLORATION_CAMERA} from './exploration-controls.js';
+import {BATTLE_INPUT_PROFILE,createCombatInput,battleHUDMarkup,battleControlsMarkup,battleStepsMarkup,updateBattleHUD as syncBattleHUD} from '../shared-ui/battle-ui.js';
 
 const storage={getItem:key=>localStorage.getItem(key),setItem:(key,value)=>localStorage.setItem(key,value)};
 const $=id=>document.getElementById(id),app=$('story-app'),canvas=$('world');
+$('battle-hud').innerHTML=battleHUDMarkup();$('battle-buttons').innerHTML=battleControlsMarkup();$('battle-steps').innerHTML=battleStepsMarkup();
+const exploration=createExplorationControls(),combatInput=createCombatInput();
 const loader=new GLTFLoader(),audio=createCombatAudio(),showtimeLoader=createShowtimeLoader(new URL('../cinematic/v14/',import.meta.url));
 const reducedMotion=matchMedia('(prefers-reduced-motion: reduce)').matches;
 const renderer=(()=>{try{return new THREE.WebGLRenderer({canvas,antialias:true,powerPreference:'high-performance'});}catch(error){$('loading-copy').textContent='3Dを開始できません。WebGLが使えるSafari/Chromeで開いてください。';throw error;}})();
@@ -26,28 +30,31 @@ const scene=new THREE.Scene();scene.background=new THREE.Color(0xa8c0bd);scene.f
 scene.add(new THREE.HemisphereLight(0xfff3d7,0x4d7866,2.4));const sun=new THREE.DirectionalLight(0xffdfab,2.5);sun.position.set(-3,6,4);scene.add(sun);
 const village=createVillage(),arena=createBattleStage();scene.add(village,arena);arena.visible=false;
 const camera=new THREE.PerspectiveCamera(43,2,.03,40),battleCamera=new THREE.OrthographicCamera(-1.7,1.7,1,-1,.01,30);
-let mode='loading',previousMode=null,rotated=false,paused=false,last=0,acc=0,previewAngle=0,spinning=false,loadGeneration=0;
+let mode='loading',previousMode=null,rotated=false,paused=false,backgroundPaused=false,last=0,acc=0,previewAngle=0,spinning=false,loadGeneration=0;
 let avatar=null,player=null,progress=freshProgress(),npcs=[],nearby=null,dialogueNpc=null,battle=null,combatActors=[],movie=null,finished=false;
 let returnPoint=null,storageWarning='',saveReady=false,fpsAt=0,fpsFrames=0;
 const state={editorError:'',loading:false,metrics:{fps:0,loadMs:0,geometries:0,textures:0,drawCalls:0},events:[]};
 const originalCache=new Map(),showtimeCache=new Map(),npcActors=new Map(),npcPending=new Map(),projectiles=new Map(),impacts=[];
 function setStatus(text){$('status').textContent=text;}
-function clearInput(){keys.clear();held.clear();queued.clear();stick.x=stick.y=0;stick.pointer=null;$('story-thumb').style.transform='';document.querySelectorAll('[data-control]').forEach(b=>b.classList.remove('held'));}
+function clearInput(){
+ for(const node of [document.getElementById('story-stick'),document.getElementById('camera-orbit'),...document.querySelectorAll('[data-control]')])if(node){for(const pointer of [stick.pointer,exploration.snapshot.leftPointer,exploration.snapshot.rightPointer,...held.keys()])if(pointer!==null&&node.hasPointerCapture(pointer))node.releasePointerCapture(pointer);}
+ keys.clear();held.clear();queued.clear();combatInput.clear();exploration.clearPointers();stick.x=stick.y=0;stick.pointer=null;$('story-thumb').style.transform='';$('camera-orbit').classList.remove('dragging');document.querySelectorAll('[data-control]').forEach(b=>b.classList.remove('held'));
+}
 function setMode(next){mode=next;app.dataset.mode=next;clearInput();
  $('editor').hidden=next!=='editor';$('journey').hidden=next!=='explore';$('dialogue').hidden=next!=='dialogue';$('result').hidden=next!=='result';$('loading').hidden=next!=='loading';
  $('input-controls').hidden=!['explore','battle'].includes(next);$('battle-buttons').hidden=next!=='battle';$('battle-hud').hidden=!['battle','movie','result'].includes(next);
  $('movie-ui').hidden=next!=='movie';$('edit').hidden=!['explore','editor'].includes(next);$('save').hidden=next!=='explore';$('pause').hidden=!['explore','battle'].includes(next);
- $('npc-tag').hidden=true;$('talk').hidden=true;$('help').textContent=next==='battle'?'方向+必殺 · ↓+必殺で咆哮 · Z弱 / X強 / V掴 / B必殺 / M奥義':'WASD / 方向キーで移動 · Eで会話';
- paused=false;$('pause').textContent='一時停止';
+ $('npc-tag').hidden=true;$('talk').hidden=true;$('camera-orbit').hidden=next!=='explore';$('camera-tools').hidden=next!=='explore';$('help').textContent=next==='battle'?'方向＋必殺／↓咆哮 · F前/R後ステップ · M奥義':'左で移動 · 右ドラッグで視点 · Eで会話';
+ paused=backgroundPaused||document.hidden||window.mamokenNative?.active===false;$('pause').textContent=paused?'再開':'一時停止';resize();
 }
 function resize(){
  const coarse=matchMedia('(pointer:coarse)').matches||navigator.maxTouchPoints>0;
  const next=shouldRotateLandscape(innerWidth,innerHeight,coarse);if(next!==rotated){rotated=next;document.documentElement.classList.toggle('landscape-locked',next);clearInput();}
- const width=app.clientWidth,height=app.clientHeight;if(!width||!height)return;
+ const width=canvas.clientWidth,height=canvas.clientHeight;if(!width||!height)return;
  renderer.setSize(width,height,false);camera.aspect=width/height;camera.updateProjectionMatrix();
  battleCamera.left=-1.75;battleCamera.right=1.75;battleCamera.top=1.75/(width/height);battleCamera.bottom=-battleCamera.top;battleCamera.updateProjectionMatrix();
 }
-new ResizeObserver(resize).observe(app);addEventListener('resize',resize);addEventListener('orientationchange',resize);
+const sizeObserver=new ResizeObserver(resize);sizeObserver.observe(app);sizeObserver.observe(canvas);addEventListener('resize',resize);addEventListener('orientationchange',resize);
 function disposeActor(actor){if(!actor)return;actor.mixer.stopAllAction();actor.mixer.uncacheRoot(actor.model);actor.holder.removeFromParent();actor.avatar.dispose();}
 async function original(id){
  if(!originalCache.has(id)&&originalCache.size>=4)originalCache.delete(originalCache.keys().next().value);
@@ -120,20 +127,22 @@ async function updateNpcModels(now){
  }
 }
 async function enterVillage(){
+ if(document.hidden||window.mamokenNative?.active===false)return;
+ if(!document.hidden&&window.mamokenNative?.active!==false)backgroundPaused=false;
  clearTimeout(previewTimer);
  const validation=validateCombatLoadout(readForm());if(!validation.ok){$('editor-error').textContent=validation.errors.map(e=>e.message).join(' / ');return;}
  const next=validation.definition??normalizeAvatar(readForm());const token=++loadGeneration;setMode('loading');$('loading-copy').textContent='旅のキャラを準備しています';
  try{const replacement=await createActor(next);if(token!==loadGeneration){disposeActor(replacement);return;}
-  disposeActor(player);player=replacement;avatar=next;village.add(player.holder);player.holder.position.set(progress.position.x,0,progress.position.z);player.turn.rotation.y=progress.heading;playIdle(player);
+  disposeActor(player);player=replacement;avatar=next;village.add(player.holder);player.holder.position.set(progress.position.x,0,progress.position.z);player.turn.rotation.y=progress.heading;playIdle(player);exploration.restore(progress.camera);syncCameraTools();
   village.visible=true;arena.visible=false;for(const actor of combatActors)disposeActor(actor);combatActors=[];battle=null;setNpcList();updateJourney();setMode('explore');setStatus(storageWarning);save();
  }catch(error){setMode('editor');$('editor-error').textContent='キャラを準備できません: '+error.message;}
 }
-function openDialogue(){if(mode!=='explore'||!nearby)return;dialogueNpc=nearby;setMode('dialogue');$('dialogue-name').textContent=nearby.name;
+function openDialogue(){if(mode!=='explore'||paused||!nearby)return;dialogueNpc=nearby;setMode('dialogue');$('dialogue-name').textContent=nearby.name;
  const old=progress.encounters[nearby.id];$('dialogue-line').textContent=old?.battles?`また来たね。これまで${old.battles}戦、君の${old.wins}勝だ。もう一度、勝負しよう。`:nearby.line;}
 function closeDialogue(){dialogueNpc=null;setMode('explore');setStatus('');}
 function clearProjectiles(){for(const mesh of projectiles.values())mesh.removeFromParent();projectiles.clear();for(const p of impacts)p.mesh.removeFromParent();impacts.length=0;}
 async function startBattle(){
- if(mode!=='dialogue'||!dialogueNpc)return;audio.unlock();returnPoint={position:{...progress.position},heading:progress.heading};const token=++loadGeneration;setMode('loading');$('loading-copy').textContent='稽古の準備と技の互換性を確認中…';const started=performance.now();
+ if(mode!=='dialogue'||!dialogueNpc||document.hidden||window.mamokenNative?.active===false)return;if(!document.hidden&&window.mamokenNative?.active!==false)backgroundPaused=false;audio.unlock();returnPoint={position:{...progress.position},heading:progress.heading,camera:exploration.view};const token=++loadGeneration;setMode('loading');$('loading-copy').textContent='稽古の準備と技の互換性を確認中…';const started=performance.now();
  try{
   const definitions=[avatar,dialogueNpc.definition];const loaded=await Promise.allSettled(definitions.map(def=>createActor(def,{combat:true})));
   const failed=loaded.find(v=>v.status==='rejected');if(failed){for(const v of loaded)if(v.status==='fulfilled')disposeActor(v.value);throw failed.reason;}
@@ -169,10 +178,8 @@ function battleEvents(){for(const e of battle.events){state.events.push({...e,fr
  if(['hit','block','ko','throw_pair','gyuiin_start'].includes(e.type)){audio.play(e.type==='block'?'block':e.type==='ko'?'ko':'hit',battle.fighters[e.slot??0].id);
   const p=battle.fighters[e.target??1];const mesh=new THREE.Mesh(impactGeo,impactMat);mesh.position.set(e.x??p.x,e.y??p.y+.35,.2);scene.add(mesh);impacts.push({mesh,life:.18});}
 }}
-function updateBattleHUD(){
- for(let i=0;i<2;i++){const f=battle.fighters[i],def=combatActors[i].definition;$('p'+(i+1)+'-name').textContent=def.name;$('hp-'+i).style.width=Math.max(0,f.hp/ROSTER[f.id].hp*100)+'%';$('super-'+i).textContent=`奥義 ${Math.floor(f.super)}% · Drive ${Math.floor(f.drive)}`;}
- $('round-time').textContent=Math.ceil(battle.time/FPS);
-}
+function updateBattleHUD(){syncBattleHUD(app,{battle,names:combatActors.map(a=>a.definition.name),roundLabel:'ROUND 1'});}
+
 function finishRound(){if(finished||movie)return;finished=true;progress=recordEncounter(progress,dialogueNpc.id,battle.winner);
  $('result-title').textContent=battle.winner===0?'その一歩が、力になる。':battle.winner===1?'次は、もう一歩。':'互角の稽古だった。';
  $('result-reason').textContent=battle.events.some(e=>e.type==='timeout')?'TIME UP':battle.winner<0?'DOUBLE K.O.':'K.O.';
@@ -180,7 +187,7 @@ function finishRound(){if(finished||movie)return;finished=true;progress=recordEn
  save();setMode('result');setStatus('');
 }
 function returnToVillage(){if(mode!=='result')return;for(const actor of combatActors)disposeActor(actor);combatActors=[];battle=null;clearProjectiles();arena.visible=false;village.visible=true;
- progress.position={...returnPoint.position};progress.heading=returnPoint.heading;player.holder.position.set(progress.position.x,0,progress.position.z);player.turn.rotation.y=progress.heading;dialogueNpc=null;setMode('explore');updateJourney();save();}
+ progress.position={...returnPoint.position};progress.heading=returnPoint.heading;exploration.restore(returnPoint.camera);progress.camera=exploration.view;player.holder.position.set(progress.position.x,0,progress.position.z);player.turn.rotation.y=progress.heading;dialogueNpc=null;setMode('explore');syncCameraTools();updateExplorationCamera(0,true);updateJourney();save();}
 async function canonicalCinemaActor(styleId){
  // Preserve the original two-primitive film actor exactly. The editor's modular
  // avatar is restored after the movie; it must not silently replace film faces.
@@ -248,34 +255,54 @@ $('avatar-form').addEventListener('change',event=>{
  if(event.target.tagName==='SELECT'){updatePartCompatibility();updateMoveOptions();clearTimeout(previewTimer);previewTimer=setTimeout(refreshPreview,60);}
 });
 $('avatar-form').addEventListener('submit',event=>{event.preventDefault();audio.unlock();enterVillage();});$('preview-turn').onclick=()=>spinning=!spinning;
-$('edit').onclick=editAvatar;$('save').onclick=save;$('talk').onclick=openDialogue;$('talk-close').onclick=closeDialogue;$('challenge').onclick=startBattle;$('return').onclick=returnToVillage;$('movie-skip').onclick=finishMovie;
+$('edit').onclick=editAvatar;$('save').onclick=save;$('talk').onclick=openDialogue;$('talk').addEventListener('pointerdown',event=>{if(mode!=='explore'||paused)return;event.preventDefault();openDialogue();});$('talk-close').onclick=closeDialogue;$('challenge').onclick=startBattle;$('return').onclick=returnToVillage;$('movie-skip').onclick=finishMovie;
 $('sound').onclick=()=>{audio.unlock();const muted=audio.setMuted(!audio.muted);$('sound').textContent=muted?'音 OFF':'音 ON';};
-$('pause').onclick=()=>{if(!['explore','battle'].includes(mode))return;paused=!paused;clearInput();$('pause').textContent=paused?'再開':'一時停止';setStatus(paused?'一時停止':'');};
+$('pause').onclick=()=>{if(!['explore','battle'].includes(mode)||document.hidden||window.mamokenNative?.active===false)return;paused=!paused;if(!paused)backgroundPaused=false;clearInput();$('pause').textContent=paused?'再開':'一時停止';setStatus(paused?'一時停止':'');};
 const keys=new Set(),held=new Map(),queued=new Set(),stick={pointer:null,x:0,y:0};
-const keyMap={ArrowLeft:'left',ArrowRight:'right',ArrowUp:'up',ArrowDown:'down',KeyA:'left',KeyD:'right',KeyW:'up',KeyS:'down',KeyZ:'weak',KeyX:'strong',KeyV:'throw',KeyN:'gyuiin',KeyB:'special',KeyM:'ultimateButton',KeyF:'stepForward',KeyR:'stepBack'};
+const keyMap=BATTLE_INPUT_PROFILE.keyMap;
 addEventListener('keydown',event=>{
  if(event.target.matches('input,select,textarea')||mode==='editor')return;
  if(event.code==='Escape'){if(mode==='dialogue')closeDialogue();else if(mode==='movie')finishMovie();return;}
  if(event.code==='KeyE'&&mode==='explore'){event.preventDefault();openDialogue();return;}
  if(!['explore','battle'].includes(mode)||paused)return;
- const key=keyMap[event.code];if(key){event.preventDefault();if(!keys.has(key))queued.add(key);keys.add(key);}
-});addEventListener('keyup',event=>{const key=keyMap[event.code];if(key)keys.delete(key);});
-const joystick=$('story-stick');function stickMove(event){const b=joystick.getBoundingClientRect();const axes=localStickAxes(event.clientX-b.x-b.width/2,event.clientY-b.y-b.height/2,Math.min(b.width,b.height)*.38,rotated);const norm=Math.max(1,Math.hypot(axes.x,axes.y));stick.x=axes.x/norm;stick.y=axes.y/norm;if(Math.hypot(stick.x,stick.y)<.18)stick.x=stick.y=0;$('story-thumb').style.transform=`translate(${stick.x*34}px,${stick.y*34}px)`;}
-joystick.addEventListener('pointerdown',event=>{if(stick.pointer!==null||paused)return;event.preventDefault();stick.pointer=event.pointerId;joystick.setPointerCapture(event.pointerId);stickMove(event);});joystick.addEventListener('pointermove',event=>{if(event.pointerId===stick.pointer){event.preventDefault();stickMove(event);}});
-for(const type of ['pointerup','pointercancel','lostpointercapture'])joystick.addEventListener(type,event=>{if(event.pointerId===stick.pointer){stick.pointer=null;stick.x=stick.y=0;$('story-thumb').style.transform='';}});
-for(const button of document.querySelectorAll('[data-control]')){button.addEventListener('pointerdown',event=>{if(mode!=='battle'||paused)return;event.preventDefault();button.setPointerCapture(event.pointerId);held.set(event.pointerId,button.dataset.control);queued.add(button.dataset.control);});for(const type of ['pointerup','pointercancel','lostpointercapture'])button.addEventListener(type,event=>held.delete(event.pointerId));}
-function controls(){const result={};for(const key of keys)result[key]=true;for(const key of held.values())result[key]=true;for(const key of queued)result[key]=true;queued.clear();if(stick.x<-.3)result.left=true;if(stick.x>.3)result.right=true;if(stick.y<-.3)result.up=true;if(stick.y>.3)result.down=true;return result;}
-addEventListener('blur',()=>{clearInput();if(['battle','explore'].includes(mode)){paused=true;$('pause').textContent='再開';}});document.addEventListener('visibilitychange',()=>{clearInput();last=0;if(document.hidden){if(['battle','explore'].includes(mode)){paused=true;$('pause').textContent='再開';setStatus('一時停止');}if(avatar&&saveReady)writeSave(storage,avatar,progress);}});
+ const key=keyMap[event.code];if(key){event.preventDefault();if(event.repeat)return;keys.add(key);if(mode==='battle')combatInput.keyDown(event.code);}
+});addEventListener('keyup',event=>{const key=keyMap[event.code];if(key){keys.delete(key);combatInput.keyUp(event.code);}});
+const joystick=$('story-stick');
+function pointerPoint(event){const box=app.getBoundingClientRect();return rotated?{x:event.clientY-box.top,y:box.right-event.clientX}:{x:event.clientX-box.left,y:event.clientY-box.top};}
+function stickMove(event){const b=joystick.getBoundingClientRect(),axes=localStickAxes(event.clientX-b.x-b.width/2,event.clientY-b.y-b.height/2,Math.min(b.width,b.height)*.34,rotated);
+ if(mode==='battle'){const value=combatInput.setAnalog(axes.x,axes.y);stick.x=value.x;stick.y=value.y;}
+ else{exploration.move(event.pointerId,axes.x,axes.y);const value=exploration.snapshot.stick;stick.x=value.x;stick.y=value.y;}
+ $('story-thumb').style.transform=`translate(${stick.x*30}px,${stick.y*30}px)`;
+}
+joystick.addEventListener('pointerdown',event=>{if(!['explore','battle'].includes(mode)||stick.pointer!==null||paused)return;if(mode==='explore'&&!exploration.beginMove(event.pointerId))return;event.preventDefault();stick.pointer=event.pointerId;joystick.setPointerCapture(event.pointerId);stickMove(event);});
+joystick.addEventListener('pointermove',event=>{if(event.pointerId===stick.pointer){event.preventDefault();stickMove(event);}});
+for(const type of ['pointerup','pointercancel','lostpointercapture'])joystick.addEventListener(type,event=>{if(event.pointerId===stick.pointer){stick.pointer=null;stick.x=stick.y=0;exploration.endMove(event.pointerId);combatInput.setAnalog(0,0);$('story-thumb').style.transform='';}});
+const orbitPad=$('camera-orbit');orbitPad.addEventListener('pointerdown',event=>{if(mode!=='explore'||paused)return;const point=pointerPoint(event);if(!exploration.beginOrbit(event.pointerId,point.x,point.y))return;event.preventDefault();orbitPad.setPointerCapture(event.pointerId);orbitPad.classList.add('dragging');});
+orbitPad.addEventListener('pointermove',event=>{if(mode!=='explore'||paused)return;const point=pointerPoint(event);if(exploration.orbit(event.pointerId,point.x,point.y))event.preventDefault();});
+for(const type of ['pointerup','pointercancel','lostpointercapture'])orbitPad.addEventListener(type,event=>{if(exploration.endOrbit(event.pointerId))orbitPad.classList.remove('dragging');});
+for(const node of [orbitPad,joystick])node.addEventListener('contextmenu',event=>event.preventDefault());
+for(const button of document.querySelectorAll('[data-control]')){button.addEventListener('pointerdown',event=>{if(mode!=='battle'||paused)return;event.preventDefault();button.setPointerCapture(event.pointerId);held.set(event.pointerId,button.dataset.control);combatInput.hold(event.pointerId,button.dataset.control);button.classList.add('held');});for(const type of ['pointerup','pointercancel','lostpointercapture'])button.addEventListener(type,event=>{held.delete(event.pointerId);combatInput.release(event.pointerId);button.classList.remove('held');});button.addEventListener('contextmenu',event=>event.preventDefault());}
+function controls(){return combatInput.consume();}
+function syncCameraTools(){const value=exploration.view.follow;$('camera-follow').setAttribute('aria-pressed',String(value));$('camera-follow').textContent='後方追従 '+(value?'ON':'OFF');}
+$('camera-reset').onclick=()=>{if(mode!=='explore'||paused)return;exploration.resetView(progress.heading);updateExplorationCamera(0,true);};
+$('camera-follow').onclick=()=>{if(mode!=='explore'||paused)return;exploration.setFollow(!exploration.view.follow);syncCameraTools();};
+function updateExplorationCamera(delta,snap=false){const view=exploration.view,distance=EXPLORATION_CAMERA.distance,flat=distance*Math.cos(view.pitch);
+ const position=new THREE.Vector3(progress.position.x+Math.sin(view.yaw)*flat,.35+Math.sin(view.pitch)*distance,progress.position.z+Math.cos(view.yaw)*flat);
+ camera.position.lerp(position,snap||reducedMotion?1:Math.min(1,delta*10));camera.lookAt(progress.position.x,.35,progress.position.z);
+}
+function pauseForBackground(){backgroundPaused=true;if(mode==='movie')finishMovie();clearInput();last=0;acc=0;if(['battle','explore'].includes(mode)){paused=true;$('pause').textContent='再開';setStatus('一時停止');}if(avatar&&saveReady){progress.camera=exploration.view;writeSave(storage,avatar,progress);}}
+addEventListener('mamoken:native-state',event=>{if(event.detail?.active===false)pauseForBackground();else last=0;});
+addEventListener('blur',pauseForBackground);document.addEventListener('visibilitychange',()=>{if(document.hidden)pauseForBackground();else last=0;});
 function render(now){requestAnimationFrame(render);const elapsed=last?Math.max(0,(now-last)/1000):1/FPS,delta=Math.min(.05,elapsed);last=now;
  if(mode==='editor'&&player){if(spinning)previewAngle+=delta*.6;player.turn.rotation.y=previewAngle;playIdle(player,false,delta);camera.position.set(.15,.60,1.65);camera.lookAt(.15,.34,0);}
  if(['explore','dialogue'].includes(mode)&&player){
-  if(mode==='explore'&&!paused){const input=controls(),x=keys.has('right')?1:keys.has('left')?-1:stick.x,z=keys.has('down')?1:keys.has('up')?-1:stick.y;
-   const before=progress.position;progress.position=moveInVillage(before,{x,z},delta);const dx=progress.position.x-before.x,dz=progress.position.z-before.z,moving=Math.hypot(dx,dz)>1e-5;
-   if(moving)progress.heading=Math.atan2(dx,dz);player.holder.position.set(progress.position.x,0,progress.position.z);player.turn.rotation.y=progress.heading;playIdle(player,moving,delta);updateNpcModels(now);
+  if(mode==='explore'&&!paused){const direction=exploration.movement(Object.fromEntries([...keys].map(key=>[key,true])));
+   const before=progress.position;progress.position=moveInVillage(before,direction,delta);const dx=progress.position.x-before.x,dz=progress.position.z-before.z,moving=Math.hypot(dx,dz)>1e-5;
+   if(moving)progress.heading=Math.atan2(dx,dz);exploration.update(delta,progress.heading,moving);progress.camera=exploration.view;player.holder.position.set(progress.position.x,0,progress.position.z);player.turn.rotation.y=progress.heading;playIdle(player,moving,delta);updateNpcModels(now);
    nearby=nearestNpc(progress.position,npcs,1.05);$('talk').hidden=!nearby;$('npc-tag').hidden=!nearby;if(nearby){$('npc-name').textContent=nearby.name;const e=progress.encounters[nearby.id];$('npc-record').textContent=e?`${e.battles}戦 ${e.wins}勝`:'話しかけられる';}
   }
   for(const actor of npcActors.values()){actor.holder.visible=true;playIdle(actor,false,paused?0:delta);}
-  const behind=new THREE.Vector3(progress.position.x-Math.sin(progress.heading)*2.6,1.65,progress.position.z-Math.cos(progress.heading)*2.6);camera.position.lerp(behind,reducedMotion?1:Math.min(1,delta*3.4));camera.lookAt(progress.position.x,.35,progress.position.z);
+  if(!paused)updateExplorationCamera(delta);
  }
  if(mode==='battle'&&battle&&!paused){acc=Math.min(.1,acc+delta);let ticks=0;while(acc>=1/FPS&&ticks<5&&mode==='battle'&&battle.phase==='fight'){
   battle.tick(controls());for(let i=0;i<2;i++)syncCombatActor(combatActors[i],battle.fighters[i]);updateProjectiles();battleEvents();acc-=1/FPS;ticks++;
@@ -285,6 +312,6 @@ function render(now){requestAnimationFrame(render);const elapsed=last?Math.max(0
  const battleView=['battle','movie','result'].includes(mode);if(battleView&&battle){const center=(battle.fighters[0].x+battle.fighters[1].x)*.5,width=Math.max(1.35,Math.abs(battle.fighters[0].x-battle.fighters[1].x)*.6+.65),ratio=canvas.clientWidth/Math.max(1,canvas.clientHeight);battleCamera.left=-width;battleCamera.right=width;battleCamera.top=width/ratio;battleCamera.bottom=-width/ratio;battleCamera.position.set(center,1.08,5.5);battleCamera.lookAt(center,.35,0);battleCamera.updateProjectionMatrix();}
  renderer.render(scene,battleView?battleCamera:camera);fpsFrames++;if(now-fpsAt>1000){state.metrics.fps=Math.round(fpsFrames*1000/(now-fpsAt));fpsAt=now;fpsFrames=0;Object.assign(state.metrics,renderer.info.memory,{drawCalls:renderer.info.render.calls});$('perf').textContent=`${state.metrics.fps} FPS · ${npcActors.size}人表示`;}
 }
-async function boot(){buildForm();const saved=readSave(storage,normalizeAvatar);storageWarning=saved.error??'';saveReady=!!saved.save;avatar=saved.save?.avatar??createDefaultAvatar('moguzo');progress=saved.save?.progress??freshProgress();fillForm(avatar);village.visible=false;setMode('editor');resize();requestAnimationFrame(render);await refreshPreview();setStatus(storageWarning);}
-window.mamokenStory={get mode(){return mode;},get previewReady(){return mode==='editor'&&player?.holder.parent===scene;},get player(){return player;},get avatar(){return avatar;},get progress(){return structuredClone(progress);},get battle(){return battle;},get actors(){return combatActors;},get nearby(){return nearby;},get npcs(){return npcs.map(({definition,...n})=>n);},get metrics(){return {...state.metrics,npcModels:npcActors.size};},get cinematic(){return {active:mode==='movie',elapsed:movie?.elapsed??0};},get landscapeLocked(){return rotated;},get events(){return [...state.events];},save,openDialogue,returnToVillage};
+async function boot(){await window.mamokenNative?.ready;buildForm();const saved=readSave(storage,normalizeAvatar);storageWarning=saved.error??'';saveReady=!!saved.save;avatar=saved.save?.avatar??createDefaultAvatar('moguzo');progress=saved.save?.progress??freshProgress();fillForm(avatar);village.visible=false;setMode('editor');resize();requestAnimationFrame(render);await refreshPreview();setStatus(storageWarning);}
+window.mamokenStory={get mode(){return mode;},get previewReady(){return mode==='editor'&&player?.holder.parent===scene;},get player(){return player;},get avatar(){return avatar;},get progress(){return structuredClone(progress);},get battle(){return battle;},get actors(){return combatActors;},get nearby(){return nearby;},get npcs(){return npcs.map(({definition,...n})=>n);},get metrics(){return {...state.metrics,npcModels:npcActors.size};},get cinematic(){return {active:mode==='movie',elapsed:movie?.elapsed??0};},get landscapeLocked(){return rotated;},get controls(){return {exploration:exploration.snapshot,battle:combatInput.snapshot,paused};},get events(){return [...state.events];},save,openDialogue,returnToVillage};
 boot().catch(error=>{$('loading').hidden=false;$('loading-copy').textContent='起動できません: '+error.message;console.error(error);});

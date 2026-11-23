@@ -1,0 +1,12 @@
+{
+  "baseline": "8ab8972295d059426b858d9b8edabfda6068a7a3",
+  "designBaseline": "15c4897f3dee625dcbeaeacea8a422c33638c8aa",
+  "p0p1ImplementationAuthorized": true,
+  "p1OwnerDeviceReview": "pending",
+  "p2ImplementationAuthorized": false,
+  "p2AllowedWork": ["read-only investigation", "compatibility design"],
+  "p3p4ParallelProductionAuthorized": true,
+  "p4OwnerReview": "pending",
+  "p5ImplementationAuthorized": false,
+  "mainMergeAuthorized": false
+}

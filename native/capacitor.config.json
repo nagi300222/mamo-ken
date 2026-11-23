@@ -1,0 +1,7 @@
+{
+  "appId": "jp.nagi.mamoken.poc",
+  "appName": "マモ拳",
+  "webDir": "www",
+  "server": {"hostname": "localhost", "iosScheme": "capacitor"},
+  "ios": {"contentInset": "never", "backgroundColor": "#141c23"}
+}

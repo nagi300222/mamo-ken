@@ -1,0 +1,33 @@
+# P1 本人確認ゲート
+
+P0/P1の実装承認と、iPhoneで使いやすいと本人が認めたことは別。**この表の実機項目は未実施。P2は本人がP1を確認するまで開始しない。**
+
+## 制作時点で確認したこと
+
+| 対象 | 結果 | 限界 |
+|---|---|---|
+| 固定npm依存・lock | インストール成功 | iPhone実行ではない |
+| Capacitor 8.6.2 iOS生成 | 実Xcode/SPM/Swift/Info.plistソースを生成 | LinuxではXcodeコンパイル不能 |
+| 端末内ゲーム素材 | 約107.7 MB、144ファイルを生成（初期P1基準） | P0/P4統合後はnative/evidence/native-assets.jsonで再計測 |
+| Node保存・横向き・音・native契約 | 自動テスト対象 | UIKit・WebKit実機挙動は別 |
+| macOS Simulator unsigned build | [CI45124479615](https://github.com/nagi300222/mamo-ken/actions/runs/45124479615)でXcode26.6／iPhoneSimulator26.5 SDKによるBUILD SUCCEEDEDを確認 | 端末の署名・インストール・操作は別 |
+| 実Simulator起動・画面保存 | [CI45128527109](verification/SIMULATOR_20261123.md)で実install/launch/PNG2枚とUIKit LandscapeRightログを確認 | 入口カードにDynamic Island重なりを確認。対戦・タッチ・実機性能は未検証 |
+
+## 本人のiPhoneで確認
+
+端末機種、iOSバージョン、Xcodeバージョン、確認したPR／HEAD、計測方法を先に記録する。
+
+| 操作 | 期待結果 | 実機結果 |
+|---|---|---|
+| 縦持ち・回転ロックONで起動 | アプリ全体が横向き。OS側UIとゲームに二重90度回転がない | 未確認 |
+| 左右の横持ちを切替 | ノッチを避けてHUD／6ボタン／スティック／戻るが押せる | 未確認 |
+| 探索の左スティック＋右ドラッグ＋会話 | 移動と視点が独立し、Pointerを離すと止まる | 未確認 |
+| Story→Battle→帰還 | 共通操作で対戦し、保存された位置・向き・戦績へ戻る | 未確認 |
+| 9体の通常・必殺・奥義 | 欠けたモデルや読めないGLBなし。映画中にBattle/CPU/タイマー停止 | 未確認 |
+| 奥義自然終了／スキップ／奥義KO | 一度だけ復帰・KO結果。操作や音の押し残りなし | 未確認 |
+| Home・画面ロック・Control Center・着信割込み | 入力解除・音停止・勝手な対戦継続なし。復帰後は本人操作で再開 | 未確認 |
+| 再起動・新アプリビルドへ更新 | 名前・外見・技・Story進行・Survivalベストが維持 | 未確認 |
+| 機内モードで新規起動し5モードを遊ぶ | 同梱素材を読み、サーバー接続を必要としない | 未確認 |
+| 冷えた状態から10分プレイ | 初回ロード秒・平均／最低FPS・熱・電池変化を実測 | 未確認 |
+
+SimulatorやSwiftShaderで計測したFPSを、iPhoneのFPSとして記録しない。App Store公開・mainマージ・P2承認はこのテスト実施だけで自動決定しない。

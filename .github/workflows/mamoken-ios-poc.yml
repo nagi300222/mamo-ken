@@ -1,0 +1,47 @@
+name: MamoKen P1 unsigned iOS source build
+on:
+  push:
+    branches: [feat/mamoken-p1-ios-landscape, feat/mamoken-p0-p1-integration]
+    paths: [native/**, exp/fable-3d/**, .github/workflows/mamoken-ios-poc.yml]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  unsigned-simulator:
+    runs-on: macos-26
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: native/package-lock.json
+      - name: Install exact Capacitor toolchain
+        run: npm ci --prefix native --no-fund --no-audit
+      - name: Build all local game assets and sync native source
+        run: npm --prefix native run ios:sync
+      - name: Native contract, persistence and audio lifecycle tests
+        run: npm --prefix native test
+      - name: Existing combat, practice, modes and cinematic regression
+        run: npm --prefix exp/fable-3d/dojo test
+      - name: Compile simulator app without signing credentials
+        shell: bash
+        run: |
+          set -euo pipefail
+          xcodebuild -version | tee native/evidence/xcode-version.txt
+          xcodebuild -project native/ios/App/App.xcodeproj -scheme App -configuration Debug \
+            -sdk iphonesimulator -destination 'generic/platform=iOS Simulator' \
+            -derivedDataPath native/DerivedData CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO \
+            build 2>&1 | tee native/evidence/xcodebuild.log
+      - name: Boot iPhone Simulator and launch the actual installed app
+        run: node native/tools/simulator-smoke.mjs
+      - name: Save actual build logs and unsigned simulator app
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mamoken-p1-unsigned-ios-simulator
+          retention-days: 7
+          path: |
+            native/evidence/
+            native/DerivedData/Build/Products/Debug-iphonesimulator/App.app/

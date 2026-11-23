@@ -18,18 +18,21 @@ export const NPCS=Object.freeze([
  ['dark_moguzo',0,-4.6,'……その拳、どこまで届く。']
 ].map(([id,x,z,line])=>Object.freeze({id,x,z,line,kind:'roster'})));
 const clamp=(n,a,b)=>Math.max(a,Math.min(b,n));
-export function freshProgress(seed=2401123){return {version:STORY_VERSION,seed:seed>>>0,position:{x:0,z:0},heading:Math.PI,encounters:{},battles:0,wins:0,lastResult:null};}
+export function freshProgress(seed=2401123){return {version:STORY_VERSION,seed:seed>>>0,position:{x:0,z:0},heading:Math.PI,camera:{yaw:0,pitch:.43,follow:true},encounters:{},battles:0,wins:0,lastResult:null};}
 export function validateProgress(raw){
  if(raw?.version!==STORY_VERSION||!Number.isSafeInteger(raw.seed)||raw.seed<0||raw.seed>0xffffffff)throw Error('保存データの形式が異なります');
  if(!Number.isFinite(raw.position?.x)||!Number.isFinite(raw.position?.z)||!Number.isFinite(raw.heading))throw Error('保存位置を読み込めません');
  if(!Number.isSafeInteger(raw.battles)||raw.battles<0||!Number.isSafeInteger(raw.wins)||raw.wins<0||raw.wins>raw.battles)throw Error('戦績の形式が異なります');
+ const view=raw.camera;
+ if(view!==undefined&&(!view||!Number.isFinite(view.yaw)||!Number.isFinite(view.pitch)||typeof view.follow!=='boolean'))throw Error('保存した視点を読み込めません');
+ const camera=view?{yaw:Math.atan2(Math.sin(view.yaw),Math.cos(view.yaw)),pitch:clamp(view.pitch,.12,.98),follow:view.follow}:{yaw:Math.atan2(Math.sin(raw.heading-Math.PI),Math.cos(raw.heading-Math.PI)),pitch:.43,follow:true};
  const encounters={};
  for(const [id,e] of Object.entries(raw.encounters??{})){
   if(!/^(moguzo|pisuke|godan|hakuma|chirka|takimaru|yomikage|bullet|dark_moguzo|mob-[0-2])$/.test(id))continue;
   if(!Number.isSafeInteger(e?.battles)||e.battles<0||!Number.isSafeInteger(e.wins)||e.wins<0||e.wins>e.battles)throw Error('対戦記録を読み込めません');
   encounters[id]={battles:e.battles,wins:e.wins};
  }
- return {...freshProgress(raw.seed),position:{x:clamp(raw.position.x,WORLD.minX,WORLD.maxX),z:clamp(raw.position.z,WORLD.minZ,WORLD.maxZ)},heading:raw.heading,encounters,battles:raw.battles,wins:raw.wins,lastResult:typeof raw.lastResult==='string'?raw.lastResult.slice(0,120):null};
+ return {...freshProgress(raw.seed),position:{x:clamp(raw.position.x,WORLD.minX,WORLD.maxX),z:clamp(raw.position.z,WORLD.minZ,WORLD.maxZ)},heading:raw.heading,camera,encounters,battles:raw.battles,wins:raw.wins,lastResult:typeof raw.lastResult==='string'?raw.lastResult.slice(0,120):null};
 }
 export function obstructed(x,z,obstacles=BUILDINGS,radius=WORLD.radius){
  return obstacles.some(b=>Math.abs(x-b.x)<b.w/2+radius&&Math.abs(z-b.z)<b.d/2+radius);

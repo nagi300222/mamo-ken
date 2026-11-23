@@ -4,6 +4,10 @@ on:
     branches:
       - feat/mamoken-v151-arcade-survival
       - feat/mamoken-v16-story-integration
+      - feat/mamoken-p0-p1-integration
+      - feat/mamoken-p3-combat-feel
+      - feat/mamoken-p4-ui
+      - feat/mamoken-p0-p4-reviewed-integration
     paths-ignore:
       - docs/**
   workflow_dispatch:
@@ -16,7 +20,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        suite: [core, avatar, custom, story]
+        suite: [core, avatar, custom, story, native]
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -24,9 +28,10 @@ jobs:
           node-version: '22'
       - name: Unit and original combat regression
         run: |
+          node tools/verify-protected-assets.mjs
           npm --prefix exp/fable-3d/dojo test
           if test -d exp/fable-3d/story; then
-            node --test exp/fable-3d/custom/v16/*.test.mjs exp/fable-3d/story/*.test.mjs
+            node --test exp/fable-3d/custom/v16/*.test.mjs exp/fable-3d/story/*.test.mjs exp/fable-3d/shared-ui/*.test.mjs
           fi
       - name: Build actual game and assets
         run: npm --prefix exp/fable-3d/dojo run build:pages
@@ -54,9 +59,15 @@ jobs:
               node exp/fable-3d/dojo/acceptance/run-modes-browser.mjs
               node exp/fable-3d/dojo/acceptance/v15-normal-art-browser.mjs
               node exp/fable-3d/dojo/acceptance/v15-practice-browser.mjs ;;
+            native)
+              npm ci --prefix native --no-audit --no-fund
+              npm --prefix native run build
+              npm --prefix native test
+              node native/test/browser.mjs ;;
             avatar) node exp/fable-3d/custom/v16/tools/verify-avatar-browser.mjs ;;
             custom) node exp/fable-3d/custom/v16/custom-combat-browser.mjs ;;
             story)
+              node exp/fable-3d/story/p0-browser.mjs
               node exp/fable-3d/story/story-browser.mjs
               if test -f exp/fable-3d/story/story-motion-browser.mjs; then node exp/fable-3d/story/story-motion-browser.mjs; fi ;;
           esac

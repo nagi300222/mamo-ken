@@ -1,3 +1,4 @@
+import { BATTLE_INPUT_PROFILE, battleAnalog, updateBattleHUD } from '../shared-ui/battle-ui.js';
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { clone as cloneSkeleton } from 'three/addons/utils/SkeletonUtils.js';
@@ -352,6 +353,7 @@ function readyForCheck(){
   if(bullet)battle.setTailTipPath(bullet.meta.clips.sp_tail_whip.tail_tip_path);
   finishShown=false;
 }
+let backgroundPaused=false;
 let battle=null,selected='moguzo',cpuChoice='godan',playing=false,paused=false,loading=false,lastFrame=0,acc=0,finishShown=false;
 let practiceEnabled=false;
 const practice=createPracticeController();
@@ -735,32 +737,8 @@ function showUltimateStatus(){
 }
 function hud(){
   if(!battle)return;
-  for(let i=0;i<2;i++){
-    const p=battle.fighters[i],r=ROSTER[p.id],theme=hudTheme(p.id);
-    $('hud-side-'+i).dataset.element=theme.tone;
-    $('hud-side-'+i).dataset.mark=theme.mark;
-    $('hud-side-'+i).querySelector('.hud-name').dataset.mark=theme.mark;
-    $('name-'+i).textContent=r.name;
-    $('trait-'+i).textContent=theme.word;
-    const ready=isSuperReady(p.super);
-    $('ultimate-ready-'+i).hidden=!ready;
-    const chargeBar=$('charge-pips-'+i);
-    chargeBar.hidden=p.id!=='bullet';
-    if(p.id==='bullet'){
-      const pipState=chargePips(p.ability.charge);
-      [...chargeBar.children].forEach((node,k)=>node.classList.toggle('filled',pipState[k]));
-      chargeBar.setAttribute('aria-label','バレットのチャージ '+p.ability.charge+'/3');
-    }
-    $('arena').style.setProperty(i===0?'--p1-accent':'--p2-accent',showtimeHex(p.id));
-    $('ability-'+i).textContent=abilityLabel(p);
-    $('hp-'+i).style.width=fwd(p.hp/r.hp*100)+'%';
-    $('meter-'+i).style.width=fwd(p.super)+'%';
-    $('drive-'+i).style.width=fwd(p.drive/DRIVE.max*100)+'%';
-    $('drive-value-'+i).textContent=Math.floor(p.drive);
-    $('super-value-'+i).textContent=Math.floor(p.super);
-    $('hp-'+i).classList.toggle('low',p.hp/r.hp<.25);
-    $('meter-'+i).classList.toggle('ready',p.super>=100);
-  }
+  updateBattleHUD(document,{battle,roundLabel:flow.roundCall,practice:practiceEnabled});
+  for(let i=0;i<2;i++)$('arena').style.setProperty(i===0?'--p1-accent':'--p2-accent',showtimeHex(battle.fighters[i].id));
   showDriveStatus('roar');
   showDriveStatus('gyuiin');
   showUltimateStatus();
@@ -807,7 +785,8 @@ function fillVsScreen(ids){
     $('vs-name-'+i).textContent=ROSTER[id].name;$('vs-role-'+i).textContent=ROSTER[id].role;
     $('vs-side-'+i).style.setProperty('--vs-accent',dark&&id==='dark_moguzo'?'#a56cff':showtimeHex(id));
   });
-  $('vs-omen').hidden=!dark;$('vs-omen').textContent=dark?VS_TEXT.dark:'';
+  // P0: VSの不要な煽り文だけ除く。固有能力とArcadeの台詞は別経路のまま。
+  $('vs-omen').hidden=true;$('vs-omen').textContent='';
   $('vs-status').textContent=VS_TEXT.loading;$('vs-screen').dataset.ready='false';
 }
 function idleActors(){
@@ -966,7 +945,7 @@ function onFlowChange(next,from){
     clearInput();acc=0;lastFrame=0;$('intro-plate').hidden=true;
     if(from==='intro'){$('round-call-text').textContent='FIGHT!';$('round-call').dataset.kind='call';$('round-call').hidden=false;presentState.callUntil=performance.now()+420;}
     else $('round-call').hidden=true;
-    if(document.hasFocus?.()!==false&&paused){paused=false;$('pause').textContent='一時停止';}
+    if(!backgroundPaused&&document.hasFocus?.()!==false&&paused){paused=false;$('pause').textContent='一時停止';}
     note(practiceEnabled?'PRACTICE｜相手行動・位置リセット・コンボを確認':'FIGHT！ 必殺は方向＋ボタン／奥義は専用ボタン');
   }
   if(next==='ko'){
@@ -1010,6 +989,12 @@ function setLoading(s){$('loading-status').textContent=s;}
 //   {ids:[p1,cpu], level, instant, round, roundLabel, victoryVariant:'full'|'short', vsVariant:'full'|'short', carryHp:[p1,cpu], onRoundEnd, onNextRound, onResult}
 async function startMatch(options={}){
   if(loading)return;
+  // The explicit start is a resume intent. An inactive event while readiness
+  // awaits must stay latched; never clear it after the asynchronous boundary.
+  backgroundPaused=window.mamokenNative?.active===false||document.hidden;
+  await window.mamokenNative?.ready;
+  backgroundPaused=backgroundPaused||window.mamokenNative?.active===false||document.hidden;
+  if(loading)return;
   if(options instanceof Event)options={};
   if(!options.ids&&['arcade','survival'].includes($('match-mode').value))return startRun($('match-mode').value);
   if(!options.createBattle){activeRun=null;runUI.reset();setRunStage(null);}
@@ -1020,7 +1005,7 @@ async function startMatch(options={}){
   checking=!practiceEnabled&&checkAvailable&&$('check-mode').checked;
   practice.clear();practice.setDummy($('practice-dummy').value);syncPracticeUI();
   loading=true;clearInput();
-  playing=false;paused=false;finishShown=false;$('pause').textContent='一時停止';$('start').disabled=true;setLoading('GLBを読み込み中…');
+  playing=false;paused=backgroundPaused;finishShown=false;$('pause').textContent=paused?'再開':'一時停止';$('start').disabled=true;setLoading('GLBを読み込み中…');
   const ids=options.ids??[selected,cpuChoice],level=options.level??+$('difficulty').value;
   // プラクティスと演出確認は VS／顔アップを通さず、読み込み完了ですぐ操作できる（従来どおり）。
   const instant=options.instant??(practiceEnabled||checking);
@@ -1114,7 +1099,7 @@ const stick=$('joystick'),thumb=$('stick-thumb');
 const analog={pointer:null,x:0,y:0,left:false,right:false,up:false,down:false};
 function directionTap(k){
   const now=performance.now();
-  if(lastDirectionTap?.key===k&&now-lastDirectionTap.at<280)dashPulse=3;
+  if(lastDirectionTap?.key===k&&now-lastDirectionTap.at<BATTLE_INPUT_PROFILE.doubleTapMs)dashPulse=3;
   lastDirectionTap={key:k,at:now};
 }
 function recordDirection(){
@@ -1129,12 +1114,10 @@ function analogMove(e){
   const r=stick.getBoundingClientRect(),cx=r.left+r.width/2,cy=r.top+r.height/2;
   const radius=Math.min(r.width,r.height)*.34;
   let {x,y}=localStickAxes(e.clientX-cx,e.clientY-cy,radius,gameRotated);
-  const norm=Math.hypot(x,y);
-  if(norm>1){x/=norm;y/=norm;}
-  if(norm<.24){x=0;y=0;}
+  const axes=battleAnalog(x,y);x=axes.x;y=axes.y;
   const previous=analog.left?-1:analog.right?1:0;
-  const dirX=x>=.33?1:x<=-.33?-1:0;
-  const dirY=y>=.33?1:y<=-.33?-1:0;
+  const dirX=axes.left?-1:axes.right?1:0;
+  const dirY=axes.down?1:axes.up?-1:0;
   if(!previous&&!analog.up&&!analog.down&&!dirY&&dirX)directionTap(dirX===1?'right':'left');
   Object.assign(analog,{x,y,left:dirX===-1,right:dirX===1,down:dirY===1,up:dirY===-1});
   recordDirection();
@@ -1155,11 +1138,7 @@ for(const type of ['pointerup','pointercancel','lostpointercapture']){
   stick.addEventListener(type,e=>{if(analog.pointer===e.pointerId){resetAnalog();recordDirection();}});
 }
 stick.addEventListener('contextmenu',e=>e.preventDefault());
-const keyMap={
-  ArrowLeft:'left',ArrowRight:'right',ArrowUp:'up',ArrowDown:'down',
-  KeyA:'left',KeyD:'right',KeyW:'up',KeyS:'down',
-  KeyZ:'weak',KeyX:'strong',KeyV:'throw',KeyB:'special',KeyM:'ultimateButton',KeyN:'gyuiin',KeyC:'dash',KeyF:'stepForward',KeyR:'stepBack'
-};
+const keyMap=BATTLE_INPUT_PROFILE.keyMap;
 function clearInput(){
   if(analog.pointer!==null&&stick.hasPointerCapture(analog.pointer))stick.releasePointerCapture(analog.pointer);
   document.querySelectorAll('[data-control]').forEach(button=>{
@@ -1189,14 +1168,24 @@ document.addEventListener('keydown',e=>{
 document.addEventListener('keyup',e=>{
   const k=keyMap[e.code];if(k){e.preventDefault();pressedKeys.delete(k);if(directions.includes(k))recordDirection();}
 });
+window.addEventListener('mamoken:native-state',event=>{
+  lastFrame=0;acc=0;
+  if(event.detail?.active){resize();return;}
+  backgroundPaused=true;
+  if(movie.active)finishUltimateMovie();
+  clearInput();paused=true;$('pause').textContent='再開';music.update(false);
+});
 window.addEventListener('focus',()=>{lastFrame=0;});
 window.addEventListener('blur',()=>{
+  backgroundPaused=true;
   if(movie.active)finishUltimateMovie();
   clearInput();paused=true;$('pause').textContent='再開';music.update(false);
 });
 document.addEventListener('visibilitychange',()=>{
   if(!document.hidden){lastFrame=0;return;}       // 復帰の 1 フレーム目に、隠れていた時間を経過として渡さない
+  backgroundPaused=true;
   if(movie.active)finishUltimateMovie();
+  clearInput();paused=true;acc=0;lastFrame=0;$('pause').textContent='再開';
   music.update(false);
 });
 $('fx-toggle').onclick=()=>{
@@ -1273,7 +1262,7 @@ $('start').onclick=()=>startMatch();$('select-back').onclick=showSelection;$('re
 $('rematch').onclick=()=>presentState.match?.onRematch?presentState.match.onRematch():startMatch(presentState.match?.ids?{...presentState.match,carryHp:null}:{});
 $('presentation-skip').onclick=skipPresentation;
 $('vs-screen').addEventListener('pointerdown',event=>{event.preventDefault();skipPresentation();});
-$('pause').onclick=()=>{if(!battle||battle.phase!=='fight'||!flow.battleRunning)return;clearInput();paused=!paused;$('pause').textContent=paused?'再開':'一時停止';note(paused?'一時停止':'対戦再開');};
+$('pause').onclick=()=>{if(!battle||battle.phase!=='fight'||!flow.battleRunning)return;if(window.mamokenNative?.active===false||document.hidden)return;backgroundPaused=false;clearInput();paused=!paused;$('pause').textContent=paused?'再開':'一時停止';note(paused?'一時停止':'対戦再開');};
 
 const FIXED=1/FPS;
 function render(now){
@@ -1341,6 +1330,9 @@ function render(now){
   if(!movie.active)updateCamera();
   renderer.render(scene,camera);
 }
+document.querySelector('.hud').classList.add('shared-battle-hud');
+$('buttons-rail').classList.add('shared-attack-pad');
+$('stick-rail').classList.add('shared-step-pad');
 makeChooser();
 const runUI=createRunUI({onNext:continueRun});
 const entryMode=new URLSearchParams(location.search).get('mode');

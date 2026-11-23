@@ -1,3 +1,4 @@
+import {BATTLE_INPUT_PROFILE} from '../shared-ui/battle-ui.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
@@ -72,8 +73,10 @@ test('ヨミカゲの見切りは後ステップ専用ボタンからも成立�
   assert.equal(p.dashDir,-1);
 });
 test('短いタップとキーボード F/R が既存の入力バッファに乗る',()=>{
-  assert.match(main,/KeyF:'stepForward'/);
-  assert.match(main,/KeyR:'stepBack'/);
+  assert.equal(BATTLE_INPUT_PROFILE.keyMap.KeyF,'stepForward');
+  assert.match(main,/const keyMap=BATTLE_INPUT_PROFILE.keyMap/);
+  assert.equal(BATTLE_INPUT_PROFILE.keyMap.KeyR,'stepBack');
+  assert.match(main,/const keyMap=BATTLE_INPUT_PROFILE.keyMap/);
   assert.match(main,/queuedActions\.add\(k\)/);
   assert.match(main,/for\(const k of queuedActions\)o\[k\]=true/);
   assert.match(main,/button\.setPointerCapture\(e\.pointerId\)/);

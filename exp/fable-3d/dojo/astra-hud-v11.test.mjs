@@ -33,7 +33,8 @@ test('header contains independent SFX/BGM/FX settings, without changing 6 attack
 test('Bullet charge pips, Yomikage reticle, FX OFF visual-only',()=>{
  const main=read('main.js'),build=read('build-pages.mjs');
  assert.match(main,/p\.id==='bullet'/);
- assert.match(main,/p\.ability\.charge/);
+ assert.match(main,/updateBattleHUD\(document/);
+ assert.match(read('../shared-ui/battle-ui.js'),/p\.ability\.charge/);
  assert.match(main,/impactFX\('reticle'/);
  assert.match(main,/visualFXEnabled=!visualFXEnabled/);
  assert.match(main,/actor\?\.illusions\?\.stop\(\)/);
