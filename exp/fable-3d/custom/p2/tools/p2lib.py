@@ -180,6 +180,14 @@ def build_module(H, D, slot, band_scale=0.6, radius=None, scale=None):
             seam_w[w_] = d; seam_m[w_] = [hm[t][a] * (1 - f[n]) + hm[t][b_] * f[n] for t in range(4)]
             maxd = max(maxd, float(np.linalg.norm(target[w_])))
         loops_out.append(dict(hi=hi, di=di, hlp=hlp, dw=dw, tt=tt, band=band, flip=flip))
+    # ---- 耳だけ: 自分の骨を持たない小さな部品で、付け根の位置が host と donor の頭で違う。まず左右それぞれを縁の平均のずれぶん丸ごと平行移動し、残りだけを下で広げる
+    shift_w = np.zeros((nw, 3))
+    if slot == 'ears':
+        ncomp, comp = sp.csgraph.connected_components(G, directed=False)
+        for L_ in loops_out:
+            c = comp[L_['dw'][0]]; t = np.mean([target[w_] for w_ in L_['dw']], axis=0); shift_w[comp == c] = t
+            for w_ in L_['dw']: target[w_] = target[w_] - t
+        maxd = max(float(np.linalg.norm(v)) for v in target.values()); rep['rigid_shift_m'] = [round(float(np.linalg.norm(shift_w[L_['dw'][0]])), 5) for L_ in loops_out]
     # ---- 調和関数で広げる。縁 = 決めた値、縁から R より遠い頂点 = 0（動かさない）
     src = np.array(sorted(target)); dist = dijkstra(G, indices=src, min_only=True)
     ext = float(np.linalg.norm(wpos.max(axis=0) - wpos.min(axis=0))); R = radius if radius else float(np.clip(2.5 * maxd + 0.02, 0.03, 0.09)); R = min(R, 0.75 * float(dist[np.isfinite(dist)].max()))
@@ -189,8 +197,8 @@ def build_module(H, D, slot, band_scale=0.6, radius=None, scale=None):
     A = sp.coo_matrix((np.ones(len(E) * 2), (np.r_[E[:, 0], E[:, 1]], np.r_[E[:, 1], E[:, 0]])), shape=(nw, nw)).tocsr(); deg = np.asarray(A.sum(axis=1)).ravel(); Lp = sp.diags(deg) - A
     if len(free):
         rhs = -Lp[free][:, np.flatnonzero(fixed)] @ val[fixed]; lu = spl.splu(Lp[free][:, free].tocsc()); val[free] = lu.solve(rhs)
-    disp_w, phi_w = val[:, :3], np.clip(val[:, 3], 0, 1)
-    rep.update(seam_max_shift_m=round(maxd, 5), falloff_radius_m=round(R, 4), moved_vertices=int((np.linalg.norm(disp_w, axis=1) > 1e-6).sum()), donor_vertices=int(nv), donor_triangles=int(len(F['idx'])))
+    disp_w, phi_w = val[:, :3] + shift_w, np.clip(val[:, 3], 0, 1)
+    rep.update(seam_max_shift_m=round(float(np.linalg.norm(disp_w[src], axis=1).max()), 5), falloff_radius_m=round(R, 4), moved_vertices=int((np.linalg.norm(disp_w, axis=1) > 1e-6).sum()), donor_vertices=int(nv), donor_triangles=int(len(F['idx'])))
     pos = pos + disp_w[wid]; phi = phi_w[wid]
     # スキンウェイトとモーフを host の境界値へつなぐ: 縁の値を、いちばん近い縁の頂点から借りて phi で混ぜる
     _, pred, srcs = dijkstra(G, indices=src, min_only=True, return_predecessors=True)
@@ -207,26 +215,36 @@ def build_module(H, D, slot, band_scale=0.6, radius=None, scale=None):
     # ---- 4. 接合帯: host の境界頂点の写しを置き、donor の縁と三角形でつなぐ
     V = dict(pos=[*pos], nrm=[*nrm], uv=[*F['uv']], region=[*F['region']], W=[top4(w) for w in W], morph=[[*m] for m in morph]); tris = [*map(tuple, F['idx'])]; seam_vertices = []; bridge = 0; first_of = {}
     for vi in range(nv): first_of.setdefault(wid[vi], vi)
+    def clone(v, uv, region):                         # donor の縁の頂点の写し（位置・法線・ウェイト・モーフは同じ、UV だけ帯の色にする）
+        V['pos'].append(V['pos'][v]); V['nrm'].append(V['nrm'][v]); V['uv'].append(uv); V['region'].append(region); V['W'].append(V['W'][v])
+        for t in range(4): V['morph'][t].append(V['morph'][t][v])
+        return len(V['pos']) - 1
+    def host_copy(g, uv, region):                     # host の境界頂点の写し（host の値そのまま）
+        pi, vi = hg[g][0]; p = H.prims[pi]; V['pos'].append(p['pos'][vi].copy()); V['nrm'].append(p['nrm'][vi].copy()); V['uv'].append(uv); V['region'].append(region)
+        V['W'].append([(H.joints[p['jn'][vi, c]], p['w'][vi, c]) for c in range(4) if p['w'][vi, c] > 0])
+        for t in range(4): V['morph'][t].append(p['morph'][t][vi].copy())
+        seam_vertices.append(dict(index=len(V['pos']) - 1, hostPrim=pi, hostVertex=vi)); return len(V['pos']) - 1
+    rim_clones = set()
     for L in loops_out:
         hlp, dw, tt = L['hlp'], L['dw'], L['tt']; hp = np.array([hpos_g(g) for g in hlp]); uh, _ = closed_param(hp)
-        hidx = []
-        for g in hlp:                                 # host の境界頂点の写し（host の値そのまま）
-            pi, vi = hg[g][0]; p = H.prims[pi]; near = first_of[dw[np.argmin(np.linalg.norm(wpos[dw] + disp_w[dw] - p['pos'][vi], axis=1))]]
-            V['pos'].append(p['pos'][vi].copy()); V['nrm'].append(p['nrm'][vi].copy()); V['uv'].append(F['uv'][near]); V['region'].append(F['region'][near])
-            V['W'].append([(H.joints[p['jn'][vi, c]], p['w'][vi, c]) for c in range(4) if p['w'][vi, c] > 0])
-            for t in range(4): V['morph'][t].append(p['morph'][t][vi].copy())
-            hidx.append(len(V['pos']) - 1); seam_vertices.append(dict(index=len(V['pos']) - 1, hostPrim=pi, hostVertex=vi))
         # donor の縁を、パラメータの小さい順に並べ直す
-        order = np.argsort(tt); dv = [first_of[dw[i]] for i in order]; dt = tt[order]; n, m = len(dv), len(hidx); i = j = 0; strip = []
-        while i < n or j < m:                         # はしご状に進める: 次のパラメータが小さい側を 1 つ進めて三角形を 1 枚
+        order = np.argsort(tt); dv = [first_of[dw[i]] for i in order]; dt = tt[order]; n, m = len(dv), len(hlp); i = j = 0; strip = []
+        while i < n or j < m:                         # はしご状に進める: 次のパラメータが小さい側を 1 つ進めて三角形を 1 枚。('d', 番号) = donor の縁、('h', 番号) = host の境界
             ti = dt[i % n] + (i // n); tj = uh[j % m] + (j // m)
-            if j >= m or (i < n and ti <= tj): strip.append((dv[i % n], dv[(i + 1) % n], hidx[j % m])); i += 1
-            else: strip.append((hidx[j % m], dv[i % n], hidx[(j + 1) % m])); j += 1
+            if j >= m or (i < n and ti <= tj): strip.append((('d', i % n), ('d', (i + 1) % n), ('h', j % m))); i += 1
+            else: strip.append((('h', j % m), ('d', i % n), ('h', (j + 1) % m))); j += 1
         # 表向きにそろえる: 帯の法線と、頂点法線の平均の内積で決める
-        P_ = np.array(V['pos']); N_ = np.array(V['nrm']); s_ = 0.0
-        for a, b_, c in strip: s_ += float(np.dot(np.cross(P_[b_] - P_[a], P_[c] - P_[a]), N_[a] + N_[b_] + N_[c]))
+        P_ = np.array(V['pos']); N_ = np.array(V['nrm']); pp = lambda c: P_[dv[c[1]]] if c[0] == 'd' else hp[c[1]]; s_ = 0.0
+        for a, b_, c in strip:
+            ref = N_[dv[[x for x in (a, b_, c) if x[0] == 'd'][0][1]]]; s_ += float(np.dot(np.cross(pp(b_) - pp(a), pp(c) - pp(a)), ref))
         if s_ < 0: strip = [(a, c, b_) for a, b_, c in strip]
-        tris += strip; bridge += len(strip)
+        # 三角形ごとに専用の 3 頂点。UV と region は、その三角形が使う donor の縁の頂点 1 つの値（帯は donor の縁の色 1 色になり、UV の島をまたがない）
+        for a, b_, c in strip:
+            rimv = dv[[x for x in (a, b_, c) if x[0] == 'd'][0][1]]; uv, rg = F['uv'][rimv], F['region'][rimv]; f = []
+            for x in (a, b_, c):
+                if x[0] == 'd': k = clone(dv[x[1]], uv, rg); rim_clones.add(k); f.append(k)
+                else: f.append(host_copy(hlp[x[1]], uv, rg))
+            tris.append(tuple(f)); bridge += 1
     # ---- 5. donor に元からあった穴にふたをする（中心に 1 頂点を足して扇形）
     caps = []
     for lp in dopen:

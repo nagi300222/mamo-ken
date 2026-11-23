@@ -7,7 +7,8 @@
   境界   … モジュールの開いた辺が、host のその slot の境界ループ（他 slot との継ぎ目）とちょうど一致。それ以外の開いた辺が無い（新しい穴が無い）
   接合   … 境界頂点が、host の隣の slot の同じ場所の頂点と 位置 / 法線 / スキンウェイト / 4 モーフ で一致（許容 0.02mm、上限 0.1mm）
   実メッシュ … donor の slot の三角形（頂点番号の組）がそのまま全部入っている。足した面は接合帯とふただけ
-  manifest … bytes / sha256 / meshNames / jointNames が実ファイルと一致"""
+  manifest … bytes / sha256 / meshNames / jointNames が実ファイルと一致
+  小ささ … アニメーション無し、使っていない bufferView / accessor 無し、ノードは host の骨とモジュールのメッシュだけ"""
 import collections, json, os, sys
 import numpy as np
 HERE = os.path.dirname(os.path.abspath(__file__)); sys.path.insert(0, HERE)
@@ -38,6 +39,12 @@ def inspect(entry, chars):
     C['inverse_bind_equal_host'] = bool(np.array_equal(array(j, b, sk['inverseBindMatrices']).astype(np.float32), H.ibm_raw))
     hn = {n['name']: n for n in H.j['nodes']}; C['bone_rest_equal_host'] = all(all(j['nodes'][k].get(t) == hn[j['nodes'][k]['name']].get(t) for t in ('translation', 'rotation', 'scale')) for k in sk['joints'])
     C['no_animations'] = 'animations' not in j
+    # 余分なものが無い: 全 bufferView が accessor か画像から使われ、全 accessor がメッシュか skin から使われ、ノードは host の骨 + その親 + モジュールのメッシュだけ
+    used_v = {a_['bufferView'] for a_ in j['accessors']} | {i['bufferView'] for i in j.get('images', [])}; used_a = {sk['inverseBindMatrices']}
+    for m_ in j['meshes']:
+        for pr in m_['primitives']: used_a |= set(pr['attributes'].values()) | {pr['indices']} | {t['POSITION'] for t in pr.get('targets', [])}
+    C['compact_no_unused_data'] = used_v == set(range(len(j['bufferViews']))) and used_a == set(range(len(j['accessors']))) and len(j['nodes']) == len(sk['joints']) + 1 + len(j['meshes']) and len(j.get('images', [])) == 1
+    img = j['bufferViews'][j['images'][0]['bufferView']]['byteLength']; R['bytes'] = dict(total=len(raw), donorTexture=img, geometryAndSkin=len(raw) - img)
     # メッシュ
     mesh_nodes = [n for n in j['nodes'] if 'mesh' in n]; C['mesh_names'] = [n['name'] for n in mesh_nodes] == entry['meshNames'] and [j['meshes'][n['mesh']]['name'] for n in mesh_nodes] == entry['meshNames']; C['meshes_skinned_to_host_skin'] = all(n.get('skin') == 0 for n in mesh_nodes)
     need = sorted(['POSITION', 'NORMAL', 'TEXCOORD_0', 'JOINTS_0', 'WEIGHTS_0', '_AVATAR_REGION', '_AVATAR_PART']); M = [read_mesh(j, b, j['meshes'][n['mesh']]) for n in mesh_nodes]

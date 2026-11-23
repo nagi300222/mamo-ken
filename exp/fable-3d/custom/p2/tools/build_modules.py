@@ -8,9 +8,10 @@ HERE = os.path.dirname(os.path.abspath(__file__)); sys.path.insert(0, HERE)
 import p2lib as L
 ASSETS = os.path.join(L.P2, 'assets')
 # (host, slot, donor)。自分自身が donor の組は作らない（base を使う）。
-MODULES = [
-    ('moguzo', 'head', 'godan'), ('godan', 'hands', 'bullet'), ('bullet', 'feet', 'moguzo'),
-]
+HOSTS = ('moguzo', 'godan', 'bullet')
+MODULES = [(h, s, d) for h in HOSTS for s in ('head', 'ears', 'hands', 'feet') for d in HOSTS if d != h]
+MODULES += [('moguzo', 'tail', 'godan'), ('godan', 'tail', 'moguzo')]          # 短い尾（3 骨）どうしだけ。bullet の 6 骨の尾との交換は未対応
+
 def main():
     chars = {}; get = lambda c: chars.setdefault(c, L.Char(c)); entries = []; reports = []
     src = dict(path='../tools/p2lib.py', sha256=L.sha(open(os.path.join(HERE, 'p2lib.py'), 'rb').read()))

@@ -11,7 +11,7 @@ v16 の「寸法 graft」（host の面のまま寸法だけ donor に寄せる�
 `assets/manifest.json` の `modules` に載っているものだけが制作・検査済み。載っていない組み合わせは **未制作**。
 一覧と検査結果は `assets/inspection.json`、作ったときの数値（縮尺・動かした頂点数・接合帯の面数・ふた）は `assets/build_report.json`。
 
-対象の全体は host 3 体（moguzo / godan / bullet）× 他 2 体の head / ears / hands / feet = 24、短尾どうし moguzo ↔ godan の tail 2 = 最大 26。
+対象の全体は host 3 体（moguzo / godan / bullet）× 他 2 体の head / ears / hands / feet = 24、短尾どうし moguzo ↔ godan の tail 2 = 最大 26。**26 本ぜんぶ制作し、下の検査と WebGL の継ぎ目実測を通した。**
 bullet の長い尾（6 骨）と短い尾（3 骨）の交換は **未対応**（骨を勝手に足さない）。自分自身が donor の組は作らない（base を使う）。
 
 ## 部品の作り方
@@ -19,7 +19,9 @@ bullet の長い尾（6 骨）と短い尾（3 骨）の交換は **未対応**�
 1. donor の slot の三角形を `custom/v16/assets/<donor>_parts.glb` からそのまま取り出す。頂点数・面の張り方・UV・テクスチャは donor のまま。
 2. 骨ごとの変換「host のバインド × 縮尺 × donor の逆バインド」を donor のスキンウェイトで混ぜて頂点・法線・モーフへ掛け、host の骨格のバインド姿勢へ移す（骨名で対応）。縮尺は境界ループの周長比（host / donor、0.8〜1.25 に制限）で、モジュールごとに 1 つ。
 3. host の同じ slot が他の slot と接していた境界ループ（= host の既存の境界）を求める。donor の縁を、そのループの少し内側（接合帯の幅ぶん）へ寄せる。寄せる量は donor メッシュの上で調和関数として広げ、縁から離れると 0 になる。スキンウェイトとモーフも同じ重みで host の境界値へつなぐ。
+   耳だけは自分の骨を持たない小さな部品なので、先に左右それぞれを付け根ごと平行移動（host の耳の付け根の位置へ）してから、残りの差だけを広げる。
 4. host の境界頂点の**写し**（位置・法線・スキンウェイト・4 モーフが host の値そのまま）をモジュールに置き、donor の縁との間を三角形の帯でつなぐ（接合帯。モジュールの中に入っている）。
+   帯の三角形は 1 枚ごとに専用の 3 頂点を持ち、UV は donor の縁の 1 点（帯は donor の縁の色 1 色。UV の島をまたいで別の色を拾わない）。
 5. donor の slot に元からあった開いた穴（足の裏など）は、モジュールの中でふたをする。
 
 結果として、モジュールの開いた境界は **host の継ぎ目ループだけ**。host の slot に元からあった開いた穴は持ち込んでいない（ふたをした donor の面に置き換わる）。新しい未接続の境界は無い。
@@ -27,7 +29,7 @@ bullet の長い尾（6 骨）と短い尾（3 骨）の交換は **未対応**�
 
 ## GLB の中身
 
-- ノード: host の骨ノード（名前・rest の TRS は host と同じ）＋モジュールのメッシュのノード。アニメーションは入っていない。
+- ノード: host の骨ノード（名前・rest の TRS は host と同じ）＋モジュールのメッシュのノード。**アニメーション（元の 37 クリップ）も、host / donor の全身のデータも入っていない**。入っているのはモジュールの形・4 モーフ・host の skin と rest・donor のテクスチャ 1 枚だけ（1 本 0.27〜0.92MB、26 本で 17.6MB。うち 7.4MB は donor のテクスチャ JPEG）。使っていない bufferView / accessor が無いことは検査で確認している。
 - skin: 骨名・順番・逆バインド行列は host の `<host>_parts.glb` と同じ（moguzo / godan 40 骨、bullet 39 骨）。実行時は host の共有 Skeleton へ bind し直す前提。
 - メッシュ: `p2_<slot>_<donor>_for_<host>`。head だけ目が別メッシュで `…_eyes` が付く（manifest の `meshNames` に全部載せている）。1 メッシュ 1 プリミティブ、LOD0 のみ。
 - 属性: `POSITION` `NORMAL` `TEXCOORD_0` `JOINTS_0` `WEIGHTS_0` `_AVATAR_REGION`（donor の値）`_AVATAR_PART`（slot の番号。v16 と同じ並び body0 head1 ears2 hands3 feet4 tail5 accessory6）。
@@ -71,4 +73,6 @@ node exp/fable-3d/custom/p2/tools/evidence.mjs             # 比較画像・動�
 - 色: モジュールは donor のテクスチャのまま。host の体との毛色の境目は、host の境界ループ（面の割り方がぎざぎざ）の形でそのまま見える。色をそろえるかどうかは実行時のパレット側の扱い。
 - host の装身具（モグゾーのハチマキ、ゴダンの帯・腕輪、バレットの首ひも）は host のまま動かしていない。head や hands を換えると、装身具が donor の形に少し埋まる／浮く箇所がある（例: モグゾーにゴダンの頭 → ハチマキの前が額に埋まる）。
 - 接合帯のあたりは donor の面を host の境界へ寄せているので、付け根の太さが大きく違う組（縮尺が 0.8 / 1.25 の制限に当たる組）は付け根の形が donor 本来とは変わる。`assets/build_report.json` の `scale` と `seam_max_shift_m` に出ている。
+- 耳は元の 3 体とも小さな丸い突起で形が近いので、交換しても見た目の差は小さい（位置は host の耳の付け根、形と色は donor）。
+- 継ぎ目の毛色の境目がぎざぎざに見えるのは、host の slot の割り方（三角形の境界）そのものの形。面はつながっていて、すき間は無い。
 - 打点・被弾範囲は、交換後の実メッシュから測り直す必要がある（v16 の `measureContacts` 相当。ここでは測っていない）。
