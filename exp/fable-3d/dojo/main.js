@@ -1005,7 +1005,7 @@ async function startMatch(options={}){
   checking=!practiceEnabled&&checkAvailable&&$('check-mode').checked;
   practice.clear();practice.setDummy($('practice-dummy').value);syncPracticeUI();
   loading=true;clearInput();
-  playing=false;paused=backgroundPaused;finishShown=false;$('pause').textContent='一時停止';$('start').disabled=true;setLoading('GLBを読み込み中…');
+  playing=false;paused=backgroundPaused;finishShown=false;$('pause').textContent=paused?'再開':'一時停止';$('start').disabled=true;setLoading('GLBを読み込み中…');
   const ids=options.ids??[selected,cpuChoice],level=options.level??+$('difficulty').value;
   // プラクティスと演出確認は VS／顔アップを通さず、読み込み完了ですぐ操作できる（従来どおり）。
   const instant=options.instant??(practiceEnabled||checking);
