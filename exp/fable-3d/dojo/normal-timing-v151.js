@@ -1,8 +1,8 @@
 // The authored striking pose lands on Battle.startup, independently of clip length.
 import {MOTIFS} from './normal-motifs-v15.js';
-import {NORMAL_CONTACTS} from './normal-contacts-v151.js';
+import {NORMAL_CONTACTS} from './normal-contact-source.js';
 export function normalClipTime(id,slot,frame,move,duration,contacts=NORMAL_CONTACTS){
- const authored=contacts?.[id]?.[slot];
+ const authored=move.customContact??contacts?.[id]?.[slot];
  const contact=authored?.contact??MOTIFS[id][slot].contact;
  const end=authored?.contactEnd??Math.min(.94,contact+.08);
  const total=move.startup+move.active+move.recovery;

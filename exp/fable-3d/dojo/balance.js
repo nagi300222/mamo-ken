@@ -1,6 +1,7 @@
 // マモ拳3D 対戦バランス v0.5（固有能力・CPU再設計） — すべて仮値。60Hz、距離はモデルのm単位。
 import {normalPerformance} from './normal-balance-v151.js';
-import {NORMAL_CONTACTS} from './normal-contacts-v151.js';
+import {NORMAL_CONTACTS,NORMAL_CONTACTS_VERSION,ACTIVE_NORMAL_MOTION_VERSION} from './normal-contact-source.js';
+import {specialHitstunP3} from './special-balance-p3.js';
 export const FPS = 60;
 export const ARENA = Object.freeze({ minX: -1.76, maxX: 1.76, pushRadius: 0.17, gravity: 0.0062, roundSeconds: 75 });
 const S = (name, kind, startup, active, recovery, damage, reach, extra = {}) =>
@@ -61,13 +62,14 @@ export function normalMove(id, slot) {
   const motion=NORMAL_CONTACTS[id]?.[slot];
   if(!motion)throw Error('missing authored contact: '+id+'/'+slot);
   return {...normalPerformance(id,slot),reach:motion.reach,strikeHeight:motion.height,activeReach:motion.activeReach.map(p=>({...p})),
-    name:slot,kind:'strike',normalVersion:'15.1'};
+    name:slot,kind:'strike',normalVersion:ACTIVE_NORMAL_MOTION_VERSION==='v17'?NORMAL_CONTACTS_VERSION:'15.1'};
 }
 export function specialMove(id, index) {
   const r=ROSTER[id]; if (!r) throw Error('unknown fighter '+id);
   const m=r.specials[index];
   if (!m) throw Error('unknown special '+index);
-  return { ...m, damage:Math.round(m.damage*r.power), level:m.level||'mid', specialIndex:index };
+  const hitstun=specialHitstunP3(id,index);
+  return { ...m, damage:Math.round(m.damage*r.power), level:m.level||'mid', specialIndex:index,...(hitstun===undefined?{}:{hitstun}) };
 }
 export function ultimateMove(id) {
   const r=ROSTER[id]; return { ...r.ultimate, kind:r.ultimate.kind||'super',

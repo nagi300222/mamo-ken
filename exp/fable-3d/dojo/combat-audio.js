@@ -2,6 +2,7 @@
 // AudioContext is opened only by an explicit user interaction (start/tap/sound button).
 import { showtimeFor } from './showtime-profiles.js';
 import { isNativeRuntime } from './landscape-lock.js';
+import {IMPACT_SOUND_RECIPES,combatFeedback} from './fight-feel.js';
 
 export function cinematicSoundKind(key) {
   if (/tension_hold|mute/.test(key)) return null;
@@ -24,7 +25,7 @@ export function cinematicSoundKind(key) {
 }
 
 export function createCombatAudio(contextFactory=()=>globalThis.AudioContext||globalThis.webkitAudioContext){
-  let context=null,master=null,muted=false;
+  let context=null,master=null,muted=false,volume=1;
   const last=new Map();
   let noiseBuffer=null;
   const activeSounds=new Set();
@@ -44,7 +45,7 @@ export function createCombatAudio(contextFactory=()=>globalThis.AudioContext||gl
       if(!Factory)return false;
       try{
         context=new Factory();
-        master=context.createGain();master.gain.value=.12;master.connect(context.destination);
+        master=context.createGain();master.gain.value=.12*volume;master.connect(context.destination);
       }catch{context=null;master=null;return false;}
     }
     if(context.state==='suspended')context.resume().catch(()=>{});
@@ -52,10 +53,16 @@ export function createCombatAudio(contextFactory=()=>globalThis.AudioContext||gl
   }
   function setMuted(next){
     muted=!!next;
-    if(master)master.gain.value=muted?0:.12;
+    if(master)master.gain.value=muted?0:.12*volume;
     return muted;
   }
-  function playNoise(kind, now, duration, level, voices) {
+  function setVolume(next){
+    if(!Number.isFinite(next))throw new TypeError('sound volume must be finite');
+    volume=Math.max(0,Math.min(1,next));
+    if(master)master.gain.value=muted?0:.12*volume;
+    return volume;
+  }
+  function playNoise(kind, now, duration, level, voices, recipe) {
     if (!context.createBuffer || !context.createBiquadFilter) return false;
     if (!noiseBuffer) {
       noiseBuffer = context.createBuffer(1, context.sampleRate, context.sampleRate);
@@ -65,10 +72,10 @@ export function createCombatAudio(contextFactory=()=>globalThis.AudioContext||gl
     const source = context.createBufferSource(), filter = context.createBiquadFilter();
     const gain = context.createGain();
     source.buffer = noiseBuffer;
-    filter.type = kind === 'wind' || kind === 'breath' ? 'bandpass' : 'lowpass';
-    const cutoff = {wind:1500,breath:700,crack:900,crash:450}[kind];
+    filter.type = recipe?.filter??(kind === 'wind' || kind === 'breath' ? 'bandpass' : 'lowpass');
+    const cutoff = recipe?.cutoff??{wind:1500,breath:700,crack:900,crash:450}[kind];
     filter.frequency.setValueAtTime(cutoff, now);
-    filter.frequency.exponentialRampToValueAtTime(Math.max(80,cutoff * .35), now + duration);
+    filter.frequency.exponentialRampToValueAtTime(recipe?.endCutoff??Math.max(80,cutoff * .35), now + duration);
     gain.gain.setValueAtTime(.0001,now);
     gain.gain.exponentialRampToValueAtTime(level,now + Math.min(.04,duration * .2));
     gain.gain.exponentialRampToValueAtTime(.0001,now + duration);
@@ -85,13 +92,14 @@ export function createCombatAudio(contextFactory=()=>globalThis.AudioContext||gl
     return true;
   }
   function play(kind,id='moguzo',{voices}={}){
-    if(muted||!context||context.state!=='running')return false;
+    if(muted||volume===0||!context||context.state!=='running')return false;
     const now=context.currentTime,key=kind+':'+id;
     // Avoid noisy overlaps when several collision events share one simulation frame.
     if(now-(last.get(key)??-100)<.045)return false;
     last.set(key,now);
     const base=showtimeFor(id).pitch;
-    const cfg={
+    const recipe=IMPACT_SOUND_RECIPES[kind];
+    const cfg=recipe?[recipe.ratio,recipe.duration,recipe.level,recipe.wave]:{
       tap:[.9,.055,.08,'triangle'],hit:[.75,.10,.28,'sawtooth'],
       block:[1.5,.09,.14,'triangle'],special:[1.5,.17,.18,'sawtooth'],
       ultimate:[.72,.37,.27,'sawtooth'],roar:[.55,.25,.25,'sawtooth'],
@@ -105,8 +113,8 @@ export function createCombatAudio(contextFactory=()=>globalThis.AudioContext||gl
     }[kind]||[1,.1,.12,'triangle'];
     const [ratio,duration,level,wave]=cfg;
     try{
-      if (['wind','breath','crack','crash'].includes(kind) &&
-          playNoise(kind,now,duration,level,voices)) return true;
+      if ((recipe?.noise||['wind','breath','crack','crash'].includes(kind)) &&
+          playNoise(kind,now,duration,level,voices,recipe?.noise)) return true;
       const oscillator=context.createOscillator(),gain=context.createGain();
       const startFreq=Math.max(50,base*ratio);
       oscillator.type=wave;
@@ -128,5 +136,10 @@ export function createCombatAudio(contextFactory=()=>globalThis.AudioContext||gl
       return true;
     }catch{return false;}
   }
-  return {unlock,play,setMuted,suspend,get muted(){return muted;},get context(){return context;},get supported(){return !!contextFactory();}};
+  function playFeedback(event,options){
+    const feedback=combatFeedback(event);
+    if(!feedback?.sound)return false;
+    return play(feedback.sound,feedback.characterId,options);
+  }
+  return {unlock,play,playFeedback,setMuted,setVolume,suspend,get volume(){return volume;},get muted(){return muted;},get context(){return context;},get supported(){return !!contextFactory();}};
 }

@@ -1,3 +1,4 @@
+import {presentCombatFeedback} from './fight-feel.js';
 import { BATTLE_INPUT_PROFILE, battleAnalog, updateBattleHUD } from '../shared-ui/battle-ui.js';
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
@@ -631,6 +632,8 @@ const cues={
 const cueColors={hit:0xffb77a,block:0x9fe0ff,roar:0xffcc65,clinch:0xd8a1fa};
 function vfx(){
   for(const e of battle.events){
+    const feedbackPresented=presentCombatFeedback(e,{audio:audioFX,effectsEnabled:effectsAllowed(),
+      impact:fb=>impactFX(fb.effect,showtimeFor(fb.characterId).color,fb.point.x,fb.point.y,fb.scale,fb.lifeFrames),shake});
     if(e.type==='ultimate_hit'){
       beginUltimateMovie(e); // Only a confirmed strike can open full-screen movie mode.
       continue;
@@ -665,7 +668,8 @@ function vfx(){
     const id=battle.fighters[owner]?.id||'moguzo';
     const soundKind=e.type==='block'?'block':e.type==='counter'?'counter':
       kind==='clinch'?'clinch':kind==='roar'?'roar':'hit';
-    audioFX.play(soundKind,id);
+    if(!feedbackPresented)audioFX.play(soundKind,id);
+    if(feedbackPresented)continue;
     if(e.x===undefined)continue;
     const color=kind==='hit'?showtimeFor(id).color:cueColors[kind];
     impactFX(kind,color,e.x,e.y??.42,1,e.damage>=100?18:14);

@@ -1,3 +1,5 @@
+import {presentCombatFeedback} from '../dojo/fight-feel.js';
+import {showtimeFor} from '../dojo/showtime-profiles.js';
 import * as THREE from 'three';
 import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
 import {clone as cloneSkeleton} from 'three/addons/utils/SkeletonUtils.js';
@@ -140,7 +142,7 @@ async function enterVillage(){
 function openDialogue(){if(mode!=='explore'||paused||!nearby)return;dialogueNpc=nearby;setMode('dialogue');$('dialogue-name').textContent=nearby.name;
  const old=progress.encounters[nearby.id];$('dialogue-line').textContent=old?.battles?`また来たね。これまで${old.battles}戦、君の${old.wins}勝だ。もう一度、勝負しよう。`:nearby.line;}
 function closeDialogue(){dialogueNpc=null;setMode('explore');setStatus('');}
-function clearProjectiles(){for(const mesh of projectiles.values())mesh.removeFromParent();projectiles.clear();for(const p of impacts)p.mesh.removeFromParent();impacts.length=0;}
+function clearProjectiles(){for(const mesh of projectiles.values())mesh.removeFromParent();projectiles.clear();for(const p of impacts){p.mesh.removeFromParent();if(p.ownedMaterial)p.mesh.material.dispose();}feedbackShake=0;feedbackShakeTime=0;impacts.length=0;}
 async function startBattle(){
  if(mode!=='dialogue'||!dialogueNpc||document.hidden||window.mamokenNative?.active===false)return;if(!document.hidden&&window.mamokenNative?.active!==false)backgroundPaused=false;audio.unlock();returnPoint={position:{...progress.position},heading:progress.heading,camera:exploration.view};const token=++loadGeneration;setMode('loading');$('loading-copy').textContent='稽古の準備と技の互換性を確認中…';const started=performance.now();
  try{
@@ -171,11 +173,20 @@ function syncCombatActor(actor,fighter){
  }else if(!fighter.stop)actor.mixer.update(1/FPS);
 }
 const projectileGeo=new THREE.SphereGeometry(.08,10,7),projectileMat=new THREE.MeshStandardMaterial({color:0xe9c578,emissive:0xbb7b25,emissiveIntensity:.6});
+let feedbackShake=0,feedbackShakeTime=0;
+const feedbackGeometry={slash:new THREE.PlaneGeometry(.19,.022),shard:new THREE.CircleGeometry(.075,3),block:new THREE.RingGeometry(.062,.077,12)};
 const impactGeo=new THREE.RingGeometry(.055,.09,10),impactMat=new THREE.MeshBasicMaterial({color:0xffdd96,side:THREE.DoubleSide,transparent:true,opacity:.9,depthWrite:false});
 function updateProjectiles(){const ids=new Set();for(const p of battle.projectiles){ids.add(p.id);let mesh=projectiles.get(p.id);if(!mesh){mesh=new THREE.Mesh(projectileGeo,projectileMat);projectiles.set(p.id,mesh);scene.add(mesh);}mesh.position.set(p.x,p.y,.02);}for(const [id,mesh]of projectiles)if(!ids.has(id)){mesh.removeFromParent();projectiles.delete(id);}}
-function battleEvents(){for(const e of battle.events){state.events.push({...e,frame:battle.frame});if(state.events.length>100)state.events.shift();
+function showCombatImpact(fb){
+ if(impacts.length>=24){const old=impacts.shift();old.mesh.removeFromParent();if(old.ownedMaterial)old.mesh.material.dispose();}
+ const material=impactMat.clone();material.color.setHex(fb.outcome==='guard'?0x9fe0ff:showtimeFor(fb.characterId).color);
+ const mesh=new THREE.Mesh(feedbackGeometry[fb.effect]??impactGeo,material);mesh.position.set(fb.point.x,fb.point.y,.2);mesh.scale.setScalar(fb.scale);if(fb.effect==='slash')mesh.rotation.z=-.65;
+ scene.add(mesh);impacts.push({mesh,life:fb.lifeFrames/FPS,ownedMaterial:true});
+}
+function battleEvents(){for(const e of battle.events){
+ const feedbackPresented=presentCombatFeedback(e,{audio,effectsEnabled:!reducedMotion,impact:showCombatImpact,shake:(amount,frames)=>{feedbackShake=Math.max(feedbackShake,amount);feedbackShakeTime=Math.max(feedbackShakeTime,frames/FPS);}});state.events.push({...e,frame:battle.frame});if(state.events.length>100)state.events.shift();
  if(e.type==='ultimate_hit'){beginMovie(e);continue;}
- if(['hit','block','ko','throw_pair','gyuiin_start'].includes(e.type)){audio.play(e.type==='block'?'block':e.type==='ko'?'ko':'hit',battle.fighters[e.slot??0].id);
+ if(!feedbackPresented&&['hit','block','ko','throw_pair','gyuiin_start'].includes(e.type)){audio.play(e.type==='block'?'block':e.type==='ko'?'ko':'hit',battle.fighters[e.slot??0].id);
   const p=battle.fighters[e.target??1];const mesh=new THREE.Mesh(impactGeo,impactMat);mesh.position.set(e.x??p.x,e.y??p.y+.35,.2);scene.add(mesh);impacts.push({mesh,life:.18});}
 }}
 function updateBattleHUD(){syncBattleHUD(app,{battle,names:combatActors.map(a=>a.definition.name),roundLabel:'ROUND 1'});}
@@ -307,9 +318,10 @@ function render(now){requestAnimationFrame(render);const elapsed=last?Math.max(0
  if(mode==='battle'&&battle&&!paused){acc=Math.min(.1,acc+delta);let ticks=0;while(acc>=1/FPS&&ticks<5&&mode==='battle'&&battle.phase==='fight'){
   battle.tick(controls());for(let i=0;i<2;i++)syncCombatActor(combatActors[i],battle.fighters[i]);updateProjectiles();battleEvents();acc-=1/FPS;ticks++;
  }updateBattleHUD();if(battle.phase==='ko'&&mode==='battle')finishRound();}
- for(let i=impacts.length-1;i>=0;i--){const p=impacts[i];p.life-=delta;p.mesh.scale.multiplyScalar(1+delta*4);if(p.life<=0){p.mesh.removeFromParent();impacts.splice(i,1);}}
+ for(let i=impacts.length-1;i>=0;i--){const p=impacts[i];p.life-=delta;p.mesh.scale.multiplyScalar(1+delta*4);if(p.life<=0){p.mesh.removeFromParent();if(p.ownedMaterial)p.mesh.material.dispose();impacts.splice(i,1);}}
  if(mode==='movie'){if(movie&&!document.hidden){try{const frame=movie.update(elapsed,canvas.clientWidth/Math.max(1,canvas.clientHeight));$('movie-caption').textContent=frame.caption;renderer.render(frame.scene,frame.camera);if(frame.ended)finishMovie();return;}catch(error){console.warn(error);finishMovie();}}else if(!movie){renderer.render(scene,battleCamera);return;}}
  const battleView=['battle','movie','result'].includes(mode);if(battleView&&battle){const center=(battle.fighters[0].x+battle.fighters[1].x)*.5,width=Math.max(1.35,Math.abs(battle.fighters[0].x-battle.fighters[1].x)*.6+.65),ratio=canvas.clientWidth/Math.max(1,canvas.clientHeight);battleCamera.left=-width;battleCamera.right=width;battleCamera.top=width/ratio;battleCamera.bottom=-width/ratio;battleCamera.position.set(center,1.08,5.5);battleCamera.lookAt(center,.35,0);battleCamera.updateProjectionMatrix();}
+ if(mode==='battle'&&!paused&&feedbackShakeTime>0&&!reducedMotion){feedbackShakeTime=Math.max(0,feedbackShakeTime-delta);battleCamera.position.x+=Math.sin(now*.15)*feedbackShake;battleCamera.position.y+=Math.cos(now*.13)*feedbackShake;if(!feedbackShakeTime)feedbackShake=0;}
  renderer.render(scene,battleView?battleCamera:camera);fpsFrames++;if(now-fpsAt>1000){state.metrics.fps=Math.round(fpsFrames*1000/(now-fpsAt));fpsAt=now;fpsFrames=0;Object.assign(state.metrics,renderer.info.memory,{drawCalls:renderer.info.render.calls});$('perf').textContent=`${state.metrics.fps} FPS · ${npcActors.size}人表示`;}
 }
 async function boot(){await window.mamokenNative?.ready;buildForm();const saved=readSave(storage,normalizeAvatar);storageWarning=saved.error??'';saveReady=!!saved.save;avatar=saved.save?.avatar??createDefaultAvatar('moguzo');progress=saved.save?.progress??freshProgress();fillForm(avatar);village.visible=false;setMode('editor');resize();requestAnimationFrame(render);await refreshPreview();setStatus(storageWarning);}

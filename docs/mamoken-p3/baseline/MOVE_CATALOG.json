@@ -1,0 +1,5744 @@
+{
+  "schemaVersion": 1,
+  "baselineSha": "8ab8972295d059426b858d9b8edabfda6068a7a3",
+  "performanceSource": "/tmp/mamoken-p3-baseline/exp/fable-3d/dojo",
+  "catalog": [
+    {
+      "key": "moguzo.stand_weak",
+      "characterId": "moguzo",
+      "name": "stand_weak",
+      "moveId": "stand_weak",
+      "kind": "normal",
+      "characterRole": "万能/根性",
+      "weakness": "突出した距離と高速連打は持たない",
+      "role": "近距離牽制/連係開始",
+      "performance": {
+        "startup": 5,
+        "active": 3,
+        "recovery": 12,
+        "damage": 38,
+        "level": "mid",
+        "anim": "stand_light",
+        "hitstun": 18,
+        "blockstun": 11,
+        "knockback": 0.045,
+        "blockPushback": 0.045,
+        "cancelWindow": {
+          "hit": [
+            0,
+            6
+          ],
+          "block": [
+            0,
+            2
+          ]
+        },
+        "cancelOnHit": [
+          "weak",
+          "heavy",
+          "s1",
+          "s2",
+          "s3"
+        ],
+        "cancelOnBlock": [
+          "weak",
+          "heavy",
+          "s1"
+        ],
+        "reach": 0.415,
+        "strikeHeight": 0.34,
+        "activeReach": [
+          {
+            "phase": 0,
+            "reach": 0.415,
+            "height": 0.34
+          },
+          {
+            "phase": 0.5,
+            "reach": 0.409,
+            "height": 0.322
+          },
+          {
+            "phase": 1,
+            "reach": 0.396,
+            "height": 0.294
+          }
+        ],
+        "name": "stand_weak",
+        "kind": "strike",
+        "normalVersion": "15.1"
+      },
+      "animation": {
+        "model": "chars/moguzo/moguzo.glb",
+        "modelSha256": "8f25428c14e9cc58fe229367a1a2324cb9d6bdd716c2306b26c5061e82e44fdd",
+        "file": "normal/v15/moguzo_normals.glb",
+        "clip": "v15_stand_weak",
+        "contact": 0.225,
+        "contactEnd": 0.3,
+        "attackPart": "armL",
+        "measurement": "v15.1 actual skinned surface"
+      },
+      "baseline": {
+        "hitstopFrames": 6,
+        "guardstopFrames": 3
+      },
+      "proposal": {
+        "hitstopFrames": 5,
+        "guardstopFrames": 3,
+        "sound": {
+          "hit": "contact_light",
+          "guard": "guard_light",
+          "swing": "swing_light"
+        },
+        "gameplayValuesChanged": false
+      },
+      "rationale": "Keep measured reach, startup/active/recovery/damage/cancel. Propose symmetric contact holds and distinct hit/guard/swing audio; no claim of new Claude animation integration."
+    },
+    {
+      "key": "moguzo.stand_heavy",
+      "characterId": "moguzo",
+      "name": "stand_heavy",
+      "moveId": "stand_heavy",
+      "kind": "normal",
+      "characterRole": "万能/根性",
+      "weakness": "突出した距離と高速連打は持たない",
+      "role": "中距離/大打撃",
+      "performance": {
+        "startup": 12,
+        "active": 4,
+        "recovery": 22,
+        "damage": 80,
+        "level": "mid",
+        "anim": "stand_heavy",
+        "hitstun": 28,
+        "blockstun": 14,
+        "knockback": 0.1,
+        "blockPushback": 0.09,
+        "cancelWindow": {
+          "hit": [
+            0,
+            5
+          ],
+          "block": [
+            0,
+            2
+          ]
+        },
+        "cancelOnHit": [
+          "s1",
+          "s2",
+          "s3"
+        ],
+        "cancelOnBlock": [],
+        "reach": 0.463,
+        "strikeHeight": 0.247,
+        "activeReach": [
+          {
+            "phase": 0,
+            "reach": 0.463,
+            "height": 0.247
+          },
+          {
+            "phase": 0.5,
+            "reach": 0.438,
+            "height": 0.228
+          },
+          {
+            "phase": 1,
+            "reach": 0.403,
+            "height": 0.214
+          }
+        ],
+        "name": "stand_heavy",
+        "kind": "strike",
+        "normalVersion": "15.1"
+      },
+      "animation": {
+        "model": "chars/moguzo/moguzo.glb",
+        "modelSha256": "8f25428c14e9cc58fe229367a1a2324cb9d6bdd716c2306b26c5061e82e44fdd",
+        "file": "normal/v15/moguzo_normals.glb",
+        "clip": "v15_stand_heavy",
+        "contact": 0.3,
+        "contactEnd": 0.36,
+        "attackPart": "armR",
+        "measurement": "v15.1 actual skinned surface"
+      },
+      "baseline": {
+        "hitstopFrames": 6,
+        "guardstopFrames": 3
+      },
+      "proposal": {
+        "hitstopFrames": 8,
+        "guardstopFrames": 4,
+        "sound": {
+          "hit": "contact_fist",
+          "guard": "guard_heavy",
+          "swing": "swing_heavy"
+        },
+        "gameplayValuesChanged": false
+      },
+      "rationale": "Keep measured reach, startup/active/recovery/damage/cancel. Propose symmetric contact holds and distinct hit/guard/swing audio; no claim of new Claude animation integration."
+    },
+    {
+      "key": "moguzo.crouch_weak",
+      "characterId": "moguzo",
+      "name": "crouch_weak",
+      "moveId": "crouch_weak",
+      "kind": "normal",
+      "characterRole": "万能/根性",
+      "weakness": "突出した距離と高速連打は持たない",
+      "role": "低姿勢/下段",
+      "performance": {
+        "startup": 6,
+        "active": 3,
+        "recovery": 13,
+        "damage": 33,
+        "level": "low",
+        "anim": "stand_light",
+        "hitstun": 18,
+        "blockstun": 11,
+        "knockback": 0.045,
+        "blockPushback": 0.045,
+        "cancelWindow": {
+          "hit": [
+            0,
+            6
+          ],
+          "block": [
+            0,
+            2
+          ]
+        },
+        "cancelOnHit": [
+          "weak",
+          "heavy",
+          "s1",
+          "s2",
+          "s3"
+        ],
+        "cancelOnBlock": [
+          "weak",
+          "heavy",
+          "s1"
+        ],
+        "reach": 0.46,
+        "strikeHeight": 0.188,
+        "activeReach": [
+          {
+            "phase": 0,
+            "reach": 0.46,
+            "height": 0.188
+          },
+          {
+            "phase": 0.5,
+            "reach": 0.454,
+            "height": 0.19
+          },
+          {
+            "phase": 1,
+            "reach": 0.442,
+            "height": 0.192
+          }
+        ],
+        "name": "crouch_weak",
+        "kind": "strike",
+        "normalVersion": "15.1"
+      },
+      "animation": {
+        "model": "chars/moguzo/moguzo.glb",
+        "modelSha256": "8f25428c14e9cc58fe229367a1a2324cb9d6bdd716c2306b26c5061e82e44fdd",
+        "file": "normal/v15/moguzo_normals.glb",
+        "clip": "v15_crouch_weak",
+        "contact": 0.375,
+        "contactEnd": 0.495,
+        "attackPart": "armR",
+        "measurement": "v15.1 actual skinned surface"
+      },
+      "baseline": {
+        "hitstopFrames": 6,
+        "guardstopFrames": 3
+      },
+      "proposal": {
+        "hitstopFrames": 5,
+        "guardstopFrames": 3,
+        "sound": {
+          "hit": "contact_light",
+          "guard": "guard_light",
+          "swing": "swing_light"
+        },
+        "gameplayValuesChanged": false
+      },
+      "rationale": "Keep measured reach, startup/active/recovery/damage/cancel. Propose symmetric contact holds and distinct hit/guard/swing audio; no claim of new Claude animation integration."
+    },
+    {
+      "key": "moguzo.crouch_heavy",
+      "characterId": "moguzo",
+      "name": "crouch_heavy",
+      "moveId": "crouch_heavy",
+      "kind": "normal",
+      "characterRole": "万能/根性",
+      "weakness": "突出した距離と高速連打は持たない",
+      "role": "低姿勢/下段",
+      "performance": {
+        "startup": 13,
+        "active": 4,
+        "recovery": 24,
+        "damage": 76,
+        "level": "low",
+        "anim": "stand_heavy",
+        "hitstun": 30,
+        "blockstun": 13,
+        "knockback": 0.11,
+        "blockPushback": 0.1,
+        "cancelWindow": {
+          "hit": [
+            0,
+            5
+          ],
+          "block": [
+            0,
+            2
+          ]
+        },
+        "cancelOnHit": [
+          "s1",
+          "s2",
+          "s3"
+        ],
+        "cancelOnBlock": [],
+        "reach": 0.386,
+        "strikeHeight": 0.15,
+        "activeReach": [
+          {
+            "phase": 0,
+            "reach": 0.386,
+            "height": 0.15
+          },
+          {
+            "phase": 0.5,
+            "reach": 0.381,
+            "height": 0.151
+          },
+          {
+            "phase": 1,
+            "reach": 0.369,
+            "height": 0.152
+          }
+        ],
+        "name": "crouch_heavy",
+        "kind": "strike",
+        "normalVersion": "15.1"
+      },
+      "animation": {
+        "model": "chars/moguzo/moguzo.glb",
+        "modelSha256": "8f25428c14e9cc58fe229367a1a2324cb9d6bdd716c2306b26c5061e82e44fdd",
+        "file": "normal/v15/moguzo_normals.glb",
+        "clip": "v15_crouch_heavy",
+        "contact": 0.5,
+        "contactEnd": 0.575,
+        "attackPart": "armR",
+        "measurement": "v15.1 actual skinned surface"
+      },
+      "baseline": {
+        "hitstopFrames": 6,
+        "guardstopFrames": 3
+      },
+      "proposal": {
+        "hitstopFrames": 8,
+        "guardstopFrames": 4,
+        "sound": {
+          "hit": "contact_fist",
+          "guard": "guard_heavy",
+          "swing": "swing_heavy"
+        },
+        "gameplayValuesChanged": false
+      },
+      "rationale": "Keep measured reach, startup/active/recovery/damage/cancel. Propose symmetric contact holds and distinct hit/guard/swing audio; no claim of new Claude animation integration."
+    },
+    {
+      "key": "moguzo.air_weak",
+      "characterId": "moguzo",
+      "name": "air_weak",
+      "moveId": "air_weak",
+      "kind": "normal",
+      "characterRole": "万能/根性",
+      "weakness": "突出した距離と高速連打は持たない",
+      "role": "空中差し合い",
+      "performance": {
+        "startup": 6,
+        "active": 5,
+        "recovery": 12,
+        "damage": 39,
+        "level": "air",
+        "anim": "stand_light",
+        "hitstun": 16,
+        "blockstun": 10,
+        "knockback": 0.07,
+        "blockPushback": 0.06,
+        "cancelWindow": {
+          "hit": null,
+          "block": null
+        },
+        "cancelOnHit": [],
+        "cancelOnBlock": [],
+        "reach": 0.427,
+        "strikeHeight": 0.324,
+        "activeReach": [
+          {
+            "phase": 0,
+            "reach": 0.427,
+            "height": 0.324
+          },
+          {
+            "phase": 0.5,
+            "reach": 0.424,
+            "height": 0.341
+          },
+          {
+            "phase": 1,
+            "reach": 0.427,
+            "height": 0.326
+          }
+        ],
+        "name": "air_weak",
+        "kind": "strike",
+        "normalVersion": "15.1"
+      },
+      "animation": {
+        "model": "chars/moguzo/moguzo.glb",
+        "modelSha256": "8f25428c14e9cc58fe229367a1a2324cb9d6bdd716c2306b26c5061e82e44fdd",
+        "file": "normal/v15/moguzo_normals.glb",
+        "clip": "v15_air_weak",
+        "contact": 0.35,
+        "contactEnd": 0.47,
+        "attackPart": "armL",
+        "measurement": "v15.1 actual skinned surface"
+      },
+      "baseline": {
+        "hitstopFrames": 6,
+        "guardstopFrames": 3
+      },
+      "proposal": {
+        "hitstopFrames": 5,
+        "guardstopFrames": 3,
+        "sound": {
+          "hit": "contact_light",
+          "guard": "guard_light",
+          "swing": "swing_light"
+        },
+        "gameplayValuesChanged": false
+      },
+      "rationale": "Keep measured reach, startup/active/recovery/damage/cancel. Propose symmetric contact holds and distinct hit/guard/swing audio; no claim of new Claude animation integration."
+    },
+    {
+      "key": "moguzo.air_heavy",
+      "characterId": "moguzo",
+      "name": "air_heavy",
+      "moveId": "air_heavy",
+      "kind": "normal",
+      "characterRole": "万能/根性",
+      "weakness": "突出した距離と高速連打は持たない",
+      "role": "空中差し合い",
+      "performance": {
+        "startup": 11,
+        "active": 6,
+        "recovery": 18,
+        "damage": 77,
+        "level": "air",
+        "anim": "stand_heavy",
+        "hitstun": 25,
+        "blockstun": 13,
+        "knockback": 0.11,
+        "blockPushback": 0.09,
+        "cancelWindow": {
+          "hit": null,
+          "block": null
+        },
+        "cancelOnHit": [],
+        "cancelOnBlock": [],
+        "reach": 0.297,
+        "strikeHeight": 0.098,
+        "activeReach": [
+          {
+            "phase": 0,
+            "reach": 0.297,
+            "height": 0.098
+          },
+          {
+            "phase": 0.5,
+            "reach": 0.282,
+            "height": 0.107
+          },
+          {
+            "phase": 1,
+            "reach": 0.262,
+            "height": 0.126
+          }
+        ],
+        "name": "air_heavy",
+        "kind": "strike",
+        "normalVersion": "15.1"
+      },
+      "animation": {
+        "model": "chars/moguzo/moguzo.glb",
+        "modelSha256": "8f25428c14e9cc58fe229367a1a2324cb9d6bdd716c2306b26c5061e82e44fdd",
+        "file": "normal/v15/moguzo_normals.glb",
+        "clip": "v15_air_heavy",
+        "contact": 0.475,
+        "contactEnd": 0.535,
+        "attackPart": "legR",
+        "measurement": "v15.1 actual skinned surface"
+      },
+      "baseline": {
+        "hitstopFrames": 6,
+        "guardstopFrames": 3
+      },
+      "proposal": {
+        "hitstopFrames": 8,
+        "guardstopFrames": 4,
+        "sound": {
+          "hit": "contact_fist",
+          "guard": "guard_heavy",
+          "swing": "swing_heavy"
+        },
+        "gameplayValuesChanged": false
+      },
+      "rationale": "Keep measured reach, startup/active/recovery/damage/cancel. Propose symmetric contact holds and distinct hit/guard/swing audio; no claim of new Claude animation integration."
+    },
+    {
+      "key": "moguzo.s1",
+      "characterId": "moguzo",
+      "name": "大地の波",
+      "moveId": "s1",
+      "kind": "special",
+      "characterRole": "万能/根性",
+      "weakness": "突出した距離と高速連打は持たない",
+      "role": "牽制/位置を動かす",
+      "performance": {
+        "name": "大地の波",
+        "kind": "projectile",
+        "startup": 13,
+        "active": 2,
+        "recovery": 20,
+        "damage": 57,
+        "reach": 0.42,
+        "speed": 0.04,
+        "life": 85,
+        "effect": "earth",
+        "level": "mid",
+        "specialIndex": 0
+      },
+      "animation": {
+        "model": "chars/moguzo/moguzo.glb",
+        "modelSha256": "8f25428c14e9cc58fe229367a1a2324cb9d6bdd716c2306b26c5061e82e44fdd",
+        "file": "cinematic/v14/moguzo/moguzo_animations.glb",
+        "clip": "s1_v14",
+        "contact": 0.18333333333333332,
+        "measurement": "current authored spec, new P3 measurement pending"
+      },
+      "baseline": {
+        "hitstopFrames": 6,
+        "guardstopFrames": 3
+      },
+      "proposal": {
+        "hitstopFrames": 5,
+        "guardstopFrames": 3,
+        "sound": {
+          "hit": "contact_projectile",
+          "guard": "guard_light",
+          "swing": "projectile_cast"
+        },
+        "gameplayValuesChanged": false
+      },
+      "rationale": "Keep measured reach, startup/active/recovery/damage/cancel. Propose symmetric contact holds and distinct hit/guard/swing audio; no claim of new Claude animation integration."
+    },
+    {
+      "key": "moguzo.s2",
+      "characterId": "moguzo",
+      "name": "昇り拳",
+      "moveId": "s2",
+      "kind": "special",
+      "characterRole": "万能/根性",
+      "weakness": "突出した距離と高速連打は持たない",
+      "role": "対空/迎撃",
+      "performance": {
+        "name": "昇り拳",
+        "kind": "anti",
+        "startup": 6,
+        "active": 8,
+        "recovery": 26,
+        "damage": 95,
+        "reach": 0.4,
+        "anim": "sp_rising_upper",
+        "invul": 4,
+        "level": "mid",
+        "specialIndex": 1
+      },
+      "animation": {
+        "model": "chars/moguzo/moguzo.glb",
+        "modelSha256": "8f25428c14e9cc58fe229367a1a2324cb9d6bdd716c2306b26c5061e82e44fdd",
+        "file": "cinematic/v14/moguzo/moguzo_animations.glb",
+        "clip": "s2_v14",
+        "contact": 0.06666666666666667,
+        "measurement": "current authored spec, new P3 measurement pending"
+      },
+      "baseline": {
+        "hitstopFrames": 6,
+        "guardstopFrames": 3
+      },
+      "proposal": {
+        "hitstopFrames": 8,
+        "guardstopFrames": 4,
+        "sound": {
+          "hit": "contact_fist",
+          "guard": "guard_heavy",
+          "swing": "swing_heavy"
+        },
+        "gameplayValuesChanged": false
+      },
+      "rationale": "Keep measured reach, startup/active/recovery/damage/cancel. Propose symmetric contact holds and distinct hit/guard/swing audio; no claim of new Claude animation integration."
+    },
+    {
+      "key": "moguzo.s3",
+      "characterId": "moguzo",
+      "name": "地走り",
+      "moveId": "s3",
+      "kind": "special",
+      "characterRole": "万能/根性",
+      "weakness": "突出した距離と高速連打は持たない",
+      "role": "前進/ライン回復",
+      "performance": {
+        "name": "地走り",
+        "kind": "dash",
+        "startup": 12,
+        "active": 5,
+        "recovery": 19,
+        "damage": 75,
+        "reach": 0.51,
+        "travel": 0.32,
+        "level": "mid",
+        "specialIndex": 2
+      },
+      "animation": {
+        "model": "chars/moguzo/moguzo.glb",
+        "modelSha256": "8f25428c14e9cc58fe229367a1a2324cb9d6bdd716c2306b26c5061e82e44fdd",
+        "file": "cinematic/v14/moguzo/moguzo_animations.glb",
+        "clip": "s3_v14",
+        "contact": 0.16666666666666666,
+        "measurement": "current authored spec, new P3 measurement pending"
+      },
+      "baseline": {
+        "hitstopFrames": 6,
+        "guardstopFrames": 3
+      },
+      "proposal": {
+        "hitstopFrames": 7,
+        "guardstopFrames": 4,
+        "sound": {
+          "hit": "contact_fist",
+          "guard": "guard_heavy",
+          "swing": "swing_heavy"
+        },
+        "gameplayValuesChanged": false
+      },
+      "rationale": "Keep measured reach, startup/active/recovery/damage/cancel. Propose symmetric contact holds and distinct hit/guard/swing audio; no claim of new Claude animation integration."
+    },
+    {
+      "key": "pisuke.stand_weak",
+      "characterId": "pisuke",
+      "name": "stand_weak",
+      "moveId": "stand_weak",
+      "kind": "normal",
+      "characterRole": "機動/蹴り/差し返し",
+      "weakness": "低い体力とガード耐久",
+      "role": "近距離牽制/連係開始",
+      "performance": {
+        "startup": 4,
+        "active": 2,
+        "recovery": 12,
+        "damage": 31,
+        "level": "mid",
+        "anim": "stand_light",
+        "hitstun": 16,
+        "blockstun": 9,
+        "knockback": 0.035,
+        "blockPushback": 0.04,
+        "cancelWindow": {
+          "hit": [
+            0,
+            6
+          ],
+          "block": [
+            0,
+            2
+          ]
+        },
+        "cancelOnHit": [
+          "weak",
+          "heavy",
+          "s1",
+          "s2",
+          "s3"
+        ],
+        "cancelOnBlock": [
+          "weak",
+          "heavy"
+        ],
+        "reach": 0.376,
+        "strikeHeight": 0.371,
+        "activeReach": [
+          {
+            "phase": 0,
+            "reach": 0.376,
+            "height": 0.371
+          },
+          {
+            "phase": 0.5,
+            "reach": 0.357,
+            "height": 0.347
+          },
+          {
+            "phase": 1,
+            "reach": 0.332,
+            "height": 0.329
+          }
+        ],
+        "name": "stand_weak",
+        "kind": "strike",
+        "normalVersion": "15.1"
+      },
+      "animation": {
+        "model": "chars/pisuke/pisuke.glb",
+        "modelSha256": "0636f1e1e30fbc4806acef3f5a0402225a83a50227799e96d17421adc92884f6",
+        "file": "normal/v15/pisuke_normals.glb",
+        "clip": "v15_stand_weak",
+        "contact": 0.2,
+        "contactEnd": 0.26,
+        "attackPart": "armL",
+        "measurement": "v15.1 actual skinned surface"
+      },
+      "baseline": {
+        "hitstopFrames": 6,
+        "guardstopFrames": 3
+      },
+      "proposal": {
+        "hitstopFrames": 4,
+        "guardstopFrames": 3,
+        "sound": {
+          "hit": "contact_light",
+          "guard": "guard_light",
+          "swing": "swing_light"
+        },
+        "gameplayValuesChanged": false
+      },
+      "rationale": "Keep measured reach, startup/active/recovery/damage/cancel. Propose symmetric contact holds and distinct hit/guard/swing audio; no claim of new Claude animation integration."
+    },
+    {
+      "key": "pisuke.stand_heavy",
+      "characterId": "pisuke",
+      "name": "stand_heavy",
+      "moveId": "stand_heavy",
+      "kind": "normal",
+      "characterRole": "機動/蹴り/差し返し",
+      "weakness": "低い体力とガード耐久",
+      "role": "中距離/大打撃",
+      "performance": {
+        "startup": 11,
+        "active": 3,
+        "recovery": 22,
+        "damage": 68,
+        "level": "mid",
+        "anim": "stand_heavy",
+        "hitstun": 27,
+        "blockstun": 12,
+        "knockback": 0.08,
+        "blockPushback": 0.085,
+        "cancelWindow": {
+          "hit": [
+            0,
+            5
+          ],
+          "block": [
+            0,
+            2
+          ]
+        },
+        "cancelOnHit": [
+          "s1",
+          "s2",
+          "s3"
+        ],
+        "cancelOnBlock": [],
+        "reach": 0.335,
+        "strikeHeight": 0.252,
+        "activeReach": [
+          {
+            "phase": 0,
+            "reach": 0.335,
+            "height": 0.252
+          },
+          {
+            "phase": 0.5,
+            "reach": 0.305,
+            "height": 0.268
+          },
+          {
+            "phase": 1,
+            "reach": 0.264,
+            "height": 0.289
+          }
+        ],
+        "name": "stand_heavy",
+        "kind": "strike",
+        "normalVersion": "15.1"
+      },
+      "animation": {
+        "model": "chars/pisuke/pisuke.glb",
+        "modelSha256": "0636f1e1e30fbc4806acef3f5a0402225a83a50227799e96d17421adc92884f6",
+        "file": "normal/v15/pisuke_normals.glb",
+        "clip": "v15_stand_heavy",
+        "contact": 0.3,
+        "contactEnd": 0.36,
+        "attackPart": "legR",
+        "measurement": "v15.1 actual skinned surface"
+      },
+      "baseline": {
+        "hitstopFrames": 6,
+        "guardstopFrames": 3
+      },
+      "proposal": {
+        "hitstopFrames": 7,
+        "guardstopFrames": 4,
+        "sound": {
+          "hit": "contact_kick",
+          "guard": "guard_heavy",
+          "swing": "swing_heavy"
+        },
+        "gameplayValuesChanged": false
+      },
+      "rationale": "Keep measured reach, startup/active/recovery/damage/cancel. Propose symmetric contact holds and distinct hit/guard/swing audio; no claim of new Claude animation integration."
+    },
+    {
+      "key": "pisuke.crouch_weak",
+      "characterId": "pisuke",
+      "name": "crouch_weak",
+      "moveId": "crouch_weak",
+      "kind": "normal",
+      "characterRole": "機動/蹴り/差し返し",
+      "weakness": "低い体力とガード耐久",
+      "role": "低姿勢/下段",
+      "performance": {
+        "startup": 5,
+        "active": 2,
+        "recovery": 13,
+        "damage": 27,
+        "level": "low",
+        "anim": "stand_light",
+        "hitstun": 16,
+        "blockstun": 9,
+        "knockback": 0.035,
+        "blockPushback": 0.04,
+        "cancelWindow": {
+          "hit": [
+            0,
+            6
+          ],
+          "block": [
+            0,
+            2
+          ]
+        },
+        "cancelOnHit": [
+          "weak",
+          "heavy",
+          "s1",
+          "s2",
+          "s3"
+        ],
+        "cancelOnBlock": [
+          "weak",
+          "heavy"
+        ],
+        "reach": 0.307,
+        "strikeHeight": 0.102,
+        "activeReach": [
+          {
+            "phase": 0,
+            "reach": 0.307,
+            "height": 0.102
+          },
+          {
+            "phase": 0.5,
+            "reach": 0.303,
+            "height": 0.099
+          },
+          {
+            "phase": 1,
+            "reach": 0.293,
+            "height": 0.077
+          }
+        ],
+        "name": "crouch_weak",
+        "kind": "strike",
+        "normalVersion": "15.1"
+      },
+      "animation": {
+        "model": "chars/pisuke/pisuke.glb",
+        "modelSha256": "0636f1e1e30fbc4806acef3f5a0402225a83a50227799e96d17421adc92884f6",
+        "file": "normal/v15/pisuke_normals.glb",
+        "clip": "v15_crouch_weak",
+        "contact": 0.325,
+        "contactEnd": 0.445,
+        "attackPart": "legL",
+        "measurement": "v15.1 actual skinned surface"
+      },
+      "baseline": {
+        "hitstopFrames": 6,
+        "guardstopFrames": 3
+      },
+      "proposal": {
+        "hitstopFrames": 4,
+        "guardstopFrames": 3,
+        "sound": {
+          "hit": "contact_light",
+          "guard": "guard_light",
+          "swing": "swing_light"
+        },
+        "gameplayValuesChanged": false
+      },
+      "rationale": "Keep measured reach, startup/active/recovery/damage/cancel. Propose symmetric contact holds and distinct hit/guard/swing audio; no claim of new Claude animation integration."
+    },
+    {
+      "key": "pisuke.crouch_heavy",
+      "characterId": "pisuke",
+      "name": "crouch_heavy",
+      "moveId": "crouch_heavy",
+      "kind": "normal",
+      "characterRole": "機動/蹴り/差し返し",
+      "weakness": "低い体力とガード耐久",
+      "role": "低姿勢/下段",
+      "performance": {
+        "startup": 11,
+        "active": 4,
+        "recovery": 24,
+        "damage": 65,
+        "level": "low",
+        "anim": "stand_heavy",
+        "hitstun": 30,
+        "blockstun": 12,
+        "knockback": 0.09,
+        "blockPushback": 0.095,
+        "cancelWindow": {
+          "hit": [
+            0,
+            5
+          ],
+          "block": [
+            0,
+            2
+          ]
+        },
+        "cancelOnHit": [
+          "s1",
+          "s2",
+          "s3"
+        ],
+        "cancelOnBlock": [],
+        "reach": 0.395,
+        "strikeHeight": 0.069,
+        "activeReach": [
+          {
+            "phase": 0,
+            "reach": 0.395,
+            "height": 0.069
+          },
+          {
+            "phase": 0.5,
+            "reach": 0.389,
+            "height": 0.067
+          },
+          {
+            "phase": 1,
+            "reach": 0.372,
+            "height": 0.063
+          }
+        ],
+        "name": "crouch_heavy",
+        "kind": "strike",
+        "normalVersion": "15.1"
+      },
+      "animation": {
+        "model": "chars/pisuke/pisuke.glb",
+        "modelSha256": "0636f1e1e30fbc4806acef3f5a0402225a83a50227799e96d17421adc92884f6",
+        "file": "normal/v15/pisuke_normals.glb",
+        "clip": "v15_crouch_heavy",
+        "contact": 0.4,
+        "contactEnd": 0.46,
+        "attackPart": "legR",
+        "measurement": "v15.1 actual skinned surface"
+      },
+      "baseline": {
+        "hitstopFrames": 6,
+        "guardstopFrames": 3
+      },
+      "proposal": {
+        "hitstopFrames": 7,
+        "guardstopFrames": 4,
+        "sound": {
+          "hit": "contact_kick",
+          "guard": "guard_heavy",
+          "swing": "swing_heavy"
+        },
+        "gameplayValuesChanged": false
+      },
+      "rationale": "Keep measured reach, startup/active/recovery/damage/cancel. Propose symmetric contact holds and distinct hit/guard/swing audio; no claim of new Claude animation integration."
+    },
+    {
+      "key": "pisuke.air_weak",
+      "characterId": "pisuke",
+      "name": "air_weak",
+      "moveId": "air_weak",
+      "kind": "normal",
+      "characterRole": "機動/蹴り/差し返し",
+      "weakness": "低い体力とガード耐久",
+      "role": "空中差し合い",
+      "performance": {
+        "startup": 4,
+        "active": 4,
+        "recovery": 11,
+        "damage": 33,
+        "level": "air",
+        "anim": "stand_light",
+        "hitstun": 15,
+        "blockstun": 9,
+        "knockback": 0.05,
+        "blockPushback": 0.05,
+        "cancelWindow": {
+          "hit": null,
+          "block": null
+        },
+        "cancelOnHit": [],
+        "cancelOnBlock": [],
+        "reach": 0.327,
+        "strikeHeight": 0.211,
+        "activeReach": [
+          {
+            "phase": 0,
+            "reach": 0.327,
+            "height": 0.211
+          },
+          {
+            "phase": 0.5,
+            "reach": 0.326,
+            "height": 0.198
+          },
+          {
+            "phase": 1,
+            "reach": 0.316,
+            "height": 0.184
+          }
+        ],
+        "name": "air_weak",
+        "kind": "strike",
+        "normalVersion": "15.1"
+      },
+      "animation": {
+        "model": "chars/pisuke/pisuke.glb",
+        "modelSha256": "0636f1e1e30fbc4806acef3f5a0402225a83a50227799e96d17421adc92884f6",
+        "file": "normal/v15/pisuke_normals.glb",
+        "clip": "v15_air_weak",
+        "contact": 0.45,
+        "contactEnd": 0.57,
+        "attackPart": "legL",
+        "measurement": "v15.1 actual skinned surface"
+      },
+      "baseline": {
+        "hitstopFrames": 6,
+        "guardstopFrames": 3
+      },
+      "proposal": {
+        "hitstopFrames": 4,
+        "guardstopFrames": 3,
+        "sound": {
+          "hit": "contact_light",
+          "guard": "guard_light",
+          "swing": "swing_light"
+        },
+        "gameplayValuesChanged": false
+      },
+      "rationale": "Keep measured reach, startup/active/recovery/damage/cancel. Propose symmetric contact holds and distinct hit/guard/swing audio; no claim of new Claude animation integration."
+    },
+    {
+      "key": "pisuke.air_heavy",
+      "characterId": "pisuke",
+      "name": "air_heavy",
+      "moveId": "air_heavy",
+      "kind": "normal",
+      "characterRole": "機動/蹴り/差し返し",
+      "weakness": "低い体力とガード耐久",
+      "role": "空中差し合い",
+      "performance": {
+        "startup": 9,
+        "active": 5,
+        "recovery": 18,
+        "damage": 66,
+        "level": "air",
+        "anim": "stand_heavy",
+        "hitstun": 24,
+        "blockstun": 12,
+        "knockback": 0.09,
+        "blockPushback": 0.08,
+        "cancelWindow": {
+          "hit": null,
+          "block": null
+        },
+        "cancelOnHit": [],
+        "cancelOnBlock": [],
+        "reach": 0.325,
+        "strikeHeight": 0.142,
+        "activeReach": [
+          {
+            "phase": 0,
+            "reach": 0.325,
+            "height": 0.142
+          },
+          {
+            "phase": 0.5,
+            "reach": 0.323,
+            "height": 0.179
+          },
+          {
+            "phase": 1,
+            "reach": 0.321,
+            "height": 0.167
+          }
+        ],
+        "name": "air_heavy",
+        "kind": "strike",
+        "normalVersion": "15.1"
+      },
+      "animation": {
+        "model": "chars/pisuke/pisuke.glb",
+        "modelSha256": "0636f1e1e30fbc4806acef3f5a0402225a83a50227799e96d17421adc92884f6",
+        "file": "normal/v15/pisuke_normals.glb",
+        "clip": "v15_air_heavy",
+        "contact": 0.425,
+        "contactEnd": 0.545,
+        "attackPart": "legR",
+        "measurement": "v15.1 actual skinned surface"
+      },
+      "baseline": {
+        "hitstopFrames": 6,
+        "guardstopFrames": 3
+      },
+      "proposal": {
+        "hitstopFrames": 7,
+        "guardstopFrames": 4,
+        "sound": {
+          "hit": "contact_kick",
+          "guard": "guard_heavy",
+          "swing": "swing_heavy"
+        },
+        "gameplayValuesChanged": false
+      },
+      "rationale": "Keep measured reach, startup/active/recovery/damage/cancel. Propose symmetric contact holds and distinct hit/guard/swing audio; no claim of new Claude animation integration."
+    },
+    {
+      "key": "pisuke.s1",
+      "characterId": "pisuke",
+      "name": "風の気弾",
+      "moveId": "s1",
+      "kind": "special",
+      "characterRole": "機動/蹴り/差し返し",
+      "weakness": "低い体力とガード耐久",
+      "role": "牽制/位置を動かす",
+      "performance": {
+        "name": "風の気弾",
+        "kind": "projectile",
+        "startup": 11,
+        "active": 1,
+        "recovery": 17,
+        "damage": 35,
+        "reach": 0.3,
+        "speed": 0.035,
+        "life": 28,
+        "effect": "wind",
+        "level": "mid",
+        "specialIndex": 0
+      },
+      "animation": {
+        "model": "chars/pisuke/pisuke.glb",
+        "modelSha256": "0636f1e1e30fbc4806acef3f5a0402225a83a50227799e96d17421adc92884f6",
+        "file": "cinematic/v14/pisuke/pisuke_animations.glb",
+        "clip": "s1_v14",
+        "contact": 0.15,
+        "measurement": "current authored spec, new P3 measurement pending"
+      },
+      "baseline": {
+        "hitstopFrames": 6,
+        "guardstopFrames": 3
+      },
+      "proposal": {
+        "hitstopFrames": 4,
+        "guardstopFrames": 3,
+        "sound": {
+          "hit": "contact_projectile",
+          "guard": "guard_light",
+          "swing": "projectile_cast"
+        },
+        "gameplayValuesChanged": false
+      },
+      "rationale": "Keep measured reach, startup/active/recovery/damage/cancel. Propose symmetric contact holds and distinct hit/guard/swing audio; no claim of new Claude animation integration."
+    },
+    {
+      "key": "pisuke.s2",
+      "characterId": "pisuke",
+      "name": "空牙蹴り",
+      "moveId": "s2",
+      "kind": "special",
+      "characterRole": "機動/蹴り/差し返し",
+      "weakness": "低い体力とガード耐久",
+      "role": "対空/迎撃",
+      "performance": {
+        "name": "空牙蹴り",
+        "kind": "anti",
+        "startup": 6,
+        "active": 8,
+        "recovery": 22,
+        "damage": 64,
+        "reach": 0.36,
+        "anim": "sp_double_kick",
+        "level": "mid",
+        "specialIndex": 1
+      },
+      "animation": {
+        "model": "chars/pisuke/pisuke.glb",
+        "modelSha256": "0636f1e1e30fbc4806acef3f5a0402225a83a50227799e96d17421adc92884f6",
+        "file": "cinematic/v14/pisuke/pisuke_animations.glb",
+        "clip": "s2_v14",
+        "contact": 0.06666666666666667,
+        "measurement": "current authored spec, new P3 measurement pending"
+      },
+      "baseline": {
+        "hitstopFrames": 6,
+        "guardstopFrames": 3
+      },
+      "proposal": {
+        "hitstopFrames": 6,
+        "guardstopFrames": 4,
+        "sound": {
+          "hit": "contact_kick",
+          "guard": "guard_heavy",
+          "swing": "swing_heavy"
+        },
+        "gameplayValuesChanged": false
+      },
+      "rationale": "Keep measured reach, startup/active/recovery/damage/cancel. Propose symmetric contact holds and distinct hit/guard/swing audio; no claim of new Claude animation integration."
+    },
+    {
+      "key": "pisuke.s3",
+      "characterId": "pisuke",
+      "name": "連脚",
+      "moveId": "s3",
+      "kind": "special",
+      "characterRole": "機動/蹴り/差し返し",
+      "weakness": "低い体力とガード耐久",
+      "role": "前進/ライン回復",
+      "performance": {
+        "name": "連脚",
+        "kind": "dash",
+        "startup": 7,
+        "active": 9,
+        "recovery": 20,
+        "damage": 69,
+        "reach": 0.47,
+        "travel": 0.38,
+        "anim": "sp_double_kick",
+        "level": "mid",
+        "specialIndex": 2
+      },
+      "animation": {
+        "model": "chars/pisuke/pisuke.glb",
+        "modelSha256": "0636f1e1e30fbc4806acef3f5a0402225a83a50227799e96d17421adc92884f6",
+        "file": "cinematic/v14/pisuke/pisuke_animations.glb",
+        "clip": "s3_v14",
+        "contact": 0.08333333333333333,
+        "measurement": "current authored spec, new P3 measurement pending"
+      },
+      "baseline": {
+        "hitstopFrames": 6,
+        "guardstopFrames": 3
+      },
+      "proposal": {
+        "hitstopFrames": 6,
+        "guardstopFrames": 4,
+        "sound": {
+          "hit": "contact_kick",
+          "guard": "guard_heavy",
+          "swing": "swing_heavy"
+        },
+        "gameplayValuesChanged": false
+      },
+      "rationale": "Keep measured reach, startup/active/recovery/damage/cancel. Propose symmetric contact holds and distinct hit/guard/swing audio; no claim of new Claude animation integration."
+    },
+    {
+      "key": "godan.stand_weak",
+      "characterId": "godan",
+      "name": "stand_weak",
+      "moveId": "stand_weak",
+      "kind": "normal",
+      "characterRole": "重量/装甲/大打撃",
+      "weakness": "遅い移動と大きな予備・ガードリスク",
+      "role": "近距離牽制/連係開始",
+      "performance": {
+        "startup": 7,
+        "active": 3,
+        "recovery": 14,
+        "damage": 47,
+        "level": "mid",
+        "anim": "stand_light",
+        "hitstun": 23,
+        "blockstun": 12,
+        "knockback": 0.04,
+        "blockPushback": 0.06,
+        "cancelWindow": {
+          "hit": [
+            0,
+            6
+          ],
+          "block": [
+            0,
+            2
+          ]
+        },
+        "cancelOnHit": [
+          "weak",
+          "heavy",
+          "s1",
+          "s2",
+          "s3"
+        ],
+        "cancelOnBlock": [
+          "weak",
+          "heavy"
+        ],
+        "reach": 0.459,
+        "strikeHeight": 0.28,
+        "activeReach": [
+          {
+            "phase": 0,
+            "reach": 0.459,
+            "height": 0.28
+          },
+          {
+            "phase": 0.5,
+            "reach": 0.449,
+            "height": 0.281
+          },
+          {
+            "phase": 1,
+            "reach": 0.437,
+            "height": 0.283
+          }
+        ],
+        "name": "stand_weak",
+        "kind": "strike",
+        "normalVersion": "15.1"
+      },
+      "animation": {
+        "model": "chars/godan/godan.glb",
+        "modelSha256": "90711ae7d323cc01a1892979ea28d2358b329c19f04dce95c51ec74535b17f65",
+        "file": "normal/v15/godan_normals.glb",
+        "clip": "v15_stand_weak",
+        "contact": 0.425,
+        "contactEnd": 0.485,
+        "attackPart": "armR",
+        "measurement": "v15.1 actual skinned surface"
+      },
+      "baseline": {
+        "hitstopFrames": 6,
+        "guardstopFrames": 3
+      },
+      "proposal": {
+        "hitstopFrames": 6,
+        "guardstopFrames": 3,
+        "sound": {
+          "hit": "contact_light",
+          "guard": "guard_light",
+          "swing": "swing_light"
+        },
+        "gameplayValuesChanged": false
+      },
+      "rationale": "Keep measured reach, startup/active/recovery/damage/cancel. Propose symmetric contact holds and distinct hit/guard/swing audio; no claim of new Claude animation integration."
+    },
+    {
+      "key": "godan.stand_heavy",
+      "characterId": "godan",
+      "name": "stand_heavy",
+      "moveId": "stand_heavy",
+      "kind": "normal",
+      "characterRole": "重量/装甲/大打撃",
+      "weakness": "遅い移動と大きな予備・ガードリスク",
+      "role": "中距離/大打撃",
+      "performance": {
+        "startup": 16,
+        "active": 5,
+        "recovery": 26,
+        "damage": 96,
+        "level": "mid",
+        "anim": "stand_heavy",
+        "hitstun": 33,
+        "blockstun": 15,
+        "knockback": 0.14,
+        "blockPushback": 0.12,
+        "cancelWindow": {
+          "hit": [
+            0,
+            5
+          ],
+          "block": [
+            0,
+            2
+          ]
+        },
+        "cancelOnHit": [
+          "s1",
+          "s2",
+          "s3"
+        ],
+        "cancelOnBlock": [],
+        "reach": 0.557,
+        "strikeHeight": 0.18,
+        "activeReach": [
+          {
+            "phase": 0,
+            "reach": 0.557,
+            "height": 0.18
+          },
+          {
+            "phase": 0.5,
+            "reach": 0.554,
+            "height": 0.17
+          },
+          {
+            "phase": 1,
+            "reach": 0.541,
+            "height": 0.158
+          }
+        ],
+        "name": "stand_heavy",
+        "kind": "strike",
+        "normalVersion": "15.1"
+      },
+      "animation": {
+        "model": "chars/godan/godan.glb",
+        "modelSha256": "90711ae7d323cc01a1892979ea28d2358b329c19f04dce95c51ec74535b17f65",
+        "file": "normal/v15/godan_normals.glb",
+        "clip": "v15_stand_heavy",
+        "contact": 0.45,
+        "contactEnd": 0.57,
+        "attackPart": "armR",
+        "measurement": "v15.1 actual skinned surface"
+      },
+      "baseline": {
+        "hitstopFrames": 6,
+        "guardstopFrames": 3
+      },
+      "proposal": {
+        "hitstopFrames": 10,
+        "guardstopFrames": 5,
+        "sound": {
+          "hit": "contact_stone",
+          "guard": "guard_heavy",
+          "swing": "swing_heavy"
+        },
+        "gameplayValuesChanged": false
+      },
+      "rationale": "Keep measured reach, startup/active/recovery/damage/cancel. Propose symmetric contact holds and distinct hit/guard/swing audio; no claim of new Claude animation integration."
+    },
+    {
+      "key": "godan.crouch_weak",
+      "characterId": "godan",
+      "name": "crouch_weak",
+      "moveId": "crouch_weak",
+      "kind": "normal",
+      "characterRole": "重量/装甲/大打撃",
+      "weakness": "遅い移動と大きな予備・ガードリスク",
+      "role": "低姿勢/下段",
+      "performance": {
+        "startup": 8,
+        "active": 3,
+        "recovery": 15,
+        "damage": 41,
+        "level": "low",
+        "anim": "stand_light",
+        "hitstun": 23,
+        "blockstun": 12,
+        "knockback": 0.04,
+        "blockPushback": 0.06,
+        "cancelWindow": {
+          "hit": [
+            0,
+            6
+          ],
+          "block": [
+            0,
+            2
+          ]
+        },
+        "cancelOnHit": [
+          "weak",
+          "heavy",
+          "s1",
+          "s2",
+          "s3"
+        ],
+        "cancelOnBlock": [
+          "weak",
+          "heavy"
+        ],
+        "reach": 0.426,
+        "strikeHeight": 0.256,
+        "activeReach": [
+          {
+            "phase": 0,
+            "reach": 0.426,
+            "height": 0.256
+          },
+          {
+            "phase": 0.5,
+            "reach": 0.419,
+            "height": 0.251
+          },
+          {
+            "phase": 1,
+            "reach": 0.408,
+            "height": 0.241
+          }
+        ],
+        "name": "crouch_weak",
+        "kind": "strike",
+        "normalVersion": "15.1"
+      },
+      "animation": {
+        "model": "chars/godan/godan.glb",
+        "modelSha256": "90711ae7d323cc01a1892979ea28d2358b329c19f04dce95c51ec74535b17f65",
+        "file": "normal/v15/godan_normals.glb",
+        "clip": "v15_crouch_weak",
+        "contact": 0.45,
+        "contactEnd": 0.55,
+        "attackPart": "armL",
+        "measurement": "v15.1 actual skinned surface"
+      },
+      "baseline": {
+        "hitstopFrames": 6,
+        "guardstopFrames": 3
+      },
+      "proposal": {
+        "hitstopFrames": 6,
+        "guardstopFrames": 3,
+        "sound": {
+          "hit": "contact_light",
+          "guard": "guard_light",
+          "swing": "swing_light"
+        },
+        "gameplayValuesChanged": false
+      },
+      "rationale": "Keep measured reach, startup/active/recovery/damage/cancel. Propose symmetric contact holds and distinct hit/guard/swing audio; no claim of new Claude animation integration."
+    },
+    {
+      "key": "godan.crouch_heavy",
+      "characterId": "godan",
+      "name": "crouch_heavy",
+      "moveId": "crouch_heavy",
+      "kind": "normal",
+      "characterRole": "重量/装甲/大打撃",
+      "weakness": "遅い移動と大きな予備・ガードリスク",
+      "role": "低姿勢/下段",
+      "performance": {
+        "startup": 17,
+        "active": 5,
+        "recovery": 28,
+        "damage": 91,
+        "level": "low",
+        "anim": "stand_heavy",
+        "hitstun": 35,
+        "blockstun": 14,
+        "knockback": 0.15,
+        "blockPushback": 0.13,
+        "cancelWindow": {
+          "hit": [
+            0,
+            5
+          ],
+          "block": [
+            0,
+            2
+          ]
+        },
+        "cancelOnHit": [
+          "s1",
+          "s2",
+          "s3"
+        ],
+        "cancelOnBlock": [],
+        "reach": 0.446,
+        "strikeHeight": 0.197,
+        "activeReach": [
+          {
+            "phase": 0,
+            "reach": 0.446,
+            "height": 0.197
+          },
+          {
+            "phase": 0.5,
+            "reach": 0.444,
+            "height": 0.146
+          },
+          {
+            "phase": 1,
+            "reach": 0.429,
+            "height": 0.086
+          }
+        ],
+        "name": "crouch_heavy",
+        "kind": "strike",
+        "normalVersion": "15.1"
+      },
+      "animation": {
+        "model": "chars/godan/godan.glb",
+        "modelSha256": "90711ae7d323cc01a1892979ea28d2358b329c19f04dce95c51ec74535b17f65",
+        "file": "normal/v15/godan_normals.glb",
+        "clip": "v15_crouch_heavy",
+        "contact": 0.5,
+        "contactEnd": 0.575,
+        "attackPart": "armR",
+        "measurement": "v15.1 actual skinned surface"
+      },
+      "baseline": {
+        "hitstopFrames": 6,
+        "guardstopFrames": 3
+      },
+      "proposal": {
+        "hitstopFrames": 10,
+        "guardstopFrames": 5,
+        "sound": {
+          "hit": "contact_stone",
+          "guard": "guard_heavy",
+          "swing": "swing_heavy"
+        },
+        "gameplayValuesChanged": false
+      },
+      "rationale": "Keep measured reach, startup/active/recovery/damage/cancel. Propose symmetric contact holds and distinct hit/guard/swing audio; no claim of new Claude animation integration."
+    },
+    {
+      "key": "godan.air_weak",
+      "characterId": "godan",
+      "name": "air_weak",
+      "moveId": "air_weak",
+      "kind": "normal",
+      "characterRole": "重量/装甲/大打撃",
+      "weakness": "遅い移動と大きな予備・ガードリスク",
+      "role": "空中差し合い",
+      "performance": {
+        "startup": 10,
+        "active": 5,
+        "recovery": 16,
+        "damage": 48,
+        "level": "air",
+        "anim": "stand_light",
+        "hitstun": 20,
+        "blockstun": 12,
+        "knockback": 0.1,
+        "blockPushback": 0.08,
+        "cancelWindow": {
+          "hit": null,
+          "block": null
+        },
+        "cancelOnHit": [],
+        "cancelOnBlock": [],
+        "reach": 0.466,
+        "strikeHeight": 0.187,
+        "activeReach": [
+          {
+            "phase": 0,
+            "reach": 0.466,
+            "height": 0.187
+          },
+          {
+            "phase": 0.5,
+            "reach": 0.454,
+            "height": 0.188
+          },
+          {
+            "phase": 1,
+            "reach": 0.442,
+            "height": 0.194
+          }
+        ],
+        "name": "air_weak",
+        "kind": "strike",
+        "normalVersion": "15.1"
+      },
+      "animation": {
+        "model": "chars/godan/godan.glb",
+        "modelSha256": "90711ae7d323cc01a1892979ea28d2358b329c19f04dce95c51ec74535b17f65",
+        "file": "normal/v15/godan_normals.glb",
+        "clip": "v15_air_weak",
+        "contact": 0.475,
+        "contactEnd": 0.535,
+        "attackPart": "armR",
+        "measurement": "v15.1 actual skinned surface"
+      },
+      "baseline": {
+        "hitstopFrames": 6,
+        "guardstopFrames": 3
+      },
+      "proposal": {
+        "hitstopFrames": 6,
+        "guardstopFrames": 3,
+        "sound": {
+          "hit": "contact_light",
+          "guard": "guard_light",
+          "swing": "swing_light"
+        },
+        "gameplayValuesChanged": false
+      },
+      "rationale": "Keep measured reach, startup/active/recovery/damage/cancel. Propose symmetric contact holds and distinct hit/guard/swing audio; no claim of new Claude animation integration."
+    },
+    {
+      "key": "godan.air_heavy",
+      "characterId": "godan",
+      "name": "air_heavy",
+      "moveId": "air_heavy",
+      "kind": "normal",
+      "characterRole": "重量/装甲/大打撃",
+      "weakness": "遅い移動と大きな予備・ガードリスク",
+      "role": "空中差し合い",
+      "performance": {
+        "startup": 16,
+        "active": 6,
+        "recovery": 25,
+        "damage": 93,
+        "level": "air",
+        "anim": "stand_heavy",
+        "hitstun": 32,
+        "blockstun": 14,
+        "knockback": 0.15,
+        "blockPushback": 0.12,
+        "cancelWindow": {
+          "hit": null,
+          "block": null
+        },
+        "cancelOnHit": [],
+        "cancelOnBlock": [],
+        "reach": 0.478,
+        "strikeHeight": 0.18,
+        "activeReach": [
+          {
+            "phase": 0,
+            "reach": 0.478,
+            "height": 0.18
+          },
+          {
+            "phase": 0.5,
+            "reach": 0.473,
+            "height": 0.117
+          },
+          {
+            "phase": 1,
+            "reach": 0.459,
+            "height": 0.052
+          }
+        ],
+        "name": "air_heavy",
+        "kind": "strike",
+        "normalVersion": "15.1"
+      },
+      "animation": {
+        "model": "chars/godan/godan.glb",
+        "modelSha256": "90711ae7d323cc01a1892979ea28d2358b329c19f04dce95c51ec74535b17f65",
+        "file": "normal/v15/godan_normals.glb",
+        "clip": "v15_air_heavy",
+        "contact": 0.325,
+        "contactEnd": 0.445,
+        "attackPart": "armL",
+        "measurement": "v15.1 actual skinned surface"
+      },
+      "baseline": {
+        "hitstopFrames": 6,
+        "guardstopFrames": 3
+      },
+      "proposal": {
+        "hitstopFrames": 10,
+        "guardstopFrames": 5,
+        "sound": {
+          "hit": "contact_stone",
+          "guard": "guard_heavy",
+          "swing": "swing_heavy"
+        },
+        "gameplayValuesChanged": false
+      },
+      "rationale": "Keep measured reach, startup/active/recovery/damage/cancel. Propose symmetric contact holds and distinct hit/guard/swing audio; no claim of new Claude animation integration."
+    },
+    {
+      "key": "godan.s1",
+      "characterId": "godan",
+      "name": "地割り",
+      "moveId": "s1",
+      "kind": "special",
+      "characterRole": "重量/装甲/大打撃",
+      "weakness": "遅い移動と大きな予備・ガードリスク",
+      "role": "間合いで押す",
+      "performance": {
+        "name": "地割り",
+        "kind": "strike",
+        "startup": 21,
+        "active": 5,
+        "recovery": 28,
+        "damage": 94,
+        "reach": 0.52,
+        "level": "low",
+        "specialIndex": 0
+      },
+      "animation": {
+        "model": "chars/godan/godan.glb",
+        "modelSha256": "90711ae7d323cc01a1892979ea28d2358b329c19f04dce95c51ec74535b17f65",
+        "file": "cinematic/v14/godan/godan_animations.glb",
+        "clip": "s1_v14",
+        "contact": 0.31666666666666665,
+        "measurement": "current authored spec, new P3 measurement pending"
+      },
+      "baseline": {
+        "hitstopFrames": 6,
+        "guardstopFrames": 3
+      },
+      "proposal": {
+        "hitstopFrames": 10,
+        "guardstopFrames": 5,
+        "sound": {
+          "hit": "contact_stone",
+          "guard": "guard_heavy",
+          "swing": "swing_heavy"
+        },
+        "gameplayValuesChanged": false
+      },
+      "rationale": "Keep measured reach, startup/active/recovery/damage/cancel. Propose symmetric contact holds and distinct hit/guard/swing audio; no claim of new Claude animation integration."
+    },
+    {
+      "key": "godan.s2",
+      "characterId": "godan",
+      "name": "岩砕き",
+      "moveId": "s2",
+      "kind": "special",
+      "characterRole": "重量/装甲/大打撃",
+      "weakness": "遅い移動と大きな予備・ガードリスク",
+      "role": "対空/迎撃",
+      "performance": {
+        "name": "岩砕き",
+        "kind": "anti",
+        "startup": 11,
+        "active": 7,
+        "recovery": 31,
+        "damage": 109,
+        "reach": 0.41,
+        "armor": 1,
+        "level": "mid",
+        "specialIndex": 1
+      },
+      "animation": {
+        "model": "chars/godan/godan.glb",
+        "modelSha256": "90711ae7d323cc01a1892979ea28d2358b329c19f04dce95c51ec74535b17f65",
+        "file": "cinematic/v14/godan/godan_animations.glb",
+        "clip": "s2_v14",
+        "contact": 0.15,
+        "measurement": "current authored spec, new P3 measurement pending"
+      },
+      "baseline": {
+        "hitstopFrames": 6,
+        "guardstopFrames": 3
+      },
+      "proposal": {
+        "hitstopFrames": 9,
+        "guardstopFrames": 5,
+        "sound": {
+          "hit": "contact_stone",
+          "guard": "guard_heavy",
+          "swing": "swing_heavy"
+        },
+        "gameplayValuesChanged": false
+      },
+      "rationale": "Keep measured reach, startup/active/recovery/damage/cancel. Propose symmetric contact holds and distinct hit/guard/swing audio; no claim of new Claude animation integration."
+    },
+    {
+      "key": "godan.s3",
+      "characterId": "godan",
+      "name": "肩当て突進",
+      "moveId": "s3",
+      "kind": "special",
+      "characterRole": "重量/装甲/大打撃",
+      "weakness": "遅い移動と大きな予備・ガードリスク",
+      "role": "前進/ライン回復",
+      "performance": {
+        "name": "肩当て突進",
+        "kind": "dash",
+        "startup": 18,
+        "active": 7,
+        "recovery": 32,
+        "damage": 112,
+        "reach": 0.56,
+        "travel": 0.3,
+        "armor": 1,
+        "anim": "sp_shoulder_charge",
+        "level": "mid",
+        "specialIndex": 2
+      },
+      "animation": {
+        "model": "chars/godan/godan.glb",
+        "modelSha256": "90711ae7d323cc01a1892979ea28d2358b329c19f04dce95c51ec74535b17f65",
+        "file": "cinematic/v14/godan/godan_animations.glb",
+        "clip": "s3_v14",
+        "contact": 0.26666666666666666,
+        "measurement": "current authored spec, new P3 measurement pending"
+      },
+      "baseline": {
+        "hitstopFrames": 6,
+        "guardstopFrames": 3
+      },
+      "proposal": {
+        "hitstopFrames": 10,
+        "guardstopFrames": 5,
+        "sound": {
+          "hit": "contact_stone",
+          "guard": "guard_heavy",
+          "swing": "swing_heavy"
+        },
+        "gameplayValuesChanged": false
+      },
+      "rationale": "Keep measured reach, startup/active/recovery/damage/cancel. Propose symmetric contact holds and distinct hit/guard/swing audio; no claim of new Claude animation integration."
+    },
+    {
+      "key": "hakuma.stand_weak",
+      "characterId": "hakuma",
+      "name": "stand_weak",
+      "moveId": "stand_weak",
+      "kind": "normal",
+      "characterRole": "守勢/掌の押し返し",
+      "weakness": "追い掛け性能が低い",
+      "role": "近距離牽制/連係開始",
+      "performance": {
+        "startup": 7,
+        "active": 4,
+        "recovery": 13,
+        "damage": 39,
+        "level": "mid",
+        "anim": "stand_light",
+        "hitstun": 20,
+        "blockstun": 12,
+        "knockback": 0.05,
+        "blockPushback": 0.05,
+        "cancelWindow": {
+          "hit": [
+            0,
+            6
+          ],
+          "block": [
+            0,
+            2
+          ]
+        },
+        "cancelOnHit": [
+          "weak",
+          "heavy",
+          "s1",
+          "s2",
+          "s3"
+        ],
+        "cancelOnBlock": [
+          "weak",
+          "heavy"
+        ],
+        "reach": 0.487,
+        "strikeHeight": 0.336,
+        "activeReach": [
+          {
+            "phase": 0,
+            "reach": 0.487,
+            "height": 0.336
+          },
+          {
+            "phase": 0.5,
+            "reach": 0.468,
+            "height": 0.304
+          },
+          {
+            "phase": 1,
+            "reach": 0.444,
+            "height": 0.277
+          }
+        ],
+        "name": "stand_weak",
+        "kind": "strike",
+        "normalVersion": "15.1"
+      },
+      "animation": {
+        "model": "chars/hakuma/hakuma.glb",
+        "modelSha256": "bf00b34eb0930751ddcdf548c4866c4c72d1db28bbf6fcf1f78db4c0146d8bed",
+        "file": "normal/v15/hakuma_normals.glb",
+        "clip": "v15_stand_weak",
+        "contact": 0.275,
+        "contactEnd": 0.335,
+        "attackPart": "armL",
+        "measurement": "v15.1 actual skinned surface"
+      },
+      "baseline": {
+        "hitstopFrames": 6,
+        "guardstopFrames": 3
+      },
+      "proposal": {
+        "hitstopFrames": 6,
+        "guardstopFrames": 3,
+        "sound": {
+          "hit": "contact_light",
+          "guard": "guard_light",
+          "swing": "swing_light"
+        },
+        "gameplayValuesChanged": false
+      },
+      "rationale": "Keep measured reach, startup/active/recovery/damage/cancel. Propose symmetric contact holds and distinct hit/guard/swing audio; no claim of new Claude animation integration."
+    },
+    {
+      "key": "hakuma.stand_heavy",
+      "characterId": "hakuma",
+      "name": "stand_heavy",
+      "moveId": "stand_heavy",
+      "kind": "normal",
+      "characterRole": "守勢/掌の押し返し",
+      "weakness": "追い掛け性能が低い",
+      "role": "中距離/大打撃",
+      "performance": {
+        "startup": 14,
+        "active": 5,
+        "recovery": 24,
+        "damage": 82,
+        "level": "mid",
+        "anim": "stand_heavy",
+        "hitstun": 32,
+        "blockstun": 15,
+        "knockback": 0.13,
+        "blockPushback": 0.1,
+        "cancelWindow": {
+          "hit": [
+            0,
+            5
+          ],
+          "block": [
+            0,
+            2
+          ]
+        },
+        "cancelOnHit": [
+          "s1",
+          "s2",
+          "s3"
+        ],
+        "cancelOnBlock": [],
+        "reach": 0.581,
+        "strikeHeight": 0.313,
+        "activeReach": [
+          {
+            "phase": 0,
+            "reach": 0.581,
+            "height": 0.313
+          },
+          {
+            "phase": 0.5,
+            "reach": 0.571,
+            "height": 0.287
+          },
+          {
+            "phase": 1,
+            "reach": 0.551,
+            "height": 0.269
+          }
+        ],
+        "name": "stand_heavy",
+        "kind": "strike",
+        "normalVersion": "15.1"
+      },
+      "animation": {
+        "model": "chars/hakuma/hakuma.glb",
+        "modelSha256": "bf00b34eb0930751ddcdf548c4866c4c72d1db28bbf6fcf1f78db4c0146d8bed",
+        "file": "normal/v15/hakuma_normals.glb",
+        "clip": "v15_stand_heavy",
+        "contact": 0.3,
+        "contactEnd": 0.36,
+        "attackPart": "armR",
+        "measurement": "v15.1 actual skinned surface"
+      },
+      "baseline": {
+        "hitstopFrames": 6,
+        "guardstopFrames": 3
+      },
+      "proposal": {
+        "hitstopFrames": 9,
+        "guardstopFrames": 5,
+        "sound": {
+          "hit": "contact_palm",
+          "guard": "guard_heavy",
+          "swing": "swing_heavy"
+        },
+        "gameplayValuesChanged": false
+      },
+      "rationale": "Keep measured reach, startup/active/recovery/damage/cancel. Propose symmetric contact holds and distinct hit/guard/swing audio; no claim of new Claude animation integration."
+    },
+    {
+      "key": "hakuma.crouch_weak",
+      "characterId": "hakuma",
+      "name": "crouch_weak",
+      "moveId": "crouch_weak",
+      "kind": "normal",
+      "characterRole": "守勢/掌の押し返し",
+      "weakness": "追い掛け性能が低い",
+      "role": "低姿勢/下段",
+      "performance": {
+        "startup": 8,
+        "active": 4,
+        "recovery": 14,
+        "damage": 34,
+        "level": "low",
+        "anim": "stand_light",
+        "hitstun": 20,
+        "blockstun": 12,
+        "knockback": 0.05,
+        "blockPushback": 0.05,
+        "cancelWindow": {
+          "hit": [
+            0,
+            6
+          ],
+          "block": [
+            0,
+            2
+          ]
+        },
+        "cancelOnHit": [
+          "weak",
+          "heavy",
+          "s1",
+          "s2",
+          "s3"
+        ],
+        "cancelOnBlock": [
+          "weak",
+          "heavy"
+        ],
+        "reach": 0.467,
+        "strikeHeight": 0.258,
+        "activeReach": [
+          {
+            "phase": 0,
+            "reach": 0.467,
+            "height": 0.258
+          },
+          {
+            "phase": 0.5,
+            "reach": 0.456,
+            "height": 0.207
+          },
+          {
+            "phase": 1,
+            "reach": 0.432,
+            "height": 0.16
+          }
+        ],
+        "name": "crouch_weak",
+        "kind": "strike",
+        "normalVersion": "15.1"
+      },
+      "animation": {
+        "model": "chars/hakuma/hakuma.glb",
+        "modelSha256": "bf00b34eb0930751ddcdf548c4866c4c72d1db28bbf6fcf1f78db4c0146d8bed",
+        "file": "normal/v15/hakuma_normals.glb",
+        "clip": "v15_crouch_weak",
+        "contact": 0.275,
+        "contactEnd": 0.335,
+        "attackPart": "armR",
+        "measurement": "v15.1 actual skinned surface"
+      },
+      "baseline": {
+        "hitstopFrames": 6,
+        "guardstopFrames": 3
+      },
+      "proposal": {
+        "hitstopFrames": 6,
+        "guardstopFrames": 3,
+        "sound": {
+          "hit": "contact_light",
+          "guard": "guard_light",
+          "swing": "swing_light"
+        },
+        "gameplayValuesChanged": false
+      },
+      "rationale": "Keep measured reach, startup/active/recovery/damage/cancel. Propose symmetric contact holds and distinct hit/guard/swing audio; no claim of new Claude animation integration."
+    },
+    {
+      "key": "hakuma.crouch_heavy",
+      "characterId": "hakuma",
+      "name": "crouch_heavy",
+      "moveId": "crouch_heavy",
+      "kind": "normal",
+      "characterRole": "守勢/掌の押し返し",
+      "weakness": "追い掛け性能が低い",
+      "role": "低姿勢/下段",
+      "performance": {
+        "startup": 15,
+        "active": 5,
+        "recovery": 26,
+        "damage": 78,
+        "level": "low",
+        "anim": "stand_heavy",
+        "hitstun": 34,
+        "blockstun": 14,
+        "knockback": 0.13,
+        "blockPushback": 0.11,
+        "cancelWindow": {
+          "hit": [
+            0,
+            5
+          ],
+          "block": [
+            0,
+            2
+          ]
+        },
+        "cancelOnHit": [
+          "s1",
+          "s2",
+          "s3"
+        ],
+        "cancelOnBlock": [],
+        "reach": 0.532,
+        "strikeHeight": 0.38,
+        "activeReach": [
+          {
+            "phase": 0,
+            "reach": 0.532,
+            "height": 0.38
+          },
+          {
+            "phase": 0.5,
+            "reach": 0.528,
+            "height": 0.323
+          },
+          {
+            "phase": 1,
+            "reach": 0.515,
+            "height": 0.265
+          }
+        ],
+        "name": "crouch_heavy",
+        "kind": "strike",
+        "normalVersion": "15.1"
+      },
+      "animation": {
+        "model": "chars/hakuma/hakuma.glb",
+        "modelSha256": "bf00b34eb0930751ddcdf548c4866c4c72d1db28bbf6fcf1f78db4c0146d8bed",
+        "file": "normal/v15/hakuma_normals.glb",
+        "clip": "v15_crouch_heavy",
+        "contact": 0.625,
+        "contactEnd": 0.725,
+        "attackPart": "armL",
+        "measurement": "v15.1 actual skinned surface"
+      },
+      "baseline": {
+        "hitstopFrames": 6,
+        "guardstopFrames": 3
+      },
+      "proposal": {
+        "hitstopFrames": 9,
+        "guardstopFrames": 5,
+        "sound": {
+          "hit": "contact_palm",
+          "guard": "guard_heavy",
+          "swing": "swing_heavy"
+        },
+        "gameplayValuesChanged": false
+      },
+      "rationale": "Keep measured reach, startup/active/recovery/damage/cancel. Propose symmetric contact holds and distinct hit/guard/swing audio; no claim of new Claude animation integration."
+    },
+    {
+      "key": "hakuma.air_weak",
+      "characterId": "hakuma",
+      "name": "air_weak",
+      "moveId": "air_weak",
+      "kind": "normal",
+      "characterRole": "守勢/掌の押し返し",
+      "weakness": "追い掛け性能が低い",
+      "role": "空中差し合い",
+      "performance": {
+        "startup": 8,
+        "active": 5,
+        "recovery": 13,
+        "damage": 40,
+        "level": "air",
+        "anim": "stand_light",
+        "hitstun": 18,
+        "blockstun": 11,
+        "knockback": 0.08,
+        "blockPushback": 0.06,
+        "cancelWindow": {
+          "hit": null,
+          "block": null
+        },
+        "cancelOnHit": [],
+        "cancelOnBlock": [],
+        "reach": 0.467,
+        "strikeHeight": 0.336,
+        "activeReach": [
+          {
+            "phase": 0,
+            "reach": 0.467,
+            "height": 0.336
+          },
+          {
+            "phase": 0.5,
+            "reach": 0.46,
+            "height": 0.334
+          },
+          {
+            "phase": 1,
+            "reach": 0.445,
+            "height": 0.332
+          }
+        ],
+        "name": "air_weak",
+        "kind": "strike",
+        "normalVersion": "15.1"
+      },
+      "animation": {
+        "model": "chars/hakuma/hakuma.glb",
+        "modelSha256": "bf00b34eb0930751ddcdf548c4866c4c72d1db28bbf6fcf1f78db4c0146d8bed",
+        "file": "normal/v15/hakuma_normals.glb",
+        "clip": "v15_air_weak",
+        "contact": 0.425,
+        "contactEnd": 0.485,
+        "attackPart": "armR",
+        "measurement": "v15.1 actual skinned surface"
+      },
+      "baseline": {
+        "hitstopFrames": 6,
+        "guardstopFrames": 3
+      },
+      "proposal": {
+        "hitstopFrames": 6,
+        "guardstopFrames": 3,
+        "sound": {
+          "hit": "contact_light",
+          "guard": "guard_light",
+          "swing": "swing_light"
+        },
+        "gameplayValuesChanged": false
+      },
+      "rationale": "Keep measured reach, startup/active/recovery/damage/cancel. Propose symmetric contact holds and distinct hit/guard/swing audio; no claim of new Claude animation integration."
+    },
+    {
+      "key": "hakuma.air_heavy",
+      "characterId": "hakuma",
+      "name": "air_heavy",
+      "moveId": "air_heavy",
+      "kind": "normal",
+      "characterRole": "守勢/掌の押し返し",
+      "weakness": "追い掛け性能が低い",
+      "role": "空中差し合い",
+      "performance": {
+        "startup": 13,
+        "active": 6,
+        "recovery": 20,
+        "damage": 79,
+        "level": "air",
+        "anim": "stand_heavy",
+        "hitstun": 27,
+        "blockstun": 14,
+        "knockback": 0.12,
+        "blockPushback": 0.1,
+        "cancelWindow": {
+          "hit": null,
+          "block": null
+        },
+        "cancelOnHit": [],
+        "cancelOnBlock": [],
+        "reach": 0.526,
+        "strikeHeight": 0.235,
+        "activeReach": [
+          {
+            "phase": 0,
+            "reach": 0.526,
+            "height": 0.235
+          },
+          {
+            "phase": 0.5,
+            "reach": 0.52,
+            "height": 0.239
+          },
+          {
+            "phase": 1,
+            "reach": 0.511,
+            "height": 0.237
+          }
+        ],
+        "name": "air_heavy",
+        "kind": "strike",
+        "normalVersion": "15.1"
+      },
+      "animation": {
+        "model": "chars/hakuma/hakuma.glb",
+        "modelSha256": "bf00b34eb0930751ddcdf548c4866c4c72d1db28bbf6fcf1f78db4c0146d8bed",
+        "file": "normal/v15/hakuma_normals.glb",
+        "clip": "v15_air_heavy",
+        "contact": 0.5,
+        "contactEnd": 0.575,
+        "attackPart": "armL",
+        "measurement": "v15.1 actual skinned surface"
+      },
+      "baseline": {
+        "hitstopFrames": 6,
+        "guardstopFrames": 3
+      },
+      "proposal": {
+        "hitstopFrames": 9,
+        "guardstopFrames": 5,
+        "sound": {
+          "hit": "contact_palm",
+          "guard": "guard_heavy",
+          "swing": "swing_heavy"
+        },
+        "gameplayValuesChanged": false
+      },
+      "rationale": "Keep measured reach, startup/active/recovery/damage/cancel. Propose symmetric contact holds and distinct hit/guard/swing audio; no claim of new Claude animation integration."
+    },
+    {
+      "key": "hakuma.s1",
+      "characterId": "hakuma",
+      "name": "雪壁掌",
+      "moveId": "s1",
+      "kind": "special",
+      "characterRole": "守勢/掌の押し返し",
+      "weakness": "追い掛け性能が低い",
+      "role": "間合いで押す",
+      "performance": {
+        "name": "雪壁掌",
+        "kind": "strike",
+        "startup": 11,
+        "active": 6,
+        "recovery": 22,
+        "damage": 81,
+        "reach": 0.56,
+        "anim": "sp_harite",
+        "level": "mid",
+        "specialIndex": 0
+      },
+      "animation": {
+        "model": "chars/hakuma/hakuma.glb",
+        "modelSha256": "bf00b34eb0930751ddcdf548c4866c4c72d1db28bbf6fcf1f78db4c0146d8bed",
+        "file": "cinematic/v14/hakuma/hakuma_animations.glb",
+        "clip": "s1_v14",
+        "contact": 0.15,
+        "measurement": "current authored spec, new P3 measurement pending"
+      },
+      "baseline": {
+        "hitstopFrames": 6,
+        "guardstopFrames": 3
+      },
+      "proposal": {
+        "hitstopFrames": 8,
+        "guardstopFrames": 5,
+        "sound": {
+          "hit": "contact_palm",
+          "guard": "guard_heavy",
+          "swing": "swing_heavy"
+        },
+        "gameplayValuesChanged": false
+      },
+      "rationale": "Keep measured reach, startup/active/recovery/damage/cancel. Propose symmetric contact holds and distinct hit/guard/swing audio; no claim of new Claude animation integration."
+    },
+    {
+      "key": "hakuma.s2",
+      "characterId": "hakuma",
+      "name": "白峰対空",
+      "moveId": "s2",
+      "kind": "special",
+      "characterRole": "守勢/掌の押し返し",
+      "weakness": "追い掛け性能が低い",
+      "role": "対空/迎撃",
+      "performance": {
+        "name": "白峰対空",
+        "kind": "anti",
+        "startup": 8,
+        "active": 7,
+        "recovery": 24,
+        "damage": 85,
+        "reach": 0.43,
+        "anim": "sp_harite",
+        "level": "mid",
+        "specialIndex": 1
+      },
+      "animation": {
+        "model": "chars/hakuma/hakuma.glb",
+        "modelSha256": "bf00b34eb0930751ddcdf548c4866c4c72d1db28bbf6fcf1f78db4c0146d8bed",
+        "file": "cinematic/v14/hakuma/hakuma_animations.glb",
+        "clip": "s2_v14",
+        "contact": 0.1,
+        "measurement": "current authored spec, new P3 measurement pending"
+      },
+      "baseline": {
+        "hitstopFrames": 6,
+        "guardstopFrames": 3
+      },
+      "proposal": {
+        "hitstopFrames": 8,
+        "guardstopFrames": 5,
+        "sound": {
+          "hit": "contact_palm",
+          "guard": "guard_heavy",
+          "swing": "swing_heavy"
+        },
+        "gameplayValuesChanged": false
+      },
+      "rationale": "Keep measured reach, startup/active/recovery/damage/cancel. Propose symmetric contact holds and distinct hit/guard/swing audio; no claim of new Claude animation integration."
+    },
+    {
+      "key": "hakuma.s3",
+      "characterId": "hakuma",
+      "name": "連続突っ張り",
+      "moveId": "s3",
+      "kind": "special",
+      "characterRole": "守勢/掌の押し返し",
+      "weakness": "追い掛け性能が低い",
+      "role": "前進/ライン回復",
+      "performance": {
+        "name": "連続突っ張り",
+        "kind": "dash",
+        "startup": 12,
+        "active": 9,
+        "recovery": 25,
+        "damage": 100,
+        "reach": 0.55,
+        "travel": 0.2,
+        "anim": "sp_harite",
+        "level": "mid",
+        "specialIndex": 2
+      },
+      "animation": {
+        "model": "chars/hakuma/hakuma.glb",
+        "modelSha256": "bf00b34eb0930751ddcdf548c4866c4c72d1db28bbf6fcf1f78db4c0146d8bed",
+        "file": "cinematic/v14/hakuma/hakuma_animations.glb",
+        "clip": "s3_v14",
+        "contact": 0.16666666666666666,
+        "measurement": "current authored spec, new P3 measurement pending"
+      },
+      "baseline": {
+        "hitstopFrames": 6,
+        "guardstopFrames": 3
+      },
+      "proposal": {
+        "hitstopFrames": 9,
+        "guardstopFrames": 5,
+        "sound": {
+          "hit": "contact_palm",
+          "guard": "guard_heavy",
+          "swing": "swing_heavy"
+        },
+        "gameplayValuesChanged": false
+      },
+      "rationale": "Keep measured reach, startup/active/recovery/damage/cancel. Propose symmetric contact holds and distinct hit/guard/swing audio; no claim of new Claude animation integration."
+    },
+    {
+      "key": "chirka.stand_weak",
+      "characterId": "chirka",
+      "name": "stand_weak",
+      "moveId": "stand_weak",
+      "kind": "normal",
+      "characterRole": "フェイント/可変タイミング",
+      "weakness": "一撃の威力と耐久が低い",
+      "role": "近距離牽制/連係開始",
+      "performance": {
+        "startup": 4,
+        "active": 2,
+        "recovery": 11,
+        "damage": 32,
+        "level": "mid",
+        "anim": "stand_light",
+        "hitstun": 16,
+        "blockstun": 9,
+        "knockback": 0.035,
+        "blockPushback": 0.04,
+        "cancelWindow": {
+          "hit": [
+            0,
+            6
+          ],
+          "block": [
+            0,
+            2
+          ]
+        },
+        "cancelOnHit": [
+          "weak",
+          "heavy",
+          "s1",
+          "s2",
+          "s3"
+        ],
+        "cancelOnBlock": [
+          "weak",
+          "heavy"
+        ],
+        "reach": 0.388,
+        "strikeHeight": 0.321,
+        "activeReach": [
+          {
+            "phase": 0,
+            "reach": 0.388,
+            "height": 0.321
+          },
+          {
+            "phase": 0.5,
+            "reach": 0.384,
+            "height": 0.304
+          },
+          {
+            "phase": 1,
+            "reach": 0.373,
+            "height": 0.283
+          }
+        ],
+        "name": "stand_weak",
+        "kind": "strike",
+        "normalVersion": "15.1"
+      },
+      "animation": {
+        "model": "chars/chirka/chirka.glb",
+        "modelSha256": "1badcc2c8e7315b5acc08c25358d338cb71991cabc4b3ec9e616b9cbb6d432ae",
+        "file": "normal/v15/chirka_normals.glb",
+        "clip": "v15_stand_weak",
+        "contact": 0.225,
+        "contactEnd": 0.325,
+        "attackPart": "armL",
+        "measurement": "v15.1 actual skinned surface"
+      },
+      "baseline": {
+        "hitstopFrames": 6,
+        "guardstopFrames": 3
+      },
+      "proposal": {
+        "hitstopFrames": 4,
+        "guardstopFrames": 3,
+        "sound": {
+          "hit": "contact_light",
+          "guard": "guard_light",
+          "swing": "swing_light"
+        },
+        "gameplayValuesChanged": false
+      },
+      "rationale": "Keep measured reach, startup/active/recovery/damage/cancel. Propose symmetric contact holds and distinct hit/guard/swing audio; no claim of new Claude animation integration."
+    },
+    {
+      "key": "chirka.stand_heavy",
+      "characterId": "chirka",
+      "name": "stand_heavy",
+      "moveId": "stand_heavy",
+      "kind": "normal",
+      "characterRole": "フェイント/可変タイミング",
+      "weakness": "一撃の威力と耐久が低い",
+      "role": "中距離/大打撃",
+      "performance": {
+        "startup": 11,
+        "active": 3,
+        "recovery": 22,
+        "damage": 68,
+        "level": "mid",
+        "anim": "stand_heavy",
+        "hitstun": 27,
+        "blockstun": 12,
+        "knockback": 0.08,
+        "blockPushback": 0.08,
+        "cancelWindow": {
+          "hit": [
+            0,
+            5
+          ],
+          "block": [
+            0,
+            2
+          ]
+        },
+        "cancelOnHit": [
+          "s1",
+          "s2",
+          "s3"
+        ],
+        "cancelOnBlock": [],
+        "reach": 0.4,
+        "strikeHeight": 0.352,
+        "activeReach": [
+          {
+            "phase": 0,
+            "reach": 0.4,
+            "height": 0.352
+          },
+          {
+            "phase": 0.5,
+            "reach": 0.391,
+            "height": 0.344
+          },
+          {
+            "phase": 1,
+            "reach": 0.374,
+            "height": 0.342
+          }
+        ],
+        "name": "stand_heavy",
+        "kind": "strike",
+        "normalVersion": "15.1"
+      },
+      "animation": {
+        "model": "chars/chirka/chirka.glb",
+        "modelSha256": "1badcc2c8e7315b5acc08c25358d338cb71991cabc4b3ec9e616b9cbb6d432ae",
+        "file": "normal/v15/chirka_normals.glb",
+        "clip": "v15_stand_heavy",
+        "contact": 0.45,
+        "contactEnd": 0.51,
+        "attackPart": "armR",
+        "measurement": "v15.1 actual skinned surface"
+      },
+      "baseline": {
+        "hitstopFrames": 6,
+        "guardstopFrames": 3
+      },
+      "proposal": {
+        "hitstopFrames": 7,
+        "guardstopFrames": 4,
+        "sound": {
+          "hit": "contact_claw",
+          "guard": "guard_heavy",
+          "swing": "swing_heavy"
+        },
+        "gameplayValuesChanged": false
+      },
+      "rationale": "Keep measured reach, startup/active/recovery/damage/cancel. Propose symmetric contact holds and distinct hit/guard/swing audio; no claim of new Claude animation integration."
+    },
+    {
+      "key": "chirka.crouch_weak",
+      "characterId": "chirka",
+      "name": "crouch_weak",
+      "moveId": "crouch_weak",
+      "kind": "normal",
+      "characterRole": "フェイント/可変タイミング",
+      "weakness": "一撃の威力と耐久が低い",
+      "role": "低姿勢/下段",
+      "performance": {
+        "startup": 5,
+        "active": 2,
+        "recovery": 12,
+        "damage": 28,
+        "level": "low",
+        "anim": "stand_light",
+        "hitstun": 18,
+        "blockstun": 9,
+        "knockback": 0.035,
+        "blockPushback": 0.04,
+        "cancelWindow": {
+          "hit": [
+            0,
+            6
+          ],
+          "block": [
+            0,
+            2
+          ]
+        },
+        "cancelOnHit": [
+          "weak",
+          "heavy",
+          "s1",
+          "s2",
+          "s3"
+        ],
+        "cancelOnBlock": [
+          "weak",
+          "heavy"
+        ],
+        "reach": 0.398,
+        "strikeHeight": 0.146,
+        "activeReach": [
+          {
+            "phase": 0,
+            "reach": 0.398,
+            "height": 0.146
+          },
+          {
+            "phase": 0.5,
+            "reach": 0.395,
+            "height": 0.146
+          },
+          {
+            "phase": 1,
+            "reach": 0.385,
+            "height": 0.148
+          }
+        ],
+        "name": "crouch_weak",
+        "kind": "strike",
+        "normalVersion": "15.1"
+      },
+      "animation": {
+        "model": "chars/chirka/chirka.glb",
+        "modelSha256": "1badcc2c8e7315b5acc08c25358d338cb71991cabc4b3ec9e616b9cbb6d432ae",
+        "file": "normal/v15/chirka_normals.glb",
+        "clip": "v15_crouch_weak",
+        "contact": 0.375,
+        "contactEnd": 0.495,
+        "attackPart": "armR",
+        "measurement": "v15.1 actual skinned surface"
+      },
+      "baseline": {
+        "hitstopFrames": 6,
+        "guardstopFrames": 3
+      },
+      "proposal": {
+        "hitstopFrames": 4,
+        "guardstopFrames": 3,
+        "sound": {
+          "hit": "contact_light",
+          "guard": "guard_light",
+          "swing": "swing_light"
+        },
+        "gameplayValuesChanged": false
+      },
+      "rationale": "Keep measured reach, startup/active/recovery/damage/cancel. Propose symmetric contact holds and distinct hit/guard/swing audio; no claim of new Claude animation integration."
+    },
+    {
+      "key": "chirka.crouch_heavy",
+      "characterId": "chirka",
+      "name": "crouch_heavy",
+      "moveId": "crouch_heavy",
+      "kind": "normal",
+      "characterRole": "フェイント/可変タイミング",
+      "weakness": "一撃の威力と耐久が低い",
+      "role": "低姿勢/下段",
+      "performance": {
+        "startup": 12,
+        "active": 4,
+        "recovery": 24,
+        "damage": 65,
+        "level": "low",
+        "anim": "stand_heavy",
+        "hitstun": 30,
+        "blockstun": 12,
+        "knockback": 0.09,
+        "blockPushback": 0.09,
+        "cancelWindow": {
+          "hit": [
+            0,
+            5
+          ],
+          "block": [
+            0,
+            2
+          ]
+        },
+        "cancelOnHit": [
+          "s1",
+          "s2",
+          "s3"
+        ],
+        "cancelOnBlock": [],
+        "reach": 0.451,
+        "strikeHeight": 0.226,
+        "activeReach": [
+          {
+            "phase": 0,
+            "reach": 0.451,
+            "height": 0.226
+          },
+          {
+            "phase": 0.5,
+            "reach": 0.445,
+            "height": 0.182
+          },
+          {
+            "phase": 1,
+            "reach": 0.431,
+            "height": 0.123
+          }
+        ],
+        "name": "crouch_heavy",
+        "kind": "strike",
+        "normalVersion": "15.1"
+      },
+      "animation": {
+        "model": "chars/chirka/chirka.glb",
+        "modelSha256": "1badcc2c8e7315b5acc08c25358d338cb71991cabc4b3ec9e616b9cbb6d432ae",
+        "file": "normal/v15/chirka_normals.glb",
+        "clip": "v15_crouch_heavy",
+        "contact": 0.5,
+        "contactEnd": 0.575,
+        "attackPart": "armL",
+        "measurement": "v15.1 actual skinned surface"
+      },
+      "baseline": {
+        "hitstopFrames": 6,
+        "guardstopFrames": 3
+      },
+      "proposal": {
+        "hitstopFrames": 7,
+        "guardstopFrames": 4,
+        "sound": {
+          "hit": "contact_claw",
+          "guard": "guard_heavy",
+          "swing": "swing_heavy"
+        },
+        "gameplayValuesChanged": false
+      },
+      "rationale": "Keep measured reach, startup/active/recovery/damage/cancel. Propose symmetric contact holds and distinct hit/guard/swing audio; no claim of new Claude animation integration."
+    },
+    {
+      "key": "chirka.air_weak",
+      "characterId": "chirka",
+      "name": "air_weak",
+      "moveId": "air_weak",
+      "kind": "normal",
+      "characterRole": "フェイント/可変タイミング",
+      "weakness": "一撃の威力と耐久が低い",
+      "role": "空中差し合い",
+      "performance": {
+        "startup": 5,
+        "active": 4,
+        "recovery": 11,
+        "damage": 34,
+        "level": "air",
+        "anim": "stand_light",
+        "hitstun": 16,
+        "blockstun": 9,
+        "knockback": 0.06,
+        "blockPushback": 0.05,
+        "cancelWindow": {
+          "hit": null,
+          "block": null
+        },
+        "cancelOnHit": [],
+        "cancelOnBlock": [],
+        "reach": 0.357,
+        "strikeHeight": 0.323,
+        "activeReach": [
+          {
+            "phase": 0,
+            "reach": 0.357,
+            "height": 0.323
+          },
+          {
+            "phase": 0.5,
+            "reach": 0.349,
+            "height": 0.323
+          },
+          {
+            "phase": 1,
+            "reach": 0.34,
+            "height": 0.322
+          }
+        ],
+        "name": "air_weak",
+        "kind": "strike",
+        "normalVersion": "15.1"
+      },
+      "animation": {
+        "model": "chars/chirka/chirka.glb",
+        "modelSha256": "1badcc2c8e7315b5acc08c25358d338cb71991cabc4b3ec9e616b9cbb6d432ae",
+        "file": "normal/v15/chirka_normals.glb",
+        "clip": "v15_air_weak",
+        "contact": 0.4,
+        "contactEnd": 0.52,
+        "attackPart": "armL",
+        "measurement": "v15.1 actual skinned surface"
+      },
+      "baseline": {
+        "hitstopFrames": 6,
+        "guardstopFrames": 3
+      },
+      "proposal": {
+        "hitstopFrames": 4,
+        "guardstopFrames": 3,
+        "sound": {
+          "hit": "contact_light",
+          "guard": "guard_light",
+          "swing": "swing_light"
+        },
+        "gameplayValuesChanged": false
+      },
+      "rationale": "Keep measured reach, startup/active/recovery/damage/cancel. Propose symmetric contact holds and distinct hit/guard/swing audio; no claim of new Claude animation integration."
+    },
+    {
+      "key": "chirka.air_heavy",
+      "characterId": "chirka",
+      "name": "air_heavy",
+      "moveId": "air_heavy",
+      "kind": "normal",
+      "characterRole": "フェイント/可変タイミング",
+      "weakness": "一撃の威力と耐久が低い",
+      "role": "空中差し合い",
+      "performance": {
+        "startup": 10,
+        "active": 5,
+        "recovery": 18,
+        "damage": 68,
+        "level": "air",
+        "anim": "stand_heavy",
+        "hitstun": 24,
+        "blockstun": 12,
+        "knockback": 0.1,
+        "blockPushback": 0.08,
+        "cancelWindow": {
+          "hit": null,
+          "block": null
+        },
+        "cancelOnHit": [],
+        "cancelOnBlock": [],
+        "reach": 0.368,
+        "strikeHeight": 0.261,
+        "activeReach": [
+          {
+            "phase": 0,
+            "reach": 0.368,
+            "height": 0.261
+          },
+          {
+            "phase": 0.5,
+            "reach": 0.362,
+            "height": 0.263
+          },
+          {
+            "phase": 1,
+            "reach": 0.35,
+            "height": 0.27
+          }
+        ],
+        "name": "air_heavy",
+        "kind": "strike",
+        "normalVersion": "15.1"
+      },
+      "animation": {
+        "model": "chars/chirka/chirka.glb",
+        "modelSha256": "1badcc2c8e7315b5acc08c25358d338cb71991cabc4b3ec9e616b9cbb6d432ae",
+        "file": "normal/v15/chirka_normals.glb",
+        "clip": "v15_air_heavy",
+        "contact": 0.525,
+        "contactEnd": 0.6,
+        "attackPart": "armR",
+        "measurement": "v15.1 actual skinned surface"
+      },
+      "baseline": {
+        "hitstopFrames": 6,
+        "guardstopFrames": 3
+      },
+      "proposal": {
+        "hitstopFrames": 7,
+        "guardstopFrames": 4,
+        "sound": {
+          "hit": "contact_claw",
+          "guard": "guard_heavy",
+          "swing": "swing_heavy"
+        },
+        "gameplayValuesChanged": false
+      },
+      "rationale": "Keep measured reach, startup/active/recovery/damage/cancel. Propose symmetric contact holds and distinct hit/guard/swing audio; no claim of new Claude animation integration."
+    },
+    {
+      "key": "chirka.s1",
+      "characterId": "chirka",
+      "name": "だまし突き",
+      "moveId": "s1",
+      "kind": "special",
+      "characterRole": "フェイント/可変タイミング",
+      "weakness": "一撃の威力と耐久が低い",
+      "role": "間合いで押す",
+      "performance": {
+        "name": "だまし突き",
+        "kind": "strike",
+        "startup": 13,
+        "active": 4,
+        "recovery": 19,
+        "damage": 63,
+        "reach": 0.49,
+        "feintable": true,
+        "delayable": true,
+        "level": "mid",
+        "specialIndex": 0
+      },
+      "animation": {
+        "model": "chars/chirka/chirka.glb",
+        "modelSha256": "1badcc2c8e7315b5acc08c25358d338cb71991cabc4b3ec9e616b9cbb6d432ae",
+        "file": "cinematic/v14/chirka/chirka_animations.glb",
+        "clip": "s1_v14",
+        "contact": 0.18333333333333332,
+        "measurement": "current authored spec, new P3 measurement pending"
+      },
+      "baseline": {
+        "hitstopFrames": 6,
+        "guardstopFrames": 3
+      },
+      "proposal": {
+        "hitstopFrames": 6,
+        "guardstopFrames": 4,
+        "sound": {
+          "hit": "contact_claw",
+          "guard": "guard_heavy",
+          "swing": "swing_heavy"
+        },
+        "gameplayValuesChanged": false
+      },
+      "rationale": "Keep measured reach, startup/active/recovery/damage/cancel. Propose symmetric contact holds and distinct hit/guard/swing audio; no claim of new Claude animation integration."
+    },
+    {
+      "key": "chirka.s2",
+      "characterId": "chirka",
+      "name": "跳ね爪",
+      "moveId": "s2",
+      "kind": "special",
+      "characterRole": "フェイント/可変タイミング",
+      "weakness": "一撃の威力と耐久が低い",
+      "role": "対空/迎撃",
+      "performance": {
+        "name": "跳ね爪",
+        "kind": "anti",
+        "startup": 8,
+        "active": 7,
+        "recovery": 25,
+        "damage": 68,
+        "reach": 0.42,
+        "level": "mid",
+        "specialIndex": 1
+      },
+      "animation": {
+        "model": "chars/chirka/chirka.glb",
+        "modelSha256": "1badcc2c8e7315b5acc08c25358d338cb71991cabc4b3ec9e616b9cbb6d432ae",
+        "file": "cinematic/v14/chirka/chirka_animations.glb",
+        "clip": "s2_v14",
+        "contact": 0.1,
+        "measurement": "current authored spec, new P3 measurement pending"
+      },
+      "baseline": {
+        "hitstopFrames": 6,
+        "guardstopFrames": 3
+      },
+      "proposal": {
+        "hitstopFrames": 6,
+        "guardstopFrames": 4,
+        "sound": {
+          "hit": "contact_claw",
+          "guard": "guard_heavy",
+          "swing": "swing_heavy"
+        },
+        "gameplayValuesChanged": false
+      },
+      "rationale": "Keep measured reach, startup/active/recovery/damage/cancel. Propose symmetric contact holds and distinct hit/guard/swing audio; no claim of new Claude animation integration."
+    },
+    {
+      "key": "chirka.s3",
+      "characterId": "chirka",
+      "name": "影引き爪",
+      "moveId": "s3",
+      "kind": "special",
+      "characterRole": "フェイント/可変タイミング",
+      "weakness": "一撃の威力と耐久が低い",
+      "role": "前進/ライン回復",
+      "performance": {
+        "name": "影引き爪",
+        "kind": "dash",
+        "startup": 13,
+        "active": 5,
+        "recovery": 22,
+        "damage": 66,
+        "reach": 0.5,
+        "travel": 0.21,
+        "feintable": true,
+        "delayable": true,
+        "anim": "sp_feint_claw",
+        "level": "mid",
+        "specialIndex": 2
+      },
+      "animation": {
+        "model": "chars/chirka/chirka.glb",
+        "modelSha256": "1badcc2c8e7315b5acc08c25358d338cb71991cabc4b3ec9e616b9cbb6d432ae",
+        "file": "cinematic/v14/chirka/chirka_animations.glb",
+        "clip": "s3_v14",
+        "contact": 0.18333333333333332,
+        "measurement": "current authored spec, new P3 measurement pending"
+      },
+      "baseline": {
+        "hitstopFrames": 6,
+        "guardstopFrames": 3
+      },
+      "proposal": {
+        "hitstopFrames": 7,
+        "guardstopFrames": 4,
+        "sound": {
+          "hit": "contact_claw",
+          "guard": "guard_heavy",
+          "swing": "swing_heavy"
+        },
+        "gameplayValuesChanged": false
+      },
+      "rationale": "Keep measured reach, startup/active/recovery/damage/cancel. Propose symmetric contact holds and distinct hit/guard/swing audio; no claim of new Claude animation integration."
+    },
+    {
+      "key": "takimaru.stand_weak",
+      "characterId": "takimaru",
+      "name": "stand_weak",
+      "moveId": "stand_weak",
+      "kind": "normal",
+      "characterRole": "近接/掴み",
+      "weakness": "接近までにリスクがある",
+      "role": "近距離牽制/連係開始",
+      "performance": {
+        "startup": 7,
+        "active": 3,
+        "recovery": 14,
+        "damage": 41,
+        "level": "mid",
+        "anim": "stand_light",
+        "hitstun": 21,
+        "blockstun": 11,
+        "knockback": 0.025,
+        "blockPushback": 0.035,
+        "cancelWindow": {
+          "hit": [
+            0,
+            6
+          ],
+          "block": [
+            0,
+            2
+          ]
+        },
+        "cancelOnHit": [
+          "weak",
+          "heavy",
+          "s1",
+          "s2",
+          "s3"
+        ],
+        "cancelOnBlock": [
+          "weak",
+          "heavy"
+        ],
+        "reach": 0.591,
+        "strikeHeight": 0.418,
+        "activeReach": [
+          {
+            "phase": 0,
+            "reach": 0.591,
+            "height": 0.418
+          },
+          {
+            "phase": 0.5,
+            "reach": 0.579,
+            "height": 0.376
+          },
+          {
+            "phase": 1,
+            "reach": 0.559,
+            "height": 0.342
+          }
+        ],
+        "name": "stand_weak",
+        "kind": "strike",
+        "normalVersion": "15.1"
+      },
+      "animation": {
+        "model": "chars/takimaru/takimaru.glb",
+        "modelSha256": "d449bb56f5eda962763eefc9ab4e0291fb4ef4e553379c3f5adcc72ddd7427f1",
+        "file": "normal/v15/takimaru_normals.glb",
+        "clip": "v15_stand_weak",
+        "contact": 0.275,
+        "contactEnd": 0.335,
+        "attackPart": "armL",
+        "measurement": "v15.1 actual skinned surface"
+      },
+      "baseline": {
+        "hitstopFrames": 6,
+        "guardstopFrames": 3
+      },
+      "proposal": {
+        "hitstopFrames": 6,
+        "guardstopFrames": 3,
+        "sound": {
+          "hit": "contact_light",
+          "guard": "guard_light",
+          "swing": "swing_light"
+        },
+        "gameplayValuesChanged": false
+      },
+      "rationale": "Keep measured reach, startup/active/recovery/damage/cancel. Propose symmetric contact holds and distinct hit/guard/swing audio; no claim of new Claude animation integration."
+    },
+    {
+      "key": "takimaru.stand_heavy",
+      "characterId": "takimaru",
+      "name": "stand_heavy",
+      "moveId": "stand_heavy",
+      "kind": "normal",
+      "characterRole": "近接/掴み",
+      "weakness": "接近までにリスクがある",
+      "role": "中距離/大打撃",
+      "performance": {
+        "startup": 14,
+        "active": 4,
+        "recovery": 26,
+        "damage": 85,
+        "level": "mid",
+        "anim": "stand_heavy",
+        "hitstun": 33,
+        "blockstun": 13,
+        "knockback": 0.055,
+        "blockPushback": 0.06,
+        "cancelWindow": {
+          "hit": [
+            0,
+            5
+          ],
+          "block": [
+            0,
+            2
+          ]
+        },
+        "cancelOnHit": [
+          "s1",
+          "s2",
+          "s3"
+        ],
+        "cancelOnBlock": [],
+        "reach": 0.544,
+        "strikeHeight": 0.163,
+        "activeReach": [
+          {
+            "phase": 0,
+            "reach": 0.544,
+            "height": 0.163
+          },
+          {
+            "phase": 0.5,
+            "reach": 0.483,
+            "height": 0.104
+          },
+          {
+            "phase": 1,
+            "reach": 0.405,
+            "height": 0.16
+          }
+        ],
+        "name": "stand_heavy",
+        "kind": "strike",
+        "normalVersion": "15.1"
+      },
+      "animation": {
+        "model": "chars/takimaru/takimaru.glb",
+        "modelSha256": "d449bb56f5eda962763eefc9ab4e0291fb4ef4e553379c3f5adcc72ddd7427f1",
+        "file": "normal/v15/takimaru_normals.glb",
+        "clip": "v15_stand_heavy",
+        "contact": 0.35,
+        "contactEnd": 0.41,
+        "attackPart": "armR",
+        "measurement": "v15.1 actual skinned surface"
+      },
+      "baseline": {
+        "hitstopFrames": 6,
+        "guardstopFrames": 3
+      },
+      "proposal": {
+        "hitstopFrames": 10,
+        "guardstopFrames": 5,
+        "sound": {
+          "hit": "contact_palm",
+          "guard": "guard_heavy",
+          "swing": "swing_heavy"
+        },
+        "gameplayValuesChanged": false
+      },
+      "rationale": "Keep measured reach, startup/active/recovery/damage/cancel. Propose symmetric contact holds and distinct hit/guard/swing audio; no claim of new Claude animation integration."
+    },
+    {
+      "key": "takimaru.crouch_weak",
+      "characterId": "takimaru",
+      "name": "crouch_weak",
+      "moveId": "crouch_weak",
+      "kind": "normal",
+      "characterRole": "近接/掴み",
+      "weakness": "接近までにリスクがある",
+      "role": "低姿勢/下段",
+      "performance": {
+        "startup": 8,
+        "active": 3,
+        "recovery": 15,
+        "damage": 35,
+        "level": "low",
+        "anim": "stand_light",
+        "hitstun": 21,
+        "blockstun": 11,
+        "knockback": 0.025,
+        "blockPushback": 0.035,
+        "cancelWindow": {
+          "hit": [
+            0,
+            6
+          ],
+          "block": [
+            0,
+            2
+          ]
+        },
+        "cancelOnHit": [
+          "weak",
+          "heavy",
+          "s1",
+          "s2",
+          "s3"
+        ],
+        "cancelOnBlock": [
+          "weak",
+          "heavy"
+        ],
+        "reach": 0.621,
+        "strikeHeight": 0.09,
+        "activeReach": [
+          {
+            "phase": 0,
+            "reach": 0.621,
+            "height": 0.09
+          },
+          {
+            "phase": 0.5,
+            "reach": 0.619,
+            "height": 0.105
+          },
+          {
+            "phase": 1,
+            "reach": 0.608,
+            "height": 0.127
+          }
+        ],
+        "name": "crouch_weak",
+        "kind": "strike",
+        "normalVersion": "15.1"
+      },
+      "animation": {
+        "model": "chars/takimaru/takimaru.glb",
+        "modelSha256": "d449bb56f5eda962763eefc9ab4e0291fb4ef4e553379c3f5adcc72ddd7427f1",
+        "file": "normal/v15/takimaru_normals.glb",
+        "clip": "v15_crouch_weak",
+        "contact": 0.375,
+        "contactEnd": 0.495,
+        "attackPart": "armR",
+        "measurement": "v15.1 actual skinned surface"
+      },
+      "baseline": {
+        "hitstopFrames": 6,
+        "guardstopFrames": 3
+      },
+      "proposal": {
+        "hitstopFrames": 6,
+        "guardstopFrames": 3,
+        "sound": {
+          "hit": "contact_light",
+          "guard": "guard_light",
+          "swing": "swing_light"
+        },
+        "gameplayValuesChanged": false
+      },
+      "rationale": "Keep measured reach, startup/active/recovery/damage/cancel. Propose symmetric contact holds and distinct hit/guard/swing audio; no claim of new Claude animation integration."
+    },
+    {
+      "key": "takimaru.crouch_heavy",
+      "characterId": "takimaru",
+      "name": "crouch_heavy",
+      "moveId": "crouch_heavy",
+      "kind": "normal",
+      "characterRole": "近接/掴み",
+      "weakness": "接近までにリスクがある",
+      "role": "低姿勢/下段",
+      "performance": {
+        "startup": 15,
+        "active": 4,
+        "recovery": 28,
+        "damage": 80,
+        "level": "low",
+        "anim": "stand_heavy",
+        "hitstun": 35,
+        "blockstun": 13,
+        "knockback": 0.06,
+        "blockPushback": 0.07,
+        "cancelWindow": {
+          "hit": [
+            0,
+            5
+          ],
+          "block": [
+            0,
+            2
+          ]
+        },
+        "cancelOnHit": [
+          "s1",
+          "s2",
+          "s3"
+        ],
+        "cancelOnBlock": [],
+        "reach": 0.607,
+        "strikeHeight": 0.386,
+        "activeReach": [
+          {
+            "phase": 0,
+            "reach": 0.607,
+            "height": 0.386
+          },
+          {
+            "phase": 0.5,
+            "reach": 0.598,
+            "height": 0.337
+          },
+          {
+            "phase": 1,
+            "reach": 0.588,
+            "height": 0.297
+          }
+        ],
+        "name": "crouch_heavy",
+        "kind": "strike",
+        "normalVersion": "15.1"
+      },
+      "animation": {
+        "model": "chars/takimaru/takimaru.glb",
+        "modelSha256": "d449bb56f5eda962763eefc9ab4e0291fb4ef4e553379c3f5adcc72ddd7427f1",
+        "file": "normal/v15/takimaru_normals.glb",
+        "clip": "v15_crouch_heavy",
+        "contact": 0.575,
+        "contactEnd": 0.65,
+        "attackPart": "armL",
+        "measurement": "v15.1 actual skinned surface"
+      },
+      "baseline": {
+        "hitstopFrames": 6,
+        "guardstopFrames": 3
+      },
+      "proposal": {
+        "hitstopFrames": 10,
+        "guardstopFrames": 5,
+        "sound": {
+          "hit": "contact_palm",
+          "guard": "guard_heavy",
+          "swing": "swing_heavy"
+        },
+        "gameplayValuesChanged": false
+      },
+      "rationale": "Keep measured reach, startup/active/recovery/damage/cancel. Propose symmetric contact holds and distinct hit/guard/swing audio; no claim of new Claude animation integration."
+    },
+    {
+      "key": "takimaru.air_weak",
+      "characterId": "takimaru",
+      "name": "air_weak",
+      "moveId": "air_weak",
+      "kind": "normal",
+      "characterRole": "近接/掴み",
+      "weakness": "接近までにリスクがある",
+      "role": "空中差し合い",
+      "performance": {
+        "startup": 8,
+        "active": 5,
+        "recovery": 14,
+        "damage": 42,
+        "level": "air",
+        "anim": "stand_light",
+        "hitstun": 18,
+        "blockstun": 11,
+        "knockback": 0.07,
+        "blockPushback": 0.06,
+        "cancelWindow": {
+          "hit": null,
+          "block": null
+        },
+        "cancelOnHit": [],
+        "cancelOnBlock": [],
+        "reach": 0.542,
+        "strikeHeight": 0.265,
+        "activeReach": [
+          {
+            "phase": 0,
+            "reach": 0.542,
+            "height": 0.265
+          },
+          {
+            "phase": 0.5,
+            "reach": 0.532,
+            "height": 0.245
+          },
+          {
+            "phase": 1,
+            "reach": 0.493,
+            "height": 0.257
+          }
+        ],
+        "name": "air_weak",
+        "kind": "strike",
+        "normalVersion": "15.1"
+      },
+      "animation": {
+        "model": "chars/takimaru/takimaru.glb",
+        "modelSha256": "d449bb56f5eda962763eefc9ab4e0291fb4ef4e553379c3f5adcc72ddd7427f1",
+        "file": "normal/v15/takimaru_normals.glb",
+        "clip": "v15_air_weak",
+        "contact": 0.25,
+        "contactEnd": 0.31,
+        "attackPart": "armL",
+        "measurement": "v15.1 actual skinned surface"
+      },
+      "baseline": {
+        "hitstopFrames": 6,
+        "guardstopFrames": 3
+      },
+      "proposal": {
+        "hitstopFrames": 6,
+        "guardstopFrames": 3,
+        "sound": {
+          "hit": "contact_light",
+          "guard": "guard_light",
+          "swing": "swing_light"
+        },
+        "gameplayValuesChanged": false
+      },
+      "rationale": "Keep measured reach, startup/active/recovery/damage/cancel. Propose symmetric contact holds and distinct hit/guard/swing audio; no claim of new Claude animation integration."
+    },
+    {
+      "key": "takimaru.air_heavy",
+      "characterId": "takimaru",
+      "name": "air_heavy",
+      "moveId": "air_heavy",
+      "kind": "normal",
+      "characterRole": "近接/掴み",
+      "weakness": "接近までにリスクがある",
+      "role": "空中差し合い",
+      "performance": {
+        "startup": 13,
+        "active": 6,
+        "recovery": 23,
+        "damage": 81,
+        "level": "air",
+        "anim": "stand_heavy",
+        "hitstun": 30,
+        "blockstun": 13,
+        "knockback": 0.1,
+        "blockPushback": 0.09,
+        "cancelWindow": {
+          "hit": null,
+          "block": null
+        },
+        "cancelOnHit": [],
+        "cancelOnBlock": [],
+        "reach": 0.615,
+        "strikeHeight": 0.224,
+        "activeReach": [
+          {
+            "phase": 0,
+            "reach": 0.615,
+            "height": 0.224
+          },
+          {
+            "phase": 0.5,
+            "reach": 0.608,
+            "height": 0.256
+          },
+          {
+            "phase": 1,
+            "reach": 0.596,
+            "height": 0.263
+          }
+        ],
+        "name": "air_heavy",
+        "kind": "strike",
+        "normalVersion": "15.1"
+      },
+      "animation": {
+        "model": "chars/takimaru/takimaru.glb",
+        "modelSha256": "d449bb56f5eda962763eefc9ab4e0291fb4ef4e553379c3f5adcc72ddd7427f1",
+        "file": "normal/v15/takimaru_normals.glb",
+        "clip": "v15_air_heavy",
+        "contact": 0.525,
+        "contactEnd": 0.625,
+        "attackPart": "armL",
+        "measurement": "v15.1 actual skinned surface"
+      },
+      "baseline": {
+        "hitstopFrames": 6,
+        "guardstopFrames": 3
+      },
+      "proposal": {
+        "hitstopFrames": 10,
+        "guardstopFrames": 5,
+        "sound": {
+          "hit": "contact_palm",
+          "guard": "guard_heavy",
+          "swing": "swing_heavy"
+        },
+        "gameplayValuesChanged": false
+      },
+      "rationale": "Keep measured reach, startup/active/recovery/damage/cancel. Propose symmetric contact holds and distinct hit/guard/swing audio; no claim of new Claude animation integration."
+    },
+    {
+      "key": "takimaru.s1",
+      "characterId": "takimaru",
+      "name": "大地走り",
+      "moveId": "s1",
+      "kind": "special",
+      "characterRole": "近接/掴み",
+      "weakness": "接近までにリスクがある",
+      "role": "牽制/位置を動かす",
+      "performance": {
+        "name": "大地走り",
+        "kind": "projectile",
+        "startup": 20,
+        "active": 1,
+        "recovery": 30,
+        "damage": 39,
+        "reach": 0.34,
+        "speed": 0.026,
+        "life": 32,
+        "effect": "earth",
+        "level": "mid",
+        "specialIndex": 0
+      },
+      "animation": {
+        "model": "chars/takimaru/takimaru.glb",
+        "modelSha256": "d449bb56f5eda962763eefc9ab4e0291fb4ef4e553379c3f5adcc72ddd7427f1",
+        "file": "cinematic/v14/takimaru/takimaru_animations.glb",
+        "clip": "s1_v14",
+        "contact": 0.3,
+        "measurement": "current authored spec, new P3 measurement pending"
+      },
+      "baseline": {
+        "hitstopFrames": 6,
+        "guardstopFrames": 3
+      },
+      "proposal": {
+        "hitstopFrames": 5,
+        "guardstopFrames": 3,
+        "sound": {
+          "hit": "contact_projectile",
+          "guard": "guard_light",
+          "swing": "projectile_cast"
+        },
+        "gameplayValuesChanged": false
+      },
+      "rationale": "Keep measured reach, startup/active/recovery/damage/cancel. Propose symmetric contact holds and distinct hit/guard/swing audio; no claim of new Claude animation integration."
+    },
+    {
+      "key": "takimaru.s2",
+      "characterId": "takimaru",
+      "name": "抱え上げ",
+      "moveId": "s2",
+      "kind": "special",
+      "characterRole": "近接/掴み",
+      "weakness": "接近までにリスクがある",
+      "role": "対空/迎撃",
+      "performance": {
+        "name": "抱え上げ",
+        "kind": "anti",
+        "startup": 10,
+        "active": 7,
+        "recovery": 27,
+        "damage": 82,
+        "reach": 0.43,
+        "level": "mid",
+        "specialIndex": 1
+      },
+      "animation": {
+        "model": "chars/takimaru/takimaru.glb",
+        "modelSha256": "d449bb56f5eda962763eefc9ab4e0291fb4ef4e553379c3f5adcc72ddd7427f1",
+        "file": "cinematic/v14/takimaru/takimaru_animations.glb",
+        "clip": "s2_v14",
+        "contact": 0.13333333333333333,
+        "measurement": "current authored spec, new P3 measurement pending"
+      },
+      "baseline": {
+        "hitstopFrames": 6,
+        "guardstopFrames": 3
+      },
+      "proposal": {
+        "hitstopFrames": 8,
+        "guardstopFrames": 5,
+        "sound": {
+          "hit": "contact_palm",
+          "guard": "guard_heavy",
+          "swing": "swing_heavy"
+        },
+        "gameplayValuesChanged": false
+      },
+      "rationale": "Keep measured reach, startup/active/recovery/damage/cancel. Propose symmetric contact holds and distinct hit/guard/swing audio; no claim of new Claude animation integration."
+    },
+    {
+      "key": "takimaru.s3",
+      "characterId": "takimaru",
+      "name": "抱え込み",
+      "moveId": "s3",
+      "kind": "special",
+      "characterRole": "近接/掴み",
+      "weakness": "接近までにリスクがある",
+      "role": "接近/拘束",
+      "performance": {
+        "name": "抱え込み",
+        "kind": "throw",
+        "startup": 9,
+        "active": 3,
+        "recovery": 37,
+        "damage": 111,
+        "reach": 0.33,
+        "anim": "sp_bear_grab",
+        "level": "mid",
+        "specialIndex": 2
+      },
+      "animation": {
+        "model": "chars/takimaru/takimaru.glb",
+        "modelSha256": "d449bb56f5eda962763eefc9ab4e0291fb4ef4e553379c3f5adcc72ddd7427f1",
+        "file": "cinematic/v14/takimaru/takimaru_animations.glb",
+        "clip": "s3_v14",
+        "contact": 0.11666666666666667,
+        "measurement": "current authored spec, new P3 measurement pending"
+      },
+      "baseline": {
+        "hitstopFrames": 0,
+        "guardstopFrames": null
+      },
+      "proposal": {
+        "hitstopFrames": 0,
+        "guardstopFrames": null,
+        "sound": {
+          "hit": "contact_palm",
+          "guard": "guard_heavy",
+          "swing": "swing_heavy"
+        },
+        "gameplayValuesChanged": false
+      },
+      "rationale": "Keep measured reach, startup/active/recovery/damage/cancel. Propose symmetric contact holds and distinct hit/guard/swing audio; no claim of new Claude animation integration."
+    },
+    {
+      "key": "yomikage.stand_weak",
+      "characterId": "yomikage",
+      "name": "stand_weak",
+      "moveId": "stand_weak",
+      "kind": "normal",
+      "characterRole": "見切り/反撃",
+      "weakness": "読まれた当て身の大きな隙",
+      "role": "近距離牽制/連係開始",
+      "performance": {
+        "startup": 5,
+        "active": 2,
+        "recovery": 12,
+        "damage": 35,
+        "level": "mid",
+        "anim": "stand_light",
+        "hitstun": 18,
+        "blockstun": 10,
+        "knockback": 0.04,
+        "blockPushback": 0.04,
+        "cancelWindow": {
+          "hit": [
+            0,
+            6
+          ],
+          "block": [
+            0,
+            2
+          ]
+        },
+        "cancelOnHit": [
+          "weak",
+          "heavy",
+          "s1",
+          "s2",
+          "s3"
+        ],
+        "cancelOnBlock": [
+          "weak",
+          "heavy"
+        ],
+        "reach": 0.388,
+        "strikeHeight": 0.355,
+        "activeReach": [
+          {
+            "phase": 0,
+            "reach": 0.388,
+            "height": 0.355
+          },
+          {
+            "phase": 0.5,
+            "reach": 0.368,
+            "height": 0.325
+          },
+          {
+            "phase": 1,
+            "reach": 0.372,
+            "height": 0.328
+          }
+        ],
+        "name": "stand_weak",
+        "kind": "strike",
+        "normalVersion": "15.1"
+      },
+      "animation": {
+        "model": "chars/yomikage/yomikage.glb",
+        "modelSha256": "171a84e010037455dfaaf9c7b6d4a9dc8efe70775a772912c353057e08c01586",
+        "file": "normal/v15/yomikage_normals.glb",
+        "clip": "v15_stand_weak",
+        "contact": 0.25,
+        "contactEnd": 0.37,
+        "attackPart": "armL",
+        "measurement": "v15.1 actual skinned surface"
+      },
+      "baseline": {
+        "hitstopFrames": 6,
+        "guardstopFrames": 3
+      },
+      "proposal": {
+        "hitstopFrames": 4,
+        "guardstopFrames": 3,
+        "sound": {
+          "hit": "contact_light",
+          "guard": "guard_light",
+          "swing": "swing_light"
+        },
+        "gameplayValuesChanged": false
+      },
+      "rationale": "Keep measured reach, startup/active/recovery/damage/cancel. Propose symmetric contact holds and distinct hit/guard/swing audio; no claim of new Claude animation integration."
+    },
+    {
+      "key": "yomikage.stand_heavy",
+      "characterId": "yomikage",
+      "name": "stand_heavy",
+      "moveId": "stand_heavy",
+      "kind": "normal",
+      "characterRole": "見切り/反撃",
+      "weakness": "読まれた当て身の大きな隙",
+      "role": "中距離/大打撃",
+      "performance": {
+        "startup": 12,
+        "active": 3,
+        "recovery": 24,
+        "damage": 74,
+        "level": "mid",
+        "anim": "stand_heavy",
+        "hitstun": 30,
+        "blockstun": 13,
+        "knockback": 0.09,
+        "blockPushback": 0.09,
+        "cancelWindow": {
+          "hit": [
+            0,
+            5
+          ],
+          "block": [
+            0,
+            2
+          ]
+        },
+        "cancelOnHit": [
+          "s1",
+          "s2",
+          "s3"
+        ],
+        "cancelOnBlock": [],
+        "reach": 0.45,
+        "strikeHeight": 0.27,
+        "activeReach": [
+          {
+            "phase": 0,
+            "reach": 0.45,
+            "height": 0.27
+          },
+          {
+            "phase": 0.5,
+            "reach": 0.413,
+            "height": 0.242
+          },
+          {
+            "phase": 1,
+            "reach": 0.355,
+            "height": 0.247
+          }
+        ],
+        "name": "stand_heavy",
+        "kind": "strike",
+        "normalVersion": "15.1"
+      },
+      "animation": {
+        "model": "chars/yomikage/yomikage.glb",
+        "modelSha256": "171a84e010037455dfaaf9c7b6d4a9dc8efe70775a772912c353057e08c01586",
+        "file": "normal/v15/yomikage_normals.glb",
+        "clip": "v15_stand_heavy",
+        "contact": 0.3,
+        "contactEnd": 0.36,
+        "attackPart": "armR",
+        "measurement": "v15.1 actual skinned surface"
+      },
+      "baseline": {
+        "hitstopFrames": 6,
+        "guardstopFrames": 3
+      },
+      "proposal": {
+        "hitstopFrames": 8,
+        "guardstopFrames": 4,
+        "sound": {
+          "hit": "contact_elbow",
+          "guard": "guard_heavy",
+          "swing": "swing_heavy"
+        },
+        "gameplayValuesChanged": false
+      },
+      "rationale": "Keep measured reach, startup/active/recovery/damage/cancel. Propose symmetric contact holds and distinct hit/guard/swing audio; no claim of new Claude animation integration."
+    },
+    {
+      "key": "yomikage.crouch_weak",
+      "characterId": "yomikage",
+      "name": "crouch_weak",
+      "moveId": "crouch_weak",
+      "kind": "normal",
+      "characterRole": "見切り/反撃",
+      "weakness": "読まれた当て身の大きな隙",
+      "role": "低姿勢/下段",
+      "performance": {
+        "startup": 6,
+        "active": 2,
+        "recovery": 13,
+        "damage": 30,
+        "level": "low",
+        "anim": "stand_light",
+        "hitstun": 19,
+        "blockstun": 10,
+        "knockback": 0.04,
+        "blockPushback": 0.04,
+        "cancelWindow": {
+          "hit": [
+            0,
+            6
+          ],
+          "block": [
+            0,
+            2
+          ]
+        },
+        "cancelOnHit": [
+          "weak",
+          "heavy",
+          "s1",
+          "s2",
+          "s3"
+        ],
+        "cancelOnBlock": [
+          "weak",
+          "heavy"
+        ],
+        "reach": 0.417,
+        "strikeHeight": 0.154,
+        "activeReach": [
+          {
+            "phase": 0,
+            "reach": 0.417,
+            "height": 0.154
+          },
+          {
+            "phase": 0.5,
+            "reach": 0.415,
+            "height": 0.153
+          },
+          {
+            "phase": 1,
+            "reach": 0.409,
+            "height": 0.154
+          }
+        ],
+        "name": "crouch_weak",
+        "kind": "strike",
+        "normalVersion": "15.1"
+      },
+      "animation": {
+        "model": "chars/yomikage/yomikage.glb",
+        "modelSha256": "171a84e010037455dfaaf9c7b6d4a9dc8efe70775a772912c353057e08c01586",
+        "file": "normal/v15/yomikage_normals.glb",
+        "clip": "v15_crouch_weak",
+        "contact": 0.35,
+        "contactEnd": 0.47,
+        "attackPart": "armR",
+        "measurement": "v15.1 actual skinned surface"
+      },
+      "baseline": {
+        "hitstopFrames": 6,
+        "guardstopFrames": 3
+      },
+      "proposal": {
+        "hitstopFrames": 4,
+        "guardstopFrames": 3,
+        "sound": {
+          "hit": "contact_light",
+          "guard": "guard_light",
+          "swing": "swing_light"
+        },
+        "gameplayValuesChanged": false
+      },
+      "rationale": "Keep measured reach, startup/active/recovery/damage/cancel. Propose symmetric contact holds and distinct hit/guard/swing audio; no claim of new Claude animation integration."
+    },
+    {
+      "key": "yomikage.crouch_heavy",
+      "characterId": "yomikage",
+      "name": "crouch_heavy",
+      "moveId": "crouch_heavy",
+      "kind": "normal",
+      "characterRole": "見切り/反撃",
+      "weakness": "読まれた当て身の大きな隙",
+      "role": "低姿勢/下段",
+      "performance": {
+        "startup": 13,
+        "active": 4,
+        "recovery": 26,
+        "damage": 71,
+        "level": "low",
+        "anim": "stand_heavy",
+        "hitstun": 33,
+        "blockstun": 13,
+        "knockback": 0.1,
+        "blockPushback": 0.1,
+        "cancelWindow": {
+          "hit": [
+            0,
+            5
+          ],
+          "block": [
+            0,
+            2
+          ]
+        },
+        "cancelOnHit": [
+          "s1",
+          "s2",
+          "s3"
+        ],
+        "cancelOnBlock": [],
+        "reach": 0.437,
+        "strikeHeight": 0.124,
+        "activeReach": [
+          {
+            "phase": 0,
+            "reach": 0.437,
+            "height": 0.124
+          },
+          {
+            "phase": 0.5,
+            "reach": 0.429,
+            "height": 0.124
+          },
+          {
+            "phase": 1,
+            "reach": 0.415,
+            "height": 0.125
+          }
+        ],
+        "name": "crouch_heavy",
+        "kind": "strike",
+        "normalVersion": "15.1"
+      },
+      "animation": {
+        "model": "chars/yomikage/yomikage.glb",
+        "modelSha256": "171a84e010037455dfaaf9c7b6d4a9dc8efe70775a772912c353057e08c01586",
+        "file": "normal/v15/yomikage_normals.glb",
+        "clip": "v15_crouch_heavy",
+        "contact": 0.475,
+        "contactEnd": 0.535,
+        "attackPart": "armR",
+        "measurement": "v15.1 actual skinned surface"
+      },
+      "baseline": {
+        "hitstopFrames": 6,
+        "guardstopFrames": 3
+      },
+      "proposal": {
+        "hitstopFrames": 8,
+        "guardstopFrames": 4,
+        "sound": {
+          "hit": "contact_elbow",
+          "guard": "guard_heavy",
+          "swing": "swing_heavy"
+        },
+        "gameplayValuesChanged": false
+      },
+      "rationale": "Keep measured reach, startup/active/recovery/damage/cancel. Propose symmetric contact holds and distinct hit/guard/swing audio; no claim of new Claude animation integration."
+    },
+    {
+      "key": "yomikage.air_weak",
+      "characterId": "yomikage",
+      "name": "air_weak",
+      "moveId": "air_weak",
+      "kind": "normal",
+      "characterRole": "見切り/反撃",
+      "weakness": "読まれた当て身の大きな隙",
+      "role": "空中差し合い",
+      "performance": {
+        "startup": 6,
+        "active": 4,
+        "recovery": 12,
+        "damage": 36,
+        "level": "air",
+        "anim": "stand_light",
+        "hitstun": 17,
+        "blockstun": 10,
+        "knockback": 0.07,
+        "blockPushback": 0.06,
+        "cancelWindow": {
+          "hit": null,
+          "block": null
+        },
+        "cancelOnHit": [],
+        "cancelOnBlock": [],
+        "reach": 0.342,
+        "strikeHeight": 0.254,
+        "activeReach": [
+          {
+            "phase": 0,
+            "reach": 0.342,
+            "height": 0.254
+          },
+          {
+            "phase": 0.5,
+            "reach": 0.314,
+            "height": 0.227
+          },
+          {
+            "phase": 1,
+            "reach": 0.27,
+            "height": 0.201
+          }
+        ],
+        "name": "air_weak",
+        "kind": "strike",
+        "normalVersion": "15.1"
+      },
+      "animation": {
+        "model": "chars/yomikage/yomikage.glb",
+        "modelSha256": "171a84e010037455dfaaf9c7b6d4a9dc8efe70775a772912c353057e08c01586",
+        "file": "normal/v15/yomikage_normals.glb",
+        "clip": "v15_air_weak",
+        "contact": 0.25,
+        "contactEnd": 0.31,
+        "attackPart": "armL",
+        "measurement": "v15.1 actual skinned surface"
+      },
+      "baseline": {
+        "hitstopFrames": 6,
+        "guardstopFrames": 3
+      },
+      "proposal": {
+        "hitstopFrames": 4,
+        "guardstopFrames": 3,
+        "sound": {
+          "hit": "contact_light",
+          "guard": "guard_light",
+          "swing": "swing_light"
+        },
+        "gameplayValuesChanged": false
+      },
+      "rationale": "Keep measured reach, startup/active/recovery/damage/cancel. Propose symmetric contact holds and distinct hit/guard/swing audio; no claim of new Claude animation integration."
+    },
+    {
+      "key": "yomikage.air_heavy",
+      "characterId": "yomikage",
+      "name": "air_heavy",
+      "moveId": "air_heavy",
+      "kind": "normal",
+      "characterRole": "見切り/反撃",
+      "weakness": "読まれた当て身の大きな隙",
+      "role": "空中差し合い",
+      "performance": {
+        "startup": 11,
+        "active": 5,
+        "recovery": 20,
+        "damage": 73,
+        "level": "air",
+        "anim": "stand_heavy",
+        "hitstun": 26,
+        "blockstun": 13,
+        "knockback": 0.11,
+        "blockPushback": 0.09,
+        "cancelWindow": {
+          "hit": null,
+          "block": null
+        },
+        "cancelOnHit": [],
+        "cancelOnBlock": [],
+        "reach": 0.408,
+        "strikeHeight": 0.19,
+        "activeReach": [
+          {
+            "phase": 0,
+            "reach": 0.408,
+            "height": 0.19
+          },
+          {
+            "phase": 0.5,
+            "reach": 0.402,
+            "height": 0.18
+          },
+          {
+            "phase": 1,
+            "reach": 0.389,
+            "height": 0.167
+          }
+        ],
+        "name": "air_heavy",
+        "kind": "strike",
+        "normalVersion": "15.1"
+      },
+      "animation": {
+        "model": "chars/yomikage/yomikage.glb",
+        "modelSha256": "171a84e010037455dfaaf9c7b6d4a9dc8efe70775a772912c353057e08c01586",
+        "file": "normal/v15/yomikage_normals.glb",
+        "clip": "v15_air_heavy",
+        "contact": 0.45,
+        "contactEnd": 0.525,
+        "attackPart": "armR",
+        "measurement": "v15.1 actual skinned surface"
+      },
+      "baseline": {
+        "hitstopFrames": 6,
+        "guardstopFrames": 3
+      },
+      "proposal": {
+        "hitstopFrames": 8,
+        "guardstopFrames": 4,
+        "sound": {
+          "hit": "contact_elbow",
+          "guard": "guard_heavy",
+          "swing": "swing_heavy"
+        },
+        "gameplayValuesChanged": false
+      },
+      "rationale": "Keep measured reach, startup/active/recovery/damage/cancel. Propose symmetric contact holds and distinct hit/guard/swing audio; no claim of new Claude animation integration."
+    },
+    {
+      "key": "yomikage.s1",
+      "characterId": "yomikage",
+      "name": "残月の波",
+      "moveId": "s1",
+      "kind": "special",
+      "characterRole": "見切り/反撃",
+      "weakness": "読まれた当て身の大きな隙",
+      "role": "牽制/位置を動かす",
+      "performance": {
+        "name": "残月の波",
+        "kind": "projectile",
+        "startup": 13,
+        "active": 1,
+        "recovery": 23,
+        "damage": 45,
+        "reach": 0.38,
+        "speed": 0.047,
+        "life": 58,
+        "effect": "blue",
+        "level": "mid",
+        "specialIndex": 0
+      },
+      "animation": {
+        "model": "chars/yomikage/yomikage.glb",
+        "modelSha256": "171a84e010037455dfaaf9c7b6d4a9dc8efe70775a772912c353057e08c01586",
+        "file": "cinematic/v14/yomikage/yomikage_animations.glb",
+        "clip": "s1_v14",
+        "contact": 0.18333333333333332,
+        "measurement": "current authored spec, new P3 measurement pending"
+      },
+      "baseline": {
+        "hitstopFrames": 6,
+        "guardstopFrames": 3
+      },
+      "proposal": {
+        "hitstopFrames": 5,
+        "guardstopFrames": 3,
+        "sound": {
+          "hit": "contact_projectile",
+          "guard": "guard_light",
+          "swing": "projectile_cast"
+        },
+        "gameplayValuesChanged": false
+      },
+      "rationale": "Keep measured reach, startup/active/recovery/damage/cancel. Propose symmetric contact holds and distinct hit/guard/swing audio; no claim of new Claude animation integration."
+    },
+    {
+      "key": "yomikage.s2",
+      "characterId": "yomikage",
+      "name": "昇り肘",
+      "moveId": "s2",
+      "kind": "special",
+      "characterRole": "見切り/反撃",
+      "weakness": "読まれた当て身の大きな隙",
+      "role": "対空/迎撃",
+      "performance": {
+        "name": "昇り肘",
+        "kind": "anti",
+        "startup": 8,
+        "active": 7,
+        "recovery": 25,
+        "damage": 79,
+        "reach": 0.43,
+        "level": "mid",
+        "specialIndex": 1
+      },
+      "animation": {
+        "model": "chars/yomikage/yomikage.glb",
+        "modelSha256": "171a84e010037455dfaaf9c7b6d4a9dc8efe70775a772912c353057e08c01586",
+        "file": "cinematic/v14/yomikage/yomikage_animations.glb",
+        "clip": "s2_v14",
+        "contact": 0.1,
+        "measurement": "current authored spec, new P3 measurement pending"
+      },
+      "baseline": {
+        "hitstopFrames": 6,
+        "guardstopFrames": 3
+      },
+      "proposal": {
+        "hitstopFrames": 7,
+        "guardstopFrames": 4,
+        "sound": {
+          "hit": "contact_elbow",
+          "guard": "guard_heavy",
+          "swing": "swing_heavy"
+        },
+        "gameplayValuesChanged": false
+      },
+      "rationale": "Keep measured reach, startup/active/recovery/damage/cancel. Propose symmetric contact holds and distinct hit/guard/swing audio; no claim of new Claude animation integration."
+    },
+    {
+      "key": "yomikage.s3",
+      "characterId": "yomikage",
+      "name": "受け返し",
+      "moveId": "s3",
+      "kind": "special",
+      "characterRole": "見切り/反撃",
+      "weakness": "読まれた当て身の大きな隙",
+      "role": "読み/反撃",
+      "performance": {
+        "name": "受け返し",
+        "kind": "counter",
+        "startup": 7,
+        "active": 13,
+        "recovery": 31,
+        "damage": 80,
+        "reach": 0.47,
+        "anim": "sp_counter",
+        "level": "mid",
+        "specialIndex": 2
+      },
+      "animation": {
+        "model": "chars/yomikage/yomikage.glb",
+        "modelSha256": "171a84e010037455dfaaf9c7b6d4a9dc8efe70775a772912c353057e08c01586",
+        "file": "cinematic/v14/yomikage/yomikage_animations.glb",
+        "clip": "s3_v14",
+        "contact": 0.08333333333333333,
+        "measurement": "current authored spec, new P3 measurement pending"
+      },
+      "baseline": {
+        "hitstopFrames": 0,
+        "guardstopFrames": null
+      },
+      "proposal": {
+        "hitstopFrames": 0,
+        "guardstopFrames": null,
+        "sound": {
+          "hit": "contact_elbow",
+          "guard": "guard_heavy",
+          "swing": "swing_heavy"
+        },
+        "gameplayValuesChanged": false
+      },
+      "rationale": "Keep measured reach, startup/active/recovery/damage/cancel. Propose symmetric contact holds and distinct hit/guard/swing audio; no claim of new Claude animation integration."
+    },
+    {
+      "key": "bullet.stand_weak",
+      "characterId": "bullet",
+      "name": "stand_weak",
+      "moveId": "stand_weak",
+      "kind": "normal",
+      "characterRole": "長尾/距離支配",
+      "weakness": "尾の内側と空振りの戻り",
+      "role": "近距離牽制/連係開始",
+      "performance": {
+        "startup": 6,
+        "active": 3,
+        "recovery": 14,
+        "damage": 34,
+        "level": "mid",
+        "anim": "stand_light",
+        "hitstun": 20,
+        "blockstun": 10,
+        "knockback": 0.04,
+        "blockPushback": 0.045,
+        "cancelWindow": {
+          "hit": [
+            0,
+            6
+          ],
+          "block": [
+            0,
+            2
+          ]
+        },
+        "cancelOnHit": [
+          "weak",
+          "heavy",
+          "s1",
+          "s2",
+          "s3"
+        ],
+        "cancelOnBlock": [
+          "weak",
+          "heavy"
+        ],
+        "reach": 0.417,
+        "strikeHeight": 0.407,
+        "activeReach": [
+          {
+            "phase": 0,
+            "reach": 0.417,
+            "height": 0.407
+          },
+          {
+            "phase": 0.5,
+            "reach": 0.409,
+            "height": 0.412
+          },
+          {
+            "phase": 1,
+            "reach": 0.4,
+            "height": 0.416
+          }
+        ],
+        "name": "stand_weak",
+        "kind": "strike",
+        "normalVersion": "15.1"
+      },
+      "animation": {
+        "model": "chars/bullet/bullet.glb",
+        "modelSha256": "abb2765bcf1f7d8fd696b55c992c84b9e52c00b6ba933ec792228f490bed03f4",
+        "file": "normal/v15/bullet_normals.glb",
+        "clip": "v15_stand_weak",
+        "contact": 0.4,
+        "contactEnd": 0.46,
+        "attackPart": "head",
+        "measurement": "v15.1 actual skinned surface"
+      },
+      "baseline": {
+        "hitstopFrames": 6,
+        "guardstopFrames": 3
+      },
+      "proposal": {
+        "hitstopFrames": 5,
+        "guardstopFrames": 3,
+        "sound": {
+          "hit": "contact_light",
+          "guard": "guard_light",
+          "swing": "swing_light"
+        },
+        "gameplayValuesChanged": false
+      },
+      "rationale": "Keep measured reach, startup/active/recovery/damage/cancel. Propose symmetric contact holds and distinct hit/guard/swing audio; no claim of new Claude animation integration."
+    },
+    {
+      "key": "bullet.stand_heavy",
+      "characterId": "bullet",
+      "name": "stand_heavy",
+      "moveId": "stand_heavy",
+      "kind": "normal",
+      "characterRole": "長尾/距離支配",
+      "weakness": "尾の内側と空振りの戻り",
+      "role": "中距離/大打撃",
+      "performance": {
+        "startup": 13,
+        "active": 4,
+        "recovery": 26,
+        "damage": 79,
+        "level": "mid",
+        "anim": "stand_heavy",
+        "hitstun": 32,
+        "blockstun": 13,
+        "knockback": 0.12,
+        "blockPushback": 0.11,
+        "cancelWindow": {
+          "hit": [
+            0,
+            5
+          ],
+          "block": [
+            0,
+            2
+          ]
+        },
+        "cancelOnHit": [
+          "s1",
+          "s2",
+          "s3"
+        ],
+        "cancelOnBlock": [],
+        "reach": 0.656,
+        "strikeHeight": 0.191,
+        "activeReach": [
+          {
+            "phase": 0,
+            "reach": 0.656,
+            "height": 0.191
+          },
+          {
+            "phase": 0.5,
+            "reach": 0.643,
+            "height": 0.247
+          },
+          {
+            "phase": 1,
+            "reach": 0.612,
+            "height": 0.25
+          }
+        ],
+        "name": "stand_heavy",
+        "kind": "strike",
+        "normalVersion": "15.1"
+      },
+      "animation": {
+        "model": "chars/bullet/bullet.glb",
+        "modelSha256": "abb2765bcf1f7d8fd696b55c992c84b9e52c00b6ba933ec792228f490bed03f4",
+        "file": "normal/v15/bullet_normals.glb",
+        "clip": "v15_stand_heavy",
+        "contact": 0.45,
+        "contactEnd": 0.51,
+        "attackPart": "tail",
+        "measurement": "v15.1 actual skinned surface"
+      },
+      "baseline": {
+        "hitstopFrames": 6,
+        "guardstopFrames": 3
+      },
+      "proposal": {
+        "hitstopFrames": 9,
+        "guardstopFrames": 4,
+        "sound": {
+          "hit": "contact_tail",
+          "guard": "guard_heavy",
+          "swing": "swing_heavy"
+        },
+        "gameplayValuesChanged": false
+      },
+      "rationale": "Keep measured reach, startup/active/recovery/damage/cancel. Propose symmetric contact holds and distinct hit/guard/swing audio; no claim of new Claude animation integration."
+    },
+    {
+      "key": "bullet.crouch_weak",
+      "characterId": "bullet",
+      "name": "crouch_weak",
+      "moveId": "crouch_weak",
+      "kind": "normal",
+      "characterRole": "長尾/距離支配",
+      "weakness": "尾の内側と空振りの戻り",
+      "role": "低姿勢/下段",
+      "performance": {
+        "startup": 6,
+        "active": 3,
+        "recovery": 15,
+        "damage": 29,
+        "level": "low",
+        "anim": "stand_light",
+        "hitstun": 20,
+        "blockstun": 10,
+        "knockback": 0.04,
+        "blockPushback": 0.045,
+        "cancelWindow": {
+          "hit": [
+            0,
+            6
+          ],
+          "block": [
+            0,
+            2
+          ]
+        },
+        "cancelOnHit": [
+          "weak",
+          "heavy",
+          "s1",
+          "s2",
+          "s3"
+        ],
+        "cancelOnBlock": [
+          "weak",
+          "heavy"
+        ],
+        "reach": 0.548,
+        "strikeHeight": 0.069,
+        "activeReach": [
+          {
+            "phase": 0,
+            "reach": 0.548,
+            "height": 0.069
+          },
+          {
+            "phase": 0.5,
+            "reach": 0.532,
+            "height": 0.023
+          },
+          {
+            "phase": 1,
+            "reach": 0.5,
+            "height": 0
+          }
+        ],
+        "name": "crouch_weak",
+        "kind": "strike",
+        "normalVersion": "15.1"
+      },
+      "animation": {
+        "model": "chars/bullet/bullet.glb",
+        "modelSha256": "abb2765bcf1f7d8fd696b55c992c84b9e52c00b6ba933ec792228f490bed03f4",
+        "file": "normal/v15/bullet_normals.glb",
+        "clip": "v15_crouch_weak",
+        "contact": 0.375,
+        "contactEnd": 0.435,
+        "attackPart": "tail",
+        "measurement": "v15.1 actual skinned surface"
+      },
+      "baseline": {
+        "hitstopFrames": 6,
+        "guardstopFrames": 3
+      },
+      "proposal": {
+        "hitstopFrames": 5,
+        "guardstopFrames": 3,
+        "sound": {
+          "hit": "contact_light",
+          "guard": "guard_light",
+          "swing": "swing_light"
+        },
+        "gameplayValuesChanged": false
+      },
+      "rationale": "Keep measured reach, startup/active/recovery/damage/cancel. Propose symmetric contact holds and distinct hit/guard/swing audio; no claim of new Claude animation integration."
+    },
+    {
+      "key": "bullet.crouch_heavy",
+      "characterId": "bullet",
+      "name": "crouch_heavy",
+      "moveId": "crouch_heavy",
+      "kind": "normal",
+      "characterRole": "長尾/距離支配",
+      "weakness": "尾の内側と空振りの戻り",
+      "role": "低姿勢/下段",
+      "performance": {
+        "startup": 14,
+        "active": 4,
+        "recovery": 28,
+        "damage": 76,
+        "level": "low",
+        "anim": "stand_heavy",
+        "hitstun": 34,
+        "blockstun": 13,
+        "knockback": 0.13,
+        "blockPushback": 0.12,
+        "cancelWindow": {
+          "hit": [
+            0,
+            5
+          ],
+          "block": [
+            0,
+            2
+          ]
+        },
+        "cancelOnHit": [
+          "s1",
+          "s2",
+          "s3"
+        ],
+        "cancelOnBlock": [],
+        "reach": 0.641,
+        "strikeHeight": 0.007,
+        "activeReach": [
+          {
+            "phase": 0,
+            "reach": 0.641,
+            "height": 0.007
+          },
+          {
+            "phase": 0.5,
+            "reach": 0.621,
+            "height": 0
+          },
+          {
+            "phase": 1,
+            "reach": 0.586,
+            "height": 0
+          }
+        ],
+        "name": "crouch_heavy",
+        "kind": "strike",
+        "normalVersion": "15.1"
+      },
+      "animation": {
+        "model": "chars/bullet/bullet.glb",
+        "modelSha256": "abb2765bcf1f7d8fd696b55c992c84b9e52c00b6ba933ec792228f490bed03f4",
+        "file": "normal/v15/bullet_normals.glb",
+        "clip": "v15_crouch_heavy",
+        "contact": 0.5,
+        "contactEnd": 0.56,
+        "attackPart": "tail",
+        "measurement": "v15.1 actual skinned surface"
+      },
+      "baseline": {
+        "hitstopFrames": 6,
+        "guardstopFrames": 3
+      },
+      "proposal": {
+        "hitstopFrames": 9,
+        "guardstopFrames": 4,
+        "sound": {
+          "hit": "contact_tail",
+          "guard": "guard_heavy",
+          "swing": "swing_heavy"
+        },
+        "gameplayValuesChanged": false
+      },
+      "rationale": "Keep measured reach, startup/active/recovery/damage/cancel. Propose symmetric contact holds and distinct hit/guard/swing audio; no claim of new Claude animation integration."
+    },
+    {
+      "key": "bullet.air_weak",
+      "characterId": "bullet",
+      "name": "air_weak",
+      "moveId": "air_weak",
+      "kind": "normal",
+      "characterRole": "長尾/距離支配",
+      "weakness": "尾の内側と空振りの戻り",
+      "role": "空中差し合い",
+      "performance": {
+        "startup": 6,
+        "active": 5,
+        "recovery": 14,
+        "damage": 35,
+        "level": "air",
+        "anim": "stand_light",
+        "hitstun": 18,
+        "blockstun": 10,
+        "knockback": 0.08,
+        "blockPushback": 0.06,
+        "cancelWindow": {
+          "hit": null,
+          "block": null
+        },
+        "cancelOnHit": [],
+        "cancelOnBlock": [],
+        "reach": 0.551,
+        "strikeHeight": 0.304,
+        "activeReach": [
+          {
+            "phase": 0,
+            "reach": 0.551,
+            "height": 0.304
+          },
+          {
+            "phase": 0.5,
+            "reach": 0.531,
+            "height": 0.303
+          },
+          {
+            "phase": 1,
+            "reach": 0.497,
+            "height": 0.308
+          }
+        ],
+        "name": "air_weak",
+        "kind": "strike",
+        "normalVersion": "15.1"
+      },
+      "animation": {
+        "model": "chars/bullet/bullet.glb",
+        "modelSha256": "abb2765bcf1f7d8fd696b55c992c84b9e52c00b6ba933ec792228f490bed03f4",
+        "file": "normal/v15/bullet_normals.glb",
+        "clip": "v15_air_weak",
+        "contact": 0.35,
+        "contactEnd": 0.41,
+        "attackPart": "tail",
+        "measurement": "v15.1 actual skinned surface"
+      },
+      "baseline": {
+        "hitstopFrames": 6,
+        "guardstopFrames": 3
+      },
+      "proposal": {
+        "hitstopFrames": 5,
+        "guardstopFrames": 3,
+        "sound": {
+          "hit": "contact_light",
+          "guard": "guard_light",
+          "swing": "swing_light"
+        },
+        "gameplayValuesChanged": false
+      },
+      "rationale": "Keep measured reach, startup/active/recovery/damage/cancel. Propose symmetric contact holds and distinct hit/guard/swing audio; no claim of new Claude animation integration."
+    },
+    {
+      "key": "bullet.air_heavy",
+      "characterId": "bullet",
+      "name": "air_heavy",
+      "moveId": "air_heavy",
+      "kind": "normal",
+      "characterRole": "長尾/距離支配",
+      "weakness": "尾の内側と空振りの戻り",
+      "role": "空中差し合い",
+      "performance": {
+        "startup": 14,
+        "active": 6,
+        "recovery": 24,
+        "damage": 72,
+        "level": "air",
+        "anim": "stand_heavy",
+        "hitstun": 31,
+        "blockstun": 13,
+        "knockback": 0.12,
+        "blockPushback": 0.1,
+        "cancelWindow": {
+          "hit": null,
+          "block": null
+        },
+        "cancelOnHit": [],
+        "cancelOnBlock": [],
+        "reach": 0.552,
+        "strikeHeight": 0.097,
+        "activeReach": [
+          {
+            "phase": 0,
+            "reach": 0.552,
+            "height": 0.097
+          },
+          {
+            "phase": 0.5,
+            "reach": 0.546,
+            "height": 0.137
+          },
+          {
+            "phase": 1,
+            "reach": 0.543,
+            "height": 0.194
+          }
+        ],
+        "name": "air_heavy",
+        "kind": "strike",
+        "normalVersion": "15.1"
+      },
+      "animation": {
+        "model": "chars/bullet/bullet.glb",
+        "modelSha256": "abb2765bcf1f7d8fd696b55c992c84b9e52c00b6ba933ec792228f490bed03f4",
+        "file": "normal/v15/bullet_normals.glb",
+        "clip": "v15_air_heavy",
+        "contact": 0.475,
+        "contactEnd": 0.55,
+        "attackPart": "tail",
+        "measurement": "v15.1 actual skinned surface"
+      },
+      "baseline": {
+        "hitstopFrames": 6,
+        "guardstopFrames": 3
+      },
+      "proposal": {
+        "hitstopFrames": 9,
+        "guardstopFrames": 4,
+        "sound": {
+          "hit": "contact_tail",
+          "guard": "guard_heavy",
+          "swing": "swing_heavy"
+        },
+        "gameplayValuesChanged": false
+      },
+      "rationale": "Keep measured reach, startup/active/recovery/damage/cancel. Propose symmetric contact holds and distinct hit/guard/swing audio; no claim of new Claude animation integration."
+    },
+    {
+      "key": "bullet.s1",
+      "characterId": "bullet",
+      "name": "木の実弾",
+      "moveId": "s1",
+      "kind": "special",
+      "characterRole": "長尾/距離支配",
+      "weakness": "尾の内側と空振りの戻り",
+      "role": "牽制/位置を動かす",
+      "performance": {
+        "name": "木の実弾",
+        "kind": "projectile",
+        "startup": 17,
+        "active": 1,
+        "recovery": 28,
+        "damage": 42,
+        "reach": 0.39,
+        "speed": 0.043,
+        "life": 72,
+        "effect": "amber",
+        "level": "mid",
+        "specialIndex": 0
+      },
+      "animation": {
+        "model": "chars/bullet/bullet.glb",
+        "modelSha256": "abb2765bcf1f7d8fd696b55c992c84b9e52c00b6ba933ec792228f490bed03f4",
+        "file": "cinematic/v14/bullet/bullet_animations.glb",
+        "clip": "s1_v14",
+        "contact": 0.25,
+        "measurement": "current authored spec, new P3 measurement pending"
+      },
+      "baseline": {
+        "hitstopFrames": 6,
+        "guardstopFrames": 3
+      },
+      "proposal": {
+        "hitstopFrames": 6,
+        "guardstopFrames": 3,
+        "sound": {
+          "hit": "contact_projectile",
+          "guard": "guard_light",
+          "swing": "projectile_cast"
+        },
+        "gameplayValuesChanged": false
+      },
+      "rationale": "Keep measured reach, startup/active/recovery/damage/cancel. Propose symmetric contact holds and distinct hit/guard/swing audio; no claim of new Claude animation integration."
+    },
+    {
+      "key": "bullet.s2",
+      "characterId": "bullet",
+      "name": "尾跳ね",
+      "moveId": "s2",
+      "kind": "special",
+      "characterRole": "長尾/距離支配",
+      "weakness": "尾の内側と空振りの戻り",
+      "role": "対空/迎撃",
+      "performance": {
+        "name": "尾跳ね",
+        "kind": "anti",
+        "startup": 9,
+        "active": 7,
+        "recovery": 27,
+        "damage": 72,
+        "reach": 0.46,
+        "level": "mid",
+        "specialIndex": 1
+      },
+      "animation": {
+        "model": "chars/bullet/bullet.glb",
+        "modelSha256": "abb2765bcf1f7d8fd696b55c992c84b9e52c00b6ba933ec792228f490bed03f4",
+        "file": "cinematic/v14/bullet/bullet_animations.glb",
+        "clip": "s2_v14",
+        "contact": 0.11666666666666667,
+        "measurement": "current authored spec, new P3 measurement pending"
+      },
+      "baseline": {
+        "hitstopFrames": 6,
+        "guardstopFrames": 3
+      },
+      "proposal": {
+        "hitstopFrames": 8,
+        "guardstopFrames": 4,
+        "sound": {
+          "hit": "contact_tail",
+          "guard": "guard_heavy",
+          "swing": "swing_heavy"
+        },
+        "gameplayValuesChanged": false
+      },
+      "rationale": "Keep measured reach, startup/active/recovery/damage/cancel. Propose symmetric contact holds and distinct hit/guard/swing audio; no claim of new Claude animation integration."
+    },
+    {
+      "key": "bullet.s3",
+      "characterId": "bullet",
+      "name": "尾薙ぎ",
+      "moveId": "s3",
+      "kind": "special",
+      "characterRole": "長尾/距離支配",
+      "weakness": "尾の内側と空振りの戻り",
+      "role": "長尾/距離支配",
+      "performance": {
+        "name": "尾薙ぎ",
+        "kind": "tail",
+        "startup": 19,
+        "active": 6,
+        "recovery": 23,
+        "damage": 91,
+        "reach": 0.651,
+        "minReach": 0.27,
+        "anim": "sp_tail_whip",
+        "dynamicTail": 1,
+        "chargeRelease": true,
+        "level": "mid",
+        "specialIndex": 2
+      },
+      "animation": {
+        "model": "chars/bullet/bullet.glb",
+        "modelSha256": "abb2765bcf1f7d8fd696b55c992c84b9e52c00b6ba933ec792228f490bed03f4",
+        "file": "cinematic/v14/bullet/bullet_polish_anim.glb",
+        "clip": "s3_v14",
+        "contact": 0.31666666666666665,
+        "measurement": "current authored spec, new P3 measurement pending"
+      },
+      "baseline": {
+        "hitstopFrames": 6,
+        "guardstopFrames": 3
+      },
+      "proposal": {
+        "hitstopFrames": 9,
+        "guardstopFrames": 4,
+        "sound": {
+          "hit": "contact_tail",
+          "guard": "guard_heavy",
+          "swing": "swing_heavy"
+        },
+        "gameplayValuesChanged": false
+      },
+      "rationale": "Keep measured reach, startup/active/recovery/damage/cancel. Propose symmetric contact holds and distinct hit/guard/swing audio; no claim of new Claude animation integration."
+    },
+    {
+      "key": "dark_moguzo.stand_weak",
+      "characterId": "dark_moguzo",
+      "name": "stand_weak",
+      "moveId": "stand_weak",
+      "kind": "normal",
+      "characterRole": "高速/連係",
+      "weakness": "低耐久と切り返されるリスク",
+      "role": "近距離牽制/連係開始",
+      "performance": {
+        "startup": 4,
+        "active": 2,
+        "recovery": 13,
+        "damage": 29,
+        "level": "mid",
+        "anim": "stand_light",
+        "hitstun": 17,
+        "blockstun": 8,
+        "knockback": 0.025,
+        "blockPushback": 0.035,
+        "cancelWindow": {
+          "hit": [
+            0,
+            6
+          ],
+          "block": [
+            0,
+            2
+          ]
+        },
+        "cancelOnHit": [
+          "weak",
+          "heavy",
+          "s1",
+          "s2",
+          "s3"
+        ],
+        "cancelOnBlock": [
+          "weak",
+          "heavy"
+        ],
+        "reach": 0.395,
+        "strikeHeight": 0.333,
+        "activeReach": [
+          {
+            "phase": 0,
+            "reach": 0.395,
+            "height": 0.333
+          },
+          {
+            "phase": 0.5,
+            "reach": 0.386,
+            "height": 0.336
+          },
+          {
+            "phase": 1,
+            "reach": 0.376,
+            "height": 0.34
+          }
+        ],
+        "name": "stand_weak",
+        "kind": "strike",
+        "normalVersion": "15.1"
+      },
+      "animation": {
+        "model": "chars/dark_moguzo/dark_moguzo.glb",
+        "modelSha256": "57c1ba36f5c7175d9c496a7bda3c329423022ad220ca7cd52b90688168f6e7ab",
+        "file": "normal/v15/dark_moguzo_normals.glb",
+        "clip": "v15_stand_weak",
+        "contact": 0.325,
+        "contactEnd": 0.385,
+        "attackPart": "armR",
+        "measurement": "v15.1 actual skinned surface"
+      },
+      "baseline": {
+        "hitstopFrames": 6,
+        "guardstopFrames": 3
+      },
+      "proposal": {
+        "hitstopFrames": 4,
+        "guardstopFrames": 3,
+        "sound": {
+          "hit": "contact_light",
+          "guard": "guard_light",
+          "swing": "swing_light"
+        },
+        "gameplayValuesChanged": false
+      },
+      "rationale": "Keep measured reach, startup/active/recovery/damage/cancel. Propose symmetric contact holds and distinct hit/guard/swing audio; no claim of new Claude animation integration."
+    },
+    {
+      "key": "dark_moguzo.stand_heavy",
+      "characterId": "dark_moguzo",
+      "name": "stand_heavy",
+      "moveId": "stand_heavy",
+      "kind": "normal",
+      "characterRole": "高速/連係",
+      "weakness": "低耐久と切り返されるリスク",
+      "role": "中距離/大打撃",
+      "performance": {
+        "startup": 11,
+        "active": 3,
+        "recovery": 24,
+        "damage": 65,
+        "level": "mid",
+        "anim": "stand_heavy",
+        "hitstun": 29,
+        "blockstun": 11,
+        "knockback": 0.07,
+        "blockPushback": 0.08,
+        "cancelWindow": {
+          "hit": [
+            0,
+            5
+          ],
+          "block": [
+            0,
+            2
+          ]
+        },
+        "cancelOnHit": [
+          "s1",
+          "s2",
+          "s3"
+        ],
+        "cancelOnBlock": [],
+        "reach": 0.44,
+        "strikeHeight": 0.18,
+        "activeReach": [
+          {
+            "phase": 0,
+            "reach": 0.44,
+            "height": 0.18
+          },
+          {
+            "phase": 0.5,
+            "reach": 0.392,
+            "height": 0.152
+          },
+          {
+            "phase": 1,
+            "reach": 0.342,
+            "height": 0.16
+          }
+        ],
+        "name": "stand_heavy",
+        "kind": "strike",
+        "normalVersion": "15.1"
+      },
+      "animation": {
+        "model": "chars/dark_moguzo/dark_moguzo.glb",
+        "modelSha256": "57c1ba36f5c7175d9c496a7bda3c329423022ad220ca7cd52b90688168f6e7ab",
+        "file": "normal/v15/dark_moguzo_normals.glb",
+        "clip": "v15_stand_heavy",
+        "contact": 0.3,
+        "contactEnd": 0.36,
+        "attackPart": "armR",
+        "measurement": "v15.1 actual skinned surface"
+      },
+      "baseline": {
+        "hitstopFrames": 6,
+        "guardstopFrames": 3
+      },
+      "proposal": {
+        "hitstopFrames": 8,
+        "guardstopFrames": 4,
+        "sound": {
+          "hit": "contact_fist",
+          "guard": "guard_heavy",
+          "swing": "swing_heavy"
+        },
+        "gameplayValuesChanged": false
+      },
+      "rationale": "Keep measured reach, startup/active/recovery/damage/cancel. Propose symmetric contact holds and distinct hit/guard/swing audio; no claim of new Claude animation integration."
+    },
+    {
+      "key": "dark_moguzo.crouch_weak",
+      "characterId": "dark_moguzo",
+      "name": "crouch_weak",
+      "moveId": "crouch_weak",
+      "kind": "normal",
+      "characterRole": "高速/連係",
+      "weakness": "低耐久と切り返されるリスク",
+      "role": "低姿勢/下段",
+      "performance": {
+        "startup": 5,
+        "active": 2,
+        "recovery": 14,
+        "damage": 25,
+        "level": "low",
+        "anim": "stand_light",
+        "hitstun": 17,
+        "blockstun": 8,
+        "knockback": 0.025,
+        "blockPushback": 0.035,
+        "cancelWindow": {
+          "hit": [
+            0,
+            6
+          ],
+          "block": [
+            0,
+            2
+          ]
+        },
+        "cancelOnHit": [
+          "weak",
+          "heavy",
+          "s1",
+          "s2",
+          "s3"
+        ],
+        "cancelOnBlock": [
+          "weak",
+          "heavy"
+        ],
+        "reach": 0.437,
+        "strikeHeight": 0.174,
+        "activeReach": [
+          {
+            "phase": 0,
+            "reach": 0.437,
+            "height": 0.174
+          },
+          {
+            "phase": 0.5,
+            "reach": 0.435,
+            "height": 0.174
+          },
+          {
+            "phase": 1,
+            "reach": 0.431,
+            "height": 0.18
+          }
+        ],
+        "name": "crouch_weak",
+        "kind": "strike",
+        "normalVersion": "15.1"
+      },
+      "animation": {
+        "model": "chars/dark_moguzo/dark_moguzo.glb",
+        "modelSha256": "57c1ba36f5c7175d9c496a7bda3c329423022ad220ca7cd52b90688168f6e7ab",
+        "file": "normal/v15/dark_moguzo_normals.glb",
+        "clip": "v15_crouch_weak",
+        "contact": 0.325,
+        "contactEnd": 0.445,
+        "attackPart": "armR",
+        "measurement": "v15.1 actual skinned surface"
+      },
+      "baseline": {
+        "hitstopFrames": 6,
+        "guardstopFrames": 3
+      },
+      "proposal": {
+        "hitstopFrames": 4,
+        "guardstopFrames": 3,
+        "sound": {
+          "hit": "contact_light",
+          "guard": "guard_light",
+          "swing": "swing_light"
+        },
+        "gameplayValuesChanged": false
+      },
+      "rationale": "Keep measured reach, startup/active/recovery/damage/cancel. Propose symmetric contact holds and distinct hit/guard/swing audio; no claim of new Claude animation integration."
+    },
+    {
+      "key": "dark_moguzo.crouch_heavy",
+      "characterId": "dark_moguzo",
+      "name": "crouch_heavy",
+      "moveId": "crouch_heavy",
+      "kind": "normal",
+      "characterRole": "高速/連係",
+      "weakness": "低耐久と切り返されるリスク",
+      "role": "低姿勢/下段",
+      "performance": {
+        "startup": 11,
+        "active": 4,
+        "recovery": 26,
+        "damage": 62,
+        "level": "low",
+        "anim": "stand_heavy",
+        "hitstun": 32,
+        "blockstun": 11,
+        "knockback": 0.08,
+        "blockPushback": 0.09,
+        "cancelWindow": {
+          "hit": [
+            0,
+            5
+          ],
+          "block": [
+            0,
+            2
+          ]
+        },
+        "cancelOnHit": [
+          "s1",
+          "s2",
+          "s3"
+        ],
+        "cancelOnBlock": [],
+        "reach": 0.509,
+        "strikeHeight": 0.254,
+        "activeReach": [
+          {
+            "phase": 0,
+            "reach": 0.509,
+            "height": 0.254
+          },
+          {
+            "phase": 0.5,
+            "reach": 0.504,
+            "height": 0.252
+          },
+          {
+            "phase": 1,
+            "reach": 0.489,
+            "height": 0.243
+          }
+        ],
+        "name": "crouch_heavy",
+        "kind": "strike",
+        "normalVersion": "15.1"
+      },
+      "animation": {
+        "model": "chars/dark_moguzo/dark_moguzo.glb",
+        "modelSha256": "57c1ba36f5c7175d9c496a7bda3c329423022ad220ca7cd52b90688168f6e7ab",
+        "file": "normal/v15/dark_moguzo_normals.glb",
+        "clip": "v15_crouch_heavy",
+        "contact": 0.425,
+        "contactEnd": 0.5,
+        "attackPart": "armR",
+        "measurement": "v15.1 actual skinned surface"
+      },
+      "baseline": {
+        "hitstopFrames": 6,
+        "guardstopFrames": 3
+      },
+      "proposal": {
+        "hitstopFrames": 8,
+        "guardstopFrames": 4,
+        "sound": {
+          "hit": "contact_fist",
+          "guard": "guard_heavy",
+          "swing": "swing_heavy"
+        },
+        "gameplayValuesChanged": false
+      },
+      "rationale": "Keep measured reach, startup/active/recovery/damage/cancel. Propose symmetric contact holds and distinct hit/guard/swing audio; no claim of new Claude animation integration."
+    },
+    {
+      "key": "dark_moguzo.air_weak",
+      "characterId": "dark_moguzo",
+      "name": "air_weak",
+      "moveId": "air_weak",
+      "kind": "normal",
+      "characterRole": "高速/連係",
+      "weakness": "低耐久と切り返されるリスク",
+      "role": "空中差し合い",
+      "performance": {
+        "startup": 4,
+        "active": 4,
+        "recovery": 12,
+        "damage": 31,
+        "level": "air",
+        "anim": "stand_light",
+        "hitstun": 16,
+        "blockstun": 9,
+        "knockback": 0.05,
+        "blockPushback": 0.05,
+        "cancelWindow": {
+          "hit": null,
+          "block": null
+        },
+        "cancelOnHit": [],
+        "cancelOnBlock": [],
+        "reach": 0.336,
+        "strikeHeight": 0.113,
+        "activeReach": [
+          {
+            "phase": 0,
+            "reach": 0.336,
+            "height": 0.113
+          },
+          {
+            "phase": 0.5,
+            "reach": 0.321,
+            "height": 0.11
+          },
+          {
+            "phase": 1,
+            "reach": 0.305,
+            "height": 0.111
+          }
+        ],
+        "name": "air_weak",
+        "kind": "strike",
+        "normalVersion": "15.1"
+      },
+      "animation": {
+        "model": "chars/dark_moguzo/dark_moguzo.glb",
+        "modelSha256": "57c1ba36f5c7175d9c496a7bda3c329423022ad220ca7cd52b90688168f6e7ab",
+        "file": "normal/v15/dark_moguzo_normals.glb",
+        "clip": "v15_air_weak",
+        "contact": 0.35,
+        "contactEnd": 0.41,
+        "attackPart": "armR",
+        "measurement": "v15.1 actual skinned surface"
+      },
+      "baseline": {
+        "hitstopFrames": 6,
+        "guardstopFrames": 3
+      },
+      "proposal": {
+        "hitstopFrames": 4,
+        "guardstopFrames": 3,
+        "sound": {
+          "hit": "contact_light",
+          "guard": "guard_light",
+          "swing": "swing_light"
+        },
+        "gameplayValuesChanged": false
+      },
+      "rationale": "Keep measured reach, startup/active/recovery/damage/cancel. Propose symmetric contact holds and distinct hit/guard/swing audio; no claim of new Claude animation integration."
+    },
+    {
+      "key": "dark_moguzo.air_heavy",
+      "characterId": "dark_moguzo",
+      "name": "air_heavy",
+      "moveId": "air_heavy",
+      "kind": "normal",
+      "characterRole": "高速/連係",
+      "weakness": "低耐久と切り返されるリスク",
+      "role": "空中差し合い",
+      "performance": {
+        "startup": 9,
+        "active": 5,
+        "recovery": 20,
+        "damage": 64,
+        "level": "air",
+        "anim": "stand_heavy",
+        "hitstun": 26,
+        "blockstun": 12,
+        "knockback": 0.09,
+        "blockPushback": 0.08,
+        "cancelWindow": {
+          "hit": null,
+          "block": null
+        },
+        "cancelOnHit": [],
+        "cancelOnBlock": [],
+        "reach": 0.262,
+        "strikeHeight": 0.165,
+        "activeReach": [
+          {
+            "phase": 0,
+            "reach": 0.262,
+            "height": 0.165
+          },
+          {
+            "phase": 0.5,
+            "reach": 0.255,
+            "height": 0.19
+          },
+          {
+            "phase": 1,
+            "reach": 0.247,
+            "height": 0.219
+          }
+        ],
+        "name": "air_heavy",
+        "kind": "strike",
+        "normalVersion": "15.1"
+      },
+      "animation": {
+        "model": "chars/dark_moguzo/dark_moguzo.glb",
+        "modelSha256": "57c1ba36f5c7175d9c496a7bda3c329423022ad220ca7cd52b90688168f6e7ab",
+        "file": "normal/v15/dark_moguzo_normals.glb",
+        "clip": "v15_air_heavy",
+        "contact": 0.475,
+        "contactEnd": 0.595,
+        "attackPart": "legR",
+        "measurement": "v15.1 actual skinned surface"
+      },
+      "baseline": {
+        "hitstopFrames": 6,
+        "guardstopFrames": 3
+      },
+      "proposal": {
+        "hitstopFrames": 8,
+        "guardstopFrames": 4,
+        "sound": {
+          "hit": "contact_fist",
+          "guard": "guard_heavy",
+          "swing": "swing_heavy"
+        },
+        "gameplayValuesChanged": false
+      },
+      "rationale": "Keep measured reach, startup/active/recovery/damage/cancel. Propose symmetric contact holds and distinct hit/guard/swing audio; no claim of new Claude animation integration."
+    },
+    {
+      "key": "dark_moguzo.s1",
+      "characterId": "dark_moguzo",
+      "name": "黒い地走波",
+      "moveId": "s1",
+      "kind": "special",
+      "characterRole": "高速/連係",
+      "weakness": "低耐久と切り返されるリスク",
+      "role": "牽制/位置を動かす",
+      "performance": {
+        "name": "黒い地走波",
+        "kind": "projectile",
+        "startup": 11,
+        "active": 1,
+        "recovery": 19,
+        "damage": 51,
+        "reach": 0.42,
+        "speed": 0.049,
+        "life": 80,
+        "effect": "violet",
+        "level": "mid",
+        "specialIndex": 0
+      },
+      "animation": {
+        "model": "chars/dark_moguzo/dark_moguzo.glb",
+        "modelSha256": "57c1ba36f5c7175d9c496a7bda3c329423022ad220ca7cd52b90688168f6e7ab",
+        "file": "cinematic/v14/dark_moguzo/dark_moguzo_animations.glb",
+        "clip": "s1_v14",
+        "contact": 0.15,
+        "measurement": "current authored spec, new P3 measurement pending"
+      },
+      "baseline": {
+        "hitstopFrames": 6,
+        "guardstopFrames": 3
+      },
+      "proposal": {
+        "hitstopFrames": 5,
+        "guardstopFrames": 3,
+        "sound": {
+          "hit": "contact_projectile",
+          "guard": "guard_light",
+          "swing": "projectile_cast"
+        },
+        "gameplayValuesChanged": false
+      },
+      "rationale": "Keep measured reach, startup/active/recovery/damage/cancel. Propose symmetric contact holds and distinct hit/guard/swing audio; no claim of new Claude animation integration."
+    },
+    {
+      "key": "dark_moguzo.s2",
+      "characterId": "dark_moguzo",
+      "name": "逆昇撃",
+      "moveId": "s2",
+      "kind": "special",
+      "characterRole": "高速/連係",
+      "weakness": "低耐久と切り返されるリスク",
+      "role": "対空/迎撃",
+      "performance": {
+        "name": "逆昇撃",
+        "kind": "anti",
+        "startup": 5,
+        "active": 8,
+        "recovery": 31,
+        "damage": 94,
+        "reach": 0.45,
+        "anim": "sp_dark_rush",
+        "level": "mid",
+        "specialIndex": 1
+      },
+      "animation": {
+        "model": "chars/dark_moguzo/dark_moguzo.glb",
+        "modelSha256": "57c1ba36f5c7175d9c496a7bda3c329423022ad220ca7cd52b90688168f6e7ab",
+        "file": "cinematic/v14/dark_moguzo/dark_moguzo_animations.glb",
+        "clip": "s2_v14",
+        "contact": 0.05,
+        "measurement": "current authored spec, new P3 measurement pending"
+      },
+      "baseline": {
+        "hitstopFrames": 6,
+        "guardstopFrames": 3
+      },
+      "proposal": {
+        "hitstopFrames": 8,
+        "guardstopFrames": 4,
+        "sound": {
+          "hit": "contact_fist",
+          "guard": "guard_heavy",
+          "swing": "swing_heavy"
+        },
+        "gameplayValuesChanged": false
+      },
+      "rationale": "Keep measured reach, startup/active/recovery/damage/cancel. Propose symmetric contact holds and distinct hit/guard/swing audio; no claim of new Claude animation integration."
+    },
+    {
+      "key": "dark_moguzo.s3",
+      "characterId": "dark_moguzo",
+      "name": "暗連",
+      "moveId": "s3",
+      "kind": "special",
+      "characterRole": "高速/連係",
+      "weakness": "低耐久と切り返されるリスク",
+      "role": "前進/ライン回復",
+      "performance": {
+        "name": "暗連",
+        "kind": "dash",
+        "startup": 7,
+        "active": 9,
+        "recovery": 24,
+        "damage": 81,
+        "reach": 0.52,
+        "travel": 0.39,
+        "anim": "sp_dark_rush",
+        "level": "mid",
+        "specialIndex": 2
+      },
+      "animation": {
+        "model": "chars/dark_moguzo/dark_moguzo.glb",
+        "modelSha256": "57c1ba36f5c7175d9c496a7bda3c329423022ad220ca7cd52b90688168f6e7ab",
+        "file": "cinematic/v14/dark_moguzo/dark_moguzo_animations.glb",
+        "clip": "s3_v14",
+        "contact": 0.08333333333333333,
+        "measurement": "current authored spec, new P3 measurement pending"
+      },
+      "baseline": {
+        "hitstopFrames": 6,
+        "guardstopFrames": 3
+      },
+      "proposal": {
+        "hitstopFrames": 7,
+        "guardstopFrames": 4,
+        "sound": {
+          "hit": "contact_fist",
+          "guard": "guard_heavy",
+          "swing": "swing_heavy"
+        },
+        "gameplayValuesChanged": false
+      },
+      "rationale": "Keep measured reach, startup/active/recovery/damage/cancel. Propose symmetric contact holds and distinct hit/guard/swing audio; no claim of new Claude animation integration."
+    }
+  ]
+}
