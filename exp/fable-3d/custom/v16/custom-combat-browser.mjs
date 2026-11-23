@@ -88,11 +88,14 @@ try{
  },undefined,{timeout:180000});
  assert.equal(report.normalCases.length,54);assert.equal(report.projectileCases.length,54);assert.equal(report.rigCases.length,9);
  await writeFile(output+'/report.json',JSON.stringify({...report,errors},null,2));
- await page.locator('#editor details').nth(1).locator('summary').click();
+ const tabbedEditor=await page.locator('#p4-editor-tab-0').count()>0;
+ if(!tabbedEditor)await page.locator('#editor details').nth(1).locator('summary').click();
  for(const baseId of ['moguzo','godan','bullet']){
+  if(tabbedEditor)await page.locator('#p4-editor-tab-0').click();
   await page.locator('#avatar-base').selectOption(baseId);
   await page.locator('#avatar-name').fill('検証 '+baseId);
   await page.locator('#part-head').selectOption(baseId==='godan'?'pisuke':'godan');
+  if(tabbedEditor)await page.locator('#p4-editor-tab-1').click();
   await page.locator('#avatar-pattern').selectOption('spots');
   await page.locator('#color-fur').fill('#397db9');
   await page.waitForFunction(id=>{const d=mamokenStory.player?.definition;return d?.appearance.baseId===id&&d.name==='検証 '+id&&d.appearance.parts.head===(id==='godan'?'pisuke':'godan')&&d.appearance.pattern==='spots'&&d.appearance.palette.fur==='#397db9';},baseId,{timeout:60000});

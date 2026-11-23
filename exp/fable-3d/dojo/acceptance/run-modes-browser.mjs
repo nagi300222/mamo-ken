@@ -60,7 +60,7 @@ try{
  }
  await finish(1);await result();assert.equal(await page.locator('#result-title').textContent(),'SURVIVAL END');assert.equal(await page.locator('#run-next').isVisible(),false);assert.match(await page.locator('#result-description').textContent(),/残HP 0/);
  await page.screenshot({path:evidence+'/survival-end.png'});
- await page.locator('#result-select').tap();await page.setViewportSize({width:393,height:852});await page.locator('#match-mode').selectOption('practice');await page.locator('#start').tap();await page.waitForFunction(()=>mamoken3d.practice.enabled&&mamoken3d.battle.frame>3);
+ await page.locator('#result-select').tap();await page.setViewportSize({width:393,height:852});await page.locator('#match-mode').selectOption('practice');await page.locator('#start').tap();await page.waitForFunction(()=>mamoken3d.practice.enabled&&!mamoken3d.diagnostics.loading&&mamoken3d.presentation.loaded&&mamoken3d.battle?.frame>3);
  assert.equal(await page.evaluate(()=>mamoken3d.run),null);assert.equal(await page.locator('#run-status').isVisible(),false);assert.equal(await page.locator('#timer').textContent(),'∞');assert.equal(await page.evaluate(()=>mamoken3d.landscapeLocked),true);
  await page.screenshot({path:evidence+'/practice-return.png'});assert.deepEqual(errors,[]);await writeFile(evidence+'/report.json',JSON.stringify({report,again,errors},null,2));console.log('RUN MODES WEBGL PASS: 8 matches, 16 rounds, final, continue draw, carry/reset, short victory, loss, portrait practice return');
 }catch(e){await page.screenshot({path:evidence+'/error.png'}).catch(()=>{});console.error(errors);throw e;}finally{await browser.close();}

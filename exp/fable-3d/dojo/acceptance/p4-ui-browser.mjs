@@ -1,11 +1,30 @@
 // P4 visual/interaction acceptance on the built site, not static screenshots.
 import assert from 'node:assert/strict';
-import {mkdir,writeFile} from 'node:fs/promises';
+import {mkdir,writeFile,readFile,stat} from 'node:fs/promises';
+import http from 'node:http';
+import path from 'node:path';
+import {fileURLToPath} from 'node:url';
 import {createRequire} from 'node:module';
 const {chromium}=createRequire(import.meta.url)('playwright-core');
-const root=process.env.MAMOKEN_UI_URL??'http://127.0.0.1:4173/exp/fable-3d/_pages/';
+// Serve the built artifact at its own origin root, exactly like Cloudflare and
+// Capacitor. Mounting it below the repository path changes ../../../assets URLs.
+const siteRoot=path.resolve(fileURLToPath(new URL('../../_pages/',import.meta.url)));
+const mime={'.html':'text/html','.js':'text/javascript','.css':'text/css','.json':'application/json','.glb':'model/gltf-binary','.png':'image/png','.webp':'image/webp','.jpg':'image/jpeg','.svg':'image/svg+xml'};
+let server=null;
+let root=process.env.MAMOKEN_UI_URL;
+if(!root){
+ server=http.createServer(async(request,response)=>{
+  try{
+   let file=path.resolve(siteRoot,'.'+decodeURIComponent(new URL(request.url,'http://localhost').pathname));
+   if(file!==siteRoot&&!file.startsWith(siteRoot+path.sep)){response.writeHead(403);response.end();return;}
+   if((await stat(file)).isDirectory())file=path.join(file,'index.html');
+   response.writeHead(200,{'content-type':mime[path.extname(file)]??'application/octet-stream','cache-control':'no-store'});response.end(await readFile(file));
+  }catch{response.writeHead(404);response.end('Not found');}
+ });
+ await new Promise(resolve=>server.listen(0,'127.0.0.1',resolve));root='http://127.0.0.1:'+server.address().port+'/';
+}
 const dir=(process.env.MAMOKEN_EVIDENCE??'/tmp/mamoken-p4')+'/ui';await mkdir(dir,{recursive:true});
-const browser=await chromium.launch({executablePath:process.env.CHROMIUM_PATH??'/usr/bin/google-chrome',args:['--no-sandbox','--use-angle=swiftshader','--enable-unsafe-swiftshader']});
+let browser;try{browser=await chromium.launch({executablePath:process.env.CHROMIUM_PATH??'/usr/bin/google-chrome',args:['--no-sandbox','--use-angle=swiftshader','--enable-unsafe-swiftshader']});}catch(error){server?.close();throw error;}
 const context=await browser.newContext({viewport:{width:852,height:393},isMobile:true,hasTouch:true,deviceScaleFactor:1});
 const page=await context.newPage(),errors=[],report=[];
 page.on('pageerror',e=>errors.push(e.message));page.on('response',r=>{if(r.status()>=400&&!r.url().endsWith('favicon.ico'))errors.push(r.status()+' '+r.url());});
@@ -32,7 +51,7 @@ try{
   assert.match(await page.locator('.p4-profile').textContent(),/得意.*苦手/);
   await page.screenshot({path:dir+`/select-${mode}.png`});
   if(mode==='practice'){
-   await page.locator('#start').tap();await page.waitForFunction(()=>mamoken3d.practice.enabled&&mamoken3d.battle.frame>2,undefined,{timeout:60000});
+   await page.locator('#start').tap();await page.waitForFunction(()=>mamoken3d.practice.enabled&&!mamoken3d.diagnostics.loading&&mamoken3d.presentation.loaded&&mamoken3d.battle?.frame>2,undefined,{timeout:60000});
    assert.equal(await page.locator('#timer').textContent(),'∞');await tapTargets('#buttons-rail button,#stick-rail button,#practice-panel select,#practice-panel button');
    await page.screenshot({path:dir+'/practice-common-hud.png'});
   }
@@ -56,4 +75,4 @@ try{
  assert.deepEqual(errors,[]);await writeFile(dir+'/report.json',JSON.stringify({report,errors},null,2));
  console.log('P4 UI WEBGL PASS: five mode routes, native & rotated 720/852 layouts, 44px targets, paired character roles, shared Practice HUD, four-tab editor save and unchanged journey record');
 }catch(error){await page.screenshot({path:dir+'/error.png'}).catch(()=>{});console.error(errors);throw error;}
-finally{await browser.close();}
+finally{await browser.close();if(server)await new Promise(resolve=>server.close(resolve));}
