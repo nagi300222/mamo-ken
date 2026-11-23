@@ -89,6 +89,9 @@ async function lobby(){
  }
 }
 async function selection(){
+ // Keep one scenario failure from inheriting an unrelated previous viewport.
+ // Every required viewport (including portrait safe) is still measured below.
+ await configure(cases[1]);
  await page.goto(new URL('dojo/?mode=battle',root).href,{waitUntil:'domcontentloaded'});
  await page.waitForFunction(()=>window.mamoken3d&&document.querySelectorAll('.fighter-card').length===9,undefined,{timeout:90000});
  // The longest existing roster name, not a synthetic replacement of UI text.
@@ -100,11 +103,14 @@ async function selection(){
   await targets('.fighter-card span',c,'full fighter names',{text:true});
   await targets('.p4-profile [data-strength],.p4-profile [data-weakness]',c,'selected strengths and weaknesses',{text:true});
   await targets('#start',c,'start and roster visible together',{minimum:44,text:true});
+  check(await page.locator('#arena > .hud').evaluate(node=>getComputedStyle(node).visibility==='hidden'),'battle HUD is hidden while choosing a fighter',c.id);
+  try{await page.locator('.fighter-card').filter({hasText:longest}).click({timeout:2500});check(true,'longest fighter can be selected in this viewport',c.id);}catch(error){check(false,'longest fighter can be selected in this viewport',{case:c.id,error:error.message});}
   const chosen=await page.locator('#chosen-name').textContent();check(chosen===longest,'longest actual fighter selected',{case:c.id,chosen,longest});
   await capture('selection-'+c.id);
  }
 }
 async function editor(){
+ await configure(cases[1]);
  await page.goto(new URL('story/',root).href,{waitUntil:'domcontentloaded'});
  await page.waitForFunction(()=>window.mamokenStory?.previewReady,undefined,{timeout:120000});
  const name='ダークモグゾーと山あいを旅するマーモット'.slice(0,24);
@@ -166,7 +172,7 @@ async function setResources(kind,ready){
   const g=kind==='story'?mamokenStory.battle:mamoken3d.battle;
   const [p,t]=g.fighters;p.super=ready?100:0;p.drive=ready?100:0;p.gyuiinCooldown=p.roarCooldown=0;p.y=0;p.action=null;p.stun=p.stop=p.dashF=0;
   // Freeze the opponent's actions without replacing the game's HUD update.
-  t.stun=99999;t.action=null;g.projectiles=[];g.time=99999;
+  t.stun=99999;t.action=null;g.projectiles=[];g.time=75*60;
  },{kind,ready});
  await page.waitForFunction(ready=>document.querySelector('#ultimate-status')?.textContent===(ready?'発動可':'ゲージ不足'),ready,{timeout:15000});
 }
@@ -175,6 +181,10 @@ async function battleControls(kind){
  for(const item of cases){const c=await configure(item);
   for(const ready of [false,true]){
    await setResources(kind,ready);
+   if(kind==='dojo'){
+    const note=await page.locator('#note').boundingBox(),hud=await page.locator('#arena > .hud').boundingBox();
+    check(note&&hud&&!overlaps({...note,right:note.x+note.width,bottom:note.y+note.height},{...hud,right:hud.x+hud.width,bottom:hud.y+hud.height}),'battle status never covers HP/Drive/ultimate meters',{case:c.id,note,hud});
+   }
    const buttons=await targets(selector,c,kind+' six combat buttons '+ready,{minimum:44});check(buttons.length===6,kind+' retains six controls',{case:c.id,ready});
    const labels=await targets(selector+' .attack-label',c,kind+' main combat labels '+ready,{text:true});check(labels.length===6,kind+' has six separate main label spans',{case:c.id,ready});
    const states=await metrics('.battle-control-guide [data-control-state]');
@@ -201,6 +211,7 @@ async function battleControls(kind){
  }
 }
 async function dojo(){
+ await configure(cases[1]);
  await page.goto(new URL('dojo/?mode=battle',root).href,{waitUntil:'domcontentloaded'});
  await page.waitForFunction(()=>window.mamoken3d,undefined,{timeout:90000});
  await page.locator('.fighter-card').filter({hasText:'ダークモグゾー'}).click();

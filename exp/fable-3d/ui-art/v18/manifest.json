@@ -1,0 +1,884 @@
+{
+ "version": "v18-p4-ui-polish-r1",
+ "status": "proposal",
+ "base": "exp/fable-3d/ui-art/v18/",
+ "basedOn": "ui-art/v17（変更していない）",
+ "textBakedIn": false,
+ "species": "全員マーモット",
+ "assets": [
+  {
+   "file": "png/mode-vs.webp",
+   "bytes": 22686,
+   "sha256": "137379a974d9c0021ccfa13efcddaf0de9143935a40dc4e2052b04d75272f8ce",
+   "id": "mode-vs",
+   "kind": "mode-illustration",
+   "mode": "vs",
+   "size": [
+    1280,
+    480
+   ],
+   "displayBase": [
+    640,
+    240
+   ],
+   "alpha": true,
+   "use": "モードカードの絵（主に使う）",
+   "motif": "土俵・両陣の旗・ぶつかる前足の火花",
+   "textSafe": {
+    "x": 20,
+    "y": 18,
+    "width": 280,
+    "height": 204,
+    "note": "この範囲（左側）は文字を置く場所。絵は低密度で、うす暗がりを重ねてある。文字色は colors.text を想定"
+   },
+   "hero": {
+    "x": 310,
+    "width": 330,
+    "note": "主役はこの範囲（右側）"
+   },
+   "fit": "cover / right center",
+   "accent": "#F1C66C"
+  },
+  {
+   "file": "png/mode-vs.png",
+   "bytes": 112153,
+   "sha256": "156042293b506bbb5076e4fabb530377767428d3fae2dbfa9389990ae6cd36da",
+   "id": "mode-vs-png",
+   "kind": "mode-illustration-fallback",
+   "mode": "vs",
+   "size": [
+    640,
+    240
+   ],
+   "alpha": true,
+   "use": "WebP を使わない場合の予備"
+  },
+  {
+   "file": "png/mode-vs@thumb.png",
+   "bytes": 16519,
+   "sha256": "fc56e2a9da50febd7c3ba5f25c69d52350c76785bb58667762d850a86fbb6c90",
+   "id": "mode-vs-thumb",
+   "kind": "mode-illustration-thumb-check",
+   "mode": "vs",
+   "size": [
+    180,
+    80
+   ],
+   "alpha": true,
+   "use": "縮小確認用（右寄せ切り）。小さな枠にそのまま使ってもよい"
+  },
+  {
+   "file": "source/mode-vs.svg",
+   "bytes": 3243,
+   "sha256": "849cafcab1788d023babca36891f688f40ba39ae7a56ce4b8e5d2066b3b74264",
+   "id": "mode-vs-source",
+   "kind": "editable-source",
+   "mode": "vs",
+   "size": [
+    640,
+    240
+   ],
+   "use": "編集元。source/cutouts/*.png を相対参照する"
+  },
+  {
+   "file": "png/mode-vs-large.webp",
+   "bytes": 28266,
+   "sha256": "6d8364300201a14fcc35b67b9efc08186938315252d9d9ab5be108aa9104f299",
+   "id": "mode-vs-large",
+   "kind": "mode-illustration",
+   "mode": "vs",
+   "size": [
+    960,
+    720
+   ],
+   "displayBase": [
+    480,
+    360
+   ],
+   "alpha": true,
+   "use": "大きい対戦カードの絵（4:3）",
+   "motif": "土俵・両陣の旗・ぶつかる前足の火花（大きいカード用）",
+   "textSafe": {
+    "x": 18,
+    "y": 16,
+    "width": 210,
+    "height": 120
+   },
+   "buttonSafe": {
+    "x": 14,
+    "y": 292,
+    "width": 160,
+    "height": 54
+   },
+   "fit": "cover / right bottom",
+   "accent": "#F1C66C"
+  },
+  {
+   "file": "png/mode-vs-large.png",
+   "bytes": 150725,
+   "sha256": "bce34e98c6aa5d3191f2c987f89e2f8a427f3de6262663596c306e78857eb75c",
+   "id": "mode-vs-large-png",
+   "kind": "mode-illustration-fallback",
+   "mode": "vs",
+   "size": [
+    480,
+    360
+   ],
+   "alpha": true,
+   "use": "WebP を使わない場合の予備"
+  },
+  {
+   "file": "source/mode-vs-large.svg",
+   "bytes": 3203,
+   "sha256": "4c956dabdd08b53fefdb5249db52539219bc0ca7cfdb181ab97e30621f54b42a",
+   "id": "mode-vs-large-source",
+   "kind": "editable-source",
+   "mode": "vs",
+   "size": [
+    480,
+    360
+   ],
+   "use": "編集元。source/cutouts/*.png を相対参照する"
+  },
+  {
+   "file": "png/mode-practice.webp",
+   "bytes": 19162,
+   "sha256": "058098f50ee06c5eb0e2565f456f4f21ceb2632bd13c9bf86e6969bdc6acbaf6",
+   "id": "mode-practice",
+   "kind": "mode-illustration",
+   "mode": "practice",
+   "size": [
+    1280,
+    480
+   ],
+   "displayBase": [
+    640,
+    240
+   ],
+   "alpha": true,
+   "use": "モードカードの絵（主に使う）",
+   "motif": "巻き藁（稽古柱）と的・数え札・竹垣",
+   "textSafe": {
+    "x": 20,
+    "y": 18,
+    "width": 280,
+    "height": 204,
+    "note": "この範囲（左側）は文字を置く場所。絵は低密度で、うす暗がりを重ねてある。文字色は colors.text を想定"
+   },
+   "hero": {
+    "x": 310,
+    "width": 330,
+    "note": "主役はこの範囲（右側）"
+   },
+   "fit": "cover / right center",
+   "accent": "#6FD0A0"
+  },
+  {
+   "file": "png/mode-practice.png",
+   "bytes": 96541,
+   "sha256": "4c3817ec55b2cc31732f225b7eccb2cb7c4e5e540c5718698c36e13ff5db77c0",
+   "id": "mode-practice-png",
+   "kind": "mode-illustration-fallback",
+   "mode": "practice",
+   "size": [
+    640,
+    240
+   ],
+   "alpha": true,
+   "use": "WebP を使わない場合の予備"
+  },
+  {
+   "file": "png/mode-practice@thumb.png",
+   "bytes": 14567,
+   "sha256": "42e4d05b0587c58a3749c186497d7851ee24b371278fc015cc53d5fc187e795e",
+   "id": "mode-practice-thumb",
+   "kind": "mode-illustration-thumb-check",
+   "mode": "practice",
+   "size": [
+    180,
+    80
+   ],
+   "alpha": true,
+   "use": "縮小確認用（右寄せ切り）。小さな枠にそのまま使ってもよい"
+  },
+  {
+   "file": "source/mode-practice.svg",
+   "bytes": 5670,
+   "sha256": "3df882edf123060988b7ea21540fa1219ecd2f665b2e6dc01f9c94b643763173",
+   "id": "mode-practice-source",
+   "kind": "editable-source",
+   "mode": "practice",
+   "size": [
+    640,
+    240
+   ],
+   "use": "編集元。source/cutouts/*.png を相対参照する"
+  },
+  {
+   "file": "png/mode-arcade.webp",
+   "bytes": 16472,
+   "sha256": "61efa9226718c8f4a7b0a07c63789823ade375ba5e1697b97abbf2351e35adce",
+   "id": "mode-arcade",
+   "kind": "mode-illustration",
+   "mode": "arcade",
+   "size": [
+    1280,
+    480
+   ],
+   "displayBase": [
+    640,
+    240
+   ],
+   "alpha": true,
+   "use": "モードカードの絵（主に使う）",
+   "motif": "山道の石段・段ごとの相手と灯ろう（点の数）・山頂の旗",
+   "textSafe": {
+    "x": 20,
+    "y": 18,
+    "width": 280,
+    "height": 204,
+    "note": "この範囲（左側）は文字を置く場所。絵は低密度で、うす暗がりを重ねてある。文字色は colors.text を想定"
+   },
+   "hero": {
+    "x": 310,
+    "width": 330,
+    "note": "主役はこの範囲（右側）"
+   },
+   "fit": "cover / right center",
+   "accent": "#A79BEA"
+  },
+  {
+   "file": "png/mode-arcade.png",
+   "bytes": 91442,
+   "sha256": "a161fb9d2b0e096f01b2f43d0c87b52e7986392dbbb7cfb73f58538503e14516",
+   "id": "mode-arcade-png",
+   "kind": "mode-illustration-fallback",
+   "mode": "arcade",
+   "size": [
+    640,
+    240
+   ],
+   "alpha": true,
+   "use": "WebP を使わない場合の予備"
+  },
+  {
+   "file": "png/mode-arcade@thumb.png",
+   "bytes": 13601,
+   "sha256": "037cd035ae3037500e0709d1588d4abfb5ec220d4d0c30d0857ea9eac5c948c4",
+   "id": "mode-arcade-thumb",
+   "kind": "mode-illustration-thumb-check",
+   "mode": "arcade",
+   "size": [
+    180,
+    80
+   ],
+   "alpha": true,
+   "use": "縮小確認用（右寄せ切り）。小さな枠にそのまま使ってもよい"
+  },
+  {
+   "file": "source/mode-arcade.svg",
+   "bytes": 3005,
+   "sha256": "6c81a07b20153c3e4fdb1246ff4b6bcfce2a9603e9ebda61d8be5546c7efb42c",
+   "id": "mode-arcade-source",
+   "kind": "editable-source",
+   "mode": "arcade",
+   "size": [
+    640,
+    240
+   ],
+   "use": "編集元。source/cutouts/*.png を相対参照する"
+  },
+  {
+   "file": "png/mode-survival.webp",
+   "bytes": 18292,
+   "sha256": "d700a1c4fe05bd05234696952ef84dfd4b09c1d4dd2174c4bce1f05cd539245a",
+   "id": "mode-survival",
+   "kind": "mode-illustration",
+   "mode": "survival",
+   "size": [
+    1280,
+    480
+   ],
+   "displayBase": [
+    640,
+    240
+   ],
+   "alpha": true,
+   "use": "モードカードの絵（主に使う）",
+   "motif": "夕日・囲む影と光る目・倒した数の刻み",
+   "textSafe": {
+    "x": 20,
+    "y": 18,
+    "width": 280,
+    "height": 204,
+    "note": "この範囲（左側）は文字を置く場所。絵は低密度で、うす暗がりを重ねてある。文字色は colors.text を想定"
+   },
+   "hero": {
+    "x": 310,
+    "width": 330,
+    "note": "主役はこの範囲（右側）"
+   },
+   "fit": "cover / right center",
+   "accent": "#FA8976"
+  },
+  {
+   "file": "png/mode-survival.png",
+   "bytes": 95723,
+   "sha256": "62c414c87c75a7e2ecccc1f27c25b4cc9b1f38d225396b232cba846d77a0dfae",
+   "id": "mode-survival-png",
+   "kind": "mode-illustration-fallback",
+   "mode": "survival",
+   "size": [
+    640,
+    240
+   ],
+   "alpha": true,
+   "use": "WebP を使わない場合の予備"
+  },
+  {
+   "file": "png/mode-survival@thumb.png",
+   "bytes": 15060,
+   "sha256": "356f5c922853243f1087134348807b340a3c05c70e4a3307b084ab68f2a8bb5f",
+   "id": "mode-survival-thumb",
+   "kind": "mode-illustration-thumb-check",
+   "mode": "survival",
+   "size": [
+    180,
+    80
+   ],
+   "alpha": true,
+   "use": "縮小確認用（右寄せ切り）。小さな枠にそのまま使ってもよい"
+  },
+  {
+   "file": "source/mode-survival.svg",
+   "bytes": 2815,
+   "sha256": "6e351ea91e99a51261f2a50feed6197d3ad9732a1e5efb5bfc0d3911b290aa38",
+   "id": "mode-survival-source",
+   "kind": "editable-source",
+   "mode": "survival",
+   "size": [
+    640,
+    240
+   ],
+   "use": "編集元。source/cutouts/*.png を相対参照する"
+  },
+  {
+   "file": "png/mode-story.webp",
+   "bytes": 17014,
+   "sha256": "1db159830b140ad804aac906e1371efac5a1a2296f234d13072e7263945a97c3",
+   "id": "mode-story",
+   "kind": "mode-illustration",
+   "mode": "story",
+   "size": [
+    1280,
+    480
+   ],
+   "displayBase": [
+    640,
+    240
+   ],
+   "alpha": true,
+   "use": "モードカードの絵（主に使う）",
+   "motif": "朝日へ続く道・道しるべ・旅札・足あと",
+   "textSafe": {
+    "x": 20,
+    "y": 18,
+    "width": 280,
+    "height": 204,
+    "note": "この範囲（左側）は文字を置く場所。絵は低密度で、うす暗がりを重ねてある。文字色は colors.text を想定"
+   },
+   "hero": {
+    "x": 310,
+    "width": 330,
+    "note": "主役はこの範囲（右側）"
+   },
+   "fit": "cover / right center",
+   "accent": "#F2A76B"
+  },
+  {
+   "file": "png/mode-story.png",
+   "bytes": 83267,
+   "sha256": "4a5797b87bff73b672c40016be32a819725cfc11cfd7b4f711269c5fa17a8bb9",
+   "id": "mode-story-png",
+   "kind": "mode-illustration-fallback",
+   "mode": "story",
+   "size": [
+    640,
+    240
+   ],
+   "alpha": true,
+   "use": "WebP を使わない場合の予備"
+  },
+  {
+   "file": "png/mode-story@thumb.png",
+   "bytes": 13319,
+   "sha256": "fe5413b65eb1743d5f8302e78a482ae4d26621cccd6696420be7cb32e0b264c7",
+   "id": "mode-story-thumb",
+   "kind": "mode-illustration-thumb-check",
+   "mode": "story",
+   "size": [
+    180,
+    80
+   ],
+   "alpha": true,
+   "use": "縮小確認用（右寄せ切り）。小さな枠にそのまま使ってもよい"
+  },
+  {
+   "file": "source/mode-story.svg",
+   "bytes": 5247,
+   "sha256": "b1a5d665580168f5dbadffec86ccf249ee82084c5f3fcab35d6d9823a0a2fde4",
+   "id": "mode-story-source",
+   "kind": "editable-source",
+   "mode": "story",
+   "size": [
+    640,
+    240
+   ],
+   "use": "編集元。source/cutouts/*.png を相対参照する"
+  },
+  {
+   "file": "svg/sym-select.svg",
+   "bytes": 905,
+   "sha256": "61a0c0f1d52a3e1e9e1d83d54ecb8984f58b4c88d63497c3b2d40a573e00498e",
+   "id": "sym-select",
+   "kind": "symbol",
+   "size": [
+    24,
+    24
+   ],
+   "color": "currentColor",
+   "use": "選択（前足が指し示す）",
+   "minDisplayPx": 16,
+   "padding": "24 の枠の内側 2px は空けてある"
+  },
+  {
+   "file": "svg/sym-confirm.svg",
+   "bytes": 886,
+   "sha256": "0e81c62aaafb27d28655c97dff363edb6b8386a6768242bee68b500708c81645",
+   "id": "sym-confirm",
+   "kind": "symbol",
+   "size": [
+    24,
+    24
+   ],
+   "color": "currentColor",
+   "use": "決定（前足の判を押す＝丸い印）",
+   "minDisplayPx": 16,
+   "padding": "24 の枠の内側 2px は空けてある"
+  },
+  {
+   "file": "svg/sym-back.svg",
+   "bytes": 298,
+   "sha256": "47108e57be5b6ba1f1448a6de836d3417cdd4c352062510f32c94ff90ce308a4",
+   "id": "sym-back",
+   "kind": "symbol",
+   "size": [
+    24,
+    24
+   ],
+   "color": "currentColor",
+   "use": "戻る（引き返す道。尾のように巻いた矢印）",
+   "minDisplayPx": 16,
+   "padding": "24 の枠の内側 2px は空けてある"
+  },
+  {
+   "file": "svg/sym-disabled.svg",
+   "bytes": 363,
+   "sha256": "b4f78b739e960c7df0e13890a709bca96025aff9ffadd9aeb0fa459261c820f0",
+   "id": "sym-disabled",
+   "kind": "symbol",
+   "size": [
+    24,
+    24
+   ],
+   "color": "currentColor",
+   "use": "使用不可（縄で封じた札。斜めの線）",
+   "minDisplayPx": 16,
+   "padding": "24 の枠の内側 2px は空けてある"
+  },
+  {
+   "file": "svg/sym-save.svg",
+   "bytes": 414,
+   "sha256": "cb74675ae64749368feb93334284a884c45716c52adf254e2e623eb694c0adb2",
+   "id": "sym-save",
+   "kind": "symbol",
+   "size": [
+    24,
+    24
+   ],
+   "color": "currentColor",
+   "use": "保存（旅札に刻みが入った印）",
+   "minDisplayPx": 16,
+   "padding": "24 の枠の内側 2px は空けてある"
+  },
+  {
+   "file": "svg/sym-paw.svg",
+   "bytes": 811,
+   "sha256": "a75f886d5eac27dc482f65b1401741fdfa2be45479927abdf2a99b978fa8df0f",
+   "id": "sym-paw",
+   "kind": "symbol",
+   "size": [
+    24,
+    24
+   ],
+   "color": "currentColor",
+   "use": "前足（飾り・カーソル用）",
+   "minDisplayPx": 16,
+   "padding": "24 の枠の内側 2px は空けてある"
+  },
+  {
+   "file": "svg/state-focus.svg",
+   "bytes": 652,
+   "sha256": "5e16ad659a614c77570a63144ddaf3ef929786a1926058e5358c4f980d46f827",
+   "id": "state-focus",
+   "kind": "state-decoration",
+   "size": [
+    96,
+    64
+   ],
+   "slice": {
+    "top": 26,
+    "right": 26,
+    "bottom": 26,
+    "left": 26
+   },
+   "use": "state decoration: focus",
+   "distinguishBy": "四隅の角金具（辺の中央は空く）＋左に前足カーソル sym-paw",
+   "apply": "border-image か、枠の上に重ねる要素として 9 スライスで伸ばす"
+  },
+  {
+   "file": "svg/state-selected.svg",
+   "bytes": 539,
+   "sha256": "262448407b7ba22f68012ebafc9fbb8329c9f9fa27d13b9f2b7ebbb255956b2c",
+   "id": "state-selected",
+   "kind": "state-decoration",
+   "size": [
+    96,
+    64
+   ],
+   "slice": {
+    "top": 28,
+    "right": 30,
+    "bottom": 14,
+    "left": 14
+   },
+   "use": "state decoration: selected",
+   "distinguishBy": "全周の二重線と右上の丸い判（チェック入り）",
+   "apply": "border-image か、枠の上に重ねる要素として 9 スライスで伸ばす"
+  },
+  {
+   "file": "svg/state-pressed.svg",
+   "bytes": 466,
+   "sha256": "f76ce63f99664df3a4860e250aba2b9c5720b5580c934935866adf20b941f66b",
+   "id": "state-pressed",
+   "kind": "state-decoration",
+   "size": [
+    96,
+    64
+   ],
+   "slice": {
+    "top": 14,
+    "right": 14,
+    "bottom": 14,
+    "left": 14
+   },
+   "use": "state decoration: pressed",
+   "distinguishBy": "上と左に濃い内影（へこんで見える）",
+   "apply": "border-image か、枠の上に重ねる要素として 9 スライスで伸ばす"
+  },
+  {
+   "file": "svg/state-disabled.svg",
+   "bytes": 488,
+   "sha256": "748dd6cee8c108bb1831ceb56d9ef136c271346e9265f4b43e3e8b5933297c65",
+   "id": "state-disabled",
+   "kind": "state-decoration",
+   "size": [
+    96,
+    64
+   ],
+   "slice": {
+    "top": 28,
+    "right": 30,
+    "bottom": 14,
+    "left": 14
+   },
+   "use": "state decoration: disabled",
+   "distinguishBy": "破線の枠と右上の横棒の丸（線が点線・印が「−」）。絵は不透明度と彩度を落とす",
+   "apply": "border-image か、枠の上に重ねる要素として 9 スライスで伸ばす"
+  },
+  {
+   "file": "svg/state-saved.svg",
+   "bytes": 551,
+   "sha256": "6e08a795876977423d17a8155bbb8dc2059ee5accdf56fa6947c3adff0f0c1ac",
+   "id": "state-saved",
+   "kind": "state-decoration",
+   "size": [
+    96,
+    64
+   ],
+   "slice": {
+    "top": 10,
+    "right": 30,
+    "bottom": 22,
+    "left": 12
+   },
+   "use": "state decoration: saved",
+   "distinguishBy": "下辺の線と右下の小さな旅札（刻み入り）",
+   "apply": "border-image か、枠の上に重ねる要素として 9 スライスで伸ばす"
+  },
+  {
+   "id": "ui-select",
+   "kind": "ui-sound",
+   "file": "audio/ui-select.wav",
+   "use": "フォーカス移動・項目選択",
+   "durationMs": 70,
+   "peakDbfs": -15,
+   "rmsDbfs": -30.9,
+   "bytes": 6218,
+   "sha256": "8bca70e022c0a14ce0bf98da74644de2d28e8f661bafe3b6ccf24101d5adb715"
+  },
+  {
+   "id": "ui-confirm",
+   "kind": "ui-sound",
+   "file": "audio/ui-confirm.wav",
+   "use": "決定",
+   "durationMs": 200,
+   "peakDbfs": -12,
+   "rmsDbfs": -28.0,
+   "bytes": 17684,
+   "sha256": "70d44a2c69a89e54304f93446ab0db2cc0976785b52b437b528f2f21a85b677f"
+  },
+  {
+   "id": "ui-back",
+   "kind": "ui-sound",
+   "file": "audio/ui-back.wav",
+   "use": "戻る・取り消し",
+   "durationMs": 130,
+   "peakDbfs": -14,
+   "rmsDbfs": -28.7,
+   "bytes": 11510,
+   "sha256": "4550aefde5d30b18a68460c51509750c0a44139589923882bc501e3b5466eca0"
+  },
+  {
+   "id": "ui-save",
+   "kind": "ui-sound",
+   "file": "audio/ui-save.wav",
+   "use": "保存できた",
+   "durationMs": 340,
+   "peakDbfs": -12,
+   "rmsDbfs": -24.8,
+   "bytes": 30032,
+   "sha256": "37dffa4c4b618a909c9acdcf8fe99beee580dbcd3e0506769ee2877c70eaf200"
+  },
+  {
+   "file": "source/cutouts/vs_moguzo.png",
+   "bytes": 139572,
+   "sha256": "b9b96513419692679b0432d02770a62e6157a784ec6be14ed51ce232fef8e9ff",
+   "id": "cutout-vs_moguzo",
+   "kind": "source-cutout",
+   "size": [
+    436,
+    382
+   ],
+   "character": "moguzo",
+   "clip": "stand_heavy",
+   "use": "編集元の部品（元の GLB から描いた切り抜き）"
+  },
+  {
+   "file": "source/cutouts/vs_godan.png",
+   "bytes": 112134,
+   "sha256": "077b6651c160a11c8ecac451ae7f51f72751a3b1c8d76364062c9933998f52a0",
+   "id": "cutout-vs_godan",
+   "kind": "source-cutout",
+   "size": [
+    351,
+    411
+   ],
+   "character": "godan",
+   "clip": "guard_stand",
+   "use": "編集元の部品（元の GLB から描いた切り抜き）"
+  },
+  {
+   "file": "source/cutouts/practice_pisuke.png",
+   "bytes": 203982,
+   "sha256": "056332f6b4a47259ba90b0d7b40bf54c25c8f019cbcbc8a212fb0c16eacd0703",
+   "id": "cutout-practice_pisuke",
+   "kind": "source-cutout",
+   "size": [
+    383,
+    532
+   ],
+   "character": "pisuke",
+   "clip": "stand_light",
+   "use": "編集元の部品（元の GLB から描いた切り抜き）"
+  },
+  {
+   "file": "source/cutouts/arcade_chirka.png",
+   "bytes": 159115,
+   "sha256": "d92ad6e29422086685f34648035ca65e3745ac15ff92a05fa89f64ee98ef35e0",
+   "id": "cutout-arcade_chirka",
+   "kind": "source-cutout",
+   "size": [
+    344,
+    445
+   ],
+   "character": "chirka",
+   "clip": "idle",
+   "use": "編集元の部品（元の GLB から描いた切り抜き）"
+  },
+  {
+   "file": "source/cutouts/arcade_takimaru.png",
+   "bytes": 174131,
+   "sha256": "c0359d97aef26ac71b3663f87d11ca003171de2814f9bf2cdc1c0ce1d05555e9",
+   "id": "cutout-arcade_takimaru",
+   "kind": "source-cutout",
+   "size": [
+    374,
+    474
+   ],
+   "character": "takimaru",
+   "clip": "idle",
+   "use": "編集元の部品（元の GLB から描いた切り抜き）"
+  },
+  {
+   "file": "source/cutouts/arcade_yomikage.png",
+   "bytes": 180765,
+   "sha256": "e903b836393555a438278c0b4a554962f10d56582c361588795a43c5aacbfd6c",
+   "id": "cutout-arcade_yomikage",
+   "kind": "source-cutout",
+   "size": [
+    371,
+    544
+   ],
+   "character": "yomikage",
+   "clip": "idle",
+   "use": "編集元の部品（元の GLB から描いた切り抜き）"
+  },
+  {
+   "file": "source/cutouts/arcade_bullet.png",
+   "bytes": 108009,
+   "sha256": "5ccc3285b99a83612d1d491ff0f9d9844a47ee5194d896c6240dccb037b81b93",
+   "id": "cutout-arcade_bullet",
+   "kind": "source-cutout",
+   "size": [
+    326,
+    356
+   ],
+   "character": "bullet",
+   "clip": "idle",
+   "use": "編集元の部品（元の GLB から描いた切り抜き）"
+  },
+  {
+   "file": "source/cutouts/survival_hakuma.png",
+   "bytes": 166520,
+   "sha256": "2d2f2aa1e35788c17b9167c217ff6df8daf82230c7991266c37726892d3fda55",
+   "id": "cutout-survival_hakuma",
+   "kind": "source-cutout",
+   "size": [
+    400,
+    418
+   ],
+   "character": "hakuma",
+   "clip": "guard_stand",
+   "use": "編集元の部品（元の GLB から描いた切り抜き）"
+  },
+  {
+   "file": "source/cutouts/survival_sil_a.png",
+   "bytes": 4877,
+   "sha256": "c2d11ea4fe99a683332d1a3f245eb504022ff2ee7087c74b0532eca9c05d2622",
+   "id": "cutout-survival_sil_a",
+   "kind": "source-cutout",
+   "size": [
+    402,
+    369
+   ],
+   "character": "dark_moguzo",
+   "clip": "stand_heavy",
+   "use": "編集元の部品（元の GLB から描いた切り抜き）"
+  },
+  {
+   "file": "source/cutouts/survival_sil_b.png",
+   "bytes": 5654,
+   "sha256": "e09b2670707736811194ac172700938172d1432887fe0524aa3d7b391838353c",
+   "id": "cutout-survival_sil_b",
+   "kind": "source-cutout",
+   "size": [
+    375,
+    442
+   ],
+   "character": "godan",
+   "clip": "idle",
+   "use": "編集元の部品（元の GLB から描いた切り抜き）"
+  },
+  {
+   "file": "source/cutouts/survival_sil_c.png",
+   "bytes": 6335,
+   "sha256": "8ae081687bdfe1c27342a253b9724e0bd2c041af2f7d65c0e905541e56dc74ec",
+   "id": "cutout-survival_sil_c",
+   "kind": "source-cutout",
+   "size": [
+    416,
+    456
+   ],
+   "character": "pisuke",
+   "clip": "dash_f",
+   "use": "編集元の部品（元の GLB から描いた切り抜き）"
+  },
+  {
+   "file": "source/cutouts/survival_sil_d.png",
+   "bytes": 5531,
+   "sha256": "c90027763f0b45c84f624e8d0c55a8db60e18d651724499e052bb2fcc0bc932b",
+   "id": "cutout-survival_sil_d",
+   "kind": "source-cutout",
+   "size": [
+    442,
+    348
+   ],
+   "character": "bullet",
+   "clip": "idle",
+   "use": "編集元の部品（元の GLB から描いた切り抜き）"
+  },
+  {
+   "file": "source/cutouts/story_moguzo.png",
+   "bytes": 193500,
+   "sha256": "e3add223d293d5a84071ba3b7e158005ebe88144becedcb4de4f9adbfb03b957",
+   "id": "cutout-story_moguzo",
+   "kind": "source-cutout",
+   "size": [
+    386,
+    533
+   ],
+   "character": "moguzo",
+   "clip": "walk_f",
+   "use": "編集元の部品（元の GLB から描いた切り抜き）"
+  },
+  {
+   "file": "tokens.json",
+   "bytes": 2808,
+   "sha256": "97b9c23263983bdd59c7677d4de4bbbfa8d5acfd90fc8f492e316b9368d00699",
+   "id": "tokens",
+   "kind": "spec",
+   "use": "色・寸法・状態の決めごと"
+  },
+  {
+   "file": "motion.json",
+   "bytes": 3193,
+   "sha256": "e0e5aefe0dec342132413d488f3f962e63763f96caa9321fe5a43c8231f4ca46",
+   "id": "motion",
+   "kind": "spec",
+   "use": "動きと音の対応"
+  }
+ ],
+ "totals": {
+  "shipBytes": 193709,
+  "allBytes": 2385935
+ },
+ "rebuild": [
+  "node tools/render_cutouts.mjs",
+  "python3 tools/build_ui_art_v18.py",
+  "node tools/render_outputs.mjs",
+  "python3 tools/make_ui_sounds.py",
+  "python3 tools/finalize.py",
+  "node tools/render_preview.mjs"
+ ]
+}

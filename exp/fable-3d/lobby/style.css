@@ -29,3 +29,7 @@ html.portrait{overflow:hidden}html.portrait body{width:100dvh;height:100vw;trans
  .mode-hall .mode-story .mode-rule{min-height:20px;line-height:1.25;padding-top:2px;font-size:12px}
  .mode-hall .mode-story .mode-rule b{font-size:18px;line-height:1}
 }
+
+/* Glyph line boxes have room inside the caption in every compact layout. */
+.mode-hall .mode .mode-rule{min-height:24px;padding-block:2px}
+.mode-hall .mode .mode-rule b{font-size:18px;line-height:1;display:block;flex:none}

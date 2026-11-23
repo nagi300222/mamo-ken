@@ -58,6 +58,7 @@ jobs:
           fi
           sudo apt-get update -qq
           sudo apt-get install -y fonts-noto-cjk
+          if test "${{ matrix.suite }}" = p4; then sudo apt-get install -y ffmpeg; fi
       - name: Render real models and operate games
         env:
           CHROMIUM_PATH: /usr/bin/google-chrome
@@ -89,7 +90,9 @@ jobs:
             p3) node exp/fable-3d/dojo/acceptance/p3-feedback-browser.mjs ;;
             p4)
               MAMOKEN_UI_VIDEO=1 node exp/fable-3d/dojo/acceptance/p4-ui-browser.mjs
-              MAMOKEN_UI_VIDEO=1 node exp/fable-3d/dojo/acceptance/p4-polish-browser.mjs ;;
+              MAMOKEN_UI_VIDEO=1 node exp/fable-3d/dojo/acceptance/p4-polish-browser.mjs
+              node exp/fable-3d/dojo/acceptance/p4-ui-audio-browser.mjs
+              node exp/fable-3d/dojo/acceptance/mux-p4-ui-audio.mjs "$MAMOKEN_EVIDENCE/ui-audio/report.json" ;;
             special)
               MAMOKEN_REQUIRE_PRODUCTION=1 MAMOKEN_SPECIAL_SOURCE_VERSION=v17r2 node exp/fable-3d/dojo/acceptance/p3-special-contact-browser.mjs
               node exp/fable-3d/dojo/acceptance/p3-special-response-browser.mjs ;;

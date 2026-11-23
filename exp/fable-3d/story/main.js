@@ -1,3 +1,4 @@
+import {syncSoundToggle,subscribeUIAudioMuted} from '../shared-ui/ui-feedback.js';
 import {presentCombatFeedback} from '../dojo/fight-feel.js';
 import {showtimeFor} from '../dojo/showtime-profiles.js';
 import * as THREE from 'three';
@@ -33,6 +34,7 @@ const modalFocus=createModalFocus(app);
 $('battle-hud').innerHTML=battleHUDMarkup();$('battle-buttons').innerHTML=battleControlsMarkup();$('battle-steps').innerHTML=battleStepsMarkup();
 const exploration=createExplorationControls(),combatInput=createCombatInput();
 const loader=new GLTFLoader(),audio=createCombatAudio(),showtimeLoader=createShowtimeLoader(new URL('../cinematic/v14/',import.meta.url));
+syncSoundToggle($('sound'),audio.muted);subscribeUIAudioMuted(muted=>syncSoundToggle($('sound'),muted));
 const reducedMotion=matchMedia('(prefers-reduced-motion: reduce)').matches;
 const renderer=(()=>{try{return new THREE.WebGLRenderer({canvas,antialias:true,powerPreference:'high-performance'});}catch(error){$('loading-copy').textContent='3Dを開始できません。WebGLが使えるSafari/Chromeで開いてください。';throw error;}})();
 renderer.setPixelRatio(Math.min(devicePixelRatio||1,1.5));renderer.outputColorSpace=THREE.SRGBColorSpace;
@@ -128,7 +130,7 @@ function updateJourney(){
  $('player-label').textContent=avatar.name;$('journey-record').textContent=`${progress.battles}戦 ${progress.wins}勝 · 旅人${progress.seed.toString(16).slice(-4)}`;
  $('task').textContent=progress.battles?'出会った相手との戦績は保存される。ほかのマーモットにも話しかけよう。':'道場前のモグゾーに話しかけてみよう。';
 }
-function save(){saveReady=true;const error=writeSave(storage,avatar,progress);setStatus(error??'キャラと旅の記録を保存した');return !error;}
+function save(){saveReady=true;const error=writeSave(storage,avatar,progress);setStatus(error??'キャラと旅の記録を保存した');if(!error)document.dispatchEvent(new Event('mamoken:save-complete'));return !error;}
 let npcRefreshAt=0,npcWanted=new Set();
 async function updateNpcModels(now){
  if(now<npcRefreshAt)return;npcRefreshAt=now+500;

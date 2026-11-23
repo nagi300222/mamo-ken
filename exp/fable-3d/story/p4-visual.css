@@ -141,4 +141,11 @@ body[data-ui=mountain] .shared-step-pad .step-button{min-height:44px;background:
  #story-app .p4-editor-footer .p4-save-state{font-size:10px;margin-bottom:4px}
  #story-app .p4-editor-footer #preview-state{font-size:10px;margin-bottom:4px}
  #story-app .p4-editor-footer .editor-actions button{font-size:12px}
+ /* The last step is a compact review card. Repeated headings and editable
+    controls belong to the earlier tabs; the saved values remain explicit. */
+ #story-app #editor[data-editor-step="3"]>h1{display:none}
+ #story-app #editor[data-editor-step="3"] .p4-editor-scroll>.form-row,
+ #story-app #editor[data-editor-step="3"] .p4-save-title,
+ #story-app #editor[data-editor-step="3"] .p4-save-copy{display:none}
+ #story-app #editor[data-editor-step="3"] .p4-save-summary{padding:8px;gap:5px}
 }

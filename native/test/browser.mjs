@@ -142,8 +142,9 @@ try{
  await page.locator('#start').tap();await page.waitForFunction(()=>mamoken3d.practice.enabled&&mamoken3d.battle?.frame>3,undefined,{timeout:90000});
  await assertDecodedArt('dojo-hud-and-controls',[
   ['.brand-mark','','fist-seal.svg'],['#arena .health .track','','hud-hp-frame.svg'],['#arena .drive .track','','hud-sub-frame.svg'],['#arena .round-center','','hud-timer-dark.svg'],
-  ['#arena .hud-name','::before','crest-moguzo.svg'],...buttonArt('#buttons-rail')
+  ['#arena .hud-name','::before','crest-moguzo.svg'],
  ]);
+ const nativeLabels=await page.locator('#buttons-rail .attack-label').allTextContents();assert.equal(nativeLabels.length,6);assert.deepEqual(nativeLabels.map(label=>label.trim()),['弱','強','掴み','ギュイーン','必殺','奥義']);assert.equal(await page.locator('#buttons-rail .battle-control-guide').count(),1);
  assert.equal(await page.locator('[data-control]').count(),8); // six attacks + two step buttons
  assert.equal(await page.evaluate(()=>mamoken3d.landscapeLocked),false);
  // A transient portrait viewport must be left to UIKit, not rotated again by CSS.
@@ -180,7 +181,7 @@ try{
  await page.waitForFunction(()=>mamokenStory.mode==='battle',undefined,{timeout:90000});await page.locator('#pause').tap();
  await assertDecodedArt('story-hud-and-controls',[
   ['#battle-hud .health .track','','hud-hp-frame.svg'],['#battle-hud .drive .track','','hud-sub-frame.svg'],['#battle-hud .round-center','','hud-timer-dark.svg'],
-  ['#battle-hud .hud-name','::before','crest-moguzo.svg'],...buttonArt('#battle-buttons')
+  ['#battle-hud .hud-name','::before','crest-moguzo.svg'],
  ]);
  for(const side of [59,62]){
   await page.evaluate(()=>{for(const edge of ['left','right','top','bottom'])document.documentElement.style.removeProperty('--native-safe-'+edge);});

@@ -646,3 +646,18 @@ body[data-ui=mountain] #selection .selection-footer:has(#check-mode-label:not([h
 }
 @media(forced-colors:active){body[data-ui=mountain] #selection .fighter-card.chosen{outline:2px solid Highlight}body[data-ui=mountain] #selection .p4-profile{border-left:1px solid ButtonText}}
 @media(prefers-reduced-motion:reduce){body[data-ui=mountain] #selection .fighter-card{transition:none}body[data-ui=mountain] #selection .fighter-card:active{translate:none}}
+
+
+/* P4 safe-viewport correction: reserve the complete 3×3 decision area before
+   placing settings below it. Hidden run/debug fields never consume a row. */
+body[data-ui=mountain] #selection [hidden]{display:none!important}
+body[data-ui=mountain] #selection .selection-inner{grid-template-rows:auto minmax(146px,1fr) auto}
+body[data-ui=mountain] #selection .p4-selection-main{min-height:146px}
+body[data-ui=mountain] #selection .p4-profile{grid-template-rows:auto minmax(0,1fr) minmax(0,1fr)}
+@media(orientation:portrait){
+ /* The app is CSS-rotated. Physical top is logical left; using env(top)
+    directly here stole the notch width from the roster's vertical space. */
+ html.landscape-locked body[data-ui=mountain] #selection{
+  inset:calc(var(--topbar-height) + var(--ui-safe-top)) var(--ui-safe-right) var(--ui-safe-bottom) var(--ui-safe-left);
+ }
+}

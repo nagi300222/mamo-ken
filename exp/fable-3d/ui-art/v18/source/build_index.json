@@ -1,0 +1,160 @@
+{
+ "modes": {
+  "vs": {
+   "use": "mode illustration: versus",
+   "motif": "土俵・両陣の旗・ぶつかる前足の火花",
+   "size": [
+    640,
+    240
+   ]
+  },
+  "vs-large": {
+   "use": "mode illustration: versus (large card 4:3)",
+   "motif": "土俵・両陣の旗・ぶつかる前足の火花（大きいカード用）",
+   "size": [
+    480,
+    360
+   ]
+  },
+  "practice": {
+   "use": "mode illustration: practice",
+   "motif": "巻き藁（稽古柱）と的・数え札・竹垣",
+   "size": [
+    640,
+    240
+   ]
+  },
+  "arcade": {
+   "use": "mode illustration: arcade",
+   "motif": "山道の石段・段ごとの相手と灯ろう（点の数）・山頂の旗",
+   "size": [
+    640,
+    240
+   ]
+  },
+  "survival": {
+   "use": "mode illustration: survival",
+   "motif": "夕日・囲む影と光る目・倒した数の刻み",
+   "size": [
+    640,
+    240
+   ]
+  },
+  "story": {
+   "use": "mode illustration: story (journey)",
+   "motif": "朝日へ続く道・道しるべ・旅札・足あと",
+   "size": [
+    640,
+    240
+   ]
+  }
+ },
+ "icons": {
+  "sym-select": {
+   "use": "symbol: select / move focus",
+   "meaning": "選択（前足が指し示す）"
+  },
+  "sym-confirm": {
+   "use": "symbol: confirm",
+   "meaning": "決定（前足の判を押す＝丸い印）"
+  },
+  "sym-back": {
+   "use": "symbol: back",
+   "meaning": "戻る（引き返す道。尾のように巻いた矢印）"
+  },
+  "sym-disabled": {
+   "use": "symbol: unavailable",
+   "meaning": "使用不可（縄で封じた札。斜めの線）"
+  },
+  "sym-save": {
+   "use": "symbol: saved",
+   "meaning": "保存（旅札に刻みが入った印）"
+  },
+  "sym-paw": {
+   "use": "symbol: marmot forepaw",
+   "meaning": "前足（飾り・カーソル用）"
+  }
+ },
+ "states": {
+  "state-focus": {
+   "use": "state decoration: focus",
+   "distinguishBy": "四隅の角金具（辺の中央は空く）＋左に前足カーソル sym-paw",
+   "viewBox": [
+    0,
+    0,
+    96,
+    64
+   ],
+   "slice": {
+    "top": 26,
+    "right": 26,
+    "bottom": 26,
+    "left": 26
+   }
+  },
+  "state-selected": {
+   "use": "state decoration: selected",
+   "distinguishBy": "全周の二重線と右上の丸い判（チェック入り）",
+   "viewBox": [
+    0,
+    0,
+    96,
+    64
+   ],
+   "slice": {
+    "top": 28,
+    "right": 30,
+    "bottom": 14,
+    "left": 14
+   }
+  },
+  "state-pressed": {
+   "use": "state decoration: pressed",
+   "distinguishBy": "上と左に濃い内影（へこんで見える）",
+   "viewBox": [
+    0,
+    0,
+    96,
+    64
+   ],
+   "slice": {
+    "top": 14,
+    "right": 14,
+    "bottom": 14,
+    "left": 14
+   }
+  },
+  "state-disabled": {
+   "use": "state decoration: disabled",
+   "distinguishBy": "破線の枠と右上の横棒の丸（線が点線・印が「−」）。絵は不透明度と彩度を落とす",
+   "viewBox": [
+    0,
+    0,
+    96,
+    64
+   ],
+   "slice": {
+    "top": 28,
+    "right": 30,
+    "bottom": 14,
+    "left": 14
+   }
+  },
+  "state-saved": {
+   "use": "state decoration: saved",
+   "distinguishBy": "下辺の線と右下の小さな旅札（刻み入り）",
+   "viewBox": [
+    0,
+    0,
+    96,
+    64
+   ],
+   "slice": {
+    "top": 10,
+    "right": 30,
+    "bottom": 22,
+    "left": 12
+   }
+  }
+ }
+}

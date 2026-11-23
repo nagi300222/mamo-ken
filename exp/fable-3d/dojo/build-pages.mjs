@@ -18,6 +18,9 @@ await copyOne(path.join(dojo,'p4-visual.js'),path.join(OUTPUT,'dojo','p4-visual.
 for(const name of ['special-motion-source.js','special-motion-overrides-p3.js','special-motion-contract-p3.js','special-cues.js','special-contact-runtime-p3.js','special-contact-overrides-p3.js','special-contact-reviewed-v17r2.js','normal-contact-reviewed-v17.js','combat-geometry.js'])
   await copyOne(path.join(dojo,name),path.join(OUTPUT,'dojo',name));
 await cp(path.join(ROOT,'preview','vendor'),path.join(OUTPUT,'preview','vendor'),{recursive:true});
+// Ship only v18 runtime assets; editable originals and review images stay in git.
+for(const folder of ['png','svg','audio'])await cp(path.join(ROOT,'ui-art','v18',folder),path.join(OUTPUT,'ui-art','v18',folder),{recursive:true,filter:file=>!path.extname(file)||/\.(webp|svg|wav|json)$/.test(file)});
+for(const name of ['manifest.json','tokens.json','motion.json'])await copyOne(path.join(ROOT,'ui-art','v18',name),path.join(OUTPUT,'ui-art','v18',name));
 await cp(path.join(ROOT,'shared-ui'),path.join(OUTPUT,'shared-ui'),{recursive:true,filter:file=>!file.endsWith('.test.mjs')});
 // v16 is a separate lazy entry point; normal matches do not download custom rigs.
 await cp(path.join(ROOT,'story'),path.join(OUTPUT,'story'),{recursive:true,

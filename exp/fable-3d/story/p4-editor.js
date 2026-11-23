@@ -13,6 +13,7 @@ if(form){
   let active=0,initialized=false;
   const choose=(index,focus=false)=>{
    active=(index+panels.length)%panels.length;
+   document.getElementById('editor').dataset.editorStep=String(active);
    [...nav.children].forEach((button,i)=>{const selected=i===active;button.setAttribute('aria-selected',String(selected));button.tabIndex=selected?0:-1;panels[i].hidden=!selected;});
    if(active===3)summary();if(focus)nav.children[active].focus();
    // Short screens initially show the name/base row and tabs. Reveal the newly

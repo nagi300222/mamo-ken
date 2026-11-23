@@ -1,0 +1,15 @@
+[
+ {"name": "vs_moguzo", "id": "moguzo", "clip": "stand_heavy", "t": 0.26, "yaw": 62, "pitch": 5},
+ {"name": "vs_godan", "id": "godan", "clip": "guard_stand", "t": 0.2, "yaw": -58, "pitch": 5},
+ {"name": "practice_pisuke", "id": "pisuke", "clip": "stand_light", "t": 0.14, "yaw": 66, "pitch": 5},
+ {"name": "arcade_chirka", "id": "chirka", "clip": "idle", "t": 0.3, "yaw": 38, "pitch": 6},
+ {"name": "arcade_takimaru", "id": "takimaru", "clip": "idle", "t": 0.3, "yaw": -34, "pitch": 6},
+ {"name": "arcade_yomikage", "id": "yomikage", "clip": "idle", "t": 0.5, "yaw": -34, "pitch": 6},
+ {"name": "arcade_bullet", "id": "bullet", "clip": "idle", "t": 0.2, "yaw": -34, "pitch": 6},
+ {"name": "survival_hakuma", "id": "hakuma", "clip": "guard_stand", "t": 0.2, "yaw": 20, "pitch": 6},
+ {"name": "survival_sil_a", "id": "dark_moguzo", "clip": "stand_heavy", "t": 0.26, "yaw": -70, "mode": "silhouette", "tint": "1a1012"},
+ {"name": "survival_sil_b", "id": "godan", "clip": "idle", "t": 0.3, "yaw": 70, "mode": "silhouette", "tint": "1a1012"},
+ {"name": "survival_sil_c", "id": "pisuke", "clip": "dash_f", "t": 0.1, "yaw": -75, "mode": "silhouette", "tint": "1a1012"},
+ {"name": "survival_sil_d", "id": "bullet", "clip": "idle", "t": 0.3, "yaw": 65, "mode": "silhouette", "tint": "1a1012"},
+ {"name": "story_moguzo", "id": "moguzo", "clip": "walk_f", "t": 0.2, "yaw": 150, "pitch": 8}
+]
