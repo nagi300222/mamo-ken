@@ -91,9 +91,10 @@ try{
  for(const [id,slot]of scenarios){
   await start(id);await inspect(id);
   for(const facing of [1,-1])for(const outcome of id==='dark_moguzo'?['release']:['hit','guard','whiff']){
+   report.pendingCase={id,slot,facing,outcome,placement:outcome==='guard'?'defender at actual back wall; guard input/retreat unchanged':'centre'};
    await page.locator('#practice-dummy').selectOption(outcome==='guard'?'guard_stand':'stand');
    await page.evaluate(async({id,slot,facing,outcome,delivery,requireProduction})=>{
-    const {specialMove}=await import('./balance.js'),{validateP3SpecialContactDelivery}=await import('./special-contact-runtime-p3.js');
+    const {specialMove,ARENA}=await import('./balance.js'),{validateP3SpecialContactDelivery}=await import('./special-contact-runtime-p3.js');
     const g=mamoken3d.battle,[p,t]=g.fighters;
     if(requireProduction){if(g.specialContactDelivery?.version!==delivery.version)throw Error('Production Battle lost its approved contacts');}
     else g.specialContactDelivery=validateP3SpecialContactDelivery(delivery);
@@ -101,14 +102,27 @@ try{
     for(const a of [p,t])Object.assign(a,{action:null,hp:900,stun:0,stop:0,frame:0,y:0,vy:0,state:'idle',ko:false,used:false,spawned:false,input:{},prev:{},dashF:0,landF:0,comboHits:0,comboContact:null});
     p.x=facing===1?-.5:.5;p.facing=facing;t.facing=-facing;
     const row=delivery.characters[id][slot],maximum=Math.max(...row.activeReach.map(p=>p.reach));
-    t.x=p.x+facing*(outcome==='release'?1.4:outcome==='whiff'?maximum+.45:row.reach+.12);t.guard=100;
+    const distance=outcome==='release'?1.4:outcome==='whiff'?maximum+.45:row.reach+.12;
+    t.x=p.x+facing*distance;
+    // Back input naturally retreats. Place guard fixtures at the real arena wall
+    // rather than disabling walking or extending the striking surface.
+    if(outcome==='guard'){t.x=facing===1?ARENA.maxX:ARENA.minX;p.x=t.x-facing*distance;}
+    t.guard=100;
     // Let the real startup play so the renderer completes its normal blending.
-    g._begin(p,specialMove(id,Number(slot.slice(1))-1),slot);window.__p3SpecialEvent=null;
+    const begun=g._begin(p,specialMove(id,Number(slot.slice(1))-1),slot);window.__p3SpecialEvent=null;window.__p3SpecialFailure=null;
+    window.__p3SpecialAttempt={id,slot,facing,outcome,begun,initial:{gameFrame:g.frame,attackerX:p.x,targetX:t.x,distance},events:[],samples:[]};
+    if(!begun)throw Error('Actual special did not begin: '+id+'.'+slot);
     const tick=g.tick;g.tick=function(...args){const result=tick.apply(this,args),e=this.events.find(e=>outcome==='release'?e.type==='projectile':e.type===(outcome==='guard'?'block':'hit'));
+     const attempt=window.__p3SpecialAttempt;
+     for(const event of this.events)if(['hit','block','projectile','counter','combat_feedback'].includes(event.type)){attempt.events.push({...event,gameFrame:this.frame,actionFrame:p.frame});if(attempt.events.length>32)attempt.events.shift();}
+     if(p.action||this.frame%30===0){attempt.samples.push({gameFrame:this.frame,frame:p.frame,action:p.action?.id,attackerX:p.x,targetX:t.x,targetY:t.y,targetState:t.state,targetInput:{...t.input}});if(attempt.samples.length>24)attempt.samples.shift();}
      const whiff=outcome==='whiff'&&this.events.find(e=>e.type==='combat_feedback'&&e.feedback?.outcome==='whiff');
+     const wrongGuard=outcome==='guard'&&this.events.find(e=>e.type==='hit'),missed=outcome==='guard'&&this.events.some(e=>e.feedback?.outcome==='whiff');
+     if(wrongGuard||missed){window.__p3SpecialFailure={reason:wrongGuard?'guard fixture was actually hit':'guard fixture actually whiffed',event:wrongGuard,attempt};p.stop=300;t.stop=300;this.tick=tick;}
      if(e||whiff){window.__p3SpecialEvent={event:e??whiff,frame:p.frame,stop:p.stop,targetStop:t.stop,rootX:p.x,projectile:this.projectiles[0]&&{...this.projectiles[0]},hitEvents:this.events.filter(e=>e.type==='hit'||e.type==='block')};p.stop=300;t.stop=300;this.tick=tick;}return result;};
    },{id,slot,facing,outcome,delivery,requireProduction});
-   await page.waitForFunction(()=>window.__p3SpecialEvent,undefined,{timeout:12000});
+   await page.waitForFunction(()=>window.__p3SpecialEvent||window.__p3SpecialFailure,undefined,{timeout:12000});
+   const failure=await page.evaluate(()=>window.__p3SpecialFailure);assert.equal(failure,null,JSON.stringify(failure));
    const record=await page.evaluate(()=>{const a=mamoken3d.actors[0],p=mamoken3d.battle.fighters[0],entry=a.showtime[p.action?.id];return {...window.__p3SpecialEvent,clip:a.currentName,time:a.current?.time,poseWeight:a.current?.getEffectiveWeight(),expectedTime:entry?.spec.contactSeconds,surface:__p3SpecialSurface(),renderedFrame:p.frame};});
    assert.equal(record.clip,slot+'_v17',id+' actual renderer did not consume v17 special');assert.ok(record.poseWeight>.99,id+' incomplete contact pose blending');
    if(outcome==='release'){
@@ -123,7 +137,8 @@ try{
     assert.ok(Math.abs(event.x-(record.rootX+facing*actual.reach))<.005,id+' actual visible striking surface disagrees with hit point');
     assert.ok(Math.abs(event.y-actual.height)<.005,id+' actual strike height disagrees with hit point');
    }
-   await page.screenshot({path:dir+'/'+id+'-'+slot+'-'+(facing===1?'right':'left')+'-'+outcome+'.png'});report.cases.push({id,slot,facing,outcome,...record});
+   const attempt=await page.evaluate(()=>window.__p3SpecialAttempt);
+   await page.screenshot({path:dir+'/'+id+'-'+slot+'-'+(facing===1?'right':'left')+'-'+outcome+'.png'});report.cases.push({id,slot,facing,outcome,attempt,...record});report.pendingCase=null;
   }
  }
  if(sourceVersion==='v17r2'){
@@ -134,6 +149,7 @@ try{
   const active=await page.evaluate(async()=>{const {ACTIVE_NORMAL_MOTION_SOURCE:s}=await import('./normal-motion-source.js');return {version:s.contactVersion,clip:s.clipName('crouch_heavy',{rigId:'takimaru'}),file:s.pack('takimaru').file};});
   assert.equal(active.clip,'v17r2_crouch_heavy');assert.equal(active.file,'motion/v17r2/takimaru_normals_v17r2.glb');report.normalProvider=active;report.normalCases=[];
   for(const facing of [1,-1])for(const outcome of ['hit','guard','whiff']){
+   report.pendingCase={id:'takimaru',slot:'crouch_heavy',facing,outcome,placement:'0.55m crouching Chirka / 0.95m whiff'};
    await page.locator('#practice-dummy').selectOption('guard_crouch');
    await page.evaluate(async({facing,outcome})=>{
     const {normalMove}=await import('./balance.js'),g=mamoken3d.battle,[p,t]=g.fighters;
@@ -149,10 +165,10 @@ try{
    const row=await page.evaluate(()=>({...window.__p3LowEvent,clip:mamoken3d.actors[0].currentName,time:mamoken3d.actors[0].current.time,poseWeight:mamoken3d.actors[0].current.getEffectiveWeight()}));
    assert.equal(row.clip,'v17r2_crouch_heavy');assert.ok(row.poseWeight>.99);
    if(outcome==='whiff')assert.equal(row.hitEvents.length,0);else{assert.equal(row.event.type,outcome==='guard'?'block':'hit');assert.equal(row.frame,15);assert.equal(row.event.feedback.point.space,'authored-strike-surface');}
-   await page.screenshot({path:dir+'/takimaru-crouch_heavy-'+(facing===1?'right':'left')+'-'+outcome+'.png'});report.normalCases.push({facing,outcome,...row});
+   await page.screenshot({path:dir+'/takimaru-crouch_heavy-'+(facing===1?'right':'left')+'-'+outcome+'.png'});report.normalCases.push({facing,outcome,...row});report.pendingCase=null;
   }
   assert.equal(report.normalCases.length,6);
  }
  assert.equal(report.rows.length,27);assert.equal(report.cases.length,sourceVersion==='v17r2'?50:14);assert.deepEqual(report.errors,[]);report.passed=true;
-}catch(error){report.error=error.stack;await page.screenshot({path:dir+'/failure.png'}).catch(()=>{});throw error;}
+}catch(error){report.error=error.stack;report.failureState=await page.evaluate(()=>({info:mamoken3d?.battle?.info(),attempt:window.__p3SpecialAttempt,failure:window.__p3SpecialFailure,lowEvent:window.__p3LowEvent,actors:mamoken3d?.actors?.map(a=>({id:a.id,clip:a.currentName,time:a.current?.time,weight:a.current?.getEffectiveWeight(),source:a.showtime?.[mamoken3d.battle.fighters[a.slot]?.action?.id]?.spec?.sourceFile}))})).catch(()=>null);await page.screenshot({path:dir+'/failure.png'}).catch(()=>{});throw error;}
 finally{await writeFile(dir+'/report.json',JSON.stringify(report,null,2));await browser.close();}

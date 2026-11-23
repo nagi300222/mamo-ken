@@ -65,7 +65,9 @@ jobs:
               npm --prefix native test
               node native/test/browser.mjs ;;
             p3) node exp/fable-3d/dojo/acceptance/p3-feedback-browser.mjs ;;
-            special) MAMOKEN_REQUIRE_PRODUCTION=1 MAMOKEN_SPECIAL_SOURCE_VERSION=v17r2 node exp/fable-3d/dojo/acceptance/p3-special-contact-browser.mjs ;;
+            special)
+              MAMOKEN_REQUIRE_PRODUCTION=1 MAMOKEN_SPECIAL_SOURCE_VERSION=v17r2 node exp/fable-3d/dojo/acceptance/p3-special-contact-browser.mjs
+              node exp/fable-3d/dojo/acceptance/p3-special-response-browser.mjs ;;
             motion)
               node --test exp/fable-3d/motion/v17/qa/*.test.mjs
               MAMOKEN_REQUIRE_PRODUCTION=1 MAMOKEN_NORMAL_ART_REVISION=r2 MAMOKEN_ART_REVISION=15977ff node exp/fable-3d/motion/v17/qa/independent-motion-browser.mjs ;;

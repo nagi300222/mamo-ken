@@ -171,7 +171,7 @@ export async function createAvatar(definition,options={}){
  scene.updateMatrixWorld(true);
  const animations=[...gltf.animations,...normal.animations.map(clip=>bindAvatarClip(clip,{meshes}))];let disposed=false;
  return {scene,animations,bones,meshes,baseId,appearance:structuredClone(appearance),parameters:base.parameters,
-  normalMotionSource,normalMotionVersion:normalMotionSource.version,normalContacts:normalPack.contacts,combatStyleId:definition.combat.styleId,
+  normalMotionSource,normalMotionVersion:normalMotionSource.version,normalContacts:normalPack.contacts,combatStyleId:definition.combat?.styleId??baseId,
   grafts:Object.keys(donors),gltf:{scene,animations},
   dispose(){if(disposed)return;disposed=true;scene.removeFromParent();for(const g of geometries)g.dispose();for(const m of materials)m.dispose();for(const s of skeletons)s.dispose();}
  };
@@ -263,14 +263,17 @@ export function measureSpecialContact(avatar,clip,spec,move,{ref,sourceVersion=s
  if(!Number.isInteger(move?.active)||move.active<1||!Number.isFinite(spec.contactSeconds)||spec.contactSeconds<0||spec.contactSeconds>=clip.duration)fail('技または接触時計が不正です');
  const sourceClip=clip.userData?.customRetarget?.sourceClip??clip.name;
  if(sourceClip!==sourceMoveId+'_v17'||!reference?.attackPart||reference.clip!==sourceMoveId+'_v17')fail('元クリップ・実測打撃部位が一致しません');
- const attackPart=reference.attackPart,parts=new Set(['armL','armR','legL','legR','tail','body','head']);
- if(!parts.has(attackPart))fail('実測打撃部位が未対応です');
+ const limbParts={pawL:['armL'],pawR:['armR'],elbowL:['armL'],elbowR:['armR'],shoulderL:['armL','body'],shoulderR:['armR','body'],
+  footL:['legL'],footR:['legR'],kneeL:['legL'],kneeR:['legR'],tail:['tail'],body:['body','head'],head:['head']};
+ const attackParts=[...new Set(String(spec.attackLimb).split('+').flatMap(limb=>limbParts[limb]??[undefined]))];
+ if(attackParts.some(part=>!part)||!attackParts.includes(reference.attackPart))fail('実測打撃部位が宣言された技の手足と一致しません');
  const root=avatar.scene,old={position:root.position.clone(),rotation:root.quaternion.clone(),scale:root.scale.clone()},mixer=new THREE.AnimationMixer(root),v=new THREE.Vector3();
  const meshes=avatar.meshes.filter(mesh=>mesh.visible).map(mesh=>{
   const {skinIndex,skinWeight,position}=mesh.geometry.attributes,indices=[];
   for(let i=0;i<position.count;i++){
    let best=0;for(let k=1;k<4;k++)if(skinWeight.getComponent(i,k)>skinWeight.getComponent(i,best))best=k;
-   if(bonePart(mesh.skeleton.bones[skinIndex.getComponent(i,best)].name)===attackPart)indices.push(i);
+   const part=bonePart(mesh.skeleton.bones[skinIndex.getComponent(i,best)].name);
+   if(attackParts.includes(part))indices.push({vertex:i,part});
   }
   return {mesh,indices};
  });
@@ -279,10 +282,10 @@ export function measureSpecialContact(avatar,clip,spec,move,{ref,sourceVersion=s
   const action=mixer.clipAction(clip);action.setLoop(THREE.LoopOnce,1);action.clampWhenFinished=true;action.play();action.setEffectiveTimeScale(0);
   const at=seconds=>{action.time=seconds;mixer.update(0);root.updateMatrixWorld(true);};
   const surface=()=>{
-   let reach=-Infinity,height=0,vertices=0;
-   for(const {mesh,indices}of meshes){mesh.skeleton.update();for(const i of indices){mesh.getVertexPosition(i,v);v.applyMatrix4(mesh.matrixWorld);vertices++;if(v.z>reach){reach=v.z;height=v.y;}}}
+   let reach=-Infinity,height=0,part,vertices=0;
+   for(const {mesh,indices}of meshes){mesh.skeleton.update();for(const {vertex,part:group}of indices){mesh.getVertexPosition(vertex,v);v.applyMatrix4(mesh.matrixWorld);vertices++;if(v.z>reach){reach=v.z;height=v.y;part=group;}}}
    if(!vertices||!Number.isFinite(reach)||!Number.isFinite(height))fail('打撃部位の実スキン表面を取得できません');
-   return {reach:+reach.toFixed(6),height:+height.toFixed(6)};
+   return {reach:+reach.toFixed(6),height:+height.toFixed(6),part};
   };
   const activeReach=Array.from({length:move.active},(_,frame)=>{
    const seconds=specialClipTime(spec,move,move.startup+frame,clip.duration);at(seconds);
@@ -296,7 +299,7 @@ export function measureSpecialContact(avatar,clip,spec,move,{ref,sourceVersion=s
   return {ref,sourceCharacterId,sourceMoveId,clip:sourceMoveId+'_v17',motionVersion:'v17',sourceVersion,
    sourceClip:spec.actualSourceClip??sourceMoveId+'_v17',...(spec.sourceFile?{sourceFile:spec.sourceFile}:{}),
    source:'runtime-skinned-mesh',sampling:'exact-clip-clock',status:'ok',sampledContactSeconds:spec.contactSeconds,contactSeconds:spec.contactSeconds,
-   activeFrameCount:move.active,attackPart,attackLimb:spec.attackLimb,kind:spec.kind,...contact,activeReach,
+   activeFrameCount:move.active,attackPart:contact.part,attackParts,attackLimb:spec.attackLimb,kind:spec.kind,...contact,activeReach,
    ...(socket?{contactSocket:socket,...(move.kind==='projectile'?{projectileSocket:socket}:{})}:{}),visualRigId:avatar.baseId,grafts:[...avatar.grafts]};
  }finally{
   mixer.stopAllAction();mixer.uncacheRoot(root);root.position.copy(old.position);root.quaternion.copy(old.rotation);root.scale.copy(old.scale);root.updateMatrixWorld(true);

@@ -17,7 +17,7 @@ await page.addInitScript(()=>{
   Type.prototype.stop=function(when,...args){const record=pending.get(this);if(record&&Number.isFinite(when))window.__p3audio.push({...record,duration:when-record.start,wave:this.type});return stop.call(this,when,...args);};
  }
 });
-const errors=[],cases=[];
+const errors=[],cases=[],clawCases=[];
 page.on('pageerror',error=>errors.push(error.message));
 page.on('console',message=>{if(/PropertyBinding.*(not found|failed)/.test(message.text()))errors.push(message.text());});
 page.on('response',response=>{if(response.status()>=400&&!response.url().endsWith('favicon.ico'))errors.push(response.status()+' '+response.url());});
@@ -58,6 +58,59 @@ try{
   }
   await page.locator('#select-back').tap();
  }
+ // The original nine feel cases do not include Chirka. Prove the actual s3
+ // contact consumes its feedback into the new curved mesh in the real scene.
+ await page.locator('.fighter-card').nth(4).tap();await page.locator('#match-mode').selectOption('practice');await page.locator('#start').tap();
+ await page.waitForFunction(()=>mamoken3d.actors[0]?.id==='chirka'&&mamoken3d.practice.enabled&&mamoken3d.battle?.frame>0,undefined,{timeout:45000});
+ await page.locator('#practice-dummy').selectOption('stand');
+ for(const facing of [1,-1]){
+  if(await page.locator('#pause').textContent()==='再開')await page.locator('#pause').tap();
+  await page.evaluate(async facing=>{
+   const {specialMove}=await import('./balance.js'),g=mamoken3d.battle,[a,t]=g.fighters,scene=mamoken3d.actors[0].holder.parent;
+   window.__p3contact=null;window.__p3claw=null;window.__p3clawMesh=null;
+   for(const p of [a,t]){p.action=null;p.y=0;p.vy=0;p.frame=0;p.stun=0;p.stop=0;p.dashF=0;p.landF=0;p.state='idle';p.input={};p.prev={};p.comboHits=0;p.comboContact=null;p.bufferedInput=null;p.ko=false;p.hp=900;}
+   a.x=1.42*facing;t.x=1.76*facing;a.facing=facing;t.facing=-facing;
+   const add=scene.add;scene.add=function(...objects){
+    const result=add.apply(this,objects);
+    for(const mesh of objects){
+     const geometry=mesh.geometry,shapes=geometry?.parameters?.shapes;
+     if(geometry?.type!=='ShapeGeometry'||!Array.isArray(shapes)||shapes.length!==3||!shapes.every(shape=>shape.curves.filter(curve=>curve.isQuadraticBezierCurve).length===2))continue;
+     geometry.computeBoundingBox();const b=geometry.boundingBox,positions=geometry.attributes.position;
+     window.__p3clawMesh=mesh;
+     window.__p3claw={type:geometry.type,shapeCount:shapes.length,curveTypes:shapes.map(shape=>shape.curves.map(curve=>curve.type)),segments:geometry.parameters.curveSegments,
+      vertexCount:positions.count,indexCount:geometry.index?.count??0,finite:Array.from(positions.array).every(Number.isFinite),bounds:{min:b.min.toArray(),max:b.max.toArray()},
+      position:mesh.position.toArray(),scale:mesh.scale.toArray(),color:mesh.material.color.getHexString(),activeInstances:scene.children.filter(item=>item.geometry===geometry).length};
+     scene.add=add;
+     // Preserve the real rendered short-lived FX via the game's existing pause
+     // handler after vfx/animateFX finishes this task; no fake event or mesh.
+     queueMicrotask(()=>{const pause=document.querySelector('#pause');if(pause.textContent==='一時停止')pause.click();});
+     break;
+    }
+    return result;
+   };
+   window.__p3restoreSceneAdd=()=>{scene.add=add;};
+   const tick=g.tick;g.tick=function(...inputs){
+    const result=tick.apply(this,inputs),event=this.events.find(e=>e.type==='hit'&&e.feedback?.moveId==='s3');
+    if(event){window.__p3contact={event,attackerStop:a.stop,targetStop:t.stop,poseFrame:a.frame};a.stop=10000;t.stop=10000;this.tick=tick;}
+    return result;
+   };
+   if(!g._begin(a,specialMove('chirka',2),'s3'))throw Error('Chirka real s3 begin was rejected');
+  },facing);
+  await page.waitForFunction(()=>window.__p3contact&&window.__p3claw&&document.querySelector('#pause').textContent==='再開',undefined,{timeout:12000});
+  const record=await page.evaluate(()=>({facing:mamoken3d.battle.fighters[0].facing,contact:window.__p3contact,geometry:window.__p3claw,
+   attached:window.__p3clawMesh.parent===mamoken3d.actors[0].holder.parent,clip:mamoken3d.actors[0].currentName}));
+  clawCases.push(record);await writeFile(directory+'/chirka-curve-evidence.json',JSON.stringify({clawCases,errors},null,2));
+  assert.equal(record.facing,facing);assert.equal(record.contact.event.feedback.effect,'slash');assert.equal(record.contact.event.feedback.characterId,'chirka');
+  assert.equal(record.contact.event.feedback.point.space,'authored-special-surface');assert.equal(record.contact.event.feedback.moveId,'s3');assert.equal(record.contact.attackerStop,7);assert.equal(record.contact.targetStop,7);assert.equal(record.attached,true);
+  const geometry=record.geometry;assert.equal(geometry.shapeCount,3);assert.equal(geometry.finite,true);assert.equal(geometry.segments,8);
+  assert.ok(geometry.vertexCount>12&&geometry.vertexCount<500&&geometry.indexCount>0,'Missing or unbounded claw triangulation');
+  assert.ok(geometry.activeInstances>0&&geometry.activeInstances<=24,'Claw FX instance limit exceeded');
+  const width=geometry.bounds.max[0]-geometry.bounds.min[0],height=geometry.bounds.max[1]-geometry.bounds.min[1];
+  assert.ok(width>.15&&width<.4&&height>.3&&height<.4,'Actual claw shape bounds are unexpected');
+  assert.ok(Math.abs(geometry.position[0]-record.contact.event.feedback.point.x)<1e-6&&Math.abs(geometry.position[1]-record.contact.event.feedback.point.y)<1e-6,'Claw mesh missed its real authored contact point');
+  await page.screenshot({path:directory+'/chirka-s3-'+(facing>0?'right':'left')+'-curved-hit.png'});
+  await page.evaluate(()=>window.__p3restoreSceneAdd());
+ }
  const audio=await page.evaluate(async()=>{
   const {createCombatAudio}=await import('./combat-audio.js'),{feedbackForMove,IMPACT_SOUND_RECIPES}=await import('./fight-feel.js');
   const results={};
@@ -91,7 +144,7 @@ try{
  }
  // Write measurements before assertions so failed CI retains the actual signal,
  // schedules and in-game events rather than screenshots alone.
- await writeFile(directory+'/report.json',JSON.stringify({cases,audio,errors},null,2));
+ await writeFile(directory+'/report.json',JSON.stringify({cases,clawCases,audio,errors},null,2));
  for(const name of ['light','heavy','guard','swing']){
   const result=audio[name];assert.equal(result.played,true);assert.ok(result.finite&&result.rms>0&&result.peak<.1,name+' clipped, nonfinite or silent');
   assert.equal(result.scheduled.length,1,name+' did not schedule exactly one voice');
@@ -104,7 +157,7 @@ try{
  assert.notEqual(audio.guard.sound,audio.heavy.sound);assert.notEqual(audio.swing.sound,audio.heavy.sound);
  assert.ok(Math.abs(audio.quarter.rms/audio.light.rms-.25)<.005,'independent volume gain not respected');
  for(const name of ['whiff','muted','zero']){assert.equal(audio[name].played,false);assert.equal(audio[name].peak,0);}
- assert.deepEqual(errors,[]);await writeFile(directory+'/report.json',JSON.stringify({cases,audio,errors},null,2));
- console.log('P3 FEEDBACK WEBGL/AUDIO PASS: 9 real weak/heavy/guard holds, frozen authored poses, 8 browser audio buffers with mute/volume/miss distinctions');
-}catch(error){await page.screenshot({path:directory+'/failure.png'}).catch(()=>{});throw error;}
+ assert.deepEqual(errors,[]);await writeFile(directory+'/report.json',JSON.stringify({cases,clawCases,audio,errors},null,2));
+ console.log('P3 FEEDBACK WEBGL/AUDIO PASS: 9 real weak/heavy/guard holds, 2 real Chirka s3 curved contacts, frozen authored poses, 8 browser audio buffers with mute/volume/miss distinctions');
+}catch(error){await writeFile(directory+'/claw-failure.json',JSON.stringify(await page.evaluate(()=>({contact:window.__p3contact,geometry:window.__p3claw})).catch(()=>({})),null,2));await page.screenshot({path:directory+'/failure.png'}).catch(()=>{});throw error;}
 finally{await browser.close();}
