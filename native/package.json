@@ -11,6 +11,7 @@
     "ios:generate": "node tools/generate-ios.mjs",
     "ios:sync": "npm run build && cap sync ios && node tools/configure-ios.mjs",
     "ios:open": "cap open ios",
+    "ios:smoke": "node tools/simulator-smoke.mjs",
     "test": "node --test test/*.test.mjs"
   },
   "dependencies": {

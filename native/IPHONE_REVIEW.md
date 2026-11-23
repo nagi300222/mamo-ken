@@ -10,7 +10,8 @@ P0/P1の実装承認と、iPhoneで使いやすいと本人が認めたことは
 | Capacitor 8.6.2 iOS生成 | 実Xcode/SPM/Swift/Info.plistソースを生成 | LinuxではXcodeコンパイル不能 |
 | 端末内ゲーム素材 | 約107.7 MB、144ファイルを生成（初期P1基準） | P0/P4統合後はnative/evidence/native-assets.jsonで再計測 |
 | Node保存・横向き・音・native契約 | 自動テスト対象 | UIKit・WebKit実機挙動は別 |
-| macOS Simulator unsigned build | CI実ログ待ち | 端末の署名・インストール・操作は別 |
+| macOS Simulator unsigned build | [CI45124479615](https://github.com/nagi300222/mamo-ken/actions/runs/45124479615)でXcode26.6／iPhoneSimulator26.5 SDKによるBUILD SUCCEEDEDを確認 | 端末の署名・インストール・操作は別 |
+| 実Simulator起動・画面保存 | `ios:smoke`を追加。追加後の実CI待ち | 画面保存だけで対戦・タッチ・実機性能の合格とはしない |
 
 ## 本人のiPhoneで確認
 

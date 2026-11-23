@@ -40,6 +40,20 @@ xcodebuild -project native/ios/App/App.xcodeproj -scheme App -configuration Debu
 
 iPhoneへ入れる場合は本人のMacのXcodeで対象iPhoneを選び、Signing & CapabilitiesのTeamと必要ならBundle Identifierを本人の環境に合わせる。初期ID`jp.nagi.mamoken.poc`は検証用の仮IDで、登録済みの本番IDではない。Developer Modeや初回の開発元信頼が端末から要求された場合も本人の端末で操作する。Apple ID・証明書・Provisioning ProfileをGitHubへ保存しない。Simulator用`.app`は実機用IPAではない。
 
+## Simulatorへ実インストールして画面を保存
+
+unsigned simulatorアプリをビルドしたMacで、次を実行する。
+
+```sh
+npm --prefix native run ios:smoke
+```
+
+`simctl`の実inventoryから利用可能なiPhoneとiOS runtimeを選び、boot完了待ち→App.appの実インストール→起動→8秒後と10秒後のPNG撮影を行う。起動PIDが残っていることも確認する。Xcode/SDK、選択したSimulator、実PNGの縦横ピクセル数、実行コマンド、アプリログを`native/evidence/simulator/`へ保存する。既存のSimulatorデータを消去せず、この工程で起動したSimulatorだけ終了する。
+
+Simulatorが無い、bootに失敗する、アプリが終了する、PNGを取得できない場合はCIを失敗にし、成功へ置換しない。`MAMOKEN_SIMULATOR_APP`でビルド済み.appの場所、`MAMOKEN_SIMULATOR_EVIDENCE`で証拠出力先を指定できる。
+
+これは**実iOS Simulatorのインストール・プロセス起動・画面保存**の検査。自動撮影しただけでは、画面内のゲームUIが正しいこと、WebGLで対戦できたこと、タッチ操作やiPhone実機性能が合格したとは扱わない。PNGの縦横は実測値として残し、UIKitのinterface orientationは画像の目視確認と合わせて判断する。P1本人確認ゲートは解除しない。
+
 ## 横向き・復帰・音
 
 - Info.plistはiPhone／iPadとも左右のLandscapeのみ。iPadの全画面要件も指定する。
