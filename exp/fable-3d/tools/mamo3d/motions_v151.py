@@ -48,8 +48,8 @@ def pisuke(cid):
                 handL=P((0.45, 0.0, 0.20)), handR=P((0.45, -0.10, 0.10)), tail=(24, 0), jaw=12.0, keys=K(n0, brow_angry=0.4))
     land = merge(n0, pelvis=pel(n0, (0, 0, -0.22), (10, -50, 0)), handL=P((0.30, 0.20, -0.20)), handR=P((0.30, 0.15, -0.20)), footL=foot(n0, 'footL', (0.04, 0.04, 0)), footR=foot(n0, 'footR', (0.06, -0.04, 0)), tail=(-12, 0))
     crane = merge(n0, pelvis=pel(n0, (0, 0.02, 0.10), (-4, -64, 0)), chest=add(n0['chest'], (-8, -8, 0)), head=add(n0['head'], (-10, -30, -6)),
-                  footL=foot(n0, 'footL', (0.02, 0.02, 0), yaw=-10), footR=foot(n0, 'footR', (0.04, 0.34, 0.62), pitch=-10, knee=0.55),
-                  handL=W((0.62, 0.0, 0.42), fwd=(1, 0, 0.2), back=(0, 0, 1), elbow=(0.6, -0.3, -0.6)), handR=W((0.62, 0.05, 0.42), fwd=(1, 0, 0.2), back=(0, 0, 1), elbow=(0.6, -0.3, -0.6)), tail=(22, 0), jaw=10.0, keys=K(n0, paw_open_L=1.0, paw_open_R=1.0))
+                  footL=foot(n0, 'footL', (0.02, 0.02, 0), yaw=-10), footR=foot(n0, 'footR', (0.10, 0.40, 0.95), pitch=-20, knee=0.6),
+                  handL=P((0.86, 0.05, 0.30), fwd=(1, 0, 0.25), back=(0, 0, 1), elbow=(0.5, -0.3, -0.7)), handR=P((0.86, 0.05, 0.30), fwd=(1, 0, 0.25), back=(0, 0, 1), elbow=(0.5, -0.3, -0.7)), tail=(22, 0), jaw=10.0, keys=K(n0, paw_open_L=1.0, paw_open_R=1.0))
     keys = [(0, n0), (10, hop, 'out'), (20, n0, 'in'), (30, hop, 'out'), (40, n0, 'in'), (52, kick1, 'in3'), (60, kick1, 'lin'), (76, crouch, 'io'), (84, crouch, 'lin'), (96, air, 'in'), (112, air, 'lin'), (126, land, 'in'), (152, crane, 'out3')]
     spin = [(0, 0), (84, 0, 'lin'), (96, 150, 'in'), (112, 330, 'lin'), (126, 360, 'out'), (N, 360, 'lin')]
     base = spun(cid, keys, spin); last = crane
@@ -61,7 +61,7 @@ def godan(cid):
     n0 = neutral(cid)
     wide = merge(n0, pelvis=pel(n0, (0, 0, -0.22), (6, -66, 0)), chest=add(n0['chest'], (4, 0, 0)), head=add(n0['head'], (0, -30, 0)), footL=foot(n0, 'footL', (0.20, 0.0, 0), yaw=-20), footR=foot(n0, 'footR', (0.22, 0.0, 0), yaw=20),
                  handL=P((0.34, 0.10, -0.40)), handR=P((0.34, 0.10, -0.40)), tail=(-6, 0), keys=K(n0, brow_angry=1.0))
-    lift = merge(wide, pelvis=pel(n0, (0.10, 0, -0.06), (4, -66, -16)), chest=add(n0['chest'], (0, 0, 10)), footR=foot(n0, 'footR', (0.62, 0.0, 0.86), yaw=20, pitch=-10, knee=0.35),
+    lift = merge(wide, pelvis=pel(n0, (0.16, 0, 0.02), (4, -66, -24)), chest=add(n0['chest'], (0, 0, 14)), footR=foot(n0, 'footR', (0.85, 0.0, 1.35), yaw=30, pitch=-20, knee=0.5),
                  handL=P((0.40, 0.05, -0.30)), handR=R_((0.55, 0.0, 0.62), fwd=(1, 0, 0), back=(0, 0, 1), elbow=(0.3, -0.6, -0.7)), tail=(8, 0), jaw=6.0)
     stomp = merge(wide, pelvis=pel(n0, (0, 0, -0.46), (10, -66, 0)), chest=add(n0['chest'], (10, 0, 0)), head=add(n0['head'], (6, -30, 0)), footR=foot(n0, 'footR', (0.30, 0.0, 0), yaw=24),
                   handL=R_((0.36, 0.10, 0.52), fwd=(0, 0.3, -0.9), back=(1, 0, 0), elbow=(0.9, -0.3, 0.2)), handR=R_((0.36, 0.10, 0.52), fwd=(0, 0.3, -0.9), back=(1, 0, 0), elbow=(0.9, -0.3, 0.2)), tail=(-18, 0), jaw=14.0)
@@ -71,13 +71,13 @@ def godan(cid):
                 handL=P((0.30, 0.12, -0.42), fwd=(0, 0.2, -1.0), back=(1, 0.2, 0), elbow=(0.9, -0.3, 0.1)), handR=P((0.30, 0.10, -0.42), fwd=(0, 0.2, -1.0), back=(1, 0.2, 0), elbow=(0.9, -0.3, 0.1)), jaw=8.0, tail=(6, 0))
     keys = [(0, n0), (30, wide, 'io'), (40, wide, 'lin'), (74, lift, 'out3'), (88, lift, 'lin'), (98, stomp, 'in3'), (112, stomp, 'lin'), (136, rise, 'io'), (148, rise, 'lin'), (160, osu, 'in'), (172, osu, 'out')]
     return dict(frames=N, loop=False, fn=held(keys, 172), info=info(cid, '四股・押忍', dict(stance=30, lift=74, stomp=98, cross=136, osu=160), 60,
-                silhouette='カメラへ正対して腰を割る→右脚を高く上げる→踏み下ろし（地響き）→胸の前で拳を交差→両拳を腰へ引き切って押忍', impact_frames=[98]))
+                silhouette='カメラへ正対して腰を割る→体を傾けて右脚を浮かせる（脚が短く、上がりは小さい）→深く踏み下ろし（地響き）→胸の前で拳を交差→両拳を腰へ引き切って押忍', impact_frames=[98]))
 
 # ---------------------------------------------------------------- ハクマ: 柏手と一礼
 def hakuma(cid):
     n0 = neutral(cid)
     open_ = merge(n0, pelvis=pel(n0, (0, 0, -0.06), (0, -62, 0)), chest=add(n0['chest'], (-10, 0, 0)), head=add(n0['head'], (-8, -30, 0)),
-                  handL=W((0.80, 0.10, 0.30), fwd=(1, 0, 0.1), back=(0, -1, 0), elbow=(0.3, -0.4, -0.8)), handR=W((0.80, 0.10, 0.30), fwd=(1, 0, 0.1), back=(0, -1, 0), elbow=(0.3, -0.4, -0.8)), tail=(8, 0), keys=K(n0, paw_open_L=1.0, paw_open_R=1.0))
+                  handL=P((0.90, 0.15, 0.20), fwd=(1, 0, 0.1), back=(0, -1, 0), elbow=(0.3, -0.4, -0.8)), handR=P((0.90, 0.15, 0.20), fwd=(1, 0, 0.1), back=(0, -1, 0), elbow=(0.3, -0.4, -0.8)), tail=(8, 0), keys=K(n0, paw_open_L=1.0, paw_open_R=1.0))
     clap = merge(open_, chest=add(n0['chest'], (-2, 0, 0)), head=add(n0['head'], (2, -30, 0)),
                  handL=P((0.02, 0.46, 0.14), fwd=(-0.3, 0.3, 0.9), back=(1, 0, 0), elbow=(0.9, -0.2, -0.4)), handR=P((0.02, 0.46, 0.14), fwd=(-0.3, 0.3, 0.9), back=(1, 0, 0), elbow=(0.9, -0.2, -0.4)), jaw=4.0, keys=K(n0, paw_open_L=1.0, paw_open_R=1.0))
     bow = merge(clap, pelvis=pel(n0, (0, -0.06, -0.08), (34, -62, 0)), spine=add(n0['spine'], (10, 0, 0)), chest=add(n0['chest'], (16, 0, 0)), neck=add(n0['neck'], (8, 0, 0)), head=add(n0['head'], (16, -30, 0)), tail=(-14, 0), keys=K(n0, paw_open_L=1.0, paw_open_R=1.0, blink=1.0))
@@ -93,12 +93,12 @@ def chirka(cid):
     sway1 = merge(n0, pelvis=pel(n0, (0.06, 0, 0.04), (0, -40, 8)), head=add(n0['head'], (0, -20, 12)), handL=P((0.26, 0.20, 0.05)), handR=P((0.26, 0.15, 0.05)), tail=(20, 14))
     sway2 = merge(n0, pelvis=pel(n0, (-0.06, 0, 0.04), (0, -50, -8)), head=add(n0['head'], (0, -24, -12)), handL=P((0.26, 0.20, 0.05)), handR=P((0.26, 0.15, 0.05)), tail=(20, -14))
     dip = merge(n0, pelvis=pel(n0, (0, 0, -0.24), (10, -30, 0)), handL=P((0.30, 0.10, -0.20)), handR=P((0.30, 0.05, -0.20)), tail=(-10, 0))
-    twirl = merge(n0, pelvis=pel(n0, (0, 0, 0.34), (-4, 0, 0)), handL=W((0.55, 0, 0.40), fwd=(1, 0, 0.3), back=(0, 0, 1), elbow=(0.5, -0.3, -0.7)), handR=W((0.55, 0, 0.40), fwd=(1, 0, 0.3), back=(0, 0, 1), elbow=(0.5, -0.3, -0.7)),
+    twirl = merge(n0, pelvis=pel(n0, (0, 0, 0.34), (-4, 0, 0)), handL=P((0.80, 0.0, 0.30), fwd=(1, 0, 0.3), back=(0, 0, 1), elbow=(0.5, -0.3, -0.7)), handR=P((0.80, 0.0, 0.30), fwd=(1, 0, 0.3), back=(0, 0, 1), elbow=(0.5, -0.3, -0.7)),
                   footL=foot(n0, 'footL', (0, 0, 0.30), pitch=30), footR=foot(n0, 'footR', (0, 0.10, 0.44), pitch=40, knee=0.4), tail=(34, 0), jaw=8.0, keys=K(n0, paw_open_L=1.0, paw_open_R=1.0))
     lean = merge(n0, pelvis=pel(n0, (0, 0.06, -0.10), (18, -78, 0)), spine=add(n0['spine'], (6, 0, 0)), chest=add(n0['chest'], (8, 0, 0)), neck=add(n0['neck'], (-10, 0, 0)), head=add(n0['head'], (-16, -36, 14)),
-                 handR=P((0.16, 0.34, 0.34), fwd=(0, 0.2, 1.0), back=(0, 1, 0), elbow=(0.9, -0.3, -0.2)), handL=P((0.30, 0.0, -0.36), fwd=(0, -0.2, -1.0), back=(1, 0, 0), elbow=(0.7, -0.6, 0)),
+                 handR=P((0.30, 0.30, 0.62), fwd=(0, 0.2, 1.0), back=(0, 1, 0), elbow=(0.9, -0.3, -0.2)), handL=P((0.30, 0.0, -0.36), fwd=(0, -0.2, -1.0), back=(1, 0, 0), elbow=(0.7, -0.6, 0)),
                  footL=foot(n0, 'footL', (0.04, 0.02, 0)), footR=foot(n0, 'footR', (0.06, -0.06, 0), pitch=30), tail=(40, 0), jaw=10.0, keys=K(n0, paw_open_R=1.0))
-    wave = merge(lean, head=add(n0['head'], (-16, -36, -10)), handR=P((0.26, 0.30, 0.38), fwd=(0.3, 0.2, 0.95), back=(0, 1, 0), elbow=(0.9, -0.3, -0.2)), tail=(40, 12), keys=K(n0, paw_open_R=1.0, blink=1.0))
+    wave = merge(lean, head=add(n0['head'], (-16, -36, -10)), handR=P((0.46, 0.28, 0.66), fwd=(0.3, 0.2, 0.95), back=(0, 1, 0), elbow=(0.9, -0.3, -0.2)), tail=(40, 12), keys=K(n0, paw_open_R=1.0, blink=1.0))
     keys = [(0, n0), (16, sway1, 'io'), (32, sway2, 'io'), (48, sway1, 'io'), (60, dip, 'io'), (72, twirl, 'in'), (96, twirl, 'lin'), (110, dip, 'in'), (140, lean, 'out3'), (158, wave, 'io'), (176, lean, 'io'), (194, wave, 'io'), (212, lean, 'io')]
     spin = [(0, 0), (60, 0, 'lin'), (72, 90, 'in'), (96, 630, 'lin'), (110, 720, 'out'), (N, 720, 'lin')]
     base = spun(cid, keys, spin)
