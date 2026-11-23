@@ -15,10 +15,16 @@ const PROFILES={
 const chosen=document.getElementById('chosen-name'),roster=document.getElementById('roster');
 if(chosen&&roster){
  const panel=document.createElement('div');panel.className='p4-profile';panel.setAttribute('aria-live','polite');panel.setAttribute('aria-label','選択キャラクターの得意と苦手');
+ // Keep all nine choices beside one large character dossier. The footer owns
+ // only match settings and the commit action, so it cannot cover the dossier.
+ const selection=document.querySelector('.selection-inner'),footer=document.querySelector('.selection-footer');
+ const layout=document.createElement('div');layout.className='p4-selection-main';
+ selection.insertBefore(layout,roster);layout.append(roster,panel);
+ const chosenCopy=footer?.querySelector('.chosen');if(chosenCopy)panel.prepend(chosenCopy);
  const portrait=document.createElement('img');portrait.className='p4-selected-portrait';portrait.alt='';portrait.setAttribute('aria-hidden','true');portrait.hidden=true;
  const strength=document.createElement('span'),weakness=document.createElement('span');strength.dataset.strength='';weakness.dataset.weakness='';
  const sLabel=document.createElement('b'),wLabel=document.createElement('b');sLabel.textContent='得意';wLabel.textContent='苦手';
- const sText=document.createTextNode(''),wText=document.createTextNode('');strength.append(sLabel,sText);weakness.append(wLabel,wText);panel.append(portrait,strength,weakness);roster.after(panel);
+ const sText=document.createTextNode(''),wText=document.createTextNode('');strength.append(sLabel,sText);weakness.append(wLabel,wText);panel.append(portrait,strength,weakness);
  const update=()=>{for(const button of roster.querySelectorAll('button')){button.setAttribute('aria-pressed',String(button.classList.contains('chosen')));const character=Object.values(UI_ART).find(asset=>asset.character&&asset.displayName===button.querySelector('span')?.textContent);if(character&&!button.querySelector('.p4-crest')){const image=document.createElement('img');image.className='p4-crest';image.alt='';image.setAttribute('aria-hidden','true');image.src=uiArtUrl('crest-'+character.character);image.dataset.uiArt='crest-'+character.character;button.appendChild(image);}}const selected=roster.querySelector('.fighter-card.chosen img:not(.p4-crest)');if(selected?.getAttribute('src')){const src=selected.getAttribute('src');if(portrait.getAttribute('src')!==src)portrait.src=src;portrait.hidden=false;}else portrait.hidden=true;const [s,w]=PROFILES[chosen.textContent]??['自分の間合いを知る','相手の得意な間合い'];sText.textContent=s;wText.textContent=w;};
  new MutationObserver(update).observe(chosen,{childList:true,subtree:true,characterData:true});new MutationObserver(update).observe(roster,{childList:true,subtree:true,attributes:true,attributeFilter:['class']});update();
 }

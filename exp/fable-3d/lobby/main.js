@@ -7,7 +7,8 @@ async function restoreJourneyLabel(){try{
  await globalThis.mamokenNative?.ready;
  const raw=localStorage.getItem('mamoken.story.v16.1');
  if(raw&&raw.length<100000){const saved=JSON.parse(raw);if(saved.version===1&&typeof saved.avatar?.name==='string'){
-  document.getElementById('saved-journey').textContent=saved.avatar.name.slice(0,24)+' の旅を続ける';
+  const label=saved.avatar.name.slice(0,24)+' の旅を続ける';
+  document.getElementById('saved-journey').textContent=label;document.getElementById('saved-journey').title=label;
  }}
 }catch{/* A damaged or unavailable save must never block the mode menu. */}}
 restoreJourneyLabel();
