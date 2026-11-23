@@ -30,3 +30,7 @@ The user requested **implementation including the Claude-assigned 9×6 normal mo
 - Authoring source: `exp/fable-3d/dojo/normal-motifs-v15.js`, packer `normal-clip-builder-v15.mjs`. `models.js` selects v15 clips by priority and `main.js` binds them to the existing actual character skeleton, preserving all nine previously created ultimates.
 - **Mio's implementation, not a direct Claude Code session**: Claude can now review and improve the actual generated animation assets via the same motif source or replace them with hand-crafted Blender clips. Do not erase these working assets; propose edit-ready improvements with rendered footage and submit a distinct Draft PR.
 - Important art review targets: silhouette difference on tiny phone stage, joint clipping, true foot contact and tail tip trajectory, left/right paw direction, stiffness and character personality. Preserve actual `Battle` timings and hitboxes unless a separate combat change is reviewed.
+
+
+## Species identity (owner confirmed 2026-11-23)
+All nine MamoKen characters, including Moguzo, are marmots (マーモット). Moguzo is not a mole (モグラ). Do not infer species from names. Preserve the established models. See docs/mamoken-v16/CHARACTER_IDENTITY.md.

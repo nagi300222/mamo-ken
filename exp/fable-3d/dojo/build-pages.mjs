@@ -41,7 +41,8 @@ for(const id of IDS){
     await copyOne(path.join(PROJECT,'assets',folder,name),path.join(OUTPUT,'assets',folder,name));
   }
 }
-await writeFile(path.join(OUTPUT,'index.html'),'<!doctype html><html lang="ja"><meta charset="utf-8"><meta http-equiv="refresh" content="0;url=./dojo/"><title>マモ拳3D</title><a href="./dojo/">ゲームを開く</a></html>');
+await copyOne(path.join(ROOT,'lobby','index.html'),path.join(OUTPUT,'index.html'));
+await copyOne(path.join(ROOT,'lobby','style.css'),path.join(OUTPUT,'lobby','style.css'));
 await writeFile(path.join(OUTPUT,'_headers'),'/chars/*\n  Cache-Control: public, max-age=120\n/normal/*\n  Cache-Control: public, max-age=120\n/presentation/*\n  Cache-Control: public, max-age=120\n/dojo/*\n  Cache-Control: no-cache\n/cinematic/*\n  Cache-Control: no-cache\n');
 console.log('Cloudflare Pages static output:',OUTPUT);
 console.log('9 GLB total:',(bytes/1024/1024).toFixed(2)+' MiB');
