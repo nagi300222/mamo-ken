@@ -7,7 +7,7 @@ import {ROSTER,IDS,FPS,ARENA} from '../dojo/balance.js';
 import {chooseClip} from '../dojo/models.js';
 import {normalClipTime} from '../dojo/normal-timing-v151.js';
 import {ACTIVE_NORMAL_MOTION_SOURCE} from '../dojo/normal-motion-source.js';
-import {specialClipTime} from '../dojo/special-motion-source.js';
+import {specialClipTime,resolveSpecialBone} from '../dojo/special-motion-source.js';
 import {consumeSpecialMovementCues} from '../dojo/special-cues.js';
 import {bindMorphTargets} from '../dojo/morph-binding.js';
 import {createCombatAudio} from '../dojo/combat-audio.js';
@@ -174,7 +174,7 @@ function syncCombatActor(actor,fighter){
   entry.action.setEffectiveTimeScale(0);entry.action.time=Math.min(duration,seconds);actor.mixer.update(0);
   actor.holder.updateMatrixWorld(true);
   actor.specialCueIndex=consumeSpecialMovementCues(entry.spec,seconds,actor.specialCueIndex,{audio,characterId:actor.id,visual:cue=>{
-   if(reducedMotion)return;const point=cue.bone&&actor.model.getObjectByName(cue.bone)?.getWorldPosition(new THREE.Vector3());
+   if(reducedMotion)return;const point=cue.bone&&resolveSpecialBone(actor.model,cue.bone)?.getWorldPosition(new THREE.Vector3());
    showCombatImpact({characterId:actor.id,effect:cue.key==='roar'?'block':'shard',point:{x:point?.x??fighter.x,y:point?.y??fighter.y+.35},scale:.8,lifeFrames:10});
   }});
  }else if(!fighter.stop)actor.mixer.update(1/FPS);

@@ -14,7 +14,7 @@ await rm(OUTPUT,{recursive:true,force:true});await mkdir(OUTPUT,{recursive:true}
 const dojo=path.join(ROOT,'dojo');
 for(const name of ['index.html','style.css','models.js','balance.js','battle.js','commands.js','cpu.js','camera-frame.js','main.js','showtime-profiles.js','combat-audio.js','showtime-illusions.js','arena-music.js','hud-themes.js','ultimate-cinematic.js','showtime-assets.js','authored-cinematic.js','run-controller.js','run-cpu.js','run-stages.js','run-ui.js','run-dialogue.js','presentation-flow.js','presentation-data.js','choreographed-cinematic.js','cinematic-stage.js','morph-binding.js','landscape-lock.js','practice-mode.js','fighter-style.js','normal-balance-v151.js','normal-contact-runtime-v151.js','normal-contacts-v151.js','normal-timing-v151.js','normal-motifs-v15.js','fight-feel.js','special-balance-p3.js','p3-contact-adapter.js','normal-contact-overrides-p3.js','normal-contact-source.js','normal-motion-source.js','p3-normal-candidate.js'])
   await copyOne(path.join(dojo,name),path.join(OUTPUT,'dojo',name));
-for(const name of ['special-motion-source.js','special-motion-overrides-p3.js','special-cues.js'])
+for(const name of ['special-motion-source.js','special-motion-overrides-p3.js','special-cues.js','special-contact-runtime-p3.js','special-contact-overrides-p3.js'])
   await copyOne(path.join(dojo,name),path.join(OUTPUT,'dojo',name));
 await cp(path.join(ROOT,'preview','vendor'),path.join(OUTPUT,'preview','vendor'),{recursive:true});
 await cp(path.join(ROOT,'shared-ui'),path.join(OUTPUT,'shared-ui'),{recursive:true,filter:file=>!file.endsWith('.test.mjs')});

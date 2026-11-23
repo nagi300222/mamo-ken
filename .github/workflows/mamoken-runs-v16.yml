@@ -20,7 +20,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        suite: [core, avatar, custom, story, native, p3, motion]
+        suite: [core, avatar, custom, story, native, p3, motion, special]
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -65,6 +65,7 @@ jobs:
               npm --prefix native test
               node native/test/browser.mjs ;;
             p3) node exp/fable-3d/dojo/acceptance/p3-feedback-browser.mjs ;;
+            special) node exp/fable-3d/dojo/acceptance/p3-special-contact-browser.mjs ;;
             motion)
               node --test exp/fable-3d/motion/v17/qa/motion-structure.test.mjs
               MAMOKEN_ART_REVISION=7f79ea252d6f5c08de892bd11c0e85845a91af14 node exp/fable-3d/motion/v17/qa/independent-motion-browser.mjs ;;

@@ -87,3 +87,17 @@ export function specialClipTime(spec,move,frame,duration){
  if(f<=activeEnd)return contact+(end-contact)*(f-move.startup)/Math.max(1,move.active-1);
  return Math.min(duration,end+(duration-end)*(f-activeEnd)/Math.max(1,move.recovery+1));
 }
+
+// Authoring uses pawR/footR while exported Blender bones use paw.R/foot.R.
+// Resolve the original node instead of silently placing releases at body centre.
+export function resolveSpecialBone(root,anchor){
+ if(!anchor)return null;
+ const exact=root.getObjectByName?.(anchor);if(exact)return exact;
+ const canonical=name=>String(name).toLowerCase().replace(/[^a-z0-9]/g,'');
+ const wanted=canonical(anchor==='tail'?'tail_03':anchor);let match=null;
+ root.traverse(node=>{if(!match&&node.isBone&&canonical(node.name)===wanted)match=node;});
+ return match;
+}
+export function specialReleaseAnchor(row){
+ return row.cue_track?.find(c=>c.trigger==='movement'&&c.type==='vfx'&&c.key==='special'&&c.bone)?.bone??row.fx_anchor;
+}

@@ -20,7 +20,7 @@ import { shouldRotateLandscape, localStickAxes } from './landscape-lock.js';
 import { createPracticeController } from './practice-mode.js';
 import { normalClipTime } from './normal-timing-v151.js';
 import { ACTIVE_NORMAL_MOTION_SOURCE } from './normal-motion-source.js';
-import { specialClipTime } from './special-motion-source.js';
+import { specialClipTime,resolveSpecialBone } from './special-motion-source.js';
 import { consumeSpecialMovementCues } from './special-cues.js';
 import { createPresentationFlow } from './presentation-flow.js';
 import { VICTORY, VICTORY_CLIP, VICTORY_PACK, VICTORY_CAMERA_DISTANCE, VS_TEXT, cameraSegment, victoryPlan, faceCamera } from './presentation-data.js';
@@ -596,7 +596,7 @@ function playSpecialFrame(actor,fighter,entry){
   entry.action.time=Math.max(0,seconds);actor.mixer.update(0);
   actor.holder.updateMatrixWorld(true);
   actor.specialCueIndex=consumeSpecialMovementCues(entry.spec,seconds,actor.specialCueIndex,{audio:audioFX,characterId:actor.id,visual:cue=>{
-      const position=cue.bone&&actor.gltf.scene.getObjectByName(cue.bone)?.getWorldPosition(new THREE.Vector3());
+      const position=cue.bone&&resolveSpecialBone(actor.gltf.scene,cue.bone)?.getWorldPosition(new THREE.Vector3());
       impactFX(cue.key,showtimeFor(actor.id).color,position?.x??fighter.x,position?.y??fighter.y+.35,1,14,scene,flashes,position?.z??.23);
   }});
 }

@@ -5,6 +5,7 @@ import {fighterStyle,isChainNormal,isChainWeak} from './fighter-style.js';
 import {normalReachAt,normalHeightAt,normalVerticalContact} from './normal-contact-runtime-v151.js';
 import * as NORMAL_ART from './normal-contact-source.js';
 import {feedbackForMove} from './fight-feel.js';
+import {ACTIVE_P3_SPECIAL_CONTACT_DELIVERY,validateP3SpecialContactDelivery,withP3SpecialContact,specialSurfaceAt,specialSurfaceContact} from './special-contact-runtime-p3.js';
 // 設計の正本はバランスデータ。GLB・Three.js・操作DOMには依存しない。
 const KEYS=['left','right','up','down','weak','strong','throw','roar','gyuiin','dash','stepForward','stepBack','special','ultimateButton','special1','special2','special3','super'];
 const cap=(v,a,b)=>Math.max(a,Math.min(b,v));
@@ -64,10 +65,12 @@ export class Battle {
     this.projectileOrigin=options.projectileOrigin??null;
     this.projectileContact=options.projectileContact??null;
     this.customAgain=options.customAgain??null;
+    this.specialContactDelivery=options.specialContactDelivery===undefined?ACTIVE_P3_SPECIAL_CONTACT_DELIVERY:
+      options.specialContactDelivery&&validateP3SpecialContactDelivery(options.specialContactDelivery);
   }
   again(){
     if(this.customAgain)return this.customAgain(this);
-    const n=new Battle(this.fighters[0].id,this.fighters[1].id,this.level);
+    const n=new Battle(this.fighters[0].id,this.fighters[1].id,this.level,{specialContactDelivery:this.specialContactDelivery});
     n.tailTipSamples=this.tailTipSamples;return n;
   }
   setTailTipPath(path){
@@ -152,6 +155,7 @@ export class Battle {
   }
   _begin(p,m,id,allowCancel=false){
     if(this.moveResolver){m=this.moveResolver(p,m,id);if(!m)return false;}
+    m=withP3SpecialContact(p,m,id,this.specialContactDelivery);
     if(m.kind==='clinch')return this._startGyuiin(p);
     if(p.ko||p.stun||p.stop||(p.y>.06&&['throw','roar','projectile'].includes(m.kind)))return false;
     if(m.isSuper&&p.super<100)return false;
@@ -391,7 +395,10 @@ export class Battle {
       return;
     }
     const guard=this._guarding(t,m);
-    const point=m.contactPoint??(m.normalVersion?{
+    const specialSurface=m.specialContact&&specialSurfaceAt(m,a.frame);
+    const point=m.contactPoint??(specialSurface?{
+      x:a.x+a.facing*specialSurface.reach,y:a.y+specialSurface.height,space:'authored-special-surface'
+    }:m.normalVersion?{
       x:a.x+a.facing*normalReachAt(m,a.frame),y:a.y+normalHeightAt(m,a.frame),space:'authored-strike-surface'
     }:{x:t.x,y:t.y+.32,space:'target-center-fallback'});
     const feedback=feedbackForMove(a,m,guard?'guard':'hit',point);
@@ -501,6 +508,7 @@ export class Battle {
     if(m.normalVersion&&(t.x-a.x)*a.facing<0)return false;
     if(m.kind==='clinch')return dist<=.83&&Math.abs(a.y-t.y)<1.25;
     if(m.kind==='throw')return a.y<.09&&t.y<.10&&dist<m.reach+.12;
+    if(m.specialContact)return specialSurfaceContact(a,t,m,this.hurtBoundsResolver?.(t)??NORMAL_ART.NORMAL_HURT_BOUNDS);
     if(m.kind==='tail'){
       const tip=this._tailAt(a.frame);
       return dist>=m.minReach&&tip>0&&dist<=tip+.16&&Math.abs(t.y-a.y)<.43;
@@ -526,7 +534,7 @@ export class Battle {
       return;
     }
     if(m.kind==='projectile'&&!p.spawned&&p.frame===m.startup){
-      const origin=this.projectileOrigin?.(p,m)??{forward:.30,height:.30};
+      const origin=this.projectileOrigin?.(p,m)??m.projectileSocket??{forward:.30,height:.30};
       p.spawned=true;this.projectiles.push({id:++this.seq,owner:p.slot,x:p.x+p.facing*origin.forward,y:p.y+origin.height,
         face:p.facing,speed:m.speed||.045,life:m.life||75,damage:m.damage,poison:m.poison||0,
         effect:m.effect||'earth',level:m.level||'mid',sourceCharacterId:m.sourceCharacterId??p.id,sourceMoveId:m.sourceMoveId??m.id,
