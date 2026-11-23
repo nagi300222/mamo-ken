@@ -78,3 +78,12 @@ TIME UP／DRAW／DOUBLE K.O.、奥義 KO は 10 秒ムービー後に 1 回だ�
 - DOUBLE K.O. は同キャラ同時発生の条件でだけ実ゲームで再現している。発生差のある組は片側 K.O. になる（Battle の仕様どおり）。
 - 勝利ムービーの効果音は既存の合成音（`combat-audio.js` の種類）の組み合わせで、新しい音素材は足していない。
 - ARCADE／SURVIVAL との結合（ラウンド制・短縮版の使い分け）は #202 側の作業で、このブランチ単体では通常対戦 1 本勝負だけを通している。
+
+
+## 2026-11-23 固定版の動画保存
+
+`evidence/videos/` に9体の実ゲーム映像MP4、ffprobe JSON、SHA256付きmanifestを保存した。元素材 `d6ef603`、撮影HEAD `465fb483`、[render run 45111367016](https://github.com/nagi300222/mamo-ken/actions/runs/45111367016)（ゴダンの一時screenshot timeoutは同runで再試行成功）。9本すべて486×342、60/1fps、約8.3秒。KO→専用5秒勝利→結果の画面記録であり、既存約10秒奥義の尺は変更していない。静止画列のMP4は無音で、ゲーム内の同期Web Audioは別途稼働する。
+
+60fpsは仮想時間で進めた制作映像の符号化設定。物理スマホのFPSではない。9本のメタデータと中間フレームを確認したが、端末上での連続再生のアート評価、熱・電池・タッチ感は未検証。
+
+Codex側の結合は [run 45111366934](https://github.com/nagi300222/mamo-ken/actions/runs/45111366934) でアーケード8戦16ラウンド・サバイバル・本演出・通常54技・Practiceが成功。v16全統合 `57b140b6` の [run 45111784490](https://github.com/nagi300222/mamo-ken/actions/runs/45111784490)（Node168件/実WebGL4レーン）と [run 45111784442](https://github.com/nagi300222/mamo-ken/actions/runs/45111784442)（81奥義組合せと総合受入）も成功。

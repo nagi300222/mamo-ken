@@ -1,0 +1,59 @@
+{
+  "artifactRun": 45111367016,
+  "captureCommit": "465fb483185c440e7c2cc77540bf40d6db3c0296",
+  "artCommit": "d6ef60358275121a408ef534d76ceab7dc5aee7c",
+  "rendering": "Chrome WebGL, virtual timeline 60 encoded frames/second; not measured device FPS",
+  "resolution": [
+    486,
+    342
+  ],
+  "audio": "These PNG-sequence MP4 exports are silent. The interactive game plays its synchronized Web Audio effects.",
+  "content": "KO through full authored five-second victory and result; total approximately 8.3 seconds. Existing ten-second ultimates are unchanged.",
+  "movies": [
+    {
+      "file": "bullet_victory.mp4",
+      "sha256": "810bb9e018abe499bd2b8912c56b86273a3ba90c86deac8a9cc81c5515d61f93",
+      "probe": "bullet_probe.json"
+    },
+    {
+      "file": "chirka_victory.mp4",
+      "sha256": "9340242a625af1908518c82c0e713d7f166319b49b9d28602a94e134379aefaf",
+      "probe": "chirka_probe.json"
+    },
+    {
+      "file": "dark_moguzo_victory.mp4",
+      "sha256": "76ce213cc885c717e1ae5c2d0784f0caa9353cb0cc9cb4f457441e2049cca6b2",
+      "probe": "dark_moguzo_probe.json"
+    },
+    {
+      "file": "godan_victory.mp4",
+      "sha256": "b24d4ca5dd80047325d006bd9b29645434a130b118d7980eca771a80f2564a0f",
+      "probe": "godan_probe.json"
+    },
+    {
+      "file": "hakuma_victory.mp4",
+      "sha256": "19e1e57b34e7e5bf0354c5a6929808f1b38d316b80ad06e464c599b65d2cd2aa",
+      "probe": "hakuma_probe.json"
+    },
+    {
+      "file": "moguzo_victory.mp4",
+      "sha256": "b7b3d02922988b34fa83cec0ac1108b6fd5e6f0e1c48de5c2fac5860907c8006",
+      "probe": "moguzo_probe.json"
+    },
+    {
+      "file": "pisuke_victory.mp4",
+      "sha256": "b3db3c352387970455b9f06fdabd28b0e5423162d317e40d86178d0dcce7de64",
+      "probe": "pisuke_probe.json"
+    },
+    {
+      "file": "takimaru_victory.mp4",
+      "sha256": "8d8c78ae14f433c3084a6227e0f2f2563072efb7f39265dd93a5f03c4114cedb",
+      "probe": "takimaru_probe.json"
+    },
+    {
+      "file": "yomikage_victory.mp4",
+      "sha256": "98f8ecf4f9426492fa5b33b224416da18a90fe776bb71312678f855f4816846b",
+      "probe": "yomikage_probe.json"
+    }
+  ]
+}
