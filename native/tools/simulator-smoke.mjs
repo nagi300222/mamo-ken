@@ -5,7 +5,7 @@ import {promisify} from 'node:util';
 import {access,appendFile,mkdir,readFile,writeFile} from 'node:fs/promises';
 import path from 'node:path';
 import {fileURLToPath,pathToFileURL} from 'node:url';
-import {selectIPhoneSimulator,pngDimensions} from './simulator-policy.mjs';
+import {selectIPhoneSimulator,pngDimensions,coldBootProgress} from './simulator-policy.mjs';
 const execute=promisify(execFile);
 
 export async function simulatorSmoke(){
@@ -49,7 +49,20 @@ export async function simulatorSmoke(){
   const executable=(await command('/usr/libexec/PlistBuddy',['-c','Print :CFBundleExecutable',path.join(app,'Info.plist')])).trim();
   report.supportedOrientations=(await command('/usr/libexec/PlistBuddy',['-c','Print :UISupportedInterfaceOrientations',path.join(app,'Info.plist')])).trim();
   if(selected.state!=='Booted'){await command('xcrun',['simctl','boot',selected.udid],{timeout:60000});bootedHere=true;}
-  await command('xcrun',['simctl','bootstatus',selected.udid,'-b'],{timeout:180000});report.simulatorTested=true;
+  // Attach the actual Xcode Simulator UI so SpringBoard has a display surface.
+  const developer=(await command('xcode-select',['-p'])).trim();
+  await command('open',['-a',path.join(developer,'Applications/Simulator.app'),'--args','-CurrentDeviceUDID',selected.udid]);
+  const bootArgs=['simctl','bootstatus',selected.udid,'-b'];
+  try{await command('xcrun',bootArgs,{timeout:180000});}
+  catch(error){
+   report.coldBootProgress=coldBootProgress(String(error.stdout??'')+String(error.stderr??''));
+   // First boot ran five different migration plugins in CI45126858881 before
+   // its original 180s deadline. Continue that same boot only with such evidence.
+   if(!error.killed||!report.coldBootProgress.advanced)throw error;
+   report.bootExtension={reason:'Observed multiple real migration stages before initial timeout',additionalMaximumMs:420000};
+   await command('xcrun',bootArgs,{timeout:420000});
+  }
+  report.simulatorTested=true;
   await command('xcrun',['simctl','install',selected.udid,app],{timeout:120000});report.installed=true;
   const launch=await command('xcrun',['simctl','launch','--terminate-running-process','--stdout='+path.join(directory,'app-stdout.log'),'--stderr='+path.join(directory,'app-stderr.log'),selected.udid,bundleId],{timeout:60000});
   const pid=/\:\s*(\d+)\s*$/.exec(launch)?.[1];assert.ok(pid,'simctl did not report a launched application PID');report.launchedPid=Number(pid);
@@ -65,6 +78,7 @@ export async function simulatorSmoke(){
   report.passed=true;
  }catch(error){
   report.error=error.stack??error.message;
+  if(selected){const current=await command('xcrun',['simctl','list','devices','--json'],{diagnostic:true});if(current!==null)await writeFile(path.join(directory,'failure-devices.json'),current);}
   if(selected&&report.simulatorTested){try{await screenshot('failure.png');}catch(captureError){report.diagnosticErrors.push({error:captureError.message});}}
  }finally{
   if(selected&&report.installed&&bundleId)await command('xcrun',['simctl','terminate',selected.udid,bundleId],{diagnostic:true});

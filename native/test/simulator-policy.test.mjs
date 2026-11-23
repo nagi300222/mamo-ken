@@ -1,5 +1,5 @@
 import test from 'node:test';import assert from 'node:assert/strict';
-import {selectIPhoneSimulator,pngDimensions} from '../tools/simulator-policy.mjs';
+import {selectIPhoneSimulator,pngDimensions,coldBootProgress} from '../tools/simulator-policy.mjs';
 const ios=n=>'com.apple.CoreSimulator.SimRuntime.iOS-'+n;
 test('Simulator discovery selects an available iPhone on newest available iOS, excluding iPad/unavailable',()=>{
  const runtimes={runtimes:[{identifier:ios('26-4'),version:'26.4',isAvailable:true},{identifier:ios('26-5'),version:'26.5',isAvailable:true},{identifier:ios('27-0'),version:'27.0',isAvailable:false}]};
@@ -17,4 +17,12 @@ test('PNG metadata reports actual pixel orientation and rejects empty/truncated 
  assert.deepEqual(pngDimensions(png),{width:2532,height:1170,landscapePixels:true});
  png.writeUInt32BE(1170,16);png.writeUInt32BE(2532,20);assert.equal(pngDimensions(png).landscapePixels,false);
  assert.throws(()=>pngDimensions(Buffer.alloc(10)),/valid PNG/);png.writeUInt32BE(0,20);assert.throws(()=>pngDimensions(png),/empty framebuffer/);
+});
+test('cold boot extension requires advancing migration stages, not an elapsed counter',()=>{
+ const waiting='Status=2, isTerminal=NO, Elapsed=02:00.\nReason:Running plugin com.apple.locationd.migrator (CoreLocationMigrator.migrator)\n';
+ assert.equal(coldBootProgress(waiting+waiting.replace('02:00','03:00')).advanced,false);
+ assert.equal(coldBootProgress('Waiting on BackBoard').advanced,false);
+ const actualStages='Reason:Running plugin com.apple.MobileSafari.migrator (MobileSafari.migrator)\n'+waiting;
+ assert.equal(coldBootProgress(actualStages).advanced,true);
+ assert.equal(coldBootProgress('Status=2, isTerminal=NO\nStatus=3, isTerminal=NO').advanced,true);
 });

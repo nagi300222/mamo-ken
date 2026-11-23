@@ -24,3 +24,9 @@ export function pngDimensions(data){
  if(!width||!height)throw Error('Simulator screenshot has an empty framebuffer');
  return {width,height,landscapePixels:width>height};
 }
+// A moving elapsed counter alone does not demonstrate migration progress.
+export function coldBootProgress(output){
+ const plugins=[...new Set([...String(output).matchAll(/Reason:Running plugin ([^\r\n]+)/g)].map(match=>match[1].trim()))];
+ const statuses=[...new Set([...String(output).matchAll(/Status=(\d+), isTerminal=NO/g)].map(match=>Number(match[1])))];
+ return {plugins,statuses,advanced:plugins.length>1||statuses.length>1};
+}
