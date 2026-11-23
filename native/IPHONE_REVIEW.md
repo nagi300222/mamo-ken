@@ -11,7 +11,7 @@ P0/P1の実装承認と、iPhoneで使いやすいと本人が認めたことは
 | 端末内ゲーム素材 | 約107.7 MB、144ファイルを生成（初期P1基準） | P0/P4統合後はnative/evidence/native-assets.jsonで再計測 |
 | Node保存・横向き・音・native契約 | 自動テスト対象 | UIKit・WebKit実機挙動は別 |
 | macOS Simulator unsigned build | [CI45124479615](https://github.com/nagi300222/mamo-ken/actions/runs/45124479615)でXcode26.6／iPhoneSimulator26.5 SDKによるBUILD SUCCEEDEDを確認 | 端末の署名・インストール・操作は別 |
-| 実Simulator起動・画面保存 | `ios:smoke`を追加。追加後の実CI待ち | 画面保存だけで対戦・タッチ・実機性能の合格とはしない |
+| 実Simulator起動・画面保存 | [CI45128527109](verification/SIMULATOR_20261123.md)で実install/launch/PNG2枚とUIKit LandscapeRightログを確認 | 入口カードにDynamic Island重なりを確認。対戦・タッチ・実機性能は未検証 |
 
 ## 本人のiPhoneで確認
 

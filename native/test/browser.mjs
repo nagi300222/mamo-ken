@@ -21,6 +21,20 @@ const url='http://127.0.0.1:'+server.address().port;
 const browser=await chromium.launch({executablePath:process.env.CHROMIUM_PATH??'/usr/bin/google-chrome',args:['--no-sandbox','--use-angle=swiftshader','--enable-unsafe-swiftshader']});
 const context=await browser.newContext({viewport:{width:852,height:393},isMobile:true,hasTouch:true,deviceScaleFactor:1});
 const page=await context.newPage(),errors=[],remoteRequests=[],report=[];
+const safeAreaGeometry=[];
+async function safeInsets(left,right,bottom=21){
+ await page.evaluate(({left,right,bottom})=>{
+  for(const [edge,value]of Object.entries({left,right,top:0,bottom}))document.documentElement.style.setProperty('--native-safe-'+edge,value+'px');
+  dispatchEvent(new Event('resize'));
+ },{left,right,bottom});
+ await page.waitForTimeout(80);
+}
+async function safeBounds(selector,left,right,bottom=21){
+ const rect=await page.locator(selector).boundingBox();assert.ok(rect,'Missing visible notch geometry target '+selector);
+ assert.ok(rect.x>=left-.5&&rect.x+rect.width<=852-right+.5,'Target crosses horizontal safe rectangle: '+selector+' '+JSON.stringify(rect));
+ assert.ok(rect.y>=-.5&&rect.y+rect.height<=393-bottom+.5,'Target crosses vertical safe rectangle: '+selector+' '+JSON.stringify(rect));
+ safeAreaGeometry.push({selector,simulatedInsets:{left,right,bottom},rect});
+}
 page.on('pageerror',error=>errors.push(error.message));page.on('response',r=>{if(r.status()>=400&&!r.url().endsWith('favicon.ico'))errors.push(r.status()+' '+r.url());});
 await context.route('**/*',route=>{const request=route.request().url();if(request.startsWith(url)||request.startsWith('data:'))return route.continue();remoteRequests.push(request);return route.abort();});
 await context.addInitScript(()=>{
@@ -31,6 +45,14 @@ await context.addInitScript(()=>{
 });
 try{
  await page.goto(url+'/');assert.equal(await page.locator('.modes a').count(),5);
+ // Chromium has no iPhone notch: explicit CSS inputs exercise real DOM geometry,
+ // not UIKit env() values. Test either side and preserve web layout when disabled.
+ for(const [left,right]of [[62,0],[0,62],[62,62]]){
+  await safeInsets(left,right);await safeBounds('.modes',left,right);
+ }
+ await page.evaluate(()=>document.documentElement.classList.remove('native-runtime'));
+ assert.equal(await page.locator('main').evaluate(el=>getComputedStyle(el).paddingLeft),'25px','Native layout leaked into the web launcher');
+ await page.evaluate(()=>document.documentElement.classList.add('native-runtime'));
  await page.screenshot({path:output+'/01-bundled-five-modes.png'});
  await page.locator('a[href="./dojo/?mode=practice"]').click();
  await page.waitForFunction(()=>window.mamoken3d,undefined,{timeout:15000});
@@ -52,11 +74,21 @@ try{
  report.push(await page.evaluate(()=>({frame:mamoken3d.battle.frame,practice:mamoken3d.practice,diagnostics:mamoken3d.diagnostics,nativeSimulated:true})));
  await page.screenshot({path:output+'/02-native-state-practice.png'});
  await page.goto(url+'/story/');await page.waitForFunction(()=>window.mamokenStory?.mode==='editor'&&mamokenStory.player,undefined,{timeout:90000});
+ for(const [left,right]of [[62,0],[0,62],[62,62]]){
+  await safeInsets(left,right);await safeBounds('#story-app',left,right);await safeBounds('#editor',left,right);
+ }
+ await page.evaluate(()=>document.documentElement.classList.remove('native-runtime'));
+ assert.equal((await page.locator('#story-app').boundingBox()).x,0,'Native safe rectangle leaked into web Story');
+ await page.evaluate(()=>document.documentElement.classList.add('native-runtime'));
  await page.locator('#avatar-name').fill('端末内の旅人');await page.locator('#enter').click();await page.waitForFunction(()=>mamokenStory.mode==='explore',undefined,{timeout:90000});
+ await safeBounds('#story-stick',62,62);if(await page.locator('#talk').isVisible())await safeBounds('#talk',62,62);
+ // The skip control shares the same safe parent; this is a layout-only probe,
+ // not a claim that an actual native movie was played by this browser fixture.
+ await page.locator('#movie-ui').evaluate(el=>el.hidden=false);await safeBounds('#movie-skip',62,62);await page.locator('#movie-ui').evaluate(el=>el.hidden=true);
  await page.reload();await page.waitForFunction(()=>mamokenStory.mode==='editor'&&mamokenStory.player,undefined,{timeout:90000});assert.equal(await page.locator('#avatar-name').inputValue(),'端末内の旅人');
  await page.screenshot({path:output+'/03-bundled-story-save.png'});
  assert.deepEqual(remoteRequests,[]);assert.deepEqual(errors,[]);
- await writeFile(output+'/report.json',JSON.stringify({webglRendered:true,nativeAdapterSimulated:true,uiKitTested:false,remoteRequests,errors,report},null,2));
+ await writeFile(output+'/report.json',JSON.stringify({webglRendered:true,nativeAdapterSimulated:true,uiKitTested:false,safeAreaInsetsSimulated:true,safeAreaGeometry,remoteRequests,errors,report},null,2));
  console.log('P1 BUNDLED WEBGL PASS: five modes, real GLBs/practice, simulated native background/foreground/input reset, no CSS double rotation, Story save reload, no external asset requests');
 }catch(error){await page.screenshot({path:output+'/failure.png'}).catch(()=>{});console.error({errors,remoteRequests});throw error;}
 finally{await browser.close();await new Promise(resolve=>server.close(resolve));}

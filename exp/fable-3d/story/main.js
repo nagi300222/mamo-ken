@@ -54,7 +54,7 @@ function resize(){
  renderer.setSize(width,height,false);camera.aspect=width/height;camera.updateProjectionMatrix();
  battleCamera.left=-1.75;battleCamera.right=1.75;battleCamera.top=1.75/(width/height);battleCamera.bottom=-battleCamera.top;battleCamera.updateProjectionMatrix();
 }
-new ResizeObserver(resize).observe(app);addEventListener('resize',resize);addEventListener('orientationchange',resize);
+const sizeObserver=new ResizeObserver(resize);sizeObserver.observe(app);sizeObserver.observe(canvas);addEventListener('resize',resize);addEventListener('orientationchange',resize);
 function disposeActor(actor){if(!actor)return;actor.mixer.stopAllAction();actor.mixer.uncacheRoot(actor.model);actor.holder.removeFromParent();actor.avatar.dispose();}
 async function original(id){
  if(!originalCache.has(id)&&originalCache.size>=4)originalCache.delete(originalCache.keys().next().value);
