@@ -429,4 +429,4 @@ export const UI_ART=Object.freeze({
  }
 });
 export const uiArtUrl=id=>{const asset=UI_ART[id];if(!asset)throw Error('Unknown UI art: '+id);return new URL('./art/v17/'+asset.file,import.meta.url).href;};
-export function markUIArt(){document.documentElement.dataset.uiArt=UI_ART_VERSION;}
+export function markUIArt(root=document.documentElement){for(const id of Object.keys(UI_ART))root.style.setProperty('--p4-art-'+id,'url('+JSON.stringify(uiArtUrl(id))+')');root.dataset.uiArt=UI_ART_VERSION;}
