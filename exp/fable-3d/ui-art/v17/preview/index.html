@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>マモ拳 v17 P4｜UIアート合成プレビュー</title>
+<style>
+:root{--mk-bg:#101F1B;--mk-panel:#1C332C;--mk-text:#F5EFDB;--mk-sub:#BED1C7;--mk-action:#F1C66C;--mk-good:#6FD0A0;--mk-drive:#58C7D2;--mk-danger:#FA8976;--mk-line:#69877C;
+ --mk-paper:#EFE6CC;--mk-paper-shade:#D9CDA9;--mk-wood:#8A6A45;--mk-wood-dark:#5C4630;--mk-wood-light:#A98759;--mk-ink:#1B1A17;--mk-seal:#B5402E;--mk-seal-dark:#7F2A1E;--mk-cloth:#2F5247;--mk-cloth-light:#3F6B5C}
+*{box-sizing:border-box}body{margin:0;background:#0a1512;color:var(--mk-text);font-family:"Hiragino Sans","Noto Sans JP","Yu Gothic",system-ui,sans-serif}
+h1{font-size:18px;margin:18px 20px 4px}p.lead{margin:0 20px 14px;color:var(--mk-sub);font-size:13px;max-width:70em;line-height:1.6}
+h2{font-size:14px;margin:22px 20px 8px;color:var(--mk-action)}
+.screen{position:relative;width:1280px;height:590px;margin:0 20px 8px;overflow:hidden;background:var(--mk-bg);border:1px solid #2b4138}
+.screen>img.bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.art{display:block}.art svg{display:block;width:100%;height:100%}
+.abs{position:absolute}.heavy{font-weight:900;letter-spacing:.04em}.ink{color:var(--mk-ink)}
+.tag{position:relative}.tag.abs{position:absolute}.tag>.art:not(.abs){position:absolute;inset:0}
+.note{margin:0 20px 18px;color:var(--mk-sub);font-size:12px;max-width:80em;line-height:1.6}
+.btn{position:absolute;width:74px;height:74px}.btn b{position:absolute;inset:0;display:grid;place-items:center;font-size:17px;font-weight:800}
+.hpfill{position:absolute;height:32px;background:linear-gradient(90deg,var(--mk-good),#a6e3c2);clip-path:polygon(0 0,95.4% 0,100% 100%,0 100%)}
+</style></head><body>
+<h1>マモ拳 v17 P4｜UIアート合成プレビュー（Claude 制作・提案）</h1>
+<p class="lead">背景は現行ゲーム（PR #209 `8ab8972`）の実 WebGL キャプチャ。その上に <code>ui-art/v17/svg</code> の素材と DOM の文字を重ねた構図案で、<b>ゲームの実装画面ではありません</b>。
+A「山の格闘大会」は対戦・モード選択、B「旅の稽古帖」はキャラクリ・探索。色は <code>tokens.json</code> の CSS 変数（--mk-*）。</p>
+
+<h2>A-1　モード選択｜山の格闘大会</h2>
+<div class="screen" id="a1"><img class="bg" src="captures/dojo-battle.png" alt="" style="filter:saturate(.75) brightness(.62)">
+ <i class="art abs" data-svg="ridge-far" style="left:0;right:0;bottom:60px;height:190px;opacity:.9"></i><i class="art abs" data-svg="ridge-near" style="left:0;right:0;bottom:-70px;height:220px"></i>
+ <div class="tag abs" style="left:0;top:86px;width:620px;height:300px"><i class="art" data-svg="cut-panel" data-stretch></i>
+   <i class="art abs" data-svg="mode-versus" style="left:44px;top:40px;width:150px;height:150px"></i>
+   <b class="abs heavy" style="left:214px;top:54px;font-size:74px;line-height:1">戦う</b><span class="abs" style="left:218px;top:140px;color:var(--mk-sub);font-size:17px">通常対戦 · 9人から選んで1本勝負</span>
+   <span class="abs heavy" style="left:44px;top:222px;font-size:20px;color:var(--mk-action)">▶ 決定で対戦相手を選ぶ</span></div>
+ <div class="abs" style="right:36px;top:70px;width:470px;display:grid;gap:14px">
+   <div class="tag" style="height:86px"><i class="art" data-svg="wood-tag" data-stretch></i><i class="art abs" data-svg="mode-arcade" style="left:62px;top:12px;width:62px;height:62px"></i><b class="abs heavy" style="left:140px;top:14px;font-size:30px">勝ち進む</b><span class="abs" style="left:142px;top:54px;font-size:13px">ARCADE · 全8戦</span></div>
+   <div class="tag" style="height:86px"><i class="art" data-svg="wood-tag" data-stretch></i><i class="art abs" data-svg="mode-survival" style="left:62px;top:12px;width:62px;height:62px"></i><b class="abs heavy" style="left:140px;top:14px;font-size:30px">生き残る</b><span class="abs" style="left:142px;top:54px;font-size:13px">SURVIVAL · 体力を持ち越す連戦</span></div>
+   <div class="tag" style="height:86px"><i class="art" data-svg="wood-tag" data-stretch></i><i class="art abs" data-svg="mode-journey" style="left:62px;top:12px;width:62px;height:62px"></i><b class="abs heavy" style="left:140px;top:14px;font-size:30px">自分を作って旅する</b><span class="abs" style="left:142px;top:54px;font-size:13px">キャラクリ ＋ 集落の探索</span></div>
+   <div class="tag" style="height:64px;width:300px;justify-self:end"><i class="art" data-svg="paper-strip" data-stretch></i><i class="art abs" data-svg="mode-practice" style="left:22px;top:8px;width:46px;height:46px;--mk-text:#1B1A17;--mk-panel:#D9CDA9"></i><b class="abs heavy ink" style="left:80px;top:14px;font-size:24px">練習する</b></div></div>
+ <i class="art abs" data-svg="fist-seal" style="left:520px;top:300px;width:120px;height:120px;transform:rotate(-8deg)"></i>
+ <i class="art abs" data-svg="ridge-line" style="left:0;right:0;top:44px;height:44px"></i><b class="abs heavy" style="left:36px;top:12px;font-size:26px">マモ拳 <span style="color:var(--mk-action)">山の格闘大会</span></b></div>
+<p class="note">主役の「戦う」を斜めに切った大きな面に、ほかの 3 つは木札、練習は紙の札で一段小さく。5 モードの数は変えていません。記号は形だけで区別できます（拳／登る稜線と旗／焚き火／足あとの道／稽古柱）。</p>
+
+<h2>A-2　対戦 HUD｜山の格闘大会</h2>
+<div class="screen" id="a2"><img class="bg" src="captures/dojo-battle.png" alt="">
+ <i class="art abs" data-svg="hud-hp-frame" style="left:74px;top:14px;width:470px;height:54px"></i><i class="hpfill" style="left:114px;top:25px;width:390px"></i>
+ <i class="art abs" data-svg="hud-hp-frame" style="right:74px;top:14px;width:470px;height:54px;transform:scaleX(-1)"></i><i class="hpfill" style="right:114px;top:25px;width:250px;transform:scaleX(-1);background:linear-gradient(90deg,var(--mk-danger),#ffc0b3)"></i>
+ <i class="art abs" data-svg="hud-sub-frame" style="left:96px;top:70px;width:300px;height:22px"></i><i class="abs" style="left:118px;top:76px;width:210px;height:11px;background:var(--mk-drive)"></i>
+ <i class="art abs" data-svg="hud-sub-frame" style="right:96px;top:70px;width:300px;height:22px;transform:scaleX(-1)"></i><i class="abs" style="right:118px;top:76px;width:120px;height:11px;background:var(--mk-drive)"></i>
+ <i class="art abs" data-svg="hud-timer" style="left:586px;top:4px;width:108px;height:86px"></i><b class="abs heavy" style="left:586px;top:16px;width:108px;text-align:center;font-size:38px">75</b>
+ <i class="art abs" data-svg="crest-moguzo" style="left:10px;top:8px;width:62px;height:62px"></i><i class="art abs" data-svg="crest-godan" style="right:10px;top:8px;width:62px;height:62px"></i>
+ <b class="abs heavy" style="left:118px;top:94px;font-size:16px">1P モグゾー</b><b class="abs heavy" style="right:118px;top:94px;font-size:16px">ゴダン CPU</b>
+ <div class="abs" style="left:34px;bottom:30px;width:150px;height:150px"><i class="art" data-svg="button-plate" style="--mk-button:#69877C"></i></div>
+ <div class="abs" style="right:28px;bottom:22px;width:250px;height:170px">
+  <span class="btn" style="left:0;top:0"><i class="art" data-svg="button-plate" style="--mk-button:#6FD0A0"></i><b>弱</b></span><span class="btn" style="left:86px;top:0"><i class="art" data-svg="button-plate" style="--mk-button:#FA8976"></i><b>強</b></span><span class="btn" style="left:172px;top:0"><i class="art" data-svg="button-plate" style="--mk-button:#BED1C7"></i><b>掴み</b></span>
+  <span class="btn" style="left:0;top:88px"><i class="art" data-svg="button-plate" style="--mk-button:#58C7D2"></i><b style="font-size:12px">ギュイーン</b></span><span class="btn" style="left:86px;top:88px"><i class="art" data-svg="button-plate"></i><b>必殺</b></span><span class="btn" style="left:172px;top:88px"><i class="art" data-svg="button-plate" style="--mk-button:#F5EFDB"></i><b>奥義</b></span></div></div>
+<p class="note">上段は 体力（斜めの枠）→ その下にドライブ → 中央に木札のタイマー。名前の横にキャラ識別紋。画面の中央（顔・拳・弾の高さ）には何も置きません。6 ボタンと左スティックの位置は現行のままで、台の絵だけを差し替える案です。</p>
+
+<h2>A-3　キャラクター選択｜のぼりと識別紋</h2>
+<div class="screen" id="a3"><img class="bg" src="captures/dojo-face-moguzo.png" alt="" style="object-position:50% 20%;transform:translate(70px,-40px) scale(1.04)">
+ <div class="abs" style="left:0;top:0;bottom:0;width:46%;background:linear-gradient(90deg,#101F1Bf2 60%,#101F1B00)"></div>
+ <b class="abs heavy" style="left:36px;top:26px;font-size:64px;line-height:1">モグゾー</b><span class="abs" style="left:40px;top:100px;font-size:18px;color:var(--mk-action)">万能・根性</span>
+ <div class="tag abs" style="left:36px;top:140px;width:380px;height:60px"><i class="art" data-svg="paper-strip" data-stretch></i><span class="abs ink" style="left:20px;top:8px;font-size:13px">得意</span><b class="abs ink" style="left:20px;top:26px;font-size:17px">どの距離でも戦える。ピンチで踏ん張る</b></div>
+ <div class="tag abs" style="left:36px;top:208px;width:380px;height:60px"><i class="art" data-svg="paper-strip" data-stretch></i><span class="abs ink" style="left:20px;top:8px;font-size:13px">苦手</span><b class="abs ink" style="left:20px;top:26px;font-size:17px">飛び抜けた速さ・長さは無い</b></div>
+ <div class="abs" id="banners" style="right:20px;bottom:6px;display:grid;grid-template-columns:repeat(9,76px);gap:6px;align-items:end"></div>
+ <i class="art abs" data-svg="fist-seal" style="left:300px;top:286px;width:104px;height:104px;transform:rotate(6deg)"></i><b class="abs heavy" style="left:36px;top:318px;font-size:30px;color:var(--mk-action)">▶ 決定</b></div>
+<p class="note">9 人をのぼり（布）で並べ、顔画像の上に識別紋。紋は枠の形と中の図が全員違うので、色が見分けにくくても区別できます。顔画像は既存の <code>assets/ui/facesq_*.png</code>、左の大きな顔は実ゲームの顔アップ（3D）。「得意／苦手」を紙の札で対にします（文面は仮）。</p>
+
+<h2>B-1　キャラクリ｜旅の稽古帖</h2>
+<div class="screen" id="b1"><img class="bg" src="captures/story-editor-preview.png" alt="">
+ <div class="abs" style="left:0;top:0;bottom:0;width:470px;background:var(--mk-paper)"></div><div class="abs" style="left:470px;top:0;bottom:0;width:26px;background:linear-gradient(270deg,#0000,#00000055)"></div>
+ <div class="abs" style="left:0;top:0;width:470px;height:74px;background:var(--mk-paper-shade)"></div>
+ <b class="abs heavy ink" style="left:30px;top:20px;font-size:28px">旅の稽古帖</b><i class="art abs" data-svg="fist-seal" style="left:386px;top:8px;width:60px;height:60px;transform:rotate(7deg)"></i>
+ <div class="abs" style="left:20px;top:92px;width:430px;display:grid;gap:10px">
+  <div class="tag" style="height:62px"><i class="art" data-svg="wood-tag" data-stretch></i><b class="abs heavy" style="left:64px;top:16px;font-size:22px">① 体格・パーツ</b></div>
+  <div class="tag" style="height:52px;opacity:.9"><i class="art" data-svg="paper-strip" data-stretch style="--mk-paper:#E3D8B8"></i><b class="abs ink" style="left:24px;top:13px;font-size:19px">② 色・毛模様</b></div>
+  <div class="tag" style="height:52px;opacity:.9"><i class="art" data-svg="paper-strip" data-stretch style="--mk-paper:#E3D8B8"></i><b class="abs ink" style="left:24px;top:13px;font-size:19px">③ 戦闘スタイル・3つの技</b></div>
+  <div class="tag" style="height:52px;opacity:.9"><i class="art" data-svg="paper-strip" data-stretch style="--mk-paper:#E3D8B8"></i><b class="abs ink" style="left:24px;top:13px;font-size:19px">④ 名前と保存</b></div></div>
+ <div class="abs ink" style="left:30px;top:370px;width:410px;font-size:14px;line-height:1.7;border-top:2px dashed #B5402E88;padding-top:10px"><b>選べない技には理由を書く</b><br>例：「尾薙ぎ」は長い尾（6ボーン）が必要です。いまの尾では装備できません。</div>
+ <i class="art abs" data-svg="ridge-line" style="left:470px;right:0;bottom:54px;height:40px;opacity:.8"></i>
+ <div class="tag abs" style="right:30px;bottom:14px;width:300px;height:44px"><i class="art" data-svg="cut-panel" data-stretch></i><span class="abs" style="left:16px;top:11px;font-size:15px">◀ ▶ 回して見る　拡大</span></div>
+ <i class="art abs" data-svg="crest-moguzo" style="right:30px;top:20px;width:70px;height:70px"></i></div>
+<p class="note">右の広い面は実ゲームの 3D プレビュー（現行のエディタと同じ並び）。左は紙の帳面で、4 つの手順を札の重なりで見せ、いま開いている手順だけ木札。使えない技には具体的な理由を書く欄を取っています（文面は例）。</p>
+
+<h2>B-2　探索｜旅の稽古帖</h2>
+<div class="screen" id="b2"><img class="bg" src="captures/story-explore.png" alt="">
+ <div class="tag abs" style="left:18px;top:16px;width:270px;height:58px"><i class="art" data-svg="paper-strip" data-stretch></i><i class="art abs" data-svg="mode-journey" style="left:14px;top:8px;width:42px;height:42px;--mk-text:#1B1A17;--mk-panel:#D9CDA9"></i><b class="abs heavy ink" style="left:66px;top:9px;font-size:19px">山あいの集落</b><span class="abs ink" style="left:67px;top:33px;font-size:12px">稽古 0 / 2</span></div>
+ <div class="tag abs" style="left:560px;top:250px;width:210px;height:56px"><i class="art" data-svg="wood-tag" data-stretch></i><b class="abs heavy" style="left:54px;top:8px;font-size:19px">ゴダン</b><span class="abs" style="left:56px;top:32px;font-size:12px">話す</span></div>
+ <div class="abs" style="left:34px;bottom:30px;width:140px;height:140px;opacity:.85"><i class="art" data-svg="button-plate" style="--mk-button:#69877C"></i></div>
+ <span class="btn" style="right:40px;bottom:44px;width:96px;height:96px"><i class="art" data-svg="button-plate"></i><b style="font-size:20px">話す</b></span>
+ <i class="art abs" data-svg="fist-mark" style="right:20px;top:16px;width:40px;height:40px;color:var(--mk-text);opacity:.85"></i></div>
+<p class="note">探索は景色が主役なので、常時出すのは場所の札（左上）と移動・会話だけ。相手に近づいたときだけ名前の木札と「話す」。右ドラッグの視点操作のために画面右は空けています。</p>
+
+<script>
+const cache={};const load=id=>cache[id]??=fetch('../svg/'+id+'.svg').then(r=>r.text());
+const faces=['moguzo','pisuke','godan','hakuma','chirka','takimaru','yomikage','bullet','dark_moguzo'];
+document.getElementById('banners').innerHTML=faces.map((id,i)=>`<div class="tag" style="position:relative;height:${i===0?250:214}px"><i class="art" data-svg="cloth-banner" data-stretch style="${i===0?'--mk-cloth:#3F6B5C;--mk-cloth-light:#5a8a79':''}"></i>
+ <img src="../../../../../assets/ui/facesq_${id}.png" alt="" class="abs" style="left:8px;top:${i===0?112:98}px;width:60px;height:60px;border-radius:6px;object-fit:cover">
+ <i class="art abs" data-svg="crest-${id}" style="left:8px;top:${i===0?46:38}px;width:60px;height:60px"></i></div>`).join('');
+let uid=0;
+Promise.all([...document.querySelectorAll('[data-svg]')].map(async el=>{
+  let svg=await load(el.dataset.svg);const n=++uid;
+  svg=svg.replace(/id="(\w+)"/g,(m,a)=>`id="${a}${n}"`).replace(/url\(#(\w+)\)/g,(m,a)=>`url(#${a}${n})`);     // 同じ素材を複数置いても clip/pattern の id が衝突しないように
+  if(el.hasAttribute('data-stretch'))svg=svg.replace('<svg ','<svg preserveAspectRatio="none" ');
+  el.innerHTML=svg;})).then(()=>document.body.dataset.ready='1');
+</script></body></html>
