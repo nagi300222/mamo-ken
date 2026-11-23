@@ -32,14 +32,14 @@ async function assertDecodedArt(screen,expectations){
   const background=getComputedStyle(element,pseudo||null).backgroundImage;
   const urls=[...background.matchAll(/url\(["']?([^"')]+)["']?\)/g)].map(match=>match[1]);
   const src=urls.find(value=>new URL(value,location.href).pathname.endsWith('/'+filename));
-  if(!src)return {selector,pseudo,filename,background,error:'Expected SVG is not applied to the real UI'};
+  if(!src)return {selector,pseudo,filename,background,error:'Expected art is not applied to the real UI'};
   try{
    const response=await fetch(src),image=new Image();image.src=src;await image.decode();
    return {selector,pseudo,filename,src,status:response.status,mime:response.headers.get('content-type'),width:image.naturalWidth,height:image.naturalHeight,decoded:true};
   }catch(error){return {selector,pseudo,filename,src,error:error.message};}
  })),expectations);
  svgDecoding.push({screen,checks});await writeFile(output+'/native-svg-decoding.json',JSON.stringify({uiKitTested:false,svgDecoding},null,2));
- for(const check of checks){assert.equal(check.error,undefined,screen+' '+JSON.stringify(check));assert.equal(check.status,200);assert.match(check.mime??'',/^image\/svg\+xml\b/);assert.ok(check.decoded&&check.width>0&&check.height>0,'SVG did not decode: '+JSON.stringify(check));}
+ for(const check of checks){assert.equal(check.error,undefined,screen+' '+JSON.stringify(check));assert.equal(check.status,200);assert.match(check.mime??'',check.filename.endsWith('.webp')?/^image\/webp\b/:/^image\/svg\+xml\b/);assert.ok(check.decoded&&check.width>0&&check.height>0,'Art did not decode: '+JSON.stringify(check));}
 }
 const buttonArt=parent=>[['weak','weak'],['strong','heavy'],['throw','throw'],['gyuiin','gyuiin'],['special','special'],['ultimateButton','ultimate']].map(([control,asset])=>[parent+' [data-control="'+control+'"]','','button-'+asset+'.svg']);
 async function safeInsets(left,right,bottom=21){
@@ -108,7 +108,7 @@ try{
  await assertDecodedArt('five-mode-entry',[
   ['.ui-seal','','fist-seal.svg'],['.mode-hall','::before','ridge-far.svg'],['.mode-hall','::before','ridge-near.svg'],
   ...[['battle','versus'],['practice','practice'],['arcade','arcade'],['survival','survival'],['story','journey-paper']].map(([mode,asset])=>['.mode[data-mode="'+mode+'"] .mode-kicker','::before','mode-'+asset+'.svg']),
-  ['.mode-story','','paper-strip.svg']
+  ...[['battle','vs-large'],['practice','practice'],['arcade','arcade'],['survival','survival'],['story','story']].map(([mode,asset])=>['.mode[data-mode="'+mode+'"] .mode-illustration','','mode-'+asset+'.webp'])
  ]);
  // Preserve a valid long saved name, prove every card and its action can be
  // scrolled into the native safe scrollport, then take all five real routes.

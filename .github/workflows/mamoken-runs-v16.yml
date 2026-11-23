@@ -89,10 +89,12 @@ jobs:
               node exp/fable-3d/dojo/acceptance/p2-integration-browser.mjs ;;
             p3) node exp/fable-3d/dojo/acceptance/p3-feedback-browser.mjs ;;
             p4)
-              MAMOKEN_UI_VIDEO=1 node exp/fable-3d/dojo/acceptance/p4-ui-browser.mjs
-              MAMOKEN_UI_VIDEO=1 node exp/fable-3d/dojo/acceptance/p4-polish-browser.mjs
-              node exp/fable-3d/dojo/acceptance/p4-ui-audio-browser.mjs
-              node exp/fable-3d/dojo/acceptance/mux-p4-ui-audio.mjs "$MAMOKEN_EVIDENCE/ui-audio/report.json" ;;
+              p4_failed=0
+              MAMOKEN_UI_VIDEO=1 node exp/fable-3d/dojo/acceptance/p4-ui-browser.mjs || p4_failed=1
+              MAMOKEN_UI_VIDEO=1 node exp/fable-3d/dojo/acceptance/p4-polish-browser.mjs || p4_failed=1
+              node exp/fable-3d/dojo/acceptance/p4-ui-audio-browser.mjs || p4_failed=1
+              node exp/fable-3d/dojo/acceptance/mux-p4-ui-audio.mjs "$MAMOKEN_EVIDENCE/ui-audio/report.json" || p4_failed=1
+              exit "$p4_failed" ;;
             special)
               MAMOKEN_REQUIRE_PRODUCTION=1 MAMOKEN_SPECIAL_SOURCE_VERSION=v17r2 node exp/fable-3d/dojo/acceptance/p3-special-contact-browser.mjs
               node exp/fable-3d/dojo/acceptance/p3-special-response-browser.mjs ;;

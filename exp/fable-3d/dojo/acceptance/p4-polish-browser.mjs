@@ -77,6 +77,8 @@ async function capture(name){await page.screenshot({path:path.join(evidence,name
 async function lobby(){
  await page.goto(root,{waitUntil:'domcontentloaded'});
  await page.waitForFunction(()=>document.documentElement.dataset.uiArt==='v17-p4-ui-art-1');
+ const modeScenes=await page.locator('.mode-illustration').evaluateAll(nodes=>nodes.map(node=>getComputedStyle(node).backgroundImage));
+ check(modeScenes.length===5&&new Set(modeScenes).size===5&&modeScenes.every(scene=>scene.includes('.webp')),'five mode scenes are distinct authored assets',{modeScenes});
  for(const item of cases){const c=await configure(item);
   await page.locator('.mode-hall').evaluate(node=>{node.scrollTop=0;});await settle();
   const scroll=await page.locator('.mode-hall').evaluate(node=>({top:node.scrollTop,height:node.scrollHeight,client:node.clientHeight}));
@@ -151,6 +153,7 @@ async function editor(){
       const entry=entries.nth(index);await entry.scrollIntoViewIfNeeded();await settle();
       const bounds=await entry.boundingBox(),paneBox=await pane.boundingBox();
       check(bounds&&paneBox&&inside({...bounds,right:bounds.x+bounds.width,bottom:bounds.y+bounds.height},{left:paneBox.x,top:paneBox.y,right:paneBox.x+paneBox.width,bottom:paneBox.y+paneBox.height}),'each save summary entry is independently reachable',{case:c.id,index,bounds,paneBox,text:await entry.textContent()});
+      for(const row of await metrics('.p4-save-summary > div:nth-child('+(index+1)+') dd'))for(const rect of row.textRects)check(inside(rect,row.rect),'full saved summary text wraps inside its own cell',{case:c.id,index,text:row.text,rect,cell:row.rect});
      }
      check(await page.locator('[data-save-name]').textContent()===name,'full long saved name retained in summary',c.id);
     }
@@ -182,8 +185,14 @@ async function battleControls(kind){
   for(const ready of [false,true]){
    await setResources(kind,ready);
    if(kind==='dojo'){
+    // Use a real, current pause message. The start message intentionally expires
+    // after 48 simulation frames and an empty hidden message has no rectangle.
+    await page.locator('#pause').click();
+    await page.waitForFunction(()=>document.querySelector('#note')?.textContent==='一時停止');
     const note=await page.locator('#note').boundingBox(),hud=await page.locator('#arena > .hud').boundingBox();
     check(note&&hud&&!overlaps({...note,right:note.x+note.width,bottom:note.y+note.height},{...hud,right:hud.x+hud.width,bottom:hud.y+hud.height}),'battle status never covers HP/Drive/ultimate meters',{case:c.id,note,hud});
+    check(await page.locator('#app .footnote #note').count()===1,'battle status occupies reserved footer',{case:c.id});
+    await page.locator('#pause').click();
    }
    const buttons=await targets(selector,c,kind+' six combat buttons '+ready,{minimum:44});check(buttons.length===6,kind+' retains six controls',{case:c.id,ready});
    const labels=await targets(selector+' .attack-label',c,kind+' main combat labels '+ready,{text:true});check(labels.length===6,kind+' has six separate main label spans',{case:c.id,ready});

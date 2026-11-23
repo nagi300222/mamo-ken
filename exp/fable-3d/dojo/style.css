@@ -661,3 +661,19 @@ body[data-ui=mountain] #selection .p4-profile{grid-template-rows:auto minmax(0,1
   inset:calc(var(--topbar-height) + var(--ui-safe-top)) var(--ui-safe-right) var(--ui-safe-bottom) var(--ui-safe-left);
  }
 }
+
+/* In a 320px-high safe viewport, settings use one horizontal 44px row.
+   Reserve 3×44px + two 5px gaps for all nine fighters, and spend the saved
+   label height on the system's bottom inset instead of clipping the CTA. */
+@media(max-height:350px),(orientation:portrait) and (max-width:350px){
+ body[data-ui=mountain] #selection{padding:6px 12px}
+ body[data-ui=mountain] #selection .selection-inner{gap:4px;grid-template-rows:auto minmax(142px,1fr) auto}
+ body[data-ui=mountain] #selection .selection-top{min-height:22px;padding-bottom:1px}
+ body[data-ui=mountain] #selection h1{font-size:17px;line-height:1.2}
+ body[data-ui=mountain] #selection .p4-selection-main{min-height:142px}
+ body[data-ui=mountain] #selection .selection-footer{padding:5px 7px;gap:6px}
+ body[data-ui=mountain] #selection .selection-footer .opponent{display:flex;flex-direction:row;align-items:center;gap:4px;white-space:nowrap;min-height:44px}
+ body[data-ui=mountain] #selection .selection-footer .opponent select{flex:1 1 0;width:0;min-width:0;min-height:44px;padding:5px 4px}
+ body[data-ui=mountain] #selection .selection-footer:has(#run-rule-note:not([hidden])){padding-top:4px;padding-bottom:14px}
+ body[data-ui=mountain] #selection #run-rule-note{bottom:2px;font-size:9px;line-height:1.1}
+}

@@ -40,7 +40,7 @@ html.native-runtime #story-app{--ui-safe-top:0px;--ui-safe-right:0px;--ui-safe-b
 #story-app .p4-save-summary{display:grid;gap:8px;border-top:1px solid #71917a66;padding-top:12px;margin-top:14px}
 #story-app .p4-save-summary div{display:grid;grid-template-columns:5em 1fr;gap:12px;font-size:12px}
 #story-app .p4-save-summary dt{color:var(--ui-muted)}
-#story-app .p4-save-summary dd{margin:0;color:var(--ui-paper);font-weight:750;overflow-wrap:anywhere}
+#story-app .p4-save-summary dd{margin:0;min-width:0;max-width:100%;white-space:normal;color:var(--ui-paper);font-weight:750;overflow-wrap:anywhere}
 #story-app .journey{left:max(26px,var(--ui-safe-left));background:#153323d9;border:1px solid #8c9d7355;border-left:3px solid var(--ui-gold);border-radius:2px;padding:13px 16px;width:235px;box-shadow:0 3px 10px #071d122e}
 #story-app .journey strong{font-size:21px;color:#fff4d7}
 #story-app .journey small{font-size:11px;color:#d7e2cc}
