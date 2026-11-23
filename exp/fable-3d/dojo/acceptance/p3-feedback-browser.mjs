@@ -2,6 +2,7 @@
 import assert from 'node:assert/strict';
 import {mkdir,writeFile} from 'node:fs/promises';
 import {createRequire} from 'node:module';
+import {analyzeAudioBuffer,monoWav} from './audio-buffer-evidence.mjs';
 const {chromium}=createRequire(import.meta.url)('playwright-core');
 const base=process.env.MAMOKEN_URL??'http://127.0.0.1:4173/exp/fable-3d/dojo/';
 const directory=(process.env.MAMOKEN_EVIDENCE??'/tmp/mamoken-p3')+'/fight-feel';
@@ -12,7 +13,7 @@ await page.addInitScript(()=>{
  window.__p3audio=[];const pending=new WeakMap();
  for(const [Type,kind]of [[OscillatorNode,'oscillator'],[AudioBufferSourceNode,'noise']]){
   const start=Type.prototype.start,stop=Type.prototype.stop;
-  Type.prototype.start=function(when=0,...args){pending.set(this,{kind,start:when});return start.call(this,when,...args);};
+  Type.prototype.start=function(when=0,...args){pending.set(this,{kind,start:when,offline:this.context instanceof OfflineAudioContext});return start.call(this,when,...args);};
   Type.prototype.stop=function(when,...args){const record=pending.get(this);if(record&&Number.isFinite(when))window.__p3audio.push({...record,duration:when-record.start,wave:this.type});return stop.call(this,when,...args);};
  }
 });
@@ -58,7 +59,7 @@ try{
   await page.locator('#select-back').tap();
  }
  const audio=await page.evaluate(async()=>{
-  const {createCombatAudio}=await import('./combat-audio.js'),{feedbackForMove}=await import('./fight-feel.js');
+  const {createCombatAudio}=await import('./combat-audio.js'),{feedbackForMove,IMPACT_SOUND_RECIPES}=await import('./fight-feel.js');
   const results={};
   // OfflineAudioContext produces real browser audio samples without requesting
   // microphone/output permission or claiming a physical phone speaker was heard.
@@ -69,17 +70,37 @@ try{
    ['whiff','godan','stand_heavy','whiff',1,false],['quarter','pisuke','stand_weak','hit',.25,false],
    ['muted','godan','stand_heavy','hit',1,true],['zero','godan','stand_heavy','hit',0,false]
   ]){
+   window.__p3audio=[];
    const sound=createCombatAudio(()=>TestContext);sound.setVolume(volume);sound.unlock();sound.setMuted(muted);
-   const event={feedback:feedbackForMove({id},{id:slot,kind:'strike'},outcome)},played=sound.playFeedback(event);
+   const event={feedback:feedbackForMove({id},{id:slot,kind:'strike'},outcome)};
+   // Reproducible white-noise fixture, limited to the synchronous synth call.
+   const nativeRandom=Math.random;let seed=0x53a901,played;
+   Math.random=()=>{seed=(Math.imul(seed,1664525)+1013904223)>>>0;return seed/4294967296;};
+   try{played=sound.playFeedback(event);}finally{Math.random=nativeRandom;}
    const buffer=await sound.context.startRendering(),samples=buffer.getChannelData(0);
-   let sum=0,peak=0,last=0;
-   for(let i=0;i<samples.length;i++){sum+=samples[i]**2;peak=Math.max(peak,Math.abs(samples[i]));if(Math.abs(samples[i])>1e-5)last=i;}
-   results[name]={played,rms:Math.sqrt(sum/samples.length),peak,duration:last/buffer.sampleRate,sound:event.feedback.sound};
+   const recipe=IMPACT_SOUND_RECIPES[event.feedback.sound];
+   results[name]={played,noiseSeed:'0x53a901',samples:Array.from(samples),sampleRate:buffer.sampleRate,sound:event.feedback.sound,
+    scheduled:window.__p3audio.filter(record=>record.offline),expectedDuration:recipe?recipe.duration+(recipe.noise?0:.016):0};
   }
   return results;
  });
- for(const name of ['light','heavy','guard','swing']){assert.equal(audio[name].played,true);assert.ok(audio[name].rms>0&&audio[name].peak<.1,name+' clipped or silent');}
- assert.ok(audio.heavy.duration>audio.light.duration+.06,'heavy has no longer contact envelope');
+ for(const [name,result]of Object.entries(audio)){
+  const {samples,sampleRate}=result;
+  Object.assign(result,analyzeAudioBuffer(samples,sampleRate,{tailStart:audio.light.expectedDuration+.02,quietStart:result.expectedDuration+.025}));
+  await writeFile(directory+'/'+name+'.wav',monoWav(samples,sampleRate));delete result.samples;
+ }
+ // Write measurements before assertions so failed CI retains the actual signal,
+ // schedules and in-game events rather than screenshots alone.
+ await writeFile(directory+'/report.json',JSON.stringify({cases,audio,errors},null,2));
+ for(const name of ['light','heavy','guard','swing']){
+  const result=audio[name];assert.equal(result.played,true);assert.ok(result.finite&&result.rms>0&&result.peak<.1,name+' clipped, nonfinite or silent');
+  assert.equal(result.scheduled.length,1,name+' did not schedule exactly one voice');
+  assert.ok(Math.abs(result.scheduled[0].duration-result.expectedDuration)<1e-6,name+' voice ended outside its authored envelope');
+  assert.ok(result.quietPeak<1e-7,name+' leaked audio beyond its scheduled end');
+ }
+ assert.ok(audio.heavy.scheduled[0].duration>audio.light.scheduled[0].duration+.1,'heavy has no longer scheduled contact envelope');
+ assert.ok(audio.heavy.tailEnergy>1e-12&&audio.heavy.tailRms>1e-7,'heavy rendered no sustained energy after the light hit ended');
+ assert.equal(audio.light.quietPeak,0,'light voice did not stop cleanly');
  assert.notEqual(audio.guard.sound,audio.heavy.sound);assert.notEqual(audio.swing.sound,audio.heavy.sound);
  assert.ok(Math.abs(audio.quarter.rms/audio.light.rms-.25)<.005,'independent volume gain not respected');
  for(const name of ['whiff','muted','zero']){assert.equal(audio[name].played,false);assert.equal(audio[name].peak,0);}

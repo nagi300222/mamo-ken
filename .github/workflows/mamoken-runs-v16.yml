@@ -67,8 +67,8 @@ jobs:
             p3) node exp/fable-3d/dojo/acceptance/p3-feedback-browser.mjs ;;
             special) node exp/fable-3d/dojo/acceptance/p3-special-contact-browser.mjs ;;
             motion)
-              node --test exp/fable-3d/motion/v17/qa/motion-structure.test.mjs
-              MAMOKEN_ART_REVISION=7f79ea252d6f5c08de892bd11c0e85845a91af14 node exp/fable-3d/motion/v17/qa/independent-motion-browser.mjs ;;
+              node --test exp/fable-3d/motion/v17/qa/*.test.mjs
+              MAMOKEN_ART_REVISION=0ce6b852cb8ea9dd2f3cd593f105255a26bd387a node exp/fable-3d/motion/v17/qa/independent-motion-browser.mjs ;;
             avatar) node exp/fable-3d/custom/v16/tools/verify-avatar-browser.mjs ;;
             custom) node exp/fable-3d/custom/v16/custom-combat-browser.mjs ;;
             story)

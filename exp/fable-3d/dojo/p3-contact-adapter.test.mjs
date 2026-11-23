@@ -50,6 +50,36 @@ test('only a measured approved override selects v17; custom pose clocks remain a
  assert.equal(normalClipTime('moguzo','stand_weak',move.startup,move,2),1.22);
  assert.equal(normalClipTime('moguzo','stand_weak',move.startup+move.active-1,move,2),1.46);
 });
+test('exact trajectories cover the actual Battle frames, including valid 2F normals',()=>{
+ const {metadata,measurements}=fixture(),two=measurements.characters.pisuke.stand_weak;
+ assert.equal(normalMove('pisuke','stand_weak').active,2);
+ Object.assign(two,{battleActive:2,contactSeconds:.5,activeReach:[two.activeReach[0],two.activeReach.at(-1)]});
+ const delivery=createP3ContactDelivery(metadata,measurements),row=delivery.characters.pisuke.stand_weak;
+ assert.equal(row.activeReach.length,2);assert.equal(row.trajectorySampling,'exact-battle-active-frames');
+ assert.equal(validateP3ContactDelivery(delivery),delivery);
+ const incomplete=structuredClone(delivery);incomplete.characters.pisuke.stand_weak.activeReach.pop();
+ assert.throws(()=>validateP3ContactDelivery(incomplete),/actual Battle frame coverage/);
+ const mislabeled=structuredClone(measurements);mislabeled.characters.pisuke.stand_weak.battleActive=3;
+ assert.throws(()=>createP3ContactDelivery(metadata,mislabeled),/actual Battle frame coverage/);
+ const noClock=structuredClone(measurements);delete noClock.characters.pisuke.stand_weak.contactSeconds;
+ assert.throws(()=>createP3ContactDelivery(metadata,noClock),/actual Battle frame coverage/);
+ const missingClock=structuredClone(delivery);delete missingClock.characters.pisuke.stand_weak.contactSeconds;
+ assert.throws(()=>validateP3ContactDelivery(missingClock),/actual Battle frame coverage/);
+ const legacy=delivery.characters.moguzo.stand_weak;assert.equal(legacy.trajectorySampling,'legacy-active-samples');
+ const falseClaim=structuredClone(delivery);falseClaim.characters.moguzo.stand_weak.trajectorySampling='exact-battle-active-frames';
+ assert.throws(()=>validateP3ContactDelivery(falseClaim),/exact sampling claim/);
+});
+test('exact rows permit extra diagnostic phases but cannot omit an actual active frame',()=>{
+ const {metadata,measurements}=fixture(),row=measurements.characters.moguzo.stand_heavy;
+ row.battleActive=4;row.contactSeconds=.5;
+ row.activeReach=[0,1/3,.5,2/3,1].map(phase=>({...row.activeReach[0],phase}));
+ assert.equal(validateP3ContactDelivery(createP3ContactDelivery(metadata,measurements)).characters.moguzo.stand_heavy.activeReach.length,5);
+ row.activeReach[1].phase=.2;
+ assert.throws(()=>createP3ContactDelivery(metadata,measurements),/actual Battle frame coverage/);
+ const missing=structuredClone(measurements);missing.characters.moguzo.stand_heavy.activeReach[1].phase=1/3;
+ const delivery=createP3ContactDelivery(metadata,missing);delivery.characters.moguzo.stand_heavy.activeReach[1].phase=.2;
+ assert.throws(()=>validateP3ContactDelivery(delivery),/actual Battle frame coverage/);
+});
 test('only air slots accept signed local heights and real contact adds airborne world Y',()=>{
  const {metadata,measurements}=fixture(),air=measurements.characters.bullet.air_heavy;
  air.height=-.17;air.activeReach.forEach(point=>point.height=-.17);

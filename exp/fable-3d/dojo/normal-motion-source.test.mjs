@@ -52,3 +52,9 @@ test('explicit candidate loading never changes the live source and fails on miss
  assert.equal(candidate.status,'candidate-only');assert.equal(candidate.source.version,'v17');assert.equal(candidate.revision,'unit-test');assert.equal(ACTIVE_NORMAL_MOTION_SOURCE,before);
  await assert.rejects(loadP3NormalMotionCandidate({fetcher:async()=>({ok:false,status:404}),moduleLoader:async()=>({})}),/HTTP 404/);
 });
+test('provider accepts a full exact 2F pack contract and rejects missing-frame delivery',()=>{
+ const d=delivery(),row=d.characters.pisuke.stand_weak;
+ Object.assign(row,{battleActive:2,contactSeconds:row.contact*row.authoredDuration,activeReach:[row.activeReach[0],row.activeReach.at(-1)]});
+ const source=createNormalMotionSource({version:'v17',delivery:d});assert.equal(source.contacts.pisuke.stand_weak.activeReach.length,2);
+ row.activeReach.pop();assert.throws(()=>createNormalMotionSource({version:'v17',delivery:d}),/actual Battle frame coverage/);
+});

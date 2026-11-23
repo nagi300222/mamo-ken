@@ -214,7 +214,8 @@ export function measureContacts(avatar){
   const normalSource=avatar.normalMotionSource??ACTIVE_NORMAL_MOTION_SOURCE;
   for(const [slot,reference] of Object.entries(avatar.normalContacts??normalSource.contacts[avatar.baseId])){
    const clip=avatar.animations.find(a=>a.name===normalSource.clipName(slot));if(!clip)throw Error('通常技がありません: '+slot);
-   const activeReach=[0,.5,1].map(phase=>{at(clip.name,(reference.contact+(reference.contactEnd-reference.contact)*phase)*clip.duration);return {phase,...surface(reference.attackPart)};});
+   const phases=reference.battleActive===undefined?[0,.5,1]:reference.activeReach.map(point=>point.phase);
+   const activeReach=phases.map(phase=>{at(clip.name,(reference.contact+(reference.contactEnd-reference.contact)*phase)*clip.duration);return {phase,...surface(reference.attackPart)};});
    normals[slot]={...reference,...activeReach[0],activeReach};delete normals[slot].phase;
   }
   const bounds=(names,phases=[0,.25,.5,.75])=>{let top=0;for(const name of names){const clip=avatar.animations.find(a=>a.name===name);if(!clip)continue;for(const phase of phases){at(name,phase*clip.duration);top=Math.max(top,surface(null).top);}}return {bottom:0,top};};

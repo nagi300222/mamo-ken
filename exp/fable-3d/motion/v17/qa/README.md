@@ -68,7 +68,16 @@ NODE_PATH=/path/to/playwright-core CHROMIUM_PATH=/usr/bin/google-chrome \
 
 このページ内だけ`normal-contact-overrides-p3.js`のレスポンスを完全な候補へ差し替え、ゲーム本体のprovider/actor/clockを通す。productionの承認値nullはそのまま。実際のBattle.startupから持続の最終Fまで**各activeフレーム**を通し、source時刻・weight・Battleのreach/heightと実スキンを比較する。直接サンプルでもphase=i/(active−1)の全点に0/.5/1を加え、左右反転、全地上フレームの足表面を検査する。三点間の補間が途中フレームを外す場合も失敗させる。
 
-`independent-exact-report.json`と`independent-exact-contacts.json`を先に保存してから、誤差があればCIを失敗させる。`MAMOKEN_QA_IDS=godan,chirka,bullet`で対象を絞れる。`MAMOKEN_QA_REPORT_ONLY=1`は調査専用で、差分が残っても出力を収集するモード。**成功ゲートの代わりに使わない。**
+`independent-exact-report.json`と`independent-exact-contacts.json`を先に保存してから、誤差があればCIを失敗させる。`MAMOKEN_QA_IDS=godan,chirka,bullet`で対象を絞れる。
+
+独立測定した表を**明示候補**として同じ実Battleへ戻す場合だけ、次を指定する。無指定時は作者のJSONを使う。入力表のパス・SHA256、metadata/9packのSHA256をレポートへ保存し、productionの承認moduleがnullであることをファイルから確認する。候補を自動承認する処理はない。
+
+```sh
+MAMOKEN_NORMAL_CONTACTS=/tmp/previous-run/independent-exact-contacts.json \
+  node exp/fable-3d/motion/v17/qa/independent-motion-browser.mjs
+```
+
+生のcharacter mapと`{characters: ...}`形式の候補deliveryを受け付ける。再検査でも全active実フレーム・左右・足接地を通し、右向き/左向きの立強・空強PNGを保存する。`MAMOKEN_QA_REPORT_ONLY=1`は調査専用で、差分が残っても出力を収集するモード。**成功ゲートの代わりに使わない。**
 
 ## 未認証/次のゲート
 
@@ -77,3 +86,12 @@ NODE_PATH=/path/to/playwright-core CHROMIUM_PATH=/usr/bin/google-chrome \
 - 別骨格・任意パーツの互換（P2）は実装していない。
 - iPhoneのFPS/熱/タッチと最終採否は未検証。
 - 通常provider/必殺providerのglobalapprovalは未設定のまま。CIが通る前に採用済みと記録しない。
+
+
+## exact battleActive表（0ce6b852以降）の比較方針
+
+作者の新しい表は、実Battleの`i/(active−1)`全フレームを直接測定する。active=2の場合はphase0/1の2点で足り、実Battleで発生しないphase0.5を必須にしない。
+
+検査器は実activeフレームすべてで1.5cmのstrict比較を維持する。直接sourceサンプルでは追加0.5も記録するが、そのphaseに作者の実測referenceが存在せず、実Battleフレームでもない場合だけ、補間expectedとの差をdiagnosticに分ける。明示referenceがある点と実Battleの全フレームは常にstrict。実フレームのreference欠落は一致して見えても失敗にする。
+
+左右・先行部位は追加点も含む全source sampleで検査し、足接地は全地上フレームを維持する。`report.records[].exact`と候補出力の`activeReach`には追加点も省略せず保存する。候補出力は実測時の`battleActive`を明記する。diagnosticへの分離はglobal承認や品質合格を意味しない。

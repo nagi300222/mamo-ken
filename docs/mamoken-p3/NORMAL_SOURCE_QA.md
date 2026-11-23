@@ -14,8 +14,10 @@ does not constitute integrated collision verification. Root owns those entry poi
 Pack validation rejects missing, duplicated, wrong-version or stale-duration
 clips. Avatar measurements retain their own `customContact` timing. A negative
 local strike height is valid only for an air normal: world height is the signed
-local value plus `fighter.y`. Ground data retains the existing small numerical
-tolerance. Mesh floor penetration is a separate art check.
+local value plus `fighter.y`. Ground initial contact retains the existing small
+numerical tolerance. A measured ground follow-through centre may fall below
+root while its 6 cm strike circle still reaches ground; a circle entirely below
+that plane is rejected. Mesh floor penetration is a separate art check.
 
 ## Verification
 
@@ -49,3 +51,45 @@ node --loader ./exp/fable-3d/custom/v16/tools/three-loader.mjs \
 ```
 
 The tool writes its report before exiting with failure on any surface mismatch.
+
+## Existing v15 custom regression
+
+CI run `45130923657`, custom job `137545983432` rejected the unchanged Bullet
+crouch-heavy measurement after validation was expanded to every active point.
+Actual Three.js CPU skin measurements reproduce `+0.0071 / -0.0164 / -0.0259 m`
+for contact/mid/end. Its centre at the endpoint remains within the existing
+6 cm contact radius of ground. The former 2 cm initial-contact tolerance was
+incorrectly applied to this later contact-circle centre. No value is clamped.
+
+The fix preserves initial-contact validation and permits active centres only
+while their circle reaches the plane. Regression tests retain the signed raw
+endpoint, verify Battle ground collision, and reject an endpoint at `-0.061 m`.
+All nine real unchanged v15 modular rigs now pass custom Battle validation;
+their measurements are in
+[v15-custom-ground-regression.json](evidence/v15-custom-ground-regression.json).
+This CPU measurement does not replace actual WebGL floor QA.
+
+## Exact active-frame handoff, revision 0ce6b852
+
+The author's subsequent delivery samples each actual Battle active frame. Its
+Pisuke/Chirka/Yomikage 2F normals correctly have two samples; requiring three
+samples would reject complete real data. Rows declaring integer `battleActive`
+must match the existing move's active count and cover every phase
+`i / (battleActive - 1)`. Extra diagnostic phases are allowed. Exact rows also
+need an aligned `contactSeconds` clock. Missing frames, incorrect active counts
+or absent/misaligned clocks fail both delivery creation and serialized delivery
+validation. Legacy three-point tables retain their separate legacy label.
+
+The shared provider validates that same delivery. AvatarFactory measures all
+the exact source phases, including 2F clips, and custom Battle validates their
+coverage against the visual base's clocks while preserving per-avatar contacts.
+No timing, performance, model or compatibility scope was expanded.
+
+The CPU tool replay of actual revision `0ce6b852` now passes nine rigs, all 54
+clips and every delivered active frame, including three existing modified
+appearances. Original/parts hashes and all 37 base clips remain intact; global
+selection remains v15. Its full report is
+[normal-source-cpu-0ce6b852.json](evidence/normal-source-cpu-0ce6b852.json).
+Dojo tests pass 178/178, custom-combat tests 12/12, and Pages builds pass.
+This is CPU skin/morph evidence; independent WebGL and floor QA remain distinct,
+and this result does not enable the production approval override.

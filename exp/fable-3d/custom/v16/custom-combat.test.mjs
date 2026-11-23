@@ -135,3 +135,26 @@ test('custom measured air strikes retain signed height while ground/nonfinite da
   const infinite=structuredClone(measurement);infinite.normals.air_heavy.height=NaN;
   assert.throws(()=>createCustomBattle(definition,'chirka',1,{measurements:[infinite]}),/通常技計測/);
 });
+
+test('v15 Bullet ground tail retains its measured below-root follow-through and actual ground collision',()=>{
+  const definition=createDefaultAvatar('bullet');
+  const measurement={source:'runtime-skinned-mesh',normals:structuredClone(NORMAL_CONTACTS.bullet),hurtBounds:structuredClone(NORMAL_HURT_BOUNDS.bullet),projectileSocket:{forward:.22,height:.32}};
+  // Exact Three.js skin measurements of the unchanged v15 modular rig. The
+  // authored table rounded/clamped its negative follow-through heights to zero.
+  Object.assign(measurement.normals.crouch_heavy,{reach:.6412,height:.0071,activeReach:[
+    {phase:0,reach:.6412,height:.0071},{phase:.5,reach:.6205,height:-.0164},{phase:1,reach:.5851,height:-.0259}
+  ]});
+  const battle=createCustomBattle(definition,'pisuke',1,{measurements:[measurement]}),[p,t]=battle.fighters;
+  p.x=0;t.x=.6;assert.equal(battle._begin(p,{},'crouch_heavy'),true);p.frame=p.action.startup+p.action.active-1;
+  assert.equal(p.action.activeReach.at(-1).height,-.0259);assert.equal(battle._contact(p,t,p.action),true);
+  const invalid=structuredClone(measurement);invalid.normals.crouch_heavy.activeReach.at(-1).height=-.061;
+  assert.throws(()=>createCustomBattle(definition,'pisuke',1,{measurements:[invalid]}),/通常技計測/);
+});
+test('custom exact measurements accept 2F moves but reject a missing real active frame',()=>{
+ const definition=createDefaultAvatar('pisuke');
+ const measurement={source:'runtime-skinned-mesh',normals:structuredClone(NORMAL_CONTACTS.pisuke),hurtBounds:structuredClone(NORMAL_HURT_BOUNDS.pisuke),projectileSocket:{forward:.22,height:.32}};
+ const row=measurement.normals.stand_weak;
+ Object.assign(row,{battleActive:2,authoredDuration:1,contactSeconds:row.contact,activeReach:[row.activeReach[0],row.activeReach.at(-1)]});
+ assert.ok(createCustomBattle(definition,'godan',1,{measurements:[measurement]}));
+ row.activeReach.pop();assert.throws(()=>createCustomBattle(definition,'godan',1,{measurements:[measurement]}),/通常技計測/);
+});

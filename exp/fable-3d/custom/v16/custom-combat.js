@@ -1,7 +1,8 @@
 import { Battle } from '../../dojo/battle.js';
 import { IDS, ROSTER, normalMove, specialMove } from '../../dojo/balance.js';
 import {NORMAL_CONTACTS,NORMAL_HURT_BOUNDS,ACTIVE_NORMAL_MOTION_VERSION} from '../../dojo/normal-contact-source.js';
-import {validNormalStrikeHeight} from '../../dojo/normal-contact-runtime-v151.js';
+import {validNormalStrikeHeight,NORMAL_STRIKE_RADIUS} from '../../dojo/normal-contact-runtime-v151.js';
+import {validNormalActiveTrajectory} from '../../dojo/p3-contact-adapter.js';
 import { normalizeAvatar, createDefaultAvatar, parseMoveRef, isUnmodifiedCombatShape } from './avatar-schema.js';
 
 const NORMAL=/^(stand|crouch|air)_(weak|heavy)$/;
@@ -42,14 +43,16 @@ export function compatibleSpecialSuggestion(raw) {
   const others=all.filter(m=>m.supported&&m.kind==='projectile');
   return [0,1,2].map(index=>native.find(m=>m.index===index)?.ref??others[index%others.length].ref);
 }
-function validateMeasurement(value,label) {
+function validateMeasurement(value,label,baseId) {
   check(value&&value.source==='runtime-skinned-mesh',label+'のスキン後接触計測が必要です');
   for(const slot of Object.keys(NORMAL_CONTACTS.moguzo)){
     const m=value.normals?.[slot];
     check(m&&Number.isFinite(m.reach)&&m.reach>=0&&validNormalStrikeHeight(slot,m.height,.02)&&
       Number.isFinite(m.contact)&&Number.isFinite(m.contactEnd)&&m.contact>0&&m.contactEnd>m.contact&&m.contactEnd<1&&
-      Array.isArray(m.activeReach)&&m.activeReach.length>=2&&m.activeReach.every(p=>
-        Number.isFinite(p.phase)&&p.phase>=0&&p.phase<=1&&Number.isFinite(p.reach)&&p.reach>=0&&validNormalStrikeHeight(slot,p.height,.02)),label+'の通常技計測が不正: '+slot);
+        // A grounded sweep's centre may finish below root while its existing
+        // strike circle still intersects ground (v15 Bullet tail: -0.0259m).
+        // Keep the measured sign; reject a circle entirely below that plane.
+      validNormalActiveTrajectory({...m,slot},{expectedActive:normalMove(baseId,slot).active,minLegacySamples:2,groundTolerance:NORMAL_STRIKE_RADIUS}),label+'の通常技計測が不正: '+slot);
   }
   for(const stance of ['stand','crouch']){
     const b=value.hurtBounds?.[stance];
@@ -94,7 +97,7 @@ export function createCustomBattle(player,opponent='godan',level=1,options={}) {
   const definitions=defs.map(value=>value?.definition??null);
   const measurements=definitions.map((definition,i)=>{
     if(!definition)return null;
-    if(options.measurements?.[i])return validateMeasurement(options.measurements[i],i?'相手':'自キャラ');
+    if(options.measurements?.[i])return validateMeasurement(options.measurements[i],i?'相手':'自キャラ',definition.appearance.baseId);
     check(isUnmodifiedCombatShape(definition),'形を変えた自キャラは接触計測後に対戦できます');
     return baseMeasurement(definition);
   });
