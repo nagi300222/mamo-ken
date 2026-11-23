@@ -82,6 +82,7 @@ try{
     // K.O. とスロー
     await finish(page,'ko',0);await waitState(page,'ko',20000);
     assert.equal(await page.locator('#ko-title').textContent(),'K.O.');assert.equal(await page.locator('#ko-banner').isVisible(),true);
+    assert.equal(await page.locator('#round-call').isVisible(),false,'early KO must clear the FIGHT call');
     const before=await P(page);await page.waitForTimeout(700);const during=await P(page);
     assert.equal(during.state,'ko');assert.equal(during.frame,before.frame,'KO 演出中に Battle.frame は進まない');assert.deepEqual(during.hp,before.hp);
     assert.ok(during.koSlow>0&&during.koSlow<.5,'表示クロックだけスロー '+during.koSlow);
@@ -89,6 +90,7 @@ try{
     // 勝利ムービー
     await waitState(page,'victory',20000);
     s=await P(page);assert.equal(s.camera,'presentation');assert.equal(s.victoryClip,'victory_v151');
+    assert.equal(await page.locator('#round-call').isVisible(),false,'victory must not retain FIGHT');
     assert.equal(await page.evaluate(()=>mamoken3d.actors[1].currentName),'ko','敗者は ko、勝者は victory（取り違えない）');
     await page.waitForFunction(t=>mamoken3d.presentation.victoryTime>t+.4,s.victoryTime,{timeout:8000});   // 勝利クリップが進む
     await page.waitForFunction(()=>document.getElementById('victory-banner').dataset.shown==='true',undefined,{timeout:5000});
@@ -96,6 +98,7 @@ try{
     await page.screenshot({path:dir+'/a6-victory.png'});
     await waitState(page,'result',27000);
     s=await P(page);assert.deepEqual(run(s.log),['vs','intro','fight','ko','victory','result']);assert.equal(s.frame,before.frame);
+    assert.equal(await page.locator('#round-call').isVisible(),false,'result must not retain FIGHT');
     assert.equal(await page.locator('#result-title').textContent(),'勝利');assert.equal(await page.locator('#result-reason').textContent(),'KO');
     assert.equal(await page.locator('#rematch').isVisible(),true);assert.equal(await page.locator('#result-select').isVisible(),true);
     await page.screenshot({path:dir+'/a7-result.png'});
@@ -196,6 +199,7 @@ try{
     const introSeconds=await page.evaluate(()=>window.__intro);assert.ok(introSeconds>1.5&&introSeconds<2.9,'低刺激の導入は短い（2.7 秒。通常は 3.6 秒）: '+introSeconds);
     await page.waitForFunction(()=>mamoken3d.battle.frame>2);await finish(page,'ko',0);await waitState(page,'ko',20000);
     await page.waitForTimeout(350);const s=await P(page);assert.equal(s.koSlow,1,'低刺激では KO をスローにしない');assert.equal(await page.locator('#ko-banner').getAttribute('data-motion'),'reduced');
+    assert.equal(await page.locator('#round-call').isVisible(),false,'reduced-motion early KO must clear FIGHT');
     await page.screenshot({path:dir+'/e1-ko-reduced-motion.png'});
     await waitState(page,'victory',20000);await waitState(page,'result',27000);
     await context.close();

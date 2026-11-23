@@ -4,6 +4,7 @@
 import assert from 'node:assert/strict';
 import {mkdir,writeFile} from 'node:fs/promises';
 import {createRequire} from 'node:module';
+import {inspectEditorConfirmation} from '../dojo/acceptance/editor-contrast.mjs';
 const {chromium}=createRequire(import.meta.url)('playwright-core');
 const root=process.env.MAMOKEN_STORY_URL??'http://127.0.0.1:4173/exp/fable-3d/story/';
 const dir=(process.env.MAMOKEN_EVIDENCE??'/tmp/mamoken-p2')+'/editor';await mkdir(dir,{recursive:true});
@@ -54,7 +55,7 @@ try{
   assert.equal(preview.entry.sha256,module.sha256);assert.ok(preview.meshes.length>0);
   assert.equal(preview.meshes.reduce((n,mesh)=>n+mesh.vertices,0),preview.entry.vertices);
   assert.ok(preview.meshes.every(mesh=>mesh.morphs===4&&mesh.sharedSkin&&mesh.part.donorId===module.donorId));
-  await tab(3);assert.ok((await page.locator('[data-save-mesh]').textContent()).includes(await page.locator('#mesh-part-head').evaluate(select=>select.selectedOptions[0].textContent)),'confirmation omitted the selected physical head');await page.screenshot({path:dir+'/'+baseId+'-editor.png'});await page.locator('#enter').click();
+  await tab(3);const confirmation=await inspectEditorConfirmation(page);assert.ok((await page.locator('[data-save-mesh]').textContent()).includes(await page.locator('#mesh-part-head').evaluate(select=>select.selectedOptions[0].textContent)),'confirmation omitted the selected physical head');await page.screenshot({path:dir+'/'+baseId+'-editor.png'});await page.locator('#enter').click();
   await page.waitForFunction(()=>mamokenStory.mode==='explore'&&mamokenStory.nearby?.id==='moguzo',undefined,{timeout:90000});
   const before=await page.evaluate(()=>({position:mamokenStory.progress.position,camera:mamokenStory.progress.camera,battles:mamokenStory.progress.battles,wins:mamokenStory.progress.wins}));
   assert.equal(await page.evaluate(()=>mamokenStory.avatar.appearance.palette.futureShade),'#123456');
@@ -76,7 +77,7 @@ try{
   await page.reload();await page.waitForFunction(()=>mamokenStory.previewReady,undefined,{timeout:90000});
   assert.equal(await page.locator('#mesh-part-head').inputValue(),module.donorId);assert.equal(await page.evaluate(()=>mamokenStory.avatar.appearance.palette.futureShade),'#123456');
   assert.equal(await page.evaluate(()=>mamokenStory.progress.battles),after.battles);
-  report.push({baseId,moduleId:module.id,donorId:module.donorId,sha256:module.sha256,preview,before,after,measuredSource:measured.measurement.source});
+  report.push({baseId,moduleId:module.id,donorId:module.donorId,sha256:module.sha256,preview,confirmation,before,after,measuredSource:measured.measurement.source});
  }
  // An unavailable stored donor is preserved and visibly refused, never silently
  // normalized to the current body. A separate context avoids outgoing autosave.

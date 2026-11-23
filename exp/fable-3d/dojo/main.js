@@ -933,6 +933,9 @@ function showResult(){
   $('game-over').classList.remove('hidden');note('');
 }
 function onFlowChange(next,from){
+  // A terminal transition can happen before the short FIGHT call expires.
+  // Clear its display clock immediately; Battle and KO slow clocks stay intact.
+  if(next!=='fight'){presentState.callUntil=0;$('round-call').hidden=true;}
   if(from==='victory'&&next!=='result')endVictoryPose();
   if(next==='select'){endVictoryPose();$('ko-banner').hidden=true;$('round-call').hidden=true;$('intro-plate').hidden=true;}
   if(next==='intro'){
