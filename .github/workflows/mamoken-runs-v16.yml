@@ -20,7 +20,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        suite: [core, avatar, custom, story]
+        suite: [core, avatar, custom, story, ui]
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -59,6 +59,7 @@ jobs:
               node exp/fable-3d/dojo/acceptance/run-modes-browser.mjs
               node exp/fable-3d/dojo/acceptance/v15-normal-art-browser.mjs
               node exp/fable-3d/dojo/acceptance/v15-practice-browser.mjs ;;
+            ui) node exp/fable-3d/dojo/acceptance/p4-ui-browser.mjs ;;
             avatar) node exp/fable-3d/custom/v16/tools/verify-avatar-browser.mjs ;;
             custom) node exp/fable-3d/custom/v16/custom-combat-browser.mjs ;;
             story)

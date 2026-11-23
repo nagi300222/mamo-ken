@@ -8,7 +8,8 @@ test('Astra HUDを追加してもv0.3の3D対戦canvasは全領域を使用',()=
   assert.match(html,/id="combat-layout"/);
   assert.ok(html.indexOf('id="stick-rail"')<html.indexOf('id="arena"'));
   assert.ok(html.indexOf('id="buttons-rail"')>html.indexOf('id="stage"'));
-  assert.ok(html.indexOf('id="stage"')<html.indexOf('class="hud"'),'HUD remains overlay after canvas');
+  const hud=[...html.matchAll(/\bclass="([^"]*)"/g)].find(match=>match[1].split(/\s+/).includes('hud'));
+  assert.ok(hud&&html.indexOf('id="stage"')<hud.index,'HUD remains overlay after canvas');
   assert.match(style,/#arena>\.hud\s*\{\s*position:absolute/);
   assert.match(main,/import \{ frameTargets \} from '\.\/camera-frame\.js'/);
   assert.match(main,/updateCamera\(\);\s*renderer\.render\(scene,camera\)/);
