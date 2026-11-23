@@ -1,4 +1,4 @@
-<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover"><meta name="theme-color" content="#18302d"><link rel="icon" href="data:,"><title>マモ拳 v16｜旅のはじまり</title><link rel="stylesheet" href="./style.css"><script type="importmap">{"imports":{"three":"../preview/vendor/three.module.min.js","three/addons/":"../preview/vendor/addons/"}}</script></head><body>
+<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover"><meta name="theme-color" content="#18302d"><link rel="icon" href="data:,"><title>マモ拳 v16｜旅のはじまり</title><link rel="stylesheet" href="./style.css"><link rel="stylesheet" href="../shared-ui/battle-ui.css"><link rel="stylesheet" href="./p0-controls.css"><script type="importmap">{"imports":{"three":"../preview/vendor/three.module.min.js","three/addons/":"../preview/vendor/addons/"}}</script></head><body data-ui="mountain">
 <main id="story-app" data-mode="loading">
  <canvas id="world" aria-label="自作キャラクターと山あいの集落の3D表示"></canvas>
  <header><a class="brand" href="../dojo/">マモ拳 <small>旅のはじまり · v16</small></a><div><button id="sound">音 ON</button><button id="edit" hidden>キャラを編集</button><button id="save" hidden>保存</button><button id="pause" hidden>一時停止</button><a href="../">モード選択へ</a></div></header>
@@ -15,11 +15,13 @@
  </section>
  <aside id="journey" class="journey" hidden><span class="eyebrow">山あいの集落</span><strong id="player-label"></strong><small id="journey-record"></small><p id="task">道場前のモグゾーに話しかけてみよう。</p></aside>
  <div id="npc-tag" class="npc-tag" hidden><b id="npc-name"></b><span id="npc-record"></span></div>
- <div id="battle-hud" class="battle-hud" hidden><div><strong id="p1-name"></strong><div class="hp"><i id="hp-0"></i></div><small id="super-0"></small></div><b id="round-time">75</b><div><strong id="p2-name"></strong><div class="hp"><i id="hp-1"></i></div><small id="super-1"></small></div></div>
+ <div id="battle-hud" class="hud shared-battle-hud" hidden aria-label="共通対戦HUD"></div>
  <div id="dialogue" class="shade" hidden><section class="dialogue panel" role="dialog" aria-modal="true" aria-labelledby="dialogue-name"><small class="eyebrow">ENCOUNTER</small><h2 id="dialogue-name"></h2><p id="dialogue-line"></p><div class="actions"><button id="talk-close">またあとで</button><button id="challenge" class="primary">勝負しよう</button></div></section></div>
  <div id="result" class="shade" hidden><section class="dialogue panel" role="dialog" aria-modal="true" aria-labelledby="result-title"><small class="eyebrow" id="result-reason">稽古の結果</small><h2 id="result-title"></h2><p id="result-copy"></p><button id="return" class="primary">集落に戻る</button></section></div>
  <div id="loading" class="loading"><span></span><p id="loading-copy">モデルを読み込んでいます</p></div>
  <div id="movie-ui" class="movie-ui" hidden><p id="movie-caption"></p><button id="movie-skip">スキップ</button></div>
- <div id="input-controls" hidden><div id="story-stick" class="stick" role="group" aria-label="移動スティック"><i id="story-thumb"></i></div><button id="talk" class="primary talk" hidden>話す</button><div id="battle-buttons" hidden><button data-control="weak">弱</button><button data-control="strong">強</button><button data-control="throw">掴み</button><button data-control="gyuiin">ギュイーン</button><button data-control="special">必殺</button><button data-control="ultimateButton" class="ultimate">奥義</button></div></div>
- <footer><span id="help">WASD / 方向キーで移動 · Eで会話</span><output id="perf"></output></footer>
+ <div id="camera-orbit" role="region" aria-label="右ドラッグで視点を動かす" hidden><span>右ドラッグで視点</span></div>
+ <div id="camera-tools" hidden><button id="camera-reset" type="button">視点リセット</button><button id="camera-follow" type="button" aria-pressed="true">後方追従 ON</button></div>
+ <div id="input-controls" hidden><div id="stick-rail"><div id="story-stick" class="stick joystick" role="group" aria-label="8方向スティック"><i id="story-thumb"></i></div><div id="battle-steps" class="shared-step-pad"></div></div><button id="talk" class="primary talk" hidden>話す</button><div id="battle-buttons" class="shared-attack-pad" hidden></div></div>
+ <footer><span id="help">左で移動 · 右ドラッグで視点 · Eで会話</span><output id="perf"></output></footer>
 </main><script type="module" src="./main.js"></script></body></html>

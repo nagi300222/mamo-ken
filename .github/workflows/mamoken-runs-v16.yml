@@ -4,6 +4,10 @@ on:
     branches:
       - feat/mamoken-v151-arcade-survival
       - feat/mamoken-v16-story-integration
+      - feat/mamoken-p0-p1-integration
+      - feat/mamoken-p3-combat-feel
+      - feat/mamoken-p4-ui
+      - feat/mamoken-p0-p4-reviewed-integration
     paths-ignore:
       - docs/**
   workflow_dispatch:
@@ -24,9 +28,10 @@ jobs:
           node-version: '22'
       - name: Unit and original combat regression
         run: |
+          node tools/verify-protected-assets.mjs
           npm --prefix exp/fable-3d/dojo test
           if test -d exp/fable-3d/story; then
-            node --test exp/fable-3d/custom/v16/*.test.mjs exp/fable-3d/story/*.test.mjs
+            node --test exp/fable-3d/custom/v16/*.test.mjs exp/fable-3d/story/*.test.mjs exp/fable-3d/shared-ui/*.test.mjs
           fi
       - name: Build actual game and assets
         run: npm --prefix exp/fable-3d/dojo run build:pages
