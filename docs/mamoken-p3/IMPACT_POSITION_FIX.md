@@ -33,3 +33,9 @@ the later stopped render root and retains a 5 mm mesh-contact tolerance.
 
 Actual WebGL acceptance must be rerun after this correction; the failed run is
 evidence for the bug, not a completed browser acceptance result.
+
+The rerun has now completed successfully on `e10c823`: CI `45146238314`, special
+job `137596104430`, artifact `14804372067`. All 32 actual hit/guard captures
+retained their impact roots and matched the independently rendered attack surface
+within the unchanged 5 mm threshold. Full counts, counter/throw evidence and
+device limitations are recorded in [the final production receipt](SPECIAL_R2_FINAL_WEBGL.md).

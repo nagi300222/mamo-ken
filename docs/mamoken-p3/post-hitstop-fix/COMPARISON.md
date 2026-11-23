@@ -1,5 +1,10 @@
 # CPU comparison after the wall hitstop fix
 
+This retains the initial `b3770b2` receipt. The subsequent trade/projectile
+presentation fix is replayed against the final runtime in
+[final-presentation/COMPARISON.md](final-presentation/COMPARISON.md), with its
+own final Battle SHA and another complete 2,916-round rerun.
+
 After receiving runtime fix `b3770b2`, both phases were replayed with that exact
 fixed Battle: **1,458 old-surface reference rounds + 1,458 combined-R2 rounds**.
 The original [R2 receipt](../r2-combined-cpu/COMPARISON.md) is preserved unchanged.
