@@ -44,6 +44,24 @@ npm --prefix exp/fable-3d/dojo run build:pages
 ```
 `build_victory.py` には Blender の `bpy` が必要（`pip install bpy scikit-image scipy xatlas pillow numpy`）。
 
+## 時計
+- 表示（VS・顔アップ・KO・勝利ムービー）は**実経過時間**で進む（奥義ムービーと同じ）。勝利クリップの再生位置は表示時計へ直接同期するので、描画が遅い端末でも尺・音・カメラがずれない。
+- Battle の固定 60Hz と、その delta 上限（0.05 秒）はそのまま。タブ復帰・フォーカス復帰の最初の 1 フレームは経過 0 として扱い、1 フレームの表示経過は 0.25 秒で頭打ち。
+- KO 演出だけ、役者とエフェクトを `経過 × flow.koSlow` で進める。
+
+## 検証
+```bash
+npm --prefix exp/fable-3d/dojo test                                   # 純ロジック（presentation-flow.test.mjs を含む）
+npm --prefix exp/fable-3d/dojo run build:pages                         # Pages 成果物（presentation/v151/*.glb を含む）
+node exp/fable-3d/presentation/v151/tools/run_acceptance.mjs           # 実 WebGL Chromium の受入（ローカル。CI は .github/workflows/mamoken-v151-presentation.yml）
+node exp/fable-3d/presentation/v151/tools/capture_victory.mjs --out DIR --mp4   # 9 本を 60fps・実時間速度で撮る
+```
+`dojo/acceptance/v151-presentation-browser.mjs` が見ているもの：縦持ち回転ロックのスマホでの一連の流れ、VS の画像 2 枚と CPU 側の左右反転、
+顔アップで頭・耳の上・鼻先が画面内、導入中に押したボタンが FIGHT 直後に出ない、KO 中に `Battle.frame` と HP が不変で表示だけスロー、
+勝者＝`victory_v151`／敗者＝`ko`、結果からの再戦とキャラ選択、Escape／Space／Enter のスキップ、CPU 勝利とミラー対戦、
+TIME UP／DRAW／DOUBLE K.O.、奥義 KO は 10 秒ムービー後に 1 回だけ、フォーカス喪失の一時停止、9 体の勝利クリップ・台詞・カメラが 9 通り、短縮版、プラクティスは VS なし、低刺激。
+決着は Battle 自身に出させる（テストは HP・タイマー・位置を置いて本物の技を始めるだけで、`winner` や `phase` は書かない）。
+
 ## 未完（このPRへ追記）
 - 9本の勝利ムービーのカメラ・ポーズの仕上げと、60fps・実時間速度の映像
 - 実 WebGL Chromium での受入テスト（横画面・縦回転ロック・タッチ・低刺激・スキップ・時間切れ・ダブルKO・奥義KO・CPU勝利）
