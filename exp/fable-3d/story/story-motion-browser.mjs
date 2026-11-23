@@ -16,6 +16,7 @@ try{
  await page.goto(root,{waitUntil:'domcontentloaded'});
  await page.waitForFunction(()=>window.mamokenStory?.mode==='editor'&&mamokenStory.player,undefined,{timeout:90000});
  await page.locator('#avatar-base').selectOption('chirka');
+ if(await page.locator('#p4-editor-tab-2').count())await page.locator('#p4-editor-tab-2').click();
  await page.locator('#avatar-style').selectOption('chirka');
  await page.locator('#avatar-name').fill('接触検査のチルカ');
  for(let i=0;i<3;i++)await page.locator('#move-'+i).selectOption('chirka.s'+(i+1));

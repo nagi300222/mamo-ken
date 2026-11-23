@@ -15,9 +15,10 @@ try{
  await page.locator('#avatar-name').fill('山風のナギ');
  assert.equal(await page.locator('#avatar-style option').count(),9);
  await page.locator('#part-head').selectOption('pisuke');
- await page.locator('details').nth(1).locator('summary').click();
+ if(await page.locator('#p4-editor-tab-1').count())await page.locator('#p4-editor-tab-1').click();else await page.locator('details').nth(1).locator('summary').click();
  await page.locator('#avatar-pattern').selectOption('stripes');
  await page.locator('#color-fields').locator('input').first().evaluate(e=>{e.value='#69967d';e.dispatchEvent(new Event('input',{bubbles:true}));});
+ if(await page.locator('#p4-editor-tab-2').count())await page.locator('#p4-editor-tab-2').click();
  await page.locator('#move-0').selectOption('pisuke.s1');
  await page.screenshot({path:dir+'/01-editor.png'});
  // Submit in the same event turn as a colour edit: an outstanding preview timer
@@ -58,6 +59,7 @@ try{
  assert.equal(await page.locator('#avatar-name').inputValue(),'山風のナギ');assert.equal(await page.evaluate(()=>mamokenStory.progress.wins),1);assert.equal(await page.locator('#move-0').inputValue(),'pisuke.s1');assert.equal(await page.locator('#part-head').inputValue(),'pisuke');assert.equal(await page.locator('#avatar-pattern').inputValue(),'stripes');
  // Re-edit style independently from the visual base, then end a second actual
  // Battle by timeout draw. The existing win count and location must survive.
+ if(await page.locator('#p4-editor-tab-2').count())await page.locator('#p4-editor-tab-2').click();
  await page.locator('#avatar-style').selectOption('pisuke');await page.locator('#move-0').selectOption('yomikage.s1');await page.locator('#enter').click();
  await page.waitForFunction(()=>mamokenStory.mode==='explore'&&mamokenStory.nearby?.id==='moguzo',undefined,{timeout:90000});
  await page.locator('#talk').tap();await page.locator('#challenge').click();await page.waitForFunction(()=>mamokenStory.mode==='battle'&&mamokenStory.battle.frame>0,undefined,{timeout:120000});
