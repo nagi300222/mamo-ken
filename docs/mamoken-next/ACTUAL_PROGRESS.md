@@ -2,8 +2,8 @@
 
 基準PR209 `8ab89722`、詳細設計PR214 `15c4897f`。2026-11-23本人による一括制作指示。
 
-- Codex P0: 探索独立カメラ/共通入力HUDとVS不要文言の修正を実装中。
-- Codex P1: 固定依存Capacitor/iOS project/横向き/lifecycle/端末手順を実装中。
+- Codex P0: 探索独立カメラ/共通入力HUDとVS不要文言を実装。179 Node/77アセット保全/実WebGL4レーン成功（02323fc、Actions45123063619）。読み込み中Native停止の追補を次のP1CIで追加検証。
+- Codex P1: 固定依存Capacitor/iOS project/横向き/lifecycle/端末手順を実装、Linuxで実素材同梱・ios sync・native9テスト成功。macOS unsigned compileとnative-adapterシミュレートの実WebGLをCIで検証する。iPhone実機は未実施。
 - Codex P3: 技カタログ/実ヒット感・音・CPU測定、Claude成果の統合を実装中。
 - Codex P4: 全5モードの実UI/デザイントークンと共有HUDを実装中。
 - Claude Code: 既存実セッションで追加指示を受領、Issue212/213とPR214の読み込み・実制作準備を確認。新モーション/アートの完成は未確認。

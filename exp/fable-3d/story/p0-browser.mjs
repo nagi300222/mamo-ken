@@ -38,7 +38,12 @@ try{
  // A blur clears held keys and both pointer streams, requiring explicit resume.
  await page.keyboard.down('ArrowRight');await page.evaluate(()=>window.dispatchEvent(new Event('blur')));await page.keyboard.up('ArrowRight');
  assert.equal(await page.evaluate(()=>mamokenStory.controls.paused),true);assert.deepEqual(await page.evaluate(()=>mamokenStory.controls.battle.keys),[]);await page.locator('#pause').tap();position=await page.evaluate(()=>mamokenStory.progress.position);view=await page.evaluate(()=>mamokenStory.controls.exploration);
- await page.locator('#talk').tap();await page.locator('#challenge').click();await page.waitForFunction(()=>mamokenStory.mode==='battle'&&mamokenStory.battle.frame>2,undefined,{timeout:120000});
+ await page.locator('#talk').tap();
+ // Native inactive arrives in the same task as a user-started asynchronous load.
+ // Finishing that load must not silently start combat in the background.
+ await page.evaluate(()=>{document.querySelector('#challenge').click();window.dispatchEvent(new CustomEvent('mamoken:native-state',{detail:{active:false}}));});
+ await page.waitForFunction(()=>mamokenStory.mode==='battle',undefined,{timeout:120000});assert.equal(await page.evaluate(()=>mamokenStory.controls.paused),true);assert.equal(await page.evaluate(()=>mamokenStory.battle.frame),0);
+ await page.evaluate(()=>window.dispatchEvent(new CustomEvent('mamoken:native-state',{detail:{active:true}})));assert.equal(await page.evaluate(()=>mamokenStory.controls.paused),true);await page.locator('#pause').tap();await page.waitForFunction(()=>mamokenStory.battle.frame>2);
  assert.deepEqual(await page.locator('#battle-buttons [data-control]').evaluateAll(nodes=>nodes.map(n=>n.dataset.control)),['weak','strong','throw','gyuiin','special','ultimateButton']);
  assert.deepEqual(await page.locator('#battle-steps [data-control]').evaluateAll(nodes=>nodes.map(n=>n.dataset.control)),['stepBack','stepForward']);
  for(const id of ['hp-0','hp-1','drive-0','drive-1','meter-0','meter-1','timer','name-0','name-1'])assert.equal(await page.locator('#'+id).count(),1,id);
@@ -57,9 +62,13 @@ try{
  await page.screenshot({path:output+'/independent-story-camera.png'});report.story={original,simultaneous,position,returned};
  // Regression for the unwanted ordinary-match Dark narration only. Gameplay's
  // Dark ability label and legacy Arcade narration remain independent contracts.
- await page.goto(new URL('../dojo/',base).href);await page.waitForFunction(()=>window.mamoken3d);await page.evaluate(()=>mamoken3d.startMatch({ids:['dark_moguzo','moguzo']}));
+ await page.goto(new URL('../dojo/',base).href);await page.waitForFunction(()=>window.mamoken3d);
+ // A native lifecycle event arrives before the async dojo model load resolves.
+ // The presentation may finish its intro, but Battle must remain at frame zero.
+ await page.evaluate(()=>{mamoken3d.startMatch({ids:['dark_moguzo','moguzo']});window.dispatchEvent(new CustomEvent('mamoken:native-state',{detail:{active:false}}));});
  await page.waitForFunction(()=>document.querySelector('#vs-screen').dataset.ready==='true',undefined,{timeout:90000});assert.equal(await page.locator('#vs-omen').isVisible(),false);assert.equal((await page.locator('#vs-omen').textContent()).trim(),'');
- await page.locator('#vs-screen').tap();await page.waitForFunction(()=>mamoken3d.battle?.frame>0,undefined,{timeout:30000});assert.match(await page.locator('#ability-0').textContent(),/暗連/);await page.screenshot({path:output+'/dark-ordinary-match.png'});
- assert.deepEqual(errors,[]);await writeFile(output+'/p0-report.json',JSON.stringify({report,errors},null,2));console.log('P0 actual WebGL PASS: independent multi-touch camera/move/talk, shared HUD+6buttons+steps, pause, return camera/save, short/portrait bounds, Dark ordinary VS copy');
+ await page.locator('#vs-screen').tap();await page.waitForFunction(()=>mamoken3d.presentation.state==='fight',undefined,{timeout:30000});assert.equal(await page.evaluate(()=>mamoken3d.battle.frame),0);assert.equal(await page.locator('#pause').textContent(),'再開');
+ await page.evaluate(()=>window.dispatchEvent(new CustomEvent('mamoken:native-state',{detail:{active:true}})));await page.waitForTimeout(180);assert.equal(await page.evaluate(()=>mamoken3d.battle.frame),0,'native foreground must not auto-resume');await page.locator('#pause').tap();await page.waitForFunction(()=>mamoken3d.battle.frame>0);assert.match(await page.locator('#ability-0').textContent(),/暗連/);await page.screenshot({path:output+'/dark-ordinary-match.png'});
+ assert.deepEqual(errors,[]);await writeFile(output+'/p0-report.json',JSON.stringify({report,errors},null,2));console.log('P0 actual WebGL PASS: independent multi-touch camera/move/talk, shared HUD+6buttons+steps, pause, return camera/save, short/portrait bounds, Dark ordinary VS copy and native async-load pause');
 }catch(error){await page.screenshot({path:output+'/error.png'}).catch(()=>{});console.error('P0 page errors',errors);throw error;}
 finally{await browser.close();}

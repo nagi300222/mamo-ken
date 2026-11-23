@@ -1,6 +1,7 @@
 // Minimal original synthesized impact sounds. No copyrighted audio assets or music.
 // AudioContext is opened only by an explicit user interaction (start/tap/sound button).
 import { showtimeFor } from './showtime-profiles.js';
+import { isNativeRuntime } from './landscape-lock.js';
 
 export function cinematicSoundKind(key) {
   if (/tension_hold|mute/.test(key)) return null;
@@ -26,6 +27,17 @@ export function createCombatAudio(contextFactory=()=>globalThis.AudioContext||gl
   let context=null,master=null,muted=false;
   const last=new Map();
   let noiseBuffer=null;
+  const activeSounds=new Set();
+  function suspend(){
+    for(const stop of activeSounds){try{stop();}catch{}}
+    activeSounds.clear();
+    if(context?.state==='running'){try{context.suspend?.()?.catch?.(()=>{});}catch{}}
+  }
+  if(isNativeRuntime()){
+    globalThis.addEventListener?.('mamoken:native-state',event=>{if(event.detail?.active===false)suspend();});
+    // Resume only within a real user gesture, including the pause/resume button.
+    globalThis.addEventListener?.('pointerdown',()=>{if(globalThis.mamokenNative?.active!==false&&context?.state==='suspended')unlock();},{capture:true});
+  }
   function unlock(){
     if(!context){
       const Factory=contextFactory();
@@ -62,9 +74,11 @@ export function createCombatAudio(contextFactory=()=>globalThis.AudioContext||gl
     gain.gain.exponentialRampToValueAtTime(.0001,now + duration);
     source.connect(filter);filter.connect(gain);gain.connect(master);
     const stop = () => {gain.disconnect();source.stop();};
+    activeSounds.add(stop);
     voices?.add(stop);
     source.onended = () => {
       voices?.delete(stop);
+      activeSounds.delete(stop);
       source.disconnect();filter.disconnect();gain.disconnect();
     };
     source.start(now);source.stop(now + duration);
@@ -104,13 +118,15 @@ export function createCombatAudio(contextFactory=()=>globalThis.AudioContext||gl
       oscillator.connect(gain);gain.connect(master);
       oscillator.start(now);oscillator.stop(now+duration+.016);
       const stop=()=>{gain.disconnect();oscillator.stop();};
+      activeSounds.add(stop);
       voices?.add(stop);
       oscillator.onended=()=>{
         voices?.delete(stop);
+        activeSounds.delete(stop);
         oscillator.disconnect();gain.disconnect();
       };
       return true;
     }catch{return false;}
   }
-  return {unlock,play,setMuted,get muted(){return muted;},get context(){return context;},get supported(){return !!contextFactory();}};
+  return {unlock,play,setMuted,suspend,get muted(){return muted;},get context(){return context;},get supported(){return !!contextFactory();}};
 }

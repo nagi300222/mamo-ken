@@ -353,6 +353,7 @@ function readyForCheck(){
   if(bullet)battle.setTailTipPath(bullet.meta.clips.sp_tail_whip.tail_tip_path);
   finishShown=false;
 }
+let backgroundPaused=false;
 let battle=null,selected='moguzo',cpuChoice='godan',playing=false,paused=false,loading=false,lastFrame=0,acc=0,finishShown=false;
 let practiceEnabled=false;
 const practice=createPracticeController();
@@ -944,7 +945,7 @@ function onFlowChange(next,from){
     clearInput();acc=0;lastFrame=0;$('intro-plate').hidden=true;
     if(from==='intro'){$('round-call-text').textContent='FIGHT!';$('round-call').dataset.kind='call';$('round-call').hidden=false;presentState.callUntil=performance.now()+420;}
     else $('round-call').hidden=true;
-    if(document.hasFocus?.()!==false&&paused){paused=false;$('pause').textContent='一時停止';}
+    if(!backgroundPaused&&document.hasFocus?.()!==false&&paused){paused=false;$('pause').textContent='一時停止';}
     note(practiceEnabled?'PRACTICE｜相手行動・位置リセット・コンボを確認':'FIGHT！ 必殺は方向＋ボタン／奥義は専用ボタン');
   }
   if(next==='ko'){
@@ -999,7 +1000,7 @@ async function startMatch(options={}){
   checking=!practiceEnabled&&checkAvailable&&$('check-mode').checked;
   practice.clear();practice.setDummy($('practice-dummy').value);syncPracticeUI();
   loading=true;clearInput();
-  playing=false;paused=false;finishShown=false;$('pause').textContent='一時停止';$('start').disabled=true;setLoading('GLBを読み込み中…');
+  backgroundPaused=window.mamokenNative?.active===false||document.hidden;playing=false;paused=backgroundPaused;finishShown=false;$('pause').textContent='一時停止';$('start').disabled=true;setLoading('GLBを読み込み中…');
   const ids=options.ids??[selected,cpuChoice],level=options.level??+$('difficulty').value;
   // プラクティスと演出確認は VS／顔アップを通さず、読み込み完了ですぐ操作できる（従来どおり）。
   const instant=options.instant??(practiceEnabled||checking);
@@ -1165,16 +1166,19 @@ document.addEventListener('keyup',e=>{
 window.addEventListener('mamoken:native-state',event=>{
   lastFrame=0;acc=0;
   if(event.detail?.active){resize();return;}
+  backgroundPaused=true;
   if(movie.active)finishUltimateMovie();
   clearInput();paused=true;$('pause').textContent='再開';music.update(false);
 });
 window.addEventListener('focus',()=>{lastFrame=0;});
 window.addEventListener('blur',()=>{
+  backgroundPaused=true;
   if(movie.active)finishUltimateMovie();
   clearInput();paused=true;$('pause').textContent='再開';music.update(false);
 });
 document.addEventListener('visibilitychange',()=>{
   if(!document.hidden){lastFrame=0;return;}       // 復帰の 1 フレーム目に、隠れていた時間を経過として渡さない
+  backgroundPaused=true;
   if(movie.active)finishUltimateMovie();
   clearInput();paused=true;acc=0;lastFrame=0;$('pause').textContent='再開';
   music.update(false);
@@ -1253,7 +1257,7 @@ $('start').onclick=()=>startMatch();$('select-back').onclick=showSelection;$('re
 $('rematch').onclick=()=>presentState.match?.onRematch?presentState.match.onRematch():startMatch(presentState.match?.ids?{...presentState.match,carryHp:null}:{});
 $('presentation-skip').onclick=skipPresentation;
 $('vs-screen').addEventListener('pointerdown',event=>{event.preventDefault();skipPresentation();});
-$('pause').onclick=()=>{if(!battle||battle.phase!=='fight'||!flow.battleRunning)return;clearInput();paused=!paused;$('pause').textContent=paused?'再開':'一時停止';note(paused?'一時停止':'対戦再開');};
+$('pause').onclick=()=>{if(!battle||battle.phase!=='fight'||!flow.battleRunning)return;if(window.mamokenNative?.active===false||document.hidden)return;backgroundPaused=false;clearInput();paused=!paused;$('pause').textContent=paused?'再開':'一時停止';note(paused?'一時停止':'対戦再開');};
 
 const FIXED=1/FPS;
 function render(now){
