@@ -1,0 +1,3 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 64" width="96" height="64" role="img" aria-label="state decoration: selected" fill="none">
+<rect x="3" y="3" width="90" height="58" rx="10" stroke="var(--mk-action,#F1C66C)" stroke-width="3"/><rect x="8" y="8" width="80" height="48" rx="6" stroke="var(--mk-action,#F1C66C)" stroke-width="1.5"/><circle cx="80" cy="16" r="11" fill="var(--mk-seal,#B5402E)"/><path d="M74.5 16.2l3.6 3.6 7-7.6" stroke="#FFF6DC" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

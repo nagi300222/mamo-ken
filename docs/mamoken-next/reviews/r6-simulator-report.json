@@ -1,0 +1,331 @@
+{
+  "schemaVersion": 1,
+  "passed": true,
+  "platform": "darwin",
+  "simulatorTested": true,
+  "physicalDeviceTested": false,
+  "scope": "Actual iOS Simulator boot/install/launch/framebuffer capture; no touch gameplay or physical-device certification",
+  "uiLoadedAutomaticallyVerified": false,
+  "webglGameplayTested": false,
+  "touchControlsTested": false,
+  "captureWaitSeconds": 8,
+  "commands": [
+    {
+      "program": "xcodebuild",
+      "args": [
+        "-version"
+      ],
+      "timeoutMs": 30000,
+      "startedAt": "2026-11-23T14:23:29.283Z",
+      "exitCode": 0,
+      "finishedAt": "2026-11-23T14:23:30.124Z"
+    },
+    {
+      "program": "xcrun",
+      "args": [
+        "--sdk",
+        "iphonesimulator",
+        "--show-sdk-version"
+      ],
+      "timeoutMs": 30000,
+      "startedAt": "2026-11-23T14:23:30.124Z",
+      "exitCode": 0,
+      "finishedAt": "2026-11-23T14:23:34.144Z"
+    },
+    {
+      "program": "xcrun",
+      "args": [
+        "simctl",
+        "list",
+        "devices",
+        "available",
+        "--json"
+      ],
+      "timeoutMs": 30000,
+      "startedAt": "2026-11-23T14:23:34.144Z",
+      "exitCode": 0,
+      "finishedAt": "2026-11-23T14:23:36.265Z"
+    },
+    {
+      "program": "xcrun",
+      "args": [
+        "simctl",
+        "list",
+        "runtimes",
+        "--json"
+      ],
+      "timeoutMs": 30000,
+      "startedAt": "2026-11-23T14:23:36.266Z",
+      "exitCode": 0,
+      "finishedAt": "2026-11-23T14:23:36.581Z"
+    },
+    {
+      "program": "/usr/libexec/PlistBuddy",
+      "args": [
+        "-c",
+        "Print :CFBundleIdentifier",
+        "/Users/runner/work/mamo-ken/mamo-ken/native/DerivedData/Build/Products/Debug-iphonesimulator/App.app/Info.plist"
+      ],
+      "timeoutMs": 30000,
+      "startedAt": "2026-11-23T14:23:36.614Z",
+      "exitCode": 0,
+      "finishedAt": "2026-11-23T14:23:36.623Z"
+    },
+    {
+      "program": "/usr/libexec/PlistBuddy",
+      "args": [
+        "-c",
+        "Print :CFBundleExecutable",
+        "/Users/runner/work/mamo-ken/mamo-ken/native/DerivedData/Build/Products/Debug-iphonesimulator/App.app/Info.plist"
+      ],
+      "timeoutMs": 30000,
+      "startedAt": "2026-11-23T14:23:36.624Z",
+      "exitCode": 0,
+      "finishedAt": "2026-11-23T14:23:36.632Z"
+    },
+    {
+      "program": "/usr/libexec/PlistBuddy",
+      "args": [
+        "-c",
+        "Print :UISupportedInterfaceOrientations",
+        "/Users/runner/work/mamo-ken/mamo-ken/native/DerivedData/Build/Products/Debug-iphonesimulator/App.app/Info.plist"
+      ],
+      "timeoutMs": 30000,
+      "startedAt": "2026-11-23T14:23:36.632Z",
+      "exitCode": 0,
+      "finishedAt": "2026-11-23T14:23:36.643Z"
+    },
+    {
+      "program": "xcrun",
+      "args": [
+        "simctl",
+        "boot",
+        "8EBAA496-5654-45BF-897F-3C4FD73935F1"
+      ],
+      "timeoutMs": 60000,
+      "startedAt": "2026-11-23T14:23:36.643Z",
+      "exitCode": 0,
+      "finishedAt": "2026-11-23T14:23:39.304Z"
+    },
+    {
+      "program": "xcode-select",
+      "args": [
+        "-p"
+      ],
+      "timeoutMs": 30000,
+      "startedAt": "2026-11-23T14:23:39.304Z",
+      "exitCode": 0,
+      "finishedAt": "2026-11-23T14:23:41.038Z"
+    },
+    {
+      "program": "open",
+      "args": [
+        "-a",
+        "/Applications/Xcode_26.6.app/Contents/Developer/Applications/Simulator.app",
+        "--args",
+        "-CurrentDeviceUDID",
+        "8EBAA496-5654-45BF-897F-3C4FD73935F1"
+      ],
+      "timeoutMs": 30000,
+      "startedAt": "2026-11-23T14:23:41.038Z",
+      "exitCode": 0,
+      "finishedAt": "2026-11-23T14:24:08.087Z"
+    },
+    {
+      "program": "xcrun",
+      "args": [
+        "simctl",
+        "bootstatus",
+        "8EBAA496-5654-45BF-897F-3C4FD73935F1",
+        "-b"
+      ],
+      "timeoutMs": 180000,
+      "startedAt": "2026-11-23T14:24:08.329Z",
+      "exitCode": null,
+      "timedOut": true,
+      "finishedAt": "2026-11-23T14:27:16.170Z"
+    },
+    {
+      "program": "xcrun",
+      "args": [
+        "simctl",
+        "bootstatus",
+        "8EBAA496-5654-45BF-897F-3C4FD73935F1",
+        "-b"
+      ],
+      "timeoutMs": 420000,
+      "startedAt": "2026-11-23T14:27:16.187Z",
+      "exitCode": 0,
+      "finishedAt": "2026-11-23T14:32:24.880Z"
+    },
+    {
+      "program": "xcrun",
+      "args": [
+        "simctl",
+        "install",
+        "8EBAA496-5654-45BF-897F-3C4FD73935F1",
+        "/Users/runner/work/mamo-ken/mamo-ken/native/DerivedData/Build/Products/Debug-iphonesimulator/App.app"
+      ],
+      "timeoutMs": 120000,
+      "startedAt": "2026-11-23T14:32:25.114Z",
+      "exitCode": 0,
+      "finishedAt": "2026-11-23T14:33:14.926Z"
+    },
+    {
+      "program": "xcrun",
+      "args": [
+        "simctl",
+        "launch",
+        "--terminate-running-process",
+        "--stdout=/Users/runner/work/mamo-ken/mamo-ken/native/evidence/simulator/app-stdout.log",
+        "--stderr=/Users/runner/work/mamo-ken/mamo-ken/native/evidence/simulator/app-stderr.log",
+        "8EBAA496-5654-45BF-897F-3C4FD73935F1",
+        "jp.nagi.mamoken.poc"
+      ],
+      "timeoutMs": 60000,
+      "startedAt": "2026-11-23T14:33:15.190Z",
+      "exitCode": 0,
+      "finishedAt": "2026-11-23T14:33:24.947Z"
+    },
+    {
+      "program": "xcrun",
+      "args": [
+        "simctl",
+        "spawn",
+        "8EBAA496-5654-45BF-897F-3C4FD73935F1",
+        "launchctl",
+        "list"
+      ],
+      "timeoutMs": 30000,
+      "startedAt": "2026-11-23T14:33:33.181Z",
+      "exitCode": 0,
+      "finishedAt": "2026-11-23T14:33:36.774Z"
+    },
+    {
+      "program": "xcrun",
+      "args": [
+        "simctl",
+        "io",
+        "8EBAA496-5654-45BF-897F-3C4FD73935F1",
+        "screenshot",
+        "--type=png",
+        "/Users/runner/work/mamo-ken/mamo-ken/native/evidence/simulator/01-native-launcher.png"
+      ],
+      "timeoutMs": 30000,
+      "startedAt": "2026-11-23T14:33:36.788Z",
+      "exitCode": 0,
+      "finishedAt": "2026-11-23T14:33:49.288Z"
+    },
+    {
+      "program": "xcrun",
+      "args": [
+        "simctl",
+        "io",
+        "8EBAA496-5654-45BF-897F-3C4FD73935F1",
+        "screenshot",
+        "--type=png",
+        "/Users/runner/work/mamo-ken/mamo-ken/native/evidence/simulator/02-native-launcher-stable.png"
+      ],
+      "timeoutMs": 30000,
+      "startedAt": "2026-11-23T14:33:51.381Z",
+      "exitCode": 0,
+      "finishedAt": "2026-11-23T14:34:03.202Z"
+    },
+    {
+      "program": "xcrun",
+      "args": [
+        "simctl",
+        "spawn",
+        "8EBAA496-5654-45BF-897F-3C4FD73935F1",
+        "log",
+        "show",
+        "--last",
+        "2m",
+        "--style",
+        "compact",
+        "--predicate",
+        "process == \"App\""
+      ],
+      "timeoutMs": 30000,
+      "startedAt": "2026-11-23T14:34:03.225Z",
+      "exitCode": 0,
+      "finishedAt": "2026-11-23T14:34:08.341Z"
+    },
+    {
+      "program": "xcrun",
+      "args": [
+        "simctl",
+        "terminate",
+        "8EBAA496-5654-45BF-897F-3C4FD73935F1",
+        "jp.nagi.mamoken.poc"
+      ],
+      "timeoutMs": 30000,
+      "startedAt": "2026-11-23T14:34:08.343Z",
+      "exitCode": 0,
+      "finishedAt": "2026-11-23T14:34:09.669Z"
+    },
+    {
+      "program": "xcrun",
+      "args": [
+        "simctl",
+        "shutdown",
+        "8EBAA496-5654-45BF-897F-3C4FD73935F1"
+      ],
+      "timeoutMs": 60000,
+      "startedAt": "2026-11-23T14:34:09.669Z",
+      "exitCode": 0,
+      "finishedAt": "2026-11-23T14:34:15.964Z"
+    }
+  ],
+  "screenshots": [
+    {
+      "file": "01-native-launcher.png",
+      "bytes": 2744680,
+      "width": 1206,
+      "height": 2622,
+      "landscapePixels": false
+    },
+    {
+      "file": "02-native-launcher-stable.png",
+      "bytes": 2744680,
+      "width": 1206,
+      "height": 2622,
+      "landscapePixels": false
+    }
+  ],
+  "diagnosticErrors": [],
+  "startedAt": "2026-11-23T14:23:29.274Z",
+  "xcode": "Xcode 26.6\nBuild version 17F113",
+  "sdk": "26.5",
+  "device": {
+    "udid": "8EBAA496-5654-45BF-897F-3C4FD73935F1",
+    "name": "iPhone 17",
+    "runtime": "com.apple.CoreSimulator.SimRuntime.iOS-26-5",
+    "version": "26.5",
+    "state": "Shutdown",
+    "deviceTypeIdentifier": "com.apple.CoreSimulator.SimDeviceType.iPhone-17"
+  },
+  "app": "DerivedData/Build/Products/Debug-iphonesimulator/App.app",
+  "bundleId": "jp.nagi.mamoken.poc",
+  "supportedOrientations": "Array {\n    UIInterfaceOrientationLandscapeLeft\n    UIInterfaceOrientationLandscapeRight\n}",
+  "coldBootProgress": {
+    "plugins": [
+      "com.apple.managedconfiguration.migrator (MCProfile.migrator, user-agnostic)",
+      "com.apple.addressbook.migrator (AddressBookLegacy.migrator)",
+      "com.apple.MobileSafari.migrator (MobileSafari.migrator)",
+      "com.apple.locationd.migrator (CoreLocationMigrator.migrator)"
+    ],
+    "statuses": [
+      2
+    ],
+    "advanced": true
+  },
+  "bootExtension": {
+    "reason": "Observed multiple real migration stages before initial timeout",
+    "additionalMaximumMs": 420000
+  },
+  "installed": true,
+  "launchedPid": 20233,
+  "runningProcess": "20233\t0\tUIKitApplication:jp.nagi.mamoken.poc[f6e2][rb-legacy]",
+  "finishedAt": "2026-11-23T14:34:15.964Z"
+}

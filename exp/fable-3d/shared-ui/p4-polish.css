@@ -1,0 +1,79 @@
+/* Claude v18 scenes in the real five-mode menu. Copy remains live HTML.
+   P4 independent assessment owns the score; this file only presents assets. */
+body[data-ui=mountain] #app .footnote .note{position:static;transform:none;inset:auto;flex:1;min-width:0;max-width:none;margin:0;padding:0;border:0;background:none;color:#fff1bc;font-size:11px;line-height:1.25;text-align:left;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;visibility:visible}
+body[data-ui=mountain] #app .footnote .note:empty{display:none}
+body[data-ui=mountain] #app .footnote:has(.note:not(:empty)) .keyboard-help{display:none}
+body[data-ui=mountain] #app .footnote #run-status{position:static;inset:auto;order:-1;flex:1;min-width:0;padding:0;margin:0;border:0;border-radius:0;background:none;text-align:left;font-size:10px;line-height:1.25;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+body[data-ui=mountain] #app .footnote:has(#run-status:not([hidden]))>span{display:none}
+body[data-ui=mountain] #app .footnote:has(#run-status:not([hidden])) .note{flex:0 1 auto;max-width:40%}
+body[data-ui=mountain] #arena:has(#selection:not(.hidden))>.hud{visibility:hidden}
+body[data-ui=mountain] #arena:has(#selection:not(.hidden))>.showtime-banner{visibility:hidden}
+/* These controls cannot act during presentation. Keep the grid/camera stable,
+   while leaving the independent header and presentation skip accessible. */
+body[data-ui=mountain] #app:has(#arena:is([data-flow="vs"],[data-flow="intro"],[data-flow="ko"],[data-flow="victory"],[data-flow="result"])) :is(#stick-rail,#buttons-rail){visibility:hidden;pointer-events:none}
+html[data-ui-polish] body[data-ui=mountain] .mode-hall .mode{background-image:none;background-color:#19382d;border-radius:8px;border-top-width:2px;border-color:#8ba08080;box-shadow:0 3px 0 #07180eb3}
+html[data-ui-polish] .mode-hall .mode[data-mode=battle]{--mode-scene:var(--p4-polish-mode-vs-large);border-color:#f1c66c;background-color:#314e34}
+html[data-ui-polish] .mode-hall .mode[data-mode=practice]{--mode-scene:var(--p4-polish-mode-practice);--mode-accent:#6fd0a0}
+html[data-ui-polish] .mode-hall .mode[data-mode=arcade]{--mode-scene:var(--p4-polish-mode-arcade);--mode-accent:#c8bdf6}
+html[data-ui-polish] .mode-hall .mode[data-mode=survival]{--mode-scene:var(--p4-polish-mode-survival);--mode-accent:#ffb3a3}
+html[data-ui-polish] .mode-hall .mode[data-mode=story]{--mode-scene:var(--p4-polish-mode-story);--mode-accent:#ffe0ac}
+html[data-ui-polish] .mode-hall .mode .mode-illustration{z-index:-2;background-image:var(--mode-scene);background-size:cover;background-position:right center;opacity:1;transition:filter 120ms ease-out}
+html[data-ui-polish] .mode-hall .mode:before{inset:0;height:auto;clip-path:none;background:linear-gradient(0deg,#071c16fa 0%,#0c251ce8 25%,#10271e33 66%,#10271e12 100%);z-index:-1}
+html[data-ui-polish] .mode-hall .mode .mode-kicker{color:var(--mode-accent,var(--ui-gold))}
+html[data-ui-polish] .mode-hall .mode h2{color:#fff7df;text-shadow:0 2px 3px #061a16;line-height:1.2;margin-top:auto}
+html[data-ui-polish] .mode-hall .mode h2>span{color:#e1ead8}
+html[data-ui-polish] .mode-hall .mode p{color:#e0e8d9;text-shadow:0 1px 3px #061a16}
+html[data-ui-polish] .mode-hall .mode .mode-rule{color:#f5efdb;margin-top:4px;padding-top:0;background:none;min-height:24px}
+html[data-ui-polish] .mode-hall .mode .mode-rule b{color:var(--mode-accent,var(--ui-gold));font-size:20px;line-height:1}
+html[data-ui-polish] .mode-hall .mode .mode-number{color:#fff3cfb8;text-shadow:0 1px 3px #061a16}
+html[data-ui-polish] .mode-hall .mode-versus .mode-illustration{background-position:right bottom}
+html[data-ui-polish] .mode-hall .mode-versus:before{background:linear-gradient(180deg,#10271ec9 0%,#10271e66 27%,transparent 54%,#0e241931 82%,#0e2419c7 100%)}
+html[data-ui-polish] .mode-hall .mode-versus .versus-fighter{display:none}
+html[data-ui-polish] .mode-hall .mode-versus h2{margin-top:12px}
+html[data-ui-polish] .mode-hall .mode-versus .mode-action{min-width:140px;background:#f1c66c;color:#10251d;text-shadow:none;gap:10px;box-shadow:0 3px 0 #13291966}
+html[data-ui-polish] .mode-hall .mode-versus .mode-action:before{background:var(--p4-polish-sym-confirm) center/contain no-repeat}
+html[data-ui-polish] .mode-hall .mode-story{display:flex;color:#f5efdb;background-image:none;border-color:#c5c6a180}
+html[data-ui-polish] .mode-hall .mode-story>div{margin-top:auto}
+html[data-ui-polish] .mode-hall .mode-story h2{color:#fff7df}
+html[data-ui-polish] .mode-hall .mode-story p{color:#e0e8d9}
+html[data-ui-polish] .mode-hall .mode-story .mode-kicker{color:#ffe0ac}
+html[data-ui-polish] .mode-hall .mode-story .journey-tag{color:#f5efdb;border-left-color:#efbe7c;white-space:normal;overflow:visible;overflow-wrap:anywhere;text-shadow:0 1px 3px #061a16}
+html[data-ui-polish] .mode-hall .mode-story .mode-rule,html[data-ui-polish] .mode-hall .mode-story .mode-rule b{color:#ffe0ac}
+html[data-ui-polish] .mode-hall .mode-story .mode-kicker:before{filter:brightness(0) invert(.92)}
+html[data-ui-polish] .mode-hall .mode:hover .mode-illustration{filter:brightness(1.08)}
+/* Corners are drawn inside each target, without scaling into neighbouring cards. */
+html[data-ui-polish] .mode-hall .mode:after{inset:2px;border:8px solid transparent;border-image:var(--p4-polish-state-focus) 26 stretch;opacity:0;transform:none;transition:opacity 120ms ease-out;pointer-events:none}
+html[data-ui-polish] .mode-hall .mode:is(:hover,:focus-visible):after{opacity:1}
+html[data-ui-polish] .mode-hall .mode:focus-visible{outline:2px solid var(--ui-focus);outline-offset:-4px}
+html[data-ui-polish] .mode-hall .mode:active{translate:0 1px;filter:brightness(.94)}
+html[data-ui-polish] .mode-hall .hall-sound{flex:none;min-height:44px;min-width:60px;padding:6px 10px;background:#19372bf2;border:1px solid #91a487;color:#fff4d4;border-radius:4px;font:750 12px var(--ui-font);cursor:pointer;white-space:nowrap;transition:background 120ms,border-color 120ms}
+html[data-ui-polish] .mode-hall .hall-sound[aria-pressed=false]{border-style:dashed;color:#dbe5d4}
+html[data-ui-polish] .mode-hall .hall-sound:is(:hover,:focus-visible){background:#345240;border-color:#f1c66c}
+html[data-ui-polish] .mode-hall .hall-sound:focus-visible{outline:2px solid var(--ui-focus);outline-offset:2px}
+html[data-ui-polish] body[data-ui=mountain] #selection .fighter-card.chosen:before{content:"";position:absolute;inset:1px;border:6px solid transparent;border-image:var(--p4-polish-state-selected) 28 30 14 14 stretch;pointer-events:none;z-index:2}
+html[data-ui-polish] body[data-ui=mountain] #selection .fighter-card:focus-visible{outline-offset:-4px}
+html[data-ui-polish] body[data-ui=mountain] #selection .fighter-card:focus-visible:not(.chosen):before{content:"";position:absolute;inset:1px;border:6px solid transparent;border-image:var(--p4-polish-state-focus) 26 stretch;pointer-events:none;z-index:2}
+@media(max-height:560px),(orientation:portrait){
+ html[data-ui-polish] .mode-hall .mode:not(.mode-versus) .mode-kicker{display:none}
+ html[data-ui-polish] .mode-hall .mode:not(.mode-versus) p{display:none}
+ html[data-ui-polish] .mode-hall .mode h2{font-size:20px;margin-bottom:3px;line-height:1.2}
+ html[data-ui-polish] .mode-hall .mode .mode-rule{font-size:12px;min-height:24px;line-height:1.25;margin-top:0;padding:2px 0}
+ html[data-ui-polish] .mode-hall .mode .mode-rule b{font-size:18px;line-height:1}
+ html[data-ui-polish] .mode-hall .mode-versus h2{font-size:31px;margin-top:12px}
+ html[data-ui-polish] .mode-hall .mode-versus .mode-action{min-width:136px;font-size:13px;padding:6px 10px;min-height:44px}
+ html[data-ui-polish] .mode-hall .mode-story .journey-tag{font-size:11px;line-height:1.25;margin-top:3px;margin-bottom:2px}
+ html[data-ui-polish] .mode-hall .mode-story h2{font-size:18px;margin-bottom:2px}
+ html[data-ui-polish] .mode-hall .mode-story:before{background:linear-gradient(0deg,#071c16fc 0%,#0c251cf0 48%,#10271e66 80%,#10271e12 100%)}
+ html[data-ui-polish] .mode-hall .hall-note{display:none}
+ html[data-ui-polish] .mode-hall .hall-sound{margin-left:auto}
+}
+@media(max-height:350px),(orientation:portrait) and (max-width:350px){
+ html[data-ui-polish] .mode-hall .mode h2{font-size:19px}
+ html[data-ui-polish] .mode-hall .mode-story h2{font-size:17px;line-height:1.15;margin-bottom:2px}
+ html[data-ui-polish] .mode-hall .mode-story .journey-tag{margin-top:2px;margin-bottom:0}
+ html[data-ui-polish] .mode-hall .mode-story .mode-rule{min-height:24px}
+ html[data-ui-polish] .mode-hall .mode-versus h2{font-size:30px}
+ html[data-ui-polish] .mode-hall .hall-invitation{font-size:11px;max-width:200px;line-height:1.4}
+}
+@media(forced-colors:active){html[data-ui-polish] .mode-hall .mode{background:Canvas;border-color:ButtonText}html[data-ui-polish] .mode-hall .mode .mode-illustration,html[data-ui-polish] .mode-hall .mode:before,html[data-ui-polish] .mode-hall .mode:after{display:none}html[data-ui-polish] .mode-hall .mode h2,html[data-ui-polish] .mode-hall .mode p,html[data-ui-polish] .mode-hall .mode .mode-rule,html[data-ui-polish] .mode-hall .mode-story .journey-tag{color:CanvasText;text-shadow:none}html[data-ui-polish] .mode-hall .mode:focus-visible{outline-color:Highlight}}
+@media(prefers-reduced-motion:reduce){html[data-ui-polish] .mode-hall .mode,html[data-ui-polish] .mode-hall .mode:after,html[data-ui-polish] .mode-hall .mode .mode-illustration,html[data-ui-polish] .mode-hall .hall-sound{transition:none}html[data-ui-polish] .mode-hall .mode:active{translate:none}}

@@ -1,0 +1,23 @@
+{
+  "sourceReport": "report.json",
+  "output": "ui-with-audio.webm",
+  "alignment": "Approximate; page-creation midpoint and actual recorder start timestamps. Does not certify frame-accurate audiovisual synchronization or physical device latency.",
+  "videoEpochBounds": {
+    "before": 1795445236494,
+    "after": 1795445236594
+  },
+  "inputs": [
+    {
+      "id": 1,
+      "file": "audio-context-1.webm",
+      "delayMilliseconds": 2305
+    },
+    {
+      "id": 2,
+      "file": "audio-context-2.webm",
+      "delayMilliseconds": 3674
+    }
+  ],
+  "exitCode": 0,
+  "error": null
+}

@@ -1,0 +1,124 @@
+{
+  "sha": "9ee89efafa76cb3ad80fbff46c7f56a1261baa48",
+  "runId": 45193206578,
+  "attempt": 1,
+  "artifactId": 14827987408,
+  "artifactZipSHA256": "9edffb0d7bf0f27e33ced8ccacb60c666f62a316d20c9d0265a11d07d9c028ce",
+  "checkedAt": "2026-11-23T14:51:17.751414+00:00",
+  "environment": "Desktop Chromium / SwiftShader, CSS pixels; not a physical phone",
+  "geometry": {
+    "checks": 3417,
+    "passed": 3417,
+    "failed": 0,
+    "errors": []
+  },
+  "audio": {
+    "failure": null,
+    "errors": [],
+    "segmentPeakRms": {
+      "before-first-gesture": 0,
+      "roster-selection": 0.019271016117956057,
+      "muted-roster-selection": 0,
+      "sound-restored": 0.00179447076135336,
+      "practice-confirmation": 0.03798293387735954,
+      "practice-weak": 0.0003505134723205253,
+      "practice-strong": 0.0005120938310476945,
+      "practice-pause": 0,
+      "muted-practice-resume-and-attack": 0,
+      "back-to-roster": 0.026699166400398752
+    },
+    "actualBattleActionsAccepted": [
+      "stand_weak",
+      "stand_heavy"
+    ],
+    "wavResponses": [
+      {
+        "url": "http://127.0.0.1:46835/ui-art/v18/audio/ui-select.wav",
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:46835/ui-art/v18/audio/ui-confirm.wav",
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:46835/ui-art/v18/audio/ui-back.wav",
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:46835/ui-art/v18/audio/ui-save.wav",
+        "status": 200
+      }
+    ],
+    "rawRecordings": [
+      {
+        "file": "p4-r6-evidence/ui-audio/audio-context-1.webm",
+        "bytes": 19069,
+        "sha256": "04e4958085471ed2c2105ff2dd9de9ed73888282f730b497c2f505943c8bc121",
+        "decode": "FFmpeg successful",
+        "decodedSeconds": 2.88,
+        "decodedRms": 0.011314438171909913,
+        "decodedPeak": 0.19566547870635986
+      },
+      {
+        "file": "p4-r6-evidence/ui-audio/audio-context-2.webm",
+        "bytes": 15396,
+        "sha256": "5eda1fe3893825bf3a0e1db85c79b64950795e09d51e85a5a293e266bcbecbe5",
+        "decode": "FFmpeg successful",
+        "decodedSeconds": 4.8,
+        "decodedRms": 0.0003512688155918091,
+        "decodedPeak": 0.012706093490123749
+      }
+    ],
+    "muxProbe": {
+      "programs": [],
+      "stream_groups": [],
+      "streams": [
+        {
+          "codec_name": "h264",
+          "codec_type": "video",
+          "duration": "16.160000"
+        },
+        {
+          "codec_name": "aac",
+          "codec_type": "audio",
+          "duration": "16.149000"
+        }
+      ],
+      "format": {
+        "duration": "16.160000"
+      }
+    },
+    "muxAlignment": "Approximate only; raw separate streams authoritative; no frame-accurate sync claim",
+    "humanAudioQualityJudged": false,
+    "saveSoundLivePathTested": false
+  },
+  "sourceJSONs": [
+    {
+      "file": "p4-r6-evidence/ci-provenance.json",
+      "bytes": 365,
+      "sha256": "66e21f9bd1b50f089321690a6263281e284e3155a371510dfc2610e9d92b3d16"
+    },
+    {
+      "file": "p4-r6-evidence/polish/report.json",
+      "bytes": 6161388,
+      "sha256": "ee9f812a4904c0617b9741e470b7fa61e30a134498c468c52558ef5764e54de0"
+    },
+    {
+      "file": "p4-r6-evidence/ui/report.json",
+      "bytes": 21709,
+      "sha256": "efb36250cb12c2162c39de489f72898ca8333235f96ccb745f7e2a556009c735"
+    },
+    {
+      "file": "p4-r6-evidence/ui-audio/report.json",
+      "bytes": 456563,
+      "sha256": "a4cf9c546a1c59b0ade41faca2c3186a172e24619feef26545c8890148989e96"
+    },
+    {
+      "file": "p4-r6-evidence/ui-audio/mux-receipt.json",
+      "bytes": 583,
+      "sha256": "6607299b64279f7ee24ab8772764cc70fe5a6da64bd6a6931b429db8b7d2c9fe"
+    }
+  ],
+  "physicalIphoneTested": false,
+  "humanTesters": 0
+}

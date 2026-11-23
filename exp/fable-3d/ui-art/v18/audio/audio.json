@@ -1,0 +1,46 @@
+{
+ "version": "v18-p4-ui-polish-r1",
+ "sampleRate": 44100,
+ "channels": 1,
+ "bitDepth": 16,
+ "source": "tools/make_ui_sounds.py",
+ "note": "既存の戦闘音（dojo/combat-audio.js の合成音）より小さく鳴らす想定。再生時の音量はさらに 0.6〜0.8 倍を目安に",
+ "sounds": {
+  "select": {
+   "file": "audio/ui-select.wav",
+   "use": "フォーカス移動・項目選択",
+   "durationMs": 70,
+   "peakDbfs": -15,
+   "rmsDbfs": -30.9,
+   "bytes": 6218,
+   "sha256": "8bca70e022c0a14ce0bf98da74644de2d28e8f661bafe3b6ccf24101d5adb715"
+  },
+  "confirm": {
+   "file": "audio/ui-confirm.wav",
+   "use": "決定",
+   "durationMs": 200,
+   "peakDbfs": -12,
+   "rmsDbfs": -28.0,
+   "bytes": 17684,
+   "sha256": "70d44a2c69a89e54304f93446ab0db2cc0976785b52b437b528f2f21a85b677f"
+  },
+  "back": {
+   "file": "audio/ui-back.wav",
+   "use": "戻る・取り消し",
+   "durationMs": 130,
+   "peakDbfs": -14,
+   "rmsDbfs": -28.7,
+   "bytes": 11510,
+   "sha256": "4550aefde5d30b18a68460c51509750c0a44139589923882bc501e3b5466eca0"
+  },
+  "save": {
+   "file": "audio/ui-save.wav",
+   "use": "保存できた",
+   "durationMs": 340,
+   "peakDbfs": -12,
+   "rmsDbfs": -24.8,
+   "bytes": 30032,
+   "sha256": "37dffa4c4b618a909c9acdcf8fe99beee580dbcd3e0506769ee2877c70eaf200"
+  }
+ }
+}

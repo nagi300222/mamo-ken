@@ -1,0 +1,351 @@
+{
+  "sha": "9ee89efafa76cb3ad80fbff46c7f56a1261baa48",
+  "baseURL": "https://19b355a1.mamoken-3d.pages.dev/",
+  "observedAt": "2026-11-23T14:23:09.440189+00:00",
+  "method": "actual HTTPS GET of deployed files compared byte-for-byte against independently rebuilt fixed source",
+  "checked": 34,
+  "all200": true,
+  "allBytesMatch": true,
+  "files": [
+    {
+      "path": "index.html",
+      "status": 200,
+      "mime": "text/html; charset=utf-8",
+      "url": "https://19b355a1.mamoken-3d.pages.dev/",
+      "bytes": 3940,
+      "sha256": "372e5f470748ced1d6ddaa19ff81cd39cd5bdb1551050c6b0d89bf595db9442a",
+      "localBuiltSHA256": "372e5f470748ced1d6ddaa19ff81cd39cd5bdb1551050c6b0d89bf595db9442a",
+      "matchesLocalBuilt": true
+    },
+    {
+      "path": "lobby/style.css",
+      "status": 200,
+      "mime": "text/css; charset=utf-8",
+      "url": "https://19b355a1.mamoken-3d.pages.dev/lobby/style.css",
+      "bytes": 9485,
+      "sha256": "b0a9e122d5538703ada858115f6495b0e4e4667252eea257da6fcd8b64b05da6",
+      "localBuiltSHA256": "b0a9e122d5538703ada858115f6495b0e4e4667252eea257da6fcd8b64b05da6",
+      "matchesLocalBuilt": true
+    },
+    {
+      "path": "dojo/style.css",
+      "status": 200,
+      "mime": "text/css; charset=utf-8",
+      "url": "https://19b355a1.mamoken-3d.pages.dev/dojo/style.css",
+      "bytes": 53015,
+      "sha256": "e0548877ab6730b8eadb23c08728a671f0538de85432c72f5eb9aeabde445c82",
+      "localBuiltSHA256": "e0548877ab6730b8eadb23c08728a671f0538de85432c72f5eb9aeabde445c82",
+      "matchesLocalBuilt": true
+    },
+    {
+      "path": "shared-ui/p4-polish.css",
+      "status": 200,
+      "mime": "text/css; charset=utf-8",
+      "url": "https://19b355a1.mamoken-3d.pages.dev/shared-ui/p4-polish.css",
+      "bytes": 9506,
+      "sha256": "4c3b65727b9f5f420f943c6816c2100f8c33346a4a3e7814895c7e3ba5c7aef7",
+      "localBuiltSHA256": "4c3b65727b9f5f420f943c6816c2100f8c33346a4a3e7814895c7e3ba5c7aef7",
+      "matchesLocalBuilt": true
+    },
+    {
+      "path": "story/p4-visual.css",
+      "status": 200,
+      "mime": "text/css; charset=utf-8",
+      "url": "https://19b355a1.mamoken-3d.pages.dev/story/p4-visual.css",
+      "bytes": 15674,
+      "sha256": "6023da266c9ccd84c6052ccb051a292bd3d580a629f6c2176cfb03e86d8b78c1",
+      "localBuiltSHA256": "6023da266c9ccd84c6052ccb051a292bd3d580a629f6c2176cfb03e86d8b78c1",
+      "matchesLocalBuilt": true
+    },
+    {
+      "path": "shared-ui/ui-feedback.js",
+      "status": 200,
+      "mime": "application/javascript",
+      "url": "https://19b355a1.mamoken-3d.pages.dev/shared-ui/ui-feedback.js",
+      "bytes": 5586,
+      "sha256": "e9908d6c9957c08485ba3e6603eb98f3cde58f7380a2a1e85feb11e42cd451e1",
+      "localBuiltSHA256": "e9908d6c9957c08485ba3e6603eb98f3cde58f7380a2a1e85feb11e42cd451e1",
+      "matchesLocalBuilt": true
+    },
+    {
+      "path": "shared-ui/ui-feedback-entry.js",
+      "status": 200,
+      "mime": "application/javascript",
+      "url": "https://19b355a1.mamoken-3d.pages.dev/shared-ui/ui-feedback-entry.js",
+      "bytes": 1733,
+      "sha256": "e394cdc2bedddc555def31640e67f3d6ca67a0bdc550b29d2a7bb071bff111cf",
+      "localBuiltSHA256": "e394cdc2bedddc555def31640e67f3d6ca67a0bdc550b29d2a7bb071bff111cf",
+      "matchesLocalBuilt": true
+    },
+    {
+      "path": "shared-ui/p4-polish-art.js",
+      "status": 200,
+      "mime": "application/javascript",
+      "url": "https://19b355a1.mamoken-3d.pages.dev/shared-ui/p4-polish-art.js",
+      "bytes": 2211,
+      "sha256": "78568299323e251c4b56c8f0baa877a87fd73597e81ed58830c24ef6a4a1b315",
+      "localBuiltSHA256": "78568299323e251c4b56c8f0baa877a87fd73597e81ed58830c24ef6a4a1b315",
+      "matchesLocalBuilt": true
+    },
+    {
+      "path": "lobby/main.js",
+      "status": 200,
+      "mime": "application/javascript",
+      "url": "https://19b355a1.mamoken-3d.pages.dev/lobby/main.js",
+      "bytes": 944,
+      "sha256": "adfe4b7e8d18e7c84b3096c86e4656c4c3ef51095ed8f52fff5a2905451950cf",
+      "localBuiltSHA256": "adfe4b7e8d18e7c84b3096c86e4656c4c3ef51095ed8f52fff5a2905451950cf",
+      "matchesLocalBuilt": true
+    },
+    {
+      "path": "dojo/main.js",
+      "status": 200,
+      "mime": "application/javascript",
+      "url": "https://19b355a1.mamoken-3d.pages.dev/dojo/main.js",
+      "bytes": 77724,
+      "sha256": "614bd2914909cbd2d019c6d979573511968faa71f6e7f46d3b46091185c96026",
+      "localBuiltSHA256": "614bd2914909cbd2d019c6d979573511968faa71f6e7f46d3b46091185c96026",
+      "matchesLocalBuilt": true
+    },
+    {
+      "path": "story/main.js",
+      "status": 200,
+      "mime": "application/javascript",
+      "url": "https://19b355a1.mamoken-3d.pages.dev/story/main.js",
+      "bytes": 48339,
+      "sha256": "faf8e3fb6416018d09db76713aea3aea1b58ea97f0ef8d166a7e0679c908296a",
+      "localBuiltSHA256": "faf8e3fb6416018d09db76713aea3aea1b58ea97f0ef8d166a7e0679c908296a",
+      "matchesLocalBuilt": true
+    },
+    {
+      "path": "dojo/run-ui.js",
+      "status": 200,
+      "mime": "application/javascript",
+      "url": "https://19b355a1.mamoken-3d.pages.dev/dojo/run-ui.js",
+      "bytes": 5342,
+      "sha256": "62dcebe08eb934ad71af544dd4b3e1c231098add8e0d8f5dfb372235b5978055",
+      "localBuiltSHA256": "62dcebe08eb934ad71af544dd4b3e1c231098add8e0d8f5dfb372235b5978055",
+      "matchesLocalBuilt": true
+    },
+    {
+      "path": "story/p4-editor.js",
+      "status": 200,
+      "mime": "application/javascript",
+      "url": "https://19b355a1.mamoken-3d.pages.dev/story/p4-editor.js",
+      "bytes": 4988,
+      "sha256": "0ef0ce53947e045244b0921cbab4f48786eb62eda6bffc78e423501e2454641b",
+      "localBuiltSHA256": "0ef0ce53947e045244b0921cbab4f48786eb62eda6bffc78e423501e2454641b",
+      "matchesLocalBuilt": true
+    },
+    {
+      "path": "ui-art/v18/png/mode-vs.webp",
+      "status": 200,
+      "mime": "image/webp",
+      "url": "https://19b355a1.mamoken-3d.pages.dev/ui-art/v18/png/mode-vs.webp",
+      "bytes": 22686,
+      "sha256": "137379a974d9c0021ccfa13efcddaf0de9143935a40dc4e2052b04d75272f8ce",
+      "localBuiltSHA256": "137379a974d9c0021ccfa13efcddaf0de9143935a40dc4e2052b04d75272f8ce",
+      "matchesLocalBuilt": true
+    },
+    {
+      "path": "ui-art/v18/png/mode-vs-large.webp",
+      "status": 200,
+      "mime": "image/webp",
+      "url": "https://19b355a1.mamoken-3d.pages.dev/ui-art/v18/png/mode-vs-large.webp",
+      "bytes": 28266,
+      "sha256": "6d8364300201a14fcc35b67b9efc08186938315252d9d9ab5be108aa9104f299",
+      "localBuiltSHA256": "6d8364300201a14fcc35b67b9efc08186938315252d9d9ab5be108aa9104f299",
+      "matchesLocalBuilt": true
+    },
+    {
+      "path": "ui-art/v18/png/mode-practice.webp",
+      "status": 200,
+      "mime": "image/webp",
+      "url": "https://19b355a1.mamoken-3d.pages.dev/ui-art/v18/png/mode-practice.webp",
+      "bytes": 19162,
+      "sha256": "058098f50ee06c5eb0e2565f456f4f21ceb2632bd13c9bf86e6969bdc6acbaf6",
+      "localBuiltSHA256": "058098f50ee06c5eb0e2565f456f4f21ceb2632bd13c9bf86e6969bdc6acbaf6",
+      "matchesLocalBuilt": true
+    },
+    {
+      "path": "ui-art/v18/png/mode-arcade.webp",
+      "status": 200,
+      "mime": "image/webp",
+      "url": "https://19b355a1.mamoken-3d.pages.dev/ui-art/v18/png/mode-arcade.webp",
+      "bytes": 16472,
+      "sha256": "61efa9226718c8f4a7b0a07c63789823ade375ba5e1697b97abbf2351e35adce",
+      "localBuiltSHA256": "61efa9226718c8f4a7b0a07c63789823ade375ba5e1697b97abbf2351e35adce",
+      "matchesLocalBuilt": true
+    },
+    {
+      "path": "ui-art/v18/png/mode-survival.webp",
+      "status": 200,
+      "mime": "image/webp",
+      "url": "https://19b355a1.mamoken-3d.pages.dev/ui-art/v18/png/mode-survival.webp",
+      "bytes": 18292,
+      "sha256": "d700a1c4fe05bd05234696952ef84dfd4b09c1d4dd2174c4bce1f05cd539245a",
+      "localBuiltSHA256": "d700a1c4fe05bd05234696952ef84dfd4b09c1d4dd2174c4bce1f05cd539245a",
+      "matchesLocalBuilt": true
+    },
+    {
+      "path": "ui-art/v18/png/mode-story.webp",
+      "status": 200,
+      "mime": "image/webp",
+      "url": "https://19b355a1.mamoken-3d.pages.dev/ui-art/v18/png/mode-story.webp",
+      "bytes": 17014,
+      "sha256": "1db159830b140ad804aac906e1371efac5a1a2296f234d13072e7263945a97c3",
+      "localBuiltSHA256": "1db159830b140ad804aac906e1371efac5a1a2296f234d13072e7263945a97c3",
+      "matchesLocalBuilt": true
+    },
+    {
+      "path": "ui-art/v18/svg/sym-select.svg",
+      "status": 200,
+      "mime": "image/svg+xml",
+      "url": "https://19b355a1.mamoken-3d.pages.dev/ui-art/v18/svg/sym-select.svg",
+      "bytes": 905,
+      "sha256": "61a0c0f1d52a3e1e9e1d83d54ecb8984f58b4c88d63497c3b2d40a573e00498e",
+      "localBuiltSHA256": "61a0c0f1d52a3e1e9e1d83d54ecb8984f58b4c88d63497c3b2d40a573e00498e",
+      "matchesLocalBuilt": true
+    },
+    {
+      "path": "ui-art/v18/svg/sym-confirm.svg",
+      "status": 200,
+      "mime": "image/svg+xml",
+      "url": "https://19b355a1.mamoken-3d.pages.dev/ui-art/v18/svg/sym-confirm.svg",
+      "bytes": 886,
+      "sha256": "0e81c62aaafb27d28655c97dff363edb6b8386a6768242bee68b500708c81645",
+      "localBuiltSHA256": "0e81c62aaafb27d28655c97dff363edb6b8386a6768242bee68b500708c81645",
+      "matchesLocalBuilt": true
+    },
+    {
+      "path": "ui-art/v18/svg/sym-back.svg",
+      "status": 200,
+      "mime": "image/svg+xml",
+      "url": "https://19b355a1.mamoken-3d.pages.dev/ui-art/v18/svg/sym-back.svg",
+      "bytes": 298,
+      "sha256": "47108e57be5b6ba1f1448a6de836d3417cdd4c352062510f32c94ff90ce308a4",
+      "localBuiltSHA256": "47108e57be5b6ba1f1448a6de836d3417cdd4c352062510f32c94ff90ce308a4",
+      "matchesLocalBuilt": true
+    },
+    {
+      "path": "ui-art/v18/svg/sym-disabled.svg",
+      "status": 200,
+      "mime": "image/svg+xml",
+      "url": "https://19b355a1.mamoken-3d.pages.dev/ui-art/v18/svg/sym-disabled.svg",
+      "bytes": 363,
+      "sha256": "b4f78b739e960c7df0e13890a709bca96025aff9ffadd9aeb0fa459261c820f0",
+      "localBuiltSHA256": "b4f78b739e960c7df0e13890a709bca96025aff9ffadd9aeb0fa459261c820f0",
+      "matchesLocalBuilt": true
+    },
+    {
+      "path": "ui-art/v18/svg/sym-save.svg",
+      "status": 200,
+      "mime": "image/svg+xml",
+      "url": "https://19b355a1.mamoken-3d.pages.dev/ui-art/v18/svg/sym-save.svg",
+      "bytes": 414,
+      "sha256": "cb74675ae64749368feb93334284a884c45716c52adf254e2e623eb694c0adb2",
+      "localBuiltSHA256": "cb74675ae64749368feb93334284a884c45716c52adf254e2e623eb694c0adb2",
+      "matchesLocalBuilt": true
+    },
+    {
+      "path": "ui-art/v18/svg/sym-paw.svg",
+      "status": 200,
+      "mime": "image/svg+xml",
+      "url": "https://19b355a1.mamoken-3d.pages.dev/ui-art/v18/svg/sym-paw.svg",
+      "bytes": 811,
+      "sha256": "a75f886d5eac27dc482f65b1401741fdfa2be45479927abdf2a99b978fa8df0f",
+      "localBuiltSHA256": "a75f886d5eac27dc482f65b1401741fdfa2be45479927abdf2a99b978fa8df0f",
+      "matchesLocalBuilt": true
+    },
+    {
+      "path": "ui-art/v18/svg/state-focus.svg",
+      "status": 200,
+      "mime": "image/svg+xml",
+      "url": "https://19b355a1.mamoken-3d.pages.dev/ui-art/v18/svg/state-focus.svg",
+      "bytes": 652,
+      "sha256": "5e16ad659a614c77570a63144ddaf3ef929786a1926058e5358c4f980d46f827",
+      "localBuiltSHA256": "5e16ad659a614c77570a63144ddaf3ef929786a1926058e5358c4f980d46f827",
+      "matchesLocalBuilt": true
+    },
+    {
+      "path": "ui-art/v18/svg/state-selected.svg",
+      "status": 200,
+      "mime": "image/svg+xml",
+      "url": "https://19b355a1.mamoken-3d.pages.dev/ui-art/v18/svg/state-selected.svg",
+      "bytes": 539,
+      "sha256": "262448407b7ba22f68012ebafc9fbb8329c9f9fa27d13b9f2b7ebbb255956b2c",
+      "localBuiltSHA256": "262448407b7ba22f68012ebafc9fbb8329c9f9fa27d13b9f2b7ebbb255956b2c",
+      "matchesLocalBuilt": true
+    },
+    {
+      "path": "ui-art/v18/svg/state-pressed.svg",
+      "status": 200,
+      "mime": "image/svg+xml",
+      "url": "https://19b355a1.mamoken-3d.pages.dev/ui-art/v18/svg/state-pressed.svg",
+      "bytes": 466,
+      "sha256": "f76ce63f99664df3a4860e250aba2b9c5720b5580c934935866adf20b941f66b",
+      "localBuiltSHA256": "f76ce63f99664df3a4860e250aba2b9c5720b5580c934935866adf20b941f66b",
+      "matchesLocalBuilt": true
+    },
+    {
+      "path": "ui-art/v18/svg/state-disabled.svg",
+      "status": 200,
+      "mime": "image/svg+xml",
+      "url": "https://19b355a1.mamoken-3d.pages.dev/ui-art/v18/svg/state-disabled.svg",
+      "bytes": 488,
+      "sha256": "748dd6cee8c108bb1831ceb56d9ef136c271346e9265f4b43e3e8b5933297c65",
+      "localBuiltSHA256": "748dd6cee8c108bb1831ceb56d9ef136c271346e9265f4b43e3e8b5933297c65",
+      "matchesLocalBuilt": true
+    },
+    {
+      "path": "ui-art/v18/svg/state-saved.svg",
+      "status": 200,
+      "mime": "image/svg+xml",
+      "url": "https://19b355a1.mamoken-3d.pages.dev/ui-art/v18/svg/state-saved.svg",
+      "bytes": 551,
+      "sha256": "6e08a795876977423d17a8155bbb8dc2059ee5accdf56fa6947c3adff0f0c1ac",
+      "localBuiltSHA256": "6e08a795876977423d17a8155bbb8dc2059ee5accdf56fa6947c3adff0f0c1ac",
+      "matchesLocalBuilt": true
+    },
+    {
+      "path": "ui-art/v18/audio/ui-select.wav",
+      "status": 200,
+      "mime": "audio/wav",
+      "url": "https://19b355a1.mamoken-3d.pages.dev/ui-art/v18/audio/ui-select.wav",
+      "bytes": 6218,
+      "sha256": "8bca70e022c0a14ce0bf98da74644de2d28e8f661bafe3b6ccf24101d5adb715",
+      "localBuiltSHA256": "8bca70e022c0a14ce0bf98da74644de2d28e8f661bafe3b6ccf24101d5adb715",
+      "matchesLocalBuilt": true
+    },
+    {
+      "path": "ui-art/v18/audio/ui-confirm.wav",
+      "status": 200,
+      "mime": "audio/wav",
+      "url": "https://19b355a1.mamoken-3d.pages.dev/ui-art/v18/audio/ui-confirm.wav",
+      "bytes": 17684,
+      "sha256": "70d44a2c69a89e54304f93446ab0db2cc0976785b52b437b528f2f21a85b677f",
+      "localBuiltSHA256": "70d44a2c69a89e54304f93446ab0db2cc0976785b52b437b528f2f21a85b677f",
+      "matchesLocalBuilt": true
+    },
+    {
+      "path": "ui-art/v18/audio/ui-back.wav",
+      "status": 200,
+      "mime": "audio/wav",
+      "url": "https://19b355a1.mamoken-3d.pages.dev/ui-art/v18/audio/ui-back.wav",
+      "bytes": 11510,
+      "sha256": "4550aefde5d30b18a68460c51509750c0a44139589923882bc501e3b5466eca0",
+      "localBuiltSHA256": "4550aefde5d30b18a68460c51509750c0a44139589923882bc501e3b5466eca0",
+      "matchesLocalBuilt": true
+    },
+    {
+      "path": "ui-art/v18/audio/ui-save.wav",
+      "status": 200,
+      "mime": "audio/wav",
+      "url": "https://19b355a1.mamoken-3d.pages.dev/ui-art/v18/audio/ui-save.wav",
+      "bytes": 30032,
+      "sha256": "37dffa4c4b618a909c9acdcf8fe99beee580dbcd3e0506769ee2877c70eaf200",
+      "localBuiltSHA256": "37dffa4c4b618a909c9acdcf8fe99beee580dbcd3e0506769ee2877c70eaf200",
+      "matchesLocalBuilt": true
+    }
+  ]
+}

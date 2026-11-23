@@ -1,0 +1,345 @@
+{
+  "schemaVersion": "1.0.0",
+  "target": {
+    "integratedPr": "https://github.com/nagi300222/mamo-ken/pull/225",
+    "sha": "9ee89efafa76cb3ad80fbff46c7f56a1261baa48",
+    "previewUrl": "https://19b355a1.mamoken-3d.pages.dev/"
+  },
+  "p1Confirmed": true,
+  "p2Permission": "CONFIRMED",
+  "reviewers": {
+    "independent": "Independent UI reviewer agent /root/independent_ui_review; did not author or modify P4 implementation or assets",
+    "implementer": "Codex implementation agents and coordinator /root; Claude v18 art/audio production. Independent reviewer authored review feedback only, no production implementation or asset edits."
+  },
+  "humanTesters": {
+    "novice": 0,
+    "experienced": 0
+  },
+  "physicalIphone": {
+    "model": "",
+    "os": "",
+    "tested": false
+  },
+  "ownerDecision": "UNTESTED",
+  "axes": {
+    "A": {
+      "score": 4,
+      "rationale": "720×320でも目的の異なるClaude v18の5場面と主CTAが同時に見える。9顔・得意/苦手・開始がまとまり、安全領域内に44px開始を保持。絵と次の行動の対応が高水準。",
+      "evidence": [
+        "https://github.com/nagi300222/mamo-ken/actions/runs/45193206578"
+      ]
+    },
+    "B": {
+      "score": 3,
+      "rationale": "6ボタンの主名と方向/使用可否を分離し文字重複を解消。実動画と記録に決定/戻る/弱/強受理と実出音・mute0がある。演出中railは非表示、fightで復帰。ギュイーン改行、両親指の誤操作・聴感・主観レスポンスの評価は残る。",
+      "evidence": [
+        "https://github.com/nagi300222/mamo-ken/actions/runs/45193206578"
+      ]
+    },
+    "C": {
+      "score": 3,
+      "rationale": "深緑・山稜・旅札・前足印が全5モードで一貫。5場面は対戦/勝ち抜き/標的練習/旅/夕景生存を描き分ける。Battleの矩形操作部品と紙札の質感・文字密度の統一は最高水準まで未完。直接模写は観察されない。",
+      "evidence": [
+        "https://github.com/nagi300222/mamo-ken/actions/runs/45193206578"
+      ]
+    },
+    "D": {
+      "score": 3,
+      "rationale": "Arcade/Survival/Practice/FIGHTの進行や説明が下端へ移りHP/Drive/奥義を遮らない。中央の対戦接点を確保し、演出中の左右操作railも静かにする。二次資源ラベルと下端進行の小文字・密度は残る。 Story safe720ではドライ/ブ等の窮屈な補助ラベル改行も残る。",
+      "evidence": [
+        "https://github.com/nagi300222/mamo-ken/actions/runs/45193206578"
+      ]
+    },
+    "E": {
+      "score": 3,
+      "rationale": "safe720の開始/保存44px、主名と外guide、背景に依存しない12px探索guideが改善。最終紙baseで長名末尾も読め、全4行を初期可視。物理iPhone/親指/拡大/読上げ等の評価は未実施で、補助小文字の改善余地は残る。",
+      "evidence": [
+        "https://github.com/nagi300222/mamo-ken/actions/runs/45193206578"
+      ]
+    },
+    "F": {
+      "score": 3,
+      "rationale": "確認札の全4行が短画面の初期表示に収まり、保存CTA/未保存状態/preview状態が同時可視。原PNGで保存確認と探索画面、CIで保存/帰還/再読込、通常操作動画でモード間進行を確認。勝ち抜き等の進行説明は最下端小文字に依存し、初見無説明タスクの快適さは未測定。",
+      "evidence": [
+        "https://github.com/nagi300222/mamo-ken/actions/runs/45193206578"
+      ]
+    }
+  },
+  "gates": {
+    "G0": {
+      "status": "PASS",
+      "evidence": [
+        "https://github.com/nagi300222/mamo-ken/actions/runs/45193206578",
+        "https://github.com/nagi300222/mamo-ken/pull/225"
+      ],
+      "note": "Actual improvement Draft225 SHA9ee89efa. Baseline222 SHA1391 is separately recorded. Production gate and original77 assets unchanged per separate independent verifier."
+    },
+    "G1": {
+      "status": "PASS",
+      "evidence": [
+        "https://github.com/nagi300222/mamo-ken/actions/runs/45193206578",
+        "https://github.com/nagi300222/mamo-ken/actions/runs/45193206865"
+      ],
+      "note": "Same-SHA WebGL CI all11 jobs success; separate verifier fresh unit298/0, original77 assets/build/deployment checks. Reviewer observed raw receipts and visual/audio artifacts, did not personally execute all regressions. Mac unsigned build/install/launch succeeded; 1206x2622 framebuffer landscapePixels=false, no native touch gameplay or physical landscape certification."
+    },
+    "G2": {
+      "status": "FAIL",
+      "evidence": [
+        "https://github.com/nagi300222/mamo-ken/actions/runs/45193206578"
+      ],
+      "note": "81.25/100, all axes at least3, observed HIGH and final paper/intro MED fixed. Proposal threshold85 not met. Subjective audio/human/physical-device evaluation remains unperformed."
+    },
+    "G3": {
+      "status": "UNTESTED",
+      "evidence": []
+    },
+    "G4": {
+      "status": "UNTESTED",
+      "evidence": []
+    },
+    "G5": {
+      "status": "UNTESTED",
+      "evidence": []
+    }
+  },
+  "tasks": {
+    "T01": {
+      "status": "UNTESTED",
+      "evidence": [],
+      "note": "Real no-explanation human task not performed; automated routes and AI image observation do not count as a human participant."
+    },
+    "T02": {
+      "status": "UNTESTED",
+      "evidence": [],
+      "note": "Real no-explanation human task not performed; automated routes and AI image observation do not count as a human participant."
+    },
+    "T03": {
+      "status": "UNTESTED",
+      "evidence": [],
+      "note": "Real no-explanation human task not performed; automated routes and AI image observation do not count as a human participant."
+    },
+    "T04": {
+      "status": "UNTESTED",
+      "evidence": [],
+      "note": "Real no-explanation human task not performed; automated routes and AI image observation do not count as a human participant."
+    },
+    "T05": {
+      "status": "UNTESTED",
+      "evidence": [],
+      "note": "Real no-explanation human task not performed; automated routes and AI image observation do not count as a human participant."
+    },
+    "T06": {
+      "status": "UNTESTED",
+      "evidence": [],
+      "note": "Real no-explanation human task not performed; automated routes and AI image observation do not count as a human participant."
+    },
+    "T07": {
+      "status": "UNTESTED",
+      "evidence": [],
+      "note": "Real no-explanation human task not performed; automated routes and AI image observation do not count as a human participant."
+    },
+    "T08": {
+      "status": "UNTESTED",
+      "evidence": [],
+      "note": "Real no-explanation human task not performed; automated routes and AI image observation do not count as a human participant."
+    }
+  },
+  "issues": [
+    {
+      "id": "UI-01",
+      "title": "短画面で下段モードが隠れる",
+      "severity": "HIGH",
+      "resolved": true,
+      "evidence": [
+        "https://github.com/nagi300222/mamo-ken/actions/runs/45193206578"
+      ]
+    },
+    {
+      "id": "UI-02",
+      "title": "6ボタン内の主名/固有名/状態の文字重複",
+      "severity": "HIGH",
+      "resolved": true,
+      "evidence": [
+        "https://github.com/nagi300222/mamo-ken/actions/runs/45193206578"
+      ]
+    },
+    {
+      "id": "UI-03",
+      "title": "確認後の保存CTAが画面外",
+      "severity": "HIGH",
+      "resolved": true,
+      "evidence": [
+        "https://github.com/nagi300222/mamo-ken/actions/runs/45193206578"
+      ]
+    },
+    {
+      "id": "UI-08",
+      "title": "run-statusまたは説明がDrive/奥義を覆う",
+      "severity": "HIGH",
+      "resolved": true,
+      "evidence": [
+        "https://github.com/nagi300222/mamo-ken/actions/runs/45193206578"
+      ]
+    },
+    {
+      "id": "R2-01",
+      "title": "safe720開始44pxの下端が安全領域外",
+      "severity": "HIGH",
+      "resolved": true,
+      "evidence": [
+        "https://github.com/nagi300222/mamo-ken/actions/runs/45193206578"
+      ]
+    },
+    {
+      "id": "R2-03",
+      "title": "副4モードで同じ絵を反復",
+      "severity": "MEDIUM",
+      "resolved": true,
+      "evidence": [
+        "https://github.com/nagi300222/mamo-ken/actions/runs/45193206578"
+      ]
+    },
+    {
+      "id": "FINAL-01",
+      "title": "二次資源・下端進行の小文字とStory safe720補助ラベルの窮屈な改行",
+      "severity": "MEDIUM",
+      "resolved": false,
+      "evidence": [
+        "https://github.com/nagi300222/mamo-ken/actions/runs/45193206578"
+      ]
+    },
+    {
+      "id": "FINAL-02",
+      "title": "VS/intro/victory中に左右全操作railが残り演出へ集中しにくい",
+      "severity": "MEDIUM",
+      "resolved": true,
+      "evidence": [
+        "https://github.com/nagi300222/mamo-ken/actions/runs/45193206578"
+      ]
+    },
+    {
+      "id": "FINAL-03",
+      "title": "短画面の長い確認名が紙の斜め切欠きを跨ぎ暗背景へ出る",
+      "severity": "MEDIUM",
+      "resolved": true,
+      "evidence": [
+        "https://github.com/nagi300222/mamo-ken/actions/runs/45193206578"
+      ]
+    },
+    {
+      "id": "FINAL-04",
+      "title": "ボタンのギュイーンの不自然な改行",
+      "severity": "LOW",
+      "resolved": false,
+      "evidence": [
+        "https://github.com/nagi300222/mamo-ken/actions/runs/45193206578"
+      ]
+    },
+    {
+      "id": "FINAL-05",
+      "title": "音の聴感品質・保存音ライブ経路の証拠不足",
+      "severity": "MEDIUM",
+      "resolved": false,
+      "evidence": [
+        "https://github.com/nagi300222/mamo-ken/actions/runs/45193206578"
+      ]
+    }
+  ],
+  "permissionEvidence": [
+    "https://github.com/nagi300222/mamo-ken/blob/1391c49493eca193c3a49a22140e5b1c3d2c6417/docs/mamoken-next/PRODUCTION_GATE.json"
+  ],
+  "reviewConditions": {
+    "date": "2026-11-23",
+    "timezone": "Asia/Tokyo",
+    "browser": "Linux Chromium / SwiftShader CI capture; physical device not observed",
+    "viewports": [
+      "720x320",
+      "852x393",
+      "393x852 CSS-rotated",
+      "each with simulated native safe area"
+    ],
+    "video": {
+      "durationSeconds": 38.76,
+      "encodedWidth": 852,
+      "encodedHeight": 392,
+      "encodedFPS": 25,
+      "hasAudioStream": false,
+      "isGameplayFPS": false,
+      "observedAs": "chronological frame sequence every3 seconds plus seconds5-14 every0.2 seconds for VS/both intros/FIGHT/rail and HUD restoration; not continuous playback"
+    },
+    "audioVideo": {
+      "durationSeconds": 16.16,
+      "hasAudioStream": true,
+      "alignment": "approximate; separate raw AudioContext streams remain authoritative",
+      "subjectiveListening": false,
+      "saveSoundLivePathTested": false
+    },
+    "physicalIphoneTested": false,
+    "humanTesters": 0,
+    "audioSubjectiveReviewPerformed": false,
+    "scope": "Independent visual/information/recorded-transition judgement. No production source or assets changed by this reviewer. No static-image substitution for human/audio/device results.",
+    "simulator": {
+      "sameSha": "9ee89efafa76cb3ad80fbff46c7f56a1261baa48",
+      "runId": 45193206865,
+      "unsignedBuild": "SUCCEEDED",
+      "installed": true,
+      "launchPid": 20233,
+      "framebuffer": [
+        1206,
+        2622
+      ],
+      "landscapePixels": false,
+      "manualLobbyImageObserved": true,
+      "nativeTouchGameplayTested": false,
+      "physicalLandscapeCertified": false,
+      "scope": "Actual boot/install/launch/framebuffer only; portrait framebuffer contains rotated landscape lobby. OS live orientation and physical use not certified."
+    }
+  },
+  "evidenceVerification": {
+    "sourceSha": "9ee89efafa76cb3ad80fbff46c7f56a1261baa48",
+    "report": "p4-r6-evidence/polish/report.json",
+    "passedGeometry": 3417,
+    "failedGeometry": 0,
+    "coreProvenanceSha": "9ee89efafa76cb3ad80fbff46c7f56a1261baa48",
+    "uiAudioProvenanceSha": "9ee89efafa76cb3ad80fbff46c7f56a1261baa48",
+    "audioErrors": [],
+    "audioFailure": null,
+    "humanAudioQualityJudged": false,
+    "saveSoundLivePathTested": false,
+    "separateVerifierReport": "r6-independent-regression.json",
+    "thisReviewerDidNotRunFullRegression": true,
+    "rawCIReceipts": [
+      "r6-webgl-ci-receipt.json",
+      "r6-mac-ci-receipt.json"
+    ],
+    "audioPeakRms": {
+      "before-first-gesture": 0,
+      "roster-selection": 0.019271016117956057,
+      "muted-roster-selection": 0,
+      "sound-restored": 0.00179447076135336,
+      "practice-confirmation": 0.03798293387735954,
+      "practice-weak": 0.0003505134723205253,
+      "practice-strong": 0.0005120938310476945,
+      "practice-pause": 0,
+      "muted-practice-resume-and-attack": 0,
+      "back-to-roster": 0.026699166400398752
+    },
+    "derivedObservationFrames": [
+      "review-frames/r6-video-contact.png",
+      "review-frames/r6-vs-intro-fight-200ms.png"
+    ]
+  },
+  "baseline": {
+    "pr": "https://github.com/nagi300222/mamo-ken/pull/222",
+    "sha": "1391c49493eca193c3a49a22140e5b1c3d2c6417",
+    "score": 56.25,
+    "axes": {
+      "A": 2,
+      "B": 2,
+      "C": 3,
+      "D": 2,
+      "E": 2,
+      "F": 3
+    }
+  }
+}

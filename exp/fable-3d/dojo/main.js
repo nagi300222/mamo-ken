@@ -1,3 +1,4 @@
+import {syncSoundToggle,subscribeUIAudioMuted} from '../shared-ui/ui-feedback.js';
 import {presentCombatFeedback} from './fight-feel.js';
 import { BATTLE_INPUT_PROFILE, battleAnalog, updateBattleHUD } from '../shared-ui/battle-ui.js';
 import * as THREE from 'three';
@@ -1210,6 +1211,8 @@ $('music-toggle').onclick=()=>{
   $('music-toggle').textContent=enabled?'BGM ON':'BGM OFF';
   $('music-toggle').setAttribute('aria-pressed',String(enabled));
 };
+syncSoundToggle($('sound-toggle'),audioFX.muted);
+subscribeUIAudioMuted(muted=>syncSoundToggle($('sound-toggle'),muted));
 $('sound-toggle').onclick=()=>{
   audioFX.unlock();
   const muted=audioFX.setMuted(!audioFX.muted);

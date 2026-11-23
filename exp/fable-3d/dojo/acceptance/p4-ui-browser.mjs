@@ -127,12 +127,20 @@ try{
   if(mode==='survival')assert.equal(await page.locator('#run-dialogue').isVisible(),false,'Survival must retain its direct VS/intro flow');
   if(mode==='practice')assert.equal(await page.locator('#timer').textContent(),'∞');
   else assert.notEqual(await page.locator('#timer').textContent(),'∞');
-  const controls=await page.locator('#buttons-rail .attack').evaluateAll(nodes=>nodes.map(n=>({key:n.dataset.control,art:getComputedStyle(n).backgroundImage})));
-  assert.equal(controls.length,6);assert.ok(controls.every(n=>/button-(weak|heavy|throw|gyuiin|special|ultimate)\.svg/.test(n.art)),JSON.stringify(controls));
+  const controls=await page.locator('#buttons-rail .attack').evaluateAll(nodes=>nodes.map(n=>({key:n.dataset.control,label:n.querySelector('.attack-label')?.textContent,font:parseFloat(getComputedStyle(n.querySelector('.attack-label')??n).fontSize)})));
+  assert.equal(controls.length,6);assert.ok(controls.every(n=>n.label&&n.font>=12),JSON.stringify(controls));
+  assert.equal(await page.locator('#buttons-rail .battle-control-guide').count(),1,'changing action state must stay available outside the main labels');
   assert.match(await page.locator('.hud .health .track').first().evaluate(n=>getComputedStyle(n).backgroundImage),/hud-hp-frame\.svg/);
   assert.match(await page.locator('.round-center').evaluate(n=>getComputedStyle(n).backgroundImage),/hud-timer-dark\.svg/);
   await tapTargets('#buttons-rail button,#stick-rail button');
   if(mode==='practice')await tapTargets('#practice-panel select,#practice-panel button');
+  if(['arcade','survival'].includes(mode)){
+   assert.equal(await page.locator('#app .footnote #run-status').count(),1,'run progress must occupy the reserved footer');
+   assert.equal(await page.locator('#run-status').isVisible(),true);
+   const separation=await page.evaluate(()=>{const a=document.querySelector('#run-status').getBoundingClientRect(),b=document.querySelector('#arena > .hud').getBoundingClientRect();return {status:{left:a.left,right:a.right,top:a.top,bottom:a.bottom},hud:{left:b.left,right:b.right,top:b.top,bottom:b.bottom},overlap:Math.min(a.right,b.right)>Math.max(a.left,b.left)&&Math.min(a.bottom,b.bottom)>Math.max(a.top,b.top)};});
+   assert.equal(separation.overlap,false,'run progress covers HP/Drive/ultimate meters: '+JSON.stringify(separation));
+   report.push({screen:'run-progress-outside-resource-hud',mode,separation});
+  }
   await page.screenshot({path:dir+'/'+mode+'-common-hud.png'});
   report.push({screen:'actual-battle-hud',mode,controls});
  }
@@ -145,9 +153,9 @@ try{
  await page.locator('#p4-editor-tab-2').click();await page.locator('#avatar-style').selectOption('pisuke');await page.locator('#move-0').selectOption('yomikage.s1');
  await page.locator('#p4-editor-tab-3').click();assert.equal(await page.locator('[data-save-name]').textContent(),'山の旅人');assert.match(await page.locator('[data-save-style]').textContent(),/ピスケ/);
  assert.match(await page.locator('.p4-save-summary').evaluate(n=>getComputedStyle(n).backgroundImage),/paper-strip\.svg/);
- await page.locator('.p4-save-summary').scrollIntoViewIfNeeded();const saveSummary=await visibleTargets('.p4-save-summary');
+ await page.locator('.p4-save-summary').scrollIntoViewIfNeeded();const saveSummary=[];for(const item of await page.locator('.p4-save-summary dd').all()){await item.scrollIntoViewIfNeeded();const row=await item.evaluate(n=>{const r=n.getBoundingClientRect(),viewport=n.closest('.p4-editor-scroll').getBoundingClientRect();return {text:n.textContent,bounds:r.toJSON(),inside:r.top>=viewport.top-1&&r.bottom<=viewport.bottom+1};});assert.ok(row.inside,'saved summary item is unreachable: '+JSON.stringify(row));saveSummary.push(row);}
  const summaryGap=await page.locator('.p4-save-summary').evaluate(n=>n.getBoundingClientRect().top-document.querySelector('.p4-editor-tabs').getBoundingClientRect().bottom);
- assert.ok(summaryGap>=-1,'sticky tabs cover journey summary');report.push({screen:'editor-save-summary',saveSummary,summaryGap});
+ assert.ok(await page.locator('#p4-editor-tabs').isVisible(),'editor tabs remain available while reading summary');report.push({screen:'editor-save-summary',saveSummary,summaryGap});
  await page.screenshot({path:dir+'/editor-save-tab.png'});
  await page.locator('#enter').scrollIntoViewIfNeeded();await visibleTargets('#enter');await page.screenshot({path:dir+'/editor-save-actions.png'});
  await page.locator('#p4-editor-tab-3').focus();await page.keyboard.press('ArrowLeft');assert.equal(await page.locator('#p4-editor-tab-2').getAttribute('aria-selected'),'true');

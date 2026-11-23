@@ -1,0 +1,81 @@
+{
+  "schemaVersion": 1,
+  "testedSource": "1391c49493eca193c3a49a22140e5b1c3d2c6417",
+  "observedAt": "2026-11-23T13:19:23.213036+00:00",
+  "role": "independent evidence and regression; no implementation or score changes",
+  "worktree": "/workspace/scratch/282f6e44f4ff/mamoken-ui-evidence",
+  "local": {
+    "node": "v24.22.3",
+    "platform": "Linux-6.18.57-x86_64-with-glibc2.41",
+    "protectedAssets": 77,
+    "combatTests": {
+      "passed": 216,
+      "failed": 0
+    },
+    "customStoryP2SharedUITests": {
+      "passed": 53,
+      "failed": 0
+    },
+    "nativeTests": {
+      "passed": 14,
+      "failed": 0,
+      "skipped": 0
+    },
+    "reviewValidatorTests": {
+      "passed": 6,
+      "failed": 0
+    },
+    "pagesBuild": "PASS",
+    "nativeBuild": {
+      "result": "PASS",
+      "assetFiles": 289,
+      "bytes": 130704820,
+      "remoteServerURL": null
+    },
+    "browserRecapture": {
+      "result": "BLOCKED_ENVIRONMENT",
+      "reason": "Chromium launch failed at process_singleton_posix socket() Operation not permitted before loading application",
+      "log": "baseline-ui.log"
+    }
+  },
+  "existingCI": {
+    "runId": 45164225654,
+    "shaMatches": true,
+    "conclusion": "success",
+    "successfulJobs": [
+      "core",
+      "avatar",
+      "custom",
+      "story",
+      "native",
+      "p3",
+      "motion",
+      "special",
+      "p4",
+      "p2",
+      "review-framework"
+    ],
+    "iOSRunId": 45164225785,
+    "iOSShaMatches": true,
+    "iOSConclusion": "success"
+  },
+  "existingEvidence": {
+    "directory": "/workspace/scratch/ca539eada1ef/mamoken-p4-receipt/docs/mamoken-next/evidence/p4-1391c494",
+    "verifiedFiles": 29,
+    "hashMismatches": [],
+    "video": {
+      "durationSeconds": 36.92,
+      "encodedWidth": 852,
+      "encodedHeight": 392,
+      "encodedFPS": 25,
+      "requestedViewport": [
+        852,
+        393
+      ],
+      "isGameplayFPS": false
+    }
+  },
+  "physicalIphoneTested": false,
+  "humanTesters": 0,
+  "ownerP4Decision": "UNTESTED"
+}

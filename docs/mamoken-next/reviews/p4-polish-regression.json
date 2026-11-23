@@ -1,0 +1,219 @@
+{
+  "schemaVersion": 1,
+  "role": "Independent final CSS delta, build/source/deployment verification; no UI quality scoring",
+  "sha": "9ee89efafa76cb3ad80fbff46c7f56a1261baa48",
+  "previousSource": "e6ae86062f287ae351cfed9e5fbc59ebf23f0c92",
+  "baseline": "1391c49493eca193c3a49a22140e5b1c3d2c6417",
+  "observedAt": "2026-11-23T14:49:48.520248+00:00",
+  "delta": {
+    "changedFiles": [
+      "exp/fable-3d/dojo/acceptance/p4-polish-browser.mjs",
+      "exp/fable-3d/dojo/acceptance/v151-presentation-browser.mjs",
+      "exp/fable-3d/shared-ui/p4-polish.css",
+      "exp/fable-3d/story/p4-visual.css"
+    ],
+    "runtimeScope": "Only two CSS changes: opaque saved-summary paper background and hidden inactive presentation control rails",
+    "runtimeJavaScriptUnchanged": true,
+    "railRule": "#arena data-flow vs/intro/ko/victory/result only; visibility:hidden keeps layout geometry, separate header and skip remain outside selector",
+    "savedPaperRule": "Opaque --ui-paper behind decorative cutout in compact confirmation tab",
+    "browserContracts": "Opaque light background under summary text and presentation rails hidden/restored at actual states"
+  },
+  "freshLocalVerification": {
+    "protectedOriginalAssets": 77,
+    "syntax": [
+      "dojo/acceptance/p4-polish-browser.mjs",
+      "dojo/acceptance/v151-presentation-browser.mjs"
+    ],
+    "pagesBuild": "PASS",
+    "nativeBuild": {
+      "result": "PASS",
+      "assetFiles": 319,
+      "bytes": 130976007,
+      "remoteServerURL": null
+    },
+    "trackedSourceUnchangedByBuild": true
+  },
+  "priorIndependentFullNode": {
+    "sha": "dbfea14108c07a0974364970c4239feaa545f823",
+    "tests": 298,
+    "failed": 0,
+    "scope": "R4 evidence preserved; fresh final full regression is run by sameSHA CI"
+  },
+  "sourceContracts": {
+    "gateSameAsBaseline": true,
+    "gateBlob": "c93810a56832f862569503096c5187577327a6b0",
+    "v18AssetsUnchanged": true,
+    "nativeRuntimeAndBootGuardsUnchanged": true,
+    "v18RuntimeAssets": 21,
+    "v18RuntimeBytes": 193709,
+    "physicsSameAsBaseline": [
+      "battle.js",
+      "balance.js",
+      "cpu.js",
+      "fighter-style.js",
+      "run-controller.js"
+    ]
+  },
+  "deployment": {
+    "url": "https://19b355a1.mamoken-3d.pages.dev/",
+    "checkSameSHA": "success",
+    "checkReceipt": "r6-cloudflare-check.json",
+    "actualGET": {
+      "checked": 34,
+      "all200": true,
+      "allBytesMatch": true,
+      "receipt": "r6-deploy-get-verification.json"
+    }
+  },
+  "ci": {
+    "webglRunId": 45193206578,
+    "webglStatus": "completed",
+    "webglConclusion": "success",
+    "sha": "9ee89efafa76cb3ad80fbff46c7f56a1261baa48",
+    "webglAndFrameworkJobs": 11,
+    "all11JobsSuccess": true,
+    "receipt": "r6-webgl-ci-receipt.json",
+    "p4OriginalLog": "r6-ci-p4-job.log",
+    "p4GeometryChecks": 3417,
+    "p4GeometryResult": "PASS",
+    "p4CoreUIResult": "PASS",
+    "p4ActualAudioResult": "PASS",
+    "p4Artifact": 14827987408,
+    "coreArtifact": 14828540638,
+    "retryPerformed": false,
+    "scope": "Automated Node/build/WebGL only; iOS Simulator smoke in separate nativeSimulator field",
+    "artifactVerification": "r6-p4-artifact-verification.json",
+    "geometryFromOriginalJSON": {
+      "checks": 3417,
+      "allPass": true,
+      "errors": []
+    },
+    "actualAudioFromOriginalJSON": {
+      "failure": null,
+      "errors": [],
+      "silentSegmentsPeakRms": 0,
+      "acceptedWeakAndStrong": true,
+      "rawContextStreamsDecodedAndNonzero": 2,
+      "humanAudioQualityJudged": false
+    }
+  },
+  "historicalFailure": {
+    "sha": "e6ae86062f287ae351cfed9e5fbc59ebf23f0c92",
+    "runId": 45190961017,
+    "attempt": 1,
+    "build": "SUCCEEDED",
+    "simulator": "FAIL before app installation: CoreLocationMigrator initial boot stall",
+    "diagnosisReceipt": "r5-mac-failure-diagnosis.json",
+    "guardsWeakened": false,
+    "scope": "Preserved as history; not relabeled as final SHA failure or pass"
+  },
+  "gates": {
+    "p4OwnerReview": "pending",
+    "p5ImplementationAuthorized": false,
+    "mainMergeAuthorized": false,
+    "physicalDeviceCertified": false
+  },
+  "unperformed": [
+    "physical iPhone",
+    "real human unexplained tasks",
+    "owner P4 decision",
+    "human audio quality judgment"
+  ],
+  "localBrowser": "Not launched; no sandbox escalation",
+  "freshFinalCIUnit": {
+    "sha": "9ee89efafa76cb3ad80fbff46c7f56a1261baa48",
+    "totalTests": 298,
+    "groups": {
+      "combat": 218,
+      "custom_story_sharedUI": 60,
+      "native": 14,
+      "reviewFramework": 6
+    },
+    "failed": 0,
+    "skipped": 0,
+    "source": "Actual sameSHA completed job logs; duplicate matrix executions not double-counted",
+    "logs": [
+      {
+        "file": "r6-ci-custom-job.log",
+        "sha256": "63e906c5bd8cb4488cbef3776ae039853e5ad3e5a75f335de223092b220434c0"
+      },
+      {
+        "file": "r6-ci-native-job.log",
+        "sha256": "1f3959f1a598963181cf5a8da086e5889cbec6d5391a614c702ad2ae2fdb28ce"
+      },
+      {
+        "file": "r6-ci-framework-job.log",
+        "sha256": "fc1f80f946ea455ca3eba6448e9e91834e04272812f65a05e5d2d25b58ef6d8e"
+      }
+    ]
+  },
+  "nativeSimulator": {
+    "sha": "9ee89efafa76cb3ad80fbff46c7f56a1261baa48",
+    "runId": 45193206865,
+    "artifactId": 14828485907,
+    "ci": "success",
+    "unsignedBuild": "SUCCEEDED",
+    "smokePassed": true,
+    "simulatorTested": true,
+    "installed": true,
+    "launchedPid": 20233,
+    "runningProcess": "20233\t0\tUIKitApplication:jp.nagi.mamoken.poc[f6e2][rb-legacy]",
+    "supportedOrientations": "Array {\n    UIInterfaceOrientationLandscapeLeft\n    UIInterfaceOrientationLandscapeRight\n}",
+    "screenshots": [
+      {
+        "file": "01-native-launcher.png",
+        "bytes": 2744680,
+        "width": 1206,
+        "height": 2622,
+        "landscapePixels": false
+      },
+      {
+        "file": "02-native-launcher-stable.png",
+        "bytes": 2744680,
+        "width": 1206,
+        "height": 2622,
+        "landscapePixels": false
+      }
+    ],
+    "scope": "Actual iOS Simulator boot/install/launch/framebuffer capture; no touch gameplay or physical-device certification",
+    "uiLoadedAutomaticallyVerified": false,
+    "webglGameplayTested": false,
+    "touchControlsTested": false,
+    "physicalDeviceTested": false,
+    "coldBootProgress": {
+      "plugins": [
+        "com.apple.managedconfiguration.migrator (MCProfile.migrator, user-agnostic)",
+        "com.apple.addressbook.migrator (AddressBookLegacy.migrator)",
+        "com.apple.MobileSafari.migrator (MobileSafari.migrator)",
+        "com.apple.locationd.migrator (CoreLocationMigrator.migrator)"
+      ],
+      "statuses": [
+        2
+      ],
+      "advanced": true
+    },
+    "bootExtension": {
+      "reason": "Observed multiple real migration stages before initial timeout",
+      "additionalMaximumMs": 420000
+    },
+    "evidence": [
+      {
+        "file": "mac-r6-evidence/evidence/simulator/report.json",
+        "sha256": "02087289f9ac721fe995e08cb371d1de995b6059df8d74c0a04237f702176bf4"
+      },
+      {
+        "file": "mac-r6-evidence/evidence/simulator/commands.log",
+        "sha256": "0d731c05f02ad4a4f72212dbf55b1c577072d1685f2f04b268ecbd6a641b6644"
+      },
+      {
+        "file": "mac-r6-evidence/evidence/simulator/01-native-launcher.png",
+        "sha256": "f157ab23c3254236f384af4d8c71d627e2ba20515adb9895d808faea0c9ab734"
+      },
+      {
+        "file": "mac-r6-evidence/evidence/simulator/02-native-launcher-stable.png",
+        "sha256": "f157ab23c3254236f384af4d8c71d627e2ba20515adb9895d808faea0c9ab734"
+      }
+    ],
+    "visualObservation": "Unmodified portrait framebuffer capture visibly contains sideways landscape lobby and all five mode cards; no touch gameplay performed. LandscapePixels=false is raw framebuffer dimensions, not native orientation certification."
+  }
+}

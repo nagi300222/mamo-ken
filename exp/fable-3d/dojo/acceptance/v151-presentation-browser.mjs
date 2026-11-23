@@ -43,6 +43,7 @@ const finish=(page,kind,winner=0)=>page.evaluate(async([kind,winner])=>{
   if(kind==='double')g._begin(t,{...B.normalMove(t.id,'stand_heavy')},'stand_heavy');
 },[kind,winner]);
 const startBy=(page,options)=>page.evaluate(o=>{mamoken3d.startMatch(o);},options);
+const controlVisibility=(page,visible)=>page.waitForFunction(visible=>['stick-rail','buttons-rail'].every(id=>getComputedStyle(document.getElementById(id)).visibility===(visible?'visible':'hidden')),visible,{timeout:4000});
 try{
   // ---------- A. 縦持ち（回転ロック）のスマホ: 通常対戦の一連の流れ ----------
   {
@@ -51,6 +52,7 @@ try{
     await page.locator('#cpu-choice').selectOption('godan');
     await page.locator('#start').tap();
     await waitState(page,'vs',20000);
+    await controlVisibility(page,false);
     assert.equal(await page.locator('#vs-screen').isVisible(),true,'VS 画面');
     assert.equal(await page.locator('#selection').isVisible(),false);
     let s=await P(page);
@@ -62,6 +64,7 @@ try{
     assert.equal((await P(page)).frame,0,'VS 中は Battle を進めない');
     await page.screenshot({path:dir+'/a1-vs-portrait-locked.png'});
     await waitState(page,'intro',24000);
+    await controlVisibility(page,false);
     await page.waitForFunction(()=>mamoken3d.presentation.faceFrame?.slot===0,undefined,{timeout:4000});
     s=await P(page);assert.equal(s.camera,'presentation');assert.equal(s.frame,0);
     for(const key of ['head','top','nose','back'])assert.ok(Math.abs(s.faceFrame[key][0])<.9&&Math.abs(s.faceFrame[key][1])<.9,'1P の顔が画面内 '+key+' '+JSON.stringify(s.faceFrame));
@@ -76,11 +79,13 @@ try{
     await page.waitForFunction(()=>!document.getElementById('round-call').hidden&&document.getElementById('round-call-text').textContent==='FIGHT!',undefined,{timeout:5000});
     await page.screenshot({path:dir+'/a4-fight-call.png'});
     await waitState(page,'fight',20000);
+    await controlVisibility(page,true);
     await page.waitForFunction(()=>mamoken3d.battle.frame>3,undefined,{timeout:4000});
     assert.equal(await page.evaluate(()=>mamoken3d.battle.fighters[0].action),null,'導入中に押したボタンが FIGHT 直後に出ない');
     assert.equal(await page.locator('#buttons-rail [data-control]').count(),6);
     // K.O. とスロー
     await finish(page,'ko',0);await waitState(page,'ko',20000);
+    await controlVisibility(page,false);
     assert.equal(await page.locator('#ko-title').textContent(),'K.O.');assert.equal(await page.locator('#ko-banner').isVisible(),true);
     assert.equal(await page.locator('#round-call').isVisible(),false,'early KO must clear the FIGHT call');
     const before=await P(page);await page.waitForTimeout(700);const during=await P(page);
@@ -89,6 +94,7 @@ try{
     await page.screenshot({path:dir+'/a5-ko-slow.png'});
     // 勝利ムービー
     await waitState(page,'victory',20000);
+    await controlVisibility(page,false);
     s=await P(page);assert.equal(s.camera,'presentation');assert.equal(s.victoryClip,'victory_v151');
     assert.equal(await page.locator('#round-call').isVisible(),false,'victory must not retain FIGHT');
     assert.equal(await page.evaluate(()=>mamoken3d.actors[1].currentName),'ko','敗者は ko、勝者は victory（取り違えない）');
@@ -97,6 +103,7 @@ try{
     assert.equal(await page.locator('#victory-name').textContent(),'モグゾー');assert.match(await page.locator('#victory-side').textContent(),/^1P WIN/);
     await page.screenshot({path:dir+'/a6-victory.png'});
     await waitState(page,'result',27000);
+    await controlVisibility(page,false);
     s=await P(page);assert.deepEqual(run(s.log),['vs','intro','fight','ko','victory','result']);assert.equal(s.frame,before.frame);
     assert.equal(await page.locator('#round-call').isVisible(),false,'result must not retain FIGHT');
     assert.equal(await page.locator('#result-title').textContent(),'勝利');assert.equal(await page.locator('#result-reason').textContent(),'KO');

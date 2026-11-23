@@ -3,6 +3,7 @@
 import { showtimeFor } from './showtime-profiles.js';
 import { isNativeRuntime } from './landscape-lock.js';
 import {IMPACT_SOUND_RECIPES,combatFeedback} from './fight-feel.js';
+import {readUIAudioMuted,setUIAudioMuted,subscribeUIAudioMuted} from '../shared-ui/ui-feedback.js';
 
 export function cinematicSoundKind(key) {
   if (/tension_hold|mute/.test(key)) return null;
@@ -25,7 +26,7 @@ export function cinematicSoundKind(key) {
 }
 
 export function createCombatAudio(contextFactory=()=>globalThis.AudioContext||globalThis.webkitAudioContext){
-  let context=null,master=null,muted=false,volume=1;
+  let context=null,master=null,muted=readUIAudioMuted(),volume=1;
   const last=new Map();
   let noiseBuffer=null;
   const activeSounds=new Set();
@@ -34,28 +35,36 @@ export function createCombatAudio(contextFactory=()=>globalThis.AudioContext||gl
     activeSounds.clear();
     if(context?.state==='running'){try{context.suspend?.()?.catch?.(()=>{});}catch{}}
   }
+  const cleanup=[];
+  function listen(target,type,handler,options){target?.addEventListener?.(type,handler,options);cleanup.push(()=>target?.removeEventListener?.(type,handler,options));}
+  listen(globalThis,'pagehide',suspend);
+  listen(globalThis.document,'visibilitychange',()=>{if(globalThis.document.hidden)suspend();});
   if(isNativeRuntime()){
-    globalThis.addEventListener?.('mamoken:native-state',event=>{if(event.detail?.active===false)suspend();});
+    listen(globalThis,'mamoken:native-state',event=>{if(event.detail?.active===false)suspend();});
     // Resume only within a real user gesture, including the pause/resume button.
-    globalThis.addEventListener?.('pointerdown',()=>{if(globalThis.mamokenNative?.active!==false&&context?.state==='suspended')unlock();},{capture:true});
+    listen(globalThis,'pointerdown',()=>{if(globalThis.mamokenNative?.active!==false&&context?.state==='suspended')unlock();},{capture:true});
   }
+  const unsubscribeMute=subscribeUIAudioMuted(next=>applyMuted(next));
   function unlock(){
+    if(globalThis.document?.hidden||globalThis.mamokenNative?.active===false)return false;
     if(!context){
       const Factory=contextFactory();
       if(!Factory)return false;
       try{
         context=new Factory();
-        master=context.createGain();master.gain.value=.12*volume;master.connect(context.destination);
+        master=context.createGain();master.gain.value=muted?0:.12*volume;master.connect(context.destination);
       }catch{context=null;master=null;return false;}
     }
     if(context.state==='suspended')context.resume().catch(()=>{});
     return true;
   }
-  function setMuted(next){
+  function applyMuted(next){
     muted=!!next;
     if(master)master.gain.value=muted?0:.12*volume;
+    if(muted){for(const stop of activeSounds){try{stop();}catch{}}activeSounds.clear();}
     return muted;
   }
+  function setMuted(next){return setUIAudioMuted(next);}
   function setVolume(next){
     if(!Number.isFinite(next))throw new TypeError('sound volume must be finite');
     volume=Math.max(0,Math.min(1,next));
@@ -141,5 +150,5 @@ export function createCombatAudio(contextFactory=()=>globalThis.AudioContext||gl
     if(!feedback?.sound)return false;
     return play(feedback.sound,feedback.characterId,options);
   }
-  return {unlock,play,playFeedback,setMuted,setVolume,suspend,get volume(){return volume;},get muted(){return muted;},get context(){return context;},get supported(){return !!contextFactory();}};
+  return {unlock,play,playFeedback,setMuted,setVolume,suspend,dispose(){suspend();unsubscribeMute();for(const remove of cleanup)remove();context?.close?.()?.catch?.(()=>{});},get volume(){return volume;},get muted(){return muted;},get context(){return context;},get supported(){return !!contextFactory();}};
 }

@@ -32,14 +32,14 @@ async function assertDecodedArt(screen,expectations){
   const background=getComputedStyle(element,pseudo||null).backgroundImage;
   const urls=[...background.matchAll(/url\(["']?([^"')]+)["']?\)/g)].map(match=>match[1]);
   const src=urls.find(value=>new URL(value,location.href).pathname.endsWith('/'+filename));
-  if(!src)return {selector,pseudo,filename,background,error:'Expected SVG is not applied to the real UI'};
+  if(!src)return {selector,pseudo,filename,background,error:'Expected art is not applied to the real UI'};
   try{
    const response=await fetch(src),image=new Image();image.src=src;await image.decode();
    return {selector,pseudo,filename,src,status:response.status,mime:response.headers.get('content-type'),width:image.naturalWidth,height:image.naturalHeight,decoded:true};
   }catch(error){return {selector,pseudo,filename,src,error:error.message};}
  })),expectations);
  svgDecoding.push({screen,checks});await writeFile(output+'/native-svg-decoding.json',JSON.stringify({uiKitTested:false,svgDecoding},null,2));
- for(const check of checks){assert.equal(check.error,undefined,screen+' '+JSON.stringify(check));assert.equal(check.status,200);assert.match(check.mime??'',/^image\/svg\+xml\b/);assert.ok(check.decoded&&check.width>0&&check.height>0,'SVG did not decode: '+JSON.stringify(check));}
+ for(const check of checks){assert.equal(check.error,undefined,screen+' '+JSON.stringify(check));assert.equal(check.status,200);assert.match(check.mime??'',check.filename.endsWith('.webp')?/^image\/webp\b/:/^image\/svg\+xml\b/);assert.ok(check.decoded&&check.width>0&&check.height>0,'Art did not decode: '+JSON.stringify(check));}
 }
 const buttonArt=parent=>[['weak','weak'],['strong','heavy'],['throw','throw'],['gyuiin','gyuiin'],['special','special'],['ultimateButton','ultimate']].map(([control,asset])=>[parent+' [data-control="'+control+'"]','','button-'+asset+'.svg']);
 async function safeInsets(left,right,bottom=21){
@@ -67,13 +67,13 @@ async function inspectLobby(condition){
  const {left,right,bottom}=condition;await lobbyInsets(condition);
  await safeBounds('.mode-hall',left,right,bottom);
  const scroll=await page.locator('.mode-hall').evaluate(el=>({position:getComputedStyle(el).position,overflow:getComputedStyle(el).overflowY,clientHeight:el.clientHeight,scrollHeight:el.scrollHeight,scrollTop:el.scrollTop}));
- assert.equal(scroll.position,'fixed');assert.equal(scroll.overflow,'auto');assert.ok(scroll.scrollHeight>scroll.clientHeight,'P4 scrollable menu was compressed into one screen');
+ assert.equal(scroll.position,'fixed');assert.equal(scroll.overflow,'auto');assert.ok(scroll.scrollHeight<=scroll.clientHeight+1,'P4 five-mode overview requires scrolling at the supported native size');
  await page.locator('.hall-header').scrollIntoViewIfNeeded();await safeBounds('.hall-header',left,right,bottom);await safeBounds('.hall-title h1',left,right,bottom);
  assert.equal((await page.locator('.hall-title h1').textContent()).trim(),'マモ拳');
  const cards=[];
  for(const mode of ['battle','practice','arcade','survival','story']){
   const selector='.modes a[data-mode="'+mode+'"]',card=page.locator(selector);
-  await card.scrollIntoViewIfNeeded();await safeBounds(selector,left,right,bottom);
+  await safeBounds(selector,left,right,bottom);
   const action=card.locator('.mode-action,.mode-rule').first();await action.click({trial:true});
   await safeBounds(selector+' h2',left,right,bottom);await safeBounds(selector+' '+(mode==='battle'?'.mode-action':'.mode-rule'),left,right,bottom);
   const record=await card.evaluate(el=>{
@@ -88,7 +88,7 @@ async function inspectLobby(condition){
   }
  }
  await page.locator('.hall-footer').scrollIntoViewIfNeeded();await safeBounds('.hall-footer',left,right,bottom);
- const maxScroll=await page.locator('.mode-hall').evaluate(el=>el.scrollTop);assert.ok(maxScroll>0,'Five modes were not reached by scrolling');
+ const maxScroll=await page.locator('.mode-hall').evaluate(el=>el.scrollTop);assert.equal(maxScroll,0,'The five-mode overview must start and remain visible before scrolling');
  await page.screenshot({path:output+'/lobby-safe-lower-'+condition.width+'-'+left+'-'+right+'.png'});
  await page.locator('.hall-header').scrollIntoViewIfNeeded();await safeBounds('.hall-header',left,right,bottom);
  nativeLobbyScroll.push({condition,scroll,maxScroll,cards});
@@ -108,7 +108,7 @@ try{
  await assertDecodedArt('five-mode-entry',[
   ['.ui-seal','','fist-seal.svg'],['.mode-hall','::before','ridge-far.svg'],['.mode-hall','::before','ridge-near.svg'],
   ...[['battle','versus'],['practice','practice'],['arcade','arcade'],['survival','survival'],['story','journey-paper']].map(([mode,asset])=>['.mode[data-mode="'+mode+'"] .mode-kicker','::before','mode-'+asset+'.svg']),
-  ['.mode-story','','paper-strip.svg']
+  ...[['battle','vs-large'],['practice','practice'],['arcade','arcade'],['survival','survival'],['story','story']].map(([mode,asset])=>['.mode[data-mode="'+mode+'"] .mode-illustration','','mode-'+asset+'.webp'])
  ]);
  // Preserve a valid long saved name, prove every card and its action can be
  // scrolled into the native safe scrollport, then take all five real routes.
@@ -142,8 +142,9 @@ try{
  await page.locator('#start').tap();await page.waitForFunction(()=>mamoken3d.practice.enabled&&mamoken3d.battle?.frame>3,undefined,{timeout:90000});
  await assertDecodedArt('dojo-hud-and-controls',[
   ['.brand-mark','','fist-seal.svg'],['#arena .health .track','','hud-hp-frame.svg'],['#arena .drive .track','','hud-sub-frame.svg'],['#arena .round-center','','hud-timer-dark.svg'],
-  ['#arena .hud-name','::before','crest-moguzo.svg'],...buttonArt('#buttons-rail')
+  ['#arena .hud-name','::before','crest-moguzo.svg'],
  ]);
+ const nativeLabels=await page.locator('#buttons-rail .attack-label').allTextContents();assert.equal(nativeLabels.length,6);assert.deepEqual(nativeLabels.map(label=>label.trim()),['弱','強','掴み','ギュイーン','必殺','奥義']);assert.equal(await page.locator('#buttons-rail .battle-control-guide').count(),1);
  assert.equal(await page.locator('[data-control]').count(),8); // six attacks + two step buttons
  assert.equal(await page.evaluate(()=>mamoken3d.landscapeLocked),false);
  // A transient portrait viewport must be left to UIKit, not rotated again by CSS.
@@ -180,7 +181,7 @@ try{
  await page.waitForFunction(()=>mamokenStory.mode==='battle',undefined,{timeout:90000});await page.locator('#pause').tap();
  await assertDecodedArt('story-hud-and-controls',[
   ['#battle-hud .health .track','','hud-hp-frame.svg'],['#battle-hud .drive .track','','hud-sub-frame.svg'],['#battle-hud .round-center','','hud-timer-dark.svg'],
-  ['#battle-hud .hud-name','::before','crest-moguzo.svg'],...buttonArt('#battle-buttons')
+  ['#battle-hud .hud-name','::before','crest-moguzo.svg'],
  ]);
  for(const side of [59,62]){
   await page.evaluate(()=>{for(const edge of ['left','right','top','bottom'])document.documentElement.style.removeProperty('--native-safe-'+edge);});
