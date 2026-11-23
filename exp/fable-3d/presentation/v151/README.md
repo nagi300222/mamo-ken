@@ -62,6 +62,28 @@ node exp/fable-3d/presentation/v151/tools/capture_victory.mjs --out DIR --mp4   
 TIME UP／DRAW／DOUBLE K.O.、奥義 KO は 10 秒ムービー後に 1 回だけ、フォーカス喪失の一時停止、9 体の勝利クリップ・台詞・カメラが 9 通り、短縮版、プラクティスは VS なし、低刺激。
 決着は Battle 自身に出させる（テストは HP・タイマー・位置を置いて本物の技を始めるだけで、`winner` や `phase` は書かない）。
 
-## 未完（このPRへ追記）
-- 9本の勝利ムービーのカメラ・ポーズの仕上げと、60fps・実時間速度の映像
-- 実 WebGL Chromium での受入テスト（横画面・縦回転ロック・タッチ・低刺激・スキップ・時間切れ・ダブルKO・奥義KO・CPU勝利）
+## 納品状態（2026-11-23）
+- **素材 HEAD**：`d6ef603`（9本の勝利クリップ・カメラ・光・音・台詞はここで固定）。以後のコミットはテストと文書だけ。
+- **CI**：`6705826` で `.github/workflows/mamoken-v151-presentation.yml` が成功（run 45111593577）。
+  内容は Node 全テスト（145）、Pages build、実 WebGL Chromium（google-chrome）での受入 `v151-presentation-browser.mjs`、既存回帰 `portrait-lock-browser.mjs`・`v15-practice-browser.mjs`。
+- **ローカル**（ヘッドレス Chromium・ソフトウェア描画）：同じ受入が OK。Practice 回帰も通過。
+  回転ロック回帰は、ローカルの Chromium だとヘッダーの技表ポップオーバーを閉じるタップで止まる（開始より前の箇所）。CI の google-chrome では通過。
+- **目視**：9体の勝利ムービーを実ゲームの画面で、0.4〜0.5 秒おきの静止画として確認（寄りすぎ・頭切れ・ポーズを修正済み）。縦持ち回転ロックの VS／顔アップ／K.O.／勝利／結果もスクリーンショットで確認。
+
+### 未確認・既知の制約
+- **実機（スマホ）では未確認。** 音の聞こえ方・発熱・実際の fps・タップの感触は見ていない。
+- **9体の60fps制作動画は `evidence/videos/` に保存済み。** 仮想時間での書き出しであり、スマホ実機の速度測定ではない。条件と出典は下記。
+  私の手元では連続再生の動画としては通し見していない（確認は上記の静止画）。
+- ゴダンの四股は脚が短く、上げ幅が小さい（体の傾きと深い踏み下ろしで見せている）。
+- DOUBLE K.O. は同キャラ同時発生の条件でだけ実ゲームで再現している。発生差のある組は片側 K.O. になる（Battle の仕様どおり）。
+- 勝利ムービーの効果音は既存の合成音（`combat-audio.js` の種類）の組み合わせで、新しい音素材は足していない。
+- ARCADE／SURVIVAL との結合（ラウンド制・短縮版の使い分け）は #202 側の作業で、このブランチ単体では通常対戦 1 本勝負だけを通している。
+
+
+## 2026-11-23 固定版の動画保存
+
+`evidence/videos/` に9体の実ゲーム映像MP4、ffprobe JSON、SHA256付きmanifestを保存した。元素材 `d6ef603`、撮影HEAD `465fb483`、[render run 45111367016](https://github.com/nagi300222/mamo-ken/actions/runs/45111367016)（ゴダンの一時screenshot timeoutは同runで再試行成功）。9本すべて486×342、60/1fps、約8.3秒。KO→専用5秒勝利→結果の画面記録であり、既存約10秒奥義の尺は変更していない。静止画列のMP4は無音で、ゲーム内の同期Web Audioは別途稼働する。
+
+60fpsは仮想時間で進めた制作映像の符号化設定。物理スマホのFPSではない。9本のメタデータと中間フレームを確認したが、端末上での連続再生のアート評価、熱・電池・タッチ感は未検証。
+
+Codex側の結合は [run 45111366934](https://github.com/nagi300222/mamo-ken/actions/runs/45111366934) でアーケード8戦16ラウンド・サバイバル・本演出・通常54技・Practiceが成功。v16全統合 `57b140b6` の [run 45111784490](https://github.com/nagi300222/mamo-ken/actions/runs/45111784490)（Node168件/実WebGL4レーン）と [run 45111784442](https://github.com/nagi300222/mamo-ken/actions/runs/45111784442)（81奥義組合せと総合受入）も成功。

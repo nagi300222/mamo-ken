@@ -178,7 +178,8 @@ try{
       await page.evaluate(()=>mamoken3d.skipPresentation());assert.equal((await P(page)).state,'result');assert.equal(await page.locator('#result-title').textContent(),'勝利');
     }
     for(const key of ['line','title','camera'])assert.equal(new Set(seen.map(v=>v[key])).size,9,key+' が 9 通り '+JSON.stringify(seen.map(v=>v[key])));
-    assert.ok(seen.find(v=>v.id==='bullet').from>1,'短縮版は後半から始まる');assert.ok(seen.find(v=>v.id==='moguzo').from<.2);
+    // 読み取りまでに実時間が少し進むので、絶対値ではなく「短縮版は編集元の開始位置（70F=1.17 秒）以降」「フル版は頭から」を幅を持たせて見る
+    assert.ok(seen.find(v=>v.id==='bullet').from>=1.16,'短縮版は後半から始まる');assert.ok(seen.find(v=>v.id==='moguzo').from<1.0,'フル版は頭から');
     // プラクティスは VS／顔アップなし（従来どおり）
     await page.evaluate(()=>mamoken3d.showSelection());await page.locator('#match-mode').selectOption('practice');await page.locator('#start').tap();
     await page.waitForFunction(()=>mamoken3d.practice.enabled&&mamoken3d.presentation.state==='fight'&&mamoken3d.battle?.frame>4,undefined,{timeout:35000});

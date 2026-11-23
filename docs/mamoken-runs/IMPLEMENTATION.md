@@ -26,3 +26,10 @@ CPUは旧9Lv表の思考間隔・反応遅延・防御率・攻撃頻度・ダ�
 - 同CIで元9体54通常の実GLB再生、Practiceの弱ヒット/ダメージ・リセット・奥義/スキップ・通常対戦復帰を検証。Artifact14788267478に34ファイルの画像/JSON証拠。勝敗遷移テストの終局条件は状態fixtureで加速し、実接触の検証とは区別している。
 
 iPhone Safariの操作感・長時間FPS/熱/電池、CPUの最終対人バランスは未認証。Claude #207の最終カメラ/9動画を追随し、最終HEADの検証記録は同PR群へ追記する。
+
+
+## 最終結合の確認（2026-11-23）
+
+演出素材d6ef603を含むHEAD `465fb483` の [Actions 45111366934](https://github.com/nagi300222/mamo-ken/actions/runs/45111366934) が成功。KO/勝利/VS/顔アップ、8戦16ラウンド・継続・サバイバル、通常54技とPracticeを実Chrome WebGLで検査した。v16全統合 `57b140b6` の [45111784490](https://github.com/nagi300222/mamo-ken/actions/runs/45111784490) と [45111784442](https://github.com/nagi300222/mamo-ken/actions/runs/45111784442) も成功し、既存81奥義組合せと追加ストーリーの回帰を確認。後続の動画・文書保存では性能や戦闘ソースを変更していない。
+
+9勝利映像の固定版は `presentation/v151/evidence/videos/`。60fpsは動画符号化設定で、スマホのFPS/発熱/電池は未測定。試遊はCloudflare PagesのPRブランチプレビューで行う。mainは未変更。
