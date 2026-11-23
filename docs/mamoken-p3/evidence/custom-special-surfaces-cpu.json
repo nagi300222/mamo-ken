@@ -1,0 +1,6287 @@
+{
+  "passed": true,
+  "note": "Actual GLTFLoader/Three CPU skin/retarget evaluation. Images stubbed; no WebGL or physical-phone performance claim.",
+  "sourceVersion": "v17-p3-specials-1",
+  "native": [
+    {
+      "id": "moguzo",
+      "slot": "s1",
+      "row": {
+        "ref": "moguzo.s1",
+        "sourceCharacterId": "moguzo",
+        "sourceMoveId": "s1",
+        "clip": "s1_v17",
+        "motionVersion": "v17",
+        "sourceVersion": "v17-p3-specials-1",
+        "source": "runtime-skinned-mesh",
+        "sampling": "exact-clip-clock",
+        "status": "ok",
+        "sampledContactSeconds": 0.2167,
+        "contactSeconds": 0.2167,
+        "activeFrameCount": 2,
+        "attackPart": "armR",
+        "attackLimb": "pawR",
+        "kind": "projectile",
+        "reach": 0.526389,
+        "height": 0.167294,
+        "activeReach": [
+          {
+            "phase": 0,
+            "frame": 0,
+            "seconds": 0.2167,
+            "reach": 0.526389,
+            "height": 0.167294
+          },
+          {
+            "phase": 1,
+            "frame": 1,
+            "seconds": 0.23333332538604737,
+            "reach": 0.474629,
+            "height": 0.296421
+          }
+        ],
+        "contactSocket": {
+          "forward": 0.468829,
+          "height": 0.122595,
+          "bone": "pawR",
+          "atSeconds": 0.2167,
+          "source": "runtime-bone-world-position"
+        },
+        "projectileSocket": {
+          "forward": 0.468829,
+          "height": 0.122595,
+          "bone": "pawR",
+          "atSeconds": 0.2167,
+          "source": "runtime-bone-world-position"
+        },
+        "visualRigId": "moguzo",
+        "grafts": []
+      },
+      "anchor": "pawR"
+    },
+    {
+      "id": "moguzo",
+      "slot": "s2",
+      "row": {
+        "ref": "moguzo.s2",
+        "sourceCharacterId": "moguzo",
+        "sourceMoveId": "s2",
+        "clip": "s2_v17",
+        "motionVersion": "v17",
+        "sourceVersion": "v17-p3-specials-1",
+        "source": "runtime-skinned-mesh",
+        "sampling": "exact-clip-clock",
+        "status": "ok",
+        "sampledContactSeconds": 0.1,
+        "contactSeconds": 0.1,
+        "activeFrameCount": 8,
+        "attackPart": "armR",
+        "attackLimb": "pawR",
+        "kind": "antiair",
+        "reach": 0.22151,
+        "height": 0.799758,
+        "activeReach": [
+          {
+            "phase": 0,
+            "frame": 0,
+            "seconds": 0.10000000000000002,
+            "reach": 0.22151,
+            "height": 0.799758
+          },
+          {
+            "phase": 0.14285714285714285,
+            "frame": 1,
+            "seconds": 0.1166666675891195,
+            "reach": 0.201581,
+            "height": 0.814591
+          },
+          {
+            "phase": 0.2857142857142857,
+            "frame": 2,
+            "seconds": 0.133333335178239,
+            "reach": 0.172897,
+            "height": 0.825079
+          },
+          {
+            "phase": 0.42857142857142855,
+            "frame": 3,
+            "seconds": 0.15000000276735853,
+            "reach": 0.140155,
+            "height": 0.831316
+          },
+          {
+            "phase": 0.5714285714285714,
+            "frame": 4,
+            "seconds": 0.16666667035647803,
+            "reach": 0.107658,
+            "height": 0.83339
+          },
+          {
+            "phase": 0.7142857142857143,
+            "frame": 5,
+            "seconds": 0.18333333794559753,
+            "reach": 0.078346,
+            "height": 0.83339
+          },
+          {
+            "phase": 0.8571428571428571,
+            "frame": 6,
+            "seconds": 0.20000000553471703,
+            "reach": 0.054745,
+            "height": 0.833389
+          },
+          {
+            "phase": 1,
+            "frame": 7,
+            "seconds": 0.21666667312383653,
+            "reach": 0.039363,
+            "height": 0.833393
+          }
+        ],
+        "contactSocket": {
+          "forward": 0.174315,
+          "height": 0.770466,
+          "bone": "pawR",
+          "atSeconds": 0.1,
+          "source": "runtime-bone-world-position"
+        },
+        "visualRigId": "moguzo",
+        "grafts": []
+      },
+      "anchor": "pawR"
+    },
+    {
+      "id": "moguzo",
+      "slot": "s3",
+      "row": {
+        "ref": "moguzo.s3",
+        "sourceCharacterId": "moguzo",
+        "sourceMoveId": "s3",
+        "clip": "s3_v17",
+        "motionVersion": "v17",
+        "sourceVersion": "v17-p3-specials-1",
+        "source": "runtime-skinned-mesh",
+        "sampling": "exact-clip-clock",
+        "status": "ok",
+        "sampledContactSeconds": 0.2,
+        "contactSeconds": 0.2,
+        "activeFrameCount": 5,
+        "attackPart": "armL",
+        "attackLimb": "pawL+pawR",
+        "kind": "rush",
+        "reach": 0.489628,
+        "height": 0.369061,
+        "activeReach": [
+          {
+            "phase": 0,
+            "frame": 0,
+            "seconds": 0.20000000000000004,
+            "reach": 0.489628,
+            "height": 0.369061
+          },
+          {
+            "phase": 0.25,
+            "frame": 1,
+            "seconds": 0.21666000264883042,
+            "reach": 0.489424,
+            "height": 0.372602
+          },
+          {
+            "phase": 0.5,
+            "frame": 2,
+            "seconds": 0.23332000529766084,
+            "reach": 0.489198,
+            "height": 0.376114
+          },
+          {
+            "phase": 0.75,
+            "frame": 3,
+            "seconds": 0.24998000794649125,
+            "reach": 0.488948,
+            "height": 0.379596
+          },
+          {
+            "phase": 1,
+            "frame": 4,
+            "seconds": 0.26664001059532166,
+            "reach": 0.488677,
+            "height": 0.383048
+          }
+        ],
+        "contactSocket": {
+          "forward": 0.335229,
+          "height": 0.352865,
+          "bone": "pawR",
+          "atSeconds": 0.2,
+          "source": "runtime-bone-world-position"
+        },
+        "visualRigId": "moguzo",
+        "grafts": []
+      },
+      "anchor": "pawR"
+    },
+    {
+      "id": "pisuke",
+      "slot": "s1",
+      "row": {
+        "ref": "pisuke.s1",
+        "sourceCharacterId": "pisuke",
+        "sourceMoveId": "s1",
+        "clip": "s1_v17",
+        "motionVersion": "v17",
+        "sourceVersion": "v17-p3-specials-1",
+        "source": "runtime-skinned-mesh",
+        "sampling": "exact-clip-clock",
+        "status": "ok",
+        "sampledContactSeconds": 0.1833,
+        "contactSeconds": 0.1833,
+        "activeFrameCount": 1,
+        "attackPart": "legR",
+        "attackLimb": "footR",
+        "kind": "projectile",
+        "reach": 0.345612,
+        "height": 0.222041,
+        "activeReach": [
+          {
+            "phase": 0,
+            "frame": 0,
+            "seconds": 0.1833,
+            "reach": 0.345612,
+            "height": 0.222041
+          }
+        ],
+        "contactSocket": {
+          "forward": 0.256085,
+          "height": 0.211354,
+          "bone": "footR",
+          "atSeconds": 0.1833,
+          "source": "runtime-bone-world-position"
+        },
+        "projectileSocket": {
+          "forward": 0.256085,
+          "height": 0.211354,
+          "bone": "footR",
+          "atSeconds": 0.1833,
+          "source": "runtime-bone-world-position"
+        },
+        "visualRigId": "pisuke",
+        "grafts": []
+      },
+      "anchor": "footR"
+    },
+    {
+      "id": "pisuke",
+      "slot": "s2",
+      "row": {
+        "ref": "pisuke.s2",
+        "sourceCharacterId": "pisuke",
+        "sourceMoveId": "s2",
+        "clip": "s2_v17",
+        "motionVersion": "v17",
+        "sourceVersion": "v17-p3-specials-1",
+        "source": "runtime-skinned-mesh",
+        "sampling": "exact-clip-clock",
+        "status": "ok",
+        "sampledContactSeconds": 0.1,
+        "contactSeconds": 0.1,
+        "activeFrameCount": 8,
+        "attackPart": "legR",
+        "attackLimb": "footR",
+        "kind": "antiair",
+        "reach": 0.185765,
+        "height": 0.436316,
+        "activeReach": [
+          {
+            "phase": 0,
+            "frame": 0,
+            "seconds": 0.10000000000000002,
+            "reach": 0.185765,
+            "height": 0.436316
+          },
+          {
+            "phase": 0.14285714285714285,
+            "frame": 1,
+            "seconds": 0.11666571551561356,
+            "reach": 0.186194,
+            "height": 0.447399
+          },
+          {
+            "phase": 0.2857142857142857,
+            "frame": 2,
+            "seconds": 0.1333314310312271,
+            "reach": 0.185181,
+            "height": 0.451183
+          },
+          {
+            "phase": 0.42857142857142855,
+            "frame": 3,
+            "seconds": 0.14999714654684065,
+            "reach": 0.183981,
+            "height": 0.449001
+          },
+          {
+            "phase": 0.5714285714285714,
+            "frame": 4,
+            "seconds": 0.16666286206245423,
+            "reach": 0.183454,
+            "height": 0.448208
+          },
+          {
+            "phase": 0.7142857142857143,
+            "frame": 5,
+            "seconds": 0.18332857757806775,
+            "reach": 0.183454,
+            "height": 0.448208
+          },
+          {
+            "phase": 0.8571428571428571,
+            "frame": 6,
+            "seconds": 0.19999429309368133,
+            "reach": 0.183454,
+            "height": 0.448208
+          },
+          {
+            "phase": 1,
+            "frame": 7,
+            "seconds": 0.2166600086092949,
+            "reach": 0.183454,
+            "height": 0.448208
+          }
+        ],
+        "contactSocket": {
+          "forward": 0.101911,
+          "height": 0.58012,
+          "bone": "footR",
+          "atSeconds": 0.1,
+          "source": "runtime-bone-world-position"
+        },
+        "visualRigId": "pisuke",
+        "grafts": []
+      },
+      "anchor": "footR"
+    },
+    {
+      "id": "pisuke",
+      "slot": "s3",
+      "row": {
+        "ref": "pisuke.s3",
+        "sourceCharacterId": "pisuke",
+        "sourceMoveId": "s3",
+        "clip": "s3_v17",
+        "motionVersion": "v17",
+        "sourceVersion": "v17-p3-specials-1",
+        "source": "runtime-skinned-mesh",
+        "sampling": "exact-clip-clock",
+        "status": "ok",
+        "sampledContactSeconds": 0.1167,
+        "contactSeconds": 0.1167,
+        "activeFrameCount": 9,
+        "attackPart": "legR",
+        "attackLimb": "footR",
+        "kind": "rush",
+        "reach": 0.399636,
+        "height": 0.129272,
+        "activeReach": [
+          {
+            "phase": 0,
+            "frame": 0,
+            "seconds": 0.1167,
+            "reach": 0.399636,
+            "height": 0.129272
+          },
+          {
+            "phase": 0.125,
+            "frame": 1,
+            "seconds": 0.13336500124186276,
+            "reach": 0.399636,
+            "height": 0.129272
+          },
+          {
+            "phase": 0.25,
+            "frame": 2,
+            "seconds": 0.15003000248372556,
+            "reach": 0.399527,
+            "height": 0.129258
+          },
+          {
+            "phase": 0.375,
+            "frame": 3,
+            "seconds": 0.16669500372558832,
+            "reach": 0.316874,
+            "height": 0.124877
+          },
+          {
+            "phase": 0.5,
+            "frame": 4,
+            "seconds": 0.18336000496745108,
+            "reach": 0.220006,
+            "height": 0.127261
+          },
+          {
+            "phase": 0.625,
+            "frame": 5,
+            "seconds": 0.20002500620931388,
+            "reach": 0.264615,
+            "height": 0.175113
+          },
+          {
+            "phase": 0.75,
+            "frame": 6,
+            "seconds": 0.21669000745117664,
+            "reach": 0.345037,
+            "height": 0.336071
+          },
+          {
+            "phase": 0.875,
+            "frame": 7,
+            "seconds": 0.23335500869303943,
+            "reach": 0.345037,
+            "height": 0.336071
+          },
+          {
+            "phase": 1,
+            "frame": 8,
+            "seconds": 0.2500200099349022,
+            "reach": 0.345077,
+            "height": 0.335981
+          }
+        ],
+        "contactSocket": {
+          "forward": 0.289369,
+          "height": 0.135146,
+          "bone": "footR",
+          "atSeconds": 0.1167,
+          "source": "runtime-bone-world-position"
+        },
+        "visualRigId": "pisuke",
+        "grafts": []
+      },
+      "anchor": "footR"
+    },
+    {
+      "id": "godan",
+      "slot": "s1",
+      "row": {
+        "ref": "godan.s1",
+        "sourceCharacterId": "godan",
+        "sourceMoveId": "s1",
+        "clip": "s1_v17",
+        "motionVersion": "v17",
+        "sourceVersion": "v17-p3-specials-1",
+        "source": "runtime-skinned-mesh",
+        "sampling": "exact-clip-clock",
+        "status": "ok",
+        "sampledContactSeconds": 0.35,
+        "contactSeconds": 0.35,
+        "activeFrameCount": 5,
+        "attackPart": "legR",
+        "attackLimb": "footR",
+        "kind": "strike",
+        "reach": 0.296975,
+        "height": 0.007889,
+        "activeReach": [
+          {
+            "phase": 0,
+            "frame": 0,
+            "seconds": 0.35,
+            "reach": 0.296975,
+            "height": 0.007889
+          },
+          {
+            "phase": 0.25,
+            "frame": 1,
+            "seconds": 0.36667499724030495,
+            "reach": 0.296975,
+            "height": 0.007889
+          },
+          {
+            "phase": 0.5,
+            "frame": 2,
+            "seconds": 0.3833499944806099,
+            "reach": 0.296975,
+            "height": 0.007889
+          },
+          {
+            "phase": 0.75,
+            "frame": 3,
+            "seconds": 0.4000249917209148,
+            "reach": 0.296975,
+            "height": 0.007889
+          },
+          {
+            "phase": 1,
+            "frame": 4,
+            "seconds": 0.4166999889612198,
+            "reach": 0.296975,
+            "height": 0.007889
+          }
+        ],
+        "contactSocket": {
+          "forward": 0.174149,
+          "height": 0.03381,
+          "bone": "footR",
+          "atSeconds": 0.35,
+          "source": "runtime-bone-world-position"
+        },
+        "visualRigId": "godan",
+        "grafts": []
+      },
+      "anchor": "footR"
+    },
+    {
+      "id": "godan",
+      "slot": "s2",
+      "row": {
+        "ref": "godan.s2",
+        "sourceCharacterId": "godan",
+        "sourceMoveId": "s2",
+        "clip": "s2_v17",
+        "motionVersion": "v17",
+        "sourceVersion": "v17-p3-specials-1",
+        "source": "runtime-skinned-mesh",
+        "sampling": "exact-clip-clock",
+        "status": "ok",
+        "sampledContactSeconds": 0.1833,
+        "contactSeconds": 0.1833,
+        "activeFrameCount": 7,
+        "attackPart": "armL",
+        "attackLimb": "pawL+pawR",
+        "kind": "antiair",
+        "reach": 0.172833,
+        "height": 0.580859,
+        "activeReach": [
+          {
+            "phase": 0,
+            "frame": 0,
+            "seconds": 0.1833,
+            "reach": 0.172833,
+            "height": 0.580859
+          },
+          {
+            "phase": 0.16666666666666666,
+            "frame": 1,
+            "seconds": 0.19996694421470163,
+            "reach": 0.171742,
+            "height": 0.582611
+          },
+          {
+            "phase": 0.3333333333333333,
+            "frame": 2,
+            "seconds": 0.2166338884294033,
+            "reach": 0.171228,
+            "height": 0.583738
+          },
+          {
+            "phase": 0.5,
+            "frame": 3,
+            "seconds": 0.23330083264410495,
+            "reach": 0.170715,
+            "height": 0.584861
+          },
+          {
+            "phase": 0.6666666666666666,
+            "frame": 4,
+            "seconds": 0.24996777685880658,
+            "reach": 0.170204,
+            "height": 0.585978
+          },
+          {
+            "phase": 0.8333333333333334,
+            "frame": 5,
+            "seconds": 0.2666347210735082,
+            "reach": 0.169693,
+            "height": 0.58709
+          },
+          {
+            "phase": 1,
+            "frame": 6,
+            "seconds": 0.2833016652882099,
+            "reach": 0.169184,
+            "height": 0.588198
+          }
+        ],
+        "contactSocket": {
+          "forward": 0.072176,
+          "height": 0.673496,
+          "bone": "pawR",
+          "atSeconds": 0.1833,
+          "source": "runtime-bone-world-position"
+        },
+        "visualRigId": "godan",
+        "grafts": []
+      },
+      "anchor": "pawR"
+    },
+    {
+      "id": "godan",
+      "slot": "s3",
+      "row": {
+        "ref": "godan.s3",
+        "sourceCharacterId": "godan",
+        "sourceMoveId": "s3",
+        "clip": "s3_v17",
+        "motionVersion": "v17",
+        "sourceVersion": "v17-p3-specials-1",
+        "source": "runtime-skinned-mesh",
+        "sampling": "exact-clip-clock",
+        "status": "ok",
+        "sampledContactSeconds": 0.3,
+        "contactSeconds": 0.3,
+        "activeFrameCount": 7,
+        "attackPart": "body",
+        "attackLimb": "shoulderL",
+        "kind": "rush",
+        "reach": 0.389254,
+        "height": 0.264438,
+        "activeReach": [
+          {
+            "phase": 0,
+            "frame": 0,
+            "seconds": 0.3,
+            "reach": 0.389254,
+            "height": 0.264438
+          },
+          {
+            "phase": 0.16666666666666666,
+            "frame": 1,
+            "seconds": 0.3166741658300161,
+            "reach": 0.389254,
+            "height": 0.264438
+          },
+          {
+            "phase": 0.3333333333333333,
+            "frame": 2,
+            "seconds": 0.33334833166003225,
+            "reach": 0.389254,
+            "height": 0.264438
+          },
+          {
+            "phase": 0.5,
+            "frame": 3,
+            "seconds": 0.3500224974900484,
+            "reach": 0.389254,
+            "height": 0.264438
+          },
+          {
+            "phase": 0.6666666666666666,
+            "frame": 4,
+            "seconds": 0.3666966633200645,
+            "reach": 0.389254,
+            "height": 0.264438
+          },
+          {
+            "phase": 0.8333333333333334,
+            "frame": 5,
+            "seconds": 0.38337082915008064,
+            "reach": 0.389254,
+            "height": 0.264438
+          },
+          {
+            "phase": 1,
+            "frame": 6,
+            "seconds": 0.40004499498009677,
+            "reach": 0.389254,
+            "height": 0.264438
+          }
+        ],
+        "contactSocket": {
+          "forward": 0.104073,
+          "height": 0.328943,
+          "bone": "shoulderL",
+          "atSeconds": 0.3,
+          "source": "runtime-bone-world-position"
+        },
+        "visualRigId": "godan",
+        "grafts": []
+      },
+      "anchor": "shoulderL"
+    },
+    {
+      "id": "hakuma",
+      "slot": "s1",
+      "row": {
+        "ref": "hakuma.s1",
+        "sourceCharacterId": "hakuma",
+        "sourceMoveId": "s1",
+        "clip": "s1_v17",
+        "motionVersion": "v17",
+        "sourceVersion": "v17-p3-specials-1",
+        "source": "runtime-skinned-mesh",
+        "sampling": "exact-clip-clock",
+        "status": "ok",
+        "sampledContactSeconds": 0.1833,
+        "contactSeconds": 0.1833,
+        "activeFrameCount": 6,
+        "attackPart": "armR",
+        "attackLimb": "pawR",
+        "kind": "strike",
+        "reach": 0.487107,
+        "height": 0.372412,
+        "activeReach": [
+          {
+            "phase": 0,
+            "frame": 0,
+            "seconds": 0.1833,
+            "reach": 0.487107,
+            "height": 0.372412
+          },
+          {
+            "phase": 0.2,
+            "frame": 1,
+            "seconds": 0.19997899804353714,
+            "reach": 0.490867,
+            "height": 0.420079
+          },
+          {
+            "phase": 0.4,
+            "frame": 2,
+            "seconds": 0.21665799608707428,
+            "reach": 0.493422,
+            "height": 0.41892
+          },
+          {
+            "phase": 0.6,
+            "frame": 3,
+            "seconds": 0.23333699413061143,
+            "reach": 0.495969,
+            "height": 0.417759
+          },
+          {
+            "phase": 0.8,
+            "frame": 4,
+            "seconds": 0.2500159921741486,
+            "reach": 0.498507,
+            "height": 0.416597
+          },
+          {
+            "phase": 1,
+            "frame": 5,
+            "seconds": 0.2666949902176857,
+            "reach": 0.501037,
+            "height": 0.415433
+          }
+        ],
+        "contactSocket": {
+          "forward": 0.442035,
+          "height": 0.360896,
+          "bone": "pawR",
+          "atSeconds": 0.1833,
+          "source": "runtime-bone-world-position"
+        },
+        "visualRigId": "hakuma",
+        "grafts": []
+      },
+      "anchor": "pawR"
+    },
+    {
+      "id": "hakuma",
+      "slot": "s2",
+      "row": {
+        "ref": "hakuma.s2",
+        "sourceCharacterId": "hakuma",
+        "sourceMoveId": "s2",
+        "clip": "s2_v17",
+        "motionVersion": "v17",
+        "sourceVersion": "v17-p3-specials-1",
+        "source": "runtime-skinned-mesh",
+        "sampling": "exact-clip-clock",
+        "status": "ok",
+        "sampledContactSeconds": 0.1333,
+        "contactSeconds": 0.1333,
+        "activeFrameCount": 7,
+        "attackPart": "armR",
+        "attackLimb": "pawR",
+        "kind": "antiair",
+        "reach": 0.221363,
+        "height": 0.62155,
+        "activeReach": [
+          {
+            "phase": 0,
+            "frame": 0,
+            "seconds": 0.1333,
+            "reach": 0.221363,
+            "height": 0.62155
+          },
+          {
+            "phase": 0.16666666666666666,
+            "frame": 1,
+            "seconds": 0.14997499857346216,
+            "reach": 0.221344,
+            "height": 0.623473
+          },
+          {
+            "phase": 0.3333333333333333,
+            "frame": 2,
+            "seconds": 0.16664999714692433,
+            "reach": 0.221637,
+            "height": 0.624551
+          },
+          {
+            "phase": 0.5,
+            "frame": 3,
+            "seconds": 0.18332499572038652,
+            "reach": 0.221936,
+            "height": 0.625624
+          },
+          {
+            "phase": 0.6666666666666666,
+            "frame": 4,
+            "seconds": 0.19999999429384868,
+            "reach": 0.222239,
+            "height": 0.626692
+          },
+          {
+            "phase": 0.8333333333333334,
+            "frame": 5,
+            "seconds": 0.21667499286731084,
+            "reach": 0.222549,
+            "height": 0.627753
+          },
+          {
+            "phase": 1,
+            "frame": 6,
+            "seconds": 0.233349991440773,
+            "reach": 0.222863,
+            "height": 0.62881
+          }
+        ],
+        "contactSocket": {
+          "forward": 0.169484,
+          "height": 0.641974,
+          "bone": "pawR",
+          "atSeconds": 0.1333,
+          "source": "runtime-bone-world-position"
+        },
+        "visualRigId": "hakuma",
+        "grafts": []
+      },
+      "anchor": "pawR"
+    },
+    {
+      "id": "hakuma",
+      "slot": "s3",
+      "row": {
+        "ref": "hakuma.s3",
+        "sourceCharacterId": "hakuma",
+        "sourceMoveId": "s3",
+        "clip": "s3_v17",
+        "motionVersion": "v17",
+        "sourceVersion": "v17-p3-specials-1",
+        "source": "runtime-skinned-mesh",
+        "sampling": "exact-clip-clock",
+        "status": "ok",
+        "sampledContactSeconds": 0.2,
+        "contactSeconds": 0.2,
+        "activeFrameCount": 9,
+        "attackPart": "armL",
+        "attackLimb": "pawL+pawR",
+        "kind": "rush",
+        "reach": 0.492692,
+        "height": 0.423549,
+        "activeReach": [
+          {
+            "phase": 0,
+            "frame": 0,
+            "seconds": 0.20000000000000004,
+            "reach": 0.492692,
+            "height": 0.423549
+          },
+          {
+            "phase": 0.125,
+            "frame": 1,
+            "seconds": 0.21666833246946338,
+            "reach": 0.492692,
+            "height": 0.423549
+          },
+          {
+            "phase": 0.25,
+            "frame": 2,
+            "seconds": 0.2333366649389267,
+            "reach": 0.492692,
+            "height": 0.423549
+          },
+          {
+            "phase": 0.375,
+            "frame": 3,
+            "seconds": 0.25000499740839005,
+            "reach": 0.492667,
+            "height": 0.423588
+          },
+          {
+            "phase": 0.5,
+            "frame": 4,
+            "seconds": 0.2666733298778534,
+            "reach": 0.367821,
+            "height": 0.453929
+          },
+          {
+            "phase": 0.625,
+            "frame": 5,
+            "seconds": 0.2833416623473168,
+            "reach": 0.143659,
+            "height": 0.397646
+          },
+          {
+            "phase": 0.75,
+            "frame": 6,
+            "seconds": 0.30000999481678015,
+            "reach": 0.143659,
+            "height": 0.397646
+          },
+          {
+            "phase": 0.875,
+            "frame": 7,
+            "seconds": 0.31667832728624346,
+            "reach": 0.143751,
+            "height": 0.397654
+          },
+          {
+            "phase": 1,
+            "frame": 8,
+            "seconds": 0.3333466597557068,
+            "reach": 0.316018,
+            "height": 0.465556
+          }
+        ],
+        "contactSocket": {
+          "forward": -0.074433,
+          "height": 0.414145,
+          "bone": "pawR",
+          "atSeconds": 0.2,
+          "source": "runtime-bone-world-position"
+        },
+        "visualRigId": "hakuma",
+        "grafts": []
+      },
+      "anchor": "pawR"
+    },
+    {
+      "id": "chirka",
+      "slot": "s1",
+      "row": {
+        "ref": "chirka.s1",
+        "sourceCharacterId": "chirka",
+        "sourceMoveId": "s1",
+        "clip": "s1_v17",
+        "motionVersion": "v17",
+        "sourceVersion": "v17-p3-specials-1",
+        "source": "runtime-skinned-mesh",
+        "sampling": "exact-clip-clock",
+        "status": "ok",
+        "sampledContactSeconds": 0.2167,
+        "contactSeconds": 0.2167,
+        "activeFrameCount": 4,
+        "attackPart": "armL",
+        "attackLimb": "pawL",
+        "kind": "strike",
+        "reach": 0.449026,
+        "height": 0.210394,
+        "activeReach": [
+          {
+            "phase": 0,
+            "frame": 0,
+            "seconds": 0.2167,
+            "reach": 0.449026,
+            "height": 0.210394
+          },
+          {
+            "phase": 0.3333333333333333,
+            "frame": 1,
+            "seconds": 0.23334667019844055,
+            "reach": 0.450269,
+            "height": 0.207948
+          },
+          {
+            "phase": 0.6666666666666666,
+            "frame": 2,
+            "seconds": 0.24999334039688112,
+            "reach": 0.451485,
+            "height": 0.205493
+          },
+          {
+            "phase": 1,
+            "frame": 3,
+            "seconds": 0.26664001059532166,
+            "reach": 0.452674,
+            "height": 0.203029
+          }
+        ],
+        "contactSocket": {
+          "forward": 0.387337,
+          "height": 0.211013,
+          "bone": "pawL",
+          "atSeconds": 0.2167,
+          "source": "runtime-bone-world-position"
+        },
+        "visualRigId": "chirka",
+        "grafts": []
+      },
+      "anchor": "pawL"
+    },
+    {
+      "id": "chirka",
+      "slot": "s2",
+      "row": {
+        "ref": "chirka.s2",
+        "sourceCharacterId": "chirka",
+        "sourceMoveId": "s2",
+        "clip": "s2_v17",
+        "motionVersion": "v17",
+        "sourceVersion": "v17-p3-specials-1",
+        "source": "runtime-skinned-mesh",
+        "sampling": "exact-clip-clock",
+        "status": "ok",
+        "sampledContactSeconds": 0.1333,
+        "contactSeconds": 0.1333,
+        "activeFrameCount": 7,
+        "attackPart": "armR",
+        "attackLimb": "pawR",
+        "kind": "antiair",
+        "reach": 0.214998,
+        "height": 0.666824,
+        "activeReach": [
+          {
+            "phase": 0,
+            "frame": 0,
+            "seconds": 0.1333,
+            "reach": 0.214998,
+            "height": 0.666824
+          },
+          {
+            "phase": 0.16666666666666666,
+            "frame": 1,
+            "seconds": 0.14997222338120142,
+            "reach": 0.226364,
+            "height": 0.675904
+          },
+          {
+            "phase": 0.3333333333333333,
+            "frame": 2,
+            "seconds": 0.16664444676240284,
+            "reach": 0.207822,
+            "height": 0.707905
+          },
+          {
+            "phase": 0.5,
+            "frame": 3,
+            "seconds": 0.18331667014360425,
+            "reach": 0.160704,
+            "height": 0.721024
+          },
+          {
+            "phase": 0.6666666666666666,
+            "frame": 4,
+            "seconds": 0.1999888935248057,
+            "reach": 0.110224,
+            "height": 0.632892
+          },
+          {
+            "phase": 0.8333333333333334,
+            "frame": 5,
+            "seconds": 0.21666111690600712,
+            "reach": 0.0669,
+            "height": 0.633352
+          },
+          {
+            "phase": 1,
+            "frame": 6,
+            "seconds": 0.23333334028720853,
+            "reach": 0.017521,
+            "height": 0.633242
+          }
+        ],
+        "contactSocket": {
+          "forward": 0.169834,
+          "height": 0.759761,
+          "bone": "pawR",
+          "atSeconds": 0.1333,
+          "source": "runtime-bone-world-position"
+        },
+        "visualRigId": "chirka",
+        "grafts": []
+      },
+      "anchor": "pawR"
+    },
+    {
+      "id": "chirka",
+      "slot": "s3",
+      "row": {
+        "ref": "chirka.s3",
+        "sourceCharacterId": "chirka",
+        "sourceMoveId": "s3",
+        "clip": "s3_v17",
+        "motionVersion": "v17",
+        "sourceVersion": "v17-p3-specials-1",
+        "source": "runtime-skinned-mesh",
+        "sampling": "exact-clip-clock",
+        "status": "ok",
+        "sampledContactSeconds": 0.2167,
+        "contactSeconds": 0.2167,
+        "activeFrameCount": 5,
+        "attackPart": "armR",
+        "attackLimb": "pawR",
+        "kind": "rush",
+        "reach": 0.494133,
+        "height": 0.222175,
+        "activeReach": [
+          {
+            "phase": 0,
+            "frame": 0,
+            "seconds": 0.2167,
+            "reach": 0.494133,
+            "height": 0.222175
+          },
+          {
+            "phase": 0.25,
+            "frame": 1,
+            "seconds": 0.23335833544433116,
+            "reach": 0.494133,
+            "height": 0.222175
+          },
+          {
+            "phase": 0.5,
+            "frame": 2,
+            "seconds": 0.2500166708886623,
+            "reach": 0.494133,
+            "height": 0.222175
+          },
+          {
+            "phase": 0.75,
+            "frame": 3,
+            "seconds": 0.2666750063329935,
+            "reach": 0.494133,
+            "height": 0.222175
+          },
+          {
+            "phase": 1,
+            "frame": 4,
+            "seconds": 0.28333334177732467,
+            "reach": 0.494133,
+            "height": 0.222175
+          }
+        ],
+        "contactSocket": {
+          "forward": 0.433143,
+          "height": 0.22912,
+          "bone": "pawR",
+          "atSeconds": 0.2167,
+          "source": "runtime-bone-world-position"
+        },
+        "visualRigId": "chirka",
+        "grafts": []
+      },
+      "anchor": "pawR"
+    },
+    {
+      "id": "takimaru",
+      "slot": "s1",
+      "row": {
+        "ref": "takimaru.s1",
+        "sourceCharacterId": "takimaru",
+        "sourceMoveId": "s1",
+        "clip": "s1_v17",
+        "motionVersion": "v17",
+        "sourceVersion": "v17-p3-specials-1",
+        "source": "runtime-skinned-mesh",
+        "sampling": "exact-clip-clock",
+        "status": "ok",
+        "sampledContactSeconds": 0.3333,
+        "contactSeconds": 0.3333,
+        "activeFrameCount": 1,
+        "attackPart": "armL",
+        "attackLimb": "pawL+pawR",
+        "kind": "projectile",
+        "reach": 0.484844,
+        "height": 0.10572,
+        "activeReach": [
+          {
+            "phase": 0,
+            "frame": 0,
+            "seconds": 0.3333,
+            "reach": 0.484844,
+            "height": 0.10572
+          }
+        ],
+        "contactSocket": {
+          "forward": 0.391532,
+          "height": 0.011031,
+          "bone": "pawR",
+          "atSeconds": 0.3333,
+          "source": "runtime-bone-world-position"
+        },
+        "projectileSocket": {
+          "forward": 0.391532,
+          "height": 0.011031,
+          "bone": "pawR",
+          "atSeconds": 0.3333,
+          "source": "runtime-bone-world-position"
+        },
+        "visualRigId": "takimaru",
+        "grafts": []
+      },
+      "anchor": "pawR"
+    },
+    {
+      "id": "takimaru",
+      "slot": "s2",
+      "row": {
+        "ref": "takimaru.s2",
+        "sourceCharacterId": "takimaru",
+        "sourceMoveId": "s2",
+        "clip": "s2_v17",
+        "motionVersion": "v17",
+        "sourceVersion": "v17-p3-specials-1",
+        "source": "runtime-skinned-mesh",
+        "sampling": "exact-clip-clock",
+        "status": "ok",
+        "sampledContactSeconds": 0.1667,
+        "contactSeconds": 0.1667,
+        "activeFrameCount": 7,
+        "attackPart": "armL",
+        "attackLimb": "pawL+pawR",
+        "kind": "antiair",
+        "reach": 0.015085,
+        "height": 0.51212,
+        "activeReach": [
+          {
+            "phase": 0,
+            "frame": 0,
+            "seconds": 0.1667,
+            "reach": 0.015085,
+            "height": 0.51212
+          },
+          {
+            "phase": 0.16666666666666666,
+            "frame": 1,
+            "seconds": 0.1833566676298777,
+            "reach": 0.01356,
+            "height": 0.512597
+          },
+          {
+            "phase": 0.3333333333333333,
+            "frame": 2,
+            "seconds": 0.20001333525975543,
+            "reach": 0.012037,
+            "height": 0.513063
+          },
+          {
+            "phase": 0.5,
+            "frame": 3,
+            "seconds": 0.21667000288963317,
+            "reach": 0.010518,
+            "height": 0.51352
+          },
+          {
+            "phase": 0.6666666666666666,
+            "frame": 4,
+            "seconds": 0.2333266705195109,
+            "reach": 0.009002,
+            "height": 0.513966
+          },
+          {
+            "phase": 0.8333333333333334,
+            "frame": 5,
+            "seconds": 0.2499833381493886,
+            "reach": 0.007489,
+            "height": 0.514403
+          },
+          {
+            "phase": 1,
+            "frame": 6,
+            "seconds": 0.26664000577926633,
+            "reach": 0.005979,
+            "height": 0.51483
+          }
+        ],
+        "contactSocket": {
+          "forward": -0.272214,
+          "height": 0.689451,
+          "bone": "pawR",
+          "atSeconds": 0.1667,
+          "source": "runtime-bone-world-position"
+        },
+        "visualRigId": "takimaru",
+        "grafts": []
+      },
+      "anchor": "pawR"
+    },
+    {
+      "id": "takimaru",
+      "slot": "s3",
+      "row": {
+        "ref": "takimaru.s3",
+        "sourceCharacterId": "takimaru",
+        "sourceMoveId": "s3",
+        "clip": "s3_v17",
+        "motionVersion": "v17",
+        "sourceVersion": "v17-p3-specials-1",
+        "source": "runtime-skinned-mesh",
+        "sampling": "exact-clip-clock",
+        "status": "ok",
+        "sampledContactSeconds": 0.15,
+        "contactSeconds": 0.15,
+        "activeFrameCount": 3,
+        "attackPart": "armL",
+        "attackLimb": "pawL+pawR",
+        "kind": "grab",
+        "reach": 0.64868,
+        "height": 0.323335,
+        "activeReach": [
+          {
+            "phase": 0,
+            "frame": 0,
+            "seconds": 0.15,
+            "reach": 0.64868,
+            "height": 0.323335
+          },
+          {
+            "phase": 0.5,
+            "frame": 1,
+            "seconds": 0.1666708328872919,
+            "reach": 0.64868,
+            "height": 0.323335
+          },
+          {
+            "phase": 1,
+            "frame": 2,
+            "seconds": 0.18334166577458383,
+            "reach": 0.64868,
+            "height": 0.323335
+          }
+        ],
+        "contactSocket": {
+          "forward": 0.208028,
+          "height": 0.295114,
+          "bone": "chest",
+          "atSeconds": 0.15,
+          "source": "runtime-bone-world-position"
+        },
+        "visualRigId": "takimaru",
+        "grafts": []
+      },
+      "anchor": "chest"
+    },
+    {
+      "id": "yomikage",
+      "slot": "s1",
+      "row": {
+        "ref": "yomikage.s1",
+        "sourceCharacterId": "yomikage",
+        "sourceMoveId": "s1",
+        "clip": "s1_v17",
+        "motionVersion": "v17",
+        "sourceVersion": "v17-p3-specials-1",
+        "source": "runtime-skinned-mesh",
+        "sampling": "exact-clip-clock",
+        "status": "ok",
+        "sampledContactSeconds": 0.2167,
+        "contactSeconds": 0.2167,
+        "activeFrameCount": 1,
+        "attackPart": "armR",
+        "attackLimb": "pawR",
+        "kind": "projectile",
+        "reach": 0.301166,
+        "height": 0.402348,
+        "activeReach": [
+          {
+            "phase": 0,
+            "frame": 0,
+            "seconds": 0.2167,
+            "reach": 0.301166,
+            "height": 0.402348
+          }
+        ],
+        "contactSocket": {
+          "forward": 0.235659,
+          "height": 0.393378,
+          "bone": "pawR",
+          "atSeconds": 0.2167,
+          "source": "runtime-bone-world-position"
+        },
+        "projectileSocket": {
+          "forward": 0.235659,
+          "height": 0.393378,
+          "bone": "pawR",
+          "atSeconds": 0.2167,
+          "source": "runtime-bone-world-position"
+        },
+        "visualRigId": "yomikage",
+        "grafts": []
+      },
+      "anchor": "pawR"
+    },
+    {
+      "id": "yomikage",
+      "slot": "s2",
+      "row": {
+        "ref": "yomikage.s2",
+        "sourceCharacterId": "yomikage",
+        "sourceMoveId": "s2",
+        "clip": "s2_v17",
+        "motionVersion": "v17",
+        "sourceVersion": "v17-p3-specials-1",
+        "source": "runtime-skinned-mesh",
+        "sampling": "exact-clip-clock",
+        "status": "ok",
+        "sampledContactSeconds": 0.1333,
+        "contactSeconds": 0.1333,
+        "activeFrameCount": 7,
+        "attackPart": "armR",
+        "attackLimb": "elbowR",
+        "kind": "antiair",
+        "reach": 0.143209,
+        "height": 0.530571,
+        "activeReach": [
+          {
+            "phase": 0,
+            "frame": 0,
+            "seconds": 0.1333,
+            "reach": 0.143209,
+            "height": 0.530571
+          },
+          {
+            "phase": 0.16666666666666666,
+            "frame": 1,
+            "seconds": 0.14997222338120142,
+            "reach": 0.143058,
+            "height": 0.532648
+          },
+          {
+            "phase": 0.3333333333333333,
+            "frame": 2,
+            "seconds": 0.16664444676240284,
+            "reach": 0.142874,
+            "height": 0.534284
+          },
+          {
+            "phase": 0.5,
+            "frame": 3,
+            "seconds": 0.18331667014360425,
+            "reach": 0.142688,
+            "height": 0.535913
+          },
+          {
+            "phase": 0.6666666666666666,
+            "frame": 4,
+            "seconds": 0.1999888935248057,
+            "reach": 0.142499,
+            "height": 0.537535
+          },
+          {
+            "phase": 0.8333333333333334,
+            "frame": 5,
+            "seconds": 0.21666111690600712,
+            "reach": 0.142308,
+            "height": 0.539149
+          },
+          {
+            "phase": 1,
+            "frame": 6,
+            "seconds": 0.23333334028720853,
+            "reach": 0.142115,
+            "height": 0.540755
+          }
+        ],
+        "contactSocket": {
+          "forward": 0.051142,
+          "height": 0.539872,
+          "bone": "pawR",
+          "atSeconds": 0.1333,
+          "source": "runtime-bone-world-position"
+        },
+        "visualRigId": "yomikage",
+        "grafts": []
+      },
+      "anchor": "pawR"
+    },
+    {
+      "id": "yomikage",
+      "slot": "s3",
+      "row": {
+        "ref": "yomikage.s3",
+        "sourceCharacterId": "yomikage",
+        "sourceMoveId": "s3",
+        "clip": "s3_v17",
+        "motionVersion": "v17",
+        "sourceVersion": "v17-p3-specials-1",
+        "source": "runtime-skinned-mesh",
+        "sampling": "exact-clip-clock",
+        "status": "ok",
+        "sampledContactSeconds": 0.1167,
+        "contactSeconds": 0.1167,
+        "activeFrameCount": 13,
+        "attackPart": "armL",
+        "attackLimb": "pawL",
+        "kind": "counter",
+        "reach": 0.16417,
+        "height": 0.438648,
+        "activeReach": [
+          {
+            "phase": 0,
+            "frame": 0,
+            "seconds": 0.1167,
+            "reach": 0.16417,
+            "height": 0.438648
+          },
+          {
+            "phase": 0.08333333333333333,
+            "frame": 1,
+            "seconds": 0.13336041740675766,
+            "reach": 0.16417,
+            "height": 0.438466
+          },
+          {
+            "phase": 0.16666666666666666,
+            "frame": 2,
+            "seconds": 0.15002083481351536,
+            "reach": 0.16417,
+            "height": 0.438283
+          },
+          {
+            "phase": 0.25,
+            "frame": 3,
+            "seconds": 0.16668125222027302,
+            "reach": 0.16417,
+            "height": 0.438101
+          },
+          {
+            "phase": 0.3333333333333333,
+            "frame": 4,
+            "seconds": 0.1833416696270307,
+            "reach": 0.16417,
+            "height": 0.437918
+          },
+          {
+            "phase": 0.4166666666666667,
+            "frame": 5,
+            "seconds": 0.20000208703378836,
+            "reach": 0.16417,
+            "height": 0.437736
+          },
+          {
+            "phase": 0.5,
+            "frame": 6,
+            "seconds": 0.21666250444054602,
+            "reach": 0.16417,
+            "height": 0.437553
+          },
+          {
+            "phase": 0.5833333333333334,
+            "frame": 7,
+            "seconds": 0.23332292184730372,
+            "reach": 0.16417,
+            "height": 0.437371
+          },
+          {
+            "phase": 0.6666666666666666,
+            "frame": 8,
+            "seconds": 0.24998333925406138,
+            "reach": 0.16417,
+            "height": 0.437188
+          },
+          {
+            "phase": 0.75,
+            "frame": 9,
+            "seconds": 0.2666437566608191,
+            "reach": 0.16417,
+            "height": 0.437005
+          },
+          {
+            "phase": 0.8333333333333334,
+            "frame": 10,
+            "seconds": 0.28330417406757674,
+            "reach": 0.16417,
+            "height": 0.436823
+          },
+          {
+            "phase": 0.9166666666666666,
+            "frame": 11,
+            "seconds": 0.2999645914743344,
+            "reach": 0.16417,
+            "height": 0.43664
+          },
+          {
+            "phase": 1,
+            "frame": 12,
+            "seconds": 0.3166250088810921,
+            "reach": 0.16417,
+            "height": 0.436458
+          }
+        ],
+        "contactSocket": {
+          "forward": 0.122906,
+          "height": 0.46294,
+          "bone": "pawL",
+          "atSeconds": 0.1167,
+          "source": "runtime-bone-world-position"
+        },
+        "visualRigId": "yomikage",
+        "grafts": []
+      },
+      "anchor": "pawL"
+    },
+    {
+      "id": "bullet",
+      "slot": "s1",
+      "row": {
+        "ref": "bullet.s1",
+        "sourceCharacterId": "bullet",
+        "sourceMoveId": "s1",
+        "clip": "s1_v17",
+        "motionVersion": "v17",
+        "sourceVersion": "v17-p3-specials-1",
+        "source": "runtime-skinned-mesh",
+        "sampling": "exact-clip-clock",
+        "status": "ok",
+        "sampledContactSeconds": 0.2833,
+        "contactSeconds": 0.2833,
+        "activeFrameCount": 1,
+        "attackPart": "tail",
+        "attackLimb": "tail",
+        "kind": "projectile",
+        "reach": -0.082609,
+        "height": 0.234211,
+        "activeReach": [
+          {
+            "phase": 0,
+            "frame": 0,
+            "seconds": 0.2833,
+            "reach": -0.082609,
+            "height": 0.234211
+          }
+        ],
+        "contactSocket": {
+          "forward": -0.238719,
+          "height": 0.275993,
+          "bone": "tail_03",
+          "atSeconds": 0.2833,
+          "source": "runtime-bone-world-position"
+        },
+        "projectileSocket": {
+          "forward": -0.238719,
+          "height": 0.275993,
+          "bone": "tail_03",
+          "atSeconds": 0.2833,
+          "source": "runtime-bone-world-position"
+        },
+        "visualRigId": "bullet",
+        "grafts": []
+      },
+      "anchor": "tail_03"
+    },
+    {
+      "id": "bullet",
+      "slot": "s2",
+      "row": {
+        "ref": "bullet.s2",
+        "sourceCharacterId": "bullet",
+        "sourceMoveId": "s2",
+        "clip": "s2_v17",
+        "motionVersion": "v17",
+        "sourceVersion": "v17-p3-specials-1",
+        "source": "runtime-skinned-mesh",
+        "sampling": "exact-clip-clock",
+        "status": "ok",
+        "sampledContactSeconds": 0.15,
+        "contactSeconds": 0.15,
+        "activeFrameCount": 7,
+        "attackPart": "tail",
+        "attackLimb": "tail",
+        "kind": "antiair",
+        "reach": -0.104135,
+        "height": 0.380425,
+        "activeReach": [
+          {
+            "phase": 0,
+            "frame": 0,
+            "seconds": 0.15,
+            "reach": -0.104135,
+            "height": 0.380425
+          },
+          {
+            "phase": 0.16666666666666666,
+            "frame": 1,
+            "seconds": 0.16666222060521443,
+            "reach": -0.08802,
+            "height": 0.389011
+          },
+          {
+            "phase": 0.3333333333333333,
+            "frame": 2,
+            "seconds": 0.18332444121042887,
+            "reach": -0.08337,
+            "height": 0.385945
+          },
+          {
+            "phase": 0.5,
+            "frame": 3,
+            "seconds": 0.1999866618156433,
+            "reach": -0.082794,
+            "height": 0.386131
+          },
+          {
+            "phase": 0.6666666666666666,
+            "frame": 4,
+            "seconds": 0.21664888242085775,
+            "reach": -0.061335,
+            "height": 0.657633
+          },
+          {
+            "phase": 0.8333333333333334,
+            "frame": 5,
+            "seconds": 0.2333111030260722,
+            "reach": -0.011663,
+            "height": 0.732556
+          },
+          {
+            "phase": 1,
+            "frame": 6,
+            "seconds": 0.24997332363128663,
+            "reach": 0.04087,
+            "height": 0.785799
+          }
+        ],
+        "contactSocket": {
+          "forward": -0.275787,
+          "height": 0.360754,
+          "bone": "tail_03",
+          "atSeconds": 0.15,
+          "source": "runtime-bone-world-position"
+        },
+        "visualRigId": "bullet",
+        "grafts": []
+      },
+      "anchor": "tail_03"
+    },
+    {
+      "id": "bullet",
+      "slot": "s3",
+      "row": {
+        "ref": "bullet.s3",
+        "sourceCharacterId": "bullet",
+        "sourceMoveId": "s3",
+        "clip": "s3_v17",
+        "motionVersion": "v17",
+        "sourceVersion": "v17-p3-specials-1",
+        "source": "runtime-skinned-mesh",
+        "sampling": "exact-clip-clock",
+        "status": "ok",
+        "sampledContactSeconds": 0.3167,
+        "contactSeconds": 0.3167,
+        "activeFrameCount": 6,
+        "attackPart": "tail",
+        "attackLimb": "tail",
+        "kind": "strike",
+        "reach": 0.473376,
+        "height": 0.216657,
+        "activeReach": [
+          {
+            "phase": 0,
+            "frame": 0,
+            "seconds": 0.3167,
+            "reach": 0.473376,
+            "height": 0.216657
+          },
+          {
+            "phase": 0.2,
+            "frame": 1,
+            "seconds": 0.33336000119209286,
+            "reach": 0.536211,
+            "height": 0.226527
+          },
+          {
+            "phase": 0.4,
+            "frame": 2,
+            "seconds": 0.3500200023841858,
+            "reach": 0.595549,
+            "height": 0.235782
+          },
+          {
+            "phase": 0.6,
+            "frame": 3,
+            "seconds": 0.36668000357627867,
+            "reach": 0.639913,
+            "height": 0.25592
+          },
+          {
+            "phase": 0.8,
+            "frame": 4,
+            "seconds": 0.3833400047683716,
+            "reach": 0.676159,
+            "height": 0.247666
+          },
+          {
+            "phase": 1,
+            "frame": 5,
+            "seconds": 0.4000000059604645,
+            "reach": 0.68211,
+            "height": 0.253351
+          }
+        ],
+        "contactSocket": {
+          "forward": 0.320912,
+          "height": 0.160617,
+          "bone": "tail_03",
+          "atSeconds": 0.3167,
+          "source": "runtime-bone-world-position"
+        },
+        "visualRigId": "bullet",
+        "grafts": []
+      },
+      "anchor": "tail_03"
+    },
+    {
+      "id": "dark_moguzo",
+      "slot": "s1",
+      "row": {
+        "ref": "dark_moguzo.s1",
+        "sourceCharacterId": "dark_moguzo",
+        "sourceMoveId": "s1",
+        "clip": "s1_v17",
+        "motionVersion": "v17",
+        "sourceVersion": "v17-p3-specials-1",
+        "source": "runtime-skinned-mesh",
+        "sampling": "exact-clip-clock",
+        "status": "ok",
+        "sampledContactSeconds": 0.1833,
+        "contactSeconds": 0.1833,
+        "activeFrameCount": 1,
+        "attackPart": "armR",
+        "attackLimb": "pawR",
+        "kind": "projectile",
+        "reach": 0.414421,
+        "height": 0.234056,
+        "activeReach": [
+          {
+            "phase": 0,
+            "frame": 0,
+            "seconds": 0.1833,
+            "reach": 0.414421,
+            "height": 0.234056
+          }
+        ],
+        "contactSocket": {
+          "forward": 0.34176,
+          "height": 0.219873,
+          "bone": "pawR",
+          "atSeconds": 0.1833,
+          "source": "runtime-bone-world-position"
+        },
+        "projectileSocket": {
+          "forward": 0.34176,
+          "height": 0.219873,
+          "bone": "pawR",
+          "atSeconds": 0.1833,
+          "source": "runtime-bone-world-position"
+        },
+        "visualRigId": "dark_moguzo",
+        "grafts": []
+      },
+      "anchor": "pawR"
+    },
+    {
+      "id": "dark_moguzo",
+      "slot": "s2",
+      "row": {
+        "ref": "dark_moguzo.s2",
+        "sourceCharacterId": "dark_moguzo",
+        "sourceMoveId": "s2",
+        "clip": "s2_v17",
+        "motionVersion": "v17",
+        "sourceVersion": "v17-p3-specials-1",
+        "source": "runtime-skinned-mesh",
+        "sampling": "exact-clip-clock",
+        "status": "ok",
+        "sampledContactSeconds": 0.0833,
+        "contactSeconds": 0.0833,
+        "activeFrameCount": 8,
+        "attackPart": "armL",
+        "attackLimb": "pawL",
+        "kind": "antiair",
+        "reach": 0.263866,
+        "height": 0.550633,
+        "activeReach": [
+          {
+            "phase": 0,
+            "frame": 0,
+            "seconds": 0.0833,
+            "reach": 0.263866,
+            "height": 0.550633
+          },
+          {
+            "phase": 0.14285714285714285,
+            "frame": 1,
+            "seconds": 0.09996857204777854,
+            "reach": 0.263633,
+            "height": 0.553174
+          },
+          {
+            "phase": 0.2857142857142857,
+            "frame": 2,
+            "seconds": 0.11663714409555707,
+            "reach": 0.263742,
+            "height": 0.555076
+          },
+          {
+            "phase": 0.42857142857142855,
+            "frame": 3,
+            "seconds": 0.1333057161433356,
+            "reach": 0.263853,
+            "height": 0.561023
+          },
+          {
+            "phase": 0.5714285714285714,
+            "frame": 4,
+            "seconds": 0.14997428819111414,
+            "reach": 0.263967,
+            "height": 0.562917
+          },
+          {
+            "phase": 0.7142857142857143,
+            "frame": 5,
+            "seconds": 0.1666428602388927,
+            "reach": 0.26408,
+            "height": 0.564808
+          },
+          {
+            "phase": 0.8571428571428571,
+            "frame": 6,
+            "seconds": 0.18331143228667124,
+            "reach": 0.264193,
+            "height": 0.566697
+          },
+          {
+            "phase": 1,
+            "frame": 7,
+            "seconds": 0.19998000433444976,
+            "reach": 0.264305,
+            "height": 0.568584
+          }
+        ],
+        "contactSocket": {
+          "forward": 0.213842,
+          "height": 0.664417,
+          "bone": "pawL",
+          "atSeconds": 0.0833,
+          "source": "runtime-bone-world-position"
+        },
+        "visualRigId": "dark_moguzo",
+        "grafts": []
+      },
+      "anchor": "pawL"
+    },
+    {
+      "id": "dark_moguzo",
+      "slot": "s3",
+      "row": {
+        "ref": "dark_moguzo.s3",
+        "sourceCharacterId": "dark_moguzo",
+        "sourceMoveId": "s3",
+        "clip": "s3_v17",
+        "motionVersion": "v17",
+        "sourceVersion": "v17-p3-specials-1",
+        "source": "runtime-skinned-mesh",
+        "sampling": "exact-clip-clock",
+        "status": "ok",
+        "sampledContactSeconds": 0.1167,
+        "contactSeconds": 0.1167,
+        "activeFrameCount": 9,
+        "attackPart": "armL",
+        "attackLimb": "pawL+pawR",
+        "kind": "rush",
+        "reach": 0.460512,
+        "height": 0.146808,
+        "activeReach": [
+          {
+            "phase": 0,
+            "frame": 0,
+            "seconds": 0.1167,
+            "reach": 0.460512,
+            "height": 0.146808
+          },
+          {
+            "phase": 0.125,
+            "frame": 1,
+            "seconds": 0.13336250093132257,
+            "reach": 0.278187,
+            "height": 0.266667
+          },
+          {
+            "phase": 0.25,
+            "frame": 2,
+            "seconds": 0.15002500186264514,
+            "reach": 0.191751,
+            "height": 0.301151
+          },
+          {
+            "phase": 0.375,
+            "frame": 3,
+            "seconds": 0.1666875027939677,
+            "reach": 0.191751,
+            "height": 0.301151
+          },
+          {
+            "phase": 0.5,
+            "frame": 4,
+            "seconds": 0.1833500037252903,
+            "reach": 0.19183,
+            "height": 0.301161
+          },
+          {
+            "phase": 0.625,
+            "frame": 5,
+            "seconds": 0.20001250465661286,
+            "reach": 0.278447,
+            "height": 0.347223
+          },
+          {
+            "phase": 0.75,
+            "frame": 6,
+            "seconds": 0.21667500558793545,
+            "reach": 0.47307,
+            "height": 0.353466
+          },
+          {
+            "phase": 0.875,
+            "frame": 7,
+            "seconds": 0.23333750651925803,
+            "reach": 0.530616,
+            "height": 0.344936
+          },
+          {
+            "phase": 1,
+            "frame": 8,
+            "seconds": 0.2500000074505806,
+            "reach": 0.530616,
+            "height": 0.344936
+          }
+        ],
+        "contactSocket": {
+          "forward": 0.078213,
+          "height": 0.279316,
+          "bone": "pawR",
+          "atSeconds": 0.1167,
+          "source": "runtime-bone-world-position"
+        },
+        "visualRigId": "dark_moguzo",
+        "grafts": []
+      },
+      "anchor": "pawR"
+    }
+  ],
+  "grafted": [
+    {
+      "id": "moguzo",
+      "appearance": {
+        "baseId": "moguzo",
+        "parts": {
+          "head": "godan",
+          "ears": "chirka",
+          "tail": "base",
+          "hands": "base",
+          "feet": "base",
+          "accessory": "base"
+        },
+        "palette": {
+          "fur": "#397db3",
+          "belly": "#ebcc94",
+          "muzzle": "#edd4a3",
+          "accent": "#cc140f",
+          "pattern": "#554235",
+          "paw": "#422e21",
+          "foot": "#383636",
+          "ear": "#734c33",
+          "tail": "#bd915c"
+        },
+        "pattern": "spots"
+      },
+      "contacts": {
+        "moguzo.s1": {
+          "ref": "moguzo.s1",
+          "sourceCharacterId": "moguzo",
+          "sourceMoveId": "s1",
+          "clip": "s1_v17",
+          "motionVersion": "v17",
+          "sourceVersion": "v17-p3-specials-1",
+          "source": "runtime-skinned-mesh",
+          "sampling": "exact-clip-clock",
+          "status": "ok",
+          "sampledContactSeconds": 0.2167,
+          "contactSeconds": 0.2167,
+          "activeFrameCount": 2,
+          "attackPart": "armR",
+          "attackLimb": "pawR",
+          "kind": "projectile",
+          "reach": 0.526389,
+          "height": 0.167294,
+          "activeReach": [
+            {
+              "phase": 0,
+              "frame": 0,
+              "seconds": 0.2167,
+              "reach": 0.526389,
+              "height": 0.167294
+            },
+            {
+              "phase": 1,
+              "frame": 1,
+              "seconds": 0.23333332538604737,
+              "reach": 0.474629,
+              "height": 0.296421
+            }
+          ],
+          "contactSocket": {
+            "forward": 0.468829,
+            "height": 0.122595,
+            "bone": "pawR",
+            "atSeconds": 0.2167,
+            "source": "runtime-bone-world-position"
+          },
+          "projectileSocket": {
+            "forward": 0.468829,
+            "height": 0.122595,
+            "bone": "pawR",
+            "atSeconds": 0.2167,
+            "source": "runtime-bone-world-position"
+          },
+          "visualRigId": "moguzo",
+          "grafts": [
+            "head",
+            "ears"
+          ]
+        },
+        "moguzo.s2": {
+          "ref": "moguzo.s2",
+          "sourceCharacterId": "moguzo",
+          "sourceMoveId": "s2",
+          "clip": "s2_v17",
+          "motionVersion": "v17",
+          "sourceVersion": "v17-p3-specials-1",
+          "source": "runtime-skinned-mesh",
+          "sampling": "exact-clip-clock",
+          "status": "ok",
+          "sampledContactSeconds": 0.1,
+          "contactSeconds": 0.1,
+          "activeFrameCount": 8,
+          "attackPart": "armR",
+          "attackLimb": "pawR",
+          "kind": "antiair",
+          "reach": 0.22151,
+          "height": 0.799758,
+          "activeReach": [
+            {
+              "phase": 0,
+              "frame": 0,
+              "seconds": 0.10000000000000002,
+              "reach": 0.22151,
+              "height": 0.799758
+            },
+            {
+              "phase": 0.14285714285714285,
+              "frame": 1,
+              "seconds": 0.1166666675891195,
+              "reach": 0.201581,
+              "height": 0.814591
+            },
+            {
+              "phase": 0.2857142857142857,
+              "frame": 2,
+              "seconds": 0.133333335178239,
+              "reach": 0.172897,
+              "height": 0.825079
+            },
+            {
+              "phase": 0.42857142857142855,
+              "frame": 3,
+              "seconds": 0.15000000276735853,
+              "reach": 0.140155,
+              "height": 0.831316
+            },
+            {
+              "phase": 0.5714285714285714,
+              "frame": 4,
+              "seconds": 0.16666667035647803,
+              "reach": 0.107658,
+              "height": 0.83339
+            },
+            {
+              "phase": 0.7142857142857143,
+              "frame": 5,
+              "seconds": 0.18333333794559753,
+              "reach": 0.078346,
+              "height": 0.83339
+            },
+            {
+              "phase": 0.8571428571428571,
+              "frame": 6,
+              "seconds": 0.20000000553471703,
+              "reach": 0.054745,
+              "height": 0.833389
+            },
+            {
+              "phase": 1,
+              "frame": 7,
+              "seconds": 0.21666667312383653,
+              "reach": 0.039363,
+              "height": 0.833393
+            }
+          ],
+          "contactSocket": {
+            "forward": 0.174315,
+            "height": 0.770466,
+            "bone": "pawR",
+            "atSeconds": 0.1,
+            "source": "runtime-bone-world-position"
+          },
+          "visualRigId": "moguzo",
+          "grafts": [
+            "head",
+            "ears"
+          ]
+        },
+        "moguzo.s3": {
+          "ref": "moguzo.s3",
+          "sourceCharacterId": "moguzo",
+          "sourceMoveId": "s3",
+          "clip": "s3_v17",
+          "motionVersion": "v17",
+          "sourceVersion": "v17-p3-specials-1",
+          "source": "runtime-skinned-mesh",
+          "sampling": "exact-clip-clock",
+          "status": "ok",
+          "sampledContactSeconds": 0.2,
+          "contactSeconds": 0.2,
+          "activeFrameCount": 5,
+          "attackPart": "armL",
+          "attackLimb": "pawL+pawR",
+          "kind": "rush",
+          "reach": 0.489628,
+          "height": 0.369061,
+          "activeReach": [
+            {
+              "phase": 0,
+              "frame": 0,
+              "seconds": 0.20000000000000004,
+              "reach": 0.489628,
+              "height": 0.369061
+            },
+            {
+              "phase": 0.25,
+              "frame": 1,
+              "seconds": 0.21666000264883042,
+              "reach": 0.489424,
+              "height": 0.372602
+            },
+            {
+              "phase": 0.5,
+              "frame": 2,
+              "seconds": 0.23332000529766084,
+              "reach": 0.489198,
+              "height": 0.376114
+            },
+            {
+              "phase": 0.75,
+              "frame": 3,
+              "seconds": 0.24998000794649125,
+              "reach": 0.488948,
+              "height": 0.379596
+            },
+            {
+              "phase": 1,
+              "frame": 4,
+              "seconds": 0.26664001059532166,
+              "reach": 0.488677,
+              "height": 0.383048
+            }
+          ],
+          "contactSocket": {
+            "forward": 0.335229,
+            "height": 0.352865,
+            "bone": "pawR",
+            "atSeconds": 0.2,
+            "source": "runtime-bone-world-position"
+          },
+          "visualRigId": "moguzo",
+          "grafts": [
+            "head",
+            "ears"
+          ]
+        }
+      }
+    },
+    {
+      "id": "pisuke",
+      "appearance": {
+        "baseId": "pisuke",
+        "parts": {
+          "head": "godan",
+          "ears": "chirka",
+          "tail": "base",
+          "hands": "base",
+          "feet": "base",
+          "accessory": "base"
+        },
+        "palette": {
+          "fur": "#397db3",
+          "belly": "#e0c48f",
+          "muzzle": "#e0c799",
+          "accent": "#124ccc",
+          "pattern": "#554235",
+          "paw": "#e6cc9e",
+          "foot": "#e6cc9e",
+          "ear": "#8c6647",
+          "tail": "#cca870"
+        },
+        "pattern": "spots"
+      },
+      "contacts": {
+        "pisuke.s1": {
+          "ref": "pisuke.s1",
+          "sourceCharacterId": "pisuke",
+          "sourceMoveId": "s1",
+          "clip": "s1_v17",
+          "motionVersion": "v17",
+          "sourceVersion": "v17-p3-specials-1",
+          "source": "runtime-skinned-mesh",
+          "sampling": "exact-clip-clock",
+          "status": "ok",
+          "sampledContactSeconds": 0.1833,
+          "contactSeconds": 0.1833,
+          "activeFrameCount": 1,
+          "attackPart": "legR",
+          "attackLimb": "footR",
+          "kind": "projectile",
+          "reach": 0.345612,
+          "height": 0.222041,
+          "activeReach": [
+            {
+              "phase": 0,
+              "frame": 0,
+              "seconds": 0.1833,
+              "reach": 0.345612,
+              "height": 0.222041
+            }
+          ],
+          "contactSocket": {
+            "forward": 0.256085,
+            "height": 0.211354,
+            "bone": "footR",
+            "atSeconds": 0.1833,
+            "source": "runtime-bone-world-position"
+          },
+          "projectileSocket": {
+            "forward": 0.256085,
+            "height": 0.211354,
+            "bone": "footR",
+            "atSeconds": 0.1833,
+            "source": "runtime-bone-world-position"
+          },
+          "visualRigId": "pisuke",
+          "grafts": [
+            "head",
+            "ears"
+          ]
+        },
+        "pisuke.s2": {
+          "ref": "pisuke.s2",
+          "sourceCharacterId": "pisuke",
+          "sourceMoveId": "s2",
+          "clip": "s2_v17",
+          "motionVersion": "v17",
+          "sourceVersion": "v17-p3-specials-1",
+          "source": "runtime-skinned-mesh",
+          "sampling": "exact-clip-clock",
+          "status": "ok",
+          "sampledContactSeconds": 0.1,
+          "contactSeconds": 0.1,
+          "activeFrameCount": 8,
+          "attackPart": "legR",
+          "attackLimb": "footR",
+          "kind": "antiair",
+          "reach": 0.185765,
+          "height": 0.436316,
+          "activeReach": [
+            {
+              "phase": 0,
+              "frame": 0,
+              "seconds": 0.10000000000000002,
+              "reach": 0.185765,
+              "height": 0.436316
+            },
+            {
+              "phase": 0.14285714285714285,
+              "frame": 1,
+              "seconds": 0.11666571551561356,
+              "reach": 0.186194,
+              "height": 0.447399
+            },
+            {
+              "phase": 0.2857142857142857,
+              "frame": 2,
+              "seconds": 0.1333314310312271,
+              "reach": 0.185181,
+              "height": 0.451183
+            },
+            {
+              "phase": 0.42857142857142855,
+              "frame": 3,
+              "seconds": 0.14999714654684065,
+              "reach": 0.183981,
+              "height": 0.449001
+            },
+            {
+              "phase": 0.5714285714285714,
+              "frame": 4,
+              "seconds": 0.16666286206245423,
+              "reach": 0.183454,
+              "height": 0.448208
+            },
+            {
+              "phase": 0.7142857142857143,
+              "frame": 5,
+              "seconds": 0.18332857757806775,
+              "reach": 0.183454,
+              "height": 0.448208
+            },
+            {
+              "phase": 0.8571428571428571,
+              "frame": 6,
+              "seconds": 0.19999429309368133,
+              "reach": 0.183454,
+              "height": 0.448208
+            },
+            {
+              "phase": 1,
+              "frame": 7,
+              "seconds": 0.2166600086092949,
+              "reach": 0.183454,
+              "height": 0.448208
+            }
+          ],
+          "contactSocket": {
+            "forward": 0.101911,
+            "height": 0.58012,
+            "bone": "footR",
+            "atSeconds": 0.1,
+            "source": "runtime-bone-world-position"
+          },
+          "visualRigId": "pisuke",
+          "grafts": [
+            "head",
+            "ears"
+          ]
+        },
+        "pisuke.s3": {
+          "ref": "pisuke.s3",
+          "sourceCharacterId": "pisuke",
+          "sourceMoveId": "s3",
+          "clip": "s3_v17",
+          "motionVersion": "v17",
+          "sourceVersion": "v17-p3-specials-1",
+          "source": "runtime-skinned-mesh",
+          "sampling": "exact-clip-clock",
+          "status": "ok",
+          "sampledContactSeconds": 0.1167,
+          "contactSeconds": 0.1167,
+          "activeFrameCount": 9,
+          "attackPart": "legR",
+          "attackLimb": "footR",
+          "kind": "rush",
+          "reach": 0.399636,
+          "height": 0.129272,
+          "activeReach": [
+            {
+              "phase": 0,
+              "frame": 0,
+              "seconds": 0.1167,
+              "reach": 0.399636,
+              "height": 0.129272
+            },
+            {
+              "phase": 0.125,
+              "frame": 1,
+              "seconds": 0.13336500124186276,
+              "reach": 0.399636,
+              "height": 0.129272
+            },
+            {
+              "phase": 0.25,
+              "frame": 2,
+              "seconds": 0.15003000248372556,
+              "reach": 0.399527,
+              "height": 0.129258
+            },
+            {
+              "phase": 0.375,
+              "frame": 3,
+              "seconds": 0.16669500372558832,
+              "reach": 0.316874,
+              "height": 0.124877
+            },
+            {
+              "phase": 0.5,
+              "frame": 4,
+              "seconds": 0.18336000496745108,
+              "reach": 0.220006,
+              "height": 0.127261
+            },
+            {
+              "phase": 0.625,
+              "frame": 5,
+              "seconds": 0.20002500620931388,
+              "reach": 0.264615,
+              "height": 0.175113
+            },
+            {
+              "phase": 0.75,
+              "frame": 6,
+              "seconds": 0.21669000745117664,
+              "reach": 0.345037,
+              "height": 0.336071
+            },
+            {
+              "phase": 0.875,
+              "frame": 7,
+              "seconds": 0.23335500869303943,
+              "reach": 0.345037,
+              "height": 0.336071
+            },
+            {
+              "phase": 1,
+              "frame": 8,
+              "seconds": 0.2500200099349022,
+              "reach": 0.345077,
+              "height": 0.335981
+            }
+          ],
+          "contactSocket": {
+            "forward": 0.289369,
+            "height": 0.135146,
+            "bone": "footR",
+            "atSeconds": 0.1167,
+            "source": "runtime-bone-world-position"
+          },
+          "visualRigId": "pisuke",
+          "grafts": [
+            "head",
+            "ears"
+          ]
+        }
+      }
+    },
+    {
+      "id": "godan",
+      "appearance": {
+        "baseId": "godan",
+        "parts": {
+          "head": "pisuke",
+          "ears": "chirka",
+          "tail": "base",
+          "hands": "base",
+          "feet": "base",
+          "accessory": "base"
+        },
+        "palette": {
+          "fur": "#397db3",
+          "belly": "#b28547",
+          "muzzle": "#bd9457",
+          "accent": "#0f0f12",
+          "pattern": "#554235",
+          "paw": "#33241a",
+          "foot": "#30241c",
+          "ear": "#40291a",
+          "tail": "#664224"
+        },
+        "pattern": "spots"
+      },
+      "contacts": {
+        "godan.s1": {
+          "ref": "godan.s1",
+          "sourceCharacterId": "godan",
+          "sourceMoveId": "s1",
+          "clip": "s1_v17",
+          "motionVersion": "v17",
+          "sourceVersion": "v17-p3-specials-1",
+          "source": "runtime-skinned-mesh",
+          "sampling": "exact-clip-clock",
+          "status": "ok",
+          "sampledContactSeconds": 0.35,
+          "contactSeconds": 0.35,
+          "activeFrameCount": 5,
+          "attackPart": "legR",
+          "attackLimb": "footR",
+          "kind": "strike",
+          "reach": 0.296975,
+          "height": 0.007889,
+          "activeReach": [
+            {
+              "phase": 0,
+              "frame": 0,
+              "seconds": 0.35,
+              "reach": 0.296975,
+              "height": 0.007889
+            },
+            {
+              "phase": 0.25,
+              "frame": 1,
+              "seconds": 0.36667499724030495,
+              "reach": 0.296975,
+              "height": 0.007889
+            },
+            {
+              "phase": 0.5,
+              "frame": 2,
+              "seconds": 0.3833499944806099,
+              "reach": 0.296975,
+              "height": 0.007889
+            },
+            {
+              "phase": 0.75,
+              "frame": 3,
+              "seconds": 0.4000249917209148,
+              "reach": 0.296975,
+              "height": 0.007889
+            },
+            {
+              "phase": 1,
+              "frame": 4,
+              "seconds": 0.4166999889612198,
+              "reach": 0.296975,
+              "height": 0.007889
+            }
+          ],
+          "contactSocket": {
+            "forward": 0.174149,
+            "height": 0.03381,
+            "bone": "footR",
+            "atSeconds": 0.35,
+            "source": "runtime-bone-world-position"
+          },
+          "visualRigId": "godan",
+          "grafts": [
+            "head",
+            "ears"
+          ]
+        },
+        "godan.s2": {
+          "ref": "godan.s2",
+          "sourceCharacterId": "godan",
+          "sourceMoveId": "s2",
+          "clip": "s2_v17",
+          "motionVersion": "v17",
+          "sourceVersion": "v17-p3-specials-1",
+          "source": "runtime-skinned-mesh",
+          "sampling": "exact-clip-clock",
+          "status": "ok",
+          "sampledContactSeconds": 0.1833,
+          "contactSeconds": 0.1833,
+          "activeFrameCount": 7,
+          "attackPart": "armL",
+          "attackLimb": "pawL+pawR",
+          "kind": "antiair",
+          "reach": 0.172833,
+          "height": 0.580859,
+          "activeReach": [
+            {
+              "phase": 0,
+              "frame": 0,
+              "seconds": 0.1833,
+              "reach": 0.172833,
+              "height": 0.580859
+            },
+            {
+              "phase": 0.16666666666666666,
+              "frame": 1,
+              "seconds": 0.19996694421470163,
+              "reach": 0.171742,
+              "height": 0.582611
+            },
+            {
+              "phase": 0.3333333333333333,
+              "frame": 2,
+              "seconds": 0.2166338884294033,
+              "reach": 0.171228,
+              "height": 0.583738
+            },
+            {
+              "phase": 0.5,
+              "frame": 3,
+              "seconds": 0.23330083264410495,
+              "reach": 0.170715,
+              "height": 0.584861
+            },
+            {
+              "phase": 0.6666666666666666,
+              "frame": 4,
+              "seconds": 0.24996777685880658,
+              "reach": 0.170204,
+              "height": 0.585978
+            },
+            {
+              "phase": 0.8333333333333334,
+              "frame": 5,
+              "seconds": 0.2666347210735082,
+              "reach": 0.169693,
+              "height": 0.58709
+            },
+            {
+              "phase": 1,
+              "frame": 6,
+              "seconds": 0.2833016652882099,
+              "reach": 0.169184,
+              "height": 0.588198
+            }
+          ],
+          "contactSocket": {
+            "forward": 0.072176,
+            "height": 0.673496,
+            "bone": "pawR",
+            "atSeconds": 0.1833,
+            "source": "runtime-bone-world-position"
+          },
+          "visualRigId": "godan",
+          "grafts": [
+            "head",
+            "ears"
+          ]
+        },
+        "godan.s3": {
+          "ref": "godan.s3",
+          "sourceCharacterId": "godan",
+          "sourceMoveId": "s3",
+          "clip": "s3_v17",
+          "motionVersion": "v17",
+          "sourceVersion": "v17-p3-specials-1",
+          "source": "runtime-skinned-mesh",
+          "sampling": "exact-clip-clock",
+          "status": "ok",
+          "sampledContactSeconds": 0.3,
+          "contactSeconds": 0.3,
+          "activeFrameCount": 7,
+          "attackPart": "body",
+          "attackLimb": "shoulderL",
+          "kind": "rush",
+          "reach": 0.389254,
+          "height": 0.264438,
+          "activeReach": [
+            {
+              "phase": 0,
+              "frame": 0,
+              "seconds": 0.3,
+              "reach": 0.389254,
+              "height": 0.264438
+            },
+            {
+              "phase": 0.16666666666666666,
+              "frame": 1,
+              "seconds": 0.3166741658300161,
+              "reach": 0.389254,
+              "height": 0.264438
+            },
+            {
+              "phase": 0.3333333333333333,
+              "frame": 2,
+              "seconds": 0.33334833166003225,
+              "reach": 0.389254,
+              "height": 0.264438
+            },
+            {
+              "phase": 0.5,
+              "frame": 3,
+              "seconds": 0.3500224974900484,
+              "reach": 0.389254,
+              "height": 0.264438
+            },
+            {
+              "phase": 0.6666666666666666,
+              "frame": 4,
+              "seconds": 0.3666966633200645,
+              "reach": 0.389254,
+              "height": 0.264438
+            },
+            {
+              "phase": 0.8333333333333334,
+              "frame": 5,
+              "seconds": 0.38337082915008064,
+              "reach": 0.389254,
+              "height": 0.264438
+            },
+            {
+              "phase": 1,
+              "frame": 6,
+              "seconds": 0.40004499498009677,
+              "reach": 0.389254,
+              "height": 0.264438
+            }
+          ],
+          "contactSocket": {
+            "forward": 0.104073,
+            "height": 0.328943,
+            "bone": "shoulderL",
+            "atSeconds": 0.3,
+            "source": "runtime-bone-world-position"
+          },
+          "visualRigId": "godan",
+          "grafts": [
+            "head",
+            "ears"
+          ]
+        }
+      }
+    },
+    {
+      "id": "hakuma",
+      "appearance": {
+        "baseId": "hakuma",
+        "parts": {
+          "head": "godan",
+          "ears": "chirka",
+          "tail": "base",
+          "hands": "base",
+          "feet": "base",
+          "accessory": "base"
+        },
+        "palette": {
+          "fur": "#397db3",
+          "belly": "#ede0bd",
+          "muzzle": "#f2e6c7",
+          "accent": "#215233",
+          "pattern": "#554235",
+          "paw": "#3d3838",
+          "foot": "#ccb899",
+          "ear": "#332e2e",
+          "tail": "#424040"
+        },
+        "pattern": "spots"
+      },
+      "contacts": {
+        "hakuma.s1": {
+          "ref": "hakuma.s1",
+          "sourceCharacterId": "hakuma",
+          "sourceMoveId": "s1",
+          "clip": "s1_v17",
+          "motionVersion": "v17",
+          "sourceVersion": "v17-p3-specials-1",
+          "source": "runtime-skinned-mesh",
+          "sampling": "exact-clip-clock",
+          "status": "ok",
+          "sampledContactSeconds": 0.1833,
+          "contactSeconds": 0.1833,
+          "activeFrameCount": 6,
+          "attackPart": "armR",
+          "attackLimb": "pawR",
+          "kind": "strike",
+          "reach": 0.487107,
+          "height": 0.372412,
+          "activeReach": [
+            {
+              "phase": 0,
+              "frame": 0,
+              "seconds": 0.1833,
+              "reach": 0.487107,
+              "height": 0.372412
+            },
+            {
+              "phase": 0.2,
+              "frame": 1,
+              "seconds": 0.19997899804353714,
+              "reach": 0.490867,
+              "height": 0.420079
+            },
+            {
+              "phase": 0.4,
+              "frame": 2,
+              "seconds": 0.21665799608707428,
+              "reach": 0.493422,
+              "height": 0.41892
+            },
+            {
+              "phase": 0.6,
+              "frame": 3,
+              "seconds": 0.23333699413061143,
+              "reach": 0.495969,
+              "height": 0.417759
+            },
+            {
+              "phase": 0.8,
+              "frame": 4,
+              "seconds": 0.2500159921741486,
+              "reach": 0.498507,
+              "height": 0.416597
+            },
+            {
+              "phase": 1,
+              "frame": 5,
+              "seconds": 0.2666949902176857,
+              "reach": 0.501037,
+              "height": 0.415433
+            }
+          ],
+          "contactSocket": {
+            "forward": 0.442035,
+            "height": 0.360896,
+            "bone": "pawR",
+            "atSeconds": 0.1833,
+            "source": "runtime-bone-world-position"
+          },
+          "visualRigId": "hakuma",
+          "grafts": [
+            "head",
+            "ears"
+          ]
+        },
+        "hakuma.s2": {
+          "ref": "hakuma.s2",
+          "sourceCharacterId": "hakuma",
+          "sourceMoveId": "s2",
+          "clip": "s2_v17",
+          "motionVersion": "v17",
+          "sourceVersion": "v17-p3-specials-1",
+          "source": "runtime-skinned-mesh",
+          "sampling": "exact-clip-clock",
+          "status": "ok",
+          "sampledContactSeconds": 0.1333,
+          "contactSeconds": 0.1333,
+          "activeFrameCount": 7,
+          "attackPart": "armR",
+          "attackLimb": "pawR",
+          "kind": "antiair",
+          "reach": 0.221363,
+          "height": 0.62155,
+          "activeReach": [
+            {
+              "phase": 0,
+              "frame": 0,
+              "seconds": 0.1333,
+              "reach": 0.221363,
+              "height": 0.62155
+            },
+            {
+              "phase": 0.16666666666666666,
+              "frame": 1,
+              "seconds": 0.14997499857346216,
+              "reach": 0.221344,
+              "height": 0.623473
+            },
+            {
+              "phase": 0.3333333333333333,
+              "frame": 2,
+              "seconds": 0.16664999714692433,
+              "reach": 0.221637,
+              "height": 0.624551
+            },
+            {
+              "phase": 0.5,
+              "frame": 3,
+              "seconds": 0.18332499572038652,
+              "reach": 0.221936,
+              "height": 0.625624
+            },
+            {
+              "phase": 0.6666666666666666,
+              "frame": 4,
+              "seconds": 0.19999999429384868,
+              "reach": 0.222239,
+              "height": 0.626692
+            },
+            {
+              "phase": 0.8333333333333334,
+              "frame": 5,
+              "seconds": 0.21667499286731084,
+              "reach": 0.222549,
+              "height": 0.627753
+            },
+            {
+              "phase": 1,
+              "frame": 6,
+              "seconds": 0.233349991440773,
+              "reach": 0.222863,
+              "height": 0.62881
+            }
+          ],
+          "contactSocket": {
+            "forward": 0.169484,
+            "height": 0.641974,
+            "bone": "pawR",
+            "atSeconds": 0.1333,
+            "source": "runtime-bone-world-position"
+          },
+          "visualRigId": "hakuma",
+          "grafts": [
+            "head",
+            "ears"
+          ]
+        },
+        "hakuma.s3": {
+          "ref": "hakuma.s3",
+          "sourceCharacterId": "hakuma",
+          "sourceMoveId": "s3",
+          "clip": "s3_v17",
+          "motionVersion": "v17",
+          "sourceVersion": "v17-p3-specials-1",
+          "source": "runtime-skinned-mesh",
+          "sampling": "exact-clip-clock",
+          "status": "ok",
+          "sampledContactSeconds": 0.2,
+          "contactSeconds": 0.2,
+          "activeFrameCount": 9,
+          "attackPart": "armL",
+          "attackLimb": "pawL+pawR",
+          "kind": "rush",
+          "reach": 0.492692,
+          "height": 0.423549,
+          "activeReach": [
+            {
+              "phase": 0,
+              "frame": 0,
+              "seconds": 0.20000000000000004,
+              "reach": 0.492692,
+              "height": 0.423549
+            },
+            {
+              "phase": 0.125,
+              "frame": 1,
+              "seconds": 0.21666833246946338,
+              "reach": 0.492692,
+              "height": 0.423549
+            },
+            {
+              "phase": 0.25,
+              "frame": 2,
+              "seconds": 0.2333366649389267,
+              "reach": 0.492692,
+              "height": 0.423549
+            },
+            {
+              "phase": 0.375,
+              "frame": 3,
+              "seconds": 0.25000499740839005,
+              "reach": 0.492667,
+              "height": 0.423588
+            },
+            {
+              "phase": 0.5,
+              "frame": 4,
+              "seconds": 0.2666733298778534,
+              "reach": 0.367821,
+              "height": 0.453929
+            },
+            {
+              "phase": 0.625,
+              "frame": 5,
+              "seconds": 0.2833416623473168,
+              "reach": 0.143659,
+              "height": 0.397646
+            },
+            {
+              "phase": 0.75,
+              "frame": 6,
+              "seconds": 0.30000999481678015,
+              "reach": 0.143659,
+              "height": 0.397646
+            },
+            {
+              "phase": 0.875,
+              "frame": 7,
+              "seconds": 0.31667832728624346,
+              "reach": 0.143751,
+              "height": 0.397654
+            },
+            {
+              "phase": 1,
+              "frame": 8,
+              "seconds": 0.3333466597557068,
+              "reach": 0.316018,
+              "height": 0.465556
+            }
+          ],
+          "contactSocket": {
+            "forward": -0.074433,
+            "height": 0.414145,
+            "bone": "pawR",
+            "atSeconds": 0.2,
+            "source": "runtime-bone-world-position"
+          },
+          "visualRigId": "hakuma",
+          "grafts": [
+            "head",
+            "ears"
+          ]
+        }
+      }
+    },
+    {
+      "id": "chirka",
+      "appearance": {
+        "baseId": "chirka",
+        "parts": {
+          "head": "godan",
+          "ears": "chirka",
+          "tail": "base",
+          "hands": "base",
+          "feet": "base",
+          "accessory": "base"
+        },
+        "palette": {
+          "fur": "#397db3",
+          "belly": "#9e4c24",
+          "muzzle": "#e6b85c",
+          "accent": "#5c297a",
+          "pattern": "#554235",
+          "paw": "#3d332e",
+          "foot": "#42362e",
+          "ear": "#33241a",
+          "tail": "#47301f"
+        },
+        "pattern": "spots"
+      },
+      "contacts": {
+        "chirka.s1": {
+          "ref": "chirka.s1",
+          "sourceCharacterId": "chirka",
+          "sourceMoveId": "s1",
+          "clip": "s1_v17",
+          "motionVersion": "v17",
+          "sourceVersion": "v17-p3-specials-1",
+          "source": "runtime-skinned-mesh",
+          "sampling": "exact-clip-clock",
+          "status": "ok",
+          "sampledContactSeconds": 0.2167,
+          "contactSeconds": 0.2167,
+          "activeFrameCount": 4,
+          "attackPart": "armL",
+          "attackLimb": "pawL",
+          "kind": "strike",
+          "reach": 0.449026,
+          "height": 0.210394,
+          "activeReach": [
+            {
+              "phase": 0,
+              "frame": 0,
+              "seconds": 0.2167,
+              "reach": 0.449026,
+              "height": 0.210394
+            },
+            {
+              "phase": 0.3333333333333333,
+              "frame": 1,
+              "seconds": 0.23334667019844055,
+              "reach": 0.450269,
+              "height": 0.207948
+            },
+            {
+              "phase": 0.6666666666666666,
+              "frame": 2,
+              "seconds": 0.24999334039688112,
+              "reach": 0.451485,
+              "height": 0.205493
+            },
+            {
+              "phase": 1,
+              "frame": 3,
+              "seconds": 0.26664001059532166,
+              "reach": 0.452674,
+              "height": 0.203029
+            }
+          ],
+          "contactSocket": {
+            "forward": 0.387337,
+            "height": 0.211013,
+            "bone": "pawL",
+            "atSeconds": 0.2167,
+            "source": "runtime-bone-world-position"
+          },
+          "visualRigId": "chirka",
+          "grafts": [
+            "head"
+          ]
+        },
+        "chirka.s2": {
+          "ref": "chirka.s2",
+          "sourceCharacterId": "chirka",
+          "sourceMoveId": "s2",
+          "clip": "s2_v17",
+          "motionVersion": "v17",
+          "sourceVersion": "v17-p3-specials-1",
+          "source": "runtime-skinned-mesh",
+          "sampling": "exact-clip-clock",
+          "status": "ok",
+          "sampledContactSeconds": 0.1333,
+          "contactSeconds": 0.1333,
+          "activeFrameCount": 7,
+          "attackPart": "armR",
+          "attackLimb": "pawR",
+          "kind": "antiair",
+          "reach": 0.214998,
+          "height": 0.666824,
+          "activeReach": [
+            {
+              "phase": 0,
+              "frame": 0,
+              "seconds": 0.1333,
+              "reach": 0.214998,
+              "height": 0.666824
+            },
+            {
+              "phase": 0.16666666666666666,
+              "frame": 1,
+              "seconds": 0.14997222338120142,
+              "reach": 0.226364,
+              "height": 0.675904
+            },
+            {
+              "phase": 0.3333333333333333,
+              "frame": 2,
+              "seconds": 0.16664444676240284,
+              "reach": 0.207822,
+              "height": 0.707905
+            },
+            {
+              "phase": 0.5,
+              "frame": 3,
+              "seconds": 0.18331667014360425,
+              "reach": 0.160704,
+              "height": 0.721024
+            },
+            {
+              "phase": 0.6666666666666666,
+              "frame": 4,
+              "seconds": 0.1999888935248057,
+              "reach": 0.110224,
+              "height": 0.632892
+            },
+            {
+              "phase": 0.8333333333333334,
+              "frame": 5,
+              "seconds": 0.21666111690600712,
+              "reach": 0.0669,
+              "height": 0.633352
+            },
+            {
+              "phase": 1,
+              "frame": 6,
+              "seconds": 0.23333334028720853,
+              "reach": 0.017521,
+              "height": 0.633242
+            }
+          ],
+          "contactSocket": {
+            "forward": 0.169834,
+            "height": 0.759761,
+            "bone": "pawR",
+            "atSeconds": 0.1333,
+            "source": "runtime-bone-world-position"
+          },
+          "visualRigId": "chirka",
+          "grafts": [
+            "head"
+          ]
+        },
+        "chirka.s3": {
+          "ref": "chirka.s3",
+          "sourceCharacterId": "chirka",
+          "sourceMoveId": "s3",
+          "clip": "s3_v17",
+          "motionVersion": "v17",
+          "sourceVersion": "v17-p3-specials-1",
+          "source": "runtime-skinned-mesh",
+          "sampling": "exact-clip-clock",
+          "status": "ok",
+          "sampledContactSeconds": 0.2167,
+          "contactSeconds": 0.2167,
+          "activeFrameCount": 5,
+          "attackPart": "armR",
+          "attackLimb": "pawR",
+          "kind": "rush",
+          "reach": 0.494133,
+          "height": 0.222175,
+          "activeReach": [
+            {
+              "phase": 0,
+              "frame": 0,
+              "seconds": 0.2167,
+              "reach": 0.494133,
+              "height": 0.222175
+            },
+            {
+              "phase": 0.25,
+              "frame": 1,
+              "seconds": 0.23335833544433116,
+              "reach": 0.494133,
+              "height": 0.222175
+            },
+            {
+              "phase": 0.5,
+              "frame": 2,
+              "seconds": 0.2500166708886623,
+              "reach": 0.494133,
+              "height": 0.222175
+            },
+            {
+              "phase": 0.75,
+              "frame": 3,
+              "seconds": 0.2666750063329935,
+              "reach": 0.494133,
+              "height": 0.222175
+            },
+            {
+              "phase": 1,
+              "frame": 4,
+              "seconds": 0.28333334177732467,
+              "reach": 0.494133,
+              "height": 0.222175
+            }
+          ],
+          "contactSocket": {
+            "forward": 0.433143,
+            "height": 0.22912,
+            "bone": "pawR",
+            "atSeconds": 0.2167,
+            "source": "runtime-bone-world-position"
+          },
+          "visualRigId": "chirka",
+          "grafts": [
+            "head"
+          ]
+        }
+      }
+    },
+    {
+      "id": "takimaru",
+      "appearance": {
+        "baseId": "takimaru",
+        "parts": {
+          "head": "godan",
+          "ears": "chirka",
+          "tail": "base",
+          "hands": "base",
+          "feet": "base",
+          "accessory": "base"
+        },
+        "palette": {
+          "fur": "#397db3",
+          "belly": "#dbdbdb",
+          "muzzle": "#f0f0ed",
+          "accent": "#e6a81a",
+          "pattern": "#554235",
+          "paw": "#121214",
+          "foot": "#17171a",
+          "ear": "#242426",
+          "tail": "#333336"
+        },
+        "pattern": "spots"
+      },
+      "contacts": {
+        "takimaru.s1": {
+          "ref": "takimaru.s1",
+          "sourceCharacterId": "takimaru",
+          "sourceMoveId": "s1",
+          "clip": "s1_v17",
+          "motionVersion": "v17",
+          "sourceVersion": "v17-p3-specials-1",
+          "source": "runtime-skinned-mesh",
+          "sampling": "exact-clip-clock",
+          "status": "ok",
+          "sampledContactSeconds": 0.3333,
+          "contactSeconds": 0.3333,
+          "activeFrameCount": 1,
+          "attackPart": "armL",
+          "attackLimb": "pawL+pawR",
+          "kind": "projectile",
+          "reach": 0.484844,
+          "height": 0.10572,
+          "activeReach": [
+            {
+              "phase": 0,
+              "frame": 0,
+              "seconds": 0.3333,
+              "reach": 0.484844,
+              "height": 0.10572
+            }
+          ],
+          "contactSocket": {
+            "forward": 0.391532,
+            "height": 0.011031,
+            "bone": "pawR",
+            "atSeconds": 0.3333,
+            "source": "runtime-bone-world-position"
+          },
+          "projectileSocket": {
+            "forward": 0.391532,
+            "height": 0.011031,
+            "bone": "pawR",
+            "atSeconds": 0.3333,
+            "source": "runtime-bone-world-position"
+          },
+          "visualRigId": "takimaru",
+          "grafts": [
+            "head",
+            "ears"
+          ]
+        },
+        "takimaru.s2": {
+          "ref": "takimaru.s2",
+          "sourceCharacterId": "takimaru",
+          "sourceMoveId": "s2",
+          "clip": "s2_v17",
+          "motionVersion": "v17",
+          "sourceVersion": "v17-p3-specials-1",
+          "source": "runtime-skinned-mesh",
+          "sampling": "exact-clip-clock",
+          "status": "ok",
+          "sampledContactSeconds": 0.1667,
+          "contactSeconds": 0.1667,
+          "activeFrameCount": 7,
+          "attackPart": "armL",
+          "attackLimb": "pawL+pawR",
+          "kind": "antiair",
+          "reach": 0.015085,
+          "height": 0.51212,
+          "activeReach": [
+            {
+              "phase": 0,
+              "frame": 0,
+              "seconds": 0.1667,
+              "reach": 0.015085,
+              "height": 0.51212
+            },
+            {
+              "phase": 0.16666666666666666,
+              "frame": 1,
+              "seconds": 0.1833566676298777,
+              "reach": 0.01356,
+              "height": 0.512597
+            },
+            {
+              "phase": 0.3333333333333333,
+              "frame": 2,
+              "seconds": 0.20001333525975543,
+              "reach": 0.012037,
+              "height": 0.513063
+            },
+            {
+              "phase": 0.5,
+              "frame": 3,
+              "seconds": 0.21667000288963317,
+              "reach": 0.010518,
+              "height": 0.51352
+            },
+            {
+              "phase": 0.6666666666666666,
+              "frame": 4,
+              "seconds": 0.2333266705195109,
+              "reach": 0.009002,
+              "height": 0.513966
+            },
+            {
+              "phase": 0.8333333333333334,
+              "frame": 5,
+              "seconds": 0.2499833381493886,
+              "reach": 0.007489,
+              "height": 0.514403
+            },
+            {
+              "phase": 1,
+              "frame": 6,
+              "seconds": 0.26664000577926633,
+              "reach": 0.005979,
+              "height": 0.51483
+            }
+          ],
+          "contactSocket": {
+            "forward": -0.272214,
+            "height": 0.689451,
+            "bone": "pawR",
+            "atSeconds": 0.1667,
+            "source": "runtime-bone-world-position"
+          },
+          "visualRigId": "takimaru",
+          "grafts": [
+            "head",
+            "ears"
+          ]
+        },
+        "takimaru.s3": {
+          "ref": "takimaru.s3",
+          "sourceCharacterId": "takimaru",
+          "sourceMoveId": "s3",
+          "clip": "s3_v17",
+          "motionVersion": "v17",
+          "sourceVersion": "v17-p3-specials-1",
+          "source": "runtime-skinned-mesh",
+          "sampling": "exact-clip-clock",
+          "status": "ok",
+          "sampledContactSeconds": 0.15,
+          "contactSeconds": 0.15,
+          "activeFrameCount": 3,
+          "attackPart": "armL",
+          "attackLimb": "pawL+pawR",
+          "kind": "grab",
+          "reach": 0.64868,
+          "height": 0.323335,
+          "activeReach": [
+            {
+              "phase": 0,
+              "frame": 0,
+              "seconds": 0.15,
+              "reach": 0.64868,
+              "height": 0.323335
+            },
+            {
+              "phase": 0.5,
+              "frame": 1,
+              "seconds": 0.1666708328872919,
+              "reach": 0.64868,
+              "height": 0.323335
+            },
+            {
+              "phase": 1,
+              "frame": 2,
+              "seconds": 0.18334166577458383,
+              "reach": 0.64868,
+              "height": 0.323335
+            }
+          ],
+          "contactSocket": {
+            "forward": 0.208028,
+            "height": 0.295114,
+            "bone": "chest",
+            "atSeconds": 0.15,
+            "source": "runtime-bone-world-position"
+          },
+          "visualRigId": "takimaru",
+          "grafts": [
+            "head",
+            "ears"
+          ]
+        }
+      }
+    },
+    {
+      "id": "yomikage",
+      "appearance": {
+        "baseId": "yomikage",
+        "parts": {
+          "head": "godan",
+          "ears": "chirka",
+          "tail": "base",
+          "hands": "base",
+          "feet": "base",
+          "accessory": "base"
+        },
+        "palette": {
+          "fur": "#397db3",
+          "belly": "#ad9e73",
+          "muzzle": "#c2b28f",
+          "accent": "#e0dbc7",
+          "pattern": "#554235",
+          "paw": "#6b5c4c",
+          "foot": "#80705c",
+          "ear": "#332921",
+          "tail": "#5e5745"
+        },
+        "pattern": "spots"
+      },
+      "contacts": {
+        "yomikage.s1": {
+          "ref": "yomikage.s1",
+          "sourceCharacterId": "yomikage",
+          "sourceMoveId": "s1",
+          "clip": "s1_v17",
+          "motionVersion": "v17",
+          "sourceVersion": "v17-p3-specials-1",
+          "source": "runtime-skinned-mesh",
+          "sampling": "exact-clip-clock",
+          "status": "ok",
+          "sampledContactSeconds": 0.2167,
+          "contactSeconds": 0.2167,
+          "activeFrameCount": 1,
+          "attackPart": "armR",
+          "attackLimb": "pawR",
+          "kind": "projectile",
+          "reach": 0.301166,
+          "height": 0.402348,
+          "activeReach": [
+            {
+              "phase": 0,
+              "frame": 0,
+              "seconds": 0.2167,
+              "reach": 0.301166,
+              "height": 0.402348
+            }
+          ],
+          "contactSocket": {
+            "forward": 0.235659,
+            "height": 0.393378,
+            "bone": "pawR",
+            "atSeconds": 0.2167,
+            "source": "runtime-bone-world-position"
+          },
+          "projectileSocket": {
+            "forward": 0.235659,
+            "height": 0.393378,
+            "bone": "pawR",
+            "atSeconds": 0.2167,
+            "source": "runtime-bone-world-position"
+          },
+          "visualRigId": "yomikage",
+          "grafts": [
+            "head",
+            "ears"
+          ]
+        },
+        "yomikage.s2": {
+          "ref": "yomikage.s2",
+          "sourceCharacterId": "yomikage",
+          "sourceMoveId": "s2",
+          "clip": "s2_v17",
+          "motionVersion": "v17",
+          "sourceVersion": "v17-p3-specials-1",
+          "source": "runtime-skinned-mesh",
+          "sampling": "exact-clip-clock",
+          "status": "ok",
+          "sampledContactSeconds": 0.1333,
+          "contactSeconds": 0.1333,
+          "activeFrameCount": 7,
+          "attackPart": "armR",
+          "attackLimb": "elbowR",
+          "kind": "antiair",
+          "reach": 0.143209,
+          "height": 0.530571,
+          "activeReach": [
+            {
+              "phase": 0,
+              "frame": 0,
+              "seconds": 0.1333,
+              "reach": 0.143209,
+              "height": 0.530571
+            },
+            {
+              "phase": 0.16666666666666666,
+              "frame": 1,
+              "seconds": 0.14997222338120142,
+              "reach": 0.143058,
+              "height": 0.532648
+            },
+            {
+              "phase": 0.3333333333333333,
+              "frame": 2,
+              "seconds": 0.16664444676240284,
+              "reach": 0.142874,
+              "height": 0.534284
+            },
+            {
+              "phase": 0.5,
+              "frame": 3,
+              "seconds": 0.18331667014360425,
+              "reach": 0.142688,
+              "height": 0.535913
+            },
+            {
+              "phase": 0.6666666666666666,
+              "frame": 4,
+              "seconds": 0.1999888935248057,
+              "reach": 0.142499,
+              "height": 0.537535
+            },
+            {
+              "phase": 0.8333333333333334,
+              "frame": 5,
+              "seconds": 0.21666111690600712,
+              "reach": 0.142308,
+              "height": 0.539149
+            },
+            {
+              "phase": 1,
+              "frame": 6,
+              "seconds": 0.23333334028720853,
+              "reach": 0.142115,
+              "height": 0.540755
+            }
+          ],
+          "contactSocket": {
+            "forward": 0.051142,
+            "height": 0.539872,
+            "bone": "pawR",
+            "atSeconds": 0.1333,
+            "source": "runtime-bone-world-position"
+          },
+          "visualRigId": "yomikage",
+          "grafts": [
+            "head",
+            "ears"
+          ]
+        },
+        "yomikage.s3": {
+          "ref": "yomikage.s3",
+          "sourceCharacterId": "yomikage",
+          "sourceMoveId": "s3",
+          "clip": "s3_v17",
+          "motionVersion": "v17",
+          "sourceVersion": "v17-p3-specials-1",
+          "source": "runtime-skinned-mesh",
+          "sampling": "exact-clip-clock",
+          "status": "ok",
+          "sampledContactSeconds": 0.1167,
+          "contactSeconds": 0.1167,
+          "activeFrameCount": 13,
+          "attackPart": "armL",
+          "attackLimb": "pawL",
+          "kind": "counter",
+          "reach": 0.16417,
+          "height": 0.438648,
+          "activeReach": [
+            {
+              "phase": 0,
+              "frame": 0,
+              "seconds": 0.1167,
+              "reach": 0.16417,
+              "height": 0.438648
+            },
+            {
+              "phase": 0.08333333333333333,
+              "frame": 1,
+              "seconds": 0.13336041740675766,
+              "reach": 0.16417,
+              "height": 0.438466
+            },
+            {
+              "phase": 0.16666666666666666,
+              "frame": 2,
+              "seconds": 0.15002083481351536,
+              "reach": 0.16417,
+              "height": 0.438283
+            },
+            {
+              "phase": 0.25,
+              "frame": 3,
+              "seconds": 0.16668125222027302,
+              "reach": 0.16417,
+              "height": 0.438101
+            },
+            {
+              "phase": 0.3333333333333333,
+              "frame": 4,
+              "seconds": 0.1833416696270307,
+              "reach": 0.16417,
+              "height": 0.437918
+            },
+            {
+              "phase": 0.4166666666666667,
+              "frame": 5,
+              "seconds": 0.20000208703378836,
+              "reach": 0.16417,
+              "height": 0.437736
+            },
+            {
+              "phase": 0.5,
+              "frame": 6,
+              "seconds": 0.21666250444054602,
+              "reach": 0.16417,
+              "height": 0.437553
+            },
+            {
+              "phase": 0.5833333333333334,
+              "frame": 7,
+              "seconds": 0.23332292184730372,
+              "reach": 0.16417,
+              "height": 0.437371
+            },
+            {
+              "phase": 0.6666666666666666,
+              "frame": 8,
+              "seconds": 0.24998333925406138,
+              "reach": 0.16417,
+              "height": 0.437188
+            },
+            {
+              "phase": 0.75,
+              "frame": 9,
+              "seconds": 0.2666437566608191,
+              "reach": 0.16417,
+              "height": 0.437005
+            },
+            {
+              "phase": 0.8333333333333334,
+              "frame": 10,
+              "seconds": 0.28330417406757674,
+              "reach": 0.16417,
+              "height": 0.436823
+            },
+            {
+              "phase": 0.9166666666666666,
+              "frame": 11,
+              "seconds": 0.2999645914743344,
+              "reach": 0.16417,
+              "height": 0.43664
+            },
+            {
+              "phase": 1,
+              "frame": 12,
+              "seconds": 0.3166250088810921,
+              "reach": 0.16417,
+              "height": 0.436458
+            }
+          ],
+          "contactSocket": {
+            "forward": 0.122906,
+            "height": 0.46294,
+            "bone": "pawL",
+            "atSeconds": 0.1167,
+            "source": "runtime-bone-world-position"
+          },
+          "visualRigId": "yomikage",
+          "grafts": [
+            "head",
+            "ears"
+          ]
+        }
+      }
+    },
+    {
+      "id": "bullet",
+      "appearance": {
+        "baseId": "bullet",
+        "parts": {
+          "head": "godan",
+          "ears": "chirka",
+          "tail": "base",
+          "hands": "base",
+          "feet": "base",
+          "accessory": "base"
+        },
+        "palette": {
+          "fur": "#397db3",
+          "belly": "#e68f3d",
+          "muzzle": "#e6994c",
+          "accent": "#9e7042",
+          "pattern": "#554235",
+          "paw": "#5c3d29",
+          "foot": "#c79461",
+          "ear": "#73381a",
+          "tail": "#703012"
+        },
+        "pattern": "spots"
+      },
+      "contacts": {
+        "bullet.s1": {
+          "ref": "bullet.s1",
+          "sourceCharacterId": "bullet",
+          "sourceMoveId": "s1",
+          "clip": "s1_v17",
+          "motionVersion": "v17",
+          "sourceVersion": "v17-p3-specials-1",
+          "source": "runtime-skinned-mesh",
+          "sampling": "exact-clip-clock",
+          "status": "ok",
+          "sampledContactSeconds": 0.2833,
+          "contactSeconds": 0.2833,
+          "activeFrameCount": 1,
+          "attackPart": "tail",
+          "attackLimb": "tail",
+          "kind": "projectile",
+          "reach": -0.082609,
+          "height": 0.234211,
+          "activeReach": [
+            {
+              "phase": 0,
+              "frame": 0,
+              "seconds": 0.2833,
+              "reach": -0.082609,
+              "height": 0.234211
+            }
+          ],
+          "contactSocket": {
+            "forward": -0.238719,
+            "height": 0.275993,
+            "bone": "tail_03",
+            "atSeconds": 0.2833,
+            "source": "runtime-bone-world-position"
+          },
+          "projectileSocket": {
+            "forward": -0.238719,
+            "height": 0.275993,
+            "bone": "tail_03",
+            "atSeconds": 0.2833,
+            "source": "runtime-bone-world-position"
+          },
+          "visualRigId": "bullet",
+          "grafts": [
+            "head",
+            "ears"
+          ]
+        },
+        "bullet.s2": {
+          "ref": "bullet.s2",
+          "sourceCharacterId": "bullet",
+          "sourceMoveId": "s2",
+          "clip": "s2_v17",
+          "motionVersion": "v17",
+          "sourceVersion": "v17-p3-specials-1",
+          "source": "runtime-skinned-mesh",
+          "sampling": "exact-clip-clock",
+          "status": "ok",
+          "sampledContactSeconds": 0.15,
+          "contactSeconds": 0.15,
+          "activeFrameCount": 7,
+          "attackPart": "tail",
+          "attackLimb": "tail",
+          "kind": "antiair",
+          "reach": -0.104135,
+          "height": 0.380425,
+          "activeReach": [
+            {
+              "phase": 0,
+              "frame": 0,
+              "seconds": 0.15,
+              "reach": -0.104135,
+              "height": 0.380425
+            },
+            {
+              "phase": 0.16666666666666666,
+              "frame": 1,
+              "seconds": 0.16666222060521443,
+              "reach": -0.08802,
+              "height": 0.389011
+            },
+            {
+              "phase": 0.3333333333333333,
+              "frame": 2,
+              "seconds": 0.18332444121042887,
+              "reach": -0.08337,
+              "height": 0.385945
+            },
+            {
+              "phase": 0.5,
+              "frame": 3,
+              "seconds": 0.1999866618156433,
+              "reach": -0.082794,
+              "height": 0.386131
+            },
+            {
+              "phase": 0.6666666666666666,
+              "frame": 4,
+              "seconds": 0.21664888242085775,
+              "reach": -0.061335,
+              "height": 0.657633
+            },
+            {
+              "phase": 0.8333333333333334,
+              "frame": 5,
+              "seconds": 0.2333111030260722,
+              "reach": -0.011663,
+              "height": 0.732556
+            },
+            {
+              "phase": 1,
+              "frame": 6,
+              "seconds": 0.24997332363128663,
+              "reach": 0.04087,
+              "height": 0.785799
+            }
+          ],
+          "contactSocket": {
+            "forward": -0.275787,
+            "height": 0.360754,
+            "bone": "tail_03",
+            "atSeconds": 0.15,
+            "source": "runtime-bone-world-position"
+          },
+          "visualRigId": "bullet",
+          "grafts": [
+            "head",
+            "ears"
+          ]
+        },
+        "bullet.s3": {
+          "ref": "bullet.s3",
+          "sourceCharacterId": "bullet",
+          "sourceMoveId": "s3",
+          "clip": "s3_v17",
+          "motionVersion": "v17",
+          "sourceVersion": "v17-p3-specials-1",
+          "source": "runtime-skinned-mesh",
+          "sampling": "exact-clip-clock",
+          "status": "ok",
+          "sampledContactSeconds": 0.3167,
+          "contactSeconds": 0.3167,
+          "activeFrameCount": 6,
+          "attackPart": "tail",
+          "attackLimb": "tail",
+          "kind": "strike",
+          "reach": 0.473376,
+          "height": 0.216657,
+          "activeReach": [
+            {
+              "phase": 0,
+              "frame": 0,
+              "seconds": 0.3167,
+              "reach": 0.473376,
+              "height": 0.216657
+            },
+            {
+              "phase": 0.2,
+              "frame": 1,
+              "seconds": 0.33336000119209286,
+              "reach": 0.536211,
+              "height": 0.226527
+            },
+            {
+              "phase": 0.4,
+              "frame": 2,
+              "seconds": 0.3500200023841858,
+              "reach": 0.595549,
+              "height": 0.235782
+            },
+            {
+              "phase": 0.6,
+              "frame": 3,
+              "seconds": 0.36668000357627867,
+              "reach": 0.639913,
+              "height": 0.25592
+            },
+            {
+              "phase": 0.8,
+              "frame": 4,
+              "seconds": 0.3833400047683716,
+              "reach": 0.676159,
+              "height": 0.247666
+            },
+            {
+              "phase": 1,
+              "frame": 5,
+              "seconds": 0.4000000059604645,
+              "reach": 0.68211,
+              "height": 0.253351
+            }
+          ],
+          "contactSocket": {
+            "forward": 0.320912,
+            "height": 0.160617,
+            "bone": "tail_03",
+            "atSeconds": 0.3167,
+            "source": "runtime-bone-world-position"
+          },
+          "visualRigId": "bullet",
+          "grafts": [
+            "head",
+            "ears"
+          ]
+        }
+      }
+    },
+    {
+      "id": "dark_moguzo",
+      "appearance": {
+        "baseId": "dark_moguzo",
+        "parts": {
+          "head": "godan",
+          "ears": "chirka",
+          "tail": "base",
+          "hands": "base",
+          "feet": "base",
+          "accessory": "base"
+        },
+        "palette": {
+          "fur": "#397db3",
+          "belly": "#786961",
+          "muzzle": "#6e5e57",
+          "accent": "#801214",
+          "pattern": "#554235",
+          "paw": "#120f0f",
+          "foot": "#1a1717",
+          "ear": "#1a1414",
+          "tail": "#362b29"
+        },
+        "pattern": "spots"
+      },
+      "contacts": {
+        "dark_moguzo.s1": {
+          "ref": "dark_moguzo.s1",
+          "sourceCharacterId": "dark_moguzo",
+          "sourceMoveId": "s1",
+          "clip": "s1_v17",
+          "motionVersion": "v17",
+          "sourceVersion": "v17-p3-specials-1",
+          "source": "runtime-skinned-mesh",
+          "sampling": "exact-clip-clock",
+          "status": "ok",
+          "sampledContactSeconds": 0.1833,
+          "contactSeconds": 0.1833,
+          "activeFrameCount": 1,
+          "attackPart": "armR",
+          "attackLimb": "pawR",
+          "kind": "projectile",
+          "reach": 0.414421,
+          "height": 0.234056,
+          "activeReach": [
+            {
+              "phase": 0,
+              "frame": 0,
+              "seconds": 0.1833,
+              "reach": 0.414421,
+              "height": 0.234056
+            }
+          ],
+          "contactSocket": {
+            "forward": 0.34176,
+            "height": 0.219873,
+            "bone": "pawR",
+            "atSeconds": 0.1833,
+            "source": "runtime-bone-world-position"
+          },
+          "projectileSocket": {
+            "forward": 0.34176,
+            "height": 0.219873,
+            "bone": "pawR",
+            "atSeconds": 0.1833,
+            "source": "runtime-bone-world-position"
+          },
+          "visualRigId": "dark_moguzo",
+          "grafts": [
+            "head",
+            "ears"
+          ]
+        },
+        "dark_moguzo.s2": {
+          "ref": "dark_moguzo.s2",
+          "sourceCharacterId": "dark_moguzo",
+          "sourceMoveId": "s2",
+          "clip": "s2_v17",
+          "motionVersion": "v17",
+          "sourceVersion": "v17-p3-specials-1",
+          "source": "runtime-skinned-mesh",
+          "sampling": "exact-clip-clock",
+          "status": "ok",
+          "sampledContactSeconds": 0.0833,
+          "contactSeconds": 0.0833,
+          "activeFrameCount": 8,
+          "attackPart": "armL",
+          "attackLimb": "pawL",
+          "kind": "antiair",
+          "reach": 0.263866,
+          "height": 0.550633,
+          "activeReach": [
+            {
+              "phase": 0,
+              "frame": 0,
+              "seconds": 0.0833,
+              "reach": 0.263866,
+              "height": 0.550633
+            },
+            {
+              "phase": 0.14285714285714285,
+              "frame": 1,
+              "seconds": 0.09996857204777854,
+              "reach": 0.263633,
+              "height": 0.553174
+            },
+            {
+              "phase": 0.2857142857142857,
+              "frame": 2,
+              "seconds": 0.11663714409555707,
+              "reach": 0.263742,
+              "height": 0.555076
+            },
+            {
+              "phase": 0.42857142857142855,
+              "frame": 3,
+              "seconds": 0.1333057161433356,
+              "reach": 0.263853,
+              "height": 0.561023
+            },
+            {
+              "phase": 0.5714285714285714,
+              "frame": 4,
+              "seconds": 0.14997428819111414,
+              "reach": 0.263967,
+              "height": 0.562917
+            },
+            {
+              "phase": 0.7142857142857143,
+              "frame": 5,
+              "seconds": 0.1666428602388927,
+              "reach": 0.26408,
+              "height": 0.564808
+            },
+            {
+              "phase": 0.8571428571428571,
+              "frame": 6,
+              "seconds": 0.18331143228667124,
+              "reach": 0.264193,
+              "height": 0.566697
+            },
+            {
+              "phase": 1,
+              "frame": 7,
+              "seconds": 0.19998000433444976,
+              "reach": 0.264305,
+              "height": 0.568584
+            }
+          ],
+          "contactSocket": {
+            "forward": 0.213842,
+            "height": 0.664417,
+            "bone": "pawL",
+            "atSeconds": 0.0833,
+            "source": "runtime-bone-world-position"
+          },
+          "visualRigId": "dark_moguzo",
+          "grafts": [
+            "head",
+            "ears"
+          ]
+        },
+        "dark_moguzo.s3": {
+          "ref": "dark_moguzo.s3",
+          "sourceCharacterId": "dark_moguzo",
+          "sourceMoveId": "s3",
+          "clip": "s3_v17",
+          "motionVersion": "v17",
+          "sourceVersion": "v17-p3-specials-1",
+          "source": "runtime-skinned-mesh",
+          "sampling": "exact-clip-clock",
+          "status": "ok",
+          "sampledContactSeconds": 0.1167,
+          "contactSeconds": 0.1167,
+          "activeFrameCount": 9,
+          "attackPart": "armL",
+          "attackLimb": "pawL+pawR",
+          "kind": "rush",
+          "reach": 0.460512,
+          "height": 0.146808,
+          "activeReach": [
+            {
+              "phase": 0,
+              "frame": 0,
+              "seconds": 0.1167,
+              "reach": 0.460512,
+              "height": 0.146808
+            },
+            {
+              "phase": 0.125,
+              "frame": 1,
+              "seconds": 0.13336250093132257,
+              "reach": 0.278187,
+              "height": 0.266667
+            },
+            {
+              "phase": 0.25,
+              "frame": 2,
+              "seconds": 0.15002500186264514,
+              "reach": 0.191751,
+              "height": 0.301151
+            },
+            {
+              "phase": 0.375,
+              "frame": 3,
+              "seconds": 0.1666875027939677,
+              "reach": 0.191751,
+              "height": 0.301151
+            },
+            {
+              "phase": 0.5,
+              "frame": 4,
+              "seconds": 0.1833500037252903,
+              "reach": 0.19183,
+              "height": 0.301161
+            },
+            {
+              "phase": 0.625,
+              "frame": 5,
+              "seconds": 0.20001250465661286,
+              "reach": 0.278447,
+              "height": 0.347223
+            },
+            {
+              "phase": 0.75,
+              "frame": 6,
+              "seconds": 0.21667500558793545,
+              "reach": 0.47307,
+              "height": 0.353466
+            },
+            {
+              "phase": 0.875,
+              "frame": 7,
+              "seconds": 0.23333750651925803,
+              "reach": 0.530616,
+              "height": 0.344936
+            },
+            {
+              "phase": 1,
+              "frame": 8,
+              "seconds": 0.2500000074505806,
+              "reach": 0.530616,
+              "height": 0.344936
+            }
+          ],
+          "contactSocket": {
+            "forward": 0.078213,
+            "height": 0.279316,
+            "bone": "pawR",
+            "atSeconds": 0.1167,
+            "source": "runtime-bone-world-position"
+          },
+          "visualRigId": "dark_moguzo",
+          "grafts": [
+            "head",
+            "ears"
+          ]
+        }
+      }
+    }
+  ],
+  "mixed": [
+    {
+      "sourceId": "moguzo",
+      "targetId": "moguzo",
+      "slot": "s2",
+      "socket": {
+        "forward": 0.468829,
+        "height": 0.122595,
+        "bone": "pawR",
+        "atSeconds": 0.2167,
+        "source": "runtime-bone-world-position"
+      },
+      "canonicalSocket": {
+        "forward": 0.468829,
+        "height": 0.122595,
+        "bone": "pawR",
+        "atSeconds": 0.2167,
+        "source": "runtime-bone-world-position"
+      }
+    },
+    {
+      "sourceId": "pisuke",
+      "targetId": "moguzo",
+      "slot": "s2",
+      "socket": {
+        "forward": 0.197142,
+        "height": 0.128051,
+        "bone": "footR",
+        "atSeconds": 0.1833,
+        "source": "runtime-bone-world-position"
+      },
+      "canonicalSocket": {
+        "forward": 0.256085,
+        "height": 0.211354,
+        "bone": "footR",
+        "atSeconds": 0.1833,
+        "source": "runtime-bone-world-position"
+      }
+    },
+    {
+      "sourceId": "takimaru",
+      "targetId": "moguzo",
+      "slot": "s2",
+      "socket": {
+        "forward": 0.294506,
+        "height": 0.010418,
+        "bone": "pawR",
+        "atSeconds": 0.3333,
+        "source": "runtime-bone-world-position"
+      },
+      "canonicalSocket": {
+        "forward": 0.391532,
+        "height": 0.011031,
+        "bone": "pawR",
+        "atSeconds": 0.3333,
+        "source": "runtime-bone-world-position"
+      }
+    },
+    {
+      "sourceId": "yomikage",
+      "targetId": "moguzo",
+      "slot": "s2",
+      "socket": {
+        "forward": 0.21725,
+        "height": 0.366022,
+        "bone": "pawR",
+        "atSeconds": 0.2167,
+        "source": "runtime-bone-world-position"
+      },
+      "canonicalSocket": {
+        "forward": 0.235659,
+        "height": 0.393378,
+        "bone": "pawR",
+        "atSeconds": 0.2167,
+        "source": "runtime-bone-world-position"
+      }
+    },
+    {
+      "sourceId": "bullet",
+      "targetId": "moguzo",
+      "slot": "s2",
+      "socket": {
+        "forward": -0.161099,
+        "height": 0.166575,
+        "bone": "tail_03",
+        "atSeconds": 0.2833,
+        "source": "runtime-bone-world-position"
+      },
+      "canonicalSocket": {
+        "forward": -0.238719,
+        "height": 0.275993,
+        "bone": "tail_03",
+        "atSeconds": 0.2833,
+        "source": "runtime-bone-world-position"
+      }
+    },
+    {
+      "sourceId": "dark_moguzo",
+      "targetId": "moguzo",
+      "slot": "s2",
+      "socket": {
+        "forward": 0.34176,
+        "height": 0.219873,
+        "bone": "pawR",
+        "atSeconds": 0.1833,
+        "source": "runtime-bone-world-position"
+      },
+      "canonicalSocket": {
+        "forward": 0.34176,
+        "height": 0.219873,
+        "bone": "pawR",
+        "atSeconds": 0.1833,
+        "source": "runtime-bone-world-position"
+      }
+    },
+    {
+      "sourceId": "moguzo",
+      "targetId": "pisuke",
+      "slot": "s2",
+      "socket": {
+        "forward": 0.477894,
+        "height": 0.147926,
+        "bone": "pawR",
+        "atSeconds": 0.2167,
+        "source": "runtime-bone-world-position"
+      },
+      "canonicalSocket": {
+        "forward": 0.468829,
+        "height": 0.122595,
+        "bone": "pawR",
+        "atSeconds": 0.2167,
+        "source": "runtime-bone-world-position"
+      }
+    },
+    {
+      "sourceId": "pisuke",
+      "targetId": "pisuke",
+      "slot": "s2",
+      "socket": {
+        "forward": 0.256085,
+        "height": 0.211354,
+        "bone": "footR",
+        "atSeconds": 0.1833,
+        "source": "runtime-bone-world-position"
+      },
+      "canonicalSocket": {
+        "forward": 0.256085,
+        "height": 0.211354,
+        "bone": "footR",
+        "atSeconds": 0.1833,
+        "source": "runtime-bone-world-position"
+      }
+    },
+    {
+      "sourceId": "takimaru",
+      "targetId": "pisuke",
+      "slot": "s2",
+      "socket": {
+        "forward": 0.315682,
+        "height": 0.023291,
+        "bone": "pawR",
+        "atSeconds": 0.3333,
+        "source": "runtime-bone-world-position"
+      },
+      "canonicalSocket": {
+        "forward": 0.391532,
+        "height": 0.011031,
+        "bone": "pawR",
+        "atSeconds": 0.3333,
+        "source": "runtime-bone-world-position"
+      }
+    },
+    {
+      "sourceId": "yomikage",
+      "targetId": "pisuke",
+      "slot": "s2",
+      "socket": {
+        "forward": 0.238693,
+        "height": 0.390209,
+        "bone": "pawR",
+        "atSeconds": 0.2167,
+        "source": "runtime-bone-world-position"
+      },
+      "canonicalSocket": {
+        "forward": 0.235659,
+        "height": 0.393378,
+        "bone": "pawR",
+        "atSeconds": 0.2167,
+        "source": "runtime-bone-world-position"
+      }
+    },
+    {
+      "sourceId": "bullet",
+      "targetId": "pisuke",
+      "slot": "s2",
+      "socket": {
+        "forward": -0.136771,
+        "height": 0.19914,
+        "bone": "tail_03",
+        "atSeconds": 0.2833,
+        "source": "runtime-bone-world-position"
+      },
+      "canonicalSocket": {
+        "forward": -0.238719,
+        "height": 0.275993,
+        "bone": "tail_03",
+        "atSeconds": 0.2833,
+        "source": "runtime-bone-world-position"
+      }
+    },
+    {
+      "sourceId": "dark_moguzo",
+      "targetId": "pisuke",
+      "slot": "s2",
+      "socket": {
+        "forward": 0.342762,
+        "height": 0.248325,
+        "bone": "pawR",
+        "atSeconds": 0.1833,
+        "source": "runtime-bone-world-position"
+      },
+      "canonicalSocket": {
+        "forward": 0.34176,
+        "height": 0.219873,
+        "bone": "pawR",
+        "atSeconds": 0.1833,
+        "source": "runtime-bone-world-position"
+      }
+    },
+    {
+      "sourceId": "moguzo",
+      "targetId": "godan",
+      "slot": "s2",
+      "socket": {
+        "forward": 0.565191,
+        "height": 0.111708,
+        "bone": "pawR",
+        "atSeconds": 0.2167,
+        "source": "runtime-bone-world-position"
+      },
+      "canonicalSocket": {
+        "forward": 0.468829,
+        "height": 0.122595,
+        "bone": "pawR",
+        "atSeconds": 0.2167,
+        "source": "runtime-bone-world-position"
+      }
+    },
+    {
+      "sourceId": "pisuke",
+      "targetId": "godan",
+      "slot": "s2",
+      "socket": {
+        "forward": 0.189895,
+        "height": 0.094511,
+        "bone": "footR",
+        "atSeconds": 0.1833,
+        "source": "runtime-bone-world-position"
+      },
+      "canonicalSocket": {
+        "forward": 0.256085,
+        "height": 0.211354,
+        "bone": "footR",
+        "atSeconds": 0.1833,
+        "source": "runtime-bone-world-position"
+      }
+    },
+    {
+      "sourceId": "takimaru",
+      "targetId": "godan",
+      "slot": "s2",
+      "socket": {
+        "forward": 0.345098,
+        "height": -0.002557,
+        "bone": "pawR",
+        "atSeconds": 0.3333,
+        "source": "runtime-bone-world-position"
+      },
+      "canonicalSocket": {
+        "forward": 0.391532,
+        "height": 0.011031,
+        "bone": "pawR",
+        "atSeconds": 0.3333,
+        "source": "runtime-bone-world-position"
+      }
+    },
+    {
+      "sourceId": "yomikage",
+      "targetId": "godan",
+      "slot": "s2",
+      "socket": {
+        "forward": 0.241427,
+        "height": 0.423788,
+        "bone": "pawR",
+        "atSeconds": 0.2167,
+        "source": "runtime-bone-world-position"
+      },
+      "canonicalSocket": {
+        "forward": 0.235659,
+        "height": 0.393378,
+        "bone": "pawR",
+        "atSeconds": 0.2167,
+        "source": "runtime-bone-world-position"
+      }
+    },
+    {
+      "sourceId": "bullet",
+      "targetId": "godan",
+      "slot": "s2",
+      "socket": {
+        "forward": -0.178162,
+        "height": 0.204483,
+        "bone": "tail_03",
+        "atSeconds": 0.2833,
+        "source": "runtime-bone-world-position"
+      },
+      "canonicalSocket": {
+        "forward": -0.238719,
+        "height": 0.275993,
+        "bone": "tail_03",
+        "atSeconds": 0.2833,
+        "source": "runtime-bone-world-position"
+      }
+    },
+    {
+      "sourceId": "dark_moguzo",
+      "targetId": "godan",
+      "slot": "s2",
+      "socket": {
+        "forward": 0.419287,
+        "height": 0.230567,
+        "bone": "pawR",
+        "atSeconds": 0.1833,
+        "source": "runtime-bone-world-position"
+      },
+      "canonicalSocket": {
+        "forward": 0.34176,
+        "height": 0.219873,
+        "bone": "pawR",
+        "atSeconds": 0.1833,
+        "source": "runtime-bone-world-position"
+      }
+    },
+    {
+      "sourceId": "moguzo",
+      "targetId": "hakuma",
+      "slot": "s2",
+      "socket": {
+        "forward": 0.54852,
+        "height": 0.138525,
+        "bone": "pawR",
+        "atSeconds": 0.2167,
+        "source": "runtime-bone-world-position"
+      },
+      "canonicalSocket": {
+        "forward": 0.468829,
+        "height": 0.122595,
+        "bone": "pawR",
+        "atSeconds": 0.2167,
+        "source": "runtime-bone-world-position"
+      }
+    },
+    {
+      "sourceId": "pisuke",
+      "targetId": "hakuma",
+      "slot": "s2",
+      "socket": {
+        "forward": 0.208675,
+        "height": 0.124164,
+        "bone": "footR",
+        "atSeconds": 0.1833,
+        "source": "runtime-bone-world-position"
+      },
+      "canonicalSocket": {
+        "forward": 0.256085,
+        "height": 0.211354,
+        "bone": "footR",
+        "atSeconds": 0.1833,
+        "source": "runtime-bone-world-position"
+      }
+    },
+    {
+      "sourceId": "takimaru",
+      "targetId": "hakuma",
+      "slot": "s2",
+      "socket": {
+        "forward": 0.344278,
+        "height": 0.020302,
+        "bone": "pawR",
+        "atSeconds": 0.3333,
+        "source": "runtime-bone-world-position"
+      },
+      "canonicalSocket": {
+        "forward": 0.391532,
+        "height": 0.011031,
+        "bone": "pawR",
+        "atSeconds": 0.3333,
+        "source": "runtime-bone-world-position"
+      }
+    },
+    {
+      "sourceId": "yomikage",
+      "targetId": "hakuma",
+      "slot": "s2",
+      "socket": {
+        "forward": 0.236176,
+        "height": 0.435478,
+        "bone": "pawR",
+        "atSeconds": 0.2167,
+        "source": "runtime-bone-world-position"
+      },
+      "canonicalSocket": {
+        "forward": 0.235659,
+        "height": 0.393378,
+        "bone": "pawR",
+        "atSeconds": 0.2167,
+        "source": "runtime-bone-world-position"
+      }
+    },
+    {
+      "sourceId": "bullet",
+      "targetId": "hakuma",
+      "slot": "s2",
+      "socket": {
+        "forward": -0.195557,
+        "height": 0.21242,
+        "bone": "tail_03",
+        "atSeconds": 0.2833,
+        "source": "runtime-bone-world-position"
+      },
+      "canonicalSocket": {
+        "forward": -0.238719,
+        "height": 0.275993,
+        "bone": "tail_03",
+        "atSeconds": 0.2833,
+        "source": "runtime-bone-world-position"
+      }
+    },
+    {
+      "sourceId": "dark_moguzo",
+      "targetId": "hakuma",
+      "slot": "s2",
+      "socket": {
+        "forward": 0.39718,
+        "height": 0.254364,
+        "bone": "pawR",
+        "atSeconds": 0.1833,
+        "source": "runtime-bone-world-position"
+      },
+      "canonicalSocket": {
+        "forward": 0.34176,
+        "height": 0.219873,
+        "bone": "pawR",
+        "atSeconds": 0.1833,
+        "source": "runtime-bone-world-position"
+      }
+    },
+    {
+      "sourceId": "moguzo",
+      "targetId": "chirka",
+      "slot": "s2",
+      "socket": {
+        "forward": 0.446843,
+        "height": 0.120527,
+        "bone": "pawR",
+        "atSeconds": 0.2167,
+        "source": "runtime-bone-world-position"
+      },
+      "canonicalSocket": {
+        "forward": 0.468829,
+        "height": 0.122595,
+        "bone": "pawR",
+        "atSeconds": 0.2167,
+        "source": "runtime-bone-world-position"
+      }
+    },
+    {
+      "sourceId": "pisuke",
+      "targetId": "chirka",
+      "slot": "s2",
+      "socket": {
+        "forward": 0.208253,
+        "height": 0.154295,
+        "bone": "footR",
+        "atSeconds": 0.1833,
+        "source": "runtime-bone-world-position"
+      },
+      "canonicalSocket": {
+        "forward": 0.256085,
+        "height": 0.211354,
+        "bone": "footR",
+        "atSeconds": 0.1833,
+        "source": "runtime-bone-world-position"
+      }
+    },
+    {
+      "sourceId": "takimaru",
+      "targetId": "chirka",
+      "slot": "s2",
+      "socket": {
+        "forward": 0.284275,
+        "height": 0.011558,
+        "bone": "pawR",
+        "atSeconds": 0.3333,
+        "source": "runtime-bone-world-position"
+      },
+      "canonicalSocket": {
+        "forward": 0.391532,
+        "height": 0.011031,
+        "bone": "pawR",
+        "atSeconds": 0.3333,
+        "source": "runtime-bone-world-position"
+      }
+    },
+    {
+      "sourceId": "yomikage",
+      "targetId": "chirka",
+      "slot": "s2",
+      "socket": {
+        "forward": 0.2128,
+        "height": 0.350844,
+        "bone": "pawR",
+        "atSeconds": 0.2167,
+        "source": "runtime-bone-world-position"
+      },
+      "canonicalSocket": {
+        "forward": 0.235659,
+        "height": 0.393378,
+        "bone": "pawR",
+        "atSeconds": 0.2167,
+        "source": "runtime-bone-world-position"
+      }
+    },
+    {
+      "sourceId": "bullet",
+      "targetId": "chirka",
+      "slot": "s2",
+      "socket": {
+        "forward": -0.163358,
+        "height": 0.188227,
+        "bone": "tail_03",
+        "atSeconds": 0.2833,
+        "source": "runtime-bone-world-position"
+      },
+      "canonicalSocket": {
+        "forward": -0.238719,
+        "height": 0.275993,
+        "bone": "tail_03",
+        "atSeconds": 0.2833,
+        "source": "runtime-bone-world-position"
+      }
+    },
+    {
+      "sourceId": "dark_moguzo",
+      "targetId": "chirka",
+      "slot": "s2",
+      "socket": {
+        "forward": 0.324945,
+        "height": 0.213235,
+        "bone": "pawR",
+        "atSeconds": 0.1833,
+        "source": "runtime-bone-world-position"
+      },
+      "canonicalSocket": {
+        "forward": 0.34176,
+        "height": 0.219873,
+        "bone": "pawR",
+        "atSeconds": 0.1833,
+        "source": "runtime-bone-world-position"
+      }
+    },
+    {
+      "sourceId": "moguzo",
+      "targetId": "takimaru",
+      "slot": "s2",
+      "socket": {
+        "forward": 0.619482,
+        "height": 0.144003,
+        "bone": "pawR",
+        "atSeconds": 0.2167,
+        "source": "runtime-bone-world-position"
+      },
+      "canonicalSocket": {
+        "forward": 0.468829,
+        "height": 0.122595,
+        "bone": "pawR",
+        "atSeconds": 0.2167,
+        "source": "runtime-bone-world-position"
+      }
+    },
+    {
+      "sourceId": "pisuke",
+      "targetId": "takimaru",
+      "slot": "s2",
+      "socket": {
+        "forward": 0.250629,
+        "height": 0.153533,
+        "bone": "footR",
+        "atSeconds": 0.1833,
+        "source": "runtime-bone-world-position"
+      },
+      "canonicalSocket": {
+        "forward": 0.256085,
+        "height": 0.211354,
+        "bone": "footR",
+        "atSeconds": 0.1833,
+        "source": "runtime-bone-world-position"
+      }
+    },
+    {
+      "sourceId": "takimaru",
+      "targetId": "takimaru",
+      "slot": "s2",
+      "socket": {
+        "forward": 0.391532,
+        "height": 0.011031,
+        "bone": "pawR",
+        "atSeconds": 0.3333,
+        "source": "runtime-bone-world-position"
+      },
+      "canonicalSocket": {
+        "forward": 0.391532,
+        "height": 0.011031,
+        "bone": "pawR",
+        "atSeconds": 0.3333,
+        "source": "runtime-bone-world-position"
+      }
+    },
+    {
+      "sourceId": "yomikage",
+      "targetId": "takimaru",
+      "slot": "s2",
+      "socket": {
+        "forward": 0.277718,
+        "height": 0.481612,
+        "bone": "pawR",
+        "atSeconds": 0.2167,
+        "source": "runtime-bone-world-position"
+      },
+      "canonicalSocket": {
+        "forward": 0.235659,
+        "height": 0.393378,
+        "bone": "pawR",
+        "atSeconds": 0.2167,
+        "source": "runtime-bone-world-position"
+      }
+    },
+    {
+      "sourceId": "bullet",
+      "targetId": "takimaru",
+      "slot": "s2",
+      "socket": {
+        "forward": -0.177945,
+        "height": 0.21619,
+        "bone": "tail_03",
+        "atSeconds": 0.2833,
+        "source": "runtime-bone-world-position"
+      },
+      "canonicalSocket": {
+        "forward": -0.238719,
+        "height": 0.275993,
+        "bone": "tail_03",
+        "atSeconds": 0.2833,
+        "source": "runtime-bone-world-position"
+      }
+    },
+    {
+      "sourceId": "dark_moguzo",
+      "targetId": "takimaru",
+      "slot": "s2",
+      "socket": {
+        "forward": 0.453554,
+        "height": 0.273365,
+        "bone": "pawR",
+        "atSeconds": 0.1833,
+        "source": "runtime-bone-world-position"
+      },
+      "canonicalSocket": {
+        "forward": 0.34176,
+        "height": 0.219873,
+        "bone": "pawR",
+        "atSeconds": 0.1833,
+        "source": "runtime-bone-world-position"
+      }
+    },
+    {
+      "sourceId": "moguzo",
+      "targetId": "yomikage",
+      "slot": "s2",
+      "socket": {
+        "forward": 0.492795,
+        "height": 0.139261,
+        "bone": "pawR",
+        "atSeconds": 0.2167,
+        "source": "runtime-bone-world-position"
+      },
+      "canonicalSocket": {
+        "forward": 0.468829,
+        "height": 0.122595,
+        "bone": "pawR",
+        "atSeconds": 0.2167,
+        "source": "runtime-bone-world-position"
+      }
+    },
+    {
+      "sourceId": "pisuke",
+      "targetId": "yomikage",
+      "slot": "s2",
+      "socket": {
+        "forward": 0.235591,
+        "height": 0.173189,
+        "bone": "footR",
+        "atSeconds": 0.1833,
+        "source": "runtime-bone-world-position"
+      },
+      "canonicalSocket": {
+        "forward": 0.256085,
+        "height": 0.211354,
+        "bone": "footR",
+        "atSeconds": 0.1833,
+        "source": "runtime-bone-world-position"
+      }
+    },
+    {
+      "sourceId": "takimaru",
+      "targetId": "yomikage",
+      "slot": "s2",
+      "socket": {
+        "forward": 0.318094,
+        "height": 0.0192,
+        "bone": "pawR",
+        "atSeconds": 0.3333,
+        "source": "runtime-bone-world-position"
+      },
+      "canonicalSocket": {
+        "forward": 0.391532,
+        "height": 0.011031,
+        "bone": "pawR",
+        "atSeconds": 0.3333,
+        "source": "runtime-bone-world-position"
+      }
+    },
+    {
+      "sourceId": "yomikage",
+      "targetId": "yomikage",
+      "slot": "s2",
+      "socket": {
+        "forward": 0.235659,
+        "height": 0.393378,
+        "bone": "pawR",
+        "atSeconds": 0.2167,
+        "source": "runtime-bone-world-position"
+      },
+      "canonicalSocket": {
+        "forward": 0.235659,
+        "height": 0.393378,
+        "bone": "pawR",
+        "atSeconds": 0.2167,
+        "source": "runtime-bone-world-position"
+      }
+    },
+    {
+      "sourceId": "bullet",
+      "targetId": "yomikage",
+      "slot": "s2",
+      "socket": {
+        "forward": -0.160267,
+        "height": 0.189935,
+        "bone": "tail_03",
+        "atSeconds": 0.2833,
+        "source": "runtime-bone-world-position"
+      },
+      "canonicalSocket": {
+        "forward": -0.238719,
+        "height": 0.275993,
+        "bone": "tail_03",
+        "atSeconds": 0.2833,
+        "source": "runtime-bone-world-position"
+      }
+    },
+    {
+      "sourceId": "dark_moguzo",
+      "targetId": "yomikage",
+      "slot": "s2",
+      "socket": {
+        "forward": 0.356527,
+        "height": 0.24163,
+        "bone": "pawR",
+        "atSeconds": 0.1833,
+        "source": "runtime-bone-world-position"
+      },
+      "canonicalSocket": {
+        "forward": 0.34176,
+        "height": 0.219873,
+        "bone": "pawR",
+        "atSeconds": 0.1833,
+        "source": "runtime-bone-world-position"
+      }
+    },
+    {
+      "sourceId": "moguzo",
+      "targetId": "bullet",
+      "slot": "s2",
+      "socket": {
+        "forward": 0.478975,
+        "height": 0.129291,
+        "bone": "pawR",
+        "atSeconds": 0.2167,
+        "source": "runtime-bone-world-position"
+      },
+      "canonicalSocket": {
+        "forward": 0.468829,
+        "height": 0.122595,
+        "bone": "pawR",
+        "atSeconds": 0.2167,
+        "source": "runtime-bone-world-position"
+      }
+    },
+    {
+      "sourceId": "pisuke",
+      "targetId": "bullet",
+      "slot": "s2",
+      "socket": {
+        "forward": 0.201782,
+        "height": 0.132771,
+        "bone": "footR",
+        "atSeconds": 0.1833,
+        "source": "runtime-bone-world-position"
+      },
+      "canonicalSocket": {
+        "forward": 0.256085,
+        "height": 0.211354,
+        "bone": "footR",
+        "atSeconds": 0.1833,
+        "source": "runtime-bone-world-position"
+      }
+    },
+    {
+      "sourceId": "takimaru",
+      "targetId": "bullet",
+      "slot": "s2",
+      "socket": {
+        "forward": 0.302268,
+        "height": 0.015715,
+        "bone": "pawR",
+        "atSeconds": 0.3333,
+        "source": "runtime-bone-world-position"
+      },
+      "canonicalSocket": {
+        "forward": 0.391532,
+        "height": 0.011031,
+        "bone": "pawR",
+        "atSeconds": 0.3333,
+        "source": "runtime-bone-world-position"
+      }
+    },
+    {
+      "sourceId": "yomikage",
+      "targetId": "bullet",
+      "slot": "s2",
+      "socket": {
+        "forward": 0.219071,
+        "height": 0.378286,
+        "bone": "pawR",
+        "atSeconds": 0.2167,
+        "source": "runtime-bone-world-position"
+      },
+      "canonicalSocket": {
+        "forward": 0.235659,
+        "height": 0.393378,
+        "bone": "pawR",
+        "atSeconds": 0.2167,
+        "source": "runtime-bone-world-position"
+      }
+    },
+    {
+      "sourceId": "bullet",
+      "targetId": "bullet",
+      "slot": "s2",
+      "socket": {
+        "forward": -0.238719,
+        "height": 0.275993,
+        "bone": "tail_03",
+        "atSeconds": 0.2833,
+        "source": "runtime-bone-world-position"
+      },
+      "canonicalSocket": {
+        "forward": -0.238719,
+        "height": 0.275993,
+        "bone": "tail_03",
+        "atSeconds": 0.2833,
+        "source": "runtime-bone-world-position"
+      }
+    },
+    {
+      "sourceId": "dark_moguzo",
+      "targetId": "bullet",
+      "slot": "s2",
+      "socket": {
+        "forward": 0.347599,
+        "height": 0.229362,
+        "bone": "pawR",
+        "atSeconds": 0.1833,
+        "source": "runtime-bone-world-position"
+      },
+      "canonicalSocket": {
+        "forward": 0.34176,
+        "height": 0.219873,
+        "bone": "pawR",
+        "atSeconds": 0.1833,
+        "source": "runtime-bone-world-position"
+      }
+    },
+    {
+      "sourceId": "moguzo",
+      "targetId": "dark_moguzo",
+      "slot": "s2",
+      "socket": {
+        "forward": 0.468829,
+        "height": 0.122595,
+        "bone": "pawR",
+        "atSeconds": 0.2167,
+        "source": "runtime-bone-world-position"
+      },
+      "canonicalSocket": {
+        "forward": 0.468829,
+        "height": 0.122595,
+        "bone": "pawR",
+        "atSeconds": 0.2167,
+        "source": "runtime-bone-world-position"
+      }
+    },
+    {
+      "sourceId": "pisuke",
+      "targetId": "dark_moguzo",
+      "slot": "s2",
+      "socket": {
+        "forward": 0.197142,
+        "height": 0.128051,
+        "bone": "footR",
+        "atSeconds": 0.1833,
+        "source": "runtime-bone-world-position"
+      },
+      "canonicalSocket": {
+        "forward": 0.256085,
+        "height": 0.211354,
+        "bone": "footR",
+        "atSeconds": 0.1833,
+        "source": "runtime-bone-world-position"
+      }
+    },
+    {
+      "sourceId": "takimaru",
+      "targetId": "dark_moguzo",
+      "slot": "s2",
+      "socket": {
+        "forward": 0.294506,
+        "height": 0.010418,
+        "bone": "pawR",
+        "atSeconds": 0.3333,
+        "source": "runtime-bone-world-position"
+      },
+      "canonicalSocket": {
+        "forward": 0.391532,
+        "height": 0.011031,
+        "bone": "pawR",
+        "atSeconds": 0.3333,
+        "source": "runtime-bone-world-position"
+      }
+    },
+    {
+      "sourceId": "yomikage",
+      "targetId": "dark_moguzo",
+      "slot": "s2",
+      "socket": {
+        "forward": 0.21725,
+        "height": 0.366022,
+        "bone": "pawR",
+        "atSeconds": 0.2167,
+        "source": "runtime-bone-world-position"
+      },
+      "canonicalSocket": {
+        "forward": 0.235659,
+        "height": 0.393378,
+        "bone": "pawR",
+        "atSeconds": 0.2167,
+        "source": "runtime-bone-world-position"
+      }
+    },
+    {
+      "sourceId": "bullet",
+      "targetId": "dark_moguzo",
+      "slot": "s2",
+      "socket": {
+        "forward": -0.161099,
+        "height": 0.166575,
+        "bone": "tail_03",
+        "atSeconds": 0.2833,
+        "source": "runtime-bone-world-position"
+      },
+      "canonicalSocket": {
+        "forward": -0.238719,
+        "height": 0.275993,
+        "bone": "tail_03",
+        "atSeconds": 0.2833,
+        "source": "runtime-bone-world-position"
+      }
+    },
+    {
+      "sourceId": "dark_moguzo",
+      "targetId": "dark_moguzo",
+      "slot": "s2",
+      "socket": {
+        "forward": 0.34176,
+        "height": 0.219873,
+        "bone": "pawR",
+        "atSeconds": 0.1833,
+        "source": "runtime-bone-world-position"
+      },
+      "canonicalSocket": {
+        "forward": 0.34176,
+        "height": 0.219873,
+        "bone": "pawR",
+        "atSeconds": 0.1833,
+        "source": "runtime-bone-world-position"
+      }
+    }
+  ],
+  "seeded": [
+    {
+      "seed": 7,
+      "baseId": "moguzo",
+      "appearance": {
+        "baseId": "moguzo",
+        "parts": {
+          "head": "base",
+          "ears": "base",
+          "tail": "base",
+          "hands": "base",
+          "feet": "base",
+          "accessory": "base"
+        },
+        "palette": {
+          "fur": "#b8707f",
+          "belly": "#ebcc94",
+          "muzzle": "#edd4a3",
+          "accent": "#d9bc78",
+          "pattern": "#554235",
+          "paw": "#422e21",
+          "foot": "#383636",
+          "ear": "#734c33",
+          "tail": "#bd915c"
+        },
+        "pattern": "stripes"
+      },
+      "contacts": {
+        "moguzo.s1": {
+          "ref": "moguzo.s1",
+          "sourceCharacterId": "moguzo",
+          "sourceMoveId": "s1",
+          "clip": "s1_v17",
+          "motionVersion": "v17",
+          "sourceVersion": "v17-p3-specials-1",
+          "source": "runtime-skinned-mesh",
+          "sampling": "exact-clip-clock",
+          "status": "ok",
+          "sampledContactSeconds": 0.2167,
+          "contactSeconds": 0.2167,
+          "activeFrameCount": 2,
+          "attackPart": "armR",
+          "attackLimb": "pawR",
+          "kind": "projectile",
+          "reach": 0.526389,
+          "height": 0.167294,
+          "activeReach": [
+            {
+              "phase": 0,
+              "frame": 0,
+              "seconds": 0.2167,
+              "reach": 0.526389,
+              "height": 0.167294
+            },
+            {
+              "phase": 1,
+              "frame": 1,
+              "seconds": 0.23333332538604737,
+              "reach": 0.474629,
+              "height": 0.296421
+            }
+          ],
+          "contactSocket": {
+            "forward": 0.468829,
+            "height": 0.122595,
+            "bone": "pawR",
+            "atSeconds": 0.2167,
+            "source": "runtime-bone-world-position"
+          },
+          "projectileSocket": {
+            "forward": 0.468829,
+            "height": 0.122595,
+            "bone": "pawR",
+            "atSeconds": 0.2167,
+            "source": "runtime-bone-world-position"
+          },
+          "visualRigId": "moguzo",
+          "grafts": []
+        },
+        "pisuke.s1": {
+          "ref": "pisuke.s1",
+          "sourceCharacterId": "pisuke",
+          "sourceMoveId": "s1",
+          "clip": "s1_v17",
+          "motionVersion": "v17",
+          "sourceVersion": "v17-p3-specials-1",
+          "source": "runtime-skinned-mesh",
+          "sampling": "exact-clip-clock",
+          "status": "ok",
+          "sampledContactSeconds": 0.1833,
+          "contactSeconds": 0.1833,
+          "activeFrameCount": 1,
+          "attackPart": "legR",
+          "attackLimb": "footR",
+          "kind": "projectile",
+          "reach": 0.317014,
+          "height": 0.131106,
+          "activeReach": [
+            {
+              "phase": 0,
+              "frame": 0,
+              "seconds": 0.1833,
+              "reach": 0.317014,
+              "height": 0.131106
+            }
+          ],
+          "contactSocket": {
+            "forward": 0.197142,
+            "height": 0.128051,
+            "bone": "footR",
+            "atSeconds": 0.1833,
+            "source": "runtime-bone-world-position"
+          },
+          "projectileSocket": {
+            "forward": 0.197142,
+            "height": 0.128051,
+            "bone": "footR",
+            "atSeconds": 0.1833,
+            "source": "runtime-bone-world-position"
+          },
+          "visualRigId": "moguzo",
+          "grafts": []
+        },
+        "takimaru.s1": {
+          "ref": "takimaru.s1",
+          "sourceCharacterId": "takimaru",
+          "sourceMoveId": "s1",
+          "clip": "s1_v17",
+          "motionVersion": "v17",
+          "sourceVersion": "v17-p3-specials-1",
+          "source": "runtime-skinned-mesh",
+          "sampling": "exact-clip-clock",
+          "status": "ok",
+          "sampledContactSeconds": 0.3333,
+          "contactSeconds": 0.3333,
+          "activeFrameCount": 1,
+          "attackPart": "armL",
+          "attackLimb": "pawL+pawR",
+          "kind": "projectile",
+          "reach": 0.369774,
+          "height": 0.093811,
+          "activeReach": [
+            {
+              "phase": 0,
+              "frame": 0,
+              "seconds": 0.3333,
+              "reach": 0.369774,
+              "height": 0.093811
+            }
+          ],
+          "contactSocket": {
+            "forward": 0.294506,
+            "height": 0.010418,
+            "bone": "pawR",
+            "atSeconds": 0.3333,
+            "source": "runtime-bone-world-position"
+          },
+          "projectileSocket": {
+            "forward": 0.294506,
+            "height": 0.010418,
+            "bone": "pawR",
+            "atSeconds": 0.3333,
+            "source": "runtime-bone-world-position"
+          },
+          "visualRigId": "moguzo",
+          "grafts": []
+        },
+        "yomikage.s1": {
+          "ref": "yomikage.s1",
+          "sourceCharacterId": "yomikage",
+          "sourceMoveId": "s1",
+          "clip": "s1_v17",
+          "motionVersion": "v17",
+          "sourceVersion": "v17-p3-specials-1",
+          "source": "runtime-skinned-mesh",
+          "sampling": "exact-clip-clock",
+          "status": "ok",
+          "sampledContactSeconds": 0.2167,
+          "contactSeconds": 0.2167,
+          "activeFrameCount": 1,
+          "attackPart": "armR",
+          "attackLimb": "pawR",
+          "kind": "projectile",
+          "reach": 0.292397,
+          "height": 0.375146,
+          "activeReach": [
+            {
+              "phase": 0,
+              "frame": 0,
+              "seconds": 0.2167,
+              "reach": 0.292397,
+              "height": 0.375146
+            }
+          ],
+          "contactSocket": {
+            "forward": 0.21725,
+            "height": 0.366022,
+            "bone": "pawR",
+            "atSeconds": 0.2167,
+            "source": "runtime-bone-world-position"
+          },
+          "projectileSocket": {
+            "forward": 0.21725,
+            "height": 0.366022,
+            "bone": "pawR",
+            "atSeconds": 0.2167,
+            "source": "runtime-bone-world-position"
+          },
+          "visualRigId": "moguzo",
+          "grafts": []
+        },
+        "bullet.s1": {
+          "ref": "bullet.s1",
+          "sourceCharacterId": "bullet",
+          "sourceMoveId": "s1",
+          "clip": "s1_v17",
+          "motionVersion": "v17",
+          "sourceVersion": "v17-p3-specials-1",
+          "source": "runtime-skinned-mesh",
+          "sampling": "exact-clip-clock",
+          "status": "ok",
+          "sampledContactSeconds": 0.2833,
+          "contactSeconds": 0.2833,
+          "activeFrameCount": 1,
+          "attackPart": "tail",
+          "attackLimb": "tail",
+          "kind": "projectile",
+          "reach": -0.099084,
+          "height": 0.165152,
+          "activeReach": [
+            {
+              "phase": 0,
+              "frame": 0,
+              "seconds": 0.2833,
+              "reach": -0.099084,
+              "height": 0.165152
+            }
+          ],
+          "contactSocket": {
+            "forward": -0.161099,
+            "height": 0.166575,
+            "bone": "tail_03",
+            "atSeconds": 0.2833,
+            "source": "runtime-bone-world-position"
+          },
+          "projectileSocket": {
+            "forward": -0.161099,
+            "height": 0.166575,
+            "bone": "tail_03",
+            "atSeconds": 0.2833,
+            "source": "runtime-bone-world-position"
+          },
+          "visualRigId": "moguzo",
+          "grafts": []
+        },
+        "dark_moguzo.s1": {
+          "ref": "dark_moguzo.s1",
+          "sourceCharacterId": "dark_moguzo",
+          "sourceMoveId": "s1",
+          "clip": "s1_v17",
+          "motionVersion": "v17",
+          "sourceVersion": "v17-p3-specials-1",
+          "source": "runtime-skinned-mesh",
+          "sampling": "exact-clip-clock",
+          "status": "ok",
+          "sampledContactSeconds": 0.1833,
+          "contactSeconds": 0.1833,
+          "activeFrameCount": 1,
+          "attackPart": "armR",
+          "attackLimb": "pawR",
+          "kind": "projectile",
+          "reach": 0.414419,
+          "height": 0.234056,
+          "activeReach": [
+            {
+              "phase": 0,
+              "frame": 0,
+              "seconds": 0.1833,
+              "reach": 0.414419,
+              "height": 0.234056
+            }
+          ],
+          "contactSocket": {
+            "forward": 0.34176,
+            "height": 0.219873,
+            "bone": "pawR",
+            "atSeconds": 0.1833,
+            "source": "runtime-bone-world-position"
+          },
+          "projectileSocket": {
+            "forward": 0.34176,
+            "height": 0.219873,
+            "bone": "pawR",
+            "atSeconds": 0.1833,
+            "source": "runtime-bone-world-position"
+          },
+          "visualRigId": "moguzo",
+          "grafts": []
+        }
+      },
+      "valid": true
+    },
+    {
+      "seed": 19,
+      "baseId": "moguzo",
+      "appearance": {
+        "baseId": "moguzo",
+        "parts": {
+          "head": "base",
+          "ears": "base",
+          "tail": "base",
+          "hands": "base",
+          "feet": "base",
+          "accessory": "base"
+        },
+        "palette": {
+          "fur": "#9e76b3",
+          "belly": "#ebcc94",
+          "muzzle": "#edd4a3",
+          "accent": "#d9bc78",
+          "pattern": "#554235",
+          "paw": "#422e21",
+          "foot": "#383636",
+          "ear": "#734c33",
+          "tail": "#bd915c"
+        },
+        "pattern": "mask"
+      },
+      "contacts": {
+        "moguzo.s1": {
+          "ref": "moguzo.s1",
+          "sourceCharacterId": "moguzo",
+          "sourceMoveId": "s1",
+          "clip": "s1_v17",
+          "motionVersion": "v17",
+          "sourceVersion": "v17-p3-specials-1",
+          "source": "runtime-skinned-mesh",
+          "sampling": "exact-clip-clock",
+          "status": "ok",
+          "sampledContactSeconds": 0.2167,
+          "contactSeconds": 0.2167,
+          "activeFrameCount": 2,
+          "attackPart": "armR",
+          "attackLimb": "pawR",
+          "kind": "projectile",
+          "reach": 0.526389,
+          "height": 0.167294,
+          "activeReach": [
+            {
+              "phase": 0,
+              "frame": 0,
+              "seconds": 0.2167,
+              "reach": 0.526389,
+              "height": 0.167294
+            },
+            {
+              "phase": 1,
+              "frame": 1,
+              "seconds": 0.23333332538604737,
+              "reach": 0.474629,
+              "height": 0.296421
+            }
+          ],
+          "contactSocket": {
+            "forward": 0.468829,
+            "height": 0.122595,
+            "bone": "pawR",
+            "atSeconds": 0.2167,
+            "source": "runtime-bone-world-position"
+          },
+          "projectileSocket": {
+            "forward": 0.468829,
+            "height": 0.122595,
+            "bone": "pawR",
+            "atSeconds": 0.2167,
+            "source": "runtime-bone-world-position"
+          },
+          "visualRigId": "moguzo",
+          "grafts": []
+        },
+        "pisuke.s1": {
+          "ref": "pisuke.s1",
+          "sourceCharacterId": "pisuke",
+          "sourceMoveId": "s1",
+          "clip": "s1_v17",
+          "motionVersion": "v17",
+          "sourceVersion": "v17-p3-specials-1",
+          "source": "runtime-skinned-mesh",
+          "sampling": "exact-clip-clock",
+          "status": "ok",
+          "sampledContactSeconds": 0.1833,
+          "contactSeconds": 0.1833,
+          "activeFrameCount": 1,
+          "attackPart": "legR",
+          "attackLimb": "footR",
+          "kind": "projectile",
+          "reach": 0.317014,
+          "height": 0.131106,
+          "activeReach": [
+            {
+              "phase": 0,
+              "frame": 0,
+              "seconds": 0.1833,
+              "reach": 0.317014,
+              "height": 0.131106
+            }
+          ],
+          "contactSocket": {
+            "forward": 0.197142,
+            "height": 0.128051,
+            "bone": "footR",
+            "atSeconds": 0.1833,
+            "source": "runtime-bone-world-position"
+          },
+          "projectileSocket": {
+            "forward": 0.197142,
+            "height": 0.128051,
+            "bone": "footR",
+            "atSeconds": 0.1833,
+            "source": "runtime-bone-world-position"
+          },
+          "visualRigId": "moguzo",
+          "grafts": []
+        },
+        "takimaru.s1": {
+          "ref": "takimaru.s1",
+          "sourceCharacterId": "takimaru",
+          "sourceMoveId": "s1",
+          "clip": "s1_v17",
+          "motionVersion": "v17",
+          "sourceVersion": "v17-p3-specials-1",
+          "source": "runtime-skinned-mesh",
+          "sampling": "exact-clip-clock",
+          "status": "ok",
+          "sampledContactSeconds": 0.3333,
+          "contactSeconds": 0.3333,
+          "activeFrameCount": 1,
+          "attackPart": "armL",
+          "attackLimb": "pawL+pawR",
+          "kind": "projectile",
+          "reach": 0.369774,
+          "height": 0.093811,
+          "activeReach": [
+            {
+              "phase": 0,
+              "frame": 0,
+              "seconds": 0.3333,
+              "reach": 0.369774,
+              "height": 0.093811
+            }
+          ],
+          "contactSocket": {
+            "forward": 0.294506,
+            "height": 0.010418,
+            "bone": "pawR",
+            "atSeconds": 0.3333,
+            "source": "runtime-bone-world-position"
+          },
+          "projectileSocket": {
+            "forward": 0.294506,
+            "height": 0.010418,
+            "bone": "pawR",
+            "atSeconds": 0.3333,
+            "source": "runtime-bone-world-position"
+          },
+          "visualRigId": "moguzo",
+          "grafts": []
+        },
+        "yomikage.s1": {
+          "ref": "yomikage.s1",
+          "sourceCharacterId": "yomikage",
+          "sourceMoveId": "s1",
+          "clip": "s1_v17",
+          "motionVersion": "v17",
+          "sourceVersion": "v17-p3-specials-1",
+          "source": "runtime-skinned-mesh",
+          "sampling": "exact-clip-clock",
+          "status": "ok",
+          "sampledContactSeconds": 0.2167,
+          "contactSeconds": 0.2167,
+          "activeFrameCount": 1,
+          "attackPart": "armR",
+          "attackLimb": "pawR",
+          "kind": "projectile",
+          "reach": 0.292397,
+          "height": 0.375146,
+          "activeReach": [
+            {
+              "phase": 0,
+              "frame": 0,
+              "seconds": 0.2167,
+              "reach": 0.292397,
+              "height": 0.375146
+            }
+          ],
+          "contactSocket": {
+            "forward": 0.21725,
+            "height": 0.366022,
+            "bone": "pawR",
+            "atSeconds": 0.2167,
+            "source": "runtime-bone-world-position"
+          },
+          "projectileSocket": {
+            "forward": 0.21725,
+            "height": 0.366022,
+            "bone": "pawR",
+            "atSeconds": 0.2167,
+            "source": "runtime-bone-world-position"
+          },
+          "visualRigId": "moguzo",
+          "grafts": []
+        },
+        "bullet.s1": {
+          "ref": "bullet.s1",
+          "sourceCharacterId": "bullet",
+          "sourceMoveId": "s1",
+          "clip": "s1_v17",
+          "motionVersion": "v17",
+          "sourceVersion": "v17-p3-specials-1",
+          "source": "runtime-skinned-mesh",
+          "sampling": "exact-clip-clock",
+          "status": "ok",
+          "sampledContactSeconds": 0.2833,
+          "contactSeconds": 0.2833,
+          "activeFrameCount": 1,
+          "attackPart": "tail",
+          "attackLimb": "tail",
+          "kind": "projectile",
+          "reach": -0.099084,
+          "height": 0.165152,
+          "activeReach": [
+            {
+              "phase": 0,
+              "frame": 0,
+              "seconds": 0.2833,
+              "reach": -0.099084,
+              "height": 0.165152
+            }
+          ],
+          "contactSocket": {
+            "forward": -0.161099,
+            "height": 0.166575,
+            "bone": "tail_03",
+            "atSeconds": 0.2833,
+            "source": "runtime-bone-world-position"
+          },
+          "projectileSocket": {
+            "forward": -0.161099,
+            "height": 0.166575,
+            "bone": "tail_03",
+            "atSeconds": 0.2833,
+            "source": "runtime-bone-world-position"
+          },
+          "visualRigId": "moguzo",
+          "grafts": []
+        },
+        "dark_moguzo.s1": {
+          "ref": "dark_moguzo.s1",
+          "sourceCharacterId": "dark_moguzo",
+          "sourceMoveId": "s1",
+          "clip": "s1_v17",
+          "motionVersion": "v17",
+          "sourceVersion": "v17-p3-specials-1",
+          "source": "runtime-skinned-mesh",
+          "sampling": "exact-clip-clock",
+          "status": "ok",
+          "sampledContactSeconds": 0.1833,
+          "contactSeconds": 0.1833,
+          "activeFrameCount": 1,
+          "attackPart": "armR",
+          "attackLimb": "pawR",
+          "kind": "projectile",
+          "reach": 0.414419,
+          "height": 0.234056,
+          "activeReach": [
+            {
+              "phase": 0,
+              "frame": 0,
+              "seconds": 0.1833,
+              "reach": 0.414419,
+              "height": 0.234056
+            }
+          ],
+          "contactSocket": {
+            "forward": 0.34176,
+            "height": 0.219873,
+            "bone": "pawR",
+            "atSeconds": 0.1833,
+            "source": "runtime-bone-world-position"
+          },
+          "projectileSocket": {
+            "forward": 0.34176,
+            "height": 0.219873,
+            "bone": "pawR",
+            "atSeconds": 0.1833,
+            "source": "runtime-bone-world-position"
+          },
+          "visualRigId": "moguzo",
+          "grafts": []
+        }
+      },
+      "valid": true
+    },
+    {
+      "seed": 41,
+      "baseId": "bullet",
+      "appearance": {
+        "baseId": "bullet",
+        "parts": {
+          "head": "base",
+          "ears": "base",
+          "tail": "base",
+          "hands": "base",
+          "feet": "base",
+          "accessory": "base"
+        },
+        "palette": {
+          "fur": "#679d82",
+          "belly": "#e68f3d",
+          "muzzle": "#e6994c",
+          "accent": "#679d82",
+          "pattern": "#554235",
+          "paw": "#5c3d29",
+          "foot": "#c79461",
+          "ear": "#73381a",
+          "tail": "#703012"
+        },
+        "pattern": "mask"
+      },
+      "contacts": {
+        "moguzo.s1": {
+          "ref": "moguzo.s1",
+          "sourceCharacterId": "moguzo",
+          "sourceMoveId": "s1",
+          "clip": "s1_v17",
+          "motionVersion": "v17",
+          "sourceVersion": "v17-p3-specials-1",
+          "source": "runtime-skinned-mesh",
+          "sampling": "exact-clip-clock",
+          "status": "ok",
+          "sampledContactSeconds": 0.2167,
+          "contactSeconds": 0.2167,
+          "activeFrameCount": 2,
+          "attackPart": "armR",
+          "attackLimb": "pawR",
+          "kind": "projectile",
+          "reach": 0.536592,
+          "height": 0.174626,
+          "activeReach": [
+            {
+              "phase": 0,
+              "frame": 0,
+              "seconds": 0.2167,
+              "reach": 0.536592,
+              "height": 0.174626
+            },
+            {
+              "phase": 1,
+              "frame": 1,
+              "seconds": 0.23333332538604737,
+              "reach": 0.484182,
+              "height": 0.303405
+            }
+          ],
+          "contactSocket": {
+            "forward": 0.478975,
+            "height": 0.129291,
+            "bone": "pawR",
+            "atSeconds": 0.2167,
+            "source": "runtime-bone-world-position"
+          },
+          "projectileSocket": {
+            "forward": 0.478975,
+            "height": 0.129291,
+            "bone": "pawR",
+            "atSeconds": 0.2167,
+            "source": "runtime-bone-world-position"
+          },
+          "visualRigId": "bullet",
+          "grafts": []
+        },
+        "pisuke.s1": {
+          "ref": "pisuke.s1",
+          "sourceCharacterId": "pisuke",
+          "sourceMoveId": "s1",
+          "clip": "s1_v17",
+          "motionVersion": "v17",
+          "sourceVersion": "v17-p3-specials-1",
+          "source": "runtime-skinned-mesh",
+          "sampling": "exact-clip-clock",
+          "status": "ok",
+          "sampledContactSeconds": 0.1833,
+          "contactSeconds": 0.1833,
+          "activeFrameCount": 1,
+          "attackPart": "legR",
+          "attackLimb": "footR",
+          "kind": "projectile",
+          "reach": 0.319766,
+          "height": 0.135116,
+          "activeReach": [
+            {
+              "phase": 0,
+              "frame": 0,
+              "seconds": 0.1833,
+              "reach": 0.319766,
+              "height": 0.135116
+            }
+          ],
+          "contactSocket": {
+            "forward": 0.201782,
+            "height": 0.132771,
+            "bone": "footR",
+            "atSeconds": 0.1833,
+            "source": "runtime-bone-world-position"
+          },
+          "projectileSocket": {
+            "forward": 0.201782,
+            "height": 0.132771,
+            "bone": "footR",
+            "atSeconds": 0.1833,
+            "source": "runtime-bone-world-position"
+          },
+          "visualRigId": "bullet",
+          "grafts": []
+        },
+        "takimaru.s1": {
+          "ref": "takimaru.s1",
+          "sourceCharacterId": "takimaru",
+          "sourceMoveId": "s1",
+          "clip": "s1_v17",
+          "motionVersion": "v17",
+          "sourceVersion": "v17-p3-specials-1",
+          "source": "runtime-skinned-mesh",
+          "sampling": "exact-clip-clock",
+          "status": "ok",
+          "sampledContactSeconds": 0.3333,
+          "contactSeconds": 0.3333,
+          "activeFrameCount": 1,
+          "attackPart": "armL",
+          "attackLimb": "pawL+pawR",
+          "kind": "projectile",
+          "reach": 0.378549,
+          "height": 0.099669,
+          "activeReach": [
+            {
+              "phase": 0,
+              "frame": 0,
+              "seconds": 0.3333,
+              "reach": 0.378549,
+              "height": 0.099669
+            }
+          ],
+          "contactSocket": {
+            "forward": 0.302268,
+            "height": 0.015715,
+            "bone": "pawR",
+            "atSeconds": 0.3333,
+            "source": "runtime-bone-world-position"
+          },
+          "projectileSocket": {
+            "forward": 0.302268,
+            "height": 0.015715,
+            "bone": "pawR",
+            "atSeconds": 0.3333,
+            "source": "runtime-bone-world-position"
+          },
+          "visualRigId": "bullet",
+          "grafts": []
+        },
+        "yomikage.s1": {
+          "ref": "yomikage.s1",
+          "sourceCharacterId": "yomikage",
+          "sourceMoveId": "s1",
+          "clip": "s1_v17",
+          "motionVersion": "v17",
+          "sourceVersion": "v17-p3-specials-1",
+          "source": "runtime-skinned-mesh",
+          "sampling": "exact-clip-clock",
+          "status": "ok",
+          "sampledContactSeconds": 0.2167,
+          "contactSeconds": 0.2167,
+          "activeFrameCount": 1,
+          "attackPart": "armR",
+          "attackLimb": "pawR",
+          "kind": "projectile",
+          "reach": 0.294201,
+          "height": 0.387763,
+          "activeReach": [
+            {
+              "phase": 0,
+              "frame": 0,
+              "seconds": 0.2167,
+              "reach": 0.294201,
+              "height": 0.387763
+            }
+          ],
+          "contactSocket": {
+            "forward": 0.219071,
+            "height": 0.378286,
+            "bone": "pawR",
+            "atSeconds": 0.2167,
+            "source": "runtime-bone-world-position"
+          },
+          "projectileSocket": {
+            "forward": 0.219071,
+            "height": 0.378286,
+            "bone": "pawR",
+            "atSeconds": 0.2167,
+            "source": "runtime-bone-world-position"
+          },
+          "visualRigId": "bullet",
+          "grafts": []
+        },
+        "bullet.s1": {
+          "ref": "bullet.s1",
+          "sourceCharacterId": "bullet",
+          "sourceMoveId": "s1",
+          "clip": "s1_v17",
+          "motionVersion": "v17",
+          "sourceVersion": "v17-p3-specials-1",
+          "source": "runtime-skinned-mesh",
+          "sampling": "exact-clip-clock",
+          "status": "ok",
+          "sampledContactSeconds": 0.2833,
+          "contactSeconds": 0.2833,
+          "activeFrameCount": 1,
+          "attackPart": "tail",
+          "attackLimb": "tail",
+          "kind": "projectile",
+          "reach": -0.082609,
+          "height": 0.234211,
+          "activeReach": [
+            {
+              "phase": 0,
+              "frame": 0,
+              "seconds": 0.2833,
+              "reach": -0.082609,
+              "height": 0.234211
+            }
+          ],
+          "contactSocket": {
+            "forward": -0.238719,
+            "height": 0.275993,
+            "bone": "tail_03",
+            "atSeconds": 0.2833,
+            "source": "runtime-bone-world-position"
+          },
+          "projectileSocket": {
+            "forward": -0.238719,
+            "height": 0.275993,
+            "bone": "tail_03",
+            "atSeconds": 0.2833,
+            "source": "runtime-bone-world-position"
+          },
+          "visualRigId": "bullet",
+          "grafts": []
+        },
+        "dark_moguzo.s1": {
+          "ref": "dark_moguzo.s1",
+          "sourceCharacterId": "dark_moguzo",
+          "sourceMoveId": "s1",
+          "clip": "s1_v17",
+          "motionVersion": "v17",
+          "sourceVersion": "v17-p3-specials-1",
+          "source": "runtime-skinned-mesh",
+          "sampling": "exact-clip-clock",
+          "status": "ok",
+          "sampledContactSeconds": 0.1833,
+          "contactSeconds": 0.1833,
+          "activeFrameCount": 1,
+          "attackPart": "armR",
+          "attackLimb": "pawR",
+          "kind": "projectile",
+          "reach": 0.420262,
+          "height": 0.244303,
+          "activeReach": [
+            {
+              "phase": 0,
+              "frame": 0,
+              "seconds": 0.1833,
+              "reach": 0.420262,
+              "height": 0.244303
+            }
+          ],
+          "contactSocket": {
+            "forward": 0.347599,
+            "height": 0.229362,
+            "bone": "pawR",
+            "atSeconds": 0.1833,
+            "source": "runtime-bone-world-position"
+          },
+          "projectileSocket": {
+            "forward": 0.347599,
+            "height": 0.229362,
+            "bone": "pawR",
+            "atSeconds": 0.1833,
+            "source": "runtime-bone-world-position"
+          },
+          "visualRigId": "bullet",
+          "grafts": []
+        }
+      },
+      "valid": true
+    }
+  ],
+  "originalAndPartsSHA256": {
+    "/workspace/scratch/ca539eada1ef/mamoken-p3-combat/exp/fable-3d/chars/moguzo/moguzo.glb": "8f25428c14e9cc58fe229367a1a2324cb9d6bdd716c2306b26c5061e82e44fdd",
+    "/workspace/scratch/ca539eada1ef/mamoken-p3-combat/exp/fable-3d/custom/v16/assets/moguzo_parts.glb": "b30a934c5176bf788756bf9ba06360b2600b8c3f75186ef6976575fe207253c9",
+    "/workspace/scratch/ca539eada1ef/mamoken-p3-combat/exp/fable-3d/chars/pisuke/pisuke.glb": "0636f1e1e30fbc4806acef3f5a0402225a83a50227799e96d17421adc92884f6",
+    "/workspace/scratch/ca539eada1ef/mamoken-p3-combat/exp/fable-3d/custom/v16/assets/pisuke_parts.glb": "2a6be1179e857e3abdf6df43f2d1b8edc336d48d119bc23f0e4c8d9534666d01",
+    "/workspace/scratch/ca539eada1ef/mamoken-p3-combat/exp/fable-3d/chars/godan/godan.glb": "90711ae7d323cc01a1892979ea28d2358b329c19f04dce95c51ec74535b17f65",
+    "/workspace/scratch/ca539eada1ef/mamoken-p3-combat/exp/fable-3d/custom/v16/assets/godan_parts.glb": "4956c9b4a887ea6254782035f1afcb1610a25c3cee24930f50be649b07f5d768",
+    "/workspace/scratch/ca539eada1ef/mamoken-p3-combat/exp/fable-3d/chars/hakuma/hakuma.glb": "bf00b34eb0930751ddcdf548c4866c4c72d1db28bbf6fcf1f78db4c0146d8bed",
+    "/workspace/scratch/ca539eada1ef/mamoken-p3-combat/exp/fable-3d/custom/v16/assets/hakuma_parts.glb": "29a4cb16cb48d8593403e57661ffba94fee55e9a3aea66b85b30f2a82172ddce",
+    "/workspace/scratch/ca539eada1ef/mamoken-p3-combat/exp/fable-3d/chars/chirka/chirka.glb": "1badcc2c8e7315b5acc08c25358d338cb71991cabc4b3ec9e616b9cbb6d432ae",
+    "/workspace/scratch/ca539eada1ef/mamoken-p3-combat/exp/fable-3d/custom/v16/assets/chirka_parts.glb": "6664130e5300a00cb236e77b2910a4a9b8ecc9c480f8610b2d2ebb60dda83d85",
+    "/workspace/scratch/ca539eada1ef/mamoken-p3-combat/exp/fable-3d/chars/takimaru/takimaru.glb": "d449bb56f5eda962763eefc9ab4e0291fb4ef4e553379c3f5adcc72ddd7427f1",
+    "/workspace/scratch/ca539eada1ef/mamoken-p3-combat/exp/fable-3d/custom/v16/assets/takimaru_parts.glb": "068954e932f66e153c776e11e1c5cb2832e9e4f223f7485aca91dd676b43ecf2",
+    "/workspace/scratch/ca539eada1ef/mamoken-p3-combat/exp/fable-3d/chars/yomikage/yomikage.glb": "171a84e010037455dfaaf9c7b6d4a9dc8efe70775a772912c353057e08c01586",
+    "/workspace/scratch/ca539eada1ef/mamoken-p3-combat/exp/fable-3d/custom/v16/assets/yomikage_parts.glb": "535522320762df7c9d7e2cf1869416ba15b483f092be4f1544f22799d7f0f322",
+    "/workspace/scratch/ca539eada1ef/mamoken-p3-combat/exp/fable-3d/chars/bullet/bullet.glb": "abb2765bcf1f7d8fd696b55c992c84b9e52c00b6ba933ec792228f490bed03f4",
+    "/workspace/scratch/ca539eada1ef/mamoken-p3-combat/exp/fable-3d/custom/v16/assets/bullet_parts.glb": "ffcf7dfe25077c867d4366a4e5e238fd44ccc63d2abcad0b3e565c00f0f377af",
+    "/workspace/scratch/ca539eada1ef/mamoken-p3-combat/exp/fable-3d/chars/dark_moguzo/dark_moguzo.glb": "57c1ba36f5c7175d9c496a7bda3c329423022ad220ca7cd52b90688168f6e7ab",
+    "/workspace/scratch/ca539eada1ef/mamoken-p3-combat/exp/fable-3d/custom/v16/assets/dark_moguzo_parts.glb": "3b2125663185d972f28ca71502e74973e1576ea886b75c73656133acc7d7d919"
+  }
+}

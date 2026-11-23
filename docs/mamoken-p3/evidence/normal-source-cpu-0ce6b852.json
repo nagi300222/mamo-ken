@@ -1,0 +1,1758 @@
+{
+  "passed": true,
+  "failures": [],
+  "revision": "0ce6b852",
+  "activeVersion": "v15",
+  "candidateVersion": "v17",
+  "note": "Actual GLTFLoader, 54 clips on original modular skins, CPU skin/morph/contact clocks. Image decoding stubbed. No actual GPU/iPhone performance claim.",
+  "results": [
+    {
+      "id": "moguzo",
+      "moves": [
+        {
+          "slot": "stand_weak",
+          "clip": "v17_stand_weak",
+          "tracks": 128,
+          "morphTargets": 8,
+          "errors": [
+            {
+              "phase": 0,
+              "reach": 0,
+              "height": 0
+            },
+            {
+              "phase": 0.5,
+              "reach": 0,
+              "height": 0
+            },
+            {
+              "phase": 1,
+              "reach": 0,
+              "height": 0
+            }
+          ],
+          "contactSeconds": 0.1500000006386212,
+          "surfaceOK": true
+        },
+        {
+          "slot": "stand_heavy",
+          "clip": "v17_stand_heavy",
+          "tracks": 128,
+          "morphTargets": 8,
+          "errors": [
+            {
+              "phase": 0,
+              "reach": 0,
+              "height": 0
+            },
+            {
+              "phase": 0.3333,
+              "reach": 0,
+              "height": 0
+            },
+            {
+              "phase": 0.6667,
+              "reach": 0,
+              "height": 0
+            },
+            {
+              "phase": 1,
+              "reach": 0,
+              "height": 0
+            }
+          ],
+          "contactSeconds": 0.28333332745925244,
+          "surfaceOK": true
+        },
+        {
+          "slot": "crouch_weak",
+          "clip": "v17_crouch_weak",
+          "tracks": 128,
+          "morphTargets": 8,
+          "errors": [
+            {
+              "phase": 0,
+              "reach": 0,
+              "height": 0
+            },
+            {
+              "phase": 0.5,
+              "reach": 0,
+              "height": 0
+            },
+            {
+              "phase": 1,
+              "reach": 0,
+              "height": 0
+            }
+          ],
+          "contactSeconds": 0.1500000006386212,
+          "surfaceOK": true
+        },
+        {
+          "slot": "crouch_heavy",
+          "clip": "v17_crouch_heavy",
+          "tracks": 128,
+          "morphTargets": 8,
+          "errors": [
+            {
+              "phase": 0,
+              "reach": 0,
+              "height": 0
+            },
+            {
+              "phase": 0.3333,
+              "reach": 0,
+              "height": 0
+            },
+            {
+              "phase": 0.6667,
+              "reach": 0,
+              "height": 0
+            },
+            {
+              "phase": 1,
+              "reach": 0,
+              "height": 0
+            }
+          ],
+          "contactSeconds": 0.2833333274592524,
+          "surfaceOK": true
+        },
+        {
+          "slot": "air_weak",
+          "clip": "v17_air_weak",
+          "tracks": 128,
+          "morphTargets": 8,
+          "errors": [
+            {
+              "phase": 0,
+              "reach": 0,
+              "height": 0
+            },
+            {
+              "phase": 0.25,
+              "reach": 0,
+              "height": 0
+            },
+            {
+              "phase": 0.5,
+              "reach": 0,
+              "height": 0
+            },
+            {
+              "phase": 0.75,
+              "reach": 0,
+              "height": 0
+            },
+            {
+              "phase": 1,
+              "reach": 0,
+              "height": 0
+            }
+          ],
+          "contactSeconds": 0.1500000006386212,
+          "surfaceOK": true
+        },
+        {
+          "slot": "air_heavy",
+          "clip": "v17_air_heavy",
+          "tracks": 128,
+          "morphTargets": 8,
+          "errors": [
+            {
+              "phase": 0,
+              "reach": 0,
+              "height": 0
+            },
+            {
+              "phase": 0.2,
+              "reach": 0,
+              "height": 0
+            },
+            {
+              "phase": 0.4,
+              "reach": 0,
+              "height": 0
+            },
+            {
+              "phase": 0.6,
+              "reach": 0,
+              "height": 0
+            },
+            {
+              "phase": 0.8,
+              "reach": 0,
+              "height": 0
+            },
+            {
+              "phase": 1,
+              "reach": 0,
+              "height": 0
+            }
+          ],
+          "contactSeconds": 0.2833333274592524,
+          "surfaceOK": true
+        }
+      ],
+      "hurtBounds": {
+        "stand": {
+          "bottom": 0,
+          "top": 0.5733
+        },
+        "crouch": {
+          "bottom": 0,
+          "top": 0.442
+        }
+      },
+      "originalSHA256": "8f25428c14e9cc58fe229367a1a2324cb9d6bdd716c2306b26c5061e82e44fdd",
+      "partsSHA256": "b30a934c5176bf788756bf9ba06360b2600b8c3f75186ef6976575fe207253c9"
+    },
+    {
+      "id": "pisuke",
+      "moves": [
+        {
+          "slot": "stand_weak",
+          "clip": "v17_stand_weak",
+          "tracks": 116,
+          "morphTargets": 8,
+          "errors": [
+            {
+              "phase": 0,
+              "reach": 0,
+              "height": 0
+            },
+            {
+              "phase": 1,
+              "reach": 0,
+              "height": 0
+            }
+          ],
+          "contactSeconds": 0.1500000006386212,
+          "surfaceOK": true
+        },
+        {
+          "slot": "stand_heavy",
+          "clip": "v17_stand_heavy",
+          "tracks": 116,
+          "morphTargets": 8,
+          "errors": [
+            {
+              "phase": 0,
+              "reach": 0,
+              "height": 0
+            },
+            {
+              "phase": 0.5,
+              "reach": 0,
+              "height": 0
+            },
+            {
+              "phase": 1,
+              "reach": 0,
+              "height": 0
+            }
+          ],
+          "contactSeconds": 0.2833333274592524,
+          "surfaceOK": true
+        },
+        {
+          "slot": "crouch_weak",
+          "clip": "v17_crouch_weak",
+          "tracks": 116,
+          "morphTargets": 8,
+          "errors": [
+            {
+              "phase": 0,
+              "reach": 0,
+              "height": 0
+            },
+            {
+              "phase": 1,
+              "reach": 0,
+              "height": 0
+            }
+          ],
+          "contactSeconds": 0.1500000006386212,
+          "surfaceOK": true
+        },
+        {
+          "slot": "crouch_heavy",
+          "clip": "v17_crouch_heavy",
+          "tracks": 116,
+          "morphTargets": 8,
+          "errors": [
+            {
+              "phase": 0,
+              "reach": 0,
+              "height": 0
+            },
+            {
+              "phase": 0.3333,
+              "reach": 0,
+              "height": 0
+            },
+            {
+              "phase": 0.6667,
+              "reach": 0,
+              "height": 0
+            },
+            {
+              "phase": 1,
+              "reach": 0,
+              "height": 0
+            }
+          ],
+          "contactSeconds": 0.2833333274592524,
+          "surfaceOK": true
+        },
+        {
+          "slot": "air_weak",
+          "clip": "v17_air_weak",
+          "tracks": 116,
+          "morphTargets": 8,
+          "errors": [
+            {
+              "phase": 0,
+              "reach": 0,
+              "height": 0
+            },
+            {
+              "phase": 0.3333,
+              "reach": 0,
+              "height": 0
+            },
+            {
+              "phase": 0.6667,
+              "reach": 0,
+              "height": 0
+            },
+            {
+              "phase": 1,
+              "reach": 0,
+              "height": 0
+            }
+          ],
+          "contactSeconds": 0.1500000006386212,
+          "surfaceOK": true
+        },
+        {
+          "slot": "air_heavy",
+          "clip": "v17_air_heavy",
+          "tracks": 116,
+          "morphTargets": 8,
+          "errors": [
+            {
+              "phase": 0,
+              "reach": 0,
+              "height": 0
+            },
+            {
+              "phase": 0.25,
+              "reach": 0,
+              "height": 0
+            },
+            {
+              "phase": 0.5,
+              "reach": 0,
+              "height": 0
+            },
+            {
+              "phase": 0.75,
+              "reach": 0,
+              "height": 0
+            },
+            {
+              "phase": 1,
+              "reach": 0,
+              "height": 0
+            }
+          ],
+          "contactSeconds": 0.2833333274592524,
+          "surfaceOK": true
+        }
+      ],
+      "hurtBounds": {
+        "stand": {
+          "bottom": 0,
+          "top": 0.6234
+        },
+        "crouch": {
+          "bottom": 0,
+          "top": 0.3931
+        }
+      },
+      "originalSHA256": "0636f1e1e30fbc4806acef3f5a0402225a83a50227799e96d17421adc92884f6",
+      "partsSHA256": "2a6be1179e857e3abdf6df43f2d1b8edc336d48d119bc23f0e4c8d9534666d01"
+    },
+    {
+      "id": "godan",
+      "moves": [
+        {
+          "slot": "stand_weak",
+          "clip": "v17_stand_weak",
+          "tracks": 128,
+          "morphTargets": 8,
+          "errors": [
+            {
+              "phase": 0,
+              "reach": 0,
+              "height": 0
+            },
+            {
+              "phase": 0.5,
+              "reach": 0,
+              "height": 0
+            },
+            {
+              "phase": 1,
+              "reach": 0,
+              "height": 0
+            }
+          ],
+          "contactSeconds": 0.18333334289491177,
+          "surfaceOK": true
+        },
+        {
+          "slot": "stand_heavy",
+          "clip": "v17_stand_heavy",
+          "tracks": 128,
+          "morphTargets": 8,
+          "errors": [
+            {
+              "phase": 0,
+              "reach": 0,
+              "height": 0
+            },
+            {
+              "phase": 0.25,
+              "reach": 0,
+              "height": 0
+            },
+            {
+              "phase": 0.5,
+              "reach": 0,
+              "height": 0
+            },
+            {
+              "phase": 0.75,
+              "reach": 0,
+              "height": 0
+            },
+            {
+              "phase": 1,
+              "reach": 0,
+              "height": 0
+            }
+          ],
+          "contactSeconds": 0.3499999907281664,
+          "surfaceOK": true
+        },
+        {
+          "slot": "crouch_weak",
+          "clip": "v17_crouch_weak",
+          "tracks": 128,
+          "morphTargets": 8,
+          "errors": [
+            {
+              "phase": 0,
+              "reach": 0,
+              "height": 0
+            },
+            {
+              "phase": 0.5,
+              "reach": 0,
+              "height": 0
+            },
+            {
+              "phase": 1,
+              "reach": 0,
+              "height": 0
+            }
+          ],
+          "contactSeconds": 0.18333334289491177,
+          "surfaceOK": true
+        },
+        {
+          "slot": "crouch_heavy",
+          "clip": "v17_crouch_heavy",
+          "tracks": 128,
+          "morphTargets": 8,
+          "errors": [
+            {
+              "phase": 0,
+              "reach": 0,
+              "height": 0
+            },
+            {
+              "phase": 0.25,
+              "reach": 0,
+              "height": 0
+            },
+            {
+              "phase": 0.5,
+              "reach": 0,
+              "height": 0
+            },
+            {
+              "phase": 0.75,
+              "reach": 0,
+              "height": 0
+            },
+            {
+              "phase": 1,
+              "reach": 0,
+              "height": 0
+            }
+          ],
+          "contactSeconds": 0.3499999907281664,
+          "surfaceOK": true
+        },
+        {
+          "slot": "air_weak",
+          "clip": "v17_air_weak",
+          "tracks": 128,
+          "morphTargets": 8,
+          "errors": [
+            {
+              "phase": 0,
+              "reach": 0,
+              "height": 0
+            },
+            {
+              "phase": 0.25,
+              "reach": 0,
+              "height": 0
+            },
+            {
+              "phase": 0.5,
+              "reach": 0,
+              "height": 0
+            },
+            {
+              "phase": 0.75,
+              "reach": 0,
+              "height": 0
+            },
+            {
+              "phase": 1,
+              "reach": 0,
+              "height": 0
+            }
+          ],
+          "contactSeconds": 0.18333334289491177,
+          "surfaceOK": true
+        },
+        {
+          "slot": "air_heavy",
+          "clip": "v17_air_heavy",
+          "tracks": 128,
+          "morphTargets": 8,
+          "errors": [
+            {
+              "phase": 0,
+              "reach": 0,
+              "height": 0
+            },
+            {
+              "phase": 0.2,
+              "reach": 0,
+              "height": 0
+            },
+            {
+              "phase": 0.4,
+              "reach": 0,
+              "height": 0
+            },
+            {
+              "phase": 0.6,
+              "reach": 0,
+              "height": 0
+            },
+            {
+              "phase": 0.8,
+              "reach": 0,
+              "height": 0
+            },
+            {
+              "phase": 1,
+              "reach": 0,
+              "height": 0
+            }
+          ],
+          "contactSeconds": 0.3499999907281664,
+          "surfaceOK": true
+        }
+      ],
+      "hurtBounds": {
+        "stand": {
+          "bottom": 0,
+          "top": 0.6283
+        },
+        "crouch": {
+          "bottom": 0,
+          "top": 0.52
+        }
+      },
+      "originalSHA256": "90711ae7d323cc01a1892979ea28d2358b329c19f04dce95c51ec74535b17f65",
+      "partsSHA256": "4956c9b4a887ea6254782035f1afcb1610a25c3cee24930f50be649b07f5d768"
+    },
+    {
+      "id": "hakuma",
+      "moves": [
+        {
+          "slot": "stand_weak",
+          "clip": "v17_stand_weak",
+          "tracks": 116,
+          "morphTargets": 8,
+          "errors": [
+            {
+              "phase": 0,
+              "reach": 0,
+              "height": 0
+            },
+            {
+              "phase": 0.3333,
+              "reach": 0,
+              "height": 0
+            },
+            {
+              "phase": 0.6667,
+              "reach": 0,
+              "height": 0
+            },
+            {
+              "phase": 1,
+              "reach": 0,
+              "height": 0
+            }
+          ],
+          "contactSeconds": 0.1500000006386212,
+          "surfaceOK": true
+        },
+        {
+          "slot": "stand_heavy",
+          "clip": "v17_stand_heavy",
+          "tracks": 116,
+          "morphTargets": 8,
+          "errors": [
+            {
+              "phase": 0,
+              "reach": 0,
+              "height": 0
+            },
+            {
+              "phase": 0.25,
+              "reach": 0,
+              "height": 0
+            },
+            {
+              "phase": 0.5,
+              "reach": 0,
+              "height": 0
+            },
+            {
+              "phase": 0.75,
+              "reach": 0,
+              "height": 0
+            },
+            {
+              "phase": 1,
+              "reach": 0,
+              "height": 0
+            }
+          ],
+          "contactSeconds": 0.2833333274592524,
+          "surfaceOK": true
+        },
+        {
+          "slot": "crouch_weak",
+          "clip": "v17_crouch_weak",
+          "tracks": 116,
+          "morphTargets": 8,
+          "errors": [
+            {
+              "phase": 0,
+              "reach": 0,
+              "height": 0
+            },
+            {
+              "phase": 0.3333,
+              "reach": 0,
+              "height": 0
+            },
+            {
+              "phase": 0.6667,
+              "reach": 0,
+              "height": 0
+            },
+            {
+              "phase": 1,
+              "reach": 0,
+              "height": 0
+            }
+          ],
+          "contactSeconds": 0.1500000006386212,
+          "surfaceOK": true
+        },
+        {
+          "slot": "crouch_heavy",
+          "clip": "v17_crouch_heavy",
+          "tracks": 116,
+          "morphTargets": 8,
+          "errors": [
+            {
+              "phase": 0,
+              "reach": 0,
+              "height": 0
+            },
+            {
+              "phase": 0.25,
+              "reach": 0,
+              "height": 0
+            },
+            {
+              "phase": 0.5,
+              "reach": 0,
+              "height": 0
+            },
+            {
+              "phase": 0.75,
+              "reach": 0,
+              "height": 0
+            },
+            {
+              "phase": 1,
+              "reach": 0,
+              "height": 0
+            }
+          ],
+          "contactSeconds": 0.2833333274592524,
+          "surfaceOK": true
+        },
+        {
+          "slot": "air_weak",
+          "clip": "v17_air_weak",
+          "tracks": 116,
+          "morphTargets": 8,
+          "errors": [
+            {
+              "phase": 0,
+              "reach": 0,
+              "height": 0
+            },
+            {
+              "phase": 0.25,
+              "reach": 0,
+              "height": 0
+            },
+            {
+              "phase": 0.5,
+              "reach": 0,
+              "height": 0
+            },
+            {
+              "phase": 0.75,
+              "reach": 0,
+              "height": 0
+            },
+            {
+              "phase": 1,
+              "reach": 0,
+              "height": 0
+            }
+          ],
+          "contactSeconds": 0.1500000006386212,
+          "surfaceOK": true
+        },
+        {
+          "slot": "air_heavy",
+          "clip": "v17_air_heavy",
+          "tracks": 116,
+          "morphTargets": 8,
+          "errors": [
+            {
+              "phase": 0,
+              "reach": 0,
+              "height": 0
+            },
+            {
+              "phase": 0.2,
+              "reach": 0,
+              "height": 0
+            },
+            {
+              "phase": 0.4,
+              "reach": 0,
+              "height": 0
+            },
+            {
+              "phase": 0.6,
+              "reach": 0,
+              "height": 0
+            },
+            {
+              "phase": 0.8,
+              "reach": 0,
+              "height": 0
+            },
+            {
+              "phase": 1,
+              "reach": 0,
+              "height": 0
+            }
+          ],
+          "contactSeconds": 0.2833333274592524,
+          "surfaceOK": true
+        }
+      ],
+      "hurtBounds": {
+        "stand": {
+          "bottom": 0,
+          "top": 0.6612
+        },
+        "crouch": {
+          "bottom": 0,
+          "top": 0.5633
+        }
+      },
+      "originalSHA256": "bf00b34eb0930751ddcdf548c4866c4c72d1db28bbf6fcf1f78db4c0146d8bed",
+      "partsSHA256": "29a4cb16cb48d8593403e57661ffba94fee55e9a3aea66b85b30f2a82172ddce"
+    },
+    {
+      "id": "chirka",
+      "moves": [
+        {
+          "slot": "stand_weak",
+          "clip": "v17_stand_weak",
+          "tracks": 116,
+          "morphTargets": 8,
+          "errors": [
+            {
+              "phase": 0,
+              "reach": 0,
+              "height": 0
+            },
+            {
+              "phase": 1,
+              "reach": 0,
+              "height": 0
+            }
+          ],
+          "contactSeconds": 0.1500000006386212,
+          "surfaceOK": true
+        },
+        {
+          "slot": "stand_heavy",
+          "clip": "v17_stand_heavy",
+          "tracks": 116,
+          "morphTargets": 8,
+          "errors": [
+            {
+              "phase": 0,
+              "reach": 0,
+              "height": 0
+            },
+            {
+              "phase": 0.5,
+              "reach": 0,
+              "height": 0
+            },
+            {
+              "phase": 1,
+              "reach": 0,
+              "height": 0
+            }
+          ],
+          "contactSeconds": 0.2833333274592524,
+          "surfaceOK": true
+        },
+        {
+          "slot": "crouch_weak",
+          "clip": "v17_crouch_weak",
+          "tracks": 116,
+          "morphTargets": 8,
+          "errors": [
+            {
+              "phase": 0,
+              "reach": 0,
+              "height": 0
+            },
+            {
+              "phase": 1,
+              "reach": 0,
+              "height": 0
+            }
+          ],
+          "contactSeconds": 0.1500000006386212,
+          "surfaceOK": true
+        },
+        {
+          "slot": "crouch_heavy",
+          "clip": "v17_crouch_heavy",
+          "tracks": 116,
+          "morphTargets": 8,
+          "errors": [
+            {
+              "phase": 0,
+              "reach": 0,
+              "height": 0
+            },
+            {
+              "phase": 0.3333,
+              "reach": 0,
+              "height": 0
+            },
+            {
+              "phase": 0.6667,
+              "reach": 0,
+              "height": 0
+            },
+            {
+              "phase": 1,
+              "reach": 0,
+              "height": 0
+            }
+          ],
+          "contactSeconds": 0.28333332745925244,
+          "surfaceOK": true
+        },
+        {
+          "slot": "air_weak",
+          "clip": "v17_air_weak",
+          "tracks": 116,
+          "morphTargets": 8,
+          "errors": [
+            {
+              "phase": 0,
+              "reach": 0,
+              "height": 0
+            },
+            {
+              "phase": 0.3333,
+              "reach": 0,
+              "height": 0
+            },
+            {
+              "phase": 0.6667,
+              "reach": 0,
+              "height": 0
+            },
+            {
+              "phase": 1,
+              "reach": 0,
+              "height": 0
+            }
+          ],
+          "contactSeconds": 0.1500000006386212,
+          "surfaceOK": true
+        },
+        {
+          "slot": "air_heavy",
+          "clip": "v17_air_heavy",
+          "tracks": 116,
+          "morphTargets": 8,
+          "errors": [
+            {
+              "phase": 0,
+              "reach": 0,
+              "height": 0
+            },
+            {
+              "phase": 0.25,
+              "reach": 0,
+              "height": 0
+            },
+            {
+              "phase": 0.5,
+              "reach": 0,
+              "height": 0
+            },
+            {
+              "phase": 0.75,
+              "reach": 0,
+              "height": 0
+            },
+            {
+              "phase": 1,
+              "reach": 0,
+              "height": 0
+            }
+          ],
+          "contactSeconds": 0.2999999937803849,
+          "surfaceOK": true
+        }
+      ],
+      "hurtBounds": {
+        "stand": {
+          "bottom": 0,
+          "top": 0.5534
+        },
+        "crouch": {
+          "bottom": 0,
+          "top": 0.3832
+        }
+      },
+      "originalSHA256": "1badcc2c8e7315b5acc08c25358d338cb71991cabc4b3ec9e616b9cbb6d432ae",
+      "partsSHA256": "6664130e5300a00cb236e77b2910a4a9b8ecc9c480f8610b2d2ebb60dda83d85"
+    },
+    {
+      "id": "takimaru",
+      "moves": [
+        {
+          "slot": "stand_weak",
+          "clip": "v17_stand_weak",
+          "tracks": 116,
+          "morphTargets": 8,
+          "errors": [
+            {
+              "phase": 0,
+              "reach": 0,
+              "height": 0
+            },
+            {
+              "phase": 0.5,
+              "reach": 0,
+              "height": 0
+            },
+            {
+              "phase": 1,
+              "reach": 0,
+              "height": 0
+            }
+          ],
+          "contactSeconds": 0.1500000006386212,
+          "surfaceOK": true
+        },
+        {
+          "slot": "stand_heavy",
+          "clip": "v17_stand_heavy",
+          "tracks": 116,
+          "morphTargets": 8,
+          "errors": [
+            {
+              "phase": 0,
+              "reach": 0,
+              "height": 0
+            },
+            {
+              "phase": 0.3333,
+              "reach": 0,
+              "height": 0
+            },
+            {
+              "phase": 0.6667,
+              "reach": 0,
+              "height": 0
+            },
+            {
+              "phase": 1,
+              "reach": 0,
+              "height": 0
+            }
+          ],
+          "contactSeconds": 0.2833333274592524,
+          "surfaceOK": true
+        },
+        {
+          "slot": "crouch_weak",
+          "clip": "v17_crouch_weak",
+          "tracks": 116,
+          "morphTargets": 8,
+          "errors": [
+            {
+              "phase": 0,
+              "reach": 0,
+              "height": 0
+            },
+            {
+              "phase": 0.5,
+              "reach": 0,
+              "height": 0
+            },
+            {
+              "phase": 1,
+              "reach": 0,
+              "height": 0
+            }
+          ],
+          "contactSeconds": 0.1500000006386212,
+          "surfaceOK": true
+        },
+        {
+          "slot": "crouch_heavy",
+          "clip": "v17_crouch_heavy",
+          "tracks": 116,
+          "morphTargets": 8,
+          "errors": [
+            {
+              "phase": 0,
+              "reach": 0,
+              "height": 0
+            },
+            {
+              "phase": 0.3333,
+              "reach": 0,
+              "height": 0
+            },
+            {
+              "phase": 0.6667,
+              "reach": 0,
+              "height": 0
+            },
+            {
+              "phase": 1,
+              "reach": 0,
+              "height": 0
+            }
+          ],
+          "contactSeconds": 0.2833333274592524,
+          "surfaceOK": true
+        },
+        {
+          "slot": "air_weak",
+          "clip": "v17_air_weak",
+          "tracks": 116,
+          "morphTargets": 8,
+          "errors": [
+            {
+              "phase": 0,
+              "reach": 0,
+              "height": 0
+            },
+            {
+              "phase": 0.25,
+              "reach": 0,
+              "height": 0
+            },
+            {
+              "phase": 0.5,
+              "reach": 0,
+              "height": 0
+            },
+            {
+              "phase": 0.75,
+              "reach": 0,
+              "height": 0
+            },
+            {
+              "phase": 1,
+              "reach": 0,
+              "height": 0
+            }
+          ],
+          "contactSeconds": 0.1500000006386212,
+          "surfaceOK": true
+        },
+        {
+          "slot": "air_heavy",
+          "clip": "v17_air_heavy",
+          "tracks": 116,
+          "morphTargets": 8,
+          "errors": [
+            {
+              "phase": 0,
+              "reach": 0,
+              "height": 0
+            },
+            {
+              "phase": 0.2,
+              "reach": 0,
+              "height": 0
+            },
+            {
+              "phase": 0.4,
+              "reach": 0,
+              "height": 0
+            },
+            {
+              "phase": 0.6,
+              "reach": 0,
+              "height": 0
+            },
+            {
+              "phase": 0.8,
+              "reach": 0,
+              "height": 0
+            },
+            {
+              "phase": 1,
+              "reach": 0,
+              "height": 0
+            }
+          ],
+          "contactSeconds": 0.2833333274592524,
+          "surfaceOK": true
+        }
+      ],
+      "hurtBounds": {
+        "stand": {
+          "bottom": 0,
+          "top": 0.7023
+        },
+        "crouch": {
+          "bottom": 0,
+          "top": 0.5685
+        }
+      },
+      "originalSHA256": "d449bb56f5eda962763eefc9ab4e0291fb4ef4e553379c3f5adcc72ddd7427f1",
+      "partsSHA256": "068954e932f66e153c776e11e1c5cb2832e9e4f223f7485aca91dd676b43ecf2"
+    },
+    {
+      "id": "yomikage",
+      "moves": [
+        {
+          "slot": "stand_weak",
+          "clip": "v17_stand_weak",
+          "tracks": 116,
+          "morphTargets": 8,
+          "errors": [
+            {
+              "phase": 0,
+              "reach": 0,
+              "height": 0
+            },
+            {
+              "phase": 1,
+              "reach": 0,
+              "height": 0
+            }
+          ],
+          "contactSeconds": 0.11666666840513548,
+          "surfaceOK": true
+        },
+        {
+          "slot": "stand_heavy",
+          "clip": "v17_stand_heavy",
+          "tracks": 116,
+          "morphTargets": 8,
+          "errors": [
+            {
+              "phase": 0,
+              "reach": 0,
+              "height": 0
+            },
+            {
+              "phase": 0.5,
+              "reach": 0,
+              "height": 0
+            },
+            {
+              "phase": 1,
+              "reach": 0,
+              "height": 0
+            }
+          ],
+          "contactSeconds": 0.2999999937803849,
+          "surfaceOK": true
+        },
+        {
+          "slot": "crouch_weak",
+          "clip": "v17_crouch_weak",
+          "tracks": 116,
+          "morphTargets": 8,
+          "errors": [
+            {
+              "phase": 0,
+              "reach": 0,
+              "height": 0
+            },
+            {
+              "phase": 1,
+              "reach": 0,
+              "height": 0
+            }
+          ],
+          "contactSeconds": 0.11666666840513548,
+          "surfaceOK": true
+        },
+        {
+          "slot": "crouch_heavy",
+          "clip": "v17_crouch_heavy",
+          "tracks": 116,
+          "morphTargets": 8,
+          "errors": [
+            {
+              "phase": 0,
+              "reach": 0,
+              "height": 0
+            },
+            {
+              "phase": 0.3333,
+              "reach": 0,
+              "height": 0
+            },
+            {
+              "phase": 0.6667,
+              "reach": 0,
+              "height": 0
+            },
+            {
+              "phase": 1,
+              "reach": 0,
+              "height": 0
+            }
+          ],
+          "contactSeconds": 0.2833333274592524,
+          "surfaceOK": true
+        },
+        {
+          "slot": "air_weak",
+          "clip": "v17_air_weak",
+          "tracks": 116,
+          "morphTargets": 8,
+          "errors": [
+            {
+              "phase": 0,
+              "reach": 0,
+              "height": 0
+            },
+            {
+              "phase": 0.3333,
+              "reach": 0,
+              "height": 0
+            },
+            {
+              "phase": 0.6667,
+              "reach": 0,
+              "height": 0
+            },
+            {
+              "phase": 1,
+              "reach": 0,
+              "height": 0
+            }
+          ],
+          "contactSeconds": 0.11666666840513548,
+          "surfaceOK": true
+        },
+        {
+          "slot": "air_heavy",
+          "clip": "v17_air_heavy",
+          "tracks": 116,
+          "morphTargets": 8,
+          "errors": [
+            {
+              "phase": 0,
+              "reach": 0,
+              "height": 0
+            },
+            {
+              "phase": 0.25,
+              "reach": 0,
+              "height": 0
+            },
+            {
+              "phase": 0.5,
+              "reach": 0,
+              "height": 0
+            },
+            {
+              "phase": 0.75,
+              "reach": 0,
+              "height": 0
+            },
+            {
+              "phase": 1,
+              "reach": 0,
+              "height": 0
+            }
+          ],
+          "contactSeconds": 0.2833333274592524,
+          "surfaceOK": true
+        }
+      ],
+      "hurtBounds": {
+        "stand": {
+          "bottom": 0,
+          "top": 0.6145
+        },
+        "crouch": {
+          "bottom": 0,
+          "top": 0.4566
+        }
+      },
+      "originalSHA256": "171a84e010037455dfaaf9c7b6d4a9dc8efe70775a772912c353057e08c01586",
+      "partsSHA256": "535522320762df7c9d7e2cf1869416ba15b483f092be4f1544f22799d7f0f322"
+    },
+    {
+      "id": "bullet",
+      "moves": [
+        {
+          "slot": "stand_weak",
+          "clip": "v17_stand_weak",
+          "tracks": 125,
+          "morphTargets": 8,
+          "errors": [
+            {
+              "phase": 0,
+              "reach": 0,
+              "height": 0
+            },
+            {
+              "phase": 0.5,
+              "reach": 0,
+              "height": 0
+            },
+            {
+              "phase": 1,
+              "reach": 0,
+              "height": 0
+            }
+          ],
+          "contactSeconds": 0.1500000006386212,
+          "surfaceOK": true
+        },
+        {
+          "slot": "stand_heavy",
+          "clip": "v17_stand_heavy",
+          "tracks": 125,
+          "morphTargets": 8,
+          "errors": [
+            {
+              "phase": 0,
+              "reach": 0,
+              "height": 0
+            },
+            {
+              "phase": 0.3333,
+              "reach": 0,
+              "height": 0
+            },
+            {
+              "phase": 0.6667,
+              "reach": 0,
+              "height": 0
+            },
+            {
+              "phase": 1,
+              "reach": 0,
+              "height": 0
+            }
+          ],
+          "contactSeconds": 0.41666667287548387,
+          "surfaceOK": true
+        },
+        {
+          "slot": "crouch_weak",
+          "clip": "v17_crouch_weak",
+          "tracks": 125,
+          "morphTargets": 8,
+          "errors": [
+            {
+              "phase": 0,
+              "reach": 0,
+              "height": 0
+            },
+            {
+              "phase": 0.5,
+              "reach": 0,
+              "height": 0
+            },
+            {
+              "phase": 1,
+              "reach": 0,
+              "height": 0
+            }
+          ],
+          "contactSeconds": 0.1500000006386212,
+          "surfaceOK": true
+        },
+        {
+          "slot": "crouch_heavy",
+          "clip": "v17_crouch_heavy",
+          "tracks": 125,
+          "morphTargets": 8,
+          "errors": [
+            {
+              "phase": 0,
+              "reach": 0,
+              "height": 0
+            },
+            {
+              "phase": 0.3333,
+              "reach": 0,
+              "height": 0
+            },
+            {
+              "phase": 0.6667,
+              "reach": 0,
+              "height": 0
+            },
+            {
+              "phase": 1,
+              "reach": 0,
+              "height": 0
+            }
+          ],
+          "contactSeconds": 0.3333333383003871,
+          "surfaceOK": true
+        },
+        {
+          "slot": "air_weak",
+          "clip": "v17_air_weak",
+          "tracks": 125,
+          "morphTargets": 8,
+          "errors": [
+            {
+              "phase": 0,
+              "reach": 0,
+              "height": 0
+            },
+            {
+              "phase": 0.25,
+              "reach": 0,
+              "height": 0
+            },
+            {
+              "phase": 0.5,
+              "reach": 0,
+              "height": 0
+            },
+            {
+              "phase": 0.75,
+              "reach": 0,
+              "height": 0
+            },
+            {
+              "phase": 1,
+              "reach": 0,
+              "height": 0
+            }
+          ],
+          "contactSeconds": 0.1500000006386212,
+          "surfaceOK": true
+        },
+        {
+          "slot": "air_heavy",
+          "clip": "v17_air_heavy",
+          "tracks": 125,
+          "morphTargets": 8,
+          "errors": [
+            {
+              "phase": 0,
+              "reach": 0,
+              "height": 0
+            },
+            {
+              "phase": 0.2,
+              "reach": 0,
+              "height": 0
+            },
+            {
+              "phase": 0.4,
+              "reach": 0,
+              "height": 0
+            },
+            {
+              "phase": 0.6,
+              "reach": 0,
+              "height": 0
+            },
+            {
+              "phase": 0.8,
+              "reach": 0,
+              "height": 0
+            },
+            {
+              "phase": 1,
+              "reach": 0,
+              "height": 0
+            }
+          ],
+          "contactSeconds": 0.3333333383003871,
+          "surfaceOK": true
+        }
+      ],
+      "hurtBounds": {
+        "stand": {
+          "bottom": 0,
+          "top": 0.5924
+        },
+        "crouch": {
+          "bottom": 0,
+          "top": 0.4562
+        }
+      },
+      "originalSHA256": "abb2765bcf1f7d8fd696b55c992c84b9e52c00b6ba933ec792228f490bed03f4",
+      "partsSHA256": "ffcf7dfe25077c867d4366a4e5e238fd44ccc63d2abcad0b3e565c00f0f377af"
+    },
+    {
+      "id": "dark_moguzo",
+      "moves": [
+        {
+          "slot": "stand_weak",
+          "clip": "v17_stand_weak",
+          "tracks": 128,
+          "morphTargets": 8,
+          "errors": [
+            {
+              "phase": 0,
+              "reach": 0,
+              "height": 0
+            },
+            {
+              "phase": 1,
+              "reach": 0,
+              "height": 0
+            }
+          ],
+          "contactSeconds": 0.11666666840513548,
+          "surfaceOK": true
+        },
+        {
+          "slot": "stand_heavy",
+          "clip": "v17_stand_heavy",
+          "tracks": 128,
+          "morphTargets": 8,
+          "errors": [
+            {
+              "phase": 0,
+              "reach": 0,
+              "height": 0
+            },
+            {
+              "phase": 0.5,
+              "reach": 0,
+              "height": 0
+            },
+            {
+              "phase": 1,
+              "reach": 0,
+              "height": 0
+            }
+          ],
+          "contactSeconds": 0.2833333274592524,
+          "surfaceOK": true
+        },
+        {
+          "slot": "crouch_weak",
+          "clip": "v17_crouch_weak",
+          "tracks": 128,
+          "morphTargets": 8,
+          "errors": [
+            {
+              "phase": 0,
+              "reach": 0,
+              "height": 0
+            },
+            {
+              "phase": 1,
+              "reach": 0,
+              "height": 0
+            }
+          ],
+          "contactSeconds": 0.11666666840513548,
+          "surfaceOK": true
+        },
+        {
+          "slot": "crouch_heavy",
+          "clip": "v17_crouch_heavy",
+          "tracks": 128,
+          "morphTargets": 8,
+          "errors": [
+            {
+              "phase": 0,
+              "reach": 0,
+              "height": 0
+            },
+            {
+              "phase": 0.3333,
+              "reach": 0,
+              "height": 0
+            },
+            {
+              "phase": 0.6667,
+              "reach": 0,
+              "height": 0
+            },
+            {
+              "phase": 1,
+              "reach": 0,
+              "height": 0
+            }
+          ],
+          "contactSeconds": 0.2833333274592524,
+          "surfaceOK": true
+        },
+        {
+          "slot": "air_weak",
+          "clip": "v17_air_weak",
+          "tracks": 128,
+          "morphTargets": 8,
+          "errors": [
+            {
+              "phase": 0,
+              "reach": 0,
+              "height": 0
+            },
+            {
+              "phase": 0.3333,
+              "reach": 0,
+              "height": 0
+            },
+            {
+              "phase": 0.6667,
+              "reach": 0,
+              "height": 0
+            },
+            {
+              "phase": 1,
+              "reach": 0,
+              "height": 0
+            }
+          ],
+          "contactSeconds": 0.11666666840513548,
+          "surfaceOK": true
+        },
+        {
+          "slot": "air_heavy",
+          "clip": "v17_air_heavy",
+          "tracks": 128,
+          "morphTargets": 8,
+          "errors": [
+            {
+              "phase": 0,
+              "reach": 0,
+              "height": 0
+            },
+            {
+              "phase": 0.25,
+              "reach": 0,
+              "height": 0
+            },
+            {
+              "phase": 0.5,
+              "reach": 0,
+              "height": 0
+            },
+            {
+              "phase": 0.75,
+              "reach": 0,
+              "height": 0
+            },
+            {
+              "phase": 1,
+              "reach": 0,
+              "height": 0
+            }
+          ],
+          "contactSeconds": 0.2833333274592524,
+          "surfaceOK": true
+        }
+      ],
+      "hurtBounds": {
+        "stand": {
+          "bottom": 0,
+          "top": 0.5648
+        },
+        "crouch": {
+          "bottom": 0,
+          "top": 0.4223
+        }
+      },
+      "originalSHA256": "57c1ba36f5c7175d9c496a7bda3c329423022ad220ca7cd52b90688168f6e7ab",
+      "partsSHA256": "3b2125663185d972f28ca71502e74973e1576ea886b75c73656133acc7d7d919"
+    }
+  ]
+}

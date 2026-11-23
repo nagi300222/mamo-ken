@@ -1,7 +1,8 @@
 import { IDS } from './balance.js';
+import {loadApprovedSpecialMotionSource,specialMotionOverride,canonicalSpecialClip} from './special-motion-source.js';
 
 export const MOVE_IDS = ['s1', 's2', 's3', 'ultimate'];
-const SFX_KEYS = new Set(['tap','hit','block','special','ultimate','roar','clinch','counter','ko']);
+const SFX_KEYS = new Set(['tap','hit','block','special','ultimate','roar','clinch','counter','ko','wind','grunt','chime']);
 const VFX_KEYS = new Set(['hit','block','roar','clinch','special','ultimate','shard','slash','reticle']);
 const EASING = {
   linear: t => t,
@@ -144,8 +145,8 @@ async function fetchJSON(url) {
   return response.json();
 }
 
-export function createShowtimeLoader(base) {
-  let index;
+export function createShowtimeLoader(base, {specialMotionSource}={}) {
+  let index,sourcePromise;
   return async (id, loadClip) => {
     index ??= fetchJSON(new URL('manifest.json', base)).then(validateShowtimeIndex)
       .catch(error => { index = undefined; throw error; });
@@ -153,6 +154,9 @@ export function createShowtimeLoader(base) {
     if (!location) return {};
     const url = new URL(location, base);
     const character = await fetchJSON(url);
+    sourcePromise ??= Promise.resolve(specialMotionSource===undefined?loadApprovedSpecialMotionSource():specialMotionSource)
+      .catch(error=>{sourcePromise=undefined;throw error;});
+    const specialSource=await sourcePromise;
     if (!Array.isArray(character.moves) || ![0,MOVE_IDS.length].includes(character.moves.length)) {
       throw new Error('Expected all four authored moves: ' + id);
     }
@@ -161,19 +165,21 @@ export function createShowtimeLoader(base) {
       [source.clip, await loadClip(source, url)])));
     const entries = await Promise.all(character.moves.map(async move => {
       const moveId = move.moveId;
-      const spec = validateMoveManifest(byId.get(moveId), id, moveId);
-      const attacker = await loadClip(spec.animationSources.attacker, url);
+      const original = validateMoveManifest(byId.get(moveId), id, moveId);
+      const selected = specialMotionOverride(specialSource,id,original,url);
+      const spec=validateMoveManifest(selected.spec,id,moveId),clipURL=selected.url;
+      const attacker = canonicalSpecialClip(spec,await loadClip(spec.animationSources.attacker, clipURL));
       validateClipTiming(spec, attacker);
       const targetSource = spec.animationSources.target;
-      const target = targetSource?.glb ? await loadClip(targetSource, url) : null;
+      const target = targetSource?.glb ? await loadClip(targetSource, clipURL) : null;
       const start = spec.inGameStartClip?.clip ? await loadClip({
         ...spec.animationSources.attacker, clip: spec.inGameStartClip.clip
-      }, url) : null;
+      }, clipURL) : null;
       const trackNames = new Set(Object.entries(spec.actorTracks ?? {})
         .filter(([role]) => role !== 'target')
         .flatMap(([,track]) => track.segments.map(segment => segment.clip)));
       const clips = Object.fromEntries(await Promise.all([...trackNames].map(async clip =>
-        [clip, await loadClip({ ...spec.animationSources.attacker, clip }, url)])));
+        [clip, await loadClip({ ...spec.animationSources.attacker, clip }, clipURL)])));
       return [moveId, { spec, attacker, target, start, clips }];
     }));
     return { ...Object.fromEntries(entries), reactions };

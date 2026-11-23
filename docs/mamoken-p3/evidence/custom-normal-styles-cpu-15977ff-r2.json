@@ -1,0 +1,7441 @@
+{
+  "passed": true,
+  "version": "v17-p3-normals-r2",
+  "note": "Actual original modular meshes and v17 clips, CPU skin/morph on 81 existing body/style combinations. Images stubbed; not WebGL or phone performance.",
+  "cases": [
+    {
+      "baseId": "moguzo",
+      "styleId": "moguzo",
+      "rows": [
+        {
+          "slot": "stand_weak",
+          "sourceActive": 3,
+          "styleActive": 3,
+          "measuredPhases": [
+            0,
+            0.5,
+            1
+          ],
+          "maxReachError": 0.00002022224892678226,
+          "maxHeightError": 0.00001802324606753336
+        },
+        {
+          "slot": "stand_heavy",
+          "sourceActive": 4,
+          "styleActive": 4,
+          "measuredPhases": [
+            0,
+            0.3333333333333333,
+            0.6666666666666666,
+            1
+          ],
+          "maxReachError": 0.00003358548598797473,
+          "maxHeightError": 0.0000344002769496754
+        },
+        {
+          "slot": "crouch_weak",
+          "sourceActive": 3,
+          "styleActive": 3,
+          "measuredPhases": [
+            0,
+            0.5,
+            1
+          ],
+          "maxReachError": 0.000024526432632065998,
+          "maxHeightError": 0.000011689939668241278
+        },
+        {
+          "slot": "crouch_heavy",
+          "sourceActive": 4,
+          "styleActive": 4,
+          "measuredPhases": [
+            0,
+            0.3333333333333333,
+            0.6666666666666666,
+            1
+          ],
+          "maxReachError": 0.000021815544659742336,
+          "maxHeightError": 0.00003672367049029068
+        },
+        {
+          "slot": "air_weak",
+          "sourceActive": 5,
+          "styleActive": 5,
+          "measuredPhases": [
+            0,
+            0.25,
+            0.5,
+            0.75,
+            1
+          ],
+          "maxReachError": 0.000004800613622069072,
+          "maxHeightError": 0.00004781092699723821
+        },
+        {
+          "slot": "air_heavy",
+          "sourceActive": 6,
+          "styleActive": 6,
+          "measuredPhases": [
+            0,
+            0.2,
+            0.4,
+            0.6,
+            0.8,
+            1
+          ],
+          "maxReachError": 0.000008856310333038575,
+          "maxHeightError": 0.00001735830060382859
+        }
+      ]
+    },
+    {
+      "baseId": "moguzo",
+      "styleId": "pisuke",
+      "rows": [
+        {
+          "slot": "stand_weak",
+          "sourceActive": 3,
+          "styleActive": 2,
+          "measuredPhases": [
+            0,
+            0.5,
+            1
+          ],
+          "maxReachError": 0.00002022224892678226,
+          "maxHeightError": 0.00001802324606753336
+        },
+        {
+          "slot": "stand_heavy",
+          "sourceActive": 4,
+          "styleActive": 3,
+          "measuredPhases": [
+            0,
+            0.3333333333333333,
+            0.5,
+            0.6666666666666666,
+            1
+          ],
+          "maxReachError": 0.000033585485988252284,
+          "maxHeightError": 0.00003440027695000847
+        },
+        {
+          "slot": "crouch_weak",
+          "sourceActive": 3,
+          "styleActive": 2,
+          "measuredPhases": [
+            0,
+            0.5,
+            1
+          ],
+          "maxReachError": 0.000024526107357480953,
+          "maxHeightError": 0.000011689939668241278
+        },
+        {
+          "slot": "crouch_heavy",
+          "sourceActive": 4,
+          "styleActive": 4,
+          "measuredPhases": [
+            0,
+            0.3333333333333333,
+            0.6666666666666666,
+            1
+          ],
+          "maxReachError": 0.000021815544659742336,
+          "maxHeightError": 0.00003672367049029068
+        },
+        {
+          "slot": "air_weak",
+          "sourceActive": 5,
+          "styleActive": 4,
+          "measuredPhases": [
+            0,
+            0.25,
+            0.3333333333333333,
+            0.5,
+            0.6666666666666666,
+            0.75,
+            1
+          ],
+          "maxReachError": 0.000004800613622069072,
+          "maxHeightError": 0.00004781093675698678
+        },
+        {
+          "slot": "air_heavy",
+          "sourceActive": 6,
+          "styleActive": 5,
+          "measuredPhases": [
+            0,
+            0.2,
+            0.25,
+            0.4,
+            0.5,
+            0.6,
+            0.75,
+            0.8,
+            1
+          ],
+          "maxReachError": 0.000008857123557970414,
+          "maxHeightError": 0.00001735830060382859
+        }
+      ]
+    },
+    {
+      "baseId": "moguzo",
+      "styleId": "godan",
+      "rows": [
+        {
+          "slot": "stand_weak",
+          "sourceActive": 3,
+          "styleActive": 3,
+          "measuredPhases": [
+            0,
+            0.5,
+            1
+          ],
+          "maxReachError": 0.00002022224892678226,
+          "maxHeightError": 0.00001802324606753336
+        },
+        {
+          "slot": "stand_heavy",
+          "sourceActive": 4,
+          "styleActive": 5,
+          "measuredPhases": [
+            0,
+            0.25,
+            0.3333333333333333,
+            0.5,
+            0.6666666666666666,
+            0.75,
+            1
+          ],
+          "maxReachError": 0.000033585485988252284,
+          "maxHeightError": 0.00003440027695000847
+        },
+        {
+          "slot": "crouch_weak",
+          "sourceActive": 3,
+          "styleActive": 3,
+          "measuredPhases": [
+            0,
+            0.5,
+            1
+          ],
+          "maxReachError": 0.000024526432632065998,
+          "maxHeightError": 0.000011689939668241278
+        },
+        {
+          "slot": "crouch_heavy",
+          "sourceActive": 4,
+          "styleActive": 5,
+          "measuredPhases": [
+            0,
+            0.25,
+            0.3333333333333333,
+            0.5,
+            0.6666666666666666,
+            0.75,
+            1
+          ],
+          "maxReachError": 0.000021815544659742336,
+          "maxHeightError": 0.00003672367049029068
+        },
+        {
+          "slot": "air_weak",
+          "sourceActive": 5,
+          "styleActive": 5,
+          "measuredPhases": [
+            0,
+            0.25,
+            0.5,
+            0.75,
+            1
+          ],
+          "maxReachError": 0.000004800613622069072,
+          "maxHeightError": 0.00004781092699723821
+        },
+        {
+          "slot": "air_heavy",
+          "sourceActive": 6,
+          "styleActive": 6,
+          "measuredPhases": [
+            0,
+            0.2,
+            0.4,
+            0.6,
+            0.8,
+            1
+          ],
+          "maxReachError": 0.000008856310333038575,
+          "maxHeightError": 0.00001735830060382859
+        }
+      ]
+    },
+    {
+      "baseId": "moguzo",
+      "styleId": "hakuma",
+      "rows": [
+        {
+          "slot": "stand_weak",
+          "sourceActive": 3,
+          "styleActive": 4,
+          "measuredPhases": [
+            0,
+            0.3333333333333333,
+            0.5,
+            0.6666666666666666,
+            1
+          ],
+          "maxReachError": 0.00002022224892678226,
+          "maxHeightError": 0.00001802324606753336
+        },
+        {
+          "slot": "stand_heavy",
+          "sourceActive": 4,
+          "styleActive": 5,
+          "measuredPhases": [
+            0,
+            0.25,
+            0.3333333333333333,
+            0.5,
+            0.6666666666666666,
+            0.75,
+            1
+          ],
+          "maxReachError": 0.000033585485988252284,
+          "maxHeightError": 0.00003440027695000847
+        },
+        {
+          "slot": "crouch_weak",
+          "sourceActive": 3,
+          "styleActive": 4,
+          "measuredPhases": [
+            0,
+            0.3333333333333333,
+            0.5,
+            0.6666666666666666,
+            1
+          ],
+          "maxReachError": 0.000024526923782741683,
+          "maxHeightError": 0.000011689939668241278
+        },
+        {
+          "slot": "crouch_heavy",
+          "sourceActive": 4,
+          "styleActive": 5,
+          "measuredPhases": [
+            0,
+            0.25,
+            0.3333333333333333,
+            0.5,
+            0.6666666666666666,
+            0.75,
+            1
+          ],
+          "maxReachError": 0.000021815544659742336,
+          "maxHeightError": 0.00003672367049029068
+        },
+        {
+          "slot": "air_weak",
+          "sourceActive": 5,
+          "styleActive": 5,
+          "measuredPhases": [
+            0,
+            0.25,
+            0.5,
+            0.75,
+            1
+          ],
+          "maxReachError": 0.000004800613622069072,
+          "maxHeightError": 0.00004781092699723821
+        },
+        {
+          "slot": "air_heavy",
+          "sourceActive": 6,
+          "styleActive": 6,
+          "measuredPhases": [
+            0,
+            0.2,
+            0.4,
+            0.6,
+            0.8,
+            1
+          ],
+          "maxReachError": 0.000008856310333038575,
+          "maxHeightError": 0.00001735830060382859
+        }
+      ]
+    },
+    {
+      "baseId": "moguzo",
+      "styleId": "chirka",
+      "rows": [
+        {
+          "slot": "stand_weak",
+          "sourceActive": 3,
+          "styleActive": 2,
+          "measuredPhases": [
+            0,
+            0.5,
+            1
+          ],
+          "maxReachError": 0.00002022224892678226,
+          "maxHeightError": 0.00001802324606753336
+        },
+        {
+          "slot": "stand_heavy",
+          "sourceActive": 4,
+          "styleActive": 3,
+          "measuredPhases": [
+            0,
+            0.3333333333333333,
+            0.5,
+            0.6666666666666666,
+            1
+          ],
+          "maxReachError": 0.000033585485988252284,
+          "maxHeightError": 0.00003440027695000847
+        },
+        {
+          "slot": "crouch_weak",
+          "sourceActive": 3,
+          "styleActive": 2,
+          "measuredPhases": [
+            0,
+            0.5,
+            1
+          ],
+          "maxReachError": 0.000024526107357480953,
+          "maxHeightError": 0.000011689939668241278
+        },
+        {
+          "slot": "crouch_heavy",
+          "sourceActive": 4,
+          "styleActive": 4,
+          "measuredPhases": [
+            0,
+            0.3333333333333333,
+            0.6666666666666666,
+            1
+          ],
+          "maxReachError": 0.00002181554465985336,
+          "maxHeightError": 0.00003672367049023517
+        },
+        {
+          "slot": "air_weak",
+          "sourceActive": 5,
+          "styleActive": 4,
+          "measuredPhases": [
+            0,
+            0.25,
+            0.3333333333333333,
+            0.5,
+            0.6666666666666666,
+            0.75,
+            1
+          ],
+          "maxReachError": 0.000004800613622069072,
+          "maxHeightError": 0.00004781093675698678
+        },
+        {
+          "slot": "air_heavy",
+          "sourceActive": 6,
+          "styleActive": 5,
+          "measuredPhases": [
+            0,
+            0.2,
+            0.25,
+            0.4,
+            0.5,
+            0.6,
+            0.75,
+            0.8,
+            1
+          ],
+          "maxReachError": 0.000008857123557970414,
+          "maxHeightError": 0.00001735830060382859
+        }
+      ]
+    },
+    {
+      "baseId": "moguzo",
+      "styleId": "takimaru",
+      "rows": [
+        {
+          "slot": "stand_weak",
+          "sourceActive": 3,
+          "styleActive": 3,
+          "measuredPhases": [
+            0,
+            0.5,
+            1
+          ],
+          "maxReachError": 0.00002022224892678226,
+          "maxHeightError": 0.00001802324606753336
+        },
+        {
+          "slot": "stand_heavy",
+          "sourceActive": 4,
+          "styleActive": 4,
+          "measuredPhases": [
+            0,
+            0.3333333333333333,
+            0.6666666666666666,
+            1
+          ],
+          "maxReachError": 0.000033585485988252284,
+          "maxHeightError": 0.00003440027695000847
+        },
+        {
+          "slot": "crouch_weak",
+          "sourceActive": 3,
+          "styleActive": 3,
+          "measuredPhases": [
+            0,
+            0.5,
+            1
+          ],
+          "maxReachError": 0.000024526432632065998,
+          "maxHeightError": 0.000011689939668241278
+        },
+        {
+          "slot": "crouch_heavy",
+          "sourceActive": 4,
+          "styleActive": 4,
+          "measuredPhases": [
+            0,
+            0.3333333333333333,
+            0.6666666666666666,
+            1
+          ],
+          "maxReachError": 0.000021815544659742336,
+          "maxHeightError": 0.00003672367049029068
+        },
+        {
+          "slot": "air_weak",
+          "sourceActive": 5,
+          "styleActive": 5,
+          "measuredPhases": [
+            0,
+            0.25,
+            0.5,
+            0.75,
+            1
+          ],
+          "maxReachError": 0.000004800613622069072,
+          "maxHeightError": 0.00004781092699723821
+        },
+        {
+          "slot": "air_heavy",
+          "sourceActive": 6,
+          "styleActive": 6,
+          "measuredPhases": [
+            0,
+            0.2,
+            0.4,
+            0.6,
+            0.8,
+            1
+          ],
+          "maxReachError": 0.000008856310333038575,
+          "maxHeightError": 0.00001735830060382859
+        }
+      ]
+    },
+    {
+      "baseId": "moguzo",
+      "styleId": "yomikage",
+      "rows": [
+        {
+          "slot": "stand_weak",
+          "sourceActive": 3,
+          "styleActive": 2,
+          "measuredPhases": [
+            0,
+            0.5,
+            1
+          ],
+          "maxReachError": 0.00002022224892678226,
+          "maxHeightError": 0.00001802324606753336
+        },
+        {
+          "slot": "stand_heavy",
+          "sourceActive": 4,
+          "styleActive": 3,
+          "measuredPhases": [
+            0,
+            0.3333333333333333,
+            0.5,
+            0.6666666666666666,
+            1
+          ],
+          "maxReachError": 0.00003358548598797473,
+          "maxHeightError": 0.0000344002769496754
+        },
+        {
+          "slot": "crouch_weak",
+          "sourceActive": 3,
+          "styleActive": 2,
+          "measuredPhases": [
+            0,
+            0.5,
+            1
+          ],
+          "maxReachError": 0.000024526107357480953,
+          "maxHeightError": 0.000011689939668241278
+        },
+        {
+          "slot": "crouch_heavy",
+          "sourceActive": 4,
+          "styleActive": 4,
+          "measuredPhases": [
+            0,
+            0.3333333333333333,
+            0.6666666666666666,
+            1
+          ],
+          "maxReachError": 0.000021815544659742336,
+          "maxHeightError": 0.00003672367049029068
+        },
+        {
+          "slot": "air_weak",
+          "sourceActive": 5,
+          "styleActive": 4,
+          "measuredPhases": [
+            0,
+            0.25,
+            0.3333333333333333,
+            0.5,
+            0.6666666666666666,
+            0.75,
+            1
+          ],
+          "maxReachError": 0.000004800613622069072,
+          "maxHeightError": 0.00004781093675698678
+        },
+        {
+          "slot": "air_heavy",
+          "sourceActive": 6,
+          "styleActive": 5,
+          "measuredPhases": [
+            0,
+            0.2,
+            0.25,
+            0.4,
+            0.5,
+            0.6,
+            0.75,
+            0.8,
+            1
+          ],
+          "maxReachError": 0.000008857123557970414,
+          "maxHeightError": 0.00001735830060382859
+        }
+      ]
+    },
+    {
+      "baseId": "moguzo",
+      "styleId": "bullet",
+      "rows": [
+        {
+          "slot": "stand_weak",
+          "sourceActive": 3,
+          "styleActive": 3,
+          "measuredPhases": [
+            0,
+            0.5,
+            1
+          ],
+          "maxReachError": 0.00002022224892678226,
+          "maxHeightError": 0.00001802324606753336
+        },
+        {
+          "slot": "stand_heavy",
+          "sourceActive": 4,
+          "styleActive": 4,
+          "measuredPhases": [
+            0,
+            0.3333333333333333,
+            0.6666666666666666,
+            1
+          ],
+          "maxReachError": 0.000033585485988252284,
+          "maxHeightError": 0.00003440027695000847
+        },
+        {
+          "slot": "crouch_weak",
+          "sourceActive": 3,
+          "styleActive": 3,
+          "measuredPhases": [
+            0,
+            0.5,
+            1
+          ],
+          "maxReachError": 0.000024526432632065998,
+          "maxHeightError": 0.000011689939668241278
+        },
+        {
+          "slot": "crouch_heavy",
+          "sourceActive": 4,
+          "styleActive": 4,
+          "measuredPhases": [
+            0,
+            0.3333333333333333,
+            0.6666666666666666,
+            1
+          ],
+          "maxReachError": 0.000021815544659742336,
+          "maxHeightError": 0.00003672367049029068
+        },
+        {
+          "slot": "air_weak",
+          "sourceActive": 5,
+          "styleActive": 5,
+          "measuredPhases": [
+            0,
+            0.25,
+            0.5,
+            0.75,
+            1
+          ],
+          "maxReachError": 0.000004800613622069072,
+          "maxHeightError": 0.00004781092699723821
+        },
+        {
+          "slot": "air_heavy",
+          "sourceActive": 6,
+          "styleActive": 6,
+          "measuredPhases": [
+            0,
+            0.2,
+            0.4,
+            0.6,
+            0.8,
+            1
+          ],
+          "maxReachError": 0.000008856310333038575,
+          "maxHeightError": 0.00001735830060382859
+        }
+      ]
+    },
+    {
+      "baseId": "moguzo",
+      "styleId": "dark_moguzo",
+      "rows": [
+        {
+          "slot": "stand_weak",
+          "sourceActive": 3,
+          "styleActive": 2,
+          "measuredPhases": [
+            0,
+            0.5,
+            1
+          ],
+          "maxReachError": 0.00002022224892678226,
+          "maxHeightError": 0.00001802324606753336
+        },
+        {
+          "slot": "stand_heavy",
+          "sourceActive": 4,
+          "styleActive": 3,
+          "measuredPhases": [
+            0,
+            0.3333333333333333,
+            0.5,
+            0.6666666666666666,
+            1
+          ],
+          "maxReachError": 0.000033585485988252284,
+          "maxHeightError": 0.00003440027695000847
+        },
+        {
+          "slot": "crouch_weak",
+          "sourceActive": 3,
+          "styleActive": 2,
+          "measuredPhases": [
+            0,
+            0.5,
+            1
+          ],
+          "maxReachError": 0.000024526107357480953,
+          "maxHeightError": 0.000011689939668241278
+        },
+        {
+          "slot": "crouch_heavy",
+          "sourceActive": 4,
+          "styleActive": 4,
+          "measuredPhases": [
+            0,
+            0.3333333333333333,
+            0.6666666666666666,
+            1
+          ],
+          "maxReachError": 0.000021815544659742336,
+          "maxHeightError": 0.00003672367049029068
+        },
+        {
+          "slot": "air_weak",
+          "sourceActive": 5,
+          "styleActive": 4,
+          "measuredPhases": [
+            0,
+            0.25,
+            0.3333333333333333,
+            0.5,
+            0.6666666666666666,
+            0.75,
+            1
+          ],
+          "maxReachError": 0.000004800613622069072,
+          "maxHeightError": 0.00004781093675698678
+        },
+        {
+          "slot": "air_heavy",
+          "sourceActive": 6,
+          "styleActive": 5,
+          "measuredPhases": [
+            0,
+            0.2,
+            0.25,
+            0.4,
+            0.5,
+            0.6,
+            0.75,
+            0.8,
+            1
+          ],
+          "maxReachError": 0.000008857123557970414,
+          "maxHeightError": 0.00001735830060382859
+        }
+      ]
+    },
+    {
+      "baseId": "pisuke",
+      "styleId": "moguzo",
+      "rows": [
+        {
+          "slot": "stand_weak",
+          "sourceActive": 2,
+          "styleActive": 3,
+          "measuredPhases": [
+            0,
+            0.5,
+            1
+          ],
+          "maxReachError": 0.00003419058325404567,
+          "maxHeightError": 0.000017734186085749393
+        },
+        {
+          "slot": "stand_heavy",
+          "sourceActive": 3,
+          "styleActive": 4,
+          "measuredPhases": [
+            0,
+            0.3333333333333333,
+            0.5,
+            0.6666666666666666,
+            1
+          ],
+          "maxReachError": 0.00003607341566597144,
+          "maxHeightError": 0.000031573745926716246
+        },
+        {
+          "slot": "crouch_weak",
+          "sourceActive": 2,
+          "styleActive": 3,
+          "measuredPhases": [
+            0,
+            0.5,
+            1
+          ],
+          "maxReachError": 0.00004256251323808691,
+          "maxHeightError": 0.000013566918909274639
+        },
+        {
+          "slot": "crouch_heavy",
+          "sourceActive": 4,
+          "styleActive": 4,
+          "measuredPhases": [
+            0,
+            0.3333333333333333,
+            0.6666666666666666,
+            1
+          ],
+          "maxReachError": 0.00002935054723846031,
+          "maxHeightError": 0.00003655187536899529
+        },
+        {
+          "slot": "air_weak",
+          "sourceActive": 4,
+          "styleActive": 5,
+          "measuredPhases": [
+            0,
+            0.25,
+            0.3333333333333333,
+            0.5,
+            0.6666666666666666,
+            0.75,
+            1
+          ],
+          "maxReachError": 0.000008109509344267352,
+          "maxHeightError": 0.00001590344566826385
+        },
+        {
+          "slot": "air_heavy",
+          "sourceActive": 5,
+          "styleActive": 6,
+          "measuredPhases": [
+            0,
+            0.2,
+            0.25,
+            0.4,
+            0.5,
+            0.6,
+            0.75,
+            0.8,
+            1
+          ],
+          "maxReachError": 0.000007863898136617475,
+          "maxHeightError": 0.000006296050679893694
+        }
+      ]
+    },
+    {
+      "baseId": "pisuke",
+      "styleId": "pisuke",
+      "rows": [
+        {
+          "slot": "stand_weak",
+          "sourceActive": 2,
+          "styleActive": 2,
+          "measuredPhases": [
+            0,
+            1
+          ],
+          "maxReachError": 0.00003419058325404567,
+          "maxHeightError": 0.000017734186085749393
+        },
+        {
+          "slot": "stand_heavy",
+          "sourceActive": 3,
+          "styleActive": 3,
+          "measuredPhases": [
+            0,
+            0.5,
+            1
+          ],
+          "maxReachError": 0.00003607341566597144,
+          "maxHeightError": 0.0000315737459269938
+        },
+        {
+          "slot": "crouch_weak",
+          "sourceActive": 2,
+          "styleActive": 2,
+          "measuredPhases": [
+            0,
+            1
+          ],
+          "maxReachError": 0.00004256251323808691,
+          "maxHeightError": 0.000013566918909274639
+        },
+        {
+          "slot": "crouch_heavy",
+          "sourceActive": 4,
+          "styleActive": 4,
+          "measuredPhases": [
+            0,
+            0.3333333333333333,
+            0.6666666666666666,
+            1
+          ],
+          "maxReachError": 0.00002935054723846031,
+          "maxHeightError": 0.00003655187536899529
+        },
+        {
+          "slot": "air_weak",
+          "sourceActive": 4,
+          "styleActive": 4,
+          "measuredPhases": [
+            0,
+            0.3333333333333333,
+            0.6666666666666666,
+            1
+          ],
+          "maxReachError": 0.000008109509344267352,
+          "maxHeightError": 0.00001590344566826385
+        },
+        {
+          "slot": "air_heavy",
+          "sourceActive": 5,
+          "styleActive": 5,
+          "measuredPhases": [
+            0,
+            0.25,
+            0.5,
+            0.75,
+            1
+          ],
+          "maxReachError": 0.000007863898136617475,
+          "maxHeightError": 0.000006296050679893694
+        }
+      ]
+    },
+    {
+      "baseId": "pisuke",
+      "styleId": "godan",
+      "rows": [
+        {
+          "slot": "stand_weak",
+          "sourceActive": 2,
+          "styleActive": 3,
+          "measuredPhases": [
+            0,
+            0.5,
+            1
+          ],
+          "maxReachError": 0.00003419058325404567,
+          "maxHeightError": 0.000017734186085749393
+        },
+        {
+          "slot": "stand_heavy",
+          "sourceActive": 3,
+          "styleActive": 5,
+          "measuredPhases": [
+            0,
+            0.25,
+            0.5,
+            0.75,
+            1
+          ],
+          "maxReachError": 0.00003607341566597144,
+          "maxHeightError": 0.0000315737459269938
+        },
+        {
+          "slot": "crouch_weak",
+          "sourceActive": 2,
+          "styleActive": 3,
+          "measuredPhases": [
+            0,
+            0.5,
+            1
+          ],
+          "maxReachError": 0.00004256251323808691,
+          "maxHeightError": 0.000013566918909274639
+        },
+        {
+          "slot": "crouch_heavy",
+          "sourceActive": 4,
+          "styleActive": 5,
+          "measuredPhases": [
+            0,
+            0.25,
+            0.3333333333333333,
+            0.5,
+            0.6666666666666666,
+            0.75,
+            1
+          ],
+          "maxReachError": 0.00002935054723846031,
+          "maxHeightError": 0.00003655187536899529
+        },
+        {
+          "slot": "air_weak",
+          "sourceActive": 4,
+          "styleActive": 5,
+          "measuredPhases": [
+            0,
+            0.25,
+            0.3333333333333333,
+            0.5,
+            0.6666666666666666,
+            0.75,
+            1
+          ],
+          "maxReachError": 0.000008109509344267352,
+          "maxHeightError": 0.00001590344566826385
+        },
+        {
+          "slot": "air_heavy",
+          "sourceActive": 5,
+          "styleActive": 6,
+          "measuredPhases": [
+            0,
+            0.2,
+            0.25,
+            0.4,
+            0.5,
+            0.6,
+            0.75,
+            0.8,
+            1
+          ],
+          "maxReachError": 0.000007863898136617475,
+          "maxHeightError": 0.000006296050679893694
+        }
+      ]
+    },
+    {
+      "baseId": "pisuke",
+      "styleId": "hakuma",
+      "rows": [
+        {
+          "slot": "stand_weak",
+          "sourceActive": 2,
+          "styleActive": 4,
+          "measuredPhases": [
+            0,
+            0.3333333333333333,
+            0.6666666666666666,
+            1
+          ],
+          "maxReachError": 0.00003419058325404567,
+          "maxHeightError": 0.000017734186085749393
+        },
+        {
+          "slot": "stand_heavy",
+          "sourceActive": 3,
+          "styleActive": 5,
+          "measuredPhases": [
+            0,
+            0.25,
+            0.5,
+            0.75,
+            1
+          ],
+          "maxReachError": 0.00003607341566597144,
+          "maxHeightError": 0.0000315737459269938
+        },
+        {
+          "slot": "crouch_weak",
+          "sourceActive": 2,
+          "styleActive": 4,
+          "measuredPhases": [
+            0,
+            0.3333333333333333,
+            0.6666666666666666,
+            1
+          ],
+          "maxReachError": 0.00004256251323808691,
+          "maxHeightError": 0.000013566918909274639
+        },
+        {
+          "slot": "crouch_heavy",
+          "sourceActive": 4,
+          "styleActive": 5,
+          "measuredPhases": [
+            0,
+            0.25,
+            0.3333333333333333,
+            0.5,
+            0.6666666666666666,
+            0.75,
+            1
+          ],
+          "maxReachError": 0.00002935054723846031,
+          "maxHeightError": 0.00003655187536899529
+        },
+        {
+          "slot": "air_weak",
+          "sourceActive": 4,
+          "styleActive": 5,
+          "measuredPhases": [
+            0,
+            0.25,
+            0.3333333333333333,
+            0.5,
+            0.6666666666666666,
+            0.75,
+            1
+          ],
+          "maxReachError": 0.000008109509344267352,
+          "maxHeightError": 0.00001590344566826385
+        },
+        {
+          "slot": "air_heavy",
+          "sourceActive": 5,
+          "styleActive": 6,
+          "measuredPhases": [
+            0,
+            0.2,
+            0.25,
+            0.4,
+            0.5,
+            0.6,
+            0.75,
+            0.8,
+            1
+          ],
+          "maxReachError": 0.000007863898136617475,
+          "maxHeightError": 0.000006296050679893694
+        }
+      ]
+    },
+    {
+      "baseId": "pisuke",
+      "styleId": "chirka",
+      "rows": [
+        {
+          "slot": "stand_weak",
+          "sourceActive": 2,
+          "styleActive": 2,
+          "measuredPhases": [
+            0,
+            1
+          ],
+          "maxReachError": 0.00003419058325404567,
+          "maxHeightError": 0.000017734186085749393
+        },
+        {
+          "slot": "stand_heavy",
+          "sourceActive": 3,
+          "styleActive": 3,
+          "measuredPhases": [
+            0,
+            0.5,
+            1
+          ],
+          "maxReachError": 0.00003607341566597144,
+          "maxHeightError": 0.0000315737459269938
+        },
+        {
+          "slot": "crouch_weak",
+          "sourceActive": 2,
+          "styleActive": 2,
+          "measuredPhases": [
+            0,
+            1
+          ],
+          "maxReachError": 0.00004256251323808691,
+          "maxHeightError": 0.000013566918909274639
+        },
+        {
+          "slot": "crouch_heavy",
+          "sourceActive": 4,
+          "styleActive": 4,
+          "measuredPhases": [
+            0,
+            0.3333333333333333,
+            0.6666666666666666,
+            1
+          ],
+          "maxReachError": 0.00002935054723846031,
+          "maxHeightError": 0.00003655187536899529
+        },
+        {
+          "slot": "air_weak",
+          "sourceActive": 4,
+          "styleActive": 4,
+          "measuredPhases": [
+            0,
+            0.3333333333333333,
+            0.6666666666666666,
+            1
+          ],
+          "maxReachError": 0.000008109509344267352,
+          "maxHeightError": 0.00001590344566826385
+        },
+        {
+          "slot": "air_heavy",
+          "sourceActive": 5,
+          "styleActive": 5,
+          "measuredPhases": [
+            0,
+            0.25,
+            0.5,
+            0.75,
+            1
+          ],
+          "maxReachError": 0.000007863898136617475,
+          "maxHeightError": 0.000006296050679893694
+        }
+      ]
+    },
+    {
+      "baseId": "pisuke",
+      "styleId": "takimaru",
+      "rows": [
+        {
+          "slot": "stand_weak",
+          "sourceActive": 2,
+          "styleActive": 3,
+          "measuredPhases": [
+            0,
+            0.5,
+            1
+          ],
+          "maxReachError": 0.00003419058325404567,
+          "maxHeightError": 0.000017734186085749393
+        },
+        {
+          "slot": "stand_heavy",
+          "sourceActive": 3,
+          "styleActive": 4,
+          "measuredPhases": [
+            0,
+            0.3333333333333333,
+            0.5,
+            0.6666666666666666,
+            1
+          ],
+          "maxReachError": 0.00003607341566597144,
+          "maxHeightError": 0.0000315737459269938
+        },
+        {
+          "slot": "crouch_weak",
+          "sourceActive": 2,
+          "styleActive": 3,
+          "measuredPhases": [
+            0,
+            0.5,
+            1
+          ],
+          "maxReachError": 0.00004256251323808691,
+          "maxHeightError": 0.000013566918909274639
+        },
+        {
+          "slot": "crouch_heavy",
+          "sourceActive": 4,
+          "styleActive": 4,
+          "measuredPhases": [
+            0,
+            0.3333333333333333,
+            0.6666666666666666,
+            1
+          ],
+          "maxReachError": 0.00002935054723846031,
+          "maxHeightError": 0.00003655187536899529
+        },
+        {
+          "slot": "air_weak",
+          "sourceActive": 4,
+          "styleActive": 5,
+          "measuredPhases": [
+            0,
+            0.25,
+            0.3333333333333333,
+            0.5,
+            0.6666666666666666,
+            0.75,
+            1
+          ],
+          "maxReachError": 0.000008109509344267352,
+          "maxHeightError": 0.00001590344566826385
+        },
+        {
+          "slot": "air_heavy",
+          "sourceActive": 5,
+          "styleActive": 6,
+          "measuredPhases": [
+            0,
+            0.2,
+            0.25,
+            0.4,
+            0.5,
+            0.6,
+            0.75,
+            0.8,
+            1
+          ],
+          "maxReachError": 0.000007863898136617475,
+          "maxHeightError": 0.000006296050679893694
+        }
+      ]
+    },
+    {
+      "baseId": "pisuke",
+      "styleId": "yomikage",
+      "rows": [
+        {
+          "slot": "stand_weak",
+          "sourceActive": 2,
+          "styleActive": 2,
+          "measuredPhases": [
+            0,
+            1
+          ],
+          "maxReachError": 0.00003419058325404567,
+          "maxHeightError": 0.000017734186085749393
+        },
+        {
+          "slot": "stand_heavy",
+          "sourceActive": 3,
+          "styleActive": 3,
+          "measuredPhases": [
+            0,
+            0.5,
+            1
+          ],
+          "maxReachError": 0.00003607341566597144,
+          "maxHeightError": 0.000031573745926716246
+        },
+        {
+          "slot": "crouch_weak",
+          "sourceActive": 2,
+          "styleActive": 2,
+          "measuredPhases": [
+            0,
+            1
+          ],
+          "maxReachError": 0.00004256251323808691,
+          "maxHeightError": 0.000013566918909274639
+        },
+        {
+          "slot": "crouch_heavy",
+          "sourceActive": 4,
+          "styleActive": 4,
+          "measuredPhases": [
+            0,
+            0.3333333333333333,
+            0.6666666666666666,
+            1
+          ],
+          "maxReachError": 0.00002935054723846031,
+          "maxHeightError": 0.00003655187536899529
+        },
+        {
+          "slot": "air_weak",
+          "sourceActive": 4,
+          "styleActive": 4,
+          "measuredPhases": [
+            0,
+            0.3333333333333333,
+            0.6666666666666666,
+            1
+          ],
+          "maxReachError": 0.000008109509344267352,
+          "maxHeightError": 0.00001590344566826385
+        },
+        {
+          "slot": "air_heavy",
+          "sourceActive": 5,
+          "styleActive": 5,
+          "measuredPhases": [
+            0,
+            0.25,
+            0.5,
+            0.75,
+            1
+          ],
+          "maxReachError": 0.000007863898136617475,
+          "maxHeightError": 0.000006296050679893694
+        }
+      ]
+    },
+    {
+      "baseId": "pisuke",
+      "styleId": "bullet",
+      "rows": [
+        {
+          "slot": "stand_weak",
+          "sourceActive": 2,
+          "styleActive": 3,
+          "measuredPhases": [
+            0,
+            0.5,
+            1
+          ],
+          "maxReachError": 0.00003419058325404567,
+          "maxHeightError": 0.000017734186085749393
+        },
+        {
+          "slot": "stand_heavy",
+          "sourceActive": 3,
+          "styleActive": 4,
+          "measuredPhases": [
+            0,
+            0.3333333333333333,
+            0.5,
+            0.6666666666666666,
+            1
+          ],
+          "maxReachError": 0.00003607341566597144,
+          "maxHeightError": 0.0000315737459269938
+        },
+        {
+          "slot": "crouch_weak",
+          "sourceActive": 2,
+          "styleActive": 3,
+          "measuredPhases": [
+            0,
+            0.5,
+            1
+          ],
+          "maxReachError": 0.00004256251323808691,
+          "maxHeightError": 0.000013566918909274639
+        },
+        {
+          "slot": "crouch_heavy",
+          "sourceActive": 4,
+          "styleActive": 4,
+          "measuredPhases": [
+            0,
+            0.3333333333333333,
+            0.6666666666666666,
+            1
+          ],
+          "maxReachError": 0.00002935054723846031,
+          "maxHeightError": 0.00003655187536899529
+        },
+        {
+          "slot": "air_weak",
+          "sourceActive": 4,
+          "styleActive": 5,
+          "measuredPhases": [
+            0,
+            0.25,
+            0.3333333333333333,
+            0.5,
+            0.6666666666666666,
+            0.75,
+            1
+          ],
+          "maxReachError": 0.000008109509344267352,
+          "maxHeightError": 0.00001590344566826385
+        },
+        {
+          "slot": "air_heavy",
+          "sourceActive": 5,
+          "styleActive": 6,
+          "measuredPhases": [
+            0,
+            0.2,
+            0.25,
+            0.4,
+            0.5,
+            0.6,
+            0.75,
+            0.8,
+            1
+          ],
+          "maxReachError": 0.000007863898136617475,
+          "maxHeightError": 0.000006296050679893694
+        }
+      ]
+    },
+    {
+      "baseId": "pisuke",
+      "styleId": "dark_moguzo",
+      "rows": [
+        {
+          "slot": "stand_weak",
+          "sourceActive": 2,
+          "styleActive": 2,
+          "measuredPhases": [
+            0,
+            1
+          ],
+          "maxReachError": 0.00003419058325404567,
+          "maxHeightError": 0.000017734186085749393
+        },
+        {
+          "slot": "stand_heavy",
+          "sourceActive": 3,
+          "styleActive": 3,
+          "measuredPhases": [
+            0,
+            0.5,
+            1
+          ],
+          "maxReachError": 0.00003607341566597144,
+          "maxHeightError": 0.0000315737459269938
+        },
+        {
+          "slot": "crouch_weak",
+          "sourceActive": 2,
+          "styleActive": 2,
+          "measuredPhases": [
+            0,
+            1
+          ],
+          "maxReachError": 0.00004256251323808691,
+          "maxHeightError": 0.000013566918909274639
+        },
+        {
+          "slot": "crouch_heavy",
+          "sourceActive": 4,
+          "styleActive": 4,
+          "measuredPhases": [
+            0,
+            0.3333333333333333,
+            0.6666666666666666,
+            1
+          ],
+          "maxReachError": 0.00002935054723846031,
+          "maxHeightError": 0.00003655187536899529
+        },
+        {
+          "slot": "air_weak",
+          "sourceActive": 4,
+          "styleActive": 4,
+          "measuredPhases": [
+            0,
+            0.3333333333333333,
+            0.6666666666666666,
+            1
+          ],
+          "maxReachError": 0.000008109509344267352,
+          "maxHeightError": 0.00001590344566826385
+        },
+        {
+          "slot": "air_heavy",
+          "sourceActive": 5,
+          "styleActive": 5,
+          "measuredPhases": [
+            0,
+            0.25,
+            0.5,
+            0.75,
+            1
+          ],
+          "maxReachError": 0.000007863898136617475,
+          "maxHeightError": 0.000006296050679893694
+        }
+      ]
+    },
+    {
+      "baseId": "godan",
+      "styleId": "moguzo",
+      "rows": [
+        {
+          "slot": "stand_weak",
+          "sourceActive": 3,
+          "styleActive": 3,
+          "measuredPhases": [
+            0,
+            0.5,
+            1
+          ],
+          "maxReachError": 0.000017896136628614556,
+          "maxHeightError": 0.000031322873287997766
+        },
+        {
+          "slot": "stand_heavy",
+          "sourceActive": 5,
+          "styleActive": 4,
+          "measuredPhases": [
+            0,
+            0.25,
+            0.3333333333333333,
+            0.5,
+            0.6666666666666666,
+            0.75,
+            1
+          ],
+          "maxReachError": 0.00004903376840348361,
+          "maxHeightError": 0.000049996748639813404
+        },
+        {
+          "slot": "crouch_weak",
+          "sourceActive": 3,
+          "styleActive": 3,
+          "measuredPhases": [
+            0,
+            0.5,
+            1
+          ],
+          "maxReachError": 2.6246728024315047e-7,
+          "maxHeightError": 0.00003364777249828532
+        },
+        {
+          "slot": "crouch_heavy",
+          "sourceActive": 5,
+          "styleActive": 4,
+          "measuredPhases": [
+            0,
+            0.25,
+            0.3333333333333333,
+            0.5,
+            0.6666666666666666,
+            0.75,
+            1
+          ],
+          "maxReachError": 0.000015956196898758712,
+          "maxHeightError": 0.000015296419871912992
+        },
+        {
+          "slot": "air_weak",
+          "sourceActive": 5,
+          "styleActive": 5,
+          "measuredPhases": [
+            0,
+            0.25,
+            0.5,
+            0.75,
+            1
+          ],
+          "maxReachError": 0.0000068040201630092945,
+          "maxHeightError": 0.0000492090171004822
+        },
+        {
+          "slot": "air_heavy",
+          "sourceActive": 6,
+          "styleActive": 6,
+          "measuredPhases": [
+            0,
+            0.2,
+            0.4,
+            0.6,
+            0.8,
+            1
+          ],
+          "maxReachError": 0.00003281440460106699,
+          "maxHeightError": 0.000043776759151986644
+        }
+      ]
+    },
+    {
+      "baseId": "godan",
+      "styleId": "pisuke",
+      "rows": [
+        {
+          "slot": "stand_weak",
+          "sourceActive": 3,
+          "styleActive": 2,
+          "measuredPhases": [
+            0,
+            0.5,
+            1
+          ],
+          "maxReachError": 0.000017896044384624332,
+          "maxHeightError": 0.000031322873287997766
+        },
+        {
+          "slot": "stand_heavy",
+          "sourceActive": 5,
+          "styleActive": 3,
+          "measuredPhases": [
+            0,
+            0.25,
+            0.5,
+            0.75,
+            1
+          ],
+          "maxReachError": 0.00004903376840348361,
+          "maxHeightError": 0.00004999300671543194
+        },
+        {
+          "slot": "crouch_weak",
+          "sourceActive": 3,
+          "styleActive": 2,
+          "measuredPhases": [
+            0,
+            0.5,
+            1
+          ],
+          "maxReachError": 2.608199927145449e-7,
+          "maxHeightError": 0.00003364777249828532
+        },
+        {
+          "slot": "crouch_heavy",
+          "sourceActive": 5,
+          "styleActive": 4,
+          "measuredPhases": [
+            0,
+            0.25,
+            0.3333333333333333,
+            0.5,
+            0.6666666666666666,
+            0.75,
+            1
+          ],
+          "maxReachError": 0.000015956196898758712,
+          "maxHeightError": 0.000015296419871912992
+        },
+        {
+          "slot": "air_weak",
+          "sourceActive": 5,
+          "styleActive": 4,
+          "measuredPhases": [
+            0,
+            0.25,
+            0.3333333333333333,
+            0.5,
+            0.6666666666666666,
+            0.75,
+            1
+          ],
+          "maxReachError": 0.0000068040201630092945,
+          "maxHeightError": 0.0000492090171004822
+        },
+        {
+          "slot": "air_heavy",
+          "sourceActive": 6,
+          "styleActive": 5,
+          "measuredPhases": [
+            0,
+            0.2,
+            0.25,
+            0.4,
+            0.5,
+            0.6,
+            0.75,
+            0.8,
+            1
+          ],
+          "maxReachError": 0.00003281440460106699,
+          "maxHeightError": 0.000043776759151986644
+        }
+      ]
+    },
+    {
+      "baseId": "godan",
+      "styleId": "godan",
+      "rows": [
+        {
+          "slot": "stand_weak",
+          "sourceActive": 3,
+          "styleActive": 3,
+          "measuredPhases": [
+            0,
+            0.5,
+            1
+          ],
+          "maxReachError": 0.000017896136628614556,
+          "maxHeightError": 0.000031322873287997766
+        },
+        {
+          "slot": "stand_heavy",
+          "sourceActive": 5,
+          "styleActive": 5,
+          "measuredPhases": [
+            0,
+            0.25,
+            0.5,
+            0.75,
+            1
+          ],
+          "maxReachError": 0.00004903376840348361,
+          "maxHeightError": 0.000049996748639813404
+        },
+        {
+          "slot": "crouch_weak",
+          "sourceActive": 3,
+          "styleActive": 3,
+          "measuredPhases": [
+            0,
+            0.5,
+            1
+          ],
+          "maxReachError": 2.6246728024315047e-7,
+          "maxHeightError": 0.00003364777249828532
+        },
+        {
+          "slot": "crouch_heavy",
+          "sourceActive": 5,
+          "styleActive": 5,
+          "measuredPhases": [
+            0,
+            0.25,
+            0.5,
+            0.75,
+            1
+          ],
+          "maxReachError": 0.000015956196898758712,
+          "maxHeightError": 0.000015296419871912992
+        },
+        {
+          "slot": "air_weak",
+          "sourceActive": 5,
+          "styleActive": 5,
+          "measuredPhases": [
+            0,
+            0.25,
+            0.5,
+            0.75,
+            1
+          ],
+          "maxReachError": 0.0000068040201630092945,
+          "maxHeightError": 0.0000492090171004822
+        },
+        {
+          "slot": "air_heavy",
+          "sourceActive": 6,
+          "styleActive": 6,
+          "measuredPhases": [
+            0,
+            0.2,
+            0.4,
+            0.6,
+            0.8,
+            1
+          ],
+          "maxReachError": 0.00003281440460106699,
+          "maxHeightError": 0.000043776759151986644
+        }
+      ]
+    },
+    {
+      "baseId": "godan",
+      "styleId": "hakuma",
+      "rows": [
+        {
+          "slot": "stand_weak",
+          "sourceActive": 3,
+          "styleActive": 4,
+          "measuredPhases": [
+            0,
+            0.3333333333333333,
+            0.5,
+            0.6666666666666666,
+            1
+          ],
+          "maxReachError": 0.000017896136628614556,
+          "maxHeightError": 0.000031322873287997766
+        },
+        {
+          "slot": "stand_heavy",
+          "sourceActive": 5,
+          "styleActive": 5,
+          "measuredPhases": [
+            0,
+            0.25,
+            0.5,
+            0.75,
+            1
+          ],
+          "maxReachError": 0.00004903376840348361,
+          "maxHeightError": 0.000049996748639813404
+        },
+        {
+          "slot": "crouch_weak",
+          "sourceActive": 3,
+          "styleActive": 4,
+          "measuredPhases": [
+            0,
+            0.3333333333333333,
+            0.5,
+            0.6666666666666666,
+            1
+          ],
+          "maxReachError": 2.6246728024315047e-7,
+          "maxHeightError": 0.00003364777249828532
+        },
+        {
+          "slot": "crouch_heavy",
+          "sourceActive": 5,
+          "styleActive": 5,
+          "measuredPhases": [
+            0,
+            0.25,
+            0.5,
+            0.75,
+            1
+          ],
+          "maxReachError": 0.000015956196898758712,
+          "maxHeightError": 0.000015296419871912992
+        },
+        {
+          "slot": "air_weak",
+          "sourceActive": 5,
+          "styleActive": 5,
+          "measuredPhases": [
+            0,
+            0.25,
+            0.5,
+            0.75,
+            1
+          ],
+          "maxReachError": 0.0000068040201630092945,
+          "maxHeightError": 0.0000492090171004822
+        },
+        {
+          "slot": "air_heavy",
+          "sourceActive": 6,
+          "styleActive": 6,
+          "measuredPhases": [
+            0,
+            0.2,
+            0.4,
+            0.6,
+            0.8,
+            1
+          ],
+          "maxReachError": 0.00003281440460106699,
+          "maxHeightError": 0.000043776759151986644
+        }
+      ]
+    },
+    {
+      "baseId": "godan",
+      "styleId": "chirka",
+      "rows": [
+        {
+          "slot": "stand_weak",
+          "sourceActive": 3,
+          "styleActive": 2,
+          "measuredPhases": [
+            0,
+            0.5,
+            1
+          ],
+          "maxReachError": 0.000017896044384624332,
+          "maxHeightError": 0.000031322873287997766
+        },
+        {
+          "slot": "stand_heavy",
+          "sourceActive": 5,
+          "styleActive": 3,
+          "measuredPhases": [
+            0,
+            0.25,
+            0.5,
+            0.75,
+            1
+          ],
+          "maxReachError": 0.00004903376840348361,
+          "maxHeightError": 0.00004999300671543194
+        },
+        {
+          "slot": "crouch_weak",
+          "sourceActive": 3,
+          "styleActive": 2,
+          "measuredPhases": [
+            0,
+            0.5,
+            1
+          ],
+          "maxReachError": 2.608199927145449e-7,
+          "maxHeightError": 0.00003364777249828532
+        },
+        {
+          "slot": "crouch_heavy",
+          "sourceActive": 5,
+          "styleActive": 4,
+          "measuredPhases": [
+            0,
+            0.25,
+            0.3333333333333333,
+            0.5,
+            0.6666666666666666,
+            0.75,
+            1
+          ],
+          "maxReachError": 0.000015956196898758712,
+          "maxHeightError": 0.000015296419871912992
+        },
+        {
+          "slot": "air_weak",
+          "sourceActive": 5,
+          "styleActive": 4,
+          "measuredPhases": [
+            0,
+            0.25,
+            0.3333333333333333,
+            0.5,
+            0.6666666666666666,
+            0.75,
+            1
+          ],
+          "maxReachError": 0.0000068040201630092945,
+          "maxHeightError": 0.0000492090171004822
+        },
+        {
+          "slot": "air_heavy",
+          "sourceActive": 6,
+          "styleActive": 5,
+          "measuredPhases": [
+            0,
+            0.2,
+            0.25,
+            0.4,
+            0.5,
+            0.6,
+            0.75,
+            0.8,
+            1
+          ],
+          "maxReachError": 0.00003281440460106699,
+          "maxHeightError": 0.000043776759151986644
+        }
+      ]
+    },
+    {
+      "baseId": "godan",
+      "styleId": "takimaru",
+      "rows": [
+        {
+          "slot": "stand_weak",
+          "sourceActive": 3,
+          "styleActive": 3,
+          "measuredPhases": [
+            0,
+            0.5,
+            1
+          ],
+          "maxReachError": 0.000017896136628614556,
+          "maxHeightError": 0.000031322873287997766
+        },
+        {
+          "slot": "stand_heavy",
+          "sourceActive": 5,
+          "styleActive": 4,
+          "measuredPhases": [
+            0,
+            0.25,
+            0.3333333333333333,
+            0.5,
+            0.6666666666666666,
+            0.75,
+            1
+          ],
+          "maxReachError": 0.00004903376840348361,
+          "maxHeightError": 0.000049996748639813404
+        },
+        {
+          "slot": "crouch_weak",
+          "sourceActive": 3,
+          "styleActive": 3,
+          "measuredPhases": [
+            0,
+            0.5,
+            1
+          ],
+          "maxReachError": 2.6246728024315047e-7,
+          "maxHeightError": 0.00003364777249828532
+        },
+        {
+          "slot": "crouch_heavy",
+          "sourceActive": 5,
+          "styleActive": 4,
+          "measuredPhases": [
+            0,
+            0.25,
+            0.3333333333333333,
+            0.5,
+            0.6666666666666666,
+            0.75,
+            1
+          ],
+          "maxReachError": 0.000015956196898758712,
+          "maxHeightError": 0.000015296419871912992
+        },
+        {
+          "slot": "air_weak",
+          "sourceActive": 5,
+          "styleActive": 5,
+          "measuredPhases": [
+            0,
+            0.25,
+            0.5,
+            0.75,
+            1
+          ],
+          "maxReachError": 0.0000068040201630092945,
+          "maxHeightError": 0.0000492090171004822
+        },
+        {
+          "slot": "air_heavy",
+          "sourceActive": 6,
+          "styleActive": 6,
+          "measuredPhases": [
+            0,
+            0.2,
+            0.4,
+            0.6,
+            0.8,
+            1
+          ],
+          "maxReachError": 0.00003281440460106699,
+          "maxHeightError": 0.000043776759151986644
+        }
+      ]
+    },
+    {
+      "baseId": "godan",
+      "styleId": "yomikage",
+      "rows": [
+        {
+          "slot": "stand_weak",
+          "sourceActive": 3,
+          "styleActive": 2,
+          "measuredPhases": [
+            0,
+            0.5,
+            1
+          ],
+          "maxReachError": 0.000017896044384624332,
+          "maxHeightError": 0.000031322873287997766
+        },
+        {
+          "slot": "stand_heavy",
+          "sourceActive": 5,
+          "styleActive": 3,
+          "measuredPhases": [
+            0,
+            0.25,
+            0.5,
+            0.75,
+            1
+          ],
+          "maxReachError": 0.00004903376840348361,
+          "maxHeightError": 0.00004999300671543194
+        },
+        {
+          "slot": "crouch_weak",
+          "sourceActive": 3,
+          "styleActive": 2,
+          "measuredPhases": [
+            0,
+            0.5,
+            1
+          ],
+          "maxReachError": 2.608199927145449e-7,
+          "maxHeightError": 0.00003364777249828532
+        },
+        {
+          "slot": "crouch_heavy",
+          "sourceActive": 5,
+          "styleActive": 4,
+          "measuredPhases": [
+            0,
+            0.25,
+            0.3333333333333333,
+            0.5,
+            0.6666666666666666,
+            0.75,
+            1
+          ],
+          "maxReachError": 0.000015956196898758712,
+          "maxHeightError": 0.000015296419871912992
+        },
+        {
+          "slot": "air_weak",
+          "sourceActive": 5,
+          "styleActive": 4,
+          "measuredPhases": [
+            0,
+            0.25,
+            0.3333333333333333,
+            0.5,
+            0.6666666666666666,
+            0.75,
+            1
+          ],
+          "maxReachError": 0.0000068040201630092945,
+          "maxHeightError": 0.0000492090171004822
+        },
+        {
+          "slot": "air_heavy",
+          "sourceActive": 6,
+          "styleActive": 5,
+          "measuredPhases": [
+            0,
+            0.2,
+            0.25,
+            0.4,
+            0.5,
+            0.6,
+            0.75,
+            0.8,
+            1
+          ],
+          "maxReachError": 0.00003281440460106699,
+          "maxHeightError": 0.000043776759151986644
+        }
+      ]
+    },
+    {
+      "baseId": "godan",
+      "styleId": "bullet",
+      "rows": [
+        {
+          "slot": "stand_weak",
+          "sourceActive": 3,
+          "styleActive": 3,
+          "measuredPhases": [
+            0,
+            0.5,
+            1
+          ],
+          "maxReachError": 0.000017896136628614556,
+          "maxHeightError": 0.000031322873287997766
+        },
+        {
+          "slot": "stand_heavy",
+          "sourceActive": 5,
+          "styleActive": 4,
+          "measuredPhases": [
+            0,
+            0.25,
+            0.3333333333333333,
+            0.5,
+            0.6666666666666666,
+            0.75,
+            1
+          ],
+          "maxReachError": 0.00004903376840348361,
+          "maxHeightError": 0.000049996748639813404
+        },
+        {
+          "slot": "crouch_weak",
+          "sourceActive": 3,
+          "styleActive": 3,
+          "measuredPhases": [
+            0,
+            0.5,
+            1
+          ],
+          "maxReachError": 2.6246728024315047e-7,
+          "maxHeightError": 0.00003364777249828532
+        },
+        {
+          "slot": "crouch_heavy",
+          "sourceActive": 5,
+          "styleActive": 4,
+          "measuredPhases": [
+            0,
+            0.25,
+            0.3333333333333333,
+            0.5,
+            0.6666666666666666,
+            0.75,
+            1
+          ],
+          "maxReachError": 0.000015956196898758712,
+          "maxHeightError": 0.000015296419871912992
+        },
+        {
+          "slot": "air_weak",
+          "sourceActive": 5,
+          "styleActive": 5,
+          "measuredPhases": [
+            0,
+            0.25,
+            0.5,
+            0.75,
+            1
+          ],
+          "maxReachError": 0.0000068040201630092945,
+          "maxHeightError": 0.0000492090171004822
+        },
+        {
+          "slot": "air_heavy",
+          "sourceActive": 6,
+          "styleActive": 6,
+          "measuredPhases": [
+            0,
+            0.2,
+            0.4,
+            0.6,
+            0.8,
+            1
+          ],
+          "maxReachError": 0.00003281440460106699,
+          "maxHeightError": 0.000043776759151986644
+        }
+      ]
+    },
+    {
+      "baseId": "godan",
+      "styleId": "dark_moguzo",
+      "rows": [
+        {
+          "slot": "stand_weak",
+          "sourceActive": 3,
+          "styleActive": 2,
+          "measuredPhases": [
+            0,
+            0.5,
+            1
+          ],
+          "maxReachError": 0.000017896044384624332,
+          "maxHeightError": 0.000031322873287997766
+        },
+        {
+          "slot": "stand_heavy",
+          "sourceActive": 5,
+          "styleActive": 3,
+          "measuredPhases": [
+            0,
+            0.25,
+            0.5,
+            0.75,
+            1
+          ],
+          "maxReachError": 0.00004903376840348361,
+          "maxHeightError": 0.00004999300671543194
+        },
+        {
+          "slot": "crouch_weak",
+          "sourceActive": 3,
+          "styleActive": 2,
+          "measuredPhases": [
+            0,
+            0.5,
+            1
+          ],
+          "maxReachError": 2.608199927145449e-7,
+          "maxHeightError": 0.00003364777249828532
+        },
+        {
+          "slot": "crouch_heavy",
+          "sourceActive": 5,
+          "styleActive": 4,
+          "measuredPhases": [
+            0,
+            0.25,
+            0.3333333333333333,
+            0.5,
+            0.6666666666666666,
+            0.75,
+            1
+          ],
+          "maxReachError": 0.000015956196898758712,
+          "maxHeightError": 0.000015296419871912992
+        },
+        {
+          "slot": "air_weak",
+          "sourceActive": 5,
+          "styleActive": 4,
+          "measuredPhases": [
+            0,
+            0.25,
+            0.3333333333333333,
+            0.5,
+            0.6666666666666666,
+            0.75,
+            1
+          ],
+          "maxReachError": 0.0000068040201630092945,
+          "maxHeightError": 0.0000492090171004822
+        },
+        {
+          "slot": "air_heavy",
+          "sourceActive": 6,
+          "styleActive": 5,
+          "measuredPhases": [
+            0,
+            0.2,
+            0.25,
+            0.4,
+            0.5,
+            0.6,
+            0.75,
+            0.8,
+            1
+          ],
+          "maxReachError": 0.00003281440460106699,
+          "maxHeightError": 0.000043776759151986644
+        }
+      ]
+    },
+    {
+      "baseId": "hakuma",
+      "styleId": "moguzo",
+      "rows": [
+        {
+          "slot": "stand_weak",
+          "sourceActive": 4,
+          "styleActive": 3,
+          "measuredPhases": [
+            0,
+            0.3333333333333333,
+            0.5,
+            0.6666666666666666,
+            1
+          ],
+          "maxReachError": 0.00002966027605494359,
+          "maxHeightError": 0.000011711605189090868
+        },
+        {
+          "slot": "stand_heavy",
+          "sourceActive": 5,
+          "styleActive": 4,
+          "measuredPhases": [
+            0,
+            0.25,
+            0.3333333333333333,
+            0.5,
+            0.6666666666666666,
+            0.75,
+            1
+          ],
+          "maxReachError": 0.000007437841909652132,
+          "maxHeightError": 0.000013496858770278841
+        },
+        {
+          "slot": "crouch_weak",
+          "sourceActive": 4,
+          "styleActive": 3,
+          "measuredPhases": [
+            0,
+            0.3333333333333333,
+            0.5,
+            0.6666666666666666,
+            1
+          ],
+          "maxReachError": 0.000017093909079668457,
+          "maxHeightError": 0.000009862809635385883
+        },
+        {
+          "slot": "crouch_heavy",
+          "sourceActive": 5,
+          "styleActive": 4,
+          "measuredPhases": [
+            0,
+            0.25,
+            0.3333333333333333,
+            0.5,
+            0.6666666666666666,
+            0.75,
+            1
+          ],
+          "maxReachError": 0.00003308472716495592,
+          "maxHeightError": 0.0000138782402516191
+        },
+        {
+          "slot": "air_weak",
+          "sourceActive": 5,
+          "styleActive": 5,
+          "measuredPhases": [
+            0,
+            0.25,
+            0.5,
+            0.75,
+            1
+          ],
+          "maxReachError": 0.000037908943349374,
+          "maxHeightError": 0.000038590673406224685
+        },
+        {
+          "slot": "air_heavy",
+          "sourceActive": 6,
+          "styleActive": 6,
+          "measuredPhases": [
+            0,
+            0.2,
+            0.4,
+            0.6,
+            0.8,
+            1
+          ],
+          "maxReachError": 0.00003659716082310416,
+          "maxHeightError": 0.000033176416003755094
+        }
+      ]
+    },
+    {
+      "baseId": "hakuma",
+      "styleId": "pisuke",
+      "rows": [
+        {
+          "slot": "stand_weak",
+          "sourceActive": 4,
+          "styleActive": 2,
+          "measuredPhases": [
+            0,
+            0.3333333333333333,
+            0.6666666666666666,
+            1
+          ],
+          "maxReachError": 0.00002966027605494359,
+          "maxHeightError": 0.000011711605189090868
+        },
+        {
+          "slot": "stand_heavy",
+          "sourceActive": 5,
+          "styleActive": 3,
+          "measuredPhases": [
+            0,
+            0.25,
+            0.5,
+            0.75,
+            1
+          ],
+          "maxReachError": 0.000007437841909652132,
+          "maxHeightError": 0.000013496858770278841
+        },
+        {
+          "slot": "crouch_weak",
+          "sourceActive": 4,
+          "styleActive": 2,
+          "measuredPhases": [
+            0,
+            0.3333333333333333,
+            0.6666666666666666,
+            1
+          ],
+          "maxReachError": 0.00001708744626149894,
+          "maxHeightError": 0.000009850337737260517
+        },
+        {
+          "slot": "crouch_heavy",
+          "sourceActive": 5,
+          "styleActive": 4,
+          "measuredPhases": [
+            0,
+            0.25,
+            0.3333333333333333,
+            0.5,
+            0.6666666666666666,
+            0.75,
+            1
+          ],
+          "maxReachError": 0.00003308472716495592,
+          "maxHeightError": 0.0000138782402516191
+        },
+        {
+          "slot": "air_weak",
+          "sourceActive": 5,
+          "styleActive": 4,
+          "measuredPhases": [
+            0,
+            0.25,
+            0.3333333333333333,
+            0.5,
+            0.6666666666666666,
+            0.75,
+            1
+          ],
+          "maxReachError": 0.000037908943349374,
+          "maxHeightError": 0.000038590673406224685
+        },
+        {
+          "slot": "air_heavy",
+          "sourceActive": 6,
+          "styleActive": 5,
+          "measuredPhases": [
+            0,
+            0.2,
+            0.25,
+            0.4,
+            0.5,
+            0.6,
+            0.75,
+            0.8,
+            1
+          ],
+          "maxReachError": 0.00003659716082310416,
+          "maxHeightError": 0.000033176416003755094
+        }
+      ]
+    },
+    {
+      "baseId": "hakuma",
+      "styleId": "godan",
+      "rows": [
+        {
+          "slot": "stand_weak",
+          "sourceActive": 4,
+          "styleActive": 3,
+          "measuredPhases": [
+            0,
+            0.3333333333333333,
+            0.5,
+            0.6666666666666666,
+            1
+          ],
+          "maxReachError": 0.00002966027605494359,
+          "maxHeightError": 0.000011711605189090868
+        },
+        {
+          "slot": "stand_heavy",
+          "sourceActive": 5,
+          "styleActive": 5,
+          "measuredPhases": [
+            0,
+            0.25,
+            0.5,
+            0.75,
+            1
+          ],
+          "maxReachError": 0.000007437841909652132,
+          "maxHeightError": 0.000013496858770278841
+        },
+        {
+          "slot": "crouch_weak",
+          "sourceActive": 4,
+          "styleActive": 3,
+          "measuredPhases": [
+            0,
+            0.3333333333333333,
+            0.5,
+            0.6666666666666666,
+            1
+          ],
+          "maxReachError": 0.000017093909079668457,
+          "maxHeightError": 0.000009862809635385883
+        },
+        {
+          "slot": "crouch_heavy",
+          "sourceActive": 5,
+          "styleActive": 5,
+          "measuredPhases": [
+            0,
+            0.25,
+            0.5,
+            0.75,
+            1
+          ],
+          "maxReachError": 0.00003308472716495592,
+          "maxHeightError": 0.0000138782402516191
+        },
+        {
+          "slot": "air_weak",
+          "sourceActive": 5,
+          "styleActive": 5,
+          "measuredPhases": [
+            0,
+            0.25,
+            0.5,
+            0.75,
+            1
+          ],
+          "maxReachError": 0.000037908943349374,
+          "maxHeightError": 0.000038590673406224685
+        },
+        {
+          "slot": "air_heavy",
+          "sourceActive": 6,
+          "styleActive": 6,
+          "measuredPhases": [
+            0,
+            0.2,
+            0.4,
+            0.6,
+            0.8,
+            1
+          ],
+          "maxReachError": 0.00003659716082310416,
+          "maxHeightError": 0.000033176416003755094
+        }
+      ]
+    },
+    {
+      "baseId": "hakuma",
+      "styleId": "hakuma",
+      "rows": [
+        {
+          "slot": "stand_weak",
+          "sourceActive": 4,
+          "styleActive": 4,
+          "measuredPhases": [
+            0,
+            0.3333333333333333,
+            0.6666666666666666,
+            1
+          ],
+          "maxReachError": 0.00002966027605494359,
+          "maxHeightError": 0.000011711605189090868
+        },
+        {
+          "slot": "stand_heavy",
+          "sourceActive": 5,
+          "styleActive": 5,
+          "measuredPhases": [
+            0,
+            0.25,
+            0.5,
+            0.75,
+            1
+          ],
+          "maxReachError": 0.000007437841909652132,
+          "maxHeightError": 0.000013496858770278841
+        },
+        {
+          "slot": "crouch_weak",
+          "sourceActive": 4,
+          "styleActive": 4,
+          "measuredPhases": [
+            0,
+            0.3333333333333333,
+            0.6666666666666666,
+            1
+          ],
+          "maxReachError": 0.000017097529837806213,
+          "maxHeightError": 0.000009871875736588986
+        },
+        {
+          "slot": "crouch_heavy",
+          "sourceActive": 5,
+          "styleActive": 5,
+          "measuredPhases": [
+            0,
+            0.25,
+            0.5,
+            0.75,
+            1
+          ],
+          "maxReachError": 0.00003308472716495592,
+          "maxHeightError": 0.0000138782402516191
+        },
+        {
+          "slot": "air_weak",
+          "sourceActive": 5,
+          "styleActive": 5,
+          "measuredPhases": [
+            0,
+            0.25,
+            0.5,
+            0.75,
+            1
+          ],
+          "maxReachError": 0.000037908943349374,
+          "maxHeightError": 0.000038590673406224685
+        },
+        {
+          "slot": "air_heavy",
+          "sourceActive": 6,
+          "styleActive": 6,
+          "measuredPhases": [
+            0,
+            0.2,
+            0.4,
+            0.6,
+            0.8,
+            1
+          ],
+          "maxReachError": 0.00003659716082310416,
+          "maxHeightError": 0.000033176416003755094
+        }
+      ]
+    },
+    {
+      "baseId": "hakuma",
+      "styleId": "chirka",
+      "rows": [
+        {
+          "slot": "stand_weak",
+          "sourceActive": 4,
+          "styleActive": 2,
+          "measuredPhases": [
+            0,
+            0.3333333333333333,
+            0.6666666666666666,
+            1
+          ],
+          "maxReachError": 0.00002966027605494359,
+          "maxHeightError": 0.000011711605189090868
+        },
+        {
+          "slot": "stand_heavy",
+          "sourceActive": 5,
+          "styleActive": 3,
+          "measuredPhases": [
+            0,
+            0.25,
+            0.5,
+            0.75,
+            1
+          ],
+          "maxReachError": 0.000007437841909652132,
+          "maxHeightError": 0.000013496858770278841
+        },
+        {
+          "slot": "crouch_weak",
+          "sourceActive": 4,
+          "styleActive": 2,
+          "measuredPhases": [
+            0,
+            0.3333333333333333,
+            0.6666666666666666,
+            1
+          ],
+          "maxReachError": 0.00001708744626149894,
+          "maxHeightError": 0.000009850337737260517
+        },
+        {
+          "slot": "crouch_heavy",
+          "sourceActive": 5,
+          "styleActive": 4,
+          "measuredPhases": [
+            0,
+            0.25,
+            0.3333333333333333,
+            0.5,
+            0.6666666666666666,
+            0.75,
+            1
+          ],
+          "maxReachError": 0.00003308472716495592,
+          "maxHeightError": 0.0000138782402516191
+        },
+        {
+          "slot": "air_weak",
+          "sourceActive": 5,
+          "styleActive": 4,
+          "measuredPhases": [
+            0,
+            0.25,
+            0.3333333333333333,
+            0.5,
+            0.6666666666666666,
+            0.75,
+            1
+          ],
+          "maxReachError": 0.000037908943349374,
+          "maxHeightError": 0.000038590673406224685
+        },
+        {
+          "slot": "air_heavy",
+          "sourceActive": 6,
+          "styleActive": 5,
+          "measuredPhases": [
+            0,
+            0.2,
+            0.25,
+            0.4,
+            0.5,
+            0.6,
+            0.75,
+            0.8,
+            1
+          ],
+          "maxReachError": 0.00003659716082310416,
+          "maxHeightError": 0.000033176416003755094
+        }
+      ]
+    },
+    {
+      "baseId": "hakuma",
+      "styleId": "takimaru",
+      "rows": [
+        {
+          "slot": "stand_weak",
+          "sourceActive": 4,
+          "styleActive": 3,
+          "measuredPhases": [
+            0,
+            0.3333333333333333,
+            0.5,
+            0.6666666666666666,
+            1
+          ],
+          "maxReachError": 0.00002966027605494359,
+          "maxHeightError": 0.000011711605189090868
+        },
+        {
+          "slot": "stand_heavy",
+          "sourceActive": 5,
+          "styleActive": 4,
+          "measuredPhases": [
+            0,
+            0.25,
+            0.3333333333333333,
+            0.5,
+            0.6666666666666666,
+            0.75,
+            1
+          ],
+          "maxReachError": 0.000007437841909652132,
+          "maxHeightError": 0.000013496858770278841
+        },
+        {
+          "slot": "crouch_weak",
+          "sourceActive": 4,
+          "styleActive": 3,
+          "measuredPhases": [
+            0,
+            0.3333333333333333,
+            0.5,
+            0.6666666666666666,
+            1
+          ],
+          "maxReachError": 0.000017093909079668457,
+          "maxHeightError": 0.000009862809635385883
+        },
+        {
+          "slot": "crouch_heavy",
+          "sourceActive": 5,
+          "styleActive": 4,
+          "measuredPhases": [
+            0,
+            0.25,
+            0.3333333333333333,
+            0.5,
+            0.6666666666666666,
+            0.75,
+            1
+          ],
+          "maxReachError": 0.00003308472716495592,
+          "maxHeightError": 0.0000138782402516191
+        },
+        {
+          "slot": "air_weak",
+          "sourceActive": 5,
+          "styleActive": 5,
+          "measuredPhases": [
+            0,
+            0.25,
+            0.5,
+            0.75,
+            1
+          ],
+          "maxReachError": 0.000037908943349374,
+          "maxHeightError": 0.000038590673406224685
+        },
+        {
+          "slot": "air_heavy",
+          "sourceActive": 6,
+          "styleActive": 6,
+          "measuredPhases": [
+            0,
+            0.2,
+            0.4,
+            0.6,
+            0.8,
+            1
+          ],
+          "maxReachError": 0.00003659716082310416,
+          "maxHeightError": 0.000033176416003755094
+        }
+      ]
+    },
+    {
+      "baseId": "hakuma",
+      "styleId": "yomikage",
+      "rows": [
+        {
+          "slot": "stand_weak",
+          "sourceActive": 4,
+          "styleActive": 2,
+          "measuredPhases": [
+            0,
+            0.3333333333333333,
+            0.6666666666666666,
+            1
+          ],
+          "maxReachError": 0.00002966027605494359,
+          "maxHeightError": 0.000011711605189090868
+        },
+        {
+          "slot": "stand_heavy",
+          "sourceActive": 5,
+          "styleActive": 3,
+          "measuredPhases": [
+            0,
+            0.25,
+            0.5,
+            0.75,
+            1
+          ],
+          "maxReachError": 0.000007437841909652132,
+          "maxHeightError": 0.000013496858770278841
+        },
+        {
+          "slot": "crouch_weak",
+          "sourceActive": 4,
+          "styleActive": 2,
+          "measuredPhases": [
+            0,
+            0.3333333333333333,
+            0.6666666666666666,
+            1
+          ],
+          "maxReachError": 0.00001708744626149894,
+          "maxHeightError": 0.000009850337737260517
+        },
+        {
+          "slot": "crouch_heavy",
+          "sourceActive": 5,
+          "styleActive": 4,
+          "measuredPhases": [
+            0,
+            0.25,
+            0.3333333333333333,
+            0.5,
+            0.6666666666666666,
+            0.75,
+            1
+          ],
+          "maxReachError": 0.00003308472716495592,
+          "maxHeightError": 0.0000138782402516191
+        },
+        {
+          "slot": "air_weak",
+          "sourceActive": 5,
+          "styleActive": 4,
+          "measuredPhases": [
+            0,
+            0.25,
+            0.3333333333333333,
+            0.5,
+            0.6666666666666666,
+            0.75,
+            1
+          ],
+          "maxReachError": 0.000037908943349374,
+          "maxHeightError": 0.000038590673406224685
+        },
+        {
+          "slot": "air_heavy",
+          "sourceActive": 6,
+          "styleActive": 5,
+          "measuredPhases": [
+            0,
+            0.2,
+            0.25,
+            0.4,
+            0.5,
+            0.6,
+            0.75,
+            0.8,
+            1
+          ],
+          "maxReachError": 0.00003659716082310416,
+          "maxHeightError": 0.000033176416003755094
+        }
+      ]
+    },
+    {
+      "baseId": "hakuma",
+      "styleId": "bullet",
+      "rows": [
+        {
+          "slot": "stand_weak",
+          "sourceActive": 4,
+          "styleActive": 3,
+          "measuredPhases": [
+            0,
+            0.3333333333333333,
+            0.5,
+            0.6666666666666666,
+            1
+          ],
+          "maxReachError": 0.00002966027605494359,
+          "maxHeightError": 0.000011711605189090868
+        },
+        {
+          "slot": "stand_heavy",
+          "sourceActive": 5,
+          "styleActive": 4,
+          "measuredPhases": [
+            0,
+            0.25,
+            0.3333333333333333,
+            0.5,
+            0.6666666666666666,
+            0.75,
+            1
+          ],
+          "maxReachError": 0.000007437841909652132,
+          "maxHeightError": 0.000013496858770278841
+        },
+        {
+          "slot": "crouch_weak",
+          "sourceActive": 4,
+          "styleActive": 3,
+          "measuredPhases": [
+            0,
+            0.3333333333333333,
+            0.5,
+            0.6666666666666666,
+            1
+          ],
+          "maxReachError": 0.000017093909079668457,
+          "maxHeightError": 0.000009862809635385883
+        },
+        {
+          "slot": "crouch_heavy",
+          "sourceActive": 5,
+          "styleActive": 4,
+          "measuredPhases": [
+            0,
+            0.25,
+            0.3333333333333333,
+            0.5,
+            0.6666666666666666,
+            0.75,
+            1
+          ],
+          "maxReachError": 0.00003308472716495592,
+          "maxHeightError": 0.0000138782402516191
+        },
+        {
+          "slot": "air_weak",
+          "sourceActive": 5,
+          "styleActive": 5,
+          "measuredPhases": [
+            0,
+            0.25,
+            0.5,
+            0.75,
+            1
+          ],
+          "maxReachError": 0.000037908943349374,
+          "maxHeightError": 0.000038590673406224685
+        },
+        {
+          "slot": "air_heavy",
+          "sourceActive": 6,
+          "styleActive": 6,
+          "measuredPhases": [
+            0,
+            0.2,
+            0.4,
+            0.6,
+            0.8,
+            1
+          ],
+          "maxReachError": 0.00003659716082310416,
+          "maxHeightError": 0.000033176416003755094
+        }
+      ]
+    },
+    {
+      "baseId": "hakuma",
+      "styleId": "dark_moguzo",
+      "rows": [
+        {
+          "slot": "stand_weak",
+          "sourceActive": 4,
+          "styleActive": 2,
+          "measuredPhases": [
+            0,
+            0.3333333333333333,
+            0.6666666666666666,
+            1
+          ],
+          "maxReachError": 0.00002966027605494359,
+          "maxHeightError": 0.000011711605189090868
+        },
+        {
+          "slot": "stand_heavy",
+          "sourceActive": 5,
+          "styleActive": 3,
+          "measuredPhases": [
+            0,
+            0.25,
+            0.5,
+            0.75,
+            1
+          ],
+          "maxReachError": 0.000007437841909652132,
+          "maxHeightError": 0.000013496858770278841
+        },
+        {
+          "slot": "crouch_weak",
+          "sourceActive": 4,
+          "styleActive": 2,
+          "measuredPhases": [
+            0,
+            0.3333333333333333,
+            0.6666666666666666,
+            1
+          ],
+          "maxReachError": 0.00001708744626149894,
+          "maxHeightError": 0.000009850337737260517
+        },
+        {
+          "slot": "crouch_heavy",
+          "sourceActive": 5,
+          "styleActive": 4,
+          "measuredPhases": [
+            0,
+            0.25,
+            0.3333333333333333,
+            0.5,
+            0.6666666666666666,
+            0.75,
+            1
+          ],
+          "maxReachError": 0.00003308472716495592,
+          "maxHeightError": 0.0000138782402516191
+        },
+        {
+          "slot": "air_weak",
+          "sourceActive": 5,
+          "styleActive": 4,
+          "measuredPhases": [
+            0,
+            0.25,
+            0.3333333333333333,
+            0.5,
+            0.6666666666666666,
+            0.75,
+            1
+          ],
+          "maxReachError": 0.000037908943349374,
+          "maxHeightError": 0.000038590673406224685
+        },
+        {
+          "slot": "air_heavy",
+          "sourceActive": 6,
+          "styleActive": 5,
+          "measuredPhases": [
+            0,
+            0.2,
+            0.25,
+            0.4,
+            0.5,
+            0.6,
+            0.75,
+            0.8,
+            1
+          ],
+          "maxReachError": 0.00003659716082310416,
+          "maxHeightError": 0.000033176416003755094
+        }
+      ]
+    },
+    {
+      "baseId": "chirka",
+      "styleId": "moguzo",
+      "rows": [
+        {
+          "slot": "stand_weak",
+          "sourceActive": 2,
+          "styleActive": 3,
+          "measuredPhases": [
+            0,
+            0.5,
+            1
+          ],
+          "maxReachError": 0.000029377879438907684,
+          "maxHeightError": 0.000007867308199016598
+        },
+        {
+          "slot": "stand_heavy",
+          "sourceActive": 3,
+          "styleActive": 4,
+          "measuredPhases": [
+            0,
+            0.3333333333333333,
+            0.5,
+            0.6666666666666666,
+            1
+          ],
+          "maxReachError": 0.000049933085776776576,
+          "maxHeightError": 0.00004590466819953676
+        },
+        {
+          "slot": "crouch_weak",
+          "sourceActive": 2,
+          "styleActive": 3,
+          "measuredPhases": [
+            0,
+            0.5,
+            1
+          ],
+          "maxReachError": 0.00004256949654052322,
+          "maxHeightError": 0.00003817878461535168
+        },
+        {
+          "slot": "crouch_heavy",
+          "sourceActive": 4,
+          "styleActive": 4,
+          "measuredPhases": [
+            0,
+            0.3333333333333333,
+            0.6666666666666666,
+            1
+          ],
+          "maxReachError": 0.00003097011091196533,
+          "maxHeightError": 0.000017599673056638288
+        },
+        {
+          "slot": "air_weak",
+          "sourceActive": 4,
+          "styleActive": 5,
+          "measuredPhases": [
+            0,
+            0.25,
+            0.3333333333333333,
+            0.5,
+            0.6666666666666666,
+            0.75,
+            1
+          ],
+          "maxReachError": 0.00003898917993017115,
+          "maxHeightError": 0.0000027080893092723546
+        },
+        {
+          "slot": "air_heavy",
+          "sourceActive": 5,
+          "styleActive": 6,
+          "measuredPhases": [
+            0,
+            0.2,
+            0.25,
+            0.4,
+            0.5,
+            0.6,
+            0.75,
+            0.8,
+            1
+          ],
+          "maxReachError": 0.00002800608414182948,
+          "maxHeightError": 0.000022173604581315898
+        }
+      ]
+    },
+    {
+      "baseId": "chirka",
+      "styleId": "pisuke",
+      "rows": [
+        {
+          "slot": "stand_weak",
+          "sourceActive": 2,
+          "styleActive": 2,
+          "measuredPhases": [
+            0,
+            1
+          ],
+          "maxReachError": 0.000029377879438907684,
+          "maxHeightError": 0.000007864461607220985
+        },
+        {
+          "slot": "stand_heavy",
+          "sourceActive": 3,
+          "styleActive": 3,
+          "measuredPhases": [
+            0,
+            0.5,
+            1
+          ],
+          "maxReachError": 0.00004993308577699862,
+          "maxHeightError": 0.00004590466819953676
+        },
+        {
+          "slot": "crouch_weak",
+          "sourceActive": 2,
+          "styleActive": 2,
+          "measuredPhases": [
+            0,
+            1
+          ],
+          "maxReachError": 0.00004256949654052322,
+          "maxHeightError": 0.00003817878461535168
+        },
+        {
+          "slot": "crouch_heavy",
+          "sourceActive": 4,
+          "styleActive": 4,
+          "measuredPhases": [
+            0,
+            0.3333333333333333,
+            0.6666666666666666,
+            1
+          ],
+          "maxReachError": 0.00003097011091196533,
+          "maxHeightError": 0.000017599673056638288
+        },
+        {
+          "slot": "air_weak",
+          "sourceActive": 4,
+          "styleActive": 4,
+          "measuredPhases": [
+            0,
+            0.3333333333333333,
+            0.6666666666666666,
+            1
+          ],
+          "maxReachError": 0.00003898917993017115,
+          "maxHeightError": 0.0000027080893092723546
+        },
+        {
+          "slot": "air_heavy",
+          "sourceActive": 5,
+          "styleActive": 5,
+          "measuredPhases": [
+            0,
+            0.25,
+            0.5,
+            0.75,
+            1
+          ],
+          "maxReachError": 0.00002800608414182948,
+          "maxHeightError": 0.000022173604581315898
+        }
+      ]
+    },
+    {
+      "baseId": "chirka",
+      "styleId": "godan",
+      "rows": [
+        {
+          "slot": "stand_weak",
+          "sourceActive": 2,
+          "styleActive": 3,
+          "measuredPhases": [
+            0,
+            0.5,
+            1
+          ],
+          "maxReachError": 0.000029377879438907684,
+          "maxHeightError": 0.000007867308199016598
+        },
+        {
+          "slot": "stand_heavy",
+          "sourceActive": 3,
+          "styleActive": 5,
+          "measuredPhases": [
+            0,
+            0.25,
+            0.5,
+            0.75,
+            1
+          ],
+          "maxReachError": 0.00004993308577699862,
+          "maxHeightError": 0.00004590466819953676
+        },
+        {
+          "slot": "crouch_weak",
+          "sourceActive": 2,
+          "styleActive": 3,
+          "measuredPhases": [
+            0,
+            0.5,
+            1
+          ],
+          "maxReachError": 0.00004256949654052322,
+          "maxHeightError": 0.00003817878461535168
+        },
+        {
+          "slot": "crouch_heavy",
+          "sourceActive": 4,
+          "styleActive": 5,
+          "measuredPhases": [
+            0,
+            0.25,
+            0.3333333333333333,
+            0.5,
+            0.6666666666666666,
+            0.75,
+            1
+          ],
+          "maxReachError": 0.00003097011091196533,
+          "maxHeightError": 0.000017599673056638288
+        },
+        {
+          "slot": "air_weak",
+          "sourceActive": 4,
+          "styleActive": 5,
+          "measuredPhases": [
+            0,
+            0.25,
+            0.3333333333333333,
+            0.5,
+            0.6666666666666666,
+            0.75,
+            1
+          ],
+          "maxReachError": 0.00003898917993017115,
+          "maxHeightError": 0.0000027080893092723546
+        },
+        {
+          "slot": "air_heavy",
+          "sourceActive": 5,
+          "styleActive": 6,
+          "measuredPhases": [
+            0,
+            0.2,
+            0.25,
+            0.4,
+            0.5,
+            0.6,
+            0.75,
+            0.8,
+            1
+          ],
+          "maxReachError": 0.00002800608414182948,
+          "maxHeightError": 0.000022173604581315898
+        }
+      ]
+    },
+    {
+      "baseId": "chirka",
+      "styleId": "hakuma",
+      "rows": [
+        {
+          "slot": "stand_weak",
+          "sourceActive": 2,
+          "styleActive": 4,
+          "measuredPhases": [
+            0,
+            0.3333333333333333,
+            0.6666666666666666,
+            1
+          ],
+          "maxReachError": 0.000029377879438907684,
+          "maxHeightError": 0.000007867899367075548
+        },
+        {
+          "slot": "stand_heavy",
+          "sourceActive": 3,
+          "styleActive": 5,
+          "measuredPhases": [
+            0,
+            0.25,
+            0.5,
+            0.75,
+            1
+          ],
+          "maxReachError": 0.00004993308577699862,
+          "maxHeightError": 0.00004590466819953676
+        },
+        {
+          "slot": "crouch_weak",
+          "sourceActive": 2,
+          "styleActive": 4,
+          "measuredPhases": [
+            0,
+            0.3333333333333333,
+            0.6666666666666666,
+            1
+          ],
+          "maxReachError": 0.00004256949654052322,
+          "maxHeightError": 0.00003817878461535168
+        },
+        {
+          "slot": "crouch_heavy",
+          "sourceActive": 4,
+          "styleActive": 5,
+          "measuredPhases": [
+            0,
+            0.25,
+            0.3333333333333333,
+            0.5,
+            0.6666666666666666,
+            0.75,
+            1
+          ],
+          "maxReachError": 0.00003097011091196533,
+          "maxHeightError": 0.000017599673056638288
+        },
+        {
+          "slot": "air_weak",
+          "sourceActive": 4,
+          "styleActive": 5,
+          "measuredPhases": [
+            0,
+            0.25,
+            0.3333333333333333,
+            0.5,
+            0.6666666666666666,
+            0.75,
+            1
+          ],
+          "maxReachError": 0.00003898917993017115,
+          "maxHeightError": 0.0000027080893092723546
+        },
+        {
+          "slot": "air_heavy",
+          "sourceActive": 5,
+          "styleActive": 6,
+          "measuredPhases": [
+            0,
+            0.2,
+            0.25,
+            0.4,
+            0.5,
+            0.6,
+            0.75,
+            0.8,
+            1
+          ],
+          "maxReachError": 0.00002800608414182948,
+          "maxHeightError": 0.000022173604581315898
+        }
+      ]
+    },
+    {
+      "baseId": "chirka",
+      "styleId": "chirka",
+      "rows": [
+        {
+          "slot": "stand_weak",
+          "sourceActive": 2,
+          "styleActive": 2,
+          "measuredPhases": [
+            0,
+            1
+          ],
+          "maxReachError": 0.000029377879438907684,
+          "maxHeightError": 0.000007864461607220985
+        },
+        {
+          "slot": "stand_heavy",
+          "sourceActive": 3,
+          "styleActive": 3,
+          "measuredPhases": [
+            0,
+            0.5,
+            1
+          ],
+          "maxReachError": 0.00004993308577699862,
+          "maxHeightError": 0.00004590466819953676
+        },
+        {
+          "slot": "crouch_weak",
+          "sourceActive": 2,
+          "styleActive": 2,
+          "measuredPhases": [
+            0,
+            1
+          ],
+          "maxReachError": 0.00004256949654052322,
+          "maxHeightError": 0.00003817878461535168
+        },
+        {
+          "slot": "crouch_heavy",
+          "sourceActive": 4,
+          "styleActive": 4,
+          "measuredPhases": [
+            0,
+            0.3333333333333333,
+            0.6666666666666666,
+            1
+          ],
+          "maxReachError": 0.00003097011091196533,
+          "maxHeightError": 0.000017599673056575837
+        },
+        {
+          "slot": "air_weak",
+          "sourceActive": 4,
+          "styleActive": 4,
+          "measuredPhases": [
+            0,
+            0.3333333333333333,
+            0.6666666666666666,
+            1
+          ],
+          "maxReachError": 0.00003898917993017115,
+          "maxHeightError": 0.0000027080893092723546
+        },
+        {
+          "slot": "air_heavy",
+          "sourceActive": 5,
+          "styleActive": 5,
+          "measuredPhases": [
+            0,
+            0.25,
+            0.5,
+            0.75,
+            1
+          ],
+          "maxReachError": 0.00002800608414182948,
+          "maxHeightError": 0.000022173604581315898
+        }
+      ]
+    },
+    {
+      "baseId": "chirka",
+      "styleId": "takimaru",
+      "rows": [
+        {
+          "slot": "stand_weak",
+          "sourceActive": 2,
+          "styleActive": 3,
+          "measuredPhases": [
+            0,
+            0.5,
+            1
+          ],
+          "maxReachError": 0.000029377879438907684,
+          "maxHeightError": 0.000007867308199016598
+        },
+        {
+          "slot": "stand_heavy",
+          "sourceActive": 3,
+          "styleActive": 4,
+          "measuredPhases": [
+            0,
+            0.3333333333333333,
+            0.5,
+            0.6666666666666666,
+            1
+          ],
+          "maxReachError": 0.00004993308577699862,
+          "maxHeightError": 0.00004590466819953676
+        },
+        {
+          "slot": "crouch_weak",
+          "sourceActive": 2,
+          "styleActive": 3,
+          "measuredPhases": [
+            0,
+            0.5,
+            1
+          ],
+          "maxReachError": 0.00004256949654052322,
+          "maxHeightError": 0.00003817878461535168
+        },
+        {
+          "slot": "crouch_heavy",
+          "sourceActive": 4,
+          "styleActive": 4,
+          "measuredPhases": [
+            0,
+            0.3333333333333333,
+            0.6666666666666666,
+            1
+          ],
+          "maxReachError": 0.00003097011091196533,
+          "maxHeightError": 0.000017599673056638288
+        },
+        {
+          "slot": "air_weak",
+          "sourceActive": 4,
+          "styleActive": 5,
+          "measuredPhases": [
+            0,
+            0.25,
+            0.3333333333333333,
+            0.5,
+            0.6666666666666666,
+            0.75,
+            1
+          ],
+          "maxReachError": 0.00003898917993017115,
+          "maxHeightError": 0.0000027080893092723546
+        },
+        {
+          "slot": "air_heavy",
+          "sourceActive": 5,
+          "styleActive": 6,
+          "measuredPhases": [
+            0,
+            0.2,
+            0.25,
+            0.4,
+            0.5,
+            0.6,
+            0.75,
+            0.8,
+            1
+          ],
+          "maxReachError": 0.00002800608414182948,
+          "maxHeightError": 0.000022173604581315898
+        }
+      ]
+    },
+    {
+      "baseId": "chirka",
+      "styleId": "yomikage",
+      "rows": [
+        {
+          "slot": "stand_weak",
+          "sourceActive": 2,
+          "styleActive": 2,
+          "measuredPhases": [
+            0,
+            1
+          ],
+          "maxReachError": 0.000029377879438907684,
+          "maxHeightError": 0.000007864461607220985
+        },
+        {
+          "slot": "stand_heavy",
+          "sourceActive": 3,
+          "styleActive": 3,
+          "measuredPhases": [
+            0,
+            0.5,
+            1
+          ],
+          "maxReachError": 0.000049933085776776576,
+          "maxHeightError": 0.00004590466819953676
+        },
+        {
+          "slot": "crouch_weak",
+          "sourceActive": 2,
+          "styleActive": 2,
+          "measuredPhases": [
+            0,
+            1
+          ],
+          "maxReachError": 0.00004256949654052322,
+          "maxHeightError": 0.00003817878461535168
+        },
+        {
+          "slot": "crouch_heavy",
+          "sourceActive": 4,
+          "styleActive": 4,
+          "measuredPhases": [
+            0,
+            0.3333333333333333,
+            0.6666666666666666,
+            1
+          ],
+          "maxReachError": 0.00003097011091196533,
+          "maxHeightError": 0.000017599673056638288
+        },
+        {
+          "slot": "air_weak",
+          "sourceActive": 4,
+          "styleActive": 4,
+          "measuredPhases": [
+            0,
+            0.3333333333333333,
+            0.6666666666666666,
+            1
+          ],
+          "maxReachError": 0.00003898917993017115,
+          "maxHeightError": 0.0000027080893092723546
+        },
+        {
+          "slot": "air_heavy",
+          "sourceActive": 5,
+          "styleActive": 5,
+          "measuredPhases": [
+            0,
+            0.25,
+            0.5,
+            0.75,
+            1
+          ],
+          "maxReachError": 0.00002800608414182948,
+          "maxHeightError": 0.000022173604581315898
+        }
+      ]
+    },
+    {
+      "baseId": "chirka",
+      "styleId": "bullet",
+      "rows": [
+        {
+          "slot": "stand_weak",
+          "sourceActive": 2,
+          "styleActive": 3,
+          "measuredPhases": [
+            0,
+            0.5,
+            1
+          ],
+          "maxReachError": 0.000029377879438907684,
+          "maxHeightError": 0.000007867308199016598
+        },
+        {
+          "slot": "stand_heavy",
+          "sourceActive": 3,
+          "styleActive": 4,
+          "measuredPhases": [
+            0,
+            0.3333333333333333,
+            0.5,
+            0.6666666666666666,
+            1
+          ],
+          "maxReachError": 0.00004993308577699862,
+          "maxHeightError": 0.00004590466819953676
+        },
+        {
+          "slot": "crouch_weak",
+          "sourceActive": 2,
+          "styleActive": 3,
+          "measuredPhases": [
+            0,
+            0.5,
+            1
+          ],
+          "maxReachError": 0.00004256949654052322,
+          "maxHeightError": 0.00003817878461535168
+        },
+        {
+          "slot": "crouch_heavy",
+          "sourceActive": 4,
+          "styleActive": 4,
+          "measuredPhases": [
+            0,
+            0.3333333333333333,
+            0.6666666666666666,
+            1
+          ],
+          "maxReachError": 0.00003097011091196533,
+          "maxHeightError": 0.000017599673056638288
+        },
+        {
+          "slot": "air_weak",
+          "sourceActive": 4,
+          "styleActive": 5,
+          "measuredPhases": [
+            0,
+            0.25,
+            0.3333333333333333,
+            0.5,
+            0.6666666666666666,
+            0.75,
+            1
+          ],
+          "maxReachError": 0.00003898917993017115,
+          "maxHeightError": 0.0000027080893092723546
+        },
+        {
+          "slot": "air_heavy",
+          "sourceActive": 5,
+          "styleActive": 6,
+          "measuredPhases": [
+            0,
+            0.2,
+            0.25,
+            0.4,
+            0.5,
+            0.6,
+            0.75,
+            0.8,
+            1
+          ],
+          "maxReachError": 0.00002800608414182948,
+          "maxHeightError": 0.000022173604581315898
+        }
+      ]
+    },
+    {
+      "baseId": "chirka",
+      "styleId": "dark_moguzo",
+      "rows": [
+        {
+          "slot": "stand_weak",
+          "sourceActive": 2,
+          "styleActive": 2,
+          "measuredPhases": [
+            0,
+            1
+          ],
+          "maxReachError": 0.000029377879438907684,
+          "maxHeightError": 0.000007864461607220985
+        },
+        {
+          "slot": "stand_heavy",
+          "sourceActive": 3,
+          "styleActive": 3,
+          "measuredPhases": [
+            0,
+            0.5,
+            1
+          ],
+          "maxReachError": 0.00004993308577699862,
+          "maxHeightError": 0.00004590466819953676
+        },
+        {
+          "slot": "crouch_weak",
+          "sourceActive": 2,
+          "styleActive": 2,
+          "measuredPhases": [
+            0,
+            1
+          ],
+          "maxReachError": 0.00004256949654052322,
+          "maxHeightError": 0.00003817878461535168
+        },
+        {
+          "slot": "crouch_heavy",
+          "sourceActive": 4,
+          "styleActive": 4,
+          "measuredPhases": [
+            0,
+            0.3333333333333333,
+            0.6666666666666666,
+            1
+          ],
+          "maxReachError": 0.00003097011091196533,
+          "maxHeightError": 0.000017599673056638288
+        },
+        {
+          "slot": "air_weak",
+          "sourceActive": 4,
+          "styleActive": 4,
+          "measuredPhases": [
+            0,
+            0.3333333333333333,
+            0.6666666666666666,
+            1
+          ],
+          "maxReachError": 0.00003898917993017115,
+          "maxHeightError": 0.0000027080893092723546
+        },
+        {
+          "slot": "air_heavy",
+          "sourceActive": 5,
+          "styleActive": 5,
+          "measuredPhases": [
+            0,
+            0.25,
+            0.5,
+            0.75,
+            1
+          ],
+          "maxReachError": 0.00002800608414182948,
+          "maxHeightError": 0.000022173604581315898
+        }
+      ]
+    },
+    {
+      "baseId": "takimaru",
+      "styleId": "moguzo",
+      "rows": [
+        {
+          "slot": "stand_weak",
+          "sourceActive": 3,
+          "styleActive": 3,
+          "measuredPhases": [
+            0,
+            0.5,
+            1
+          ],
+          "maxReachError": 0.000012517264845357534,
+          "maxHeightError": 0.00003972025102605414
+        },
+        {
+          "slot": "stand_heavy",
+          "sourceActive": 4,
+          "styleActive": 4,
+          "measuredPhases": [
+            0,
+            0.3333333333333333,
+            0.6666666666666666,
+            1
+          ],
+          "maxReachError": 0.000017066624745321057,
+          "maxHeightError": 0.000025297215479391788
+        },
+        {
+          "slot": "crouch_weak",
+          "sourceActive": 3,
+          "styleActive": 3,
+          "measuredPhases": [
+            0,
+            0.5,
+            1
+          ],
+          "maxReachError": 0.000004386851360838051,
+          "maxHeightError": 0.000040333390496000154
+        },
+        {
+          "slot": "crouch_heavy",
+          "sourceActive": 4,
+          "styleActive": 4,
+          "measuredPhases": [
+            0,
+            0.3333333333333333,
+            0.6666666666666666,
+            1
+          ],
+          "maxReachError": 0.00004565516114052315,
+          "maxHeightError": 0.00004372786783291005
+        },
+        {
+          "slot": "air_weak",
+          "sourceActive": 5,
+          "styleActive": 5,
+          "measuredPhases": [
+            0,
+            0.25,
+            0.5,
+            0.75,
+            1
+          ],
+          "maxReachError": 0.000048681989074039755,
+          "maxHeightError": 0.0000476407785570121
+        },
+        {
+          "slot": "air_heavy",
+          "sourceActive": 6,
+          "styleActive": 6,
+          "measuredPhases": [
+            0,
+            0.2,
+            0.4,
+            0.6,
+            0.8,
+            1
+          ],
+          "maxReachError": 0.00002586162536255543,
+          "maxHeightError": 0.000029040855395290333
+        }
+      ]
+    },
+    {
+      "baseId": "takimaru",
+      "styleId": "pisuke",
+      "rows": [
+        {
+          "slot": "stand_weak",
+          "sourceActive": 3,
+          "styleActive": 2,
+          "measuredPhases": [
+            0,
+            0.5,
+            1
+          ],
+          "maxReachError": 0.000012517264845357534,
+          "maxHeightError": 0.00003971967434779344
+        },
+        {
+          "slot": "stand_heavy",
+          "sourceActive": 4,
+          "styleActive": 3,
+          "measuredPhases": [
+            0,
+            0.3333333333333333,
+            0.5,
+            0.6666666666666666,
+            1
+          ],
+          "maxReachError": 0.000017066624745321057,
+          "maxHeightError": 0.00002529721547955832
+        },
+        {
+          "slot": "crouch_weak",
+          "sourceActive": 3,
+          "styleActive": 2,
+          "measuredPhases": [
+            0,
+            0.5,
+            1
+          ],
+          "maxReachError": 0.000004386851360838051,
+          "maxHeightError": 0.000040333390496000154
+        },
+        {
+          "slot": "crouch_heavy",
+          "sourceActive": 4,
+          "styleActive": 4,
+          "measuredPhases": [
+            0,
+            0.3333333333333333,
+            0.6666666666666666,
+            1
+          ],
+          "maxReachError": 0.00004565516114052315,
+          "maxHeightError": 0.00004372786783291005
+        },
+        {
+          "slot": "air_weak",
+          "sourceActive": 5,
+          "styleActive": 4,
+          "measuredPhases": [
+            0,
+            0.25,
+            0.3333333333333333,
+            0.5,
+            0.6666666666666666,
+            0.75,
+            1
+          ],
+          "maxReachError": 0.00004868256540341287,
+          "maxHeightError": 0.0000476407785570121
+        },
+        {
+          "slot": "air_heavy",
+          "sourceActive": 6,
+          "styleActive": 5,
+          "measuredPhases": [
+            0,
+            0.2,
+            0.25,
+            0.4,
+            0.5,
+            0.6,
+            0.75,
+            0.8,
+            1
+          ],
+          "maxReachError": 0.00002586162536255543,
+          "maxHeightError": 0.000029040855395290333
+        }
+      ]
+    },
+    {
+      "baseId": "takimaru",
+      "styleId": "godan",
+      "rows": [
+        {
+          "slot": "stand_weak",
+          "sourceActive": 3,
+          "styleActive": 3,
+          "measuredPhases": [
+            0,
+            0.5,
+            1
+          ],
+          "maxReachError": 0.000012517264845357534,
+          "maxHeightError": 0.00003972025102605414
+        },
+        {
+          "slot": "stand_heavy",
+          "sourceActive": 4,
+          "styleActive": 5,
+          "measuredPhases": [
+            0,
+            0.25,
+            0.3333333333333333,
+            0.5,
+            0.6666666666666666,
+            0.75,
+            1
+          ],
+          "maxReachError": 0.000017066624745321057,
+          "maxHeightError": 0.00002529721547955832
+        },
+        {
+          "slot": "crouch_weak",
+          "sourceActive": 3,
+          "styleActive": 3,
+          "measuredPhases": [
+            0,
+            0.5,
+            1
+          ],
+          "maxReachError": 0.000004386851360838051,
+          "maxHeightError": 0.000040333390496000154
+        },
+        {
+          "slot": "crouch_heavy",
+          "sourceActive": 4,
+          "styleActive": 5,
+          "measuredPhases": [
+            0,
+            0.25,
+            0.3333333333333333,
+            0.5,
+            0.6666666666666666,
+            0.75,
+            1
+          ],
+          "maxReachError": 0.000040465141146861505,
+          "maxHeightError": 0.000025440463707893102
+        },
+        {
+          "slot": "air_weak",
+          "sourceActive": 5,
+          "styleActive": 5,
+          "measuredPhases": [
+            0,
+            0.25,
+            0.5,
+            0.75,
+            1
+          ],
+          "maxReachError": 0.000048681989074039755,
+          "maxHeightError": 0.0000476407785570121
+        },
+        {
+          "slot": "air_heavy",
+          "sourceActive": 6,
+          "styleActive": 6,
+          "measuredPhases": [
+            0,
+            0.2,
+            0.4,
+            0.6,
+            0.8,
+            1
+          ],
+          "maxReachError": 0.00002586162536255543,
+          "maxHeightError": 0.000029040855395290333
+        }
+      ]
+    },
+    {
+      "baseId": "takimaru",
+      "styleId": "hakuma",
+      "rows": [
+        {
+          "slot": "stand_weak",
+          "sourceActive": 3,
+          "styleActive": 4,
+          "measuredPhases": [
+            0,
+            0.3333333333333333,
+            0.5,
+            0.6666666666666666,
+            1
+          ],
+          "maxReachError": 0.000012517264845357534,
+          "maxHeightError": 0.00003972419199660404
+        },
+        {
+          "slot": "stand_heavy",
+          "sourceActive": 4,
+          "styleActive": 5,
+          "measuredPhases": [
+            0,
+            0.25,
+            0.3333333333333333,
+            0.5,
+            0.6666666666666666,
+            0.75,
+            1
+          ],
+          "maxReachError": 0.000017066624745321057,
+          "maxHeightError": 0.00002529721547955832
+        },
+        {
+          "slot": "crouch_weak",
+          "sourceActive": 3,
+          "styleActive": 4,
+          "measuredPhases": [
+            0,
+            0.3333333333333333,
+            0.5,
+            0.6666666666666666,
+            1
+          ],
+          "maxReachError": 0.000004388422424894678,
+          "maxHeightError": 0.000040333390496000154
+        },
+        {
+          "slot": "crouch_heavy",
+          "sourceActive": 4,
+          "styleActive": 5,
+          "measuredPhases": [
+            0,
+            0.25,
+            0.3333333333333333,
+            0.5,
+            0.6666666666666666,
+            0.75,
+            1
+          ],
+          "maxReachError": 0.000040465141146861505,
+          "maxHeightError": 0.000025440463707893102
+        },
+        {
+          "slot": "air_weak",
+          "sourceActive": 5,
+          "styleActive": 5,
+          "measuredPhases": [
+            0,
+            0.25,
+            0.5,
+            0.75,
+            1
+          ],
+          "maxReachError": 0.000048681989074039755,
+          "maxHeightError": 0.0000476407785570121
+        },
+        {
+          "slot": "air_heavy",
+          "sourceActive": 6,
+          "styleActive": 6,
+          "measuredPhases": [
+            0,
+            0.2,
+            0.4,
+            0.6,
+            0.8,
+            1
+          ],
+          "maxReachError": 0.00002586162536255543,
+          "maxHeightError": 0.000029040855395290333
+        }
+      ]
+    },
+    {
+      "baseId": "takimaru",
+      "styleId": "chirka",
+      "rows": [
+        {
+          "slot": "stand_weak",
+          "sourceActive": 3,
+          "styleActive": 2,
+          "measuredPhases": [
+            0,
+            0.5,
+            1
+          ],
+          "maxReachError": 0.000012517264845357534,
+          "maxHeightError": 0.00003971967434779344
+        },
+        {
+          "slot": "stand_heavy",
+          "sourceActive": 4,
+          "styleActive": 3,
+          "measuredPhases": [
+            0,
+            0.3333333333333333,
+            0.5,
+            0.6666666666666666,
+            1
+          ],
+          "maxReachError": 0.000017066624745321057,
+          "maxHeightError": 0.00002529721547955832
+        },
+        {
+          "slot": "crouch_weak",
+          "sourceActive": 3,
+          "styleActive": 2,
+          "measuredPhases": [
+            0,
+            0.5,
+            1
+          ],
+          "maxReachError": 0.000004386851360838051,
+          "maxHeightError": 0.000040333390496000154
+        },
+        {
+          "slot": "crouch_heavy",
+          "sourceActive": 4,
+          "styleActive": 4,
+          "measuredPhases": [
+            0,
+            0.3333333333333333,
+            0.6666666666666666,
+            1
+          ],
+          "maxReachError": 0.00004565516114052315,
+          "maxHeightError": 0.00004372786783291005
+        },
+        {
+          "slot": "air_weak",
+          "sourceActive": 5,
+          "styleActive": 4,
+          "measuredPhases": [
+            0,
+            0.25,
+            0.3333333333333333,
+            0.5,
+            0.6666666666666666,
+            0.75,
+            1
+          ],
+          "maxReachError": 0.00004868256540341287,
+          "maxHeightError": 0.0000476407785570121
+        },
+        {
+          "slot": "air_heavy",
+          "sourceActive": 6,
+          "styleActive": 5,
+          "measuredPhases": [
+            0,
+            0.2,
+            0.25,
+            0.4,
+            0.5,
+            0.6,
+            0.75,
+            0.8,
+            1
+          ],
+          "maxReachError": 0.00002586162536255543,
+          "maxHeightError": 0.000029040855395290333
+        }
+      ]
+    },
+    {
+      "baseId": "takimaru",
+      "styleId": "takimaru",
+      "rows": [
+        {
+          "slot": "stand_weak",
+          "sourceActive": 3,
+          "styleActive": 3,
+          "measuredPhases": [
+            0,
+            0.5,
+            1
+          ],
+          "maxReachError": 0.000012517264845357534,
+          "maxHeightError": 0.00003972025102605414
+        },
+        {
+          "slot": "stand_heavy",
+          "sourceActive": 4,
+          "styleActive": 4,
+          "measuredPhases": [
+            0,
+            0.3333333333333333,
+            0.6666666666666666,
+            1
+          ],
+          "maxReachError": 0.000017066624745321057,
+          "maxHeightError": 0.00002529721547955832
+        },
+        {
+          "slot": "crouch_weak",
+          "sourceActive": 3,
+          "styleActive": 3,
+          "measuredPhases": [
+            0,
+            0.5,
+            1
+          ],
+          "maxReachError": 0.000004386851360838051,
+          "maxHeightError": 0.000040333390496000154
+        },
+        {
+          "slot": "crouch_heavy",
+          "sourceActive": 4,
+          "styleActive": 4,
+          "measuredPhases": [
+            0,
+            0.3333333333333333,
+            0.6666666666666666,
+            1
+          ],
+          "maxReachError": 0.00004565516114052315,
+          "maxHeightError": 0.00004372786783291005
+        },
+        {
+          "slot": "air_weak",
+          "sourceActive": 5,
+          "styleActive": 5,
+          "measuredPhases": [
+            0,
+            0.25,
+            0.5,
+            0.75,
+            1
+          ],
+          "maxReachError": 0.000048681989074039755,
+          "maxHeightError": 0.0000476407785570121
+        },
+        {
+          "slot": "air_heavy",
+          "sourceActive": 6,
+          "styleActive": 6,
+          "measuredPhases": [
+            0,
+            0.2,
+            0.4,
+            0.6,
+            0.8,
+            1
+          ],
+          "maxReachError": 0.00002586162536255543,
+          "maxHeightError": 0.000029040855395290333
+        }
+      ]
+    },
+    {
+      "baseId": "takimaru",
+      "styleId": "yomikage",
+      "rows": [
+        {
+          "slot": "stand_weak",
+          "sourceActive": 3,
+          "styleActive": 2,
+          "measuredPhases": [
+            0,
+            0.5,
+            1
+          ],
+          "maxReachError": 0.000012517264845357534,
+          "maxHeightError": 0.00003971967434779344
+        },
+        {
+          "slot": "stand_heavy",
+          "sourceActive": 4,
+          "styleActive": 3,
+          "measuredPhases": [
+            0,
+            0.3333333333333333,
+            0.5,
+            0.6666666666666666,
+            1
+          ],
+          "maxReachError": 0.000017066624745321057,
+          "maxHeightError": 0.000025297215479391788
+        },
+        {
+          "slot": "crouch_weak",
+          "sourceActive": 3,
+          "styleActive": 2,
+          "measuredPhases": [
+            0,
+            0.5,
+            1
+          ],
+          "maxReachError": 0.000004386851360838051,
+          "maxHeightError": 0.000040333390496000154
+        },
+        {
+          "slot": "crouch_heavy",
+          "sourceActive": 4,
+          "styleActive": 4,
+          "measuredPhases": [
+            0,
+            0.3333333333333333,
+            0.6666666666666666,
+            1
+          ],
+          "maxReachError": 0.00004565516114052315,
+          "maxHeightError": 0.00004372786783291005
+        },
+        {
+          "slot": "air_weak",
+          "sourceActive": 5,
+          "styleActive": 4,
+          "measuredPhases": [
+            0,
+            0.25,
+            0.3333333333333333,
+            0.5,
+            0.6666666666666666,
+            0.75,
+            1
+          ],
+          "maxReachError": 0.00004868256540341287,
+          "maxHeightError": 0.0000476407785570121
+        },
+        {
+          "slot": "air_heavy",
+          "sourceActive": 6,
+          "styleActive": 5,
+          "measuredPhases": [
+            0,
+            0.2,
+            0.25,
+            0.4,
+            0.5,
+            0.6,
+            0.75,
+            0.8,
+            1
+          ],
+          "maxReachError": 0.00002586162536255543,
+          "maxHeightError": 0.000029040855395290333
+        }
+      ]
+    },
+    {
+      "baseId": "takimaru",
+      "styleId": "bullet",
+      "rows": [
+        {
+          "slot": "stand_weak",
+          "sourceActive": 3,
+          "styleActive": 3,
+          "measuredPhases": [
+            0,
+            0.5,
+            1
+          ],
+          "maxReachError": 0.000012517264845357534,
+          "maxHeightError": 0.00003972025102605414
+        },
+        {
+          "slot": "stand_heavy",
+          "sourceActive": 4,
+          "styleActive": 4,
+          "measuredPhases": [
+            0,
+            0.3333333333333333,
+            0.6666666666666666,
+            1
+          ],
+          "maxReachError": 0.000017066624745321057,
+          "maxHeightError": 0.00002529721547955832
+        },
+        {
+          "slot": "crouch_weak",
+          "sourceActive": 3,
+          "styleActive": 3,
+          "measuredPhases": [
+            0,
+            0.5,
+            1
+          ],
+          "maxReachError": 0.000004386851360838051,
+          "maxHeightError": 0.000040333390496000154
+        },
+        {
+          "slot": "crouch_heavy",
+          "sourceActive": 4,
+          "styleActive": 4,
+          "measuredPhases": [
+            0,
+            0.3333333333333333,
+            0.6666666666666666,
+            1
+          ],
+          "maxReachError": 0.00004565516114052315,
+          "maxHeightError": 0.00004372786783291005
+        },
+        {
+          "slot": "air_weak",
+          "sourceActive": 5,
+          "styleActive": 5,
+          "measuredPhases": [
+            0,
+            0.25,
+            0.5,
+            0.75,
+            1
+          ],
+          "maxReachError": 0.000048681989074039755,
+          "maxHeightError": 0.0000476407785570121
+        },
+        {
+          "slot": "air_heavy",
+          "sourceActive": 6,
+          "styleActive": 6,
+          "measuredPhases": [
+            0,
+            0.2,
+            0.4,
+            0.6,
+            0.8,
+            1
+          ],
+          "maxReachError": 0.00002586162536255543,
+          "maxHeightError": 0.000029040855395290333
+        }
+      ]
+    },
+    {
+      "baseId": "takimaru",
+      "styleId": "dark_moguzo",
+      "rows": [
+        {
+          "slot": "stand_weak",
+          "sourceActive": 3,
+          "styleActive": 2,
+          "measuredPhases": [
+            0,
+            0.5,
+            1
+          ],
+          "maxReachError": 0.000012517264845357534,
+          "maxHeightError": 0.00003971967434779344
+        },
+        {
+          "slot": "stand_heavy",
+          "sourceActive": 4,
+          "styleActive": 3,
+          "measuredPhases": [
+            0,
+            0.3333333333333333,
+            0.5,
+            0.6666666666666666,
+            1
+          ],
+          "maxReachError": 0.000017066624745321057,
+          "maxHeightError": 0.00002529721547955832
+        },
+        {
+          "slot": "crouch_weak",
+          "sourceActive": 3,
+          "styleActive": 2,
+          "measuredPhases": [
+            0,
+            0.5,
+            1
+          ],
+          "maxReachError": 0.000004386851360838051,
+          "maxHeightError": 0.000040333390496000154
+        },
+        {
+          "slot": "crouch_heavy",
+          "sourceActive": 4,
+          "styleActive": 4,
+          "measuredPhases": [
+            0,
+            0.3333333333333333,
+            0.6666666666666666,
+            1
+          ],
+          "maxReachError": 0.00004565516114052315,
+          "maxHeightError": 0.00004372786783291005
+        },
+        {
+          "slot": "air_weak",
+          "sourceActive": 5,
+          "styleActive": 4,
+          "measuredPhases": [
+            0,
+            0.25,
+            0.3333333333333333,
+            0.5,
+            0.6666666666666666,
+            0.75,
+            1
+          ],
+          "maxReachError": 0.00004868256540341287,
+          "maxHeightError": 0.0000476407785570121
+        },
+        {
+          "slot": "air_heavy",
+          "sourceActive": 6,
+          "styleActive": 5,
+          "measuredPhases": [
+            0,
+            0.2,
+            0.25,
+            0.4,
+            0.5,
+            0.6,
+            0.75,
+            0.8,
+            1
+          ],
+          "maxReachError": 0.00002586162536255543,
+          "maxHeightError": 0.000029040855395290333
+        }
+      ]
+    },
+    {
+      "baseId": "yomikage",
+      "styleId": "moguzo",
+      "rows": [
+        {
+          "slot": "stand_weak",
+          "sourceActive": 2,
+          "styleActive": 3,
+          "measuredPhases": [
+            0,
+            0.5,
+            1
+          ],
+          "maxReachError": 0.000035538150502612,
+          "maxHeightError": 0.000010979314477799207
+        },
+        {
+          "slot": "stand_heavy",
+          "sourceActive": 3,
+          "styleActive": 4,
+          "measuredPhases": [
+            0,
+            0.3333333333333333,
+            0.5,
+            0.6666666666666666,
+            1
+          ],
+          "maxReachError": 0.00002791412701269591,
+          "maxHeightError": 0.00003691563289276445
+        },
+        {
+          "slot": "crouch_weak",
+          "sourceActive": 2,
+          "styleActive": 3,
+          "measuredPhases": [
+            0,
+            0.5,
+            1
+          ],
+          "maxReachError": 0.000042309031321463575,
+          "maxHeightError": 0.00003286650502673516
+        },
+        {
+          "slot": "crouch_heavy",
+          "sourceActive": 4,
+          "styleActive": 4,
+          "measuredPhases": [
+            0,
+            0.3333333333333333,
+            0.6666666666666666,
+            1
+          ],
+          "maxReachError": 0.0000032658346429959018,
+          "maxHeightError": 0.000013184835992191557
+        },
+        {
+          "slot": "air_weak",
+          "sourceActive": 4,
+          "styleActive": 5,
+          "measuredPhases": [
+            0,
+            0.25,
+            0.3333333333333333,
+            0.5,
+            0.6666666666666666,
+            0.75,
+            1
+          ],
+          "maxReachError": 0.00003592361802534638,
+          "maxHeightError": 0.00004665553639909836
+        },
+        {
+          "slot": "air_heavy",
+          "sourceActive": 5,
+          "styleActive": 6,
+          "measuredPhases": [
+            0,
+            0.2,
+            0.25,
+            0.4,
+            0.5,
+            0.6,
+            0.75,
+            0.8,
+            1
+          ],
+          "maxReachError": 0.000018994469538291536,
+          "maxHeightError": 0.000024273187486378855
+        }
+      ]
+    },
+    {
+      "baseId": "yomikage",
+      "styleId": "pisuke",
+      "rows": [
+        {
+          "slot": "stand_weak",
+          "sourceActive": 2,
+          "styleActive": 2,
+          "measuredPhases": [
+            0,
+            1
+          ],
+          "maxReachError": 0.000035537540559460457,
+          "maxHeightError": 0.000010978375762138448
+        },
+        {
+          "slot": "stand_heavy",
+          "sourceActive": 3,
+          "styleActive": 3,
+          "measuredPhases": [
+            0,
+            0.5,
+            1
+          ],
+          "maxReachError": 0.00002791412701269591,
+          "maxHeightError": 0.00003691563289276445
+        },
+        {
+          "slot": "crouch_weak",
+          "sourceActive": 2,
+          "styleActive": 2,
+          "measuredPhases": [
+            0,
+            1
+          ],
+          "maxReachError": 0.00004230445389147297,
+          "maxHeightError": 0.00003286650502673516
+        },
+        {
+          "slot": "crouch_heavy",
+          "sourceActive": 4,
+          "styleActive": 4,
+          "measuredPhases": [
+            0,
+            0.3333333333333333,
+            0.6666666666666666,
+            1
+          ],
+          "maxReachError": 0.0000032658346429959018,
+          "maxHeightError": 0.000013184835992191557
+        },
+        {
+          "slot": "air_weak",
+          "sourceActive": 4,
+          "styleActive": 4,
+          "measuredPhases": [
+            0,
+            0.3333333333333333,
+            0.6666666666666666,
+            1
+          ],
+          "maxReachError": 0.000035925620786581014,
+          "maxHeightError": 0.00004665553639909836
+        },
+        {
+          "slot": "air_heavy",
+          "sourceActive": 5,
+          "styleActive": 5,
+          "measuredPhases": [
+            0,
+            0.25,
+            0.5,
+            0.75,
+            1
+          ],
+          "maxReachError": 0.000018994469538291536,
+          "maxHeightError": 0.000024273187486378855
+        }
+      ]
+    },
+    {
+      "baseId": "yomikage",
+      "styleId": "godan",
+      "rows": [
+        {
+          "slot": "stand_weak",
+          "sourceActive": 2,
+          "styleActive": 3,
+          "measuredPhases": [
+            0,
+            0.5,
+            1
+          ],
+          "maxReachError": 0.000035538150502612,
+          "maxHeightError": 0.000010979314477799207
+        },
+        {
+          "slot": "stand_heavy",
+          "sourceActive": 3,
+          "styleActive": 5,
+          "measuredPhases": [
+            0,
+            0.25,
+            0.5,
+            0.75,
+            1
+          ],
+          "maxReachError": 0.00002791412701269591,
+          "maxHeightError": 0.00003691563289276445
+        },
+        {
+          "slot": "crouch_weak",
+          "sourceActive": 2,
+          "styleActive": 3,
+          "measuredPhases": [
+            0,
+            0.5,
+            1
+          ],
+          "maxReachError": 0.000042309031321463575,
+          "maxHeightError": 0.00003286650502673516
+        },
+        {
+          "slot": "crouch_heavy",
+          "sourceActive": 4,
+          "styleActive": 5,
+          "measuredPhases": [
+            0,
+            0.25,
+            0.3333333333333333,
+            0.5,
+            0.6666666666666666,
+            0.75,
+            1
+          ],
+          "maxReachError": 0.0000032658346429959018,
+          "maxHeightError": 0.000013184835992191557
+        },
+        {
+          "slot": "air_weak",
+          "sourceActive": 4,
+          "styleActive": 5,
+          "measuredPhases": [
+            0,
+            0.25,
+            0.3333333333333333,
+            0.5,
+            0.6666666666666666,
+            0.75,
+            1
+          ],
+          "maxReachError": 0.00003592361802534638,
+          "maxHeightError": 0.00004665553639909836
+        },
+        {
+          "slot": "air_heavy",
+          "sourceActive": 5,
+          "styleActive": 6,
+          "measuredPhases": [
+            0,
+            0.2,
+            0.25,
+            0.4,
+            0.5,
+            0.6,
+            0.75,
+            0.8,
+            1
+          ],
+          "maxReachError": 0.000018994469538291536,
+          "maxHeightError": 0.000024273187486378855
+        }
+      ]
+    },
+    {
+      "baseId": "yomikage",
+      "styleId": "hakuma",
+      "rows": [
+        {
+          "slot": "stand_weak",
+          "sourceActive": 2,
+          "styleActive": 4,
+          "measuredPhases": [
+            0,
+            0.3333333333333333,
+            0.6666666666666666,
+            1
+          ],
+          "maxReachError": 0.000035538150502612,
+          "maxHeightError": 0.000010979580806425027
+        },
+        {
+          "slot": "stand_heavy",
+          "sourceActive": 3,
+          "styleActive": 5,
+          "measuredPhases": [
+            0,
+            0.25,
+            0.5,
+            0.75,
+            1
+          ],
+          "maxReachError": 0.00002791412701269591,
+          "maxHeightError": 0.00003691563289276445
+        },
+        {
+          "slot": "crouch_weak",
+          "sourceActive": 2,
+          "styleActive": 4,
+          "measuredPhases": [
+            0,
+            0.3333333333333333,
+            0.6666666666666666,
+            1
+          ],
+          "maxReachError": 0.00004231020593498114,
+          "maxHeightError": 0.00003286650502673516
+        },
+        {
+          "slot": "crouch_heavy",
+          "sourceActive": 4,
+          "styleActive": 5,
+          "measuredPhases": [
+            0,
+            0.25,
+            0.3333333333333333,
+            0.5,
+            0.6666666666666666,
+            0.75,
+            1
+          ],
+          "maxReachError": 0.0000032658346429959018,
+          "maxHeightError": 0.000013184835992191557
+        },
+        {
+          "slot": "air_weak",
+          "sourceActive": 4,
+          "styleActive": 5,
+          "measuredPhases": [
+            0,
+            0.25,
+            0.3333333333333333,
+            0.5,
+            0.6666666666666666,
+            0.75,
+            1
+          ],
+          "maxReachError": 0.00003592361802534638,
+          "maxHeightError": 0.00004665553639909836
+        },
+        {
+          "slot": "air_heavy",
+          "sourceActive": 5,
+          "styleActive": 6,
+          "measuredPhases": [
+            0,
+            0.2,
+            0.25,
+            0.4,
+            0.5,
+            0.6,
+            0.75,
+            0.8,
+            1
+          ],
+          "maxReachError": 0.000018994469538291536,
+          "maxHeightError": 0.000024273187486378855
+        }
+      ]
+    },
+    {
+      "baseId": "yomikage",
+      "styleId": "chirka",
+      "rows": [
+        {
+          "slot": "stand_weak",
+          "sourceActive": 2,
+          "styleActive": 2,
+          "measuredPhases": [
+            0,
+            1
+          ],
+          "maxReachError": 0.000035537540559460457,
+          "maxHeightError": 0.000010978375762138448
+        },
+        {
+          "slot": "stand_heavy",
+          "sourceActive": 3,
+          "styleActive": 3,
+          "measuredPhases": [
+            0,
+            0.5,
+            1
+          ],
+          "maxReachError": 0.00002791412701269591,
+          "maxHeightError": 0.00003691563289276445
+        },
+        {
+          "slot": "crouch_weak",
+          "sourceActive": 2,
+          "styleActive": 2,
+          "measuredPhases": [
+            0,
+            1
+          ],
+          "maxReachError": 0.00004230445389147297,
+          "maxHeightError": 0.00003286650502673516
+        },
+        {
+          "slot": "crouch_heavy",
+          "sourceActive": 4,
+          "styleActive": 4,
+          "measuredPhases": [
+            0,
+            0.3333333333333333,
+            0.6666666666666666,
+            1
+          ],
+          "maxReachError": 0.0000032658346429959018,
+          "maxHeightError": 0.000013184835992052779
+        },
+        {
+          "slot": "air_weak",
+          "sourceActive": 4,
+          "styleActive": 4,
+          "measuredPhases": [
+            0,
+            0.3333333333333333,
+            0.6666666666666666,
+            1
+          ],
+          "maxReachError": 0.000035925620786581014,
+          "maxHeightError": 0.00004665553639909836
+        },
+        {
+          "slot": "air_heavy",
+          "sourceActive": 5,
+          "styleActive": 5,
+          "measuredPhases": [
+            0,
+            0.25,
+            0.5,
+            0.75,
+            1
+          ],
+          "maxReachError": 0.000018994469538291536,
+          "maxHeightError": 0.000024273187486378855
+        }
+      ]
+    },
+    {
+      "baseId": "yomikage",
+      "styleId": "takimaru",
+      "rows": [
+        {
+          "slot": "stand_weak",
+          "sourceActive": 2,
+          "styleActive": 3,
+          "measuredPhases": [
+            0,
+            0.5,
+            1
+          ],
+          "maxReachError": 0.000035538150502612,
+          "maxHeightError": 0.000010979314477799207
+        },
+        {
+          "slot": "stand_heavy",
+          "sourceActive": 3,
+          "styleActive": 4,
+          "measuredPhases": [
+            0,
+            0.3333333333333333,
+            0.5,
+            0.6666666666666666,
+            1
+          ],
+          "maxReachError": 0.00002791412701269591,
+          "maxHeightError": 0.00003691563289276445
+        },
+        {
+          "slot": "crouch_weak",
+          "sourceActive": 2,
+          "styleActive": 3,
+          "measuredPhases": [
+            0,
+            0.5,
+            1
+          ],
+          "maxReachError": 0.000042309031321463575,
+          "maxHeightError": 0.00003286650502673516
+        },
+        {
+          "slot": "crouch_heavy",
+          "sourceActive": 4,
+          "styleActive": 4,
+          "measuredPhases": [
+            0,
+            0.3333333333333333,
+            0.6666666666666666,
+            1
+          ],
+          "maxReachError": 0.0000032658346429959018,
+          "maxHeightError": 0.000013184835992191557
+        },
+        {
+          "slot": "air_weak",
+          "sourceActive": 4,
+          "styleActive": 5,
+          "measuredPhases": [
+            0,
+            0.25,
+            0.3333333333333333,
+            0.5,
+            0.6666666666666666,
+            0.75,
+            1
+          ],
+          "maxReachError": 0.00003592361802534638,
+          "maxHeightError": 0.00004665553639909836
+        },
+        {
+          "slot": "air_heavy",
+          "sourceActive": 5,
+          "styleActive": 6,
+          "measuredPhases": [
+            0,
+            0.2,
+            0.25,
+            0.4,
+            0.5,
+            0.6,
+            0.75,
+            0.8,
+            1
+          ],
+          "maxReachError": 0.000018994469538291536,
+          "maxHeightError": 0.000024273187486378855
+        }
+      ]
+    },
+    {
+      "baseId": "yomikage",
+      "styleId": "yomikage",
+      "rows": [
+        {
+          "slot": "stand_weak",
+          "sourceActive": 2,
+          "styleActive": 2,
+          "measuredPhases": [
+            0,
+            1
+          ],
+          "maxReachError": 0.000035537540559460457,
+          "maxHeightError": 0.000010978375762138448
+        },
+        {
+          "slot": "stand_heavy",
+          "sourceActive": 3,
+          "styleActive": 3,
+          "measuredPhases": [
+            0,
+            0.5,
+            1
+          ],
+          "maxReachError": 0.00002791412701269591,
+          "maxHeightError": 0.00003691563289276445
+        },
+        {
+          "slot": "crouch_weak",
+          "sourceActive": 2,
+          "styleActive": 2,
+          "measuredPhases": [
+            0,
+            1
+          ],
+          "maxReachError": 0.00004230445389147297,
+          "maxHeightError": 0.00003286650502673516
+        },
+        {
+          "slot": "crouch_heavy",
+          "sourceActive": 4,
+          "styleActive": 4,
+          "measuredPhases": [
+            0,
+            0.3333333333333333,
+            0.6666666666666666,
+            1
+          ],
+          "maxReachError": 0.0000032658346429959018,
+          "maxHeightError": 0.000013184835992191557
+        },
+        {
+          "slot": "air_weak",
+          "sourceActive": 4,
+          "styleActive": 4,
+          "measuredPhases": [
+            0,
+            0.3333333333333333,
+            0.6666666666666666,
+            1
+          ],
+          "maxReachError": 0.000035925620786581014,
+          "maxHeightError": 0.00004665553639909836
+        },
+        {
+          "slot": "air_heavy",
+          "sourceActive": 5,
+          "styleActive": 5,
+          "measuredPhases": [
+            0,
+            0.25,
+            0.5,
+            0.75,
+            1
+          ],
+          "maxReachError": 0.000018994469538291536,
+          "maxHeightError": 0.000024273187486378855
+        }
+      ]
+    },
+    {
+      "baseId": "yomikage",
+      "styleId": "bullet",
+      "rows": [
+        {
+          "slot": "stand_weak",
+          "sourceActive": 2,
+          "styleActive": 3,
+          "measuredPhases": [
+            0,
+            0.5,
+            1
+          ],
+          "maxReachError": 0.000035538150502612,
+          "maxHeightError": 0.000010979314477799207
+        },
+        {
+          "slot": "stand_heavy",
+          "sourceActive": 3,
+          "styleActive": 4,
+          "measuredPhases": [
+            0,
+            0.3333333333333333,
+            0.5,
+            0.6666666666666666,
+            1
+          ],
+          "maxReachError": 0.00002791412701269591,
+          "maxHeightError": 0.00003691563289276445
+        },
+        {
+          "slot": "crouch_weak",
+          "sourceActive": 2,
+          "styleActive": 3,
+          "measuredPhases": [
+            0,
+            0.5,
+            1
+          ],
+          "maxReachError": 0.000042309031321463575,
+          "maxHeightError": 0.00003286650502673516
+        },
+        {
+          "slot": "crouch_heavy",
+          "sourceActive": 4,
+          "styleActive": 4,
+          "measuredPhases": [
+            0,
+            0.3333333333333333,
+            0.6666666666666666,
+            1
+          ],
+          "maxReachError": 0.0000032658346429959018,
+          "maxHeightError": 0.000013184835992191557
+        },
+        {
+          "slot": "air_weak",
+          "sourceActive": 4,
+          "styleActive": 5,
+          "measuredPhases": [
+            0,
+            0.25,
+            0.3333333333333333,
+            0.5,
+            0.6666666666666666,
+            0.75,
+            1
+          ],
+          "maxReachError": 0.00003592361802534638,
+          "maxHeightError": 0.00004665553639909836
+        },
+        {
+          "slot": "air_heavy",
+          "sourceActive": 5,
+          "styleActive": 6,
+          "measuredPhases": [
+            0,
+            0.2,
+            0.25,
+            0.4,
+            0.5,
+            0.6,
+            0.75,
+            0.8,
+            1
+          ],
+          "maxReachError": 0.000018994469538291536,
+          "maxHeightError": 0.000024273187486378855
+        }
+      ]
+    },
+    {
+      "baseId": "yomikage",
+      "styleId": "dark_moguzo",
+      "rows": [
+        {
+          "slot": "stand_weak",
+          "sourceActive": 2,
+          "styleActive": 2,
+          "measuredPhases": [
+            0,
+            1
+          ],
+          "maxReachError": 0.000035537540559460457,
+          "maxHeightError": 0.000010978375762138448
+        },
+        {
+          "slot": "stand_heavy",
+          "sourceActive": 3,
+          "styleActive": 3,
+          "measuredPhases": [
+            0,
+            0.5,
+            1
+          ],
+          "maxReachError": 0.00002791412701269591,
+          "maxHeightError": 0.00003691563289276445
+        },
+        {
+          "slot": "crouch_weak",
+          "sourceActive": 2,
+          "styleActive": 2,
+          "measuredPhases": [
+            0,
+            1
+          ],
+          "maxReachError": 0.00004230445389147297,
+          "maxHeightError": 0.00003286650502673516
+        },
+        {
+          "slot": "crouch_heavy",
+          "sourceActive": 4,
+          "styleActive": 4,
+          "measuredPhases": [
+            0,
+            0.3333333333333333,
+            0.6666666666666666,
+            1
+          ],
+          "maxReachError": 0.0000032658346429959018,
+          "maxHeightError": 0.000013184835992191557
+        },
+        {
+          "slot": "air_weak",
+          "sourceActive": 4,
+          "styleActive": 4,
+          "measuredPhases": [
+            0,
+            0.3333333333333333,
+            0.6666666666666666,
+            1
+          ],
+          "maxReachError": 0.000035925620786581014,
+          "maxHeightError": 0.00004665553639909836
+        },
+        {
+          "slot": "air_heavy",
+          "sourceActive": 5,
+          "styleActive": 5,
+          "measuredPhases": [
+            0,
+            0.25,
+            0.5,
+            0.75,
+            1
+          ],
+          "maxReachError": 0.000018994469538291536,
+          "maxHeightError": 0.000024273187486378855
+        }
+      ]
+    },
+    {
+      "baseId": "bullet",
+      "styleId": "moguzo",
+      "rows": [
+        {
+          "slot": "stand_weak",
+          "sourceActive": 3,
+          "styleActive": 3,
+          "measuredPhases": [
+            0,
+            0.5,
+            1
+          ],
+          "maxReachError": 0.000010981635392148803,
+          "maxHeightError": 0.0000029339089968605236
+        },
+        {
+          "slot": "stand_heavy",
+          "sourceActive": 4,
+          "styleActive": 4,
+          "measuredPhases": [
+            0,
+            0.3333333333333333,
+            0.6666666666666666,
+            1
+          ],
+          "maxReachError": 0.000049501074402269474,
+          "maxHeightError": 0.000044274291341545036
+        },
+        {
+          "slot": "crouch_weak",
+          "sourceActive": 3,
+          "styleActive": 3,
+          "measuredPhases": [
+            0,
+            0.5,
+            1
+          ],
+          "maxReachError": 0.000006808563973115245,
+          "maxHeightError": 0.0000468777988234248
+        },
+        {
+          "slot": "crouch_heavy",
+          "sourceActive": 4,
+          "styleActive": 4,
+          "measuredPhases": [
+            0,
+            0.3333333333333333,
+            0.6666666666666666,
+            1
+          ],
+          "maxReachError": 0.00003315260414948895,
+          "maxHeightError": 0.000044136463483994415
+        },
+        {
+          "slot": "air_weak",
+          "sourceActive": 5,
+          "styleActive": 5,
+          "measuredPhases": [
+            0,
+            0.25,
+            0.5,
+            0.75,
+            1
+          ],
+          "maxReachError": 0.000007362153236545321,
+          "maxHeightError": 0.000021590399697402063
+        },
+        {
+          "slot": "air_heavy",
+          "sourceActive": 6,
+          "styleActive": 6,
+          "measuredPhases": [
+            0,
+            0.2,
+            0.4,
+            0.6,
+            0.8,
+            1
+          ],
+          "maxReachError": 0.00004255380347883975,
+          "maxHeightError": 0.00004011946653026399
+        }
+      ]
+    },
+    {
+      "baseId": "bullet",
+      "styleId": "pisuke",
+      "rows": [
+        {
+          "slot": "stand_weak",
+          "sourceActive": 3,
+          "styleActive": 2,
+          "measuredPhases": [
+            0,
+            0.5,
+            1
+          ],
+          "maxReachError": 0.000010981635392148803,
+          "maxHeightError": 0.0000029339089968605236
+        },
+        {
+          "slot": "stand_heavy",
+          "sourceActive": 4,
+          "styleActive": 3,
+          "measuredPhases": [
+            0,
+            0.3333333333333333,
+            0.5,
+            0.6666666666666666,
+            1
+          ],
+          "maxReachError": 0.000036055882489449687,
+          "maxHeightError": 0.000013924759831418498
+        },
+        {
+          "slot": "crouch_weak",
+          "sourceActive": 3,
+          "styleActive": 2,
+          "measuredPhases": [
+            0,
+            0.5,
+            1
+          ],
+          "maxReachError": 0.000006807197346636595,
+          "maxHeightError": 0.00004687388057586506
+        },
+        {
+          "slot": "crouch_heavy",
+          "sourceActive": 4,
+          "styleActive": 4,
+          "measuredPhases": [
+            0,
+            0.3333333333333333,
+            0.6666666666666666,
+            1
+          ],
+          "maxReachError": 0.00003315260414948895,
+          "maxHeightError": 0.000044136463483994415
+        },
+        {
+          "slot": "air_weak",
+          "sourceActive": 5,
+          "styleActive": 4,
+          "measuredPhases": [
+            0,
+            0.25,
+            0.3333333333333333,
+            0.5,
+            0.6666666666666666,
+            0.75,
+            1
+          ],
+          "maxReachError": 0.000007362153236545321,
+          "maxHeightError": 0.000021590399697402063
+        },
+        {
+          "slot": "air_heavy",
+          "sourceActive": 6,
+          "styleActive": 5,
+          "measuredPhases": [
+            0,
+            0.2,
+            0.25,
+            0.4,
+            0.5,
+            0.6,
+            0.75,
+            0.8,
+            1
+          ],
+          "maxReachError": 0.00003807224871266168,
+          "maxHeightError": 0.00004011946653026399
+        }
+      ]
+    },
+    {
+      "baseId": "bullet",
+      "styleId": "godan",
+      "rows": [
+        {
+          "slot": "stand_weak",
+          "sourceActive": 3,
+          "styleActive": 3,
+          "measuredPhases": [
+            0,
+            0.5,
+            1
+          ],
+          "maxReachError": 0.000010981635392148803,
+          "maxHeightError": 0.0000029339089968605236
+        },
+        {
+          "slot": "stand_heavy",
+          "sourceActive": 4,
+          "styleActive": 5,
+          "measuredPhases": [
+            0,
+            0.25,
+            0.3333333333333333,
+            0.5,
+            0.6666666666666666,
+            0.75,
+            1
+          ],
+          "maxReachError": 0.000036055882489449687,
+          "maxHeightError": 0.000013924759831418498
+        },
+        {
+          "slot": "crouch_weak",
+          "sourceActive": 3,
+          "styleActive": 3,
+          "measuredPhases": [
+            0,
+            0.5,
+            1
+          ],
+          "maxReachError": 0.000006808563973115245,
+          "maxHeightError": 0.0000468777988234248
+        },
+        {
+          "slot": "crouch_heavy",
+          "sourceActive": 4,
+          "styleActive": 5,
+          "measuredPhases": [
+            0,
+            0.25,
+            0.3333333333333333,
+            0.5,
+            0.6666666666666666,
+            0.75,
+            1
+          ],
+          "maxReachError": 0.000029450295458866016,
+          "maxHeightError": 0.000048344807088568365
+        },
+        {
+          "slot": "air_weak",
+          "sourceActive": 5,
+          "styleActive": 5,
+          "measuredPhases": [
+            0,
+            0.25,
+            0.5,
+            0.75,
+            1
+          ],
+          "maxReachError": 0.000007362153236545321,
+          "maxHeightError": 0.000021590399697402063
+        },
+        {
+          "slot": "air_heavy",
+          "sourceActive": 6,
+          "styleActive": 6,
+          "measuredPhases": [
+            0,
+            0.2,
+            0.4,
+            0.6,
+            0.8,
+            1
+          ],
+          "maxReachError": 0.00004255380347883975,
+          "maxHeightError": 0.00004011946653026399
+        }
+      ]
+    },
+    {
+      "baseId": "bullet",
+      "styleId": "hakuma",
+      "rows": [
+        {
+          "slot": "stand_weak",
+          "sourceActive": 3,
+          "styleActive": 4,
+          "measuredPhases": [
+            0,
+            0.3333333333333333,
+            0.5,
+            0.6666666666666666,
+            1
+          ],
+          "maxReachError": 0.000010981635392148803,
+          "maxHeightError": 0.0000029339089968605236
+        },
+        {
+          "slot": "stand_heavy",
+          "sourceActive": 4,
+          "styleActive": 5,
+          "measuredPhases": [
+            0,
+            0.25,
+            0.3333333333333333,
+            0.5,
+            0.6666666666666666,
+            0.75,
+            1
+          ],
+          "maxReachError": 0.000036055882489449687,
+          "maxHeightError": 0.000013924759831418498
+        },
+        {
+          "slot": "crouch_weak",
+          "sourceActive": 3,
+          "styleActive": 4,
+          "measuredPhases": [
+            0,
+            0.3333333333333333,
+            0.5,
+            0.6666666666666666,
+            1
+          ],
+          "maxReachError": 0.000006808563973115245,
+          "maxHeightError": 0.0000468777988234248
+        },
+        {
+          "slot": "crouch_heavy",
+          "sourceActive": 4,
+          "styleActive": 5,
+          "measuredPhases": [
+            0,
+            0.25,
+            0.3333333333333333,
+            0.5,
+            0.6666666666666666,
+            0.75,
+            1
+          ],
+          "maxReachError": 0.000029450295458866016,
+          "maxHeightError": 0.000048344807088568365
+        },
+        {
+          "slot": "air_weak",
+          "sourceActive": 5,
+          "styleActive": 5,
+          "measuredPhases": [
+            0,
+            0.25,
+            0.5,
+            0.75,
+            1
+          ],
+          "maxReachError": 0.000007362153236545321,
+          "maxHeightError": 0.000021590399697402063
+        },
+        {
+          "slot": "air_heavy",
+          "sourceActive": 6,
+          "styleActive": 6,
+          "measuredPhases": [
+            0,
+            0.2,
+            0.4,
+            0.6,
+            0.8,
+            1
+          ],
+          "maxReachError": 0.00004255380347883975,
+          "maxHeightError": 0.00004011946653026399
+        }
+      ]
+    },
+    {
+      "baseId": "bullet",
+      "styleId": "chirka",
+      "rows": [
+        {
+          "slot": "stand_weak",
+          "sourceActive": 3,
+          "styleActive": 2,
+          "measuredPhases": [
+            0,
+            0.5,
+            1
+          ],
+          "maxReachError": 0.000010981635392148803,
+          "maxHeightError": 0.0000029339089968605236
+        },
+        {
+          "slot": "stand_heavy",
+          "sourceActive": 4,
+          "styleActive": 3,
+          "measuredPhases": [
+            0,
+            0.3333333333333333,
+            0.5,
+            0.6666666666666666,
+            1
+          ],
+          "maxReachError": 0.000036055882489449687,
+          "maxHeightError": 0.000013924759831418498
+        },
+        {
+          "slot": "crouch_weak",
+          "sourceActive": 3,
+          "styleActive": 2,
+          "measuredPhases": [
+            0,
+            0.5,
+            1
+          ],
+          "maxReachError": 0.000006807197346636595,
+          "maxHeightError": 0.00004687388057586506
+        },
+        {
+          "slot": "crouch_heavy",
+          "sourceActive": 4,
+          "styleActive": 4,
+          "measuredPhases": [
+            0,
+            0.3333333333333333,
+            0.6666666666666666,
+            1
+          ],
+          "maxReachError": 0.00003315260414948895,
+          "maxHeightError": 0.000044136463483994415
+        },
+        {
+          "slot": "air_weak",
+          "sourceActive": 5,
+          "styleActive": 4,
+          "measuredPhases": [
+            0,
+            0.25,
+            0.3333333333333333,
+            0.5,
+            0.6666666666666666,
+            0.75,
+            1
+          ],
+          "maxReachError": 0.000007362153236545321,
+          "maxHeightError": 0.000021590399697402063
+        },
+        {
+          "slot": "air_heavy",
+          "sourceActive": 6,
+          "styleActive": 5,
+          "measuredPhases": [
+            0,
+            0.2,
+            0.25,
+            0.4,
+            0.5,
+            0.6,
+            0.75,
+            0.8,
+            1
+          ],
+          "maxReachError": 0.00003807224871266168,
+          "maxHeightError": 0.00004011946653026399
+        }
+      ]
+    },
+    {
+      "baseId": "bullet",
+      "styleId": "takimaru",
+      "rows": [
+        {
+          "slot": "stand_weak",
+          "sourceActive": 3,
+          "styleActive": 3,
+          "measuredPhases": [
+            0,
+            0.5,
+            1
+          ],
+          "maxReachError": 0.000010981635392148803,
+          "maxHeightError": 0.0000029339089968605236
+        },
+        {
+          "slot": "stand_heavy",
+          "sourceActive": 4,
+          "styleActive": 4,
+          "measuredPhases": [
+            0,
+            0.3333333333333333,
+            0.6666666666666666,
+            1
+          ],
+          "maxReachError": 0.000049501074402269474,
+          "maxHeightError": 0.000044274291341545036
+        },
+        {
+          "slot": "crouch_weak",
+          "sourceActive": 3,
+          "styleActive": 3,
+          "measuredPhases": [
+            0,
+            0.5,
+            1
+          ],
+          "maxReachError": 0.000006808563973115245,
+          "maxHeightError": 0.0000468777988234248
+        },
+        {
+          "slot": "crouch_heavy",
+          "sourceActive": 4,
+          "styleActive": 4,
+          "measuredPhases": [
+            0,
+            0.3333333333333333,
+            0.6666666666666666,
+            1
+          ],
+          "maxReachError": 0.00003315260414948895,
+          "maxHeightError": 0.000044136463483994415
+        },
+        {
+          "slot": "air_weak",
+          "sourceActive": 5,
+          "styleActive": 5,
+          "measuredPhases": [
+            0,
+            0.25,
+            0.5,
+            0.75,
+            1
+          ],
+          "maxReachError": 0.000007362153236545321,
+          "maxHeightError": 0.000021590399697402063
+        },
+        {
+          "slot": "air_heavy",
+          "sourceActive": 6,
+          "styleActive": 6,
+          "measuredPhases": [
+            0,
+            0.2,
+            0.4,
+            0.6,
+            0.8,
+            1
+          ],
+          "maxReachError": 0.00004255380347883975,
+          "maxHeightError": 0.00004011946653026399
+        }
+      ]
+    },
+    {
+      "baseId": "bullet",
+      "styleId": "yomikage",
+      "rows": [
+        {
+          "slot": "stand_weak",
+          "sourceActive": 3,
+          "styleActive": 2,
+          "measuredPhases": [
+            0,
+            0.5,
+            1
+          ],
+          "maxReachError": 0.000010981635392148803,
+          "maxHeightError": 0.0000029339089968605236
+        },
+        {
+          "slot": "stand_heavy",
+          "sourceActive": 4,
+          "styleActive": 3,
+          "measuredPhases": [
+            0,
+            0.3333333333333333,
+            0.5,
+            0.6666666666666666,
+            1
+          ],
+          "maxReachError": 0.000036055882489449687,
+          "maxHeightError": 0.000013924759831418498
+        },
+        {
+          "slot": "crouch_weak",
+          "sourceActive": 3,
+          "styleActive": 2,
+          "measuredPhases": [
+            0,
+            0.5,
+            1
+          ],
+          "maxReachError": 0.000006807197346636595,
+          "maxHeightError": 0.00004687388057586506
+        },
+        {
+          "slot": "crouch_heavy",
+          "sourceActive": 4,
+          "styleActive": 4,
+          "measuredPhases": [
+            0,
+            0.3333333333333333,
+            0.6666666666666666,
+            1
+          ],
+          "maxReachError": 0.00003315260414948895,
+          "maxHeightError": 0.000044136463483994415
+        },
+        {
+          "slot": "air_weak",
+          "sourceActive": 5,
+          "styleActive": 4,
+          "measuredPhases": [
+            0,
+            0.25,
+            0.3333333333333333,
+            0.5,
+            0.6666666666666666,
+            0.75,
+            1
+          ],
+          "maxReachError": 0.000007362153236545321,
+          "maxHeightError": 0.000021590399697402063
+        },
+        {
+          "slot": "air_heavy",
+          "sourceActive": 6,
+          "styleActive": 5,
+          "measuredPhases": [
+            0,
+            0.2,
+            0.25,
+            0.4,
+            0.5,
+            0.6,
+            0.75,
+            0.8,
+            1
+          ],
+          "maxReachError": 0.00003807224871266168,
+          "maxHeightError": 0.00004011946653026399
+        }
+      ]
+    },
+    {
+      "baseId": "bullet",
+      "styleId": "bullet",
+      "rows": [
+        {
+          "slot": "stand_weak",
+          "sourceActive": 3,
+          "styleActive": 3,
+          "measuredPhases": [
+            0,
+            0.5,
+            1
+          ],
+          "maxReachError": 0.000010981635392148803,
+          "maxHeightError": 0.0000029339089968605236
+        },
+        {
+          "slot": "stand_heavy",
+          "sourceActive": 4,
+          "styleActive": 4,
+          "measuredPhases": [
+            0,
+            0.3333333333333333,
+            0.6666666666666666,
+            1
+          ],
+          "maxReachError": 0.000049501074402269474,
+          "maxHeightError": 0.000044274291341545036
+        },
+        {
+          "slot": "crouch_weak",
+          "sourceActive": 3,
+          "styleActive": 3,
+          "measuredPhases": [
+            0,
+            0.5,
+            1
+          ],
+          "maxReachError": 0.000006808563973115245,
+          "maxHeightError": 0.0000468777988234248
+        },
+        {
+          "slot": "crouch_heavy",
+          "sourceActive": 4,
+          "styleActive": 4,
+          "measuredPhases": [
+            0,
+            0.3333333333333333,
+            0.6666666666666666,
+            1
+          ],
+          "maxReachError": 0.00003315260414948895,
+          "maxHeightError": 0.000044136463483994415
+        },
+        {
+          "slot": "air_weak",
+          "sourceActive": 5,
+          "styleActive": 5,
+          "measuredPhases": [
+            0,
+            0.25,
+            0.5,
+            0.75,
+            1
+          ],
+          "maxReachError": 0.000007362153236545321,
+          "maxHeightError": 0.000021590399697402063
+        },
+        {
+          "slot": "air_heavy",
+          "sourceActive": 6,
+          "styleActive": 6,
+          "measuredPhases": [
+            0,
+            0.2,
+            0.4,
+            0.6,
+            0.8,
+            1
+          ],
+          "maxReachError": 0.00004255380347883975,
+          "maxHeightError": 0.00004011946653026399
+        }
+      ]
+    },
+    {
+      "baseId": "bullet",
+      "styleId": "dark_moguzo",
+      "rows": [
+        {
+          "slot": "stand_weak",
+          "sourceActive": 3,
+          "styleActive": 2,
+          "measuredPhases": [
+            0,
+            0.5,
+            1
+          ],
+          "maxReachError": 0.000010981635392148803,
+          "maxHeightError": 0.0000029339089968605236
+        },
+        {
+          "slot": "stand_heavy",
+          "sourceActive": 4,
+          "styleActive": 3,
+          "measuredPhases": [
+            0,
+            0.3333333333333333,
+            0.5,
+            0.6666666666666666,
+            1
+          ],
+          "maxReachError": 0.000036055882489449687,
+          "maxHeightError": 0.000013924759831418498
+        },
+        {
+          "slot": "crouch_weak",
+          "sourceActive": 3,
+          "styleActive": 2,
+          "measuredPhases": [
+            0,
+            0.5,
+            1
+          ],
+          "maxReachError": 0.000006807197346636595,
+          "maxHeightError": 0.00004687388057586506
+        },
+        {
+          "slot": "crouch_heavy",
+          "sourceActive": 4,
+          "styleActive": 4,
+          "measuredPhases": [
+            0,
+            0.3333333333333333,
+            0.6666666666666666,
+            1
+          ],
+          "maxReachError": 0.00003315260414948895,
+          "maxHeightError": 0.000044136463483994415
+        },
+        {
+          "slot": "air_weak",
+          "sourceActive": 5,
+          "styleActive": 4,
+          "measuredPhases": [
+            0,
+            0.25,
+            0.3333333333333333,
+            0.5,
+            0.6666666666666666,
+            0.75,
+            1
+          ],
+          "maxReachError": 0.000007362153236545321,
+          "maxHeightError": 0.000021590399697402063
+        },
+        {
+          "slot": "air_heavy",
+          "sourceActive": 6,
+          "styleActive": 5,
+          "measuredPhases": [
+            0,
+            0.2,
+            0.25,
+            0.4,
+            0.5,
+            0.6,
+            0.75,
+            0.8,
+            1
+          ],
+          "maxReachError": 0.00003807224871266168,
+          "maxHeightError": 0.00004011946653026399
+        }
+      ]
+    },
+    {
+      "baseId": "dark_moguzo",
+      "styleId": "moguzo",
+      "rows": [
+        {
+          "slot": "stand_weak",
+          "sourceActive": 2,
+          "styleActive": 3,
+          "measuredPhases": [
+            0,
+            0.5,
+            1
+          ],
+          "maxReachError": 0.000027111929339851404,
+          "maxHeightError": 0.00003245144090230356
+        },
+        {
+          "slot": "stand_heavy",
+          "sourceActive": 3,
+          "styleActive": 4,
+          "measuredPhases": [
+            0,
+            0.3333333333333333,
+            0.5,
+            0.6666666666666666,
+            1
+          ],
+          "maxReachError": 0.00004760706947626314,
+          "maxHeightError": 0.000044864200719307856
+        },
+        {
+          "slot": "crouch_weak",
+          "sourceActive": 2,
+          "styleActive": 3,
+          "measuredPhases": [
+            0,
+            0.5,
+            1
+          ],
+          "maxReachError": 0.00004179383405966686,
+          "maxHeightError": 0.000012063851253879543
+        },
+        {
+          "slot": "crouch_heavy",
+          "sourceActive": 4,
+          "styleActive": 4,
+          "measuredPhases": [
+            0,
+            0.3333333333333333,
+            0.6666666666666666,
+            1
+          ],
+          "maxReachError": 0.00001199806168483697,
+          "maxHeightError": 0.000027139906407930292
+        },
+        {
+          "slot": "air_weak",
+          "sourceActive": 4,
+          "styleActive": 5,
+          "measuredPhases": [
+            0,
+            0.25,
+            0.3333333333333333,
+            0.5,
+            0.6666666666666666,
+            0.75,
+            1
+          ],
+          "maxReachError": 0.00002192345891044445,
+          "maxHeightError": 0.0000418403077823426
+        },
+        {
+          "slot": "air_heavy",
+          "sourceActive": 5,
+          "styleActive": 6,
+          "measuredPhases": [
+            0,
+            0.2,
+            0.25,
+            0.4,
+            0.5,
+            0.6,
+            0.75,
+            0.8,
+            1
+          ],
+          "maxReachError": 0.00004385834552045331,
+          "maxHeightError": 0.000018154445607238
+        }
+      ]
+    },
+    {
+      "baseId": "dark_moguzo",
+      "styleId": "pisuke",
+      "rows": [
+        {
+          "slot": "stand_weak",
+          "sourceActive": 2,
+          "styleActive": 2,
+          "measuredPhases": [
+            0,
+            1
+          ],
+          "maxReachError": 0.000027111929339851404,
+          "maxHeightError": 0.00003245144090230356
+        },
+        {
+          "slot": "stand_heavy",
+          "sourceActive": 3,
+          "styleActive": 3,
+          "measuredPhases": [
+            0,
+            0.5,
+            1
+          ],
+          "maxReachError": 0.000047607069476374164,
+          "maxHeightError": 0.000044864200719307856
+        },
+        {
+          "slot": "crouch_weak",
+          "sourceActive": 2,
+          "styleActive": 2,
+          "measuredPhases": [
+            0,
+            1
+          ],
+          "maxReachError": 0.000041788613526994034,
+          "maxHeightError": 0.000012063851253879543
+        },
+        {
+          "slot": "crouch_heavy",
+          "sourceActive": 4,
+          "styleActive": 4,
+          "measuredPhases": [
+            0,
+            0.3333333333333333,
+            0.6666666666666666,
+            1
+          ],
+          "maxReachError": 0.00001199806168483697,
+          "maxHeightError": 0.000027139906407930292
+        },
+        {
+          "slot": "air_weak",
+          "sourceActive": 4,
+          "styleActive": 4,
+          "measuredPhases": [
+            0,
+            0.3333333333333333,
+            0.6666666666666666,
+            1
+          ],
+          "maxReachError": 0.00002192345891044445,
+          "maxHeightError": 0.0000418403077823426
+        },
+        {
+          "slot": "air_heavy",
+          "sourceActive": 5,
+          "styleActive": 5,
+          "measuredPhases": [
+            0,
+            0.25,
+            0.5,
+            0.75,
+            1
+          ],
+          "maxReachError": 0.00004385834552045331,
+          "maxHeightError": 0.000018154445607238
+        }
+      ]
+    },
+    {
+      "baseId": "dark_moguzo",
+      "styleId": "godan",
+      "rows": [
+        {
+          "slot": "stand_weak",
+          "sourceActive": 2,
+          "styleActive": 3,
+          "measuredPhases": [
+            0,
+            0.5,
+            1
+          ],
+          "maxReachError": 0.000027111929339851404,
+          "maxHeightError": 0.00003245144090230356
+        },
+        {
+          "slot": "stand_heavy",
+          "sourceActive": 3,
+          "styleActive": 5,
+          "measuredPhases": [
+            0,
+            0.25,
+            0.5,
+            0.75,
+            1
+          ],
+          "maxReachError": 0.000047607069476374164,
+          "maxHeightError": 0.000044864200719307856
+        },
+        {
+          "slot": "crouch_weak",
+          "sourceActive": 2,
+          "styleActive": 3,
+          "measuredPhases": [
+            0,
+            0.5,
+            1
+          ],
+          "maxReachError": 0.00004179383405966686,
+          "maxHeightError": 0.000012063851253879543
+        },
+        {
+          "slot": "crouch_heavy",
+          "sourceActive": 4,
+          "styleActive": 5,
+          "measuredPhases": [
+            0,
+            0.25,
+            0.3333333333333333,
+            0.5,
+            0.6666666666666666,
+            0.75,
+            1
+          ],
+          "maxReachError": 0.00001199806168483697,
+          "maxHeightError": 0.000027139906407930292
+        },
+        {
+          "slot": "air_weak",
+          "sourceActive": 4,
+          "styleActive": 5,
+          "measuredPhases": [
+            0,
+            0.25,
+            0.3333333333333333,
+            0.5,
+            0.6666666666666666,
+            0.75,
+            1
+          ],
+          "maxReachError": 0.00002192345891044445,
+          "maxHeightError": 0.0000418403077823426
+        },
+        {
+          "slot": "air_heavy",
+          "sourceActive": 5,
+          "styleActive": 6,
+          "measuredPhases": [
+            0,
+            0.2,
+            0.25,
+            0.4,
+            0.5,
+            0.6,
+            0.75,
+            0.8,
+            1
+          ],
+          "maxReachError": 0.00004385834552045331,
+          "maxHeightError": 0.000018154445607238
+        }
+      ]
+    },
+    {
+      "baseId": "dark_moguzo",
+      "styleId": "hakuma",
+      "rows": [
+        {
+          "slot": "stand_weak",
+          "sourceActive": 2,
+          "styleActive": 4,
+          "measuredPhases": [
+            0,
+            0.3333333333333333,
+            0.6666666666666666,
+            1
+          ],
+          "maxReachError": 0.000027111929339851404,
+          "maxHeightError": 0.00003245144090230356
+        },
+        {
+          "slot": "stand_heavy",
+          "sourceActive": 3,
+          "styleActive": 5,
+          "measuredPhases": [
+            0,
+            0.25,
+            0.5,
+            0.75,
+            1
+          ],
+          "maxReachError": 0.000047607069476374164,
+          "maxHeightError": 0.000044864200719307856
+        },
+        {
+          "slot": "crouch_weak",
+          "sourceActive": 2,
+          "styleActive": 4,
+          "measuredPhases": [
+            0,
+            0.3333333333333333,
+            0.6666666666666666,
+            1
+          ],
+          "maxReachError": 0.00004179395834125188,
+          "maxHeightError": 0.000012064251648943869
+        },
+        {
+          "slot": "crouch_heavy",
+          "sourceActive": 4,
+          "styleActive": 5,
+          "measuredPhases": [
+            0,
+            0.25,
+            0.3333333333333333,
+            0.5,
+            0.6666666666666666,
+            0.75,
+            1
+          ],
+          "maxReachError": 0.00001199806168483697,
+          "maxHeightError": 0.000027139906407930292
+        },
+        {
+          "slot": "air_weak",
+          "sourceActive": 4,
+          "styleActive": 5,
+          "measuredPhases": [
+            0,
+            0.25,
+            0.3333333333333333,
+            0.5,
+            0.6666666666666666,
+            0.75,
+            1
+          ],
+          "maxReachError": 0.00002192345891044445,
+          "maxHeightError": 0.0000418403077823426
+        },
+        {
+          "slot": "air_heavy",
+          "sourceActive": 5,
+          "styleActive": 6,
+          "measuredPhases": [
+            0,
+            0.2,
+            0.25,
+            0.4,
+            0.5,
+            0.6,
+            0.75,
+            0.8,
+            1
+          ],
+          "maxReachError": 0.00004385834552045331,
+          "maxHeightError": 0.000018154445607238
+        }
+      ]
+    },
+    {
+      "baseId": "dark_moguzo",
+      "styleId": "chirka",
+      "rows": [
+        {
+          "slot": "stand_weak",
+          "sourceActive": 2,
+          "styleActive": 2,
+          "measuredPhases": [
+            0,
+            1
+          ],
+          "maxReachError": 0.000027111929339851404,
+          "maxHeightError": 0.00003245144090230356
+        },
+        {
+          "slot": "stand_heavy",
+          "sourceActive": 3,
+          "styleActive": 3,
+          "measuredPhases": [
+            0,
+            0.5,
+            1
+          ],
+          "maxReachError": 0.000047607069476374164,
+          "maxHeightError": 0.000044864200719307856
+        },
+        {
+          "slot": "crouch_weak",
+          "sourceActive": 2,
+          "styleActive": 2,
+          "measuredPhases": [
+            0,
+            1
+          ],
+          "maxReachError": 0.000041788613526994034,
+          "maxHeightError": 0.000012063851253879543
+        },
+        {
+          "slot": "crouch_heavy",
+          "sourceActive": 4,
+          "styleActive": 4,
+          "measuredPhases": [
+            0,
+            0.3333333333333333,
+            0.6666666666666666,
+            1
+          ],
+          "maxReachError": 0.00001199806168483697,
+          "maxHeightError": 0.000027139906407805392
+        },
+        {
+          "slot": "air_weak",
+          "sourceActive": 4,
+          "styleActive": 4,
+          "measuredPhases": [
+            0,
+            0.3333333333333333,
+            0.6666666666666666,
+            1
+          ],
+          "maxReachError": 0.00002192345891044445,
+          "maxHeightError": 0.0000418403077823426
+        },
+        {
+          "slot": "air_heavy",
+          "sourceActive": 5,
+          "styleActive": 5,
+          "measuredPhases": [
+            0,
+            0.25,
+            0.5,
+            0.75,
+            1
+          ],
+          "maxReachError": 0.00004385834552045331,
+          "maxHeightError": 0.000018154445607238
+        }
+      ]
+    },
+    {
+      "baseId": "dark_moguzo",
+      "styleId": "takimaru",
+      "rows": [
+        {
+          "slot": "stand_weak",
+          "sourceActive": 2,
+          "styleActive": 3,
+          "measuredPhases": [
+            0,
+            0.5,
+            1
+          ],
+          "maxReachError": 0.000027111929339851404,
+          "maxHeightError": 0.00003245144090230356
+        },
+        {
+          "slot": "stand_heavy",
+          "sourceActive": 3,
+          "styleActive": 4,
+          "measuredPhases": [
+            0,
+            0.3333333333333333,
+            0.5,
+            0.6666666666666666,
+            1
+          ],
+          "maxReachError": 0.000047607069476374164,
+          "maxHeightError": 0.000044864200719307856
+        },
+        {
+          "slot": "crouch_weak",
+          "sourceActive": 2,
+          "styleActive": 3,
+          "measuredPhases": [
+            0,
+            0.5,
+            1
+          ],
+          "maxReachError": 0.00004179383405966686,
+          "maxHeightError": 0.000012063851253879543
+        },
+        {
+          "slot": "crouch_heavy",
+          "sourceActive": 4,
+          "styleActive": 4,
+          "measuredPhases": [
+            0,
+            0.3333333333333333,
+            0.6666666666666666,
+            1
+          ],
+          "maxReachError": 0.00001199806168483697,
+          "maxHeightError": 0.000027139906407930292
+        },
+        {
+          "slot": "air_weak",
+          "sourceActive": 4,
+          "styleActive": 5,
+          "measuredPhases": [
+            0,
+            0.25,
+            0.3333333333333333,
+            0.5,
+            0.6666666666666666,
+            0.75,
+            1
+          ],
+          "maxReachError": 0.00002192345891044445,
+          "maxHeightError": 0.0000418403077823426
+        },
+        {
+          "slot": "air_heavy",
+          "sourceActive": 5,
+          "styleActive": 6,
+          "measuredPhases": [
+            0,
+            0.2,
+            0.25,
+            0.4,
+            0.5,
+            0.6,
+            0.75,
+            0.8,
+            1
+          ],
+          "maxReachError": 0.00004385834552045331,
+          "maxHeightError": 0.000018154445607238
+        }
+      ]
+    },
+    {
+      "baseId": "dark_moguzo",
+      "styleId": "yomikage",
+      "rows": [
+        {
+          "slot": "stand_weak",
+          "sourceActive": 2,
+          "styleActive": 2,
+          "measuredPhases": [
+            0,
+            1
+          ],
+          "maxReachError": 0.000027111929339851404,
+          "maxHeightError": 0.00003245144090230356
+        },
+        {
+          "slot": "stand_heavy",
+          "sourceActive": 3,
+          "styleActive": 3,
+          "measuredPhases": [
+            0,
+            0.5,
+            1
+          ],
+          "maxReachError": 0.00004760706947626314,
+          "maxHeightError": 0.000044864200719307856
+        },
+        {
+          "slot": "crouch_weak",
+          "sourceActive": 2,
+          "styleActive": 2,
+          "measuredPhases": [
+            0,
+            1
+          ],
+          "maxReachError": 0.000041788613526994034,
+          "maxHeightError": 0.000012063851253879543
+        },
+        {
+          "slot": "crouch_heavy",
+          "sourceActive": 4,
+          "styleActive": 4,
+          "measuredPhases": [
+            0,
+            0.3333333333333333,
+            0.6666666666666666,
+            1
+          ],
+          "maxReachError": 0.00001199806168483697,
+          "maxHeightError": 0.000027139906407930292
+        },
+        {
+          "slot": "air_weak",
+          "sourceActive": 4,
+          "styleActive": 4,
+          "measuredPhases": [
+            0,
+            0.3333333333333333,
+            0.6666666666666666,
+            1
+          ],
+          "maxReachError": 0.00002192345891044445,
+          "maxHeightError": 0.0000418403077823426
+        },
+        {
+          "slot": "air_heavy",
+          "sourceActive": 5,
+          "styleActive": 5,
+          "measuredPhases": [
+            0,
+            0.25,
+            0.5,
+            0.75,
+            1
+          ],
+          "maxReachError": 0.00004385834552045331,
+          "maxHeightError": 0.000018154445607238
+        }
+      ]
+    },
+    {
+      "baseId": "dark_moguzo",
+      "styleId": "bullet",
+      "rows": [
+        {
+          "slot": "stand_weak",
+          "sourceActive": 2,
+          "styleActive": 3,
+          "measuredPhases": [
+            0,
+            0.5,
+            1
+          ],
+          "maxReachError": 0.000027111929339851404,
+          "maxHeightError": 0.00003245144090230356
+        },
+        {
+          "slot": "stand_heavy",
+          "sourceActive": 3,
+          "styleActive": 4,
+          "measuredPhases": [
+            0,
+            0.3333333333333333,
+            0.5,
+            0.6666666666666666,
+            1
+          ],
+          "maxReachError": 0.000047607069476374164,
+          "maxHeightError": 0.000044864200719307856
+        },
+        {
+          "slot": "crouch_weak",
+          "sourceActive": 2,
+          "styleActive": 3,
+          "measuredPhases": [
+            0,
+            0.5,
+            1
+          ],
+          "maxReachError": 0.00004179383405966686,
+          "maxHeightError": 0.000012063851253879543
+        },
+        {
+          "slot": "crouch_heavy",
+          "sourceActive": 4,
+          "styleActive": 4,
+          "measuredPhases": [
+            0,
+            0.3333333333333333,
+            0.6666666666666666,
+            1
+          ],
+          "maxReachError": 0.00001199806168483697,
+          "maxHeightError": 0.000027139906407930292
+        },
+        {
+          "slot": "air_weak",
+          "sourceActive": 4,
+          "styleActive": 5,
+          "measuredPhases": [
+            0,
+            0.25,
+            0.3333333333333333,
+            0.5,
+            0.6666666666666666,
+            0.75,
+            1
+          ],
+          "maxReachError": 0.00002192345891044445,
+          "maxHeightError": 0.0000418403077823426
+        },
+        {
+          "slot": "air_heavy",
+          "sourceActive": 5,
+          "styleActive": 6,
+          "measuredPhases": [
+            0,
+            0.2,
+            0.25,
+            0.4,
+            0.5,
+            0.6,
+            0.75,
+            0.8,
+            1
+          ],
+          "maxReachError": 0.00004385834552045331,
+          "maxHeightError": 0.000018154445607238
+        }
+      ]
+    },
+    {
+      "baseId": "dark_moguzo",
+      "styleId": "dark_moguzo",
+      "rows": [
+        {
+          "slot": "stand_weak",
+          "sourceActive": 2,
+          "styleActive": 2,
+          "measuredPhases": [
+            0,
+            1
+          ],
+          "maxReachError": 0.000027111929339851404,
+          "maxHeightError": 0.00003245144090230356
+        },
+        {
+          "slot": "stand_heavy",
+          "sourceActive": 3,
+          "styleActive": 3,
+          "measuredPhases": [
+            0,
+            0.5,
+            1
+          ],
+          "maxReachError": 0.000047607069476374164,
+          "maxHeightError": 0.000044864200719307856
+        },
+        {
+          "slot": "crouch_weak",
+          "sourceActive": 2,
+          "styleActive": 2,
+          "measuredPhases": [
+            0,
+            1
+          ],
+          "maxReachError": 0.000041788613526994034,
+          "maxHeightError": 0.000012063851253879543
+        },
+        {
+          "slot": "crouch_heavy",
+          "sourceActive": 4,
+          "styleActive": 4,
+          "measuredPhases": [
+            0,
+            0.3333333333333333,
+            0.6666666666666666,
+            1
+          ],
+          "maxReachError": 0.00001199806168483697,
+          "maxHeightError": 0.000027139906407930292
+        },
+        {
+          "slot": "air_weak",
+          "sourceActive": 4,
+          "styleActive": 4,
+          "measuredPhases": [
+            0,
+            0.3333333333333333,
+            0.6666666666666666,
+            1
+          ],
+          "maxReachError": 0.00002192345891044445,
+          "maxHeightError": 0.0000418403077823426
+        },
+        {
+          "slot": "air_heavy",
+          "sourceActive": 5,
+          "styleActive": 5,
+          "measuredPhases": [
+            0,
+            0.25,
+            0.5,
+            0.75,
+            1
+          ],
+          "maxReachError": 0.00004385834552045331,
+          "maxHeightError": 0.000018154445607238
+        }
+      ]
+    }
+  ],
+  "samples": 1899,
+  "lowTakiCompare": {
+    "r1": {
+      "clip": "v17_crouch_heavy",
+      "reach": 0.5227,
+      "height": 0.6063,
+      "activeParts": [
+        "armL",
+        "armL",
+        "armL",
+        "armL"
+      ],
+      "cases": [
+        {
+          "targetId": "moguzo",
+          "facing": 1,
+          "hit": false
+        },
+        {
+          "targetId": "moguzo",
+          "facing": -1,
+          "hit": false
+        },
+        {
+          "targetId": "pisuke",
+          "facing": 1,
+          "hit": false
+        },
+        {
+          "targetId": "pisuke",
+          "facing": -1,
+          "hit": false
+        },
+        {
+          "targetId": "godan",
+          "facing": 1,
+          "hit": false
+        },
+        {
+          "targetId": "godan",
+          "facing": -1,
+          "hit": false
+        },
+        {
+          "targetId": "hakuma",
+          "facing": 1,
+          "hit": true
+        },
+        {
+          "targetId": "hakuma",
+          "facing": -1,
+          "hit": true
+        },
+        {
+          "targetId": "chirka",
+          "facing": 1,
+          "hit": false
+        },
+        {
+          "targetId": "chirka",
+          "facing": -1,
+          "hit": false
+        },
+        {
+          "targetId": "takimaru",
+          "facing": 1,
+          "hit": true
+        },
+        {
+          "targetId": "takimaru",
+          "facing": -1,
+          "hit": true
+        },
+        {
+          "targetId": "yomikage",
+          "facing": 1,
+          "hit": false
+        },
+        {
+          "targetId": "yomikage",
+          "facing": -1,
+          "hit": false
+        },
+        {
+          "targetId": "bullet",
+          "facing": 1,
+          "hit": false
+        },
+        {
+          "targetId": "bullet",
+          "facing": -1,
+          "hit": false
+        },
+        {
+          "targetId": "dark_moguzo",
+          "facing": 1,
+          "hit": false
+        },
+        {
+          "targetId": "dark_moguzo",
+          "facing": -1,
+          "hit": false
+        }
+      ],
+      "hits": 4
+    },
+    "r2": {
+      "clip": "v17r2_crouch_heavy",
+      "reach": 0.5716,
+      "height": 0.2597,
+      "activeParts": [
+        "armR",
+        "armL",
+        "armL",
+        "armL"
+      ],
+      "cases": [
+        {
+          "targetId": "moguzo",
+          "facing": 1,
+          "hit": true
+        },
+        {
+          "targetId": "moguzo",
+          "facing": -1,
+          "hit": true
+        },
+        {
+          "targetId": "pisuke",
+          "facing": 1,
+          "hit": true
+        },
+        {
+          "targetId": "pisuke",
+          "facing": -1,
+          "hit": true
+        },
+        {
+          "targetId": "godan",
+          "facing": 1,
+          "hit": true
+        },
+        {
+          "targetId": "godan",
+          "facing": -1,
+          "hit": true
+        },
+        {
+          "targetId": "hakuma",
+          "facing": 1,
+          "hit": true
+        },
+        {
+          "targetId": "hakuma",
+          "facing": -1,
+          "hit": true
+        },
+        {
+          "targetId": "chirka",
+          "facing": 1,
+          "hit": true
+        },
+        {
+          "targetId": "chirka",
+          "facing": -1,
+          "hit": true
+        },
+        {
+          "targetId": "takimaru",
+          "facing": 1,
+          "hit": true
+        },
+        {
+          "targetId": "takimaru",
+          "facing": -1,
+          "hit": true
+        },
+        {
+          "targetId": "yomikage",
+          "facing": 1,
+          "hit": true
+        },
+        {
+          "targetId": "yomikage",
+          "facing": -1,
+          "hit": true
+        },
+        {
+          "targetId": "bullet",
+          "facing": 1,
+          "hit": true
+        },
+        {
+          "targetId": "bullet",
+          "facing": -1,
+          "hit": true
+        },
+        {
+          "targetId": "dark_moguzo",
+          "facing": 1,
+          "hit": true
+        },
+        {
+          "targetId": "dark_moguzo",
+          "facing": -1,
+          "hit": true
+        }
+      ],
+      "hits": 18
+    }
+  }
+}

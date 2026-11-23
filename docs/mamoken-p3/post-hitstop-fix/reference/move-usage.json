@@ -1,0 +1,488 @@
+{
+  "moguzo.stand_weak": {
+    "starts": 1256,
+    "hits": 755,
+    "blocks": 0,
+    "whiffs": 139
+  },
+  "moguzo.stand_heavy": {
+    "starts": 1106,
+    "hits": 771,
+    "blocks": 12,
+    "whiffs": 28
+  },
+  "moguzo.crouch_weak": {
+    "starts": 190,
+    "hits": 126,
+    "blocks": 0,
+    "whiffs": 0
+  },
+  "moguzo.crouch_heavy": {
+    "starts": 189,
+    "hits": 126,
+    "blocks": 1,
+    "whiffs": 0
+  },
+  "moguzo.air_weak": {
+    "starts": 0,
+    "hits": 0,
+    "blocks": 0,
+    "whiffs": 0
+  },
+  "moguzo.air_heavy": {
+    "starts": 195,
+    "hits": 7,
+    "blocks": 2,
+    "whiffs": 180
+  },
+  "moguzo.s1": {
+    "starts": 2034,
+    "hits": 222,
+    "blocks": 33,
+    "whiffs": 0
+  },
+  "moguzo.s2": {
+    "starts": 994,
+    "hits": 822,
+    "blocks": 0,
+    "whiffs": 68
+  },
+  "moguzo.s3": {
+    "starts": 0,
+    "hits": 0,
+    "blocks": 0,
+    "whiffs": 0
+  },
+  "pisuke.stand_weak": {
+    "starts": 1423,
+    "hits": 1042,
+    "blocks": 0,
+    "whiffs": 190
+  },
+  "pisuke.stand_heavy": {
+    "starts": 1356,
+    "hits": 1033,
+    "blocks": 12,
+    "whiffs": 108
+  },
+  "pisuke.crouch_weak": {
+    "starts": 232,
+    "hits": 186,
+    "blocks": 0,
+    "whiffs": 12
+  },
+  "pisuke.crouch_heavy": {
+    "starts": 190,
+    "hits": 152,
+    "blocks": 5,
+    "whiffs": 4
+  },
+  "pisuke.air_weak": {
+    "starts": 1,
+    "hits": 0,
+    "blocks": 0,
+    "whiffs": 1
+  },
+  "pisuke.air_heavy": {
+    "starts": 214,
+    "hits": 1,
+    "blocks": 0,
+    "whiffs": 213
+  },
+  "pisuke.s1": {
+    "starts": 2125,
+    "hits": 302,
+    "blocks": 51,
+    "whiffs": 19
+  },
+  "pisuke.s2": {
+    "starts": 1201,
+    "hits": 962,
+    "blocks": 0,
+    "whiffs": 119
+  },
+  "pisuke.s3": {
+    "starts": 0,
+    "hits": 0,
+    "blocks": 0,
+    "whiffs": 0
+  },
+  "godan.stand_weak": {
+    "starts": 1358,
+    "hits": 341,
+    "blocks": 0,
+    "whiffs": 90
+  },
+  "godan.stand_heavy": {
+    "starts": 1085,
+    "hits": 259,
+    "blocks": 9,
+    "whiffs": 13
+  },
+  "godan.crouch_weak": {
+    "starts": 219,
+    "hits": 78,
+    "blocks": 0,
+    "whiffs": 0
+  },
+  "godan.crouch_heavy": {
+    "starts": 189,
+    "hits": 38,
+    "blocks": 4,
+    "whiffs": 0
+  },
+  "godan.air_weak": {
+    "starts": 0,
+    "hits": 0,
+    "blocks": 0,
+    "whiffs": 0
+  },
+  "godan.air_heavy": {
+    "starts": 234,
+    "hits": 164,
+    "blocks": 56,
+    "whiffs": 0
+  },
+  "godan.s1": {
+    "starts": 620,
+    "hits": 224,
+    "blocks": 97,
+    "whiffs": 84
+  },
+  "godan.s2": {
+    "starts": 147,
+    "hits": 60,
+    "blocks": 0,
+    "whiffs": 87
+  },
+  "godan.s3": {
+    "starts": 858,
+    "hits": 574,
+    "blocks": 20,
+    "whiffs": 0
+  },
+  "hakuma.stand_weak": {
+    "starts": 1446,
+    "hits": 410,
+    "blocks": 0,
+    "whiffs": 59
+  },
+  "hakuma.stand_heavy": {
+    "starts": 1183,
+    "hits": 464,
+    "blocks": 4,
+    "whiffs": 5
+  },
+  "hakuma.crouch_weak": {
+    "starts": 212,
+    "hits": 77,
+    "blocks": 0,
+    "whiffs": 1
+  },
+  "hakuma.crouch_heavy": {
+    "starts": 202,
+    "hits": 80,
+    "blocks": 2,
+    "whiffs": 0
+  },
+  "hakuma.air_weak": {
+    "starts": 0,
+    "hits": 0,
+    "blocks": 0,
+    "whiffs": 0
+  },
+  "hakuma.air_heavy": {
+    "starts": 217,
+    "hits": 4,
+    "blocks": 4,
+    "whiffs": 198
+  },
+  "hakuma.s1": {
+    "starts": 526,
+    "hits": 302,
+    "blocks": 56,
+    "whiffs": 97
+  },
+  "hakuma.s2": {
+    "starts": 178,
+    "hits": 86,
+    "blocks": 0,
+    "whiffs": 92
+  },
+  "hakuma.s3": {
+    "starts": 871,
+    "hits": 315,
+    "blocks": 8,
+    "whiffs": 0
+  },
+  "chirka.stand_weak": {
+    "starts": 1514,
+    "hits": 1143,
+    "blocks": 0,
+    "whiffs": 174
+  },
+  "chirka.stand_heavy": {
+    "starts": 1415,
+    "hits": 1143,
+    "blocks": 17,
+    "whiffs": 64
+  },
+  "chirka.crouch_weak": {
+    "starts": 183,
+    "hits": 157,
+    "blocks": 0,
+    "whiffs": 1
+  },
+  "chirka.crouch_heavy": {
+    "starts": 190,
+    "hits": 152,
+    "blocks": 9,
+    "whiffs": 2
+  },
+  "chirka.air_weak": {
+    "starts": 1,
+    "hits": 0,
+    "blocks": 0,
+    "whiffs": 1
+  },
+  "chirka.air_heavy": {
+    "starts": 210,
+    "hits": 1,
+    "blocks": 0,
+    "whiffs": 208
+  },
+  "chirka.s1": {
+    "starts": 482,
+    "hits": 284,
+    "blocks": 57,
+    "whiffs": 62
+  },
+  "chirka.s2": {
+    "starts": 1278,
+    "hits": 870,
+    "blocks": 0,
+    "whiffs": 34
+  },
+  "chirka.s3": {
+    "starts": 0,
+    "hits": 0,
+    "blocks": 0,
+    "whiffs": 0
+  },
+  "takimaru.stand_weak": {
+    "starts": 1349,
+    "hits": 417,
+    "blocks": 0,
+    "whiffs": 22
+  },
+  "takimaru.stand_heavy": {
+    "starts": 1013,
+    "hits": 397,
+    "blocks": 6,
+    "whiffs": 12
+  },
+  "takimaru.crouch_weak": {
+    "starts": 240,
+    "hits": 83,
+    "blocks": 0,
+    "whiffs": 0
+  },
+  "takimaru.crouch_heavy": {
+    "starts": 219,
+    "hits": 82,
+    "blocks": 1,
+    "whiffs": 0
+  },
+  "takimaru.air_weak": {
+    "starts": 1,
+    "hits": 0,
+    "blocks": 0,
+    "whiffs": 1
+  },
+  "takimaru.air_heavy": {
+    "starts": 212,
+    "hits": 0,
+    "blocks": 0,
+    "whiffs": 200
+  },
+  "takimaru.s1": {
+    "starts": 1862,
+    "hits": 71,
+    "blocks": 8,
+    "whiffs": 17
+  },
+  "takimaru.s2": {
+    "starts": 901,
+    "hits": 421,
+    "blocks": 0,
+    "whiffs": 94
+  },
+  "takimaru.s3": {
+    "starts": 347,
+    "hits": 291,
+    "blocks": 0,
+    "whiffs": 0
+  },
+  "yomikage.stand_weak": {
+    "starts": 1271,
+    "hits": 833,
+    "blocks": 0,
+    "whiffs": 146
+  },
+  "yomikage.stand_heavy": {
+    "starts": 1163,
+    "hits": 860,
+    "blocks": 4,
+    "whiffs": 44
+  },
+  "yomikage.crouch_weak": {
+    "starts": 180,
+    "hits": 128,
+    "blocks": 0,
+    "whiffs": 0
+  },
+  "yomikage.crouch_heavy": {
+    "starts": 188,
+    "hits": 131,
+    "blocks": 2,
+    "whiffs": 0
+  },
+  "yomikage.air_weak": {
+    "starts": 0,
+    "hits": 0,
+    "blocks": 0,
+    "whiffs": 0
+  },
+  "yomikage.air_heavy": {
+    "starts": 198,
+    "hits": 0,
+    "blocks": 0,
+    "whiffs": 193
+  },
+  "yomikage.s1": {
+    "starts": 2041,
+    "hits": 343,
+    "blocks": 24,
+    "whiffs": 0
+  },
+  "yomikage.s2": {
+    "starts": 1061,
+    "hits": 738,
+    "blocks": 0,
+    "whiffs": 39
+  },
+  "yomikage.s3": {
+    "starts": 0,
+    "hits": 0,
+    "blocks": 0,
+    "whiffs": 0
+  },
+  "bullet.stand_weak": {
+    "starts": 1213,
+    "hits": 589,
+    "blocks": 0,
+    "whiffs": 113
+  },
+  "bullet.stand_heavy": {
+    "starts": 1042,
+    "hits": 640,
+    "blocks": 3,
+    "whiffs": 3
+  },
+  "bullet.crouch_weak": {
+    "starts": 196,
+    "hits": 149,
+    "blocks": 0,
+    "whiffs": 0
+  },
+  "bullet.crouch_heavy": {
+    "starts": 183,
+    "hits": 112,
+    "blocks": 1,
+    "whiffs": 0
+  },
+  "bullet.air_weak": {
+    "starts": 0,
+    "hits": 0,
+    "blocks": 0,
+    "whiffs": 0
+  },
+  "bullet.air_heavy": {
+    "starts": 196,
+    "hits": 3,
+    "blocks": 5,
+    "whiffs": 175
+  },
+  "bullet.s1": {
+    "starts": 1808,
+    "hits": 176,
+    "blocks": 40,
+    "whiffs": 0
+  },
+  "bullet.s2": {
+    "starts": 163,
+    "hits": 118,
+    "blocks": 0,
+    "whiffs": 45
+  },
+  "bullet.s3": {
+    "starts": 723,
+    "hits": 170,
+    "blocks": 15,
+    "whiffs": 0
+  },
+  "dark_moguzo.stand_weak": {
+    "starts": 1220,
+    "hits": 882,
+    "blocks": 0,
+    "whiffs": 161
+  },
+  "dark_moguzo.stand_heavy": {
+    "starts": 1148,
+    "hits": 935,
+    "blocks": 2,
+    "whiffs": 47
+  },
+  "dark_moguzo.crouch_weak": {
+    "starts": 161,
+    "hits": 142,
+    "blocks": 0,
+    "whiffs": 0
+  },
+  "dark_moguzo.crouch_heavy": {
+    "starts": 177,
+    "hits": 154,
+    "blocks": 1,
+    "whiffs": 0
+  },
+  "dark_moguzo.air_weak": {
+    "starts": 0,
+    "hits": 0,
+    "blocks": 0,
+    "whiffs": 0
+  },
+  "dark_moguzo.air_heavy": {
+    "starts": 197,
+    "hits": 0,
+    "blocks": 0,
+    "whiffs": 196
+  },
+  "dark_moguzo.s1": {
+    "starts": 1535,
+    "hits": 457,
+    "blocks": 37,
+    "whiffs": 0
+  },
+  "dark_moguzo.s2": {
+    "starts": 1061,
+    "hits": 991,
+    "blocks": 0,
+    "whiffs": 44
+  },
+  "dark_moguzo.s3": {
+    "starts": 0,
+    "hits": 0,
+    "blocks": 0,
+    "whiffs": 0
+  }
+}

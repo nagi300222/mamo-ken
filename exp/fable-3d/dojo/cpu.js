@@ -50,10 +50,17 @@ export function cpuInput(g,p,op,level=2){
   else if(t%(beat+27)===(phase+37)%(beat+27)){
     i.strong=true;
   }else if(t%(beat+56)===(phase+18)%(beat+56)){
-    if(p.id==='godan'||p.id==='hakuma'||p.id==='bullet')i.special3=true;
-    else i.special2=true;
+    const index=p.id==='godan'||p.id==='hakuma'||p.id==='bullet'?2:1;
+    if(g.canReachSpecial?.(p,op,index)!==false)i['special'+(index+1)]=true;
+    else{
+      // The attack beat remains unchanged. A short upward strike is not fired
+      // blindly at a grounded target outside its visible limb trajectory.
+      const slot=(p.y>.06?'air_':'stand_')+'weak';
+      if(g.canReachNormal?.(p,op,slot)!==false)i.weak=true;
+      else i[dir]=true;
+    }
   }else if(distance<.36&&t%cfg.throwPeriod===(phase+24)%cfg.throwPeriod)i.throw=true;
-  if(!i.weak&&!i.strong&&!i.special2&&!i.special3&&!i.throw){
+  if(!i.weak&&!i.strong&&!i.special2&&!i.special3&&!i.throw&&!i[dir]&&!i[back]){
     // 近くで少し間合いを調整。ずっと前進して攻撃だけするCPUにしない。
     if(distance>.42&&(Math.floor(t/45)%3!==0))i[dir]=true;
     else if(distance<.27&&Math.floor(t/62)%4===0)i[back]=true;

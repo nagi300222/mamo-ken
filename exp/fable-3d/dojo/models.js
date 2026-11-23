@@ -1,10 +1,13 @@
 // 造形差し替えの唯一の接続点。モデルと対戦データは完全分離。
 // GLBの差し替え: 対象パスと revision を更新すれば戦闘ロジックは変更不要。
+import {ACTIVE_NORMAL_MOTION_SOURCE,getNormalMotionPack} from './normal-motion-source.js';
+export {ACTIVE_NORMAL_MOTION_SOURCE,getNormalMotionPack} from './normal-motion-source.js';
 export const MODEL_REVISION = 'motion-v2-20261121';
 export const MODEL_IDS = Object.freeze(['moguzo','pisuke','godan','hakuma','chirka','takimaru','yomikage','bullet','dark_moguzo']);
 export const MODEL_ASSETS = Object.freeze(Object.fromEntries(MODEL_IDS.map(id => [id,
   Object.freeze({ glb:`../chars/${id}/${id}.glb`, motion:`../chars/${id}/${id}_motions.json`,
-    portrait:`../../../assets/ui/facesq_${id}.png`, hero:`../../../assets/roster3d/${id}.webp` })
+    portrait:`../../../assets/ui/facesq_${id}.png`, hero:`../../../assets/roster3d/${id}.webp`,
+    normal:getNormalMotionPack(id).path,normalVersion:ACTIVE_NORMAL_MOTION_SOURCE.version })
 ])));
 export const FALLBACK_CLIPS = Object.freeze({
   stand_weak:'stand_light',stand_heavy:'stand_heavy',
@@ -19,7 +22,7 @@ const actionClips={
   crouch_weak:'crouch_light',crouch_heavy:'crouch_heavy',
   air_weak:'air_light',air_heavy:'air_heavy',throw:'throw_reach'
 };
-export function chooseClip(fighter, available=[], commandMap={}) {
+export function chooseClip(fighter, available=[], commandMap={}, {normalMotionSource=ACTIVE_NORMAL_MOTION_SOURCE,rigId=fighter.visualRigId??fighter.id}={}) {
   if (fighter.ko) return select(available,['ko','down','hurt_heavy','hurt_light','idle']);
   if(fighter.state==='throw_hit')return select(available,['throw_hit','throw_reach','stand_heavy','idle']);
   if(fighter.state==='thrown')return select(available,['thrown','hurt_heavy','hurt_light','idle']);
@@ -38,8 +41,9 @@ export function chooseClip(fighter, available=[], commandMap={}) {
     const exact=m.anim||FALLBACK_CLIPS[m.id]||'stand_heavy';
     const notation={s1:'236',s2:'623',s3:'214',ultimate:'236236'}[m.id];
     const mapped=notation?commandMap[notation]:null;
-    // Nine individual real v15 normal-move clips take priority over generic inherited normals.
-    const authored=/^(stand|crouch|air)_(weak|heavy)$/.test(m.id||'')?'v15_'+m.id:null;
+    // One versioned provider serves Dojo, Practice, Arcade, Survival and Story.
+    const authored=/^(stand|crouch|air)_(weak|heavy)$/.test(m.id||'')?normalMotionSource.clipName(m.id,{rigId}):null;
+    if(authored&&normalMotionSource.version==='v17'&&!available.includes(authored))throw Error('Missing selected normal motion '+authored);
     const list=[authored,actionClips[m.id],mapped,exact].filter(Boolean);
     if (m.kind==='roar') list.push('roar','roar_burst','guard_stand');
     if (m.kind==='clinch') list.push('gyuiin','gyuiin_approach','guard_stand');

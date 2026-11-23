@@ -1,0 +1,4651 @@
+{
+ "policy": "Initial earliest/latest special contact, then weak -> confirmed strong -> selected special; defender continuously guards after first hit. Defender HP/guard reset per frame. No future input lookup.",
+ "cases": [
+  {
+   "id": "moguzo",
+   "index": 1,
+   "moveId": "s2",
+   "face": 1,
+   "late": false,
+   "frames": 2000,
+   "contacts": 1,
+   "blocks": 80,
+   "maxHits": 1,
+   "firstGuardFrame": 51,
+   "firstContacts": [
+    {
+     "frame": 6,
+     "outcome": "hit",
+     "comboHits": 1,
+     "move": null
+    },
+    {
+     "frame": 51,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 66,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 100,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 115,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 149,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 164,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 198,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    }
+   ]
+  },
+  {
+   "id": "moguzo",
+   "index": 1,
+   "moveId": "s2",
+   "face": 1,
+   "late": true,
+   "frames": 2000,
+   "contacts": 1,
+   "blocks": 80,
+   "maxHits": 1,
+   "firstGuardFrame": 51,
+   "firstContacts": [
+    {
+     "frame": 13,
+     "outcome": "hit",
+     "comboHits": 1,
+     "move": null
+    },
+    {
+     "frame": 51,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 66,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 100,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 115,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 149,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 164,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 198,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    }
+   ]
+  },
+  {
+   "id": "moguzo",
+   "index": 1,
+   "moveId": "s2",
+   "face": -1,
+   "late": false,
+   "frames": 2000,
+   "contacts": 1,
+   "blocks": 80,
+   "maxHits": 1,
+   "firstGuardFrame": 51,
+   "firstContacts": [
+    {
+     "frame": 6,
+     "outcome": "hit",
+     "comboHits": 1,
+     "move": null
+    },
+    {
+     "frame": 51,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 66,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 100,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 115,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 149,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 164,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 198,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    }
+   ]
+  },
+  {
+   "id": "moguzo",
+   "index": 1,
+   "moveId": "s2",
+   "face": -1,
+   "late": true,
+   "frames": 2000,
+   "contacts": 1,
+   "blocks": 80,
+   "maxHits": 1,
+   "firstGuardFrame": 51,
+   "firstContacts": [
+    {
+     "frame": 13,
+     "outcome": "hit",
+     "comboHits": 1,
+     "move": null
+    },
+    {
+     "frame": 51,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 66,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 100,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 115,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 149,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 164,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 198,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    }
+   ]
+  },
+  {
+   "id": "moguzo",
+   "index": 2,
+   "moveId": "s3",
+   "face": 1,
+   "late": false,
+   "frames": 2000,
+   "contacts": 1,
+   "blocks": 80,
+   "maxHits": 1,
+   "firstGuardFrame": 47,
+   "firstContacts": [
+    {
+     "frame": 12,
+     "outcome": "hit",
+     "comboHits": 1,
+     "move": null
+    },
+    {
+     "frame": 47,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 62,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 96,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 111,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 145,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 160,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 194,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    }
+   ]
+  },
+  {
+   "id": "moguzo",
+   "index": 2,
+   "moveId": "s3",
+   "face": 1,
+   "late": true,
+   "frames": 2000,
+   "contacts": 1,
+   "blocks": 80,
+   "maxHits": 1,
+   "firstGuardFrame": 47,
+   "firstContacts": [
+    {
+     "frame": 16,
+     "outcome": "hit",
+     "comboHits": 1,
+     "move": null
+    },
+    {
+     "frame": 47,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 62,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 96,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 111,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 145,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 160,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 194,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    }
+   ]
+  },
+  {
+   "id": "moguzo",
+   "index": 2,
+   "moveId": "s3",
+   "face": -1,
+   "late": false,
+   "frames": 2000,
+   "contacts": 1,
+   "blocks": 80,
+   "maxHits": 1,
+   "firstGuardFrame": 47,
+   "firstContacts": [
+    {
+     "frame": 12,
+     "outcome": "hit",
+     "comboHits": 1,
+     "move": null
+    },
+    {
+     "frame": 47,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 62,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 96,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 111,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 145,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 160,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 194,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    }
+   ]
+  },
+  {
+   "id": "moguzo",
+   "index": 2,
+   "moveId": "s3",
+   "face": -1,
+   "late": true,
+   "frames": 2000,
+   "contacts": 1,
+   "blocks": 80,
+   "maxHits": 1,
+   "firstGuardFrame": 47,
+   "firstContacts": [
+    {
+     "frame": 16,
+     "outcome": "hit",
+     "comboHits": 1,
+     "move": null
+    },
+    {
+     "frame": 47,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 62,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 96,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 111,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 145,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 160,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 194,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    }
+   ]
+  },
+  {
+   "id": "pisuke",
+   "index": 1,
+   "moveId": "s2",
+   "face": 1,
+   "late": false,
+   "frames": 2000,
+   "contacts": 1,
+   "blocks": 86,
+   "maxHits": 1,
+   "firstGuardFrame": 46,
+   "firstContacts": [
+    {
+     "frame": 6,
+     "outcome": "hit",
+     "comboHits": 1,
+     "move": null
+    },
+    {
+     "frame": 46,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 60,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 92,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 106,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 138,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 152,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 184,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    }
+   ]
+  },
+  {
+   "id": "pisuke",
+   "index": 1,
+   "moveId": "s2",
+   "face": 1,
+   "late": true,
+   "frames": 2000,
+   "contacts": 1,
+   "blocks": 86,
+   "maxHits": 1,
+   "firstGuardFrame": 46,
+   "firstContacts": [
+    {
+     "frame": 13,
+     "outcome": "hit",
+     "comboHits": 1,
+     "move": null
+    },
+    {
+     "frame": 46,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 60,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 92,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 106,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 138,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 152,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 184,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    }
+   ]
+  },
+  {
+   "id": "pisuke",
+   "index": 1,
+   "moveId": "s2",
+   "face": -1,
+   "late": false,
+   "frames": 2000,
+   "contacts": 1,
+   "blocks": 86,
+   "maxHits": 1,
+   "firstGuardFrame": 46,
+   "firstContacts": [
+    {
+     "frame": 6,
+     "outcome": "hit",
+     "comboHits": 1,
+     "move": null
+    },
+    {
+     "frame": 46,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 60,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 92,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 106,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 138,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 152,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 184,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    }
+   ]
+  },
+  {
+   "id": "pisuke",
+   "index": 1,
+   "moveId": "s2",
+   "face": -1,
+   "late": true,
+   "frames": 2000,
+   "contacts": 1,
+   "blocks": 86,
+   "maxHits": 1,
+   "firstGuardFrame": 46,
+   "firstContacts": [
+    {
+     "frame": 13,
+     "outcome": "hit",
+     "comboHits": 1,
+     "move": null
+    },
+    {
+     "frame": 46,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 60,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 92,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 106,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 138,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 152,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 184,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    }
+   ]
+  },
+  {
+   "id": "pisuke",
+   "index": 2,
+   "moveId": "s3",
+   "face": 1,
+   "late": false,
+   "frames": 2000,
+   "contacts": 1,
+   "blocks": 86,
+   "maxHits": 1,
+   "firstGuardFrame": 46,
+   "firstContacts": [
+    {
+     "frame": 7,
+     "outcome": "hit",
+     "comboHits": 1,
+     "move": null
+    },
+    {
+     "frame": 46,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 60,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 92,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 106,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 138,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 152,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 184,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    }
+   ]
+  },
+  {
+   "id": "pisuke",
+   "index": 2,
+   "moveId": "s3",
+   "face": 1,
+   "late": true,
+   "frames": 2000,
+   "contacts": 1,
+   "blocks": 86,
+   "maxHits": 1,
+   "firstGuardFrame": 46,
+   "firstContacts": [
+    {
+     "frame": 15,
+     "outcome": "hit",
+     "comboHits": 1,
+     "move": null
+    },
+    {
+     "frame": 46,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 60,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 92,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 106,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 138,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 152,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 184,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    }
+   ]
+  },
+  {
+   "id": "pisuke",
+   "index": 2,
+   "moveId": "s3",
+   "face": -1,
+   "late": false,
+   "frames": 2000,
+   "contacts": 1,
+   "blocks": 86,
+   "maxHits": 1,
+   "firstGuardFrame": 46,
+   "firstContacts": [
+    {
+     "frame": 7,
+     "outcome": "hit",
+     "comboHits": 1,
+     "move": null
+    },
+    {
+     "frame": 46,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 60,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 92,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 106,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 138,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 152,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 184,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    }
+   ]
+  },
+  {
+   "id": "pisuke",
+   "index": 2,
+   "moveId": "s3",
+   "face": -1,
+   "late": true,
+   "frames": 2000,
+   "contacts": 1,
+   "blocks": 1,
+   "maxHits": 1,
+   "firstGuardFrame": 46,
+   "firstContacts": [
+    {
+     "frame": 15,
+     "outcome": "hit",
+     "comboHits": 1,
+     "move": null
+    },
+    {
+     "frame": 46,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    }
+   ]
+  },
+  {
+   "id": "godan",
+   "index": 0,
+   "moveId": "s1",
+   "face": 1,
+   "late": false,
+   "frames": 2000,
+   "contacts": 1,
+   "blocks": 65,
+   "maxHits": 1,
+   "firstGuardFrame": 67,
+   "firstContacts": [
+    {
+     "frame": 21,
+     "outcome": "hit",
+     "comboHits": 1,
+     "move": null
+    },
+    {
+     "frame": 67,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 86,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 127,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 146,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 187,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 206,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 247,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    }
+   ]
+  },
+  {
+   "id": "godan",
+   "index": 0,
+   "moveId": "s1",
+   "face": 1,
+   "late": true,
+   "frames": 2000,
+   "contacts": 1,
+   "blocks": 65,
+   "maxHits": 1,
+   "firstGuardFrame": 67,
+   "firstContacts": [
+    {
+     "frame": 25,
+     "outcome": "hit",
+     "comboHits": 1,
+     "move": null
+    },
+    {
+     "frame": 67,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 86,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 127,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 146,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 187,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 206,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 247,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    }
+   ]
+  },
+  {
+   "id": "godan",
+   "index": 0,
+   "moveId": "s1",
+   "face": -1,
+   "late": false,
+   "frames": 2000,
+   "contacts": 1,
+   "blocks": 65,
+   "maxHits": 1,
+   "firstGuardFrame": 67,
+   "firstContacts": [
+    {
+     "frame": 21,
+     "outcome": "hit",
+     "comboHits": 1,
+     "move": null
+    },
+    {
+     "frame": 67,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 86,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 127,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 146,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 187,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 206,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 247,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    }
+   ]
+  },
+  {
+   "id": "godan",
+   "index": 0,
+   "moveId": "s1",
+   "face": -1,
+   "late": true,
+   "frames": 2000,
+   "contacts": 1,
+   "blocks": 65,
+   "maxHits": 1,
+   "firstGuardFrame": 67,
+   "firstContacts": [
+    {
+     "frame": 25,
+     "outcome": "hit",
+     "comboHits": 1,
+     "move": null
+    },
+    {
+     "frame": 67,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 86,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 127,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 146,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 187,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 206,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 247,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    }
+   ]
+  },
+  {
+   "id": "godan",
+   "index": 1,
+   "moveId": "s2",
+   "face": 1,
+   "late": false,
+   "frames": 2000,
+   "contacts": 1,
+   "blocks": 65,
+   "maxHits": 1,
+   "firstGuardFrame": 62,
+   "firstContacts": [
+    {
+     "frame": 11,
+     "outcome": "hit",
+     "comboHits": 1,
+     "move": null
+    },
+    {
+     "frame": 62,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 81,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 122,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 141,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 182,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 201,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 242,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    }
+   ]
+  },
+  {
+   "id": "godan",
+   "index": 1,
+   "moveId": "s2",
+   "face": 1,
+   "late": true,
+   "frames": 2000,
+   "contacts": 1,
+   "blocks": 65,
+   "maxHits": 1,
+   "firstGuardFrame": 62,
+   "firstContacts": [
+    {
+     "frame": 17,
+     "outcome": "hit",
+     "comboHits": 1,
+     "move": null
+    },
+    {
+     "frame": 62,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 81,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 122,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 141,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 182,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 201,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 242,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    }
+   ]
+  },
+  {
+   "id": "godan",
+   "index": 1,
+   "moveId": "s2",
+   "face": -1,
+   "late": false,
+   "frames": 2000,
+   "contacts": 1,
+   "blocks": 65,
+   "maxHits": 1,
+   "firstGuardFrame": 62,
+   "firstContacts": [
+    {
+     "frame": 11,
+     "outcome": "hit",
+     "comboHits": 1,
+     "move": null
+    },
+    {
+     "frame": 62,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 81,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 122,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 141,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 182,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 201,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 242,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    }
+   ]
+  },
+  {
+   "id": "godan",
+   "index": 1,
+   "moveId": "s2",
+   "face": -1,
+   "late": true,
+   "frames": 2000,
+   "contacts": 1,
+   "blocks": 65,
+   "maxHits": 1,
+   "firstGuardFrame": 62,
+   "firstContacts": [
+    {
+     "frame": 17,
+     "outcome": "hit",
+     "comboHits": 1,
+     "move": null
+    },
+    {
+     "frame": 62,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 81,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 122,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 141,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 182,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 201,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 242,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    }
+   ]
+  },
+  {
+   "id": "godan",
+   "index": 2,
+   "moveId": "s3",
+   "face": 1,
+   "late": false,
+   "frames": 2000,
+   "contacts": 1,
+   "blocks": 65,
+   "maxHits": 1,
+   "firstGuardFrame": 70,
+   "firstContacts": [
+    {
+     "frame": 18,
+     "outcome": "hit",
+     "comboHits": 1,
+     "move": null
+    },
+    {
+     "frame": 70,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 89,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 130,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 149,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 190,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 209,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 250,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    }
+   ]
+  },
+  {
+   "id": "godan",
+   "index": 2,
+   "moveId": "s3",
+   "face": 1,
+   "late": true,
+   "frames": 2000,
+   "contacts": 1,
+   "blocks": 65,
+   "maxHits": 1,
+   "firstGuardFrame": 70,
+   "firstContacts": [
+    {
+     "frame": 24,
+     "outcome": "hit",
+     "comboHits": 1,
+     "move": null
+    },
+    {
+     "frame": 70,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 89,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 130,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 149,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 190,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 209,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 250,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    }
+   ]
+  },
+  {
+   "id": "godan",
+   "index": 2,
+   "moveId": "s3",
+   "face": -1,
+   "late": false,
+   "frames": 2000,
+   "contacts": 1,
+   "blocks": 65,
+   "maxHits": 1,
+   "firstGuardFrame": 70,
+   "firstContacts": [
+    {
+     "frame": 18,
+     "outcome": "hit",
+     "comboHits": 1,
+     "move": null
+    },
+    {
+     "frame": 70,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 89,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 130,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 149,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 190,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 209,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 250,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    }
+   ]
+  },
+  {
+   "id": "godan",
+   "index": 2,
+   "moveId": "s3",
+   "face": -1,
+   "late": true,
+   "frames": 2000,
+   "contacts": 1,
+   "blocks": 65,
+   "maxHits": 1,
+   "firstGuardFrame": 70,
+   "firstContacts": [
+    {
+     "frame": 24,
+     "outcome": "hit",
+     "comboHits": 1,
+     "move": null
+    },
+    {
+     "frame": 70,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 89,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 130,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 149,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 190,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 209,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 250,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    }
+   ]
+  },
+  {
+   "id": "hakuma",
+   "index": 0,
+   "moveId": "s1",
+   "face": 1,
+   "late": false,
+   "frames": 2000,
+   "contacts": 1,
+   "blocks": 70,
+   "maxHits": 1,
+   "firstGuardFrame": 52,
+   "firstContacts": [
+    {
+     "frame": 11,
+     "outcome": "hit",
+     "comboHits": 1,
+     "move": null
+    },
+    {
+     "frame": 52,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 69,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 108,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 125,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 164,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 181,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 220,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    }
+   ]
+  },
+  {
+   "id": "hakuma",
+   "index": 0,
+   "moveId": "s1",
+   "face": 1,
+   "late": true,
+   "frames": 2000,
+   "contacts": 1,
+   "blocks": 70,
+   "maxHits": 1,
+   "firstGuardFrame": 52,
+   "firstContacts": [
+    {
+     "frame": 16,
+     "outcome": "hit",
+     "comboHits": 1,
+     "move": null
+    },
+    {
+     "frame": 52,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 69,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 108,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 125,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 164,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 181,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 220,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    }
+   ]
+  },
+  {
+   "id": "hakuma",
+   "index": 0,
+   "moveId": "s1",
+   "face": -1,
+   "late": false,
+   "frames": 2000,
+   "contacts": 1,
+   "blocks": 70,
+   "maxHits": 1,
+   "firstGuardFrame": 52,
+   "firstContacts": [
+    {
+     "frame": 11,
+     "outcome": "hit",
+     "comboHits": 1,
+     "move": null
+    },
+    {
+     "frame": 52,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 69,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 108,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 125,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 164,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 181,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 220,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    }
+   ]
+  },
+  {
+   "id": "hakuma",
+   "index": 0,
+   "moveId": "s1",
+   "face": -1,
+   "late": true,
+   "frames": 2000,
+   "contacts": 1,
+   "blocks": 70,
+   "maxHits": 1,
+   "firstGuardFrame": 52,
+   "firstContacts": [
+    {
+     "frame": 16,
+     "outcome": "hit",
+     "comboHits": 1,
+     "move": null
+    },
+    {
+     "frame": 52,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 69,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 108,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 125,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 164,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 181,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 220,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    }
+   ]
+  },
+  {
+   "id": "hakuma",
+   "index": 1,
+   "moveId": "s2",
+   "face": 1,
+   "late": false,
+   "frames": 2000,
+   "contacts": 1,
+   "blocks": 70,
+   "maxHits": 1,
+   "firstGuardFrame": 52,
+   "firstContacts": [
+    {
+     "frame": 8,
+     "outcome": "hit",
+     "comboHits": 1,
+     "move": null
+    },
+    {
+     "frame": 52,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 69,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 108,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 125,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 164,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 181,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 220,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    }
+   ]
+  },
+  {
+   "id": "hakuma",
+   "index": 1,
+   "moveId": "s2",
+   "face": 1,
+   "late": true,
+   "frames": 2000,
+   "contacts": 1,
+   "blocks": 70,
+   "maxHits": 1,
+   "firstGuardFrame": 52,
+   "firstContacts": [
+    {
+     "frame": 14,
+     "outcome": "hit",
+     "comboHits": 1,
+     "move": null
+    },
+    {
+     "frame": 52,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 69,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 108,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 125,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 164,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 181,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 220,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    }
+   ]
+  },
+  {
+   "id": "hakuma",
+   "index": 1,
+   "moveId": "s2",
+   "face": -1,
+   "late": false,
+   "frames": 2000,
+   "contacts": 1,
+   "blocks": 70,
+   "maxHits": 1,
+   "firstGuardFrame": 52,
+   "firstContacts": [
+    {
+     "frame": 8,
+     "outcome": "hit",
+     "comboHits": 1,
+     "move": null
+    },
+    {
+     "frame": 52,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 69,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 108,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 125,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 164,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 181,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 220,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    }
+   ]
+  },
+  {
+   "id": "hakuma",
+   "index": 1,
+   "moveId": "s2",
+   "face": -1,
+   "late": true,
+   "frames": 2000,
+   "contacts": 1,
+   "blocks": 70,
+   "maxHits": 1,
+   "firstGuardFrame": 52,
+   "firstContacts": [
+    {
+     "frame": 14,
+     "outcome": "hit",
+     "comboHits": 1,
+     "move": null
+    },
+    {
+     "frame": 52,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 69,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 108,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 125,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 164,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 181,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 220,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    }
+   ]
+  },
+  {
+   "id": "hakuma",
+   "index": 2,
+   "moveId": "s3",
+   "face": 1,
+   "late": false,
+   "frames": 2000,
+   "contacts": 1,
+   "blocks": 70,
+   "maxHits": 1,
+   "firstGuardFrame": 59,
+   "firstContacts": [
+    {
+     "frame": 12,
+     "outcome": "hit",
+     "comboHits": 1,
+     "move": null
+    },
+    {
+     "frame": 59,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 76,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 115,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 132,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 171,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 188,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 227,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    }
+   ]
+  },
+  {
+   "id": "hakuma",
+   "index": 2,
+   "moveId": "s3",
+   "face": 1,
+   "late": true,
+   "frames": 2000,
+   "contacts": 1,
+   "blocks": 70,
+   "maxHits": 1,
+   "firstGuardFrame": 59,
+   "firstContacts": [
+    {
+     "frame": 20,
+     "outcome": "hit",
+     "comboHits": 1,
+     "move": null
+    },
+    {
+     "frame": 59,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 76,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 115,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 132,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 171,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 188,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 227,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    }
+   ]
+  },
+  {
+   "id": "hakuma",
+   "index": 2,
+   "moveId": "s3",
+   "face": -1,
+   "late": false,
+   "frames": 2000,
+   "contacts": 1,
+   "blocks": 70,
+   "maxHits": 1,
+   "firstGuardFrame": 59,
+   "firstContacts": [
+    {
+     "frame": 12,
+     "outcome": "hit",
+     "comboHits": 1,
+     "move": null
+    },
+    {
+     "frame": 59,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 76,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 115,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 132,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 171,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 188,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 227,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    }
+   ]
+  },
+  {
+   "id": "hakuma",
+   "index": 2,
+   "moveId": "s3",
+   "face": -1,
+   "late": true,
+   "frames": 2000,
+   "contacts": 1,
+   "blocks": 70,
+   "maxHits": 1,
+   "firstGuardFrame": 59,
+   "firstContacts": [
+    {
+     "frame": 20,
+     "outcome": "hit",
+     "comboHits": 1,
+     "move": null
+    },
+    {
+     "frame": 59,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 76,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 115,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 132,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 171,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 188,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 227,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    }
+   ]
+  },
+  {
+   "id": "chirka",
+   "index": 0,
+   "moveId": "s1",
+   "face": 1,
+   "late": false,
+   "frames": 2000,
+   "contacts": 1,
+   "blocks": 86,
+   "maxHits": 1,
+   "firstGuardFrame": 46,
+   "firstContacts": [
+    {
+     "frame": 13,
+     "outcome": "hit",
+     "comboHits": 1,
+     "move": null
+    },
+    {
+     "frame": 46,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 60,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 92,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 106,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 138,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 152,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 184,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    }
+   ]
+  },
+  {
+   "id": "chirka",
+   "index": 0,
+   "moveId": "s1",
+   "face": 1,
+   "late": true,
+   "frames": 2000,
+   "contacts": 1,
+   "blocks": 86,
+   "maxHits": 1,
+   "firstGuardFrame": 46,
+   "firstContacts": [
+    {
+     "frame": 16,
+     "outcome": "hit",
+     "comboHits": 1,
+     "move": null
+    },
+    {
+     "frame": 46,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 60,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 92,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 106,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 138,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 152,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 184,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    }
+   ]
+  },
+  {
+   "id": "chirka",
+   "index": 0,
+   "moveId": "s1",
+   "face": -1,
+   "late": false,
+   "frames": 2000,
+   "contacts": 1,
+   "blocks": 86,
+   "maxHits": 1,
+   "firstGuardFrame": 46,
+   "firstContacts": [
+    {
+     "frame": 13,
+     "outcome": "hit",
+     "comboHits": 1,
+     "move": null
+    },
+    {
+     "frame": 46,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 60,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 92,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 106,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 138,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 152,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 184,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    }
+   ]
+  },
+  {
+   "id": "chirka",
+   "index": 0,
+   "moveId": "s1",
+   "face": -1,
+   "late": true,
+   "frames": 2000,
+   "contacts": 1,
+   "blocks": 86,
+   "maxHits": 1,
+   "firstGuardFrame": 46,
+   "firstContacts": [
+    {
+     "frame": 16,
+     "outcome": "hit",
+     "comboHits": 1,
+     "move": null
+    },
+    {
+     "frame": 46,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 60,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 92,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 106,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 138,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 152,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 184,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    }
+   ]
+  },
+  {
+   "id": "chirka",
+   "index": 1,
+   "moveId": "s2",
+   "face": 1,
+   "late": false,
+   "frames": 2000,
+   "contacts": 1,
+   "blocks": 86,
+   "maxHits": 1,
+   "firstGuardFrame": 50,
+   "firstContacts": [
+    {
+     "frame": 8,
+     "outcome": "hit",
+     "comboHits": 1,
+     "move": null
+    },
+    {
+     "frame": 50,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 64,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 96,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 110,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 142,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 156,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 188,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    }
+   ]
+  },
+  {
+   "id": "chirka",
+   "index": 1,
+   "moveId": "s2",
+   "face": 1,
+   "late": true,
+   "frames": 2000,
+   "contacts": 1,
+   "blocks": 86,
+   "maxHits": 1,
+   "firstGuardFrame": 50,
+   "firstContacts": [
+    {
+     "frame": 14,
+     "outcome": "hit",
+     "comboHits": 1,
+     "move": null
+    },
+    {
+     "frame": 50,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 64,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 96,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 110,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 142,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 156,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 188,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    }
+   ]
+  },
+  {
+   "id": "chirka",
+   "index": 1,
+   "moveId": "s2",
+   "face": -1,
+   "late": false,
+   "frames": 2000,
+   "contacts": 1,
+   "blocks": 86,
+   "maxHits": 1,
+   "firstGuardFrame": 50,
+   "firstContacts": [
+    {
+     "frame": 8,
+     "outcome": "hit",
+     "comboHits": 1,
+     "move": null
+    },
+    {
+     "frame": 50,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 64,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 96,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 110,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 142,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 156,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 188,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    }
+   ]
+  },
+  {
+   "id": "chirka",
+   "index": 1,
+   "moveId": "s2",
+   "face": -1,
+   "late": true,
+   "frames": 2000,
+   "contacts": 1,
+   "blocks": 86,
+   "maxHits": 1,
+   "firstGuardFrame": 50,
+   "firstContacts": [
+    {
+     "frame": 14,
+     "outcome": "hit",
+     "comboHits": 1,
+     "move": null
+    },
+    {
+     "frame": 50,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 64,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 96,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 110,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 142,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 156,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 188,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    }
+   ]
+  },
+  {
+   "id": "chirka",
+   "index": 2,
+   "moveId": "s3",
+   "face": 1,
+   "late": false,
+   "frames": 2000,
+   "contacts": 1,
+   "blocks": 86,
+   "maxHits": 1,
+   "firstGuardFrame": 50,
+   "firstContacts": [
+    {
+     "frame": 13,
+     "outcome": "hit",
+     "comboHits": 1,
+     "move": null
+    },
+    {
+     "frame": 50,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 64,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 96,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 110,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 142,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 156,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 188,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    }
+   ]
+  },
+  {
+   "id": "chirka",
+   "index": 2,
+   "moveId": "s3",
+   "face": 1,
+   "late": true,
+   "frames": 2000,
+   "contacts": 1,
+   "blocks": 86,
+   "maxHits": 1,
+   "firstGuardFrame": 50,
+   "firstContacts": [
+    {
+     "frame": 17,
+     "outcome": "hit",
+     "comboHits": 1,
+     "move": null
+    },
+    {
+     "frame": 50,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 64,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 96,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 110,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 142,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 156,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 188,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    }
+   ]
+  },
+  {
+   "id": "chirka",
+   "index": 2,
+   "moveId": "s3",
+   "face": -1,
+   "late": false,
+   "frames": 2000,
+   "contacts": 1,
+   "blocks": 86,
+   "maxHits": 1,
+   "firstGuardFrame": 50,
+   "firstContacts": [
+    {
+     "frame": 13,
+     "outcome": "hit",
+     "comboHits": 1,
+     "move": null
+    },
+    {
+     "frame": 50,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 64,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 96,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 110,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 142,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 156,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 188,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    }
+   ]
+  },
+  {
+   "id": "chirka",
+   "index": 2,
+   "moveId": "s3",
+   "face": -1,
+   "late": true,
+   "frames": 2000,
+   "contacts": 1,
+   "blocks": 86,
+   "maxHits": 1,
+   "firstGuardFrame": 50,
+   "firstContacts": [
+    {
+     "frame": 17,
+     "outcome": "hit",
+     "comboHits": 1,
+     "move": null
+    },
+    {
+     "frame": 50,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 64,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 96,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 110,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 142,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 156,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 188,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    }
+   ]
+  },
+  {
+   "id": "takimaru",
+   "index": 1,
+   "moveId": "s2",
+   "face": 1,
+   "late": false,
+   "frames": 2000,
+   "contacts": 1,
+   "blocks": 69,
+   "maxHits": 1,
+   "firstGuardFrame": 57,
+   "firstContacts": [
+    {
+     "frame": 10,
+     "outcome": "hit",
+     "comboHits": 1,
+     "move": null
+    },
+    {
+     "frame": 57,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 74,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 114,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 131,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 171,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 188,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 228,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    }
+   ]
+  },
+  {
+   "id": "takimaru",
+   "index": 1,
+   "moveId": "s2",
+   "face": 1,
+   "late": true,
+   "frames": 2000,
+   "contacts": 1,
+   "blocks": 69,
+   "maxHits": 1,
+   "firstGuardFrame": 57,
+   "firstContacts": [
+    {
+     "frame": 16,
+     "outcome": "hit",
+     "comboHits": 1,
+     "move": null
+    },
+    {
+     "frame": 57,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 74,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 114,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 131,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 171,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 188,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 228,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    }
+   ]
+  },
+  {
+   "id": "takimaru",
+   "index": 1,
+   "moveId": "s2",
+   "face": -1,
+   "late": false,
+   "frames": 2000,
+   "contacts": 1,
+   "blocks": 69,
+   "maxHits": 1,
+   "firstGuardFrame": 57,
+   "firstContacts": [
+    {
+     "frame": 10,
+     "outcome": "hit",
+     "comboHits": 1,
+     "move": null
+    },
+    {
+     "frame": 57,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 74,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 114,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 131,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 171,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 188,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 228,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    }
+   ]
+  },
+  {
+   "id": "takimaru",
+   "index": 1,
+   "moveId": "s2",
+   "face": -1,
+   "late": true,
+   "frames": 2000,
+   "contacts": 1,
+   "blocks": 69,
+   "maxHits": 1,
+   "firstGuardFrame": 57,
+   "firstContacts": [
+    {
+     "frame": 16,
+     "outcome": "hit",
+     "comboHits": 1,
+     "move": null
+    },
+    {
+     "frame": 57,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 74,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 114,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 131,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 171,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 188,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 228,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    }
+   ]
+  },
+  {
+   "id": "yomikage",
+   "index": 1,
+   "moveId": "s2",
+   "face": 1,
+   "late": false,
+   "frames": 2000,
+   "contacts": 1,
+   "blocks": 78,
+   "maxHits": 1,
+   "firstGuardFrame": 51,
+   "firstContacts": [
+    {
+     "frame": 8,
+     "outcome": "hit",
+     "comboHits": 1,
+     "move": null
+    },
+    {
+     "frame": 51,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 66,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 101,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 116,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 151,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 166,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 201,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    }
+   ]
+  },
+  {
+   "id": "yomikage",
+   "index": 1,
+   "moveId": "s2",
+   "face": 1,
+   "late": true,
+   "frames": 2000,
+   "contacts": 1,
+   "blocks": 78,
+   "maxHits": 1,
+   "firstGuardFrame": 51,
+   "firstContacts": [
+    {
+     "frame": 14,
+     "outcome": "hit",
+     "comboHits": 1,
+     "move": null
+    },
+    {
+     "frame": 51,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 66,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 101,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 116,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 151,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 166,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 201,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    }
+   ]
+  },
+  {
+   "id": "yomikage",
+   "index": 1,
+   "moveId": "s2",
+   "face": -1,
+   "late": false,
+   "frames": 2000,
+   "contacts": 1,
+   "blocks": 78,
+   "maxHits": 1,
+   "firstGuardFrame": 51,
+   "firstContacts": [
+    {
+     "frame": 8,
+     "outcome": "hit",
+     "comboHits": 1,
+     "move": null
+    },
+    {
+     "frame": 51,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 66,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 101,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 116,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 151,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 166,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 201,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    }
+   ]
+  },
+  {
+   "id": "yomikage",
+   "index": 1,
+   "moveId": "s2",
+   "face": -1,
+   "late": true,
+   "frames": 2000,
+   "contacts": 1,
+   "blocks": 78,
+   "maxHits": 1,
+   "firstGuardFrame": 51,
+   "firstContacts": [
+    {
+     "frame": 14,
+     "outcome": "hit",
+     "comboHits": 1,
+     "move": null
+    },
+    {
+     "frame": 51,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 66,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 101,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 116,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 151,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 166,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 201,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    }
+   ]
+  },
+  {
+   "id": "bullet",
+   "index": 1,
+   "moveId": "s2",
+   "face": 1,
+   "late": false,
+   "frames": 2000,
+   "contacts": 1,
+   "blocks": 72,
+   "maxHits": 1,
+   "firstGuardFrame": 55,
+   "firstContacts": [
+    {
+     "frame": 9,
+     "outcome": "hit",
+     "comboHits": 1,
+     "move": null
+    },
+    {
+     "frame": 55,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 71,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 110,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 126,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 165,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 181,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 220,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    }
+   ]
+  },
+  {
+   "id": "bullet",
+   "index": 1,
+   "moveId": "s2",
+   "face": 1,
+   "late": true,
+   "frames": 2000,
+   "contacts": 1,
+   "blocks": 72,
+   "maxHits": 1,
+   "firstGuardFrame": 55,
+   "firstContacts": [
+    {
+     "frame": 15,
+     "outcome": "hit",
+     "comboHits": 1,
+     "move": null
+    },
+    {
+     "frame": 55,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 71,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 110,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 126,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 165,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 181,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 220,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    }
+   ]
+  },
+  {
+   "id": "bullet",
+   "index": 1,
+   "moveId": "s2",
+   "face": -1,
+   "late": false,
+   "frames": 2000,
+   "contacts": 1,
+   "blocks": 72,
+   "maxHits": 1,
+   "firstGuardFrame": 55,
+   "firstContacts": [
+    {
+     "frame": 9,
+     "outcome": "hit",
+     "comboHits": 1,
+     "move": null
+    },
+    {
+     "frame": 55,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 71,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 110,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 126,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 165,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 181,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 220,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    }
+   ]
+  },
+  {
+   "id": "bullet",
+   "index": 1,
+   "moveId": "s2",
+   "face": -1,
+   "late": true,
+   "frames": 2000,
+   "contacts": 1,
+   "blocks": 72,
+   "maxHits": 1,
+   "firstGuardFrame": 55,
+   "firstContacts": [
+    {
+     "frame": 15,
+     "outcome": "hit",
+     "comboHits": 1,
+     "move": null
+    },
+    {
+     "frame": 55,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 71,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 110,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 126,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 165,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 181,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 220,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    }
+   ]
+  },
+  {
+   "id": "bullet",
+   "index": 2,
+   "moveId": "s3",
+   "face": 1,
+   "late": false,
+   "frames": 2000,
+   "contacts": 1,
+   "blocks": 71,
+   "maxHits": 1,
+   "firstGuardFrame": 60,
+   "firstContacts": [
+    {
+     "frame": 19,
+     "outcome": "hit",
+     "comboHits": 1,
+     "move": null
+    },
+    {
+     "frame": 60,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 76,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 115,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 131,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 170,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 186,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 225,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    }
+   ]
+  },
+  {
+   "id": "bullet",
+   "index": 2,
+   "moveId": "s3",
+   "face": 1,
+   "late": true,
+   "frames": 2000,
+   "contacts": 1,
+   "blocks": 71,
+   "maxHits": 1,
+   "firstGuardFrame": 60,
+   "firstContacts": [
+    {
+     "frame": 24,
+     "outcome": "hit",
+     "comboHits": 1,
+     "move": null
+    },
+    {
+     "frame": 60,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 76,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 115,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 131,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 170,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 186,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 225,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    }
+   ]
+  },
+  {
+   "id": "bullet",
+   "index": 2,
+   "moveId": "s3",
+   "face": -1,
+   "late": false,
+   "frames": 2000,
+   "contacts": 1,
+   "blocks": 71,
+   "maxHits": 1,
+   "firstGuardFrame": 60,
+   "firstContacts": [
+    {
+     "frame": 19,
+     "outcome": "hit",
+     "comboHits": 1,
+     "move": null
+    },
+    {
+     "frame": 60,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 76,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 115,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 131,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 170,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 186,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 225,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    }
+   ]
+  },
+  {
+   "id": "bullet",
+   "index": 2,
+   "moveId": "s3",
+   "face": -1,
+   "late": true,
+   "frames": 2000,
+   "contacts": 1,
+   "blocks": 71,
+   "maxHits": 1,
+   "firstGuardFrame": 60,
+   "firstContacts": [
+    {
+     "frame": 24,
+     "outcome": "hit",
+     "comboHits": 1,
+     "move": null
+    },
+    {
+     "frame": 60,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 76,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 115,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 131,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 170,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 186,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 225,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    }
+   ]
+  },
+  {
+   "id": "dark_moguzo",
+   "index": 1,
+   "moveId": "s2",
+   "face": 1,
+   "late": false,
+   "frames": 2000,
+   "contacts": 1,
+   "blocks": 82,
+   "maxHits": 1,
+   "firstGuardFrame": 54,
+   "firstContacts": [
+    {
+     "frame": 5,
+     "outcome": "hit",
+     "comboHits": 1,
+     "move": null
+    },
+    {
+     "frame": 54,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 68,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 102,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 116,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 150,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 164,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 198,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    }
+   ]
+  },
+  {
+   "id": "dark_moguzo",
+   "index": 1,
+   "moveId": "s2",
+   "face": 1,
+   "late": true,
+   "frames": 2000,
+   "contacts": 1,
+   "blocks": 82,
+   "maxHits": 1,
+   "firstGuardFrame": 54,
+   "firstContacts": [
+    {
+     "frame": 12,
+     "outcome": "hit",
+     "comboHits": 1,
+     "move": null
+    },
+    {
+     "frame": 54,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 68,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 102,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 116,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 150,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 164,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 198,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    }
+   ]
+  },
+  {
+   "id": "dark_moguzo",
+   "index": 1,
+   "moveId": "s2",
+   "face": -1,
+   "late": false,
+   "frames": 2000,
+   "contacts": 1,
+   "blocks": 82,
+   "maxHits": 1,
+   "firstGuardFrame": 54,
+   "firstContacts": [
+    {
+     "frame": 5,
+     "outcome": "hit",
+     "comboHits": 1,
+     "move": null
+    },
+    {
+     "frame": 54,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 68,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 102,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 116,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 150,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 164,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 198,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    }
+   ]
+  },
+  {
+   "id": "dark_moguzo",
+   "index": 1,
+   "moveId": "s2",
+   "face": -1,
+   "late": true,
+   "frames": 2000,
+   "contacts": 1,
+   "blocks": 82,
+   "maxHits": 1,
+   "firstGuardFrame": 54,
+   "firstContacts": [
+    {
+     "frame": 12,
+     "outcome": "hit",
+     "comboHits": 1,
+     "move": null
+    },
+    {
+     "frame": 54,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 68,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 102,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 116,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 150,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 164,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 198,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    }
+   ]
+  },
+  {
+   "id": "dark_moguzo",
+   "index": 2,
+   "moveId": "s3",
+   "face": 1,
+   "late": false,
+   "frames": 2000,
+   "contacts": 1,
+   "blocks": 82,
+   "maxHits": 1,
+   "firstGuardFrame": 50,
+   "firstContacts": [
+    {
+     "frame": 7,
+     "outcome": "hit",
+     "comboHits": 1,
+     "move": null
+    },
+    {
+     "frame": 50,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 64,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 98,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 112,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 146,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 160,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 194,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    }
+   ]
+  },
+  {
+   "id": "dark_moguzo",
+   "index": 2,
+   "moveId": "s3",
+   "face": 1,
+   "late": true,
+   "frames": 2000,
+   "contacts": 1,
+   "blocks": 82,
+   "maxHits": 1,
+   "firstGuardFrame": 50,
+   "firstContacts": [
+    {
+     "frame": 15,
+     "outcome": "hit",
+     "comboHits": 1,
+     "move": null
+    },
+    {
+     "frame": 50,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 64,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 98,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 112,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 146,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 160,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 194,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    }
+   ]
+  },
+  {
+   "id": "dark_moguzo",
+   "index": 2,
+   "moveId": "s3",
+   "face": -1,
+   "late": false,
+   "frames": 2000,
+   "contacts": 1,
+   "blocks": 82,
+   "maxHits": 1,
+   "firstGuardFrame": 50,
+   "firstContacts": [
+    {
+     "frame": 7,
+     "outcome": "hit",
+     "comboHits": 1,
+     "move": null
+    },
+    {
+     "frame": 50,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 64,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 98,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 112,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 146,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 160,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 194,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    }
+   ]
+  },
+  {
+   "id": "dark_moguzo",
+   "index": 2,
+   "moveId": "s3",
+   "face": -1,
+   "late": true,
+   "frames": 2000,
+   "contacts": 1,
+   "blocks": 2,
+   "maxHits": 1,
+   "firstGuardFrame": 50,
+   "firstContacts": [
+    {
+     "frame": 15,
+     "outcome": "hit",
+     "comboHits": 1,
+     "move": null
+    },
+    {
+     "frame": 50,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    },
+    {
+     "frame": 64,
+     "outcome": "block",
+     "comboHits": null,
+     "move": null
+    }
+   ]
+  }
+ ]
+}

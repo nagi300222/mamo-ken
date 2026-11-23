@@ -1,3 +1,4 @@
+import {presentCombatFeedback} from './fight-feel.js';
 import { BATTLE_INPUT_PROFILE, battleAnalog, updateBattleHUD } from '../shared-ui/battle-ui.js';
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
@@ -18,6 +19,10 @@ import { bindMorphTargets } from './morph-binding.js';
 import { shouldRotateLandscape, localStickAxes } from './landscape-lock.js';
 import { createPracticeController } from './practice-mode.js';
 import { normalClipTime } from './normal-timing-v151.js';
+import { ACTIVE_NORMAL_MOTION_SOURCE } from './normal-motion-source.js';
+import { specialClipTime,resolveSpecialBone } from './special-motion-source.js';
+import { consumeSpecialMovementCues } from './special-cues.js';
+import { createClawSweepGeometry } from './combat-geometry.js';
 import { createPresentationFlow } from './presentation-flow.js';
 import { VICTORY, VICTORY_CLIP, VICTORY_PACK, VICTORY_CAMERA_DISTANCE, VS_TEXT, cameraSegment, victoryPlan, faceCamera } from './presentation-data.js';
 import { RunController } from './run-controller.js';
@@ -90,6 +95,7 @@ const fxGeometry=Object.freeze({
   ultimate:new THREE.RingGeometry(.30,.34,40),
   shard:new THREE.TetrahedronGeometry(.09),
   slash:new THREE.PlaneGeometry(.07,.47),
+  'p3-slash':createClawSweepGeometry(THREE),
   reticle:new THREE.RingGeometry(.17,.21,4)
 });
 let cameraShake=0, cameraShakeStrength=0, bannerUntil=0;
@@ -457,17 +463,18 @@ function clearActors(){for(let i=0;i<2;i++){const a=actors[i];if(!a)continue;
   cameraShake=0;cameraShakeStrength=0;$('showtime-banner').classList.remove('active');}
 async function createActor(id,slot) {
   const asset=MODEL_ASSETS[id];if(!asset)throw Error('3Dアセットが見つからない: '+id);
-  // v15: load authored skeleton motion pack without replacing the original character GLB.
+  const normalMotionSource=ACTIVE_NORMAL_MOTION_SOURCE,normalPack=normalMotionSource.pack(id);
+  // The selected pack and measured contacts share one source in every mode.
   const [gltf,meta,normalGLB,victoryGLB]=await Promise.all([
     loader.loadAsync(new URL(asset.glb,import.meta.url).href+'?v='+MODEL_REVISION),
     fetch(new URL(asset.motion,import.meta.url)).then(r=>{if(!r.ok)throw Error('motion JSON HTTP '+r.status);return r.json();}),
-    loader.loadAsync(new URL('../normal/v15/'+id+'_normals.glb',import.meta.url).href),
+    loader.loadAsync(normalPack.url),
     // v15.1 Presentation: winner-only victory clip (animation-only GLB on the untouched rig). Never the loser's `ko`.
     loader.loadAsync(new URL(VICTORY_PACK(id),import.meta.url).href).catch(error=>{console.warn('勝利モーションを読み込めません',id,error);return null;})
   ]);
   const mixer=new THREE.AnimationMixer(gltf.scene),actions=Object.fromEntries(gltf.animations.map(c=>[c.name,mixer.clipAction(c)]));
-  const normalIds=new Set(['stand_weak','stand_heavy','crouch_weak','crouch_heavy','air_weak','air_heavy'].map(s=>'v15_'+s));
-  if(normalGLB.animations.length!==normalIds.size)throw Error(id+' のv15通常技パックは6技必要');
+  const normalIds=new Set(normalPack.clipNames);
+  normalMotionSource.validatePack(id,normalGLB);
   for(const clip of normalGLB.animations){
     if(!normalIds.has(clip.name)||!clip.tracks.length)throw Error(id+' の通常技クリップ不正: '+clip.name);
     const bound=bindMorphTargets(clip,gltf.scene);
@@ -518,19 +525,15 @@ async function createActor(id,slot) {
   const sh=new THREE.Mesh(new THREE.CircleGeometry(.18,24),new THREE.MeshBasicMaterial({color:0x142128,transparent:true,opacity:.24,depthWrite:false}));
   sh.rotation.x=-Math.PI/2;sh.position.y=.003;holder.add(sh);
   const illusions=id==='chirka'?createChirkaIllusions({THREE,cloneSkeleton,gltf,scene,reducedMotion}):null;
-  return {id,slot,gltf,meta,holder,turn,shadow:sh,mixer,actions,showtime,illusions,victory,current:null,key:'',specialCueIndex:0};
+  return {id,slot,gltf,meta,holder,turn,shadow:sh,mixer,actions,showtime,illusions,victory,normalMotionSource,current:null,key:'',specialCueIndex:0};
 }
 function clipChange(a,p){
   const special=a.showtime[p.action?.id];
-  const name=special?.action?special.action.getClip().name:chooseClip(p,Object.keys(a.actions),a.meta.command_map||{});
+  const name=special?.action?special.action.getClip().name:chooseClip(p,Object.keys(a.actions),a.meta.command_map||{},{normalMotionSource:a.normalMotionSource});
   const key=name+':'+(p.action?.serial||0)+':'+(p.state==='clinch'?p.state:p.state==='clinch_recoil'?p.state:'');
   if(key===a.key)return;
   const next=special?.action??a.actions[name]??a.actions.idle,prev=a.current;
-  const originalNormal={
-    v15_stand_weak:'stand_light',v15_stand_heavy:'stand_heavy',
-    v15_crouch_weak:'crouch_light',v15_crouch_heavy:'crouch_heavy',
-    v15_air_weak:'air_light',v15_air_heavy:'air_heavy'
-  }[name];
+  const originalNormal=a.normalMotionSource.originalClipName(name);
   const info=a.meta.clips[originalNormal||name]||{},isLoop=!special?.action&&!!info.loop;
   next.reset();next.enabled=true;next.clampWhenFinished=true;
   next.setLoop(isLoop?THREE.LoopRepeat:THREE.LoopOnce,isLoop?Infinity:1);
@@ -557,7 +560,7 @@ function syncActor(a,p){
   // 新クリップに踏み込み・被弾・押し合いが入っているので、
   // 旧版用のモデル全体の拡大/傾きを重ねない。
   const special=a.showtime[p.action?.id];
-  const authored=!!special?.action||a.currentName?.startsWith('v15_')||!!a.meta.clips[a.currentName]?.v2;
+  const authored=!!special?.action||a.normalMotionSource.isNormalClip(a.currentName)||!!a.meta.clips[a.currentName]?.v2;
   if(!authored){
     if(p.action?.kind==='roar'){
       const phase=p.frame/(p.action.startup+p.action.active);
@@ -576,34 +579,28 @@ function syncActor(a,p){
   a.shadow.material.opacity=Math.max(.11,.3-p.y*.13);
   if(special?.action){
     playSpecialFrame(a,p,special);
-  }else if(a.currentName?.startsWith('v15_')&&p.action){
+  }else if(a.normalMotionSource.isNormalClip(a.currentName)&&p.action){
     if(!p.stop)a.mixer.update(1/FPS); // advance blending, never the attack clock
-    a.current.time=normalClipTime(p.id,p.action.id,p.frame,p.action,a.current.getClip().duration);
+    a.current.time=normalClipTime(p.id,p.action.id,p.frame,p.action,a.current.getClip().duration,a.normalMotionSource.contacts);
     a.mixer.update(0);
   }else if(!p.stop)a.mixer.update(1/FPS);
   updateActionTrail(a,p);
   a.illusions?.step(p);
 }
 function playSpecialFrame(actor,fighter,entry){
-  const { startup, active, recovery }=fighter.action;
   const { duration }=entry.action.getClip();
-  const contact=entry.spec.contactSeconds??duration*startup/(startup+active+recovery);
-  const frame=fighter.frame;
-  const tail=active+recovery;
-  const seconds=frame<=startup?contact*frame/Math.max(1,startup):
-    contact+(duration-contact)*Math.min(1,(frame-startup)/tail);
+  const seconds=specialClipTime(entry.spec,fighter.action,fighter.frame,duration);
   entry.action.time=Math.max(0,seconds);
+  // Advance blending first, then write the exact Battle-derived sample. Mixer
+  // delta must not move the contact pose beyond its collision frame.
+  entry.action.setEffectiveTimeScale(0);
   actor.mixer.update(fighter.stop?0:1/FPS);
+  entry.action.time=Math.max(0,seconds);actor.mixer.update(0);
   actor.holder.updateMatrixWorld(true);
-  const cues=entry.spec.cueTrack??[];
-  while(actor.specialCueIndex<cues.length&&cues[actor.specialCueIndex].at<=seconds){
-    const cue=cues[actor.specialCueIndex++];
-    if(cue.type==='sfx')audioFX.play(cue.key,actor.id);
-    if(cue.type==='vfx'){
-      const position=cue.bone&&actor.gltf.scene.getObjectByName(cue.bone)?.getWorldPosition(new THREE.Vector3());
+  actor.specialCueIndex=consumeSpecialMovementCues(entry.spec,seconds,actor.specialCueIndex,{audio:audioFX,characterId:actor.id,visual:cue=>{
+      const position=cue.bone&&resolveSpecialBone(actor.gltf.scene,cue.bone)?.getWorldPosition(new THREE.Vector3());
       impactFX(cue.key,showtimeFor(actor.id).color,position?.x??fighter.x,position?.y??fighter.y+.35,1,14,scene,flashes,position?.z??.23);
-    }
-  }
+  }});
 }
 const projectileMat={
  earth:0xb1a579,wind:0x9de4c9,violet:0xb68ce9,amber:0xf6ca72,blue:0x83c4ed
@@ -631,6 +628,8 @@ const cues={
 const cueColors={hit:0xffb77a,block:0x9fe0ff,roar:0xffcc65,clinch:0xd8a1fa};
 function vfx(){
   for(const e of battle.events){
+    const feedbackPresented=presentCombatFeedback(e,{audio:audioFX,effectsEnabled:effectsAllowed(),
+      impact:fb=>impactFX(fb.effect==='slash'?'p3-slash':fb.effect,showtimeFor(fb.characterId).color,fb.point.x,fb.point.y,fb.scale,fb.lifeFrames),shake});
     if(e.type==='ultimate_hit'){
       beginUltimateMovie(e); // Only a confirmed strike can open full-screen movie mode.
       continue;
@@ -665,7 +664,8 @@ function vfx(){
     const id=battle.fighters[owner]?.id||'moguzo';
     const soundKind=e.type==='block'?'block':e.type==='counter'?'counter':
       kind==='clinch'?'clinch':kind==='roar'?'roar':'hit';
-    audioFX.play(soundKind,id);
+    if(!feedbackPresented)audioFX.play(soundKind,id);
+    if(feedbackPresented)continue;
     if(e.x===undefined)continue;
     const color=kind==='hit'?showtimeFor(id).color:cueColors[kind];
     impactFX(kind,color,e.x,e.y??.42,1,e.damage>=100?18:14);

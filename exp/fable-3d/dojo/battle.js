@@ -2,8 +2,10 @@ import { FPS, ARENA, ROSTER, IDS, normalMove, specialMove, ultimateMove, tailTip
 import { pushDirection, readCommand, specialButtonSlot } from './commands.js';
 import { cpuInput } from './cpu.js';
 import {fighterStyle,isChainNormal,isChainWeak} from './fighter-style.js';
-import {normalReachAt,normalVerticalContact} from './normal-contact-runtime-v151.js';
-import * as NORMAL_ART from './normal-contacts-v151.js';
+import {normalReachAt,normalHeightAt,normalVerticalContact} from './normal-contact-runtime-v151.js';
+import * as NORMAL_ART from './normal-contact-source.js';
+import {feedbackForMove} from './fight-feel.js';
+import {ACTIVE_P3_SPECIAL_CONTACT_DELIVERY,validateP3SpecialContactDelivery,withP3SpecialContact,specialSurfaceAt,specialSurfaceContact} from './special-contact-runtime-p3.js';
 // 設計の正本はバランスデータ。GLB・Three.js・操作DOMには依存しない。
 const KEYS=['left','right','up','down','weak','strong','throw','roar','gyuiin','dash','stepForward','stepBack','special','ultimateButton','special1','special2','special3','super'];
 const cap=(v,a,b)=>Math.max(a,Math.min(b,v));
@@ -12,6 +14,7 @@ const total=m=>m.startup+m.active+m.recovery;
 const active=p=>!!p.action&&p.frame>=p.action.startup&&p.frame<p.action.startup+p.action.active;
 const facingBack=p=>p.facing===1?'left':'right';
 const moveX=(p,dx)=>p.x=cap(p.x+dx,ARENA.minX,ARENA.maxX);
+const authoredImpactOrigins=new WeakMap();
 const ROAR=Object.freeze({name:'咆哮',kind:'roar',startup:16,active:7,recovery:27,damage:105,reach:.66,level:'mid',anim:'roar'});
 const GYUIIN=Object.freeze({name:'ギュイーン',kind:'clinch',startup:8,active:14,recovery:24,damage:0,reach:.40,travel:.32,level:'grab',anim:'gyuiin'});
 export const DRIVE=Object.freeze({max:100,initial:100,roarCost:35,gyuiinCost:60,regenPerFrame:.11,regenDelay:90,clinchFrames:34,resetSpacing:1.35});
@@ -63,10 +66,43 @@ export class Battle {
     this.projectileOrigin=options.projectileOrigin??null;
     this.projectileContact=options.projectileContact??null;
     this.customAgain=options.customAgain??null;
+    this.specialContactDelivery=options.specialContactDelivery===undefined?ACTIVE_P3_SPECIAL_CONTACT_DELIVERY:
+      options.specialContactDelivery&&validateP3SpecialContactDelivery(options.specialContactDelivery);
+    // cpu audit callers copy the visible frame with {...game}; keep these known-
+    // move predicates on that read-only view as well as the actual game object.
+    this.canReachSpecial=this.canReachSpecial.bind(this);
+    this.canReachNormal=this.canReachNormal.bind(this);
+  }
+  canReachSpecial(p,target,index){
+    if(!this.specialContactDelivery)return true; // preserve the accepted old policy until adoption
+    const id='s'+(index+1);let move=specialMove(p.id,index);
+    if(this.moveResolver){move=this.moveResolver(p,move,id);if(!move)return false;}
+    move=withP3SpecialContact(p,move,id,this.specialContactDelivery);
+    if(!move)return false;
+    if(!move.specialContact)return true; // release / paired throw / counter keep their original choices
+    return this._knownMoveReaches(p,target,move);
+  }
+  canReachNormal(p,target,slot='stand_weak'){
+    if(!this.specialContactDelivery)return true;
+    let move=normalMove(p.id,slot);if(this.moveResolver){move=this.moveResolver(p,move,slot);if(!move)return false;}
+    return this._knownMoveReaches(p,target,move);
+  }
+  _knownMoveReaches(p,target,move){
+    // Only own trajectory/travel and the opponent's currently visible position.
+    // This does not read target.input, target.prev, commands or future CPU actions.
+    const facing=target.x>=p.x?1:-1,hurt=this.hurtBoundsResolver?.(target)??NORMAL_ART.NORMAL_HURT_BOUNDS;
+    const crouching=target.state==='crouch'||target.reaction==='guard_crouch_hit'||target.action?.id?.startsWith('crouch_');
+    const visibleTarget={id:target.id,x:target.x,y:target.y,state:crouching?'crouch':target.state,input:{down:crouching}};
+    for(let frame=move.startup;frame<move.startup+move.active;frame++){
+      const attacker={x:cap(p.x+facing*(move.travel??0)*frame/(move.startup+move.active),ARENA.minX,ARENA.maxX),y:p.y,facing,frame};
+      if(move.specialContact){if(specialSurfaceContact(attacker,visibleTarget,move,hurt))return true;}
+      else if((target.x-attacker.x)*facing>=0&&Math.abs(target.x-attacker.x)<=normalReachAt(move,frame)+.16&&normalVerticalContact(attacker,visibleTarget,move,hurt))return true;
+    }
+    return false;
   }
   again(){
     if(this.customAgain)return this.customAgain(this);
-    const n=new Battle(this.fighters[0].id,this.fighters[1].id,this.level);
+    const n=new Battle(this.fighters[0].id,this.fighters[1].id,this.level,{specialContactDelivery:this.specialContactDelivery});
     n.tailTipSamples=this.tailTipSamples;return n;
   }
   setTailTipPath(path){
@@ -151,6 +187,8 @@ export class Battle {
   }
   _begin(p,m,id,allowCancel=false){
     if(this.moveResolver){m=this.moveResolver(p,m,id);if(!m)return false;}
+    m=withP3SpecialContact(p,m,id,this.specialContactDelivery);
+    if(!m)return false;
     if(m.kind==='clinch')return this._startGyuiin(p);
     if(p.ko||p.stun||p.stop||(p.y>.06&&['throw','roar','projectile'].includes(m.kind)))return false;
     if(m.isSuper&&p.super<100)return false;
@@ -197,7 +235,7 @@ export class Battle {
     // One attack press survives hitstop. Continuous holding is not a new command.
     if(!p.action||!p.comboContact||!isChainNormal(p.action.id))return;
     for(const key of ['special','special1','special2','special3','weak','strong']){
-      if(n[key]&&!p.prev[key]){p.bufferedInput={key,at:this.frame,raw:n};break;}
+      if(n[key]&&!p.prev[key]){p.bufferedInput={key,at:this.frame,actionFrame:p.frame,raw:n};break;}
     }
   }
   _input(p,other,raw){
@@ -205,7 +243,7 @@ export class Battle {
     for(const k of KEYS)edges[k]=n[k]&&!p.prev[k];
     const buffered=p.bufferedInput;
     p.bufferedInput=null;
-    if(buffered&&this.frame-buffered.at<=9&&p.action){
+    if(buffered&&p.action&&(buffered.actionFrame===undefined?this.frame-buffered.at:p.frame-buffered.actionFrame)<=9){
       edges[buffered.key]=true;
     }
     p.prev=n;p.input=n;
@@ -390,6 +428,15 @@ export class Battle {
       return;
     }
     const guard=this._guarding(t,m);
+    const specialSurface=m.specialContact&&specialSurfaceAt(m,a.frame);
+    const point=m.contactPoint??(specialSurface?{
+      x:a.x+a.facing*specialSurface.reach,y:a.y+specialSurface.height,space:'authored-special-surface'
+    }:m.normalVersion?{
+      x:a.x+a.facing*normalReachAt(m,a.frame),y:a.y+normalHeightAt(m,a.frame),space:'authored-strike-surface'
+    }:{x:t.x,y:t.y+.32,space:'target-center-fallback'});
+    const feedback=feedbackForMove(a,m,guard?'guard':'hit',point);
+    if(feedback&&['authored-strike-surface','authored-special-surface'].includes(point?.space))
+      authoredImpactOrigins.set(feedback,{attacker:a,x:a.x});
     let dmg=m.damage;
     const links=!guard&&a.comboHits>0&&t.comboOwner===a.slot&&t.state==='hit'&&t.stun>0;
     if(links)dmg=Math.max(1,Math.round(dmg*Math.max(.60,1-.10*a.comboHits)));
@@ -406,7 +453,7 @@ export class Battle {
         this.events.push({type:'charge',slot:t.slot,value:t.ability.charge});
       }
       if(a.id==='takimaru'&&['strike','dash','anti','tail'].includes(m.kind))a.ability.pressure=36;
-      this.events.push({type:'block',slot:t.slot,x:t.x,y:t.y+.35,damage:0});
+      this.events.push({type:'block',slot:t.slot,attacker:a.slot,x:t.x,y:t.y+.35,damage:0,...(feedback?{feedback}:{})});
     }else{
       const absorb=this._absorbing(t,m);
       if(absorb==='roar'){
@@ -415,10 +462,13 @@ export class Battle {
       }
       if(t.id==='yomikage'&&t.action?.kind==='counter'&&active(t)&&
           !['roar','clinch','throw'].includes(m.kind)){
+        const counterMove=t.action;
         const counterDamage=t.action.justBoosted?t.action.damage:Math.round(t.action.damage*.63);
         a.stun=t.action.justBoosted?24:16;a.hp=Math.max(0,a.hp-counterDamage);
         t.action=null;t.state='idle';
-        this.events.push({type:'counter',slot:t.slot,x:t.x,y:t.y+.34,damage:counterDamage});
+        const response=feedbackForMove(t,counterMove,'hit',{x:a.x,y:a.y+.32,space:'counter-response-fallback'});
+        if(response)response.stopFrames=0; // keep the existing counter response clock
+        this.events.push({type:'counter',slot:t.slot,x:t.x,y:t.y+.34,damage:counterDamage,...(response?{feedback:response}:{})});
         if(a.hp===0){a.ko=true;a.state='ko';this.phase='ko';this.winner=t.slot;}
         return;
       }
@@ -463,7 +513,7 @@ export class Battle {
       // Publish combo reads from real contacts only. HP is still modified once above.
       a.comboHits=links?a.comboHits+1:1;a.lastComboFrame=this.frame;
       if(a.comboHits>=2)this.events.push({type:'combo',slot:a.slot,hits:a.comboHits,damage:dmg});
-      this.events.push({type:m.kind==='clinch'?'gyuiin_hit':'hit',slot:t.slot,attacker:a.slot,comboHits:a.comboHits,x:t.x,y:t.y+.32,damage:dmg});
+      this.events.push({type:m.kind==='clinch'?'gyuiin_hit':'hit',slot:t.slot,attacker:a.slot,comboHits:a.comboHits,x:t.x,y:t.y+.32,damage:dmg,...(feedback?{feedback}:{})});
       // Presentation-only signal: emitted ONLY after a real unguarded, non-countered super hit.
       // The cinematic consumes this event; Battle's HP, frames, damage and KO logic remain the truth.
       if(m.isSuper && dmg>0)this.events.push({
@@ -480,8 +530,10 @@ export class Battle {
     }
     a.super=cap(a.super+(guard?5:Math.round(dmg*.19)),0,100);
     t.super=cap(t.super+(guard?5:Math.round(dmg*.09)),0,100);
-    a.stop=Math.max(a.stop,guard?3:6);
-    t.stop=Math.max(t.stop,guard?3:6);
+    if(feedback&&m.kind==='throw')feedback.stopFrames=t.hp>0?0:6;
+    const impactStop=feedback?.stopFrames??(guard?3:6);
+    a.stop=Math.max(a.stop,impactStop);
+    t.stop=Math.max(t.stop,impactStop);
     moveX(t,a.facing*(guard?(m.blockPushback??.05):m.kind==='roar'?.16:(m.knockback??.085)));
     if(!guard&&m.kind==='throw'&&t.hp>0)this._beginThrow(a,t);
     if(t.hp<=0){t.ko=true;t.state='ko';this.phase='ko';this.winner=a.slot;this.events.push({type:'ko',slot:a.slot});}
@@ -491,6 +543,7 @@ export class Battle {
     if(m.normalVersion&&(t.x-a.x)*a.facing<0)return false;
     if(m.kind==='clinch')return dist<=.83&&Math.abs(a.y-t.y)<1.25;
     if(m.kind==='throw')return a.y<.09&&t.y<.10&&dist<m.reach+.12;
+    if(m.specialContact)return specialSurfaceContact(a,t,m,this.hurtBoundsResolver?.(t)??NORMAL_ART.NORMAL_HURT_BOUNDS);
     if(m.kind==='tail'){
       const tip=this._tailAt(a.frame);
       return dist>=m.minReach&&tip>0&&dist<=tip+.16&&Math.abs(t.y-a.y)<.43;
@@ -505,6 +558,10 @@ export class Battle {
   _act(p,op){
     const m=p.action;if(!m)return;
     p.frame++;
+    if(p.frame===m.startup){
+      const feedback=feedbackForMove(p,m,'swing');
+      if(feedback)this.events.push({type:'combat_feedback',slot:p.slot,feedback});
+    }
     if(m.travel&&p.frame<=m.startup+m.active)moveX(p,p.facing*m.travel/(m.startup+m.active));
     if(m.kind==='clinch'){
       if(active(p)&&this._contact(p,op,m))this._clinchPair(p,op);
@@ -512,14 +569,19 @@ export class Battle {
       return;
     }
     if(m.kind==='projectile'&&!p.spawned&&p.frame===m.startup){
-      const origin=this.projectileOrigin?.(p,m)??{forward:.30,height:.30};
+      const origin=this.projectileOrigin?.(p,m)??m.projectileSocket??{forward:.30,height:.30};
       p.spawned=true;this.projectiles.push({id:++this.seq,owner:p.slot,x:p.x+p.facing*origin.forward,y:p.y+origin.height,
         face:p.facing,speed:m.speed||.045,life:m.life||75,damage:m.damage,poison:m.poison||0,
-        effect:m.effect||'earth',level:m.level||'mid',...(m.customRef?{customRef:m.customRef}:{} )});
+        effect:m.effect||'earth',level:m.level||'mid',sourceCharacterId:m.sourceCharacterId??p.id,sourceMoveId:m.sourceMoveId??m.id,
+        ...(m.customRef?{customRef:m.customRef}:{} )});
       this.events.push({type:'projectile',slot:p.slot});
     }
     if(active(p)&&!p.used&&!['projectile','feint','counter'].includes(m.kind)&&this._contact(p,op,m)){
       p.used=true;this.pending.push({p,op,m,d:Math.abs(p.x-op.x)});
+    }
+    if(p.frame===m.startup+m.active&&!p.used&&m.kind!=='projectile'){
+      const feedback=feedbackForMove(p,m,'whiff');
+      if(feedback)this.events.push({type:'combat_feedback',slot:p.slot,feedback});
     }
     if(p.frame>=total(m)){
       p.action=null;p.frame=0;p.chainWeakCount=0;p.comboContact=null;p.bufferedInput=null;
@@ -534,7 +596,11 @@ export class Battle {
   _projectiles(){
     for(const b of this.projectiles){
       b.x+=b.speed*b.face;b.life--;
-      if(b.life<=0||Math.abs(b.x)>ARENA.maxX+.3)continue;
+      if(b.life<=0||Math.abs(b.x)>ARENA.maxX+.3){
+        const owner=this.fighters[b.owner],feedback=feedbackForMove(owner,{id:b.sourceMoveId,kind:'projectile',sourceCharacterId:b.sourceCharacterId},'whiff');
+        if(feedback)this.events.push({type:'combat_feedback',slot:b.owner,feedback});
+        b.life=0;continue;
+      }
       for(const t of this.fighters)if(this._roarErase(t,b) || (b.owner!==t.slot&&t.action?.kind==='clinch'&&Math.abs(b.x-t.x)<.65&&Math.abs((b.y-.30)-t.y)<.50)){
         b.life=0;this.events.push({type:t.action?.kind==='clinch'?'gyuiin_armor':'roar_erase',slot:t.slot,x:b.x,y:b.y});break;
       }
@@ -542,7 +608,8 @@ export class Battle {
       const t=this.fighters[1-b.owner],a=this.fighters[b.owner];
       const verticalContact=this.projectileContact?.(b,t)??Math.abs(t.y-(b.y-.3))<.50;
       if(!t.ko&&Math.abs(b.x-t.x)<.23&&verticalContact){
-        b.life=0;this._damage(a,t,{name:'飛び道具',id:'projectile',kind:'projectile',damage:b.damage,level:b.level,poison:b.poison},Math.abs(b.x-t.x),'projectile');
+        b.life=0;this._damage(a,t,{name:'飛び道具',id:'projectile',kind:'projectile',damage:b.damage,level:b.level,poison:b.poison,
+          sourceCharacterId:b.sourceCharacterId,sourceMoveId:b.sourceMoveId,contactPoint:{x:b.x,y:b.y,space:'projectile-contact'}},Math.abs(b.x-t.x),'projectile');
       }
     }
     for(let i=0;i<this.projectiles.length;i++)for(let j=i+1;j<this.projectiles.length;j++){
@@ -559,6 +626,12 @@ export class Battle {
       if(p.y===0){p.vy=0;p.airVX=0;p.landF=12;if(!p.action&&!p.stun)p.state='idle';}
     }
   }
+  _alignAuthoredImpactPoints(){
+    for(const event of this.events){
+      const origin=event.feedback&&authoredImpactOrigins.get(event.feedback);
+      if(origin){event.feedback.point.x+=origin.attacker.x-origin.x;authoredImpactOrigins.delete(event.feedback);}
+    }
+  }
   tick(raw1={},raw2=null){
     if(this.phase!=='fight')return this;
     this.frame++;this.pending=[];this.events=[];
@@ -572,6 +645,7 @@ export class Battle {
     }
     this.time--;
     const [a,b]=this.fighters;
+    const bothBeganInHitstop=a.stop>0&&b.stop>0;
     if(this.time<=0){
       this.phase='ko';const q=a.hp/ROSTER[a.id].hp-b.hp/ROSTER[b.id].hp;
       this.winner=Math.abs(q)<1e-9?-1:q>0?0:1;this.events.push({type:'timeout'});return this;
@@ -615,15 +689,18 @@ export class Battle {
       this._damage(e.p,e.op,e.m,e.d,'strike',true);
     }
     if(a.hp<=0&&b.hp<=0){this.phase='ko';this.winner=-1;}
-    if(this.throwSequence)return this;
+    if(this.throwSequence){this._alignAuthoredImpactPoints();return this;}
     if(this.phase==='fight'){
       // 高く跳んだ相手の上を横切るときは横方向の押し合いを解除。
       const sep=b.x-a.x,overlap=2*ARENA.pushRadius-Math.abs(sep);
-      if(overlap>0&&Math.abs(a.y-b.y)<.38){
+      if(!bothBeganInHitstop&&overlap>0&&Math.abs(a.y-b.y)<.38){
         const d=sep>=0?1:-1;moveX(a,-d*overlap/2);moveX(b,d*overlap/2);
       }
       this._projectiles();
     }
+    // A later trade, body separation or projectile can move a previous hitter.
+    // Only authored actor-space impacts follow that final rendered root.
+    this._alignAuthoredImpactPoints();
     if(a.hp<=0||b.hp<=0){this.phase='ko';this.winner=a.hp>0?0:b.hp>0?1:-1;}
     return this;
   }

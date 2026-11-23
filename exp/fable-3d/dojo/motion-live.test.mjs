@@ -4,6 +4,9 @@ import { readFileSync } from 'node:fs';
 import { Battle, DRIVE, simFight } from './battle.js';
 import { IDS, ROSTER } from './balance.js';
 import { MODEL_REVISION, chooseClip } from './models.js';
+import {ACTIVE_NORMAL_MOTION_SOURCE,createNormalMotionSource,NORMAL_MOTION_SLOTS} from './normal-motion-source.js';
+const legacyNormals=createNormalMotionSource({version:'v15'});
+const chooseLegacyClip=(fighter,available,commandMap={})=>chooseClip(fighter,available,commandMap,{normalMotionSource:legacyNormals});
 
 const loadModel=(id)=>{
   const meta=JSON.parse(readFileSync(new URL(`../chars/${id}/${id}_motions.json`,import.meta.url),'utf8'));
@@ -40,28 +43,40 @@ test('9体それぞれの技入力は本物の固有/新規アニメへ接続さ
     for(const [slot,notation] of [['s1','236'],['s2','623'],['s3','214'],['ultimate','236236']]){
       const fake={state:'attack',stun:0,ko:false,action:{id:slot,kind:slot==='ultimate'?'super':'strike',
         anim:'stand_heavy'},reaction:null};
-      const clip=chooseClip(fake,animations,meta.command_map);
+      const clip=chooseLegacyClip(fake,animations,meta.command_map);
       assert.equal(clip,meta.command_map[notation],id+' '+slot);
     }
   }
 });
-test('通常技・しゃがみガード・被弾・クリンチ・KOが新クリップに接続される',()=>{
+test('v15フォールバックは元GLBの通常技・ガード・被弾・クリンチ・KOへ接続される',()=>{
   const {animations}=loadModel('moguzo');
   const p=(state,rest={})=>({state,ko:false,stun:0,action:null,landF:0,...rest});
-  assert.equal(chooseClip(p('attack',{action:{id:'crouch_weak',anim:'stand_light'}}),animations),'crouch_light');
-  assert.equal(chooseClip(p('attack',{action:{id:'crouch_heavy',anim:'stand_heavy'}}),animations),'crouch_heavy');
-  assert.equal(chooseClip(p('attack',{action:{id:'air_weak',anim:'stand_light'}}),animations),'air_light');
-  assert.equal(chooseClip(p('attack',{action:{id:'air_heavy',anim:'stand_heavy'}}),animations),'air_heavy');
-  assert.equal(chooseClip(p('crouch',{input:{down:true,left:true},facing:1}),animations),'guard_crouch');
-  assert.equal(chooseClip(p('block',{stun:12,reaction:'guard_impact'}),animations),'guard_impact');
-  assert.equal(chooseClip(p('hit',{stun:12,reaction:'roar_hit'}),animations),'roar_hit');
-  assert.equal(chooseClip(p('clinch'),animations),'clinch_hold');
-  assert.equal(chooseClip(p('clinch_recoil',{stun:26}),animations),'clinch_recoil');
-  assert.equal(chooseClip(p('throw_hit'),animations),'throw_hit');
-  assert.equal(chooseClip(p('thrown'),animations),'thrown');
-  assert.equal(chooseClip(p('wakeup',{stun:40}),animations),'wakeup');
-  assert.equal(chooseClip(p('idle',{landF:8}),animations),'land');
-  assert.equal(chooseClip(p('idle',{ko:true}),animations),'ko');
+  assert.equal(chooseLegacyClip(p('attack',{action:{id:'crouch_weak',anim:'stand_light'}}),animations),'crouch_light');
+  assert.equal(chooseLegacyClip(p('attack',{action:{id:'crouch_heavy',anim:'stand_heavy'}}),animations),'crouch_heavy');
+  assert.equal(chooseLegacyClip(p('attack',{action:{id:'air_weak',anim:'stand_light'}}),animations),'air_light');
+  assert.equal(chooseLegacyClip(p('attack',{action:{id:'air_heavy',anim:'stand_heavy'}}),animations),'air_heavy');
+  assert.equal(chooseLegacyClip(p('crouch',{input:{down:true,left:true},facing:1}),animations),'guard_crouch');
+  assert.equal(chooseLegacyClip(p('block',{stun:12,reaction:'guard_impact'}),animations),'guard_impact');
+  assert.equal(chooseLegacyClip(p('hit',{stun:12,reaction:'roar_hit'}),animations),'roar_hit');
+  assert.equal(chooseLegacyClip(p('clinch'),animations),'clinch_hold');
+  assert.equal(chooseLegacyClip(p('clinch_recoil',{stun:26}),animations),'clinch_recoil');
+  assert.equal(chooseLegacyClip(p('throw_hit'),animations),'throw_hit');
+  assert.equal(chooseLegacyClip(p('thrown'),animations),'thrown');
+  assert.equal(chooseLegacyClip(p('wakeup',{stun:40}),animations),'wakeup');
+  assert.equal(chooseLegacyClip(p('idle',{landF:8}),animations),'land');
+  assert.equal(chooseLegacyClip(p('idle',{ko:true}),animations),'ko');
+});
+test('全54通常技が有効な追加パックを選び、旧GLBの同名動作へ戻らない',()=>{
+  const source=ACTIVE_NORMAL_MOTION_SOURCE;
+  for(const id of IDS){
+   const {animations}=loadModel(id);
+   for(const slot of NORMAL_MOTION_SLOTS){
+    const fighter={id,state:'attack',stun:0,ko:false,action:{id:slot,anim:slot.endsWith('weak')?'stand_light':'stand_heavy',kind:'strike'}};
+    const available=[...animations,...source.pack(id).clipNames];
+    assert.equal(chooseClip(fighter,available),source.clipName(slot,{rigId:id}),id+'/'+slot);
+    if(source.version==='v17')assert.throws(()=>chooseClip(fighter,animations),/Missing selected normal motion/,id+'/'+slot+' must fail closed');
+   }
+  }
 });
 test('ギュイーン弾き戻しは26F完走後ニュートラルへ復帰',()=>{
   const g=new Battle('moguzo','godan');

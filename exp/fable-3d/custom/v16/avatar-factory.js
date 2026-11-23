@@ -1,7 +1,9 @@
 import * as THREE from 'three';
 import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
 import {clone as cloneSkeleton} from 'three/addons/utils/SkeletonUtils.js';
-import {NORMAL_CONTACTS} from '../../dojo/normal-contacts-v151.js';
+import {ACTIVE_NORMAL_MOTION_SOURCE,getNormalMotionPack} from '../../dojo/normal-motion-source.js';
+import {specialClipTime,resolveSpecialBone} from '../../dojo/special-motion-source.js';
+import {normalMove} from '../../dojo/balance.js';
 
 export const AVATAR_BASE_IDS=Object.freeze(['moguzo','pisuke','godan','hakuma','chirka','takimaru','yomikage','bullet','dark_moguzo']);
 const NAMES=['モグゾー','ピスケ','ゴダン','ハクマ','チルカ','タキマル','ヨミカゲ','バレット','ダークモグゾー'];
@@ -151,8 +153,10 @@ export async function createAvatar(definition,options={}){
  }
  if(!['base','none',undefined].includes(parts.accessory))throw Error('この装飾の交換は骨格互換を確認中です');
  const loader=options.loader??new GLTFLoader();
+ const normalMotionSource=options.normalMotionSource??ACTIVE_NORMAL_MOTION_SOURCE;
+ const normalPack=getNormalMotionPack(baseId,{source:normalMotionSource});
  const gltf=await load(new URL(base.file,options.baseURL??ASSETS),loader);
- const normal=await load(new URL(`../../normal/v15/${baseId}_normals.glb`,import.meta.url),loader);
+ const normal=await load(normalPack.url,loader);normalMotionSource.validatePack(baseId,normal);
  const scene=cloneSkeleton(gltf.scene),meshes=[],geometries=new Set(),materials=new Set(),skeletons=new Set(),bones=new Map();
  scene.traverse(object=>{
   if(object.isBone)bones.set(object.name,object);
@@ -167,6 +171,7 @@ export async function createAvatar(definition,options={}){
  scene.updateMatrixWorld(true);
  const animations=[...gltf.animations,...normal.animations.map(clip=>bindAvatarClip(clip,{meshes}))];let disposed=false;
  return {scene,animations,bones,meshes,baseId,appearance:structuredClone(appearance),parameters:base.parameters,
+  normalMotionSource,normalMotionVersion:normalMotionSource.version,normalContacts:normalPack.contacts,combatStyleId:definition.combat?.styleId??baseId,
   grafts:Object.keys(donors),gltf:{scene,animations},
   dispose(){if(disposed)return;disposed=true;scene.removeFromParent();for(const g of geometries)g.dispose();for(const m of materials)m.dispose();for(const s of skeletons)s.dispose();}
  };
@@ -178,7 +183,7 @@ const bonePart=name=>{const n=name.toLowerCase().replace(/[^a-z0-9]/g,''),side=n
 
 // CPU skin sampling is performed once per appearance before a custom Battle.
 // It uses the actual post-graft vertices, not a guessed body-scale multiplier.
-export function measureContacts(avatar){
+export function measureContacts(avatar,{styleId=avatar.combatStyleId??avatar.baseId}={}){
  const root=avatar.scene,old={p:root.position.clone(),q:root.quaternion.clone(),s:root.scale.clone()};
  root.position.set(0,0,0);root.quaternion.identity();root.scale.set(1,1,1);
  const mixer=new THREE.AnimationMixer(root),v=new THREE.Vector3(),meshData=[];
@@ -196,28 +201,33 @@ export function measureContacts(avatar){
   const action=mixer.clipAction(clip);action.play();action.time=Math.min(clip.duration,time);mixer.update(0);root.updateMatrixWorld(true);
  };
  const surface=(part)=>{
-  let reach=-Infinity,height=0;const ys=[];
+  let reach=-Infinity,height=0,selectedPart;const ys=[];
   for(const {mesh,groups} of meshData)for(let i=0;i<groups.length;i++){
-   const group=groups[i];if(part&&group!==part)continue;
+   const group=groups[i];if(part&&!(Array.isArray(part)?part.includes(group):group===part))continue;
    mesh.getVertexPosition(i,v);v.applyMatrix4(mesh.matrixWorld);
-   if(part){if(v.z>reach){reach=v.z;height=v.y;}}
+   if(part){if(v.z>reach){reach=v.z;height=v.y;selectedPart=group;}}
    else if(['body','head','legL','legR'].includes(group))ys.push(v.y);
   }
   if(part&&!Number.isFinite(reach))throw Error('打撃部位の頂点がありません: '+part);
-  ys.sort((a,b)=>a-b);return part?{reach:+reach.toFixed(4),height:+height.toFixed(4)}:{bottom:0,top:+(ys[Math.floor(ys.length*.98)]??0).toFixed(4)};
+  ys.sort((a,b)=>a-b);return part?{reach:+reach.toFixed(4),height:+height.toFixed(4),part:selectedPart}:{bottom:0,top:+(ys[Math.floor(ys.length*.98)]??0).toFixed(4)};
  };
  try{
   const normals={};
-  for(const [slot,reference] of Object.entries(NORMAL_CONTACTS[avatar.baseId])){
-   const clip=avatar.animations.find(a=>a.name==='v15_'+slot);if(!clip)throw Error('通常技がありません: '+slot);
-   const activeReach=[0,.5,1].map(phase=>{at(clip.name,(reference.contact+(reference.contactEnd-reference.contact)*phase)*clip.duration);return {phase,...surface(reference.attackPart)};});
-   normals[slot]={...reference,...activeReach[0],activeReach};delete normals[slot].phase;
+  const normalSource=avatar.normalMotionSource??ACTIVE_NORMAL_MOTION_SOURCE;
+  for(const [slot,reference] of Object.entries(avatar.normalContacts??normalSource.contacts[avatar.baseId])){
+   const clip=avatar.animations.find(a=>a.name===normalSource.clipName(slot,{rigId:avatar.baseId}));if(!clip)throw Error('通常技がありません: '+slot);
+   const sourceActive=reference.battleActive??normalMove(avatar.baseId,slot).active,styleActive=normalMove(styleId,slot).active;
+   const requiredPhases=[...new Set([sourceActive,styleActive].flatMap(active=>Array.from({length:active},(_,i)=>i/(active-1))))];
+   const phases=[...new Set([...requiredPhases,...reference.activeReach.map(point=>requiredPhases.find(phase=>Math.abs(phase-point.phase)<.00011)??point.phase)])].sort((a,b)=>a-b);
+   const contactParts=reference.bothHands&&reference.attackParts?.length?reference.attackParts:reference.attackPart;
+   const activeReach=phases.map(phase=>{at(clip.name,(reference.contact+(reference.contactEnd-reference.contact)*phase)*clip.duration);return {phase,...surface(contactParts)};});
+   normals[slot]={...reference,...activeReach[0],activeReach,sampledBattleActives:[...new Set([sourceActive,styleActive])]};delete normals[slot].phase;
   }
   const bounds=(names,phases=[0,.25,.5,.75])=>{let top=0;for(const name of names){const clip=avatar.animations.find(a=>a.name===name);if(!clip)continue;for(const phase of phases){at(name,phase*clip.duration);top=Math.max(top,surface(null).top);}}return {bottom:0,top};};
   const hurtBounds={stand:bounds(['idle','guard_stand']),crouch:bounds(['crouch','guard_crouch'],[.65,.8,.98])};
   at('idle',0);const paw=[...avatar.bones.values()].find(b=>b.name.replace(/[^a-z0-9]/gi,'').toLowerCase()==='pawl');
   const socket=paw?paw.getWorldPosition(v):v.set(0,.35,.17);
-  return {normals,hurtBounds,projectileSocket:{forward:+socket.z.toFixed(4),height:+socket.y.toFixed(4)},source:'runtime-skinned-mesh',baseId:avatar.baseId,grafts:[...avatar.grafts]};
+  return {normals,hurtBounds,projectileSocket:{forward:+socket.z.toFixed(4),height:+socket.y.toFixed(4)},source:'runtime-skinned-mesh',baseId:avatar.baseId,normalMotionVersion:normalSource.version,normalSampling:'exact-style-active-frames',normalStyleId:styleId,grafts:[...avatar.grafts]};
  }finally{
   mixer.stopAllAction();mixer.uncacheRoot(root);root.position.copy(old.p);root.quaternion.copy(old.q);root.scale.copy(old.s);root.updateMatrixWorld(true);
  }
@@ -225,7 +235,7 @@ export function measureContacts(avatar){
 
 // Source-specific firing sockets are measured from the selected retargeted clip.
 // Call after retargetCustomClip and use the same contact seconds as gameplay.
-export function measureProjectileSocket(avatar,clip,contactSeconds){
+export function measureProjectileSocket(avatar,clip,contactSeconds,{bone='pawL'}={}){
  if(!clip?.isAnimationClip && !(clip instanceof THREE.AnimationClip))throw Error('発射計測には実アニメーションが必要です');
  if(!Number.isFinite(contactSeconds)||contactSeconds<0)throw Error('発射時刻が不正です');
  const root=avatar.scene,position=root.position.clone(),rotation=root.quaternion.clone(),scale=root.scale.clone();
@@ -233,12 +243,65 @@ export function measureProjectileSocket(avatar,clip,contactSeconds){
  try{
   root.position.set(0,0,0);root.quaternion.identity();root.scale.set(1,1,1);
   const action=mixer.clipAction(clip);action.play();action.time=Math.min(contactSeconds,clip.duration);mixer.update(0);root.updateMatrixWorld(true);
-  const bones=[...avatar.bones.values()];
-  const paw=bones.find(b=>b.name.replace(/[^a-z0-9]/gi,'').toLowerCase()==='pawl');
-  if(!paw)throw Error('発射用の手首ソケットがありません');
-  paw.getWorldPosition(out);
-  return {forward:+out.z.toFixed(4),height:+out.y.toFixed(4),bone:paw.name,atSeconds:contactSeconds,source:'runtime-bone-world-position'};
+  const socket=typeof bone==='string'?resolveSpecialBone(root,bone):bone;
+  if(!socket?.isBone||!root.getObjectByName(socket.name))throw Error('発射用の実ソケット骨がありません');
+  socket.getWorldPosition(out);
+  return {forward:+out.z.toFixed(4),height:+out.y.toFixed(4),bone:socket.name,atSeconds:contactSeconds,source:'runtime-bone-world-position'};
  }finally{
   mixer.stopAllAction();mixer.uncacheRoot(root);root.position.copy(position);root.quaternion.copy(rotation);root.scale.copy(scale);root.updateMatrixWorld(true);
+ }
+}
+
+// Measures an already bound/retargeted supported clip on this exact appearance.
+// It adds no new skeleton compatibility and never substitutes a canonical body.
+export function measureSpecialContact(avatar,clip,spec,move,{ref,sourceVersion=spec?.sourceVersion,releaseBone}={}){
+ const fail=message=>{throw Error('自キャラ必殺計測: '+message);};
+ const parsed=/^(moguzo|pisuke|godan|hakuma|chirka|takimaru|yomikage|bullet|dark_moguzo)\.(s[123])$/.exec(ref??'');
+ if(!parsed||!(clip instanceof THREE.AnimationClip)||spec?.motionVersion!=='v17'||typeof sourceVersion!=='string')fail('確定した参照技・v17モーション・制作版が必要です');
+ const [,sourceCharacterId,sourceMoveId]=parsed,reference=spec.authoredContact;
+ if(sourceCharacterId!==avatar.baseId&&move.kind!=='projectile')fail('別骨格の打撃・投げ・当身は未対応です');
+ if(!Number.isInteger(move?.active)||move.active<1||!Number.isFinite(spec.contactSeconds)||spec.contactSeconds<0||spec.contactSeconds>=clip.duration)fail('技または接触時計が不正です');
+ const sourceClip=clip.userData?.customRetarget?.sourceClip??clip.name;
+ if(sourceClip!==sourceMoveId+'_v17'||!reference?.attackPart||reference.clip!==sourceMoveId+'_v17')fail('元クリップ・実測打撃部位が一致しません');
+ const limbParts={pawL:['armL'],pawR:['armR'],elbowL:['armL'],elbowR:['armR'],shoulderL:['armL','body'],shoulderR:['armR','body'],
+  footL:['legL'],footR:['legR'],kneeL:['legL'],kneeR:['legR'],tail:['tail'],body:['body','head'],head:['head']};
+ const attackParts=[...new Set(String(spec.attackLimb).split('+').flatMap(limb=>limbParts[limb]??[undefined]))];
+ if(attackParts.some(part=>!part)||!attackParts.includes(reference.attackPart))fail('実測打撃部位が宣言された技の手足と一致しません');
+ const root=avatar.scene,old={position:root.position.clone(),rotation:root.quaternion.clone(),scale:root.scale.clone()},mixer=new THREE.AnimationMixer(root),v=new THREE.Vector3();
+ const meshes=avatar.meshes.filter(mesh=>mesh.visible).map(mesh=>{
+  const {skinIndex,skinWeight,position}=mesh.geometry.attributes,indices=[];
+  for(let i=0;i<position.count;i++){
+   let best=0;for(let k=1;k<4;k++)if(skinWeight.getComponent(i,k)>skinWeight.getComponent(i,best))best=k;
+   const part=bonePart(mesh.skeleton.bones[skinIndex.getComponent(i,best)].name);
+   if(attackParts.includes(part))indices.push({vertex:i,part});
+  }
+  return {mesh,indices};
+ });
+ try{
+  root.position.set(0,0,0);root.quaternion.identity();root.scale.set(1,1,1);
+  const action=mixer.clipAction(clip);action.setLoop(THREE.LoopOnce,1);action.clampWhenFinished=true;action.play();action.setEffectiveTimeScale(0);
+  const at=seconds=>{action.time=seconds;mixer.update(0);root.updateMatrixWorld(true);};
+  const surface=()=>{
+   let reach=-Infinity,height=0,part,vertices=0;
+   for(const {mesh,indices}of meshes){mesh.skeleton.update();for(const {vertex,part:group}of indices){mesh.getVertexPosition(vertex,v);v.applyMatrix4(mesh.matrixWorld);vertices++;if(v.z>reach){reach=v.z;height=v.y;part=group;}}}
+   if(!vertices||!Number.isFinite(reach)||!Number.isFinite(height))fail('打撃部位の実スキン表面を取得できません');
+   return {reach:+reach.toFixed(6),height:+height.toFixed(6),part};
+  };
+  const activeReach=Array.from({length:move.active},(_,frame)=>{
+   const seconds=specialClipTime(spec,move,move.startup+frame,clip.duration);at(seconds);
+   return {phase:frame/Math.max(1,move.active-1),frame,seconds,...surface()};
+  });
+  at(spec.contactSeconds);const contact=surface();
+  const anchor=releaseBone??spec.fxAnchor??spec.authoredContact?.fx_anchor??spec.cueTrack?.find(cue=>cue.type==='vfx'&&cue.key==='special'&&cue.bone)?.bone;
+  let socket;
+  if(anchor){const bone=typeof anchor==='string'?resolveSpecialBone(root,anchor):anchor;if(!bone?.isBone||root.getObjectByName(bone.name)!==bone)fail('接触ソケット骨が自キャラに存在しません');bone.getWorldPosition(v);socket={forward:+v.z.toFixed(6),height:+v.y.toFixed(6),bone:bone.name,atSeconds:spec.contactSeconds,source:'runtime-bone-world-position'};}
+  if(move.kind==='projectile'&&!socket)fail('飛び道具には発射骨が必要です');
+  return {ref,sourceCharacterId,sourceMoveId,clip:sourceMoveId+'_v17',motionVersion:'v17',sourceVersion,
+   sourceClip:spec.actualSourceClip??sourceMoveId+'_v17',...(spec.sourceFile?{sourceFile:spec.sourceFile}:{}),
+   source:'runtime-skinned-mesh',sampling:'exact-clip-clock',status:'ok',sampledContactSeconds:spec.contactSeconds,contactSeconds:spec.contactSeconds,
+   activeFrameCount:move.active,attackPart:contact.part,attackParts,attackLimb:spec.attackLimb,kind:spec.kind,...contact,activeReach,
+   ...(socket?{contactSocket:socket,...(move.kind==='projectile'?{projectileSocket:socket}:{})}:{}),visualRigId:avatar.baseId,grafts:[...avatar.grafts]};
+ }finally{
+  mixer.stopAllAction();mixer.uncacheRoot(root);root.position.copy(old.position);root.quaternion.copy(old.rotation);root.scale.copy(old.scale);root.updateMatrixWorld(true);
  }
 }

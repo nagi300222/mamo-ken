@@ -1,0 +1,190 @@
+{
+  "roundsEach": 1458,
+  "codeAndPolicyIdentical": true,
+  "winnerChanges": 104,
+  "reference": {
+    "normalMotionVersion": "v15",
+    "normalContactVersion": "15.1-r3",
+    "specialMotionVersion": null,
+    "providerFiles": {
+      "normal": [
+        "normal-contacts-v151.js"
+      ],
+      "special": [
+        "battle.js",
+        "balance.js"
+      ]
+    },
+    "providerHashes": {
+      "normal": {
+        "normal-contacts-v151.js": "7ec0ea1df46d40cc878ffccf7e6898eda814521da645f2e81f876e2b3ff41dfb"
+      },
+      "special": {
+        "battle.js": "499c141e4ceb40ffbc7de3df757c2b2a5c04df4906fc7668b3f248474c5cb475",
+        "balance.js": "0e348e3715d601003852a83f4e7367cff30401ae6d1dd975d89184e7ae5d0bd2"
+      }
+    },
+    "codeHashes": {
+      "battle.js": "499c141e4ceb40ffbc7de3df757c2b2a5c04df4906fc7668b3f248474c5cb475",
+      "cpu.js": "9bad63d4208582b698004b14b1eb7fe46d8901a45268ad8cbd12f96f3ebc9998",
+      "normal-balance-v151.js": "de561713c4386038919b72c7251de0f821633a3e8d96544c2be363b5a9484fa4",
+      "special-balance-p3.js": "5f5c0e059b4e45cac16ff329421138ee303683d0de043ae2d1df7b366cd8a965",
+      "balance.js": "0e348e3715d601003852a83f4e7367cff30401ae6d1dd975d89184e7ae5d0bd2"
+    },
+    "policySha256": "df329c97e1df86dff195b94d2b8e23996238fa0e1f9403b16ee7d5efb72f6286",
+    "timeouts": 69,
+    "draws": 44,
+    "meanFrames": 1388.488340192044
+  },
+  "combinedR2": {
+    "normalMotionVersion": "v17",
+    "normalContactVersion": "v17-p3-normals-r2",
+    "specialMotionVersion": "v17r2",
+    "providerFiles": {
+      "normal": [
+        "normal-contact-reviewed-v17.js"
+      ],
+      "special": [
+        "special-contact-reviewed-v17r2.js"
+      ]
+    },
+    "providerHashes": {
+      "normal": {
+        "normal-contact-reviewed-v17.js": "9f188cce799e4b83d2edf52970f8b6f225a86755a2f09c9224fa290f3412797d"
+      },
+      "special": {
+        "special-contact-reviewed-v17r2.js": "7aff0c674105633a1a84c603d91950d44f1835c18f74308a010637a6215d9ec2"
+      }
+    },
+    "codeHashes": {
+      "battle.js": "499c141e4ceb40ffbc7de3df757c2b2a5c04df4906fc7668b3f248474c5cb475",
+      "cpu.js": "9bad63d4208582b698004b14b1eb7fe46d8901a45268ad8cbd12f96f3ebc9998",
+      "normal-balance-v151.js": "de561713c4386038919b72c7251de0f821633a3e8d96544c2be363b5a9484fa4",
+      "special-balance-p3.js": "5f5c0e059b4e45cac16ff329421138ee303683d0de043ae2d1df7b366cd8a965",
+      "balance.js": "0e348e3715d601003852a83f4e7367cff30401ae6d1dd975d89184e7ae5d0bd2"
+    },
+    "policySha256": "df329c97e1df86dff195b94d2b8e23996238fa0e1f9403b16ee7d5efb72f6286",
+    "timeouts": 60,
+    "draws": 36,
+    "meanFrames": 1406.2661179698216
+  },
+  "characters": [
+    {
+      "id": "moguzo",
+      "gamesEach": 288,
+      "referenceScore": 0.6770833333333334,
+      "combinedScore": 0.6822916666666666,
+      "deltaPoints": 0.5208333333333259,
+      "referenceWins": 190,
+      "combinedWins": 193,
+      "referenceDraws": 10,
+      "combinedDraws": 7,
+      "referenceTimeouts": 21,
+      "combinedTimeouts": 12
+    },
+    {
+      "id": "pisuke",
+      "gamesEach": 288,
+      "referenceScore": 0.6440972222222222,
+      "combinedScore": 0.6493055555555556,
+      "deltaPoints": 0.520833333333337,
+      "referenceWins": 178,
+      "combinedWins": 180,
+      "referenceDraws": 15,
+      "combinedDraws": 14,
+      "referenceTimeouts": 21,
+      "combinedTimeouts": 21
+    },
+    {
+      "id": "godan",
+      "gamesEach": 288,
+      "referenceScore": 0.3576388888888889,
+      "combinedScore": 0.3090277777777778,
+      "deltaPoints": -4.861111111111111,
+      "referenceWins": 103,
+      "combinedWins": 89,
+      "referenceDraws": 0,
+      "combinedDraws": 0,
+      "referenceTimeouts": 0,
+      "combinedTimeouts": 0
+    },
+    {
+      "id": "hakuma",
+      "gamesEach": 288,
+      "referenceScore": 0.3194444444444444,
+      "combinedScore": 0.3159722222222222,
+      "deltaPoints": -0.347222222222221,
+      "referenceWins": 92,
+      "combinedWins": 91,
+      "referenceDraws": 0,
+      "combinedDraws": 0,
+      "referenceTimeouts": 0,
+      "combinedTimeouts": 0
+    },
+    {
+      "id": "chirka",
+      "gamesEach": 288,
+      "referenceScore": 0.6458333333333334,
+      "combinedScore": 0.6788194444444444,
+      "deltaPoints": 3.298611111111105,
+      "referenceWins": 186,
+      "combinedWins": 195,
+      "referenceDraws": 0,
+      "combinedDraws": 1,
+      "referenceTimeouts": 0,
+      "combinedTimeouts": 0
+    },
+    {
+      "id": "takimaru",
+      "gamesEach": 288,
+      "referenceScore": 0.3055555555555556,
+      "combinedScore": 0.2986111111111111,
+      "deltaPoints": -0.6944444444444475,
+      "referenceWins": 84,
+      "combinedWins": 81,
+      "referenceDraws": 8,
+      "combinedDraws": 10,
+      "referenceTimeouts": 15,
+      "combinedTimeouts": 18
+    },
+    {
+      "id": "yomikage",
+      "gamesEach": 288,
+      "referenceScore": 0.5520833333333334,
+      "combinedScore": 0.5451388888888888,
+      "deltaPoints": -0.6944444444444531,
+      "referenceWins": 151,
+      "combinedWins": 151,
+      "referenceDraws": 16,
+      "combinedDraws": 12,
+      "referenceTimeouts": 21,
+      "combinedTimeouts": 15
+    },
+    {
+      "id": "bullet",
+      "gamesEach": 288,
+      "referenceScore": 0.2899305555555556,
+      "combinedScore": 0.3159722222222222,
+      "deltaPoints": 2.604166666666663,
+      "referenceWins": 79,
+      "combinedWins": 87,
+      "referenceDraws": 9,
+      "combinedDraws": 8,
+      "referenceTimeouts": 15,
+      "combinedTimeouts": 18
+    },
+    {
+      "id": "dark_moguzo",
+      "gamesEach": 288,
+      "referenceScore": 0.7083333333333334,
+      "combinedScore": 0.7048611111111112,
+      "deltaPoints": -0.347222222222221,
+      "referenceWins": 198,
+      "combinedWins": 200,
+      "referenceDraws": 12,
+      "combinedDraws": 6,
+      "referenceTimeouts": 15,
+      "combinedTimeouts": 12
+    }
+  ]
+}

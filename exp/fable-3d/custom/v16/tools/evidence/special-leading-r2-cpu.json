@@ -1,0 +1,3457 @@
+{
+  "passed": true,
+  "sourceVersion": "v17-p3-specials-r2",
+  "selectedIDs": [
+    "moguzo",
+    "pisuke",
+    "godan",
+    "hakuma",
+    "chirka",
+    "takimaru",
+    "yomikage",
+    "bullet",
+    "dark_moguzo"
+  ],
+  "note": "Actual R2 GLTFLoader/CPU skins and bound clips; independent declared-part extrema checked every actual active frame. Images stubbed; not WebGL/phone evidence.",
+  "cases": [
+    {
+      "id": "moguzo",
+      "slot": "s1",
+      "grafted": false,
+      "sourceClip": "s1_v17",
+      "sourceFile": "motion/v17r2/moguzo_specials_v17r2.glb",
+      "attackParts": [
+        "armR"
+      ],
+      "observed": [
+        {
+          "frame": 0,
+          "seconds": 0.21666666666666667,
+          "part": "armR",
+          "reach": 0.52642,
+          "height": 0.166945,
+          "oldFixedPart": "armR",
+          "oldReachError": 0
+        },
+        {
+          "frame": 1,
+          "seconds": 0.23333333333333334,
+          "part": "armR",
+          "reach": 0.474629,
+          "height": 0.296421,
+          "oldFixedPart": "armR",
+          "oldReachError": 0
+        }
+      ]
+    },
+    {
+      "id": "moguzo",
+      "slot": "s2",
+      "grafted": false,
+      "sourceClip": "s2_v17r2",
+      "sourceFile": "motion/v17r2/moguzo_specials_v17r2.glb",
+      "attackParts": [
+        "armR"
+      ],
+      "observed": [
+        {
+          "frame": 0,
+          "seconds": 0.10000000000000002,
+          "part": "armR",
+          "reach": 0.290563,
+          "height": 0.46107,
+          "oldFixedPart": "armR",
+          "oldReachError": 0
+        },
+        {
+          "frame": 1,
+          "seconds": 0.11666666666666667,
+          "part": "armR",
+          "reach": 0.25621,
+          "height": 0.531023,
+          "oldFixedPart": "armR",
+          "oldReachError": 0
+        },
+        {
+          "frame": 2,
+          "seconds": 0.13333333333333333,
+          "part": "armR",
+          "reach": 0.235055,
+          "height": 0.599879,
+          "oldFixedPart": "armR",
+          "oldReachError": 0
+        },
+        {
+          "frame": 3,
+          "seconds": 0.15,
+          "part": "armR",
+          "reach": 0.227319,
+          "height": 0.556728,
+          "oldFixedPart": "armR",
+          "oldReachError": 0
+        },
+        {
+          "frame": 4,
+          "seconds": 0.16666666666666669,
+          "part": "armR",
+          "reach": 0.242075,
+          "height": 0.614555,
+          "oldFixedPart": "armR",
+          "oldReachError": 0
+        },
+        {
+          "frame": 5,
+          "seconds": 0.18333333333333335,
+          "part": "armR",
+          "reach": 0.253242,
+          "height": 0.659489,
+          "oldFixedPart": "armR",
+          "oldReachError": 0
+        },
+        {
+          "frame": 6,
+          "seconds": 0.2,
+          "part": "armR",
+          "reach": 0.248117,
+          "height": 0.684809,
+          "oldFixedPart": "armR",
+          "oldReachError": 0
+        },
+        {
+          "frame": 7,
+          "seconds": 0.21666666666666667,
+          "part": "armR",
+          "reach": 0.18319,
+          "height": 0.829699,
+          "oldFixedPart": "armR",
+          "oldReachError": 0
+        }
+      ]
+    },
+    {
+      "id": "moguzo",
+      "slot": "s3",
+      "grafted": false,
+      "sourceClip": "s3_v17",
+      "sourceFile": "motion/v17r2/moguzo_specials_v17r2.glb",
+      "attackParts": [
+        "armL",
+        "armR"
+      ],
+      "observed": [
+        {
+          "frame": 0,
+          "seconds": 0.20000000000000004,
+          "part": "armL",
+          "reach": 0.489628,
+          "height": 0.369061,
+          "oldFixedPart": "armL",
+          "oldReachError": 0
+        },
+        {
+          "frame": 1,
+          "seconds": 0.21666666666666667,
+          "part": "armL",
+          "reach": 0.489424,
+          "height": 0.372604,
+          "oldFixedPart": "armL",
+          "oldReachError": 0
+        },
+        {
+          "frame": 2,
+          "seconds": 0.23333333333333334,
+          "part": "armL",
+          "reach": 0.489197,
+          "height": 0.376117,
+          "oldFixedPart": "armL",
+          "oldReachError": 0
+        },
+        {
+          "frame": 3,
+          "seconds": 0.25,
+          "part": "armL",
+          "reach": 0.488948,
+          "height": 0.3796,
+          "oldFixedPart": "armL",
+          "oldReachError": 0
+        },
+        {
+          "frame": 4,
+          "seconds": 0.26666666666666666,
+          "part": "armL",
+          "reach": 0.488676,
+          "height": 0.383053,
+          "oldFixedPart": "armL",
+          "oldReachError": 0
+        }
+      ]
+    },
+    {
+      "id": "pisuke",
+      "slot": "s1",
+      "grafted": false,
+      "sourceClip": "s1_v17",
+      "sourceFile": "motion/v17/pisuke_specials_v17.glb",
+      "attackParts": [
+        "legR"
+      ],
+      "observed": [
+        {
+          "frame": 0,
+          "seconds": 0.18333333333333332,
+          "part": "legR",
+          "reach": 0.34549,
+          "height": 0.221709,
+          "oldFixedPart": "legR",
+          "oldReachError": 0
+        }
+      ]
+    },
+    {
+      "id": "pisuke",
+      "slot": "s2",
+      "grafted": false,
+      "sourceClip": "s2_v17",
+      "sourceFile": "motion/v17/pisuke_specials_v17.glb",
+      "attackParts": [
+        "legR"
+      ],
+      "observed": [
+        {
+          "frame": 0,
+          "seconds": 0.10000000000000002,
+          "part": "legR",
+          "reach": 0.185765,
+          "height": 0.436316,
+          "oldFixedPart": "legR",
+          "oldReachError": 0
+        },
+        {
+          "frame": 1,
+          "seconds": 0.11666666666666667,
+          "part": "legR",
+          "reach": 0.186194,
+          "height": 0.447399,
+          "oldFixedPart": "legR",
+          "oldReachError": 0
+        },
+        {
+          "frame": 2,
+          "seconds": 0.13333333333333333,
+          "part": "legR",
+          "reach": 0.185181,
+          "height": 0.451183,
+          "oldFixedPart": "legR",
+          "oldReachError": 0
+        },
+        {
+          "frame": 3,
+          "seconds": 0.15,
+          "part": "legR",
+          "reach": 0.183981,
+          "height": 0.449,
+          "oldFixedPart": "legR",
+          "oldReachError": 0
+        },
+        {
+          "frame": 4,
+          "seconds": 0.16666666666666669,
+          "part": "legR",
+          "reach": 0.183454,
+          "height": 0.448208,
+          "oldFixedPart": "legR",
+          "oldReachError": 0
+        },
+        {
+          "frame": 5,
+          "seconds": 0.18333333333333335,
+          "part": "legR",
+          "reach": 0.183454,
+          "height": 0.448208,
+          "oldFixedPart": "legR",
+          "oldReachError": 0
+        },
+        {
+          "frame": 6,
+          "seconds": 0.2,
+          "part": "legR",
+          "reach": 0.183454,
+          "height": 0.448208,
+          "oldFixedPart": "legR",
+          "oldReachError": 0
+        },
+        {
+          "frame": 7,
+          "seconds": 0.21666666666666667,
+          "part": "legR",
+          "reach": 0.183454,
+          "height": 0.448208,
+          "oldFixedPart": "legR",
+          "oldReachError": 0
+        }
+      ]
+    },
+    {
+      "id": "pisuke",
+      "slot": "s3",
+      "grafted": false,
+      "sourceClip": "s3_v17",
+      "sourceFile": "motion/v17/pisuke_specials_v17.glb",
+      "attackParts": [
+        "legR"
+      ],
+      "observed": [
+        {
+          "frame": 0,
+          "seconds": 0.11666666666666667,
+          "part": "legR",
+          "reach": 0.399636,
+          "height": 0.129272,
+          "oldFixedPart": "legR",
+          "oldReachError": 0
+        },
+        {
+          "frame": 1,
+          "seconds": 0.13333333333333333,
+          "part": "legR",
+          "reach": 0.399636,
+          "height": 0.129272,
+          "oldFixedPart": "legR",
+          "oldReachError": 0
+        },
+        {
+          "frame": 2,
+          "seconds": 0.15,
+          "part": "legR",
+          "reach": 0.399636,
+          "height": 0.129272,
+          "oldFixedPart": "legR",
+          "oldReachError": 0
+        },
+        {
+          "frame": 3,
+          "seconds": 0.16666666666666669,
+          "part": "legR",
+          "reach": 0.317021,
+          "height": 0.124903,
+          "oldFixedPart": "legR",
+          "oldReachError": 0
+        },
+        {
+          "frame": 4,
+          "seconds": 0.18333333333333335,
+          "part": "legR",
+          "reach": 0.219927,
+          "height": 0.127187,
+          "oldFixedPart": "legR",
+          "oldReachError": 0
+        },
+        {
+          "frame": 5,
+          "seconds": 0.2,
+          "part": "legR",
+          "reach": 0.264431,
+          "height": 0.17486,
+          "oldFixedPart": "legR",
+          "oldReachError": 0
+        },
+        {
+          "frame": 6,
+          "seconds": 0.21666666666666667,
+          "part": "legR",
+          "reach": 0.345037,
+          "height": 0.336071,
+          "oldFixedPart": "legR",
+          "oldReachError": 0
+        },
+        {
+          "frame": 7,
+          "seconds": 0.23333333333333334,
+          "part": "legR",
+          "reach": 0.345037,
+          "height": 0.336071,
+          "oldFixedPart": "legR",
+          "oldReachError": 0
+        },
+        {
+          "frame": 8,
+          "seconds": 0.25,
+          "part": "legR",
+          "reach": 0.345037,
+          "height": 0.336071,
+          "oldFixedPart": "legR",
+          "oldReachError": 0
+        }
+      ]
+    },
+    {
+      "id": "godan",
+      "slot": "s1",
+      "grafted": false,
+      "sourceClip": "s1_v17",
+      "sourceFile": "motion/v17r2/godan_specials_v17r2.glb",
+      "attackParts": [
+        "legR"
+      ],
+      "observed": [
+        {
+          "frame": 0,
+          "seconds": 0.35,
+          "part": "legR",
+          "reach": 0.296975,
+          "height": 0.007889,
+          "oldFixedPart": "legR",
+          "oldReachError": 0
+        },
+        {
+          "frame": 1,
+          "seconds": 0.36666666666666664,
+          "part": "legR",
+          "reach": 0.296975,
+          "height": 0.007889,
+          "oldFixedPart": "legR",
+          "oldReachError": 0
+        },
+        {
+          "frame": 2,
+          "seconds": 0.3833333333333333,
+          "part": "legR",
+          "reach": 0.296975,
+          "height": 0.007889,
+          "oldFixedPart": "legR",
+          "oldReachError": 0
+        },
+        {
+          "frame": 3,
+          "seconds": 0.4,
+          "part": "legR",
+          "reach": 0.296975,
+          "height": 0.007889,
+          "oldFixedPart": "legR",
+          "oldReachError": 0
+        },
+        {
+          "frame": 4,
+          "seconds": 0.4166666666666667,
+          "part": "legR",
+          "reach": 0.296975,
+          "height": 0.007889,
+          "oldFixedPart": "legR",
+          "oldReachError": 0
+        }
+      ]
+    },
+    {
+      "id": "godan",
+      "slot": "s2",
+      "grafted": false,
+      "sourceClip": "s2_v17r2",
+      "sourceFile": "motion/v17r2/godan_specials_v17r2.glb",
+      "attackParts": [
+        "armL",
+        "armR"
+      ],
+      "observed": [
+        {
+          "frame": 0,
+          "seconds": 0.18333333333333332,
+          "part": "armL",
+          "reach": 0.34635,
+          "height": 0.526005,
+          "oldFixedPart": "armL",
+          "oldReachError": 0
+        },
+        {
+          "frame": 1,
+          "seconds": 0.19999999999999998,
+          "part": "armL",
+          "reach": 0.33126,
+          "height": 0.554452,
+          "oldFixedPart": "armL",
+          "oldReachError": 0
+        },
+        {
+          "frame": 2,
+          "seconds": 0.21666666666666665,
+          "part": "armL",
+          "reach": 0.316093,
+          "height": 0.582436,
+          "oldFixedPart": "armL",
+          "oldReachError": 0
+        },
+        {
+          "frame": 3,
+          "seconds": 0.23333333333333334,
+          "part": "armL",
+          "reach": 0.300877,
+          "height": 0.60996,
+          "oldFixedPart": "armL",
+          "oldReachError": 0
+        },
+        {
+          "frame": 4,
+          "seconds": 0.25,
+          "part": "armL",
+          "reach": 0.285641,
+          "height": 0.637029,
+          "oldFixedPart": "armL",
+          "oldReachError": 0
+        },
+        {
+          "frame": 5,
+          "seconds": 0.26666666666666666,
+          "part": "armL",
+          "reach": 0.270392,
+          "height": 0.663629,
+          "oldFixedPart": "armL",
+          "oldReachError": 0
+        },
+        {
+          "frame": 6,
+          "seconds": 0.2833333333333333,
+          "part": "armL",
+          "reach": 0.255162,
+          "height": 0.689773,
+          "oldFixedPart": "armL",
+          "oldReachError": 0
+        }
+      ]
+    },
+    {
+      "id": "godan",
+      "slot": "s3",
+      "grafted": false,
+      "sourceClip": "s3_v17",
+      "sourceFile": "motion/v17r2/godan_specials_v17r2.glb",
+      "attackParts": [
+        "armL",
+        "body"
+      ],
+      "observed": [
+        {
+          "frame": 0,
+          "seconds": 0.3,
+          "part": "body",
+          "reach": 0.389254,
+          "height": 0.264438,
+          "oldFixedPart": "body",
+          "oldReachError": 0
+        },
+        {
+          "frame": 1,
+          "seconds": 0.31666666666666665,
+          "part": "body",
+          "reach": 0.389254,
+          "height": 0.264438,
+          "oldFixedPart": "body",
+          "oldReachError": 0
+        },
+        {
+          "frame": 2,
+          "seconds": 0.3333333333333333,
+          "part": "body",
+          "reach": 0.389254,
+          "height": 0.264438,
+          "oldFixedPart": "body",
+          "oldReachError": 0
+        },
+        {
+          "frame": 3,
+          "seconds": 0.35,
+          "part": "body",
+          "reach": 0.389254,
+          "height": 0.264438,
+          "oldFixedPart": "body",
+          "oldReachError": 0
+        },
+        {
+          "frame": 4,
+          "seconds": 0.3666666666666667,
+          "part": "body",
+          "reach": 0.389254,
+          "height": 0.264438,
+          "oldFixedPart": "body",
+          "oldReachError": 0
+        },
+        {
+          "frame": 5,
+          "seconds": 0.38333333333333336,
+          "part": "body",
+          "reach": 0.389254,
+          "height": 0.264438,
+          "oldFixedPart": "body",
+          "oldReachError": 0
+        },
+        {
+          "frame": 6,
+          "seconds": 0.4,
+          "part": "body",
+          "reach": 0.389254,
+          "height": 0.264438,
+          "oldFixedPart": "body",
+          "oldReachError": 0
+        }
+      ]
+    },
+    {
+      "id": "hakuma",
+      "slot": "s1",
+      "grafted": false,
+      "sourceClip": "s1_v17",
+      "sourceFile": "motion/v17r2/hakuma_specials_v17r2.glb",
+      "attackParts": [
+        "armR"
+      ],
+      "observed": [
+        {
+          "frame": 0,
+          "seconds": 0.18333333333333332,
+          "part": "armR",
+          "reach": 0.488308,
+          "height": 0.421234,
+          "oldFixedPart": "armR",
+          "oldReachError": 0
+        },
+        {
+          "frame": 1,
+          "seconds": 0.19999999999999998,
+          "part": "armR",
+          "reach": 0.49087,
+          "height": 0.420078,
+          "oldFixedPart": "armR",
+          "oldReachError": 0
+        },
+        {
+          "frame": 2,
+          "seconds": 0.21666666666666667,
+          "part": "armR",
+          "reach": 0.493423,
+          "height": 0.41892,
+          "oldFixedPart": "armR",
+          "oldReachError": 0
+        },
+        {
+          "frame": 3,
+          "seconds": 0.23333333333333334,
+          "part": "armR",
+          "reach": 0.495968,
+          "height": 0.41776,
+          "oldFixedPart": "armR",
+          "oldReachError": 0
+        },
+        {
+          "frame": 4,
+          "seconds": 0.25,
+          "part": "armR",
+          "reach": 0.498505,
+          "height": 0.416598,
+          "oldFixedPart": "armR",
+          "oldReachError": 0
+        },
+        {
+          "frame": 5,
+          "seconds": 0.26666666666666666,
+          "part": "armR",
+          "reach": 0.501032,
+          "height": 0.415435,
+          "oldFixedPart": "armR",
+          "oldReachError": 0
+        }
+      ]
+    },
+    {
+      "id": "hakuma",
+      "slot": "s2",
+      "grafted": false,
+      "sourceClip": "s2_v17",
+      "sourceFile": "motion/v17r2/hakuma_specials_v17r2.glb",
+      "attackParts": [
+        "armR"
+      ],
+      "observed": [
+        {
+          "frame": 0,
+          "seconds": 0.13333333333333333,
+          "part": "armR",
+          "reach": 0.221057,
+          "height": 0.622391,
+          "oldFixedPart": "armR",
+          "oldReachError": 0
+        },
+        {
+          "frame": 1,
+          "seconds": 0.15,
+          "part": "armR",
+          "reach": 0.221345,
+          "height": 0.623475,
+          "oldFixedPart": "armR",
+          "oldReachError": 0
+        },
+        {
+          "frame": 2,
+          "seconds": 0.16666666666666666,
+          "part": "armR",
+          "reach": 0.221638,
+          "height": 0.624552,
+          "oldFixedPart": "armR",
+          "oldReachError": 0
+        },
+        {
+          "frame": 3,
+          "seconds": 0.18333333333333335,
+          "part": "armR",
+          "reach": 0.221936,
+          "height": 0.625625,
+          "oldFixedPart": "armR",
+          "oldReachError": 0
+        },
+        {
+          "frame": 4,
+          "seconds": 0.2,
+          "part": "armR",
+          "reach": 0.222239,
+          "height": 0.626692,
+          "oldFixedPart": "armR",
+          "oldReachError": 0
+        },
+        {
+          "frame": 5,
+          "seconds": 0.21666666666666667,
+          "part": "armR",
+          "reach": 0.222548,
+          "height": 0.627753,
+          "oldFixedPart": "armR",
+          "oldReachError": 0
+        },
+        {
+          "frame": 6,
+          "seconds": 0.23333333333333334,
+          "part": "armR",
+          "reach": 0.222863,
+          "height": 0.628809,
+          "oldFixedPart": "armR",
+          "oldReachError": 0
+        }
+      ]
+    },
+    {
+      "id": "hakuma",
+      "slot": "s3",
+      "grafted": false,
+      "sourceClip": "s3_v17r2",
+      "sourceFile": "motion/v17r2/hakuma_specials_v17r2.glb",
+      "attackParts": [
+        "armL",
+        "armR"
+      ],
+      "observed": [
+        {
+          "frame": 0,
+          "seconds": 0.20000000000000004,
+          "part": "armL",
+          "reach": 0.55359,
+          "height": 0.407575,
+          "oldFixedPart": "armL",
+          "oldReachError": 0
+        },
+        {
+          "frame": 1,
+          "seconds": 0.21666666666666667,
+          "part": "armL",
+          "reach": 0.555154,
+          "height": 0.407575,
+          "oldFixedPart": "armL",
+          "oldReachError": 0
+        },
+        {
+          "frame": 2,
+          "seconds": 0.23333333333333334,
+          "part": "armL",
+          "reach": 0.556718,
+          "height": 0.407575,
+          "oldFixedPart": "armL",
+          "oldReachError": 0
+        },
+        {
+          "frame": 3,
+          "seconds": 0.25,
+          "part": "armL",
+          "reach": 0.558283,
+          "height": 0.407575,
+          "oldFixedPart": "armL",
+          "oldReachError": 0
+        },
+        {
+          "frame": 4,
+          "seconds": 0.26666666666666666,
+          "part": "armL",
+          "reach": 0.441496,
+          "height": 0.447244,
+          "oldFixedPart": "armL",
+          "oldReachError": 0
+        },
+        {
+          "frame": 5,
+          "seconds": 0.2833333333333333,
+          "part": "armR",
+          "reach": 0.537538,
+          "height": 0.450864,
+          "oldFixedPart": "armL",
+          "oldReachError": 0.3516395673201229
+        },
+        {
+          "frame": 6,
+          "seconds": 0.3,
+          "part": "armR",
+          "reach": 0.537538,
+          "height": 0.450863,
+          "oldFixedPart": "armL",
+          "oldReachError": 0.3516395929801761
+        },
+        {
+          "frame": 7,
+          "seconds": 0.31666666666666665,
+          "part": "armR",
+          "reach": 0.537538,
+          "height": 0.450864,
+          "oldFixedPart": "armL",
+          "oldReachError": 0.3516395280923863
+        },
+        {
+          "frame": 8,
+          "seconds": 0.3333333333333333,
+          "part": "armR",
+          "reach": 0.495229,
+          "height": 0.401501,
+          "oldFixedPart": "armL",
+          "oldReachError": 0.14645840673857913
+        }
+      ]
+    },
+    {
+      "id": "chirka",
+      "slot": "s1",
+      "grafted": false,
+      "sourceClip": "s1_v17",
+      "sourceFile": "motion/v17/chirka_specials_v17.glb",
+      "attackParts": [
+        "armL"
+      ],
+      "observed": [
+        {
+          "frame": 0,
+          "seconds": 0.21666666666666667,
+          "part": "armL",
+          "reach": 0.449024,
+          "height": 0.210399,
+          "oldFixedPart": "armL",
+          "oldReachError": 0
+        },
+        {
+          "frame": 1,
+          "seconds": 0.23333333333333334,
+          "part": "armL",
+          "reach": 0.450268,
+          "height": 0.20795,
+          "oldFixedPart": "armL",
+          "oldReachError": 0
+        },
+        {
+          "frame": 2,
+          "seconds": 0.25,
+          "part": "armL",
+          "reach": 0.451486,
+          "height": 0.205492,
+          "oldFixedPart": "armL",
+          "oldReachError": 0
+        },
+        {
+          "frame": 3,
+          "seconds": 0.26666666666666666,
+          "part": "armL",
+          "reach": 0.452676,
+          "height": 0.203025,
+          "oldFixedPart": "armL",
+          "oldReachError": 0
+        }
+      ]
+    },
+    {
+      "id": "chirka",
+      "slot": "s2",
+      "grafted": false,
+      "sourceClip": "s2_v17",
+      "sourceFile": "motion/v17/chirka_specials_v17.glb",
+      "attackParts": [
+        "armR"
+      ],
+      "observed": [
+        {
+          "frame": 0,
+          "seconds": 0.13333333333333333,
+          "part": "armR",
+          "reach": 0.214756,
+          "height": 0.667503,
+          "oldFixedPart": "armR",
+          "oldReachError": 0
+        },
+        {
+          "frame": 1,
+          "seconds": 0.15,
+          "part": "armR",
+          "reach": 0.226378,
+          "height": 0.675952,
+          "oldFixedPart": "armR",
+          "oldReachError": 0
+        },
+        {
+          "frame": 2,
+          "seconds": 0.16666666666666666,
+          "part": "armR",
+          "reach": 0.207785,
+          "height": 0.707949,
+          "oldFixedPart": "armR",
+          "oldReachError": 0
+        },
+        {
+          "frame": 3,
+          "seconds": 0.18333333333333335,
+          "part": "armR",
+          "reach": 0.160647,
+          "height": 0.721048,
+          "oldFixedPart": "armR",
+          "oldReachError": 0
+        },
+        {
+          "frame": 4,
+          "seconds": 0.2,
+          "part": "armR",
+          "reach": 0.110198,
+          "height": 0.632895,
+          "oldFixedPart": "armR",
+          "oldReachError": 0
+        },
+        {
+          "frame": 5,
+          "seconds": 0.21666666666666667,
+          "part": "armR",
+          "reach": 0.066884,
+          "height": 0.633353,
+          "oldFixedPart": "armR",
+          "oldReachError": 0
+        },
+        {
+          "frame": 6,
+          "seconds": 0.23333333333333334,
+          "part": "armR",
+          "reach": 0.017521,
+          "height": 0.633242,
+          "oldFixedPart": "armR",
+          "oldReachError": 0
+        }
+      ]
+    },
+    {
+      "id": "chirka",
+      "slot": "s3",
+      "grafted": false,
+      "sourceClip": "s3_v17",
+      "sourceFile": "motion/v17/chirka_specials_v17.glb",
+      "attackParts": [
+        "armR"
+      ],
+      "observed": [
+        {
+          "frame": 0,
+          "seconds": 0.21666666666666667,
+          "part": "armR",
+          "reach": 0.494133,
+          "height": 0.222175,
+          "oldFixedPart": "armR",
+          "oldReachError": 0
+        },
+        {
+          "frame": 1,
+          "seconds": 0.23333333333333334,
+          "part": "armR",
+          "reach": 0.494133,
+          "height": 0.222175,
+          "oldFixedPart": "armR",
+          "oldReachError": 0
+        },
+        {
+          "frame": 2,
+          "seconds": 0.25,
+          "part": "armR",
+          "reach": 0.494133,
+          "height": 0.222175,
+          "oldFixedPart": "armR",
+          "oldReachError": 0
+        },
+        {
+          "frame": 3,
+          "seconds": 0.26666666666666666,
+          "part": "armR",
+          "reach": 0.494133,
+          "height": 0.222175,
+          "oldFixedPart": "armR",
+          "oldReachError": 0
+        },
+        {
+          "frame": 4,
+          "seconds": 0.2833333333333333,
+          "part": "armR",
+          "reach": 0.494133,
+          "height": 0.222175,
+          "oldFixedPart": "armR",
+          "oldReachError": 0
+        }
+      ]
+    },
+    {
+      "id": "takimaru",
+      "slot": "s1",
+      "grafted": false,
+      "sourceClip": "s1_v17",
+      "sourceFile": "motion/v17r2/takimaru_specials_v17r2.glb",
+      "attackParts": [
+        "armL",
+        "armR"
+      ],
+      "observed": [
+        {
+          "frame": 0,
+          "seconds": 0.3333333333333333,
+          "part": "armL",
+          "reach": 0.484978,
+          "height": 0.104755,
+          "oldFixedPart": "armL",
+          "oldReachError": 0
+        }
+      ]
+    },
+    {
+      "id": "takimaru",
+      "slot": "s2",
+      "grafted": false,
+      "sourceClip": "s2_v17r2",
+      "sourceFile": "motion/v17r2/takimaru_specials_v17r2.glb",
+      "attackParts": [
+        "armL",
+        "armR"
+      ],
+      "observed": [
+        {
+          "frame": 0,
+          "seconds": 0.16666666666666666,
+          "part": "armL",
+          "reach": 0.446482,
+          "height": 0.554906,
+          "oldFixedPart": "armL",
+          "oldReachError": 0
+        },
+        {
+          "frame": 1,
+          "seconds": 0.18333333333333332,
+          "part": "armL",
+          "reach": 0.424831,
+          "height": 0.603914,
+          "oldFixedPart": "armL",
+          "oldReachError": 0
+        },
+        {
+          "frame": 2,
+          "seconds": 0.19999999999999998,
+          "part": "armL",
+          "reach": 0.402898,
+          "height": 0.65176,
+          "oldFixedPart": "armL",
+          "oldReachError": 0
+        },
+        {
+          "frame": 3,
+          "seconds": 0.21666666666666667,
+          "part": "armL",
+          "reach": 0.380727,
+          "height": 0.698395,
+          "oldFixedPart": "armL",
+          "oldReachError": 0
+        },
+        {
+          "frame": 4,
+          "seconds": 0.23333333333333334,
+          "part": "armL",
+          "reach": 0.358432,
+          "height": 0.743837,
+          "oldFixedPart": "armL",
+          "oldReachError": 0
+        },
+        {
+          "frame": 5,
+          "seconds": 0.25,
+          "part": "armL",
+          "reach": 0.336078,
+          "height": 0.788063,
+          "oldFixedPart": "armL",
+          "oldReachError": 0
+        },
+        {
+          "frame": 6,
+          "seconds": 0.26666666666666666,
+          "part": "armL",
+          "reach": 0.313754,
+          "height": 0.83108,
+          "oldFixedPart": "armL",
+          "oldReachError": 0
+        }
+      ]
+    },
+    {
+      "id": "takimaru",
+      "slot": "s3",
+      "grafted": false,
+      "sourceClip": "s3_v17",
+      "sourceFile": "motion/v17r2/takimaru_specials_v17r2.glb",
+      "attackParts": [
+        "armL",
+        "armR"
+      ],
+      "observed": [
+        {
+          "frame": 0,
+          "seconds": 0.15,
+          "part": "armL",
+          "reach": 0.64868,
+          "height": 0.323335,
+          "oldFixedPart": "armL",
+          "oldReachError": 0
+        },
+        {
+          "frame": 1,
+          "seconds": 0.16666666666666666,
+          "part": "armL",
+          "reach": 0.64868,
+          "height": 0.323335,
+          "oldFixedPart": "armL",
+          "oldReachError": 0
+        },
+        {
+          "frame": 2,
+          "seconds": 0.18333333333333332,
+          "part": "armL",
+          "reach": 0.64868,
+          "height": 0.323335,
+          "oldFixedPart": "armL",
+          "oldReachError": 0
+        }
+      ]
+    },
+    {
+      "id": "yomikage",
+      "slot": "s1",
+      "grafted": false,
+      "sourceClip": "s1_v17",
+      "sourceFile": "motion/v17r2/yomikage_specials_v17r2.glb",
+      "attackParts": [
+        "armR"
+      ],
+      "observed": [
+        {
+          "frame": 0,
+          "seconds": 0.21666666666666667,
+          "part": "armR",
+          "reach": 0.301047,
+          "height": 0.402718,
+          "oldFixedPart": "armR",
+          "oldReachError": 0
+        }
+      ]
+    },
+    {
+      "id": "yomikage",
+      "slot": "s2",
+      "grafted": false,
+      "sourceClip": "s2_v17r2",
+      "sourceFile": "motion/v17r2/yomikage_specials_v17r2.glb",
+      "attackParts": [
+        "armR"
+      ],
+      "observed": [
+        {
+          "frame": 0,
+          "seconds": 0.13333333333333333,
+          "part": "armR",
+          "reach": 0.315404,
+          "height": 0.469984,
+          "oldFixedPart": "armR",
+          "oldReachError": 0
+        },
+        {
+          "frame": 1,
+          "seconds": 0.15,
+          "part": "armR",
+          "reach": 0.311553,
+          "height": 0.474808,
+          "oldFixedPart": "armR",
+          "oldReachError": 0
+        },
+        {
+          "frame": 2,
+          "seconds": 0.16666666666666666,
+          "part": "armR",
+          "reach": 0.307607,
+          "height": 0.479639,
+          "oldFixedPart": "armR",
+          "oldReachError": 0
+        },
+        {
+          "frame": 3,
+          "seconds": 0.18333333333333335,
+          "part": "armR",
+          "reach": 0.303557,
+          "height": 0.484483,
+          "oldFixedPart": "armR",
+          "oldReachError": 0
+        },
+        {
+          "frame": 4,
+          "seconds": 0.2,
+          "part": "armR",
+          "reach": 0.299394,
+          "height": 0.489349,
+          "oldFixedPart": "armR",
+          "oldReachError": 0
+        },
+        {
+          "frame": 5,
+          "seconds": 0.21666666666666667,
+          "part": "armR",
+          "reach": 0.295103,
+          "height": 0.494246,
+          "oldFixedPart": "armR",
+          "oldReachError": 0
+        },
+        {
+          "frame": 6,
+          "seconds": 0.23333333333333334,
+          "part": "armR",
+          "reach": 0.290671,
+          "height": 0.49918,
+          "oldFixedPart": "armR",
+          "oldReachError": 0
+        }
+      ]
+    },
+    {
+      "id": "yomikage",
+      "slot": "s3",
+      "grafted": false,
+      "sourceClip": "s3_v17",
+      "sourceFile": "motion/v17r2/yomikage_specials_v17r2.glb",
+      "attackParts": [
+        "armL"
+      ],
+      "observed": [
+        {
+          "frame": 0,
+          "seconds": 0.11666666666666667,
+          "part": "armL",
+          "reach": 0.16417,
+          "height": 0.438649,
+          "oldFixedPart": "armL",
+          "oldReachError": 0
+        },
+        {
+          "frame": 1,
+          "seconds": 0.13333333333333333,
+          "part": "armL",
+          "reach": 0.16417,
+          "height": 0.438466,
+          "oldFixedPart": "armL",
+          "oldReachError": 0
+        },
+        {
+          "frame": 2,
+          "seconds": 0.15,
+          "part": "armL",
+          "reach": 0.16417,
+          "height": 0.438284,
+          "oldFixedPart": "armL",
+          "oldReachError": 0
+        },
+        {
+          "frame": 3,
+          "seconds": 0.16666666666666666,
+          "part": "armL",
+          "reach": 0.16417,
+          "height": 0.438101,
+          "oldFixedPart": "armL",
+          "oldReachError": 0
+        },
+        {
+          "frame": 4,
+          "seconds": 0.18333333333333335,
+          "part": "armL",
+          "reach": 0.16417,
+          "height": 0.437918,
+          "oldFixedPart": "armL",
+          "oldReachError": 0
+        },
+        {
+          "frame": 5,
+          "seconds": 0.2,
+          "part": "armL",
+          "reach": 0.16417,
+          "height": 0.437736,
+          "oldFixedPart": "armL",
+          "oldReachError": 0
+        },
+        {
+          "frame": 6,
+          "seconds": 0.21666666666666667,
+          "part": "armL",
+          "reach": 0.16417,
+          "height": 0.437553,
+          "oldFixedPart": "armL",
+          "oldReachError": 0
+        },
+        {
+          "frame": 7,
+          "seconds": 0.23333333333333334,
+          "part": "armL",
+          "reach": 0.16417,
+          "height": 0.43737,
+          "oldFixedPart": "armL",
+          "oldReachError": 0
+        },
+        {
+          "frame": 8,
+          "seconds": 0.25,
+          "part": "armL",
+          "reach": 0.16417,
+          "height": 0.437188,
+          "oldFixedPart": "armL",
+          "oldReachError": 0
+        },
+        {
+          "frame": 9,
+          "seconds": 0.26666666666666666,
+          "part": "armL",
+          "reach": 0.16417,
+          "height": 0.437005,
+          "oldFixedPart": "armL",
+          "oldReachError": 0
+        },
+        {
+          "frame": 10,
+          "seconds": 0.2833333333333333,
+          "part": "armL",
+          "reach": 0.16417,
+          "height": 0.436823,
+          "oldFixedPart": "armL",
+          "oldReachError": 0
+        },
+        {
+          "frame": 11,
+          "seconds": 0.3,
+          "part": "armL",
+          "reach": 0.16417,
+          "height": 0.43664,
+          "oldFixedPart": "armL",
+          "oldReachError": 0
+        },
+        {
+          "frame": 12,
+          "seconds": 0.31666666666666665,
+          "part": "armL",
+          "reach": 0.16417,
+          "height": 0.436457,
+          "oldFixedPart": "armL",
+          "oldReachError": 0
+        }
+      ]
+    },
+    {
+      "id": "bullet",
+      "slot": "s1",
+      "grafted": false,
+      "sourceClip": "s1_v17",
+      "sourceFile": "motion/v17r2/bullet_specials_v17r2.glb",
+      "attackParts": [
+        "tail"
+      ],
+      "observed": [
+        {
+          "frame": 0,
+          "seconds": 0.2833333333333333,
+          "part": "tail",
+          "reach": -0.082506,
+          "height": 0.234307,
+          "oldFixedPart": "tail",
+          "oldReachError": 0
+        }
+      ]
+    },
+    {
+      "id": "bullet",
+      "slot": "s2",
+      "grafted": false,
+      "sourceClip": "s2_v17r2",
+      "sourceFile": "motion/v17r2/bullet_specials_v17r2.glb",
+      "attackParts": [
+        "tail"
+      ],
+      "observed": [
+        {
+          "frame": 0,
+          "seconds": 0.15,
+          "part": "tail",
+          "reach": 0.286172,
+          "height": 0.535323,
+          "oldFixedPart": "tail",
+          "oldReachError": 0
+        },
+        {
+          "frame": 1,
+          "seconds": 0.16666666666666666,
+          "part": "tail",
+          "reach": 0.279775,
+          "height": 0.512148,
+          "oldFixedPart": "tail",
+          "oldReachError": 0
+        },
+        {
+          "frame": 2,
+          "seconds": 0.18333333333333332,
+          "part": "tail",
+          "reach": 0.274419,
+          "height": 0.50476,
+          "oldFixedPart": "tail",
+          "oldReachError": 0
+        },
+        {
+          "frame": 3,
+          "seconds": 0.2,
+          "part": "tail",
+          "reach": 0.271995,
+          "height": 0.506725,
+          "oldFixedPart": "tail",
+          "oldReachError": 0
+        },
+        {
+          "frame": 4,
+          "seconds": 0.21666666666666667,
+          "part": "tail",
+          "reach": 0.271006,
+          "height": 0.511551,
+          "oldFixedPart": "tail",
+          "oldReachError": 0
+        },
+        {
+          "frame": 5,
+          "seconds": 0.23333333333333334,
+          "part": "tail",
+          "reach": 0.270537,
+          "height": 0.517161,
+          "oldFixedPart": "tail",
+          "oldReachError": 0
+        },
+        {
+          "frame": 6,
+          "seconds": 0.25,
+          "part": "tail",
+          "reach": 0.270245,
+          "height": 0.522996,
+          "oldFixedPart": "tail",
+          "oldReachError": 0
+        }
+      ]
+    },
+    {
+      "id": "bullet",
+      "slot": "s3",
+      "grafted": false,
+      "sourceClip": "s3_v17",
+      "sourceFile": "motion/v17r2/bullet_specials_v17r2.glb",
+      "attackParts": [
+        "tail"
+      ],
+      "observed": [
+        {
+          "frame": 0,
+          "seconds": 0.31666666666666665,
+          "part": "tail",
+          "reach": 0.473246,
+          "height": 0.216673,
+          "oldFixedPart": "tail",
+          "oldReachError": 0
+        },
+        {
+          "frame": 1,
+          "seconds": 0.3333333333333333,
+          "part": "tail",
+          "reach": 0.536123,
+          "height": 0.226535,
+          "oldFixedPart": "tail",
+          "oldReachError": 0
+        },
+        {
+          "frame": 2,
+          "seconds": 0.35,
+          "part": "tail",
+          "reach": 0.595496,
+          "height": 0.235784,
+          "oldFixedPart": "tail",
+          "oldReachError": 0
+        },
+        {
+          "frame": 3,
+          "seconds": 0.3666666666666667,
+          "part": "tail",
+          "reach": 0.639875,
+          "height": 0.255919,
+          "oldFixedPart": "tail",
+          "oldReachError": 0
+        },
+        {
+          "frame": 4,
+          "seconds": 0.38333333333333336,
+          "part": "tail",
+          "reach": 0.676151,
+          "height": 0.247667,
+          "oldFixedPart": "tail",
+          "oldReachError": 0
+        },
+        {
+          "frame": 5,
+          "seconds": 0.4,
+          "part": "tail",
+          "reach": 0.68211,
+          "height": 0.253351,
+          "oldFixedPart": "tail",
+          "oldReachError": 0
+        }
+      ]
+    },
+    {
+      "id": "dark_moguzo",
+      "slot": "s1",
+      "grafted": false,
+      "sourceClip": "s1_v17",
+      "sourceFile": "motion/v17/dark_moguzo_specials_v17.glb",
+      "attackParts": [
+        "armR"
+      ],
+      "observed": [
+        {
+          "frame": 0,
+          "seconds": 0.18333333333333332,
+          "part": "armR",
+          "reach": 0.414725,
+          "height": 0.234471,
+          "oldFixedPart": "armR",
+          "oldReachError": 0
+        }
+      ]
+    },
+    {
+      "id": "dark_moguzo",
+      "slot": "s2",
+      "grafted": false,
+      "sourceClip": "s2_v17",
+      "sourceFile": "motion/v17/dark_moguzo_specials_v17.glb",
+      "attackParts": [
+        "armL"
+      ],
+      "observed": [
+        {
+          "frame": 0,
+          "seconds": 0.08333333333333333,
+          "part": "armL",
+          "reach": 0.263523,
+          "height": 0.551274,
+          "oldFixedPart": "armL",
+          "oldReachError": 0
+        },
+        {
+          "frame": 1,
+          "seconds": 0.1,
+          "part": "armL",
+          "reach": 0.263633,
+          "height": 0.553178,
+          "oldFixedPart": "armL",
+          "oldReachError": 0
+        },
+        {
+          "frame": 2,
+          "seconds": 0.11666666666666667,
+          "part": "armL",
+          "reach": 0.263743,
+          "height": 0.555079,
+          "oldFixedPart": "armL",
+          "oldReachError": 0
+        },
+        {
+          "frame": 3,
+          "seconds": 0.13333333333333333,
+          "part": "armL",
+          "reach": 0.263853,
+          "height": 0.561026,
+          "oldFixedPart": "armL",
+          "oldReachError": 0
+        },
+        {
+          "frame": 4,
+          "seconds": 0.15000000000000002,
+          "part": "armL",
+          "reach": 0.263967,
+          "height": 0.56292,
+          "oldFixedPart": "armL",
+          "oldReachError": 0
+        },
+        {
+          "frame": 5,
+          "seconds": 0.16666666666666669,
+          "part": "armL",
+          "reach": 0.26408,
+          "height": 0.564811,
+          "oldFixedPart": "armL",
+          "oldReachError": 0
+        },
+        {
+          "frame": 6,
+          "seconds": 0.18333333333333335,
+          "part": "armL",
+          "reach": 0.264193,
+          "height": 0.5667,
+          "oldFixedPart": "armL",
+          "oldReachError": 0
+        },
+        {
+          "frame": 7,
+          "seconds": 0.2,
+          "part": "armL",
+          "reach": 0.264305,
+          "height": 0.568586,
+          "oldFixedPart": "armL",
+          "oldReachError": 0
+        }
+      ]
+    },
+    {
+      "id": "dark_moguzo",
+      "slot": "s3",
+      "grafted": false,
+      "sourceClip": "s3_v17",
+      "sourceFile": "motion/v17/dark_moguzo_specials_v17.glb",
+      "attackParts": [
+        "armL",
+        "armR"
+      ],
+      "observed": [
+        {
+          "frame": 0,
+          "seconds": 0.11666666666666667,
+          "part": "armL",
+          "reach": 0.460616,
+          "height": 0.146474,
+          "oldFixedPart": "armL",
+          "oldReachError": 0
+        },
+        {
+          "frame": 1,
+          "seconds": 0.13333333333333333,
+          "part": "armR",
+          "reach": 0.377143,
+          "height": 0.293405,
+          "oldFixedPart": "armL",
+          "oldReachError": 0.09880842964031528
+        },
+        {
+          "frame": 2,
+          "seconds": 0.15,
+          "part": "armR",
+          "reach": 0.490331,
+          "height": 0.293372,
+          "oldFixedPart": "armL",
+          "oldReachError": 0.298579653626326
+        },
+        {
+          "frame": 3,
+          "seconds": 0.16666666666666669,
+          "part": "armR",
+          "reach": 0.490331,
+          "height": 0.293372,
+          "oldFixedPart": "armL",
+          "oldReachError": 0.2985797080443432
+        },
+        {
+          "frame": 4,
+          "seconds": 0.18333333333333335,
+          "part": "armR",
+          "reach": 0.490331,
+          "height": 0.293372,
+          "oldFixedPart": "armL",
+          "oldReachError": 0.29857970843930404
+        },
+        {
+          "frame": 5,
+          "seconds": 0.2,
+          "part": "armR",
+          "reach": 0.409196,
+          "height": 0.351095,
+          "oldFixedPart": "armL",
+          "oldReachError": 0.13087873753881418
+        },
+        {
+          "frame": 6,
+          "seconds": 0.21666666666666667,
+          "part": "armL",
+          "reach": 0.473028,
+          "height": 0.353461,
+          "oldFixedPart": "armL",
+          "oldReachError": 0
+        },
+        {
+          "frame": 7,
+          "seconds": 0.23333333333333334,
+          "part": "armL",
+          "reach": 0.530616,
+          "height": 0.344936,
+          "oldFixedPart": "armL",
+          "oldReachError": 0
+        },
+        {
+          "frame": 8,
+          "seconds": 0.25,
+          "part": "armL",
+          "reach": 0.530616,
+          "height": 0.344936,
+          "oldFixedPart": "armL",
+          "oldReachError": 0
+        }
+      ]
+    },
+    {
+      "id": "moguzo",
+      "slot": "s1",
+      "grafted": true,
+      "sourceClip": "s1_v17",
+      "sourceFile": "motion/v17r2/moguzo_specials_v17r2.glb",
+      "attackParts": [
+        "armR"
+      ],
+      "observed": [
+        {
+          "frame": 0,
+          "seconds": 0.21666666666666667,
+          "part": "armR",
+          "reach": 0.52642,
+          "height": 0.166945,
+          "oldFixedPart": "armR",
+          "oldReachError": 0
+        },
+        {
+          "frame": 1,
+          "seconds": 0.23333333333333334,
+          "part": "armR",
+          "reach": 0.474629,
+          "height": 0.296421,
+          "oldFixedPart": "armR",
+          "oldReachError": 0
+        }
+      ]
+    },
+    {
+      "id": "moguzo",
+      "slot": "s2",
+      "grafted": true,
+      "sourceClip": "s2_v17r2",
+      "sourceFile": "motion/v17r2/moguzo_specials_v17r2.glb",
+      "attackParts": [
+        "armR"
+      ],
+      "observed": [
+        {
+          "frame": 0,
+          "seconds": 0.10000000000000002,
+          "part": "armR",
+          "reach": 0.290563,
+          "height": 0.46107,
+          "oldFixedPart": "armR",
+          "oldReachError": 0
+        },
+        {
+          "frame": 1,
+          "seconds": 0.11666666666666667,
+          "part": "armR",
+          "reach": 0.25621,
+          "height": 0.531023,
+          "oldFixedPart": "armR",
+          "oldReachError": 0
+        },
+        {
+          "frame": 2,
+          "seconds": 0.13333333333333333,
+          "part": "armR",
+          "reach": 0.235055,
+          "height": 0.599879,
+          "oldFixedPart": "armR",
+          "oldReachError": 0
+        },
+        {
+          "frame": 3,
+          "seconds": 0.15,
+          "part": "armR",
+          "reach": 0.227319,
+          "height": 0.556728,
+          "oldFixedPart": "armR",
+          "oldReachError": 0
+        },
+        {
+          "frame": 4,
+          "seconds": 0.16666666666666669,
+          "part": "armR",
+          "reach": 0.242075,
+          "height": 0.614555,
+          "oldFixedPart": "armR",
+          "oldReachError": 0
+        },
+        {
+          "frame": 5,
+          "seconds": 0.18333333333333335,
+          "part": "armR",
+          "reach": 0.253242,
+          "height": 0.659489,
+          "oldFixedPart": "armR",
+          "oldReachError": 0
+        },
+        {
+          "frame": 6,
+          "seconds": 0.2,
+          "part": "armR",
+          "reach": 0.248117,
+          "height": 0.684809,
+          "oldFixedPart": "armR",
+          "oldReachError": 0
+        },
+        {
+          "frame": 7,
+          "seconds": 0.21666666666666667,
+          "part": "armR",
+          "reach": 0.18319,
+          "height": 0.829699,
+          "oldFixedPart": "armR",
+          "oldReachError": 0
+        }
+      ]
+    },
+    {
+      "id": "moguzo",
+      "slot": "s3",
+      "grafted": true,
+      "sourceClip": "s3_v17",
+      "sourceFile": "motion/v17r2/moguzo_specials_v17r2.glb",
+      "attackParts": [
+        "armL",
+        "armR"
+      ],
+      "observed": [
+        {
+          "frame": 0,
+          "seconds": 0.20000000000000004,
+          "part": "armL",
+          "reach": 0.489628,
+          "height": 0.369061,
+          "oldFixedPart": "armL",
+          "oldReachError": 0
+        },
+        {
+          "frame": 1,
+          "seconds": 0.21666666666666667,
+          "part": "armL",
+          "reach": 0.489424,
+          "height": 0.372604,
+          "oldFixedPart": "armL",
+          "oldReachError": 0
+        },
+        {
+          "frame": 2,
+          "seconds": 0.23333333333333334,
+          "part": "armL",
+          "reach": 0.489197,
+          "height": 0.376117,
+          "oldFixedPart": "armL",
+          "oldReachError": 0
+        },
+        {
+          "frame": 3,
+          "seconds": 0.25,
+          "part": "armL",
+          "reach": 0.488948,
+          "height": 0.3796,
+          "oldFixedPart": "armL",
+          "oldReachError": 0
+        },
+        {
+          "frame": 4,
+          "seconds": 0.26666666666666666,
+          "part": "armL",
+          "reach": 0.488676,
+          "height": 0.383053,
+          "oldFixedPart": "armL",
+          "oldReachError": 0
+        }
+      ]
+    },
+    {
+      "id": "pisuke",
+      "slot": "s1",
+      "grafted": true,
+      "sourceClip": "s1_v17",
+      "sourceFile": "motion/v17/pisuke_specials_v17.glb",
+      "attackParts": [
+        "legR"
+      ],
+      "observed": [
+        {
+          "frame": 0,
+          "seconds": 0.18333333333333332,
+          "part": "legR",
+          "reach": 0.34549,
+          "height": 0.221709,
+          "oldFixedPart": "legR",
+          "oldReachError": 0
+        }
+      ]
+    },
+    {
+      "id": "pisuke",
+      "slot": "s2",
+      "grafted": true,
+      "sourceClip": "s2_v17",
+      "sourceFile": "motion/v17/pisuke_specials_v17.glb",
+      "attackParts": [
+        "legR"
+      ],
+      "observed": [
+        {
+          "frame": 0,
+          "seconds": 0.10000000000000002,
+          "part": "legR",
+          "reach": 0.185765,
+          "height": 0.436316,
+          "oldFixedPart": "legR",
+          "oldReachError": 0
+        },
+        {
+          "frame": 1,
+          "seconds": 0.11666666666666667,
+          "part": "legR",
+          "reach": 0.186194,
+          "height": 0.447399,
+          "oldFixedPart": "legR",
+          "oldReachError": 0
+        },
+        {
+          "frame": 2,
+          "seconds": 0.13333333333333333,
+          "part": "legR",
+          "reach": 0.185181,
+          "height": 0.451183,
+          "oldFixedPart": "legR",
+          "oldReachError": 0
+        },
+        {
+          "frame": 3,
+          "seconds": 0.15,
+          "part": "legR",
+          "reach": 0.183981,
+          "height": 0.449,
+          "oldFixedPart": "legR",
+          "oldReachError": 0
+        },
+        {
+          "frame": 4,
+          "seconds": 0.16666666666666669,
+          "part": "legR",
+          "reach": 0.183454,
+          "height": 0.448208,
+          "oldFixedPart": "legR",
+          "oldReachError": 0
+        },
+        {
+          "frame": 5,
+          "seconds": 0.18333333333333335,
+          "part": "legR",
+          "reach": 0.183454,
+          "height": 0.448208,
+          "oldFixedPart": "legR",
+          "oldReachError": 0
+        },
+        {
+          "frame": 6,
+          "seconds": 0.2,
+          "part": "legR",
+          "reach": 0.183454,
+          "height": 0.448208,
+          "oldFixedPart": "legR",
+          "oldReachError": 0
+        },
+        {
+          "frame": 7,
+          "seconds": 0.21666666666666667,
+          "part": "legR",
+          "reach": 0.183454,
+          "height": 0.448208,
+          "oldFixedPart": "legR",
+          "oldReachError": 0
+        }
+      ]
+    },
+    {
+      "id": "pisuke",
+      "slot": "s3",
+      "grafted": true,
+      "sourceClip": "s3_v17",
+      "sourceFile": "motion/v17/pisuke_specials_v17.glb",
+      "attackParts": [
+        "legR"
+      ],
+      "observed": [
+        {
+          "frame": 0,
+          "seconds": 0.11666666666666667,
+          "part": "legR",
+          "reach": 0.399636,
+          "height": 0.129272,
+          "oldFixedPart": "legR",
+          "oldReachError": 0
+        },
+        {
+          "frame": 1,
+          "seconds": 0.13333333333333333,
+          "part": "legR",
+          "reach": 0.399636,
+          "height": 0.129272,
+          "oldFixedPart": "legR",
+          "oldReachError": 0
+        },
+        {
+          "frame": 2,
+          "seconds": 0.15,
+          "part": "legR",
+          "reach": 0.399636,
+          "height": 0.129272,
+          "oldFixedPart": "legR",
+          "oldReachError": 0
+        },
+        {
+          "frame": 3,
+          "seconds": 0.16666666666666669,
+          "part": "legR",
+          "reach": 0.317021,
+          "height": 0.124903,
+          "oldFixedPart": "legR",
+          "oldReachError": 0
+        },
+        {
+          "frame": 4,
+          "seconds": 0.18333333333333335,
+          "part": "legR",
+          "reach": 0.219927,
+          "height": 0.127187,
+          "oldFixedPart": "legR",
+          "oldReachError": 0
+        },
+        {
+          "frame": 5,
+          "seconds": 0.2,
+          "part": "legR",
+          "reach": 0.264431,
+          "height": 0.17486,
+          "oldFixedPart": "legR",
+          "oldReachError": 0
+        },
+        {
+          "frame": 6,
+          "seconds": 0.21666666666666667,
+          "part": "legR",
+          "reach": 0.345037,
+          "height": 0.336071,
+          "oldFixedPart": "legR",
+          "oldReachError": 0
+        },
+        {
+          "frame": 7,
+          "seconds": 0.23333333333333334,
+          "part": "legR",
+          "reach": 0.345037,
+          "height": 0.336071,
+          "oldFixedPart": "legR",
+          "oldReachError": 0
+        },
+        {
+          "frame": 8,
+          "seconds": 0.25,
+          "part": "legR",
+          "reach": 0.345037,
+          "height": 0.336071,
+          "oldFixedPart": "legR",
+          "oldReachError": 0
+        }
+      ]
+    },
+    {
+      "id": "godan",
+      "slot": "s1",
+      "grafted": true,
+      "sourceClip": "s1_v17",
+      "sourceFile": "motion/v17r2/godan_specials_v17r2.glb",
+      "attackParts": [
+        "legR"
+      ],
+      "observed": [
+        {
+          "frame": 0,
+          "seconds": 0.35,
+          "part": "legR",
+          "reach": 0.296975,
+          "height": 0.007889,
+          "oldFixedPart": "legR",
+          "oldReachError": 0
+        },
+        {
+          "frame": 1,
+          "seconds": 0.36666666666666664,
+          "part": "legR",
+          "reach": 0.296975,
+          "height": 0.007889,
+          "oldFixedPart": "legR",
+          "oldReachError": 0
+        },
+        {
+          "frame": 2,
+          "seconds": 0.3833333333333333,
+          "part": "legR",
+          "reach": 0.296975,
+          "height": 0.007889,
+          "oldFixedPart": "legR",
+          "oldReachError": 0
+        },
+        {
+          "frame": 3,
+          "seconds": 0.4,
+          "part": "legR",
+          "reach": 0.296975,
+          "height": 0.007889,
+          "oldFixedPart": "legR",
+          "oldReachError": 0
+        },
+        {
+          "frame": 4,
+          "seconds": 0.4166666666666667,
+          "part": "legR",
+          "reach": 0.296975,
+          "height": 0.007889,
+          "oldFixedPart": "legR",
+          "oldReachError": 0
+        }
+      ]
+    },
+    {
+      "id": "godan",
+      "slot": "s2",
+      "grafted": true,
+      "sourceClip": "s2_v17r2",
+      "sourceFile": "motion/v17r2/godan_specials_v17r2.glb",
+      "attackParts": [
+        "armL",
+        "armR"
+      ],
+      "observed": [
+        {
+          "frame": 0,
+          "seconds": 0.18333333333333332,
+          "part": "armL",
+          "reach": 0.34635,
+          "height": 0.526005,
+          "oldFixedPart": "armL",
+          "oldReachError": 0
+        },
+        {
+          "frame": 1,
+          "seconds": 0.19999999999999998,
+          "part": "armL",
+          "reach": 0.33126,
+          "height": 0.554452,
+          "oldFixedPart": "armL",
+          "oldReachError": 0
+        },
+        {
+          "frame": 2,
+          "seconds": 0.21666666666666665,
+          "part": "armL",
+          "reach": 0.316093,
+          "height": 0.582436,
+          "oldFixedPart": "armL",
+          "oldReachError": 0
+        },
+        {
+          "frame": 3,
+          "seconds": 0.23333333333333334,
+          "part": "armL",
+          "reach": 0.300877,
+          "height": 0.60996,
+          "oldFixedPart": "armL",
+          "oldReachError": 0
+        },
+        {
+          "frame": 4,
+          "seconds": 0.25,
+          "part": "armL",
+          "reach": 0.285641,
+          "height": 0.637029,
+          "oldFixedPart": "armL",
+          "oldReachError": 0
+        },
+        {
+          "frame": 5,
+          "seconds": 0.26666666666666666,
+          "part": "armL",
+          "reach": 0.270392,
+          "height": 0.663629,
+          "oldFixedPart": "armL",
+          "oldReachError": 0
+        },
+        {
+          "frame": 6,
+          "seconds": 0.2833333333333333,
+          "part": "armL",
+          "reach": 0.255162,
+          "height": 0.689773,
+          "oldFixedPart": "armL",
+          "oldReachError": 0
+        }
+      ]
+    },
+    {
+      "id": "godan",
+      "slot": "s3",
+      "grafted": true,
+      "sourceClip": "s3_v17",
+      "sourceFile": "motion/v17r2/godan_specials_v17r2.glb",
+      "attackParts": [
+        "armL",
+        "body"
+      ],
+      "observed": [
+        {
+          "frame": 0,
+          "seconds": 0.3,
+          "part": "body",
+          "reach": 0.389254,
+          "height": 0.264438,
+          "oldFixedPart": "body",
+          "oldReachError": 0
+        },
+        {
+          "frame": 1,
+          "seconds": 0.31666666666666665,
+          "part": "body",
+          "reach": 0.389254,
+          "height": 0.264438,
+          "oldFixedPart": "body",
+          "oldReachError": 0
+        },
+        {
+          "frame": 2,
+          "seconds": 0.3333333333333333,
+          "part": "body",
+          "reach": 0.389254,
+          "height": 0.264438,
+          "oldFixedPart": "body",
+          "oldReachError": 0
+        },
+        {
+          "frame": 3,
+          "seconds": 0.35,
+          "part": "body",
+          "reach": 0.389254,
+          "height": 0.264438,
+          "oldFixedPart": "body",
+          "oldReachError": 0
+        },
+        {
+          "frame": 4,
+          "seconds": 0.3666666666666667,
+          "part": "body",
+          "reach": 0.389254,
+          "height": 0.264438,
+          "oldFixedPart": "body",
+          "oldReachError": 0
+        },
+        {
+          "frame": 5,
+          "seconds": 0.38333333333333336,
+          "part": "body",
+          "reach": 0.389254,
+          "height": 0.264438,
+          "oldFixedPart": "body",
+          "oldReachError": 0
+        },
+        {
+          "frame": 6,
+          "seconds": 0.4,
+          "part": "body",
+          "reach": 0.389254,
+          "height": 0.264438,
+          "oldFixedPart": "body",
+          "oldReachError": 0
+        }
+      ]
+    },
+    {
+      "id": "hakuma",
+      "slot": "s1",
+      "grafted": true,
+      "sourceClip": "s1_v17",
+      "sourceFile": "motion/v17r2/hakuma_specials_v17r2.glb",
+      "attackParts": [
+        "armR"
+      ],
+      "observed": [
+        {
+          "frame": 0,
+          "seconds": 0.18333333333333332,
+          "part": "armR",
+          "reach": 0.488308,
+          "height": 0.421234,
+          "oldFixedPart": "armR",
+          "oldReachError": 0
+        },
+        {
+          "frame": 1,
+          "seconds": 0.19999999999999998,
+          "part": "armR",
+          "reach": 0.49087,
+          "height": 0.420078,
+          "oldFixedPart": "armR",
+          "oldReachError": 0
+        },
+        {
+          "frame": 2,
+          "seconds": 0.21666666666666667,
+          "part": "armR",
+          "reach": 0.493423,
+          "height": 0.41892,
+          "oldFixedPart": "armR",
+          "oldReachError": 0
+        },
+        {
+          "frame": 3,
+          "seconds": 0.23333333333333334,
+          "part": "armR",
+          "reach": 0.495968,
+          "height": 0.41776,
+          "oldFixedPart": "armR",
+          "oldReachError": 0
+        },
+        {
+          "frame": 4,
+          "seconds": 0.25,
+          "part": "armR",
+          "reach": 0.498505,
+          "height": 0.416598,
+          "oldFixedPart": "armR",
+          "oldReachError": 0
+        },
+        {
+          "frame": 5,
+          "seconds": 0.26666666666666666,
+          "part": "armR",
+          "reach": 0.501032,
+          "height": 0.415435,
+          "oldFixedPart": "armR",
+          "oldReachError": 0
+        }
+      ]
+    },
+    {
+      "id": "hakuma",
+      "slot": "s2",
+      "grafted": true,
+      "sourceClip": "s2_v17",
+      "sourceFile": "motion/v17r2/hakuma_specials_v17r2.glb",
+      "attackParts": [
+        "armR"
+      ],
+      "observed": [
+        {
+          "frame": 0,
+          "seconds": 0.13333333333333333,
+          "part": "armR",
+          "reach": 0.221057,
+          "height": 0.622391,
+          "oldFixedPart": "armR",
+          "oldReachError": 0
+        },
+        {
+          "frame": 1,
+          "seconds": 0.15,
+          "part": "armR",
+          "reach": 0.221345,
+          "height": 0.623475,
+          "oldFixedPart": "armR",
+          "oldReachError": 0
+        },
+        {
+          "frame": 2,
+          "seconds": 0.16666666666666666,
+          "part": "armR",
+          "reach": 0.221638,
+          "height": 0.624552,
+          "oldFixedPart": "armR",
+          "oldReachError": 0
+        },
+        {
+          "frame": 3,
+          "seconds": 0.18333333333333335,
+          "part": "armR",
+          "reach": 0.221936,
+          "height": 0.625625,
+          "oldFixedPart": "armR",
+          "oldReachError": 0
+        },
+        {
+          "frame": 4,
+          "seconds": 0.2,
+          "part": "armR",
+          "reach": 0.222239,
+          "height": 0.626692,
+          "oldFixedPart": "armR",
+          "oldReachError": 0
+        },
+        {
+          "frame": 5,
+          "seconds": 0.21666666666666667,
+          "part": "armR",
+          "reach": 0.222548,
+          "height": 0.627753,
+          "oldFixedPart": "armR",
+          "oldReachError": 0
+        },
+        {
+          "frame": 6,
+          "seconds": 0.23333333333333334,
+          "part": "armR",
+          "reach": 0.222863,
+          "height": 0.628809,
+          "oldFixedPart": "armR",
+          "oldReachError": 0
+        }
+      ]
+    },
+    {
+      "id": "hakuma",
+      "slot": "s3",
+      "grafted": true,
+      "sourceClip": "s3_v17r2",
+      "sourceFile": "motion/v17r2/hakuma_specials_v17r2.glb",
+      "attackParts": [
+        "armL",
+        "armR"
+      ],
+      "observed": [
+        {
+          "frame": 0,
+          "seconds": 0.20000000000000004,
+          "part": "armL",
+          "reach": 0.55359,
+          "height": 0.407575,
+          "oldFixedPart": "armL",
+          "oldReachError": 0
+        },
+        {
+          "frame": 1,
+          "seconds": 0.21666666666666667,
+          "part": "armL",
+          "reach": 0.555154,
+          "height": 0.407575,
+          "oldFixedPart": "armL",
+          "oldReachError": 0
+        },
+        {
+          "frame": 2,
+          "seconds": 0.23333333333333334,
+          "part": "armL",
+          "reach": 0.556718,
+          "height": 0.407575,
+          "oldFixedPart": "armL",
+          "oldReachError": 0
+        },
+        {
+          "frame": 3,
+          "seconds": 0.25,
+          "part": "armL",
+          "reach": 0.558283,
+          "height": 0.407575,
+          "oldFixedPart": "armL",
+          "oldReachError": 0
+        },
+        {
+          "frame": 4,
+          "seconds": 0.26666666666666666,
+          "part": "armL",
+          "reach": 0.441496,
+          "height": 0.447244,
+          "oldFixedPart": "armL",
+          "oldReachError": 0
+        },
+        {
+          "frame": 5,
+          "seconds": 0.2833333333333333,
+          "part": "armR",
+          "reach": 0.537538,
+          "height": 0.450864,
+          "oldFixedPart": "armL",
+          "oldReachError": 0.3516395673201229
+        },
+        {
+          "frame": 6,
+          "seconds": 0.3,
+          "part": "armR",
+          "reach": 0.537538,
+          "height": 0.450863,
+          "oldFixedPart": "armL",
+          "oldReachError": 0.3516395929801761
+        },
+        {
+          "frame": 7,
+          "seconds": 0.31666666666666665,
+          "part": "armR",
+          "reach": 0.537538,
+          "height": 0.450864,
+          "oldFixedPart": "armL",
+          "oldReachError": 0.3516395280923863
+        },
+        {
+          "frame": 8,
+          "seconds": 0.3333333333333333,
+          "part": "armR",
+          "reach": 0.495229,
+          "height": 0.401501,
+          "oldFixedPart": "armL",
+          "oldReachError": 0.14645840673857913
+        }
+      ]
+    },
+    {
+      "id": "chirka",
+      "slot": "s1",
+      "grafted": true,
+      "sourceClip": "s1_v17",
+      "sourceFile": "motion/v17/chirka_specials_v17.glb",
+      "attackParts": [
+        "armL"
+      ],
+      "observed": [
+        {
+          "frame": 0,
+          "seconds": 0.21666666666666667,
+          "part": "armL",
+          "reach": 0.449024,
+          "height": 0.210399,
+          "oldFixedPart": "armL",
+          "oldReachError": 0
+        },
+        {
+          "frame": 1,
+          "seconds": 0.23333333333333334,
+          "part": "armL",
+          "reach": 0.450268,
+          "height": 0.20795,
+          "oldFixedPart": "armL",
+          "oldReachError": 0
+        },
+        {
+          "frame": 2,
+          "seconds": 0.25,
+          "part": "armL",
+          "reach": 0.451486,
+          "height": 0.205492,
+          "oldFixedPart": "armL",
+          "oldReachError": 0
+        },
+        {
+          "frame": 3,
+          "seconds": 0.26666666666666666,
+          "part": "armL",
+          "reach": 0.452676,
+          "height": 0.203025,
+          "oldFixedPart": "armL",
+          "oldReachError": 0
+        }
+      ]
+    },
+    {
+      "id": "chirka",
+      "slot": "s2",
+      "grafted": true,
+      "sourceClip": "s2_v17",
+      "sourceFile": "motion/v17/chirka_specials_v17.glb",
+      "attackParts": [
+        "armR"
+      ],
+      "observed": [
+        {
+          "frame": 0,
+          "seconds": 0.13333333333333333,
+          "part": "armR",
+          "reach": 0.214756,
+          "height": 0.667503,
+          "oldFixedPart": "armR",
+          "oldReachError": 0
+        },
+        {
+          "frame": 1,
+          "seconds": 0.15,
+          "part": "armR",
+          "reach": 0.226378,
+          "height": 0.675952,
+          "oldFixedPart": "armR",
+          "oldReachError": 0
+        },
+        {
+          "frame": 2,
+          "seconds": 0.16666666666666666,
+          "part": "armR",
+          "reach": 0.207785,
+          "height": 0.707949,
+          "oldFixedPart": "armR",
+          "oldReachError": 0
+        },
+        {
+          "frame": 3,
+          "seconds": 0.18333333333333335,
+          "part": "armR",
+          "reach": 0.160647,
+          "height": 0.721048,
+          "oldFixedPart": "armR",
+          "oldReachError": 0
+        },
+        {
+          "frame": 4,
+          "seconds": 0.2,
+          "part": "armR",
+          "reach": 0.110198,
+          "height": 0.632895,
+          "oldFixedPart": "armR",
+          "oldReachError": 0
+        },
+        {
+          "frame": 5,
+          "seconds": 0.21666666666666667,
+          "part": "armR",
+          "reach": 0.066884,
+          "height": 0.633353,
+          "oldFixedPart": "armR",
+          "oldReachError": 0
+        },
+        {
+          "frame": 6,
+          "seconds": 0.23333333333333334,
+          "part": "armR",
+          "reach": 0.017521,
+          "height": 0.633242,
+          "oldFixedPart": "armR",
+          "oldReachError": 0
+        }
+      ]
+    },
+    {
+      "id": "chirka",
+      "slot": "s3",
+      "grafted": true,
+      "sourceClip": "s3_v17",
+      "sourceFile": "motion/v17/chirka_specials_v17.glb",
+      "attackParts": [
+        "armR"
+      ],
+      "observed": [
+        {
+          "frame": 0,
+          "seconds": 0.21666666666666667,
+          "part": "armR",
+          "reach": 0.494133,
+          "height": 0.222175,
+          "oldFixedPart": "armR",
+          "oldReachError": 0
+        },
+        {
+          "frame": 1,
+          "seconds": 0.23333333333333334,
+          "part": "armR",
+          "reach": 0.494133,
+          "height": 0.222175,
+          "oldFixedPart": "armR",
+          "oldReachError": 0
+        },
+        {
+          "frame": 2,
+          "seconds": 0.25,
+          "part": "armR",
+          "reach": 0.494133,
+          "height": 0.222175,
+          "oldFixedPart": "armR",
+          "oldReachError": 0
+        },
+        {
+          "frame": 3,
+          "seconds": 0.26666666666666666,
+          "part": "armR",
+          "reach": 0.494133,
+          "height": 0.222175,
+          "oldFixedPart": "armR",
+          "oldReachError": 0
+        },
+        {
+          "frame": 4,
+          "seconds": 0.2833333333333333,
+          "part": "armR",
+          "reach": 0.494133,
+          "height": 0.222175,
+          "oldFixedPart": "armR",
+          "oldReachError": 0
+        }
+      ]
+    },
+    {
+      "id": "takimaru",
+      "slot": "s1",
+      "grafted": true,
+      "sourceClip": "s1_v17",
+      "sourceFile": "motion/v17r2/takimaru_specials_v17r2.glb",
+      "attackParts": [
+        "armL",
+        "armR"
+      ],
+      "observed": [
+        {
+          "frame": 0,
+          "seconds": 0.3333333333333333,
+          "part": "armL",
+          "reach": 0.484978,
+          "height": 0.104755,
+          "oldFixedPart": "armL",
+          "oldReachError": 0
+        }
+      ]
+    },
+    {
+      "id": "takimaru",
+      "slot": "s2",
+      "grafted": true,
+      "sourceClip": "s2_v17r2",
+      "sourceFile": "motion/v17r2/takimaru_specials_v17r2.glb",
+      "attackParts": [
+        "armL",
+        "armR"
+      ],
+      "observed": [
+        {
+          "frame": 0,
+          "seconds": 0.16666666666666666,
+          "part": "armL",
+          "reach": 0.446482,
+          "height": 0.554906,
+          "oldFixedPart": "armL",
+          "oldReachError": 0
+        },
+        {
+          "frame": 1,
+          "seconds": 0.18333333333333332,
+          "part": "armL",
+          "reach": 0.424831,
+          "height": 0.603914,
+          "oldFixedPart": "armL",
+          "oldReachError": 0
+        },
+        {
+          "frame": 2,
+          "seconds": 0.19999999999999998,
+          "part": "armL",
+          "reach": 0.402898,
+          "height": 0.65176,
+          "oldFixedPart": "armL",
+          "oldReachError": 0
+        },
+        {
+          "frame": 3,
+          "seconds": 0.21666666666666667,
+          "part": "armL",
+          "reach": 0.380727,
+          "height": 0.698395,
+          "oldFixedPart": "armL",
+          "oldReachError": 0
+        },
+        {
+          "frame": 4,
+          "seconds": 0.23333333333333334,
+          "part": "armL",
+          "reach": 0.358432,
+          "height": 0.743837,
+          "oldFixedPart": "armL",
+          "oldReachError": 0
+        },
+        {
+          "frame": 5,
+          "seconds": 0.25,
+          "part": "armL",
+          "reach": 0.336078,
+          "height": 0.788063,
+          "oldFixedPart": "armL",
+          "oldReachError": 0
+        },
+        {
+          "frame": 6,
+          "seconds": 0.26666666666666666,
+          "part": "armL",
+          "reach": 0.313754,
+          "height": 0.83108,
+          "oldFixedPart": "armL",
+          "oldReachError": 0
+        }
+      ]
+    },
+    {
+      "id": "takimaru",
+      "slot": "s3",
+      "grafted": true,
+      "sourceClip": "s3_v17",
+      "sourceFile": "motion/v17r2/takimaru_specials_v17r2.glb",
+      "attackParts": [
+        "armL",
+        "armR"
+      ],
+      "observed": [
+        {
+          "frame": 0,
+          "seconds": 0.15,
+          "part": "armL",
+          "reach": 0.64868,
+          "height": 0.323335,
+          "oldFixedPart": "armL",
+          "oldReachError": 0
+        },
+        {
+          "frame": 1,
+          "seconds": 0.16666666666666666,
+          "part": "armL",
+          "reach": 0.64868,
+          "height": 0.323335,
+          "oldFixedPart": "armL",
+          "oldReachError": 0
+        },
+        {
+          "frame": 2,
+          "seconds": 0.18333333333333332,
+          "part": "armL",
+          "reach": 0.64868,
+          "height": 0.323335,
+          "oldFixedPart": "armL",
+          "oldReachError": 0
+        }
+      ]
+    },
+    {
+      "id": "yomikage",
+      "slot": "s1",
+      "grafted": true,
+      "sourceClip": "s1_v17",
+      "sourceFile": "motion/v17r2/yomikage_specials_v17r2.glb",
+      "attackParts": [
+        "armR"
+      ],
+      "observed": [
+        {
+          "frame": 0,
+          "seconds": 0.21666666666666667,
+          "part": "armR",
+          "reach": 0.301047,
+          "height": 0.402718,
+          "oldFixedPart": "armR",
+          "oldReachError": 0
+        }
+      ]
+    },
+    {
+      "id": "yomikage",
+      "slot": "s2",
+      "grafted": true,
+      "sourceClip": "s2_v17r2",
+      "sourceFile": "motion/v17r2/yomikage_specials_v17r2.glb",
+      "attackParts": [
+        "armR"
+      ],
+      "observed": [
+        {
+          "frame": 0,
+          "seconds": 0.13333333333333333,
+          "part": "armR",
+          "reach": 0.315404,
+          "height": 0.469984,
+          "oldFixedPart": "armR",
+          "oldReachError": 0
+        },
+        {
+          "frame": 1,
+          "seconds": 0.15,
+          "part": "armR",
+          "reach": 0.311553,
+          "height": 0.474808,
+          "oldFixedPart": "armR",
+          "oldReachError": 0
+        },
+        {
+          "frame": 2,
+          "seconds": 0.16666666666666666,
+          "part": "armR",
+          "reach": 0.307607,
+          "height": 0.479639,
+          "oldFixedPart": "armR",
+          "oldReachError": 0
+        },
+        {
+          "frame": 3,
+          "seconds": 0.18333333333333335,
+          "part": "armR",
+          "reach": 0.303557,
+          "height": 0.484483,
+          "oldFixedPart": "armR",
+          "oldReachError": 0
+        },
+        {
+          "frame": 4,
+          "seconds": 0.2,
+          "part": "armR",
+          "reach": 0.299394,
+          "height": 0.489349,
+          "oldFixedPart": "armR",
+          "oldReachError": 0
+        },
+        {
+          "frame": 5,
+          "seconds": 0.21666666666666667,
+          "part": "armR",
+          "reach": 0.295103,
+          "height": 0.494246,
+          "oldFixedPart": "armR",
+          "oldReachError": 0
+        },
+        {
+          "frame": 6,
+          "seconds": 0.23333333333333334,
+          "part": "armR",
+          "reach": 0.290671,
+          "height": 0.49918,
+          "oldFixedPart": "armR",
+          "oldReachError": 0
+        }
+      ]
+    },
+    {
+      "id": "yomikage",
+      "slot": "s3",
+      "grafted": true,
+      "sourceClip": "s3_v17",
+      "sourceFile": "motion/v17r2/yomikage_specials_v17r2.glb",
+      "attackParts": [
+        "armL"
+      ],
+      "observed": [
+        {
+          "frame": 0,
+          "seconds": 0.11666666666666667,
+          "part": "armL",
+          "reach": 0.16417,
+          "height": 0.438649,
+          "oldFixedPart": "armL",
+          "oldReachError": 0
+        },
+        {
+          "frame": 1,
+          "seconds": 0.13333333333333333,
+          "part": "armL",
+          "reach": 0.16417,
+          "height": 0.438466,
+          "oldFixedPart": "armL",
+          "oldReachError": 0
+        },
+        {
+          "frame": 2,
+          "seconds": 0.15,
+          "part": "armL",
+          "reach": 0.16417,
+          "height": 0.438284,
+          "oldFixedPart": "armL",
+          "oldReachError": 0
+        },
+        {
+          "frame": 3,
+          "seconds": 0.16666666666666666,
+          "part": "armL",
+          "reach": 0.16417,
+          "height": 0.438101,
+          "oldFixedPart": "armL",
+          "oldReachError": 0
+        },
+        {
+          "frame": 4,
+          "seconds": 0.18333333333333335,
+          "part": "armL",
+          "reach": 0.16417,
+          "height": 0.437918,
+          "oldFixedPart": "armL",
+          "oldReachError": 0
+        },
+        {
+          "frame": 5,
+          "seconds": 0.2,
+          "part": "armL",
+          "reach": 0.16417,
+          "height": 0.437736,
+          "oldFixedPart": "armL",
+          "oldReachError": 0
+        },
+        {
+          "frame": 6,
+          "seconds": 0.21666666666666667,
+          "part": "armL",
+          "reach": 0.16417,
+          "height": 0.437553,
+          "oldFixedPart": "armL",
+          "oldReachError": 0
+        },
+        {
+          "frame": 7,
+          "seconds": 0.23333333333333334,
+          "part": "armL",
+          "reach": 0.16417,
+          "height": 0.43737,
+          "oldFixedPart": "armL",
+          "oldReachError": 0
+        },
+        {
+          "frame": 8,
+          "seconds": 0.25,
+          "part": "armL",
+          "reach": 0.16417,
+          "height": 0.437188,
+          "oldFixedPart": "armL",
+          "oldReachError": 0
+        },
+        {
+          "frame": 9,
+          "seconds": 0.26666666666666666,
+          "part": "armL",
+          "reach": 0.16417,
+          "height": 0.437005,
+          "oldFixedPart": "armL",
+          "oldReachError": 0
+        },
+        {
+          "frame": 10,
+          "seconds": 0.2833333333333333,
+          "part": "armL",
+          "reach": 0.16417,
+          "height": 0.436823,
+          "oldFixedPart": "armL",
+          "oldReachError": 0
+        },
+        {
+          "frame": 11,
+          "seconds": 0.3,
+          "part": "armL",
+          "reach": 0.16417,
+          "height": 0.43664,
+          "oldFixedPart": "armL",
+          "oldReachError": 0
+        },
+        {
+          "frame": 12,
+          "seconds": 0.31666666666666665,
+          "part": "armL",
+          "reach": 0.16417,
+          "height": 0.436457,
+          "oldFixedPart": "armL",
+          "oldReachError": 0
+        }
+      ]
+    },
+    {
+      "id": "bullet",
+      "slot": "s1",
+      "grafted": true,
+      "sourceClip": "s1_v17",
+      "sourceFile": "motion/v17r2/bullet_specials_v17r2.glb",
+      "attackParts": [
+        "tail"
+      ],
+      "observed": [
+        {
+          "frame": 0,
+          "seconds": 0.2833333333333333,
+          "part": "tail",
+          "reach": -0.082506,
+          "height": 0.234307,
+          "oldFixedPart": "tail",
+          "oldReachError": 0
+        }
+      ]
+    },
+    {
+      "id": "bullet",
+      "slot": "s2",
+      "grafted": true,
+      "sourceClip": "s2_v17r2",
+      "sourceFile": "motion/v17r2/bullet_specials_v17r2.glb",
+      "attackParts": [
+        "tail"
+      ],
+      "observed": [
+        {
+          "frame": 0,
+          "seconds": 0.15,
+          "part": "tail",
+          "reach": 0.286172,
+          "height": 0.535323,
+          "oldFixedPart": "tail",
+          "oldReachError": 0
+        },
+        {
+          "frame": 1,
+          "seconds": 0.16666666666666666,
+          "part": "tail",
+          "reach": 0.279775,
+          "height": 0.512148,
+          "oldFixedPart": "tail",
+          "oldReachError": 0
+        },
+        {
+          "frame": 2,
+          "seconds": 0.18333333333333332,
+          "part": "tail",
+          "reach": 0.274419,
+          "height": 0.50476,
+          "oldFixedPart": "tail",
+          "oldReachError": 0
+        },
+        {
+          "frame": 3,
+          "seconds": 0.2,
+          "part": "tail",
+          "reach": 0.271995,
+          "height": 0.506725,
+          "oldFixedPart": "tail",
+          "oldReachError": 0
+        },
+        {
+          "frame": 4,
+          "seconds": 0.21666666666666667,
+          "part": "tail",
+          "reach": 0.271006,
+          "height": 0.511551,
+          "oldFixedPart": "tail",
+          "oldReachError": 0
+        },
+        {
+          "frame": 5,
+          "seconds": 0.23333333333333334,
+          "part": "tail",
+          "reach": 0.270537,
+          "height": 0.517161,
+          "oldFixedPart": "tail",
+          "oldReachError": 0
+        },
+        {
+          "frame": 6,
+          "seconds": 0.25,
+          "part": "tail",
+          "reach": 0.270245,
+          "height": 0.522996,
+          "oldFixedPart": "tail",
+          "oldReachError": 0
+        }
+      ]
+    },
+    {
+      "id": "bullet",
+      "slot": "s3",
+      "grafted": true,
+      "sourceClip": "s3_v17",
+      "sourceFile": "motion/v17r2/bullet_specials_v17r2.glb",
+      "attackParts": [
+        "tail"
+      ],
+      "observed": [
+        {
+          "frame": 0,
+          "seconds": 0.31666666666666665,
+          "part": "tail",
+          "reach": 0.473246,
+          "height": 0.216673,
+          "oldFixedPart": "tail",
+          "oldReachError": 0
+        },
+        {
+          "frame": 1,
+          "seconds": 0.3333333333333333,
+          "part": "tail",
+          "reach": 0.536123,
+          "height": 0.226535,
+          "oldFixedPart": "tail",
+          "oldReachError": 0
+        },
+        {
+          "frame": 2,
+          "seconds": 0.35,
+          "part": "tail",
+          "reach": 0.595496,
+          "height": 0.235784,
+          "oldFixedPart": "tail",
+          "oldReachError": 0
+        },
+        {
+          "frame": 3,
+          "seconds": 0.3666666666666667,
+          "part": "tail",
+          "reach": 0.639875,
+          "height": 0.255919,
+          "oldFixedPart": "tail",
+          "oldReachError": 0
+        },
+        {
+          "frame": 4,
+          "seconds": 0.38333333333333336,
+          "part": "tail",
+          "reach": 0.676151,
+          "height": 0.247667,
+          "oldFixedPart": "tail",
+          "oldReachError": 0
+        },
+        {
+          "frame": 5,
+          "seconds": 0.4,
+          "part": "tail",
+          "reach": 0.68211,
+          "height": 0.253351,
+          "oldFixedPart": "tail",
+          "oldReachError": 0
+        }
+      ]
+    },
+    {
+      "id": "dark_moguzo",
+      "slot": "s1",
+      "grafted": true,
+      "sourceClip": "s1_v17",
+      "sourceFile": "motion/v17/dark_moguzo_specials_v17.glb",
+      "attackParts": [
+        "armR"
+      ],
+      "observed": [
+        {
+          "frame": 0,
+          "seconds": 0.18333333333333332,
+          "part": "armR",
+          "reach": 0.414725,
+          "height": 0.234471,
+          "oldFixedPart": "armR",
+          "oldReachError": 0
+        }
+      ]
+    },
+    {
+      "id": "dark_moguzo",
+      "slot": "s2",
+      "grafted": true,
+      "sourceClip": "s2_v17",
+      "sourceFile": "motion/v17/dark_moguzo_specials_v17.glb",
+      "attackParts": [
+        "armL"
+      ],
+      "observed": [
+        {
+          "frame": 0,
+          "seconds": 0.08333333333333333,
+          "part": "armL",
+          "reach": 0.263523,
+          "height": 0.551274,
+          "oldFixedPart": "armL",
+          "oldReachError": 0
+        },
+        {
+          "frame": 1,
+          "seconds": 0.1,
+          "part": "armL",
+          "reach": 0.263633,
+          "height": 0.553178,
+          "oldFixedPart": "armL",
+          "oldReachError": 0
+        },
+        {
+          "frame": 2,
+          "seconds": 0.11666666666666667,
+          "part": "armL",
+          "reach": 0.263743,
+          "height": 0.555079,
+          "oldFixedPart": "armL",
+          "oldReachError": 0
+        },
+        {
+          "frame": 3,
+          "seconds": 0.13333333333333333,
+          "part": "armL",
+          "reach": 0.263853,
+          "height": 0.561026,
+          "oldFixedPart": "armL",
+          "oldReachError": 0
+        },
+        {
+          "frame": 4,
+          "seconds": 0.15000000000000002,
+          "part": "armL",
+          "reach": 0.263967,
+          "height": 0.56292,
+          "oldFixedPart": "armL",
+          "oldReachError": 0
+        },
+        {
+          "frame": 5,
+          "seconds": 0.16666666666666669,
+          "part": "armL",
+          "reach": 0.26408,
+          "height": 0.564811,
+          "oldFixedPart": "armL",
+          "oldReachError": 0
+        },
+        {
+          "frame": 6,
+          "seconds": 0.18333333333333335,
+          "part": "armL",
+          "reach": 0.264193,
+          "height": 0.5667,
+          "oldFixedPart": "armL",
+          "oldReachError": 0
+        },
+        {
+          "frame": 7,
+          "seconds": 0.2,
+          "part": "armL",
+          "reach": 0.264305,
+          "height": 0.568586,
+          "oldFixedPart": "armL",
+          "oldReachError": 0
+        }
+      ]
+    },
+    {
+      "id": "dark_moguzo",
+      "slot": "s3",
+      "grafted": true,
+      "sourceClip": "s3_v17",
+      "sourceFile": "motion/v17/dark_moguzo_specials_v17.glb",
+      "attackParts": [
+        "armL",
+        "armR"
+      ],
+      "observed": [
+        {
+          "frame": 0,
+          "seconds": 0.11666666666666667,
+          "part": "armL",
+          "reach": 0.460616,
+          "height": 0.146474,
+          "oldFixedPart": "armL",
+          "oldReachError": 0
+        },
+        {
+          "frame": 1,
+          "seconds": 0.13333333333333333,
+          "part": "armR",
+          "reach": 0.377143,
+          "height": 0.293405,
+          "oldFixedPart": "armL",
+          "oldReachError": 0.09880842964031528
+        },
+        {
+          "frame": 2,
+          "seconds": 0.15,
+          "part": "armR",
+          "reach": 0.490331,
+          "height": 0.293372,
+          "oldFixedPart": "armL",
+          "oldReachError": 0.298579653626326
+        },
+        {
+          "frame": 3,
+          "seconds": 0.16666666666666669,
+          "part": "armR",
+          "reach": 0.490331,
+          "height": 0.293372,
+          "oldFixedPart": "armL",
+          "oldReachError": 0.2985797080443432
+        },
+        {
+          "frame": 4,
+          "seconds": 0.18333333333333335,
+          "part": "armR",
+          "reach": 0.490331,
+          "height": 0.293372,
+          "oldFixedPart": "armL",
+          "oldReachError": 0.29857970843930404
+        },
+        {
+          "frame": 5,
+          "seconds": 0.2,
+          "part": "armR",
+          "reach": 0.409196,
+          "height": 0.351095,
+          "oldFixedPart": "armL",
+          "oldReachError": 0.13087873753881418
+        },
+        {
+          "frame": 6,
+          "seconds": 0.21666666666666667,
+          "part": "armL",
+          "reach": 0.473028,
+          "height": 0.353461,
+          "oldFixedPart": "armL",
+          "oldReachError": 0
+        },
+        {
+          "frame": 7,
+          "seconds": 0.23333333333333334,
+          "part": "armL",
+          "reach": 0.530616,
+          "height": 0.344936,
+          "oldFixedPart": "armL",
+          "oldReachError": 0
+        },
+        {
+          "frame": 8,
+          "seconds": 0.25,
+          "part": "armL",
+          "reach": 0.530616,
+          "height": 0.344936,
+          "oldFixedPart": "armL",
+          "oldReachError": 0
+        }
+      ]
+    }
+  ],
+  "samples": 308,
+  "changedLeadingCases": 4,
+  "maxOldFixedPartError": 0.3516395929801761
+}

@@ -5,6 +5,7 @@ import {IDS} from './balance.js';
 import {MOTIFS,GESTURES,NORMAL_SOURCE,NORMAL_SLOTS} from './normal-motifs-v15.js';
 import {buildNormalPack,decodeNormalPack} from './normal-clip-builder-v15.mjs';
 import {chooseClip} from './models.js';
+import {createNormalMotionSource} from './normal-motion-source.js';
 const clipNames=NORMAL_SLOTS.map(s=>'v15_'+s);
 test('nine actors have six authored distinct normal gestures, not just hue differences',()=>{
  assert.deepEqual(Object.keys(MOTIFS).sort(),[...IDS].sort());
@@ -47,8 +48,9 @@ test('GLB animation-only assets are rebuilt with 54 keyed skeletal clips and no 
 });
 test('v15 normal clips take priority only when they exist, without modifying specials or KO',()=>{
  const actor={ko:false,stun:0,state:'attack',action:{id:'stand_weak',anim:'stand_light'}};
- assert.equal(chooseClip(actor,['idle','stand_light','v15_stand_weak']),'v15_stand_weak');
- assert.equal(chooseClip(actor,['idle','stand_light']),'stand_light');
+ const legacy={normalMotionSource:createNormalMotionSource({version:'v15'})};
+ assert.equal(chooseClip(actor,['idle','stand_light','v15_stand_weak'],{},legacy),'v15_stand_weak');
+ assert.equal(chooseClip(actor,['idle','stand_light'],{},legacy),'stand_light');
  const special={...actor,action:{id:'s2',anim:'sp_rising_upper'}};
  assert.equal(chooseClip(special,['idle','sp_rising_upper']),'sp_rising_upper');
 });
@@ -58,6 +60,6 @@ test('Pages generation and actor loader include all 9 normal packs without alter
  assert.match(build,/pack-normals-v15\.mjs/);
  assert.match(build,/normal','v15',id\+'_normals\.glb'/);
  assert.match(main,/normalGLB\.animations/);
- assert.match(main,/v15_stand_weak/);
+ assert.match(main,/normalMotionSource\.validatePack\(id,normalGLB\)/);
  assert.match(main,/bindMorphTargets\(clip,gltf\.scene\)/);
 });

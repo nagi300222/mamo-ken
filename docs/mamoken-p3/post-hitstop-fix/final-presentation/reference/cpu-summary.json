@@ -1,0 +1,119 @@
+{
+  "providerFiles": {
+    "normal": [
+      "normal-contacts-v151.js"
+    ],
+    "special": [
+      "battle.js",
+      "balance.js"
+    ]
+  },
+  "providerHashes": {
+    "normal": {
+      "normal-contacts-v151.js": "7ec0ea1df46d40cc878ffccf7e6898eda814521da645f2e81f876e2b3ff41dfb"
+    },
+    "special": {
+      "battle.js": "ced458404345df723db4f0a6a42087a7a805acfe2fc0e7ce02c35d58eeef3eb4",
+      "balance.js": "0e348e3715d601003852a83f4e7367cff30401ae6d1dd975d89184e7ae5d0bd2"
+    }
+  },
+  "phase": "final-impact-reference-v15-v14",
+  "normalContactVersion": "15.1-r3",
+  "normalMotionVersion": "v15",
+  "specialMotionVersion": null,
+  "codeHashes": {
+    "battle.js": "ced458404345df723db4f0a6a42087a7a805acfe2fc0e7ce02c35d58eeef3eb4",
+    "balance.js": "0e348e3715d601003852a83f4e7367cff30401ae6d1dd975d89184e7ae5d0bd2",
+    "cpu.js": "9bad63d4208582b698004b14b1eb7fe46d8901a45268ad8cbd12f96f3ebc9998",
+    "normal-balance-v151.js": "de561713c4386038919b72c7251de0f821633a3e8d96544c2be363b5a9484fa4",
+    "special-balance-p3.js": "5f5c0e059b4e45cac16ff329421138ee303683d0de043ae2d1df7b366cd8a965"
+  },
+  "policySha256": "df329c97e1df86dff195b94d2b8e23996238fa0e1f9403b16ee7d5efb72f6286",
+  "note": "Same current CPU known-reach policy, six frozen patterns, timings/damage/hitstun/stop profiles in both phases. Both normals and specials select their actual phase-specific surfaces. Fixed confirm patterns intentionally retain old s2 requests, filtered by current known-reach rules. CPU scores are not human competitive balance or phone performance.",
+  "rounds": 1458,
+  "timeouts": 69,
+  "draws": 44,
+  "meanFrames": 1388.488340192044,
+  "patterns": [
+    "neutral",
+    "confirm",
+    "low-pressure",
+    "air-footsies",
+    "grapple-pressure",
+    "ranged-control"
+  ],
+  "summary": [
+    {
+      "id": "moguzo",
+      "games": 288,
+      "wins": 190,
+      "draws": 10,
+      "score": 0.6770833333333334,
+      "timeouts": 21
+    },
+    {
+      "id": "pisuke",
+      "games": 288,
+      "wins": 178,
+      "draws": 15,
+      "score": 0.6440972222222222,
+      "timeouts": 21
+    },
+    {
+      "id": "godan",
+      "games": 288,
+      "wins": 103,
+      "draws": 0,
+      "score": 0.3576388888888889,
+      "timeouts": 0
+    },
+    {
+      "id": "hakuma",
+      "games": 288,
+      "wins": 92,
+      "draws": 0,
+      "score": 0.3194444444444444,
+      "timeouts": 0
+    },
+    {
+      "id": "chirka",
+      "games": 288,
+      "wins": 186,
+      "draws": 0,
+      "score": 0.6458333333333334,
+      "timeouts": 0
+    },
+    {
+      "id": "takimaru",
+      "games": 288,
+      "wins": 84,
+      "draws": 8,
+      "score": 0.3055555555555556,
+      "timeouts": 15
+    },
+    {
+      "id": "yomikage",
+      "games": 288,
+      "wins": 151,
+      "draws": 16,
+      "score": 0.5520833333333334,
+      "timeouts": 21
+    },
+    {
+      "id": "bullet",
+      "games": 288,
+      "wins": 79,
+      "draws": 9,
+      "score": 0.2899305555555556,
+      "timeouts": 15
+    },
+    {
+      "id": "dark_moguzo",
+      "games": 288,
+      "wins": 198,
+      "draws": 12,
+      "score": 0.7083333333333334,
+      "timeouts": 15
+    }
+  ]
+}

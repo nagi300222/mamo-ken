@@ -1,0 +1,2033 @@
+{
+  "moguzo": {
+    "stand_weak": {
+      "clip": "v17_stand_weak",
+      "contact": 0.32142857142857145,
+      "contactEnd": 0.42857142857142855,
+      "attackPart": "armL",
+      "attackLimb": "pawL",
+      "reach": 0.40177973438515646,
+      "height": 0.3638819797622923,
+      "activeReach": [
+        {
+          "phase": 0,
+          "reach": 0.40177973438515646,
+          "height": 0.3638819797622923
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.4017797488293807,
+          "height": 0.36388198618649564
+        },
+        {
+          "phase": 1,
+          "reach": 0.4017797494088198,
+          "height": 0.363881976753933
+        }
+      ],
+      "status": "ok",
+      "name": "前手の直ジャブ",
+      "source": "independent-exact-time-WebGL",
+      "reviewStatus": "candidate-only-not-approved"
+    },
+    "stand_heavy": {
+      "clip": "v17_stand_heavy",
+      "contact": 0.3695652173913043,
+      "contactEnd": 0.45652173913043476,
+      "attackPart": "armR",
+      "attackLimb": "pawR",
+      "reach": 0.49526647821471315,
+      "height": 0.2960343840592701,
+      "activeReach": [
+        {
+          "phase": 0,
+          "reach": 0.49526647821471315,
+          "height": 0.2960343840592701
+        },
+        {
+          "phase": 0.3333333333333333,
+          "reach": 0.4952664768041617,
+          "height": 0.29603439494607825
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.4952664768041617,
+          "height": 0.29603439494607825
+        },
+        {
+          "phase": 0.6666666666666666,
+          "reach": 0.4952664768041617,
+          "height": 0.29603439494607825
+        },
+        {
+          "phase": 1,
+          "reach": 0.4952664713280994,
+          "height": 0.296034385073264
+        }
+      ],
+      "status": "ok",
+      "name": "踏み込みストレート",
+      "source": "independent-exact-time-WebGL",
+      "reviewStatus": "candidate-only-not-approved"
+    },
+    "crouch_weak": {
+      "clip": "v17_crouch_weak",
+      "contact": 0.32142857142857145,
+      "contactEnd": 0.42857142857142855,
+      "attackPart": "armL",
+      "attackLimb": "pawL",
+      "reach": 0.5022245298959189,
+      "height": 0.20038830732127677,
+      "activeReach": [
+        {
+          "phase": 0,
+          "reach": 0.5022245298959189,
+          "height": 0.20038830732127677
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.5022245577250709,
+          "height": 0.2003883302237913
+        },
+        {
+          "phase": 1,
+          "reach": 0.5022245573997962,
+          "height": 0.2003883328857857
+        }
+      ],
+      "status": "ok",
+      "name": "しゃがみすくい打ち",
+      "source": "independent-exact-time-WebGL",
+      "reviewStatus": "candidate-only-not-approved"
+    },
+    "crouch_heavy": {
+      "clip": "v17_crouch_heavy",
+      "contact": 0.3695652173913043,
+      "contactEnd": 0.45652173913043476,
+      "attackPart": "armR",
+      "attackLimb": "pawR",
+      "reach": 0.4688781722433327,
+      "height": 0.16553672167991335,
+      "activeReach": [
+        {
+          "phase": 0,
+          "reach": 0.4688781722433327,
+          "height": 0.16553672167991335
+        },
+        {
+          "phase": 0.3333333333333333,
+          "reach": 0.4688781719078884,
+          "height": 0.16553671463731479
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.4688781719078884,
+          "height": 0.16553671463731479
+        },
+        {
+          "phase": 0.6666666666666666,
+          "reach": 0.4688781719078884,
+          "height": 0.16553671463731479
+        },
+        {
+          "phase": 1,
+          "reach": 0.46887816758055423,
+          "height": 0.1655367214760006
+        }
+      ],
+      "status": "ok",
+      "name": "しゃがみ横払い",
+      "source": "independent-exact-time-WebGL",
+      "reviewStatus": "candidate-only-not-approved"
+    },
+    "air_weak": {
+      "clip": "v17_air_weak",
+      "contact": 0.32142857142857145,
+      "contactEnd": 0.42857142857142855,
+      "attackPart": "armL",
+      "attackLimb": "pawL",
+      "reach": 0.39400480446497355,
+      "height": 0.21524779297108754,
+      "activeReach": [
+        {
+          "phase": 0,
+          "reach": 0.39400480446497355,
+          "height": 0.21524779297108754
+        },
+        {
+          "phase": 0.25,
+          "reach": 0.3940048219545138,
+          "height": 0.21524779675178074
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.39400482277909954,
+          "height": 0.21524779984425846
+        },
+        {
+          "phase": 0.75,
+          "reach": 0.39400482195451536,
+          "height": 0.2152477967517874
+        },
+        {
+          "phase": 1,
+          "reach": 0.3940048195939261,
+          "height": 0.2152477874450761
+        }
+      ],
+      "status": "ok",
+      "name": "空中の差し拳",
+      "source": "independent-exact-time-WebGL",
+      "reviewStatus": "candidate-only-not-approved"
+    },
+    "air_heavy": {
+      "clip": "v17_air_heavy",
+      "contact": 0.3695652173913043,
+      "contactEnd": 0.45652173913043476,
+      "attackPart": "legR",
+      "attackLimb": "footR",
+      "reach": 0.2909911469425983,
+      "height": 0.08481732448424562,
+      "activeReach": [
+        {
+          "phase": 0,
+          "reach": 0.2909911469425983,
+          "height": 0.08481732448424562
+        },
+        {
+          "phase": 0.2,
+          "reach": 0.2909911436896726,
+          "height": 0.08481734619472925
+        },
+        {
+          "phase": 0.4,
+          "reach": 0.2909911447191649,
+          "height": 0.08481735830060377
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.2909911447191649,
+          "height": 0.08481735830060377
+        },
+        {
+          "phase": 0.6,
+          "reach": 0.2909911447191649,
+          "height": 0.08481735830060377
+        },
+        {
+          "phase": 0.8,
+          "reach": 0.2909911436896686,
+          "height": 0.08481734619475523
+        },
+        {
+          "phase": 1,
+          "reach": 0.29099114689449457,
+          "height": 0.08481732505423134
+        }
+      ],
+      "status": "ok",
+      "name": "かかと落とし",
+      "source": "independent-exact-time-WebGL",
+      "reviewStatus": "candidate-only-not-approved"
+    }
+  },
+  "pisuke": {
+    "stand_weak": {
+      "clip": "v17_stand_weak",
+      "contact": 0.32142857142857145,
+      "contactEnd": 0.42857142857142855,
+      "attackPart": "armL",
+      "attackLimb": "pawL",
+      "reach": 0.3822657693899938,
+      "height": 0.3984177351082536,
+      "activeReach": [
+        {
+          "phase": 0,
+          "reach": 0.3822657693899938,
+          "height": 0.3984177351082536
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.38226577726174527,
+          "height": 0.3984177272728235
+        },
+        {
+          "phase": 1,
+          "reach": 0.38226577789456306,
+          "height": 0.3984177265013513
+        }
+      ],
+      "status": "ok",
+      "name": "二拍子の前手",
+      "source": "independent-exact-time-WebGL",
+      "reviewStatus": "candidate-only-not-approved"
+    },
+    "stand_heavy": {
+      "clip": "v17_stand_heavy",
+      "contact": 0.3695652173913043,
+      "contactEnd": 0.45652173913043476,
+      "attackPart": "legR",
+      "attackLimb": "footR",
+      "reach": 0.39173607341566563,
+      "height": 0.2619684445889948,
+      "activeReach": [
+        {
+          "phase": 0,
+          "reach": 0.39173607341566563,
+          "height": 0.2619684445889948
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.39173607336341454,
+          "height": 0.26196846174378496
+        },
+        {
+          "phase": 1,
+          "reach": 0.3917360608165128,
+          "height": 0.2619684411433532
+        }
+      ],
+      "status": "ok",
+      "name": "背面回し蹴り",
+      "source": "independent-exact-time-WebGL",
+      "reviewStatus": "candidate-only-not-approved"
+    },
+    "crouch_weak": {
+      "clip": "v17_crouch_weak",
+      "contact": 0.32142857142857145,
+      "contactEnd": 0.42857142857142855,
+      "attackPart": "armR",
+      "attackLimb": "pawR",
+      "reach": 0.4396574198631328,
+      "height": 0.07531356237781837,
+      "activeReach": [
+        {
+          "phase": 0,
+          "reach": 0.4396574198631328,
+          "height": 0.07531356237781837
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.4396574400613632,
+          "height": 0.07531356339182672
+        },
+        {
+          "phase": 1,
+          "reach": 0.43965743831895254,
+          "height": 0.07531356691890928
+        }
+      ],
+      "status": "ok",
+      "name": "地すれの手払い",
+      "source": "independent-exact-time-WebGL",
+      "reviewStatus": "candidate-only-not-approved"
+    },
+    "crouch_heavy": {
+      "clip": "v17_crouch_heavy",
+      "contact": 0.3695652173913043,
+      "contactEnd": 0.45652173913043476,
+      "attackPart": "legR",
+      "attackLimb": "footR",
+      "reach": 0.4114293505472386,
+      "height": 0.047636542850736874,
+      "activeReach": [
+        {
+          "phase": 0,
+          "reach": 0.4114293505472386,
+          "height": 0.047636542850736874
+        },
+        {
+          "phase": 0.3333333333333333,
+          "reach": 0.4114293502473805,
+          "height": 0.047636551875369
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.4114293502473805,
+          "height": 0.047636551875369
+        },
+        {
+          "phase": 0.6666666666666666,
+          "reach": 0.4114293502473805,
+          "height": 0.047636551875369
+        },
+        {
+          "phase": 1,
+          "reach": 0.4114293466417863,
+          "height": 0.04763653880013245
+        }
+      ],
+      "status": "ok",
+      "name": "長い掃き蹴り",
+      "source": "independent-exact-time-WebGL",
+      "reviewStatus": "candidate-only-not-approved"
+    },
+    "air_weak": {
+      "clip": "v17_air_weak",
+      "contact": 0.32142857142857145,
+      "contactEnd": 0.42857142857142855,
+      "attackPart": "armL",
+      "attackLimb": "pawL",
+      "reach": 0.3568081151789406,
+      "height": 0.24311589197247363,
+      "activeReach": [
+        {
+          "phase": 0,
+          "reach": 0.3568081151789406,
+          "height": 0.24311589197247363
+        },
+        {
+          "phase": 0.3333333333333333,
+          "reach": 0.35680812770251835,
+          "height": 0.24311588820580243
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.3568081286384803,
+          "height": 0.2431158888971322
+        },
+        {
+          "phase": 0.6666666666666666,
+          "reach": 0.35680812957444386,
+          "height": 0.24311588958846364
+        },
+        {
+          "phase": 1,
+          "reach": 0.3568081303709698,
+          "height": 0.24311589301485537
+        }
+      ],
+      "status": "ok",
+      "name": "膝を畳んだ差し拳",
+      "source": "independent-exact-time-WebGL",
+      "reviewStatus": "candidate-only-not-approved"
+    },
+    "air_heavy": {
+      "clip": "v17_air_heavy",
+      "contact": 0.3695652173913043,
+      "contactEnd": 0.45652173913043476,
+      "attackPart": "legR",
+      "attackLimb": "footR",
+      "reach": 0.31720784944397695,
+      "height": 0.10680629250535612,
+      "activeReach": [
+        {
+          "phase": 0,
+          "reach": 0.31720784944397695,
+          "height": 0.10680629250535612
+        },
+        {
+          "phase": 0.25,
+          "reach": 0.31720784944397695,
+          "height": 0.10680629250535612
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.31720784944397695,
+          "height": 0.10680629250535612
+        },
+        {
+          "phase": 0.75,
+          "reach": 0.31720784944397695,
+          "height": 0.10680629250535612
+        },
+        {
+          "phase": 1,
+          "reach": 0.3172078474838318,
+          "height": 0.10680628587253804
+        }
+      ],
+      "status": "ok",
+      "name": "止めて落とすかかと",
+      "source": "independent-exact-time-WebGL",
+      "reviewStatus": "candidate-only-not-approved"
+    }
+  },
+  "godan": {
+    "stand_weak": {
+      "clip": "v17_stand_weak",
+      "contact": 0.34375,
+      "contactEnd": 0.46875,
+      "attackPart": "armL",
+      "attackLimb": "pawL",
+      "reach": 0.47221784137986544,
+      "height": 0.3818686988023162,
+      "activeReach": [
+        {
+          "phase": 0,
+          "reach": 0.47221784137986544,
+          "height": 0.3818686988023162
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.47221785441337716,
+          "height": 0.3818687002551142
+        },
+        {
+          "phase": 1,
+          "reach": 0.4722178545959992,
+          "height": 0.38186870430474723
+        }
+      ],
+      "status": "ok",
+      "name": "前腕の押し",
+      "source": "independent-exact-time-WebGL",
+      "reviewStatus": "candidate-only-not-approved"
+    },
+    "stand_heavy": {
+      "clip": "v17_stand_heavy",
+      "contact": 0.3888888888888889,
+      "contactEnd": 0.48148148148148145,
+      "attackPart": "armR",
+      "attackLimb": "pawR",
+      "reach": 0.6063509534270329,
+      "height": 0.24625001022286072,
+      "activeReach": [
+        {
+          "phase": 0,
+          "reach": 0.6063509534270329,
+          "height": 0.24625001022286072
+        },
+        {
+          "phase": 0.25,
+          "reach": 0.6063509534270329,
+          "height": 0.24625001022286072
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.6063509527563135,
+          "height": 0.24625000699328026
+        },
+        {
+          "phase": 0.75,
+          "reach": 0.6063509509439364,
+          "height": 0.24625000325136018
+        },
+        {
+          "phase": 1,
+          "reach": 0.6063509534270329,
+          "height": 0.2462500102228594
+        }
+      ],
+      "status": "ok",
+      "name": "踏み込み重拳",
+      "source": "independent-exact-time-WebGL",
+      "reviewStatus": "candidate-only-not-approved"
+    },
+    "crouch_weak": {
+      "clip": "v17_crouch_weak",
+      "contact": 0.34375,
+      "contactEnd": 0.46875,
+      "attackPart": "armR",
+      "attackLimb": "pawR",
+      "reach": 0.5323002557251212,
+      "height": 0.19393363813941752,
+      "activeReach": [
+        {
+          "phase": 0,
+          "reach": 0.5323002557251212,
+          "height": 0.19393363813941752
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.5323002728980929,
+          "height": 0.19393362078582188
+        },
+        {
+          "phase": 1,
+          "reach": 0.5323002716230568,
+          "height": 0.1939336388648576
+        }
+      ],
+      "status": "ok",
+      "name": "低い押し払い",
+      "source": "independent-exact-time-WebGL",
+      "reviewStatus": "candidate-only-not-approved"
+    },
+    "crouch_heavy": {
+      "clip": "v17_crouch_heavy",
+      "contact": 0.3888888888888889,
+      "contactEnd": 0.48148148148148145,
+      "attackPart": "armR",
+      "attackLimb": "pawR",
+      "reach": 0.5683840313551989,
+      "height": 0.34151529641987194,
+      "activeReach": [
+        {
+          "phase": 0,
+          "reach": 0.5683840313551989,
+          "height": 0.34151529641987194
+        },
+        {
+          "phase": 0.25,
+          "reach": 0.5683840313551989,
+          "height": 0.34151529641987194
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.5683840313551989,
+          "height": 0.34151529641987194
+        },
+        {
+          "phase": 0.75,
+          "reach": 0.5683840313551989,
+          "height": 0.34151529641987194
+        },
+        {
+          "phase": 1,
+          "reach": 0.5683840313551989,
+          "height": 0.34151529641987194
+        }
+      ],
+      "status": "ok",
+      "name": "肩ごとの押し上げ",
+      "source": "independent-exact-time-WebGL",
+      "reviewStatus": "candidate-only-not-approved"
+    },
+    "air_weak": {
+      "clip": "v17_air_weak",
+      "contact": 0.34375,
+      "contactEnd": 0.46875,
+      "attackPart": "armR",
+      "attackLimb": "elbowR",
+      "reach": 0.2838067543335585,
+      "height": 0.3659492387154013,
+      "activeReach": [
+        {
+          "phase": 0,
+          "reach": 0.2838067543335585,
+          "height": 0.3659492387154013
+        },
+        {
+          "phase": 0.25,
+          "reach": 0.2838067600128851,
+          "height": 0.36594922633925053
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.2838067606770103,
+          "height": 0.36594922526816265
+        },
+        {
+          "phase": 0.75,
+          "reach": 0.2838067606770103,
+          "height": 0.36594922526816265
+        },
+        {
+          "phase": 1,
+          "reach": 0.28380676315518727,
+          "height": 0.3659492284945205
+        }
+      ],
+      "status": "ok",
+      "name": "空中の肘",
+      "source": "independent-exact-time-WebGL",
+      "reviewStatus": "candidate-only-not-approved"
+    },
+    "air_heavy": {
+      "clip": "v17_air_heavy",
+      "contact": 0.3888888888888889,
+      "contactEnd": 0.5,
+      "attackPart": "head",
+      "attackLimb": "body",
+      "reach": 0.47043281440460105,
+      "height": 0.2387562232408479,
+      "activeReach": [
+        {
+          "phase": 0,
+          "reach": 0.47043281440460105,
+          "height": 0.2387562232408479
+        },
+        {
+          "phase": 0.2,
+          "reach": 0.47043281440460105,
+          "height": 0.2387562232408479
+        },
+        {
+          "phase": 0.4,
+          "reach": 0.47043281440460105,
+          "height": 0.2387562232408479
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.47043281440460105,
+          "height": 0.2387562232408479
+        },
+        {
+          "phase": 0.6,
+          "reach": 0.47043281440460105,
+          "height": 0.2387562232408479
+        },
+        {
+          "phase": 0.8,
+          "reach": 0.47043281440460105,
+          "height": 0.2387562232408479
+        },
+        {
+          "phase": 1,
+          "reach": 0.47043281211403354,
+          "height": 0.2387562136582725
+        }
+      ],
+      "status": "ok",
+      "name": "全身の落とし",
+      "source": "independent-exact-time-WebGL",
+      "reviewStatus": "candidate-only-not-approved"
+    }
+  },
+  "hakuma": {
+    "stand_weak": {
+      "clip": "v17_stand_weak",
+      "contact": 0.32142857142857145,
+      "contactEnd": 0.42857142857142855,
+      "attackPart": "armL",
+      "attackLimb": "pawL",
+      "reach": 0.3674703799829979,
+      "height": 0.4827882875477366,
+      "activeReach": [
+        {
+          "phase": 0,
+          "reach": 0.3674703799829979,
+          "height": 0.4827882875477366
+        },
+        {
+          "phase": 0.3333333333333333,
+          "reach": 0.3674703944221882,
+          "height": 0.48278829210602364
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.3674703918126845,
+          "height": 0.4827882943530657
+        },
+        {
+          "phase": 0.6666666666666666,
+          "reach": 0.3674703892031772,
+          "height": 0.4827882966001086
+        },
+        {
+          "phase": 1,
+          "reach": 0.3674703941879802,
+          "height": 0.4827882933333375
+        }
+      ],
+      "status": "ok",
+      "name": "短い張り手",
+      "source": "independent-exact-time-WebGL",
+      "reviewStatus": "candidate-only-not-approved"
+    },
+    "stand_heavy": {
+      "clip": "v17_stand_heavy",
+      "contact": 0.3695652173913043,
+      "contactEnd": 0.45652173913043476,
+      "attackPart": "armL",
+      "attackLimb": "pawL+pawR",
+      "bothHands": true,
+      "reach": 0.4354074795651601,
+      "height": 0.44308650314123027,
+      "activeReach": [
+        {
+          "phase": 0,
+          "reach": 0.4354074795651601,
+          "height": 0.44308650314123027
+        },
+        {
+          "phase": 0.25,
+          "reach": 0.4354074564127348,
+          "height": 0.44308651703175655
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.4354074555168801,
+          "height": 0.44308651971005986
+        },
+        {
+          "phase": 0.75,
+          "reach": 0.4354074555168801,
+          "height": 0.44308651971005986
+        },
+        {
+          "phase": 1,
+          "reach": 0.43540746810146147,
+          "height": 0.443086515144738
+        }
+      ],
+      "status": "ok",
+      "name": "踏み込み両掌突き",
+      "source": "independent-exact-time-WebGL",
+      "reviewStatus": "candidate-only-not-approved"
+    },
+    "crouch_weak": {
+      "clip": "v17_crouch_weak",
+      "contact": 0.32142857142857145,
+      "contactEnd": 0.42857142857142855,
+      "attackPart": "armR",
+      "attackLimb": "pawR",
+      "reach": 0.5044170932926997,
+      "height": 0.25240984979083814,
+      "activeReach": [
+        {
+          "phase": 0,
+          "reach": 0.5044170932926997,
+          "height": 0.25240984979083814
+        },
+        {
+          "phase": 0.3333333333333333,
+          "reach": 0.5044171183914631,
+          "height": 0.2524098579428231
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.5044171147707055,
+          "height": 0.25240986280963457
+        },
+        {
+          "phase": 0.6666666666666666,
+          "reach": 0.5044171129796945,
+          "height": 0.2524098718757357
+        },
+        {
+          "phase": 1,
+          "reach": 0.5044171083078873,
+          "height": 0.25240984855018955
+        }
+      ],
+      "status": "ok",
+      "name": "守りの払い",
+      "source": "independent-exact-time-WebGL",
+      "reviewStatus": "candidate-only-not-approved"
+    },
+    "crouch_heavy": {
+      "clip": "v17_crouch_heavy",
+      "contact": 0.3695652173913043,
+      "contactEnd": 0.45652173913043476,
+      "attackPart": "armR",
+      "attackLimb": "elbowR",
+      "reach": 0.4147669184565126,
+      "height": 0.2512861217597484,
+      "activeReach": [
+        {
+          "phase": 0,
+          "reach": 0.4147669184565126,
+          "height": 0.2512861217597484
+        },
+        {
+          "phase": 0.25,
+          "reach": 0.4147669184565126,
+          "height": 0.2512861217597484
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.4147669184565126,
+          "height": 0.2512861217597484
+        },
+        {
+          "phase": 0.75,
+          "reach": 0.4147669184565126,
+          "height": 0.2512861217597484
+        },
+        {
+          "phase": 1,
+          "reach": 0.41476691484284134,
+          "height": 0.25128613366491825
+        }
+      ],
+      "status": "ok",
+      "name": "足元への肘",
+      "source": "independent-exact-time-WebGL",
+      "reviewStatus": "candidate-only-not-approved"
+    },
+    "air_weak": {
+      "clip": "v17_air_weak",
+      "contact": 0.32142857142857145,
+      "contactEnd": 0.42857142857142855,
+      "attackPart": "armL",
+      "attackLimb": "pawL",
+      "reach": 0.4076621107543832,
+      "height": 0.4711613987460752,
+      "activeReach": [
+        {
+          "phase": 0,
+          "reach": 0.4076621107543832,
+          "height": 0.4711613987460752
+        },
+        {
+          "phase": 0.25,
+          "reach": 0.40766212127528734,
+          "height": 0.47116139990063166
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.4076621204118962,
+          "height": 0.4711614002209419
+        },
+        {
+          "phase": 0.75,
+          "reach": 0.40766212015741377,
+          "height": 0.4711614004397706
+        },
+        {
+          "phase": 1,
+          "reach": 0.4076621216297145,
+          "height": 0.4711614000179778
+        }
+      ],
+      "status": "ok",
+      "name": "空中の前掌",
+      "source": "independent-exact-time-WebGL",
+      "reviewStatus": "candidate-only-not-approved"
+    },
+    "air_heavy": {
+      "clip": "v17_air_heavy",
+      "contact": 0.3695652173913043,
+      "contactEnd": 0.45652173913043476,
+      "attackPart": "armL",
+      "attackLimb": "pawL+pawR",
+      "bothHands": true,
+      "reach": 0.46036342664267615,
+      "height": 0.3703668131531834,
+      "activeReach": [
+        {
+          "phase": 0,
+          "reach": 0.46036342664267615,
+          "height": 0.3703668131531834
+        },
+        {
+          "phase": 0.2,
+          "reach": 0.46036342565603094,
+          "height": 0.37036681356805934
+        },
+        {
+          "phase": 0.4,
+          "reach": 0.4603634259108593,
+          "height": 0.3703668195132479
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.4603634259108593,
+          "height": 0.3703668195132479
+        },
+        {
+          "phase": 0.6,
+          "reach": 0.4603634259108593,
+          "height": 0.3703668195132479
+        },
+        {
+          "phase": 0.8,
+          "reach": 0.46036342565602983,
+          "height": 0.37036681356806
+        },
+        {
+          "phase": 1,
+          "reach": 0.4603634261393794,
+          "height": 0.3703668233236246
+        }
+      ],
+      "status": "ok",
+      "name": "合わせ降り掌",
+      "source": "independent-exact-time-WebGL",
+      "reviewStatus": "candidate-only-not-approved"
+    }
+  },
+  "chirka": {
+    "stand_weak": {
+      "clip": "v17_stand_weak",
+      "contact": 0.32142857142857145,
+      "contactEnd": 0.42857142857142855,
+      "attackPart": "armL",
+      "attackLimb": "pawL",
+      "reach": 0.3845706023834554,
+      "height": 0.28690786261581785,
+      "activeReach": [
+        {
+          "phase": 0,
+          "reach": 0.3845706023834554,
+          "height": 0.28690786261581785
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.3845706165431817,
+          "height": 0.286907867308199
+        },
+        {
+          "phase": 1,
+          "reach": 0.3845706163188396,
+          "height": 0.28690786446160743
+        }
+      ],
+      "status": "ok",
+      "name": "ずらし爪",
+      "source": "independent-exact-time-WebGL",
+      "reviewStatus": "candidate-only-not-approved"
+    },
+    "stand_heavy": {
+      "clip": "v17_stand_heavy",
+      "contact": 0.3695652173913043,
+      "contactEnd": 0.45652173913043476,
+      "attackPart": "armR",
+      "attackLimb": "pawR",
+      "reach": 0.4493500883791095,
+      "height": 0.3052458999101043,
+      "activeReach": [
+        {
+          "phase": 0,
+          "reach": 0.4493500883791095,
+          "height": 0.3052458999101043
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.44935008214230154,
+          "height": 0.30524590330921614
+        },
+        {
+          "phase": 1,
+          "reach": 0.4493500840639354,
+          "height": 0.30524590274435814
+        }
+      ],
+      "status": "ok",
+      "name": "逆ひねり爪",
+      "source": "independent-exact-time-WebGL",
+      "reviewStatus": "candidate-only-not-approved"
+    },
+    "crouch_weak": {
+      "clip": "v17_crouch_weak",
+      "contact": 0.32142857142857145,
+      "contactEnd": 0.42857142857142855,
+      "attackPart": "armL",
+      "attackLimb": "pawL",
+      "reach": 0.489842526731872,
+      "height": 0.0423618203890992,
+      "activeReach": [
+        {
+          "phase": 0,
+          "reach": 0.489842526731872,
+          "height": 0.0423618203890992
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.48984254863491483,
+          "height": 0.04236182810109245
+        },
+        {
+          "phase": 1,
+          "reach": 0.48984254863491483,
+          "height": 0.04236182810109245
+        }
+      ],
+      "status": "ok",
+      "name": "視線先行の足元爪",
+      "source": "independent-exact-time-WebGL",
+      "reviewStatus": "candidate-only-not-approved"
+    },
+    "crouch_heavy": {
+      "clip": "v17_crouch_heavy",
+      "contact": 0.3695652173913043,
+      "contactEnd": 0.45652173913043476,
+      "attackPart": "legL",
+      "attackLimb": "footL",
+      "reach": 0.34923094142617694,
+      "height": 0.04571759658115177,
+      "activeReach": [
+        {
+          "phase": 0,
+          "reach": 0.34923094142617694,
+          "height": 0.04571759658115177
+        },
+        {
+          "phase": 0.3333333333333333,
+          "reach": 0.34923094142617694,
+          "height": 0.04571759658115177
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.34923094142617694,
+          "height": 0.04571759658115177
+        },
+        {
+          "phase": 0.6666666666666666,
+          "reach": 0.34923094142617694,
+          "height": 0.04571759658115177
+        },
+        {
+          "phase": 1,
+          "reach": 0.34923093381315606,
+          "height": 0.045717595229100016
+        }
+      ],
+      "status": "ok",
+      "name": "低い横蹴り",
+      "source": "independent-exact-time-WebGL",
+      "reviewStatus": "candidate-only-not-approved"
+    },
+    "air_weak": {
+      "clip": "v17_air_weak",
+      "contact": 0.32142857142857145,
+      "contactEnd": 0.42857142857142855,
+      "attackPart": "armL",
+      "attackLimb": "pawL",
+      "reach": 0.3593609722304292,
+      "height": 0.1863973090589206,
+      "activeReach": [
+        {
+          "phase": 0,
+          "reach": 0.3593609722304292,
+          "height": 0.1863973090589206
+        },
+        {
+          "phase": 0.3333333333333333,
+          "reach": 0.3593610007856025,
+          "height": 0.1863973261590327
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.35936100127307613,
+          "height": 0.18639732633012684
+        },
+        {
+          "phase": 0.6666666666666666,
+          "reach": 0.35936100127307613,
+          "height": 0.18639732633012684
+        },
+        {
+          "phase": 1,
+          "reach": 0.3593609912067657,
+          "height": 0.18639731921946656
+        }
+      ],
+      "status": "ok",
+      "name": "空中のずらし爪",
+      "source": "independent-exact-time-WebGL",
+      "reviewStatus": "candidate-only-not-approved"
+    },
+    "air_heavy": {
+      "clip": "v17_air_heavy",
+      "contact": 0.391304347826087,
+      "contactEnd": 0.4782608695652174,
+      "attackPart": "armR",
+      "attackLimb": "pawR",
+      "reach": 0.39352797169330134,
+      "height": 0.14987806565509498,
+      "activeReach": [
+        {
+          "phase": 0,
+          "reach": 0.39352797169330134,
+          "height": 0.14987806565509498
+        },
+        {
+          "phase": 0.25,
+          "reach": 0.3935279865263679,
+          "height": 0.1498778361743056
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.3935279865263679,
+          "height": 0.1498778361743056
+        },
+        {
+          "phase": 0.75,
+          "reach": 0.3935279865263679,
+          "height": 0.1498778361743056
+        },
+        {
+          "phase": 1,
+          "reach": 0.3935279865263679,
+          "height": 0.1498778361743056
+        }
+      ],
+      "status": "ok",
+      "name": "溜め振り爪",
+      "source": "independent-exact-time-WebGL",
+      "reviewStatus": "candidate-only-not-approved"
+    }
+  },
+  "takimaru": {
+    "stand_weak": {
+      "clip": "v17_stand_weak",
+      "contact": 0.32142857142857145,
+      "contactEnd": 0.42857142857142855,
+      "attackPart": "armL",
+      "attackLimb": "pawL",
+      "reach": 0.4944124725227502,
+      "height": 0.5925397180939798,
+      "activeReach": [
+        {
+          "phase": 0,
+          "reach": 0.4944124725227502,
+          "height": 0.5925397180939798
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.4944124852410121,
+          "height": 0.592539720251026
+        },
+        {
+          "phase": 1,
+          "reach": 0.4944124859724065,
+          "height": 0.5925397196743478
+        }
+      ],
+      "status": "ok",
+      "name": "探る掌",
+      "source": "independent-exact-time-WebGL",
+      "reviewStatus": "candidate-only-not-approved"
+    },
+    "stand_heavy": {
+      "clip": "v17_stand_heavy",
+      "contact": 0.3695652173913043,
+      "contactEnd": 0.45652173913043476,
+      "attackPart": "armR",
+      "attackLimb": "shoulderR",
+      "reach": 0.4443170365182072,
+      "height": 0.25902528156081783,
+      "activeReach": [
+        {
+          "phase": 0,
+          "reach": 0.4443170365182072,
+          "height": 0.25902528156081783
+        },
+        {
+          "phase": 0.3333333333333333,
+          "reach": 0.44431704576312003,
+          "height": 0.2590252766842544
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.44431704576312003,
+          "height": 0.2590252766842544
+        },
+        {
+          "phase": 0.6666666666666666,
+          "reach": 0.44431704576312003,
+          "height": 0.2590252766842544
+        },
+        {
+          "phase": 1,
+          "reach": 0.444317029760284,
+          "height": 0.2590253019162042
+        }
+      ],
+      "status": "ok",
+      "name": "寄せる肩打ち",
+      "source": "independent-exact-time-WebGL",
+      "reviewStatus": "candidate-only-not-approved"
+    },
+    "crouch_weak": {
+      "clip": "v17_crouch_weak",
+      "contact": 0.32142857142857145,
+      "contactEnd": 0.42857142857142855,
+      "attackPart": "armR",
+      "attackLimb": "pawR",
+      "reach": 0.6065955748949687,
+      "height": 0.22914032310490517,
+      "activeReach": [
+        {
+          "phase": 0,
+          "reach": 0.6065955748949687,
+          "height": 0.22914032310490517
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.6065955833225778,
+          "height": 0.2291403109967499
+        },
+        {
+          "phase": 1,
+          "reach": 0.6065955925762281,
+          "height": 0.22914033339049455
+        }
+      ],
+      "status": "ok",
+      "name": "足元の払い",
+      "source": "independent-exact-time-WebGL",
+      "reviewStatus": "candidate-only-not-approved"
+    },
+    "crouch_heavy": {
+      "clip": "v17_crouch_heavy",
+      "contact": 0.3695652173913043,
+      "contactEnd": 0.45652173913043476,
+      "attackPart": "armL",
+      "attackLimb": "pawL+pawR",
+      "bothHands": true,
+      "reach": 0.5227264705118914,
+      "height": 0.6062853455394719,
+      "activeReach": [
+        {
+          "phase": 0,
+          "reach": 0.5227264705118914,
+          "height": 0.6062853455394719
+        },
+        {
+          "phase": 0.3333333333333333,
+          "reach": 0.522726457030354,
+          "height": 0.606285352191118
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.522726457030354,
+          "height": 0.6062853521911182
+        },
+        {
+          "phase": 0.6666666666666666,
+          "reach": 0.522726457030354,
+          "height": 0.6062853521911182
+        },
+        {
+          "phase": 1,
+          "reach": 0.5227264636443757,
+          "height": 0.6062853596931285
+        }
+      ],
+      "status": "ok",
+      "name": "すくい上げ",
+      "source": "independent-exact-time-WebGL",
+      "reviewStatus": "candidate-only-not-approved"
+    },
+    "air_weak": {
+      "clip": "v17_air_weak",
+      "contact": 0.32142857142857145,
+      "contactEnd": 0.42857142857142855,
+      "attackPart": "armR",
+      "attackLimb": "elbowR",
+      "reach": 0.28504867242821663,
+      "height": 0.4374476427661713,
+      "activeReach": [
+        {
+          "phase": 0,
+          "reach": 0.28504867242821663,
+          "height": 0.4374476427661713
+        },
+        {
+          "phase": 0.25,
+          "reach": 0.28504868198907385,
+          "height": 0.4374476172523669
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.285048681412746,
+          "height": 0.4374476196840482
+        },
+        {
+          "phase": 0.75,
+          "reach": 0.2850486806209118,
+          "height": 0.4374476242151075
+        },
+        {
+          "phase": 1,
+          "reach": 0.2850486806209118,
+          "height": 0.4374476242151075
+        }
+      ],
+      "status": "ok",
+      "name": "落とし肘",
+      "source": "independent-exact-time-WebGL",
+      "reviewStatus": "candidate-only-not-approved"
+    },
+    "air_heavy": {
+      "clip": "v17_air_heavy",
+      "contact": 0.3695652173913043,
+      "contactEnd": 0.45652173913043476,
+      "attackPart": "head",
+      "attackLimb": "body",
+      "reach": 0.4656741454165072,
+      "height": 0.3309290002117635,
+      "activeReach": [
+        {
+          "phase": 0,
+          "reach": 0.4656741454165072,
+          "height": 0.3309290002117635
+        },
+        {
+          "phase": 0.2,
+          "reach": 0.4656741454165072,
+          "height": 0.3309290002117635
+        },
+        {
+          "phase": 0.4,
+          "reach": 0.4656741454165072,
+          "height": 0.3309290002117635
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.4656741454165072,
+          "height": 0.3309290002117635
+        },
+        {
+          "phase": 0.6,
+          "reach": 0.4656741454165072,
+          "height": 0.3309290002117635
+        },
+        {
+          "phase": 0.8,
+          "reach": 0.4656741454165072,
+          "height": 0.3309290002117635
+        },
+        {
+          "phase": 1,
+          "reach": 0.4656741447157208,
+          "height": 0.3309290017178643
+        }
+      ],
+      "status": "ok",
+      "name": "丸めた体落とし",
+      "source": "independent-exact-time-WebGL",
+      "reviewStatus": "candidate-only-not-approved"
+    }
+  },
+  "yomikage": {
+    "stand_weak": {
+      "clip": "v17_stand_weak",
+      "contact": 0.2916666666666667,
+      "contactEnd": 0.4166666666666667,
+      "attackPart": "armL",
+      "attackLimb": "pawL",
+      "reach": 0.34863550888317674,
+      "height": 0.41961097922095175,
+      "activeReach": [
+        {
+          "phase": 0,
+          "reach": 0.34863550888317674,
+          "height": 0.41961097922095175
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.3486355107696193,
+          "height": 0.41961097931447777
+        },
+        {
+          "phase": 1,
+          "reach": 0.3486355101596763,
+          "height": 0.4196109783757622
+        }
+      ],
+      "status": "ok",
+      "name": "手首返しの小突き",
+      "source": "independent-exact-time-WebGL",
+      "reviewStatus": "candidate-only-not-approved"
+    },
+    "stand_heavy": {
+      "clip": "v17_stand_heavy",
+      "contact": 0.391304347826087,
+      "contactEnd": 0.4782608695652174,
+      "attackPart": "armR",
+      "attackLimb": "pawR",
+      "reach": 0.4676721322608658,
+      "height": 0.37753688931183327,
+      "activeReach": [
+        {
+          "phase": 0,
+          "reach": 0.4676721322608658,
+          "height": 0.37753688931183327
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.46767222564008737,
+          "height": 0.37753685285318744
+        },
+        {
+          "phase": 1,
+          "reach": 0.467672230754145,
+          "height": 0.3775368384010067
+        }
+      ],
+      "status": "ok",
+      "name": "一歩の手刀斬り",
+      "source": "independent-exact-time-WebGL",
+      "reviewStatus": "candidate-only-not-approved"
+    },
+    "crouch_weak": {
+      "clip": "v17_crouch_weak",
+      "contact": 0.2916666666666667,
+      "contactEnd": 0.4166666666666667,
+      "attackPart": "armR",
+      "attackLimb": "pawR",
+      "reach": 0.360057698775603,
+      "height": 0.1507328630946145,
+      "activeReach": [
+        {
+          "phase": 0,
+          "reach": 0.360057698775603,
+          "height": 0.1507328630946145
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.3600576961840849,
+          "height": 0.15073285095243158
+        },
+        {
+          "phase": 1,
+          "reach": 0.360057700761514,
+          "height": 0.15073286638913008
+        }
+      ],
+      "status": "ok",
+      "name": "足首の払い",
+      "source": "independent-exact-time-WebGL",
+      "reviewStatus": "candidate-only-not-approved"
+    },
+    "crouch_heavy": {
+      "clip": "v17_crouch_heavy",
+      "contact": 0.3695652173913043,
+      "contactEnd": 0.45652173913043476,
+      "attackPart": "legL",
+      "attackLimb": "kneeL+elbowR",
+      "reach": 0.3373032658346429,
+      "height": 0.1608868287029056,
+      "activeReach": [
+        {
+          "phase": 0,
+          "reach": 0.3373032658346429,
+          "height": 0.1608868287029056
+        },
+        {
+          "phase": 0.3333333333333333,
+          "reach": 0.3373032658346429,
+          "height": 0.1608868287029056
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.3373032658346429,
+          "height": 0.1608868287029056
+        },
+        {
+          "phase": 0.6666666666666666,
+          "reach": 0.3373032658346429,
+          "height": 0.1608868287029056
+        },
+        {
+          "phase": 1,
+          "reach": 0.33730325718362275,
+          "height": 0.16088682467125306
+        }
+      ],
+      "status": "ok",
+      "name": "迎えの膝と肘",
+      "source": "independent-exact-time-WebGL",
+      "reviewStatus": "candidate-only-not-approved"
+    },
+    "air_weak": {
+      "clip": "v17_air_weak",
+      "contact": 0.2916666666666667,
+      "contactEnd": 0.4166666666666667,
+      "attackPart": "armL",
+      "attackLimb": "pawL",
+      "reach": 0.3323359446554599,
+      "height": 0.3427466452514012,
+      "activeReach": [
+        {
+          "phase": 0,
+          "reach": 0.3323359446554599,
+          "height": 0.3427466452514012
+        },
+        {
+          "phase": 0.3333333333333333,
+          "reach": 0.3323359516978177,
+          "height": 0.3427466391023757
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.33233594887747264,
+          "height": 0.3427466404342432
+        },
+        {
+          "phase": 0.6666666666666666,
+          "reach": 0.33233594605712136,
+          "height": 0.3427466417661129
+        },
+        {
+          "phase": 1,
+          "reach": 0.3323359436867719,
+          "height": 0.3427466424978829
+        }
+      ],
+      "status": "ok",
+      "name": "空中の短い掌",
+      "source": "independent-exact-time-WebGL",
+      "reviewStatus": "candidate-only-not-approved"
+    },
+    "air_heavy": {
+      "clip": "v17_air_heavy",
+      "contact": 0.3695652173913043,
+      "contactEnd": 0.45652173913043476,
+      "attackPart": "armR",
+      "attackLimb": "pawR",
+      "reach": 0.26851899334533025,
+      "height": 0.2215242284351132,
+      "activeReach": [
+        {
+          "phase": 0,
+          "reach": 0.26851899334533025,
+          "height": 0.2215242284351132
+        },
+        {
+          "phase": 0.25,
+          "reach": 0.268518983831177,
+          "height": 0.22152422365453106
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.2685189832853341,
+          "height": 0.22152421948731116
+        },
+        {
+          "phase": 0.75,
+          "reach": 0.2685189832853341,
+          "height": 0.22152421948731116
+        },
+        {
+          "phase": 1,
+          "reach": 0.2685189913356123,
+          "height": 0.2215242304247128
+        }
+      ],
+      "status": "ok",
+      "name": "下突き",
+      "source": "independent-exact-time-WebGL",
+      "reviewStatus": "candidate-only-not-approved"
+    }
+  },
+  "bullet": {
+    "stand_weak": {
+      "clip": "v17_stand_weak",
+      "contact": 0.32142857142857145,
+      "contactEnd": 0.42857142857142855,
+      "attackPart": "armL",
+      "attackLimb": "pawL",
+      "reach": 0.40548904915866146,
+      "height": 0.38019706680662657,
+      "activeReach": [
+        {
+          "phase": 0,
+          "reach": 0.40548904915866146,
+          "height": 0.38019706680662657
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.40548906497608495,
+          "height": 0.38019707650676804
+        },
+        {
+          "phase": 1,
+          "reach": 0.4054890648168221,
+          "height": 0.38019706609100357
+        }
+      ],
+      "status": "ok",
+      "name": "測る前手",
+      "source": "independent-exact-time-WebGL",
+      "reviewStatus": "candidate-only-not-approved"
+    },
+    "stand_heavy": {
+      "clip": "v17_stand_heavy",
+      "contact": 0.5208333333333334,
+      "contactEnd": 0.6041666666666666,
+      "attackPart": "tail",
+      "attackLimb": "tail",
+      "reach": 0.6424639344332235,
+      "height": 0.19130519497332868,
+      "activeReach": [
+        {
+          "phase": 0,
+          "reach": 0.6424639344332235,
+          "height": 0.19130519497332868
+        },
+        {
+          "phase": 0.3333333333333333,
+          "reach": 0.6541505021105943,
+          "height": 0.17538891360232903
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.6428148559566359,
+          "height": 0.16991392571649755
+        },
+        {
+          "phase": 0.6666666666666666,
+          "reach": 0.6239766832779758,
+          "height": 0.1673557266410025
+        },
+        {
+          "phase": 1,
+          "reach": 0.5680240980813472,
+          "height": 0.16380174483420706
+        }
+      ],
+      "status": "ok",
+      "name": "長尾の横払い",
+      "source": "independent-exact-time-WebGL",
+      "reviewStatus": "candidate-only-not-approved"
+    },
+    "crouch_weak": {
+      "clip": "v17_crouch_weak",
+      "contact": 0.32142857142857145,
+      "contactEnd": 0.42857142857142855,
+      "attackPart": "armR",
+      "attackLimb": "pawR",
+      "reach": 0.4031067825067577,
+      "height": 0.22574687365044327,
+      "activeReach": [
+        {
+          "phase": 0,
+          "reach": 0.4031067825067577,
+          "height": 0.22574687365044327
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.40310679291775386,
+          "height": 0.22574687779882344
+        },
+        {
+          "phase": 1,
+          "reach": 0.4031067915511275,
+          "height": 0.22574687266417404
+        }
+      ],
+      "status": "ok",
+      "name": "低い前手突き",
+      "source": "independent-exact-time-WebGL",
+      "reviewStatus": "candidate-only-not-approved"
+    },
+    "crouch_heavy": {
+      "clip": "v17_crouch_heavy",
+      "contact": 0.4166666666666667,
+      "contactEnd": 0.5,
+      "attackPart": "tail",
+      "attackLimb": "tail",
+      "reach": 0.6801962121352226,
+      "height": 0.10701822836999057,
+      "activeReach": [
+        {
+          "phase": 0,
+          "reach": 0.6801962121352226,
+          "height": 0.10701822836999057
+        },
+        {
+          "phase": 0.3333333333333333,
+          "reach": 0.6855789740087931,
+          "height": 0.06965856928093686
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.6850059604979848,
+          "height": 0.06004834949224977
+        },
+        {
+          "phase": 0.6666666666666666,
+          "reach": 0.6853331525169852,
+          "height": 0.057402583402914126
+        },
+        {
+          "phase": 1,
+          "reach": 0.6862294693759116,
+          "height": 0.055544119091313876
+        }
+      ],
+      "status": "ok",
+      "name": "地すれの尾薙ぎ",
+      "source": "independent-exact-time-WebGL",
+      "reviewStatus": "candidate-only-not-approved"
+    },
+    "air_weak": {
+      "clip": "v17_air_weak",
+      "contact": 0.32142857142857145,
+      "contactEnd": 0.42857142857142855,
+      "attackPart": "armL",
+      "attackLimb": "pawL",
+      "reach": 0.39649264917860494,
+      "height": 0.23777840773001202,
+      "activeReach": [
+        {
+          "phase": 0,
+          "reach": 0.39649264917860494,
+          "height": 0.23777840773001202
+        },
+        {
+          "phase": 0.25,
+          "reach": 0.39649266964423124,
+          "height": 0.23777840961342378
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.39649267195193105,
+          "height": 0.23777841137141031
+        },
+        {
+          "phase": 0.75,
+          "reach": 0.3964926696442346,
+          "height": 0.23777840961342855
+        },
+        {
+          "phase": 1,
+          "reach": 0.3964926647155278,
+          "height": 0.23777840308104492
+        }
+      ],
+      "status": "ok",
+      "name": "空中の前手",
+      "source": "independent-exact-time-WebGL",
+      "reviewStatus": "candidate-only-not-approved"
+    },
+    "air_heavy": {
+      "clip": "v17_air_heavy",
+      "contact": 0.4166666666666667,
+      "contactEnd": 0.5,
+      "attackPart": "tail",
+      "attackLimb": "tail",
+      "reach": 0.5826870396851284,
+      "height": -0.07238373499973672,
+      "activeReach": [
+        {
+          "phase": 0,
+          "reach": 0.5826870396851284,
+          "height": -0.07238373499973672
+        },
+        {
+          "phase": 0.2,
+          "reach": 0.566086300330317,
+          "height": -0.13170047170952337
+        },
+        {
+          "phase": 0.4,
+          "reach": 0.5535118856177788,
+          "height": -0.16081897549182633
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.5485381012047406,
+          "height": -0.1620916268441156
+        },
+        {
+          "phase": 0.6,
+          "reach": 0.5480425790394593,
+          "height": -0.1647157622425951
+        },
+        {
+          "phase": 0.8,
+          "reach": 0.547512449590034,
+          "height": -0.16882325482116656
+        },
+        {
+          "phase": 1,
+          "reach": 0.5490859990331622,
+          "height": -0.16974012570715724
+        }
+      ],
+      "status": "ok",
+      "name": "溜め尾の振り下ろし",
+      "source": "independent-exact-time-WebGL",
+      "reviewStatus": "candidate-only-not-approved"
+    }
+  },
+  "dark_moguzo": {
+    "stand_weak": {
+      "clip": "v17_stand_weak",
+      "contact": 0.2916666666666667,
+      "contactEnd": 0.4166666666666667,
+      "attackPart": "armR",
+      "attackLimb": "pawR",
+      "reach": 0.38092711044158034,
+      "height": 0.27486754894300003,
+      "activeReach": [
+        {
+          "phase": 0,
+          "reach": 0.38092711044158034,
+          "height": 0.27486754894300003
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.380927109375649,
+          "height": 0.274867562069577
+        },
+        {
+          "phase": 1,
+          "reach": 0.3809271106254881,
+          "height": 0.2748675485591007
+        }
+      ],
+      "status": "ok",
+      "name": "低い差し返し",
+      "source": "independent-exact-time-WebGL",
+      "reviewStatus": "candidate-only-not-approved"
+    },
+    "stand_heavy": {
+      "clip": "v17_stand_heavy",
+      "contact": 0.3695652173913043,
+      "contactEnd": 0.45652173913043476,
+      "attackPart": "armL",
+      "attackLimb": "pawL",
+      "reach": 0.4527476146984575,
+      "height": 0.25574486420071885,
+      "activeReach": [
+        {
+          "phase": 0,
+          "reach": 0.4527476146984575,
+          "height": 0.25574486420071885
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.4527476146194058,
+          "height": 0.25574485361043026
+        },
+        {
+          "phase": 1,
+          "reach": 0.45274760423105675,
+          "height": 0.25574486629416693
+        }
+      ],
+      "status": "ok",
+      "name": "滑り込みの振り抜き",
+      "source": "independent-exact-time-WebGL",
+      "reviewStatus": "candidate-only-not-approved"
+    },
+    "crouch_weak": {
+      "clip": "v17_crouch_weak",
+      "contact": 0.2916666666666667,
+      "contactEnd": 0.4166666666666667,
+      "attackPart": "armR",
+      "attackLimb": "pawR",
+      "reach": 0.5022582086156673,
+      "height": 0.07771206537631573,
+      "activeReach": [
+        {
+          "phase": 0,
+          "reach": 0.5022582086156673,
+          "height": 0.07771206537631573
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.5022582048620887,
+          "height": 0.07771206189813978
+        },
+        {
+          "phase": 1,
+          "reach": 0.5022582100826205,
+          "height": 0.07771206385125255
+        }
+      ],
+      "status": "ok",
+      "name": "潜り突き",
+      "source": "independent-exact-time-WebGL",
+      "reviewStatus": "candidate-only-not-approved"
+    },
+    "crouch_heavy": {
+      "clip": "v17_crouch_heavy",
+      "contact": 0.3695652173913043,
+      "contactEnd": 0.45652173913043476,
+      "attackPart": "armL",
+      "attackLimb": "pawL",
+      "reach": 0.48001199284627805,
+      "height": 0.07257288177256056,
+      "activeReach": [
+        {
+          "phase": 0,
+          "reach": 0.48001199284627805,
+          "height": 0.07257288177256056
+        },
+        {
+          "phase": 0.3333333333333333,
+          "reach": 0.48001199123582206,
+          "height": 0.07257287928704888
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.48001199123582206,
+          "height": 0.07257287928704888
+        },
+        {
+          "phase": 0.6666666666666666,
+          "reach": 0.48001199123582206,
+          "height": 0.07257287928704888
+        },
+        {
+          "phase": 1,
+          "reach": 0.4800119848060347,
+          "height": 0.07257288745732236
+        }
+      ],
+      "status": "ok",
+      "name": "地を切る横払い",
+      "source": "independent-exact-time-WebGL",
+      "reviewStatus": "candidate-only-not-approved"
+    },
+    "air_weak": {
+      "clip": "v17_air_weak",
+      "contact": 0.2916666666666667,
+      "contactEnd": 0.4166666666666667,
+      "attackPart": "armR",
+      "attackLimb": "pawR",
+      "reach": 0.31107804262035677,
+      "height": 0.2156581744001247,
+      "activeReach": [
+        {
+          "phase": 0,
+          "reach": 0.31107804262035677,
+          "height": 0.2156581744001247
+        },
+        {
+          "phase": 0.3333333333333333,
+          "reach": 0.3110780495448444,
+          "height": 0.21565818037407536
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.3110780505375137,
+          "height": 0.2156581780690613
+        },
+        {
+          "phase": 0.6666666666666666,
+          "reach": 0.3110780505375137,
+          "height": 0.2156581780690613
+        },
+        {
+          "phase": 1,
+          "reach": 0.3110780465525034,
+          "height": 0.21565817468651205
+        }
+      ],
+      "status": "ok",
+      "name": "ひねり差し",
+      "source": "independent-exact-time-WebGL",
+      "reviewStatus": "candidate-only-not-approved"
+    },
+    "air_heavy": {
+      "clip": "v17_air_heavy",
+      "contact": 0.3695652173913043,
+      "contactEnd": 0.45652173913043476,
+      "attackPart": "legL",
+      "attackLimb": "footL",
+      "reach": 0.3017438896379592,
+      "height": 0.06891813879938802,
+      "activeReach": [
+        {
+          "phase": 0,
+          "reach": 0.3017438896379592,
+          "height": 0.06891813879938802
+        },
+        {
+          "phase": 0.25,
+          "reach": 0.3017438896379592,
+          "height": 0.06891813879938802
+        },
+        {
+          "phase": 0.5,
+          "reach": 0.3017438896379592,
+          "height": 0.06891813879938802
+        },
+        {
+          "phase": 0.75,
+          "reach": 0.3017438896379592,
+          "height": 0.06891813879938802
+        },
+        {
+          "phase": 1,
+          "reach": 0.30174388869402624,
+          "height": 0.0689181416003023
+        }
+      ],
+      "status": "ok",
+      "name": "斜めの蹴り下ろし",
+      "source": "independent-exact-time-WebGL",
+      "reviewStatus": "candidate-only-not-approved"
+    }
+  }
+}

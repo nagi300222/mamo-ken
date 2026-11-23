@@ -1,0 +1,1964 @@
+[
+  {
+    "id": "moguzo",
+    "finisher": "s1",
+    "name": "大地の波",
+    "standing": [
+      {
+        "comboHits": 1,
+        "damage": 38,
+        "at": 4,
+        "before": {
+          "targetStun": 0,
+          "targetStop": 0,
+          "distance": 0.35
+        },
+        "action": "stand_weak",
+        "actionFrame": 5
+      },
+      {
+        "comboHits": 2,
+        "damage": 72,
+        "at": 21,
+        "before": {
+          "targetStun": 7,
+          "targetStop": 0,
+          "distance": 0.39499999999999996
+        },
+        "action": "stand_heavy",
+        "actionFrame": 12
+      },
+      {
+        "comboHits": 3,
+        "damage": 46,
+        "at": 42,
+        "before": {
+          "targetStun": 16,
+          "targetStop": 0,
+          "distance": 0.49499999999999994
+        },
+        "action": "s1",
+        "actionFrame": 13
+      }
+    ],
+    "crouching": [
+      {
+        "comboHits": 1,
+        "damage": 33,
+        "at": 5,
+        "before": {
+          "targetStun": 0,
+          "targetStop": 0,
+          "distance": 0.35
+        },
+        "action": "crouch_weak",
+        "actionFrame": 6
+      },
+      {
+        "comboHits": 2,
+        "damage": 68,
+        "at": 23,
+        "before": {
+          "targetStun": 6,
+          "targetStop": 0,
+          "distance": 0.39499999999999996
+        },
+        "action": "crouch_heavy",
+        "actionFrame": 13
+      },
+      {
+        "comboHits": 3,
+        "damage": 46,
+        "at": 44,
+        "before": {
+          "targetStun": 18,
+          "targetStop": 0,
+          "distance": 0.5049999999999999
+        },
+        "action": "s1",
+        "actionFrame": 13
+      }
+    ],
+    "oldMidS2Hits": 2,
+    "oldMidS2Active": [
+      {
+        "at": 35,
+        "move": "s2",
+        "frame": 6,
+        "dist": 0.49499999999999994,
+        "targetStun": 22,
+        "targetState": "hit",
+        "targetY": 0,
+        "attackerY": 0,
+        "reach": 0.2906,
+        "height": 0.4611,
+        "point": {
+          "phase": 0,
+          "frame": 0,
+          "reach": 0.2906,
+          "height": 0.4611,
+          "part": "armR"
+        },
+        "contact": false
+      },
+      {
+        "at": 36,
+        "move": "s2",
+        "frame": 7,
+        "dist": 0.49499999999999994,
+        "targetStun": 21,
+        "targetState": "hit",
+        "targetY": 0,
+        "attackerY": 0,
+        "reach": 0.2906,
+        "height": 0.4611,
+        "point": {
+          "phase": 0.14285714285714285,
+          "reach": 0.2562,
+          "height": 0.531
+        },
+        "contact": false
+      },
+      {
+        "at": 37,
+        "move": "s2",
+        "frame": 8,
+        "dist": 0.49499999999999994,
+        "targetStun": 20,
+        "targetState": "hit",
+        "targetY": 0,
+        "attackerY": 0,
+        "reach": 0.2906,
+        "height": 0.4611,
+        "point": {
+          "phase": 0.2857142857142857,
+          "reach": 0.2351,
+          "height": 0.5999
+        },
+        "contact": false
+      },
+      {
+        "at": 38,
+        "move": "s2",
+        "frame": 9,
+        "dist": 0.49499999999999994,
+        "targetStun": 19,
+        "targetState": "hit",
+        "targetY": 0,
+        "attackerY": 0,
+        "reach": 0.2906,
+        "height": 0.4611,
+        "point": {
+          "phase": 0.42857142857142855,
+          "reach": 0.2273,
+          "height": 0.5567
+        },
+        "contact": false
+      },
+      {
+        "at": 39,
+        "move": "s2",
+        "frame": 10,
+        "dist": 0.49499999999999994,
+        "targetStun": 18,
+        "targetState": "hit",
+        "targetY": 0,
+        "attackerY": 0,
+        "reach": 0.2906,
+        "height": 0.4611,
+        "point": {
+          "phase": 0.5714285714285714,
+          "reach": 0.2421,
+          "height": 0.6146
+        },
+        "contact": false
+      },
+      {
+        "at": 40,
+        "move": "s2",
+        "frame": 11,
+        "dist": 0.49499999999999994,
+        "targetStun": 17,
+        "targetState": "hit",
+        "targetY": 0,
+        "attackerY": 0,
+        "reach": 0.2906,
+        "height": 0.4611,
+        "point": {
+          "phase": 0.7142857142857143,
+          "reach": 0.2532,
+          "height": 0.6595
+        },
+        "contact": false
+      },
+      {
+        "at": 41,
+        "move": "s2",
+        "frame": 12,
+        "dist": 0.49499999999999994,
+        "targetStun": 16,
+        "targetState": "hit",
+        "targetY": 0,
+        "attackerY": 0,
+        "reach": 0.2906,
+        "height": 0.4611,
+        "point": {
+          "phase": 0.8571428571428571,
+          "reach": 0.2481,
+          "height": 0.6848
+        },
+        "contact": false
+      },
+      {
+        "at": 42,
+        "move": "s2",
+        "frame": 13,
+        "dist": 0.49499999999999994,
+        "targetStun": 15,
+        "targetState": "hit",
+        "targetY": 0,
+        "attackerY": 0,
+        "reach": 0.2906,
+        "height": 0.4611,
+        "point": {
+          "phase": 1,
+          "reach": 0.1832,
+          "height": 0.8297
+        },
+        "contact": false
+      }
+    ]
+  },
+  {
+    "id": "pisuke",
+    "finisher": "s3",
+    "name": "連脚",
+    "standing": [
+      {
+        "comboHits": 1,
+        "damage": 31,
+        "at": 3,
+        "before": {
+          "targetStun": 0,
+          "targetStop": 0,
+          "distance": 0.35
+        },
+        "action": "stand_weak",
+        "actionFrame": 4
+      },
+      {
+        "comboHits": 2,
+        "damage": 61,
+        "at": 18,
+        "before": {
+          "targetStun": 6,
+          "targetStop": 0,
+          "distance": 0.385
+        },
+        "action": "stand_heavy",
+        "actionFrame": 11
+      },
+      {
+        "comboHits": 3,
+        "damage": 55,
+        "at": 32,
+        "before": {
+          "targetStun": 21,
+          "targetStop": 0,
+          "distance": 0.33999999999999997
+        },
+        "action": "s3",
+        "actionFrame": 7
+      }
+    ],
+    "crouching": [
+      {
+        "comboHits": 1,
+        "damage": 27,
+        "at": 4,
+        "before": {
+          "targetStun": 0,
+          "targetStop": 0,
+          "distance": 0.35
+        },
+        "action": "crouch_weak",
+        "actionFrame": 5
+      },
+      {
+        "comboHits": 2,
+        "damage": 59,
+        "at": 19,
+        "before": {
+          "targetStun": 6,
+          "targetStop": 0,
+          "distance": 0.385
+        },
+        "action": "crouch_heavy",
+        "actionFrame": 11
+      },
+      {
+        "comboHits": 3,
+        "damage": 55,
+        "at": 33,
+        "before": {
+          "targetStun": 24,
+          "targetStop": 0,
+          "distance": 0.33999999999999997
+        },
+        "action": "s3",
+        "actionFrame": 7
+      }
+    ],
+    "oldMidS2Hits": 2,
+    "oldMidS2Active": [
+      {
+        "at": 31,
+        "move": "s2",
+        "frame": 6,
+        "dist": 0.46499999999999997,
+        "targetStun": 21,
+        "targetState": "hit",
+        "targetY": 0,
+        "attackerY": 0,
+        "reach": 0.1858,
+        "height": 0.4363,
+        "point": {
+          "phase": 0,
+          "frame": 0,
+          "reach": 0.1858,
+          "height": 0.4363,
+          "part": "legR"
+        },
+        "contact": false
+      },
+      {
+        "at": 32,
+        "move": "s2",
+        "frame": 7,
+        "dist": 0.46499999999999997,
+        "targetStun": 20,
+        "targetState": "hit",
+        "targetY": 0,
+        "attackerY": 0,
+        "reach": 0.1858,
+        "height": 0.4363,
+        "point": {
+          "phase": 0.14285714285714285,
+          "reach": 0.1862,
+          "height": 0.4474
+        },
+        "contact": false
+      },
+      {
+        "at": 33,
+        "move": "s2",
+        "frame": 8,
+        "dist": 0.46499999999999997,
+        "targetStun": 19,
+        "targetState": "hit",
+        "targetY": 0,
+        "attackerY": 0,
+        "reach": 0.1858,
+        "height": 0.4363,
+        "point": {
+          "phase": 0.2857142857142857,
+          "reach": 0.1852,
+          "height": 0.4512
+        },
+        "contact": false
+      },
+      {
+        "at": 34,
+        "move": "s2",
+        "frame": 9,
+        "dist": 0.46499999999999997,
+        "targetStun": 18,
+        "targetState": "hit",
+        "targetY": 0,
+        "attackerY": 0,
+        "reach": 0.1858,
+        "height": 0.4363,
+        "point": {
+          "phase": 0.42857142857142855,
+          "reach": 0.184,
+          "height": 0.449
+        },
+        "contact": false
+      },
+      {
+        "at": 35,
+        "move": "s2",
+        "frame": 10,
+        "dist": 0.46499999999999997,
+        "targetStun": 17,
+        "targetState": "hit",
+        "targetY": 0,
+        "attackerY": 0,
+        "reach": 0.1858,
+        "height": 0.4363,
+        "point": {
+          "phase": 0.5714285714285714,
+          "reach": 0.1835,
+          "height": 0.4482
+        },
+        "contact": false
+      },
+      {
+        "at": 36,
+        "move": "s2",
+        "frame": 11,
+        "dist": 0.46499999999999997,
+        "targetStun": 16,
+        "targetState": "hit",
+        "targetY": 0,
+        "attackerY": 0,
+        "reach": 0.1858,
+        "height": 0.4363,
+        "point": {
+          "phase": 0.7142857142857143,
+          "reach": 0.1835,
+          "height": 0.4482
+        },
+        "contact": false
+      },
+      {
+        "at": 37,
+        "move": "s2",
+        "frame": 12,
+        "dist": 0.46499999999999997,
+        "targetStun": 15,
+        "targetState": "hit",
+        "targetY": 0,
+        "attackerY": 0,
+        "reach": 0.1858,
+        "height": 0.4363,
+        "point": {
+          "phase": 0.8571428571428571,
+          "reach": 0.1835,
+          "height": 0.4482
+        },
+        "contact": false
+      },
+      {
+        "at": 38,
+        "move": "s2",
+        "frame": 13,
+        "dist": 0.46499999999999997,
+        "targetStun": 14,
+        "targetState": "hit",
+        "targetY": 0,
+        "attackerY": 0,
+        "reach": 0.1858,
+        "height": 0.4363,
+        "point": {
+          "phase": 1,
+          "reach": 0.1835,
+          "height": 0.4482
+        },
+        "contact": false
+      }
+    ]
+  },
+  {
+    "id": "godan",
+    "finisher": "s3",
+    "name": "肩当て突進",
+    "standing": [
+      {
+        "comboHits": 1,
+        "damage": 47,
+        "at": 6,
+        "before": {
+          "targetStun": 0,
+          "targetStop": 0,
+          "distance": 0.35
+        },
+        "action": "stand_weak",
+        "actionFrame": 7
+      },
+      {
+        "comboHits": 2,
+        "damage": 86,
+        "at": 28,
+        "before": {
+          "targetStun": 8,
+          "targetStop": 0,
+          "distance": 0.39
+        },
+        "action": "stand_heavy",
+        "actionFrame": 16
+      },
+      {
+        "comboHits": 3,
+        "damage": 90,
+        "at": 56,
+        "before": {
+          "targetStun": 16,
+          "targetStop": 0,
+          "distance": 0.34
+        },
+        "action": "s3",
+        "actionFrame": 18
+      }
+    ],
+    "crouching": [
+      {
+        "comboHits": 1,
+        "damage": 41,
+        "at": 7,
+        "before": {
+          "targetStun": 0,
+          "targetStop": 0,
+          "distance": 0.35
+        },
+        "action": "crouch_weak",
+        "actionFrame": 8
+      },
+      {
+        "comboHits": 2,
+        "damage": 82,
+        "at": 30,
+        "before": {
+          "targetStun": 7,
+          "targetStop": 0,
+          "distance": 0.39
+        },
+        "action": "crouch_heavy",
+        "actionFrame": 17
+      },
+      {
+        "comboHits": 3,
+        "damage": 90,
+        "at": 58,
+        "before": {
+          "targetStun": 18,
+          "targetStop": 0,
+          "distance": 0.33999999999999997
+        },
+        "action": "s3",
+        "actionFrame": 18
+      }
+    ],
+    "oldMidS2Hits": 2,
+    "oldMidS2Active": [
+      {
+        "at": 49,
+        "move": "s2",
+        "frame": 11,
+        "dist": 0.53,
+        "targetStun": 22,
+        "targetState": "hit",
+        "targetY": 0,
+        "attackerY": 0,
+        "reach": 0.3463,
+        "height": 0.526,
+        "point": {
+          "phase": 0,
+          "frame": 0,
+          "reach": 0.3463,
+          "height": 0.526,
+          "part": "armL"
+        },
+        "contact": false
+      },
+      {
+        "at": 50,
+        "move": "s2",
+        "frame": 12,
+        "dist": 0.53,
+        "targetStun": 21,
+        "targetState": "hit",
+        "targetY": 0,
+        "attackerY": 0,
+        "reach": 0.3463,
+        "height": 0.526,
+        "point": {
+          "phase": 0.16666666666666666,
+          "reach": 0.3313,
+          "height": 0.5545
+        },
+        "contact": false
+      },
+      {
+        "at": 51,
+        "move": "s2",
+        "frame": 13,
+        "dist": 0.53,
+        "targetStun": 20,
+        "targetState": "hit",
+        "targetY": 0,
+        "attackerY": 0,
+        "reach": 0.3463,
+        "height": 0.526,
+        "point": {
+          "phase": 0.3333333333333333,
+          "reach": 0.3161,
+          "height": 0.5824
+        },
+        "contact": false
+      },
+      {
+        "at": 52,
+        "move": "s2",
+        "frame": 14,
+        "dist": 0.53,
+        "targetStun": 19,
+        "targetState": "hit",
+        "targetY": 0,
+        "attackerY": 0,
+        "reach": 0.3463,
+        "height": 0.526,
+        "point": {
+          "phase": 0.5,
+          "reach": 0.3009,
+          "height": 0.61
+        },
+        "contact": false
+      },
+      {
+        "at": 53,
+        "move": "s2",
+        "frame": 15,
+        "dist": 0.53,
+        "targetStun": 18,
+        "targetState": "hit",
+        "targetY": 0,
+        "attackerY": 0,
+        "reach": 0.3463,
+        "height": 0.526,
+        "point": {
+          "phase": 0.6666666666666666,
+          "reach": 0.2856,
+          "height": 0.637
+        },
+        "contact": false
+      },
+      {
+        "at": 54,
+        "move": "s2",
+        "frame": 16,
+        "dist": 0.53,
+        "targetStun": 17,
+        "targetState": "hit",
+        "targetY": 0,
+        "attackerY": 0,
+        "reach": 0.3463,
+        "height": 0.526,
+        "point": {
+          "phase": 0.8333333333333334,
+          "reach": 0.2704,
+          "height": 0.6636
+        },
+        "contact": false
+      },
+      {
+        "at": 55,
+        "move": "s2",
+        "frame": 17,
+        "dist": 0.53,
+        "targetStun": 16,
+        "targetState": "hit",
+        "targetY": 0,
+        "attackerY": 0,
+        "reach": 0.3463,
+        "height": 0.526,
+        "point": {
+          "phase": 1,
+          "reach": 0.2552,
+          "height": 0.6898
+        },
+        "contact": false
+      }
+    ]
+  },
+  {
+    "id": "hakuma",
+    "finisher": "s1",
+    "name": "雪壁掌",
+    "standing": [
+      {
+        "comboHits": 1,
+        "damage": 39,
+        "at": 6,
+        "before": {
+          "targetStun": 0,
+          "targetStop": 0,
+          "distance": 0.35
+        },
+        "action": "stand_weak",
+        "actionFrame": 7
+      },
+      {
+        "comboHits": 2,
+        "damage": 74,
+        "at": 26,
+        "before": {
+          "targetStun": 7,
+          "targetStop": 0,
+          "distance": 0.39999999999999997
+        },
+        "action": "stand_heavy",
+        "actionFrame": 14
+      },
+      {
+        "comboHits": 3,
+        "damage": 65,
+        "at": 46,
+        "before": {
+          "targetStun": 22,
+          "targetStop": 0,
+          "distance": 0.53
+        },
+        "action": "s1",
+        "actionFrame": 11
+      }
+    ],
+    "crouching": [
+      {
+        "comboHits": 1,
+        "damage": 34,
+        "at": 7,
+        "before": {
+          "targetStun": 0,
+          "targetStop": 0,
+          "distance": 0.35
+        },
+        "action": "crouch_weak",
+        "actionFrame": 8
+      },
+      {
+        "comboHits": 2,
+        "damage": 70,
+        "at": 28,
+        "before": {
+          "targetStun": 6,
+          "targetStop": 0,
+          "distance": 0.39999999999999997
+        },
+        "action": "crouch_heavy",
+        "actionFrame": 15
+      },
+      {
+        "comboHits": 3,
+        "damage": 65,
+        "at": 48,
+        "before": {
+          "targetStun": 24,
+          "targetStop": 0,
+          "distance": 0.53
+        },
+        "action": "s1",
+        "actionFrame": 11
+      }
+    ],
+    "oldMidS2Hits": 2,
+    "oldMidS2Active": [
+      {
+        "at": 43,
+        "move": "s2",
+        "frame": 8,
+        "dist": 0.53,
+        "targetStun": 24,
+        "targetState": "hit",
+        "targetY": 0,
+        "attackerY": 0,
+        "reach": 0.2211,
+        "height": 0.6224,
+        "point": {
+          "phase": 0,
+          "frame": 0,
+          "reach": 0.2211,
+          "height": 0.6224,
+          "part": "armR"
+        },
+        "contact": false
+      },
+      {
+        "at": 44,
+        "move": "s2",
+        "frame": 9,
+        "dist": 0.53,
+        "targetStun": 23,
+        "targetState": "hit",
+        "targetY": 0,
+        "attackerY": 0,
+        "reach": 0.2211,
+        "height": 0.6224,
+        "point": {
+          "phase": 0.16666666666666666,
+          "reach": 0.2213,
+          "height": 0.6235
+        },
+        "contact": false
+      },
+      {
+        "at": 45,
+        "move": "s2",
+        "frame": 10,
+        "dist": 0.53,
+        "targetStun": 22,
+        "targetState": "hit",
+        "targetY": 0,
+        "attackerY": 0,
+        "reach": 0.2211,
+        "height": 0.6224,
+        "point": {
+          "phase": 0.3333333333333333,
+          "reach": 0.2216,
+          "height": 0.6246
+        },
+        "contact": false
+      },
+      {
+        "at": 46,
+        "move": "s2",
+        "frame": 11,
+        "dist": 0.53,
+        "targetStun": 21,
+        "targetState": "hit",
+        "targetY": 0,
+        "attackerY": 0,
+        "reach": 0.2211,
+        "height": 0.6224,
+        "point": {
+          "phase": 0.5,
+          "reach": 0.2219,
+          "height": 0.6256
+        },
+        "contact": false
+      },
+      {
+        "at": 47,
+        "move": "s2",
+        "frame": 12,
+        "dist": 0.53,
+        "targetStun": 20,
+        "targetState": "hit",
+        "targetY": 0,
+        "attackerY": 0,
+        "reach": 0.2211,
+        "height": 0.6224,
+        "point": {
+          "phase": 0.6666666666666666,
+          "reach": 0.2222,
+          "height": 0.6267
+        },
+        "contact": false
+      },
+      {
+        "at": 48,
+        "move": "s2",
+        "frame": 13,
+        "dist": 0.53,
+        "targetStun": 19,
+        "targetState": "hit",
+        "targetY": 0,
+        "attackerY": 0,
+        "reach": 0.2211,
+        "height": 0.6224,
+        "point": {
+          "phase": 0.8333333333333334,
+          "reach": 0.2225,
+          "height": 0.6278
+        },
+        "contact": false
+      },
+      {
+        "at": 49,
+        "move": "s2",
+        "frame": 14,
+        "dist": 0.53,
+        "targetStun": 18,
+        "targetState": "hit",
+        "targetY": 0,
+        "attackerY": 0,
+        "reach": 0.2211,
+        "height": 0.6224,
+        "point": {
+          "phase": 1,
+          "reach": 0.2229,
+          "height": 0.6288
+        },
+        "contact": false
+      }
+    ]
+  },
+  {
+    "id": "chirka",
+    "finisher": "s3",
+    "name": "影引き爪",
+    "standing": [
+      {
+        "comboHits": 1,
+        "damage": 32,
+        "at": 3,
+        "before": {
+          "targetStun": 0,
+          "targetStop": 0,
+          "distance": 0.35
+        },
+        "action": "stand_weak",
+        "actionFrame": 4
+      },
+      {
+        "comboHits": 2,
+        "damage": 61,
+        "at": 18,
+        "before": {
+          "targetStun": 6,
+          "targetStop": 0,
+          "distance": 0.385
+        },
+        "action": "stand_heavy",
+        "actionFrame": 11
+      },
+      {
+        "comboHits": 3,
+        "damage": 53,
+        "at": 38,
+        "before": {
+          "targetStun": 15,
+          "targetStop": 0,
+          "distance": 0.34
+        },
+        "action": "s3",
+        "actionFrame": 13
+      }
+    ],
+    "crouching": [
+      {
+        "comboHits": 1,
+        "damage": 28,
+        "at": 4,
+        "before": {
+          "targetStun": 0,
+          "targetStop": 0,
+          "distance": 0.35
+        },
+        "action": "crouch_weak",
+        "actionFrame": 5
+      },
+      {
+        "comboHits": 2,
+        "damage": 59,
+        "at": 20,
+        "before": {
+          "targetStun": 7,
+          "targetStop": 0,
+          "distance": 0.385
+        },
+        "action": "crouch_heavy",
+        "actionFrame": 12
+      },
+      {
+        "comboHits": 3,
+        "damage": 53,
+        "at": 40,
+        "before": {
+          "targetStun": 18,
+          "targetStop": 0,
+          "distance": 0.34
+        },
+        "action": "s3",
+        "actionFrame": 13
+      }
+    ],
+    "oldMidS2Hits": 2,
+    "oldMidS2Active": [
+      {
+        "at": 33,
+        "move": "s2",
+        "frame": 8,
+        "dist": 0.46499999999999997,
+        "targetStun": 19,
+        "targetState": "hit",
+        "targetY": 0,
+        "attackerY": 0,
+        "reach": 0.2148,
+        "height": 0.6675,
+        "point": {
+          "phase": 0,
+          "frame": 0,
+          "reach": 0.2148,
+          "height": 0.6675,
+          "part": "armR"
+        },
+        "contact": false
+      },
+      {
+        "at": 34,
+        "move": "s2",
+        "frame": 9,
+        "dist": 0.46499999999999997,
+        "targetStun": 18,
+        "targetState": "hit",
+        "targetY": 0,
+        "attackerY": 0,
+        "reach": 0.2148,
+        "height": 0.6675,
+        "point": {
+          "phase": 0.16666666666666666,
+          "reach": 0.2264,
+          "height": 0.676
+        },
+        "contact": false
+      },
+      {
+        "at": 35,
+        "move": "s2",
+        "frame": 10,
+        "dist": 0.46499999999999997,
+        "targetStun": 17,
+        "targetState": "hit",
+        "targetY": 0,
+        "attackerY": 0,
+        "reach": 0.2148,
+        "height": 0.6675,
+        "point": {
+          "phase": 0.3333333333333333,
+          "reach": 0.2078,
+          "height": 0.7079
+        },
+        "contact": false
+      },
+      {
+        "at": 36,
+        "move": "s2",
+        "frame": 11,
+        "dist": 0.46499999999999997,
+        "targetStun": 16,
+        "targetState": "hit",
+        "targetY": 0,
+        "attackerY": 0,
+        "reach": 0.2148,
+        "height": 0.6675,
+        "point": {
+          "phase": 0.5,
+          "reach": 0.1606,
+          "height": 0.721
+        },
+        "contact": false
+      },
+      {
+        "at": 37,
+        "move": "s2",
+        "frame": 12,
+        "dist": 0.46499999999999997,
+        "targetStun": 15,
+        "targetState": "hit",
+        "targetY": 0,
+        "attackerY": 0,
+        "reach": 0.2148,
+        "height": 0.6675,
+        "point": {
+          "phase": 0.6666666666666666,
+          "reach": 0.1102,
+          "height": 0.6329
+        },
+        "contact": false
+      },
+      {
+        "at": 38,
+        "move": "s2",
+        "frame": 13,
+        "dist": 0.46499999999999997,
+        "targetStun": 14,
+        "targetState": "hit",
+        "targetY": 0,
+        "attackerY": 0,
+        "reach": 0.2148,
+        "height": 0.6675,
+        "point": {
+          "phase": 0.8333333333333334,
+          "reach": 0.0669,
+          "height": 0.6334
+        },
+        "contact": false
+      },
+      {
+        "at": 39,
+        "move": "s2",
+        "frame": 14,
+        "dist": 0.46499999999999997,
+        "targetStun": 13,
+        "targetState": "hit",
+        "targetY": 0,
+        "attackerY": 0,
+        "reach": 0.2148,
+        "height": 0.6675,
+        "point": {
+          "phase": 1,
+          "reach": 0.0175,
+          "height": 0.6332
+        },
+        "contact": false
+      }
+    ]
+  },
+  {
+    "id": "takimaru",
+    "finisher": "s2",
+    "name": "抱え上げ",
+    "standing": [
+      {
+        "comboHits": 1,
+        "damage": 41,
+        "at": 6,
+        "before": {
+          "targetStun": 0,
+          "targetStop": 0,
+          "distance": 0.35
+        },
+        "action": "stand_weak",
+        "actionFrame": 7
+      },
+      {
+        "comboHits": 2,
+        "damage": 77,
+        "at": 26,
+        "before": {
+          "targetStun": 8,
+          "targetStop": 0,
+          "distance": 0.375
+        },
+        "action": "stand_heavy",
+        "actionFrame": 14
+      },
+      {
+        "comboHits": 3,
+        "damage": 66,
+        "at": 46,
+        "before": {
+          "targetStun": 24,
+          "targetStop": 0,
+          "distance": 0.43
+        },
+        "action": "s2",
+        "actionFrame": 10
+      }
+    ],
+    "crouching": [
+      {
+        "comboHits": 1,
+        "damage": 35,
+        "at": 7,
+        "before": {
+          "targetStun": 0,
+          "targetStop": 0,
+          "distance": 0.35
+        },
+        "action": "crouch_weak",
+        "actionFrame": 8
+      },
+      {
+        "comboHits": 2,
+        "damage": 72,
+        "at": 28,
+        "before": {
+          "targetStun": 7,
+          "targetStop": 0,
+          "distance": 0.375
+        },
+        "action": "crouch_heavy",
+        "actionFrame": 15
+      },
+      {
+        "comboHits": 3,
+        "damage": 66,
+        "at": 48,
+        "before": {
+          "targetStun": 26,
+          "targetStop": 0,
+          "distance": 0.435
+        },
+        "action": "s2",
+        "actionFrame": 10
+      }
+    ],
+    "oldMidS2Hits": 3,
+    "oldMidS2Active": [
+      {
+        "at": 54,
+        "move": "s2",
+        "frame": 10,
+        "dist": 0.515,
+        "targetStun": 35,
+        "targetState": "hit",
+        "targetY": 0,
+        "attackerY": 0,
+        "reach": 0.4465,
+        "height": 0.5549,
+        "point": {
+          "phase": 0,
+          "frame": 0,
+          "reach": 0.4465,
+          "height": 0.5549,
+          "part": "armL"
+        },
+        "contact": true
+      },
+      {
+        "at": 55,
+        "move": "s2",
+        "frame": 11,
+        "dist": 0.515,
+        "targetStun": 34,
+        "targetState": "hit",
+        "targetY": 0,
+        "attackerY": 0,
+        "reach": 0.4465,
+        "height": 0.5549,
+        "point": {
+          "phase": 0.16666666666666666,
+          "reach": 0.4248,
+          "height": 0.6039
+        },
+        "contact": true
+      },
+      {
+        "at": 56,
+        "move": "s2",
+        "frame": 12,
+        "dist": 0.515,
+        "targetStun": 33,
+        "targetState": "hit",
+        "targetY": 0,
+        "attackerY": 0,
+        "reach": 0.4465,
+        "height": 0.5549,
+        "point": {
+          "phase": 0.3333333333333333,
+          "reach": 0.4029,
+          "height": 0.6518
+        },
+        "contact": true
+      },
+      {
+        "at": 57,
+        "move": "s2",
+        "frame": 13,
+        "dist": 0.515,
+        "targetStun": 32,
+        "targetState": "hit",
+        "targetY": 0,
+        "attackerY": 0,
+        "reach": 0.4465,
+        "height": 0.5549,
+        "point": {
+          "phase": 0.5,
+          "reach": 0.3807,
+          "height": 0.6984
+        },
+        "contact": false
+      },
+      {
+        "at": 58,
+        "move": "s2",
+        "frame": 14,
+        "dist": 0.515,
+        "targetStun": 31,
+        "targetState": "hit",
+        "targetY": 0,
+        "attackerY": 0,
+        "reach": 0.4465,
+        "height": 0.5549,
+        "point": {
+          "phase": 0.6666666666666666,
+          "reach": 0.3584,
+          "height": 0.7438
+        },
+        "contact": false
+      },
+      {
+        "at": 59,
+        "move": "s2",
+        "frame": 15,
+        "dist": 0.515,
+        "targetStun": 30,
+        "targetState": "hit",
+        "targetY": 0,
+        "attackerY": 0,
+        "reach": 0.4465,
+        "height": 0.5549,
+        "point": {
+          "phase": 0.8333333333333334,
+          "reach": 0.3361,
+          "height": 0.7881
+        },
+        "contact": false
+      },
+      {
+        "at": 60,
+        "move": "s2",
+        "frame": 16,
+        "dist": 0.515,
+        "targetStun": 29,
+        "targetState": "hit",
+        "targetY": 0,
+        "attackerY": 0,
+        "reach": 0.4465,
+        "height": 0.5549,
+        "point": {
+          "phase": 1,
+          "reach": 0.3138,
+          "height": 0.8311
+        },
+        "contact": false
+      }
+    ]
+  },
+  {
+    "id": "yomikage",
+    "finisher": "s1",
+    "name": "残月の波",
+    "standing": [
+      {
+        "comboHits": 1,
+        "damage": 35,
+        "at": 4,
+        "before": {
+          "targetStun": 0,
+          "targetStop": 0,
+          "distance": 0.35
+        },
+        "action": "stand_weak",
+        "actionFrame": 5
+      },
+      {
+        "comboHits": 2,
+        "damage": 67,
+        "at": 20,
+        "before": {
+          "targetStun": 7,
+          "targetStop": 0,
+          "distance": 0.39
+        },
+        "action": "stand_heavy",
+        "actionFrame": 12
+      },
+      {
+        "comboHits": 3,
+        "damage": 36,
+        "at": 41,
+        "before": {
+          "targetStun": 18,
+          "targetStop": 0,
+          "distance": 0.48
+        },
+        "action": "s1",
+        "actionFrame": 13
+      }
+    ],
+    "crouching": [
+      {
+        "comboHits": 1,
+        "damage": 30,
+        "at": 5,
+        "before": {
+          "targetStun": 0,
+          "targetStop": 0,
+          "distance": 0.35
+        },
+        "action": "crouch_weak",
+        "actionFrame": 6
+      },
+      {
+        "comboHits": 2,
+        "damage": 64,
+        "at": 22,
+        "before": {
+          "targetStun": 7,
+          "targetStop": 0,
+          "distance": 0.39
+        },
+        "action": "crouch_heavy",
+        "actionFrame": 13
+      },
+      {
+        "comboHits": 3,
+        "damage": 36,
+        "at": 43,
+        "before": {
+          "targetStun": 21,
+          "targetStop": 0,
+          "distance": 0.49
+        },
+        "action": "s1",
+        "actionFrame": 13
+      }
+    ],
+    "oldMidS2Hits": 2,
+    "oldMidS2Active": [
+      {
+        "at": 36,
+        "move": "s2",
+        "frame": 8,
+        "dist": 0.48,
+        "targetStun": 22,
+        "targetState": "hit",
+        "targetY": 0,
+        "attackerY": 0,
+        "reach": 0.3154,
+        "height": 0.47,
+        "point": {
+          "phase": 0,
+          "frame": 0,
+          "reach": 0.3154,
+          "height": 0.47,
+          "part": "armR"
+        },
+        "contact": false
+      },
+      {
+        "at": 37,
+        "move": "s2",
+        "frame": 9,
+        "dist": 0.48,
+        "targetStun": 21,
+        "targetState": "hit",
+        "targetY": 0,
+        "attackerY": 0,
+        "reach": 0.3154,
+        "height": 0.47,
+        "point": {
+          "phase": 0.16666666666666666,
+          "reach": 0.3116,
+          "height": 0.4748
+        },
+        "contact": false
+      },
+      {
+        "at": 38,
+        "move": "s2",
+        "frame": 10,
+        "dist": 0.48,
+        "targetStun": 20,
+        "targetState": "hit",
+        "targetY": 0,
+        "attackerY": 0,
+        "reach": 0.3154,
+        "height": 0.47,
+        "point": {
+          "phase": 0.3333333333333333,
+          "reach": 0.3076,
+          "height": 0.4796
+        },
+        "contact": false
+      },
+      {
+        "at": 39,
+        "move": "s2",
+        "frame": 11,
+        "dist": 0.48,
+        "targetStun": 19,
+        "targetState": "hit",
+        "targetY": 0,
+        "attackerY": 0,
+        "reach": 0.3154,
+        "height": 0.47,
+        "point": {
+          "phase": 0.5,
+          "reach": 0.3036,
+          "height": 0.4845
+        },
+        "contact": false
+      },
+      {
+        "at": 40,
+        "move": "s2",
+        "frame": 12,
+        "dist": 0.48,
+        "targetStun": 18,
+        "targetState": "hit",
+        "targetY": 0,
+        "attackerY": 0,
+        "reach": 0.3154,
+        "height": 0.47,
+        "point": {
+          "phase": 0.6666666666666666,
+          "reach": 0.2994,
+          "height": 0.4893
+        },
+        "contact": false
+      },
+      {
+        "at": 41,
+        "move": "s2",
+        "frame": 13,
+        "dist": 0.48,
+        "targetStun": 17,
+        "targetState": "hit",
+        "targetY": 0,
+        "attackerY": 0,
+        "reach": 0.3154,
+        "height": 0.47,
+        "point": {
+          "phase": 0.8333333333333334,
+          "reach": 0.2951,
+          "height": 0.4942
+        },
+        "contact": false
+      },
+      {
+        "at": 42,
+        "move": "s2",
+        "frame": 14,
+        "dist": 0.48,
+        "targetStun": 16,
+        "targetState": "hit",
+        "targetY": 0,
+        "attackerY": 0,
+        "reach": 0.3154,
+        "height": 0.47,
+        "point": {
+          "phase": 1,
+          "reach": 0.2907,
+          "height": 0.4992
+        },
+        "contact": false
+      }
+    ]
+  },
+  {
+    "id": "bullet",
+    "finisher": "s3",
+    "name": "尾薙ぎ",
+    "standing": [
+      {
+        "comboHits": 1,
+        "damage": 34,
+        "at": 5,
+        "before": {
+          "targetStun": 0,
+          "targetStop": 0,
+          "distance": 0.35
+        },
+        "action": "stand_weak",
+        "actionFrame": 6
+      },
+      {
+        "comboHits": 2,
+        "damage": 71,
+        "at": 23,
+        "before": {
+          "targetStun": 8,
+          "targetStop": 0,
+          "distance": 0.39
+        },
+        "action": "stand_heavy",
+        "actionFrame": 13
+      },
+      {
+        "comboHits": 3,
+        "damage": 73,
+        "at": 51,
+        "before": {
+          "targetStun": 14,
+          "targetStop": 0,
+          "distance": 0.51
+        },
+        "action": "s3",
+        "actionFrame": 19
+      }
+    ],
+    "crouching": [
+      {
+        "comboHits": 1,
+        "damage": 29,
+        "at": 5,
+        "before": {
+          "targetStun": 0,
+          "targetStop": 0,
+          "distance": 0.35
+        },
+        "action": "crouch_weak",
+        "actionFrame": 6
+      },
+      {
+        "comboHits": 2,
+        "damage": 68,
+        "at": 24,
+        "before": {
+          "targetStun": 7,
+          "targetStop": 0,
+          "distance": 0.39
+        },
+        "action": "crouch_heavy",
+        "actionFrame": 14
+      },
+      {
+        "comboHits": 3,
+        "damage": 73,
+        "at": 52,
+        "before": {
+          "targetStun": 16,
+          "targetStop": 0,
+          "distance": 0.52
+        },
+        "action": "s3",
+        "actionFrame": 19
+      }
+    ],
+    "oldMidS2Hits": 2,
+    "oldMidS2Active": [
+      {
+        "at": 41,
+        "move": "s2",
+        "frame": 9,
+        "dist": 0.51,
+        "targetStun": 23,
+        "targetState": "hit",
+        "targetY": 0,
+        "attackerY": 0,
+        "reach": 0.2862,
+        "height": 0.5353,
+        "point": {
+          "phase": 0,
+          "frame": 0,
+          "reach": 0.2862,
+          "height": 0.5353,
+          "part": "tail"
+        },
+        "contact": false
+      },
+      {
+        "at": 42,
+        "move": "s2",
+        "frame": 10,
+        "dist": 0.51,
+        "targetStun": 22,
+        "targetState": "hit",
+        "targetY": 0,
+        "attackerY": 0,
+        "reach": 0.2862,
+        "height": 0.5353,
+        "point": {
+          "phase": 0.16666666666666666,
+          "reach": 0.2798,
+          "height": 0.5121
+        },
+        "contact": false
+      },
+      {
+        "at": 43,
+        "move": "s2",
+        "frame": 11,
+        "dist": 0.51,
+        "targetStun": 21,
+        "targetState": "hit",
+        "targetY": 0,
+        "attackerY": 0,
+        "reach": 0.2862,
+        "height": 0.5353,
+        "point": {
+          "phase": 0.3333333333333333,
+          "reach": 0.2744,
+          "height": 0.5048
+        },
+        "contact": false
+      },
+      {
+        "at": 44,
+        "move": "s2",
+        "frame": 12,
+        "dist": 0.51,
+        "targetStun": 20,
+        "targetState": "hit",
+        "targetY": 0,
+        "attackerY": 0,
+        "reach": 0.2862,
+        "height": 0.5353,
+        "point": {
+          "phase": 0.5,
+          "reach": 0.272,
+          "height": 0.5067
+        },
+        "contact": false
+      },
+      {
+        "at": 45,
+        "move": "s2",
+        "frame": 13,
+        "dist": 0.51,
+        "targetStun": 19,
+        "targetState": "hit",
+        "targetY": 0,
+        "attackerY": 0,
+        "reach": 0.2862,
+        "height": 0.5353,
+        "point": {
+          "phase": 0.6666666666666666,
+          "reach": 0.271,
+          "height": 0.5116
+        },
+        "contact": false
+      },
+      {
+        "at": 46,
+        "move": "s2",
+        "frame": 14,
+        "dist": 0.51,
+        "targetStun": 18,
+        "targetState": "hit",
+        "targetY": 0,
+        "attackerY": 0,
+        "reach": 0.2862,
+        "height": 0.5353,
+        "point": {
+          "phase": 0.8333333333333334,
+          "reach": 0.2705,
+          "height": 0.5172
+        },
+        "contact": false
+      },
+      {
+        "at": 47,
+        "move": "s2",
+        "frame": 15,
+        "dist": 0.51,
+        "targetStun": 17,
+        "targetState": "hit",
+        "targetY": 0,
+        "attackerY": 0,
+        "reach": 0.2862,
+        "height": 0.5353,
+        "point": {
+          "phase": 1,
+          "reach": 0.2702,
+          "height": 0.523
+        },
+        "contact": false
+      }
+    ]
+  },
+  {
+    "id": "dark_moguzo",
+    "finisher": "s3",
+    "name": "暗連",
+    "standing": [
+      {
+        "comboHits": 1,
+        "damage": 29,
+        "at": 3,
+        "before": {
+          "targetStun": 0,
+          "targetStop": 0,
+          "distance": 0.35
+        },
+        "action": "stand_weak",
+        "actionFrame": 4
+      },
+      {
+        "comboHits": 2,
+        "damage": 59,
+        "at": 18,
+        "before": {
+          "targetStun": 7,
+          "targetStop": 0,
+          "distance": 0.375
+        },
+        "action": "stand_heavy",
+        "actionFrame": 11
+      },
+      {
+        "comboHits": 3,
+        "damage": 65,
+        "at": 33,
+        "before": {
+          "targetStun": 23,
+          "targetStop": 0,
+          "distance": 0.34
+        },
+        "action": "s3",
+        "actionFrame": 7
+      }
+    ],
+    "crouching": [
+      {
+        "comboHits": 1,
+        "damage": 25,
+        "at": 4,
+        "before": {
+          "targetStun": 0,
+          "targetStop": 0,
+          "distance": 0.35
+        },
+        "action": "crouch_weak",
+        "actionFrame": 5
+      },
+      {
+        "comboHits": 2,
+        "damage": 56,
+        "at": 19,
+        "before": {
+          "targetStun": 7,
+          "targetStop": 0,
+          "distance": 0.375
+        },
+        "action": "crouch_heavy",
+        "actionFrame": 11
+      },
+      {
+        "comboHits": 3,
+        "damage": 65,
+        "at": 34,
+        "before": {
+          "targetStun": 26,
+          "targetStop": 0,
+          "distance": 0.34
+        },
+        "action": "s3",
+        "actionFrame": 7
+      }
+    ],
+    "oldMidS2Hits": 2,
+    "oldMidS2Active": [
+      {
+        "at": 31,
+        "move": "s2",
+        "frame": 5,
+        "dist": 0.445,
+        "targetStun": 24,
+        "targetState": "hit",
+        "targetY": 0,
+        "attackerY": 0,
+        "reach": 0.2635,
+        "height": 0.5513,
+        "point": {
+          "phase": 0,
+          "frame": 0,
+          "reach": 0.2635,
+          "height": 0.5513,
+          "part": "armL"
+        },
+        "contact": false
+      },
+      {
+        "at": 32,
+        "move": "s2",
+        "frame": 6,
+        "dist": 0.445,
+        "targetStun": 23,
+        "targetState": "hit",
+        "targetY": 0,
+        "attackerY": 0,
+        "reach": 0.2635,
+        "height": 0.5513,
+        "point": {
+          "phase": 0.14285714285714285,
+          "reach": 0.2636,
+          "height": 0.5532
+        },
+        "contact": false
+      },
+      {
+        "at": 33,
+        "move": "s2",
+        "frame": 7,
+        "dist": 0.445,
+        "targetStun": 22,
+        "targetState": "hit",
+        "targetY": 0,
+        "attackerY": 0,
+        "reach": 0.2635,
+        "height": 0.5513,
+        "point": {
+          "phase": 0.2857142857142857,
+          "reach": 0.2637,
+          "height": 0.5551
+        },
+        "contact": false
+      },
+      {
+        "at": 34,
+        "move": "s2",
+        "frame": 8,
+        "dist": 0.445,
+        "targetStun": 21,
+        "targetState": "hit",
+        "targetY": 0,
+        "attackerY": 0,
+        "reach": 0.2635,
+        "height": 0.5513,
+        "point": {
+          "phase": 0.42857142857142855,
+          "reach": 0.2639,
+          "height": 0.561
+        },
+        "contact": false
+      },
+      {
+        "at": 35,
+        "move": "s2",
+        "frame": 9,
+        "dist": 0.445,
+        "targetStun": 20,
+        "targetState": "hit",
+        "targetY": 0,
+        "attackerY": 0,
+        "reach": 0.2635,
+        "height": 0.5513,
+        "point": {
+          "phase": 0.5714285714285714,
+          "reach": 0.264,
+          "height": 0.5629
+        },
+        "contact": false
+      },
+      {
+        "at": 36,
+        "move": "s2",
+        "frame": 10,
+        "dist": 0.445,
+        "targetStun": 19,
+        "targetState": "hit",
+        "targetY": 0,
+        "attackerY": 0,
+        "reach": 0.2635,
+        "height": 0.5513,
+        "point": {
+          "phase": 0.7142857142857143,
+          "reach": 0.2641,
+          "height": 0.5648
+        },
+        "contact": false
+      },
+      {
+        "at": 37,
+        "move": "s2",
+        "frame": 11,
+        "dist": 0.445,
+        "targetStun": 18,
+        "targetState": "hit",
+        "targetY": 0,
+        "attackerY": 0,
+        "reach": 0.2635,
+        "height": 0.5513,
+        "point": {
+          "phase": 0.8571428571428571,
+          "reach": 0.2642,
+          "height": 0.5667
+        },
+        "contact": false
+      },
+      {
+        "at": 38,
+        "move": "s2",
+        "frame": 12,
+        "dist": 0.445,
+        "targetStun": 17,
+        "targetState": "hit",
+        "targetY": 0,
+        "attackerY": 0,
+        "reach": 0.2635,
+        "height": 0.5513,
+        "point": {
+          "phase": 1,
+          "reach": 0.2643,
+          "height": 0.5686
+        },
+        "contact": false
+      }
+    ]
+  }
+]

@@ -1,0 +1,493 @@
+{
+  "baselineSha": "8ab8972295d059426b858d9b8edabfda6068a7a3",
+  "rounds": 1458,
+  "note": "Fixed seeds/seat-swapped existing six policies. hit/block/whiff analytics available only in P3 feedback engine; baseline starts remain comparable.",
+  "usage": {
+    "moguzo.stand_weak": {
+      "starts": 1284,
+      "hits": 814,
+      "blocks": 0,
+      "whiffs": 137
+    },
+    "moguzo.stand_heavy": {
+      "starts": 1124,
+      "hits": 791,
+      "blocks": 24,
+      "whiffs": 31
+    },
+    "moguzo.crouch_weak": {
+      "starts": 199,
+      "hits": 138,
+      "blocks": 0,
+      "whiffs": 0
+    },
+    "moguzo.crouch_heavy": {
+      "starts": 214,
+      "hits": 161,
+      "blocks": 1,
+      "whiffs": 0
+    },
+    "moguzo.air_weak": {
+      "starts": 0,
+      "hits": 0,
+      "blocks": 0,
+      "whiffs": 0
+    },
+    "moguzo.air_heavy": {
+      "starts": 196,
+      "hits": 8,
+      "blocks": 1,
+      "whiffs": 181
+    },
+    "moguzo.s1": {
+      "starts": 2035,
+      "hits": 222,
+      "blocks": 34,
+      "whiffs": 0
+    },
+    "moguzo.s2": {
+      "starts": 1022,
+      "hits": 811,
+      "blocks": 0,
+      "whiffs": 110
+    },
+    "moguzo.s3": {
+      "starts": 0,
+      "hits": 0,
+      "blocks": 0,
+      "whiffs": 0
+    },
+    "pisuke.stand_weak": {
+      "starts": 1427,
+      "hits": 1060,
+      "blocks": 0,
+      "whiffs": 180
+    },
+    "pisuke.stand_heavy": {
+      "starts": 1306,
+      "hits": 999,
+      "blocks": 16,
+      "whiffs": 116
+    },
+    "pisuke.crouch_weak": {
+      "starts": 220,
+      "hits": 168,
+      "blocks": 0,
+      "whiffs": 15
+    },
+    "pisuke.crouch_heavy": {
+      "starts": 185,
+      "hits": 154,
+      "blocks": 5,
+      "whiffs": 4
+    },
+    "pisuke.air_weak": {
+      "starts": 0,
+      "hits": 0,
+      "blocks": 0,
+      "whiffs": 0
+    },
+    "pisuke.air_heavy": {
+      "starts": 191,
+      "hits": 0,
+      "blocks": 0,
+      "whiffs": 190
+    },
+    "pisuke.s1": {
+      "starts": 2125,
+      "hits": 302,
+      "blocks": 51,
+      "whiffs": 19
+    },
+    "pisuke.s2": {
+      "starts": 1232,
+      "hits": 949,
+      "blocks": 0,
+      "whiffs": 167
+    },
+    "pisuke.s3": {
+      "starts": 0,
+      "hits": 0,
+      "blocks": 0,
+      "whiffs": 0
+    },
+    "godan.stand_weak": {
+      "starts": 1406,
+      "hits": 462,
+      "blocks": 0,
+      "whiffs": 89
+    },
+    "godan.stand_heavy": {
+      "starts": 1118,
+      "hits": 338,
+      "blocks": 13,
+      "whiffs": 18
+    },
+    "godan.crouch_weak": {
+      "starts": 211,
+      "hits": 87,
+      "blocks": 0,
+      "whiffs": 0
+    },
+    "godan.crouch_heavy": {
+      "starts": 198,
+      "hits": 68,
+      "blocks": 3,
+      "whiffs": 0
+    },
+    "godan.air_weak": {
+      "starts": 0,
+      "hits": 0,
+      "blocks": 0,
+      "whiffs": 0
+    },
+    "godan.air_heavy": {
+      "starts": 232,
+      "hits": 174,
+      "blocks": 46,
+      "whiffs": 0
+    },
+    "godan.s1": {
+      "starts": 513,
+      "hits": 178,
+      "blocks": 78,
+      "whiffs": 84
+    },
+    "godan.s2": {
+      "starts": 182,
+      "hits": 58,
+      "blocks": 0,
+      "whiffs": 124
+    },
+    "godan.s3": {
+      "starts": 921,
+      "hits": 597,
+      "blocks": 34,
+      "whiffs": 0
+    },
+    "hakuma.stand_weak": {
+      "starts": 1515,
+      "hits": 546,
+      "blocks": 0,
+      "whiffs": 63
+    },
+    "hakuma.stand_heavy": {
+      "starts": 1272,
+      "hits": 597,
+      "blocks": 21,
+      "whiffs": 13
+    },
+    "hakuma.crouch_weak": {
+      "starts": 227,
+      "hits": 95,
+      "blocks": 0,
+      "whiffs": 1
+    },
+    "hakuma.crouch_heavy": {
+      "starts": 217,
+      "hits": 118,
+      "blocks": 5,
+      "whiffs": 0
+    },
+    "hakuma.air_weak": {
+      "starts": 1,
+      "hits": 0,
+      "blocks": 0,
+      "whiffs": 0
+    },
+    "hakuma.air_heavy": {
+      "starts": 236,
+      "hits": 5,
+      "blocks": 2,
+      "whiffs": 218
+    },
+    "hakuma.s1": {
+      "starts": 519,
+      "hits": 304,
+      "blocks": 59,
+      "whiffs": 98
+    },
+    "hakuma.s2": {
+      "starts": 240,
+      "hits": 101,
+      "blocks": 0,
+      "whiffs": 139
+    },
+    "hakuma.s3": {
+      "starts": 927,
+      "hits": 383,
+      "blocks": 10,
+      "whiffs": 2
+    },
+    "chirka.stand_weak": {
+      "starts": 1538,
+      "hits": 1179,
+      "blocks": 0,
+      "whiffs": 163
+    },
+    "chirka.stand_heavy": {
+      "starts": 1406,
+      "hits": 1154,
+      "blocks": 30,
+      "whiffs": 53
+    },
+    "chirka.crouch_weak": {
+      "starts": 217,
+      "hits": 192,
+      "blocks": 0,
+      "whiffs": 1
+    },
+    "chirka.crouch_heavy": {
+      "starts": 202,
+      "hits": 162,
+      "blocks": 16,
+      "whiffs": 2
+    },
+    "chirka.air_weak": {
+      "starts": 0,
+      "hits": 0,
+      "blocks": 0,
+      "whiffs": 0
+    },
+    "chirka.air_heavy": {
+      "starts": 198,
+      "hits": 1,
+      "blocks": 0,
+      "whiffs": 196
+    },
+    "chirka.s1": {
+      "starts": 512,
+      "hits": 310,
+      "blocks": 71,
+      "whiffs": 64
+    },
+    "chirka.s2": {
+      "starts": 1273,
+      "hits": 880,
+      "blocks": 0,
+      "whiffs": 44
+    },
+    "chirka.s3": {
+      "starts": 0,
+      "hits": 0,
+      "blocks": 0,
+      "whiffs": 0
+    },
+    "takimaru.stand_weak": {
+      "starts": 1393,
+      "hits": 533,
+      "blocks": 0,
+      "whiffs": 18
+    },
+    "takimaru.stand_heavy": {
+      "starts": 1095,
+      "hits": 510,
+      "blocks": 15,
+      "whiffs": 21
+    },
+    "takimaru.crouch_weak": {
+      "starts": 265,
+      "hits": 113,
+      "blocks": 0,
+      "whiffs": 0
+    },
+    "takimaru.crouch_heavy": {
+      "starts": 235,
+      "hits": 119,
+      "blocks": 7,
+      "whiffs": 0
+    },
+    "takimaru.air_weak": {
+      "starts": 2,
+      "hits": 0,
+      "blocks": 0,
+      "whiffs": 2
+    },
+    "takimaru.air_heavy": {
+      "starts": 231,
+      "hits": 2,
+      "blocks": 0,
+      "whiffs": 215
+    },
+    "takimaru.s1": {
+      "starts": 1868,
+      "hits": 75,
+      "blocks": 8,
+      "whiffs": 17
+    },
+    "takimaru.s2": {
+      "starts": 993,
+      "hits": 485,
+      "blocks": 0,
+      "whiffs": 123
+    },
+    "takimaru.s3": {
+      "starts": 366,
+      "hits": 333,
+      "blocks": 0,
+      "whiffs": 0
+    },
+    "yomikage.stand_weak": {
+      "starts": 1359,
+      "hits": 926,
+      "blocks": 0,
+      "whiffs": 149
+    },
+    "yomikage.stand_heavy": {
+      "starts": 1191,
+      "hits": 890,
+      "blocks": 18,
+      "whiffs": 44
+    },
+    "yomikage.crouch_weak": {
+      "starts": 202,
+      "hits": 154,
+      "blocks": 0,
+      "whiffs": 0
+    },
+    "yomikage.crouch_heavy": {
+      "starts": 198,
+      "hits": 146,
+      "blocks": 4,
+      "whiffs": 0
+    },
+    "yomikage.air_weak": {
+      "starts": 0,
+      "hits": 0,
+      "blocks": 0,
+      "whiffs": 0
+    },
+    "yomikage.air_heavy": {
+      "starts": 200,
+      "hits": 1,
+      "blocks": 0,
+      "whiffs": 193
+    },
+    "yomikage.s1": {
+      "starts": 2042,
+      "hits": 344,
+      "blocks": 24,
+      "whiffs": 0
+    },
+    "yomikage.s2": {
+      "starts": 1089,
+      "hits": 757,
+      "blocks": 0,
+      "whiffs": 61
+    },
+    "yomikage.s3": {
+      "starts": 0,
+      "hits": 0,
+      "blocks": 0,
+      "whiffs": 0
+    },
+    "bullet.stand_weak": {
+      "starts": 1297,
+      "hits": 700,
+      "blocks": 0,
+      "whiffs": 108
+    },
+    "bullet.stand_heavy": {
+      "starts": 1153,
+      "hits": 763,
+      "blocks": 25,
+      "whiffs": 9
+    },
+    "bullet.crouch_weak": {
+      "starts": 222,
+      "hits": 168,
+      "blocks": 0,
+      "whiffs": 0
+    },
+    "bullet.crouch_heavy": {
+      "starts": 211,
+      "hits": 135,
+      "blocks": 6,
+      "whiffs": 0
+    },
+    "bullet.air_weak": {
+      "starts": 0,
+      "hits": 0,
+      "blocks": 0,
+      "whiffs": 0
+    },
+    "bullet.air_heavy": {
+      "starts": 215,
+      "hits": 7,
+      "blocks": 1,
+      "whiffs": 195
+    },
+    "bullet.s1": {
+      "starts": 1811,
+      "hits": 177,
+      "blocks": 42,
+      "whiffs": 0
+    },
+    "bullet.s2": {
+      "starts": 208,
+      "hits": 155,
+      "blocks": 0,
+      "whiffs": 52
+    },
+    "bullet.s3": {
+      "starts": 758,
+      "hits": 194,
+      "blocks": 28,
+      "whiffs": 1
+    },
+    "dark_moguzo.stand_weak": {
+      "starts": 1220,
+      "hits": 885,
+      "blocks": 0,
+      "whiffs": 161
+    },
+    "dark_moguzo.stand_heavy": {
+      "starts": 1099,
+      "hits": 903,
+      "blocks": 6,
+      "whiffs": 49
+    },
+    "dark_moguzo.crouch_weak": {
+      "starts": 167,
+      "hits": 144,
+      "blocks": 0,
+      "whiffs": 0
+    },
+    "dark_moguzo.crouch_heavy": {
+      "starts": 165,
+      "hits": 144,
+      "blocks": 3,
+      "whiffs": 0
+    },
+    "dark_moguzo.air_weak": {
+      "starts": 0,
+      "hits": 0,
+      "blocks": 0,
+      "whiffs": 0
+    },
+    "dark_moguzo.air_heavy": {
+      "starts": 185,
+      "hits": 0,
+      "blocks": 0,
+      "whiffs": 185
+    },
+    "dark_moguzo.s1": {
+      "starts": 1535,
+      "hits": 457,
+      "blocks": 37,
+      "whiffs": 0
+    },
+    "dark_moguzo.s2": {
+      "starts": 1047,
+      "hits": 986,
+      "blocks": 0,
+      "whiffs": 34
+    },
+    "dark_moguzo.s3": {
+      "starts": 0,
+      "hits": 0,
+      "blocks": 0,
+      "whiffs": 0
+    }
+  }
+}

@@ -1,0 +1,1578 @@
+[
+  {
+    "id": "moguzo",
+    "error": null,
+    "normals": {
+      "stand_weak": {
+        "contact": 0.225,
+        "contactEnd": 0.3,
+        "attackPart": "armL",
+        "attackBone": "paw.L",
+        "reach": 0.4154,
+        "height": 0.3401,
+        "activeReach": [
+          {
+            "phase": 0,
+            "reach": 0.4154,
+            "height": 0.3401
+          },
+          {
+            "phase": 0.5,
+            "reach": 0.4091,
+            "height": 0.3215
+          },
+          {
+            "phase": 1,
+            "reach": 0.3962,
+            "height": 0.2938
+          }
+        ],
+        "status": "ok",
+        "gesture": "straightL",
+        "motifContact": 0.34
+      },
+      "stand_heavy": {
+        "contact": 0.3,
+        "contactEnd": 0.36,
+        "attackPart": "armR",
+        "attackBone": "paw.R",
+        "reach": 0.4633,
+        "height": 0.2466,
+        "activeReach": [
+          {
+            "phase": 0,
+            "reach": 0.4633,
+            "height": 0.2466
+          },
+          {
+            "phase": 0.5,
+            "reach": 0.437,
+            "height": 0.2262
+          },
+          {
+            "phase": 1,
+            "reach": 0.4035,
+            "height": 0.2106
+          }
+        ],
+        "status": "ok",
+        "gesture": "risingR",
+        "motifContact": 0.43
+      },
+      "crouch_weak": {
+        "contact": 0.375,
+        "contactEnd": 0.495,
+        "attackPart": "armR",
+        "attackBone": "paw.R",
+        "reach": 0.4603,
+        "height": 0.1882,
+        "activeReach": [
+          {
+            "phase": 0,
+            "reach": 0.4603,
+            "height": 0.1882
+          },
+          {
+            "phase": 0.5,
+            "reach": 0.4536,
+            "height": 0.1904
+          },
+          {
+            "phase": 1,
+            "reach": 0.4426,
+            "height": 0.1921
+          }
+        ],
+        "status": "ok",
+        "gesture": "lowPalmStep",
+        "motifContact": 0.36
+      },
+      "crouch_heavy": {
+        "contact": 0.5,
+        "contactEnd": 0.575,
+        "attackPart": "armR",
+        "attackBone": "paw.R",
+        "reach": 0.3863,
+        "height": 0.1502,
+        "activeReach": [
+          {
+            "phase": 0,
+            "reach": 0.3863,
+            "height": 0.1502
+          },
+          {
+            "phase": 0.5,
+            "reach": 0.3808,
+            "height": 0.1518
+          },
+          {
+            "phase": 1,
+            "reach": 0.3686,
+            "height": 0.1517
+          }
+        ],
+        "status": "ok",
+        "gesture": "groundPound",
+        "motifContact": 0.48
+      },
+      "air_weak": {
+        "contact": 0.35,
+        "contactEnd": 0.47,
+        "attackPart": "armL",
+        "attackBone": "paw.L",
+        "reach": 0.4269,
+        "height": 0.3236,
+        "activeReach": [
+          {
+            "phase": 0,
+            "reach": 0.4269,
+            "height": 0.3236
+          },
+          {
+            "phase": 0.5,
+            "reach": 0.4249,
+            "height": 0.3411
+          },
+          {
+            "phase": 1,
+            "reach": 0.4268,
+            "height": 0.3259
+          }
+        ],
+        "status": "ok",
+        "gesture": "diveFistL",
+        "motifContact": 0.37
+      },
+      "air_heavy": {
+        "contact": 0.475,
+        "contactEnd": 0.535,
+        "attackPart": "legR",
+        "attackBone": "foot.R",
+        "reach": 0.297,
+        "height": 0.098,
+        "activeReach": [
+          {
+            "phase": 0,
+            "reach": 0.297,
+            "height": 0.098
+          },
+          {
+            "phase": 0.5,
+            "reach": 0.2821,
+            "height": 0.1063
+          },
+          {
+            "phase": 1,
+            "reach": 0.2617,
+            "height": 0.1259
+          }
+        ],
+        "status": "ok",
+        "gesture": "overheadHeel",
+        "motifContact": 0.46
+      }
+    }
+  },
+  {
+    "id": "pisuke",
+    "error": null,
+    "normals": {
+      "stand_weak": {
+        "contact": 0.2,
+        "contactEnd": 0.26,
+        "attackPart": "armL",
+        "attackBone": "paw.L",
+        "reach": 0.3757,
+        "height": 0.3714,
+        "activeReach": [
+          {
+            "phase": 0,
+            "reach": 0.3757,
+            "height": 0.3714
+          },
+          {
+            "phase": 0.5,
+            "reach": 0.3574,
+            "height": 0.3457
+          },
+          {
+            "phase": 1,
+            "reach": 0.3288,
+            "height": 0.3271
+          }
+        ],
+        "status": "ok",
+        "gesture": "snapJabL",
+        "motifContact": 0.27
+      },
+      "stand_heavy": {
+        "contact": 0.3,
+        "contactEnd": 0.36,
+        "attackPart": "legR",
+        "attackBone": "foot.R",
+        "reach": 0.3355,
+        "height": 0.2525,
+        "activeReach": [
+          {
+            "phase": 0,
+            "reach": 0.3355,
+            "height": 0.2525
+          },
+          {
+            "phase": 0.5,
+            "reach": 0.3066,
+            "height": 0.2669
+          },
+          {
+            "phase": 1,
+            "reach": 0.2635,
+            "height": 0.2819
+          }
+        ],
+        "status": "ok",
+        "gesture": "roundKickR",
+        "motifContact": 0.39
+      },
+      "crouch_weak": {
+        "contact": 0.325,
+        "contactEnd": 0.445,
+        "attackPart": "legL",
+        "attackBone": "foot.L",
+        "reach": 0.3066,
+        "height": 0.1015,
+        "activeReach": [
+          {
+            "phase": 0,
+            "reach": 0.3066,
+            "height": 0.1015
+          },
+          {
+            "phase": 0.5,
+            "reach": 0.3027,
+            "height": 0.0984
+          },
+          {
+            "phase": 1,
+            "reach": 0.2933,
+            "height": 0.0766
+          }
+        ],
+        "status": "ok",
+        "gesture": "shinSnapL",
+        "motifContact": 0.32
+      },
+      "crouch_heavy": {
+        "contact": 0.4,
+        "contactEnd": 0.46,
+        "attackPart": "legR",
+        "attackBone": "foot.R",
+        "reach": 0.3954,
+        "height": 0.069,
+        "activeReach": [
+          {
+            "phase": 0,
+            "reach": 0.3954,
+            "height": 0.069
+          },
+          {
+            "phase": 0.5,
+            "reach": 0.3894,
+            "height": 0.0675
+          },
+          {
+            "phase": 1,
+            "reach": 0.373,
+            "height": 0.0634
+          }
+        ],
+        "status": "ok",
+        "gesture": "lowSpinKick",
+        "motifContact": 0.4
+      },
+      "air_weak": {
+        "contact": 0.45,
+        "contactEnd": 0.57,
+        "attackPart": "legL",
+        "attackBone": "foot.L",
+        "reach": 0.3265,
+        "height": 0.2112,
+        "activeReach": [
+          {
+            "phase": 0,
+            "reach": 0.3265,
+            "height": 0.2112
+          },
+          {
+            "phase": 0.5,
+            "reach": 0.3262,
+            "height": 0.1975
+          },
+          {
+            "phase": 1,
+            "reach": 0.3169,
+            "height": 0.1845
+          }
+        ],
+        "status": "ok",
+        "gesture": "airSnapKick",
+        "motifContact": 0.31
+      },
+      "air_heavy": {
+        "contact": 0.425,
+        "contactEnd": 0.545,
+        "attackPart": "legR",
+        "attackBone": "foot.R",
+        "reach": 0.3248,
+        "height": 0.1418,
+        "activeReach": [
+          {
+            "phase": 0,
+            "reach": 0.3248,
+            "height": 0.1418
+          },
+          {
+            "phase": 0.5,
+            "reach": 0.323,
+            "height": 0.1788
+          },
+          {
+            "phase": 1,
+            "reach": 0.3216,
+            "height": 0.1671
+          }
+        ],
+        "status": "ok",
+        "gesture": "heelDiveR",
+        "motifContact": 0.46
+      }
+    }
+  },
+  {
+    "id": "godan",
+    "error": null,
+    "normals": {
+      "stand_weak": {
+        "contact": 0.425,
+        "contactEnd": 0.485,
+        "attackPart": "armR",
+        "attackBone": "paw.R",
+        "reach": 0.4589,
+        "height": 0.2799,
+        "activeReach": [
+          {
+            "phase": 0,
+            "reach": 0.4589,
+            "height": 0.2799
+          },
+          {
+            "phase": 0.5,
+            "reach": 0.4493,
+            "height": 0.281
+          },
+          {
+            "phase": 1,
+            "reach": 0.4372,
+            "height": 0.2825
+          }
+        ],
+        "status": "ok",
+        "gesture": "shortBodyR",
+        "motifContact": 0.4
+      },
+      "stand_heavy": {
+        "contact": 0.45,
+        "contactEnd": 0.57,
+        "attackPart": "armR",
+        "attackBone": "paw.R",
+        "bothHands": true,
+        "reach": 0.5574,
+        "height": 0.1801,
+        "activeReach": [
+          {
+            "phase": 0,
+            "reach": 0.5574,
+            "height": 0.1801
+          },
+          {
+            "phase": 0.5,
+            "reach": 0.5539,
+            "height": 0.1724
+          },
+          {
+            "phase": 1,
+            "reach": 0.542,
+            "height": 0.1579
+          }
+        ],
+        "status": "ok",
+        "gesture": "doubleHammer",
+        "motifContact": 0.61
+      },
+      "crouch_weak": {
+        "contact": 0.45,
+        "contactEnd": 0.55,
+        "attackPart": "armL",
+        "attackBone": "paw.L",
+        "reach": 0.4264,
+        "height": 0.2564,
+        "activeReach": [
+          {
+            "phase": 0,
+            "reach": 0.4264,
+            "height": 0.2564
+          },
+          {
+            "phase": 0.5,
+            "reach": 0.419,
+            "height": 0.2509
+          },
+          {
+            "phase": 1,
+            "reach": 0.4081,
+            "height": 0.2408
+          }
+        ],
+        "status": "ok",
+        "gesture": "sideElbowL",
+        "motifContact": 0.43
+      },
+      "crouch_heavy": {
+        "contact": 0.5,
+        "contactEnd": 0.575,
+        "attackPart": "armR",
+        "attackBone": "paw.R",
+        "bothHands": true,
+        "reach": 0.4463,
+        "height": 0.1972,
+        "activeReach": [
+          {
+            "phase": 0,
+            "reach": 0.4463,
+            "height": 0.1972
+          },
+          {
+            "phase": 0.5,
+            "reach": 0.4444,
+            "height": 0.1472
+          },
+          {
+            "phase": 1,
+            "reach": 0.4287,
+            "height": 0.0858
+          }
+        ],
+        "status": "ok",
+        "gesture": "doubleGroundPound",
+        "motifContact": 0.62
+      },
+      "air_weak": {
+        "contact": 0.475,
+        "contactEnd": 0.535,
+        "attackPart": "armR",
+        "attackBone": "paw.R",
+        "reach": 0.4661,
+        "height": 0.1871,
+        "activeReach": [
+          {
+            "phase": 0,
+            "reach": 0.4661,
+            "height": 0.1871
+          },
+          {
+            "phase": 0.5,
+            "reach": 0.454,
+            "height": 0.1874
+          },
+          {
+            "phase": 1,
+            "reach": 0.4419,
+            "height": 0.1928
+          }
+        ],
+        "status": "ok",
+        "gesture": "descendingForearm",
+        "motifContact": 0.46
+      },
+      "air_heavy": {
+        "contact": 0.325,
+        "contactEnd": 0.445,
+        "attackPart": "armL",
+        "attackBone": "paw.L",
+        "bothHands": true,
+        "reach": 0.4777,
+        "height": 0.1797,
+        "activeReach": [
+          {
+            "phase": 0,
+            "reach": 0.4777,
+            "height": 0.1797
+          },
+          {
+            "phase": 0.5,
+            "reach": 0.4738,
+            "height": 0.1171
+          },
+          {
+            "phase": 1,
+            "reach": 0.4595,
+            "height": 0.0525
+          }
+        ],
+        "status": "ok",
+        "gesture": "bodyCrush",
+        "motifContact": 0.59
+      }
+    }
+  },
+  {
+    "id": "hakuma",
+    "error": null,
+    "normals": {
+      "stand_weak": {
+        "contact": 0.275,
+        "contactEnd": 0.335,
+        "attackPart": "armL",
+        "attackBone": "paw.L",
+        "reach": 0.487,
+        "height": 0.3359,
+        "activeReach": [
+          {
+            "phase": 0,
+            "reach": 0.487,
+            "height": 0.3359
+          },
+          {
+            "phase": 0.5,
+            "reach": 0.4679,
+            "height": 0.3033
+          },
+          {
+            "phase": 1,
+            "reach": 0.4449,
+            "height": 0.2763
+          }
+        ],
+        "status": "ok",
+        "gesture": "palmPushL",
+        "motifContact": 0.35
+      },
+      "stand_heavy": {
+        "contact": 0.3,
+        "contactEnd": 0.36,
+        "attackPart": "armR",
+        "attackBone": "paw.R",
+        "bothHands": true,
+        "reach": 0.5813,
+        "height": 0.3129,
+        "activeReach": [
+          {
+            "phase": 0,
+            "reach": 0.5813,
+            "height": 0.3129
+          },
+          {
+            "phase": 0.5,
+            "reach": 0.5715,
+            "height": 0.2874
+          },
+          {
+            "phase": 1,
+            "reach": 0.5525,
+            "height": 0.2672
+          }
+        ],
+        "status": "ok",
+        "gesture": "doublePalmPush",
+        "motifContact": 0.48
+      },
+      "crouch_weak": {
+        "contact": 0.275,
+        "contactEnd": 0.335,
+        "attackPart": "armR",
+        "attackBone": "paw.R",
+        "reach": 0.4669,
+        "height": 0.2578,
+        "activeReach": [
+          {
+            "phase": 0,
+            "reach": 0.4669,
+            "height": 0.2578
+          },
+          {
+            "phase": 0.5,
+            "reach": 0.4561,
+            "height": 0.2071
+          },
+          {
+            "phase": 1,
+            "reach": 0.4329,
+            "height": 0.1598
+          }
+        ],
+        "status": "ok",
+        "gesture": "lowPalmR",
+        "motifContact": 0.38
+      },
+      "crouch_heavy": {
+        "contact": 0.625,
+        "contactEnd": 0.725,
+        "attackPart": "armL",
+        "attackBone": "paw.L",
+        "reach": 0.5322,
+        "height": 0.3801,
+        "activeReach": [
+          {
+            "phase": 0,
+            "reach": 0.5322,
+            "height": 0.3801
+          },
+          {
+            "phase": 0.5,
+            "reach": 0.5279,
+            "height": 0.3232
+          },
+          {
+            "phase": 1,
+            "reach": 0.5152,
+            "height": 0.2649
+          }
+        ],
+        "status": "ok",
+        "gesture": "risingPalmL",
+        "motifContact": 0.44
+      },
+      "air_weak": {
+        "contact": 0.425,
+        "contactEnd": 0.485,
+        "attackPart": "armR",
+        "attackBone": "paw.R",
+        "reach": 0.4674,
+        "height": 0.3358,
+        "activeReach": [
+          {
+            "phase": 0,
+            "reach": 0.4674,
+            "height": 0.3358
+          },
+          {
+            "phase": 0.5,
+            "reach": 0.4594,
+            "height": 0.3332
+          },
+          {
+            "phase": 1,
+            "reach": 0.4452,
+            "height": 0.3321
+          }
+        ],
+        "status": "ok",
+        "gesture": "shortPalmR",
+        "motifContact": 0.41
+      },
+      "air_heavy": {
+        "contact": 0.5,
+        "contactEnd": 0.575,
+        "attackPart": "armL",
+        "attackBone": "paw.L",
+        "bothHands": true,
+        "reach": 0.5259,
+        "height": 0.235,
+        "activeReach": [
+          {
+            "phase": 0,
+            "reach": 0.5259,
+            "height": 0.235
+          },
+          {
+            "phase": 0.5,
+            "reach": 0.521,
+            "height": 0.2398
+          },
+          {
+            "phase": 1,
+            "reach": 0.5112,
+            "height": 0.2367
+          }
+        ],
+        "status": "ok",
+        "gesture": "hammerPalmPair",
+        "motifContact": 0.51
+      }
+    }
+  },
+  {
+    "id": "chirka",
+    "error": null,
+    "normals": {
+      "stand_weak": {
+        "contact": 0.225,
+        "contactEnd": 0.325,
+        "attackPart": "armL",
+        "attackBone": "paw.L",
+        "reach": 0.3879,
+        "height": 0.3206,
+        "activeReach": [
+          {
+            "phase": 0,
+            "reach": 0.3879,
+            "height": 0.3206
+          },
+          {
+            "phase": 0.5,
+            "reach": 0.384,
+            "height": 0.3044
+          },
+          {
+            "phase": 1,
+            "reach": 0.3729,
+            "height": 0.2833
+          }
+        ],
+        "status": "ok",
+        "gesture": "feintClawL",
+        "motifContact": 0.4
+      },
+      "stand_heavy": {
+        "contact": 0.45,
+        "contactEnd": 0.51,
+        "attackPart": "armR",
+        "attackBone": "paw.R",
+        "reach": 0.4002,
+        "height": 0.3521,
+        "activeReach": [
+          {
+            "phase": 0,
+            "reach": 0.4002,
+            "height": 0.3521
+          },
+          {
+            "phase": 0.5,
+            "reach": 0.3911,
+            "height": 0.3443
+          },
+          {
+            "phase": 1,
+            "reach": 0.3745,
+            "height": 0.3432
+          }
+        ],
+        "status": "ok",
+        "gesture": "diagonalClawR",
+        "motifContact": 0.44
+      },
+      "crouch_weak": {
+        "contact": 0.375,
+        "contactEnd": 0.495,
+        "attackPart": "armR",
+        "attackBone": "paw.R",
+        "reach": 0.3977,
+        "height": 0.1457,
+        "activeReach": [
+          {
+            "phase": 0,
+            "reach": 0.3977,
+            "height": 0.1457
+          },
+          {
+            "phase": 0.5,
+            "reach": 0.3947,
+            "height": 0.1467
+          },
+          {
+            "phase": 1,
+            "reach": 0.3855,
+            "height": 0.1475
+          }
+        ],
+        "status": "ok",
+        "gesture": "lowClawSlide",
+        "motifContact": 0.35
+      },
+      "crouch_heavy": {
+        "contact": 0.5,
+        "contactEnd": 0.575,
+        "attackPart": "armL",
+        "attackBone": "paw.L",
+        "bothHands": true,
+        "reach": 0.4509,
+        "height": 0.2258,
+        "activeReach": [
+          {
+            "phase": 0,
+            "reach": 0.4509,
+            "height": 0.2258
+          },
+          {
+            "phase": 0.5,
+            "reach": 0.4452,
+            "height": 0.1822
+          },
+          {
+            "phase": 1,
+            "reach": 0.4306,
+            "height": 0.1232
+          }
+        ],
+        "status": "ok",
+        "gesture": "crossClawPair",
+        "motifContact": 0.5
+      },
+      "air_weak": {
+        "contact": 0.4,
+        "contactEnd": 0.52,
+        "attackPart": "armL",
+        "attackBone": "paw.L",
+        "reach": 0.3573,
+        "height": 0.323,
+        "activeReach": [
+          {
+            "phase": 0,
+            "reach": 0.3573,
+            "height": 0.323
+          },
+          {
+            "phase": 0.5,
+            "reach": 0.3498,
+            "height": 0.3228
+          },
+          {
+            "phase": 1,
+            "reach": 0.3397,
+            "height": 0.3222
+          }
+        ],
+        "status": "ok",
+        "gesture": "airFeintClaw",
+        "motifContact": 0.37
+      },
+      "air_heavy": {
+        "contact": 0.525,
+        "contactEnd": 0.6,
+        "attackPart": "armR",
+        "attackBone": "paw.R",
+        "bothHands": true,
+        "reach": 0.3683,
+        "height": 0.2615,
+        "activeReach": [
+          {
+            "phase": 0,
+            "reach": 0.3683,
+            "height": 0.2615
+          },
+          {
+            "phase": 0.5,
+            "reach": 0.3626,
+            "height": 0.2604
+          },
+          {
+            "phase": 1,
+            "reach": 0.3505,
+            "height": 0.2704
+          }
+        ],
+        "status": "ok",
+        "gesture": "pounceClawPair",
+        "motifContact": 0.52
+      }
+    }
+  },
+  {
+    "id": "takimaru",
+    "error": null,
+    "normals": {
+      "stand_weak": {
+        "contact": 0.275,
+        "contactEnd": 0.335,
+        "attackPart": "armL",
+        "attackBone": "paw.L",
+        "reach": 0.5911,
+        "height": 0.4178,
+        "activeReach": [
+          {
+            "phase": 0,
+            "reach": 0.5911,
+            "height": 0.4178
+          },
+          {
+            "phase": 0.5,
+            "reach": 0.5793,
+            "height": 0.3865
+          },
+          {
+            "phase": 1,
+            "reach": 0.5595,
+            "height": 0.3382
+          }
+        ],
+        "status": "ok",
+        "gesture": "bearHookL",
+        "motifContact": 0.42
+      },
+      "stand_heavy": {
+        "contact": 0.35,
+        "contactEnd": 0.41,
+        "attackPart": "armR",
+        "attackBone": "paw.R",
+        "reach": 0.5441,
+        "height": 0.1626,
+        "activeReach": [
+          {
+            "phase": 0,
+            "reach": 0.5441,
+            "height": 0.1626
+          },
+          {
+            "phase": 0.5,
+            "reach": 0.4837,
+            "height": 0.1017
+          },
+          {
+            "phase": 1,
+            "reach": 0.3975,
+            "height": 0.0636
+          }
+        ],
+        "status": "ok",
+        "gesture": "grapplerHammerR",
+        "motifContact": 0.55
+      },
+      "crouch_weak": {
+        "contact": 0.375,
+        "contactEnd": 0.495,
+        "attackPart": "armR",
+        "attackBone": "paw.R",
+        "reach": 0.621,
+        "height": 0.0901,
+        "activeReach": [
+          {
+            "phase": 0,
+            "reach": 0.621,
+            "height": 0.0901
+          },
+          {
+            "phase": 0.5,
+            "reach": 0.6192,
+            "height": 0.1051
+          },
+          {
+            "phase": 1,
+            "reach": 0.6082,
+            "height": 0.1271
+          }
+        ],
+        "status": "ok",
+        "gesture": "lowReachAnkle",
+        "motifContact": 0.37
+      },
+      "crouch_heavy": {
+        "contact": 0.575,
+        "contactEnd": 0.65,
+        "attackPart": "armL",
+        "attackBone": "paw.L",
+        "bothHands": true,
+        "reach": 0.6072,
+        "height": 0.3858,
+        "activeReach": [
+          {
+            "phase": 0,
+            "reach": 0.6072,
+            "height": 0.3858
+          },
+          {
+            "phase": 0.5,
+            "reach": 0.5981,
+            "height": 0.3362
+          },
+          {
+            "phase": 1,
+            "reach": 0.5875,
+            "height": 0.2974
+          }
+        ],
+        "status": "ok",
+        "gesture": "risingGrabPair",
+        "motifContact": 0.5
+      },
+      "air_weak": {
+        "contact": 0.25,
+        "contactEnd": 0.31,
+        "attackPart": "armL",
+        "attackBone": "paw.L",
+        "reach": 0.5422,
+        "height": 0.2651,
+        "activeReach": [
+          {
+            "phase": 0,
+            "reach": 0.5422,
+            "height": 0.2651
+          },
+          {
+            "phase": 0.5,
+            "reach": 0.5328,
+            "height": 0.2442
+          },
+          {
+            "phase": 1,
+            "reach": 0.494,
+            "height": 0.2557
+          }
+        ],
+        "status": "ok",
+        "gesture": "airBearSwipe",
+        "motifContact": 0.38
+      },
+      "air_heavy": {
+        "contact": 0.525,
+        "contactEnd": 0.625,
+        "attackPart": "armL",
+        "attackBone": "paw.L",
+        "bothHands": true,
+        "reach": 0.6149,
+        "height": 0.2239,
+        "activeReach": [
+          {
+            "phase": 0,
+            "reach": 0.6149,
+            "height": 0.2239
+          },
+          {
+            "phase": 0.5,
+            "reach": 0.6078,
+            "height": 0.2555
+          },
+          {
+            "phase": 1,
+            "reach": 0.5957,
+            "height": 0.263
+          }
+        ],
+        "status": "ok",
+        "gesture": "airBearHammer",
+        "motifContact": 0.56
+      }
+    }
+  },
+  {
+    "id": "yomikage",
+    "error": null,
+    "normals": {
+      "stand_weak": {
+        "contact": 0.25,
+        "contactEnd": 0.37,
+        "attackPart": "armL",
+        "attackBone": "paw.L",
+        "reach": 0.3877,
+        "height": 0.3549,
+        "activeReach": [
+          {
+            "phase": 0,
+            "reach": 0.3877,
+            "height": 0.3549
+          },
+          {
+            "phase": 0.5,
+            "reach": 0.3686,
+            "height": 0.325
+          },
+          {
+            "phase": 1,
+            "reach": 0.3711,
+            "height": 0.3284
+          }
+        ],
+        "status": "ok",
+        "gesture": "knifeHandL",
+        "motifContact": 0.3
+      },
+      "stand_heavy": {
+        "contact": 0.3,
+        "contactEnd": 0.36,
+        "attackPart": "armR",
+        "attackBone": "paw.R",
+        "reach": 0.4496,
+        "height": 0.2699,
+        "activeReach": [
+          {
+            "phase": 0,
+            "reach": 0.4496,
+            "height": 0.2699
+          },
+          {
+            "phase": 0.5,
+            "reach": 0.4146,
+            "height": 0.2323
+          },
+          {
+            "phase": 1,
+            "reach": 0.3576,
+            "height": 0.2428
+          }
+        ],
+        "status": "ok",
+        "gesture": "crescentSlashR",
+        "motifContact": 0.44
+      },
+      "crouch_weak": {
+        "contact": 0.35,
+        "contactEnd": 0.47,
+        "attackPart": "armR",
+        "attackBone": "paw.R",
+        "reach": 0.4166,
+        "height": 0.1536,
+        "activeReach": [
+          {
+            "phase": 0,
+            "reach": 0.4166,
+            "height": 0.1536
+          },
+          {
+            "phase": 0.5,
+            "reach": 0.4152,
+            "height": 0.1397
+          },
+          {
+            "phase": 1,
+            "reach": 0.4093,
+            "height": 0.1537
+          }
+        ],
+        "status": "ok",
+        "gesture": "shadowSliceLow",
+        "motifContact": 0.33
+      },
+      "crouch_heavy": {
+        "contact": 0.475,
+        "contactEnd": 0.535,
+        "attackPart": "armR",
+        "attackBone": "paw.R",
+        "reach": 0.4374,
+        "height": 0.1238,
+        "activeReach": [
+          {
+            "phase": 0,
+            "reach": 0.4374,
+            "height": 0.1238
+          },
+          {
+            "phase": 0.5,
+            "reach": 0.4297,
+            "height": 0.1238
+          },
+          {
+            "phase": 1,
+            "reach": 0.4161,
+            "height": 0.1251
+          }
+        ],
+        "status": "ok",
+        "gesture": "sweepingBladeR",
+        "motifContact": 0.45
+      },
+      "air_weak": {
+        "contact": 0.25,
+        "contactEnd": 0.31,
+        "attackPart": "armL",
+        "attackBone": "paw.L",
+        "reach": 0.3425,
+        "height": 0.2544,
+        "activeReach": [
+          {
+            "phase": 0,
+            "reach": 0.3425,
+            "height": 0.2544
+          },
+          {
+            "phase": 0.5,
+            "reach": 0.3145,
+            "height": 0.2266
+          },
+          {
+            "phase": 1,
+            "reach": 0.266,
+            "height": 0.1989
+          }
+        ],
+        "status": "ok",
+        "gesture": "risingKnifeL",
+        "motifContact": 0.32
+      },
+      "air_heavy": {
+        "contact": 0.45,
+        "contactEnd": 0.525,
+        "attackPart": "armR",
+        "attackBone": "paw.R",
+        "reach": 0.4083,
+        "height": 0.1899,
+        "activeReach": [
+          {
+            "phase": 0,
+            "reach": 0.4083,
+            "height": 0.1899
+          },
+          {
+            "phase": 0.5,
+            "reach": 0.4023,
+            "height": 0.1793
+          },
+          {
+            "phase": 1,
+            "reach": 0.389,
+            "height": 0.1673
+          }
+        ],
+        "status": "ok",
+        "gesture": "descendingBladeR",
+        "motifContact": 0.45
+      }
+    }
+  },
+  {
+    "id": "bullet",
+    "error": null,
+    "normals": {
+      "stand_weak": {
+        "contact": 0.4,
+        "contactEnd": 0.46,
+        "attackPart": "head",
+        "attackBone": "head",
+        "reach": 0.4174,
+        "height": 0.4072,
+        "activeReach": [
+          {
+            "phase": 0,
+            "reach": 0.4174,
+            "height": 0.4072
+          },
+          {
+            "phase": 0.5,
+            "reach": 0.4092,
+            "height": 0.4112
+          },
+          {
+            "phase": 1,
+            "reach": 0.4001,
+            "height": 0.4157
+          }
+        ],
+        "status": "ok",
+        "gesture": "headFlick",
+        "motifContact": 0.35
+      },
+      "stand_heavy": {
+        "contact": 0.45,
+        "contactEnd": 0.51,
+        "attackPart": "tail",
+        "attackBone": "tail",
+        "reach": 0.6556,
+        "height": 0.1911,
+        "activeReach": [
+          {
+            "phase": 0,
+            "reach": 0.6556,
+            "height": 0.1911
+          },
+          {
+            "phase": 0.5,
+            "reach": 0.6436,
+            "height": 0.2473
+          },
+          {
+            "phase": 1,
+            "reach": 0.6129,
+            "height": 0.251
+          }
+        ],
+        "status": "ok",
+        "gesture": "tailWideRight",
+        "motifContact": 0.46
+      },
+      "crouch_weak": {
+        "contact": 0.375,
+        "contactEnd": 0.435,
+        "attackPart": "tail",
+        "attackBone": "tail",
+        "reach": 0.5483,
+        "height": 0.0692,
+        "activeReach": [
+          {
+            "phase": 0,
+            "reach": 0.5483,
+            "height": 0.0692
+          },
+          {
+            "phase": 0.5,
+            "reach": 0.5338,
+            "height": 0.018
+          },
+          {
+            "phase": 1,
+            "reach": 0.5011,
+            "height": -0.0072
+          }
+        ],
+        "status": "ok",
+        "gesture": "tailTipSnap",
+        "motifContact": 0.36
+      },
+      "crouch_heavy": {
+        "contact": 0.5,
+        "contactEnd": 0.56,
+        "attackPart": "tail",
+        "attackBone": "tail",
+        "reach": 0.6412,
+        "height": 0.0071,
+        "activeReach": [
+          {
+            "phase": 0,
+            "reach": 0.6412,
+            "height": 0.0071
+          },
+          {
+            "phase": 0.5,
+            "reach": 0.6205,
+            "height": -0.0164
+          },
+          {
+            "phase": 1,
+            "reach": 0.5851,
+            "height": -0.0259
+          }
+        ],
+        "status": "ok",
+        "gesture": "tailGroundSmash",
+        "motifContact": 0.5
+      },
+      "air_weak": {
+        "contact": 0.35,
+        "contactEnd": 0.41,
+        "attackPart": "tail",
+        "attackBone": "tail",
+        "reach": 0.5505,
+        "height": 0.3038,
+        "activeReach": [
+          {
+            "phase": 0,
+            "reach": 0.5505,
+            "height": 0.3038
+          },
+          {
+            "phase": 0.5,
+            "reach": 0.5318,
+            "height": 0.3027
+          },
+          {
+            "phase": 1,
+            "reach": 0.4985,
+            "height": 0.3055
+          }
+        ],
+        "status": "ok",
+        "gesture": "airTailFlick",
+        "motifContact": 0.34
+      },
+      "air_heavy": {
+        "contact": 0.475,
+        "contactEnd": 0.55,
+        "attackPart": "tail",
+        "attackBone": "tail",
+        "reach": 0.5524,
+        "height": 0.0975,
+        "activeReach": [
+          {
+            "phase": 0,
+            "reach": 0.5524,
+            "height": 0.0975
+          },
+          {
+            "phase": 0.5,
+            "reach": 0.5454,
+            "height": 0.1185
+          },
+          {
+            "phase": 1,
+            "reach": 0.5435,
+            "height": 0.1941
+          }
+        ],
+        "status": "ok",
+        "gesture": "airTailLash",
+        "motifContact": 0.48
+      }
+    }
+  },
+  {
+    "id": "dark_moguzo",
+    "error": null,
+    "normals": {
+      "stand_weak": {
+        "contact": 0.325,
+        "contactEnd": 0.385,
+        "attackPart": "armR",
+        "attackBone": "paw.R",
+        "reach": 0.3946,
+        "height": 0.3329,
+        "activeReach": [
+          {
+            "phase": 0,
+            "reach": 0.3946,
+            "height": 0.3329
+          },
+          {
+            "phase": 0.5,
+            "reach": 0.387,
+            "height": 0.3363
+          },
+          {
+            "phase": 1,
+            "reach": 0.3764,
+            "height": 0.3404
+          }
+        ],
+        "status": "ok",
+        "gesture": "reverseJabR",
+        "motifContact": 0.28
+      },
+      "stand_heavy": {
+        "contact": 0.3,
+        "contactEnd": 0.36,
+        "attackPart": "armR",
+        "attackBone": "paw.R",
+        "bothHands": true,
+        "reach": 0.4401,
+        "height": 0.1803,
+        "activeReach": [
+          {
+            "phase": 0,
+            "reach": 0.4401,
+            "height": 0.1803
+          },
+          {
+            "phase": 0.5,
+            "reach": 0.3937,
+            "height": 0.1544
+          },
+          {
+            "phase": 1,
+            "reach": 0.3396,
+            "height": 0.1821
+          }
+        ],
+        "status": "ok",
+        "gesture": "blackDoubleHook",
+        "motifContact": 0.38
+      },
+      "crouch_weak": {
+        "contact": 0.325,
+        "contactEnd": 0.445,
+        "attackPart": "armR",
+        "attackBone": "paw.R",
+        "reach": 0.4366,
+        "height": 0.1736,
+        "activeReach": [
+          {
+            "phase": 0,
+            "reach": 0.4366,
+            "height": 0.1736
+          },
+          {
+            "phase": 0.5,
+            "reach": 0.4352,
+            "height": 0.1741
+          },
+          {
+            "phase": 1,
+            "reach": 0.4314,
+            "height": 0.1801
+          }
+        ],
+        "status": "ok",
+        "gesture": "lowBackfist",
+        "motifContact": 0.3
+      },
+      "crouch_heavy": {
+        "contact": 0.425,
+        "contactEnd": 0.5,
+        "attackPart": "armR",
+        "attackBone": "paw.R",
+        "reach": 0.5094,
+        "height": 0.2543,
+        "activeReach": [
+          {
+            "phase": 0,
+            "reach": 0.5094,
+            "height": 0.2543
+          },
+          {
+            "phase": 0.5,
+            "reach": 0.5042,
+            "height": 0.2526
+          },
+          {
+            "phase": 1,
+            "reach": 0.4888,
+            "height": 0.2427
+          }
+        ],
+        "status": "ok",
+        "gesture": "shadowRushPunch",
+        "motifContact": 0.43
+      },
+      "air_weak": {
+        "contact": 0.35,
+        "contactEnd": 0.41,
+        "attackPart": "armR",
+        "attackBone": "paw.R",
+        "reach": 0.336,
+        "height": 0.113,
+        "activeReach": [
+          {
+            "phase": 0,
+            "reach": 0.336,
+            "height": 0.113
+          },
+          {
+            "phase": 0.5,
+            "reach": 0.3214,
+            "height": 0.11
+          },
+          {
+            "phase": 1,
+            "reach": 0.3054,
+            "height": 0.1108
+          }
+        ],
+        "status": "ok",
+        "gesture": "airSpikeFistR",
+        "motifContact": 0.32
+      },
+      "air_heavy": {
+        "contact": 0.475,
+        "contactEnd": 0.595,
+        "attackPart": "legR",
+        "attackBone": "foot.R",
+        "reach": 0.2616,
+        "height": 0.1651,
+        "activeReach": [
+          {
+            "phase": 0,
+            "reach": 0.2616,
+            "height": 0.1651
+          },
+          {
+            "phase": 0.5,
+            "reach": 0.2545,
+            "height": 0.1897
+          },
+          {
+            "phase": 1,
+            "reach": 0.2469,
+            "height": 0.2191
+          }
+        ],
+        "status": "ok",
+        "gesture": "darkSpinKick",
+        "motifContact": 0.47
+      }
+    }
+  }
+]
