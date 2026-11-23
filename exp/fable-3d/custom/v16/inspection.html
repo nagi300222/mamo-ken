@@ -1,0 +1,33 @@
+<!doctype html><html lang="ja"><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>マモ拳 v16 アバター実WebGL検査</title>
+<style>html,body{margin:0;background:#202c38;color:#f3eddb;font:16px system-ui;height:100%;overflow:hidden}canvas{display:block;width:100vw;height:100vh}header{position:absolute;left:24px;top:16px}header h1{font-size:20px;margin:0 0 5px}header p{margin:0;font-size:13px;color:#b6c5d2}footer{position:absolute;bottom:20px;left:20px;right:20px;display:flex;justify-content:space-around;font-size:15px;text-align:center}#status{position:absolute;top:90px;left:20px;color:#ffd983}</style>
+<link rel="icon" href="data:,"><script type="importmap">{"imports":{"three":"../../preview/vendor/three.module.min.js","three/addons/":"../../preview/vendor/addons/"}}</script>
+<header><h1>部位・毛色・模様の実3D比較</h1><p>上：元の形状と配色　／　下：頭・耳・手足の形状変更、部位色・模様・装飾変更</p></header>
+<div id="status">モデルを読み込み中</div><canvas id="stage"></canvas><footer><span>モグゾー骨格</span><span>ゴダン骨格</span><span>バレット骨格</span></footer>
+<script type="module">
+import * as THREE from 'three';
+import {createAvatar,measureContacts} from './avatar-factory.js';
+const scene=new THREE.Scene();scene.background=new THREE.Color('#202c38');
+const camera=new THREE.OrthographicCamera(-1.5,1.5,1,-1,.01,20);camera.position.set(0,.65,4);camera.lookAt(0,.65,0);
+const renderer=new THREE.WebGLRenderer({canvas:document.querySelector('canvas'),antialias:true});renderer.setPixelRatio(1);renderer.outputColorSpace=THREE.SRGBColorSpace;
+scene.add(new THREE.HemisphereLight(0xe4f3ff,0x796857,2.2));
+const key=new THREE.DirectionalLight(0xffefd7,3);key.position.set(-1,2,3);scene.add(key);
+const rim=new THREE.DirectionalLight(0xa9c6ff,1.5);rim.position.set(2,1,-2);scene.add(rim);
+const labels=['moguzo','godan','bullet'],actors=[],rows=[];
+try{
+ for(let col=0;col<labels.length;col++){
+  const id=labels[col];
+  for(let row=0;row<2;row++){
+   const appearance={baseId:id,parts:row?{head:id==='godan'?'pisuke':'godan',ears:'hakuma',hands:id==='godan'?'pisuke':'godan',feet:'pisuke',accessory:'none'}:{},palette:row?{fur:['#568a9e','#9470a6','#b85151'][col],belly:'#f1d5a0',muzzle:'#f5e2b9',paw:'#49352a',accent:'#31b9cf',pattern:'#402b55'}:{},pattern:row?['spots','stripes','mask'][col]:'solid'};
+   const avatar=await createAvatar({appearance}),m=measureContacts(avatar);
+   avatar.scene.position.set((col-1)*.85,(1-row)*.78-.36,0);avatar.scene.rotation.y=.18;
+   scene.add(avatar.scene);const mixer=new THREE.AnimationMixer(avatar.scene);const clip=avatar.animations.find(a=>a.name==='idle');mixer.clipAction(clip).play();mixer.setTime(.45);
+   actors.push(avatar);rows.push({base:id,edited:!!row,measurements:m,meshes:avatar.meshes.length,geometryVertices:avatar.meshes.reduce((n,m)=>n+m.geometry.attributes.position.count,0)});
+  }
+ }
+ const resize=()=>{renderer.setSize(innerWidth,innerHeight,false);const h=1.04,w=h*innerWidth/innerHeight;camera.left=-w;camera.right=w;camera.top=h;camera.bottom=-h;camera.updateProjectionMatrix();};
+ addEventListener('resize',resize);resize();
+ function render(){renderer.render(scene,camera);requestAnimationFrame(render);}render();
+ document.querySelector('#status').hidden=true;
+ window.avatarEvidence={ready:true,rows,get rendererInfo(){return {calls:renderer.info.render.calls,geometries:renderer.info.memory.geometries,textures:renderer.info.memory.textures};},renderer,scene,camera,actors};
+}catch(error){document.querySelector('#status').textContent='検査エラー: '+error.message;console.error(error);window.avatarEvidence={error:error.message};}
+</script></html>
