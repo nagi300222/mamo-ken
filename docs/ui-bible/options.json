@@ -132,6 +132,32 @@
       "assistantHypothesis": "キャラクターと打撃を舞台の主役にする（ミオの解釈。本人の理由は未確認）"
     },
     {
+      "id": "BATTLE-SUB",
+      "title": "B全体×A戦闘の構図・HUDと6操作の位置",
+      "status": "PENDING",
+      "selected": null,
+      "reason": "比較候補の段階。単体構図も各部品もナギ未選択",
+      "approvedBy": null,
+      "approvedAt": null,
+      "candidates": [
+        {
+          "id": "BA-01",
+          "name": "舞台を広く/扇型+HUD01（組合せ例）",
+          "figmaNode": "https://www.figma.com/design/afaB1eVmV6uOnDZR40t0Kr?node-id=23-170"
+        },
+        {
+          "id": "BA-02",
+          "name": "競技情報を鋭く/3×2+HUD02（組合せ例）",
+          "figmaNode": "https://www.figma.com/design/afaB1eVmV6uOnDZR40t0Kr?node-id=23-170"
+        },
+        {
+          "id": "BA-03",
+          "name": "大技の差別化/4+2+HUD03（組合せ例）",
+          "figmaNode": "https://www.figma.com/design/afaB1eVmV6uOnDZR40t0Kr?node-id=23-170"
+        }
+      ]
+    },
+    {
       "id": "PRACTICE",
       "title": "プラクティス",
       "status": "PENDING",
