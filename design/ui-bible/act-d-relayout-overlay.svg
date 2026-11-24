@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1800 832" role="img" aria-label="マモ拳 ACT-D構造確認用ベクター。背景透明。">
+  <title>ACT-D Revised Position Study — design-only vector overlay</title>
+  <!-- All coordinates in 1800x832 normalized viewBox. Stage image deliberately excluded. -->
+  <g stroke="#e7e8e8" stroke-width="3.6" stroke-linejoin="round">
+    <circle id="strong" cx="1314" cy="445" r="75.5" fill="#1d2330"/>
+    <circle id="weak" cx="1395" cy="601" r="60.2" fill="#1d2330"/>
+    <path id="grab" d="M 1401,422 C 1388,412 1387,397 1402,379 C 1425,350 1453,326 1483,322 C 1508,319 1521,332 1529,346 C 1536,360 1526,379 1514,389 C 1492,403 1469,404 1453,423 C 1435,442 1413,441 1401,422 Z" fill="#1d2330"/>
+    <!-- Identical outline and size as grab, horizontally mirrored -->
+    <path id="ultimate" d="M 1401,422 C 1388,412 1387,397 1402,379 C 1425,350 1453,326 1483,322 C 1508,319 1521,332 1529,346 C 1536,360 1526,379 1514,389 C 1492,403 1469,404 1453,423 C 1435,442 1413,441 1401,422 Z" transform="translate(3081,0) scale(-1,1)" fill="#1d2330"/>
+    <circle id="special" cx="1584" cy="537" r="109" fill="#d86524" stroke="#fcfcfc" stroke-width="4"/>
+    <path id="gyuiin" d="M 1461,672 C 1452,659 1464,645 1481,646 C 1497,648 1515,670 1542,676 C 1571,685 1606,680 1629,667 C 1645,658 1660,647 1676,650 C 1690,653 1697,669 1687,686 C 1669,713 1625,729 1580,731 C 1532,729 1490,716 1467,691 C 1461,683 1459,676 1461,672 Z" fill="#2b5784"/>
+  </g>
+  <g font-family="Noto Sans CJK JP,sans-serif" font-weight="800" fill="#fcfcfd" text-anchor="middle" pointer-events="none">
+    <text x="1314" y="461" font-size="43">強</text>
+    <text x="1395" y="614" font-size="39">弱</text>
+    <text x="1464" y="381" font-size="33">掴み</text>
+    <text x="1613" y="382" font-size="33">奥義</text>
+    <text x="1584" y="558" font-size="54">必殺</text>
+    <text x="1577" y="702" font-size="34">ギュイーン</text>
+  </g>
+</svg>
