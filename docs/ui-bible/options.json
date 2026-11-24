@@ -1,10 +1,10 @@
 {
-  "schemaVersion": "0.3.0",
+  "schemaVersion": "0.4.0",
   "createdAt": "2026-11-24",
   "source": "docs/ui-bible",
   "figma": "https://www.figma.com/design/afaB1eVmV6uOnDZR40t0Kr",
   "gameplayBaseline": "9ee89efafa76cb3ad80fbff46c7f56a1261baa48",
-  "note": "本人選択の方向/構造は USER_PROPOSED として記録。ACT-Dの細部形状、ゲージ装飾、カメラ時定数、全画面アートは未採用。プロトタイプは実ゲームではない。",
+  "note": "ユーザー訂正で旧D1〜D3/G1〜G3/F1〜F3を比較不適格として無効化。基準の忠実再現1案を制作し、3案比較は停止。本人が指定した骨格と詳細アート決定は別扱い。",
   "groups": [
     {
       "id": "AD-00",
@@ -790,8 +790,8 @@
       "id": "EYE-PORTRAIT",
       "title": "ゲージの目アップ",
       "status": "USER_PROPOSED",
-      "selected": "TOP-LEFT",
-      "reason": "本人指定：HPゲージ左上にキャラの目の画像。正式アセットの切り抜き方法は未決定。",
+      "selected": "OUTER-MIRROR",
+      "reason": "本人の明確な訂正：右側のキャラの目は右に置くべき。左右外端の鏡像配置。個別のグラフィックは未採用。",
       "selectedAt": "2026-11-24",
       "requestedBy": "user",
       "approvedBy": null,
@@ -799,11 +799,17 @@
       "candidates": [
         {
           "id": "TOP-LEFT",
-          "name": "HPゲージの左上に対応キャラの目の画像"
+          "name": "HPゲージの左上に対応キャラの目の画像",
+          "deprecated": true
         },
         {
           "id": "NONE",
           "name": "画像なし"
+        },
+        {
+          "id": "OUTER-MIRROR",
+          "name": "1Pは左外端、CPUは右外端。HPゲージと対応する目アップ",
+          "figmaNode": null
         }
       ]
     },
@@ -875,7 +881,7 @@
       "title": "独自6攻撃ACT-Dの詳細配置",
       "status": "PENDING",
       "selected": null,
-      "reason": "同じ必殺中心・弧操作を守る3案。個別未選択。",
+      "reason": "本人が現行3案を『誤差すぎる、比較するほどでもない』と指摘。旧試作の差分は比較不適格で、最終採用しない。意味のある新しい対比ができるまで保留。",
       "selectedAt": null,
       "requestedBy": null,
       "approvedBy": null,
@@ -883,15 +889,27 @@
       "candidates": [
         {
           "id": "D1",
-          "name": "安定した浅い弧・必殺直径80"
+          "name": "安定した浅い弧・必殺直径80",
+          "comparisonStatus": "INVALIDATED_BY_USER_FEEDBACK",
+          "deprecated": true
         },
         {
           "id": "D2",
-          "name": "弧強調・必殺直径90"
+          "name": "弧強調・必殺直径90",
+          "comparisonStatus": "INVALIDATED_BY_USER_FEEDBACK",
+          "deprecated": true
         },
         {
           "id": "D3",
-          "name": "必殺主役・必殺直径98"
+          "name": "必殺主役・必殺直径98",
+          "comparisonStatus": "INVALIDATED_BY_USER_FEEDBACK",
+          "deprecated": true
+        },
+        {
+          "id": "D-BASE-R1",
+          "name": "指定を反映した基準1案：必殺を中心とする約82°の丸端弧、掴みと奥義は斜め楕円",
+          "comparisonStatus": "BASELINE_ONLY",
+          "approved": false
         }
       ]
     },
@@ -900,7 +918,7 @@
       "title": "HP/奥義/Driveのグラフィック細部",
       "status": "PENDING",
       "selected": null,
-      "reason": "情報の構造を守る3案。色・仕上げ未選択。",
+      "reason": "本人が現行3案を『誤差すぎる、比較するほどでもない』と指摘。旧試作の差分は比較不適格で、最終採用しない。意味のある新しい対比ができるまで保留。",
       "selectedAt": null,
       "requestedBy": null,
       "approvedBy": null,
@@ -908,15 +926,21 @@
       "candidates": [
         {
           "id": "G1",
-          "name": "3本直線・競技優先"
+          "name": "3本直線・競技優先",
+          "comparisonStatus": "INVALIDATED_BY_USER_FEEDBACK",
+          "deprecated": true
         },
         {
           "id": "G2",
-          "name": "奥義強め・舞台の切れ味"
+          "name": "奥義強め・舞台の切れ味",
+          "comparisonStatus": "INVALIDATED_BY_USER_FEEDBACK",
+          "deprecated": true
         },
         {
           "id": "G3",
-          "name": "各資源の造形差"
+          "name": "各資源の造形差",
+          "comparisonStatus": "INVALIDATED_BY_USER_FEEDBACK",
+          "deprecated": true
         }
       ]
     },
@@ -925,7 +949,7 @@
       "title": "852×393画面と追従ラグ",
       "status": "PENDING",
       "selected": null,
-      "reason": "いずれも全画面ステージ/被り禁止。時間値と操作位置は試作用。",
+      "reason": "本人が現行3案を『誤差すぎる、比較するほどでもない』と指摘。旧試作の差分は比較不適格で、最終採用しない。意味のある新しい対比ができるまで保留。",
       "selectedAt": null,
       "requestedBy": null,
       "approvedBy": null,
@@ -933,15 +957,21 @@
       "candidates": [
         {
           "id": "F1",
-          "name": "安全な全景・追従時定数190ms仮"
+          "name": "安全な全景・追従時定数190ms仮",
+          "comparisonStatus": "INVALIDATED_BY_USER_FEEDBACK",
+          "deprecated": true
         },
         {
           "id": "F2",
-          "name": "全画面ステージ・追従時定数250ms仮"
+          "name": "全画面ステージ・追従時定数250ms仮",
+          "comparisonStatus": "INVALIDATED_BY_USER_FEEDBACK",
+          "deprecated": true
         },
         {
           "id": "F3",
-          "name": "攻防追従強め・時定数145ms仮"
+          "name": "攻防追従強め・時定数145ms仮",
+          "comparisonStatus": "INVALIDATED_BY_USER_FEEDBACK",
+          "deprecated": true
         }
       ]
     },
