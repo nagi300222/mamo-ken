@@ -1,5 +1,5 @@
-# マモ拳 UI設計バイブル | v0.1 / 設計候補集
-> 作成日 2026-11-24／原案：ミオ。**候補はナギ未承認。ゲームへの実装・品質合格ではない。**
+# マモ拳 UI設計バイブル | v0.2 / 初回方向選択と詳細比較
+> 作成日 2026-11-24／原案：ミオ。**初回方向 B/B/A/A は本人選択。細部候補・Figma完成稿・ゲーム実装は未承認。**
 > 実行基準：P0〜P4改良 Draft PR #225（gameplay SHA 9ee89efafa76cb3ad80fbff46c7f56a1261baa48）。Issue #227 は全画面再設計の親課題。
 >
 > Figma： https://www.figma.com/design/afaB1eVmV6uOnDZR40t0Kr
@@ -7,6 +7,7 @@
 > B・山嶺  https://www.figma.com/design/afaB1eVmV6uOnDZR40t0Kr?node-id=3-222
 > C・絵巻  https://www.figma.com/design/afaB1eVmV6uOnDZR40t0Kr?node-id=3-391
 > ボタン・ゲージ比較  https://www.figma.com/design/afaB1eVmV6uOnDZR40t0Kr?node-id=2-2
+> B全体×A戦闘の3構図  https://www.figma.com/design/afaB1eVmV6uOnDZR40t0Kr?node-id=23-170
 
 ## 本書の位置づけ
 本書は「綺麗なスクリーンショット集」でも「今の画面の文字を減らすタスクリスト」でもない。**ゲームを遊ぶ人に何が起こり、どこを見て、何を押し、どう感じるか**を追跡し、全部のUI要素を一貫して決めるための設計正本を目指す。初回は広い範囲に実際の候補を出すことを優先し、決定前の案を勝手に正式仕様扱いしない。
@@ -25,7 +26,9 @@
 | [08 品質評価](08_accessibility_qa.md) | 見えること／触れること／動くこと／初見試遊 | 初稿 |
 | [09 選択台帳](09_decisions.md) | 採用・保留・却下・変更理由、候補ID一覧 | 全件保留 |
 | [10 実装契約](10_implementation.md) | Figma→Claude/Codex/Workへの安全な引継ぎ・版管理 | 初稿 |
-| [options.json](options.json) | マシン可読な候補IDと状態 | 全件PENDING |
+| [13 初回方向 B/B/A/A](13_selected_direction.md) | 競技B×舞台Aの統合規則とBA-01/02/03 | 本人選択4件＋構図保留 |
+| [14 6操作・3ゲージの詳細比較](14_controls_hud_variants.md) | 6ボタンごとの機能/状態、HP/Drive/奥義3案ずつ | 選択待ち |
+| [options.json](options.json) | マシン可読な候補IDと状態 | 4方向選択・その他保留 |
 
 ## 今回つくったFigmaについて
 - 3方向×6場面＝**18枚の編集可能なラフ構図**と、3方向×3状態の操作ボタン＋HP/資源ゲージの編集可能な試作コンポーネント。
@@ -34,8 +37,8 @@
 - Figmaのコンポーネントは**試作部品**。タッチ・入力遅延やゲームFPSを証明しない。
 
 ## 最初に選んでほしいのはこの順
-**第1回**：AD（世界の方向）、LAY-MENU（入口）、LAY-SELECT（選択）、LAY-BATTLE（対戦）。
-**第2回**：BTN（決定と戻る）、ACT（6攻撃）、HP/DRV/ULT（各ゲージ）、NAV（メニュー）。
+**第1回（本人の方向選択済み）**：AD=B、MENU=B、SELECT=A、BATTLE=A。**未確定：**細部とゲームへの実装。
+**第2回（今回の比較対象）**：BATTLE-SUB（BA-01/02/03）、ACT（6攻撃）、HP/DRV/ULT（各ゲージ）。その他BTN/NAVは保留。
 **第3回**：CRAFT（キャラクリ）、EXPLORE（探索）、PRACTICE（練習）、RUN（連戦）、RESULT（勝利）。
 **第4回**：MOTION/SE、アクセシビリティ、仕様の数値・比較実機。
 
