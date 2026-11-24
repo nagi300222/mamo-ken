@@ -1,10 +1,10 @@
 {
-  "schemaVersion": "0.2.0",
+  "schemaVersion": "0.3.0",
   "createdAt": "2026-11-24",
   "source": "docs/ui-bible",
   "figma": "https://www.figma.com/design/afaB1eVmV6uOnDZR40t0Kr",
   "gameplayBaseline": "9ee89efafa76cb3ad80fbff46c7f56a1261baa48",
-  "note": "全件PENDING。選択肢はモデルの提案であり本人の採用判断ではない。採用時は理由と日時、出典、再評価を追記する。",
+  "note": "本人選択の方向/構造は USER_PROPOSED として記録。ACT-Dの細部形状、ゲージ装飾、カメラ時定数、全画面アートは未採用。プロトタイプは実ゲームではない。",
   "groups": [
     {
       "id": "AD-00",
@@ -441,9 +441,9 @@
     {
       "id": "ACT",
       "title": "6攻撃ボタン",
-      "status": "PENDING",
-      "selected": null,
-      "reason": "",
+      "status": "USER_PROPOSED",
+      "selected": "D",
+      "reason": "必殺技を大きく芯より右、ギュイーンは約1/4の弧、弱は必殺の約1/3・強は弱より大きく上、掴み/奥義はGCコンX/Yから操作感の発想を得る。",
       "approvedBy": null,
       "approvedAt": null,
       "candidates": [
@@ -461,8 +461,15 @@
           "id": "C",
           "name": "通常4+大技2",
           "figmaNode": null
+        },
+        {
+          "id": "D",
+          "name": "必殺が右の大核、ギュイーンが左下の1/4弧、弱→掴み→奥義の弧、強は弱の上"
         }
-      ]
+      ],
+      "selectionScope": "本人が明言した構造・動作。個別の細部グラフィックや実機での最終採用とは別",
+      "selectedAt": "2026-11-24",
+      "requestedBy": "user"
     },
     {
       "id": "JOY",
@@ -519,9 +526,9 @@
     {
       "id": "HP",
       "title": "HPゲージ",
-      "status": "PENDING",
-      "selected": null,
-      "reason": "",
+      "status": "USER_PROPOSED",
+      "selected": "01",
+      "reason": "長い競技バーを希望。装飾・最終配色・減少エフェクトは未決定。",
       "approvedBy": null,
       "approvedAt": null,
       "candidates": [
@@ -540,7 +547,10 @@
           "name": "木札の帯",
           "figmaNode": null
         }
-      ]
+      ],
+      "selectionScope": "本人が明言した構造・動作。個別の細部グラフィックや実機での最終採用とは別",
+      "selectedAt": "2026-11-24",
+      "requestedBy": "user"
     },
     {
       "id": "HP-TEXT",
@@ -566,9 +576,9 @@
     {
       "id": "DRIVE",
       "title": "Driveゲージ",
-      "status": "PENDING",
-      "selected": null,
-      "reason": "",
+      "status": "USER_PROPOSED",
+      "selected": "02",
+      "reason": "分割ゲージを希望。内部のリソースは既存コード正本のまま変更しない。",
       "approvedBy": null,
       "approvedAt": null,
       "candidates": [
@@ -587,14 +597,17 @@
           "name": "アイコン付き",
           "figmaNode": null
         }
-      ]
+      ],
+      "selectionScope": "本人が明言した構造・動作。個別の細部グラフィックや実機での最終採用とは別",
+      "selectedAt": "2026-11-24",
+      "requestedBy": "user"
     },
     {
       "id": "ULT",
       "title": "奥義ゲージ",
-      "status": "PENDING",
-      "selected": null,
-      "reason": "",
+      "status": "USER_PROPOSED",
+      "selected": "04",
+      "reason": "分割ゲージを希望し、満タンでゲージ先端が燃え、奥義ボタンも色が変わる。炎の形/色/時間は未決定。",
       "approvedBy": null,
       "approvedAt": null,
       "candidates": [
@@ -612,8 +625,15 @@
           "id": "03",
           "name": "拳印ストック",
           "figmaNode": null
+        },
+        {
+          "id": "04",
+          "name": "分割ゲージ＋満タン時に先端が燃える＋奥義ボタン変色"
         }
-      ]
+      ],
+      "selectionScope": "本人が明言した構造・動作。個別の細部グラフィックや実機での最終採用とは別",
+      "selectedAt": "2026-11-24",
+      "requestedBy": "user"
     },
     {
       "id": "TIME",
@@ -742,6 +762,203 @@
           "id": "C",
           "name": "NPC上の行動目印",
           "figmaNode": null
+        }
+      ]
+    },
+    {
+      "id": "HUD-ORDER",
+      "title": "三段ゲージの並び",
+      "status": "USER_PROPOSED",
+      "selected": "HP-ULT-DRIVE",
+      "reason": "本人がHP・奥義・Driveを並べると指定。",
+      "selectedAt": "2026-11-24",
+      "requestedBy": "user",
+      "approvedBy": null,
+      "approvedAt": null,
+      "candidates": [
+        {
+          "id": "HP-ULT-DRIVE",
+          "name": "HP→奥義→Drive"
+        },
+        {
+          "id": "ALTERNATE",
+          "name": "未提案"
+        }
+      ]
+    },
+    {
+      "id": "EYE-PORTRAIT",
+      "title": "ゲージの目アップ",
+      "status": "USER_PROPOSED",
+      "selected": "TOP-LEFT",
+      "reason": "本人指定：HPゲージ左上にキャラの目の画像。正式アセットの切り抜き方法は未決定。",
+      "selectedAt": "2026-11-24",
+      "requestedBy": "user",
+      "approvedBy": null,
+      "approvedAt": null,
+      "candidates": [
+        {
+          "id": "TOP-LEFT",
+          "name": "HPゲージの左上に対応キャラの目の画像"
+        },
+        {
+          "id": "NONE",
+          "name": "画像なし"
+        }
+      ]
+    },
+    {
+      "id": "CAMERA-CHASE",
+      "title": "戦闘カメラ追従",
+      "status": "USER_PROPOSED",
+      "selected": "MIDPOINT-LAG",
+      "reason": "本人指定：キャラを中央に追うが少しラグを残す。追従量と制限値は未決定。",
+      "selectedAt": "2026-11-24",
+      "requestedBy": "user",
+      "approvedBy": null,
+      "approvedAt": null,
+      "candidates": [
+        {
+          "id": "MIDPOINT-LAG",
+          "name": "両キャラの攻防中心を少し遅れて追う"
+        },
+        {
+          "id": "DIRECT",
+          "name": "遅延なし"
+        }
+      ]
+    },
+    {
+      "id": "STAGE-FULLBLEED",
+      "title": "ステージと操作UIの層",
+      "status": "USER_PROPOSED",
+      "selected": "FULLBLEED",
+      "reason": "本人指定：画面いっぱいが対戦空間で、ボタンの背後にもステージが見える。",
+      "selectedAt": "2026-11-24",
+      "requestedBy": "user",
+      "approvedBy": null,
+      "approvedAt": null,
+      "candidates": [
+        {
+          "id": "FULLBLEED",
+          "name": "画面全体にステージが続く・ボタン下にも見える"
+        },
+        {
+          "id": "LETTERBOX",
+          "name": "左右UI専用枠"
+        }
+      ]
+    },
+    {
+      "id": "CHAR-BUTTON-OVERLAP",
+      "title": "キャラと操作の重なり",
+      "status": "USER_PROPOSED",
+      "selected": "NO-OVERLAP",
+      "reason": "本人指定：キャラとボタンは被らない。カメラ/ズーム/配置で達成し、単なる透明化で済ませない。",
+      "selectedAt": "2026-11-24",
+      "requestedBy": "user",
+      "approvedBy": null,
+      "approvedAt": null,
+      "candidates": [
+        {
+          "id": "NO-OVERLAP",
+          "name": "キャラクターや重要な攻防を操作部品が隠さない"
+        },
+        {
+          "id": "ALLOW",
+          "name": "重なりを許す"
+        }
+      ]
+    },
+    {
+      "id": "ACT-D-FORM",
+      "title": "独自6攻撃ACT-Dの詳細配置",
+      "status": "PENDING",
+      "selected": null,
+      "reason": "同じ必殺中心・弧操作を守る3案。個別未選択。",
+      "selectedAt": null,
+      "requestedBy": null,
+      "approvedBy": null,
+      "approvedAt": null,
+      "candidates": [
+        {
+          "id": "D1",
+          "name": "安定した浅い弧・必殺直径80"
+        },
+        {
+          "id": "D2",
+          "name": "弧強調・必殺直径90"
+        },
+        {
+          "id": "D3",
+          "name": "必殺主役・必殺直径98"
+        }
+      ]
+    },
+    {
+      "id": "HUD-G",
+      "title": "HP/奥義/Driveのグラフィック細部",
+      "status": "PENDING",
+      "selected": null,
+      "reason": "情報の構造を守る3案。色・仕上げ未選択。",
+      "selectedAt": null,
+      "requestedBy": null,
+      "approvedBy": null,
+      "approvedAt": null,
+      "candidates": [
+        {
+          "id": "G1",
+          "name": "3本直線・競技優先"
+        },
+        {
+          "id": "G2",
+          "name": "奥義強め・舞台の切れ味"
+        },
+        {
+          "id": "G3",
+          "name": "各資源の造形差"
+        }
+      ]
+    },
+    {
+      "id": "LAYOUT-F",
+      "title": "852×393画面と追従ラグ",
+      "status": "PENDING",
+      "selected": null,
+      "reason": "いずれも全画面ステージ/被り禁止。時間値と操作位置は試作用。",
+      "selectedAt": null,
+      "requestedBy": null,
+      "approvedBy": null,
+      "approvedAt": null,
+      "candidates": [
+        {
+          "id": "F1",
+          "name": "安全な全景・追従時定数190ms仮"
+        },
+        {
+          "id": "F2",
+          "name": "全画面ステージ・追従時定数250ms仮"
+        },
+        {
+          "id": "F3",
+          "name": "攻防追従強め・時定数145ms仮"
+        }
+      ]
+    },
+    {
+      "id": "GRAPHIC-SKIN",
+      "title": "仕上げの文字/装飾/素材/絵の調整",
+      "status": "PENDING",
+      "selected": null,
+      "reason": "ユーザー本人の明言：他の画面を含むグラフィックデザインは再検討。現時点では採用しない。",
+      "selectedAt": null,
+      "requestedBy": null,
+      "approvedBy": null,
+      "approvedAt": null,
+      "candidates": [
+        {
+          "id": "PENDING-ART",
+          "name": "選択画面など全体を含め、グラフィックデザインは改めて決める"
         }
       ]
     }
