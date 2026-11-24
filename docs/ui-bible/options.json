@@ -1,0 +1,1009 @@
+{
+  "schemaVersion": "0.5.1",
+  "createdAt": "2026-11-24",
+  "source": "docs/ui-bible",
+  "figma": "https://www.figma.com/design/afaB1eVmV6uOnDZR40t0Kr",
+  "gameplayBaseline": "9ee89efafa76cb3ad80fbff46c7f56a1261baa48",
+  "note": "ユーザー訂正で旧D1〜D3/G1〜G3/F1〜F3を比較不適格として無効化。基準の忠実再現1案を制作し、3案比較は停止。本人が指定した骨格と詳細アート決定は別扱い。",
+  "groups": [
+    {
+      "id": "AD-00",
+      "title": "全体の表現",
+      "status": "USER_PROPOSED",
+      "selected": "B",
+      "reason": "ユーザー本人による初回候補の明示指定。個別の選択理由は未共有",
+      "approvedBy": null,
+      "approvedAt": null,
+      "candidates": [
+        {
+          "id": "A",
+          "name": "拳祭",
+          "figmaNode": "https://www.figma.com/design/afaB1eVmV6uOnDZR40t0Kr?node-id=3-54"
+        },
+        {
+          "id": "B",
+          "name": "山嶺",
+          "figmaNode": "https://www.figma.com/design/afaB1eVmV6uOnDZR40t0Kr?node-id=3-222"
+        },
+        {
+          "id": "C",
+          "name": "絵巻",
+          "figmaNode": "https://www.figma.com/design/afaB1eVmV6uOnDZR40t0Kr?node-id=3-391"
+        },
+        {
+          "id": "MIX",
+          "name": "共通文法で混成",
+          "figmaNode": null
+        }
+      ],
+      "selectionScope": "初回の画面・美術方向性。細部の最終決定・素材採用・実装許可ではない",
+      "requestedBy": "user",
+      "selectedAt": "2026-11-24",
+      "assistantHypothesis": "競技性と情報の読みやすさを全体の基準に置く（ミオの解釈。本人の理由は未確認）"
+    },
+    {
+      "id": "MENU",
+      "title": "モード選択",
+      "status": "USER_PROPOSED",
+      "selected": "B",
+      "reason": "ユーザー本人による初回候補の明示指定。個別の選択理由は未共有",
+      "approvedBy": null,
+      "approvedAt": null,
+      "candidates": [
+        {
+          "id": "A",
+          "name": "舞台旗",
+          "figmaNode": "https://www.figma.com/design/afaB1eVmV6uOnDZR40t0Kr?node-id=3-54"
+        },
+        {
+          "id": "B",
+          "name": "大ステージ+下部5選択",
+          "figmaNode": "https://www.figma.com/design/afaB1eVmV6uOnDZR40t0Kr?node-id=3-222"
+        },
+        {
+          "id": "C",
+          "name": "山の地図",
+          "figmaNode": "https://www.figma.com/design/afaB1eVmV6uOnDZR40t0Kr?node-id=3-391"
+        }
+      ],
+      "selectionScope": "初回の画面・美術方向性。細部の最終決定・素材採用・実装許可ではない",
+      "requestedBy": "user",
+      "selectedAt": "2026-11-24",
+      "assistantHypothesis": "素早く5モードを選べる大ステージ＋下部切替にする（ミオの解釈。本人の理由は未確認）"
+    },
+    {
+      "id": "SELECT",
+      "title": "9体キャラ選択",
+      "status": "USER_PROPOSED",
+      "selected": "A",
+      "reason": "ユーザー本人による初回候補の明示指定。個別の選択理由は未共有",
+      "approvedBy": null,
+      "approvedAt": null,
+      "candidates": [
+        {
+          "id": "A",
+          "name": "3x3+登場",
+          "figmaNode": "https://www.figma.com/design/afaB1eVmV6uOnDZR40t0Kr?node-id=3-54"
+        },
+        {
+          "id": "B",
+          "name": "9人横帯+中央大キャラ",
+          "figmaNode": "https://www.figma.com/design/afaB1eVmV6uOnDZR40t0Kr?node-id=3-222"
+        },
+        {
+          "id": "C",
+          "name": "仲間の記録",
+          "figmaNode": "https://www.figma.com/design/afaB1eVmV6uOnDZR40t0Kr?node-id=3-391"
+        }
+      ],
+      "selectionScope": "初回の画面・美術方向性。細部の最終決定・素材採用・実装許可ではない",
+      "requestedBy": "user",
+      "selectedAt": "2026-11-24",
+      "assistantHypothesis": "9体を比較しながら選択中キャラを大きく見せる（ミオの解釈。本人の理由は未確認）"
+    },
+    {
+      "id": "BATTLE",
+      "title": "戦闘画面",
+      "status": "USER_PROPOSED",
+      "selected": "A",
+      "reason": "ユーザー本人による初回候補の明示指定。個別の選択理由は未共有",
+      "approvedBy": null,
+      "approvedAt": null,
+      "candidates": [
+        {
+          "id": "A",
+          "name": "舞台",
+          "figmaNode": "https://www.figma.com/design/afaB1eVmV6uOnDZR40t0Kr?node-id=3-54"
+        },
+        {
+          "id": "B",
+          "name": "競技フィールド",
+          "figmaNode": "https://www.figma.com/design/afaB1eVmV6uOnDZR40t0Kr?node-id=3-222"
+        },
+        {
+          "id": "C",
+          "name": "風景の中の戦闘",
+          "figmaNode": "https://www.figma.com/design/afaB1eVmV6uOnDZR40t0Kr?node-id=3-391"
+        }
+      ],
+      "selectionScope": "初回の画面・美術方向性。細部の最終決定・素材採用・実装許可ではない",
+      "requestedBy": "user",
+      "selectedAt": "2026-11-24",
+      "assistantHypothesis": "キャラクターと打撃を舞台の主役にする（ミオの解釈。本人の理由は未確認）"
+    },
+    {
+      "id": "BATTLE-SUB",
+      "title": "B全体×A戦闘の構図・HUDと6操作の位置",
+      "status": "PENDING",
+      "selected": null,
+      "reason": "比較候補の段階。単体構図も各部品もナギ未選択",
+      "approvedBy": null,
+      "approvedAt": null,
+      "candidates": [
+        {
+          "id": "BA-01",
+          "name": "舞台を広く/扇型+HUD01（組合せ例）",
+          "figmaNode": "https://www.figma.com/design/afaB1eVmV6uOnDZR40t0Kr?node-id=23-170"
+        },
+        {
+          "id": "BA-02",
+          "name": "競技情報を鋭く/3×2+HUD02（組合せ例）",
+          "figmaNode": "https://www.figma.com/design/afaB1eVmV6uOnDZR40t0Kr?node-id=23-170"
+        },
+        {
+          "id": "BA-03",
+          "name": "大技の差別化/4+2+HUD03（組合せ例）",
+          "figmaNode": "https://www.figma.com/design/afaB1eVmV6uOnDZR40t0Kr?node-id=23-170"
+        }
+      ]
+    },
+    {
+      "id": "PRACTICE",
+      "title": "プラクティス",
+      "status": "PENDING",
+      "selected": null,
+      "reason": "",
+      "approvedBy": null,
+      "approvedAt": null,
+      "candidates": [
+        {
+          "id": "A",
+          "name": "道場の稽古",
+          "figmaNode": null
+        },
+        {
+          "id": "B",
+          "name": "測定室",
+          "figmaNode": null
+        },
+        {
+          "id": "C",
+          "name": "稽古帖",
+          "figmaNode": null
+        }
+      ]
+    },
+    {
+      "id": "ARCADE",
+      "title": "8戦進行",
+      "status": "PENDING",
+      "selected": null,
+      "reason": "",
+      "approvedBy": null,
+      "approvedAt": null,
+      "candidates": [
+        {
+          "id": "A",
+          "name": "大会表",
+          "figmaNode": null
+        },
+        {
+          "id": "B",
+          "name": "勝ち抜き階段",
+          "figmaNode": null
+        },
+        {
+          "id": "C",
+          "name": "物語の対面",
+          "figmaNode": null
+        }
+      ]
+    },
+    {
+      "id": "SURVIVAL",
+      "title": "生存進行",
+      "status": "PENDING",
+      "selected": null,
+      "reason": "",
+      "approvedBy": null,
+      "approvedAt": null,
+      "candidates": [
+        {
+          "id": "A",
+          "name": "連勝炎",
+          "figmaNode": null
+        },
+        {
+          "id": "B",
+          "name": "残HP集中",
+          "figmaNode": null
+        },
+        {
+          "id": "C",
+          "name": "山の道程",
+          "figmaNode": null
+        }
+      ]
+    },
+    {
+      "id": "CREATOR",
+      "title": "キャラクリ",
+      "status": "PENDING",
+      "selected": null,
+      "reason": "",
+      "approvedBy": null,
+      "approvedAt": null,
+      "candidates": [
+        {
+          "id": "A",
+          "name": "中央舞台+工具",
+          "figmaNode": "https://www.figma.com/design/afaB1eVmV6uOnDZR40t0Kr?node-id=3-54"
+        },
+        {
+          "id": "B",
+          "name": "3D+右インスペクタ",
+          "figmaNode": "https://www.figma.com/design/afaB1eVmV6uOnDZR40t0Kr?node-id=3-222"
+        },
+        {
+          "id": "C",
+          "name": "集落の工房",
+          "figmaNode": "https://www.figma.com/design/afaB1eVmV6uOnDZR40t0Kr?node-id=3-391"
+        }
+      ]
+    },
+    {
+      "id": "EXPLORE",
+      "title": "探索とNPC",
+      "status": "PENDING",
+      "selected": null,
+      "reason": "",
+      "approvedBy": null,
+      "approvedAt": null,
+      "candidates": [
+        {
+          "id": "A",
+          "name": "自然出現案内",
+          "figmaNode": "https://www.figma.com/design/afaB1eVmV6uOnDZR40t0Kr?node-id=3-54"
+        },
+        {
+          "id": "B",
+          "name": "方角+コンテクスト",
+          "figmaNode": "https://www.figma.com/design/afaB1eVmV6uOnDZR40t0Kr?node-id=3-222"
+        },
+        {
+          "id": "C",
+          "name": "村の看板",
+          "figmaNode": "https://www.figma.com/design/afaB1eVmV6uOnDZR40t0Kr?node-id=3-391"
+        }
+      ]
+    },
+    {
+      "id": "RESULT",
+      "title": "勝敗結果",
+      "status": "PENDING",
+      "selected": null,
+      "reason": "",
+      "approvedBy": null,
+      "approvedAt": null,
+      "candidates": [
+        {
+          "id": "A",
+          "name": "キャラ登場+大字",
+          "figmaNode": "https://www.figma.com/design/afaB1eVmV6uOnDZR40t0Kr?node-id=3-54"
+        },
+        {
+          "id": "B",
+          "name": "競技結果",
+          "figmaNode": "https://www.figma.com/design/afaB1eVmV6uOnDZR40t0Kr?node-id=3-222"
+        },
+        {
+          "id": "C",
+          "name": "勝利の記録",
+          "figmaNode": "https://www.figma.com/design/afaB1eVmV6uOnDZR40t0Kr?node-id=3-391"
+        }
+      ]
+    },
+    {
+      "id": "SET",
+      "title": "設定パネル",
+      "status": "PENDING",
+      "selected": null,
+      "reason": "",
+      "approvedBy": null,
+      "approvedAt": null,
+      "candidates": [
+        {
+          "id": "A",
+          "name": "中央シート",
+          "figmaNode": null
+        },
+        {
+          "id": "B",
+          "name": "右パネル",
+          "figmaNode": null
+        },
+        {
+          "id": "C",
+          "name": "道具の展開",
+          "figmaNode": null
+        }
+      ]
+    },
+    {
+      "id": "NAV",
+      "title": "モード移動",
+      "status": "PENDING",
+      "selected": null,
+      "reason": "",
+      "approvedBy": null,
+      "approvedAt": null,
+      "candidates": [
+        {
+          "id": "A",
+          "name": "舞台切替",
+          "figmaNode": null
+        },
+        {
+          "id": "B",
+          "name": "横タブ",
+          "figmaNode": null
+        },
+        {
+          "id": "C",
+          "name": "場所へ移動",
+          "figmaNode": null
+        }
+      ]
+    },
+    {
+      "id": "BTN",
+      "title": "主ボタン",
+      "status": "PENDING",
+      "selected": null,
+      "reason": "",
+      "approvedBy": null,
+      "approvedAt": null,
+      "candidates": [
+        {
+          "id": "A",
+          "name": "押し込みプレート",
+          "figmaNode": null
+        },
+        {
+          "id": "B",
+          "name": "競技矩形",
+          "figmaNode": null
+        },
+        {
+          "id": "C",
+          "name": "木札・紙",
+          "figmaNode": null
+        }
+      ]
+    },
+    {
+      "id": "BACK",
+      "title": "戻る",
+      "status": "PENDING",
+      "selected": null,
+      "reason": "",
+      "approvedBy": null,
+      "approvedAt": null,
+      "candidates": [
+        {
+          "id": "01",
+          "name": "左端固定",
+          "figmaNode": null
+        },
+        {
+          "id": "02",
+          "name": "下部固定",
+          "figmaNode": null
+        },
+        {
+          "id": "03",
+          "name": "入力対応ヘルプ一体",
+          "figmaNode": null
+        }
+      ]
+    },
+    {
+      "id": "SKIP",
+      "title": "スキップ",
+      "status": "PENDING",
+      "selected": null,
+      "reason": "",
+      "approvedBy": null,
+      "approvedAt": null,
+      "candidates": [
+        {
+          "id": "01",
+          "name": "単発タップ",
+          "figmaNode": null
+        },
+        {
+          "id": "02",
+          "name": "長押し",
+          "figmaNode": null
+        }
+      ]
+    },
+    {
+      "id": "ACT",
+      "title": "6攻撃ボタン",
+      "status": "USER_PROPOSED",
+      "selected": "D",
+      "reason": "必殺技を大きく芯より右、ギュイーンは約1/4の弧、弱は必殺の約1/3・強は弱より大きく上、掴み/奥義はGCコンX/Yから操作感の発想を得る。",
+      "approvedBy": null,
+      "approvedAt": null,
+      "candidates": [
+        {
+          "id": "A",
+          "name": "親指の弧",
+          "figmaNode": null
+        },
+        {
+          "id": "B",
+          "name": "3x2競技パッド",
+          "figmaNode": null
+        },
+        {
+          "id": "C",
+          "name": "通常4+大技2",
+          "figmaNode": null
+        },
+        {
+          "id": "D",
+          "name": "必殺が右の大核、ギュイーンが左下の1/4弧、弱→掴み→奥義の弧、強は弱の上"
+        }
+      ],
+      "selectionScope": "本人が明言した構造・動作。個別の細部グラフィックや実機での最終採用とは別",
+      "selectedAt": "2026-11-24",
+      "requestedBy": "user"
+    },
+    {
+      "id": "JOY",
+      "title": "左スティック",
+      "status": "PENDING",
+      "selected": null,
+      "reason": "",
+      "approvedBy": null,
+      "approvedAt": null,
+      "candidates": [
+        {
+          "id": "A",
+          "name": "輪郭円",
+          "figmaNode": null
+        },
+        {
+          "id": "B",
+          "name": "外周ガイド",
+          "figmaNode": null
+        },
+        {
+          "id": "C",
+          "name": "触る時に表示",
+          "figmaNode": null
+        }
+      ]
+    },
+    {
+      "id": "STEP",
+      "title": "前後ステップ",
+      "status": "PENDING",
+      "selected": null,
+      "reason": "",
+      "approvedBy": null,
+      "approvedAt": null,
+      "candidates": [
+        {
+          "id": "A",
+          "name": "スティック下2連",
+          "figmaNode": null
+        },
+        {
+          "id": "B",
+          "name": "スティック横2連",
+          "figmaNode": null
+        },
+        {
+          "id": "C",
+          "name": "枠一体",
+          "figmaNode": null
+        }
+      ]
+    },
+    {
+      "id": "HP",
+      "title": "HPゲージ",
+      "status": "USER_PROPOSED",
+      "selected": "01",
+      "reason": "長い競技バーを希望。装飾・最終配色・減少エフェクトは未決定。",
+      "approvedBy": null,
+      "approvedAt": null,
+      "candidates": [
+        {
+          "id": "01",
+          "name": "長い帯",
+          "figmaNode": null
+        },
+        {
+          "id": "02",
+          "name": "拳リボン",
+          "figmaNode": null
+        },
+        {
+          "id": "03",
+          "name": "木札の帯",
+          "figmaNode": null
+        }
+      ],
+      "selectionScope": "本人が明言した構造・動作。個別の細部グラフィックや実機での最終採用とは別",
+      "selectedAt": "2026-11-24",
+      "requestedBy": "user"
+    },
+    {
+      "id": "HP-TEXT",
+      "title": "HP数値",
+      "status": "PENDING",
+      "selected": null,
+      "reason": "",
+      "approvedBy": null,
+      "approvedAt": null,
+      "candidates": [
+        {
+          "id": "01",
+          "name": "常時",
+          "figmaNode": null
+        },
+        {
+          "id": "02",
+          "name": "必要時のみ",
+          "figmaNode": null
+        }
+      ]
+    },
+    {
+      "id": "DRIVE",
+      "title": "Driveゲージ",
+      "status": "USER_PROPOSED",
+      "selected": "02",
+      "reason": "分割ゲージを希望。内部のリソースは既存コード正本のまま変更しない。",
+      "approvedBy": null,
+      "approvedAt": null,
+      "candidates": [
+        {
+          "id": "01",
+          "name": "連続帯",
+          "figmaNode": null
+        },
+        {
+          "id": "02",
+          "name": "セグメント",
+          "figmaNode": null
+        },
+        {
+          "id": "03",
+          "name": "アイコン付き",
+          "figmaNode": null
+        }
+      ],
+      "selectionScope": "本人が明言した構造・動作。個別の細部グラフィックや実機での最終採用とは別",
+      "selectedAt": "2026-11-24",
+      "requestedBy": "user"
+    },
+    {
+      "id": "ULT",
+      "title": "奥義ゲージ",
+      "status": "USER_PROPOSED",
+      "selected": "04",
+      "reason": "分割ゲージを希望し、満タンでゲージ先端が燃え、奥義ボタンも色が変わる。炎の形/色/時間は未決定。",
+      "approvedBy": null,
+      "approvedAt": null,
+      "candidates": [
+        {
+          "id": "01",
+          "name": "二段バー",
+          "figmaNode": null
+        },
+        {
+          "id": "02",
+          "name": "円環",
+          "figmaNode": null
+        },
+        {
+          "id": "03",
+          "name": "拳印ストック",
+          "figmaNode": null
+        },
+        {
+          "id": "04",
+          "name": "分割ゲージ＋満タン時に先端が燃える＋奥義ボタン変色"
+        }
+      ],
+      "selectionScope": "本人が明言した構造・動作。個別の細部グラフィックや実機での最終採用とは別",
+      "selectedAt": "2026-11-24",
+      "requestedBy": "user"
+    },
+    {
+      "id": "TIME",
+      "title": "タイマーとラウンド",
+      "status": "PENDING",
+      "selected": null,
+      "reason": "",
+      "approvedBy": null,
+      "approvedAt": null,
+      "candidates": [
+        {
+          "id": "01",
+          "name": "中央数字",
+          "figmaNode": null
+        },
+        {
+          "id": "02",
+          "name": "競技ボード",
+          "figmaNode": null
+        },
+        {
+          "id": "03",
+          "name": "山の時計",
+          "figmaNode": null
+        }
+      ]
+    },
+    {
+      "id": "TRAIT",
+      "title": "固有能力",
+      "status": "PENDING",
+      "selected": null,
+      "reason": "",
+      "approvedBy": null,
+      "approvedAt": null,
+      "candidates": [
+        {
+          "id": "01",
+          "name": "HUD小レーン",
+          "figmaNode": null
+        },
+        {
+          "id": "02",
+          "name": "キャラ近接",
+          "figmaNode": null
+        },
+        {
+          "id": "03",
+          "name": "チャージピップ",
+          "figmaNode": null
+        }
+      ]
+    },
+    {
+      "id": "MOTION",
+      "title": "動作の文法",
+      "status": "PENDING",
+      "selected": null,
+      "reason": "",
+      "approvedBy": null,
+      "approvedAt": null,
+      "candidates": [
+        {
+          "id": "A",
+          "name": "打撃の緩急",
+          "figmaNode": null
+        },
+        {
+          "id": "B",
+          "name": "精密なカット",
+          "figmaNode": null
+        },
+        {
+          "id": "C",
+          "name": "自然素材の動き",
+          "figmaNode": null
+        }
+      ]
+    },
+    {
+      "id": "SE",
+      "title": "サウンドの文法",
+      "status": "PENDING",
+      "selected": null,
+      "reason": "",
+      "approvedBy": null,
+      "approvedAt": null,
+      "candidates": [
+        {
+          "id": "A",
+          "name": "山の大会",
+          "figmaNode": null
+        },
+        {
+          "id": "B",
+          "name": "競技の機敏さ",
+          "figmaNode": null
+        },
+        {
+          "id": "C",
+          "name": "村の手触り",
+          "figmaNode": null
+        }
+      ]
+    },
+    {
+      "id": "TALK",
+      "title": "NPCと話す",
+      "status": "PENDING",
+      "selected": null,
+      "reason": "",
+      "approvedBy": null,
+      "approvedAt": null,
+      "candidates": [
+        {
+          "id": "A",
+          "name": "近づくと表示",
+          "figmaNode": null
+        },
+        {
+          "id": "B",
+          "name": "視点中央",
+          "figmaNode": null
+        },
+        {
+          "id": "C",
+          "name": "NPC上の行動目印",
+          "figmaNode": null
+        }
+      ]
+    },
+    {
+      "id": "HUD-ORDER",
+      "title": "三段ゲージの並び",
+      "status": "USER_PROPOSED",
+      "selected": "HP-ULT-DRIVE",
+      "reason": "本人がHP・奥義・Driveを並べると指定。",
+      "selectedAt": "2026-11-24",
+      "requestedBy": "user",
+      "approvedBy": null,
+      "approvedAt": null,
+      "candidates": [
+        {
+          "id": "HP-ULT-DRIVE",
+          "name": "HP→奥義→Drive"
+        },
+        {
+          "id": "ALTERNATE",
+          "name": "未提案"
+        }
+      ]
+    },
+    {
+      "id": "EYE-PORTRAIT",
+      "title": "ゲージの目アップ",
+      "status": "USER_PROPOSED",
+      "selected": "OUTER-MIRROR",
+      "reason": "本人の明確な訂正：右側のキャラの目は右に置くべき。左右外端の鏡像配置。個別のグラフィックは未採用。",
+      "selectedAt": "2026-11-24",
+      "requestedBy": "user",
+      "approvedBy": null,
+      "approvedAt": null,
+      "candidates": [
+        {
+          "id": "TOP-LEFT",
+          "name": "HPゲージの左上に対応キャラの目の画像",
+          "deprecated": true
+        },
+        {
+          "id": "NONE",
+          "name": "画像なし"
+        },
+        {
+          "id": "OUTER-MIRROR",
+          "name": "1Pは左外端、CPUは右外端。HPゲージと対応する目アップ",
+          "figmaNode": null
+        }
+      ]
+    },
+    {
+      "id": "CAMERA-CHASE",
+      "title": "戦闘カメラ追従",
+      "status": "USER_PROPOSED",
+      "selected": "MIDPOINT-LAG",
+      "reason": "本人指定：キャラを中央に追うが少しラグを残す。追従量と制限値は未決定。",
+      "selectedAt": "2026-11-24",
+      "requestedBy": "user",
+      "approvedBy": null,
+      "approvedAt": null,
+      "candidates": [
+        {
+          "id": "MIDPOINT-LAG",
+          "name": "両キャラの攻防中心を少し遅れて追う"
+        },
+        {
+          "id": "DIRECT",
+          "name": "遅延なし"
+        }
+      ]
+    },
+    {
+      "id": "STAGE-FULLBLEED",
+      "title": "ステージと操作UIの層",
+      "status": "USER_PROPOSED",
+      "selected": "FULLBLEED",
+      "reason": "本人指定：画面いっぱいが対戦空間で、ボタンの背後にもステージが見える。",
+      "selectedAt": "2026-11-24",
+      "requestedBy": "user",
+      "approvedBy": null,
+      "approvedAt": null,
+      "candidates": [
+        {
+          "id": "FULLBLEED",
+          "name": "画面全体にステージが続く・ボタン下にも見える"
+        },
+        {
+          "id": "LETTERBOX",
+          "name": "左右UI専用枠"
+        }
+      ]
+    },
+    {
+      "id": "CHAR-BUTTON-OVERLAP",
+      "title": "キャラと操作の重なり",
+      "status": "USER_PROPOSED",
+      "selected": "NO-OVERLAP",
+      "reason": "本人指定：キャラとボタンは被らない。カメラ/ズーム/配置で達成し、単なる透明化で済ませない。",
+      "selectedAt": "2026-11-24",
+      "requestedBy": "user",
+      "approvedBy": null,
+      "approvedAt": null,
+      "candidates": [
+        {
+          "id": "NO-OVERLAP",
+          "name": "キャラクターや重要な攻防を操作部品が隠さない"
+        },
+        {
+          "id": "ALLOW",
+          "name": "重なりを許す"
+        }
+      ]
+    },
+    {
+      "id": "ACT-D-FORM",
+      "title": "独自6攻撃ACT-Dの詳細配置",
+      "status": "PENDING",
+      "selected": null,
+      "reason": "本人は最新のSVG/後発修正版より、先に表示された画像生成ラフを好むと明言。RELAYOUT-01を採用候補として推さず、前の画像を今後の比較起点として扱う。ただし元の画像生成ラフはGitHubに素材保存未済、配置の正式採否も未確認。",
+      "selectedAt": "2026-11-24",
+      "requestedBy": null,
+      "approvedBy": null,
+      "approvedAt": null,
+      "candidates": [
+        {
+          "id": "D1",
+          "name": "安定した浅い弧・必殺直径80",
+          "comparisonStatus": "INVALIDATED_BY_USER_FEEDBACK",
+          "deprecated": true
+        },
+        {
+          "id": "D2",
+          "name": "弧強調・必殺直径90",
+          "comparisonStatus": "INVALIDATED_BY_USER_FEEDBACK",
+          "deprecated": true
+        },
+        {
+          "id": "D3",
+          "name": "必殺主役・必殺直径98",
+          "comparisonStatus": "INVALIDATED_BY_USER_FEEDBACK",
+          "deprecated": true
+        },
+        {
+          "id": "D-BASE-R1",
+          "name": "指定を反映した基準1案：必殺を中心とする約82°の丸端弧、掴みと奥義は斜め楕円",
+          "comparisonStatus": "BASELINE_ONLY",
+          "approved": false
+        },
+        {
+          "id": "RELAYOUT-01",
+          "name": "Claude原画を基準に右寄せ：必殺/強/弱の寸法維持、奥義・ギュイーンは必殺右端以内、掴み/奥義を同一の湾曲形へ",
+          "figmaNode": null,
+          "source": "docs/ui-bible/18_actd_relayout.md",
+          "status": "CANDIDATE_PENDING_VISUAL_REVIEW",
+          "deprecated": true,
+          "comparisonStatus": "REJECTED_BY_USER_PREFERENCE"
+        }
+      ],
+      "selectionScope": "構造要求の反映。形状案/ヒット領域/ゲーム実装の最終確定ではない",
+      "assistantHypothesis": "先の画像生成版の造形・全体のまとまりを維持し、修正はその画像を基準に行う。"
+    },
+    {
+      "id": "HUD-G",
+      "title": "HP/奥義/Driveのグラフィック細部",
+      "status": "PENDING",
+      "selected": null,
+      "reason": "本人が現行3案を『誤差すぎる、比較するほどでもない』と指摘。旧試作の差分は比較不適格で、最終採用しない。意味のある新しい対比ができるまで保留。",
+      "selectedAt": null,
+      "requestedBy": null,
+      "approvedBy": null,
+      "approvedAt": null,
+      "candidates": [
+        {
+          "id": "G1",
+          "name": "3本直線・競技優先",
+          "comparisonStatus": "INVALIDATED_BY_USER_FEEDBACK",
+          "deprecated": true
+        },
+        {
+          "id": "G2",
+          "name": "奥義強め・舞台の切れ味",
+          "comparisonStatus": "INVALIDATED_BY_USER_FEEDBACK",
+          "deprecated": true
+        },
+        {
+          "id": "G3",
+          "name": "各資源の造形差",
+          "comparisonStatus": "INVALIDATED_BY_USER_FEEDBACK",
+          "deprecated": true
+        }
+      ]
+    },
+    {
+      "id": "LAYOUT-F",
+      "title": "852×393画面と追従ラグ",
+      "status": "PENDING",
+      "selected": null,
+      "reason": "本人が現行3案を『誤差すぎる、比較するほどでもない』と指摘。旧試作の差分は比較不適格で、最終採用しない。意味のある新しい対比ができるまで保留。",
+      "selectedAt": null,
+      "requestedBy": null,
+      "approvedBy": null,
+      "approvedAt": null,
+      "candidates": [
+        {
+          "id": "F1",
+          "name": "安全な全景・追従時定数190ms仮",
+          "comparisonStatus": "INVALIDATED_BY_USER_FEEDBACK",
+          "deprecated": true
+        },
+        {
+          "id": "F2",
+          "name": "全画面ステージ・追従時定数250ms仮",
+          "comparisonStatus": "INVALIDATED_BY_USER_FEEDBACK",
+          "deprecated": true
+        },
+        {
+          "id": "F3",
+          "name": "攻防追従強め・時定数145ms仮",
+          "comparisonStatus": "INVALIDATED_BY_USER_FEEDBACK",
+          "deprecated": true
+        }
+      ]
+    },
+    {
+      "id": "GRAPHIC-SKIN",
+      "title": "仕上げの文字/装飾/素材/絵の調整",
+      "status": "PENDING",
+      "selected": null,
+      "reason": "ユーザー本人の明言：他の画面を含むグラフィックデザインは再検討。現時点では採用しない。",
+      "selectedAt": null,
+      "requestedBy": null,
+      "approvedBy": null,
+      "approvedAt": null,
+      "candidates": [
+        {
+          "id": "PENDING-ART",
+          "name": "選択画面など全体を含め、グラフィックデザインは改めて決める"
+        }
+      ]
+    }
+  ],
+  "lastUpdatedAt": "2026-11-24",
+  "selectionRule": "USER_PROPOSEDは初期方向の選択。本人の確定採用/実装承認とは異なる。ほかはPENDINGのまま。"
+}
