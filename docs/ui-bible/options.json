@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "0.1.0",
+  "schemaVersion": "0.2.0",
   "createdAt": "2026-11-24",
   "source": "docs/ui-bible",
   "figma": "https://www.figma.com/design/afaB1eVmV6uOnDZR40t0Kr",
@@ -9,9 +9,9 @@
     {
       "id": "AD-00",
       "title": "全体の表現",
-      "status": "PENDING",
-      "selected": null,
-      "reason": "",
+      "status": "USER_PROPOSED",
+      "selected": "B",
+      "reason": "ユーザー本人による初回候補の明示指定。個別の選択理由は未共有",
       "approvedBy": null,
       "approvedAt": null,
       "candidates": [
@@ -35,14 +35,18 @@
           "name": "共通文法で混成",
           "figmaNode": null
         }
-      ]
+      ],
+      "selectionScope": "初回の画面・美術方向性。細部の最終決定・素材採用・実装許可ではない",
+      "requestedBy": "user",
+      "selectedAt": "2026-11-24",
+      "assistantHypothesis": "競技性と情報の読みやすさを全体の基準に置く（ミオの解釈。本人の理由は未確認）"
     },
     {
       "id": "MENU",
       "title": "モード選択",
-      "status": "PENDING",
-      "selected": null,
-      "reason": "",
+      "status": "USER_PROPOSED",
+      "selected": "B",
+      "reason": "ユーザー本人による初回候補の明示指定。個別の選択理由は未共有",
       "approvedBy": null,
       "approvedAt": null,
       "candidates": [
@@ -61,14 +65,18 @@
           "name": "山の地図",
           "figmaNode": "https://www.figma.com/design/afaB1eVmV6uOnDZR40t0Kr?node-id=3-391"
         }
-      ]
+      ],
+      "selectionScope": "初回の画面・美術方向性。細部の最終決定・素材採用・実装許可ではない",
+      "requestedBy": "user",
+      "selectedAt": "2026-11-24",
+      "assistantHypothesis": "素早く5モードを選べる大ステージ＋下部切替にする（ミオの解釈。本人の理由は未確認）"
     },
     {
       "id": "SELECT",
       "title": "9体キャラ選択",
-      "status": "PENDING",
-      "selected": null,
-      "reason": "",
+      "status": "USER_PROPOSED",
+      "selected": "A",
+      "reason": "ユーザー本人による初回候補の明示指定。個別の選択理由は未共有",
       "approvedBy": null,
       "approvedAt": null,
       "candidates": [
@@ -87,14 +95,18 @@
           "name": "仲間の記録",
           "figmaNode": "https://www.figma.com/design/afaB1eVmV6uOnDZR40t0Kr?node-id=3-391"
         }
-      ]
+      ],
+      "selectionScope": "初回の画面・美術方向性。細部の最終決定・素材採用・実装許可ではない",
+      "requestedBy": "user",
+      "selectedAt": "2026-11-24",
+      "assistantHypothesis": "9体を比較しながら選択中キャラを大きく見せる（ミオの解釈。本人の理由は未確認）"
     },
     {
       "id": "BATTLE",
       "title": "戦闘画面",
-      "status": "PENDING",
-      "selected": null,
-      "reason": "",
+      "status": "USER_PROPOSED",
+      "selected": "A",
+      "reason": "ユーザー本人による初回候補の明示指定。個別の選択理由は未共有",
       "approvedBy": null,
       "approvedAt": null,
       "candidates": [
@@ -113,7 +125,11 @@
           "name": "風景の中の戦闘",
           "figmaNode": "https://www.figma.com/design/afaB1eVmV6uOnDZR40t0Kr?node-id=3-391"
         }
-      ]
+      ],
+      "selectionScope": "初回の画面・美術方向性。細部の最終決定・素材採用・実装許可ではない",
+      "requestedBy": "user",
+      "selectedAt": "2026-11-24",
+      "assistantHypothesis": "キャラクターと打撃を舞台の主役にする（ミオの解釈。本人の理由は未確認）"
     },
     {
       "id": "PRACTICE",
@@ -703,5 +719,7 @@
         }
       ]
     }
-  ]
+  ],
+  "lastUpdatedAt": "2026-11-24",
+  "selectionRule": "USER_PROPOSEDは初期方向の選択。本人の確定採用/実装承認とは異なる。ほかはPENDINGのまま。"
 }
