@@ -1,6 +1,6 @@
 # 15｜Anything Frontend Art Direction をマモ拳へ適用する方法
 
-> 調査日：2026-11-24。外部の手法は**検討・評価の道具**として使い、ゲームUIのデザインやコードを自動変更するものではない。
+> 調査日：2026-11-24。参照時点のコミット Art Direction `046e42c7de149373993109cf4a211a577b1c3bcc` / Product Design `af656d5fafc982daabcbccffe5a331802977f492` / Motion Atlas `8cff76041b06a30d7f4b4b9f79979b8e30512f60`。外部の手法は**検討・評価の道具**として使い、ゲームUIのデザインやコードを自動変更するものではない。
 > 一次資料： [Anything Frontend Art Direction](https://github.com/RNA4219/anything-frontend-art-direction) / [SKILL.md](https://github.com/RNA4219/anything-frontend-art-direction/blob/main/SKILL.md)。関連：[Product Design](https://github.com/RNA4219/anything-frontend-product-design/blob/main/SKILL.md) / [Motion Atlas](https://github.com/RNA4219/motion-atlas/blob/main/SKILL.md)。
 
 ## 1. このスキルから確認できた内容と限界
