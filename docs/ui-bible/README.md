@@ -1,5 +1,5 @@
-# マモ拳 UI設計バイブル | v0.2 / 初回方向選択と詳細比較
-> 作成日 2026-11-24／原案：ミオ。**初回方向 B/B/A/A は本人選択。細部候補・Figma完成稿・ゲーム実装は未承認。**
+# マモ拳 UI設計バイブル | v0.3 / ACT-D・分割3ゲージ・全画面カメラの構図検証
+> 作成日 2026-11-24／原案：ミオ。**B/B/A/AとACT-D・ゲージ構成・カメラ等は本人指定。形状の細部、仕上げ、ゲーム実装は未承認。**
 > 実行基準：P0〜P4改良 Draft PR #225（gameplay SHA 9ee89efafa76cb3ad80fbff46c7f56a1261baa48）。Issue #227 は全画面再設計の親課題。
 >
 > Figma： https://www.figma.com/design/afaB1eVmV6uOnDZR40t0Kr
@@ -28,7 +28,10 @@
 | [10 実装契約](10_implementation.md) | Figma→Claude/Codex/Workへの安全な引継ぎ・版管理 | 初稿 |
 | [13 初回方向 B/B/A/A](13_selected_direction.md) | 競技B×舞台Aの統合規則とBA-01/02/03 | 本人選択4件＋構図保留 |
 | [14 6操作・3ゲージの詳細比較](14_controls_hud_variants.md) | 6ボタンごとの機能/状態、HP/Drive/奥義3案ずつ | 選択待ち |
-| [options.json](options.json) | マシン可読な候補IDと状態 | 4方向選択・その他保留 |
+| [15 Art Directionの方法](15_art_direction_method.md) | GitHub外部スキルの一次資料とProduct/Motion併用、採否のループ | 実参照済み |
+| [16 ACT-D×三段ゲージ×画面追従](16_combat_ui_blueprints.md) | 852×393の座標・操作形状・炎・カメラ式・未検証を明示 | 3×3×3の独立比較試作 |
+| [HTML操作可能なラボ](prototypes/actd-hud-layout-lab.html) | 独立したSVG/CSS/JSでD1〜3/G1〜3/F1〜3を試す | ブラウザ試作、ゲーム未接続 |
+| [options.json](options.json) | マシン可読な候補IDと状態 | 13件本人指定、24件保留 |
 
 ## 今回つくったFigmaについて
 - 3方向×6場面＝**18枚の編集可能なラフ構図**と、3方向×3状態の操作ボタン＋HP/資源ゲージの編集可能な試作コンポーネント。
@@ -38,7 +41,7 @@
 
 ## 最初に選んでほしいのはこの順
 **第1回（本人の方向選択済み）**：AD=B、MENU=B、SELECT=A、BATTLE=A。**未確定：**細部とゲームへの実装。
-**第2回（今回の比較対象）**：BATTLE-SUB（BA-01/02/03）、ACT（6攻撃）、HP/DRV/ULT（各ゲージ）。その他BTN/NAVは保留。
+**第2回（本人の構造指定済み）**：ACT-Dの弧型、HP-01、Drive-02、ULT-04、HP→奥義→Drive、目アップ、追従ラグ、全面舞台、非重なり。**第3回（現在の比較）**：ACT-D1/D2/D3、HUD-G1/G2/G3、LAYOUT-F1/F2/F3。その他BTN/NAVや完成グラフィックは保留。
 **第3回**：CRAFT（キャラクリ）、EXPLORE（探索）、PRACTICE（練習）、RUN（連戦）、RESULT（勝利）。
 **第4回**：MOTION/SE、アクセシビリティ、仕様の数値・比較実機。
 
