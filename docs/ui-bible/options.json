@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "0.5.0",
+  "schemaVersion": "0.5.1",
   "createdAt": "2026-11-24",
   "source": "docs/ui-bible",
   "figma": "https://www.figma.com/design/afaB1eVmV6uOnDZR40t0Kr",
@@ -879,9 +879,9 @@
     {
       "id": "ACT-D-FORM",
       "title": "独自6攻撃ACT-Dの詳細配置",
-      "status": "USER_PROPOSED",
-      "selected": "RELAYOUT-01",
-      "reason": "本人による位置とサイズの最新修正要求を一案として反映。可視化されたレイアウトは本人未承認。旧3案は採用対象外。",
+      "status": "PENDING",
+      "selected": null,
+      "reason": "本人は最新のSVG/後発修正版より、先に表示された画像生成ラフを好むと明言。RELAYOUT-01を採用候補として推さず、前の画像を今後の比較起点として扱う。ただし元の画像生成ラフはGitHubに素材保存未済、配置の正式採否も未確認。",
       "selectedAt": "2026-11-24",
       "requestedBy": null,
       "approvedBy": null,
@@ -916,10 +916,13 @@
           "name": "Claude原画を基準に右寄せ：必殺/強/弱の寸法維持、奥義・ギュイーンは必殺右端以内、掴み/奥義を同一の湾曲形へ",
           "figmaNode": null,
           "source": "docs/ui-bible/18_actd_relayout.md",
-          "status": "CANDIDATE_PENDING_VISUAL_REVIEW"
+          "status": "CANDIDATE_PENDING_VISUAL_REVIEW",
+          "deprecated": true,
+          "comparisonStatus": "REJECTED_BY_USER_PREFERENCE"
         }
       ],
-      "selectionScope": "構造要求の反映。形状案/ヒット領域/ゲーム実装の最終確定ではない"
+      "selectionScope": "構造要求の反映。形状案/ヒット領域/ゲーム実装の最終確定ではない",
+      "assistantHypothesis": "先の画像生成版の造形・全体のまとまりを維持し、修正はその画像を基準に行う。"
     },
     {
       "id": "HUD-G",
