@@ -1,6 +1,6 @@
 # 14｜6攻撃ボタン・HP／Drive／奥義の比較設計 v0.2
 
-> 2026-11-24。全体B/MENU-B/SELECT-A/BATTLE-Aという初回方向を前提とした**第二段階の未採用候補**。選択した方向を理由に、個々の操作ボタンやゲージを勝手に確定しない。
+> 2026-11-24の旧候補比較。**その後ナギ本人がACT-D・HP-01・Drive分割・奥義分割とREADY演出を具体指定したため、現在の構造正本は[16章](16_combat_ui_blueprints.md)**。この章のACT-A/B/Cなどは比較履歴として保管。
 >
 > Figma [戦闘レイアウト3案](https://www.figma.com/design/afaB1eVmV6uOnDZR40t0Kr?node-id=23-170)、[既存のボタン/HP/Drive試作](https://www.figma.com/design/afaB1eVmV6uOnDZR40t0Kr?node-id=2-2)。6操作3型×使用可否2状態、HUDセット3型の編集可能部品を追加。**ゲーム入力への接続は未実施**。
 
