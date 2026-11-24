@@ -1,0 +1,707 @@
+{
+  "schemaVersion": "0.1.0",
+  "createdAt": "2026-11-24",
+  "source": "docs/ui-bible",
+  "figma": "https://www.figma.com/design/afaB1eVmV6uOnDZR40t0Kr",
+  "gameplayBaseline": "9ee89efafa76cb3ad80fbff46c7f56a1261baa48",
+  "note": "全件PENDING。選択肢はモデルの提案であり本人の採用判断ではない。採用時は理由と日時、出典、再評価を追記する。",
+  "groups": [
+    {
+      "id": "AD-00",
+      "title": "全体の表現",
+      "status": "PENDING",
+      "selected": null,
+      "reason": "",
+      "approvedBy": null,
+      "approvedAt": null,
+      "candidates": [
+        {
+          "id": "A",
+          "name": "拳祭",
+          "figmaNode": "https://www.figma.com/design/afaB1eVmV6uOnDZR40t0Kr?node-id=3-54"
+        },
+        {
+          "id": "B",
+          "name": "山嶺",
+          "figmaNode": "https://www.figma.com/design/afaB1eVmV6uOnDZR40t0Kr?node-id=3-222"
+        },
+        {
+          "id": "C",
+          "name": "絵巻",
+          "figmaNode": "https://www.figma.com/design/afaB1eVmV6uOnDZR40t0Kr?node-id=3-391"
+        },
+        {
+          "id": "MIX",
+          "name": "共通文法で混成",
+          "figmaNode": null
+        }
+      ]
+    },
+    {
+      "id": "MENU",
+      "title": "モード選択",
+      "status": "PENDING",
+      "selected": null,
+      "reason": "",
+      "approvedBy": null,
+      "approvedAt": null,
+      "candidates": [
+        {
+          "id": "A",
+          "name": "舞台旗",
+          "figmaNode": "https://www.figma.com/design/afaB1eVmV6uOnDZR40t0Kr?node-id=3-54"
+        },
+        {
+          "id": "B",
+          "name": "大ステージ+下部5選択",
+          "figmaNode": "https://www.figma.com/design/afaB1eVmV6uOnDZR40t0Kr?node-id=3-222"
+        },
+        {
+          "id": "C",
+          "name": "山の地図",
+          "figmaNode": "https://www.figma.com/design/afaB1eVmV6uOnDZR40t0Kr?node-id=3-391"
+        }
+      ]
+    },
+    {
+      "id": "SELECT",
+      "title": "9体キャラ選択",
+      "status": "PENDING",
+      "selected": null,
+      "reason": "",
+      "approvedBy": null,
+      "approvedAt": null,
+      "candidates": [
+        {
+          "id": "A",
+          "name": "3x3+登場",
+          "figmaNode": "https://www.figma.com/design/afaB1eVmV6uOnDZR40t0Kr?node-id=3-54"
+        },
+        {
+          "id": "B",
+          "name": "9人横帯+中央大キャラ",
+          "figmaNode": "https://www.figma.com/design/afaB1eVmV6uOnDZR40t0Kr?node-id=3-222"
+        },
+        {
+          "id": "C",
+          "name": "仲間の記録",
+          "figmaNode": "https://www.figma.com/design/afaB1eVmV6uOnDZR40t0Kr?node-id=3-391"
+        }
+      ]
+    },
+    {
+      "id": "BATTLE",
+      "title": "戦闘画面",
+      "status": "PENDING",
+      "selected": null,
+      "reason": "",
+      "approvedBy": null,
+      "approvedAt": null,
+      "candidates": [
+        {
+          "id": "A",
+          "name": "舞台",
+          "figmaNode": "https://www.figma.com/design/afaB1eVmV6uOnDZR40t0Kr?node-id=3-54"
+        },
+        {
+          "id": "B",
+          "name": "競技フィールド",
+          "figmaNode": "https://www.figma.com/design/afaB1eVmV6uOnDZR40t0Kr?node-id=3-222"
+        },
+        {
+          "id": "C",
+          "name": "風景の中の戦闘",
+          "figmaNode": "https://www.figma.com/design/afaB1eVmV6uOnDZR40t0Kr?node-id=3-391"
+        }
+      ]
+    },
+    {
+      "id": "PRACTICE",
+      "title": "プラクティス",
+      "status": "PENDING",
+      "selected": null,
+      "reason": "",
+      "approvedBy": null,
+      "approvedAt": null,
+      "candidates": [
+        {
+          "id": "A",
+          "name": "道場の稽古",
+          "figmaNode": null
+        },
+        {
+          "id": "B",
+          "name": "測定室",
+          "figmaNode": null
+        },
+        {
+          "id": "C",
+          "name": "稽古帖",
+          "figmaNode": null
+        }
+      ]
+    },
+    {
+      "id": "ARCADE",
+      "title": "8戦進行",
+      "status": "PENDING",
+      "selected": null,
+      "reason": "",
+      "approvedBy": null,
+      "approvedAt": null,
+      "candidates": [
+        {
+          "id": "A",
+          "name": "大会表",
+          "figmaNode": null
+        },
+        {
+          "id": "B",
+          "name": "勝ち抜き階段",
+          "figmaNode": null
+        },
+        {
+          "id": "C",
+          "name": "物語の対面",
+          "figmaNode": null
+        }
+      ]
+    },
+    {
+      "id": "SURVIVAL",
+      "title": "生存進行",
+      "status": "PENDING",
+      "selected": null,
+      "reason": "",
+      "approvedBy": null,
+      "approvedAt": null,
+      "candidates": [
+        {
+          "id": "A",
+          "name": "連勝炎",
+          "figmaNode": null
+        },
+        {
+          "id": "B",
+          "name": "残HP集中",
+          "figmaNode": null
+        },
+        {
+          "id": "C",
+          "name": "山の道程",
+          "figmaNode": null
+        }
+      ]
+    },
+    {
+      "id": "CREATOR",
+      "title": "キャラクリ",
+      "status": "PENDING",
+      "selected": null,
+      "reason": "",
+      "approvedBy": null,
+      "approvedAt": null,
+      "candidates": [
+        {
+          "id": "A",
+          "name": "中央舞台+工具",
+          "figmaNode": "https://www.figma.com/design/afaB1eVmV6uOnDZR40t0Kr?node-id=3-54"
+        },
+        {
+          "id": "B",
+          "name": "3D+右インスペクタ",
+          "figmaNode": "https://www.figma.com/design/afaB1eVmV6uOnDZR40t0Kr?node-id=3-222"
+        },
+        {
+          "id": "C",
+          "name": "集落の工房",
+          "figmaNode": "https://www.figma.com/design/afaB1eVmV6uOnDZR40t0Kr?node-id=3-391"
+        }
+      ]
+    },
+    {
+      "id": "EXPLORE",
+      "title": "探索とNPC",
+      "status": "PENDING",
+      "selected": null,
+      "reason": "",
+      "approvedBy": null,
+      "approvedAt": null,
+      "candidates": [
+        {
+          "id": "A",
+          "name": "自然出現案内",
+          "figmaNode": "https://www.figma.com/design/afaB1eVmV6uOnDZR40t0Kr?node-id=3-54"
+        },
+        {
+          "id": "B",
+          "name": "方角+コンテクスト",
+          "figmaNode": "https://www.figma.com/design/afaB1eVmV6uOnDZR40t0Kr?node-id=3-222"
+        },
+        {
+          "id": "C",
+          "name": "村の看板",
+          "figmaNode": "https://www.figma.com/design/afaB1eVmV6uOnDZR40t0Kr?node-id=3-391"
+        }
+      ]
+    },
+    {
+      "id": "RESULT",
+      "title": "勝敗結果",
+      "status": "PENDING",
+      "selected": null,
+      "reason": "",
+      "approvedBy": null,
+      "approvedAt": null,
+      "candidates": [
+        {
+          "id": "A",
+          "name": "キャラ登場+大字",
+          "figmaNode": "https://www.figma.com/design/afaB1eVmV6uOnDZR40t0Kr?node-id=3-54"
+        },
+        {
+          "id": "B",
+          "name": "競技結果",
+          "figmaNode": "https://www.figma.com/design/afaB1eVmV6uOnDZR40t0Kr?node-id=3-222"
+        },
+        {
+          "id": "C",
+          "name": "勝利の記録",
+          "figmaNode": "https://www.figma.com/design/afaB1eVmV6uOnDZR40t0Kr?node-id=3-391"
+        }
+      ]
+    },
+    {
+      "id": "SET",
+      "title": "設定パネル",
+      "status": "PENDING",
+      "selected": null,
+      "reason": "",
+      "approvedBy": null,
+      "approvedAt": null,
+      "candidates": [
+        {
+          "id": "A",
+          "name": "中央シート",
+          "figmaNode": null
+        },
+        {
+          "id": "B",
+          "name": "右パネル",
+          "figmaNode": null
+        },
+        {
+          "id": "C",
+          "name": "道具の展開",
+          "figmaNode": null
+        }
+      ]
+    },
+    {
+      "id": "NAV",
+      "title": "モード移動",
+      "status": "PENDING",
+      "selected": null,
+      "reason": "",
+      "approvedBy": null,
+      "approvedAt": null,
+      "candidates": [
+        {
+          "id": "A",
+          "name": "舞台切替",
+          "figmaNode": null
+        },
+        {
+          "id": "B",
+          "name": "横タブ",
+          "figmaNode": null
+        },
+        {
+          "id": "C",
+          "name": "場所へ移動",
+          "figmaNode": null
+        }
+      ]
+    },
+    {
+      "id": "BTN",
+      "title": "主ボタン",
+      "status": "PENDING",
+      "selected": null,
+      "reason": "",
+      "approvedBy": null,
+      "approvedAt": null,
+      "candidates": [
+        {
+          "id": "A",
+          "name": "押し込みプレート",
+          "figmaNode": null
+        },
+        {
+          "id": "B",
+          "name": "競技矩形",
+          "figmaNode": null
+        },
+        {
+          "id": "C",
+          "name": "木札・紙",
+          "figmaNode": null
+        }
+      ]
+    },
+    {
+      "id": "BACK",
+      "title": "戻る",
+      "status": "PENDING",
+      "selected": null,
+      "reason": "",
+      "approvedBy": null,
+      "approvedAt": null,
+      "candidates": [
+        {
+          "id": "01",
+          "name": "左端固定",
+          "figmaNode": null
+        },
+        {
+          "id": "02",
+          "name": "下部固定",
+          "figmaNode": null
+        },
+        {
+          "id": "03",
+          "name": "入力対応ヘルプ一体",
+          "figmaNode": null
+        }
+      ]
+    },
+    {
+      "id": "SKIP",
+      "title": "スキップ",
+      "status": "PENDING",
+      "selected": null,
+      "reason": "",
+      "approvedBy": null,
+      "approvedAt": null,
+      "candidates": [
+        {
+          "id": "01",
+          "name": "単発タップ",
+          "figmaNode": null
+        },
+        {
+          "id": "02",
+          "name": "長押し",
+          "figmaNode": null
+        }
+      ]
+    },
+    {
+      "id": "ACT",
+      "title": "6攻撃ボタン",
+      "status": "PENDING",
+      "selected": null,
+      "reason": "",
+      "approvedBy": null,
+      "approvedAt": null,
+      "candidates": [
+        {
+          "id": "A",
+          "name": "親指の弧",
+          "figmaNode": null
+        },
+        {
+          "id": "B",
+          "name": "3x2競技パッド",
+          "figmaNode": null
+        },
+        {
+          "id": "C",
+          "name": "通常4+大技2",
+          "figmaNode": null
+        }
+      ]
+    },
+    {
+      "id": "JOY",
+      "title": "左スティック",
+      "status": "PENDING",
+      "selected": null,
+      "reason": "",
+      "approvedBy": null,
+      "approvedAt": null,
+      "candidates": [
+        {
+          "id": "A",
+          "name": "輪郭円",
+          "figmaNode": null
+        },
+        {
+          "id": "B",
+          "name": "外周ガイド",
+          "figmaNode": null
+        },
+        {
+          "id": "C",
+          "name": "触る時に表示",
+          "figmaNode": null
+        }
+      ]
+    },
+    {
+      "id": "STEP",
+      "title": "前後ステップ",
+      "status": "PENDING",
+      "selected": null,
+      "reason": "",
+      "approvedBy": null,
+      "approvedAt": null,
+      "candidates": [
+        {
+          "id": "A",
+          "name": "スティック下2連",
+          "figmaNode": null
+        },
+        {
+          "id": "B",
+          "name": "スティック横2連",
+          "figmaNode": null
+        },
+        {
+          "id": "C",
+          "name": "枠一体",
+          "figmaNode": null
+        }
+      ]
+    },
+    {
+      "id": "HP",
+      "title": "HPゲージ",
+      "status": "PENDING",
+      "selected": null,
+      "reason": "",
+      "approvedBy": null,
+      "approvedAt": null,
+      "candidates": [
+        {
+          "id": "01",
+          "name": "長い帯",
+          "figmaNode": null
+        },
+        {
+          "id": "02",
+          "name": "拳リボン",
+          "figmaNode": null
+        },
+        {
+          "id": "03",
+          "name": "木札の帯",
+          "figmaNode": null
+        }
+      ]
+    },
+    {
+      "id": "HP-TEXT",
+      "title": "HP数値",
+      "status": "PENDING",
+      "selected": null,
+      "reason": "",
+      "approvedBy": null,
+      "approvedAt": null,
+      "candidates": [
+        {
+          "id": "01",
+          "name": "常時",
+          "figmaNode": null
+        },
+        {
+          "id": "02",
+          "name": "必要時のみ",
+          "figmaNode": null
+        }
+      ]
+    },
+    {
+      "id": "DRIVE",
+      "title": "Driveゲージ",
+      "status": "PENDING",
+      "selected": null,
+      "reason": "",
+      "approvedBy": null,
+      "approvedAt": null,
+      "candidates": [
+        {
+          "id": "01",
+          "name": "連続帯",
+          "figmaNode": null
+        },
+        {
+          "id": "02",
+          "name": "セグメント",
+          "figmaNode": null
+        },
+        {
+          "id": "03",
+          "name": "アイコン付き",
+          "figmaNode": null
+        }
+      ]
+    },
+    {
+      "id": "ULT",
+      "title": "奥義ゲージ",
+      "status": "PENDING",
+      "selected": null,
+      "reason": "",
+      "approvedBy": null,
+      "approvedAt": null,
+      "candidates": [
+        {
+          "id": "01",
+          "name": "二段バー",
+          "figmaNode": null
+        },
+        {
+          "id": "02",
+          "name": "円環",
+          "figmaNode": null
+        },
+        {
+          "id": "03",
+          "name": "拳印ストック",
+          "figmaNode": null
+        }
+      ]
+    },
+    {
+      "id": "TIME",
+      "title": "タイマーとラウンド",
+      "status": "PENDING",
+      "selected": null,
+      "reason": "",
+      "approvedBy": null,
+      "approvedAt": null,
+      "candidates": [
+        {
+          "id": "01",
+          "name": "中央数字",
+          "figmaNode": null
+        },
+        {
+          "id": "02",
+          "name": "競技ボード",
+          "figmaNode": null
+        },
+        {
+          "id": "03",
+          "name": "山の時計",
+          "figmaNode": null
+        }
+      ]
+    },
+    {
+      "id": "TRAIT",
+      "title": "固有能力",
+      "status": "PENDING",
+      "selected": null,
+      "reason": "",
+      "approvedBy": null,
+      "approvedAt": null,
+      "candidates": [
+        {
+          "id": "01",
+          "name": "HUD小レーン",
+          "figmaNode": null
+        },
+        {
+          "id": "02",
+          "name": "キャラ近接",
+          "figmaNode": null
+        },
+        {
+          "id": "03",
+          "name": "チャージピップ",
+          "figmaNode": null
+        }
+      ]
+    },
+    {
+      "id": "MOTION",
+      "title": "動作の文法",
+      "status": "PENDING",
+      "selected": null,
+      "reason": "",
+      "approvedBy": null,
+      "approvedAt": null,
+      "candidates": [
+        {
+          "id": "A",
+          "name": "打撃の緩急",
+          "figmaNode": null
+        },
+        {
+          "id": "B",
+          "name": "精密なカット",
+          "figmaNode": null
+        },
+        {
+          "id": "C",
+          "name": "自然素材の動き",
+          "figmaNode": null
+        }
+      ]
+    },
+    {
+      "id": "SE",
+      "title": "サウンドの文法",
+      "status": "PENDING",
+      "selected": null,
+      "reason": "",
+      "approvedBy": null,
+      "approvedAt": null,
+      "candidates": [
+        {
+          "id": "A",
+          "name": "山の大会",
+          "figmaNode": null
+        },
+        {
+          "id": "B",
+          "name": "競技の機敏さ",
+          "figmaNode": null
+        },
+        {
+          "id": "C",
+          "name": "村の手触り",
+          "figmaNode": null
+        }
+      ]
+    },
+    {
+      "id": "TALK",
+      "title": "NPCと話す",
+      "status": "PENDING",
+      "selected": null,
+      "reason": "",
+      "approvedBy": null,
+      "approvedAt": null,
+      "candidates": [
+        {
+          "id": "A",
+          "name": "近づくと表示",
+          "figmaNode": null
+        },
+        {
+          "id": "B",
+          "name": "視点中央",
+          "figmaNode": null
+        },
+        {
+          "id": "C",
+          "name": "NPC上の行動目印",
+          "figmaNode": null
+        }
+      ]
+    }
+  ]
+}
