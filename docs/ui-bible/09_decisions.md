@@ -9,10 +9,11 @@
 ## 09-1 全候補のIDと状態
 | スコープ | 候補 | 状態 | 参考 |
 |---|---|---|---|
-| AD-00 全体の表現 | A拳祭 / B山嶺 / C絵巻 / MIXを核に統合 | PENDING | 01 |
-| MENU 5モード | MENU-A/B/C | PENDING | Figma3案 |
-| SEL キャラ9人 | SEL-A/B/C | PENDING | Figma3案 |
-| BATTLE 対戦舞台 | BATTLE-A/B/C | PENDING | Figma3案 |
+| AD-00 全体の表現 | **B 山嶺**（初回方向） | USER_PROPOSED | [13](13_selected_direction.md) |
+| MENU 5モード | **B 大ステージ＋切替**（初回方向） | USER_PROPOSED | [13](13_selected_direction.md) |
+| SEL キャラ9人 | **A 拳祭**（初回方向） | USER_PROPOSED | [13](13_selected_direction.md) |
+| BATTLE 対戦舞台 | **A 舞台**（初回方向） | USER_PROPOSED | [13](13_selected_direction.md) |
+| BATTLE-SUB 詳細構図 | BA-01/BA-02/BA-03 | PENDING | [13](13_selected_direction.md) / [Figma](https://www.figma.com/design/afaB1eVmV6uOnDZR40t0Kr?node-id=23-170) |
 | PRACTICE 教える場面 | PRACTICE-A/B/C | PENDING | 02 |
 | RUN-A Arcade | RUN-A/B/C | PENDING | 02 |
 | SURVIVAL | SURV-A/B/C | PENDING | 02 |
@@ -38,6 +39,13 @@
 | SEの方向 | SE-A/B/C | PENDING | 07 |
 | 対話 | TST-A/B/C | PENDING | 05 |
 | 表示と操作の拡張 | READABILITY-01（初回）/02（詳細） | PENDING | 08 |
+
+## 09-1a 初回の方向選択：2026-11-24
+ナギ本人の明言は「全体=B、モード選択=B、キャラ選択=A、対戦画面=A」。本人による**初回方向の選択**として記録した。4項目はUSER_PROPOSEDとselected候補を併記している。色や形、Figmaの完成稿、個々のボタン/ゲージ、ゲーム実装の確定採用ではない。
+
+**本人の個別理由**：未共有。ミオが推察する理由（競技的な読みやすさ、モードの選択速度、キャラの存在感、戦闘の舞台性）は [13](13_selected_direction.md) に仮説として記録し、本人理由と混同しない。
+
+**保留**：新しいBATTLE-SUB構図、ACTの6操作、HP、Drive、ULTその他すべての部品・音・色・未決定画面。未決定を自動的にA/Bにしない。
 
 ## 09-2 決定1件のフォーマット
 | 欄 | 記入内容 |
