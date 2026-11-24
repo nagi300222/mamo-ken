@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "0.4.0",
+  "schemaVersion": "0.5.0",
   "createdAt": "2026-11-24",
   "source": "docs/ui-bible",
   "figma": "https://www.figma.com/design/afaB1eVmV6uOnDZR40t0Kr",
@@ -879,10 +879,10 @@
     {
       "id": "ACT-D-FORM",
       "title": "独自6攻撃ACT-Dの詳細配置",
-      "status": "PENDING",
-      "selected": null,
-      "reason": "本人が現行3案を『誤差すぎる、比較するほどでもない』と指摘。旧試作の差分は比較不適格で、最終採用しない。意味のある新しい対比ができるまで保留。",
-      "selectedAt": null,
+      "status": "USER_PROPOSED",
+      "selected": "RELAYOUT-01",
+      "reason": "本人による位置とサイズの最新修正要求を一案として反映。可視化されたレイアウトは本人未承認。旧3案は採用対象外。",
+      "selectedAt": "2026-11-24",
       "requestedBy": null,
       "approvedBy": null,
       "approvedAt": null,
@@ -910,8 +910,16 @@
           "name": "指定を反映した基準1案：必殺を中心とする約82°の丸端弧、掴みと奥義は斜め楕円",
           "comparisonStatus": "BASELINE_ONLY",
           "approved": false
+        },
+        {
+          "id": "RELAYOUT-01",
+          "name": "Claude原画を基準に右寄せ：必殺/強/弱の寸法維持、奥義・ギュイーンは必殺右端以内、掴み/奥義を同一の湾曲形へ",
+          "figmaNode": null,
+          "source": "docs/ui-bible/18_actd_relayout.md",
+          "status": "CANDIDATE_PENDING_VISUAL_REVIEW"
         }
-      ]
+      ],
+      "selectionScope": "構造要求の反映。形状案/ヒット領域/ゲーム実装の最終確定ではない"
     },
     {
       "id": "HUD-G",
