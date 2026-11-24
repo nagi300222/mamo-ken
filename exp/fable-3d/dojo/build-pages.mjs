@@ -91,6 +91,8 @@ if(await access(path.join(r2Directory,'normal_contacts_v17r2.json')).then(()=>tr
  }
 }
 await copyOne(path.join(ROOT,'lobby','index.html'),path.join(OUTPUT,'index.html'));
+// Design branch: independent UI blueprint playground, no gameplay changes.
+await copyOne(path.join(ROOT,'lobby','ui-bible-preview.html'),path.join(OUTPUT,'ui-bible-preview.html'));
 await copyOne(path.join(ROOT,'lobby','main.js'),path.join(OUTPUT,'lobby','main.js'));
 const p2Directory=path.join(ROOT,'custom','p2');
 if(await access(p2Directory).then(()=>true).catch(error=>{if(error.code==='ENOENT')return false;throw error;}))
