@@ -77,14 +77,16 @@ try{
    p.x=-.2;t.x=.2;p.y=t.y=0;p.facing=1;t.facing=-1;
    p.action=t.action=null;p.stop=t.stop=0;p.stun=0;t.stun=250;
    p.dashF=p.dashRecovery=p.gyuiinCooldown=0;p.drive=100;p.super=key==='ultimateButton'?100:0;
-   p.vx=t.vx=p.vy=t.vy=0;game.clinch=null;game.projectiles=[];
+   p.vx=t.vx=p.vy=t.vy=0;p.state=t.state='idle';
+   game.clinch=game.throwSequence=null;game.projectiles=[];
    if(!window.actionProbe){
     window.actionProbe=[];
     const base=game.tick.bind(game);
     game.tick=(input,...rest)=>{
-     const before=p.action;
      const result=base(input,...rest);
-     if(!before&&p.action)window.actionProbe.push({key:Object.keys(input).find(k=>input[k]===true),id:p.action.id});
+     for(const event of game.events){
+      if(event.type==='move'&&event.slot===0)window.actionProbe.push({key:Object.keys(input).find(k=>input[k]===true),id:event.action});
+     }
      return result;
     };
    }

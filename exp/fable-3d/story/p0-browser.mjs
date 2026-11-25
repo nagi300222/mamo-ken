@@ -56,7 +56,8 @@ try{
  // Simulate browser logical safe-area insets in a real layout. This is a CSS
  // acceptance probe, not a claim to have used an iPhone's Dynamic Island.
  await page.evaluate(()=>{const app=document.querySelector('#story-app');app.style.setProperty('--story-safe-start','59px');app.style.setProperty('--story-safe-end','59px');window.dispatchEvent(new Event('resize'));});
- for(const selector of ['#story-stick','#battle-steps','#battle-buttons','#battle-hud','#world']){const b=await page.locator(selector).boundingBox();assert.ok(b&&b.x>=59-1&&b.x+b.width<=852-59+1,'unsafe landscape inset '+selector+JSON.stringify(b));}
+ for(const selector of ['#story-stick','#battle-steps','#battle-buttons','#battle-hud']){const b=await page.locator(selector).boundingBox();assert.ok(b&&b.x>=59-1&&b.x+b.width<=852-59+1,'unsafe landscape inset '+selector+JSON.stringify(b));}
+ const stage=await page.locator('#world').boundingBox();assert.equal(stage.x,0);assert.equal(stage.width,852);
  await page.screenshot({path:output+'/safe-area-story-battle.png'});await page.evaluate(()=>{const app=document.querySelector('#story-app');app.style.removeProperty('--story-safe-start');app.style.removeProperty('--story-safe-end');window.dispatchEvent(new Event('resize'));});
  for(const size of [{width:667,height:375},{width:568,height:320},{width:393,height:852}]){
   await page.setViewportSize(size);await page.waitForFunction(()=>mamokenStory.landscapeLocked=== (innerWidth<innerHeight));

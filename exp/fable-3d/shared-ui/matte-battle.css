@@ -73,10 +73,25 @@ body[data-ui=mountain] #story-app:is([data-mode=battle],[data-mode=result]) #wor
  width:100%;
  height:100%;
 }
+#story-app[data-mode=battle] {
+ --battle-safe-left:max(var(--ui-safe-left),var(--story-safe-start));
+ --battle-safe-right:max(var(--ui-safe-right),var(--story-safe-end));
+}
+html.native-runtime {
+ --ui-safe-top:var(--native-safe-top);
+ --ui-safe-right:var(--native-safe-right);
+ --ui-safe-bottom:var(--native-safe-bottom);
+ --ui-safe-left:var(--native-safe-left);
+}
+html.native-runtime body[data-ui=mountain] #story-app:is([data-mode=battle],[data-mode=result]) {
+ width:100vw;
+ height:100dvh;
+ margin:0;
+}
 body[data-ui=mountain] #story-app[data-mode=battle] #stick-rail {
  top:auto;
  bottom:max(20px,calc(var(--ui-safe-bottom) + 6px));
- left:max(12px,calc(var(--ui-safe-left) + 6px));
+ left:max(12px,calc(var(--battle-safe-left) + 6px));
  width:clamp(102px,16%,133px);
 }
 body[data-ui=mountain] #story-app[data-mode=battle] #battle-steps { width:100% }
@@ -89,11 +104,20 @@ body[data-ui=mountain] #story-app[data-mode=battle] header {
  padding:16px;
 }
 #story-app #commands-help p { margin-block:8px }
+html.landscape-locked #story-app #commands-help:popover-open {
+ position:fixed;
+ inset:50% auto auto 50%;
+ margin:0;
+ max-width:min(420px,80dvh);
+ max-height:calc(100vw - 32px);
+ transform:translate(-50%,-50%) rotate(90deg);
+ overflow:auto;
+}
 :is(#app,#story-app) { container-type:size }
 body[data-ui=mountain] #app:has(#selection.hidden) #buttons-rail,
 body[data-ui=mountain] #story-app[data-mode=battle] #battle-buttons {
  --art-unit:clamp(.77px,.225cqh,1px);
- right:max(36px,calc(var(--ui-safe-right) + 7px));
+ right:max(36px,calc(var(--battle-safe-right,var(--ui-safe-right)) + 7px));
  bottom:max(50px,calc(var(--ui-safe-bottom) + 8px));
  display:block;
  width:calc(234 * var(--art-unit));
@@ -167,7 +191,7 @@ body[data-ui=mountain] :is(#buttons-rail,#battle-buttons).shared-attack-pad .att
  transform:translate(-50%,-50%);
  font-size:clamp(15px,calc(var(--label-font) * var(--art-unit)),24px);
  font-weight:900;
- line-height:1;
+ line-height:1.6;
  white-space:nowrap;
  pointer-events:none;
 }
@@ -198,7 +222,7 @@ body[data-ui=mountain] :is(#buttons-rail,#battle-buttons).shared-attack-pad .att
 /* Each side has an outer character crop and three rails that grow inward. */
 body[data-ui=mountain] :is(#arena,#story-app) .shared-battle-hud {
  position:absolute;
- inset:calc(var(--ui-safe-top) + 49px) max(14px,calc(var(--ui-safe-right) + 6px)) auto max(14px,calc(var(--ui-safe-left) + 6px));
+ inset:calc(var(--ui-safe-top) + 49px) max(14px,calc(var(--battle-safe-right,var(--ui-safe-right)) + 6px)) auto max(14px,calc(var(--battle-safe-left,var(--ui-safe-left)) + 6px));
  display:grid;
  grid-template-columns:minmax(0,1fr) 48px minmax(0,1fr);
  align-items:start;
@@ -337,6 +361,7 @@ body[data-ui=mountain] :is(#arena,#story-app) .shared-battle-hud .mirrored .ulti
  right:auto;
  flex-direction:row-reverse;
 }
+.shared-battle-hud .ultimate-ready[hidden] { display:none !important }
 .ultimate-ready svg {
  width:14px;
  height:18px;

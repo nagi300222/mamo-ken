@@ -141,10 +141,12 @@ try{
  await page.waitForFunction(()=>window.mamoken3d,undefined,{timeout:15000});
  await page.locator('#start').tap();await page.waitForFunction(()=>mamoken3d.practice.enabled&&mamoken3d.battle?.frame>3,undefined,{timeout:90000});
  await assertDecodedArt('dojo-hud-and-controls',[
-  ['.brand-mark','','fist-seal.svg'],['#arena .health .track','','hud-hp-frame.svg'],['#arena .drive .track','','hud-sub-frame.svg'],['#arena .round-center','','hud-timer-dark.svg'],
-  ['#arena .hud-name','::before','crest-moguzo.svg'],
+  ['.brand-mark','','fist-seal.svg'],['#arena .round-center','','hud-timer-dark.svg'],
  ]);
- const nativeLabels=await page.locator('#buttons-rail .attack-label').allTextContents();assert.equal(nativeLabels.length,6);assert.deepEqual(nativeLabels.map(label=>label.trim()),['弱','強','掴み','ギュイーン','必殺','奥義']);assert.equal(await page.locator('#buttons-rail .battle-control-guide').count(),1);
+ const nativeLabels=await page.locator('#buttons-rail .attack-label').allTextContents();
+ assert.deepEqual(nativeLabels,['B','A','Y','Z','S','X']);
+ assert.equal(await page.locator('#buttons-rail .attack-rim').count(),6);
+ assert.deepEqual(await page.locator('#match-hud .hud-eye img').evaluateAll(imgs=>imgs.map(img=>img.complete&&img.naturalWidth>0)),[true,true]);
  assert.equal(await page.locator('[data-control]').count(),8); // six attacks + two step buttons
  assert.equal(await page.evaluate(()=>mamoken3d.landscapeLocked),false);
  // A transient portrait viewport must be left to UIKit, not rotated again by CSS.
@@ -180,9 +182,9 @@ try{
  await page.locator('#talk').tap();await page.waitForFunction(()=>mamokenStory.mode==='dialogue');await page.locator('#challenge').tap();
  await page.waitForFunction(()=>mamokenStory.mode==='battle',undefined,{timeout:90000});await page.locator('#pause').tap();
  await assertDecodedArt('story-hud-and-controls',[
-  ['#battle-hud .health .track','','hud-hp-frame.svg'],['#battle-hud .drive .track','','hud-sub-frame.svg'],['#battle-hud .round-center','','hud-timer-dark.svg'],
-  ['#battle-hud .hud-name','::before','crest-moguzo.svg'],
+  ['#battle-hud .round-center','','hud-timer-dark.svg'],
  ]);
+ assert.equal(await page.locator('#battle-buttons .attack-rim').count(),6);
  for(const side of [59,62]){
   await page.evaluate(()=>{for(const edge of ['left','right','top','bottom'])document.documentElement.style.removeProperty('--native-safe-'+edge);});
   await cdp.send('Emulation.setSafeAreaInsetsOverride',{insets:{left:side,right:side,top:0,bottom:21}});
@@ -195,9 +197,9 @@ try{
   nativeEnvGeometry.push({side,bottom:21,...geometry});
   await writeFile(output+'/native-env-geometry.json',JSON.stringify({uiKitTested:false,cssEnvOverriddenViaCDP:true,nativeEnvGeometry},null,2));
   assert.equal(geometry.env.width,side,'CDP did not override actual CSS env(left)');assert.equal(geometry.env.height,side,'CDP did not override actual CSS env(right)');
-  assert.ok(Math.abs(geometry.app.x-side)<.5&&Math.abs(geometry.app.width-(852-side*2))<.5,'Native outer safe rectangle did not follow env values');
-  assert.ok(geometry.world.right<=geometry.buttons.x+.5,'Native attack rail overlaps the real world canvas: '+JSON.stringify(geometry));
-  assert.ok(Math.abs(geometry.hud.x-geometry.world.x)<.5&&Math.abs(geometry.hud.right-geometry.world.right)<.5,'HUD does not align with central world canvas');
+  assert.ok(Math.abs(geometry.app.x)<.5&&Math.abs(geometry.app.width-852)<.5,'Battle stage must use full viewport width');
+  assert.ok(Math.abs(geometry.world.x)<.5&&Math.abs(geometry.world.right-852)<.5,'Battle canvas lost full bleed');
+  assert.ok(geometry.hud.x>=side-.5&&geometry.hud.right<=852-side+.5,'HUD escaped the safe rectangle');
   assert.equal(geometry.touches.length,8,'Expected six attacks and two step touch controls');
   for(const touch of geometry.touches){assert.ok(touch.width>=44&&touch.height>=44,'Native touch target below 44px '+JSON.stringify(touch));assert.ok(touch.x>=side-.5&&touch.right<=852-side+.5&&touch.y>=-.5&&touch.bottom<=393-21+.5,'Native touch escaped the safe rectangle '+JSON.stringify(touch));}
  }
