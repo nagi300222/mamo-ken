@@ -1,11 +1,13 @@
 // Real WebGL battle with touch events and a deterministic setup via the existing
 // dojo diagnostics. Record a silent same-commit input and camera demonstration.
 import assert from 'node:assert/strict';
-import {mkdir, writeFile} from 'node:fs/promises';
+import {mkdir, readFile, writeFile} from 'node:fs/promises';
 import {execFileSync} from 'node:child_process';
 import {createRequire} from 'node:module';
 import path from 'node:path';
 const {chromium}=createRequire(import.meta.url)('playwright-core');
+const {before}=JSON.parse(await readFile(new URL('../../../../design/battle-ui-v2/evidence/hit-area-report.json',import.meta.url),'utf8'));
+const baselineNames={'landscape-852':'852x393','landscape-720':'720x320'};
 const base=process.env.MAMOKEN_URL??'http://127.0.0.1:4173/exp/fable-3d/dojo/';
 const output=path.join(process.env.MAMOKEN_EVIDENCE??'/tmp/mamoken-evidence','matte-battle');
 await mkdir(output,{recursive:true});
@@ -44,14 +46,24 @@ try{
     return {key:element.dataset.control,rect:r.toJSON(),centerHit:document.elementFromPoint(x,y)?.closest('button')===element,
       symbol:element.querySelector('.attack-label')?.textContent};
    });
-   return {box,buttons,rotated:mamoken3d.landscapeLocked};
+   const hud=[...document.querySelectorAll('.hud-side')].map(side=>side.getBoundingClientRect().toJSON());
+   return {box,buttons,hud,rotated:mamoken3d.landscapeLocked};
   });
   assert.equal(layout.box.width,width,name);
   assert.equal(layout.box.height,height,name);
-  for(const {key,rect:r,centerHit} of layout.buttons){
+  const expected=before[baselineNames[name]??name];
+  assert.deepEqual(layout.buttons.map(button=>button.key),expected.map(rect=>rect.k));
+  for(const [i,{key,rect:r,centerHit}] of layout.buttons.entries()){
+   for(const [prop,baselineProp] of [['x','x'],['y','y'],['width','w'],['height','h']]){
+    assert.ok(Math.abs(r[prop]-expected[i][baselineProp])<=.01,`${name}: ${key} ${prop} ${r[prop]} differs from ${expected[i][baselineProp]}`);
+   }
    assert.ok(r.width>=43.9&&r.height>=43.9,`${name}: ${key} under 44px`);
    assert.ok(r.left>=safe.left-.5&&r.top>=safe.top-.5&&r.right<=width-safe.right+.5&&r.bottom<=height-safe.bottom+.5,`${name}: ${key} outside safe area`);
    assert.ok(centerHit,`${name}: ${key} center is blocked`);
+  }
+  const ultimate=layout.buttons.find(button=>button.key==='ultimateButton').rect;
+  for(const hud of layout.hud){
+   assert.ok(layout.rotated?hud.left>ultimate.right:hud.bottom<ultimate.top,`${name}: HUD overlaps the ultimate button`);
   }
   await screenshot(name);
   report.layouts.push({name,...layout});
@@ -59,10 +71,48 @@ try{
  await page.setViewportSize({width:852,height:393});
  await cdp.send('Emulation.setSafeAreaInsetsOverride',{insets:{left:0,right:0,top:0,bottom:0}});
  await page.waitForFunction(()=>!mamoken3d.landscapeLocked);
+ const faceColor=control=>page.locator(`[data-control=${control}] .bt-face`).evaluate(e=>getComputedStyle(e).fill);
+ const ultimate=page.locator('[data-control=ultimateButton]');
+ const ring=ultimate.locator('.bt-ring');
+ const flame=page.locator('#ultimate-ready-0 svg');
+ assert.deepEqual(await page.locator('#hud-side-0 .resource>span').evaluateAll(nodes=>nodes.map(e=>({
+  width:e.getBoundingClientRect().width,clip:getComputedStyle(e).clipPath,label:e.textContent,
+ }))),['体力','奥義','Drive'].map(label=>({width:1,clip:'inset(50%)',label})));
+ assert.deepEqual(await page.locator('.hud-side .track').evaluateAll(nodes=>nodes.map(n=>getComputedStyle(n).backgroundImage)),Array(6).fill('none'));
+ await page.evaluate(()=>{
+  const p=mamoken3d.battle.fighters[0],r=mamoken3d.ROSTER[p.id];
+  p.super=0;p.drive=20;p.guard=r.guardMax/2;p.stun=300;
+ });
+ await page.waitForFunction(()=>document.querySelector('[data-control=gyuiin]').hasAttribute('data-wait'));
+ assert.equal(await ultimate.getAttribute('data-wait'),'');
+ assert.equal(await faceColor('ultimateButton'),'rgb(52, 50, 74)');
+ assert.equal(await faceColor('gyuiin'),'rgb(51, 57, 63)');
+ // Guard regenerates while fighting. Sample the live ratio in the same frame.
+ const guard=await page.locator('#guard-line-0').evaluate(e=>{
+  const p=mamoken3d.battle.fighters[0];
+  return {width:parseFloat(e.style.width),expected:p.guard/mamoken3d.ROSTER[p.id].guardMax*100,full:e.hasAttribute('data-full')};
+ });
+ assert.ok(Math.abs(guard.width-50)<.3&&Math.abs(guard.width-guard.expected)<.02&&!guard.full,JSON.stringify(guard));
+ await screenshot('resources-unavailable');
+ await page.evaluate(()=>{
+  const p=mamoken3d.battle.fighters[0];
+  p.guard=mamoken3d.ROSTER[p.id].guardMax;p.drive=100;p.stun=0;
+ });
+ await page.waitForFunction(()=>document.querySelector('#guard-line-0').hasAttribute('data-full')&&!document.querySelector('[data-control=gyuiin]').hasAttribute('data-wait'));
+ assert.equal(await faceColor('gyuiin'),'rgb(47, 111, 134)');
  // Exercise the real pause and help overlays while a movement key is held.
  await page.keyboard.down('KeyD');
- await page.locator('[popovertarget="commands-help"]').first().tap();
+ const strong=page.locator('[data-control=strong]');
+ const strongPoint=await strong.boundingBox();
+ const touchPoint=(box,id)=>({x:box.x+box.width/2,y:box.y+box.height/2,id});
+ const heldPoint=touchPoint(strongPoint,1);
+ await cdp.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[heldPoint]});
+ assert.ok(await strong.evaluate(e=>e.classList.contains('held')));
+ // A keyboard click on the actual menu button keeps the touch pointer down.
+ await page.locator('[popovertarget="commands-help"]').first().press('Enter');
  await page.waitForFunction(()=>document.querySelector('#commands-help').matches(':popover-open'));
+ assert.equal(await strong.evaluate(e=>e.classList.contains('held')),false,'opening the move list clears a held touch');
+ await cdp.send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});
  const frame=await page.evaluate(()=>mamoken3d.battle.frame);
  await page.keyboard.press('KeyX');
  await page.waitForTimeout(160);
@@ -72,6 +122,13 @@ try{
  for(const [key,symbol] of [['weak','B'],['strong','A'],['throw','Y'],['gyuiin','Z'],['special','S'],['ultimateButton','X']]){
   const control=page.locator(`[data-control="${key}"]`);
   assert.equal(await control.locator('.attack-label').textContent(),symbol);
+  assert.ok(await control.locator('.attack-label').evaluate(e=>e.getBoundingClientRect().width<=1&&getComputedStyle(e).clipPath==='inset(50%)'));
+  const svg=control.locator('svg.bt');
+  assert.equal(await svg.count(),1);
+  for(const layer of ['base','body','rim','face','dish','glyph-ink'])assert.equal(await svg.locator('.bt-'+layer).count(),1,key+' '+layer);
+  for(const [layer,count] of Object.entries({core:+(symbol==='S'),ticks:+(symbol==='S'),groove:+('XY'.includes(symbol)),pip:symbol==='Z'?2:0,ring:+(symbol==='X')})){
+   assert.equal(await svg.locator('.bt-'+layer).count(),count,key+' '+layer);
+  }
   await page.evaluate(key=>{
    const game=mamoken3d.battle,[p,t]=game.fighters;
    p.x=-.2;t.x=.2;p.y=t.y=0;p.facing=1;t.facing=-1;
@@ -94,15 +151,34 @@ try{
   },key);
   if(symbol==='X'){
    await page.waitForFunction(()=>document.querySelector('[data-control=ultimateButton]').hasAttribute('data-ready'));
-   await page.emulateMedia({reducedMotion:'reduce'});
-   assert.equal(await page.locator('#ultimate-ready-0 svg').evaluate(e=>getComputedStyle(e).animationName),'none');
+   assert.equal(await faceColor(key),'rgb(216, 155, 36)');
+   assert.equal(await ring.evaluate(e=>getComputedStyle(e).animationIterationCount),'1');
+   await page.waitForFunction(()=>getComputedStyle(document.querySelector('.bt-ring')).opacity==='1');
    await screenshot('ultimate-ready');
+   for(const selector of [ring,flame])assert.notEqual(await selector.evaluate(e=>getComputedStyle(e).animationName),'none');
+   await page.emulateMedia({reducedMotion:'reduce'});
+   for(const selector of [ring,flame])assert.equal(await selector.evaluate(e=>getComputedStyle(e).animationName),'none');
    await page.emulateMedia({reducedMotion:'no-preference'});
+   await page.locator('[popovertarget="av-settings"]').first().tap();
+   await page.locator('#fx-toggle').tap();
+   for(const selector of [ring,flame])assert.equal(await selector.evaluate(e=>getComputedStyle(e).animationName),'none');
+   await page.locator('#fx-toggle').tap();
+   await page.keyboard.press('Escape');
+   await page.waitForFunction(()=>!document.querySelector('#av-settings').matches(':popover-open'));
   }
   const rect=await control.boundingBox();
   await cdp.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[{x:rect.x+rect.width/2,y:rect.y+rect.height/2}]});
   assert.ok(await control.evaluate(el=>el.classList.contains('held')||window.mamoken3d.cinematic.active),key+' has immediate press feedback');
+  if(symbol==='A'){
+   assert.equal(await faceColor(key),'rgb(104, 47, 38)');
+   await page.waitForFunction(()=>getComputedStyle(document.querySelector('[data-control=strong] .bt-body')).translate==='0px 3px');
+   await screenshot('strong-held');
+   await page.emulateMedia({reducedMotion:'reduce'});
+   assert.equal(await svg.locator('.bt-body').evaluate(e=>getComputedStyle(e).translate),'none');
+   await page.emulateMedia({reducedMotion:'no-preference'});
+  }
   await cdp.send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});
+  assert.equal(await control.evaluate(e=>e.classList.contains('held')),false,key+' released');
   await page.waitForFunction(key=>window.actionProbe.some(result=>result.key===key),key);
   const observed=await page.evaluate(()=>window.actionProbe.slice());
   assert.equal(observed.filter(action=>action.key===key).length,1);

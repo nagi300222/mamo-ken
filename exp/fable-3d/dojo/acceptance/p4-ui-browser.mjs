@@ -127,12 +127,12 @@ try{
   if(mode==='survival')assert.equal(await page.locator('#run-dialogue').isVisible(),false,'Survival must retain its direct VS/intro flow');
   if(mode==='practice')assert.equal(await page.locator('#timer').textContent(),'∞');
   else assert.notEqual(await page.locator('#timer').textContent(),'∞');
-  const controls=await page.locator('#buttons-rail .attack').evaluateAll(nodes=>nodes.map(n=>({key:n.dataset.control,label:n.querySelector('.attack-label')?.textContent,font:parseFloat(getComputedStyle(n.querySelector('.attack-label')??n).fontSize)})));
-  assert.equal(controls.length,6);assert.ok(controls.every(n=>n.label&&n.font>=12),JSON.stringify(controls));
+  const controls=await page.locator('#buttons-rail .attack').evaluateAll(nodes=>nodes.map(n=>({key:n.dataset.control,label:n.querySelector('.attack-label')?.textContent,glyph:n.querySelector('svg.bt')?.dataset.symbol})));
+  assert.equal(controls.length,6);assert.ok(controls.every(n=>n.label&&n.glyph===n.label),JSON.stringify(controls));
   assert.deepEqual(controls.map(n=>n.label),['B','A','Y','Z','S','X']);
   assert.equal(await page.locator('#commands-help #button-guide').count(),1,'action names must remain in the move list');
   assert.equal(await page.locator('.hud .hud-eye img').count(),2);
-  assert.match(await page.locator('.round-center').evaluate(n=>getComputedStyle(n).backgroundImage),/hud-timer-dark\.svg/);
+  assert.equal(await page.locator('.round-center').evaluate(n=>getComputedStyle(n).backgroundImage),'none');
   await tapTargets('#buttons-rail button,#stick-rail button');
   if(mode==='practice')await tapTargets('#practice-panel select,#practice-panel button');
   if(['arcade','survival'].includes(mode)){

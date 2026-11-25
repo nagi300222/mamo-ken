@@ -2,7 +2,7 @@
 // owner of guard, attacks, costs, hit confirmation and fixed 60 Hz simulation.
 import {ROSTER,FPS} from '../dojo/balance.js';
 import {DRIVE} from '../dojo/battle.js';
-import {battleControlArt, readyFlame} from './battle-control-art.js';
+import {battleControlArtV2 as battleControlArt, readyFlame} from './battle-control-art-v2.js';
 import {hudTheme,chargePips} from '../dojo/hud-themes.js';
 export const BATTLE_INPUT_PROFILE=Object.freeze({
  id:'mamoken-six-button-v1',deadzone:.24,directionThreshold:.33,doubleTapMs:280,
@@ -47,19 +47,19 @@ export function createCombatInput(now=()=>performance.now()){
 export function battleControlsMarkup(){
  return '<div class="attack-pad">'+BATTLE_INPUT_PROFILE.attacks.map(b=>{
   const art=battleControlArt[b.label];
-  return `<button type="button" data-control="${b.key}" class="attack ${b.className}" aria-label="${b.aria}" style="${art.style}"><span class="attack-art" aria-hidden="true"><svg viewBox="${art.viewBox}" aria-hidden="true" focusable="false"><path class="attack-rim" d="${art.rim}"/><path class="attack-face" d="${art.face}"/><path class="attack-edge" d="${art.edge}"/></svg><span class="attack-label">${b.label}</span></span>${b.status?`<small id="${b.status}" hidden></small>`:''}</button>`;
+  return `<button type="button" data-control="${b.key}" class="attack ${b.className}" aria-label="${b.aria}" style="${art.style}"><span class="attack-art" aria-hidden="true">${art.svg}<span class="attack-label">${b.label}</span></span>${b.status?`<small id="${b.status}" hidden></small>`:''}</button>`;
  }).join('')+'</div>';
 }
 export const battleButtonGuide='A 強 · B 弱 · X 奥義 · Y 掴み · Z ギュイーン · S 必殺';
 export function battleStepsMarkup(){return '<div class="step-pad" role="group" aria-label="前後ステップ">'+BATTLE_INPUT_PROFILE.steps.map(b=>`<button type="button" data-control="${b.key}" class="step-button" aria-label="${b.label}" title="${b.label}">${b.key==='stepBack'?'後':'前'}</button>`).join('')+'</div>';}
-function battleGauge(kind,label,id,extra=''){
- return `<div class="resource ${kind}"><span>${label}</span><div class="track"><i id="${id}"></i></div>${extra}</div>`;
+function battleGauge(kind,label,id,extra='',overlay=''){
+ return `<div class="resource ${kind}"><span>${label}</span><div class="track"><i id="${id}"></i>${overlay}</div>${extra}</div>`;
 }
 export function battleHUDMarkup(){
  const side=i=>`<div class="hud-side${i?' mirrored':''}" id="hud-side-${i}">
   <div class="hud-eye" aria-hidden="true"><img id="hud-eye-${i}" alt=""></div>
   <div class="hud-name"><b>${i?'CPU':'1P'}</b><span id="name-${i}"></span><small id="ability-${i}"></small></div>
-  ${battleGauge('health','体力','hp-'+i)}
+  ${battleGauge('health','体力','hp-'+i,'',`<b class="guard-line" id="guard-line-${i}" data-full aria-hidden="true"></b>`)}
   ${battleGauge('super','奥義','meter-'+i,`<b id="super-value-${i}">0</b><small id="ultimate-ready-${i}" class="ultimate-ready" hidden><svg viewBox="${readyFlame.viewBox}" aria-hidden="true"><path d="${readyFlame.face}" fill="#D9541E"/><path d="${readyFlame.inner}" fill="#FFC94D"/></svg><span>READY</span></small>`)}
   ${battleGauge('drive','Drive','drive-'+i,`<b id="drive-value-${i}">100</b>`)}
   <div class="trait-row"><span id="trait-${i}" class="trait-word"></span><small>ガード <b id="guard-value-${i}"></b></small><div id="charge-pips-${i}" class="charge-pips" hidden><i></i><i></i><i></i></div></div>
@@ -87,6 +87,12 @@ export function updateBattleHUD(root,{battle,names=[],roundLabel='ROUND 1',pract
   }
   set('name-'+i,names[i]??p.displayName??r.name);set('trait-'+i,theme.word);set('ability-'+i,abilityLabel(p));set('drive-value-'+i,Math.floor(p.drive));set('super-value-'+i,Math.floor(p.super));set('guard-value-'+i,Math.ceil(p.guard));
   for(const [id,value]of [['hp-',p.hp/r.hp*100],['drive-',p.drive/DRIVE.max*100],['meter-',p.super]]){const node=find(id+i);if(node)node.style.width=clamp(value,0,100)+'%';}
+  const guardLine=find('guard-line-'+i);
+  if(guardLine){
+   const percent=clamp(p.guard/r.guardMax*100,0,100);
+   guardLine.style.width=percent+'%';
+   guardLine.toggleAttribute('data-full',percent>=100);
+  }
   find('hp-'+i)?.classList.toggle('low',p.hp/r.hp<.25);find('meter-'+i)?.classList.toggle('ready',p.super>=100);const ready=find('ultimate-ready-'+i);if(ready)ready.hidden=p.super<100;
   const charge=find('charge-pips-'+i);if(charge){charge.hidden=p.id!=='bullet';if(p.id==='bullet'){const pips=chargePips(p.ability.charge);[...charge.children].forEach((node,k)=>node.classList.toggle('filled',pips[k]));charge.setAttribute('aria-label','バレットのチャージ '+p.ability.charge+'/3');}}
  }

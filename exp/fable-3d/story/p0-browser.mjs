@@ -48,6 +48,53 @@ try{
  assert.deepEqual(await page.locator('#battle-steps [data-control]').evaluateAll(nodes=>nodes.map(n=>n.dataset.control)),['stepBack','stepForward']);
  for(const id of ['hp-0','hp-1','drive-0','drive-1','meter-0','meter-1','timer','name-0','name-1'])assert.equal(await page.locator('#'+id).count(),1,id);
  assert.equal(await page.locator('#camera-orbit').isVisible(),false);
+ const storyAttack=key=>page.locator(`#battle-buttons [data-control=${key}]`);
+ const faceColor=key=>storyAttack(key).locator('.bt-face').evaluate(e=>getComputedStyle(e).fill);
+ assert.deepEqual(await page.locator('#battle-buttons svg.bt').evaluateAll(nodes=>nodes.map(n=>n.dataset.symbol)),['B','A','Y','Z','S','X']);
+ await page.evaluate(()=>{
+  const [p,cpu]=mamokenStory.battle.fighters;
+  cpu.stun=2000;cpu.action=null;p.super=0;p.drive=20;
+ });
+ await page.waitForFunction(()=>['ultimateButton','gyuiin'].every(key=>document.querySelector(`[data-control=${key}]`).hasAttribute('data-wait')));
+ assert.equal(await faceColor('ultimateButton'),'rgb(52, 50, 74)');
+ assert.equal(await faceColor('gyuiin'),'rgb(51, 57, 63)');
+ await page.evaluate(()=>{mamokenStory.battle.fighters[0].super=100;});
+ await page.waitForFunction(()=>getComputedStyle(document.querySelector('#battle-buttons .bt-ring')).opacity==='1');
+ assert.equal(await faceColor('ultimateButton'),'rgb(216, 155, 36)');
+ await page.screenshot({path:output+'/story-v2-852-ready.png'});
+ const strong=await storyAttack('strong').boundingBox();
+ await touches('touchStart',[touch(44,strong.x+strong.width/2,strong.y+strong.height/2)]);
+ await page.waitForFunction(()=>getComputedStyle(document.querySelector('#battle-buttons [data-control=strong] .bt-body')).translate==='0px 3px');
+ assert.equal(await faceColor('strong'),'rgb(104, 47, 38)');
+ await page.screenshot({path:output+'/story-v2-852-held.png'});
+ await page.locator('#story-battle-help').press('Enter');
+ await page.waitForFunction(()=>document.querySelector('#commands-help').matches(':popover-open'));
+ assert.equal(await storyAttack('strong').evaluate(e=>e.classList.contains('held')),false);
+ assert.deepEqual(await page.evaluate(()=>mamokenStory.controls.battle.pointers),[]);
+ await touches('touchEnd');
+ await page.locator('#commands-help button').tap();
+ for(const [layout,insets] of [
+  ['720',{left:0,right:0,bottom:0}],
+  ['720-notch-left',{left:58,right:20,bottom:21}],
+  ['720-notch-right',{left:20,right:58,bottom:21}],
+ ]){
+  await page.setViewportSize({width:720,height:320});
+  await cdp.send('Emulation.setSafeAreaInsetsOverride',{insets:{top:0,...insets}});
+  await page.evaluate(()=>dispatchEvent(new Event('resize')));
+  const geometry=await page.evaluate(()=>{
+   const hudBottom=Math.max(...[...document.querySelectorAll('#battle-hud .hud-side')].map(e=>e.getBoundingClientRect().bottom));
+   const buttons=[...document.querySelectorAll('#battle-buttons [data-control],#battle-steps [data-control]')].map(button=>{
+    const r=button.getBoundingClientRect();
+    return {key:button.dataset.control,rect:r.toJSON(),hit:document.elementFromPoint(r.x+r.width/2,r.y+r.height/2)?.closest('button')===button};
+   });
+   return {hudBottom,buttons};
+  });
+  assert.ok(geometry.hudBottom<geometry.buttons.find(b=>b.key==='ultimateButton').rect.top,layout+' HUD overlap');
+  assert.ok(geometry.buttons.every(({hit,rect:r})=>hit&&r.left>=insets.left-.5&&r.right<=720-insets.right+.5&&r.bottom<=320-insets.bottom+.5),JSON.stringify(geometry));
+  await page.screenshot({path:output+`/story-v2-${layout}.png`});
+ }
+ await cdp.send('Emulation.setSafeAreaInsetsOverride',{insets:{top:0,bottom:0,left:0,right:0}});
+ await page.setViewportSize({width:852,height:393});
  await page.locator('#pause').tap();const frame=await page.evaluate(()=>mamokenStory.battle.frame);await page.locator('[data-control="weak"]').tap();await page.waitForTimeout(120);assert.equal(await page.evaluate(()=>mamokenStory.battle.frame),frame);await page.locator('#pause').tap();
  // Forward/backstep touch buttons use the same existing Battle actions as dojo.
  await page.evaluate(()=>{const g=mamokenStory.battle;for(const f of g.fighters){f.action=null;f.stun=0;f.stop=0;f.y=0;f.ko=false;}g.fighters[0].x=-.9;g.fighters[1].x=1.6;g.fighters[1].stun=1000;});

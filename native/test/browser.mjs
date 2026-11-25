@@ -140,11 +140,12 @@ try{
  await page.waitForFunction(()=>window.mamoken3d,undefined,{timeout:15000});
  await page.locator('#start').tap();await page.waitForFunction(()=>mamoken3d.practice.enabled&&mamoken3d.battle?.frame>3,undefined,{timeout:90000});
  await assertDecodedArt('dojo-hud-and-controls',[
-  ['.brand-mark','','fist-seal.svg'],['#arena .round-center','','hud-timer-dark.svg'],
+  ['.brand-mark','','fist-seal.svg'],
  ]);
+ assert.equal(await page.locator('#arena .round-center').evaluate(e=>getComputedStyle(e).backgroundImage),'none');
  const nativeLabels=await page.locator('#buttons-rail .attack-label').allTextContents();
  assert.deepEqual(nativeLabels,['B','A','Y','Z','S','X']);
- assert.equal(await page.locator('#buttons-rail .attack-rim').count(),6);
+ assert.equal(await page.locator('#buttons-rail .bt-rim').count(),6);
  assert.deepEqual(await page.locator('#match-hud .hud-eye img').evaluateAll(imgs=>imgs.map(img=>img.complete&&img.naturalWidth>0)),[true,true]);
  assert.equal(await page.locator('[data-control]').count(),8); // six attacks + two step buttons
  assert.equal(await page.evaluate(()=>mamoken3d.landscapeLocked),false);
@@ -180,10 +181,8 @@ try{
  await page.keyboard.down('w');await page.waitForFunction(()=>mamokenStory.nearby?.id==='moguzo',undefined,{timeout:30000});await page.keyboard.up('w');
  await page.locator('#talk').tap();await page.waitForFunction(()=>mamokenStory.mode==='dialogue');await page.locator('#challenge').tap();
  await page.waitForFunction(()=>mamokenStory.mode==='battle',undefined,{timeout:90000});await page.locator('#pause').tap();
- await assertDecodedArt('story-hud-and-controls',[
-  ['#battle-hud .round-center','','hud-timer-dark.svg'],
- ]);
- assert.equal(await page.locator('#battle-buttons .attack-rim').count(),6);
+ assert.equal(await page.locator('#battle-hud .round-center').evaluate(e=>getComputedStyle(e).backgroundImage),'none');
+ assert.equal(await page.locator('#battle-buttons .bt-rim').count(),6);
  for(const side of [59,62]){
   await page.evaluate(()=>{for(const edge of ['left','right','top','bottom'])document.documentElement.style.removeProperty('--native-safe-'+edge);});
   await cdp.send('Emulation.setSafeAreaInsetsOverride',{insets:{left:side,right:side,top:0,bottom:21}});

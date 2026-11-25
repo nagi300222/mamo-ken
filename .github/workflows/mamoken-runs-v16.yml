@@ -11,6 +11,7 @@ on:
       - feat/mamoken-p0-p4-integration
       - feat/mamoken-p4-ui-polish
       - feat/mamoken-matte-battle-ui
+      - codex/mamoken-battle-ui-v2
     paths-ignore:
       - docs/**
   workflow_dispatch:
