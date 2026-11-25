@@ -1,0 +1,209 @@
+{
+  "baseline": "3019f142a56517d722213e07d86d5123e9b330e3",
+  "gameCommit": "c555e6ab9c782187c2c82cdb895891c92dad4617",
+  "browser": "Chromium / WebGL (SwiftShader) with CDP touch and safe-area insets",
+  "physicalIphoneTested": false,
+  "hitAreas": {
+    "dojo": {
+      "852": {
+        "maxDeltaPx": 0,
+        "maxDeltaByControlPx": {
+          "stepBack": 0.0,
+          "stepForward": 0.0,
+          "weak": 0.0,
+          "strong": 0.0,
+          "throw": 0.0,
+          "gyuiin": 0.0,
+          "special": 0.0,
+          "ultimateButton": 0.0
+        }
+      },
+      "720": {
+        "maxDeltaPx": 0,
+        "maxDeltaByControlPx": {
+          "stepBack": 0.0,
+          "stepForward": 0.0,
+          "weak": 0.0,
+          "strong": 0.0,
+          "throw": 0.0,
+          "gyuiin": 0.0,
+          "special": 0.0,
+          "ultimateButton": 0.0
+        }
+      },
+      "notch-left": {
+        "maxDeltaPx": 0,
+        "maxDeltaByControlPx": {
+          "stepBack": 0.0,
+          "stepForward": 0.0,
+          "weak": 0.0,
+          "strong": 0.0,
+          "throw": 0.0,
+          "gyuiin": 0.0,
+          "special": 0.0,
+          "ultimateButton": 0.0
+        }
+      },
+      "notch-right": {
+        "maxDeltaPx": 0,
+        "maxDeltaByControlPx": {
+          "stepBack": 0.0,
+          "stepForward": 0.0,
+          "weak": 0.0,
+          "strong": 0.0,
+          "throw": 0.0,
+          "gyuiin": 0.0,
+          "special": 0.0,
+          "ultimateButton": 0.0
+        }
+      },
+      "portrait": {
+        "maxDeltaPx": 0,
+        "maxDeltaByControlPx": {
+          "stepBack": 0,
+          "stepForward": 0,
+          "weak": 0.0,
+          "strong": 0.0,
+          "throw": 0.0,
+          "gyuiin": 0.0,
+          "special": 0.0,
+          "ultimateButton": 0.0
+        }
+      }
+    },
+    "practice": {
+      "852": {
+        "maxDeltaPx": 0,
+        "maxDeltaByControlPx": {
+          "stepBack": 0.0,
+          "stepForward": 0.0,
+          "weak": 0.0,
+          "strong": 0.0,
+          "throw": 0.0,
+          "gyuiin": 0.0,
+          "special": 0.0,
+          "ultimateButton": 0.0
+        }
+      },
+      "720": {
+        "maxDeltaPx": 0,
+        "maxDeltaByControlPx": {
+          "stepBack": 0.0,
+          "stepForward": 0.0,
+          "weak": 0.0,
+          "strong": 0.0,
+          "throw": 0.0,
+          "gyuiin": 0.0,
+          "special": 0.0,
+          "ultimateButton": 0.0
+        }
+      },
+      "notch-left": {
+        "maxDeltaPx": 0,
+        "maxDeltaByControlPx": {
+          "stepBack": 0.0,
+          "stepForward": 0.0,
+          "weak": 0.0,
+          "strong": 0.0,
+          "throw": 0.0,
+          "gyuiin": 0.0,
+          "special": 0.0,
+          "ultimateButton": 0.0
+        }
+      },
+      "notch-right": {
+        "maxDeltaPx": 0,
+        "maxDeltaByControlPx": {
+          "stepBack": 0.0,
+          "stepForward": 0.0,
+          "weak": 0.0,
+          "strong": 0.0,
+          "throw": 0.0,
+          "gyuiin": 0.0,
+          "special": 0.0,
+          "ultimateButton": 0.0
+        }
+      },
+      "portrait": {
+        "maxDeltaPx": 0,
+        "maxDeltaByControlPx": {
+          "stepBack": 0,
+          "stepForward": 0,
+          "weak": 0.0,
+          "strong": 0.0,
+          "throw": 0.0,
+          "gyuiin": 0.0,
+          "special": 0.0,
+          "ultimateButton": 0.0
+        }
+      }
+    },
+    "story": {
+      "852": {
+        "maxDeltaPx": 0,
+        "maxDeltaByControlPx": {
+          "stepBack": 0,
+          "stepForward": 0,
+          "weak": 0.0,
+          "strong": 0.0,
+          "throw": 0.0,
+          "gyuiin": 0.0,
+          "special": 0.0,
+          "ultimateButton": 0.0
+        }
+      },
+      "720": {
+        "maxDeltaPx": 0,
+        "maxDeltaByControlPx": {
+          "stepBack": 0,
+          "stepForward": 0.0,
+          "weak": 0.0,
+          "strong": 0.0,
+          "throw": 0.0,
+          "gyuiin": 0.0,
+          "special": 0.0,
+          "ultimateButton": 0.0
+        }
+      },
+      "notch-left": {
+        "maxDeltaPx": 0,
+        "maxDeltaByControlPx": {
+          "stepBack": 0,
+          "stepForward": 0.0,
+          "weak": 0.0,
+          "strong": 0.0,
+          "throw": 0.0,
+          "gyuiin": 0.0,
+          "special": 0.0,
+          "ultimateButton": 0.0
+        }
+      },
+      "notch-right": {
+        "maxDeltaPx": 0,
+        "maxDeltaByControlPx": {
+          "stepBack": 0,
+          "stepForward": 0.0,
+          "weak": 0.0,
+          "strong": 0.0,
+          "throw": 0.0,
+          "gyuiin": 0.0,
+          "special": 0.0,
+          "ultimateButton": 0.0
+        }
+      },
+      "portrait": {
+        "maxDeltaPx": 0,
+        "maxDeltaByControlPx": {
+          "stepBack": 0,
+          "stepForward": 0,
+          "weak": 0.0,
+          "strong": 0.0,
+          "throw": 0.0,
+          "gyuiin": 0.0,
+          "special": 0.0,
+          "ultimateButton": 0.0
+        }
+      }
+    }
+  }
+}

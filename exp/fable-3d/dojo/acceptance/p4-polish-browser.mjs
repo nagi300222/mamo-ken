@@ -211,19 +211,29 @@ async function battleControls(kind){
     await page.locator('#pause').click();
    }
    const buttons=await targets(selector,c,kind+' six combat buttons '+ready,{minimum:44});check(buttons.length===6,kind+' retains six controls',{case:c.id,ready});
-   const labels=await targets(selector+' .attack-label',c,kind+' main combat labels '+ready,{text:true});check(labels.length===6,kind+' has six separate main label spans',{case:c.id,ready});
-   check(labels.map(label=>label.text).join('')==='BAYZSX',kind+' uses the approved action symbols',{case:c.id});
+   const glyphs=await page.locator(selector).evaluateAll(nodes=>nodes.map(button=>{
+    const label=button.querySelector('.attack-label'),svg=button.querySelector('svg.bt');
+    const glyph=svg?.querySelector('.bt-glyph-ink');
+    const rect=glyph?.getBoundingClientRect();
+    return {
+     key:button.dataset.control,symbol:svg?.dataset.symbol,fallback:label?.textContent,
+     fallbackClipped:label&&getComputedStyle(label).clipPath==='inset(50%)',
+     rect:rect?.toJSON(),button:button.getBoundingClientRect().toJSON(),
+     stroke:glyph&&getComputedStyle(glyph).stroke,
+     hit:rect&&document.elementFromPoint(rect.x+rect.width/2,rect.y+rect.height/2)?.closest('button')===button,
+    };
+   }));
+   check(glyphs.map(glyph=>glyph.symbol).join('')==='BAYZSX',kind+' uses the approved SVG action symbols',{case:c.id,ready,glyphs});
+   for(const glyph of glyphs){
+    check(glyph.fallbackClipped&&glyph.fallback===glyph.symbol,kind+' retains the clipped fallback symbol',{case:c.id,ready,glyph});
+    check(glyph.stroke&&glyph.stroke!=='none'&&glyph.hit&&inside(glyph.rect,glyph.button)&&inside(glyph.rect,c.safe),kind+' paints an unobscured glyph inside its own button',{case:c.id,ready,glyph});
+   }
    const gauge=await page.locator('#hud-side-0 .resource').evaluateAll(rows=>rows.map(row=>row.classList[1]));
    check(gauge.join('/')==='health/super/drive',kind+' shows HP, ultimate and Drive in order',{case:c.id,gauge});
    const readySignal=await page.locator('#ultimate-ready-0').isVisible();
    check(readySignal===ready,kind+' mirrors ultimate readiness in the HUD',{case:c.id,ready,readySignal});
    const portraits=await page.locator('.hud-eye img').evaluateAll(images=>images.map(img=>img.complete&&img.naturalWidth>0));
    check(portraits.length===2&&portraits.every(Boolean),kind+' uses both real roster portraits',{case:c.id,portraits});
-   for(const label of labels){
-    check(label.fontSize>=12,kind+' main combat text is at least 12px',{case:c.id,ready,...label});
-    const parent=buttons.find(button=>button.rect.x<=label.rect.x+.5&&button.rect.y<=label.rect.y+.5&&button.rect.right>=label.rect.right-.5&&button.rect.bottom>=label.rect.bottom-.5);
-    check(!!parent,kind+' main label fits inside its own button',{case:c.id,ready,label});
-   }
    const statuses=await page.locator('#gyuiin-status,#roar-status,#ultimate-status').evaluateAll(nodes=>nodes.map(node=>({id:node.id,text:node.textContent,parentLabel:node.parentElement.getAttribute('aria-label'),className:node.className})));
    check(statuses.length===3&&statuses.every(s=>s.parentLabel),kind+' retains accessible status contracts',{case:c.id,ready,statuses});
    report.measurements.push({screen:kind+'-statuses',case:c.id,ready,statuses});
