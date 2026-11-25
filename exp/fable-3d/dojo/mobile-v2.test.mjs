@@ -1,3 +1,4 @@
+import {battleControlsMarkup} from '../shared-ui/battle-ui.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
@@ -106,13 +107,13 @@ test('ジャンプで相手を越え、左右の向きと後ろガードが入�
   assert.ok(g.fighters[0].x>g.fighters[1].x,'crossed opponent');
   assert.equal(g.fighters[0].facing,-1,'facing switches after crossing');
 });
-test('スマホ配置：左右の操作エリアと中央対戦画面を分離、右6ボタン',()=>{
+test('スマホ配置：左右の操作と中央対戦画面、右6ボタン',()=>{
   const html=readFileSync(new URL('./index.html',import.meta.url),'utf8');
   const css=readFileSync(new URL('./style.css',import.meta.url),'utf8');
   assert.match(html,/id="combat-layout"/);
   assert.ok(html.indexOf('id="stick-rail"')<html.indexOf('id="arena"'));
   assert.ok(html.indexOf('id="buttons-rail"')>html.indexOf('</section>'));
-  const rightRail=html.split('id="buttons-rail"')[1]||'';
+  const rightRail=battleControlsMarkup();
   const buttons=[...rightRail.matchAll(/data-control="([^"]+)"/g)].map(m=>m[1]);
   assert.deepEqual(buttons,['weak','strong','throw','gyuiin','special','ultimateButton']);
   const stickRail=html.split('id="stick-rail"')[1].split('id="arena"')[0];

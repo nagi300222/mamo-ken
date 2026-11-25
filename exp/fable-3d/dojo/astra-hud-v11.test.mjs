@@ -1,3 +1,4 @@
+import {battleControlsMarkup, battleHUDMarkup} from '../shared-ui/battle-ui.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
@@ -18,9 +19,9 @@ test('header contains independent SFX/BGM/FX settings, without changing 6 attack
  const html=read('index.html'),main=read('main.js'),css=read('style.css');
  assert.match(html,/popovertarget="av-settings"/);
  for(const id of ['sound-toggle','music-toggle','fx-toggle','hud-side-0','hud-side-1','ultimate-ready-0','ultimate-ready-1','charge-pips-0','charge-pips-1']){
-   assert.ok(html.includes('id="'+id+'"'),id);
+   assert.ok((html+battleHUDMarkup()).includes('id="'+id+'"'),id);
  }
- const right=html.split('id="buttons-rail"')[1];
+ const right=battleControlsMarkup();
  assert.deepEqual([...right.matchAll(/data-control="([^"]+)"/g)].map(x=>x[1]),
  ['weak','strong','throw','gyuiin','special','ultimateButton']);
  assert.match(main,/const effectsAllowed=/);

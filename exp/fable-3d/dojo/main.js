@@ -1,6 +1,6 @@
 import {syncSoundToggle,subscribeUIAudioMuted} from '../shared-ui/ui-feedback.js';
 import {presentCombatFeedback} from './fight-feel.js';
-import { BATTLE_INPUT_PROFILE, battleAnalog, updateBattleHUD } from '../shared-ui/battle-ui.js';
+import { BATTLE_INPUT_PROFILE, battleAnalog, battleControlsMarkup, battleHUDMarkup, battleButtonGuide, updateBattleHUD } from '../shared-ui/battle-ui.js';
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { clone as cloneSkeleton } from 'three/addons/utils/SkeletonUtils.js';
@@ -8,7 +8,7 @@ import { createChirkaIllusions } from './showtime-illusions.js';
 import { Battle, DRIVE } from './battle.js';
 import { ROSTER, IDS, FPS, ARENA } from './balance.js';
 import { MODEL_ASSETS, MODEL_REVISION, chooseClip } from './models.js';
-import { frameTargets } from './camera-frame.js';
+import { frameTargets, combatTouchZones, frameCombat } from './camera-frame.js';
 import { showtimeFor, showtimeHex, superCaption, isShowtimeMove } from './showtime-profiles.js';
 import { createCombatAudio } from './combat-audio.js';
 import { createArenaMusic } from './arena-music.js';
@@ -32,6 +32,16 @@ import { createRunStage } from './run-stages.js';
 import { createRunUI } from './run-ui.js';
 
 const $=id=>document.getElementById(id), canvas=$('stage');
+$('match-hud').innerHTML=battleHUDMarkup();
+$('controls').innerHTML=battleControlsMarkup();
+$('button-guide').textContent=battleButtonGuide;
+const combatPopovers = ['commands-help','av-settings'].map($);
+const combatMenuOpen = () => combatPopovers.some(panel=>panel.matches(':popover-open'));
+const combatInputAllowed = () => flow.inputEnabled && !movie.active && !paused && !combatMenuOpen();
+for(const panel of combatPopovers){
+ panel.addEventListener('beforetoggle',clearInput);
+}
+
 let gameRotated=false;
 function updateLandscapeLock(){
   // Safari cannot be relied on to override the iOS rotation-lock switch.
@@ -48,6 +58,7 @@ function updateLandscapeLock(){
 const scene=new THREE.Scene();scene.background=new THREE.Color(0x758993);
 const camera=new THREE.OrthographicCamera(-1.4,1.4,1,-1,.01,30);
 const cameraPose={x:0,y:.5,halfWidth:1.4};
+let touchZones={left:0,right:0};
 camera.position.set(0,1.2,5.5);camera.lookAt(0,.5,0);
 const renderer=(()=>{try{return new THREE.WebGLRenderer({canvas,antialias:true,alpha:false,powerPreference:'high-performance'});}
 catch(error){$('loading-status').textContent='3D表示を開始できません。Safari/Chromeで開き直してください。';$('start').disabled=true;throw error;}})();
@@ -428,9 +439,13 @@ function updateCamera(snap=false){
     }
   }
   const blend=snap?1:.18;
-  cameraPose.x+=(t.centerX-cameraPose.x)*blend;
-  cameraPose.y+=(t.focusY-cameraPose.y)*blend;
-  cameraPose.halfWidth+=(t.halfWidth-cameraPose.halfWidth)*blend;
+  if(battle&&flow.state==='fight'){
+    Object.assign(cameraPose,frameCombat(battle.fighters,battle.projectiles,w/h,touchZones,cameraPose,reducedMotion?1:blend));
+  }else{
+    cameraPose.x+=(t.centerX-cameraPose.x)*blend;
+    cameraPose.y+=(t.focusY-cameraPose.y)*blend;
+    cameraPose.halfWidth+=(t.halfWidth-cameraPose.halfWidth)*blend;
+  }
   camera.position.set(cameraPose.x,cameraPose.y+.70,5.5);
   camera.lookAt(cameraPose.x,cameraPose.y,0);
   // Add only a tiny display shake to the approved v0.3 camera composition.
@@ -448,7 +463,10 @@ function resize(){
   const w=canvas.clientWidth,h=canvas.clientHeight;
   if(w<1||h<1)return;
   renderer.setSize(w,h,false);renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,1.5));
-  if(!movie.active)updateCamera(true);
+  if(!movie.active){
+    touchZones=combatTouchZones(canvas,$('stick-rail'),$('buttons-rail'),gameRotated);
+    updateCamera(true);
+  }
 }
 const observer=new ResizeObserver(resize);observer.observe(canvas);window.addEventListener('resize',resize);
 function disposable(o){o.traverse(node=>{if(node.geometry)node.geometry.dispose();
@@ -685,64 +703,10 @@ function animateFX(queue=flashes,frames=1){
     if(f.life<=0){f.mesh.removeFromParent();f.mesh.material.dispose();queue.splice(i,1);}
   }
 }
-function abilityLabel(p){
-  const a=p.ability;
-  switch(p.id){
-    case 'moguzo':return a.gutsReady?'根性 READY':`根性 ${a.gutsProgress}/2`+(a.grit?' · 踏ん張り':'');
-    case 'pisuke':return a.chase?'CHASE 受付中':'チェイス';
-    case 'godan':return a.armorCooldown?'装甲 回復中':'装甲 READY';
-    case 'hakuma':return a.iron?'鉄壁 READY':'鉄壁';
-    case 'chirka':return 'フェイント/ディレイ';
-    case 'takimaru':return a.pressure?'投げ派生 READY':'プレッシャー';
-    case 'yomikage':return a.just?'見切り返し READY':'後の先';
-    case 'bullet':return 'チャージ '+a.charge+'/3';
-    case 'dark_moguzo':return a.dark&&!a.darkUsed?'暗連 READY':'暗連';
-    default:return '';
-  }
-}
-// 表示専用。入力を無効化せず、実際の技の成否は Battle が決める。
-function driveStatus(move,p,op){
-  if(battle.phase!=='fight')return '終了';
-  if(p.drive<DRIVE[move+'Cost'])return '不足';
-  if(p[move+'Cooldown']>0)return '回復中';
-  if(battle.clinch)return '待機';
-  // Codex #151: ギュイーンだけはヒットストップ・被弾中も発動できる。
-  if(move==='gyuiin')return p.y>.09?'空中':'発動可';
-  if(p.stop||p.stun)return '待機';
-  if(p.y>.06)return '空中';
-  const canCounter=p.action?.kind!=='roar' && op.action?.kind==='roar';
-  return p.dashF || (p.action&&!canCounter)?'待機':'発動可';
-}
-function showDriveStatus(move){
-  const status=driveStatus(move,...battle.fighters);
-  const label=$(move+'-status');
-  // The special button remains usable even when its down+special roar lacks Drive.
-  // Do not mark the entire special button unavailable on roar cooldown.
-  if(move==='roar'){
-    const message='咆哮 '+status;
-    if(label.textContent!==message)label.textContent=message;
-    return;
-  }
-  if(label.textContent===status)return;
-  label.textContent=status;
-  const button=label.parentElement;
-  button.toggleAttribute('data-wait',status!=='発動可');
-  button.setAttribute('aria-label',button.firstChild.textContent.trim()+'：'+status);
-}
-function showUltimateStatus(){
-  const p=battle.fighters[0],label=$('ultimate-status'),button=label.parentElement;
-  const ready=p.super>=100;
-  label.textContent=ready?'発動可':'ゲージ不足';
-  button.toggleAttribute('data-wait',!ready);
-  button.setAttribute('aria-label',ready?'奥義：発動可':'奥義：ゲージ不足');
-}
 function hud(){
   if(!battle)return;
   updateBattleHUD(document,{battle,roundLabel:flow.roundCall,practice:practiceEnabled});
   for(let i=0;i<2;i++)$('arena').style.setProperty(i===0?'--p1-accent':'--p2-accent',showtimeHex(battle.fighters[i].id));
-  showDriveStatus('roar');
-  showDriveStatus('gyuiin');
-  showUltimateStatus();
   $('timer').textContent=String(Math.ceil(battle.time/FPS));
   $('round-message').textContent=practiceEnabled?'PRACTICE':battle.phase==='fight'?flow.roundCall:'FINISH';
   if(practiceEnabled){$('timer').textContent='∞';syncPracticeUI();}
@@ -773,6 +737,7 @@ function anchorWorld(actor,facing,ref,out){
 function setFlowUI(){
   const state=flow.state,arena=$('arena');
   arena.dataset.flow=state;
+  if(state==='fight')resize();
   const intro=flow.introPhase;
   arena.dataset.introPhase=intro?.phase??'';
   $('vs-screen').classList.toggle('hidden',state!=='vs');
@@ -1133,7 +1098,7 @@ function resetAnalog(){
   stick.classList.remove('held');
 }
 stick.addEventListener('pointerdown',e=>{
-  if(movie.active||!flow.inputEnabled||analog.pointer!==null)return;
+  if(!combatInputAllowed()||analog.pointer!==null)return;
   e.preventDefault();analog.pointer=e.pointerId;stick.setPointerCapture(e.pointerId);
   stick.classList.add('held');analogMove(e);
 });
@@ -1160,8 +1125,7 @@ document.addEventListener('keydown',e=>{
     return;
   }
   const k=keyMap[e.code];if(!k)return;
-  if(movie.active||document.activeElement?.tagName==='SELECT')return;
-  if(!flow.inputEnabled)return;                 // 導入・KO・勝利ムービー中は対戦入力を受けない
+  if(!combatInputAllowed()||e.target.matches('input,select,textarea'))return;
   e.preventDefault();
   if(e.repeat)return;
   if((k==='left'||k==='right')&&!pressedKeys.has(k)&&!pressedKeys.has('up')&&!pressedKeys.has('down'))directionTap(k);
@@ -1228,7 +1192,7 @@ if(!audioFX.supported){
 document.querySelectorAll('[data-control]').forEach(button=>{
   const k=button.dataset.control;
   button.addEventListener('pointerdown',e=>{
-    if(movie.active||!flow.inputEnabled)return;
+    if(!combatInputAllowed()||e.button!==0)return;
     e.preventDefault();button.setPointerCapture(e.pointerId);
     pressedTouch.set(e.pointerId,k);queuedActions.add(k);button.classList.add('held');
   });
@@ -1239,6 +1203,9 @@ document.querySelectorAll('[data-control]').forEach(button=>{
   button.addEventListener('pointerup',end);
   button.addEventListener('pointercancel',end);
   button.addEventListener('lostpointercapture',end);
+  button.addEventListener('click',e=>{
+    if(e.detail===0&&combatInputAllowed())queuedActions.add(k);
+  });
   button.addEventListener('contextmenu',e=>e.preventDefault());
 });
 function input(){
@@ -1299,7 +1266,7 @@ function render(now){
     else if(flow.state==='result'&&presentState.winner>=0)presentCamera=updateVictory(present);
     else if(flow.state==='result'||flow.state==='await_round'){for(const actor of actors)actor?.mixer.update(delta);animateFX(flashes,delta*FPS);}
   }
-  if(battle&&playing&&!paused&&battle.phase==='fight'&&!movie.active&&flow.battleRunning) {
+  if(battle&&playing&&!paused&&battle.phase==='fight'&&!movie.active&&!combatMenuOpen()&&flow.battleRunning) {
     acc=Math.min(.10,acc+delta);let steps=0;
     while(acc>=FIXED&&steps<5){
       if(checking){battle.time=75*FPS;if(!battle.fighters[0].action)battle.fighters[0].super=100;}

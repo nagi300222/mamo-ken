@@ -12,7 +12,8 @@
 <link rel="stylesheet" href="../shared-ui/mountain-ui.css">
 <link rel="stylesheet" href="../shared-ui/p4-art.css">
 <script type="importmap">{"imports":{"three":"../preview/vendor/three.module.min.js","three/addons/":"../preview/vendor/addons/"}}</script>
-<link rel="stylesheet" href="../shared-ui/p4-polish.css"></head>
+<link rel="stylesheet" href="../shared-ui/p4-polish.css">
+<link rel="stylesheet" href="../shared-ui/matte-battle.css"></head>
 <body data-ui="mountain">
 <main id="app">
   <header class="topbar">
@@ -20,16 +21,17 @@
     <div class="header-actions">
       <button class="ghost" popovertarget="commands-help">技表</button>
       <div id="commands-help" popover>
-        <strong>直感操作 v0.7</strong><small>前後は相手方向に自動反転</small>
+        <strong>技表</strong><p id="button-guide"></p><small>前後は相手方向に自動反転</small>
         <dl>
-          <dt>基本必殺</dt><dd>必殺のみ／後ろ＋必殺（s1・236系）</dd>
-          <dt>対空必殺</dt><dd>↑＋必殺（s2・623系）</dd>
-          <dt>攻め必殺</dt><dd>前＋必殺（s3・214系）</dd>
-          <dt>咆哮</dt><dd>↓＋必殺（ドライブ35消費。斜め下も咆哮を優先）</dd>
-          <dt>奥義</dt><dd>奥義ボタン（奥義ゲージ100で発動）</dd>
+          <dt>基本必殺</dt><dd>Sのみ／後ろ＋S（s1・236系）</dd>
+          <dt>対空必殺</dt><dd>↑＋S（s2・623系）</dd>
+          <dt>攻め必殺</dt><dd>前＋S（s3・214系）</dd>
+          <dt>咆哮</dt><dd>↓＋S（ドライブ35消費。斜め下も咆哮を優先）</dd>
+          <dt>奥義</dt><dd>X（奥義ゲージ100で発動）</dd>
         </dl>
         <small>比較用：従来の236／623／214／236236＋弱・強コマンドも残している。</small>
         <p id="drive-costs"></p>
+        <small>物理キー：Z 弱 / X 強 / V 掴み / N ギュイーン / B 必殺 / M 奥義</small>
         <div class="ability-guide"><strong>選択キャラの固有能力</strong><p id="ability-guide"></p></div>
         <button class="ghost" popovertarget="commands-help" popovertargetaction="hide">閉じる</button>
       </div>
@@ -58,30 +60,14 @@
         </div>
       </div>
       <div class="step-pad" role="group" aria-label="前後ステップ">
-        <button type="button" data-control="stepBack" class="step-button" aria-label="後ステップ" title="相手から離れるステップ">後ステップ</button>
-        <button type="button" data-control="stepForward" class="step-button" aria-label="前ステップ" title="相手へ近づくステップ">前ステップ</button>
+        <button type="button" data-control="stepBack" class="step-button" aria-label="後ステップ" title="相手から離れるステップ">後</button>
+        <button type="button" data-control="stepForward" class="step-button" aria-label="前ステップ" title="相手へ近づくステップ">前</button>
       </div>
       <span class="rail-sub">移動・コマンド／下は前後ステップ</span>
     </aside>
     <section id="arena" aria-label="対戦画面">
     <canvas id="stage"></canvas>
-    <div class="hud shared-battle-hud">
-      <div class="hud-side" id="hud-side-0" data-mark="地" data-element="earth">
-        <div class="hud-name"><b>1P</b><span id="name-0">モグゾー</span><small id="ability-0"></small></div>
-        <div class="resource health"><span>体力</span><div class="track"><i id="hp-0"></i></div></div>
-        <div class="resource drive"><span>ドライブ</span><div class="track"><i id="drive-0"></i></div><b id="drive-value-0">100</b></div>
-        <div class="resource super"><span>奥義</span><div class="track"><i id="meter-0"></i></div><b id="super-value-0">0</b><small id="ultimate-ready-0" class="ultimate-ready" hidden>READY</small></div>
-        <div class="trait-row"><span id="trait-0" class="trait-word"></span><div id="charge-pips-0" class="charge-pips" hidden aria-hidden="true"><i></i><i></i><i></i></div></div>
-      </div>
-      <div class="round-center"><span id="timer">75</span><small id="round-message">ROUND 1</small></div>
-      <div class="hud-side mirrored" id="hud-side-1" data-mark="岩" data-element="stone">
-        <div class="hud-name"><b>CPU</b><span id="name-1">ゴダン</span><small id="ability-1"></small></div>
-        <div class="resource health"><span>体力</span><div class="track"><i id="hp-1"></i></div></div>
-        <div class="resource drive"><span>ドライブ</span><div class="track"><i id="drive-1"></i></div><b id="drive-value-1">100</b></div>
-        <div class="resource super"><span>奥義</span><div class="track"><i id="meter-1"></i></div><b id="super-value-1">0</b><small id="ultimate-ready-1" class="ultimate-ready" hidden>READY</small></div>
-        <div class="trait-row"><span id="trait-1" class="trait-word"></span><div id="charge-pips-1" class="charge-pips" hidden aria-hidden="true"><i></i><i></i><i></i></div></div>
-      </div>
-    </div>
+    <div id="match-hud" class="hud shared-battle-hud" aria-label="対戦HUD"></div>
     <div id="note" class="note" aria-live="polite">キャラクターを選んで対戦開始</div>
     <div id="showtime-banner" class="showtime-banner" aria-live="off" aria-hidden="true"></div>
     <div id="practice-panel" class="practice-panel" hidden>
@@ -129,18 +115,7 @@
     </section>
     <aside id="buttons-rail" class="control-rail shared-attack-pad">
       <span class="rail-caption">攻撃 · ATTACK</span>
-      <div id="controls" class="overlay-controls">
-      <div class="attack-pad">
-          <button data-control="weak" class="attack weak" aria-label="弱攻撃">弱</button>
-          <button data-control="strong" class="attack heavy" aria-label="強攻撃">強</button>
-          <button data-control="throw" class="attack throw" aria-label="掴み">掴み</button>
-          <button data-control="gyuiin" class="attack gyuiin" aria-label="ギュイーン">ギュイーン<small id="gyuiin-status"></small></button>
-          <button data-control="special" class="attack special" aria-label="方向と組み合わせて必殺技、下で咆哮">必殺<small id="roar-status"></small></button>
-          <button data-control="ultimateButton" class="attack ultimateButton" aria-label="奥義">奥義<small id="ultimate-status"></small></button>
-        </div>
-
-      </div>
-      <span class="rail-sub">↑対空／前特殊／↓咆哮 ＋必殺</span>
+      <div id="controls" class="overlay-controls"></div>
     </aside>
   </div>
   <div id="cinematic-layer" class="cinematic-layer" role="dialog" aria-label="奥義の専用ムービー" aria-modal="true" hidden>

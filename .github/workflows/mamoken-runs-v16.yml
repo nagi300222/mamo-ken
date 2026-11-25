@@ -10,6 +10,7 @@ on:
       - feat/mamoken-p0-p4-reviewed-integration
       - feat/mamoken-p0-p4-integration
       - feat/mamoken-p4-ui-polish
+      - feat/mamoken-matte-battle-ui
     paths-ignore:
       - docs/**
   workflow_dispatch:
@@ -92,6 +93,7 @@ jobs:
               p4_failed=0
               MAMOKEN_UI_VIDEO=1 node exp/fable-3d/dojo/acceptance/p4-ui-browser.mjs || p4_failed=1
               MAMOKEN_UI_VIDEO=1 node exp/fable-3d/dojo/acceptance/p4-polish-browser.mjs || p4_failed=1
+              MAMOKEN_UI_VIDEO=1 node exp/fable-3d/dojo/acceptance/matte-battle-browser.mjs || p4_failed=1
               node exp/fable-3d/dojo/acceptance/p4-ui-audio-browser.mjs || p4_failed=1
               node exp/fable-3d/dojo/acceptance/mux-p4-ui-audio.mjs "$MAMOKEN_EVIDENCE/ui-audio/report.json" || p4_failed=1
               exit "$p4_failed" ;;

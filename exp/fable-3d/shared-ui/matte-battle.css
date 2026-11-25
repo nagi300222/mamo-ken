@@ -1,0 +1,421 @@
+/* The canvas is full bleed. Only the HUD and inputs use logical safe insets. */
+body[data-ui=mountain] #app:has(#selection.hidden) #combat-layout {
+ position:absolute;
+ inset:0;
+ display:block;
+}
+body[data-ui=mountain] #app:has(#selection.hidden) #arena {
+ position:absolute;
+ inset:0;
+ box-shadow:none;
+}
+body[data-ui=mountain] #app:has(#selection.hidden) .topbar {
+ position:absolute;
+ inset:var(--ui-safe-top) var(--ui-safe-right) auto var(--ui-safe-left);
+ z-index:12;
+ border:0;
+ background:none;
+}
+body[data-ui=mountain] #app:has(#selection.hidden) .footnote {
+ position:absolute;
+ inset:auto max(8px,var(--ui-safe-right)) var(--ui-safe-bottom) max(8px,var(--ui-safe-left));
+ pointer-events:none;
+}
+#app:has(#selection:not(.hidden),#arena:not([data-flow=fight])) :is(#stick-rail,#buttons-rail) {
+ visibility:hidden;
+}
+body[data-ui=mountain] #app:has(#selection.hidden) :is(#stick-rail,#buttons-rail) {
+ position:absolute;
+ z-index:5;
+ overflow:visible;
+ background:none;
+ border:0;
+ padding:0;
+ pointer-events:none;
+}
+body[data-ui=mountain] #app:has(#selection.hidden) #stick-rail {
+ left:max(12px,calc(var(--ui-safe-left) + 6px));
+ bottom:max(20px,calc(var(--ui-safe-bottom) + 6px));
+ gap:5px;
+ width:clamp(102px,16%,133px);
+}
+#app :is(#stick-rail,#buttons-rail) :is(.rail-caption,.rail-sub,.stick-label) { display:none }
+#app:has(#selection.hidden) #stick-rail .stick-area { width:clamp(83px,13vw,114px) }
+html.landscape-locked #app:has(#selection.hidden) #stick-rail .stick-area { width:96px }
+body[data-ui=mountain] :is(#app,#story-app[data-mode=battle]) #stick-rail .joystick {
+ background:#222a26;
+ border:2px solid #8d8f79;
+ box-shadow:inset 0 0 0 5px #373d32,0 3px #151914;
+ pointer-events:auto;
+}
+body[data-ui=mountain] :is(#app,#story-app[data-mode=battle]) #stick-rail :is(#stick-thumb,#story-thumb) {
+ background:#a9aa8a;
+ border:2px solid #ded8b6;
+ box-shadow:0 3px #151914;
+}
+body[data-ui=mountain] :is(#app,#story-app[data-mode=battle]) #stick-rail .step-button {
+ color:#f3ebd5;
+ background:#33392d;
+ border:1px solid #8d8f79;
+ min-width:44px;
+ min-height:44px;
+ padding:0;
+ font-size:14px;
+ font-weight:800;
+ pointer-events:auto;
+}
+body[data-ui=mountain] :is(#app,#story-app[data-mode=battle]) #stick-rail .step-button.held {
+ background:#545947;
+}
+body[data-ui=mountain] #story-app:is([data-mode=battle],[data-mode=result]) #world {
+ position:absolute;
+ inset:0;
+ width:100%;
+ height:100%;
+}
+#story-app[data-mode=battle] {
+ --battle-safe-left:max(var(--ui-safe-left),var(--story-safe-start));
+ --battle-safe-right:max(var(--ui-safe-right),var(--story-safe-end));
+}
+html.native-runtime :is(#app,#story-app[data-mode=battle]) {
+ --ui-safe-top:var(--native-safe-top);
+ --ui-safe-right:var(--native-safe-right);
+ --ui-safe-bottom:var(--native-safe-bottom);
+ --ui-safe-left:var(--native-safe-left);
+}
+html.native-runtime body[data-ui=mountain] #story-app:is([data-mode=battle],[data-mode=result]) {
+ width:100vw;
+ height:100dvh;
+ margin:0;
+}
+body[data-ui=mountain] #story-app[data-mode=battle] #stick-rail {
+ top:auto;
+ bottom:max(20px,calc(var(--ui-safe-bottom) + 6px));
+ left:max(12px,calc(var(--battle-safe-left) + 6px));
+ width:clamp(102px,16%,133px);
+}
+body[data-ui=mountain] #story-app[data-mode=battle] #battle-steps { width:100% }
+body[data-ui=mountain] #story-app[data-mode=battle] header {
+ inset:var(--ui-safe-top) var(--ui-safe-right) auto var(--ui-safe-left);
+ background:none;
+}
+#story-app #commands-help {
+ max-width:min(450px,90vw);
+ padding:16px;
+}
+#story-app #commands-help p { margin-block:8px }
+html.landscape-locked #story-app #commands-help:popover-open {
+ position:fixed;
+ inset:50% auto auto 50%;
+ margin:0;
+ max-width:min(420px,80dvh);
+ max-height:calc(100vw - 32px);
+ transform:translate(-50%,-50%) rotate(90deg);
+ overflow:auto;
+}
+:is(#app,#story-app) { container-type:size }
+body[data-ui=mountain] #app:has(#selection.hidden) #buttons-rail,
+body[data-ui=mountain] #story-app[data-mode=battle] #battle-buttons {
+ --art-unit:clamp(.77px,.225cqh,1px);
+ right:max(36px,calc(var(--battle-safe-right,var(--ui-safe-right)) + 7px));
+ bottom:max(50px,calc(var(--ui-safe-bottom) + 8px));
+ display:block;
+ width:calc(234 * var(--art-unit));
+ height:calc(215 * var(--art-unit));
+ pointer-events:none;
+}
+body[data-ui=mountain] #buttons-rail.shared-attack-pad .overlay-controls {
+ height:100%;
+ pointer-events:none;
+}
+body[data-ui=mountain] :is(#buttons-rail,#battle-buttons).shared-attack-pad .attack-pad {
+ display:block;
+ position:relative;
+ width:100%;
+ height:100%;
+ pointer-events:none;
+}
+body[data-ui=mountain] :is(#buttons-rail,#battle-buttons).shared-attack-pad button.attack[data-control] {
+ position:absolute;
+ left:calc(var(--cx) * var(--art-unit));
+ top:calc(var(--cy) * var(--art-unit));
+ width:max(44px,calc(var(--art-w) * var(--art-unit)));
+ height:max(44px,calc(var(--art-h) * var(--art-unit)));
+ min-height:44px;
+ min-width:44px;
+ transform:translate(-50%,-50%);
+ padding:0;
+ background:none;
+ border:0;
+ border-radius:0;
+ box-shadow:none;
+ outline:0;
+ filter:none;
+ pointer-events:auto;
+ color:var(--art-label);
+ touch-action:none;
+}
+body[data-ui=mountain] :is(#buttons-rail,#battle-buttons).shared-attack-pad button.attack[data-control]:focus-visible {
+ outline:2px solid #fff0b5;
+ outline-offset:0;
+}
+body[data-ui=mountain] :is(#buttons-rail,#battle-buttons).shared-attack-pad button.gyuiin {
+ --hit-offset:max(0px,calc(22px - 20 * var(--art-unit)));
+ margin-top:var(--hit-offset);
+}
+.attack-art {
+ position:absolute;
+ width:calc(var(--art-w) * var(--art-unit));
+ height:calc(var(--art-h) * var(--art-unit));
+ inset:calc(50% - var(--hit-offset,0px)) auto auto 50%;
+ transform:translate(-50%,-50%);
+ pointer-events:none;
+ overflow:visible;
+}
+
+.attack-art svg { display:block;width:100%;height:100%;overflow:visible }
+.attack {
+ --art-rim:var(--normal-rim);
+ --art-face:var(--normal-face);
+ --art-plate:var(--normal-plate);
+ --art-label:var(--normal-label);
+}
+.attack-rim { fill:var(--art-rim) }
+.attack-face { fill:var(--art-face) }
+.attack-edge { fill:var(--art-plate) }
+body[data-ui=mountain] :is(#buttons-rail,#battle-buttons).shared-attack-pad .attack[data-control] .attack-label {
+ position:absolute;
+ left:var(--label-x);
+ top:var(--label-y);
+ width:auto;
+ transform:translate(-50%,-50%);
+ font-size:clamp(15px,calc(var(--label-font) * var(--art-unit)),24px);
+ font-weight:900;
+ line-height:1.6;
+ white-space:nowrap;
+ pointer-events:none;
+}
+.attack[data-wait] {
+ --art-rim:var(--disabled-rim);
+ --art-face:var(--disabled-face);
+ --art-plate:var(--disabled-plate);
+ --art-label:var(--disabled-label);
+}
+.attack[data-ready] {
+ --art-rim:var(--ready-rim);
+ --art-face:var(--ready-face);
+ --art-plate:var(--ready-plate);
+ --art-label:var(--ready-label);
+}
+.attack.held {
+ --art-rim:var(--pressed-rim);
+ --art-face:var(--pressed-face);
+ --art-plate:var(--pressed-plate);
+ --art-label:var(--pressed-label);
+}
+.attack.held :is(.attack-edge,.attack-label) { translate:0 2px }
+.attack[data-ready] .attack-edge { stroke:#ffe5aa;stroke-width:1.5 }
+@media(prefers-reduced-motion:reduce) {
+ .attack.held :is(.attack-edge,.attack-label) { translate:none }
+}
+
+/* Each side has an outer character crop and three rails that grow inward. */
+body[data-ui=mountain] :is(#arena,#story-app) .shared-battle-hud {
+ position:absolute;
+ inset:calc(var(--ui-safe-top) + 49px) max(14px,calc(var(--battle-safe-right,var(--ui-safe-right)) + 6px)) auto max(14px,calc(var(--battle-safe-left,var(--ui-safe-left)) + 6px));
+ display:grid;
+ grid-template-columns:minmax(0,1fr) 48px minmax(0,1fr);
+ align-items:start;
+ gap:8px;
+ padding:0;
+ border:0;
+ background:none;
+ box-shadow:none;
+ filter:none;
+}
+body[data-ui=mountain] :is(#arena,#story-app) .shared-battle-hud .hud-side {
+ --eye-size:clamp(42px,7cqw,60px);
+ display:grid;
+ grid-template-columns:var(--eye-size) minmax(0,1fr);
+ grid-template-areas:"eye name" "eye hp" "eye super" "eye drive" "eye trait";
+ align-items:center;
+ column-gap:7px;
+}
+body[data-ui=mountain] :is(#arena,#story-app) .shared-battle-hud .hud-side.mirrored {
+ grid-template-columns:minmax(0,1fr) var(--eye-size);
+ grid-template-areas:"name eye" "hp eye" "super eye" "drive eye" "trait eye";
+}
+.hud-eye {
+ grid-area:eye;
+ align-self:start;
+ position:relative;
+ width:100%;
+ height:39px;
+ overflow:hidden;
+ background:#222b25;
+ border:1px solid #a8a586;
+}
+.hud-eye img {
+ position:absolute;
+ left:50%;
+ top:50%;
+ width:175%;
+ max-width:none;
+ transform:translate(calc(-1 * var(--eye-x)),calc(-1 * var(--eye-y)));
+ transform-origin:var(--eye-x) var(--eye-y);
+}
+.mirrored .hud-eye img { transform:translate(calc(-1 * var(--eye-x)),calc(-1 * var(--eye-y))) scaleX(-1) }
+body[data-ui=mountain] :is(#arena,#story-app) .shared-battle-hud .hud-side[data-element] .hud-name {
+ grid-area:name;
+ flex-wrap:nowrap;
+ justify-content:flex-start;
+ gap:4px;
+ padding:0;
+ border:0;
+ margin:0;
+ min-height:15px;
+ background:#242a23;
+}
+body[data-ui=mountain] :is(#arena,#story-app) .shared-battle-hud .hud-side[data-element] .hud-name::before { display:none }
+body[data-ui=mountain] :is(#arena,#story-app) .shared-battle-hud .hud-name>small {
+ display:block;
+ width:auto;
+ max-width:47%;
+ overflow:hidden;
+ font-size:9px;
+ text-overflow:ellipsis;
+ white-space:nowrap;
+ margin-inline-start:auto;
+}
+body[data-ui=mountain] :is(#arena,#story-app) .shared-battle-hud .mirrored .hud-name>small {
+ margin-inline:0 auto;
+}
+.shared-battle-hud .health { grid-area:hp }
+.shared-battle-hud .super { grid-area:super;--segments-color:#e6b76d }
+.shared-battle-hud .drive { grid-area:drive;--segments-color:#72babb }
+.shared-battle-hud .trait-row { grid-area:trait }
+body[data-ui=mountain] :is(#arena,#story-app) .shared-battle-hud .resource {
+ position:relative;
+ height:11px;
+ margin-top:2px;
+ padding:0 3px;
+ gap:4px;
+ background:#222824;
+ white-space:nowrap;
+}
+body[data-ui=mountain] :is(#arena,#story-app) .shared-battle-hud .health { height:15px }
+body[data-ui=mountain] :is(#arena,#story-app) .shared-battle-hud .resource>span {
+ flex:0 0 27px;
+ width:27px;
+ font-size:9px;
+}
+body[data-ui=mountain] :is(#arena,#story-app) .shared-battle-hud .track {
+ height:8px;
+ border:1px solid #858b79;
+ background:#151a17;
+}
+body[data-ui=mountain] :is(#arena,#story-app) .shared-battle-hud .health .track {
+ height:13px;
+ background:#55302b;
+}
+body[data-ui=mountain] :is(#arena,#story-app) .shared-battle-hud .health .track i { background:#90cba0 }
+body[data-ui=mountain] :is(#arena,#story-app) .shared-battle-hud .health .track i.low { background:#e48b71 }
+body[data-ui=mountain] :is(#arena,#story-app) .shared-battle-hud :is(.drive,.super) .track {
+ position:relative;
+ margin-inline-end:12%;
+}
+body[data-ui=mountain] :is(#arena,#story-app) .shared-battle-hud .mirrored :is(.drive,.super) .track {
+ margin-inline:12% 0;
+}
+body[data-ui=mountain] :is(#arena,#story-app) .shared-battle-hud :is(.drive,.super) .track::after {
+ content:"";
+ position:absolute;
+ inset:0;
+ background:repeating-linear-gradient(to right,transparent 0 calc(10% - 2px),#202621 calc(10% - 2px) 10%);
+}
+body[data-ui=mountain] :is(#arena,#story-app) .shared-battle-hud .mirrored :is(.drive,.super) .track::after {
+ background:repeating-linear-gradient(to left,transparent 0 calc(10% - 2px),#202621 calc(10% - 2px) 10%);
+}
+body[data-ui=mountain] :is(#arena,#story-app) .shared-battle-hud :is(.drive,.super) .track i {
+ background:var(--segments-color);
+ box-shadow:none;
+}
+body[data-ui=mountain] :is(#arena,#story-app) .shared-battle-hud .super .track i.ready { background:#ffdb8c }
+body[data-ui=mountain] :is(#arena,#story-app) .shared-battle-hud .resource>b { min-width:18px }
+body[data-ui=mountain] :is(#arena,#story-app) .shared-battle-hud .ultimate-ready {
+ position:absolute;
+ top:-6px;
+ bottom:auto;
+ right:27px;
+ left:auto;
+ z-index:1;
+ display:flex;
+ align-items:center;
+ gap:2px;
+ height:18px;
+ color:#ffe7af;
+ text-shadow:0 1px #2c2118;
+}
+body[data-ui=mountain] :is(#arena,#story-app) .shared-battle-hud .mirrored .ultimate-ready {
+ left:27px;
+ right:auto;
+ flex-direction:row-reverse;
+}
+.shared-battle-hud .ultimate-ready[hidden] { display:none !important }
+.ultimate-ready svg {
+ width:14px;
+ height:18px;
+ fill:#ffab57;
+ stroke:#582f1b;
+ stroke-width:.65;
+ animation:mamoken-ready 1s ease-in-out infinite alternate;
+}
+@keyframes mamoken-ready { to { transform:scale(.88,1.13) } }
+@media(prefers-reduced-motion:reduce) {
+ .ultimate-ready svg { animation:none }
+ .shared-battle-hud .track i { transition:none }
+}
+html:has(#fx-toggle[aria-pressed=false]) .ultimate-ready svg { animation:none }
+body[data-ui=mountain] :is(#arena,#story-app) .shared-battle-hud .trait-row {
+ justify-content:flex-start;
+}
+body[data-ui=mountain] :is(#arena,#story-app) .shared-battle-hud .mirrored .trait-row {
+ justify-content:flex-end;
+}
+body[data-ui=mountain] #arena>.note {
+ top:calc(var(--ui-safe-top) + 119px);
+ max-width:50%;
+}
+body[data-ui=mountain] #arena .showtime-banner {
+ top:calc(var(--ui-safe-top) + 120px);
+}
+body[data-ui=mountain] #arena #practice-panel {
+ right:auto;
+ bottom:max(20px,var(--ui-safe-bottom));
+ left:calc(50% - 12px);
+ transform:translateX(-50%);
+ display:grid;
+ grid-template-columns:auto auto auto auto;
+ grid-template-areas:"dummy hits damage reset" "dummy last last reset";
+ width:max-content;
+ max-width:none;
+ gap:0 6px;
+ padding:2px 4px;
+}
+#practice-panel label { grid-area:dummy }
+#practice-panel span:nth-of-type(1) { grid-area:hits }
+#practice-panel span:nth-of-type(2) { grid-area:damage }
+#practice-panel>small { grid-area:last }
+#practice-panel #practice-reset { grid-area:reset }
+body[data-ui=mountain] #arena #practice-panel :is(select,#practice-reset) { padding:3px 5px }
+body[data-ui=mountain] #arena #practice-panel strong { display:none }
+body[data-ui=mountain] #story-app[data-mode=battle] #status {
+ bottom:max(20px,var(--ui-safe-bottom));
+ max-width:48%;
+}
+
+/* Trim only corners outside the artwork so adjoining hit areas stay distinct. */
+.attack.heavy { clip-path:polygon(0 0,100% 0,100% 75%,75% 100%,0 100%) }
+.attack.special { clip-path:polygon(0 26%,24% 0,100% 0,100% 100%,21% 100%,0 73%) }
+.attack:focus-visible { clip-path:none }
+.attack:focus-visible .attack-rim { stroke:#fff0b5;stroke-width:2 }

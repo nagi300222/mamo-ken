@@ -1,3 +1,4 @@
+import {battleControlsMarkup} from '../shared-ui/battle-ui.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
@@ -48,6 +49,6 @@ test('HUD + mode wiring keep original right-side six buttons',()=>{
  for(const fn of ['practice.prepare(battle)','practice.dummyInput(battle)','practice.after(battle)'])
    assert.ok(m.includes(fn),fn);
  assert.match(b,/practice-mode\.js/);
- assert.deepEqual([...h.split('id="buttons-rail"')[1].matchAll(/data-control="([^"]+)"/g)].map(x=>x[1]),
+ assert.deepEqual([...battleControlsMarkup().matchAll(/data-control="([^"]+)"/g)].map(x=>x[1]),
  ['weak','strong','throw','gyuiin','special','ultimateButton']);
 });

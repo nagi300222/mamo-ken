@@ -13,6 +13,7 @@ on:
       - feat/mamoken-codex-audio-v10
       - feat/mamoken-astra-hud-v11
       - feat/mamoken-super-hit-cinematic-v13
+      - feat/mamoken-matte-battle-ui
   pull_request:
     branches:
       - feat/mamoken-3d-mobile-fight

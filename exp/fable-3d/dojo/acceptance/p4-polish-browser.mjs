@@ -212,19 +212,18 @@ async function battleControls(kind){
    }
    const buttons=await targets(selector,c,kind+' six combat buttons '+ready,{minimum:44});check(buttons.length===6,kind+' retains six controls',{case:c.id,ready});
    const labels=await targets(selector+' .attack-label',c,kind+' main combat labels '+ready,{text:true});check(labels.length===6,kind+' has six separate main label spans',{case:c.id,ready});
-   const states=await metrics('.battle-control-guide [data-control-state]');
-   check(states.length>=3,kind+' separately exposes special/gyuiin/ultimate state captions',{case:c.id,ready,states});
-   const guides=await targets('.battle-control-guide',c,kind+' external state guide '+ready);
+   check(labels.map(label=>label.text).join('')==='BAYZSX',kind+' uses the approved action symbols',{case:c.id});
+   const gauge=await page.locator('#hud-side-0 .resource').evaluateAll(rows=>rows.map(row=>row.classList[1]));
+   check(gauge.join('/')==='health/super/drive',kind+' shows HP, ultimate and Drive in order',{case:c.id,gauge});
+   const readySignal=await page.locator('#ultimate-ready-0').isVisible();
+   check(readySignal===ready,kind+' mirrors ultimate readiness in the HUD',{case:c.id,ready,readySignal});
+   const portraits=await page.locator('.hud-eye img').evaluateAll(images=>images.map(img=>img.complete&&img.naturalWidth>0));
+   check(portraits.length===2&&portraits.every(Boolean),kind+' uses both real roster portraits',{case:c.id,portraits});
    for(const label of labels){
     check(label.fontSize>=12,kind+' main combat text is at least 12px',{case:c.id,ready,...label});
     const parent=buttons.find(button=>button.rect.x<=label.rect.x+.5&&button.rect.y<=label.rect.y+.5&&button.rect.right>=label.rect.right-.5&&button.rect.bottom>=label.rect.bottom-.5);
     check(!!parent,kind+' main label fits inside its own button',{case:c.id,ready,label});
    }
-   for(const state of states){
-    check(state.visible&&state.fontSize>=10&&inside(state.rect,c.safe),kind+' status text is visible, at least 10px and safe',{case:c.id,ready,...state});
-    for(const button of buttons)check(!overlaps(state.rect,button.rect),kind+' state caption does not overlap an attack target',{case:c.id,ready,state,button});
-   }
-   for(const guide of guides)for(const button of buttons)check(!overlaps(guide.rect,button.rect),kind+' guide does not cover combat buttons',{case:c.id,ready,guide,button});
    const statuses=await page.locator('#gyuiin-status,#roar-status,#ultimate-status').evaluateAll(nodes=>nodes.map(node=>({id:node.id,text:node.textContent,parentLabel:node.parentElement.getAttribute('aria-label'),className:node.className})));
    check(statuses.length===3&&statuses.every(s=>s.parentLabel),kind+' retains accessible status contracts',{case:c.id,ready,statuses});
    report.measurements.push({screen:kind+'-statuses',case:c.id,ready,statuses});

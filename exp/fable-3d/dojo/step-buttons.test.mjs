@@ -1,3 +1,4 @@
+import {battleControlsMarkup} from '../shared-ui/battle-ui.js';
 import {BATTLE_INPUT_PROFILE} from '../shared-ui/battle-ui.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
@@ -16,7 +17,7 @@ function setup(reverse=false,id='moguzo'){
   return g;
 }
 
-test('スティック直下に「後ステップ」「前ステップ」を独立配置、中央画面は変更しない',()=>{
+test('スティック直下に「後ステップ」「前ステップ」を独立配置',()=>{
   const rail=html.split('id="stick-rail"')[1].split('<section id="arena"')[0];
   assert.match(rail,/id="joystick"/);
   assert.match(rail,/class="step-pad"/);
@@ -28,7 +29,7 @@ test('スティック直下に「後ステップ」「前ステップ」を独�
   assert.match(css,/#stick-rail \.step-button\.held\s*\{/);
   assert.equal((html.match(/id="combat-layout"/g)||[]).length,1);
   assert.equal((html.match(/id="stage"/g)||[]).length,1);
-  const right=html.split('id="buttons-rail"')[1];
+  const right=battleControlsMarkup();
   assert.deepEqual([...right.matchAll(/data-control="([^"]+)"/g)].map(m=>m[1]),
     ['weak','strong','throw','gyuiin','special','ultimateButton']);
 });

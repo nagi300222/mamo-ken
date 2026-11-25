@@ -129,8 +129,9 @@ try{
   else assert.notEqual(await page.locator('#timer').textContent(),'∞');
   const controls=await page.locator('#buttons-rail .attack').evaluateAll(nodes=>nodes.map(n=>({key:n.dataset.control,label:n.querySelector('.attack-label')?.textContent,font:parseFloat(getComputedStyle(n.querySelector('.attack-label')??n).fontSize)})));
   assert.equal(controls.length,6);assert.ok(controls.every(n=>n.label&&n.font>=12),JSON.stringify(controls));
-  assert.equal(await page.locator('#buttons-rail .battle-control-guide').count(),1,'changing action state must stay available outside the main labels');
-  assert.match(await page.locator('.hud .health .track').first().evaluate(n=>getComputedStyle(n).backgroundImage),/hud-hp-frame\.svg/);
+  assert.deepEqual(controls.map(n=>n.label),['B','A','Y','Z','S','X']);
+  assert.equal(await page.locator('#commands-help #button-guide').count(),1,'action names must remain in the move list');
+  assert.equal(await page.locator('.hud .hud-eye img').count(),2);
   assert.match(await page.locator('.round-center').evaluate(n=>getComputedStyle(n).backgroundImage),/hud-timer-dark\.svg/);
   await tapTargets('#buttons-rail button,#stick-rail button');
   if(mode==='practice')await tapTargets('#practice-panel select,#practice-panel button');
