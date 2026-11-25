@@ -20,7 +20,16 @@ try{
  assert.equal(await page.locator('#practice-panel').isVisible(),true);
  assert.equal(await page.locator('#timer').textContent(),'∞');
  assert.equal(await page.locator('#buttons-rail [data-control]').count(),6);
+ assert.deepEqual(await page.locator('#buttons-rail svg.bt').evaluateAll(nodes=>nodes.map(n=>n.dataset.symbol)),['B','A','Y','Z','S','X']);
+ assert.equal(await page.locator('#buttons-rail [data-control=ultimateButton] .bt-face').evaluate(e=>getComputedStyle(e).fill),'rgb(216, 155, 36)');
  await page.screenshot({path:dir+'/practice-landscape-locked.png'});
+ for(const [width,height] of [[720,320],[852,393]]){
+  await page.setViewportSize({width,height});
+  await page.waitForFunction(()=>!mamoken3d.landscapeLocked);
+  const [hud,x]=await Promise.all([page.locator('#hud-side-0').boundingBox(),page.locator('[data-control=ultimateButton]').boundingBox()]);
+  assert.ok(hud.y+hud.height<x.y,`Practice HUD overlaps X at ${width}×${height}`);
+  await page.screenshot({path:dir+`/practice-ready-${width}x${height}.png`});
+ }
  await page.evaluate(()=>{const g=mamoken3d.battle;g.fighters[0].x=-.18;g.fighters[1].x=.18;g.fighters[1].stun=0;g.fighters[0].action=null;g.fighters[0].stop=0;});
  await page.locator('[data-control="weak"]').tap();
  await page.waitForFunction(()=>mamoken3d.practice.stats.hits>=1,undefined,{timeout:6500});

@@ -152,7 +152,6 @@ body[data-ui=mountain] :is(#buttons-rail,#battle-buttons).shared-attack-pad butt
  outline:0;
  filter:none;
  pointer-events:auto;
- color:var(--art-label);
  touch-action:none;
 }
 body[data-ui=mountain] :is(#buttons-rail,#battle-buttons).shared-attack-pad button.attack[data-control]:focus-visible {
@@ -174,50 +173,6 @@ body[data-ui=mountain] :is(#buttons-rail,#battle-buttons).shared-attack-pad butt
 }
 
 .attack-art svg { display:block;width:100%;height:100%;overflow:visible }
-.attack {
- --art-rim:var(--normal-rim);
- --art-face:var(--normal-face);
- --art-plate:var(--normal-plate);
- --art-label:var(--normal-label);
-}
-.attack-rim { fill:var(--art-rim) }
-.attack-face { fill:var(--art-face) }
-.attack-edge { fill:var(--art-plate) }
-body[data-ui=mountain] :is(#buttons-rail,#battle-buttons).shared-attack-pad .attack[data-control] .attack-label {
- position:absolute;
- left:var(--label-x);
- top:var(--label-y);
- width:auto;
- transform:translate(-50%,-50%);
- font-size:clamp(15px,calc(var(--label-font) * var(--art-unit)),24px);
- font-weight:900;
- line-height:1.6;
- white-space:nowrap;
- pointer-events:none;
-}
-.attack[data-wait] {
- --art-rim:var(--disabled-rim);
- --art-face:var(--disabled-face);
- --art-plate:var(--disabled-plate);
- --art-label:var(--disabled-label);
-}
-.attack[data-ready] {
- --art-rim:var(--ready-rim);
- --art-face:var(--ready-face);
- --art-plate:var(--ready-plate);
- --art-label:var(--ready-label);
-}
-.attack.held {
- --art-rim:var(--pressed-rim);
- --art-face:var(--pressed-face);
- --art-plate:var(--pressed-plate);
- --art-label:var(--pressed-label);
-}
-.attack.held :is(.attack-edge,.attack-label) { translate:0 2px }
-.attack[data-ready] .attack-edge { stroke:#ffe5aa;stroke-width:1.5 }
-@media(prefers-reduced-motion:reduce) {
- .attack.held :is(.attack-edge,.attack-label) { translate:none }
-}
 
 /* Each side has an outer character crop and three rails that grow inward. */
 body[data-ui=mountain] :is(#arena,#story-app) .shared-battle-hud {
@@ -418,4 +373,3 @@ body[data-ui=mountain] #story-app[data-mode=battle] #status {
 .attack.heavy { clip-path:polygon(0 0,100% 0,100% 75%,75% 100%,0 100%) }
 .attack.special { clip-path:polygon(0 26%,24% 0,100% 0,100% 100%,21% 100%,0 73%) }
 .attack:focus-visible { clip-path:none }
-.attack:focus-visible .attack-rim { stroke:#fff0b5;stroke-width:2 }

@@ -14,6 +14,7 @@ on:
       - feat/mamoken-astra-hud-v11
       - feat/mamoken-super-hit-cinematic-v13
       - feat/mamoken-matte-battle-ui
+      - codex/mamoken-battle-ui-v2
   pull_request:
     branches:
       - feat/mamoken-3d-mobile-fight
