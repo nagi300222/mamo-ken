@@ -77,7 +77,7 @@ body[data-ui=mountain] #story-app:is([data-mode=battle],[data-mode=result]) #wor
  --battle-safe-left:max(var(--ui-safe-left),var(--story-safe-start));
  --battle-safe-right:max(var(--ui-safe-right),var(--story-safe-end));
 }
-html.native-runtime {
+html.native-runtime :is(#app,#story-app[data-mode=battle]) {
  --ui-safe-top:var(--native-safe-top);
  --ui-safe-right:var(--native-safe-right);
  --ui-safe-bottom:var(--native-safe-bottom);

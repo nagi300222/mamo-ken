@@ -41,7 +41,6 @@ async function assertDecodedArt(screen,expectations){
  svgDecoding.push({screen,checks});await writeFile(output+'/native-svg-decoding.json',JSON.stringify({uiKitTested:false,svgDecoding},null,2));
  for(const check of checks){assert.equal(check.error,undefined,screen+' '+JSON.stringify(check));assert.equal(check.status,200);assert.match(check.mime??'',check.filename.endsWith('.webp')?/^image\/webp\b/:/^image\/svg\+xml\b/);assert.ok(check.decoded&&check.width>0&&check.height>0,'Art did not decode: '+JSON.stringify(check));}
 }
-const buttonArt=parent=>[['weak','weak'],['strong','heavy'],['throw','throw'],['gyuiin','gyuiin'],['special','special'],['ultimateButton','ultimate']].map(([control,asset])=>[parent+' [data-control="'+control+'"]','','button-'+asset+'.svg']);
 async function safeInsets(left,right,bottom=21){
  await page.evaluate(({left,right,bottom})=>{
   for(const [edge,value]of Object.entries({left,right,top:0,bottom}))document.documentElement.style.setProperty('--native-safe-'+edge,value+'px');
