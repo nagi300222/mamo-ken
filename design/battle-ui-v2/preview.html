@@ -1,0 +1,37 @@
+<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Battle UI v2 States</title>
+<!-- Design board: every button × state, rendered from the runtime data module. Serve the repo root and open /design/battle-ui-v2/preview.html -->
+<link rel="stylesheet" href="../../exp/fable-3d/shared-ui/matte-battle-v2.css">
+<style>
+:root{color-scheme:dark}
+body{margin:0;padding:16px;background:#5B6B66;font:13px/1.5 system-ui,sans-serif;color:#F3EAD8}
+h1{font-size:16px;margin:0 0 12px}
+table{border-collapse:collapse}
+th{font-weight:700;text-align:left;padding:6px 10px;color:#E9DFC6}
+td{padding:10px 14px;text-align:center;vertical-align:middle}
+.cell{position:relative;display:inline-block;--art-unit:1px}
+.cell .attack-art{position:relative;display:block;width:calc(var(--art-w)*1px);height:calc(var(--art-h)*1px);scale:var(--art-scale)}
+.cell .attack-label{display:none}
+.note{max-width:860px;color:#E3E8E2;margin-top:12px}
+</style></head><body>
+<h1>マモ拳 戦闘ボタン v2：状態一覧（1 art unit = 1px）</h1>
+<table id="board"><thead><tr><th>記号</th><th>通常</th><th>押下</th><th>資源待ち（無効）</th><th>READY</th><th>READY押下</th><th>汎用無効</th></tr></thead><tbody></tbody></table>
+<p class="note">X と Z だけが資源待ちを持つ（X＝奥義ゲージ不足、Z＝Drive不足／回復中）。READY は X だけ。「汎用無効」は disabled／aria-disabled 用の予備で、現行コードでは使っていない。</p>
+<script type="module">
+import {battleControlArtV2} from '../../exp/fable-3d/shared-ui/battle-control-art-v2.js';
+const roles={S:'必殺',A:'強',B:'弱',X:'奥義',Y:'掴み',Z:'ギュイーン'};
+const states=[['',''],['held',''],['','wait'],['','ready'],['held','ready'],['','disabled']];
+const tbody=document.querySelector('tbody');
+for(const k of ['S','A','B','X','Y','Z']){
+ const a=battleControlArtV2[k],tr=document.createElement('tr');
+ tr.innerHTML=`<th>${k}　${roles[k]}</th>`;
+ for(const [cls,attr] of states){
+  const td=document.createElement('td');
+  const ok=attr===''||attr==='disabled'||(attr==='wait'&&'XZ'.includes(k))||(attr==='ready'&&k==='X');
+  if(ok){td.innerHTML=`<span class="cell attack ${cls}" data-control="${k}" style="${a.style}" ${attr==='disabled'?'aria-disabled="true"':attr?`data-${attr}`:''}><span class="attack-art">${a.svg}</span></span>`;}
+  else td.textContent='—';
+  tr.append(td);
+ }
+ tbody.append(tr);
+}
+</script></body></html>

@@ -1,0 +1,200 @@
+/* Matte battle v2 — reference stylesheet (art direction: Claude).
+ * Spec: docs/ui-bible/20_battle_visual_v2.md. Load AFTER matte-battle.css.
+ * Not linked yet. Codex links it from dojo/index.html and story/index.html (spec §6).
+ *
+ * Hard rule: this file never sets width / height / left / top / margin / clip-path
+ * on button[data-control]. Hit boxes stay exactly as in PR #230 (matte-battle.css).
+ */
+
+/* ───────────── 1. Buttons ───────────── */
+.attack[data-control] {
+ --a-base:var(--n-base); --a-rim:var(--n-rim); --a-face:var(--n-face); --a-dish:var(--n-dish);
+ --a-glyph:var(--n-glyph); --a-shade:var(--n-shade); --a-core:var(--core-n,var(--n-face));
+}
+.attack[data-control][data-wait] {
+ --a-base:var(--w-base,#0C0D0E); --a-rim:var(--w-rim,#1C1E21); --a-face:var(--w-face,#3A3D42);
+ --a-dish:var(--w-dish,#34373B); --a-glyph:var(--w-glyph,#868C94); --a-shade:var(--w-shade,#1E2023);
+}
+.attack[data-control][data-ready] {
+ --a-base:var(--r-base); --a-rim:var(--r-rim); --a-face:var(--r-face); --a-dish:var(--r-dish);
+ --a-glyph:var(--r-glyph); --a-shade:var(--r-shade);
+}
+.attack[data-control].held {
+ --a-base:var(--p-base); --a-rim:var(--p-rim); --a-face:var(--p-face); --a-dish:var(--p-dish);
+ --a-glyph:var(--p-glyph); --a-shade:var(--p-shade); --a-core:var(--core-p,var(--p-face));
+}
+.attack[data-control][data-ready].held {
+ --a-base:var(--rp-base); --a-rim:var(--rp-rim); --a-face:var(--rp-face); --a-dish:var(--rp-dish);
+ --a-glyph:var(--rp-glyph); --a-shade:var(--rp-shade);
+}
+.attack[data-control]:is(:disabled,[aria-disabled=true]) {
+ --a-base:#0C0D0E; --a-rim:#1C1E21; --a-face:#3A3D42; --a-dish:#34373B;
+ --a-glyph:#868C94; --a-shade:#1E2023; --a-core:#3A3D42; --tick:#4A4E54;
+}
+
+/* Drawn size only. The button box (hit area) is untouched. */
+body[data-ui=mountain] :is(#buttons-rail,#battle-buttons).shared-attack-pad .attack[data-control] .attack-art {
+ scale:var(--art-scale,1);
+}
+.bt { display:block; width:100%; height:100%; overflow:visible }
+.bt-base  { fill:var(--a-base); translate:0 3.2px }
+.bt-body  { transition:translate 40ms linear }
+.bt-rim   { fill:var(--a-rim) }
+.bt-face  { fill:var(--a-face) }
+.bt-dish  { fill:var(--a-dish) }
+.bt-core  { fill:var(--a-core) }
+.bt-ticks { fill:none; stroke:var(--tick,#6B5444); stroke-width:3; stroke-linecap:round }
+.bt-groove{ fill:none; stroke:var(--a-rim); stroke-width:1.6 }
+.bt-pip   { fill:var(--a-rim) }
+.bt-glyph { fill:none; stroke-linecap:square; stroke-linejoin:miter; stroke-miterlimit:3 }
+.bt-glyph-shade { stroke:var(--a-shade) }
+.bt-glyph-ink   { stroke:var(--a-glyph) }
+.bt-ring  { fill:none; stroke:#FFE3A0; stroke-width:2.4; opacity:0 }
+.attack[data-control].held .bt-body { translate:0 3px }
+.attack[data-control].held .bt-glyph-shade { opacity:0 }
+.attack[data-control][data-ready] .bt-ring { opacity:1; animation:bt-ready-in 420ms ease-out 1 }
+.attack[data-control][data-ready].held .bt-ring { opacity:.0 }
+@keyframes bt-ready-in { from { stroke-width:9; opacity:0 } 60% { opacity:1 } to { stroke-width:2.4; opacity:1 } }
+/* Symbol text stays in the DOM for tests and fallbacks; the SVG glyph is what users see. */
+body[data-ui=mountain] :is(#buttons-rail,#battle-buttons).shared-attack-pad .attack[data-control] .attack-label {
+ position:absolute; width:1px; height:1px; overflow:hidden; clip-path:inset(50%); white-space:nowrap;
+}
+.attack[data-control]:focus-visible .bt-rim { stroke:#FFF0B5; stroke-width:2 }
+@media (prefers-reduced-motion:reduce) {
+ .attack[data-control].held .bt-body { translate:none }
+ .attack[data-control][data-ready] .bt-ring { animation:none }
+ .bt-body { transition:none }
+}
+html:has(#fx-toggle[aria-pressed=false]) .attack[data-control][data-ready] .bt-ring { animation:none }
+@media (forced-colors:active) {
+ .bt-rim { stroke:ButtonText; stroke-width:2 }
+ .bt-glyph-ink { stroke:ButtonText }
+}
+
+/* ───────────── 2. HUD ───────────── */
+body[data-ui=mountain] :is(#arena,#story-app) .shared-battle-hud {
+ --hud-ink:#0E100E;
+ --hud-skew:-12deg;
+ --hud-row-name:14px; --hud-row-hp:14px; --hud-row-super:8px; --hud-row-drive:6px; --hud-gap:3px;
+ gap:10px;
+}
+body[data-ui=mountain] :is(#arena,#story-app) .shared-battle-hud .hud-side {
+ --eye-w:clamp(44px,6.2cqw,56px);
+ grid-template-columns:var(--eye-w) minmax(0,1fr);
+ grid-template-rows:var(--hud-row-name) var(--hud-row-hp) var(--hud-row-super) var(--hud-row-drive);
+ grid-template-areas:"eye name" "eye hp" ". super" ". drive";
+ column-gap:3px;
+ row-gap:var(--hud-gap);
+ align-items:stretch;
+ filter:drop-shadow(0 1px 0 #0B0D0B);
+}
+body[data-ui=mountain] :is(#arena,#story-app) .shared-battle-hud .hud-side.mirrored {
+ --hud-skew:12deg;
+ grid-template-columns:minmax(0,1fr) var(--eye-w);
+ grid-template-areas:"name eye" "hp eye" "super ." "drive .";
+}
+
+/* Eye plate: the HP bar grows out of it, so the HUD reads as one object, not a table. */
+body[data-ui=mountain] :is(#arena,#story-app) .shared-battle-hud .hud-eye {
+ grid-area:eye; align-self:stretch; height:auto;
+ border:0; background:var(--hud-ink);
+ clip-path:polygon(0 0,100% 0,calc(100% - 7px) 100%,0 100%);
+}
+body[data-ui=mountain] :is(#arena,#story-app) .shared-battle-hud .mirrored .hud-eye {
+ clip-path:polygon(0 0,100% 0,100% 100%,7px 100%);
+}
+body[data-ui=mountain] :is(#arena,#story-app) .shared-battle-hud .hud-eye img { width:205% }
+
+/* Name row: plain text on the stage, no backing bar. */
+body[data-ui=mountain] :is(#arena,#story-app) .shared-battle-hud .hud-side[data-element] .hud-name {
+ grid-area:name; min-height:0; height:var(--hud-row-name); padding:0 2px; gap:5px;
+ align-items:center; background:none; color:#F3EAD8; font-size:11px; font-weight:800; line-height:1;
+ text-shadow:0 1px 0 var(--hud-ink),0 0 3px var(--hud-ink);
+}
+body[data-ui=mountain] :is(#arena,#story-app) .shared-battle-hud .hud-name>b {
+ font-size:9px; line-height:1; padding:1px 3px; min-width:0; text-shadow:none;
+ background:#E9DFC6; color:var(--hud-ink);
+}
+body[data-ui=mountain] :is(#arena,#story-app) .shared-battle-hud .mirrored .hud-name>b { background:#D9B9A0 }
+body[data-ui=mountain] :is(#arena,#story-app) .shared-battle-hud .hud-name>small { font-size:9px; font-weight:700; color:#CFC6B0 }
+
+/* Gauge rows: no label column, no number column, no frame image. */
+body[data-ui=mountain] :is(#arena,#story-app) .shared-battle-hud .resource {
+ display:block; position:relative; height:auto; margin:0; padding:0; background:none;
+}
+body[data-ui=mountain] :is(#arena,#story-app) .shared-battle-hud :is(.resource>span,.resource>b,.ultimate-ready>span,.trait-word,.trait-row>small) {
+ position:absolute; width:1px; height:1px; overflow:hidden; clip-path:inset(50%); white-space:nowrap;
+}
+body[data-ui=mountain] :is(#arena,#story-app) .hud.shared-battle-hud .resource .track {
+ position:relative; box-sizing:border-box; height:100%; margin:0; padding:0;
+ background-image:none; border:0; overflow:hidden; transform:skewX(var(--hud-skew));
+}
+body[data-ui=mountain] :is(#arena,#story-app) .hud.shared-battle-hud .resource .track::after { content:none }
+body[data-ui=mountain] :is(#arena,#story-app) .shared-battle-hud .mirrored .resource .track { margin-inline-start:auto }
+
+/* HP — the long competitive bar. */
+body[data-ui=mountain] :is(#arena,#story-app) .hud.shared-battle-hud .health .track {
+ width:100%; height:100%; border:2px solid var(--hud-ink); background-color:#3B2420;
+}
+body[data-ui=mountain] :is(#arena,#story-app) .hud.shared-battle-hud .health .track i {
+ background:#93CDA0; box-shadow:inset 0 2px 0 #C6E8CC;
+}
+body[data-ui=mountain] :is(#arena,#story-app) .hud.shared-battle-hud .health .track i.low {
+ background:#E4876D; box-shadow:inset 0 2px 0 #F4B7A3;
+}
+.shared-battle-hud .guard-line {
+ position:absolute; left:0; bottom:0; height:2px; background:#EDE3CA; pointer-events:none;
+}
+.shared-battle-hud .mirrored .guard-line { left:auto; right:0 }
+.shared-battle-hud .guard-line[data-full] { display:none }
+
+/* 奥義 — 5 slanted blocks. */
+body[data-ui=mountain] :is(#arena,#story-app) .hud.shared-battle-hud .super .track {
+ width:64%; background-color:#2A2317;
+ -webkit-mask-image:repeating-linear-gradient(90deg,#000 0 calc(20% - 3px),transparent calc(20% - 3px) 20%);
+         mask-image:repeating-linear-gradient(90deg,#000 0 calc(20% - 3px),transparent calc(20% - 3px) 20%);
+}
+body[data-ui=mountain] :is(#arena,#story-app) .hud.shared-battle-hud .mirrored .super .track {
+ -webkit-mask-image:repeating-linear-gradient(270deg,#000 0 calc(20% - 3px),transparent calc(20% - 3px) 20%);
+         mask-image:repeating-linear-gradient(270deg,#000 0 calc(20% - 3px),transparent calc(20% - 3px) 20%);
+}
+body[data-ui=mountain] :is(#arena,#story-app) .hud.shared-battle-hud .super .track i { background:#E4B35C; box-shadow:none }
+body[data-ui=mountain] :is(#arena,#story-app) .hud.shared-battle-hud .super .track i.ready { background:#FFD66E; box-shadow:inset 0 2px 0 #FFF1C4 }
+
+/* Drive — 10 thin cells. */
+body[data-ui=mountain] :is(#arena,#story-app) .hud.shared-battle-hud .drive .track {
+ width:52%; background-color:#182526;
+ -webkit-mask-image:repeating-linear-gradient(90deg,#000 0 calc(10% - 2px),transparent calc(10% - 2px) 10%);
+         mask-image:repeating-linear-gradient(90deg,#000 0 calc(10% - 2px),transparent calc(10% - 2px) 10%);
+}
+body[data-ui=mountain] :is(#arena,#story-app) .hud.shared-battle-hud .mirrored .drive .track {
+ -webkit-mask-image:repeating-linear-gradient(270deg,#000 0 calc(10% - 2px),transparent calc(10% - 2px) 10%);
+         mask-image:repeating-linear-gradient(270deg,#000 0 calc(10% - 2px),transparent calc(10% - 2px) 10%);
+}
+body[data-ui=mountain] :is(#arena,#story-app) .hud.shared-battle-hud .drive .track i { background:#5DAFB8; box-shadow:none }
+
+/* READY flame at the inner end of the 奥義 blocks. The word READY is screen-reader only. */
+body[data-ui=mountain] :is(#arena,#story-app) .shared-battle-hud .ultimate-ready {
+ position:absolute; top:-5px; left:calc(64% + 3px); right:auto; height:16px; gap:0; text-shadow:none;
+}
+body[data-ui=mountain] :is(#arena,#story-app) .shared-battle-hud .mirrored .ultimate-ready { left:auto; right:calc(64% + 3px) }
+body[data-ui=mountain] :is(#arena,#story-app) .shared-battle-hud .ultimate-ready svg { width:12px; height:16px }
+
+/* Character-specific pips (Bullet) share the Drive row, on its inner side. */
+body[data-ui=mountain] :is(#arena,#story-app) .shared-battle-hud .trait-row {
+ grid-area:drive; justify-self:end; align-self:center; min-height:0; margin:0; padding:0;
+}
+body[data-ui=mountain] :is(#arena,#story-app) .shared-battle-hud .mirrored .trait-row { justify-self:start }
+
+/* Timer plate. */
+body[data-ui=mountain] :is(#arena,#story-app) .hud.shared-battle-hud .round-center {
+ align-self:start; background:#15191A; background-image:none; border:2px solid #0B0D0C; border-radius:0; padding:2px 0 3px;
+}
+body[data-ui=mountain] :is(#arena,#story-app) .hud.shared-battle-hud .round-center>span { font-size:22px; line-height:1 }
+body[data-ui=mountain] :is(#arena,#story-app) .hud.shared-battle-hud .round-center>small { font-size:7px; letter-spacing:.04em }
+
+@container (max-height:340px) {
+ body[data-ui=mountain] :is(#arena,#story-app) .shared-battle-hud {
+  --hud-row-name:13px; --hud-row-hp:12px; --hud-row-super:7px; --hud-row-drive:5px; --hud-gap:2px;
+ }
+}
