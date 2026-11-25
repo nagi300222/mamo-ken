@@ -1,3 +1,4 @@
+import {battleControlsMarkup} from '../shared-ui/battle-ui.js';
 import {BATTLE_INPUT_PROFILE} from '../shared-ui/battle-ui.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
@@ -96,19 +97,19 @@ test('咆哮は↓+必殺で後出しカウンター可、CPU旧IDも維持',()=
   assert.equal(ai.fighters[0].action?.id,'s1');
 });
 
-test('横画面UIは右6ボタン、左前後2ボタン、中央の幅を保持',()=>{
+test('横画面UIは右6ボタンと左前後2ボタンを保持',()=>{
   const html=read('index.html'),css=read('style.css'),main=read('main.js');
-  const right=html.split('id="buttons-rail"')[1];
+  const right=battleControlsMarkup();
   const controls=[...right.matchAll(/data-control="([^"]+)"/g)].map(m=>m[1]);
   assert.deepEqual(controls,['weak','strong','throw','gyuiin','special','ultimateButton']);
   assert.ok(!controls.includes('roar'));
-  assert.match(html,/id="ultimate-status"/);
-  assert.match(html,/id="roar-status"/);
+  assert.match(right,/id="ultimate-status"/);
+  assert.match(right,/id="roar-status"/);
   assert.equal(BATTLE_INPUT_PROFILE.keyMap.KeyB,'special');
   assert.match(main,/const keyMap=BATTLE_INPUT_PROFILE.keyMap/);
   assert.equal(BATTLE_INPUT_PROFILE.keyMap.KeyM,'ultimateButton');
   assert.match(main,/const keyMap=BATTLE_INPUT_PROFILE.keyMap/);
-  assert.match(css,/#buttons-rail \.attack\.ultimateButton\{grid-column:3;grid-row:2\}/);
+  assert.match(main,/battleControlsMarkup\(\)/);
   const left=html.split('id="stick-rail"')[1].split('id="arena"')[0];
   assert.deepEqual([...left.matchAll(/data-control="([^"]+)"/g)].map(m=>m[1]),['stepBack','stepForward']);
   assert.match(css,/#combat-layout\s*\{/);

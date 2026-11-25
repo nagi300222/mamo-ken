@@ -36,3 +36,21 @@ test('Cloudflare静的出力にcamera-frame.jsが含まれる',async()=>{
   const file=readFileSync(new URL('./build-pages.mjs',import.meta.url),'utf8');
   assert.match(file,/['"]camera-frame\.js['"]/);
 });
+test('full-bleed match framing reserves both controls including during a fast cross-up',async()=>{
+  const {frameCombat}=await import('./camera-frame.js');
+  const zones={left:.24,right:.32}, aspect=720/320, blend=.18;
+  let frame={x:0,y:.5,halfWidth:1.4};
+  for(const xs of [[-1.76,-1.3],[-1.76,1.76],[1.76,1.4],[1.45,1.76],[-.3,.3]]){
+    const fighters=xs.map((x,i)=>({x,y:i*.7}));
+    frame=frameCombat(fighters,[{x:xs[0]-.1},{x:xs[1]+.25}],aspect,zones,frame,blend);
+    const screen=x=>(x-frame.x)/(2*frame.halfWidth)+.5;
+    assert.ok(screen(Math.min(...xs)-.42)>=zones.left-1e-8);
+    assert.ok(screen(Math.max(...xs)+.42)<=1-zones.right+1e-8);
+    assert.ok(frame.halfWidth>0);
+  }
+  const fighters=[{x:.1,y:0},{x:.6,y:0}];
+  const instant=frameCombat(fighters,[],aspect,zones,frame,1);
+  const follow=frameCombat(fighters,[],aspect,zones,frame,.18);
+  assert.ok(Math.abs(follow.x-instant.x)>1e-5);
+  assert.ok(Math.abs(follow.x-frame.x)<Math.abs(instant.x-frame.x));
+});

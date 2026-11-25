@@ -1,3 +1,4 @@
+import {battleControlsMarkup} from '../shared-ui/battle-ui.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { ROSTER, IDS, assertBalance, normalMove, tailTipAt, ARENA } from './balance.js';
@@ -140,7 +141,7 @@ test('距離外の攻撃をハイパーアーマーで受けてもギュイー�
 test('v0.7は右6操作（方向+必殺と奥義専用）で左スティックも保持',async()=>{
   const {readFile}=await import('node:fs/promises');
   const html=await readFile(new URL('./index.html',import.meta.url),'utf8');
-  const rail=html.split('id="buttons-rail"')[1];
+  const rail=battleControlsMarkup();
   const buttons=[...rail.matchAll(/data-control="([^"]+)"/g)].map(x=>x[1]);
   assert.deepEqual(buttons,['weak','strong','throw','gyuiin','special','ultimateButton']);
   for(const k of ['roar','special1','special2','special3','super'])assert.ok(!buttons.includes(k));
