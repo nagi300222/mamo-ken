@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import {writeFile,mkdir} from 'node:fs/promises';
 import {createRequire} from 'node:module';
+import {setMatch} from './match-settings.mjs';
 const {chromium}=createRequire(import.meta.url)('playwright-core');
 const root=process.env.MAMOKEN_URL??'http://127.0.0.1:4173/exp/fable-3d/dojo/';
 const evidence=(process.env.MAMOKEN_EVIDENCE??'/tmp/mamoken-device')+'/device';await mkdir(evidence,{recursive:true});
@@ -34,7 +35,7 @@ try{
  assert.equal(await page.evaluate(()=>mamoken3d.battle.fighters[0].super),0);
  await page.screenshot({path:evidence+'/normal-play.png'});
  await page.locator('#select-back').tap();
- await page.locator('.fighter-card').nth(6).tap();await page.locator('#check-mode').check();await page.locator('#start').tap();
+ await page.locator('.fighter-card').nth(6).tap();await setMatch(page,'#check-mode',true);await page.locator('#start').tap();
  await page.waitForFunction(()=>mamoken3d.actors[0]?.id==='yomikage'&&mamoken3d.battle?.frame>0);
  await page.evaluate(async()=>{
    const {specialMove,normalMove}=await import('./balance.js');

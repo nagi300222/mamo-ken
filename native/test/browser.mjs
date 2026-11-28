@@ -63,34 +63,31 @@ async function lobbyInsets({width,height,left,right,bottom}){
  await page.waitForTimeout(80);
 }
 async function inspectLobby(condition){
+ // P4.5 MENU-B: brand, stage title/start and the five switches all sit inside the
+ // native safe rectangle at once; nothing needs scrolling.
  const {left,right,bottom}=condition;await lobbyInsets(condition);
- await safeBounds('.mode-hall',left,right,bottom);
- const scroll=await page.locator('.mode-hall').evaluate(el=>({position:getComputedStyle(el).position,overflow:getComputedStyle(el).overflowY,clientHeight:el.clientHeight,scrollHeight:el.scrollHeight,scrollTop:el.scrollTop}));
- assert.equal(scroll.position,'fixed');assert.equal(scroll.overflow,'auto');assert.ok(scroll.scrollHeight<=scroll.clientHeight+1,'P4 five-mode overview requires scrolling at the supported native size');
- await page.locator('.hall-header').scrollIntoViewIfNeeded();await safeBounds('.hall-header',left,right,bottom);await safeBounds('.hall-title h1',left,right,bottom);
- assert.equal((await page.locator('.hall-title h1').textContent()).trim(),'マモ拳');
+ const scroll=await page.locator('.menu').evaluate(el=>({clientHeight:el.clientHeight,scrollHeight:el.scrollHeight,scrollTop:el.scrollTop}));
+ assert.ok(scroll.scrollHeight<=scroll.clientHeight+1,'MENU-B requires scrolling at the supported native size');
+ await safeBounds('.menu-brand h1',left,right,bottom);assert.equal((await page.locator('.menu-brand h1').textContent()).trim(),'マモ拳');
+ await safeBounds('#stage-title',left,right,bottom);await safeBounds('#mode-start',left,right,bottom);
  const cards=[];
  for(const mode of ['battle','practice','arcade','survival','story']){
-  const selector='.modes a[data-mode="'+mode+'"]',card=page.locator(selector);
+  const selector='.mode-switch a[data-mode="'+mode+'"]',tab=page.locator(selector);
   await safeBounds(selector,left,right,bottom);
-  const action=card.locator('.mode-action,.mode-rule').first();await action.click({trial:true});
-  await safeBounds(selector+' h2',left,right,bottom);await safeBounds(selector+' '+(mode==='battle'?'.mode-action':'.mode-rule'),left,right,bottom);
-  const record=await card.evaluate(el=>{
-   const action=el.querySelector('.mode-action,.mode-rule'),r=action.getBoundingClientRect(),card=el.getBoundingClientRect(),hit=document.elementFromPoint(r.x+r.width/2,r.y+r.height/2);
-   return {mode:el.dataset.mode,href:el.getAttribute('href'),card:{x:card.x,y:card.y,width:card.width,height:card.height},action:{x:r.x,y:r.y,width:r.width,height:r.height},hitMatches:hit?.closest('a[data-mode]')===el,scrollTop:document.querySelector('.mode-hall').scrollTop};
-  });
-  assert.equal(record.hitMatches,true,'Native action is clipped or covered: '+mode);cards.push(record);
+  const record=await tab.evaluate(el=>{const r=el.getBoundingClientRect(),hit=document.elementFromPoint(r.x+r.width/2,r.y+r.height/2);return {mode:el.dataset.mode,href:el.getAttribute('href'),tab:{x:r.x,y:r.y,width:r.width,height:r.height},hitMatches:hit?.closest('a[data-mode]')===el};});
+  assert.equal(record.hitMatches,true,'Native mode switch is clipped or covered: '+mode);
+  if(await tab.getAttribute('aria-current')!=='true')await tab.tap();
+  assert.equal(await page.locator('#mode-start').getAttribute('href'),record.href,'Start action does not follow the shown mode: '+mode);
+  await safeBounds('#mode-start',left,right,bottom);cards.push(record);
   if(mode==='story'){
    await safeBounds('#saved-journey',left,right,bottom);assert.match(await page.locator('#saved-journey').textContent(),/端末内の長い名前/);
-   const label=await page.locator('#saved-journey').evaluate(el=>{const r=el.getBoundingClientRect(),card=el.closest('a').getBoundingClientRect();return {inside:r.left>=card.left&&r.right<=card.right+.5&&r.top>=card.top&&r.bottom<=card.bottom+.5,wrapped:el.scrollWidth<=el.clientWidth+1};});
-   assert.equal(label.inside,true,'Saved name escapes its native mode card');assert.equal(label.wrapped,true,'Saved journey name is horizontally clipped');
+   const label=await page.locator('#saved-journey').evaluate(el=>({wrapped:el.scrollWidth<=el.clientWidth+1}));
+   assert.equal(label.wrapped,true,'Saved journey name is horizontally clipped');
   }
  }
- await page.locator('.hall-footer').scrollIntoViewIfNeeded();await safeBounds('.hall-footer',left,right,bottom);
- const maxScroll=await page.locator('.mode-hall').evaluate(el=>el.scrollTop);assert.equal(maxScroll,0,'The five-mode overview must start and remain visible before scrolling');
- await page.screenshot({path:output+'/lobby-safe-lower-'+condition.width+'-'+left+'-'+right+'.png'});
- await page.locator('.hall-header').scrollIntoViewIfNeeded();await safeBounds('.hall-header',left,right,bottom);
- nativeLobbyScroll.push({condition,scroll,maxScroll,cards});
+ await page.screenshot({path:output+'/lobby-safe-'+condition.width+'-'+left+'-'+right+'.png'});
+ await page.locator('.mode-switch a[data-mode="battle"]').tap();
+ nativeLobbyScroll.push({condition,scroll,cards});
  await writeFile(output+'/native-lobby-scroll.json',JSON.stringify({uiKitTested:false,cssEnvOverriddenViaCDP:true,nativeLobbyScroll},null,2));
 }
 page.on('pageerror',error=>errors.push(error.message));page.on('response',r=>{if(r.status()>=400&&!r.url().endsWith('favicon.ico'))errors.push(r.status()+' '+r.url());});
@@ -102,12 +99,11 @@ await context.addInitScript(()=>{
  const mark=()=>document.documentElement?.classList.add('native-runtime');mark();document.addEventListener('DOMContentLoaded',mark,{once:true});
 });
 try{
- await page.goto(url+'/');assert.equal(await page.locator('.modes a').count(),5);
+ await page.goto(url+'/');assert.equal(await page.locator('.mode-switch a[data-mode]').count(),5);
  await page.waitForFunction(()=>document.documentElement.dataset.uiArt==='v17-p4-ui-art-1');
  await assertDecodedArt('five-mode-entry',[
-  ['.ui-seal','','fist-seal.svg'],['.mode-hall','::before','ridge-far.svg'],['.mode-hall','::before','ridge-near.svg'],
-  ...[['battle','versus'],['practice','practice'],['arcade','arcade'],['survival','survival'],['story','journey-paper']].map(([mode,asset])=>['.mode[data-mode="'+mode+'"] .mode-kicker','::before','mode-'+asset+'.svg']),
-  ...[['battle','vs-large'],['practice','practice'],['arcade','arcade'],['survival','survival'],['story','story']].map(([mode,asset])=>['.mode[data-mode="'+mode+'"] .mode-illustration','','mode-'+asset+'.webp'])
+  ['.ui-seal','','fist-seal.svg'],
+  ...[['battle','vs'],['practice','practice'],['arcade','arcade'],['survival','survival'],['story','story']].map(([mode,asset])=>['.stage-art[data-art="'+mode+'"]','','mode-'+asset+'.webp'])
  ]);
  // Preserve a valid long saved name, prove every card and its action can be
  // scrolled into the native safe scrollport, then take all five real routes.
@@ -118,10 +114,11 @@ try{
  assert.equal(await page.evaluate(()=>localStorage.getItem('mamoken.story.v16.1')),seededSave,'Mode menu scrolling changed the saved journey');
  for(const mode of ['battle','practice','arcade','survival','story']){
   await page.goto(url+'/');await lobbyInsets({width:720,height:320,left:62,right:21,bottom:21});
-  const card=page.locator('.modes a[data-mode="'+mode+'"]');await card.scrollIntoViewIfNeeded();
-  await safeBounds('.modes a[data-mode="'+mode+'"]',62,21);
+  const card=page.locator('.mode-switch a[data-mode="'+mode+'"]');
+  await safeBounds('.mode-switch a[data-mode="'+mode+'"]',62,21);
+  if(await card.getAttribute('aria-current')!=='true')await card.tap();
   const target=new URL(await card.getAttribute('href'),url+'/');
-  await Promise.all([page.waitForURL(actual=>actual.pathname===target.pathname&&actual.search===target.search),card.locator('.mode-action,.mode-rule').first().tap()]);
+  await Promise.all([page.waitForURL(actual=>actual.pathname===target.pathname&&actual.search===target.search),page.locator('#mode-start').tap()]);
   if(mode==='story')await page.locator('#story-app').waitFor();else{await page.waitForFunction(()=>window.mamoken3d,undefined,{timeout:15000});assert.equal(await page.locator('#match-mode').inputValue(),mode);}
   nativeLobbyScroll.push({route:mode,actualUrl:page.url(),tapNavigated:true});
  }
@@ -130,13 +127,13 @@ try{
  await cdp.send('Emulation.setSafeAreaInsetsOverride',{insets:{left:0,right:0,top:0,bottom:0}});await page.setViewportSize({width:852,height:393});await page.reload();
  // The native stylesheet must be inert for ordinary web/PWA layout. Compare
  // the same real web DOM with the stylesheet enabled and disabled.
- const webLayout=async()=>page.locator('.mode-hall').evaluate(el=>{const r=el.getBoundingClientRect(),s=getComputedStyle(el);return {x:r.x,y:r.y,width:r.width,height:r.height,position:s.position,padding:s.padding,overflow:s.overflowY};});
+ const webLayout=async()=>page.locator('.menu').evaluate(el=>{const r=el.getBoundingClientRect(),s=getComputedStyle(el);return {x:r.x,y:r.y,width:r.width,height:r.height,position:s.position,padding:s.padding,overflow:s.overflowY};});
  await page.evaluate(()=>{document.documentElement.classList.remove('native-runtime');document.querySelector('link[href="/native-layout.css"]').disabled=true;});const originalWeb=await webLayout();
  await page.evaluate(()=>{document.querySelector('link[href="/native-layout.css"]').disabled=false;});assert.deepEqual(await webLayout(),originalWeb,'Native stylesheet changed ordinary web/PWA layout');
  await page.evaluate(()=>document.documentElement.classList.add('native-runtime'));
  await writeFile(output+'/native-lobby-scroll.json',JSON.stringify({uiKitTested:false,cssEnvOverriddenViaCDP:true,nativeLobbyScroll,originalWeb},null,2));
  await page.screenshot({path:output+'/01-bundled-five-modes.png'});
- await page.locator('a[href="./dojo/?mode=practice"]').click();
+ await page.locator('.mode-switch a[href="./dojo/?mode=practice"]').click();await page.locator('#mode-start').click();
  await page.waitForFunction(()=>window.mamoken3d,undefined,{timeout:15000});
  await page.locator('#start').tap();await page.waitForFunction(()=>mamoken3d.practice.enabled&&mamoken3d.battle?.frame>3,undefined,{timeout:90000});
  await assertDecodedArt('dojo-hud-and-controls',[

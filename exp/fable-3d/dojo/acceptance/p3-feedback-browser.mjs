@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import {mkdir,writeFile} from 'node:fs/promises';
 import {createRequire} from 'node:module';
 import {analyzeAudioBuffer,monoWav} from './audio-buffer-evidence.mjs';
+import {setMatch} from './match-settings.mjs';
 const {chromium}=createRequire(import.meta.url)('playwright-core');
 const base=process.env.MAMOKEN_URL??'http://127.0.0.1:4173/exp/fable-3d/dojo/';
 const directory=(process.env.MAMOKEN_EVIDENCE??'/tmp/mamoken-p3')+'/fight-feel';
@@ -24,7 +25,7 @@ page.on('response',response=>{if(response.status()>=400&&!response.url().endsWit
 try{
  await page.goto(base,{waitUntil:'domcontentloaded'});await page.waitForFunction(()=>window.mamoken3d);
  for(const [id,index]of [['pisuke',1],['godan',2],['bullet',7]]){
-  await page.locator('.fighter-card').nth(index).tap();await page.locator('#match-mode').selectOption('practice');await page.locator('#start').tap();
+  await page.locator('.fighter-card').nth(index).tap();await setMatch(page,'#match-mode','practice');await page.locator('#start').tap();
   await page.waitForFunction(id=>mamoken3d.actors[0]?.id===id&&mamoken3d.practice.enabled&&mamoken3d.battle?.frame>0,id,{timeout:45000});
   for(const [slot,guard]of [['stand_weak',false],['stand_heavy',false],['stand_heavy',true]]){
    await page.locator('#practice-dummy').selectOption(guard?'guard_stand':'stand');
@@ -60,7 +61,7 @@ try{
  }
  // The original nine feel cases do not include Chirka. Prove the actual s3
  // contact consumes its feedback into the new curved mesh in the real scene.
- await page.locator('.fighter-card').nth(4).tap();await page.locator('#match-mode').selectOption('practice');await page.locator('#start').tap();
+ await page.locator('.fighter-card').nth(4).tap();await setMatch(page,'#match-mode','practice');await page.locator('#start').tap();
  await page.waitForFunction(()=>mamoken3d.actors[0]?.id==='chirka'&&mamoken3d.practice.enabled&&mamoken3d.battle?.frame>0,undefined,{timeout:45000});
  await page.locator('#practice-dummy').selectOption('stand');
  for(const facing of [1,-1]){

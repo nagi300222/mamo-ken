@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import { mkdir, writeFile } from 'node:fs/promises';
 import { createRequire } from 'node:module';
+import {setMatch} from './match-settings.mjs';
 const { chromium } = createRequire(import.meta.url)('playwright-core');
 const base = process.env.MAMOKEN_URL ?? 'http://127.0.0.1:4173/exp/fable-3d/dojo/';
 const evidence = process.env.MAMOKEN_EVIDENCE ?? '/tmp/mamoken-choreography';
@@ -30,7 +31,7 @@ try {
   for (const [index, target] of ids.entries()) {
     if (index) await page.locator(index === 1 ? '#select-back' : '#result-select').tap();
     await page.locator('.fighter-card').nth(ids.indexOf(attacker)).tap();
-    await page.locator('#cpu-choice').selectOption(target);
+    await setMatch(page,'#cpu-choice',target);
     await page.locator('#start').tap();
     await page.waitForFunction(({attacker,target}) => mamoken3d.battle?.frame > 0 &&
       mamoken3d.actors[0]?.id === attacker && mamoken3d.actors[1]?.id === target,

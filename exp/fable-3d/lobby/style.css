@@ -1,35 +1,85 @@
-/* P4 review revision: every mode stays visible in a short landscape viewport.
-   The entire card is the target; labels never become tiny to make room. */
-*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;font-family:var(--ui-font)}body{background:var(--ui-shadow);color:var(--ui-paper);overflow:hidden}
-.mode-hall{position:relative;isolation:isolate;display:grid;grid-template-rows:58px minmax(0,1fr) 22px;gap:14px;width:100%;max-width:1440px;height:100dvh;margin:auto;padding:max(18px,var(--ui-safe-top)) max(24px,var(--ui-safe-right)) max(12px,var(--ui-safe-bottom)) max(24px,var(--ui-safe-left));overflow:auto;overscroll-behavior:contain;scrollbar-width:thin;scrollbar-color:var(--ui-line) var(--ui-shadow)}
-.mode-hall:before{content:"";position:absolute;z-index:-1;inset:0;background:radial-gradient(ellipse at 76% 2%,#395240,transparent 57%);pointer-events:none}
-.hall-header{display:flex;align-items:center;gap:24px;min-width:0}.hall-title{display:flex;align-items:center;gap:14px;flex:none}.hall-title h1{font-size:36px;line-height:1;letter-spacing:.1em;margin:4px 0 0;font-weight:950}.hall-invitation{font-size:14px;border-left:1px solid var(--ui-line);padding-left:20px;margin:0;color:var(--ui-muted);line-height:1.6}.hall-note{margin-left:auto;font-size:13px;color:var(--ui-muted);white-space:nowrap}
-.modes{display:grid;grid-template-columns:minmax(0,1.26fr) repeat(2,minmax(0,1fr));grid-template-rows:repeat(2,minmax(0,1fr));gap:12px;min-height:0}
-.mode-hall .mode{position:relative;isolation:isolate;overflow:hidden;min-width:0;min-height:92px;display:flex;flex-direction:column;padding:18px 20px;border:1px solid #69877c99;border-top:3px solid var(--ui-line);color:inherit;text-decoration:none;background:var(--ui-surface);border-radius:3px;transition:background 120ms,border-color 120ms,translate 120ms;box-shadow:0 5px 0 #071a124d}
-.mode-hall .mode:before{content:"";position:absolute;z-index:-1;inset:auto 0 0;height:45%;background:#0c201b66;clip-path:polygon(0 60%,14% 17%,26% 40%,43% 0,64% 55%,77% 17%,100% 80%,100% 100%,0 100%)}
-.mode-hall .mode:after{content:"";position:absolute;inset:0;pointer-events:none;border:2px solid transparent;transition:border-color 120ms}.mode-hall .mode:hover{background-color:var(--ui-surface-raised);border-color:#b5c8a8}.mode-hall .mode:focus-visible{outline:3px solid var(--ui-focus);outline-offset:3px}.mode-hall .mode:hover:after,.mode-hall .mode:focus-visible:after{border-color:#f1c66c66}.mode-hall .mode:active{translate:0 2px}
-.mode-hall .mode h2{font-size:clamp(19px,2.3vw,29px);line-height:1.3;font-weight:900;letter-spacing:.02em;margin:8px 0 6px;text-wrap:balance;position:relative;z-index:2}.mode-hall .mode h2>span{font-size:12px;font-weight:650;color:var(--ui-muted);margin-left:8px;letter-spacing:.02em}.mode-hall .mode p{font-size:13px;line-height:1.6;margin:0;color:var(--ui-muted);position:relative;z-index:2;max-width:95%}.mode-hall .mode-kicker{font-size:12px;font-weight:750;letter-spacing:.04em;color:var(--ui-gold);z-index:2}.mode-hall .mode-rule,.mode-hall .mode-action{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:auto;padding:5px 0 0;font-size:13px;font-weight:800;color:var(--ui-paper);z-index:2;line-height:1.3;min-height:24px}.mode-hall .mode-rule b,.mode-hall .mode-action b{font-size:23px;font-weight:400;color:var(--ui-gold)}.mode-number{position:absolute;top:12px;right:13px;font-size:11px;color:#bed1c780;letter-spacing:.08em;z-index:2}
-.mode-hall .mode-versus{grid-column:1;grid-row:1/3;background:linear-gradient(150deg,#304b3a,#152c23);border-top-color:var(--ui-gold);padding:22px}.mode-hall .mode-versus h2{font-size:clamp(30px,3.8vw,48px);margin:13px 0 9px;letter-spacing:.025em}.mode-hall .mode-versus h2>span{display:block;margin:3px 0 0;font-size:13px}.mode-versus .mode-copy{position:relative;z-index:2;display:flex;flex-direction:column;align-items:flex-start;height:100%;width:100%}.mode-hall .mode-versus .mode-action{padding:8px 16px;border:1px solid var(--ui-gold);background:var(--ui-gold);color:var(--ui-shadow);margin-top:auto;min-height:44px;min-width:140px}.mode-hall .mode-versus .mode-action b{color:inherit}.versus-fighter{position:absolute;object-fit:contain;pointer-events:none;z-index:1;width:66%;height:70%;bottom:5%;filter:drop-shadow(0 8px 8px #0c201bb3)}.versus-left{right:24%;transform:rotate(-4deg)}.versus-right{right:-12%;transform:scaleX(-1) rotate(-3deg);height:83%;opacity:.94}.mode-hall .mode-versus p{max-width:80%}.mode-hall .mode-arcade{grid-column:2;grid-row:1}.mode-hall .mode-practice{grid-column:3;grid-row:1;background-color:#26392e}.mode-hall .mode-survival{grid-column:3;grid-row:2}.mode-hall .mode-story{grid-column:2;grid-row:2;display:flex;background-color:#e9e0c6;color:#1a3429;border-color:#e9e0c6;border-top-color:#e3bf69}.mode-hall .mode-story>div{min-width:0}.mode-hall .mode-story:hover,.mode-hall .mode-story:focus-visible{background-color:#f5efdb}.mode-hall .mode-story h2{color:#17352a}.mode-hall .mode-story p{color:#395747}.mode-hall .mode-story .mode-kicker{color:#74582c}.mode-hall .mode-story .mode-rule,.mode-hall .mode-story .mode-rule b{color:#18392c}.mode-story .mode-number{color:#486b57}.mode-hall .mode-story .journey-tag{display:block;min-width:0;max-width:100%;overflow:visible;white-space:normal;overflow-wrap:anywhere;word-break:normal;font-size:12px;font-weight:800;line-height:1.45;margin-top:7px;border-left:3px solid #b5402e;padding-left:8px}.journey-map{display:none}
-/* Asset contract for Claude's v18 scenes. The left half remains calm for copy. */
-.mode-illustration{position:absolute;inset:0;z-index:-1;pointer-events:none;background-image:var(--mode-illustration,none);background-position:right center;background-repeat:no-repeat;background-size:cover;opacity:.65}.hall-footer{display:flex;align-items:center;justify-content:space-between;gap:15px;font-size:11px;color:var(--ui-muted);min-width:0;line-height:1.3}.hall-footer span{min-width:0}
-html.portrait{overflow:hidden}html.portrait body{width:100dvh;height:100vw;transform-origin:top left;transform:translateX(100vw) rotate(90deg);overflow:hidden}html.portrait .mode-hall{height:100vw;min-height:0}
-@media(max-height:560px),(orientation:portrait){.mode-hall{grid-template-rows:44px minmax(0,1fr) 18px;padding:max(10px,var(--ui-safe-top)) max(14px,var(--ui-safe-right)) max(8px,var(--ui-safe-bottom)) max(14px,var(--ui-safe-left));gap:8px}.hall-title{gap:11px}.hall-title h1{font-size:28px}.hall-title .ui-seal{width:36px;height:36px}.hall-title .ui-eyebrow{font-size:10px}.hall-invitation{font-size:12px;padding-left:14px}.hall-note{font-size:12px}.modes{gap:8px;grid-template-columns:minmax(0,1.2fr) repeat(2,minmax(0,1fr))}.mode-hall .mode{padding:10px 12px;min-height:90px}.mode-hall .mode h2{font-size:19px;margin:4px 0}.mode-hall .mode h2>span{font-size:11px;margin-left:5px}.mode-hall .mode p{font-size:12px;line-height:1.45}.mode-hall .mode-kicker{font-size:11px;line-height:1.4}.mode-hall .mode-rule{font-size:12px;min-height:21px;padding-top:3px}.mode-hall .mode-arcade .mode-rule{background:none;padding:3px 0 0;margin-inline:0;min-height:21px}.mode-hall .mode-versus{padding:15px}.mode-hall .mode-versus h2{font-size:31px;margin:12px 0 6px}.mode-hall .mode-versus h2>span{font-size:12px;margin-left:0}.mode-hall .mode-versus .mode-action{min-width:125px;padding:7px 12px}.mode-hall .mode-story .journey-tag{font-size:11px;margin-top:3px}.mode-number{font-size:10px;top:5px;right:7px}.hall-footer{font-size:10px}.versus-fighter{bottom:3%;height:64%}.versus-right{height:76%}}
-@media(max-height:350px){.hall-note{display:none}.mode-hall{grid-template-rows:42px minmax(0,1fr) 17px;gap:6px}.mode-hall .mode{padding:8px 10px}.mode-hall .mode-kicker{font-size:11px}.mode-hall .mode h2{font-size:18px;margin:3px 0}.mode-hall .mode p{font-size:12px}.mode-hall .mode h2>.mode-alias{display:none}.mode-hall .mode-versus h2{font-size:30px}.mode-hall .mode-story p{display:none}.mode-hall .mode-story .journey-tag{font-size:12px;margin-top:5px}.mode-hall .mode-versus p{font-size:12px}.hall-footer span:last-child{font-size:10px}}
-@media(forced-colors:active){.mode-hall .mode{border:2px solid ButtonText}.mode-hall .mode:focus-visible{outline-color:Highlight}.mode-illustration,.versus-fighter{display:none}}
-@media(prefers-reduced-motion:reduce){.mode-hall .mode,.mode-hall .mode:after{transition:none}.mode-hall .mode:active{translate:none}}
-
-/* A saved traveller is useful information, including its full display name.
-   Reclaim redundant copy before reducing space reserved for that name. At the
-   720×320 native safe rectangle the narrow card fits three 11px text lines. */
-@media(max-height:350px),(orientation:portrait) and (max-width:350px){
- .mode-hall .mode-story{padding:6px 10px}
- .mode-hall .mode-story .mode-kicker,.mode-hall .mode-story p{display:none}
- .mode-hall .mode-story h2{font-size:17px;line-height:1.15;margin:0 0 2px;white-space:nowrap}
- .mode-hall .mode-story .journey-tag{font-size:11px;line-height:1.25;margin-top:2px;white-space:normal;overflow:visible;overflow-wrap:anywhere}
- .mode-hall .mode-story .mode-rule{min-height:20px;line-height:1.25;padding-top:2px;font-size:12px}
- .mode-hall .mode-story .mode-rule b{font-size:18px;line-height:1}
+/* P4.5 MENU-B (UI bible 13 / user-picked B): one large stage + five switches along the bottom.
+ * Overall direction B "山嶺・競技": blue-black rock, cyan selection, amber only for the one
+ * main action. Colours are working candidates from 04_visual_foundations, not approved finals. */
+*{box-sizing:border-box}
+html,body{margin:0;width:100%;height:100%}
+body.menu-b{
+ --b-bg:#101c23;--b-surface:#1a2c33;--b-line:#2f4a53;--b-ink:#f4f7f5;--b-muted:#c3d2cf;--b-cyan:#4ae6cf;--b-amber:#f1c66c;
+ --tab-h:clamp(50px,17vh,70px);
+ background:var(--b-bg);color:var(--b-ink);overflow:hidden;font-family:var(--ui-font)
 }
+.menu{
+ position:relative;isolation:isolate;width:100%;height:100dvh;overflow:hidden;
+ display:grid;grid-template-rows:auto minmax(0,1fr) var(--tab-h);
+ padding:max(10px,var(--ui-safe-top)) max(18px,var(--ui-safe-right)) max(10px,var(--ui-safe-bottom)) max(18px,var(--ui-safe-left));
+ gap:8px;touch-action:pan-y
+}
+/* Stage: the selected mode's scene fills everything above the switches. */
+.stage{position:absolute;z-index:-2;inset:0 0 calc(var(--tab-h) + max(10px,var(--ui-safe-bottom)) + 4px) 0;overflow:hidden;background:var(--b-bg)}
+.stage-art{position:absolute;inset:0;background:var(--b-bg) right center/cover no-repeat;opacity:0;transition:opacity 180ms ease-out}
+.menu[data-selected=battle] .stage-art[data-art=battle],
+.menu[data-selected=arcade] .stage-art[data-art=arcade],
+.menu[data-selected=practice] .stage-art[data-art=practice],
+.menu[data-selected=story] .stage-art[data-art=story],
+.menu[data-selected=survival] .stage-art[data-art=survival]{opacity:1}
+.stage:after{content:"";position:absolute;inset:0;background:
+ linear-gradient(90deg,#101c23f2 0%,#101c23c7 24%,#101c2333 52%,transparent 66%),
+ linear-gradient(0deg,#101c23 0%,transparent 22%)}
+.menu:before{content:"";position:absolute;z-index:-1;inset:auto 0 0;height:calc(var(--tab-h) + max(10px,var(--ui-safe-bottom)) + 14px);background:var(--b-bg)}
 
-/* Glyph line boxes have room inside the caption in every compact layout. */
-.mode-hall .mode .mode-rule{min-height:24px;padding-block:2px}
-.mode-hall .mode .mode-rule b{font-size:18px;line-height:1;display:block;flex:none}
+/* Brand stays small on the menu (screen atlas 02-13). */
+.menu-brand{display:flex;align-items:center;gap:10px;min-height:44px}
+.menu-brand .ui-seal{width:32px;height:32px;outline:0}
+.menu-brand h1{margin:0;font-size:20px;line-height:1;font-weight:950;letter-spacing:.14em;text-shadow:0 2px 0 #0008}
+.menu-sound{margin-left:auto;min-width:64px;min-height:44px;padding:0 12px;border:1px solid var(--b-line);border-radius:3px;background:#101c23b3;color:var(--b-ink);font:800 13px/1 var(--ui-font)}
+.menu-sound[aria-pressed=false]{color:var(--b-muted)}
+
+/* Stage copy: kicker / big title / one line / the one action. */
+.stage-copy{align-self:center;display:flex;flex-direction:column;align-items:flex-start;gap:6px;max-width:min(54%,460px);min-height:0}
+.stage-kicker{font-size:13px;font-weight:800;letter-spacing:.06em;color:var(--b-cyan)}
+.stage-copy h2{margin:0;font-size:clamp(30px,11.5vh,52px);line-height:1.25;font-weight:950;letter-spacing:.02em;text-shadow:0 3px 0 #0009;text-wrap:balance}
+.stage-copy p{margin:0;font-size:15px;line-height:1.5;color:var(--b-muted);text-shadow:0 1px 2px #000a}
+.journey-tag{font-size:13px;font-weight:800;line-height:1.35;border-left:3px solid var(--b-cyan);padding-left:8px;overflow-wrap:anywhere}
+.journey-tag[hidden]{display:none}
+.stage-start{display:inline-flex;align-items:center;gap:14px;margin-top:8px;min-height:48px;padding:0 18px 0 20px;border-radius:3px;background:var(--b-amber);color:var(--b-bg);font-size:17px;font-weight:900;text-decoration:none;box-shadow:0 4px 0 #6b4d16}
+.stage-start b{font-size:14px}
+.stage-start:active{translate:0 2px;box-shadow:0 2px 0 #6b4d16}
+.stage-start:focus-visible{outline:3px solid var(--b-cyan);outline-offset:3px}
+.menu.stage-swap .stage-copy>*{animation:copy-in 200ms ease-out both}
+.menu.stage-swap .stage-copy>:nth-child(2){animation-delay:20ms}
+.menu.stage-swap .stage-copy>:nth-child(3){animation-delay:40ms}
+@keyframes copy-in{from{opacity:0;translate:0 8px}to{opacity:1;translate:0 0}}
+
+/* Five switches. The whole switch is the touch target; the shown mode lifts and lights. */
+.mode-switch{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px;min-height:0}
+.mode-tab{position:relative;isolation:isolate;overflow:hidden;display:flex;align-items:flex-end;min-width:0;min-height:44px;padding:0 10px 8px;border:1px solid var(--b-line);border-radius:3px;background:var(--b-surface);color:var(--b-ink);text-decoration:none;transition:translate 120ms,border-color 120ms}
+.tab-art{position:absolute;z-index:-1;inset:0;background:var(--b-surface) 85% center/cover no-repeat;opacity:.42;filter:saturate(.45) brightness(.8);transition:opacity 120ms,filter 120ms}
+.mode-tab:after{content:"";position:absolute;z-index:-1;inset:0;background:linear-gradient(0deg,#101c23e6 0%,#101c2366 55%,transparent 100%)}
+.mode-tab b{font-size:15px;font-weight:900;line-height:1.15;letter-spacing:.02em;text-shadow:0 1px 2px #000;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mode-tab[aria-current=true]{translate:0 -3px;border:2px solid var(--b-cyan);box-shadow:0 0 0 1px #101c23,0 6px 14px #0009}
+.mode-tab[aria-current=true]:before{content:"";position:absolute;inset:0 0 auto;height:4px;background:var(--b-cyan)}
+.mode-tab[aria-current=true] .tab-art{opacity:1;filter:none}
+.mode-tab:focus-visible{outline:3px solid var(--b-amber);outline-offset:2px}
+.mode-tab:active{translate:0 0}
+
+@media(max-height:350px){
+ .menu{gap:4px}
+ .menu-brand{min-height:40px}.menu-brand h1{font-size:18px}
+ .stage-copy{gap:4px}.stage-copy p{font-size:14px}.stage-kicker{font-size:12px}
+ .stage-start{min-height:46px;margin-top:4px;font-size:16px}
+ .mode-tab b{font-size:14px}.mode-tab{padding:0 8px 6px}
+}
+/* Browser portrait: rotate the whole menu into landscape (same contract as before). */
+html.portrait{overflow:hidden}
+html.portrait body{width:100dvh;height:100vw;transform-origin:top left;transform:translateX(100vw) rotate(90deg);overflow:hidden}
+html.portrait .menu{height:100vw}
+@media(prefers-reduced-motion:reduce){
+ .stage-art,.mode-tab,.tab-art{transition:none}
+ .menu.stage-swap .stage-copy>*{animation:none}
+ .mode-tab[aria-current=true]{translate:none}.stage-start:active{translate:none}
+}
+@media(forced-colors:active){
+ .stage-art,.tab-art,.stage:after,.mode-tab:after{display:none}
+ .mode-tab{border:2px solid ButtonText}.mode-tab[aria-current=true]{border:4px solid Highlight}
+ .stage-start{border:2px solid ButtonText}
+}

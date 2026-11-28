@@ -67,43 +67,41 @@ async function layoutEvidence(){
 try{
  for(const viewport of [{width:720,height:320},{width:852,height:393},{width:393,height:852}]){
   await page.setViewportSize(viewport);await page.goto(root,{waitUntil:'domcontentloaded'});
-  assert.equal(await page.locator('.modes a[data-mode]').count(),5);
+  // P4.5 MENU-B: one stage + five switches. Everything is visible without scrolling.
+  assert.equal(await page.locator('.mode-switch a[data-mode]').count(),5);
   await page.waitForFunction(()=>document.documentElement.dataset.uiArt==='v17-p4-ui-art-1');
-  assert.match(await page.locator('.mode-versus .mode-kicker').evaluate(n=>getComputedStyle(n,'::before').backgroundImage),/mode-versus\.svg/);
-  const targets=await tapTargets('.modes a');assert.equal(targets.length,5);
-  const overflow=await page.evaluate(()=>{const r=document.querySelector('.mode-hall').getBoundingClientRect();return {x:r.x,y:r.y,width:r.width,height:r.height,screen:[innerWidth,innerHeight]};});
-  const upper=await visibleTargets('.mode-versus .mode-action,.mode-arcade .mode-rule,.mode-practice .mode-rule');
+  const targets=await tapTargets('.mode-switch a[data-mode]');assert.equal(targets.length,5);
+  const overflow=await page.evaluate(()=>{const n=document.querySelector('.menu'),r=n.getBoundingClientRect();return {x:r.x,y:r.y,width:r.width,height:r.height,scroll:n.scrollHeight-n.clientHeight,screen:[innerWidth,innerHeight]};});
+  assert.ok(overflow.scroll<=1,'menu must not need scrolling: '+JSON.stringify(overflow));
+  const upper=await visibleTargets('#stage-title,#mode-start,.mode-switch a[data-mode]');
   await page.screenshot({path:dir+`/lobby-${viewport.width}x${viewport.height}.png`});
-  const before=await page.locator('.mode-hall').evaluate(n=>({top:n.scrollTop,height:n.scrollHeight,client:n.clientHeight}));
-  // Exercise actual user scrolling, including the portrait-rotated landscape menu.
-  // A large page element or Playwright's automatic click scrolling is not proof
-  // that the lower two mode actions can be reached in the viewport.
-  await page.mouse.move(viewport.width/2,viewport.height/2);await page.mouse.wheel(0,2000);
-  await page.waitForFunction(()=>{const n=document.querySelector('.mode-hall');return n.scrollTop+n.clientHeight>=n.scrollHeight-1;});
-  const lower=await visibleTargets('.mode-story,.mode-survival,.mode-story .mode-rule,.mode-survival .mode-rule,.journey-tag');
-  const tagContainment=await page.locator('.journey-tag').evaluate(tag=>({tag:tag.getBoundingClientRect().toJSON(),card:tag.closest('.mode-story').getBoundingClientRect().toJSON(),minHeight:getComputedStyle(tag.closest('.mode-story')).minHeight}));
-  await page.screenshot({path:dir+`/lobby-lower-${viewport.width}x${viewport.height}.png`});
-  assert.ok(tagContainment.tag.bottom<=tagContainment.card.bottom-1,'journey name clipped by its card: '+JSON.stringify(tagContainment));
-  const after=await page.locator('.mode-hall').evaluate(n=>({top:n.scrollTop,height:n.scrollHeight,client:n.clientHeight}));
-  if(before.height>before.client)assert.ok(after.top>before.top,'wheel did not scroll the menu');
+  // Switching shows the mode on the stage first; the start button carries the route.
+  await page.locator('.mode-switch [data-mode="survival"]').tap();
+  assert.equal(await page.locator('#mode-start').getAttribute('href'),'./dojo/?mode=survival');assert.equal(await page.locator('#stage-title').textContent(),'サバイバル');
+  assert.equal(await page.locator('.mode-switch [data-mode="survival"]').getAttribute('aria-current'),'true');
+  await page.locator('.mode-switch [data-mode="story"]').tap();
+  const lower=await visibleTargets('#mode-start,.mode-switch [data-mode="story"]');
+  const tagContainment=null,before=null,after=null;
+  await page.screenshot({path:dir+`/lobby-story-${viewport.width}x${viewport.height}.png`});
   report.push({screen:'lobby',viewport,targets,overflow,upper,lower,tagContainment,scroll:{before,after}});
  }
  await page.setViewportSize({width:720,height:320});
  for(const mode of ['battle','practice','arcade','survival']){
-  await page.goto(root);await page.locator(`[data-mode="${mode}"]`).click();
+  await page.goto(root);{const tab=page.locator(`.mode-switch [data-mode="${mode}"]`);if(await tab.getAttribute('aria-current')!=='true')await tab.click();}await page.locator('#mode-start').click();
   await page.waitForFunction(()=>window.mamoken3d,undefined,{timeout:60000});
   assert.equal(await page.locator('#match-mode').inputValue(),mode);
-  await tapTargets('.fighter-card');await tapTargets('#start,.selection-footer select:not([hidden])');
+  await tapTargets('.fighter-card');await tapTargets('#start,#sa-settings-toggle');await page.locator('#sa-settings-toggle').click();await tapTargets('#sa-settings select:not([hidden])');await page.locator('.sa-settings-close').click();
   await page.waitForFunction(()=>document.querySelectorAll('.fighter-card .p4-crest').length===9&&[...document.querySelectorAll('.p4-crest')].every(image=>image.complete&&image.naturalWidth>0));
   await page.locator('.fighter-card').nth(2).tap();assert.equal(await page.locator('#chosen-name').textContent(),'ゴダン');
   assert.match(await page.locator('.p4-profile').textContent(),/得意.*苦手/);
-  await page.waitForFunction(()=>{const image=document.querySelector('.p4-selected-portrait'),selected=document.querySelector('.fighter-card.chosen img:not(.p4-crest)');return image&&!image.hidden&&image.complete&&image.naturalWidth>0&&image.currentSrc===selected?.currentSrc;});
-  assert.ok(await page.locator('.p4-selected-portrait').evaluate(n=>n.getBoundingClientRect().height>=80),'selected face should be larger than roster thumbnails');
+  // SELECT-A: the chosen marmot stands on the stage, larger than any roster tile.
+  await page.waitForFunction(()=>{const image=document.querySelector('.sa-body');return image&&image.complete&&image.naturalWidth>0&&/roster3d\/godan\.webp/.test(image.currentSrc);});
+  assert.ok(await page.locator('.sa-body').evaluate(n=>n.getBoundingClientRect().height>=Math.max(...[...document.querySelectorAll('.fighter-card')].map(c=>c.getBoundingClientRect().height))*1.5),'stage body should be much larger than roster tiles');
   const names=await page.locator('.fighter-card span').evaluateAll(nodes=>nodes.map(n=>({name:n.textContent,clipped:n.scrollWidth>n.clientWidth+1||n.scrollHeight>n.clientHeight+1})));assert.ok(names.every(n=>!n.clipped),'full roster names must remain readable: '+JSON.stringify(names));
   await page.locator('.p4-profile').scrollIntoViewIfNeeded();
   const profile=await visibleTargets('.p4-profile');
-  const separation=await page.locator('.selection-footer').evaluate(footer=>({profileBottom:document.querySelector('.p4-profile').getBoundingClientRect().bottom,footerTop:footer.getBoundingClientRect().top,position:getComputedStyle(footer).position}));
-  assert.ok(separation.footerTop>=separation.profileBottom,'selection footer covers strengths/weaknesses');
+  const separation=await page.locator('.sa-actions').evaluate(actions=>({profileBottom:document.querySelector('.p4-profile').getBoundingClientRect().bottom,footerTop:actions.getBoundingClientRect().top,position:getComputedStyle(actions).position}));
+  assert.ok(separation.footerTop>=separation.profileBottom,'selection actions cover strengths/weaknesses');
   await page.screenshot({path:dir+`/select-${mode}.png`});
   await page.locator('#start').scrollIntoViewIfNeeded();const start=await visibleTargets('#start');
   await page.screenshot({path:dir+`/select-actions-${mode}.png`});report.push({screen:'selection',mode,profile,separation,start});
@@ -145,7 +143,7 @@ try{
   await page.screenshot({path:dir+'/'+mode+'-common-hud.png'});
   report.push({screen:'actual-battle-hud',mode,controls});
  }
- await page.goto(root);await page.locator('[data-mode="story"]').click();
+ await page.goto(root);await page.locator('.mode-switch [data-mode="story"]').click();await page.locator('#mode-start').click();
  await page.waitForFunction(()=>window.mamokenStory?.previewReady,undefined,{timeout:90000});
  assert.equal(await page.getByRole('tab').count(),4);await tapTargets('#p4-editor-tabs button,#enter,#preview-turn');
  await page.locator('#avatar-name').fill('山の旅人');
@@ -164,20 +162,18 @@ try{
  await page.screenshot({path:dir+'/exploration.png'});
  assert.equal(await page.evaluate(()=>mamokenStory.avatar.name),'山の旅人');assert.equal(await page.evaluate(()=>mamokenStory.avatar.combat.specials[0]),'yomikage.s1');
  const saved=await page.evaluate(()=>localStorage.getItem('mamoken.story.v16.1'));
- await page.goto(root);assert.match(await page.locator('#saved-journey').textContent(),/山の旅人/);assert.equal(await page.evaluate(()=>localStorage.getItem('mamoken.story.v16.1')),saved,'menu changed saved journey');
- await page.emulateMedia({reducedMotion:'reduce'});assert.equal(await page.locator('.mode').first().evaluate(n=>getComputedStyle(n).transitionDuration),'0s');
+ await page.goto(root);assert.match(await page.locator('#saved-journey').textContent(),/山の旅人/);await page.locator('.mode-switch [data-mode="story"]').click();assert.equal(await page.locator('#saved-journey').isVisible(),true);assert.equal(await page.evaluate(()=>localStorage.getItem('mamoken.story.v16.1')),saved,'menu changed saved journey');
+ await page.emulateMedia({reducedMotion:'reduce'});assert.equal(await page.locator('.mode-tab').first().evaluate(n=>getComputedStyle(n).transitionDuration),'0s');
  // Controlled layout simulation, not an iPhone measurement: ensure the short
  // lobby keeps both the left notch and bottom home-indicator gutters intact.
  await page.evaluate(()=>{for(const [side,value] of Object.entries({left:62,right:21,top:0,bottom:21}))document.documentElement.style.setProperty('--ui-safe-'+side,value+'px');});
- await page.mouse.move(360,160);await page.mouse.wheel(0,2000);
- await page.waitForFunction(()=>{const n=document.querySelector('.mode-hall');return n.scrollTop+n.clientHeight>=n.scrollHeight-1;});
- const safeCards=await visibleTargets('.mode-story,.mode-survival,.hall-footer');
+ const safeCards=await visibleTargets('.mode-switch a[data-mode],#mode-start,#stage-title');
  for(const card of safeCards)assert.ok(card.x>=61&&card.x+card.width<=700&&card.y+card.height<=300,'simulated safe area covered: '+JSON.stringify(card));
  report.push({screen:'lobby-simulated-insets',insets:{left:62,right:21,top:0,bottom:21},safeCards});
  await page.screenshot({path:dir+'/lobby-simulated-insets-720x320.png'});
  assert.deepEqual(errors,[]);const video=await flushVideo();await writeFile(dir+'/report.json',JSON.stringify({report,errors,video,environment:'Desktop Chromium / SwiftShader; physical iPhone not tested'},null,2));
  if(video)console.log('P4 actual interaction video:',video.path,'(Chromium/SwiftShader, not physical iPhone)');
- console.log('P4 UI WEBGL PASS: five mode routes, native & rotated 720/852 layouts, 44px targets, paired character roles, four live shared Battle HUDs, four-tab editor save and unchanged journey record');
+ console.log('P4 UI WEBGL PASS: MENU-B five switches + stage start, SELECT-A stage/settings sheet, five mode routes, native & rotated 720/852 layouts, 44px targets, paired character roles, four live shared Battle HUDs, four-tab editor save and unchanged journey record');
 }catch(error){
  await page.screenshot({path:dir+'/error.png'}).catch(()=>{});const layout=await layoutEvidence().catch(()=>null);
  const video=await flushVideo().catch(failure=>({error:failure.message}));

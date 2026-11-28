@@ -2,6 +2,7 @@
 import assert from 'node:assert/strict';
 import {mkdir} from 'node:fs/promises';
 import {createRequire} from 'node:module';
+import {setMatch} from './match-settings.mjs';
 const {chromium}=createRequire(import.meta.url)('playwright-core');
 const base=process.env.MAMOKEN_URL||'http://127.0.0.1:4173/exp/fable-3d/dojo/';
 const dir=process.env.MAMOKEN_EVIDENCE||'/tmp/mamoken-v15-normals';
@@ -21,7 +22,7 @@ try{
  for(const [index,id] of ids.entries()){
    await page.locator('#selection').waitFor({state:'visible'});
    await page.locator('.fighter-card').nth(index).tap();
-   await page.locator('#match-mode').selectOption('practice');
+   await setMatch(page,'#match-mode','practice');
    await page.locator('#start').tap();
    await page.waitForFunction(id=>mamoken3d?.actors?.[0]?.id===id&&
      mamoken3d.battle?.frame>0&&mamoken3d.practice.enabled,id,{timeout:35000});

@@ -5,6 +5,7 @@
 import assert from 'node:assert/strict';
 import {mkdir} from 'node:fs/promises';
 import {createRequire} from 'node:module';
+import {setMatch} from './match-settings.mjs';
 const require=createRequire(import.meta.url);
 const {chromium}=(()=>{try{return require('playwright-core');}catch{return require('playwright');}})();
 const base=process.env.MAMOKEN_URL||'http://127.0.0.1:4173/exp/fable-3d/dojo/';
@@ -49,7 +50,7 @@ try{
   {
     const {context,page}=await open({viewport:{width:393,height:852}});
     await page.waitForFunction(()=>mamoken3d.landscapeLocked===true);
-    await page.locator('#cpu-choice').selectOption('godan');
+    await setMatch(page,'#cpu-choice','godan');
     await page.locator('#start').tap();
     await waitState(page,'vs',20000);
     await controlVisibility(page,false);
@@ -120,7 +121,7 @@ try{
   // ---------- B. 横画面: キーのスキップ（Escape / Space / Enter）、CPU 勝利、ミラー対戦 ----------
   {
     const {context,page}=await open({viewport:{width:852,height:393},mobile:false});
-    await page.locator('#cpu-choice').selectOption('chirka');await page.locator('.fighter-card').nth(IDS.indexOf('chirka')).click();
+    await setMatch(page,'#cpu-choice','chirka');await page.locator('.fighter-card').nth(IDS.indexOf('chirka')).click();
     await page.locator('#start').click();await page.evaluate(()=>document.activeElement?.blur());
     await page.waitForFunction(()=>mamoken3d.presentation.loaded&&mamoken3d.presentation.time>1,undefined,{timeout:60000});
     await page.keyboard.press('Escape');assert.equal((await P(page)).state,'intro','Escape で VS をスキップ');
@@ -191,7 +192,7 @@ try{
     // 読み取りまでに実時間が少し進むので、絶対値ではなく「短縮版は編集元の開始位置（70F=1.17 秒）以降」「フル版は頭から」を幅を持たせて見る
     assert.ok(seen.find(v=>v.id==='bullet').from>=1.16,'短縮版は後半から始まる');assert.ok(seen.find(v=>v.id==='moguzo').from<1.0,'フル版は頭から');
     // プラクティスは VS／顔アップなし（従来どおり）
-    await page.evaluate(()=>mamoken3d.showSelection());await page.locator('#match-mode').selectOption('practice');await page.locator('#start').tap();
+    await page.evaluate(()=>mamoken3d.showSelection());await setMatch(page,'#match-mode','practice');await page.locator('#start').tap();
     await page.waitForFunction(()=>mamoken3d.practice.enabled&&mamoken3d.presentation.state==='fight'&&mamoken3d.battle?.frame>4,undefined,{timeout:35000});
     assert.deepEqual((await P(page)).log.slice(-2),['loading','fight']);assert.equal(await page.locator('#vs-screen').isVisible(),false);
     await context.close();

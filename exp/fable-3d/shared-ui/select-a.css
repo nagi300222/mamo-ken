@@ -1,0 +1,126 @@
+/* P4.5 SELECT-A (UI bible 13 / user-picked A) in overall direction B colours.
+ * Left: 3×3 faces. Right: the chosen marmot on a lit floor with a large name.
+ * Bottom right: one settings chip + the commit button. Colours are working candidates. */
+html body[data-ui=mountain] #selection.select-a{
+ --b-bg:#101c23;--b-surface:#1a2c33;--b-line:#2f4a53;--b-ink:#f4f7f5;--b-muted:#c3d2cf;--b-cyan:#4ae6cf;--b-amber:#f1c66c;
+ position:fixed;z-index:40;inset:0;margin:0;overflow:hidden;border:0;border-radius:0;
+ padding:max(8px,var(--ui-safe-top,0px)) max(16px,var(--ui-safe-right,0px)) max(8px,var(--ui-safe-bottom,0px)) max(16px,var(--ui-safe-left,0px));
+ background:radial-gradient(ellipse 46% 70% at 70% 74%,#2b4a52 0%,transparent 70%),linear-gradient(180deg,#132730 0%,var(--b-bg) 70%);
+ color:var(--b-ink);font-family:var(--ui-font)
+}
+html body[data-ui=mountain] #selection.select-a.hidden{display:none}
+#app:has(#selection.select-a:not(.hidden)) .topbar{visibility:hidden}
+html body[data-ui=mountain] #selection.select-a .selection-inner{
+ display:grid;height:100%;max-width:none;margin:0;gap:6px 18px;
+ grid-template-columns:minmax(0,clamp(240px,40%,380px)) minmax(0,1fr);
+ grid-template-rows:auto minmax(0,1fr) auto;
+ grid-template-areas:"head stage" "grid stage" "grid actions"
+}
+html body[data-ui=mountain] #selection.select-a :is(.selection-top,.selection-footer){display:none}
+html body[data-ui=mountain] #selection.select-a .p4-selection-main{display:contents}
+
+/* Head */
+.select-a .sa-head{grid-area:head;display:flex;align-items:center;gap:12px;min-height:40px}
+.select-a .sa-back{display:inline-flex;align-items:center;gap:4px;min-height:40px;min-width:44px;padding:0 10px 0 6px;border:1px solid var(--b-line);border-radius:3px;background:#101c23b3;color:var(--b-ink);font:800 13px/1 var(--ui-font);text-decoration:none}
+.select-a .sa-back b{font-size:20px;font-weight:700;line-height:1}
+.select-a .sa-title{display:flex;flex-direction:column;margin:0;font-size:18px;line-height:1.1;font-weight:900;letter-spacing:.04em}
+.select-a .sa-title small{font-size:11px;font-weight:800;color:var(--b-cyan);letter-spacing:.06em}
+
+/* 3×3 faces */
+html body[data-ui=mountain] #selection.select-a #roster{grid-area:grid;align-self:stretch;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));grid-template-rows:repeat(3,minmax(0,1fr));gap:6px;min-height:0;margin:0}
+html body[data-ui=mountain] #selection.select-a .fighter-card{
+ position:relative;isolation:isolate;overflow:hidden;display:block;min-width:0;min-height:44px;height:auto;padding:0;margin:0;
+ border:1px solid var(--b-line);border-radius:3px;background:var(--b-surface);box-shadow:none;transition:translate 110ms,border-color 110ms
+}
+html body[data-ui=mountain] #selection.select-a .fighter-card:before{content:none;border:0}
+html body[data-ui=mountain] #selection.select-a .fighter-card>img:not(.p4-crest){position:absolute;z-index:-1;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 30%;margin:0;border:0;filter:saturate(.7) brightness(.85)}
+html body[data-ui=mountain] #selection.select-a .fighter-card:after{content:"";position:absolute;z-index:-1;inset:auto 0 0;height:46%;background:linear-gradient(0deg,#101c23f0,transparent)}
+html body[data-ui=mountain] #selection.select-a .fighter-card>span{position:absolute;left:6px;right:6px;bottom:4px;font-size:12px;font-weight:900;line-height:1.15;text-align:left;color:var(--b-ink);text-shadow:0 1px 2px #000;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+html body[data-ui=mountain] #selection.select-a .fighter-card>small{display:none}
+html body[data-ui=mountain] #selection.select-a .fighter-card .p4-crest{position:absolute;top:4px;right:4px;width:18px;height:18px;margin:0;opacity:.85}
+html body[data-ui=mountain] #selection.select-a .fighter-card.chosen{border:3px solid var(--b-cyan);translate:0 -2px;box-shadow:0 6px 12px #0008}
+html body[data-ui=mountain] #selection.select-a .fighter-card.chosen>img:not(.p4-crest){filter:none}
+html body[data-ui=mountain] #selection.select-a .fighter-card:focus-visible{outline:3px solid var(--b-amber);outline-offset:1px}
+
+/* Stage */
+.select-a .sa-stage{grid-area:stage;position:relative;min-height:0;min-width:0}
+.select-a .sa-floor{position:absolute;left:4%;width:52%;bottom:3%;height:12%;border-radius:50%;background:radial-gradient(closest-side,#4ae6cf55,#4ae6cf14 60%,transparent);pointer-events:none}
+.select-a .sa-body{position:absolute;left:5%;bottom:4%;width:auto;height:min(96%,330px);aspect-ratio:1;object-fit:contain;filter:drop-shadow(0 10px 10px #000a);pointer-events:none}
+html body[data-ui=mountain] #selection.select-a .p4-profile{
+ position:absolute;right:0;top:4%;width:min(46%,280px);display:flex;flex-direction:column;align-items:flex-start;gap:6px;
+ padding:0;margin:0;border:0;background:none;box-shadow:none
+}
+html body[data-ui=mountain] #selection.select-a .p4-profile .p4-selected-portrait{display:none}
+html body[data-ui=mountain] #selection.select-a .p4-profile .chosen{display:flex;flex-direction:column;align-items:flex-start;gap:4px;margin:0 0 4px;padding:0;border:0;background:none}
+html body[data-ui=mountain] #selection.select-a #chosen-name{font-size:clamp(26px,9vh,38px);line-height:1.05;font-weight:950;letter-spacing:.02em;color:var(--b-ink);text-shadow:0 3px 0 #0009}
+html body[data-ui=mountain] #selection.select-a #chosen-role{display:inline-block;padding:3px 8px;border:1px solid var(--b-cyan);border-radius:2px;font-size:12px;font-weight:800;color:var(--b-cyan);background:#101c23b3}
+html body[data-ui=mountain] #selection.select-a .p4-profile>span{display:grid;grid-template-columns:auto 1fr;gap:2px 8px;align-items:baseline;font-size:13px;line-height:1.4;color:var(--b-muted)}
+html body[data-ui=mountain] #selection.select-a .p4-profile>span>b{font-size:11px;font-weight:900;padding:1px 6px;border-radius:2px;background:#2a4148;color:var(--b-ink);border:0}
+.select-a .sa-stage.sa-enter .sa-body{animation:sa-step 260ms cubic-bezier(.2,.8,.2,1) both}
+.select-a .sa-stage.sa-enter .p4-profile{animation:sa-name 220ms ease-out both}
+@keyframes sa-step{from{opacity:.2;translate:-18px 14px;scale:.94}to{opacity:1;translate:0 0;scale:1}}
+@keyframes sa-name{from{opacity:0;translate:0 8px}to{opacity:1;translate:0 0}}
+
+/* Actions */
+.select-a .sa-actions{grid-area:actions;display:flex;justify-content:flex-end;align-items:center;gap:10px;min-width:0}
+.select-a .sa-settings-toggle{display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:2px;min-height:48px;min-width:0;max-width:62%;padding:4px 12px;border:1px solid var(--b-line);border-radius:3px;background:#101c23d9;color:var(--b-ink);font-family:var(--ui-font);text-align:left}
+.select-a .sa-settings-label{font-size:13px;font-weight:900}
+.select-a .sa-settings-summary{font-size:11px;font-weight:700;color:var(--b-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+.select-a .sa-settings-toggle[aria-expanded=true]{border-color:var(--b-cyan)}
+html body[data-ui=mountain] #selection.select-a #start{min-height:48px;padding:0 20px;border:0;border-radius:3px;background:var(--b-amber);color:var(--b-bg);font:900 17px/1 var(--ui-font);box-shadow:0 4px 0 #6b4d16;white-space:nowrap}
+html body[data-ui=mountain] #selection.select-a #start span{font-size:11px;letter-spacing:.08em;margin-left:4px}
+html body[data-ui=mountain] #selection.select-a #start:active{translate:0 2px;box-shadow:0 2px 0 #6b4d16}
+.select-a :is(.sa-settings-toggle,#start):focus-visible{outline:3px solid var(--b-cyan);outline-offset:2px}
+
+/* Settings sheet: opens above the actions; existing labels/selects are reused. */
+.select-a .sa-settings{position:absolute;z-index:3;right:max(16px,var(--ui-safe-right,0px));bottom:calc(max(8px,var(--ui-safe-bottom,0px)) + 56px);width:min(340px,calc(100% - 32px));max-height:calc(100% - 72px);overflow:auto;display:flex;flex-direction:column;gap:8px;padding:12px;border:1px solid var(--b-cyan);border-radius:4px;background:var(--b-surface);box-shadow:0 10px 24px #000b}
+.select-a .sa-settings[hidden]{display:none}
+html body[data-ui=mountain] #selection.select-a .sa-settings label{display:grid;grid-template-columns:5.5em minmax(0,1fr);align-items:center;gap:8px;margin:0;font-size:13px;font-weight:800;color:var(--b-ink)}
+html body[data-ui=mountain] #selection.select-a .sa-settings label[hidden]{display:none}
+html body[data-ui=mountain] #selection.select-a .sa-settings select{min-height:44px;max-width:none;width:100%;padding:4px 8px;border:1px solid var(--b-line);border-radius:3px;background:var(--b-bg);color:var(--b-ink);font:700 14px/1.2 var(--ui-font)}
+html body[data-ui=mountain] #selection.select-a .sa-settings #check-mode-label{grid-template-columns:auto 1fr;min-height:44px}
+html body[data-ui=mountain] #selection.select-a .sa-settings>a{display:inline-flex;align-items:center;min-height:44px;padding:0 10px;border:1px solid var(--b-line);border-radius:3px;color:var(--b-muted);font-size:12px;text-decoration:none}
+html body[data-ui=mountain] #selection.select-a .sa-settings #run-rule-note{font-size:11px;line-height:1.4;color:var(--b-muted)}
+.select-a .sa-settings-close{min-height:44px;border:1px solid var(--b-line);border-radius:3px;background:var(--b-bg);color:var(--b-ink);font:800 13px/1 var(--ui-font)}
+
+@media(max-height:350px){
+ html body[data-ui=mountain] #selection.select-a .selection-inner{gap:4px 14px}
+ .select-a .sa-head{min-height:36px}.select-a .sa-title{font-size:16px}
+ html body[data-ui=mountain] #selection.select-a #roster{gap:4px}
+ html body[data-ui=mountain] #selection.select-a .fighter-card>span{font-size:11px}
+ html body[data-ui=mountain] #selection.select-a .p4-profile>span{font-size:12px}
+ .select-a .sa-settings-toggle,html body[data-ui=mountain] #selection.select-a #start{min-height:46px}
+}
+@media(prefers-reduced-motion:reduce){
+ .select-a .sa-stage.sa-enter :is(.sa-body,.p4-profile){animation:none}
+ html body[data-ui=mountain] #selection.select-a .fighter-card{transition:none}
+ html body[data-ui=mountain] #selection.select-a .fighter-card.chosen{translate:none}
+}
+@media(forced-colors:active){
+ html body[data-ui=mountain] #selection.select-a .fighter-card.chosen{border:4px solid Highlight}
+ .select-a .sa-floor{display:none}
+}
+
+/* Override the P4 polish chosen/focus frames so only the cyan selection border shows. */
+html[data-ui-polish] body[data-ui=mountain] #selection.select-a .fighter-card:is(.chosen,:focus-visible):before{content:none}
+/* Story entry already lives on the mode menu; keep this sheet to match settings only. */
+html body[data-ui=mountain] #selection.select-a .sa-settings>a[href="../story/"]{display:none}
+@media(max-height:350px){
+ .select-a .sa-settings{gap:6px;padding:10px;bottom:calc(max(8px,var(--ui-safe-bottom,0px)) + 52px);max-height:calc(100% - 64px)}
+}
+html body[data-ui=mountain] #selection.select-a .sa-settings #run-rule-note{position:static;inset:auto;flex:none;order:9;margin:0;padding:0;width:auto;background:none}
+html body[data-ui=mountain] #selection.select-a .sa-settings .sa-settings-close{order:10;flex:none}
+/* Every roster name stays fully readable: long names wrap to a second line instead of truncating. */
+html body[data-ui=mountain] #selection.select-a .fighter-card>span{white-space:normal;overflow:visible;text-overflow:clip;overflow-wrap:anywhere;line-height:1.1}
+html body[data-ui=mountain] #selection.select-a .fighter-card:after{height:58%}
+
+/* Sound/effects stays reachable while choosing (the rest of the header is hidden).
+   The real topbar button and its popover are reused, only repositioned. */
+#app:has(#selection.select-a:not(.hidden)) .topbar .av-settings-toggle{
+ visibility:visible;position:fixed;z-index:45;
+ top:max(8px,var(--ui-safe-top,0px));right:max(16px,var(--ui-safe-right,0px));
+ min-height:40px;min-width:44px;padding:0 12px;border:1px solid #2f4a53;border-radius:3px;background:#101c23d9;color:#f4f7f5;font:800 12px/1 var(--ui-font)
+}
+#app:has(#selection.select-a:not(.hidden)) #av-settings{visibility:visible}
+html body[data-ui=mountain] #selection.select-a .p4-profile{top:52px}
+@media(max-height:350px){html body[data-ui=mountain] #selection.select-a .p4-profile{top:46px}}
