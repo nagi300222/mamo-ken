@@ -47,6 +47,42 @@ test('backup failures do not block local saves and a later flush retries',async(
  storage.setItem(SAVE_KEYS[0],story);const mirror=createSaveMirror({storage,preferences,onWarning:warning=>warnings.push(warning)});await mirror.restore();await mirror.flush();
  assert.equal(storage.getItem(SAVE_KEYS[0]),story);assert.equal(warnings.length,1);await mirror.flush();assert.equal(preferences.values.get(prefix+SAVE_KEYS[0]),story);
 });
+test('an unreadable native backup is unknown, not absent: flush never deletes it and retries the read',async()=>{
+ const preferences=preferenceFixture(new Map([[prefix+SAVE_KEYS[0],story],[prefix+SAVE_KEYS[1],'40']])),storage=new StorageFixture(),warnings=[];
+ const get=preferences.get;let readFailures=2;preferences.get=async args=>{if(readFailures-->0)throw Error('test read unavailable');return get(args);};
+ const mirror=createSaveMirror({storage,preferences,onWarning:w=>warnings.push(w)});await mirror.restore();mirror.install();
+ try{
+  assert.deepEqual(mirror.unknownKeys.sort(),[...SAVE_KEYS].sort());
+  await mirror.flush();
+  assert.equal(preferences.values.get(prefix+SAVE_KEYS[0]),story,'first flush must not delete the unread story backup');
+  assert.equal(storage.getItem(SAVE_KEYS[0]),story,'flush retried the read and restored the local record');
+  assert.equal(storage.getItem(SAVE_KEYS[1]),'40');assert.deepEqual(mirror.unknownKeys,[]);
+  storage.removeItem(SAVE_KEYS[0]);await mirror.flush();assert.equal(preferences.values.has(prefix+SAVE_KEYS[0]),false,'explicit game removal still deletes');
+ }finally{mirror.dispose();}
+ assert.ok(warnings.length>=2);
+});
+test('a permanently unreadable backup survives repeated flushes, and an explicit clear still removes it',async()=>{
+ const preferences=preferenceFixture(new Map([[prefix+SAVE_KEYS[0],story]])),storage=new StorageFixture();
+ preferences.get=async()=>{throw Error('test read unavailable');};
+ const mirror=createSaveMirror({storage,preferences});await mirror.restore();mirror.install();
+ try{
+  for(let i=0;i<5;i++)await mirror.flush();
+  assert.equal(preferences.values.get(prefix+SAVE_KEYS[0]),story);
+  storage.clear();await mirror.flush();assert.equal(preferences.values.has(prefix+SAVE_KEYS[0]),false);
+ }finally{mirror.dispose();}
+});
+test('survival best keeps the higher of local and native copies in both directions',async()=>{
+ const preferences=preferenceFixture(new Map([[prefix+SAVE_KEYS[1],'30']])),storage=new StorageFixture();
+ storage.setItem(SAVE_KEYS[1],'12');
+ const mirror=createSaveMirror({storage,preferences});await mirror.restore();mirror.install();
+ try{
+  await mirror.flush();assert.equal(storage.getItem(SAVE_KEYS[1]),'30');assert.equal(preferences.values.get(prefix+SAVE_KEYS[1]),'30');
+  storage.setItem(SAVE_KEYS[1],'31');await mirror.flush();assert.equal(preferences.values.get(prefix+SAVE_KEYS[1]),'31');
+  preferences.values.set(prefix+SAVE_KEYS[1],'50');storage.setItem(SAVE_KEYS[1],'32');await mirror.flush();
+  assert.equal(preferences.values.get(prefix+SAVE_KEYS[1]),'50','a lower local write never lowers the native best');
+  assert.equal(storage.getItem(SAVE_KEYS[1]),'50');
+ }finally{mirror.dispose();}
+});
 test('generated iOS scene uses landscape on iPhone/iPad and includes UserDefaults privacy resource',async()=>{
  const info=plist.parse(await readFile(new URL('ios/App/App/Info.plist',native),'utf8'));
  const orientations=['UIInterfaceOrientationLandscapeLeft','UIInterfaceOrientationLandscapeRight'];

@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {RunController,survivalLevel,healFraction,readSurvivalBest} from './run-controller.js';
+import {RunController,survivalLevel,healFraction,readSurvivalBest,saveSurvivalBest} from './run-controller.js';
 import {RUN_CPU_LEVELS,runCpuInput} from './run-cpu.js';
 import {IDS,ROSTER} from './balance.js';
 const end=(run,winner=0,hp=100,reason='ko')=>{const g=run.createBattle();g.phase='ko';g.winner=winner;g.fighters[0].hp=hp;g.events=reason==='timeout'?[{type:'timeout'}]:[];return {g,out:run.finish(g)};};
@@ -58,4 +58,15 @@ test('run CPU waits for visible startup and preserves chosen guard through block
  for(let level=1;level<=9;level++){const i=runCpuInput(g,level);assert.equal(i.right,undefined);assert.equal(i.down,undefined);assert.equal(i.stepBack,undefined);}
  op.frame=30;let guards=0;for(let seed=1;seed<=40;seed++){g.cpuSeed=seed;const i=runCpuInput(g,9);if(i.right&&i.down)guards++;}assert.ok(guards>=30);
  p.stun=8;p.state='block';p.input={down:true};assert.deepEqual(runCpuInput(g,1),{right:true,down:true});
+});
+
+test('an older survival run never lowers a best saved by a newer session',()=>{
+ const memory=new Map(),storage={getItem:k=>memory.get(k)??null,setItem:(k,v)=>memory.set(k,String(v))};
+ const old=new RunController({mode:'survival',player:'godan',seed:3,storage});
+ const fresh=new RunController({mode:'survival',player:'pisuke',seed:4,storage});
+ for(let i=0;i<5;i++){end(fresh);fresh.advance();}
+ assert.equal(readSurvivalBest(storage),5);
+ end(old);assert.equal(readSurvivalBest(storage),5,'old run with 1 win kept the newer 5');assert.equal(old.best,5);
+ assert.equal(saveSurvivalBest(storage,2),5);assert.equal(saveSurvivalBest(storage,9),9);assert.equal(readSurvivalBest(storage),9);
+ assert.equal(saveSurvivalBest({getItem(){throw Error('denied');},setItem(){}},3),false);
 });
