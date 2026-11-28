@@ -8,6 +8,7 @@ import {createRequire} from 'node:module';
 import path from 'node:path';
 const {chromium}=createRequire(import.meta.url)('playwright-core');
 const base=process.env.MAMOKEN_URL??'http://127.0.0.1:4173/exp/fable-3d/dojo/';
+const TARGETS=(process.env.MAMOKEN_HIT_TARGETS??'dojo,story').split(',');
 const output=path.join(process.env.MAMOKEN_EVIDENCE??'/tmp/mamoken-evidence','hit-ownership');
 const strict=process.env.MAMOKEN_HIT_STRICT==='1';
 await mkdir(output,{recursive:true});
@@ -25,35 +26,53 @@ const errors=[];
 page.on('pageerror',e=>errors.push(e.message));
 const report={sha:execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim(),physicalIphoneTested:false,layouts:[]};
 let failed=false;
-try{
+async function enterDojo(){
  await page.goto(new URL('?mode=battle',base).href);
  await page.locator('#start').tap();
  await page.waitForFunction(()=>window.mamoken3d?.presentation.state==='fight'&&mamoken3d.battle.frame>0);
  await page.evaluate(()=>{const t=mamoken3d.battle.fighters[1];t.stun=1e6;t.action=null;});
- for(const [name,width,height,insets] of LAYOUTS){
+ return {rail:'#buttons-rail',locked:()=>page.evaluate(()=>mamoken3d.landscapeLocked)};
+}
+async function enterStory(){
+ await page.setViewportSize({width:852,height:393});
+ await page.goto(new URL('../story/',base).href);
+ await page.waitForFunction(()=>mamokenStory.previewReady,undefined,{timeout:90000});
+ await page.evaluate(()=>document.querySelector('#avatar-form').requestSubmit());
+ await page.waitForFunction(()=>mamokenStory.mode==='explore',undefined,{timeout:90000});
+ await page.keyboard.down('w');await page.waitForFunction(()=>mamokenStory.nearby?.id==='moguzo',undefined,{timeout:20000});await page.keyboard.up('w');
+ await page.locator('#talk').tap();await page.locator('#challenge').click();
+ await page.waitForFunction(()=>mamokenStory.mode==='battle'&&mamokenStory.battle.frame>5,undefined,{timeout:120000});
+ await page.evaluate(()=>{const t=mamokenStory.battle.fighters[1];t.stun=1e6;t.action=null;});
+ return {rail:'#battle-buttons',locked:()=>page.evaluate(()=>mamokenStory.landscapeLocked)};
+}
+try{
+ for(const target of TARGETS){
+ const {rail,locked}=target==='story'?await enterStory():await enterDojo();
+ for(const [layoutName,width,height,insets] of LAYOUTS){
+  const name=target+'-'+layoutName;
   await page.setViewportSize({width,height});
   await cdp.send('Emulation.setSafeAreaInsetsOverride',{insets:{top:0,bottom:0,left:0,right:0,...insets}});
   await page.evaluate(()=>dispatchEvent(new Event('resize')));
-  await page.waitForFunction(r=>mamoken3d.landscapeLocked===r,height>width);
+  for(let i=0;i<50&&(await locked())!==(height>width);i++)await page.waitForTimeout(50);
   if(process.env.MAMOKEN_HIT_CSS)await page.addStyleTag({content:process.env.MAMOKEN_HIT_CSS});
   await page.waitForTimeout(150);
-  const result=await page.evaluate(()=>{
-   const buttons=[...document.querySelectorAll('#buttons-rail button.attack[data-control]')];
+  const result=await page.evaluate(rail=>{
+   const buttons=[...document.querySelectorAll(rail+' button.attack[data-control]')];
+   if(!buttons.length)throw Error('no attack buttons in '+rail);
    const label=b=>b?.querySelector('.attack-label')?.textContent??null;
-   // Scan the union of button boxes plus a margin, in viewport pixels.
    const rects=buttons.map(b=>b.getBoundingClientRect());
    const x0=Math.floor(Math.min(...rects.map(r=>r.left)))-6, x1=Math.ceil(Math.max(...rects.map(r=>r.right)))+6;
    const y0=Math.floor(Math.min(...rects.map(r=>r.top)))-6, y1=Math.ceil(Math.max(...rects.map(r=>r.bottom)))+6;
    const sample=fn=>{const grid=[];for(let y=y0;y<=y1;y++)for(let x=x0;x<=x1;x++)grid.push(fn(x+.5,y+.5));return grid;};
    const style=document.createElement('style');
-   style.textContent=`#buttons-rail button.attack[data-control],#buttons-rail button.attack[data-control]::before{pointer-events:none!important}
-    #buttons-rail .attack-art,#buttons-rail .attack-art svg,#buttons-rail .attack-art svg g{pointer-events:none!important}
-    #buttons-rail .attack-art svg :is(path,circle){pointer-events:visiblePainted!important}
-    #buttons-rail .bt-ring{pointer-events:none!important}`;
+   style.textContent=`${rail} button.attack[data-control],${rail} button.attack[data-control]::before{pointer-events:none!important}
+    ${rail} .attack-art,${rail} .attack-art svg,${rail} .attack-art svg g{pointer-events:none!important}
+    ${rail} .attack-art svg :is(path,circle){pointer-events:visiblePainted!important}
+    ${rail} .bt-ring{pointer-events:none!important}`;
    document.head.append(style);
-   const seen=sample((x,y)=>label(document.elementFromPoint(x,y)?.closest?.('#buttons-rail .attack-art svg')?.closest('button')));
+   const seen=sample((x,y)=>label(document.elementFromPoint(x,y)?.closest?.(rail+' .attack-art svg')?.closest('button')));
    style.remove();
-   const hit=sample((x,y)=>{const e=document.elementFromPoint(x,y);const b=e?.closest?.('button[data-control]');return b?(label(b)??b.dataset.control):(e?.closest?.('#buttons-rail')?null:'(other)');});
+   const hit=sample((x,y)=>{const e=document.elementFromPoint(x,y);const b=e?.closest?.('button[data-control]');return b?(label(b)??b.dataset.control):(e?.closest?.(rail)?null:'(other)');});
    const steals={},dead={},extra={},painted={};let stealPx=0,deadPx=0;
    const w=x1-x0+1, examples={};
    seen.forEach((s,i)=>{
@@ -66,14 +85,16 @@ try{
    const boxes=Object.fromEntries(buttons.map((b,i)=>[label(b),{x:+rects[i].x.toFixed(1),y:+rects[i].y.toFixed(1),w:+rects[i].width.toFixed(1),h:+rects[i].height.toFixed(1),clip:getComputedStyle(b).clipPath}]));
    return {scan:{x0,y0,x1,y1},boxes,painted,steals,stealPx,examples,deadVisible:dead,deadPx,invisibleHitMargin:extra,
     grid:{w,seen:seen.map(s=>s??'.').join(''),hit:hit.map(h=>h==null?'.':h==='(other)'?'#':h).join('')}};
-  });
+  },rail);
+  if(!Object.keys(result.painted).length)throw Error(name+': no painted button art found');
   await page.screenshot({path:path.join(output,name+'.png')});
   const {grid,...summary}=result;
-  report.layouts.push({name,width,height,insets,...summary});
+  report.layouts.push({name,target,width,height,insets,...summary});
   await writeFile(path.join(output,name+'.grid.txt'),
    [`# ${name} seen (painted owner)`,...grid.seen.match(new RegExp(`.{${grid.w}}`,'g')),'',`# ${name} hit (browser target)`,...grid.hit.match(new RegExp(`.{${grid.w}}`,'g'))].join('\n'));
   console.log(`${name}: steal ${result.stealPx}px ${JSON.stringify(result.steals)} | visible-but-dead ${result.deadPx}px ${JSON.stringify(result.deadVisible)}`);
-  if(result.stealPx>0)failed=true;
+  if(result.stealPx>0||result.deadPx>0)failed=true;
+ }
  }
  if(errors.length)console.log('page errors:',errors);
 }finally{

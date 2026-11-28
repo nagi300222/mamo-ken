@@ -10,17 +10,17 @@ PR #232 の残チェック「Bの見えている端がSの矩形にも入る候�
 - 2回目：本来のCSSに戻し、各ピクセルで実際に反応するボタン（四角の判定、clip-path、DOMの重なり順すべて込み）を取る。
 - 「見えているのは P なのに Q が反応する」点を**横取り**、「見えているのに何も反応しない」点を**死に絵**として数える。
 
-条件は既存の戦闘UI回帰と同じ5つ（852×393、720×320、左ノッチ、右ノッチ、縦持ちからの横表示）。
+条件は既存の戦闘UI回帰と同じ5つ（852×393、720×320、左ノッチ、右ノッチ、縦持ちからの横表示）を、**通常対戦（Dojo `#buttons-rail`）とStory Battle（`#battle-buttons`）の両方**で走査した。
 
 ## 結果
 
-| 条件 | 横取り | 死に絵 |
+| 条件 | 通常対戦 横取り/死に絵 | Story Battle 横取り/死に絵 |
 | --- | --- | --- |
-| 852×393 | 0px | 0px |
-| 720×320 | 0px | 0px |
-| 左ノッチ 720×320 | 0px | 0px |
-| 右ノッチ 720×320 | 0px | 0px |
-| 縦持ち→横表示 393×852 | 0px | 0px |
+| 852×393 | 0 / 0px | 0 / 0px |
+| 720×320 | 0 / 0px | 0 / 0px |
+| 左ノッチ 720×320 | 0 / 0px | 0 / 0px |
+| 右ノッチ 720×320 | 0 / 0px | 0 / 0px |
+| 縦持ち→横表示 393×852 | 0 / 0px | 0 / 0px |
 
 B と S の境目も含め、見えている絵の上を押して別の技が出る点は見つからなかった。PR #230 の corner trim（強・必殺の clip-path）が効いている。
 
@@ -30,10 +30,9 @@ B と S の境目も含め、見えている絵の上を押して別の技が出
 
 ## 常設した回帰
 
-`exp/fable-3d/dojo/acceptance/battle-hit-ownership.mjs` を `mamoken-runs-v16.yml` の p4 スイートに `MAMOKEN_HIT_STRICT=1` で追加。今後ボタン配置や絵の大きさを変えて横取りが1pxでも出ると p4 が失敗する。`MAMOKEN_HIT_CSS` で試しのCSSを注入して比較できる。
+`exp/fable-3d/dojo/acceptance/battle-hit-ownership.mjs` を `mamoken-runs-v16.yml` の p4 スイートに `MAMOKEN_HIT_STRICT=1` で追加。今後ボタン配置や絵の大きさを変えて横取り・死に絵が1pxでも出ると p4 が失敗する。`MAMOKEN_HIT_TARGETS=dojo` などで対象を絞れる。`MAMOKEN_HIT_CSS` で試しのCSSを注入して比較できる。
 
 ## 確認していないこと
 
 - 物理 iPhone の指の接触面積（1点ではなく面で触れる）での押し分け。ここは本人の試遊で見る。
-- Story Battle の `#battle-buttons`。同じCSS・同じ部品だが、この検査はDojoの `#buttons-rail` だけを走査した。
 - Safari / WebKit のヒットテスト。
