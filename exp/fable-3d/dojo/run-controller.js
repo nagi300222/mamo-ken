@@ -9,7 +9,17 @@ export function seededRandom(seed){let s=seed>>>0;return()=>{s+=0x6D2B79F5;let t
 function shuffle(items,random){const a=[...items];for(let i=a.length-1;i>0;i--){const j=Math.floor(random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
 const BEST_KEY='mamoken.survival.best.v1';
 export function readSurvivalBest(storage){try{const n=Number(storage?.getItem(BEST_KEY));return Number.isSafeInteger(n)&&n>=0?n:0;}catch{return 0;}}
-export function saveSurvivalBest(storage,n){try{storage?.setItem(BEST_KEY,String(n));return true;}catch{return false;}}
+// Another tab, an older run object, or a native restore may have stored a higher record
+// since this run read it. Re-read at write time and never lower the stored best.
+export function saveSurvivalBest(storage,n){
+ try{
+  if(!storage)return false;
+  const raw=storage.getItem(BEST_KEY);// throws -> unknown stored value -> do not write
+  const stored=readSurvivalBest({getItem:()=>raw}),best=Math.max(stored,n);
+  if(best!==stored||raw===null)storage.setItem(BEST_KEY,String(best));
+  return best;
+ }catch{return false;}
+}
 
 // Owns a run, never collision/frames. Each round is a fresh instance of the real Battle.
 export class RunController{
@@ -50,7 +60,7 @@ export class RunController{
    else{
     this.wins++;const max=ROSTER[this.player].hp,before=g.fighters[0].hp;
     this.hp=Math.min(max,before+Math.floor(max*healFraction(this.wins)));this.lastHeal=this.hp-before;
-    this.best=Math.max(this.best,this.wins);saveSurvivalBest(this.storage,this.best);
+    const saved=saveSurvivalBest(this.storage,Math.max(this.best,this.wins));this.best=Math.max(this.best,this.wins,saved||0);
     this.status='between';result={kind:'next',winner,reason,victory:true,short:true};
    }
   }else if(winner<0){this.status='continue';result={kind:'continue',winner,reason,victory:false};}
