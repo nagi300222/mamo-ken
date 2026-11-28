@@ -2,6 +2,7 @@
 import assert from 'node:assert/strict';
 import {mkdir} from 'node:fs/promises';
 import {createRequire} from 'node:module';
+import {setMatch} from './match-settings.mjs';
 const {chromium}=createRequire(import.meta.url)('playwright-core');
 const base=process.env.MAMOKEN_URL||'http://127.0.0.1:4173/exp/fable-3d/dojo/';
 const dir=process.env.MAMOKEN_EVIDENCE||'/tmp/mamoken-v15';
@@ -13,7 +14,7 @@ page.on('response',r=>{if(r.status()>=400&&!r.url().endsWith('favicon.ico'))erro
 try{
  await page.goto(base,{waitUntil:'domcontentloaded'});
  await page.waitForFunction(()=>window.mamoken3d?.landscapeLocked===true);
- await page.locator('#match-mode').selectOption('practice');
+ await setMatch(page,'#match-mode','practice');
  assert.equal(await page.locator('#difficulty').evaluate(e=>e.parentElement.hidden),true);
  await page.locator('#start').tap();
  await page.waitForFunction(()=>mamoken3d.practice.enabled&&mamoken3d.battle?.frame>4,undefined,{timeout:35000});
@@ -58,7 +59,7 @@ try{
  await page.waitForFunction(()=>!mamoken3d.cinematic.active,undefined,{timeout:6000});
  assert.equal(await page.evaluate(()=>mamoken3d.practice.enabled),true);
  await page.locator('#select-back').tap();
- await page.locator('#match-mode').selectOption('battle');
+ await setMatch(page,'#match-mode','battle');
  await page.locator('#start').tap();
  await page.waitForFunction(()=>mamoken3d.battle?.frame>0&&!mamoken3d.practice.enabled,undefined,{timeout:30000});
  assert.equal(await page.locator('#practice-panel').isVisible(),false);

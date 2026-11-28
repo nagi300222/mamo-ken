@@ -21,11 +21,13 @@ export function createRunUI({onNext}){
  `;document.head.appendChild(style);
  let pending=null;
  function cancelDialogue(){if(pending){const done=pending;pending=null;dialog.hidden=true;advance.onclick=null;done(false);}}
+ const checkAllowed=new URLSearchParams(globalThis.location?.search??'').get('check')==='1';
  mode.addEventListener('change',()=>{
   const value=mode.value,isRun=['arcade','survival'].includes(value);
   $('cpu-choice').parentElement.hidden=isRun;
   $('difficulty').parentElement.hidden=isRun||value==='practice';levelLabel.hidden=value!=='arcade';note.hidden=!isRun;
-  if($('check-mode-label'))$('check-mode-label').hidden=isRun||value==='practice';
+  // The cinematic check toggle is a ?check=1 developer aid (main.js); never reveal it otherwise.
+  if($('check-mode-label'))$('check-mode-label').hidden=!checkAllowed||isRun||value==='practice';
  });
  return {
   get level(){return +level.value;},

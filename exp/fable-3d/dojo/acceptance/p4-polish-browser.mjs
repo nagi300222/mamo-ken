@@ -77,16 +77,18 @@ async function capture(name){await page.screenshot({path:path.join(evidence,name
 async function lobby(){
  await page.goto(root,{waitUntil:'domcontentloaded'});
  await page.waitForFunction(()=>document.documentElement.dataset.uiArt==='v17-p4-ui-art-1');
- const modeScenes=await page.locator('.mode-illustration').evaluateAll(nodes=>nodes.map(node=>getComputedStyle(node).backgroundImage));
+ // MENU-B: the five authored scenes are the stage layers (and the switch thumbnails).
+ const modeScenes=await page.locator('.stage-art').evaluateAll(nodes=>nodes.map(node=>getComputedStyle(node).backgroundImage));
  check(modeScenes.length===5&&new Set(modeScenes).size===5&&modeScenes.every(scene=>scene.includes('.webp')),'five mode scenes are distinct authored assets',{modeScenes});
  for(const item of cases){const c=await configure(item);
-  await page.locator('.mode-hall').evaluate(node=>{node.scrollTop=0;});await settle();
-  const scroll=await page.locator('.mode-hall').evaluate(node=>({top:node.scrollTop,height:node.scrollHeight,client:node.clientHeight}));
-  check(scroll.top===0,'Lobby evidence starts before user scroll',{case:c.id,scroll});
-  const cards=await targets('.modes a[data-mode]',c,'all five mode cards',{minimum:44});check(cards.length===5,'five routes retained',c.id);
-  await targets('.modes a h2',c,'all five mode names',{text:true});
-  const actions=await targets('.modes a :is(.mode-action,.mode-rule)',c,'all five mode actions',{text:true});check(actions.length===5,'five visible action captions',c.id);
-  for(const name of await metrics('.modes a h2'))check(name.fontSize>=14,'mode names at least 14px',{case:c.id,...name});
+  await settle();
+  const scroll=await page.locator('.menu').evaluate(node=>({top:node.scrollTop,height:node.scrollHeight,client:node.clientHeight}));
+  check(scroll.height<=scroll.client+1,'MENU-B fits without scrolling',{case:c.id,scroll});
+  const cards=await targets('.mode-switch a[data-mode]',c,'all five mode switches',{minimum:44});check(cards.length===5,'five routes retained',c.id);
+  await targets('.mode-switch a b',c,'all five mode names',{text:true});
+  await targets('#stage-title,#mode-start',c,'stage title and start action',{text:true});
+  for(const name of await metrics('.mode-switch a b'))check(name.fontSize>=14,'mode names at least 14px',{case:c.id,...name});
+  for(const name of await metrics('#stage-title'))check(name.fontSize>=28,'stage title is the largest text',{case:c.id,...name});
   await capture('lobby-'+c.id);
  }
 }
@@ -100,7 +102,7 @@ async function selection(){
  const longest=await page.locator('.fighter-card').evaluateAll(nodes=>nodes.map(node=>({name:node.querySelector('span').textContent,length:node.querySelector('span').textContent.length})).sort((a,b)=>b.length-a.length)[0].name);
  await page.locator('.fighter-card').filter({hasText:longest}).click();await settle();
  for(const item of cases){const c=await configure(item);
-  await page.locator('#selection').evaluate(node=>{node.scrollTop=0;});await settle();
+  await settle();
   const cards=await targets('.fighter-card',c,'all nine fighters before scrolling',{minimum:44});check(cards.length===9,'nine roster targets retained',c.id);
   await targets('.fighter-card span',c,'full fighter names',{text:true});
   await targets('.p4-profile [data-strength],.p4-profile [data-weakness]',c,'selected strengths and weaknesses',{text:true});
