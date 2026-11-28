@@ -113,3 +113,14 @@ html body[data-ui=mountain] #selection.select-a .sa-settings .sa-settings-close{
 /* Every roster name stays fully readable: long names wrap to a second line instead of truncating. */
 html body[data-ui=mountain] #selection.select-a .fighter-card>span{white-space:normal;overflow:visible;text-overflow:clip;overflow-wrap:anywhere;line-height:1.1}
 html body[data-ui=mountain] #selection.select-a .fighter-card:after{height:58%}
+
+/* Sound/effects stays reachable while choosing (the rest of the header is hidden).
+   The real topbar button and its popover are reused, only repositioned. */
+#app:has(#selection.select-a:not(.hidden)) .topbar .av-settings-toggle{
+ visibility:visible;position:fixed;z-index:45;
+ top:max(8px,var(--ui-safe-top,0px));right:max(16px,var(--ui-safe-right,0px));
+ min-height:40px;min-width:44px;padding:0 12px;border:1px solid #2f4a53;border-radius:3px;background:#101c23d9;color:#f4f7f5;font:800 12px/1 var(--ui-font)
+}
+#app:has(#selection.select-a:not(.hidden)) #av-settings{visibility:visible}
+html body[data-ui=mountain] #selection.select-a .p4-profile{top:52px}
+@media(max-height:350px){html body[data-ui=mountain] #selection.select-a .p4-profile{top:46px}}
